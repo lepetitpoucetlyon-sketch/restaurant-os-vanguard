@@ -14,6 +14,7 @@ import { CleaningPlan } from '@/modules/compliance';
 import { DLCTracker } from '@/modules/compliance';
 import { NonConformityForm } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
     temperatures: Thermometer,
@@ -162,7 +163,7 @@ function HaccpPage() {
                                                                 {isExpired && <span className="ml-1 text-[10px] font-bold bg-status-danger/10 text-status-danger px-1 py-0.5 rounded">PÉRIMÉ</span>}
                                                             </td>
                                                             <td className="px-4 py-3 text-text-muted">{item.supplierName ?? item.supplierId ?? "—"}</td>
-                                                            <td className="px-4 py-3 tabular-nums text-text-muted">{(item as Record<string, unknown>).initialQuantity != null ? `${String((item as Record<string, unknown>).initialQuantity)} ${item.unit}` : "—"}</td>
+                                                            <td className="px-4 py-3 tabular-nums text-text-muted">{(item as JsonObject).initialQuantity != null ? `${String((item as JsonObject).initialQuantity)} ${item.unit}` : "—"}</td>
                                                             <td className="px-4 py-3 tabular-nums font-medium text-text-primary">{item.quantity} {item.unit}</td>
                                                         </tr>
                                                     );

@@ -37,6 +37,7 @@ import {
     arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { JsonObject } from "@/shared/types/json";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -217,7 +218,7 @@ export function KDSTicket({
         if (!fullOrder) return {};
         const grouped: Record<string, import('@/domain/schemas/pos').CartItem[]> = {};
         for (const item of fullOrder.items) {
-            const seat = (item as Record<string, unknown>).seatNumber as string || 'Partagé';
+            const seat = (item as JsonObject).seatNumber as string || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
             grouped[seat].push(item as unknown as import('@/domain/schemas/pos').CartItem);
         }
@@ -533,8 +534,8 @@ export function KDSTicket({
                                             {items.map((cItem, i: number) => {
                                                 const station = resolveStation(cItem.name as string);
                                                 // Highlight the item if it belongs to the current ticket
-                                                const cItemAny = cItem as unknown as Record<string, unknown>;
-                                                const isActiveStation = ticket.items.some(ti => { const tiAny = ti as unknown as Record<string, unknown>; return (tiAny.cartId || ti.name) === (cItemAny.cartId || cItemAny.name); });
+                                                const cItemAny = cItem as unknown as JsonObject;
+                                                const isActiveStation = ticket.items.some(ti => { const tiAny = ti as unknown as JsonObject; return (tiAny.cartId || ti.name) === (cItemAny.cartId || cItemAny.name); });
                                                 return (
                                                     <div key={`${cItemAny.cartId || cItemAny.name}-${i}`}
                                                          className={cn(

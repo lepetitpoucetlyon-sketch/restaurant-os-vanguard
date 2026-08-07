@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 interface TicketZRecord {
   date: string;
@@ -81,7 +82,7 @@ export class CashflowForecastHandler {
           }
         );
       } catch (err) {
-        logger.warn(`[CashflowForecast] Impossible de récupérer l'historique Ticket Z, fallback +5%`, String(err));
+        logger.warn(`[CashflowForecast] Impossible de récupérer l'historique Ticket Z, fallback +5%`, toError(err).message);
       }
 
       const forecast = CashflowForecastHandler.computeForecast(

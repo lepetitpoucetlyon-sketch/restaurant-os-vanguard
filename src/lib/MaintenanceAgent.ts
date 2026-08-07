@@ -5,6 +5,7 @@ import { logger } from '@/lib/axiom';
  
 import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
+import { toError } from "@/lib/toError";
 
 /**
  * 🤖 MaintenanceAgent - Restaurant OS
@@ -48,8 +49,8 @@ export const MaintenanceAgent = {
             this.runAutoMaintenance(ticketId, data);
 
             return ticketId;
-        } catch (error: unknown) {
-            logger.error('MaintenanceAgent: SOS submission failed', { error: String(error) });
+        } catch (error) {
+            logger.error('MaintenanceAgent: SOS submission failed', { error: toError(error).message });
             throw error;
         }
     },
@@ -82,8 +83,8 @@ export const MaintenanceAgent = {
             logger.info('MaintenanceAgent: [Step 5] PR Ready for Admin Review', { ticketId, diagnostic: analysis.summary });
 
             // Note: Steps 6 & 7 (Application & Vérification) sont manuelles/semi-auto via l'UI.
-        } catch (error: unknown) {
-            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error: String(error) });
+        } catch (error) {
+            logger.error('MaintenanceAgent: Maintenance cycle failed', { ticketId, error: toError(error).message });
         }
     },
 

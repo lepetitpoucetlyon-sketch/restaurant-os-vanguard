@@ -31,6 +31,7 @@ import {
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { JsonObject } from "@/shared/types/json";
 
 function InventoryPage() {
     const {
@@ -114,7 +115,7 @@ function InventoryPage() {
                                     {[...stockItems]
                                         .sort((a, b) => computeDLCStatus(a.dlc as string | undefined).rank - computeDLCStatus(b.dlc as string | undefined).rank)
                                         .map((item) => {
-                                            const reorderQty = (item as Record<string, unknown>).reorderQuantity as number | undefined;
+                                            const reorderQty = (item as JsonObject).reorderQuantity as number | undefined;
                                             const isLow = item.quantity <= (item.minQuantity ?? 0);
                                             const dlcStatus = computeDLCStatus(item.dlc as string | undefined);
                                             return (

@@ -1,5 +1,6 @@
 import type { NetworkConnection, PrintResult } from '../types';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 export async function printNetworkRaw(
   conn: NetworkConnection,
@@ -25,7 +26,7 @@ async function printEposHttp(conn: NetworkConnection, data: Uint8Array): Promise
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return { success: true, method: 'epos-http' };
   } catch (err) {
-    return { success: false, method: 'epos-http', error: String(err) };
+    return { success: false, method: 'epos-http', error: toError(err).message };
   }
 }
 
@@ -47,7 +48,7 @@ async function printRawViaProxy(conn: NetworkConnection, data: Uint8Array): Prom
     }
     return { success: true, method: 'network' };
   } catch (err) {
-    return { success: false, method: 'network', error: String(err) };
+    return { success: false, method: 'network', error: toError(err).message };
   }
 }
 

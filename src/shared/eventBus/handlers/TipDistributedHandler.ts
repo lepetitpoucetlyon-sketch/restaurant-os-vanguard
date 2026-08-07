@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export function registerTipDistributedHandler(): () => void {
   return NexusEventBus.on(
@@ -36,8 +37,8 @@ export function registerTipDistributedHandler(): () => void {
         });
 
         logger.info(`[TipDistributedHandler] ${tipInMicrounits}µ distribués entre ${staffIds.length} staff pour commande ${orderId}`);
-      } catch (err: unknown) {
-        logger.error(`[TipDistributedHandler] Échec distribution pourboire: ${String(err)}`);
+      } catch (err) {
+        logger.error(`[TipDistributedHandler] Échec distribution pourboire: ${toError(err).message}`);
       }
     },
     { id: 'tip-distributed', priority: 'BACKGROUND' },

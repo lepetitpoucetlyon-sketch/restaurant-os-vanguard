@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 type ServiceStatus = 'operational' | 'degraded' | 'outage';
 
@@ -54,7 +55,7 @@ async function pingNexus(): Promise<ServiceCheck> {
     const latencyMs = Date.now() - start;
     return {
       name: 'Base de données',
-      status: String(err).includes('timeout') ? 'degraded' : 'outage',
+      status: toError(err).message.includes('timeout') ? 'degraded' : 'outage',
       latencyMs,
     };
   }
@@ -91,7 +92,7 @@ export async function GET(): Promise<NextResponse> {
         const entries = [snapshot, ...prev].slice(0, 144);
         await Nexus.adapter.set('mcc/statusHistory', { entries, updatedAt: snapshot.checkedAt });
       } catch (err) {
-        logger.warn('[status] Failed to persist history', String(err));
+        logger.warn('[status] Failed to persist history', toError(err).message);
       }
     })();
   }

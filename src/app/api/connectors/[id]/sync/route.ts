@@ -7,6 +7,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
 import { logger } from '@/lib/logger';
 import type { ConnectorState } from '@/shared/connector-manifest';
+import { toError } from "@/lib/toError";
 
 // Pilier-specific factories — importés à la demande selon la catégorie du manifest
 const SYNC_HANDLERS: Record<string, (tenantId: string, credentials: Record<string, string>) => Promise<number>> = {
@@ -86,7 +87,7 @@ export async function POST(
 
     return NextResponse.json({ ok: true, itemsSynced: count });
   } catch (err) {
-    const error = String(err);
+    const error = toError(err).message;
     await Nexus.adapter.set(`tenants/${tenantId}/connectors/${id}`, { ...stored, status: 'error', errorMessage: error });
     await NexusEventBus.emit('connectors.sync_failed', { tenantId, connectorId: id, error });
     logger.error(`[connectors/sync] tenant=${tenantId} connector=${id} failed`, err);

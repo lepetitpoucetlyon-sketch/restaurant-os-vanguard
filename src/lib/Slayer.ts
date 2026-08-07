@@ -13,6 +13,7 @@ import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { toError } from "@/lib/toError";
+import { JsonObject } from "@/shared/types/json";
 
 export interface SlayerMappingConfig {
     source: string;
@@ -74,11 +75,11 @@ export class Slayer {
                                 // 1. NORMALISATION & DÉCONTAMINATION
                                 const rawOrder: Record<string, unknown> = {
                                     ...legacy,
-                                    source: (legacy as Record<string, unknown>).source || 'SLAYER_LEGACY',
-                                    tenantId: (legacy as Record<string, unknown>).tenantId || tenantId,
+                                    source: (legacy as JsonObject).source || 'SLAYER_LEGACY',
+                                    tenantId: (legacy as JsonObject).tenantId || tenantId,
                                     createdAt: legacy.timestamp || new Date().toISOString(),
                                     status: 'PAID', // Archives scellées par défaut
-                                    customer: (legacy as Record<string, unknown>).customer || { firstName: 'Legacy', lastName: 'Customer' }
+                                    customer: (legacy as JsonObject).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
                                 const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@/shared/nexus-contract').SovereignMap, { isLegacy: true });
@@ -98,7 +99,7 @@ export class Slayer {
                                 batch.set(path, sealedOrder);
                                 
                                 ingested++;
-                            } catch (itemError: unknown) {
+                            } catch (itemError) {
                                 errors++;
                                 logger.warn(`[Slayer] Item skip: ${legacy.id}`, { error: toError(itemError).message });
                             }
@@ -108,7 +109,7 @@ export class Slayer {
 
                 if (onProgress) onProgress(ingested);
                 
-            } catch (batchError: unknown) {
+            } catch (batchError) {
                 logger.error(`[Slayer] Batch Failure (i=${i})`, { error: toError(batchError).message });
             }
         }

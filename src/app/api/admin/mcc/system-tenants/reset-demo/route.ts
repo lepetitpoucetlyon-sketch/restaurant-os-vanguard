@@ -10,6 +10,7 @@ import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { PlatformVariantSchema } from '@/domain/schemas/tenant';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { toError } from "@/lib/toError";
 
 const BodySchema = z.object({ variant: PlatformVariantSchema });
 
@@ -48,6 +49,6 @@ export async function POST(req: NextRequest) {
 
     } catch (err) {
         logger.error('[MCC/reset-demo] Échec', err);
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        return NextResponse.json({ error: toError(err).message }, { status: 500 });
     }
 }

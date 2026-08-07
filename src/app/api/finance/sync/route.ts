@@ -5,6 +5,8 @@ import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 /**
  * 🛰️ API Backend de Synchro Hors-Ligne (Grade X)
@@ -61,7 +63,7 @@ export async function POST(req: NextRequest) {
         pieceNumber: receiptNumber,
         isValidated: true,
         status: 'validated',
-      } as Record<string, unknown> & { id: string };
+      } as JsonObject & { id: string };
 
       const dataSnapshot = CryptoService.canonicalStringify({
         id: entry.id,
@@ -85,7 +87,7 @@ export async function POST(req: NextRequest) {
     logger.info(`[Sync API] Synchro réussie pour ${sealedEntries.length} tickets.`);
     return NextResponse.json({ success: true, sealedEntries });
   } catch (error) {
-    logger.error('[Sync API] Erreur lors de la synchronisation', { error: String(error) });
+    logger.error('[Sync API] Erreur lors de la synchronisation', { error: toError(error).message });
     return NextResponse.json({ error: 'Erreur interne de synchronisation' }, { status: 500 });
   }
 }

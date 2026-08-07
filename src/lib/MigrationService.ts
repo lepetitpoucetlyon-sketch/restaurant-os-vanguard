@@ -4,6 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { validatePin } from '@/lib/auth/validatePin';
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * Generates a cryptographically secure 4-digit PIN (1000–9999).
@@ -61,16 +62,16 @@ function buildCrmRecord(crm: Record<string, string>): Record<string, unknown> {
 
 export class MigrationService {
     static preprocessData(data: unknown): MenuMigration {
-        const raw = data as Record<string, unknown>;
+        const raw = data as JsonObject;
         if (!raw || typeof raw !== 'object') return { categories: [], products: [] };
         
         const clean: MenuMigration = {
-            categories: Array.isArray(raw.categories) ? (raw.categories as Record<string, unknown>[]).map((c) => ({
+            categories: Array.isArray(raw.categories) ? (raw.categories as JsonObject[]).map((c) => ({
                 name: SharedKernel.Sovereign.cleanString(c?.name || ''),
                 type: String(c?.type || 'food'),
                 sortOrder: Number(c?.sortOrder || 1)
             })) : [],
-            products: Array.isArray(raw.products) ? (raw.products as Record<string, unknown>[]).map((p) => ({
+            products: Array.isArray(raw.products) ? (raw.products as JsonObject[]).map((p) => ({
                 name: SharedKernel.Sovereign.cleanString(p?.name || ''),
                 description: String(p?.description || ''),
                 price: SharedKernel.Sovereign.cleanNumber(p?.price || 0),

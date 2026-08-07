@@ -14,6 +14,7 @@ import type { ConnectorState } from '@/shared/connector-manifest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { getSystemTenantTier } from '@/lib/mcc/SystemTenantRegistry';
 import type { SystemTier } from '@/lib/mcc/SystemTenantRegistry';
+import { toError } from "@/lib/toError";
 
 export interface SeedInput {
   tenantId: string;
@@ -266,7 +267,7 @@ export const TenantSeeder = {
       logger.error(`[TenantSeeder] Seed failed for ${tenantId}`, err);
       // Best-effort rollback — ignore failures
       await Nexus.adapter.delete(`tenants/${tenantId}/tenantConfig`).catch(() => {});
-      return { success: false, seededPaths, error: String(err) };
+      return { success: false, seededPaths, error: toError(err).message };
     }
   },
 };

@@ -1,5 +1,6 @@
 import type { IWeatherProvider, WeatherForecast } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Météo France — API publique gratuite (api.meteo.fr / meteo.data.gouv.fr).
@@ -37,7 +38,7 @@ export class MeteoFranceProvider implements IWeatherProvider {
                 icon:          wmoIcon(data.daily.weathercode[i] ?? 0),
             }));
         } catch (err) {
-            logger.error('[MeteoFranceProvider] getForecast error', String(err));
+            logger.error('[MeteoFranceProvider] getForecast error', toError(err).message);
             return [];
         }
     }

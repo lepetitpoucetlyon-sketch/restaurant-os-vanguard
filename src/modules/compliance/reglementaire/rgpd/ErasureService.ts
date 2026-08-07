@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { piiVault } from '@/shared/nexus/vault/PiiVault';
 import { auditService } from '../../securite/audit/AuditService';
+import { JsonObject } from "@/shared/types/json";
 
 const COLLECTIONS_WITH_SUBJECT_REF = [
     'orders',
@@ -48,7 +49,7 @@ export class ErasureService {
                     customerName: '[EFFACÉ]',
                     customerEmail: undefined,
                     customerPhone: undefined,
-                } as unknown as Record<string, unknown>);
+                } as unknown as JsonObject);
             }
 
             if (docs.length > 0) {

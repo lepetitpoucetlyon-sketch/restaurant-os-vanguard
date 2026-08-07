@@ -1,6 +1,7 @@
 import { ZodSchema } from 'zod';
 import { atom, WritableAtom } from 'jotai';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { toError } from "@/lib/toError";
 
 /** Keys that identify the tenant itself — MUST stay unscoped to bootstrap. */
 const UNSCOPED_KEYS = new Set(['nexus_tenant_id']);
@@ -112,7 +113,7 @@ class SovereignStorageService {
     } catch (e) {
       return {
         success: false,
-        error:   `localStorage.setItem a échoué : ${String(e)}`,
+        error:   `localStorage.setItem a échoué : ${toError(e).message}`,
       };
     }
   }

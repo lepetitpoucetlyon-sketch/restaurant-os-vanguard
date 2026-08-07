@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
+import { toError } from "@/lib/toError";
 
 export async function isPeriodLocked(tenantId: string, timestamp: number): Promise<boolean> {
   try {
@@ -22,7 +23,7 @@ export async function isPeriodLocked(tenantId: string, timestamp: number): Promi
     
     return !!(lockDoc && lockDoc.isLocked);
   } catch (err) {
-    logger.error(`[fiscalLockGuard] Error checking lock for tenant ${tenantId}`, String(err));
+    logger.error(`[fiscalLockGuard] Error checking lock for tenant ${tenantId}`, toError(err).message);
     return false; // fail-open ou fail-closed? fail-open par défaut pour éviter de tout bloquer en cas d'erreur
   }
 }

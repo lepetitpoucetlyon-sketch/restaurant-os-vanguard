@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { WebPushService } from '@/lib/push/webPushService';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const BodySchema = z.object({
   insights: z.array(z.object({
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
       sent++;
     } catch (err) {
-      logger.warn(`[notify-critical] Push failed for insight ${insight.id}`, String(err));
+      logger.warn(`[notify-critical] Push failed for insight ${insight.id}`, toError(err).message);
     }
   }
 

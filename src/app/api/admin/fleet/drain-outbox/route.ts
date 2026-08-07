@@ -3,6 +3,7 @@ import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { FleetOutboxDrainService } from '@/modules/intelligence/ia/fleet/FleetOutboxDrainService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * 🚀 Draine les outboxes de tous les tenants vers la vue globale MCC.
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
-    logger.error('[DrainOutbox] Error during global drain', String(error));
+    logger.error('[DrainOutbox] Error during global drain', toError(error).message);
     return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

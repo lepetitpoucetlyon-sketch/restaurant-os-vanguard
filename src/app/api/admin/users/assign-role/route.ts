@@ -18,6 +18,7 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
+import { toError } from "@/lib/toError";
 
 const ROLE_PERMISSIONS_PATH = (tenantId: string) =>
     `tenants/${tenantId}/systemConfig/role_permissions`;
@@ -109,7 +110,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             });
             logger.info(`[assign-role] Claims Firebase mis à jour uid=${existing.firebaseUid} role=${role}`);
         } catch (err) {
-            logger.warn(`[assign-role] Claims Firebase échouées (uid=${existing.firebaseUid}) — ${String(err)}`);
+            logger.warn(`[assign-role] Claims Firebase échouées (uid=${existing.firebaseUid}) — ${toError(err).message}`);
         }
     }
 

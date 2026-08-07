@@ -12,6 +12,7 @@ import { useCategories } from '@/modules/logistics';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { JsonObject } from "@/shared/types/json";
 
 const COMMON_ALLERGENS = [
     { id: 'gluten', name: 'Gluten', icon: '🌾' },
@@ -64,9 +65,9 @@ function MenuBuilderPage() {
         setEditForm({
             name: product.name,
             priceEuros: (priceMu / 1_000_000).toFixed(2),
-            taxRate: (product as Record<string, unknown>).taxRate as string || '0.10',
-            allergens: (product as Record<string, unknown>).allergens as string[] || [],
-            recipeId: (product as Record<string, unknown>).recipeId as string || '',
+            taxRate: (product as JsonObject).taxRate as string || '0.10',
+            allergens: (product as JsonObject).allergens as string[] || [],
+            recipeId: (product as JsonObject).recipeId as string || '',
         });
     }, []);
 
@@ -178,7 +179,7 @@ function MenuBuilderPage() {
                         )}
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                             {filteredProducts.map(product => {
-                                const allergens: string[] = (product as Record<string, unknown>).allergens as string[] || [];
+                                const allergens: string[] = (product as JsonObject).allergens as string[] || [];
                                 return (
                                     <motion.div
                                         key={product.id}
@@ -205,7 +206,7 @@ function MenuBuilderPage() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            {(product as Record<string, unknown>).recipeId ? (
+                                            {(product as JsonObject).recipeId ? (
                                                 <span className="px-3 py-1 bg-status-success/10 text-status-success text-xs font-bold rounded-lg flex items-center gap-1">
                                                     <Link2 className="w-3 h-3" />
                                                     Lié

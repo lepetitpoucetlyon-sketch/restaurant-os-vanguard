@@ -7,6 +7,7 @@ import { useToast } from '@ui/Toast';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { PROVIDER_CATALOG } from '@/modules/human';
 import type { ProviderCatalogEntry } from '@/modules/human';
+import { toError } from "@/lib/toError";
 
 type ActiveTab = 'csv' | string;
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -74,7 +75,7 @@ export function PayrollIntegrationPanel() {
             showToast(`Export CSV ${periode} téléchargé`, 'success');
         } catch (err) {
             setSyncStatus('error');
-            showToast(String(err), 'error');
+            showToast(toError(err).message, 'error');
         }
     };
 
@@ -102,7 +103,7 @@ export function PayrollIntegrationPanel() {
             showToast(data.message ?? `${currentEntry.label} connecté`, 'success');
         } catch (err) {
             setConnectStatus('error');
-            showToast(String(err), 'error');
+            showToast(toError(err).message, 'error');
         }
     };
 
@@ -152,7 +153,7 @@ export function PayrollIntegrationPanel() {
             setSyncStatus('idle');
         } catch (err) {
             setSyncStatus('error');
-            showToast(String(err), 'error');
+            showToast(toError(err).message, 'error');
         }
     };
 
@@ -178,7 +179,7 @@ export function PayrollIntegrationPanel() {
             );
         } catch (err) {
             setSyncStatus('error');
-            showToast(String(err), 'error');
+            showToast(toError(err).message, 'error');
         }
     };
 
@@ -291,7 +292,7 @@ export function PayrollIntegrationPanel() {
                                         currentEntry.fields.length > 2 ? 'grid-cols-1' : 'grid-cols-2',
                                     )}>
                                         {currentEntry.fields.map(field => (
-                                            <div key={field.key} className={currentEntry.fields!.length === 1 ? 'col-span-2' : ''}>
+                                            <div key={field.key} className={currentEntry.fields?.length === 1 ? 'col-span-2' : ''}>
                                                 <label className="text-xs text-text-muted dark:text-text-secondary mb-1 block">
                                                     {field.label}
                                                     {field.optional && <span className="ml-1 opacity-60">(optionnel)</span>}

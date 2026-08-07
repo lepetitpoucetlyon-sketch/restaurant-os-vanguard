@@ -4,6 +4,8 @@ import { NexusEventBus, NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
 import { Button } from '@/shared/components/ui/button';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 /**
  * 🛠️ EventBusHealthPanel - MCC
@@ -38,7 +40,7 @@ export const EventBusHealthPanel: React.FC = () => {
     try {
       logger.info(`[EventBusHealthPanel] Retrying event ${entry.eventName}#${entry.id} (attempt ${newAttempts})`);
 
-      const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as Record<string, unknown>);
+      const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as JsonObject);
       // skipDLQWrite: on gère l'état DLQ ici, pas dans le bus, pour éviter attempts=1
       await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload, { skipDLQWrite: true });
 
@@ -51,7 +53,7 @@ export const EventBusHealthPanel: React.FC = () => {
         attempts: newAttempts,
         status: newAttempts >= MAX_ATTEMPTS ? 'quarantine' : 'retry',
         nextRetryAt: Date.now() + Math.min(2_000 * Math.pow(2, newAttempts - 1), 60_000),
-        error: `[manual retry ${newAttempts}/${MAX_ATTEMPTS}] ${String(err)}`,
+        error: `[manual retry ${newAttempts}/${MAX_ATTEMPTS}] ${toError(err).message}`,
         failedAt: Date.now(),
       });
     } finally {

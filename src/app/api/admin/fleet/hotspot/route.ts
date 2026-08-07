@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 interface HotspotAlert {
   severity: 'warning' | 'critical';
@@ -40,7 +41,7 @@ async function analyzeHotspot(tenantId: string): Promise<HotspotReport> {
 
   let usage: Record<string, number> = {};
   try {
-    const raw = await Nexus.adapter.get(`tenants/${tenantId}/usage/${monthKey}`) as Record<string, unknown> | null;
+    const raw = await Nexus.adapter.get(`tenants/${tenantId}/usage/${monthKey}`) as JsonObject | null;
     usage = raw ? Object.fromEntries(
       Object.entries(raw).map(([k, v]) => [k, typeof v === 'number' ? v : 0])
     ) : {};

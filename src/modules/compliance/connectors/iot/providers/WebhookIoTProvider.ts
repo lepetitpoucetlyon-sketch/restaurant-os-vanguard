@@ -1,6 +1,7 @@
 import type { IIoTProvider, SensorReading, Sensor } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Webhook générique HTTPS — couvre Lacroix Sensing, Monnit, et tout capteur
@@ -27,7 +28,7 @@ export class WebhookIoTProvider implements IIoTProvider {
                 return ts >= from && ts <= to;
             });
         } catch (err) {
-            logger.error('[WebhookIoTProvider] fetchHistory error', String(err));
+            logger.error('[WebhookIoTProvider] fetchHistory error', toError(err).message);
             return [];
         }
     }
@@ -38,7 +39,7 @@ export class WebhookIoTProvider implements IIoTProvider {
             if (!raw) return [];
             return Object.values(raw);
         } catch (err) {
-            logger.error('[WebhookIoTProvider] listSensors error', String(err));
+            logger.error('[WebhookIoTProvider] listSensors error', toError(err).message);
             return [];
         }
     }

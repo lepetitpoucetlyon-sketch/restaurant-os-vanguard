@@ -11,6 +11,7 @@ import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetrySe
 import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { JsonObject } from "@/shared/types/json";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;
@@ -51,7 +52,7 @@ class TelemetryService {
    * 🖋️ Suture GRADE X+++: Emission d'Audit Pulse
    */
   public emitAuditPulse(pillar: string, action: string, data: object) {
-      logger.debug(`[AuditPulse|${pillar}] ${action}`, data as Record<string, unknown>);
+      logger.debug(`[AuditPulse|${pillar}] ${action}`, data as JsonObject);
       // Implémentation réelle vers le MCC
   }
 
@@ -91,7 +92,7 @@ class TelemetryService {
 
       logger.debug(`[NexusTelemetry] Pulse emitted at ${pulse.lastPulse}`, { tenantId, rag: ragStatus?.status ?? 'unknown' });
 
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("[NexusTelemetry] Pulse failure:", error);
     }
   }

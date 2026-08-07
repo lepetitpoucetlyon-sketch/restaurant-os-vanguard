@@ -15,6 +15,7 @@
 
 import type { PayrollPeriodSummary, PayrollProviderConfig } from './types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const DEFAULT_SILAE_URL = 'https://api.silae.fr';
 
@@ -91,7 +92,7 @@ export class SilaeClient {
             );
             return { ok: true, dossierNom: data.nom ?? data.id };
         } catch (err) {
-            logger.warn('[SilaeClient] Ping failed', String(err));
+            logger.warn('[SilaeClient] Ping failed', toError(err).message);
             return { ok: false };
         }
     }
@@ -159,7 +160,7 @@ export class SilaeClient {
                 });
                 employeesUpserted++;
             } catch (err) {
-                errors.push(`Salarié ${row.matricule}: ${String(err)}`);
+                errors.push(`Salarié ${row.matricule}: ${toError(err).message}`);
             }
         }
 
@@ -188,7 +189,7 @@ export class SilaeClient {
                     errors.push(`${result.rejected} variables rejetées par Silae`);
                 }
             } catch (err) {
-                errors.push(`Push variables: ${String(err)}`);
+                errors.push(`Push variables: ${toError(err).message}`);
             }
         }
 

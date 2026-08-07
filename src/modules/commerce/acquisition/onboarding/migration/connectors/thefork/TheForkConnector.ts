@@ -5,6 +5,7 @@
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
 import { isMaskedEmail } from '../../emailFilters';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://manager-api.thefork.com/v1';
 
@@ -33,7 +34,7 @@ export class TheForkConnector implements ISourceConnector {
             const data = await res.json() as { name?: string };
             return { ok: true, providerName: 'TheFork', accountInfo: { name: data.name } };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

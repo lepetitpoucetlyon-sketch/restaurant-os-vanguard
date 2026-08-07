@@ -4,6 +4,7 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { getStripePriceId } from '@/shared/constants/pricing';
 import type { PricingTier } from '@/shared/constants/pricing';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * POST /api/billing/checkout
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
         logger.info(`[billing/checkout] Session créée`, { tenantId, tier, sessionId: session.id });
         return NextResponse.json({ url: session.url });
     } catch (err) {
-        logger.error('[billing/checkout] Stripe error', String(err));
+        logger.error('[billing/checkout] Stripe error', toError(err).message);
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Erreur Stripe.' },
             { status: 500 }

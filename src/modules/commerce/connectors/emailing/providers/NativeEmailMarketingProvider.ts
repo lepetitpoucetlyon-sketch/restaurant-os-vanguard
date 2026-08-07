@@ -1,5 +1,6 @@
 import type { IEmailMarketingProvider, Campaign, CampaignStats, Contact, AutomationTrigger } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Campagnes natives — utilise l'infrastructure Resend existante (MarketingService).
@@ -21,7 +22,7 @@ export class NativeEmailMarketingProvider implements IEmailMarketingProvider {
             try {
                 await sendEmail({ to: recipient.email, subject: campaign.subject, html });
             } catch (err) {
-                errors.push(`${recipient.email}: ${String(err)}`);
+                errors.push(`${recipient.email}: ${toError(err).message}`);
             }
         }
         if (errors.length) logger.warn('[NativeEmailMarketing] partial errors', errors);

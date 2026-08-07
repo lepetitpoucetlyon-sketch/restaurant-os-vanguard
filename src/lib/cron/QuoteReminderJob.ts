@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { toError } from "@/lib/toError";
 
 /**
  * 💼 QuoteReminderJob - Grade X
@@ -41,7 +42,7 @@ export const QuoteReminderJob = {
             logger.info(`[QuoteReminderJob] Exécution terminée. ${reminderCount} relances envoyées.`);
             return { success: true, reminderCount };
         } catch (error) {
-            logger.error(`[QuoteReminderJob] Erreur:`, String(error));
+            logger.error(`[QuoteReminderJob] Erreur:`, toError(error).message);
             throw error;
         }
     }

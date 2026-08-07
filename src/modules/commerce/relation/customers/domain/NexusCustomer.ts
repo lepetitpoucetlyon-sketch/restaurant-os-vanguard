@@ -5,6 +5,7 @@
  */
 
 import { logger } from "@/lib/logger";
+import { JsonObject } from "@/shared/types/json";
 
 export interface ContactPayload {
     email?: string;
@@ -19,7 +20,7 @@ export class NexusCustomer {
      * GRADE VI: Préparé pour intégration Twilio/SendGrid.
      */
     static async notify(clientId: string, payload: ContactPayload) {
-        logger.info(`[NexusCustomer] QUEUEING NOTIFICATION for ${clientId}`, payload as unknown as Record<string, unknown>);
+        logger.info(`[NexusCustomer] QUEUEING NOTIFICATION for ${clientId}`, payload as unknown as JsonObject);
         
         // Simulation de latence réseau
         await new Promise(resolve => setTimeout(resolve, 100));

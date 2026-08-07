@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { buildWeeklyReportHTML } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'rapports@restaurant-os.app';
@@ -111,8 +112,8 @@ export async function GET(req: NextRequest) {
         results.push({ tenantId, sentTo: ownerEmail });
       }
     } catch (err) {
-      logger.error(`[WeeklyReport] Error processing tenant ${tenantId}`, String(err));
-      results.push({ tenantId, error: String(err) });
+      logger.error(`[WeeklyReport] Error processing tenant ${tenantId}`, toError(err).message);
+      results.push({ tenantId, error: toError(err).message });
     }
   }
 

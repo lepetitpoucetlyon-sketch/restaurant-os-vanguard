@@ -16,6 +16,7 @@ import type { TenantID } from '@domain/types/brands';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
+import { toError } from "@/lib/toError";
 
 export interface ProvisioningRequest {
     ownerEmail: string;
@@ -134,7 +135,7 @@ export class TenantProvisioningService {
                 primaryColor: request.branding.primaryColor,
                 displayName:  request.companyName,
                 splashEnabled: false,
-            }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', String(err)));
+            }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', toError(err).message));
 
             // ── 6. Stripe customer ────────────────────────────────────────────────
             const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -358,7 +359,7 @@ export class TenantProvisioningService {
 
         // RAG workspace
         await sovereignCreateWorkspace(ragWorkspaceId, tenantId).catch(
-            e => logger.warn('[MCC/prov] RAG workspace:', String(e))
+            e => logger.warn('[MCC/prov] RAG workspace:', toError(e).message)
         );
 
         // Firebase Auth + PIN email
@@ -423,7 +424,7 @@ export class TenantProvisioningService {
 <h2 style="font-family:monospace;letter-spacing:0.4em;font-size:32px;">${pin}</h2>
 <p>Connectez-vous et modifiez ce PIN dès votre première connexion.</p>
 <p style="color:#888;font-size:11px;">Restaurant OS — ne partagez pas ce PIN.</p>`,
-        }).catch(e => logger.warn('[MCC/prov] email error:', String(e)));
+        }).catch(e => logger.warn('[MCC/prov] email error:', toError(e).message));
     }
 }
 

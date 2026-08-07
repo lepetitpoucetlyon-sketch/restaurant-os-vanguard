@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toError } from "@/lib/toError";
 
 export interface NotificationPayload {
     tenantId: string;
@@ -62,7 +63,7 @@ export class NotificationGateway {
             });
 
         } catch (error) {
-            logger.error(`[NotificationGateway] Échec de l'envoi de notification`, String(error));
+            logger.error(`[NotificationGateway] Échec de l'envoi de notification`, toError(error).message);
             // En cas d'erreur de l'API externe, on fallback sur la file d'attente
             await Nexus.adapter.create(`tenants/${payload.tenantId}/crm/pendingNotifications`, {
                 to: payload.to,
@@ -70,7 +71,7 @@ export class NotificationGateway {
                 text: payload.text,
                 channel,
                 status: 'error_queued',
-                error: String(error),
+                error: toError(error).message,
                 createdAt: Date.now()
             });
         }

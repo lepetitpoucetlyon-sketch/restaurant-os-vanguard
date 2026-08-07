@@ -7,13 +7,14 @@ import type { ReceiptTicket } from "@/modules/ops/service/printers/hardware/Epso
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
+import { JsonObject } from "@/shared/types/json";
 
 function parsePrinterConfig(): { ip: string; port: number } {
     const defaults = { ip: "192.168.1.100", port: 8008 };
     try {
         const raw = typeof window !== "undefined" ? localStorage.getItem(tenantScopedKey("printer_config")) : null;
         if (!raw) return defaults;
-        const obj = JSON.parse(raw) as Record<string, unknown>;
+        const obj = JSON.parse(raw) as JsonObject;
         return {
             ip: typeof obj.ip === "string" ? obj.ip : defaults.ip,
             port: typeof obj.port === "number" ? obj.port : defaults.port,

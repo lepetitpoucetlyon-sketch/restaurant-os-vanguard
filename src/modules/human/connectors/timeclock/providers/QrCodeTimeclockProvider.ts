@@ -1,6 +1,7 @@
 import type { ITimeclockProvider, ClockEntry } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Pointage QR Code — l'employé scanne un QR affiché dans l'app sur l'écran entrée.
@@ -15,7 +16,7 @@ export class QrCodeTimeclockProvider implements ITimeclockProvider {
             const raw = await Nexus.adapter.get(`tenants/${tenantId}/timeclock/${dateStr}`) as Record<string, ClockEntry> | null;
             return raw ? Object.values(raw).filter(e => e.source === 'qrcode') : [];
         } catch (err) {
-            logger.error('[QrCodeTimeclockProvider] fetchEntries error', String(err));
+            logger.error('[QrCodeTimeclockProvider] fetchEntries error', toError(err).message);
             return [];
         }
     }

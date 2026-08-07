@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class MedicalVisitAlertHandler {
   static register() { 
@@ -50,7 +51,7 @@ export class MedicalVisitAlertHandler {
             });
         }
       } catch (err) {
-        logger.error('[MedicalVisitAlertHandler] Error fetching employee data', String(err));
+        logger.error('[MedicalVisitAlertHandler] Error fetching employee data', toError(err).message);
       }
     }, { id: 'medical-visit-alert', priority: 'BACKGROUND' });
   }

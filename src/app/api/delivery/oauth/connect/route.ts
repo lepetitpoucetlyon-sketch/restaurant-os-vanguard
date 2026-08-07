@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/axiom';
+import { toError } from "@/lib/toError";
 
 /**
  * 🔗 API: Mock OAuth 2.0 pour la connexion UberEats / Deliveroo
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    logger.error('[OAuth Mock] Erreur lors de la connexion', { error: String(error) });
+    logger.error('[OAuth Mock] Erreur lors de la connexion', { error: toError(error).message });
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

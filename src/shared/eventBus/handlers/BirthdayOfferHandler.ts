@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { toError } from "@/lib/toError";
 
 export class BirthdayOfferHandler {
   static register() {
@@ -85,7 +86,7 @@ export class BirthdayOfferHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[BirthdayOfferHandler] Error generating birthday offer', String(err));
+        logger.error('[BirthdayOfferHandler] Error generating birthday offer', toError(err).message);
       }
     }, { id: 'birthday-offer', priority: 'BACKGROUND' });
   }

@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 export interface BudgetLine {
     analyticalAxis: string;
@@ -40,7 +41,7 @@ export class BudgetTrackingService {
 
             const actualsByAxis: Record<string, number> = { 'Food': 0, 'Beverage': 0 };
 
-            for (const entry of Object.values(entries) as Record<string, unknown>[]) {
+            for (const entry of Object.values(entries) as JsonObject[]) {
                 // Filtrer par mois (naïf pour l'exemple)
                 if ((entry as {type?: string}).type === 'revenue' && (entry as {date?: string}).date?.startsWith(yearMonth)) {
                     for (const line of ((entry as {lines?: Record<string, unknown>[]}).lines || [])) {

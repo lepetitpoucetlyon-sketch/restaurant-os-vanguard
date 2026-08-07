@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * 🛡️ Réagit à une brèche d'isolation souveraine détectée par SovereignGuard.
@@ -67,14 +68,14 @@ export function registerSovereignBreachHandler(): () => void {
                     }),
                 });
             } catch (e) {
-                logger.warn('[SovereignBreach] Failed to send push', String(e));
+                logger.warn('[SovereignBreach] Failed to send push', toError(e).message);
             }
         }
 
       } catch (e) {
         // En mode Vassal, isMasterMode() est faux → pushGlobalConfig refuse :
         // c'est attendu, la terminaison + logout côté Guard reste effective.
-        logger.warn(`[SovereignBreach] kill-switch push skipped/failed: ${String(e)}`);
+        logger.warn(`[SovereignBreach] kill-switch push skipped/failed: ${toError(e).message}`);
       }
     },
     { id: 'sovereign-breach-killswitch', priority: 'CRITICAL' }

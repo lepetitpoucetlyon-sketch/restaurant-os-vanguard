@@ -102,7 +102,7 @@ export class DataDigester {
 
       const validatedOrder = ExternalOrderSchema.parse(sanitized);
       return validatedOrder;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         logger.error('[DataDigester] Validation failed', { 
             errors: error.issues.map(e => `${e.path.join('.')}: ${e.message}`) 

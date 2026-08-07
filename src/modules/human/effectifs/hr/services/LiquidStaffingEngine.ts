@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { ClockEntry } from '../../../connectors/timeclock/types';
+import { toError } from "@/lib/toError";
 
 /**
  * 🧑‍🤝‍🧑 Local Liquid Staffing Engine (Human Pillar)
@@ -56,7 +57,7 @@ export class LiquidStaffingEngine {
 
                 activeShiftsByTenant[tenantId] = { currentStaff, requiredStaff };
             } catch (err) {
-                logger.error(`[Liquid Staffing] Impossible de lire les pointages pour tenant=${tenantId}`, String(err));
+                logger.error(`[Liquid Staffing] Impossible de lire les pointages pour tenant=${tenantId}`, toError(err).message);
                 activeShiftsByTenant[tenantId] = { currentStaff: 0, requiredStaff: 3 };
             }
         }));

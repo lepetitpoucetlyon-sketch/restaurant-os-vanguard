@@ -6,6 +6,7 @@ import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { TaxCalculator } from '@/modules/finance/utils/TaxCalculator';
 import { CryptoService } from '@/lib/CryptoService';
 import type { SovereignData } from '@shared/nexus-contract';
+import { toSovereignData } from "@/lib/toSovereignData";
 
 type TicketZDoc = {
   id: string;
@@ -79,7 +80,7 @@ export function registerTicketZHandler(): () => void {
           updatedAt: new Date().toISOString(),
         };
 
-        tx.set(path, updated as unknown as SovereignData);
+        tx.set(path, toSovereignData(updated));
 
         logger.info(
           `[TicketZ] Jour ${today} — total ${(updated.totalInMicrounits / 1_000_000).toFixed(2)}€ (${updated.ordersCount} tickets)`

@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
 
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as Record<string, unknown> | null;
+  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as JsonObject | null;
   const customDomain = (config?.customDomain as string | undefined) ?? null;
   const slug = (config?.slug as string | undefined) ?? tenantId;
   const cnameTarget = `${slug}.${APP_DOMAIN}`;
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: `Impossible d'utiliser un sous-domaine ${APP_DOMAIN}` }, { status: 400 });
   }
 
-  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as Record<string, unknown> | null;
+  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as JsonObject | null;
   const slug = (config?.slug as string | undefined) ?? tenantId;
 
   // Persister dans tenantConfig
@@ -96,7 +97,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as Record<string, unknown> | null;
+  const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as JsonObject | null;
   const domain = config?.customDomain as string | undefined;
 
   if (domain) {

@@ -5,6 +5,7 @@
  */
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://app.pennylane.com/api/external/v1';
 
@@ -33,7 +34,7 @@ export class PennylaneConnector implements ISourceConnector {
             const data = await res.json() as { company?: { name?: string } };
             return { ok: true, providerName: 'Pennylane', accountInfo: { name: data.company?.name } };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

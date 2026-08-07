@@ -24,6 +24,7 @@ import type { PlatformVariant } from '@/domain/schemas/tenant';
 import { getSystemTenantId, getAllSystemTenantIds } from '@/lib/mcc/SystemTenantRegistry';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -105,7 +106,7 @@ function PromotionModal({
             onSuccess();
             onClose();
         } catch (err) {
-            toast.error(`Erreur promotion : ${String(err)}`);
+            toast.error(`Erreur promotion : ${toError(err).message}`);
         } finally {
             setLoading(false);
         }
@@ -206,7 +207,7 @@ function TierRow({ variant, tierCfg, onPromote }: {
             if (!res.ok) throw new Error(await res.text());
             toast.success(`${tenantId} réinitialisé ✓`);
         } catch (err) {
-            toast.error(`Erreur reset : ${String(err)}`);
+            toast.error(`Erreur reset : ${toError(err).message}`);
         } finally {
             setLoading(null);
         }

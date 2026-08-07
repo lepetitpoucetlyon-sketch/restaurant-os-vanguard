@@ -5,6 +5,7 @@
  */
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://api.zelty.fr/2.7';
 
@@ -32,7 +33,7 @@ export class ZeltyConnector implements ISourceConnector {
             if (!res.ok) return { ok: false, error: `HTTP ${res.status}` };
             return { ok: true, providerName: 'Zelty' };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

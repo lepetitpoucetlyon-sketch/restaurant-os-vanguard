@@ -8,6 +8,7 @@ import { Order, OrderItem, FiscalSeal } from "@nexus/contracts";
 import { SovereignData } from "@shared/nexus-contract";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { logger } from "@/lib/logger";
+import { JsonObject } from "@/shared/types/json";
 
 export interface TaxBreakdown {
     total: number;
@@ -44,7 +45,7 @@ export class FinanceCore {
         const rates: Record<number, number> = {};
 
         items.forEach(item => {
-            const itemTotal = ('unitPriceInMicrounits' in item ? Number((item as Record<string, unknown>).unitPriceInMicrounits) : 0) * item.quantity;
+            const itemTotal = ('unitPriceInMicrounits' in item ? Number((item as JsonObject).unitPriceInMicrounits) : 0) * item.quantity;
             total += itemTotal;
 
             // Business Rule Grade VI: Cocktails & Alcohol at 20%, Food at 10%

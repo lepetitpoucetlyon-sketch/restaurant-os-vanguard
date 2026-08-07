@@ -22,6 +22,7 @@ import {
     PIIDetection,
     PULSE_SCHEDULE,
 } from './types';
+import { JsonObject } from "@/shared/types/json";
 
 // ============================================
 // PII DETECTION PATTERNS
@@ -300,7 +301,7 @@ export class PulseSanitizer {
             }
 
             if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                this.scanObject(value as Record<string, unknown>, fieldPath);
+                this.scanObject(value as JsonObject, fieldPath);
             }
         }
     }
@@ -347,7 +348,7 @@ export class PulseSanitizer {
 
     private isTrend(value: unknown): boolean {
         if (typeof value !== 'object' || value === null) return false;
-        const obj = value as Record<string, unknown>;
+        const obj = value as JsonObject;
         return (
             typeof obj.direction === 'string' &&
             typeof obj.magnitudePercent === 'number' &&

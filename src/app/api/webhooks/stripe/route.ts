@@ -353,7 +353,7 @@ export async function POST(req: NextRequest) {
       default:
         logger.info(`[Stripe Webhook] Event non géré: ${event.type}`);
     }
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[Stripe Webhook] Erreur traitement event', error);
     // Retourner 200 à Stripe même en cas d'erreur interne pour éviter les retries infinis
     return NextResponse.json({ received: true, error: 'Erreur interne' });

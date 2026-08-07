@@ -20,6 +20,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { JsonObject } from "@/shared/types/json";
 
 const TenantOverridePostSchema = z.object({
   tenantIds: z.array(z.string()).min(1),
@@ -39,7 +40,7 @@ function setNested(obj: Record<string, unknown>, dotPath: string, value: unknown
     if (typeof cur[parts[i]] !== 'object' || cur[parts[i]] === null) {
       cur[parts[i]] = {};
     }
-    cur = cur[parts[i]] as Record<string, unknown>;
+    cur = cur[parts[i]] as JsonObject;
   }
   cur[parts[parts.length - 1]] = value;
 }
@@ -49,7 +50,7 @@ function deleteNested(obj: Record<string, unknown>, dotPath: string): void {
   let cur: Record<string, unknown> = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     if (typeof cur[parts[i]] !== 'object' || cur[parts[i]] === null) return;
-    cur = cur[parts[i]] as Record<string, unknown>;
+    cur = cur[parts[i]] as JsonObject;
   }
   delete cur[parts[parts.length - 1]];
 }
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   await Promise.all(
     tenantIds.map(async (tid) => {
-      const current = await Nexus.adapter.get(`tenants/${tid}/tenantConfig`) as Record<string, unknown> | null;
+      const current = await Nexus.adapter.get(`tenants/${tid}/tenantConfig`) as JsonObject | null;
       const before  = (current as { overrides?: unknown } | null)?.overrides ?? {};
 
       // Deep-merge overrides into tenantConfig.overrides
@@ -131,7 +132,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
   const current = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as {
     overrides?: Record<string, unknown>;
   } | null;
-  const overrides = { ...(current?.overrides ?? {}) } as Record<string, unknown>;
+  const overrides = { ...(current?.overrides ?? {}) } as JsonObject;
   const before    = JSON.parse(JSON.stringify(overrides));
 
   deleteNested(overrides, key.replace(/^overrides\./, ''));

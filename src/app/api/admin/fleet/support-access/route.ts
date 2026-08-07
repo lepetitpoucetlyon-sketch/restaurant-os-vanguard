@@ -43,11 +43,12 @@ async function notifyTenantAccess(tenantId: string, operatorId: string, action: 
 <p style="color:#888;font-size:12px;">Restaurant OS — Transparence RGPD</p>`,
     });
   } catch (err) {
-    logger.warn('[support-access] Notification email failed:', String(err));
+    logger.warn('[support-access] Notification email failed:', toError(err).message);
   }
 }
 
 import { z } from 'zod';
+import { toError } from "@/lib/toError";
 
 const DEFAULT_DURATION_HOURS = 4;
 

@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 interface IntegrationConfig {
   autoAccept?: boolean;
@@ -42,7 +43,7 @@ export function registerAntiCorruptionLayerHandler() {
         logger.info(`[ACL] Auto-Accept activé pour ${platform}. Traduction du payload brut vers les événements natifs de l'Empire.`);
         
         const canonicalOrderId = `order_${crypto.randomUUID()}`;
-        const rp = rawPayload as Record<string, unknown>;
+        const rp = rawPayload as JsonObject;
         const amount = (rp.total_price_cents as number) * 100 || 0; 
         
         await NexusEventBus.emitDurable('order.placed', {

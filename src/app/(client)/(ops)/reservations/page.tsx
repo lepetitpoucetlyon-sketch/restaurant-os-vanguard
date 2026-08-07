@@ -36,6 +36,7 @@ import { CustomerCustomerView } from '@/modules/commerce';
 import { CustomerDetailPanel } from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { JsonObject } from "@/shared/types/json";
 
 function ReservationsPage() {
     const {
@@ -210,11 +211,11 @@ function ReservationsPage() {
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-text-muted border border-border rounded-full px-2 py-0.5">{g.status ?? "en attente"}</span>
                                             </div>
                                             <h3 className="font-black text-text-primary text-sm truncate">{g.name}</h3>
-                                            {Boolean((g as Record<string, unknown>)["minCovers"]) && (
-                                                <p className="text-[10px] text-text-muted mt-1">{String((g as Record<string, unknown>)["minCovers"] ?? "")}–{String((g as Record<string, unknown>)["maxCovers"] ?? "")} couverts</p>
+                                            {Boolean((g as JsonObject)["minCovers"]) && (
+                                                <p className="text-[10px] text-text-muted mt-1">{String((g as JsonObject)["minCovers"] ?? "")}–{String((g as JsonObject)["maxCovers"] ?? "")} couverts</p>
                                             )}
-                                            {Boolean((g as Record<string, unknown>)["notes"]) && (
-                                                <p className="text-[10px] text-text-muted mt-2 line-clamp-2 italic">{String((g as Record<string, unknown>)["notes"] ?? "")}</p>
+                                            {Boolean((g as JsonObject)["notes"]) && (
+                                                <p className="text-[10px] text-text-muted mt-2 line-clamp-2 italic">{String((g as JsonObject)["notes"] ?? "")}</p>
                                             )}
                                         </div>
                                     ))}

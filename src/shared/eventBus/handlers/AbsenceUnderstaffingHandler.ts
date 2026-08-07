@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class AbsenceUnderstaffingHandler {
   static register() { 
@@ -65,7 +66,7 @@ export class AbsenceUnderstaffingHandler {
             }
         }
       } catch (err) {
-          logger.error('[AbsenceUnderstaffingHandler] Error checking schedule', String(err));
+          logger.error('[AbsenceUnderstaffingHandler] Error checking schedule', toError(err).message);
       }
     }, { id: 'absence-understaffing', priority: 'HIGH' });
   }

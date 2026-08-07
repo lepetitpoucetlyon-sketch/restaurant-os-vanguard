@@ -2,6 +2,7 @@ import { db, SyncOperation } from './offline-store';
 import { checkOnlineStatus } from './connectivity-hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/axiom';
+import { toError } from "@/lib/toError";
 
 /**
  * 🔄 SyncManager - Restaurant OS
@@ -98,7 +99,7 @@ export class SyncManager {
                 logger.info('SyncManager: Operation synced and removed', { id: op.id, type: op.type });
             } catch (error) {
                 const err = error as Error;
-                const errorMessage = err.message || String(error);
+                const errorMessage = err.message || toError(error).message;
                 logger.error('SyncManager: Sync failed for operation', { id: op.id, error: errorMessage });
                 
                 await db.syncQueue.update(op.id!, {

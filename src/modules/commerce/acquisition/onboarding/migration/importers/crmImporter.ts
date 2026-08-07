@@ -60,7 +60,8 @@ export async function importCRM(file: ParsedFile, onProgress: (n: number) => voi
   // Build email → existing doc map for dedup
   const existing = await Nexus.adapter.query<{ id: string; email?: string }>('crms');
   const emailIndex = new Map<string, string>(
-    existing.filter(r => r.email).map(r => [r.email!.toLowerCase(), r.id])
+    existing.filter((r): r is typeof r & { email: string } => Boolean(r.email))
+            .map(r => [r.email.toLowerCase(), r.id])
   );
   onProgress(20);
 

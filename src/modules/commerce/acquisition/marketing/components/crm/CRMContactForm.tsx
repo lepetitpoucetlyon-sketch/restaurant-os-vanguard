@@ -8,6 +8,7 @@ import { useLanguage } from '@/shared/hooks';
 import { Button } from '@ui/button';
 import { BottomSheet } from '@ui/BottomSheet';
 import { useIsMobile } from '@/shared/hooks';
+import { JsonObject } from "@/shared/types/json";
 
 export function CRMContactForm() {
     const { t } = useLanguage();
@@ -34,7 +35,7 @@ export function CRMContactForm() {
                 name: formState.name,
                 phone: formState.phone,
                 notes: formState.notes,
-                tags: (formState as unknown as Record<string, unknown>).tags as string[] || [],
+                tags: (formState as unknown as JsonObject).tags as string[] || [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             });

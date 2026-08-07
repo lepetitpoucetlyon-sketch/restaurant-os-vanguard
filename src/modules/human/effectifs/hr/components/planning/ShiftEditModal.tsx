@@ -342,7 +342,7 @@ export function ShiftEditModal({
                     {!isNew ? (
                         <button
                             onClick={() => {
-                                onDelete(shift!.id);
+                                if (shift) onDelete(shift.id);
                                 onClose();
                             }}
                             className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-status-danger hover:bg-surface-bg transition-all flex items-center gap-3"

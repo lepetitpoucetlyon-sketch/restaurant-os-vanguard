@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
       schedule,
       syncedAt: syncRecord.lastSyncedAt,
     });
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[Google SyncHours] Erreur', error);
     const msg = error instanceof Error ? error.message : 'Erreur interne';
     return NextResponse.json({ error: msg }, { status: 500 });

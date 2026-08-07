@@ -1,6 +1,7 @@
 import type { IReservationProvider, Reservation } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Widget propre — réservations créées via /[slug]/reservations ou l'API interne.
@@ -18,7 +19,7 @@ export class WidgetReservationProvider implements IReservationProvider {
                 .filter((r): r is Reservation => !!r && typeof r === 'object' && (r as Reservation).date >= now)
                 .sort((a, b) => `${a.date}T${a.time}` < `${b.date}T${b.time}` ? -1 : 1);
         } catch (err) {
-            logger.error('[WidgetReservationProvider] listUpcoming error', String(err));
+            logger.error('[WidgetReservationProvider] listUpcoming error', toError(err).message);
             return [];
         }
     }

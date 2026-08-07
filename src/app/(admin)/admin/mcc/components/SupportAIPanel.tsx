@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BotMessageSquare, AlertTriangle, CheckCircle2, Loader2, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 type Severity = 'critical' | 'high' | 'medium' | 'low';
 
@@ -56,7 +57,7 @@ export function SupportAIPanel() {
       }
       setResult(await res.json() as DiagnoseResponse);
     } catch (err) {
-      toast.error(`Erreur diagnostic : ${String(err)}`);
+      toast.error(`Erreur diagnostic : ${toError(err).message}`);
     } finally {
       setIsLoading(false);
     }

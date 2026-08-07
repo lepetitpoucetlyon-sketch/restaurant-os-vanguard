@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class FleetOutboxDrainService {
     /**
@@ -40,7 +41,7 @@ export class FleetOutboxDrainService {
                 logger.info(`[FleetOutboxDrain] Successfully drained ${count} events for tenant ${tenantId}`);
             }
         } catch (error) {
-            logger.error(`[FleetOutboxDrain] Error draining outbox for tenant ${tenantId}`, String(error));
+            logger.error(`[FleetOutboxDrain] Error draining outbox for tenant ${tenantId}`, toError(error).message);
         }
         return count;
     }

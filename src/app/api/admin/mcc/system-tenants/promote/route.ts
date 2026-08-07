@@ -12,6 +12,7 @@ import { PlatformVariantSchema } from '@/domain/schemas/tenant';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { toError } from "@/lib/toError";
 
 const BodySchema = z.object({
     variant:     PlatformVariantSchema,
@@ -68,6 +69,6 @@ export async function POST(req: NextRequest) {
 
     } catch (err) {
         logger.error('[MCC/promote] Échec promotion', err);
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        return NextResponse.json({ error: toError(err).message }, { status: 500 });
     }
 }

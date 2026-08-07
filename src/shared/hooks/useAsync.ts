@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { SovereignValue, SovereignData } from "@shared/nexus-contract";
+import { toError } from "@/lib/toError";
 
 type AsyncStatus = "idle" | "loading" | "success" | "error";
 
@@ -68,7 +69,7 @@ export function useAsync<T, Args extends (SovereignValue | SovereignData)[] = []
                 }
                 return result;
             } catch (e) {
-                const err = e instanceof Error ? e : new Error(String(e));
+                const err = e instanceof Error ? e : new Error(toError(e).message);
                 if (mountedRef.current) {
                     setError(err);
                     setStatus("error");

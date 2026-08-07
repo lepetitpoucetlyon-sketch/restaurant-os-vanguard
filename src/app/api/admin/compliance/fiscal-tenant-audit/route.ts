@@ -4,6 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
+import { toError } from "@/lib/toError";
 
 interface JournalEntry {
     id: string;
@@ -126,7 +127,7 @@ export async function GET(request: NextRequest) {
             chainStatus,
         });
     } catch (err) {
-        logger.error('[fiscal-tenant-audit] Erreur', String(err));
+        logger.error('[fiscal-tenant-audit] Erreur', toError(err).message);
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Erreur interne.' },
             { status: 500 }

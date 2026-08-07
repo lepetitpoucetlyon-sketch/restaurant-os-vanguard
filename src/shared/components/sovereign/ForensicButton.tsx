@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { useTenant } from '@/shared/hooks/useTenant';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
+import { toError } from "@/lib/toError";
 
 export function ForensicButton() {
   const { activeTenantId } = useTenant();
@@ -46,7 +47,7 @@ export function ForensicButton() {
 
       toast.success(`Export FEC ${yearMonth} téléchargé`);
     } catch (err) {
-      toast.error(`Erreur export FEC : ${String(err)}`);
+      toast.error(`Erreur export FEC : ${toError(err).message}`);
     } finally {
       setLoading(false);
     }

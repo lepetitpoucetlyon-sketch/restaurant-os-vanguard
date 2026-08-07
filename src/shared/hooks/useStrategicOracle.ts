@@ -6,6 +6,7 @@ import { MacroBrain, FleetInsight } from '@modules/intelligence/services/MacroBr
 import { logger } from '@/lib/axiom';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 /**
  * useStrategicOracle (Empire Grade)
@@ -36,7 +37,7 @@ export function useStrategicOracle() {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ insights: fresh.map(i => ({ id: i.id, title: i.title, impact: i.impact })) }),
-        }).catch(err => logger.error('notify-critical failed', { err: String(err) }));
+        }).catch(err => logger.error('notify-critical failed', { err: toError(err).message }));
     }, [insights]);
 
     // 2. Executive Briefing - AI-driven fleet analysis
@@ -88,7 +89,7 @@ export function useStrategicOracle() {
                 id:          toastId,
                 description: err instanceof Error ? err.message : 'Erreur inconnue',
             });
-            logger.error('Oracle: Action failed', { insightId: insight.id, err: String(err) });
+            logger.error('Oracle: Action failed', { insightId: insight.id, err: toError(err).message });
             throw err;
         }
     }, []);

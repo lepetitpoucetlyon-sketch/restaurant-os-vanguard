@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PayrollProviderConfig } from '@/modules/human';
+import { JsonObject } from "@/shared/types/json";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const caller = await requireTenantAdmin(req);
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     // Ne pas exposer les credentials — retourner uniquement les métadonnées
     return NextResponse.json({
         provider: config?.provider ?? null,
-        connectedAt: (config as Record<string, unknown> | null)?.connectedAt ?? null,
-        providerInfo: (config as Record<string, unknown> | null)?.providerInfo ?? null,
+        connectedAt: (config as JsonObject | null)?.connectedAt ?? null,
+        providerInfo: (config as JsonObject | null)?.providerInfo ?? null,
     });
 }

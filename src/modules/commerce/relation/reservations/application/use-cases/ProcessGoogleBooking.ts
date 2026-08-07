@@ -43,7 +43,7 @@ export class ProcessGoogleBookingUseCase {
       await this.repository.save(reservation);
 
       return { success: true, message: 'Booking processed successfully.' };
-    } catch (error: unknown) {
+    } catch (error) {
       const msg = toError(error).message;
       console.error('[ProcessGoogleBookingUseCase] Error:', msg);
       return { success: false, message: 'Internal server error while processing booking.' };

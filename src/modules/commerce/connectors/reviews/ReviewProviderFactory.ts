@@ -45,10 +45,8 @@ export class ReviewProviderFactory {
                         return reviews;
                     };
                 }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                const value = (target as Record<string | symbol, unknown>)[prop];
-                return typeof value === 'function' ? value.bind(target) : value;
+                const value = Reflect.get(target, prop);
+                return typeof value === 'function' ? (value as (...args: unknown[]) => unknown).bind(target) : value;
             }
         });
     }

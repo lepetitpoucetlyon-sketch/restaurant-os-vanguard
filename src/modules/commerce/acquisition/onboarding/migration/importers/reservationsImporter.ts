@@ -51,8 +51,14 @@ export async function importReservationHistory(file: ParsedFile, onProgress: (n:
   onProgress(5);
 
   const crmRecords = await Nexus.adapter.query<CrmRecord>('crms');
-  const emailIndex = new Map<string, string>(crmRecords.filter(r => r.email).map(r => [r.email!.toLowerCase(), r.id]));
-  const phoneIndex = new Map<string, string>(crmRecords.filter(r => r.phone).map(r => [r.phone!.replace(/\s/g, ''), r.id]));
+  const emailIndex = new Map<string, string>(
+    crmRecords.filter((r): r is typeof r & { email: string } => Boolean(r.email))
+              .map(r => [r.email.toLowerCase(), r.id])
+  );
+  const phoneIndex = new Map<string, string>(
+    crmRecords.filter((r): r is typeof r & { phone: string } => Boolean(r.phone))
+              .map(r => [r.phone.replace(/\s/g, ''), r.id])
+  );
   onProgress(20);
 
   let updated = 0, skipped = 0;

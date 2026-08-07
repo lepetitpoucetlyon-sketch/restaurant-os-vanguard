@@ -4,6 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/axiom';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import type { SovereignData } from '@/shared/nexus-contract';
+import { toError } from "@/lib/toError";
 
 /**
  * 🛰️ API Backend de Synchro Hors-Ligne pour le JET (NF525)
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, count: entries.length });
   } catch (error) {
-    logger.error('[JET Sync] Erreur lors de la synchronisation', { error: String(error) });
+    logger.error('[JET Sync] Erreur lors de la synchronisation', { error: toError(error).message });
     return NextResponse.json({ error: 'Erreur interne de synchronisation JET' }, { status: 500 });
   }
 }

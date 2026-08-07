@@ -11,6 +11,7 @@ import { parsePDFWithOCR } from '@/modules/commerce/acquisition/onboarding/migra
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
 import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
 import { createLLMProvider } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { toError } from "@/lib/toError";
 
 // Bootstrap du provider si pas encore fait
 if (!LLMManager['_provider']) {
@@ -53,6 +54,6 @@ export async function POST(req: NextRequest) {
         });
     } catch (err) {
         logger.error('[onboarding/ocr]', err);
-        return NextResponse.json({ error: String(err) }, { status: 500 });
+        return NextResponse.json({ error: toError(err).message }, { status: 500 });
     }
 }

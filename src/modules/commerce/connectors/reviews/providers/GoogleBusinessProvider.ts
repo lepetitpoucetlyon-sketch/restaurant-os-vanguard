@@ -1,5 +1,6 @@
 import type { IReviewProvider, Review } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Google Business Profile — My Business API v4.
@@ -58,7 +59,7 @@ export class GoogleBusinessProvider implements IReviewProvider {
                 .map(r => this.normalize(tenantId, r))
                 .filter(r => new Date(r.date) >= since);
         } catch (err) {
-            logger.error('[GoogleBusinessProvider] fetchRecent error', String(err));
+            logger.error('[GoogleBusinessProvider] fetchRecent error', toError(err).message);
             return [];
         }
     }

@@ -6,6 +6,7 @@ import { revokeDevice } from '@/lib/sovereign/lockdown';
 import { ShieldAlert, ShieldCheck, Smartphone, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 interface Device {
   id: string; // fingerprint
@@ -26,7 +27,7 @@ export function DeviceManager({ uid }: { uid: string }) {
       const fetchedDevices = await Nexus.adapter.query<Device>(`users/${uid}/certifiedDevices`);
       setDevices(fetchedDevices);
     } catch (err) {
-      logger.warn('[DeviceManager] Failed to fetch devices', String(err));
+      logger.warn('[DeviceManager] Failed to fetch devices', toError(err).message);
     } finally {
       setLoading(false);
     }

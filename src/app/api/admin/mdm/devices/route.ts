@@ -10,6 +10,7 @@ import { MosyleClient, type MosyleDevice } from '@/lib/MosyleClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const MOCK_DEVICES: MosyleDevice[] = [
   {
@@ -63,7 +64,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const devices = await MosyleClient.listDevices();
     return NextResponse.json({ devices, demo: false });
   } catch (err) {
-    logger.warn('[MDM] listDevices failed — fallback mock', String(err));
+    logger.warn('[MDM] listDevices failed — fallback mock', toError(err).message);
     return NextResponse.json({ devices: MOCK_DEVICES, demo: true });
   }
 }

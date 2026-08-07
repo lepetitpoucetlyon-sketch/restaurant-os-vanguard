@@ -8,6 +8,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors/ConnectorRegistry';
 import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import { toError } from "@/lib/toError";
 
 export async function POST(req: NextRequest) {
     const caller = await requireTenantUser(req);
@@ -30,6 +31,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(result);
     } catch (err) {
         logger.error('[onboarding/connector/test]', err);
-        return NextResponse.json({ ok: false, error: String(err) });
+        return NextResponse.json({ ok: false, error: toError(err).message });
     }
 }

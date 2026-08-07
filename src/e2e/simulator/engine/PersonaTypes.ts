@@ -1,3 +1,6 @@
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
+
 export interface PersonaContext {
   tenantId: string;
   operatorId: string;
@@ -36,7 +39,7 @@ export async function runAct(
       layer,
       success: true,
       durationMs: Date.now() - start,
-      data: data as Record<string, unknown>,
+      data: data as JsonObject,
     };
   } catch (e) {
     return {
@@ -44,7 +47,7 @@ export async function runAct(
       layer,
       success: false,
       durationMs: Date.now() - start,
-      error: String(e),
+      error: toError(e).message,
     };
   }
 }

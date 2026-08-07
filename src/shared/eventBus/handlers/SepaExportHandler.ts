@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export function registerSepaExportHandler() {
   return NexusEventBus.on(
@@ -28,7 +29,7 @@ export function registerSepaExportHandler() {
 
         logger.info(`[SepaExport] ${pendingInvoices.length} facture(s) marquées payées pour le batch ${paymentBatchId}`);
       } catch (err) {
-        logger.error(`[SepaExport] Erreur lors de la mise à jour des factures du batch ${paymentBatchId}`, String(err));
+        logger.error(`[SepaExport] Erreur lors de la mise à jour des factures du batch ${paymentBatchId}`, toError(err).message);
       }
 
       empireAudit.log({

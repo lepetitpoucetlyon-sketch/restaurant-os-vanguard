@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
 import { HermesKnowledgeManager } from '@/modules/intelligence';
 
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import { toError } from "@/lib/toError";
 
 /**
  * Analyse intelligente BACKGROUND après chaque paiement.
@@ -89,7 +90,7 @@ async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/
 
     logger.info(`[Intelligence] Stock trend — ${names} → ${answer.answer.slice(0, 120)}`);
   } catch (err) {
-    logger.warn('[Intelligence] analyzeStockTrend failed', String(err));
+    logger.warn('[Intelligence] analyzeStockTrend failed', toError(err).message);
   }
 }
 
@@ -147,7 +148,7 @@ async function analyzeRevenueSignal(tenantId: string, totalInMicrounits: number)
       );
     }
   } catch (err) {
-    logger.warn('[Intelligence] analyzeRevenueSignal failed', String(err));
+    logger.warn('[Intelligence] analyzeRevenueSignal failed', toError(err).message);
   }
 }
 

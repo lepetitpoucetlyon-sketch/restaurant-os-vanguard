@@ -249,10 +249,12 @@ export class ReservationHistoryImporter {
 
     const crmRecords = await Nexus.adapter.query<CRMRecord>('crms');
     const emailIndex = new Map<string, string>(
-      crmRecords.filter(r => r.email).map(r => [r.email!.toLowerCase().trim(), r.id])
+      crmRecords.filter((r): r is typeof r & { email: string } => Boolean(r.email))
+               .map(r => [r.email.toLowerCase().trim(), r.id])
     );
     const phoneIndex = new Map<string, string>(
-      crmRecords.filter(r => r.phone).map(r => [normalizePhone(r.phone!), r.id])
+      crmRecords.filter((r): r is typeof r & { phone: string } => Boolean(r.phone))
+               .map(r => [normalizePhone(r.phone), r.id])
     );
 
     const updates = new Map<string, AggEntry>();

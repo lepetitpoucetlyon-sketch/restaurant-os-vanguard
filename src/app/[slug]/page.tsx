@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { MapPin, Phone, Mail, Clock, CalendarCheck } from 'lucide-react';
+import { JsonObject } from "@/shared/types/json";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -24,7 +25,7 @@ async function getTenantData(slug: string) {
   if (!raw) return null;
   const parsed = TenantConfigSchema.safeParse(raw);
   if (!parsed.success) return null;
-  return { config: parsed.data, raw: raw as Record<string, unknown> };
+  return { config: parsed.data, raw: raw as JsonObject };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

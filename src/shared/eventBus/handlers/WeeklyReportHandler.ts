@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class WeeklyReportHandler {
   static register() {
@@ -59,7 +60,7 @@ export class WeeklyReportHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[WeeklyReportHandler] Error generating weekly report', String(err));
+        logger.error('[WeeklyReportHandler] Error generating weekly report', toError(err).message);
       }
     }, { id: 'weekly-report', priority: 'BACKGROUND' });
   }

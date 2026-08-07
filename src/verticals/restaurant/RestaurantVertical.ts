@@ -13,6 +13,7 @@ import {
   RestaurantLogisticsAdapter,
   RestaurantMccAdapter,
 } from './adapters';
+import { toError } from "@/lib/toError";
 
 export class RestaurantVertical implements IVerticalPlugin {
   public readonly id = 'restaurant';
@@ -175,7 +176,7 @@ export class RestaurantVertical implements IVerticalPlugin {
             totalInMicrounits: report.avgContributionMarginInMicrounits,
             covers: report.items.length,
           });
-        }).catch((err: unknown) => logger.warn(`[RestaurantVertical] menu engineering failed: ${String(err)}`));
+        }).catch((err: unknown) => logger.warn(`[RestaurantVertical] menu engineering failed: ${toError(err).message}`));
       },
     );
 

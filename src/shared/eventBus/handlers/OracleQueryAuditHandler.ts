@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class OracleQueryAuditHandler {
   static register() {
@@ -31,7 +32,7 @@ export class OracleQueryAuditHandler {
             timestamp: new Date(),
         });
       } catch (err) {
-        logger.error('[OracleQueryAuditHandler] Error auditing AI query', String(err));
+        logger.error('[OracleQueryAuditHandler] Error auditing AI query', toError(err).message);
       }
     }, { id: 'oracle-query-audit', priority: 'BACKGROUND' });
   }

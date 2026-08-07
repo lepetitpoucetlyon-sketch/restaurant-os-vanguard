@@ -20,6 +20,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const COMMISSION_RATE = 0.10; // 10%
 
@@ -83,7 +84,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
   const { resellerId } = body;
   if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
 
-  const existing = await Nexus.adapter.get('mcc/resellers/' + resellerId) as Record<string, unknown> | null;
+  const existing = await Nexus.adapter.get('mcc/resellers/' + resellerId) as JsonObject | null;
   if (!existing) return NextResponse.json({ error: 'Revendeur introuvable' }, { status: 404 });
 
   const updates: Record<string, unknown> = { updatedAt: Date.now() };

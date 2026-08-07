@@ -2,6 +2,7 @@ import type { IPayrollConnectorProvider, TimesheetEntry, Payslip, PayrollCost, P
 import type { PayrollPeriodSummary } from '../../../remuneration/payroll/types';
 import { MergePayrollClient } from '../../../remuneration/payroll/MergePayrollClient';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Adaptateur IPayrollConnectorProvider → MergePayrollClient.
@@ -24,7 +25,7 @@ export class MergeConnectorProvider implements IPayrollConnectorProvider {
             const employees = await client.listRemoteEmployees();
             return { ok: true, info: `${employees.length} employé(s) distant(s)` };
         } catch (err) {
-            logger.warn('[MergeConnectorProvider] ping failed', String(err));
+            logger.warn('[MergeConnectorProvider] ping failed', toError(err).message);
             return { ok: false };
         }
     }

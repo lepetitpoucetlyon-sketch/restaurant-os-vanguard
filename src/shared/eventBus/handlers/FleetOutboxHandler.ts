@@ -1,6 +1,7 @@
 import { NexusEventBus, NexusEventPayload, NexusEventName } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Gère la remontée des événements critiques vers le tableau de bord global MCC.
@@ -33,7 +34,7 @@ export class FleetOutboxHandler {
 
       logger.info(`[FleetOutboxHandler] Événement ${eventName} placé dans l'outbox MCC du tenant ${tenantId}`);
     } catch (err) {
-      logger.error(`[FleetOutboxHandler] Erreur lors de l'outboxing de ${eventName}`, String(err));
+      logger.error(`[FleetOutboxHandler] Erreur lors de l'outboxing de ${eventName}`, toError(err).message);
     }
   }
 }

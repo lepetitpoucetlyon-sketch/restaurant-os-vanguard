@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * 📦 DLCExpiryJob - Grade X
@@ -35,7 +36,7 @@ export const DLCExpiryJob = {
             logger.info(`[DLCExpiryJob] Exécution terminée. ${expiredCount} articles périmés détectés.`);
             return { success: true, expiredCount };
         } catch (error) {
-            logger.error(`[DLCExpiryJob] Erreur:`, String(error));
+            logger.error(`[DLCExpiryJob] Erreur:`, toError(error).message);
             throw error;
         }
     }

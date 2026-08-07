@@ -3,6 +3,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import type { EmployeeDocument } from '@/domain/schemas/employeeDocument';
 import type { License } from '@/modules/compliance/domain/schemas/license';
+import { toError } from "@/lib/toError";
 
 interface RegisterDoc {
   id: string;
@@ -128,7 +129,7 @@ export class ComplianceWatcherService {
 
       logger.info(`[ComplianceWatcher] Scan tenant ${tenantId}: ${expired} expired, ${upcoming} upcoming`);
     } catch (err) {
-      logger.error('[ComplianceWatcher] Scan failed', String(err));
+      logger.error('[ComplianceWatcher] Scan failed', toError(err).message);
     }
 
     return { expired, upcoming };

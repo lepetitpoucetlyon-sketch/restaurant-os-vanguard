@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { JsonObject } from "@/shared/types/json";
 
 export async function generateFingerprint(): Promise<string> {
   const userAgent = navigator.userAgent;
@@ -61,7 +62,7 @@ export async function verifyDevice(uid: string, currentFingerprint: string, isFi
       return { status: "REQUIRES_MANAGER_VALIDATION" };
     }
 
-    const preferences2FA = (userData as Record<string, unknown>)?.preferences2FA as Record<string, boolean> || {};
+    const preferences2FA = (userData as JsonObject)?.preferences2FA as Record<string, boolean> || {};
     const methods: ("email" | "sms")[] = [];
     if (preferences2FA.email_enabled) methods.push("email");
     if (preferences2FA.sms_enabled) methods.push("sms");

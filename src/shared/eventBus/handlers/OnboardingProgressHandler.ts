@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const ONBOARDING_STEPS = [
   'welcome',
@@ -74,7 +75,7 @@ export class OnboardingProgressHandler {
           logger.info(`[Onboarding] Tenant ${tenantId} — onboarding fully completed (${totalSteps}/${totalSteps})`);
         }
       } catch (err) {
-        logger.error('[OnboardingProgressHandler] Error updating onboarding step', String(err));
+        logger.error('[OnboardingProgressHandler] Error updating onboarding step', toError(err).message);
       }
     }, { id: 'onboarding-progress', priority: 'BACKGROUND' });
   }

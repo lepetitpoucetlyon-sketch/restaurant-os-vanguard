@@ -17,7 +17,7 @@ const StockItemBaseSchema = z.object({
   expiryTimestamp:   TimestampSchema.nullable().optional(),
   locationXYZ:       z.tuple([z.number(), z.number(), z.number()]).nullable().optional(),
   schemaVersion:     z.literal(2).default(2),
-  updatedAt:         TimestampSchema.default(() => Date.now() as unknown as ReturnType<typeof Date.now>),
+  updatedAt:         TimestampSchema.default(() => Date.now()),
 }).catchall(z.any());
 
 export const StockItemSchema = StockItemBaseSchema.refine(

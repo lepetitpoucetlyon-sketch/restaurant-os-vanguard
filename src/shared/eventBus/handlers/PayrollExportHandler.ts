@@ -6,6 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
 import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
+import { toError } from "@/lib/toError";
 
 export class PayrollExportHandler {
   static register() {
@@ -60,11 +61,11 @@ export class PayrollExportHandler {
         });
 
       } catch (error) {
-        logger.error(`[PayrollExportHandler] Erreur export:`, String(error));
+        logger.error(`[PayrollExportHandler] Erreur export:`, toError(error).message);
 
         await Nexus.adapter.update(`tenants/${tenantId}/hr/pendingExports/${periodId}`, {
           periodId, status: 'error_queued',
-          error: String(error), totalEmployees, queuedAt: Date.now(),
+          error: toError(error).message, totalEmployees, queuedAt: Date.now(),
         });
 
         empireAudit.log({
@@ -72,7 +73,7 @@ export class PayrollExportHandler {
           module: 'human',
           userId: validatedBy || 'system',
           instanceId: tenantId,
-          details: { periodId, error: String(error) },
+          details: { periodId, error: toError(error).message },
           severity: 'critical',
           timestamp: new Date(),
         });

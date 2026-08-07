@@ -22,6 +22,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
 import type { FiscalSeal } from '@nexus/contracts';
+import { toError } from "@/lib/toError";
 
 const MICROUNITS_PER_CENT = 10; // 1 microunit = 0.000001€, 1 cent = 0.01€ = 10 000 µ
 
@@ -99,7 +100,7 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
     const stripe = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (err) {
-    logger.warn(`[Deposit/webhook] Signature invalide: ${String(err)}`);
+    logger.warn(`[Deposit/webhook] Signature invalide: ${toError(err).message}`);
     return NextResponse.json({ error: 'Signature invalide' }, { status: 401 });
   }
 

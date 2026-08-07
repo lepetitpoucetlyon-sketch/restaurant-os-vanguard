@@ -14,6 +14,7 @@ import { useAuth, useTenant } from "@/shared/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
 import { computePayroll, type StaffTab, type StaffDocument } from "@/app/(client)/(ops)/staff/staffUtils";
+import { JsonObject } from "@/shared/types/json";
 
 const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
 
@@ -75,7 +76,7 @@ export function useStaffPage() {
     }, [selectedSkillUser]);
 
     const handleToggleSkill = async (user: User, skill: string) => {
-        const current = ((user as Record<string, unknown>).skills as string[] | undefined) ?? [];
+        const current = ((user as JsonObject).skills as string[] | undefined) ?? [];
         const next = current.includes(skill) ? current.filter(s => s !== skill) : [...current, skill];
         try {
             await Nexus.adapter.update(`users/${user.id}`, { skills: next });

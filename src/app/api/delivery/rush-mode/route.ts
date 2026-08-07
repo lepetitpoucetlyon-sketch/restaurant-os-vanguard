@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/axiom';
+import { toError } from "@/lib/toError";
 
 /**
  * 🚀 API: Basculer le mode Rush (Pause Livraison)
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, isPaused });
   } catch (error) {
-    logger.error('[Delivery API] Erreur lors du basculement Rush Mode', { error: String(error) });
+    logger.error('[Delivery API] Erreur lors du basculement Rush Mode', { error: toError(error).message });
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });
   }
 }

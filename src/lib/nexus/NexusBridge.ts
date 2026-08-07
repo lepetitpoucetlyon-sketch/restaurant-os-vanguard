@@ -10,6 +10,8 @@ import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 // nexus-core ne doit pas dépendre de la couche config (règle sentrux) : on lit
 // l'env directement plutôt que d'importer APP_MODE de @/config/instance.
@@ -105,7 +107,7 @@ export class NexusBridge {
       .then(({ fleetTelemetry }) => {
         fleetTelemetry.registerNode(tenantId as import('@domain/types/brands').TenantID);
       })
-      .catch((err) => logger.warn('[NexusBridge] registerNode failed', { error: String(err) }));
+      .catch((err) => logger.warn('[NexusBridge] registerNode failed', { error: toError(err).message }));
 
     const push = () => this.pushPulse(tenantId);
     push();
@@ -130,7 +132,7 @@ export class NexusBridge {
         version: process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0',
       });
     } catch (err) {
-      logger.warn('[NexusBridge] Instance pulse failed', { error: String(err) });
+      logger.warn('[NexusBridge] Instance pulse failed', { error: toError(err).message });
     }
   }
 
@@ -156,7 +158,7 @@ export class NexusBridge {
         ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
         ...(remoteData.status || {}),
         layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as unknown as string,
-        businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as Record<string, unknown>
+        businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as JsonObject
       };
   }
 
@@ -208,7 +210,7 @@ export class NexusBridge {
         this.store.set(tenantConfigAtom, nextConfig);
         db.config.put(nextConfig);
       },
-      { onError: (error) => logger.warn('[NexusBridge] Decree listener error', { error: String(error) }) }
+      { onError: (error) => logger.warn('[NexusBridge] Decree listener error', { error: toError(error).message }) }
     );
   }
 

@@ -154,7 +154,7 @@ export class TransactionService {
             logger.info(`[TransactionService] Transaction Certified & Stock Deducted for Order ${orderId}`);
             return { success: true, hash: seal.hash };
 
-        } catch (error: unknown) {
+        } catch (error) {
             logger.error(`[TransactionService] CRITICAL: Transaction failed!`, { error, orderId });
             throw error;
         }

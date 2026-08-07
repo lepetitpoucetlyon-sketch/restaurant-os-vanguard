@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class PromotionExpiryHandler {
   static register() {
@@ -30,7 +31,7 @@ export class PromotionExpiryHandler {
                     updatedAt: Date.now()
                 });
             } catch (e) {
-                logger.warn(`[PromotionExpiry] Impossible de rollback la promo sur le produit ${productId}`, String(e));
+                logger.warn(`[PromotionExpiry] Impossible de rollback la promo sur le produit ${productId}`, toError(e).message);
             }
         }
 
@@ -56,7 +57,7 @@ export class PromotionExpiryHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[PromotionExpiryHandler] Error expiring promotion', String(err));
+        logger.error('[PromotionExpiryHandler] Error expiring promotion', toError(err).message);
       }
     }, { id: 'promotion-expiry', priority: 'HIGH' });
   }

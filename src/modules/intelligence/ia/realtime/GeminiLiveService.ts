@@ -6,6 +6,7 @@ import { SovereignData, SovereignValue } from '@shared/nexus-contract';
 import { ShieldedContext } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import type { IRealtimeVoiceService, RealtimeVoiceCallbacks, RealtimeVoiceConfig } from './IRealtimeVoiceService';
+import { toError } from "@/lib/toError";
 
 export class GeminiLiveService implements IRealtimeVoiceService {
     private socket: WebSocket | null = null;
@@ -140,7 +141,7 @@ export class GeminiLiveService implements IRealtimeVoiceService {
             });
             this.sendToolResult(event.callId, result as SovereignData);
         } catch (error) {
-            logger.error(`[RealtimeVoice] Tool execution error (${tool.name})`, { error: String(error) });
+            logger.error(`[RealtimeVoice] Tool execution error (${tool.name})`, { error: toError(error).message });
             this.sendToolResult(event.callId, { error: "Une erreur est survenue lors de l'exécution de la commande." });
         }
     }

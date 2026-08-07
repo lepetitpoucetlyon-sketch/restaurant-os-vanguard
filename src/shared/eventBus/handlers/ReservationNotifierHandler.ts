@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { toError } from "@/lib/toError";
 
 interface NotificationPayload {
   isSimulation?: boolean;
@@ -105,7 +106,7 @@ export function registerReservationNotifierHandler() {
           lastNotificationAt: Date.now()
       });
     } catch (err) {
-      logger.error(`[ReservationNotifier] Erreur envoi notif pour ${reservationId}`, String(err));
+      logger.error(`[ReservationNotifier] Erreur envoi notif pour ${reservationId}`, toError(err).message);
     }
   };
 

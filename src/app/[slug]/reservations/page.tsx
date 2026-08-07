@@ -2,6 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { ReservationWidget } from '@/modules/commerce';
+import { JsonObject } from "@/shared/types/json";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -40,7 +41,7 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
     null;
 
   // Forward card-imprint config so the widget can show the guarantee step
-  const resaRaw = (tenantData as Record<string, unknown>).reservationConfig as Record<string, unknown> | undefined;
+  const resaRaw = (tenantData as JsonObject).reservationConfig as JsonObject | undefined;
   const cardImprintConfig = {
     enabled: resaRaw?.cardImprintEnabled === true,
     condition: (resaRaw?.cardImprintCondition as string | undefined) ?? 'group',

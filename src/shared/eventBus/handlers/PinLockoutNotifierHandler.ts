@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class PinLockoutNotifierHandler {
   static register() {
@@ -27,7 +28,7 @@ export class PinLockoutNotifierHandler {
           body: `Terminal ${terminalId} bloqué (5 échecs PIN). Déverr. auto dans 30s.`,
         });
       } catch (err) {
-        logger.warn('[PinLockoutNotifier] Push indisponible', String(err));
+        logger.warn('[PinLockoutNotifier] Push indisponible', toError(err).message);
       }
 
       empireAudit.log({

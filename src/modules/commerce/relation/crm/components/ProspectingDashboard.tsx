@@ -11,6 +11,7 @@ import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 import type { BrandInput } from '@/lib/BrandingService';
+import { JsonObject } from "@/shared/types/json";
 
 type ExtractedTokens = Partial<BrandConfig>;
 type Phase = 'idle' | 'scanning' | 'preview_ready' | 'applying' | 'done';
@@ -82,7 +83,7 @@ export function ProspectingDashboard() {
         setTokens({
             brandName:    input.name,
             primaryColor: input.primaryColor ?? undefined,
-            surfaceBg:    (theme as unknown as Record<string, unknown>).backgroundColor as string ?? '#0A0A0A',
+            surfaceBg:    (theme as unknown as JsonObject).backgroundColor as string ?? '#0A0A0A',
         });
         setPhase('preview_ready');
     };

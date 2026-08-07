@@ -2,6 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import type { SensorReading } from '@/modules/compliance/domain/schemas/haccp';
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * HACCPLogService — backend du registre sanitaire (hac-6).
@@ -107,7 +108,7 @@ export const HACCPLogService = {
       recordedAt: now,
       source: input.source,
     };
-    await Nexus.adapter.set(`${logPath}/${logId}`, logEntry as unknown as Record<string, unknown>);
+    await Nexus.adapter.set(`${logPath}/${logId}`, logEntry as unknown as JsonObject);
 
     // 2. Dossier de suivi — MÊME forme que celle attendue par NonConformityForm,
     //    pour apparaître dans la liste du manager et y être résolu.

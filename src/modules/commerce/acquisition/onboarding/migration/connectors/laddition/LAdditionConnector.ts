@@ -5,6 +5,7 @@
  */
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://api.laddition.com/v1';
 
@@ -32,7 +33,7 @@ export class LAdditionConnector implements ISourceConnector {
             const data = await res.json() as { restaurant_name?: string };
             return { ok: true, providerName: "L'Addition", accountInfo: { name: data.restaurant_name } };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

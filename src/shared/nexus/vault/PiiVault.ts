@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PiiFields, PiiRecord } from '@/domain/schemas';
+import { JsonObject } from "@/shared/types/json";
 
 const ENCODER = new TextEncoder();
 const DECODER = new TextDecoder();
@@ -71,7 +72,7 @@ export class PiiVault {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/piiVault/${subjectId}`,
-            record as unknown as Record<string, unknown>
+            record as unknown as JsonObject
         );
     }
 
@@ -99,7 +100,7 @@ export class PiiVault {
                 encryptedPayload: '',
                 keyFingerprint: 'ERASED',
                 updatedAt: new Date().toISOString(),
-            } as unknown as Record<string, unknown>
+            } as unknown as JsonObject
         );
         return true;
     }
@@ -111,7 +112,7 @@ export class PiiVault {
         const fields = await this.retrieve(tenantId, subjectId);
         if (!fields) return null;
 
-        const sanitized = { ...(fields as Record<string, unknown>) };
+        const sanitized = { ...(fields as JsonObject) };
         delete sanitized.passwordHash;
         delete sanitized.password;
         delete sanitized.pin;

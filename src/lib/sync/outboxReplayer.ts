@@ -4,6 +4,7 @@ import { NexusEventBus, type NexusEventName } from '@/shared/eventBus/NexusEvent
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * Rejoue les événements bloqués dans l'Outbox au démarrage.
@@ -23,7 +24,7 @@ export async function replayPendingEvents(): Promise<void> {
       }
 
       for (const entry of pending) {
-        const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as Record<string, unknown>);
+        const migratedPayload = PayloadMigrator.migrate(entry.eventName as NexusEventName, entry.payload as JsonObject);
         await NexusEventBus.emit(entry.eventName as NexusEventName, migratedPayload);
         await db.busOutbox.update(entry.id, { status: 'done' });
       }

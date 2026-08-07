@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { logger } from '@/lib/axiom';
 import { OpenBankingProviderFactory } from '@/modules/finance';
+import { toError } from "@/lib/toError";
+
 /**
  * POST /api/finance/bank/webhook
  * Reçoit les notifications de synchronisation de l'agrégateur bancaire
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
                     'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
                     'x-tenant-id':       envelope.tenantId,
                 },
-            }).catch(err => logger.error('bank/webhook: sync trigger failed', { err: String(err) }));
+            }).catch(err => logger.error('bank/webhook: sync trigger failed', { err: toError(err).message }));
         }
     }
 

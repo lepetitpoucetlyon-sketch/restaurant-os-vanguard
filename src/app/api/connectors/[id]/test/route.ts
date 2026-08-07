@@ -9,6 +9,7 @@ import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/mig
 import { logger } from '@/lib/logger';
 import type { ConnectorState } from '@/shared/connector-manifest';
 import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import { toError } from "@/lib/toError";
 
 /**
  * POST /api/connectors/[id]/test
@@ -68,7 +69,7 @@ export async function POST(
       const result = await connector.testConnection({ apiKey: credentials.apiKey, accessToken: credentials.accessToken, ...credentials });
       testResult = { ok: result.ok, error: result.error };
     } catch (err) {
-      testResult = { ok: false, error: String(err) };
+      testResult = { ok: false, error: toError(err).message };
     }
   } else {
     // Pour les autres providers runtime : vérification de présence des champs requis

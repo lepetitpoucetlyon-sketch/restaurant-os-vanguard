@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * 📡 IotOfflineMonitorJob - Grade X
@@ -48,7 +49,7 @@ export const IotOfflineMonitorJob = {
             logger.info(`[IotOfflineMonitorJob] Exécution terminée. ${offlineCount} capteurs hors-ligne détectés.`);
             return { success: true, offlineCount };
         } catch (error) {
-            logger.error(`[IotOfflineMonitorJob] Erreur:`, String(error));
+            logger.error(`[IotOfflineMonitorJob] Erreur:`, toError(error).message);
             throw error;
         }
     }

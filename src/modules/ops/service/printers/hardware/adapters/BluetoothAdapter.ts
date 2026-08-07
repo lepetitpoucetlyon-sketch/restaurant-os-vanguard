@@ -1,5 +1,6 @@
 import type { BluetoothConnection, PrinterBrand, PrintResult } from '../types';
 import { BLE_SERVICES, BLE_CHARACTERISTICS } from '../types';
+import { toError } from "@/lib/toError";
 
 // Web Bluetooth API types (not in TS lib by default)
 interface BluetoothRemoteGATTCharacteristic {
@@ -108,6 +109,6 @@ export async function printBluetooth(
 
     return { success: true, method: 'bluetooth' };
   } catch (err) {
-    return { success: false, method: 'bluetooth', error: String(err) };
+    return { success: false, method: 'bluetooth', error: toError(err).message };
   }
 }

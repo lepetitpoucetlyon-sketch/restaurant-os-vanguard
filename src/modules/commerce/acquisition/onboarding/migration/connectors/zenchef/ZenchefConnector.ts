@@ -5,6 +5,7 @@
  */
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://api.zenchef.com/v1';
 
@@ -33,7 +34,7 @@ export class ZenchefConnector implements ISourceConnector {
             const data = await res.json() as { name?: string; id?: string };
             return { ok: true, providerName: 'Zenchef', accountInfo: { name: data.name, id: data.id } };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

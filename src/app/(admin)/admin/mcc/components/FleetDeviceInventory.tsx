@@ -11,6 +11,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 import { authedFetch } from "@/lib/client/authedFetch";
+import { toError } from "@/lib/toError";
 
 type EnrollmentType = 'NATIVE_ABM' | 'SOFTWARE_MDM';
 type DeviceStatus = 'PREPARATION' | 'SHIPPED' | 'DELIVERED' | 'LOCKED';
@@ -128,7 +129,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
       });
       toast.success("Livraison confirmée. Facturation Stripe démarrée.");
     } catch (err) {
-      logger.warn("Simulated delivery failed", String(err));
+      logger.warn("Simulated delivery failed", toError(err).message);
     }
 
     const updated = row.devices.map(d => 
@@ -152,7 +153,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
       });
       toast.success(isLocked ? "Appareil déverrouillé" : "Kill Switch activé. Appareil verrouillé.");
     } catch (err) {
-      logger.warn("Kill switch API failed", String(err));
+      logger.warn("Kill switch API failed", toError(err).message);
     }
 
     const updated = row.devices.map(d => 

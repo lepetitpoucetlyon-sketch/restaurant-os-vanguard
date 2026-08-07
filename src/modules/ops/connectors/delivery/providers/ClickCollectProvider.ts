@@ -1,6 +1,7 @@
 import type { IDeliveryProvider, DeliveryOrder, DeliveryMenuItem, DeliveryStatus } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Click & Collect propre — commandes passées via /[slug]/order (page à créer).
@@ -17,7 +18,7 @@ export class ClickCollectProvider implements IDeliveryProvider {
                 .filter((o): o is DeliveryOrder => !!o && (o as DeliveryOrder).status === 'new')
                 .sort((a, b) => a.placedAt < b.placedAt ? -1 : 1);
         } catch (err) {
-            logger.error('[ClickCollectProvider] listPendingOrders error', String(err));
+            logger.error('[ClickCollectProvider] listPendingOrders error', toError(err).message);
             return [];
         }
     }
@@ -50,7 +51,7 @@ export class ClickCollectProvider implements IDeliveryProvider {
                 };
             });
         } catch (err) {
-            logger.error('[ClickCollectProvider] getMenu error', String(err));
+            logger.error('[ClickCollectProvider] getMenu error', toError(err).message);
             return [];
         }
     }

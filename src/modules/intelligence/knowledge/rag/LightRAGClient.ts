@@ -336,7 +336,7 @@ export class LightRAGClient {
     private classifyFetchError(error: unknown, label: string, timeoutMs: number): Error {
         if (error instanceof DOMException && error.name === 'AbortError') return new LightRAGTimeoutError(label, timeoutMs);
         if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('network'))) return new LightRAGUnavailableError(label);
-        return error instanceof Error ? error : new Error(String(error));
+        return error instanceof Error ? error : new Error(toError(error).message);
     }
 
     private async request<T>(

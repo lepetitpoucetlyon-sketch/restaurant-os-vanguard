@@ -36,7 +36,7 @@ export class GenerateCA3DeclarationUseCase {
       // In a real scenario, we would also save the `declaration` entity to a relational database here for history.
 
       return { success: true, ediPayload };
-    } catch (error: unknown) {
+    } catch (error) {
       const msg = toError(error).message;
       console.error('[GenerateCA3DeclarationUseCase] Error:', msg);
       return { success: false, error: msg };

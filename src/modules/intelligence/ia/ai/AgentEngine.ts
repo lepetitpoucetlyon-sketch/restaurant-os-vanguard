@@ -52,7 +52,7 @@ async function executeGeminiRequest(url: string, body: string, apiKey: string, t
             if (attempts >= maxAttempts) {
                 rawText = `[Erreur API ${res.status}] ${await res.text()}`;
             }
-        } catch (err: unknown) {
+        } catch (err) {
             const fetchErr = err as Error;
             if (fetchErr.name === 'AbortError' && url.includes('gemini-pro')) {
                 // Timeout on pro -> fallback flash

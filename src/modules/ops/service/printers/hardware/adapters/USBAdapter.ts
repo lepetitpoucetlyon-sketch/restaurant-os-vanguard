@@ -1,4 +1,5 @@
 import type { USBConnection, PrintResult } from '../types';
+import { toError } from "@/lib/toError";
 
 interface USBDevice {
   open(): Promise<void>;
@@ -75,6 +76,6 @@ export async function printUSB(
     if (device) {
       await device.close().catch(() => {});
     }
-    return { success: false, method: 'usb', error: String(err) };
+    return { success: false, method: 'usb', error: toError(err).message };
   }
 }

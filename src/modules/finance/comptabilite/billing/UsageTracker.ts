@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export type UsageType = 'sms' | 'email' | 'ai_request';
 
@@ -29,7 +30,7 @@ export const UsageTracker = {
         updatedAt:             new Date().toISOString(),
       });
     } catch (err) {
-      logger.warn(`[UsageTracker] Impossible de logger ${type} pour ${tenantId}:`, String(err));
+      logger.warn(`[UsageTracker] Impossible de logger ${type} pour ${tenantId}:`, toError(err).message);
     }
   },
 

@@ -8,6 +8,7 @@ import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { sovereignQuery } from '@/modules/intelligence';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
+import { toError } from "@/lib/toError";
 
 // Statuts bloquant l'accès RAG — JWT valide ne suffit pas.
 const BLOCKED_STATUSES: UserStatus[] = ['suspended', 'inactive', 'on_leave', 'RESTRICTED'];
@@ -21,7 +22,7 @@ async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean>
         if (!status) return true; // champ absent → on ne bloque pas (compat legacy)
         return !BLOCKED_STATUSES.includes(status);
     } catch (err) {
-        logger.warn('[Oracle] Impossible de vérifier le statut employé, accès accordé par défaut', String(err));
+        logger.warn('[Oracle] Impossible de vérifier le statut employé, accès accordé par défaut', toError(err).message);
         return true; // fail-open : on ne bloque pas sur erreur Nexus
     }
 }
@@ -96,7 +97,7 @@ export async function POST(req: NextRequest) {
             usage: response.usage,
             ragUsed: !!ragContext,
         });
-    } catch (error: unknown) {
+    } catch (error) {
         logger.error('[Oracle API] Error', error);
         const msg = error instanceof Error ? error.message : 'Internal error';
         return NextResponse.json({ error: msg }, { status: 500 });

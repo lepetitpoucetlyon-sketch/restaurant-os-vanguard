@@ -150,7 +150,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(
       new URL('/settings?tab=integrations&connected=google', req.url)
     );
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[Google OAuth Callback] Erreur inattendue', error);
     return NextResponse.redirect(
       new URL('/settings?tab=integrations&error=internal', req.url)

@@ -4,6 +4,7 @@ import { InvoiceExtractionService } from '@modules/logistics/services/InvoiceExt
 import { IdentityGuardService } from '@/lib/IdentityGuardService';
 import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/domain/schemas/supplier-invoice.schemas';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
@@ -126,8 +127,8 @@ export const VisionService = {
             });
             const parsed = JSON.parse(response.text) as PlateAuditResult;
             return parsed;
-        } catch (error: unknown) {
-            logger.error('VisionService: Plate audit failed', { error: String(error) });
+        } catch (error) {
+            logger.error('VisionService: Plate audit failed', { error: toError(error).message });
             throw new Error('Échec de l\'audit visuel de l\'assiette.');
         }
     },
@@ -168,8 +169,8 @@ export const VisionService = {
                     ? `Anomalie potentielle détectée lors du contrôle HACCP : "${taskDescription}".`
                     : `Tâche HACCP "${taskDescription}" vérifiée et conforme.`,
             };
-        } catch (error: unknown) {
-            logger.error('VisionService: HACCP verification failed', { error: String(error) });
+        } catch (error) {
+            logger.error('VisionService: HACCP verification failed', { error: toError(error).message });
             return {
                 isCompliant: false,
                 confidence: 0.5,

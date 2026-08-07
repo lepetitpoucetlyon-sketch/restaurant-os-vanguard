@@ -60,7 +60,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
       setImprintActive(false);
       setDirection(1);
       setStep(7);
-    } catch (err: unknown) {
+    } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erreur inconnue');
     } finally {
       setSubmitting(false);

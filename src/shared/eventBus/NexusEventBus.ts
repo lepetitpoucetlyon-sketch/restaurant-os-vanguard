@@ -2,6 +2,7 @@
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { db } from '@/lib/offline/offline-store';
+import { toError } from "@/lib/toError";
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
@@ -1298,7 +1299,7 @@ class NexusEventBusClass {
               eventName: event,
               payload,
               handlerId: h.id,
-              error: String(err),
+              error: toError(err).message,
               failedAt: Date.now(),
               attempts: 1,
               nextRetryAt: Date.now() + 2000,

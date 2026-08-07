@@ -6,6 +6,7 @@ import { FleetTool, FlagSiteTool } from './FleetTool';
 import { ToolDefinition } from './types';
 import { FiscalAuditTool } from './FiscalAuditTool';
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import { JsonObject } from "@/shared/types/json";
 
 export const AGENT_TOOLS: Record<string, ToolDefinition> = {
     [FinanceTool.name]: FinanceTool,
@@ -19,9 +20,9 @@ export const AGENT_TOOLS: Record<string, ToolDefinition> = {
 
 
 export const TOOL_SCHEMAS = Object.values(AGENT_TOOLS).map(tool => {
-    const jsonSchema = zodToJsonSchema(tool.schema as unknown as Parameters<typeof zodToJsonSchema>[0], tool.name) as Record<string, unknown>;
+    const jsonSchema = zodToJsonSchema(tool.schema as unknown as Parameters<typeof zodToJsonSchema>[0], tool.name) as JsonObject;
     // Extract the actual schema from the definition wrapper
-    const definitions = jsonSchema.definitions as Record<string, unknown> | undefined; const parameters = definitions?.[tool.name] ?? jsonSchema;
+    const definitions = jsonSchema.definitions as JsonObject | undefined; const parameters = definitions?.[tool.name] ?? jsonSchema;
 
     return {
         name: tool.name,

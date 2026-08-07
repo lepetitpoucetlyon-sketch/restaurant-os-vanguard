@@ -12,6 +12,7 @@ import Stripe from 'stripe';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
@@ -32,8 +33,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'tenantId requis' }, { status: 400 });
   }
 
-  const tenantConfig = await Nexus.adapter.get(`tenants/${tenantId}/config`) as Record<string, unknown> | null;
-  const stripeCustomerId = (tenantConfig?.billing as Record<string, unknown> | undefined)?.stripeCustomerId as string | undefined;
+  const tenantConfig = await Nexus.adapter.get(`tenants/${tenantId}/config`) as JsonObject | null;
+  const stripeCustomerId = (tenantConfig?.billing as JsonObject | undefined)?.stripeCustomerId as string | undefined;
 
   if (!stripeCustomerId) {
     return NextResponse.json(

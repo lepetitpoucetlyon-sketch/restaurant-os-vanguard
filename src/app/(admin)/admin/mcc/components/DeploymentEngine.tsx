@@ -6,6 +6,7 @@ import { GitBranch, GitCommit, RefreshCw, ShieldCheck, AlertCircle, ChevronRight
 import { cn } from '@/lib/ui.foundations';
 import { logger } from '@/lib/logger';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { toError } from "@/lib/toError";
 
 interface GitStatus {
     branch: string;
@@ -40,7 +41,7 @@ export function DeploymentEngine() {
                 setStatus(data);
             }
         } catch (error) {
-            logger.warn('[DeploymentEngine] Failed to fetch git status', String(error));
+            logger.warn('[DeploymentEngine] Failed to fetch git status', toError(error).message);
         } finally {
             setIsLoading(false);
         }
@@ -56,7 +57,7 @@ export function DeploymentEngine() {
             const data = await res.json();
             if (data.success) setRagHealth(data.health as RagHealth);
         } catch (error) {
-            logger.warn('[DeploymentEngine] RAG health check failed', String(error));
+            logger.warn('[DeploymentEngine] RAG health check failed', toError(error).message);
         }
     };
 

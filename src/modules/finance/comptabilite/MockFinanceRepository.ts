@@ -1,6 +1,7 @@
 import { IFinanceRepository } from '@/modules/finance';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * 🧪 MockFinanceRepository - Validation of Sovereignty
@@ -33,6 +34,6 @@ export class MockFinanceRepository implements IFinanceRepository {
     }
 
     async saveExpenseClaim(claim: ExpenseClaim): Promise<void> {
-        logger.debug("MOCK_SAVE: Expense Claim saved to local memory", claim as unknown as Record<string, unknown>);
+        logger.debug("MOCK_SAVE: Expense Claim saved to local memory", claim as unknown as JsonObject);
     }
 }

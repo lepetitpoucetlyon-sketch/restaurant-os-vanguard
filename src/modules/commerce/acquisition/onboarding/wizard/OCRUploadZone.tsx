@@ -38,7 +38,7 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
         rawText: json.rawText,
         fileName: file.name,
       });
-    } catch (err: unknown) {
+    } catch (err) {
       onError?.(toError(err).message);
     } finally {
       setLoading(false);

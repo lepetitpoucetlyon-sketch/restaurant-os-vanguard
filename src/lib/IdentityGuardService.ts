@@ -52,8 +52,8 @@ export const IdentityGuardService = {
             }
 
             return { success: true, data: dataParse.data, rawResponse };
-        } catch (err: unknown) {
-            logger.error('[IdentityGuard] Execution failed', { error: String(err) });
+        } catch (err) {
+            logger.error('[IdentityGuard] Execution failed', { error: toError(err).message });
             return { 
                 success: false, 
                 error: { error: 'NON_PROCESSABLE', reason: toError(err).message, flags: [] },

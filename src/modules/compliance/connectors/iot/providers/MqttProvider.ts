@@ -1,6 +1,7 @@
 import type { IIoTProvider, SensorReading, Sensor } from '../types';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { toError } from "@/lib/toError";
 
 /**
  * MQTT générique — couvre Dragino LoRaWAN et tous les capteurs MQTT.
@@ -30,7 +31,7 @@ export class MqttProvider implements IIoTProvider {
                 password: process.env.MQTT_PASSWORD,
             });
             client.subscribe(`sensors/${tenantId}/#`, (err: Error | null) => {
-                if (err) logger.error('[MqttProvider] subscribe error', String(err));
+                if (err) logger.error('[MqttProvider] subscribe error', toError(err).message);
             });
             client.on('message', (_topic: string, message: { toString(): string }) => {
                 try {
@@ -61,10 +62,10 @@ export class MqttProvider implements IIoTProvider {
                         }
                     }
                 } catch (e) {
-                    logger.warn('[MqttProvider] message parse error', String(e));
+                    logger.warn('[MqttProvider] message parse error', toError(e).message);
                 }
             });
-        }).catch(err => logger.error('[MqttProvider] mqtt import error — npm i mqtt requis', String(err)));
+        }).catch(err => logger.error('[MqttProvider] mqtt import error — npm i mqtt requis', toError(err).message));
 
         return () => {
             if (client) client.end();

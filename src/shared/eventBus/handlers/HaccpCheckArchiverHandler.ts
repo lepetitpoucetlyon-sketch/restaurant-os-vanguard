@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { JsonObject } from "@/shared/types/json";
 
 export function registerHaccpCheckArchiverHandler(): () => void {
   return NexusEventBus.on(
@@ -10,7 +11,7 @@ export function registerHaccpCheckArchiverHandler(): () => void {
       const { checkId, tenantId } = payload;
       logger.info(`[HaccpCheckArchiver] Archivage du relevé HACCP ${checkId}`);
 
-      const checkData = await Nexus.adapter.get(`tenants/${tenantId}/haccpChecks/${checkId}`) as Record<string, unknown> | null;
+      const checkData = await Nexus.adapter.get(`tenants/${tenantId}/haccpChecks/${checkId}`) as JsonObject | null;
 
       if (!checkData) {
         logger.warn(`[HaccpCheckArchiver] Relevé ${checkId} introuvable — archivage ignoré.`);

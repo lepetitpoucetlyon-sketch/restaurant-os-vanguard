@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export function registerKdsCoursePassedHandler(): () => void {
   return NexusEventBus.on(
@@ -12,8 +13,8 @@ export function registerKdsCoursePassedHandler(): () => void {
           { passedAt: new Date().toISOString(), status: 'passed' },
         );
         logger.info(`[KdsCoursePassedHandler] Cours ${courseId} passé pour commande ${orderId}`);
-      } catch (err: unknown) {
-        logger.error(`[KdsCoursePassedHandler] Échec mise à jour cours: ${String(err)}`);
+      } catch (err) {
+        logger.error(`[KdsCoursePassedHandler] Échec mise à jour cours: ${toError(err).message}`);
       }
     },
     { id: 'kds-course-passed', priority: 'HIGH' },

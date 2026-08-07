@@ -1,6 +1,7 @@
 import type { IRecruitmentProvider, JobOffer, Application, ApplicationStatus } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Formulaire propre — page de candidature via /[slug]/jobs.
@@ -21,7 +22,7 @@ export class NativeFormProvider implements IRecruitmentProvider {
             const raw = await Nexus.adapter.get(`jobs/${jobId}/applications`) as Record<string, Application> | null;
             return raw ? Object.values(raw) : [];
         } catch (err) {
-            logger.error('[NativeFormProvider] fetchApplications error', String(err));
+            logger.error('[NativeFormProvider] fetchApplications error', toError(err).message);
             return [];
         }
     }

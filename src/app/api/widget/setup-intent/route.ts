@@ -5,6 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@/domain/schemas/tenant';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
+import { JsonObject } from "@/shared/types/json";
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     const tenantParsed = TenantConfigSchema.safeParse(raw);
     const resaConfig = tenantParsed.success
-      ? (tenantParsed.data as Record<string, unknown>).reservationConfig as Record<string, unknown> | undefined
+      ? (tenantParsed.data as JsonObject).reservationConfig as JsonObject | undefined
       : undefined;
 
     const imprintEnabled = resaConfig?.cardImprintEnabled === true;

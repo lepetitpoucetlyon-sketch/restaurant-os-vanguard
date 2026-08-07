@@ -2,6 +2,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { AuditEventSchema, AUDITED_COLLECTIONS, type AuditAction, type AuditEvent } from '@/modules/compliance/domain/schemas/audit';
 import { operationalFlags } from '@/config/features';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const GENESIS_HASH = 'AUDIT_GENESIS_0000000000000000';
 
@@ -134,7 +135,7 @@ export class AuditService {
 
         const header = 'id,ts,action,collection,entityId,userId,hash,previousHash\n';
         const rows = (events || []).map(e => 
-            `"${e.id}","${new Date(e.ts).toISOString()}","${e.action}","${e.collection}","${e.entityId || ''}","${(e as Record<string, unknown>).actorId || (e as Record<string, unknown>).userId || ''}","${e.hash}","${e.previousHash}"`
+            `"${e.id}","${new Date(e.ts).toISOString()}","${e.action}","${e.collection}","${e.entityId || ''}","${(e as JsonObject).actorId || (e as JsonObject).userId || ''}","${e.hash}","${e.previousHash}"`
         ).join('\n');
 
         return header + rows;

@@ -12,6 +12,8 @@ import {
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
 import { SovereignData } from '@/shared/nexus-contract';
+import { JsonObject } from "@/shared/types/json";
+import { toSovereignData } from "@/lib/toSovereignData";
 
 /**
  * 👨‍💼 useHumanResources - Grade X Atomic Mapper
@@ -42,7 +44,7 @@ export function useHumanResources() {
             createdAt: now,
             updatedAt: now
         } as unknown as Shift;
-        return shiftForge.mutate('SET', id, newShift as unknown as SovereignData);
+        return shiftForge.mutate('SET', id, toSovereignData(newShift));
     }, [shiftForge]);
 
     const updateShift = useCallback((id: string, data: Partial<Shift>) => {
@@ -74,10 +76,10 @@ export function useHumanResources() {
         if (request) {
             const userBalance = leaveBalances.find(b => b.userId === request.userId);
             if (userBalance) {
-                const days = (request as Record<string, unknown>).daysCount || (request as Record<string, unknown>).days || 1;
+                const days = (request as JsonObject).daysCount || (request as JsonObject).days || 1;
                 const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-                const tenantId = (request as Record<string, unknown>).tenantId;
-                const balanceId = (userBalance as unknown as Record<string, unknown>).id || userBalance.userId;
+                const tenantId = (request as JsonObject).tenantId;
+                const balanceId = (userBalance as unknown as JsonObject).id || userBalance.userId;
                 const balancePath = tenantId ? `tenants/${tenantId}/leaveBalances/${balanceId}` : `leaveBalances/${balanceId}`;
                 await Nexus.adapter.update(balancePath, {
                     remaining: Math.max(0, (userBalance.remaining || 0) - (days as number)),
@@ -110,7 +112,7 @@ export function useHumanResources() {
             createdAt: now,
             updatedAt: now
         } as unknown as LeaveRequest;
-        return leaveForge.mutate('SET', id, newRequest as unknown as SovereignData);
+        return leaveForge.mutate('SET', id, toSovereignData(newRequest));
     }, [leaveForge]);
 
     return {

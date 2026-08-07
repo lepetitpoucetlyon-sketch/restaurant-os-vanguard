@@ -1,6 +1,6 @@
 // src/domain/schemas/pos.ts
 import { z } from 'zod';
-import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/domain/schemas/primitives';
 import { TaxRateSchema } from '@/modules/finance/domain/schemas/finance';
 import { ConsumptionModeSchema } from '@/modules/ops/domain/schemas/orders';
 
@@ -13,7 +13,7 @@ export const CartLineSchema = z.object({
   unitPriceInMicrounits: MicrounitsSchema,
   taxRate:               TaxRateSchema,
   consumptionMode:       ConsumptionModeSchema.optional(),
-  discountInMicrounits:  MicrounitsSchema.default(0 as unknown as import('@/domain/schemas/primitives').Microunits),
+  discountInMicrounits:  MicrounitsSchema.default(toMicrounits(0)),
   modifiers:             z.array(z.object({
     id: z.string(),
     name: z.string(),

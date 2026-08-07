@@ -16,6 +16,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const RESERVE_SECRET = process.env.GOOGLE_RESERVE_SECRET;
 
@@ -127,7 +128,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'booking_id, merchant_id requis' }, { status: 400 });
   }
 
-  const existing = await Nexus.adapter.get(`tenants/${merchantId}/reservations/${bookingId}`) as Record<string, unknown> | null;
+  const existing = await Nexus.adapter.get(`tenants/${merchantId}/reservations/${bookingId}`) as JsonObject | null;
   if (!existing) {
     return NextResponse.json({ error: 'Booking introuvable' }, { status: 404 });
   }

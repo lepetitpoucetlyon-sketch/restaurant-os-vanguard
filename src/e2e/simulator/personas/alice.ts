@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { runAct, type PersonaFn, type PersonaResult } from '../engine/PersonaTypes';
+import { JsonObject } from "@/shared/types/json";
 
 export const alicePersona: PersonaFn = async ({ tenantId, operatorId }): Promise<PersonaResult> => {
   const start = Date.now();
@@ -49,6 +50,6 @@ export const alicePersona: PersonaFn = async ({ tenantId, operatorId }): Promise
     acts,
     durationMs: Date.now() - start,
     success,
-    payload: { tenantConfig: config as Record<string, unknown> },
+    payload: { tenantConfig: config as JsonObject },
   };
 };

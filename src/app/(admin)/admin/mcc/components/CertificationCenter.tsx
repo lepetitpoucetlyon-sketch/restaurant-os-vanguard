@@ -11,6 +11,7 @@ import { useNexusFleet, type SiteIntegrityReport, type GlobalComplianceCertifica
 import { logger } from '@/lib/logger';
 import { useAuth } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toError } from "@/lib/toError";
 
 interface AuditReport {
   isValid: boolean;
@@ -52,7 +53,7 @@ export function CertificationCenter() {
   useEffect(() => {
     Nexus.adapter.query<DigitalCertificate>('mcc/certificates')
       .then(certs => setCertificates((certs ?? []).sort((a, b) => b.issuedAt.localeCompare(a.issuedAt))))
-      .catch(err => logger.warn('[CertificationCenter] Failed to load certs', String(err)));
+      .catch(err => logger.warn('[CertificationCenter] Failed to load certs', toError(err).message));
   }, []);
 
   const selectedInstance = instances.find(i => i.id === selectedInstanceId);

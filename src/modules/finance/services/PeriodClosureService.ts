@@ -5,6 +5,7 @@ import type { PeriodClosure, PeriodType } from '@/modules/finance/domain/schemas
 import type { JournalEntry } from '@nexus/contracts';
 import type { Microunits } from '@/domain/schemas/primitives';
 import { toMicrounits } from '@/domain/schemas/primitives';
+import { JsonObject } from "@/shared/types/json";
 
 const GENESIS_HASH = '0'.repeat(64);
 
@@ -97,7 +98,7 @@ export class PeriodClosureService {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/periodClosures/${periodKey}`,
-            closure as unknown as Record<string, unknown>
+            closure as unknown as JsonObject
         );
 
         return closure;

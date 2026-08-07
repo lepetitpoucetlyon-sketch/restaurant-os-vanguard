@@ -13,6 +13,7 @@
  *   ANTHROPIC_API_KEY     — Claude Haiku 4.5 (fallback)
  */
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export interface AIResponse {
   text:     string;
@@ -39,7 +40,7 @@ export class AIProviderRouter {
       try {
         return await this.callGemini(prompt, opts);
       } catch (err) {
-        logger.warn(`[AIRouter] Gemini indisponible (${String(err).slice(0, 80)}) — fallback Claude`);
+        logger.warn(`[AIRouter] Gemini indisponible (${toError(err).message.slice(0, 80)}) — fallback Claude`);
       }
     }
 

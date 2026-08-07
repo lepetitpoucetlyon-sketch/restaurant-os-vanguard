@@ -54,7 +54,7 @@ export class NexusInterceptor implements INexusAdapter {
             let access: { granted: boolean; reason?: string };
             try {
                 access = await this.guard.validateAccessGradeX('READ', scopedForValidation, ctx);
-            } catch (error: unknown) {
+            } catch (error) {
                 this.emitDenial('READ', path, ctx, error instanceof Error ? error.message : 'VALIDATION_EXCEPTION');
                 options?.onError?.(new NexusError(NexusErrorCode.ACCESS_DENIED, 'Access validation failed'));
                 return; // No listener started, no data transmitted

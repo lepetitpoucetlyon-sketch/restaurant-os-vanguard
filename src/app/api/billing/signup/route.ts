@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { logger } from '@/lib/logger';
 import { getStripePriceId } from '@/shared/constants/pricing';
 import type { PricingTier } from '@/shared/constants/pricing';
+import { toError } from "@/lib/toError";
 
 /**
  * POST /api/billing/signup
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
         logger.info(`[billing/signup] Session Checkout B2B créée`, { siret, tier, sessionId: session.id });
         return NextResponse.json({ url: session.url });
     } catch (err) {
-        logger.error('[billing/signup] Stripe error', String(err));
+        logger.error('[billing/signup] Stripe error', toError(err).message);
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Erreur Stripe.' },
             { status: 500 },

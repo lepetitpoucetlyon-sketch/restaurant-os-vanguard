@@ -5,6 +5,7 @@
 
 import { IdGenerator } from './utils/IdGenerator';
 import type { SovereignData, SovereignSchemaField, SovereignField } from '@/shared/nexus-contract';
+import { toSovereignData } from "@/lib/toSovereignData";
 
 export const SharedKernel = {
     // --- SOVEREIGN FIELD HANDLERS (GRADE X) ---
@@ -135,7 +136,7 @@ export const SharedKernel = {
             // Gestion récursive pour les listes
             if (field.type === 'list' && Array.isArray(value) && field.subFields) {
                 sanitized[field.id] = SharedKernel.Sovereign.wrap(value.map(item => 
-                    SharedKernel.sync(schemaKey, item as unknown as SovereignData, field.subFields as SovereignSchemaField[])
+                    SharedKernel.sync(schemaKey, toSovereignData(item), field.subFields as SovereignSchemaField[])
                 ));
             }
         });

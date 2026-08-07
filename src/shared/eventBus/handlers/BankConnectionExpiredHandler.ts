@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class BankConnectionExpiredHandler {
   static register() {
@@ -38,7 +39,7 @@ export class BankConnectionExpiredHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[BankConnectionExpiredHandler] Error updating bank connection status', String(err));
+        logger.error('[BankConnectionExpiredHandler] Error updating bank connection status', toError(err).message);
       }
     }, { id: 'bank-connection-expired', priority: 'HIGH' });
   }

@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export class ContractRenewalAlertHandler {
   static register() { 
@@ -49,7 +50,7 @@ export class ContractRenewalAlertHandler {
             });
         }
       } catch (err) {
-        logger.error('[ContractRenewalAlertHandler] Error fetching contract', String(err));
+        logger.error('[ContractRenewalAlertHandler] Error fetching contract', toError(err).message);
       }
     }, { id: 'contract-renewal-alert', priority: 'BACKGROUND' });
   }

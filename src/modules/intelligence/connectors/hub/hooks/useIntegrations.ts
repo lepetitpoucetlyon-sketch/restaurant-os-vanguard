@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { IConnectorManifest, ConnectorState } from '@/shared/connector-manifest';
 import { useConnector } from '@/shared/hooks/useConnector';
+import { toError } from "@/lib/toError";
 
 export interface ConnectorEntry {
   manifest: IConnectorManifest;
@@ -41,7 +42,7 @@ export function useIntegrations(): UseIntegrationsReturn {
       const data = await res.json() as { connectors: ConnectorEntry[] };
       setConnectors(data.connectors);
     } catch (err) {
-      setError(String(err));
+      setError(toError(err).message);
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,7 @@ export function useIntegrations(): UseIntegrationsReturn {
       await fetchConnectors();
       return res.ok ? { ok: true } : { ok: false, error: data.error ?? 'Erreur inconnue' };
     } catch (err) {
-      return { ok: false, error: String(err) };
+      return { ok: false, error: toError(err).message };
     } finally { setItemLoading(id, false); }
   }, [fetchConnectors]);
 
@@ -92,7 +93,7 @@ export function useIntegrations(): UseIntegrationsReturn {
       await fetchConnectors();
       return data;
     } catch (err) {
-      return { ok: false, error: String(err) };
+      return { ok: false, error: toError(err).message };
     } finally { setItemLoading(id, false); }
   }, [fetchConnectors]);
 
@@ -103,7 +104,7 @@ export function useIntegrations(): UseIntegrationsReturn {
       const data = await res.json() as { ok?: boolean; itemsSynced?: number; queued?: boolean; error?: string };
       return { ok: data.ok ?? data.queued ?? false, itemsSynced: data.itemsSynced, error: data.error };
     } catch (err) {
-      return { ok: false, error: String(err) };
+      return { ok: false, error: toError(err).message };
     } finally { setItemLoading(id, false); }
   }, []);
 

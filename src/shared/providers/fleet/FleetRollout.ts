@@ -1,5 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 interface RolloutPayload {
     type: 'menu' | 'config' | 'template';
@@ -31,13 +33,13 @@ export const FleetRollout = {
                     const docId = Nexus.adapter.generateId(`tenants/${targetId}/${collection}`);
                     await Nexus.adapter.set(
                         `tenants/${targetId}/${collection}/${docId}`,
-                        { ...(value as Record<string, unknown>), id: docId, sourceRef: `${sourceTenantId}/${key}` } as unknown as import('@/shared/nexus-contract').SovereignData
+                        { ...(value as JsonObject), id: docId, sourceRef: `${sourceTenantId}/${key}` } as unknown as import('@/shared/nexus-contract').SovereignData
                     );
                 }
 
                 results.push({ tenantId: targetId, success: true });
             } catch (err) {
-                results.push({ tenantId: targetId, success: false, error: String(err) });
+                results.push({ tenantId: targetId, success: false, error: toError(err).message });
             }
         }
 

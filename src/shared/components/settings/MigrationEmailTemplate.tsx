@@ -104,7 +104,7 @@ export default function MigrationEmailTemplate() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((data as { error?: string }).error ?? 'Erreur serveur');
       toast.success('Campagne lancee avec succes');
-    } catch (err: unknown) {
+    } catch (err) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
       toast.error(msg);
     } finally {

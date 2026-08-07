@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { SupportTicket, SupportDraft, SupportTicketStatus } from '@/domain/schemas';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 const STATUS_META: Record<SupportTicketStatus, { label: string; color: string }> = {
   new:              { label: 'Nouveau',       color: 'text-text-secondary bg-slate-500/10 border-slate-500/30' },
@@ -89,7 +91,7 @@ export function SupportDraftsPanel() {
       if (!res.ok || !data.success) throw new Error(data.error ?? String(res.status));
       return true;
     } catch (err) {
-      toast.error(`Erreur : ${String(err)}`);
+      toast.error(`Erreur : ${toError(err).message}`);
       return false;
     } finally {
       setBusy(null);
@@ -117,7 +119,7 @@ export function SupportDraftsPanel() {
     let proposedPatch: Record<string, unknown> | undefined;
     if (edit.proposedPatchText.trim()) {
       try {
-        proposedPatch = JSON.parse(edit.proposedPatchText) as Record<string, unknown>;
+        proposedPatch = JSON.parse(edit.proposedPatchText) as JsonObject;
       } catch {
         toast.error('proposedPatch : JSON invalide');
         return;

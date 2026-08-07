@@ -7,6 +7,7 @@ import { SilaeClient } from '@/modules/human/remuneration/payroll/SilaeClient';
 import { MergePayrollClient } from '@/modules/human/remuneration/payroll/MergePayrollClient';
 import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
+import { toError } from "@/lib/toError";
 
 export class SilaeExportHandler {
   static register() {
@@ -117,7 +118,7 @@ export class SilaeExportHandler {
         });
 
       } catch (error) {
-        logger.error(`[SilaeExportHandler] Erreur lors de l'export:`, String(error));
+        logger.error(`[SilaeExportHandler] Erreur lors de l'export:`, toError(error).message);
 
         // Mode dégradé en cas d'erreur API: file d'attente Outbox pour retry automatique
         const outboxId = `silae_retry_${periodId}_${Date.now()}`;
@@ -125,7 +126,7 @@ export class SilaeExportHandler {
             type: 'hr.preroll_validated',
             payload,
             status: 'error_queued',
-            error: String(error),
+            error: toError(error).message,
             retryCount: 0,
             queuedAt: Date.now()
         });
@@ -137,7 +138,7 @@ export class SilaeExportHandler {
           instanceId: tenantId,
           details: {
             periodId: periodId,
-            error: String(error)
+            error: toError(error).message
           },
           severity: 'critical',
           timestamp: new Date(),

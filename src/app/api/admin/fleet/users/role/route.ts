@@ -16,6 +16,7 @@ import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
 import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
+import { toError } from "@/lib/toError";
 
 const VALID_ROLES = Object.keys(ROLE_LABELS) as (keyof typeof ROLE_LABELS)[];
 
@@ -84,7 +85,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             logger.info(`[MCC/role] Claims Firebase mis à jour pour uid=${existing.firebaseUid}`);
         } catch (err) {
             // Non-bloquant : les claims Firebase sont best-effort
-            logger.warn(`[MCC/role] Mise à jour claims Firebase échouée (uid=${existing.firebaseUid}) — ${String(err)}`);
+            logger.warn(`[MCC/role] Mise à jour claims Firebase échouée (uid=${existing.firebaseUid}) — ${toError(err).message}`);
         }
     }
 

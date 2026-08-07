@@ -7,6 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const BRIDGE_BASE = 'https://api.bridgeapi.io/v2';
 
@@ -48,7 +49,7 @@ export class BridgeProvider implements IOpenBankingProvider {
         return res.resources.map(a => ({
             id:         String(a['id'] ?? ''),
             balance:    Number(a['balance'] ?? 0),
-            bankName:   String((a['bank'] as Record<string, unknown> | undefined)?.['name'] ?? ''),
+            bankName:   String((a['bank'] as JsonObject | undefined)?.['name'] ?? ''),
             label:      String(a['name'] ?? ''),
             currency:   String(a['currency_code'] ?? 'EUR'),
             lastUpdate: String(a['updated_at'] ?? ''),
@@ -76,8 +77,8 @@ export class BridgeProvider implements IOpenBankingProvider {
                 updatedAt:      new Date().toISOString(),
                 currency:       String(t['currency_code'] ?? 'EUR'),
                 accountId,
-                category:       (t['category'] as Record<string, unknown> | undefined)?.['name']
-                                    ? String((t['category'] as Record<string, unknown>)['name'])
+                category:       (t['category'] as JsonObject | undefined)?.['name']
+                                    ? String((t['category'] as JsonObject)['name'])
                                     : undefined,
             };
         });
@@ -88,7 +89,7 @@ export class BridgeProvider implements IOpenBankingProvider {
     }
 
     normalizeWebhookPayload(raw: unknown): WebhookEnvelope {
-        const payload = raw as Record<string, unknown>;
+        const payload = raw as JsonObject;
         return {
             tenantId: payload['user_uuid'] ? String(payload['user_uuid']) : undefined,
             event:    'connection.synced',

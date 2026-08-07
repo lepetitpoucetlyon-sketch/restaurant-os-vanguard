@@ -22,6 +22,7 @@ import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/domain/schemas/ops";
 import type { Customer } from "@nexus/contracts";
 import type { GroupFormData } from "../components/GroupFormModal";
+import { JsonObject } from "@/shared/types/json";
 
 const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
 const TERRASSE_SETTINGS_PATH = "settings/terrasse";
@@ -87,7 +88,7 @@ async function recordNoShow(
     if (!res?.customerId) return;
     const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
     if (!crmRecord) return;
-    const currentNoShows = (crmRecord as Record<string, unknown>)["noShows"] as number ?? 0;
+    const currentNoShows = (crmRecord as JsonObject)["noShows"] as number ?? 0;
     await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
 }
 

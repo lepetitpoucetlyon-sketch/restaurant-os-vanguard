@@ -4,6 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PrepaieBuilder } from '@/modules/human';
 import { browserPush } from '@/lib/push/browserPush';
+import { toError } from "@/lib/toError";
 
 export class PayrollAutoCalcHandler {
   static register() {
@@ -70,7 +71,7 @@ export class PayrollAutoCalcHandler {
       } catch (error) {
         logger.error(
           `[PayrollAutoCalcHandler] Erreur calcul pré-paie ${period}:`,
-          String(error)
+          toError(error).message
         );
 
         empireAudit.log({
@@ -81,7 +82,7 @@ export class PayrollAutoCalcHandler {
           details: {
             period,
             submissionId,
-            error: String(error),
+            error: toError(error).message,
           },
           severity: 'critical',
           timestamp: new Date(),

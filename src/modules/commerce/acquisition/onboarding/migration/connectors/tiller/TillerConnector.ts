@@ -4,6 +4,7 @@
  */
 import type { ISourceConnector, ConnectorMeta, ConnectorCredentials, ConnectorTestResult } from '../types';
 import type { ImportCategory, ParsedFile, ParsedRow } from '../../types';
+import { toError } from "@/lib/toError";
 
 const BASE = 'https://api.tillersystems.com/api';
 
@@ -31,7 +32,7 @@ export class TillerConnector implements ISourceConnector {
             const data = await res.json() as Array<{ name?: string }>;
             return { ok: true, providerName: 'Tiller', accountInfo: { name: data[0]?.name } };
         } catch (e) {
-            return { ok: false, error: String(e) };
+            return { ok: false, error: toError(e).message };
         }
     }
 

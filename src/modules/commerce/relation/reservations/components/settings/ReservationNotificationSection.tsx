@@ -5,6 +5,7 @@ import { motion, Variants } from 'framer-motion';
 import { Bell, Mail, Phone, Smartphone } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { cn } from '@/lib/ui.foundations';
+import { JsonObject } from "@/shared/types/json";
 
 type Config = ReturnType<typeof useSettings>['settings']['reservationConfig'];
 
@@ -32,7 +33,7 @@ const CLIENT_TOGGLES = [
 ] as const;
 
 export function ReservationNotificationSection({ config, setConfig }: Props) {
-  const cfg = config as Record<string, unknown>;
+  const cfg = config as JsonObject;
 
   return (
     <motion.div variants={cinematicItem} className="bg-bg-secondary border border-border rounded-[2.5rem] shadow-premium p-6 md:p-10">

@@ -48,7 +48,7 @@ function MonEspacePage() {
         TipDistributionService.getByPeriode(activeTenantId, periode).then(pools => {
             const shares = pools
                 .flatMap(p => p.shares)
-                .filter(s => s.userId === currentUser!.id)
+                .filter(s => s.userId === currentUser?.id)
                 .map(s => ({ periode, amountEur: s.amountInMicrounits / 1_000_000 }));
             setTipShares(shares);
         }).catch(() => {});

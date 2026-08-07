@@ -14,6 +14,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PrepaieBuilder } from './PrepaieBuilder';
 import { logger } from '@/lib/logger';
 import type { PrepaieRow } from './types';
+import { JsonObject } from "@/shared/types/json";
 
 const URSSAF_NET_ENT_URL = 'https://www.net-entreprises.fr/declaration/dsn/depot';
 
@@ -86,7 +87,7 @@ export const DSNBuilder = {
     const [year, month] = period.split('-').map(Number);
     if (!year || !month) throw new Error(`Période invalide: ${period} (attendu YYYY-MM)`);
 
-    const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as Record<string, unknown> | null;
+    const config = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as JsonObject | null;
     const siret = (config?.siret as string | undefined) ?? '00000000000000';
     const entityName = (config?.name as string | undefined) ?? tenantId;
 

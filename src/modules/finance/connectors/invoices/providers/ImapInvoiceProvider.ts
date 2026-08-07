@@ -1,5 +1,6 @@
 import type { IEmailInvoiceProvider, EmailWithAttachments } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * IMAP générique — couvre OVH, Infomaniak, et tous les hébergeurs mail.
@@ -7,6 +8,23 @@ import { logger } from '@/lib/logger';
  *
  * Pour activer : npm i imap-simple @types/imap-simple
  */
+interface ImapPart {
+    which?: string;
+    body?: unknown;
+    disposition?: {
+        type?: string;
+        params?: { filename?: string };
+    };
+}
+
+interface ImapMessage {
+    attributes: {
+        uid: number | string;
+        struct?: unknown[];
+    };
+    parts: ImapPart[];
+}
+
 export class ImapInvoiceProvider implements IEmailInvoiceProvider {
     readonly id = 'imap';
 
@@ -31,25 +49,21 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
         try {
             // @ts-expect-error — imap-simple optionnel, installer avec: npm i imap-simple @types/imap-simple
              
-            const imapSimple = await import('imap-simple') as { connect: (opts: Record<string, unknown>) => Promise<Record<string, unknown> & { openBox: (boxName: string) => Promise<void>; search: (criteria: unknown[], fetchOptions: Record<string, unknown>) => Promise<unknown[]> }>; getParts: (struct: unknown[]) => Record<string, unknown>[] };
+            const imapSimple = await import('imap-simple') as { connect: (opts: Record<string, unknown>) => Promise<Record<string, unknown> & { openBox: (boxName: string) => Promise<void>; search: (criteria: unknown[], fetchOptions: Record<string, unknown>) => Promise<ImapMessage[]> }>; getParts: (struct: unknown[]) => ImapPart[] };
             const connection = await imapSimple.connect({
                 imap: { host, port, user, password, tls: true, authTimeout: 5000 },
             });
             await connection.openBox('INBOX');
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const messages: any[] = await connection.search(
+            const messages = await connection.search(
                 ['UNSEEN', ['SINCE', new Date(Date.now() - 7 * 86400 * 1000).toUTCString()]],
                 { bodies: ['HEADER', ''], struct: true }
             );
             const result: EmailWithAttachments[] = [];
             for (const msg of messages) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const headerPart = msg.parts.find((p: any) => p.which === 'HEADER');
+                const headerPart = msg.parts.find(p => p.which === 'HEADER');
                 const header     = headerPart?.body as Record<string, string[]> | undefined;
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const allParts: any[] = imapSimple.getParts(msg.attributes.struct ?? []);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const attachments = allParts.filter((p: any) =>
+                const allParts   = imapSimple.getParts(msg.attributes.struct ?? []);
+                const attachments = allParts.filter(p =>
                     String(p?.disposition?.type ?? '').toLowerCase() === 'attachment'
                 );
                 if (attachments.length) {
@@ -58,8 +72,7 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
                         from:        header?.['from']?.[0] ?? '',
                         subject:     header?.['subject']?.[0] ?? '',
                         date:        header?.['date']?.[0] ?? '',
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        attachments: attachments.map((a: any) => ({
+                        attachments: attachments.map(a => ({
                             filename:    String(a.disposition?.params?.filename ?? 'document.pdf'),
                             contentType: 'application/pdf',
                             data:        '',
@@ -70,7 +83,7 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
             await (connection as unknown as { end: () => Promise<void> }).end();
             return result;
         } catch (err) {
-            logger.error('[ImapInvoiceProvider] fetchUnprocessed error', String(err));
+            logger.error('[ImapInvoiceProvider] fetchUnprocessed error', toError(err).message);
             return [];
         }
     }

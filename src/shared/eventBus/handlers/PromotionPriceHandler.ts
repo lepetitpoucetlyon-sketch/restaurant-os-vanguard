@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toError } from "@/lib/toError";
 
 export class PromotionPriceHandler {
   static register() {
@@ -32,7 +33,7 @@ export class PromotionPriceHandler {
                         updatedAt: Date.now()
                     });
                 } catch (e) {
-                    logger.warn(`[PromotionPrice] Impossible d'appliquer la promotion au produit ${productId}`, String(e));
+                    logger.warn(`[PromotionPrice] Impossible d'appliquer la promotion au produit ${productId}`, toError(e).message);
                 }
             }
         }
@@ -59,7 +60,7 @@ export class PromotionPriceHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[PromotionPriceHandler] Error activating promotion', String(err));
+        logger.error('[PromotionPriceHandler] Error activating promotion', toError(err).message);
       }
     }, { id: 'promotion-price', priority: 'HIGH' });
   }

@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
   try {
     tenantId = await resolveFreeTenantId(toTenantKey(restaurantName));
   } catch (err) {
-    logger.error('[signup] Tenant allocation failed', String(err));
+    logger.error('[signup] Tenant allocation failed', toError(err).message);
     return NextResponse.json({ error: 'Impossible d\'allouer un identifiant' }, { status: 500 });
   }
 
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
   try {
     const userRecord = await getAuth().createUser({ email, password, displayName: restaurantName });
     uid = userRecord.uid;
-  } catch (err: unknown) {
+  } catch (err) {
     const message = toError(err).message;
     logger.warn('[signup] createUser failed', message);
     return NextResponse.json({ error: message }, { status: 400 });
@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
         const brand = await BrandingService.extractFromUrl(websiteUrl);
         primaryColor = brand.primaryColor;
       } catch (err) {
-        logger.warn('[signup] BrandingService.extractFromUrl failed — continuing without branding', String(err));
+        logger.warn('[signup] BrandingService.extractFromUrl failed — continuing without branding', toError(err).message);
       }
     }
 
@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
       to: email,
       subject: `Bienvenue sur Restaurant OS — ${restaurantName}`,
       html: welcomeEmailHtml(restaurantName, tenantId),
-    }).catch(err => logger.warn('[signup] Welcome email failed', String(err)));
+    }).catch(err => logger.warn('[signup] Welcome email failed', toError(err).message));
 
     // 5. Create Stripe Checkout session for initial subscription
     const origin = req.headers.get('origin') ?? 'https://app.nexus-fleet.io';
@@ -164,12 +164,12 @@ export async function POST(req: NextRequest) {
       });
       checkoutUrl = checkout.url;
     } catch (err) {
-      logger.warn('[signup] Stripe checkout creation failed — tenant can pay later', String(err));
+      logger.warn('[signup] Stripe checkout creation failed — tenant can pay later', toError(err).message);
     }
 
     return NextResponse.json({ tenantId, uid, checkoutUrl }, { status: 201 });
 
-  } catch (err: unknown) {
+  } catch (err) {
     // Rollback : un user Firebase sans tenant provisionné est un orphelin
     // qui pollue l'auth et peut bloquer un futur signup avec le même email.
     const message = toError(err).message;

@@ -3,6 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import type { Customer } from '@shared/nexus/contracts/nexus-internal-mapper';
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * P3-1: CRM VIP Handler
@@ -27,11 +28,11 @@ export function registerCRMVipHandler(): () => void {
         if (!customer) return;
 
         // Si déjà VIP, rien à faire (sauf si on gère des tiers, mais restons simple)
-        const tags = (customer as Record<string, unknown>).tags as string[] | undefined;
+        const tags = (customer as JsonObject).tags as string[] | undefined;
         if (tags?.includes('VIP')) return;
 
         // 3. Logique d'évaluation VIP
-        const stats = (customer as Record<string, unknown>).stats as { totalVisits?: number; totalSpentInMicrounits?: number; lastVisitAt?: string } | undefined;
+        const stats = (customer as JsonObject).stats as { totalVisits?: number; totalSpentInMicrounits?: number; lastVisitAt?: string } | undefined;
         const visits = (stats?.totalVisits ?? 0) + 1;
         const totalSpent = (stats?.totalSpentInMicrounits ?? 0) + (order.totalTTCInMicrounits as number ?? 0);
 

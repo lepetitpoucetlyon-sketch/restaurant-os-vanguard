@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
+import { JsonObject } from "@/shared/types/json";
 
 type HealItem = { id?: string;[k: string]: unknown };
 
@@ -108,7 +109,7 @@ export const SelfHealingEngine = {
         : await Nexus.adapter.get(persistencePath);
       if (!freshData) return;
 
-      const rawState = currentState as Record<string, unknown>;
+      const rawState = currentState as JsonObject;
       if (!isListNodeState(rawState)) {
         store.set(atom, freshData as T);
         logger.info(`[Self-Healing] Atomic Burst SUCCESSFUL: ${persistencePath} (${Date.now() - startTime}ms)`);
@@ -146,7 +147,7 @@ export const SelfHealingEngine = {
     if (Array.isArray(data)) {
         leaves = data.map(item => this.hashString(JSON.stringify(item || {})));
     } else if (data && typeof data === 'object') {
-        const obj = data as Record<string, unknown>;
+        const obj = data as JsonObject;
         if (Array.isArray(obj.data)) {
             leaves = (obj.data as unknown[]).map((item: unknown) => this.hashString(JSON.stringify(item || {})));
         } else {

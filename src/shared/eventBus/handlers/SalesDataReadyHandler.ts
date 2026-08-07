@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export function registerSalesDataReadyHandler(): () => void {
   return NexusEventBus.on(
@@ -17,8 +18,8 @@ export function registerSalesDataReadyHandler(): () => void {
           recordedAt: new Date().toISOString(),
         });
         logger.info(`[SalesDataReadyHandler] Snapshot enregistré ${snapshotId} pour ${tenantId}`);
-      } catch (err: unknown) {
-        logger.error(`[SalesDataReadyHandler] Échec enregistrement snapshot: ${String(err)}`);
+      } catch (err) {
+        logger.error(`[SalesDataReadyHandler] Échec enregistrement snapshot: ${toError(err).message}`);
       }
     },
     { id: 'sales-data-ready', priority: 'BACKGROUND' },

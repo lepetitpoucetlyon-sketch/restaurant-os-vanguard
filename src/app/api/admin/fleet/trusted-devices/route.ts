@@ -4,6 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { MccRole } from '@/lib/server/adminAuthGuard';
+import { toError } from "@/lib/toError";
 
 export interface TrustedDevice {
     deviceId:      string;
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ devices: sanitized });
     } catch (err) {
-        logger.error('[trusted-devices] GET error', String(err));
+        logger.error('[trusted-devices] GET error', toError(err).message);
         return NextResponse.json({ error: 'Erreur interne.' }, { status: 500 });
     }
 }

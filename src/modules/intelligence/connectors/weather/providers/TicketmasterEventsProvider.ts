@@ -1,5 +1,6 @@
 import type { IEventsProvider, LocalEvent } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Ticketmaster — API événements locaux pour anticiper l'affluence.
@@ -42,7 +43,7 @@ export class TicketmasterEventsProvider implements IEventsProvider {
                 };
             });
         } catch (err) {
-            logger.error('[TicketmasterEventsProvider] getLocalEvents error', String(err));
+            logger.error('[TicketmasterEventsProvider] getLocalEvents error', toError(err).message);
             return [];
         }
     }

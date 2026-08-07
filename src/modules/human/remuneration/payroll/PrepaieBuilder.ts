@@ -14,6 +14,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
 import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
+import { JsonObject } from "@/shared/types/json";
 
 const MU_TO_EUR = 1_000_000;
 
@@ -252,7 +253,7 @@ export const PrepaieBuilder = {
         const rows: PrepaieRow[] = [];
 
         for (const user of usersRaw) {
-            if ((user as unknown as Record<string, unknown>).status === 'inactive') continue;
+            if ((user as unknown as JsonObject).status === 'inactive') continue;
 
             const entries = (entriesByUser.get(user.id) ?? []).sort(
                 (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()

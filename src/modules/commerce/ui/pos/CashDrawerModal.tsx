@@ -11,6 +11,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toast } from "sonner";
 import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
+import { JsonObject } from "@/shared/types/json";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -119,7 +120,7 @@ export function CashDrawerModal({
             };
             const path = `tenants/${tenantId}/cashDrawerSessions/${sessionId}`;
             const batch = Nexus.adapter.batch();
-            batch.set(path, newSession as unknown as Record<string, unknown>);
+            batch.set(path, newSession as unknown as JsonObject);
             await batch.commit();
             setSession(newSession);
             setOpeningInput("");
@@ -154,7 +155,7 @@ export function CashDrawerModal({
                 closingInMicrounits: actualMu,
                 collectedInMicrounits,
                 changeGivenInMicrounits,
-            } as unknown as Record<string, unknown>);
+            } as unknown as JsonObject);
             await batch.commit();
 
             const diffMu = actualMu - theoreticalMu;

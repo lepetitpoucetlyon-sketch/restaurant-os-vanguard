@@ -13,6 +13,7 @@ import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/mig
 import { runImporter } from '@/modules/commerce/acquisition/onboarding/migration/importers';
 import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import { toError } from "@/lib/toError";
 
 export async function POST(req: NextRequest) {
     const caller = await requireTenantUser(req);
@@ -62,6 +63,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true, result });
     } catch (err) {
         logger.error('[onboarding/connector/pull]', err);
-        return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
+        return NextResponse.json({ ok: false, error: toError(err).message }, { status: 500 });
     }
 }

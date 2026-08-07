@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 // eslint-disable-next-line no-restricted-imports
 import { BillingService } from '@/modules/finance';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * POST /api/billing/webhook
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', { apiVersion: '2026-06-24.dahlia' });
     event = stripe.webhooks.constructEvent(body, sig, secret);
   } catch (err) {
-    logger.warn('[webhook] Signature verification failed', String(err));
+    logger.warn('[webhook] Signature verification failed', toError(err).message);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest) {
     await BillingService.handleWebhookEvent(event);
     return NextResponse.json({ received: true });
   } catch (err) {
-    logger.error('[webhook] Handler error', String(err));
+    logger.error('[webhook] Handler error', toError(err).message);
     return NextResponse.json({ error: 'Handler failed' }, { status: 500 });
   }
 }

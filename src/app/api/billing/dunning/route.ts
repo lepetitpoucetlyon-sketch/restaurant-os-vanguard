@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { Resend } from 'resend';
+import { toError } from "@/lib/toError";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM   = process.env.RESEND_FROM_EMAIL ?? 'noreply@restaurant-os.app';
@@ -37,7 +38,7 @@ async function sendDunningEmail(to: string, tenantName: string, step: number) {
     from: FROM, to,
     subject: `[Restaurant OS] ${msg.subject}`,
     html: `<p>Bonjour ${tenantName},</p><p>${msg.body}</p><p style="color:#888;font-size:11px;">Restaurant OS Billing</p>`,
-  }).catch(e => logger.warn('[Dunning] email error:', String(e)));
+  }).catch(e => logger.warn('[Dunning] email error:', toError(e).message));
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -107,7 +108,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
         processed++;
       } catch (err) {
-        logger.error(`[Dunning] Erreur tenant ${tenantId}:`, String(err));
+        logger.error(`[Dunning] Erreur tenant ${tenantId}:`, toError(err).message);
       }
     }
 

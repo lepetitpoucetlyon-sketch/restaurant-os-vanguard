@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     logger.info('[onboarding/rollback] Snapshot restauré', { snapshotId, tenantId: caller.tenantId });
     return NextResponse.json({ success: true, snapshotId, rolledBack: true });
-  } catch (err: unknown) {
+  } catch (err) {
     const message = toError(err).message;
     logger.error('[onboarding/rollback]', err);
     return NextResponse.json({ error: message }, { status: 500 });
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       category as Parameters<typeof ImportSnapshotService.list>[0]
     );
     return NextResponse.json({ snapshots });
-  } catch (err: unknown) {
+  } catch (err) {
     const message = toError(err).message;
     logger.error('[onboarding/rollback GET]', err);
     return NextResponse.json({ error: message }, { status: 500 });

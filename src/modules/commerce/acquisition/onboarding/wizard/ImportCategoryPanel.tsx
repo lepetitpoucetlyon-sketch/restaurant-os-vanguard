@@ -60,7 +60,7 @@ export function ImportCategoryPanel({
       setPreview({ rows: json.preview ?? [], confidence: 'high', source: 'api' });
       setProgress(40);
       setState('preview');
-    } catch (err: unknown) {
+    } catch (err) {
       setErrorMsg(toError(err).message);
       setState('error');
     }
@@ -89,7 +89,7 @@ export function ImportCategoryPanel({
       setProgress(100);
       setState('done');
       onImported({ created: json.created ?? rows.length, snapshotId: json.snapshotId });
-    } catch (err: unknown) {
+    } catch (err) {
       setErrorMsg(toError(err).message);
       setState('error');
     }

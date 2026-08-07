@@ -16,6 +16,7 @@
 
 import type { PrepaieRow, PayrollPeriodSummary, PayrollProviderConfig } from './types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 const MERGE_BASE = 'https://api.merge.dev/api/hris/v1';
 const MERGE_AUTH  = 'https://api.merge.dev/api';
@@ -183,7 +184,7 @@ export class MergePayrollClient {
                 if (emp.employee_number) remoteMap.set(emp.employee_number, emp.remote_id ?? '');
             }
         } catch (err) {
-            logger.warn('[MergePayroll] Failed to list remote employees', String(err));
+            logger.warn('[MergePayroll] Failed to list remote employees', toError(err).message);
         }
 
         for (const row of summary.rows) {
@@ -204,7 +205,7 @@ export class MergePayrollClient {
 
                 synced++;
             } catch (err) {
-                errors.push(`${row.matricule}: ${String(err)}`);
+                errors.push(`${row.matricule}: ${toError(err).message}`);
             }
         }
 

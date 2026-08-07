@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export function registerAnomalyDetectedHandler(): () => void {
   return NexusEventBus.on(
@@ -29,8 +30,8 @@ export function registerAnomalyDetectedHandler(): () => void {
         });
 
         logger.warn(`[AnomalyDetectedHandler] Anomalie détectée — ${metric}: ${value} (seuil: ${threshold})`);
-      } catch (err: unknown) {
-        logger.error(`[AnomalyDetectedHandler] Échec enregistrement anomalie: ${String(err)}`);
+      } catch (err) {
+        logger.error(`[AnomalyDetectedHandler] Échec enregistrement anomalie: ${toError(err).message}`);
       }
     },
     { id: 'anomaly-detected', priority: 'HIGH' },

@@ -1,4 +1,5 @@
 import type { SerialConnection, PrintResult } from '../types';
+import { toError } from "@/lib/toError";
 
 interface SerialPort {
   open(options: { baudRate: number }): Promise<void>;
@@ -51,6 +52,6 @@ export async function printSerial(
   } catch (err) {
     if (writer) { try { writer.releaseLock(); } catch { /* ignore */ } }
     if (port) { await port.close().catch(() => {}); }
-    return { success: false, method: 'serial', error: String(err) };
+    return { success: false, method: 'serial', error: toError(err).message };
   }
 }

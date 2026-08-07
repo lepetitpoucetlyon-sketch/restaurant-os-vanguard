@@ -7,6 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 const QONTO_BASE = 'https://thirdparty.qonto.com/v2';
 
@@ -80,7 +81,7 @@ export class QontoProvider implements IOpenBankingProvider {
     }
 
     normalizeWebhookPayload(raw: unknown): WebhookEnvelope {
-        const payload = raw as Record<string, unknown>;
+        const payload = raw as JsonObject;
         return {
             event:    'connection.synced',
             raw,

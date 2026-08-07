@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 interface StaffMember {
   id?: string;
@@ -126,7 +127,7 @@ export class RecruitmentRouterHandler {
             timestamp: new Date().toISOString(),
         });
       } catch (err) {
-        logger.error('[RecruitmentRouterHandler] Error saving application', String(err));
+        logger.error('[RecruitmentRouterHandler] Error saving application', toError(err).message);
       }
     }, { id: 'recruitment-router', priority: 'BACKGROUND' });
   }

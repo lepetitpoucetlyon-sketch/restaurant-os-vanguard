@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, tokens });
 
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[BrandExtract] Échec', error);
     const msg = error instanceof Error ? error.message : 'Erreur interne';
     return NextResponse.json({ error: msg }, { status: 500 });

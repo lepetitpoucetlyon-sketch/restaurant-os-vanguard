@@ -2,6 +2,7 @@ import type { IPayrollConnectorProvider, TimesheetEntry, Payslip, PayrollCost, P
 import type { PayrollPeriodSummary, PayrollProviderConfig } from '../../../remuneration/payroll/types';
 import { SilaeClient } from '../../../remuneration/payroll/SilaeClient';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Adaptateur IPayrollConnectorProvider → SilaeClient existant.
@@ -43,7 +44,7 @@ export class SilaeConnectorProvider implements IPayrollConnectorProvider {
             // Bulletins de paie récupérés via rapport Silae — implémentation complète dans NexusPayrollEngine
             return [];
         } catch (err) {
-            logger.error('[SilaeConnectorProvider] fetchPayslips error', String(err));
+            logger.error('[SilaeConnectorProvider] fetchPayslips error', toError(err).message);
             return [];
         }
     }

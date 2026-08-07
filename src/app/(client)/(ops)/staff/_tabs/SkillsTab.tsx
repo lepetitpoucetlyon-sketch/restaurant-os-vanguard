@@ -4,6 +4,7 @@ import React from "react";
 import { FileText, Trash2 } from "lucide-react";
 import type { User } from "@nexus/contracts";
 import { type StaffDocument, KNOWN_SKILLS } from "../staffUtils";
+import { JsonObject } from "@/shared/types/json";
 
 /**
  * Onglet « Compétences » de la page Staff — extrait de page.tsx (dette-5).
@@ -53,7 +54,7 @@ export function SkillsTab({
                         </thead>
                         <tbody>
                             {staffMembers.map(member => {
-                                const skills = ((member as Record<string, unknown>).skills as string[] | undefined) ?? [];
+                                const skills = ((member as JsonObject).skills as string[] | undefined) ?? [];
                                 return (
                                     <tr key={member.id} className="border-t border-border hover:bg-surface-hover">
                                         <td className="px-4 py-2.5 font-medium whitespace-nowrap">{member.name}</td>

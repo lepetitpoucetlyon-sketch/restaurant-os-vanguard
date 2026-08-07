@@ -1,6 +1,7 @@
 import type { IEmailInvoiceProvider, EmailWithAttachments } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * Gmail — OAuth 2.0 Google, lecture inbox pour factures fournisseurs.
@@ -77,7 +78,7 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
                     });
                 }
             } catch (e) {
-                logger.warn('[GmailInvoiceProvider] message parse error', String(e));
+                logger.warn('[GmailInvoiceProvider] message parse error', toError(e).message);
             }
         }
         return emails;

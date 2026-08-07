@@ -22,6 +22,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { aiRouter } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
 
 interface TenantSnapshot {
   tenantId:     string;
@@ -33,7 +34,7 @@ interface TenantSnapshot {
 }
 
 async function collectTenantSnapshot(tenantId: string): Promise<TenantSnapshot> {
-  const cfg = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as Record<string, unknown> | null;
+  const cfg = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as JsonObject | null;
   const billing = (cfg as { billing?: { status?: string } } | null)?.billing;
   const region  = (cfg as { dataRegion?: { label?: string } } | null)?.dataRegion;
   const aiMods  = (cfg as { aiModules?: Record<string, boolean> } | null)?.aiModules ?? {};

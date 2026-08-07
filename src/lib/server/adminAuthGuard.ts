@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
+import { toError } from "@/lib/toError";
 
 interface StoredDevice {
     fingerprint: string;
@@ -113,7 +114,7 @@ export async function requireMccLevel(
 
         return { uid: decoded.uid, role, tenantId };
     } catch (err) {
-        logger.warn('[adminAuth] Token verification failed', String(err));
+        logger.warn('[adminAuth] Token verification failed', toError(err).message);
         return hiddenDoor();
     }
 }
@@ -182,7 +183,7 @@ async function checkFleetAdminMFA(
         }
         return null;
     } catch (err) {
-        logger.warn('[adminAuth] Erreur lors du check MFA', String(err));
+        logger.warn('[adminAuth] Erreur lors du check MFA', toError(err).message);
         return mfaError('MFA_CHECK_FAILED');
     }
 }
@@ -222,7 +223,7 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
             }
         }
       } catch (err) {
-        logger.warn(`[adminAuth] Failed to fetch billing status for tenant ${tenantId}`, String(err));
+        logger.warn(`[adminAuth] Failed to fetch billing status for tenant ${tenantId}`, toError(err).message);
       }
     }
 
@@ -241,7 +242,7 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
       tenantId,
     };
   } catch (err) {
-    logger.warn('[adminAuth] Token verification failed', String(err));
+    logger.warn('[adminAuth] Token verification failed', toError(err).message);
     return null;
   }
 }
@@ -271,7 +272,7 @@ export async function requireFleetAdmin(request: Request): Promise<AdminCaller |
             : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
         return { uid: decoded.uid, role, tenantId };
     } catch (err) {
-        logger.warn('[adminAuth] Token verification failed', String(err));
+        logger.warn('[adminAuth] Token verification failed', toError(err).message);
         return hiddenDoor();
     }
 }

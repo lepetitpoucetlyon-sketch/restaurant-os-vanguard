@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 interface TenantRecord {
   id?: string;
@@ -45,7 +46,7 @@ export class FleetStratBriefingHandler {
               where: [{ field: 'status', operator: '==', value: 'active' }]
             });
           } catch (err) {
-            logger.warn('[FleetStratBriefing] Impossible de lister les tenants, fallback single-tenant', String(err));
+            logger.warn('[FleetStratBriefing] Impossible de lister les tenants, fallback single-tenant', toError(err).message);
             allTenants = [{ id: tenantId, name: 'current' }];
           }
 
@@ -76,7 +77,7 @@ export class FleetStratBriefingHandler {
               totalTickets += ticketZData.length;
               activeTenantCount++;
             } catch (err) {
-              logger.warn(`[FleetStratBriefing] Erreur récupération données tenant ${tid}`, String(err));
+              logger.warn(`[FleetStratBriefing] Erreur récupération données tenant ${tid}`, toError(err).message);
             }
           }
         } else {
@@ -129,7 +130,7 @@ export class FleetStratBriefingHandler {
           timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[FleetStratBriefingHandler] Error generating briefing', String(err));
+        logger.error('[FleetStratBriefingHandler] Error generating briefing', toError(err).message);
       }
     }, { id: 'fleet-strat-briefing', priority: 'BACKGROUND' });
   }

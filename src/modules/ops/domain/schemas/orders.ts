@@ -67,7 +67,7 @@ const OrderBaseSchema = z.object({
   /** @deprecated — use totalInMicrounits. Parity mirror kept only for legacy Firestore documents. */
   totalInCents:  z.number().int().min(0).optional(),
   createdAt:     TimestampSchema,
-  updatedAt:     TimestampSchema.default(() => Date.now() as unknown as ReturnType<typeof Date.now>),
+  updatedAt:     TimestampSchema.default(() => Date.now()),
   paidAt:        TimestampSchema.nullable().optional(),
   covers:        z.number().int().min(1).max(50).optional(),
   notes:         z.string().max(500).pipe(SanitizedStringSchema).optional(),

@@ -2,6 +2,8 @@ import { db } from '@/lib/offline/offline-store';
 import { NexusEventBus, NexusEventName } from './NexusEventBus';
 import { PayloadMigrator } from './PayloadMigrator';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 const MAX_ATTEMPTS = 3;
 const SCAN_INTERVAL_MS = 30_000;
@@ -34,7 +36,7 @@ async function processRetryQueue(): Promise<void> {
     try {
       const migratedPayload = PayloadMigrator.migrate(
         entry.eventName as NexusEventName,
-        entry.payload as Record<string, unknown>
+        entry.payload as JsonObject
       );
       // skipDLQWrite : on gère l'état DLQ ici, pas dans le bus
       await NexusEventBus.emit(
@@ -49,7 +51,7 @@ async function processRetryQueue(): Promise<void> {
         attempts: newAttempts,
         status: willQuarantine ? 'quarantine' : 'retry',
         nextRetryAt: Date.now() + backoffMs(newAttempts),
-        error: `[retry ${newAttempts}/${MAX_ATTEMPTS}] ${String(err)}`,
+        error: `[retry ${newAttempts}/${MAX_ATTEMPTS}] ${toError(err).message}`,
         failedAt: Date.now(),
       });
       logger.warn(

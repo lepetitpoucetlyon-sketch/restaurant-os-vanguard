@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { toError } from "@/lib/toError";
 
 export class StripePaymentRetryHandler {
   static register() {
@@ -74,7 +75,7 @@ export class StripePaymentRetryHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error('[StripePaymentRetryHandler] Error queuing retry', String(err));
+        logger.error('[StripePaymentRetryHandler] Error queuing retry', toError(err).message);
       }
     }, { id: 'stripe-payment-retry', priority: 'HIGH' });
   }

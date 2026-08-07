@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
 
     logger.info('[ReviewResponse] Réponse générée avec succès');
     return NextResponse.json({ response });
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[ReviewResponse] Erreur', error);
     const msg = error instanceof Error ? error.message : 'Erreur interne';
     return NextResponse.json({ error: msg }, { status: 500 });

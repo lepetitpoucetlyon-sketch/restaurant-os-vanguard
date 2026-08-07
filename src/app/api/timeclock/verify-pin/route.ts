@@ -5,6 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PinHashService } from '@/lib/server/PinHashService';
 import { logger } from '@/lib/logger';
 import type { User } from '@/domain/schemas/users';
+import { toError } from "@/lib/toError";
 
 /**
  * POST /api/timeclock/verify-pin
@@ -47,7 +48,7 @@ function verifyStaffPin(staffList: StaffDoc[], pin: string, tenantId: string): S
         pinHash: hashed.pinHash,
         pinSalt: hashed.pinSalt,
       }).catch((err) => {
-        logger.warn('[timeclock/verify-pin] Migration PIN hash échouée', String(err));
+        logger.warn('[timeclock/verify-pin] Migration PIN hash échouée', toError(err).message);
       });
       return staff;
     }

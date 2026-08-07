@@ -1,5 +1,6 @@
 import type { IWeatherProvider, WeatherForecast } from '../types';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * OpenWeatherMap — gratuit jusqu'à 1 000 appels/jour.
@@ -45,7 +46,7 @@ export class OpenWeatherMapProvider implements IWeatherProvider {
             }
             return Array.from(byDay.values()).slice(0, days);
         } catch (err) {
-            logger.error('[OpenWeatherMapProvider] getForecast error', String(err));
+            logger.error('[OpenWeatherMapProvider] getForecast error', toError(err).message);
             return [];
         }
     }

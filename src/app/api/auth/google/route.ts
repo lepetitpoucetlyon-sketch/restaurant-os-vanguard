@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     logger.info(`[Google OAuth] Redirection OAuth pour tenant ${tenantId}`);
 
     return NextResponse.redirect(authUrl);
-  } catch (error: unknown) {
+  } catch (error) {
     logger.error('[Google OAuth] Erreur', error);
     const msg = error instanceof Error ? error.message : 'Erreur interne';
     return NextResponse.json({ error: msg }, { status: 500 });

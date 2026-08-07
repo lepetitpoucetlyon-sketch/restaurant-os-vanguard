@@ -3,12 +3,13 @@ import { Download, ShieldCheck } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useHACCP } from '../../hooks/useHACCP';
 import { toast } from 'sonner';
+import { JsonObject } from "@/shared/types/json";
 
 export const SanitaryReport: React.FC = () => {
     const { hygieneLabels, maintenanceLogs } = useHACCP();
 
     const totalControls = hygieneLabels.length + maintenanceLogs.length;
-    const nonConformCount = hygieneLabels.filter(l => (l as Record<string, unknown>).isNonConform).length;
+    const nonConformCount = hygieneLabels.filter(l => (l as JsonObject).isNonConform).length;
     const conformityRate = totalControls > 0 
         ? (( (totalControls - nonConformCount) / totalControls ) * 100).toFixed(1)
         : '100.0';

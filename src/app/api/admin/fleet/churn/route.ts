@@ -18,6 +18,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { JsonObject } from "@/shared/types/json";
+import { toError } from "@/lib/toError";
 
 interface ChurnSignals {
   daysSinceLastOrder:   number;
@@ -62,7 +64,7 @@ async function getChurnForTenant(tenantId: string): Promise<{
     Nexus.adapter.query(`tenants/${tenantId}/supportTickets`),
   ]);
 
-  const cfg         = config.status === 'fulfilled' ? config.value as Record<string, unknown> : null;
+  const cfg         = config.status === 'fulfilled' ? config.value as JsonObject : null;
   const orderList   = orders.status === 'fulfilled' ? orders.value as Array<{ createdAt?: string }> : [];
   const ticketList  = tickets.status === 'fulfilled'
     ? (tickets.value as Array<{ status?: string }>).filter(t => t.status === 'open')
@@ -113,7 +115,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const sorted = results.sort((a, b) => b.score - a.score).slice(0, 10);
     return NextResponse.json({ churns: sorted, analyzedCount: instances.length });
   } catch (err) {
-    logger.error('[Churn] Fleet scan error:', String(err));
+    logger.error('[Churn] Fleet scan error:', toError(err).message);
     return NextResponse.json({ churns: [], analyzedCount: 0 });
   }
 }

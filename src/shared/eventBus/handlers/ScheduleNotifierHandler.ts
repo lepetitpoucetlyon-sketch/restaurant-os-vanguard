@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
+import { toError } from "@/lib/toError";
 
 interface ShiftRecord {
   id?: string;
@@ -103,7 +104,7 @@ export function registerScheduleNotifierHandler() {
           timestamp: new Date(),
         });
       } catch (error) {
-        logger.error('[ScheduleNotifier] Erreur lors de la notification:', String(error));
+        logger.error('[ScheduleNotifier] Erreur lors de la notification:', toError(error).message);
       }
     },
     { id: 'schedule-notifier', priority: 'BACKGROUND' }

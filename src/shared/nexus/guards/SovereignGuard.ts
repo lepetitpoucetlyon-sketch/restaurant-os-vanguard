@@ -273,7 +273,7 @@ export const SovereignGuard = {
       await this.validateAccess(path, context.vassalId);
       
       return { granted: true };
-    } catch (error: unknown) {
+    } catch (error) {
       const errCode = error instanceof Error && 'code' in error ? (error as { code?: string }).code : 'ACCESS_DENIED';
       return { granted: false, reason: `SECURITY_VIOLATION_${errCode || 'ACCESS_DENIED'}` };
     }

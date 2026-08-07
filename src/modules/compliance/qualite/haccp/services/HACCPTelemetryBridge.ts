@@ -67,7 +67,7 @@ export const HACCPTelemetryBridge = {
       }
 
       return healthScore;
-    } catch (error: unknown) {
+    } catch (error) {
       logger.error(`[HACCPBridge] Failed for ${tenantId}:`, error);
       return 100;
     }

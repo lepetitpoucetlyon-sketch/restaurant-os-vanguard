@@ -114,7 +114,7 @@ export const InvoiceExtractionService = {
 
             return { success: true, data: invoice, rawResponse };
 
-        } catch (error: unknown) {
+        } catch (error) {
             const errorMsg = toError(error).message;
             logger.error(`[InvoiceExtraction] Pipeline error: ${errorMsg}`);
             return {

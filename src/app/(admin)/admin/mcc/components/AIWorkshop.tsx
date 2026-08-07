@@ -5,6 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { BrainCircuit, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { toError } from "@/lib/toError";
 
 interface AIPatch {
   id: string;
@@ -32,7 +33,7 @@ export const AIWorkshop: React.FC = () => {
       const raw = await Nexus.adapter.query<AIPatch>('mcc/aiPatches');
       setPatches(raw ?? []);
     } catch (err) {
-      logger.warn('[AIWorkshop] Failed to load patches', String(err));
+      logger.warn('[AIWorkshop] Failed to load patches', toError(err).message);
     } finally {
       setLoading(false);
     }

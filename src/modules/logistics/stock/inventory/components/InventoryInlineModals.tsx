@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { StockItem } from '../types';
+import { JsonObject } from "@/shared/types/json";
 
 export interface DLCStatus {
     daysLeft: number | null;
@@ -39,7 +40,7 @@ function ModalShell({ onClose, children }: { onClose: () => void; children: Reac
 
 export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: () => void }) {
     const [minQty, setMinQty] = useState(String(item.minQuantity ?? ""));
-    const [reorderQty, setReorderQty] = useState(String((item as Record<string, unknown>).reorderQuantity ?? ""));
+    const [reorderQty, setReorderQty] = useState(String((item as JsonObject).reorderQuantity ?? ""));
     const [saving, setSaving] = useState(false);
 
     const handleSave = async () => {

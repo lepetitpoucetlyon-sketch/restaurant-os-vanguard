@@ -9,6 +9,7 @@ import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
 import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
+import { toError } from "@/lib/toError";
 
 /**
  * ProvisioningEngine - Orchestrates the Registry-based "Birth of a Client"
@@ -158,7 +159,7 @@ export const ProvisioningEngine = {
                 logoUrl:       brandingDna?.logoUrl ?? null,
                 displayName:   dna.name,
                 splashEnabled: brandingDna?.splashEnabled ?? false,
-            }).catch(err => logger.warn('ProvisioningEngine: Branding injection skipped', String(err)));
+            }).catch(err => logger.warn('ProvisioningEngine: Branding injection skipped', toError(err).message));
 
             // 5. Initialiser le workspace Sovereign RAG pour ce nouveau tenant.
             // Non-bloquant : si le sidecar est indisponible au moment du provisionnement,
@@ -183,7 +184,7 @@ export const ProvisioningEngine = {
 
             return newInstance;
 
-        } catch (error: unknown) {
+        } catch (error) {
             logger.error('ProvisioningEngine: Registry entry failed — rollback partiel', { key: dna.key, error });
 
             // Rollback best-effort : purge des fragments Firestore créés avant l'échec.
@@ -203,12 +204,12 @@ export const ProvisioningEngine = {
             empireAudit.log({
                 module: 'system',
                 action: 'PROVISIONING_ROLLBACK',
-                details: { key: dna.key, error: String(error) },
+                details: { key: dna.key, error: toError(error).message },
                 severity: 'critical',
                 timestamp: new Date(),
             });
 
-            throw new Error(`Provisioning échoué pour "${dna.key}" — fragments nettoyés. Détail: ${String(error)}`);
+            throw new Error(`Provisioning échoué pour "${dna.key}" — fragments nettoyés. Détail: ${toError(error).message}`);
         }
     }
 };

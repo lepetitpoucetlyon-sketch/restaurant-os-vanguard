@@ -7,6 +7,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
 import type { FiscalSeal } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { toError } from "@/lib/toError";
 
 /**
  * 👑 MACRO BRAIN (Empire Industrial Grade)
@@ -297,8 +298,8 @@ export const MacroBrain = {
                 maxTokens: 1024,
             });
             return response.text || "Analyse indisponible.";
-        } catch (error: unknown) {
-            logger.error('[MacroBrain] Oracle Audit Failed', { error: String(error) });
+        } catch (error) {
+            logger.error('[MacroBrain] Oracle Audit Failed', { error: toError(error).message });
             return "Échec de la connexion à l'Oracle.";
         }
     }

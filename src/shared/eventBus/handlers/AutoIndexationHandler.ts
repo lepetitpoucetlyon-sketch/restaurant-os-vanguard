@@ -3,6 +3,7 @@ import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { LightRAGClient } from '@/modules/intelligence';
+import { toError } from "@/lib/toError";
 
 export class AutoIndexationHandler {
   static register() {
@@ -81,11 +82,11 @@ export class AutoIndexationHandler {
             timestamp: new Date().toISOString()
         });
       } catch (err) {
-        logger.error(`[AutoIndexationHandler] Erreur d'indexation:`, String(err));
+        logger.error(`[AutoIndexationHandler] Erreur d'indexation:`, toError(err).message);
         
         await Nexus.adapter.update(`tenants/${tenantId}/ai/documents/${documentId}`, {
             indexStatus: 'failed',
-            error: String(err),
+            error: toError(err).message,
             updatedAt: Date.now()
         });
       }
