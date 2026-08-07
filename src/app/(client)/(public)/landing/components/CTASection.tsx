@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Zap, Phone } from "lucide-react";
+import { Zap, Phone, PlayCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function CTASection() {
+    const router = useRouter();
+
     return (
         <section className="relative py-32 px-6 bg-surface-sidebar overflow-hidden">
             {/* Background */}
@@ -33,6 +36,18 @@ export function CTASection() {
                         Commencer Maintenant
                         <Zap className="w-5 h-5" />
                     </motion.button>
+
+                    {/* Sprint 7 — Bouton Démo Technique → /showcase */}
+                    <motion.button
+                        onClick={() => router.push("/showcase")}
+                        whileHover={{ scale: 1.02, boxShadow: "0 0 40px rgba(201, 162, 39, 0.2)" }}
+                        whileTap={{ scale: 0.98 }}
+                        className="px-10 py-5 bg-surface-sidebar border border-brand/40 text-brand font-bold text-lg rounded-2xl flex items-center gap-3 hover:border-brand transition-colors"
+                    >
+                        <PlayCircle className="w-5 h-5" />
+                        Démo Technique
+                    </motion.button>
+
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

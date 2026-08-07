@@ -178,6 +178,7 @@ export class NexusBridge {
   static mapRemoteConfig(remoteData: Partial<TenantConfig> & LegacyTenantConfig, tenantId: string): TenantConfig {
     return {
       id: tenantId,
+      tier: (remoteData.tier as 'CLIENT' | 'DEMO' | 'TEST' | 'REFERENCE') ?? 'CLIENT',
       capabilities: remoteData.capabilities || remoteData.features || RESTAURANT_FULL_DNA.capabilities,
       theme: this.mapTheme(remoteData),
       status: this.mapStatus(remoteData),

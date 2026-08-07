@@ -15,10 +15,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { usePathname, useRouter } from 'next/navigation';
-import { tenantBrandTokensAtom } from '@/store/pillars/sovereign';
+import { tenantBrandTokensAtom, activeTenantIdAtom } from '@/store/pillars/sovereign';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 import { SplashScreen } from '@/shared/components/SplashScreen';
 import { z } from 'zod';
+import { getSystemTenantTier } from '@/lib/mcc/SystemTenantRegistry';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // Clé pour savoir si le splash a déjà été affiché cette session
 const SPLASH_SESSION_KEY = 'nexus_splash_shown';
@@ -40,6 +42,7 @@ const BrandingConfigSchema = z.object({
 
 export function SplashGate({ children }: { children: React.ReactNode }) {
     const rawTokens  = useAtomValue(tenantBrandTokensAtom);
+    const tenantId   = useAtomValue(activeTenantIdAtom);
     const pathname   = usePathname();
     const router     = useRouter();
     const [showSplash, setShowSplash] = useState(false);
@@ -60,6 +63,20 @@ export function SplashGate({ children }: { children: React.ReactNode }) {
             try { localStorage.setItem(LAST_PATH_KEY, pathname); } catch { /* quota exceeded */ }
         }
     }, [pathname]);
+
+    // ── Simulacra Mode pour tenants DEMO ──────────────────────────────────
+    // Le Simulacra intercepte toutes les écritures Nexus côté IndexedDB local.
+    // Le store réel du tenant DEMO reste intact après chaque session prospect.
+    useEffect(() => {
+        if (!tenantId) return;
+        const tier = getSystemTenantTier(tenantId);
+        if (tier === 'DEMO' && !Nexus.isSimulacraActive()) {
+            Nexus.activateSimulacraMode(`demo_session_${tenantId}`).catch(err => {
+                console.warn('[SplashGate] Simulacra activation failed:', err);
+            });
+        }
+        // Désactivation à la déconnexion : gérée par NexusOpsProvider teardown
+    }, [tenantId]);
 
     // ── Décision d'affichage du splash ────────────────────────────────────
     useEffect(() => {

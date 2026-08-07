@@ -5,6 +5,8 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { CryptoService } from '@/lib/CryptoService';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import type { SignedSovereignData, SovereignData, SovereignWriteSignature } from '@/shared/nexus-contract';
+import { isSystemTenant, isWritable, isFleetVisible } from '@/lib/mcc/SystemTenantRegistry';
+export { isFleetVisible };
 
 /**
  * 🛡️ SovereignGuard - Restaurant OS (Shadow Context 5.4)
@@ -181,6 +183,20 @@ export const SovereignGuard = {
 
   async protectWrite(path: string, data: SovereignData, anchoredTenantId?: string): Promise<SignedSovereignData> {
     await this.validateAccess(path, anchoredTenantId);
+
+    // 🏛️ VERSIONBASE GUARD : bloquer les écritures sur _ref_* et _demo_*
+    // _test_* est le seul tenant système acceptant les écritures directes.
+    // _demo_* est intercepté EN AMONT par Simulacra Mode (NexusAdapter) avant d'arriver ici.
+    const pathParts = path.split('/');
+    const pathTenantId = pathParts[0] === 'tenants' ? pathParts[1] : null;
+    if (pathTenantId && isSystemTenant(pathTenantId) && !isWritable(pathTenantId)) {
+      throw new NexusError(
+        NexusErrorCode.ACCESS_DENIED,
+        `[SovereignGuard] Écriture refusée sur tenant système ${pathTenantId}. ` +
+        `Seul _test_* accepte les écritures directes. ` +
+        `Pour _ref_* : utiliser la procédure de promotion MCC.`
+      );
+    }
 
     if (!this.requiresSignedWrite(path)) {
       return data;

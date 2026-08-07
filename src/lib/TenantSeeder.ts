@@ -12,6 +12,8 @@ import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
 import { CONNECTOR_CATALOG } from '@/shared/connector-manifest';
 import type { ConnectorState } from '@/shared/connector-manifest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSystemTenantTier } from '@/lib/mcc/SystemTenantRegistry';
+import type { SystemTier } from '@/lib/mcc/SystemTenantRegistry';
 
 export interface SeedInput {
   tenantId: string;
@@ -251,6 +253,12 @@ export const TenantSeeder = {
         });
       }
 
+      // ── BrandTokens (tier-aware) ──────────────────────────────────────────
+      const tier = getSystemTenantTier(tenantId);
+      const brandTokens = buildBrandTokens(tenantId, tier, input);
+      await Nexus.adapter.set(`tenants/${tenantId}/brandingTokens`, brandTokens);
+      seededPaths.push(`tenants/${tenantId}/brandingTokens`);
+
       logger.info(`[TenantSeeder] Tenant ${tenantId} seeded — ${seededPaths.length} collections`);
       return { success: true, seededPaths };
 
@@ -262,3 +270,50 @@ export const TenantSeeder = {
     }
   },
 };
+
+/**
+ * Construit les BrandTokens selon le tier du tenant.
+ * Tier DEMO  → splash gold, brandingMode custom, splashEnabled true
+ * Tier TEST  → bleu dev, brandingMode default, pas de splash
+ * Tier REF   → gold neutre, brandingMode default, pas de splash
+ * CLIENT     → reprend la couleur configurée, brandingMode default
+ */
+export function buildBrandTokens(
+  tenantId: string,
+  tier: SystemTier | null,
+  input: SeedInput
+): Record<string, unknown> {
+  if (tier === 'DEMO') {
+    const variant = input.variant ?? 'restaurant';
+    return {
+      tenantId,
+      brandName:    `Restaurant OS · Démo ${variant}`,
+      tagline:      'Découvrez la puissance de votre futur OS',
+      primaryColor: '#C5A358',
+      brandingMode: 'custom',
+      splashEnabled: true,
+      logoUrl:      null,
+    };
+  }
+  if (tier === 'TEST') {
+    return {
+      tenantId,
+      brandName:    `${input.name} · TEST`,
+      tagline:      'Environnement de développement',
+      primaryColor: '#3B82F6',
+      brandingMode: 'default',
+      splashEnabled: false,
+      logoUrl:      null,
+    };
+  }
+  // REFERENCE ou CLIENT
+  return {
+    tenantId,
+    brandName:    input.name,
+    tagline:      null,
+    primaryColor: input.primaryColor ?? '#C5A358',
+    brandingMode: 'default',
+    splashEnabled: false,
+    logoUrl:      null,
+  };
+}

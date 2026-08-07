@@ -13,6 +13,7 @@ const EXPERT_MODEL_ID = 'gemini-1.5-flash'; // alias: AI_MODELS.fast
  */
 export const lepetitpoucetConfig: TenantConfig = {
     id: 'lepetitpoucet',
+    tier: 'CLIENT' as const,
     capabilities: {
         haccpGuardEnabled: true,
         plateAuditEnabled: true,

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
-    Network, BookOpen
+    Network, BookOpen, Database
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -25,7 +25,8 @@ const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m =>
 const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
 const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.EventBusTab), { loading: () => <MCCWidgetSkeleton /> });
 const LifecycleTab    = dynamic(() => import('./_tabs/LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> });
-const TutorialTab     = dynamic(() => import('./_tabs/TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> });
+const TutorialTab       = dynamic(() => import('./_tabs/TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> });
+const SystemTenantsTab  = dynamic(() => import('./_tabs/SystemTenantsTab').then(m => m.SystemTenantsTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -68,7 +69,8 @@ function MCCDashboardInner() {
         { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
         { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
         { id: 'lifecycle',    label: t.tabs.lifecycle,    icon: <Network className="w-4 h-4" /> },
-        { id: 'tutorial',     label: 'CLI & Guide',        icon: <BookOpen className="w-4 h-4" /> },
+        { id: 'tutorial',       label: 'CLI & Guide',          icon: <BookOpen  className="w-4 h-4" /> },
+        { id: 'systemtenants',  label: 'Tenants Système',      icon: <Database  className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -160,6 +162,11 @@ function MCCDashboardInner() {
                                 {activeTab === 'tutorial' && (
                                     <motion.div key="tutorial" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                                         <TutorialTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'systemtenants' && (
+                                    <motion.div key="systemtenants" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <SystemTenantsTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

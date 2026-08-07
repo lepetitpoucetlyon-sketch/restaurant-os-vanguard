@@ -3,7 +3,7 @@ import type { TenantConfig } from '@nexus/contracts';
 export const bistrolyonConfig: TenantConfig = {
     id: 'bistrolyon',
     name: 'Bistro de Lyon (Fictif)',
-    tier: 'pro',
+    tier: 'CLIENT',
     billing: {
         status: 'active',
         plan: 'professional',

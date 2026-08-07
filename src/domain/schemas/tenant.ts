@@ -88,7 +88,7 @@ export const TenantConfigSchema = z.object({
   id: z.string(),
   variant: PlatformVariantSchema.optional(),
   name: z.string().optional(),
-  tier: z.string().optional(),
+  tier: z.enum(['CLIENT', 'DEMO', 'TEST', 'REFERENCE']).optional().default('CLIENT'),
   billing: z.object({
     status: z.string(),
     plan: z.string(),

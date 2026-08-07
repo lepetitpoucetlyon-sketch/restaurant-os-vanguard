@@ -827,6 +827,12 @@ export interface NexusEvents {
     details: Record<string, unknown>;
     severity: 'low' | 'medium' | 'high' | 'critical';
   };
+  'system.reference_promoted': {
+    variant: string;
+    timestamp: string;
+    collections: string[];
+    promotedBy: string;
+  };
   'finance.daily_audit': {
     v: 1;
     tenantId: string;

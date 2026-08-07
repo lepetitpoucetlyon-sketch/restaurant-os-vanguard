@@ -3,7 +3,7 @@ import type { TenantConfig } from '@nexus/contracts';
 export const urbanburgerConfig: TenantConfig = {
     id: 'urbanburger',
     name: 'Urban Burger (Fictif)',
-    tier: 'starter',
+    tier: 'CLIENT',
     billing: {
         status: 'active',
         plan: 'starter',

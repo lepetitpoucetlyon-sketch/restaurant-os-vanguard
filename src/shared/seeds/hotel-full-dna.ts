@@ -2,6 +2,7 @@ import { TenantConfig } from "@shared/nexus-contract";
 
 export const HOTEL_FULL_DNA: TenantConfig = {
   id: 'hotel_golden_seed_complete',
+  tier: 'CLIENT' as const,
   variant: 'hotel',
   capabilities: {
     // 1. Principal & Intelligence

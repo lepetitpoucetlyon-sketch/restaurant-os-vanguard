@@ -2,6 +2,7 @@ import { TenantConfig } from "@shared/nexus-contract";
 
 export const SALON_FULL_DNA: TenantConfig = {
   id: 'salon_golden_seed_complete',
+  tier: 'CLIENT' as const,
   variant: 'salon',
   capabilities: {
     'mod_dashboard': true,

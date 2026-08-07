@@ -2,6 +2,7 @@ import { TenantConfig } from "@shared/nexus-contract";
 
 export const GARAGE_FULL_DNA: TenantConfig = {
   id: 'garage_golden_seed_complete',
+  tier: 'CLIENT' as const,
   variant: 'garage',
   capabilities: {
     'mod_dashboard': true,
