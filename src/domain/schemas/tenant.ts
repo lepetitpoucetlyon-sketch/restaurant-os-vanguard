@@ -79,6 +79,12 @@ export const TenantOverridesSchema = z.object({
     level:          z.enum(['info', 'verbose', 'trace']).default('info'),
     showBoundaries: z.boolean().optional(),
   }).optional(),
+  /**
+   * Feature flags de branding contrôlés depuis le MCC.
+   * mod_brand_basic : logo, couleur, favicon, splash — true par défaut (absent = true).
+   * mod_brand_plus  : configurateur avancé, AI import, presets — false par défaut (absent = false).
+   */
+  capabilities: z.record(z.string(), z.boolean()).optional(),
   custom: z.record(z.string(), z.unknown()).optional(),
 }).catchall(z.any());
 

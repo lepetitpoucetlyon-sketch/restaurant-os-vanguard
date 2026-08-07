@@ -1,6 +1,7 @@
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
+import { toError } from '@/lib/toError';
 import { LLMManager } from '@/modules/intelligence';
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
 import type { PlatformVariant } from '@/domain/schemas/tenant';
@@ -65,7 +66,7 @@ export const BrandingService = {
                 atmosphere: data.atmosphere as BrandInput['atmosphere'],
             };
         } catch (error: unknown) {
-            logger.error(`[Nexus Branding] AI Extraction failed:`, { error: String(error) });
+            logger.error(`[Nexus Branding] AI Extraction failed:`, { error: toError(error).message });
             // Fallback to minimal branding
             return {
                 name: "New Partner",
