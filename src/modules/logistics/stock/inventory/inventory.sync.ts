@@ -1,10 +1,11 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
-import { StockItem, Category, Recipe } from '@nexus/contracts';
+import { StockItem, Category, Recipe, Product } from '@nexus/contracts';
 import {
     stockItemsNodeAtom,
     categoriesNodeAtom,
-    recipesNodeAtom
+    recipesNodeAtom,
+    productsNodeAtom,
 } from './store/inventoryAtoms';
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
@@ -57,7 +58,25 @@ export const InventorySyncService = {
       }
     );
 
-    // 2. CATEGORIES SYNC
+    // 2. PRODUCTS SYNC (catalogue POS / menu-builder)
+    this.private_listeners.products = Nexus.adapter.onSnapshot(
+      path('products'),
+      (data: Product[]) => {
+        store.set(productsNodeAtom, (prev) => updateNexusNode(prev, {
+          data,
+          loading: false,
+          error: null
+        }));
+      },
+      {
+        limit: 2000,
+        onError: (error: Error) => {
+          logger.error('[InventorySync] Products Sync Failed', error);
+        }
+      }
+    );
+
+    // 3. CATEGORIES SYNC
     this.private_listeners.categories = Nexus.adapter.onSnapshot(
       path('categories'),
       (data: Category[]) => {

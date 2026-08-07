@@ -6,6 +6,7 @@ const ja: SovereignData = {
         "dashboard": "ダッシュボード",
         "intelligence": "AI インテリジェンス",
         "executive_intelligence": "経営インテリジェンス",
+        "intelligence_hub": "インテリジェンスハブ",
         "system_map": "3Dシステムマップ",
         "operations": "オペレーション",
         "pos": "POSレジ",

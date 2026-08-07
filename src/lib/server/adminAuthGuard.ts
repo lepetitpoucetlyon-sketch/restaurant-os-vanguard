@@ -191,6 +191,16 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
   const authHeader = request.headers.get('authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
+  // Dev bypass tenant (NODE_ENV=development uniquement — jamais en production)
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    authHeader === 'Bearer dev-tenant-bypass'
+  ) {
+    const tenantId = request.headers.get('x-nexus-tenant-id') ?? request.headers.get('x-resolved-tenant-id') ?? 'lepetitpoucet';
+    logger.warn('[adminAuth] DEV TENANT BYPASS actif — ne pas utiliser en production');
+    return { uid: 'dev_user', role: 'admin', tenantId };
+  }
+
   try {
     initFirebaseAdmin();
     const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));

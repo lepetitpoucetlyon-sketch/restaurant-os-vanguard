@@ -1098,6 +1098,14 @@ export interface NexusEvents {
   'health.patient_flow_snapshot': { tenantId: string; date: string; admissions: number; discharges: number; occupancyRate: number };
   'health.equipment_maintenance_required': { tenantId: string; equipmentId: string; type: string; dueDate: string; critical: boolean };
 
+  // ─── Connecteurs ──────────────────────────────────────────────────────────
+  'connectors.auto_activated': { tenantId: string; variant: string; connectors: { id: string; status: 'active' | 'pending_config' }[] };
+  'connectors.activated': { tenantId: string; connectorId: string; activatedBy: string };
+  'connectors.deactivated': { tenantId: string; connectorId: string; deactivatedBy: string };
+  'connectors.config_saved': { tenantId: string; connectorId: string; savedBy: string };
+  'connectors.sync_completed': { tenantId: string; connectorId: string; itemsSynced: number };
+  'connectors.sync_failed': { tenantId: string; connectorId: string; error: string };
+
   // ─── Vertical: Auto ───────────────────────────────────────────────────────
   'auto.vehicle_checked_in': { tenantId: string; vehicleId: string; vin: string; customerId: string; mileage: number; checkedInAt: string };
   'auto.diagnostic_completed': { tenantId: string; vehicleId: string; workOrderId: string; faults: { code: string; severity: 'low' | 'medium' | 'critical' }[] };

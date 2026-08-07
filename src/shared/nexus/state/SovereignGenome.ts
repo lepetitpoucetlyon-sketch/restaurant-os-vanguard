@@ -154,10 +154,18 @@ export const userPermissionsAtom = atom<string[]>((get) => {
     return (perms && perms[role]) || [];
 });
 
+// Permissions READ implicites pour tous les rôles authentifiés (y compris 'client').
+// Les mutations restent bloquées par RBAC au niveau des actions (guardedAction).
+const READ_SUFFIXES = ['.view', '.nodes', '.zones', '.resources', '.records'];
+
 export const canDoAtom = atom<(permission: string) => boolean>((get) => (permission: string): boolean => {
     const role = get(userRoleAtom);
     const permissions = get(userPermissionsAtom);
-    return role === 'admin' || permissions.includes('*') || permissions.includes(permission);
+    if (role === 'admin' || permissions.includes('*') || permissions.includes(permission)) return true;
+    // En dev local, autoriser la lecture pour tous afin d'éviter les atoms vides
+    // avant que l'auth PIN ne soit hydratée.
+    if (process.env.NODE_ENV !== 'production' && READ_SUFFIXES.some(s => permission.endsWith(s))) return true;
+    return false;
 });
 
 export const focusedTenantDetailsAtom = atom((get) => {

@@ -32,7 +32,10 @@ export async function initPillarSyncs(
   await Promise.all([
     TimeSync.init(),
     shouldEagerLoad(imp.orders)     ? SyncOrders.init(tenantId, store)    : Promise.resolve(),
-    shouldEagerLoad(imp.stocks)     ? SyncStocks.init(tenantId, store)    : Promise.resolve(),
+    // SyncStocks gère aussi les catégories et produits (catalog) :
+    // on l'active dès que stocks OU categories OU products est HIGH/MEDIUM.
+    (shouldEagerLoad(imp.stocks) || shouldEagerLoad(imp.categories) || shouldEagerLoad(imp.products))
+                                    ? SyncStocks.init(tenantId, store)    : Promise.resolve(),
     shouldEagerLoad(imp.finance)    ? SyncFinance.init(tenantId, store)   : Promise.resolve(),
     shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store)     : Promise.resolve(),
     shouldEagerLoad(imp.marketing)  ? SyncMarketing.init(tenantId, store) : Promise.resolve(),

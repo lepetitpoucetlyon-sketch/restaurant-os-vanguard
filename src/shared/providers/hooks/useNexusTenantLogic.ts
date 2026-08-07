@@ -63,14 +63,19 @@ export function useNexusTenantLogic(): NexusTenantState {
         NexusTelemetryEngine.initSession(tenantId);
         fetchRbac(tenantId);
         
-        // Auto-provision Demo Mode if requested via URL
+        // Auto-provision Demo Mode — URL param OU dev local sans Firebase réel
         if (typeof window !== 'undefined') {
-            const isSimulacra = new URLSearchParams(window.location.search).get('simulacra') === 'true';
+            const isSimulacra =
+                new URLSearchParams(window.location.search).get('simulacra') === 'true' ||
+                (process.env.NODE_ENV !== 'production' && !process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
             if (isSimulacra) {
                 Nexus.activateSimulacraMode(tenantId).then(() => {
                     DemoSeeder.provision(tenantId).catch(err => {
                         logger.error('Failed to provision demo data', { error: err.message });
                     });
+                }).catch(err => {
+                    // Simulacra peut échouer si l'adapter Firestore n'est pas encore initialisé
+                    logger.warn('[SimulacraMode] Activation différée :', err.message);
                 });
             }
         }

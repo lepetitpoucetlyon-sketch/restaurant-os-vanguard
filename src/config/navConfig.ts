@@ -36,6 +36,7 @@ import {
     CreditCard,
     Smartphone,
     Activity,
+    Plug,
 } from "lucide-react";
 
 export type NavMode = 'tenant' | 'mcc' | 'both';
@@ -235,6 +236,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'both',
         items: [
             { label: "Paramètres", key: "settings", href: "/settings", icon: Settings, category: "settings" },
+            { label: "Intégrations", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings" },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: UserCog, category: "account-settings" },
         ]
     },

@@ -8,6 +8,10 @@ import { FiscalKeyService } from '@/modules/finance';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import type { Floor, Zone, Table } from '@/modules/ops';
+import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
+import { CONNECTOR_CATALOG } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/shared/connector-manifest';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 export interface SeedInput {
   tenantId: string;
@@ -189,6 +193,39 @@ export const TenantSeeder = {
         tables.map((t) => Nexus.adapter.set(`tenants/${tenantId}/tables/${t.id}`, t))
       );
       seededPaths.push(`tenants/${tenantId}/tables (10)`);
+
+      // 6. Auto-activation des connecteurs selon le vertical
+      const autoIds = ConnectorHub.getAutoActivated(variant);
+      const activatedConnectors: { id: string; status: 'active' | 'pending_config' }[] = [];
+
+      await Promise.all(
+        autoIds.map(async (id) => {
+          const manifest = CONNECTOR_CATALOG[id];
+          if (!manifest) return;
+
+          // Connecteurs sans config (authType 'none') → actifs immédiatement
+          const status: ConnectorState['status'] =
+            manifest.authType === 'none' ? 'active' : 'pending_config';
+
+          const state: ConnectorState = {
+            status,
+            activatedAt: Date.now(),
+            activatedBy: 'system',
+          };
+
+          await Nexus.adapter.set(`tenants/${tenantId}/connectors/${id}`, state);
+          activatedConnectors.push({ id, status });
+        })
+      );
+
+      if (activatedConnectors.length > 0) {
+        seededPaths.push(`tenants/${tenantId}/connectors (${activatedConnectors.length} auto-activés)`);
+        await NexusEventBus.emit('connectors.auto_activated', {
+          tenantId,
+          variant,
+          connectors: activatedConnectors,
+        });
+      }
 
       logger.info(`[TenantSeeder] Tenant ${tenantId} seeded — ${seededPaths.length} collections`);
       return { success: true, seededPaths };

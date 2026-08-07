@@ -42,3 +42,4 @@ export type { FleetInsight } from './services/MacroBrain';
 export { OraclePredictor } from './analytique/analytics/components';
 export { LightRAGClient } from './knowledge/rag/LightRAGClient';
 export { HermesKnowledgeManager } from './knowledge/rag/HermesKnowledgeManager';
+export { ConnectorHub } from './connectors/hub';

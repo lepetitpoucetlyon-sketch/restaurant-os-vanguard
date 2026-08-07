@@ -6,6 +6,7 @@ const pt: SovereignData = {
         "dashboard": "Painel de Controle",
         "intelligence": "Inteligência IA",
         "executive_intelligence": "Inteligência Executiva",
+        "intelligence_hub": "Hub de Inteligência",
         "system_map": "Mapeamento 3D",
         "operations": "Operações",
         "pos": "Ponto de Venda",
