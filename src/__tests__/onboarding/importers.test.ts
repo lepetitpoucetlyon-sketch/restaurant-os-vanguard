@@ -5,28 +5,31 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// ─── Mock Nexus ───────────────────────────────────────────────
-const mockBatch = {
-  set: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
-  increment: vi.fn(),
-  commit: vi.fn().mockResolvedValue(undefined),
-};
-const mockAdapter = {
-  get: vi.fn(),
-  set: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
-  create: vi.fn(),
-  query: vi.fn().mockResolvedValue([]),
-  onSnapshot: vi.fn(),
-  batch: vi.fn().mockReturnValue(mockBatch),
-  generateId: vi.fn().mockImplementation((col: string) => `${col}_test_id`),
-  serverTimestamp: vi.fn().mockReturnValue(0),
-  runTransaction: vi.fn(),
-  increment: vi.fn(),
-};
+// ─── Mock Nexus (vi.hoisted garantit que les variables sont prêtes avant les factories) ──
+const { mockBatch, mockAdapter } = vi.hoisted(() => {
+  const mockBatch = {
+    set: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    increment: vi.fn(),
+    commit: vi.fn().mockResolvedValue(undefined),
+  };
+  const mockAdapter = {
+    get: vi.fn(),
+    set: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    create: vi.fn(),
+    query: vi.fn().mockResolvedValue([]),
+    onSnapshot: vi.fn(),
+    batch: vi.fn().mockReturnValue(mockBatch),
+    generateId: vi.fn().mockImplementation((col: string) => `${col}_test_id`),
+    serverTimestamp: vi.fn().mockReturnValue(0),
+    runTransaction: vi.fn(),
+    increment: vi.fn(),
+  };
+  return { mockBatch, mockAdapter };
+});
 
 vi.mock('@/lib/nexus/NexusAdapter', () => ({
   Nexus: { adapter: mockAdapter },
@@ -36,6 +39,15 @@ vi.mock('@/lib/logger', () => ({
 }));
 vi.mock('@/lib/client/authedFetch', () => ({
   authedFetch: vi.fn(),
+}));
+// @/modules/finance est un barrel lourd (React, Jotai, providers) chargé transitoirement
+// par statementsImporter. On stub uniquement ce qu'il exporte pour accélérer la suite.
+vi.mock('@/modules/finance', () => ({
+  StatementIngestionService: {
+    ingestCSV: vi.fn().mockResolvedValue([]),
+    ingest: vi.fn().mockResolvedValue([]),
+  },
+  inferPCGAccount: vi.fn().mockReturnValue(null),
 }));
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -209,6 +221,11 @@ describe('runImporter', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('dispatche vers le bon importer selon la catégorie', async () => {
+    // Ré-applique les implementations après vi.clearAllMocks() des tests précédents
+    mockAdapter.batch.mockReturnValue(mockBatch);
+    mockAdapter.generateId.mockImplementation((col: string) => `${col}_test_id`);
+    mockBatch.commit.mockResolvedValue(undefined);
+
     const { runImporter } = await import('@/modules/onboarding/migration/importers');
     const file = parsedFile({ rows: [{ nom: 'Test', categorie: 'A', prix: '5' }] });
     const rawFile = new File([''], 'test.csv', { type: 'text/csv' });
