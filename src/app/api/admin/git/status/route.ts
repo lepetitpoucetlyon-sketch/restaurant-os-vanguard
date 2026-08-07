@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { toError } from "@/lib/toError";
 
 interface GitStatusResponse {
   success: boolean;
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<GitStatusR
     return NextResponse.json(mockStatus);
   } catch (error) {
     logger.error('[GitStatus] Failed to fetch git status', {
-      error: error instanceof Error ? error.message : String(error)
+      error: toError(error).message
     });
 
     return NextResponse.json(

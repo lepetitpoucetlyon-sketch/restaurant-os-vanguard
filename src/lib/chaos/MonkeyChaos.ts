@@ -1,5 +1,6 @@
 import { SovereignLedger } from '@/modules/finance';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * 🐒 Monkey Chaos - The Saboteur Agent
@@ -26,7 +27,7 @@ export const MonkeyChaos = {
             
             return { success: false, message: 'CRITICAL: Ledger accepted unbalanced transaction! Resilience Compromised.' };
         } catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
+            const errorMessage = toError(error).message;
             logger.info(`🛡️ [MonkeyChaos] Attack Blocked by Ledger: ${errorMessage}`);
             return { success: true, message: 'Audit Passed: Ledger financier stopped the saboteur.' };
         }

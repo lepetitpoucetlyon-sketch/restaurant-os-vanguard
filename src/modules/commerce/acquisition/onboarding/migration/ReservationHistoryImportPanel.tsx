@@ -16,6 +16,7 @@ import {
   type ImportReservationResult,
 } from "@/modules/commerce/relation/reservations/migration";
 import { useTenant } from "@/shared/hooks";
+import { toError } from "@/lib/toError";
 
 // ── Types locaux ────────────────────────────────────────────────────────────────
 
@@ -102,7 +103,7 @@ export function ReservationHistoryImportPanel() {
     } catch (err) {
       setState({
         phase: "error",
-        message: err instanceof Error ? err.message : String(err),
+        message: toError(err).message,
       });
     }
   }, [state, tenantId, source]);

@@ -10,6 +10,7 @@ import { useState, useCallback } from 'react';
 import { Plus, Trash2, ChevronRight, ChevronLeft, Save, Loader2, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toError } from "@/lib/toError";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -251,7 +252,7 @@ export default function FloorPlanSetupWizard() {
       setDone(true);
       toast.success(`${tables.length} table(s) sauvegardée(s) avec succès !`);
     } catch (err) {
-      toast.error(`Erreur sauvegarde : ${err instanceof Error ? err.message : String(err)}`);
+      toast.error(`Erreur sauvegarde : ${toError(err).message}`);
     } finally {
       setSaving(false);
     }

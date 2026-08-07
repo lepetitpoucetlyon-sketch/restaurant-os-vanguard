@@ -10,6 +10,7 @@ import {
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
  
 import { AI_MODELS } from '@/modules/intelligence';
+import { toError } from "@/lib/toError";
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }
@@ -55,7 +56,7 @@ export const IdentityGuardService = {
             logger.error('[IdentityGuard] Execution failed', { error: String(err) });
             return { 
                 success: false, 
-                error: { error: 'NON_PROCESSABLE', reason: err instanceof Error ? err.message : String(err), flags: [] },
+                error: { error: 'NON_PROCESSABLE', reason: toError(err).message, flags: [] },
                 rawResponse: '' 
             };
         }

@@ -4,6 +4,7 @@ import { checkOnlineStatus } from '@/lib/offline/status';
 import { FiscalSeal } from '@nexus/contracts';
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 /**
  * ⛓️ BlockchainLedgerService - Restaurant OS
@@ -44,7 +45,7 @@ export class BlockchainLedgerService {
             this.lastSealCache = results.length > 0 ? (results[0] as FiscalSeal) : undefined;
             return this.lastSealCache;
         } catch (error) {
-            logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', { error: error instanceof Error ? error.message : String(error) });
+            logger.warn('BlockchainLedgerService: Remote fetch failed, falling back to local', { error: toError(error).message });
             const fallback = await db.fiscalSeals.orderBy('timestamp').reverse().first();
             this.lastSealCache = fallback;
             return fallback;

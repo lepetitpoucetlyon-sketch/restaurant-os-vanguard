@@ -4,6 +4,7 @@ import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/m
 import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 import { OCRUploadZone } from './OCRUploadZone';
 import { PreviewTable } from './PreviewTable';
+import { toError } from "@/lib/toError";
 
 interface ImportCategoryPanelProps {
   category: ImportCategory;
@@ -60,7 +61,7 @@ export function ImportCategoryPanel({
       setProgress(40);
       setState('preview');
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : String(err));
+      setErrorMsg(toError(err).message);
       setState('error');
     }
   }, [connectorId, connectorCredentials, category]);
@@ -89,7 +90,7 @@ export function ImportCategoryPanel({
       setState('done');
       onImported({ created: json.created ?? rows.length, snapshotId: json.snapshotId });
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : String(err));
+      setErrorMsg(toError(err).message);
       setState('error');
     }
   }, [rows, category, onImported]);

@@ -28,6 +28,7 @@ import { CustomerCSVImporter } from './CustomerCSVImporter';
 import type { CustomerImportResult, CustomerCSVRow } from './CustomerCSVImporter';
 import { downloadCSVTemplate } from './csvTemplates';
 import { useTenant } from "@/shared/hooks";
+import { toError } from "@/lib/toError";
 
 // ── Types locaux ──────────────────────────────────────────────────────────────
 
@@ -131,7 +132,7 @@ export function CustomerImportPanel() {
     } catch (err) {
       setState({
         phase: "error",
-        message: err instanceof Error ? err.message : String(err),
+        message: toError(err).message,
       });
     }
      

@@ -3,6 +3,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ImportSnapshotService } from '@/modules/commerce/acquisition/onboarding/migration/ImportSnapshotService';
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 export async function POST(req: NextRequest) {
   const caller = await requireTenantUser(req);
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
     logger.info('[onboarding/rollback] Snapshot restauré', { snapshotId, tenantId: caller.tenantId });
     return NextResponse.json({ success: true, snapshotId, rolledBack: true });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toError(err).message;
     logger.error('[onboarding/rollback]', err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
     );
     return NextResponse.json({ snapshots });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toError(err).message;
     logger.error('[onboarding/rollback GET]', err);
     return NextResponse.json({ error: message }, { status: 500 });
   }

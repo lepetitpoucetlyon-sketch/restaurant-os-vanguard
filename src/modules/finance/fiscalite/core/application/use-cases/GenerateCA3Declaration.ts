@@ -1,6 +1,7 @@
 import { VatDeclaration } from '../../domain/entities/VatDeclaration';
 import { InMemoryLedgerRepository } from '../../infrastructure/repositories/InMemoryLedgerRepository';
 import { EdiDgfipAdapter } from '../../infrastructure/adapters/EdiDgfipAdapter';
+import { toError } from "@/lib/toError";
 
 export class GenerateCA3DeclarationUseCase {
   private ledgerRepository: InMemoryLedgerRepository;
@@ -36,7 +37,7 @@ export class GenerateCA3DeclarationUseCase {
 
       return { success: true, ediPayload };
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : String(error);
+      const msg = toError(error).message;
       console.error('[GenerateCA3DeclarationUseCase] Error:', msg);
       return { success: false, error: msg };
     }

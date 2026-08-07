@@ -10,6 +10,7 @@ import { qualityActiveControlAtom } from '@/modules/compliance';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
+import { toError } from "@/lib/toError";
 
 /**
  * 🐉 ResilienceSlayer - Grade X
@@ -80,7 +81,7 @@ export class ResilienceSlayer {
      * Triggered when an Atomic Burst fails or a transaction is rejected by the database.
      */
     static handleTransactionFailure(atomPath: string, error: unknown) {
-        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${error instanceof Error ? error.message : String(error)}`);
+        logger.error(`[Slayer] TRANSACTION_REJECTED for ${atomPath}. Reason: ${toError(error).message}`);
         
         // Map path to atom
         const map: Record<string, unknown> = {

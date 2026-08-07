@@ -1,5 +1,6 @@
 import { AgentDomain, AgentRole, AgentResponse, AgentReasoningStep } from '../../domain/agency/types';
 import { generateSystemPrompt } from '@/config/prompts';
+import { toError } from "@/lib/toError";
 
 export interface AgentRequest {
     domain: AgentDomain;
@@ -60,7 +61,7 @@ async function executeGeminiRequest(url: string, body: string, apiKey: string, t
                 continue; // Retry next attempt with flash
             }
             if (attempts >= maxAttempts) {
-                rawText = `[Erreur Réseau] ${fetchErr instanceof Error ? fetchErr.message : String(fetchErr)}`;
+                rawText = `[Erreur Réseau] ${toError(fetchErr).message}`;
             } else {
                 await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
             }
@@ -129,7 +130,7 @@ export const AgentEngine = {
                 rawText: rawText || 'Analyse terminée.',
             };
         } catch (err) {
-            throw new Error(`Échec du moteur de raisonnement expert: ${err instanceof Error ? err.message : String(err)}`);
+            throw new Error(`Échec du moteur de raisonnement expert: ${toError(err).message}`);
         }
     },
 };

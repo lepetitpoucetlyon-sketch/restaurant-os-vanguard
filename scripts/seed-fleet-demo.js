@@ -1,4 +1,10 @@
 /**
+ * @deprecated Remplacé par `scripts/bootstrap-system-tenants.ts` (Sprint 2 Versionbase).
+ * Ce script écrit directement dans Firestore sans passer par Nexus.adapter,
+ * ce qui le rend fragile aux changements de provider.
+ * Conserver uniquement pour référence — ne pas utiliser en prod.
+ * À supprimer après validation complète du bootstrap Versionbase.
+ *
  * 🏭 Fleet Demo Seed — Restaurant OS
  * Écrit un document SiteTelemetry réaliste dans fleet-telemetry/{tenantId}
  * pour rendre le tenant demo visible dans le MCC immédiatement.

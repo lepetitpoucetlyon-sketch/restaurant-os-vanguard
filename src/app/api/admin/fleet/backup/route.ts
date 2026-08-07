@@ -10,6 +10,7 @@ import type { BackupManifest } from '@/infrastructure/services/backup/BackupProv
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { toError } from "@/lib/toError";
 
 const BackupBodySchema = z.object({
   tenantIds: z.array(z.string()).optional()
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
             results.push({ tenantId, status: 'ok', location });
             logger.info(`[backup] ✅ ${tenantId} → ${location} (${compressed.length} bytes)`);
         } catch (err) {
-            const msg = err instanceof Error ? err.message : String(err);
+            const msg = toError(err).message;
             logger.error(`[backup] ❌ ${tenantId}: ${msg}`);
             results.push({ tenantId, status: 'error', error: msg });
         }

@@ -11,6 +11,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { isMaskedEmail } from './emailFilters';
 import { createHash } from 'crypto';
+import { toError } from "@/lib/toError";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -186,7 +187,7 @@ export class CustomerCSVImporter {
         const outcome = await persistCustomer(email, payload, now);
         if (outcome === 'updated') updated++; else imported++;
       } catch (err) {
-        errors.push(`Ligne ${i + 2} — ${err instanceof Error ? err.message : String(err)}`);
+        errors.push(`Ligne ${i + 2} — ${toError(err).message}`);
       }
     }
 

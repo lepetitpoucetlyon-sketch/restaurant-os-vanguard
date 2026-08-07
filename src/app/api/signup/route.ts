@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { sendEmail } from '@/lib/email-service';
 import { PlatformVariantSchema } from '@/domain/schemas/tenant';
+import { toError } from "@/lib/toError";
 
 const SignupSchema = z.object({
   email: z.string().email().max(254),
@@ -104,7 +105,7 @@ export async function POST(req: NextRequest) {
     const userRecord = await getAuth().createUser({ email, password, displayName: restaurantName });
     uid = userRecord.uid;
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toError(err).message;
     logger.warn('[signup] createUser failed', message);
     return NextResponse.json({ error: message }, { status: 400 });
   }
@@ -171,7 +172,7 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     // Rollback : un user Firebase sans tenant provisionné est un orphelin
     // qui pollue l'auth et peut bloquer un futur signup avec le même email.
-    const message = err instanceof Error ? err.message : String(err);
+    const message = toError(err).message;
     logger.error('[signup] Provisioning failed — rolling back auth user', message);
     try {
       await getAuth().deleteUser(uid);

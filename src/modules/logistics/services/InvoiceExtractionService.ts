@@ -18,6 +18,7 @@ import {
     INVOICE_EXTRACTION_SYSTEM_PROMPT,
     PRICE_REFERENCE_TABLE,
 } from '@/config/prompts/invoice-extraction.prompt';
+import { toError } from "@/lib/toError";
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -114,7 +115,7 @@ export const InvoiceExtractionService = {
             return { success: true, data: invoice, rawResponse };
 
         } catch (error: unknown) {
-            const errorMsg = error instanceof Error ? error.message : String(error);
+            const errorMsg = toError(error).message;
             logger.error(`[InvoiceExtraction] Pipeline error: ${errorMsg}`);
             return {
                 success: false,

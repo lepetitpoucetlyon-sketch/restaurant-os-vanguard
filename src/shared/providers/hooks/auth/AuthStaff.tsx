@@ -29,7 +29,8 @@ function isNetworkError(err: unknown): boolean {
 }
 
 function extractRemoteUsers(data: { users?: User[] } | null | undefined): User[] {
-    return Array.isArray(data?.users) ? data!.users.map(IdentityManager.stripSensitiveFields) : [];
+    const users = data?.users;
+    return Array.isArray(users) ? users.map(IdentityManager.stripSensitiveFields) : [];
 }
 
 async function resolveDefaultUser(): Promise<User> {

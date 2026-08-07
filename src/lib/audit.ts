@@ -23,6 +23,13 @@ export interface AuditEvent {
 }
 
 
+export interface AxiomLogPayload extends Omit<AuditEvent, 'timestamp'> {
+    timestamp: string;
+    env: string;
+    context: string;
+    [key: string]: unknown;
+}
+
 class EmpireAuditLogger {
     private static instance: EmpireAuditLogger;
     private subscribers: ((event: AuditEvent) => void)[] = [];
@@ -53,9 +60,9 @@ class EmpireAuditLogger {
     public log(event: AuditEvent) {
         // ASYNCHRONOUS LOGGING: Prevents blocking the main UI thread during navigation
         setTimeout(() => {
-            const payload = {
+            const payload: AxiomLogPayload = {
                 ...event,
-                timestamp: event.timestamp.toISOString() as unknown, // Cast temporaire pour le bridge Axiom
+                timestamp: event.timestamp.toISOString(),
                 env: process.env.NODE_ENV || 'development',
                 context: 'RESTAURANT-OS-EMPIRE'
             };

@@ -224,8 +224,7 @@ function StatCardBase({
  * Si le vertical courant a un StatCard dans son IVerticalUIPlugin.components,
  * ce composant est utilisé à la place de StatCardBase (transparent, zéro régression).
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const StatCard = withVerticalOverride('StatCard', StatCardBase as any) as unknown as typeof StatCardBase;
+export const StatCard = withVerticalOverride('StatCard', StatCardBase);
 
 interface StatsGridProps {
   children: ReactNode;

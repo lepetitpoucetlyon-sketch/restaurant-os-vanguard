@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { toError } from "@/lib/toError";
 
 interface GitPushResponse {
   success: boolean;
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GitPushRe
     );
   } catch (error) {
     logger.error('[GitPush] Failed to execute push', {
-      error: error instanceof Error ? error.message : String(error)
+      error: toError(error).message
     });
 
     return NextResponse.json(

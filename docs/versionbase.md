@@ -921,7 +921,7 @@ le même pattern, pas appeler une méthode inexistante.
 
 ---
 
-### 🟠 IMPORTANT 5 — Routing DEMO : sous-domaine impossible avec `_` prefix
+### ~~🟠 IMPORTANT 5~~ ✅ RÉSOLU — Routing DEMO : Option B choisie (`?tenant=`)
 
 `tenantFromHost.ts` extrait le tenant du sous-domaine :
 `demo-restaurant.restaurant-os.app → 'demo-restaurant'`
@@ -929,14 +929,20 @@ le même pattern, pas appeler une méthode inexistante.
 Mais les tenantIds système commencent par `_` (`_demo_restaurant`).
 Un sous-domaine `_demo_restaurant.restaurant-os.app` est **invalide** (RFC 1035).
 
-**Deux options, à choisir :**
+**Décision prise (2026-08-07) : Option B — Paramètre URL `?tenant=`**
 
-Option A — Sous-domaine court + mapping middleware (recommandé) :
 ```
-demo.restaurant-os.app → middleware mappe → _demo_restaurant
-demo-hotel.restaurant-os.app → _demo_hotel
+restaurant-os.app?tenant=_demo_restaurant    ← accès direct
+restaurant-os.app/showcase?tenant=_demo_restaurant  ← depuis CTASection
 ```
-Ajouter dans le middleware :
+
+Implémentation effective :
+- `NexusAdapter.getTenantPath()` lit déjà `?tenant=` depuis `window.location.search` ✅
+- `showcase/page.tsx` pousse `router.push('/login?tenant=_demo_restaurant&demo=1')` ✅
+- Aucun `DEMO_SUBDOMAIN_MAP` dans le middleware nécessaire
+
+Option A (sous-domaine court) reste envisageable plus tard si une URL marketing
+courte est souhaitée — ajouter alors `DEMO_SUBDOMAIN_MAP` dans `src/middleware.ts` :
 ```typescript
 const DEMO_SUBDOMAIN_MAP: Record<string, string> = {
   'demo': '_demo_restaurant',
@@ -944,16 +950,7 @@ const DEMO_SUBDOMAIN_MAP: Record<string, string> = {
   // ...
 };
 ```
-
-Option B — Paramètre URL :
-```
-restaurant-os.app?tenant=_demo_restaurant
-```
-Déjà supporté par `NexusAdapter.getTenantPath()` (lit `?tenant=` depuis `window.location.search`).
-Plus simple mais moins élégant pour le prospect.
-
-**À trancher avant le sprint 1**, car ça impacte le bootstrap des BrandTokens
-(le `tenantId` stocké en `brandingTokens` doit correspondre à l'URL réelle).
+Mais ce n'est pas bloquant — l'Option B est fonctionnelle en prod.
 
 ---
 
@@ -1061,7 +1058,7 @@ Aucun problème, mais à documenter pour éviter toute confusion future.
 | 2 | 🔴 | DEMO = Simulacra mode, pas write-blocked (ajouter dans SplashGate) |
 | 3 | 🔴 | `cloneFromReference()` = server-only (server adapter, `ensureServerNexus`) |
 | 4 | 🔴 | Remplacer `provisionForTenant()` par `generateKey()` + `provision()` |
-| 5 | 🟠 | Décider subdomain mapping vs URL param avant Sprint 1 |
+| 5 | ✅ | Option B choisie : `?tenant=_demo_*` — fonctionnel, aucune action requise |
 | 6 | 🟠 | Bootstrap script : `ensureServerNexus()` en tête |
 | 7 | 🟠 | Ajouter `SYSTEM_ADMIN_PIN` à `.env.example` |
 | 8 | 🟠 | Enregistrer `SystemTenantsTab` dans MCC `page.tsx` |

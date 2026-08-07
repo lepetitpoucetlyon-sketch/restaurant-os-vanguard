@@ -28,8 +28,8 @@ const OPACITY_MAP: Record<string, string> = { low: '0.4', medium: '0.7', high: '
 
 type BrandTokens = ReturnType<typeof BrandTokensSchema.parse>;
 
-function buildSemanticOverrides(brandTokens: BrandTokens): Record<string, unknown> {
-    const overrides: Record<string, unknown> = {};
+function buildSemanticOverrides(brandTokens: BrandTokens): Record<string, Record<string, string>> {
+    const overrides: Record<string, Record<string, string>> = {};
     if (brandTokens.primaryColor) {
         overrides.action = { ...semanticTokens.action, primary: brandTokens.primaryColor, primaryHover: brandTokens.primaryHover ?? brandTokens.primaryColor };
         overrides.text   = { ...semanticTokens.text, brand: brandTokens.primaryColor };

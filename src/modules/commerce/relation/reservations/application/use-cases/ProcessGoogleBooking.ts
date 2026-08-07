@@ -1,6 +1,7 @@
 import { GoogleReserveAdapter } from '../../infrastructure/adapters/GoogleReserveAdapter';
 import { InMemoryReservationRepository } from '../../infrastructure/repositories/InMemoryReservationRepository';
 import { RwGBooking } from '../../domain/types/GoogleReserveTypes';
+import { toError } from "@/lib/toError";
 
 export class ProcessGoogleBookingUseCase {
   private repository: InMemoryReservationRepository;
@@ -43,7 +44,7 @@ export class ProcessGoogleBookingUseCase {
 
       return { success: true, message: 'Booking processed successfully.' };
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : String(error);
+      const msg = toError(error).message;
       console.error('[ProcessGoogleBookingUseCase] Error:', msg);
       return { success: false, message: 'Internal server error while processing booking.' };
     }

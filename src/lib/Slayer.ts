@@ -12,6 +12,7 @@ import { FinanceCore } from "@/modules/finance";
 import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
+import { toError } from "@/lib/toError";
 
 export interface SlayerMappingConfig {
     source: string;
@@ -99,7 +100,7 @@ export class Slayer {
                                 ingested++;
                             } catch (itemError: unknown) {
                                 errors++;
-                                logger.warn(`[Slayer] Item skip: ${legacy.id}`, { error: itemError instanceof Error ? itemError.message : String(itemError) });
+                                logger.warn(`[Slayer] Item skip: ${legacy.id}`, { error: toError(itemError).message });
                             }
                         }
                     }
@@ -108,7 +109,7 @@ export class Slayer {
                 if (onProgress) onProgress(ingested);
                 
             } catch (batchError: unknown) {
-                logger.error(`[Slayer] Batch Failure (i=${i})`, { error: batchError instanceof Error ? batchError.message : String(batchError) });
+                logger.error(`[Slayer] Batch Failure (i=${i})`, { error: toError(batchError).message });
             }
         }
 

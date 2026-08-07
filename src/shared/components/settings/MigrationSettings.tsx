@@ -8,6 +8,7 @@ import { UniversalImportDropzone } from '@/modules/commerce/acquisition/onboardi
 import { OnboardingProgress } from '@/modules/commerce/acquisition/onboarding';
 import { CATEGORY_CONFIGS } from '@/modules/commerce/acquisition/onboarding';
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding';
+import { toError } from "@/lib/toError";
 
 const IMPORT_CATEGORIES: ImportCategory[] = [
   'floorplan',
@@ -46,7 +47,7 @@ export default function MigrationSettings() {
       await seedProduction();
       showToast("Données de démonstration injectées !", "success");
     } catch (e) {
-      showToast(`Erreur : ${e instanceof Error ? e.message : String(e)}`, "error");
+      showToast(`Erreur : ${toError(e).message}`, "error");
     }
   };
 

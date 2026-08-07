@@ -10,6 +10,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
 
 interface EmailPayload {
   to: string;
@@ -86,7 +87,7 @@ export async function sendEmail({
     logger.error('[EmailService] Failed to send email', {
       to,
       subject,
-      error: error instanceof Error ? error.message : String(error)
+      error: toError(error).message
     });
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }

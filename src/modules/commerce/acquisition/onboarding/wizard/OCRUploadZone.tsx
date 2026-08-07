@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useRef, useState } from 'react';
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import { toError } from "@/lib/toError";
 
 interface OcrResult {
   rows: Record<string, string>[];
@@ -38,7 +39,7 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
         fileName: file.name,
       });
     } catch (err: unknown) {
-      onError?.(err instanceof Error ? err.message : String(err));
+      onError?.(toError(err).message);
     } finally {
       setLoading(false);
     }

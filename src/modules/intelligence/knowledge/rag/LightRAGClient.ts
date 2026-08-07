@@ -36,6 +36,7 @@ import type {
     LightRAGHealthResponse,
     LightRAGKnowledgeGraph,
 } from './LightRAGConfig';
+import { toError } from "@/lib/toError";
 
 // ============================================
 // LIGHTRAG CLIENT
@@ -187,7 +188,7 @@ export class LightRAGClient {
                 );
                 results.push({
                     status: 'error',
-                    message: error instanceof Error ? error.message : String(error),
+                    message: toError(error).message,
                 });
             }
         }

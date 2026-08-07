@@ -15,8 +15,7 @@ import type { OverrideableComponent } from '@/shared/plugins/IVerticalUIPlugin';
  *   const StatCard = useVerticalComponent('StatCard', DefaultStatCard);
  *   return <StatCard label="CA" value="12 450 €" />;
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useVerticalComponent<P extends Record<string, any>>(
+export function useVerticalComponent<P extends object>(
   name: OverrideableComponent,
   defaultComponent: React.ComponentType<P>
 ): React.ComponentType<P> {
@@ -40,8 +39,7 @@ export function useVerticalComponent<P extends Record<string, any>>(
  *   - Vertical avec override → StatCard = composant vertical
  *   - Vertical sans override → StatCard = StatCardBase (comportement actuel)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function withVerticalOverride<P extends Record<string, any>>(
+export function withVerticalOverride<P extends object>(
   name: OverrideableComponent,
   DefaultComponent: React.ComponentType<P>
 ): React.ComponentType<P> {

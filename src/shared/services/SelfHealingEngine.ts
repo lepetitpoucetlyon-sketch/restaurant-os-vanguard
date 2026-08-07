@@ -2,6 +2,7 @@ import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { toError } from "@/lib/toError";
 
 type HealItem = { id?: string;[k: string]: unknown };
 
@@ -121,7 +122,7 @@ export const SelfHealingEngine = {
       logger.info(`[Self-Healing] Granular Merkle-Heal SUCCESSFUL: ${persistencePath} (Healed ${healedCount} items in ${Date.now() - startTime}ms)`);
     } catch (error) {
       // On loggue en warn avec la VRAIE cause (avant : « error » littéral, indiagnostiquable).
-      const message = error instanceof Error ? error.message : String(error);
+      const message = toError(error).message;
       if (isHealSkippable(message)) {
         logger.warn(`[Self-Healing] Heal skipped (backend indisponible) for ${persistencePath}: ${message}`);
       } else {

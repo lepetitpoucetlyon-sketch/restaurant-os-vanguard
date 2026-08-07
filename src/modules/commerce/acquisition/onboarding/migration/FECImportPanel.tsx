@@ -29,6 +29,7 @@ import {
   parseFECAmount,
 } from "@/modules/finance/migration";
 import { useTenant } from "@/shared/hooks";
+import { toError } from "@/lib/toError";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -76,7 +77,7 @@ export function FECImportPanel() {
       } catch (err) {
         setState({
           phase: "error",
-          message: err instanceof Error ? err.message : String(err),
+          message: toError(err).message,
         });
       }
     },
@@ -119,7 +120,7 @@ export function FECImportPanel() {
     } catch (err) {
       setState({
         phase: "error",
-        message: err instanceof Error ? err.message : String(err),
+        message: toError(err).message,
       });
     }
      

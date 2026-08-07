@@ -4,6 +4,7 @@ import { Activity, ShieldAlert, CheckCircle, XCircle, Loader2, Play, Zap } from 
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence';
 import type { EmpireInstance } from '@nexus/contracts';
+import { toError } from "@/lib/toError";
 
 type TestResult = { status: 'ok' | 'error'; message: string };
 type ResultMap = Record<string, TestResult>;
@@ -55,7 +56,7 @@ async function runTest(
     }
     return { status: 'ok', message: 'Événement émis — vérifier Nexus logs' };
   } catch (e) {
-    return { status: 'error', message: e instanceof Error ? e.message : String(e) };
+    return { status: 'error', message: toError(e).message };
   }
 }
 

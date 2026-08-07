@@ -232,7 +232,7 @@ export default function AgentIntelligencePage() {
               
               { (report?.complexity.godObjects.length ?? 0) > 10 && (
                  <div className="text-[9px] italic opacity-50 pl-8">
-                   ...and {report!.complexity.godObjects.length - 10} more architectural violations.
+                   ...and {(report?.complexity.godObjects.length ?? 0) - 10} more architectural violations.
                  </div>
               )}
 

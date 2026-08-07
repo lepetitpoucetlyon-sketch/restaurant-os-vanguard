@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { Cents, Quantity } from '@/lib/branding/brands';
+import { toError } from "@/lib/toError";
 
 /**
  * 🔍 RuntimeValidator - Restaurant OS (Singularity 5.4)
@@ -29,7 +30,7 @@ export const RuntimeValidator = {
           return data as T;
       }
     } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
+      const message = toError(e).message;
 
       logger.error(`[RuntimeValidator] QUARANTINE: ${message}`, { data });
       // In production, this would trigger an audit log to the MasterBridge

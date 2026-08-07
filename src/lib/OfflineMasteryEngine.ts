@@ -3,6 +3,7 @@ import { db } from "@/lib/offline/offline-store";
 import { Order } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
 import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
+import { toError } from "@/lib/toError";
 
 const GENESIS_HASH = '0'.repeat(64);
 const INSTANCE_PREFIX_LENGTH = 4;
@@ -151,7 +152,7 @@ export const OfflineMasteryEngine = {
                 await db.syncQueue.update(op.id!, {
                     status,
                     attempts,
-                    lastError: err instanceof Error ? err.message : String(err),
+                    lastError: toError(err).message,
                 });
                 failed++;
                 logger.error(`[Offline-Mastery] Sync failed for ${op.targetId}: ${err}`);
