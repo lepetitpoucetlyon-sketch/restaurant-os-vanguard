@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { restaurantDefaultTokens, restaurantVerticalTokens } from '@/shared/nexus/tokens/verticals/restaurant';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
@@ -19,6 +20,8 @@ export class RestaurantVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'NF525, Menu Engineering, Tip Pooling, Perishables, Table Service';
   public readonly dependencies = ['finance', 'compliance', 'logistics'];
+  public readonly defaultTheme = restaurantDefaultTokens;
+  public readonly verticalTokens = restaurantVerticalTokens;
 
   public readonly routes = [
     {

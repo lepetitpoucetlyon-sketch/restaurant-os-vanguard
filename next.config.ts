@@ -48,6 +48,42 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   serverExternalPackages: ['playwright', 'playwright-core', 'mqtt'],
+
+  // ── HTTP Security Headers (production-grade) ────────────────────────────────
+  // X-Frame-Options, HSTS, CSP, XSS protection — standard SaaS.
+  // CSP en mode report-only au départ puis basculer en enforce.
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options',    value: 'nosniff' },
+          { key: 'X-Frame-Options',            value: 'DENY' },
+          { key: 'X-XSS-Protection',           value: '1; mode=block' },
+          { key: 'Referrer-Policy',            value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy',         value: 'camera=(), microphone=(), geolocation=()' },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            // CSP permissif pour Next.js + Firebase + Stripe — à durcir progressivement.
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://apis.google.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.googleusercontent.com",
+              "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com https://api.stripe.com https://js.stripe.com",
+              "frame-src https://js.stripe.com https://hooks.stripe.com",
+              "worker-src 'self' blob:",
+            ].join('; '),
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

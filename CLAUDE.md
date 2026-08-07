@@ -149,12 +149,12 @@ Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.t
 
 | Fichier | Rôle |
 |---------|------|
-| `src/infrastructure/adapters/FinancialNexusBridge.ts` | Bridge POS → JournalEntry NF525 |
-| `src/infrastructure/adapters/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
+| `src/modules/finance/comptabilite/FinancialNexusBridge.ts` | Bridge POS → JournalEntry NF525 |
+| `src/modules/finance/fiscalite/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
 | `src/domain/schemas/pos.ts` | `PosTicket`, `CartLine` (schéma canonique) |
 | `src/domain/schemas/finance.ts` | `JournalEntry` (Zod) |
 | `src/lib/nexus/NexusAdapter.ts` | Singleton Nexus |
-| `src/engines/fiscal/NexusFiscalProvider.tsx` | Context fiscal React |
+| `src/modules/finance/providers/NexusFiscalProvider.tsx` | Context fiscal React |
 | `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
 | `src/modules/intelligence/knowledge/rag/LightRAGClient.ts` | Client REST LightRAG (retry intégré) |
 

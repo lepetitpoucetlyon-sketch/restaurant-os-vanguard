@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { bakeryDefaultTokens, bakeryVerticalTokens } from '@/shared/nexus/tokens/verticals/bakery';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -18,6 +19,8 @@ export class BakeryVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'Production par fournées, précommandes, allergènes INCO, stock vitrine';
   public readonly dependencies = ['finance', 'compliance', 'logistics'];
+  public readonly defaultTheme = bakeryDefaultTokens;
+  public readonly verticalTokens = bakeryVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale boulangerie…`);

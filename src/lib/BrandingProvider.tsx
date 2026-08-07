@@ -4,8 +4,10 @@
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
+import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 
 function getContrastTextColor(hexColor: string): string {
@@ -44,12 +46,18 @@ function applyTokenToCSS(root: HTMLElement, token: string | undefined, varName: 
 function applyFonts(root: HTMLElement, brandTokens: BrandTokens) {
     if (brandTokens.fontBrand) {
         root.style.setProperty('--font-brand', `'${brandTokens.fontBrand}', Georgia, serif`);
-        if (brandTokens.fontBrandUrl && !document.querySelector('link[data-brand-font]')) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = brandTokens.fontBrandUrl;
-            link.setAttribute('data-brand-font', 'true');
-            document.head.appendChild(link);
+        // Remplacer la précédente font de marque si le variant a changé
+        const existing = document.querySelector<HTMLLinkElement>('link[data-brand-font]');
+        if (brandTokens.fontBrandUrl) {
+            if (existing) {
+                existing.href = brandTokens.fontBrandUrl;
+            } else {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = brandTokens.fontBrandUrl;
+                link.setAttribute('data-brand-font', 'true');
+                document.head.appendChild(link);
+            }
         }
     }
     if (brandTokens.fontUI) {
@@ -70,30 +78,59 @@ function applyDocumentMeta(brandTokens: BrandTokens) {
 }
 
 export function BrandingProvider() {
-  const tenantId = useAtomValue(tenantIdAtom);
+  const tenantId       = useAtomValue(tenantIdAtom);
   const rawBrandTokens = useAtomValue(tenantBrandTokensAtom);
+  const variant        = useAtomValue(tenantVariantAtom);
 
   useFirestoreBrand(tenantId || "");
 
   useEffect(() => {
-    const result = BrandTokensSchema.safeParse(rawBrandTokens || defaultBrandTokens);
-    const brandTokens = result.success ? result.data : defaultBrandTokens;
-
-    const overrides = buildSemanticOverrides(brandTokens);
-    const cssVars = generateCSSVariables({ ...semanticTokens, ...overrides });
     const root = document.documentElement;
+
+    // 1. Tokens du variant (base de chaque vertical)
+    const verticalDefaults = VERTICAL_DEFAULT_TOKENS[variant] ?? VERTICAL_DEFAULT_TOKENS.restaurant;
+    const extraTokens      = VERTICAL_EXTRA_TOKENS[variant]   ?? {};
+
+    // 2. Parse les tokens Firestore du tenant
+    const result      = BrandTokensSchema.safeParse(rawBrandTokens || defaultBrandTokens);
+    const firestoreTokens = result.success ? result.data : defaultBrandTokens;
+
+    // 3. Priorité : semantics < vertical defaults < custom Firestore (si brandingMode=custom)
+    const isCustomMode = firestoreTokens.brandingMode === 'custom';
+    const merged: BrandTokens = BrandTokensSchema.parse({
+      ...defaultBrandTokens,
+      ...verticalDefaults,
+      ...(isCustomMode ? firestoreTokens : {}),
+      tenantId:     firestoreTokens.tenantId,
+      brandName:    firestoreTokens.brandName,
+      brandingMode: firestoreTokens.brandingMode,
+      splashEnabled: firestoreTokens.splashEnabled,
+      // Logo et favicon toujours pris du custom si fournis
+      ...(firestoreTokens.logoUrl    ? { logoUrl:    firestoreTokens.logoUrl }    : {}),
+      ...(firestoreTokens.faviconUrl ? { faviconUrl: firestoreTokens.faviconUrl } : {}),
+    });
+
+    // 4. Générer et injecter les CSS vars sémantiques
+    const overrides = buildSemanticOverrides(merged);
+    const cssVars   = generateCSSVariables({ ...semanticTokens, ...overrides });
     Object.entries(cssVars).forEach(([key, value]) => { if (value) root.style.setProperty(key, value as string); });
 
-    if (brandTokens.primaryColor) root.style.setProperty('--text-on-primary', getContrastTextColor(brandTokens.primaryColor));
+    if (merged.primaryColor) root.style.setProperty('--text-on-primary', getContrastTextColor(merged.primaryColor));
 
-    applyTokenToCSS(root, brandTokens.borderRadiusCard, '--radius-card', RADIUS_MAP);
-    applyTokenToCSS(root, brandTokens.borderRadiusBtn,  '--radius-btn',  RADIUS_MAP);
-    applyTokenToCSS(root, brandTokens.glassBlur,    '--glass-blur',    BLUR_MAP);
-    applyTokenToCSS(root, brandTokens.glassOpacity, '--glass-opacity', OPACITY_MAP);
+    // 5. Radius, glass, fonts
+    applyTokenToCSS(root, merged.borderRadiusCard, '--radius-card', RADIUS_MAP);
+    applyTokenToCSS(root, merged.borderRadiusBtn,  '--radius-btn',  RADIUS_MAP);
+    applyTokenToCSS(root, merged.glassBlur,        '--glass-blur',  BLUR_MAP);
+    applyTokenToCSS(root, merged.glassOpacity,     '--glass-opacity', OPACITY_MAP);
+    applyFonts(root, merged);
+    applyDocumentMeta(merged);
 
-    applyFonts(root, brandTokens);
-    applyDocumentMeta(brandTokens);
-  }, [rawBrandTokens]);
+    // 6. Tokens métier spécifiques au vertical
+    Object.entries(extraTokens).forEach(([key, value]) => root.style.setProperty(key, value));
+
+    // 7. Exposer le variant courant en data-attribute pour les CSS selectors si besoin
+    root.setAttribute('data-vertical', variant);
+  }, [rawBrandTokens, variant]);
 
   return null;
 }

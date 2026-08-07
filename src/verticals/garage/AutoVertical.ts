@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { garageDefaultTokens, garageVerticalTokens } from '@/shared/nexus/tokens/verticals/garage';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -18,6 +19,8 @@ export class AutoVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'Diagnostic Intake, Workshop Scheduling, Parts Inventory, Warranty Claims';
   public readonly dependencies = ['finance', 'logistics', 'commerce'];
+  public readonly defaultTheme = garageDefaultTokens;
+  public readonly verticalTokens = garageVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale garage…`);

@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { clinicDefaultTokens, clinicVerticalTokens } from '@/shared/nexus/tokens/verticals/clinic';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -19,6 +20,8 @@ export class HealthVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'Patient Flow, Bed Management, HDS Compliance, Insurance Billing';
   public readonly dependencies = ['finance', 'compliance', 'human', 'facility'];
+  public readonly defaultTheme = clinicDefaultTokens;
+  public readonly verticalTokens = clinicVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale clinique…`);

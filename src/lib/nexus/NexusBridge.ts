@@ -218,7 +218,7 @@ export class NexusBridge {
    * @deprecated Use CommunicationService.sendCommunicationPulse directly
    */
   static async sendCommunicationPulse(pulse: CommunicationPulse) {
-      const { CommunicationService } = await import('@/infrastructure/services/CommunicationService');
+      const { CommunicationService } = await import('@/lib/CommunicationService');
       return CommunicationService.sendCommunicationPulse(pulse);
   }
 

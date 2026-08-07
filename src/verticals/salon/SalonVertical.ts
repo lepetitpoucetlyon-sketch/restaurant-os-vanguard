@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { salonDefaultTokens, salonVerticalTokens } from '@/shared/nexus/tokens/verticals/salon';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -17,6 +18,8 @@ export class SalonVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'Agenda stylistes, produits cabine, fidélité, caisse NF525';
   public readonly dependencies = ['finance', 'commerce', 'human', 'logistics'];
+  public readonly defaultTheme = salonDefaultTokens;
+  public readonly verticalTokens = salonVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale salon…`);

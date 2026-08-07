@@ -1,5 +1,6 @@
 import React from 'react';
 import type { TenantRBACConfig } from '@/domain/schemas/rbac';
+import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 
 export interface IVerticalPlugin {
     id: string;
@@ -20,9 +21,15 @@ export interface IVerticalPlugin {
 
     // Optionnel: Déclarations des routes spécifiques à la verticale
     routes?: VerticalRoute[];
-    
+
     // Optionnel: Déclarations des dépendances
     dependencies?: string[];
+
+    /** Tokens de marque par défaut pour ce variant (mode "default" et base du mode "custom"). */
+    defaultTheme?: Partial<BrandConfig>;
+
+    /** CSS vars métier propres à ce vertical (tableAvailable, appointmentBooked…). Injectés sur :root en plus des tokens brand. */
+    verticalTokens?: Record<string, string>;
 }
 
 export interface ICoreContext {

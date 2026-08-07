@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { hotelDefaultTokens, hotelVerticalTokens } from '@/shared/nexus/tokens/verticals/hotel';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -18,6 +19,8 @@ export class HotelVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'PMS, Housekeeping, Yield Management, City Ledger, Channel Manager';
   public readonly dependencies = ['finance', 'commerce', 'human', 'facility'];
+  public readonly defaultTheme = hotelDefaultTokens;
+  public readonly verticalTokens = hotelVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale hôtel…`);

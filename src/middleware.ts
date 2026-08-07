@@ -6,9 +6,12 @@ const APP_MODE = process.env.NEXT_PUBLIC_APP_MODE || 'tenant';
 
 const MCC_ROUTES = ['/admin/mcc'];
 const TENANT_ONLY_ROUTES = [
-  '/pos', '/kds', '/operations', '/reservations',
+  '/pos', '/pos-mobile', '/kds', '/operations', '/reservations',
   '/bar', '/kitchen', '/floor-plan', '/registre', '/groups',
   '/staff', '/inventory', '/haccp', '/finance', '/crm', '/marketing', '/analytics',
+  '/integrations', '/intelligence', '/leaves', '/menu-builder',
+  '/migration', '/mon-espace', '/onboarding', '/planning',
+  '/recruitment', '/timeclock', '/vanguard-simulator', '/welcome-staff',
 ];
 
 const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
@@ -106,5 +109,18 @@ export const config = {
     '/crm', '/crm/:path*',
     '/marketing', '/marketing/:path*',
     '/analytics', '/analytics/:path*',
+    '/integrations', '/integrations/:path*',
+    '/intelligence', '/intelligence/:path*',
+    '/leaves', '/leaves/:path*',
+    '/menu-builder', '/menu-builder/:path*',
+    '/migration', '/migration/:path*',
+    '/mon-espace', '/mon-espace/:path*',
+    '/onboarding', '/onboarding/:path*',
+    '/planning', '/planning/:path*',
+    '/pos-mobile', '/pos-mobile/:path*',
+    '/recruitment', '/recruitment/:path*',
+    '/timeclock', '/timeclock/:path*',
+    '/vanguard-simulator', '/vanguard-simulator/:path*',
+    '/welcome-staff', '/welcome-staff/:path*',
   ],
 };

@@ -93,9 +93,6 @@
       "@domain/*": [
         "./src/domain/*"
       ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
       "@lib/*": [
         "./src/lib/*"
       ],

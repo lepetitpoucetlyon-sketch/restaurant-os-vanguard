@@ -34,5 +34,13 @@ export {
 // Tenant identity — fusionné depuis store/tenantAtoms.ts
 import { atom as _atom } from 'jotai';
 import { atomWithStorage as _atomWithStorage } from 'jotai/utils';
+import { tenantConfigAtom as _tenantConfigAtom } from '@nexus/state/SovereignGenome';
+import type { PlatformVariant } from '@/domain/schemas/tenant';
+
 export const activeTenantIdAtom = _atomWithStorage<string | null>('nexus_tenant_id', null);
 export const isTenantLoadingAtom = _atom((get: (a: ReturnType<typeof _atomWithStorage>) => string | null) => !get(activeTenantIdAtom));
+
+/** Variant du tenant courant — dérivé de tenantConfigAtom, jamais hardcodé. */
+export const tenantVariantAtom = _atom<PlatformVariant>(
+  (get) => (get(_tenantConfigAtom)?.variant ?? 'restaurant') as PlatformVariant
+);

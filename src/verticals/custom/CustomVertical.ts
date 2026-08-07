@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { customDefaultTokens, customVerticalTokens } from '@/shared/nexus/tokens/verticals/custom';
 import { logger } from '@/lib/logger';
 import { CustomMccAdapter, CustomOpsAdapter } from './adapters';
 
@@ -8,6 +9,8 @@ export class CustomVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'Vertical générique configurable — POS + health ping sans logique sectorielle';
   public readonly dependencies = ['finance'];
+  public readonly defaultTheme = customDefaultTokens;
+  public readonly verticalTokens = customVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale custom…`);

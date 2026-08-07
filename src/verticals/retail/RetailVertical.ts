@@ -1,4 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { retailDefaultTokens, retailVerticalTokens } from '@/shared/nexus/tokens/verticals/retail';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {
@@ -16,6 +17,8 @@ export class RetailVertical implements IVerticalPlugin {
   public readonly version = '1.0.0';
   public readonly description = 'POS multi-article, retours, stock alerte, promotions, fidélité, NF525';
   public readonly dependencies = ['finance', 'logistics', 'commerce'];
+  public readonly defaultTheme = retailDefaultTokens;
+  public readonly verticalTokens = retailVerticalTokens;
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale retail…`);
