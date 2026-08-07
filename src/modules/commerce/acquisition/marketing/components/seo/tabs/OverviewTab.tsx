@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Zap, TrendingUp, AlertTriangle } from 'lucide-react';
 import { useAtomValue } from 'jotai';
-import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/marketing';
+import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/commerce';
 import { ScoreGauge } from "../ScoreGauge";
 import { StatCard } from "@/shared/components/ui";
 import { PageCard } from "../PageCard";

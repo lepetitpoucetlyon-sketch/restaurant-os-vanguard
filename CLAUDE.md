@@ -80,6 +80,55 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 - Nav gating : `filterByCapabilities(sections, tenant.capabilities)` dans `src/config/navConfig.ts`
 - `variant` dans `TenantConfigSchema` (optionnel, défaut `'restaurant'` à runtime dans `TenantSeeder`)
 
+## Structure `lib/` — couches transversales
+
+`src/lib/` regroupe tout ce qui est **transversal mais pas un pilier métier**.
+Les sous-dossiers ci-dessous sont la cible de migration (barrels logiques déjà en place) :
+
+```
+lib/
+├── nexus/      ← machine core : NexusAdapter, NexusInterceptor, types, adapters Firestore
+│                 NE PAS y mettre de logique métier
+├── mcc/        ← outils Multi-Cloud-Control (admin platform)
+├── icm/        ← TaskContext, ICM-lite chargement sélectif par route
+├── cron/       ← jobs planifiés (DLCExpiryJob, QuoteReminderJob, IotOfflineMonitor…)
+├── services/   ← barrel → BrandingService, CryptoService, IdentityManager…
+│                 (fichiers sources encore à la racine lib/ — migration post-versionbase)
+├── utils/      ← barrel → dates, formatters, helpers, constants, bloom-filter…
+└── adapters/   ← barrel → firebase, axiom, sentry, audit, email-service…
+```
+
+**Règle lib/nexus vs shared/nexus** :
+
+| `lib/nexus/` | `shared/nexus/` |
+|---|---|
+| Machine core : `NexusAdapter.ts`, `NexusInterceptor.ts`, types primitifs, adapters Firestore/Simulacra/Mock | Logique métier : guards, contracts, engines, state, vault, tokens |
+| Aucune dépendance vers `modules/` ou `shared/` | Peut importer `lib/nexus/` |
+| Instanciation du singleton `Nexus` | Utilise le singleton |
+
+**Règle d'import** : toujours `@/lib/<ServiceName>` (chemin direct) jusqu'à migration physique.
+Les barrels `@/lib/services`, `@/lib/utils`, `@/lib/adapters` sont disponibles mais non obligatoires.
+
+## Routes publiques — deux groupes distincts
+
+```
+app/(public)/              ← pages PLATEFORME (indépendantes du tenant)
+│   ├── legal/             — mentions légales, CGV
+│   └── status/            — page statut système
+│
+app/(client)/(public)/     ← pages TENANT (contextuelles au tenant courant)
+    ├── landing/           — landing page personnalisée
+    ├── showcase/          — menu/vitrine publique
+    └── login/             — authentification
+```
+
+Ce n'est **pas un doublon** — les layouts et middlewares sont différents :
+- `(public)` : pas de tenant requis, pas de `NexusOpsProvider`
+- `(client)/(public)` : tenant résolu depuis l'URL (`?tenant=` ou sous-domaine), layout client actif
+
+**Piège courant** : `app/(public)/demo/` est l'**ancien** système de démo (à supprimer post-versionbase Sprint 1).
+La démo officielle passe par `_demo_*` tenants bootstrappés via `TenantSeeder`.
+
 ## ICM-lite — Chargement sélectif par route
 
 Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.ts`.

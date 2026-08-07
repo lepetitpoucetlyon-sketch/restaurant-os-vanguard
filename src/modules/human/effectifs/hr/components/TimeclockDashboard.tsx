@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
-import { activeTenantIdAtom } from "@/store/tenantAtoms";
+import { activeTenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {

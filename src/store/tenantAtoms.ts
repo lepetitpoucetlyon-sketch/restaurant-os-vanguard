@@ -1,15 +1,5 @@
-import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
-
 /**
- * ⚛️ TENANT ATOMS - Grade VI
- * Authority over the "Digital Twin" context.
+ * @deprecated Importer depuis '@/store/pillars/sovereign' ou '@/store/pillars'.
+ * Ce fichier est un shim de rétrocompatibilité — sera supprimé dans le prochain sprint.
  */
-
-
-// Persisted active tenant ID
-export const activeTenantIdAtom = atomWithStorage<string | null>('nexus_tenant_id', null);
-
-
-// Loading state
-export const isTenantLoadingAtom = atom((get) => !get(activeTenantIdAtom));
+export { activeTenantIdAtom, isTenantLoadingAtom } from '@/store/pillars/sovereign';

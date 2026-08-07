@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { marketingCampaignsNodeAtom, socialAccountsNodeAtom, seoProfileAtom } from "@/store/pillars/marketing";
+import { marketingCampaignsNodeAtom, socialAccountsNodeAtom, seoProfileAtom } from "@/store/pillars/commerce";
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 
 /**

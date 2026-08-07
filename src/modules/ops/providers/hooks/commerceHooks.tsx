@@ -6,7 +6,7 @@ import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { guardedAction, createSovereignHook } from '../opsCore';
 
 import { reservationsNodeAtom, groupsNodeAtom, quotesNodeAtom } from '@/store/pillars/commerce';
-import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/store/pillars/marketing';
+import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/store/pillars/commerce';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
 
 /**

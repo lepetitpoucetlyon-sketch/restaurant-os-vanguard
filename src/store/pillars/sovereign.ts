@@ -30,3 +30,9 @@ export {
     addToastAtom,             // SOVEREIGN
 } from '@nexus/state/SovereignGenome';
 
+
+// Tenant identity — fusionné depuis store/tenantAtoms.ts
+import { atom as _atom } from 'jotai';
+import { atomWithStorage as _atomWithStorage } from 'jotai/utils';
+export const activeTenantIdAtom = _atomWithStorage<string | null>('nexus_tenant_id', null);
+export const isTenantLoadingAtom = _atom((get: (a: ReturnType<typeof _atomWithStorage>) => string | null) => !get(activeTenantIdAtom));

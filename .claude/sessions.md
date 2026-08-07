@@ -106,3 +106,4 @@
 | ui-refactor-phases1-6 | Exécution plan AUDIT_UI.md Ph1→Ph6 : doublons (25 fichiers), orphelins, barrel ui/index.ts, tokens CSS hex→variables, couche atomique, floor-plan responsive — src/shared/components/, src/modules/, globals.css | 2026-08-07 | terminée |
 | versionbase-plan | Rédaction docs/versionbase.md — plan DEMO/TEST/REFERENCE par verticale (lecture + écriture docs/) | 2026-08-07 | terminée |
 | integrations-rbac-audit | Audit intégrations verticales + vérification RBAC — lecture seule src/verticals/, src/modules/intelligence/connectors/, src/shared/connector-manifest/, navConfig.ts | 2026-08-07 | terminée |
+| audit-structure-exec | Exécution docs/audit-structure.md items 5→10 : marketing pillar merge, store orphan atoms, lib/ barrels (services/utils/adapters), CLAUDE.md doc routes + lib/nexus split | 2026-08-07 | terminée |

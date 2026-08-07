@@ -9,5 +9,5 @@ export * from './logistics';
 export * from './human';
 export * from './commerce';
 export * from './compliance';
-export * from './marketing';
+
 export * from './sovereign';
