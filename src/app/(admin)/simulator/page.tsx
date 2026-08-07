@@ -108,28 +108,28 @@ export default function SimulatorPage() {
                     >
                         <SectionTitle title="Moyenne des Mondes Parallèles" />
                         <StatsGrid columns={4}>
-                            <StatCard 
-                                label="Chiffre d'Affaire Estimé" 
-                                value={formatCurrency(results.reduce((acc, r) => acc + r.metrics.totalRevenue, 0) / results.length)} 
-                                icon={DollarSign}
+                            <StatCard
+                                label="Chiffre d'Affaire Estimé"
+                                value={formatCurrency(results.reduce((acc, r) => acc + r.metrics.totalRevenue, 0) / results.length)}
+                                icon={<DollarSign />}
                                 accentColor="success"
                             />
-                            <StatCard 
-                                label="Profit Net Prédit" 
-                                value={formatCurrency(results.reduce((acc, r) => acc + r.metrics.netProfit, 0) / results.length)} 
-                                icon={TrendingUp}
+                            <StatCard
+                                label="Profit Net Prédit"
+                                value={formatCurrency(results.reduce((acc, r) => acc + r.metrics.netProfit, 0) / results.length)}
+                                icon={<TrendingUp />}
                                 accentColor="accent"
                             />
-                            <StatCard 
-                                label="Index de Burnout Staff" 
-                                value={`${(results.reduce((acc, r) => acc + r.metrics.burnoutIndex, 0) / results.length).toFixed(1)}%`} 
-                                icon={Users}
+                            <StatCard
+                                label="Index de Burnout Staff"
+                                value={`${(results.reduce((acc, r) => acc + r.metrics.burnoutIndex, 0) / results.length).toFixed(1)}%`}
+                                icon={<Users />}
                                 accentColor={results.reduce((acc, r) => acc + r.metrics.burnoutIndex, 0) / results.length > 70 ? "error" : "info"}
                             />
-                            <StatCard 
-                                label="Anomalies Potentielles" 
-                                value={(results.reduce((acc, r) => acc + r.metrics.anomalyCount, 0) / results.length).toFixed(1)} 
-                                icon={AlertTriangle}
+                            <StatCard
+                                label="Anomalies Potentielles"
+                                value={(results.reduce((acc, r) => acc + r.metrics.anomalyCount, 0) / results.length).toFixed(1)}
+                                icon={<AlertTriangle />}
                                 accentColor="warning"
                             />
                         </StatsGrid>

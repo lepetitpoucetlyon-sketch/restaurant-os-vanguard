@@ -4,7 +4,7 @@ import { Eye, Zap, TrendingUp, AlertTriangle } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/marketing';
 import { ScoreGauge } from "../ScoreGauge";
-import { StatCard } from "../StatCard";
+import { StatCard } from "@/shared/components/ui";
 import { PageCard } from "../PageCard";
 import { GoogleProfileCard } from "../GoogleProfileCard";
 import { KeywordsCard } from "../KeywordsCard";
@@ -40,20 +40,20 @@ export const OverviewTab = () => {
                     <StatCard
                         label="Impressions (7j)"
                         value={(analytics.impressions ?? 0).toLocaleString()}
-                        icon={Eye}
-                        change={{ value: 0, isPositive: true }}
+                        icon={<Eye />}
+                        trend={{ value: 0, direction: "up" }}
                     />
                     <StatCard
                         label="Clics (7j)"
                         value={(analytics.clicks ?? 0).toLocaleString()}
-                        icon={Zap}
-                        change={{ value: 0, isPositive: true }}
+                        icon={<Zap />}
+                        trend={{ value: 0, direction: "up" }}
                     />
                     <StatCard
                         label="CTR moyen"
                         value={`${(analytics.ctr ?? 0)}%`}
-                        icon={TrendingUp}
-                        change={{ value: 0, isPositive: true }}
+                        icon={<TrendingUp />}
+                        trend={{ value: 0, direction: "up" }}
                     />
                 </div>
             </div>

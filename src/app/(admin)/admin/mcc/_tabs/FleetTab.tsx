@@ -1,7 +1,8 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { LayoutGrid, TrendingUp, Activity, ShieldCheck, Plus, FlaskConical, Loader2 } from 'lucide-react';
-import { StatCard, TenantUsersPanel, MCCWidgetSkeleton, VerticalActivePanel, HealthHistorySparkline } from '../components';
+import { TenantUsersPanel, MCCWidgetSkeleton, VerticalActivePanel, HealthHistorySparkline } from '../components';
+import { StatCard } from '@/shared/components/ui';
 import type { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Eye, Zap, TrendingUp, BarChart3, Search } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/marketing';
-import { StatCard } from "../StatCard";
+import { StatCard } from "@/shared/components/ui";
 import { cn } from "@/lib/ui.foundations";
 
 export const AnalyticsTab = () => {
@@ -31,24 +31,24 @@ export const AnalyticsTab = () => {
                 <StatCard
                     label="Impressions"
                     value={(analytics.impressions ?? 0).toLocaleString()}
-                    icon={Eye}
-                    change={{ value: 0, isPositive: true }}
+                    icon={<Eye />}
+                    trend={{ value: 0, direction: "up" }}
                 />
                 <StatCard
                     label="Clics"
                     value={(analytics.clicks ?? 0).toLocaleString()}
-                    icon={Zap}
-                    change={{ value: 0, isPositive: true }}
+                    icon={<Zap />}
+                    trend={{ value: 0, direction: "up" }}
                 />
                 <StatCard
                     label="CTR"
                     value={`${(analytics.ctr ?? 0)}%`}
-                    icon={TrendingUp}
+                    icon={<TrendingUp />}
                 />
                 <StatCard
                     label="Position moyenne"
                     value={(analytics.avgPosition ?? 0)?.toFixed(1) || "0.0"}
-                    icon={BarChart3}
+                    icon={<BarChart3 />}
                 />
             </div>
 

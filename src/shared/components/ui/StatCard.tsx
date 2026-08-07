@@ -2,18 +2,18 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 interface StatCardProps {
     label: string;
     value: string | number;
-    icon?: LucideIcon;
+    icon?: ReactNode;
     emoji?: string;
-    trend?: {
+    trend?: string | {
         value: number;
         direction: "up" | "down" | "neutral";
     };
+    isWarning?: boolean;
     accentColor?: "accent" | "success" | "warning" | "error" | "info";
     variant?: "default" | "compact" | "large" | "minimal";
     className?: string;
@@ -55,9 +55,10 @@ const accentColors = {
 export function StatCard({
     label,
     value,
-    icon: Icon,
+    icon,
     emoji,
     trend,
+    isWarning,
     accentColor = "accent",
     variant = "default",
     className,
@@ -103,6 +104,7 @@ export function StatCard({
             animate={{ opacity: 1, y: 0 }}
             className={cn(
                 "bg-bg-secondary border border-border rounded-[2rem] transition-all duration-300 hover:shadow-lg group",
+                isWarning && "border-action-primary/20",
                 styles.container,
                 className
             )}
@@ -120,12 +122,12 @@ export function StatCard({
                 >
                     {emoji ? (
                         <span className="text-lg">{emoji}</span>
-                    ) : Icon ? (
-                        <Icon className={cn(colors.icon, styles.iconInner)} strokeWidth={2} />
+                    ) : icon ? (
+                        <span className={cn(colors.icon, styles.iconInner, "flex items-center justify-center")}>{icon}</span>
                     ) : null}
                 </div>
 
-                {trend && (
+                {trend && typeof trend === "object" && (
                     <div
                         className={cn(
                             "flex items-center gap-1 text-[10px] font-bold",
@@ -158,6 +160,9 @@ export function StatCard({
                 >
                     {label}
                 </p>
+                {trend && typeof trend === "string" && (
+                    <p className="text-[9px] font-medium text-text-muted mt-1 tracking-tighter uppercase">{trend}</p>
+                )}
             </div>
         </motion.div>
     );

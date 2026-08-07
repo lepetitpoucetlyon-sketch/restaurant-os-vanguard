@@ -29,3 +29,11 @@ export * from "./Feedback"
 export * from './PremiumSelect';
 export * from './SecurityPinModal';
 export * from './Modal';
+
+// Phase 4 - Additional UI Components
+export * from './BottomSheet';
+export * from './CameraCapture';
+export * from './GlassCard';
+export * from './PageHeaderWithDocs';
+export * from './TimePicker';
+export * from './TutorialOverlay';

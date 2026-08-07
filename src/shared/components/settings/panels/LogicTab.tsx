@@ -6,7 +6,7 @@ import { Settings } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { PageSettingConfig } from "@nexus/contracts/permissions.types";
-import { PremiumSelect } from "@/shared/components/settings/ui/PremiumSelect";
+import { PremiumSelect } from "@/shared/components/ui";
 import { PremiumNumberInput } from "@/shared/components/settings/ui/PremiumNumberInput";
 import { SovereignData, SovereignField } from "@shared/nexus-contract";
 import { SharedKernel } from "@/lib/shared-kernel";

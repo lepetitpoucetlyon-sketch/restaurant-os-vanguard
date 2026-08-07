@@ -7,7 +7,7 @@ import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { TenantSeeder } from '@/lib/TenantSeeder';
 import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
-import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
+import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/domain/schemas/rbac';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
@@ -89,8 +89,19 @@ export class TenantProvisioningService {
             }, { merge: true });
 
             // ── 3. RBAC defaults ──────────────────────────────────────────────────
+            // On convertit DEFAULT_PAGE_ACCESS (roles[]) → pageOverrides { allowed[] }
+            // et DEFAULT_TAB_ACCESS (number) → tabOverrides { minLevel } pour coller au schéma Zod.
             try {
-                const defaultRbac = TenantRBACConfigSchema.parse({});
+                const pageOverrides = Object.fromEntries(
+                    Object.entries(DEFAULT_PAGE_ACCESS).map(([page, roles]) => [page, { allowed: roles }])
+                );
+                const tabOverrides = Object.fromEntries(
+                    Object.entries(DEFAULT_TAB_ACCESS).map(([page, tabs]) => [
+                        page,
+                        Object.fromEntries(Object.entries(tabs).map(([tab, level]) => [tab, { minLevel: level }])),
+                    ])
+                );
+                const defaultRbac = TenantRBACConfigSchema.parse({ pageOverrides, tabOverrides });
                 await Nexus.adapter.set(`tenants/${tenantId}/config/rbac`, defaultRbac);
                 logger.info('[MCC/prov] RBAC defaults seedés', { tenantId });
             } catch (rbacErr) {

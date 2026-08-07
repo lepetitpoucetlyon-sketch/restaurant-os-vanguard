@@ -26,7 +26,6 @@ export * from './PerformanceMonitor';
 export * from './PluginCatalogManager';
 export * from './PluginEnginePanel';
 export * from './ResellerPortal';
-export * from './StatCard';
 export * from './StatusItem';
 export * from './StrategyOracle';
 export * from './SupportAIPanel';
