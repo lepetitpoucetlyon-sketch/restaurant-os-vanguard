@@ -4,11 +4,12 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem } from "@nexus/contracts";
+import type { CartItem } from '@/domain/schemas/pos';
 import { resolveStation } from '../..';
 
 interface KDSContextDrawerProps {
     ticket: Order;
-    fullOrderGroupedBySeat: Record<string, import('@/domain/schemas/pos').CartItem[]>;
+    fullOrderGroupedBySeat: Record<string, CartItem[]>;
     isContextOpen: boolean;
     onToggle: () => void;
 }

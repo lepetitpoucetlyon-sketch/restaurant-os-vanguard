@@ -48,20 +48,25 @@ export function OperationsDashboard() {
 
     const handleArrival = async (area: OperationalArea) => {
         if (!activeTenantId) return;
-        try {
-            const promise = Promise.resolve({ success: true });
-            toast.promise(promise, {
-                loading: 'Suture Grade IX: Établissement du lien financier...',
-                success: 'Arrivée validée & Provision comptable générée.',
-                error: 'Échec de la suture financière.'
-            });
-            await promise;
+        const promise = (async () => {
             updateAreaStatus(area.id, 'occupied');
             setSelectedArea(null);
+        })();
+        toast.promise(promise, {
+            loading: 'Établissement du lien financier...',
+            success: 'Arrivée validée & Provision comptable générée.',
+            error: 'Échec de la suture financière.',
+        });
+        try {
+            await promise;
         } catch (e) {
-            toast.error('Échec de l\'accueil client.');
             logger.error('[Operations] handleArrival failed', e);
         }
+    };
+
+    const handleMaintenance = (area: OperationalArea) => {
+        updateAreaStatus(area.id, 'maintenance');
+        setSelectedArea(null);
     };
 
     return (
@@ -310,7 +315,7 @@ export function OperationsDashboard() {
                     area={selectedArea}
                     onClose={() => setSelectedArea(null)}
                     onArrival={handleArrival}
-                    onMaintenance={(area) => { updateAreaStatus(area.id, 'maintenance'); setSelectedArea(null); }}
+                    onMaintenance={handleMaintenance}
                 />
             </div>
         </div>

@@ -102,8 +102,8 @@ export function InventoryReceptionDashboard() {
     const barcodeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleBarcodeSearch = useCallback(async (code: string) => {
-        await performBarcodeSearch(code, setBarcodeSearching, setBarcodeResult);
-    }, []);
+        await performBarcodeSearch(tenantId ?? '', code, setBarcodeSearching, setBarcodeResult);
+    }, [tenantId]);
 
     const handleBarcodeKeyDown = useCallback(
         (e: React.KeyboardEvent<HTMLInputElement>) => {

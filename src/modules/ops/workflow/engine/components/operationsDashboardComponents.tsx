@@ -22,11 +22,11 @@ export const SketchLine = ({ className }: { className?: string }) => (
 
 export const HandDrawnBorder = ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={cn("relative p-6 border-2 border-default rounded-[2rem] bg-surface-card/50 backdrop-blur-sm shadow-sm", className)}>
-        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" preserveAspectRatio="none">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible text-border-default" viewBox="0 0 500 500" preserveAspectRatio="none">
             <motion.path
                 d="M 20 0 Q 30 5 100 0 Q 200 -5 300 0 Q 450 5 480 0 L 500 20 Q 495 50 500 100 Q 505 200 500 300 Q 495 450 500 480 L 480 500 Q 450 495 300 500 Q 200 505 100 500 Q 30 495 20 500 L 0 480 Q 5 450 0 300 Q -5 200 0 100 Q 5 30 0 20 Z"
                 fill="none"
-                stroke="#A3A3A3"
+                stroke="currentColor"
                 strokeWidth="1.5"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}

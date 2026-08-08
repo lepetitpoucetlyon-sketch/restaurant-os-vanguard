@@ -5,6 +5,7 @@
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine/types";
 import { OrderItem } from "@nexus/contracts";
+import { IdGenerator } from "@/lib/utils/IdGenerator";
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
@@ -21,7 +22,7 @@ export function buildModifiers(
 ) {
     if (!selectedOptions) return [];
     return Object.values(selectedOptions).flat().map((opt) => ({
-        id: opt.id || `${Date.now()}-${Math.random()}`,
+        id: opt.id || IdGenerator.generateWithPrefix('mod'),
         name: opt.name,
         action: opt.action || 'add',
         ingredientId: opt.ingredientId,

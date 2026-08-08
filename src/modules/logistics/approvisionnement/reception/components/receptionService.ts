@@ -5,6 +5,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Ingredient } from '@nexus/contracts';
 import { toast } from 'sonner';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -63,22 +64,30 @@ export async function runOcrScan(tenantId: string): Promise<ScannedItem[]> {
 // ── Stock persistence ─────────────────────────────────────────────────────────
 
 export async function persistReception(tenantId: string, items: ScannedItem[]): Promise<void> {
-    for (const item of items) {
-        const stockPath = `tenants/${tenantId}/stockItems/${item.id}`;
-        const existing = await Nexus.adapter.get<{ quantity?: number }>(stockPath);
-        await Nexus.adapter.set(stockPath, {
-            id: item.id, name: item.name, quantity: (existing?.quantity ?? 0) + item.qty,
-            unit: item.unit, dlc: item.dlc, updatedAt: new Date().toISOString(),
-        });
-        const movPath = `tenants/${tenantId}/inventoryMovements`;
-        const movId = Nexus.adapter.generateId(movPath);
-        await Nexus.adapter.set(`${movPath}/${movId}`, {
-            id: movId, type: 'reception', ingredientId: item.id, ingredientName: item.name,
-            quantity: item.qty, unit: item.unit, costInCents: Math.round(item.price * 100),
-            costInMicrounits: Math.round(item.price * 1_000_000),
-            dlc: item.dlc, recordedAt: new Date().toISOString(),
-        });
-    }
+    // Phase 1 — lecture parallèle des stocks existants
+    const stockPaths = items.map(i => `tenants/${tenantId}/stockItems/${i.id}`);
+    const existings = await Promise.all(
+        stockPaths.map(path => Nexus.adapter.get<{ quantity?: number }>(path))
+    );
+
+    // Phase 2 — écritures parallèles (stock + mouvement)
+    const movBase = `tenants/${tenantId}/inventoryMovements`;
+    await Promise.all(items.flatMap((item, idx) => {
+        const movId = Nexus.adapter.generateId(movBase);
+        return [
+            Nexus.adapter.set(stockPaths[idx], {
+                id: item.id, name: item.name,
+                quantity: (existings[idx]?.quantity ?? 0) + item.qty,
+                unit: item.unit, dlc: item.dlc, updatedAt: new Date().toISOString(),
+            }),
+            Nexus.adapter.set(`${movBase}/${movId}`, {
+                id: movId, type: 'reception', ingredientId: item.id, ingredientName: item.name,
+                quantity: item.qty, unit: item.unit,
+                costInMicrounits: toMicrounits(Math.round(item.price * 1_000_000)),
+                dlc: item.dlc, recordedAt: new Date().toISOString(),
+            }),
+        ];
+    }));
 }
 
 // ── Barcode search ────────────────────────────────────────────────────────────
@@ -95,10 +104,10 @@ function findIngredientByBarcode(items: IngredientDoc[], code: string): Ingredie
     );
 }
 
-export async function searchBarcode(code: string): Promise<BarcodeSearchResult | null> {
+export async function searchBarcode(tenantId: string, code: string): Promise<BarcodeSearchResult | null> {
     const [products, ingredients] = await Promise.all([
-        Nexus.adapter.query<ProductDoc>('products'),
-        Nexus.adapter.query<IngredientDoc>('ingredients'),
+        Nexus.adapter.query<ProductDoc>(`tenants/${tenantId}/products`),
+        Nexus.adapter.query<IngredientDoc>(`tenants/${tenantId}/ingredients`),
     ]);
     const normalised = code.trim().toUpperCase();
     const found = findByBarcode(products ?? [], normalised) ?? findIngredientByBarcode(ingredients ?? [], normalised) ?? null;
@@ -158,6 +167,7 @@ export async function performSaveToStock(
 }
 
 export async function performBarcodeSearch(
+    tenantId: string,
     code: string,
     setBarcodeSearching: (b: boolean) => void,
     setBarcodeResult: (r: BarcodeSearchResult | null) => void,
@@ -166,7 +176,7 @@ export async function performBarcodeSearch(
     setBarcodeSearching(true);
     setBarcodeResult(null);
     try {
-        const found = await searchBarcode(code);
+        const found = await searchBarcode(tenantId, code);
         if (found) { setBarcodeResult(found); toast.success(`Produit trouvé : ${found.name}`); }
         else { toast.warning(`Aucun produit trouvé pour le code : ${code}`); }
     } catch {
