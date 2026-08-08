@@ -1,1 +1,1 @@
-// NF525 — voir @/modules/finance
+export * from '@/modules/finance/comptabilite/fec';

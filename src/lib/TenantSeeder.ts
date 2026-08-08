@@ -206,13 +206,13 @@ export const TenantSeeder = {
           { id: 'cat-boissons', name: 'Boissons',  displayOrder: 4, color: '#2980B9' },
         ];
         const demoProducts = [
-          { id: 'prod-oeuf-mayo',    name: 'Œuf Mayonnaise',    categoryId: 'cat-entrees',  priceInMicrounits: 5_000_000,  taxRate: '0.10', available: true },
-          { id: 'prod-soupe',        name: 'Soupe du jour',      categoryId: 'cat-entrees',  priceInMicrounits: 6_500_000,  taxRate: '0.10', available: true },
-          { id: 'prod-entrecote',    name: 'Entrecôte Frites',   categoryId: 'cat-plats',    priceInMicrounits: 24_000_000, taxRate: '0.10', available: true },
-          { id: 'prod-poulet',       name: 'Poulet Rôti',        categoryId: 'cat-plats',    priceInMicrounits: 18_000_000, taxRate: '0.10', available: true },
-          { id: 'prod-mousse-choco', name: 'Mousse au Chocolat', categoryId: 'cat-desserts', priceInMicrounits: 7_000_000,  taxRate: '0.10', available: true },
-          { id: 'prod-cafe',         name: 'Café Expresso',      categoryId: 'cat-boissons', priceInMicrounits: 2_500_000,  taxRate: '0.10', available: true },
-          { id: 'prod-eau',          name: 'Eau Minérale 50cl',  categoryId: 'cat-boissons', priceInMicrounits: 3_000_000,  taxRate: '0.10', available: true },
+          { id: 'prod-oeuf-mayo',    name: 'Œuf Mayonnaise',    categoryId: 'cat-entrees',  priceInMicrounits: 5_000_000,  foodCostInMicrounits: 1_250_000, costPriceInCents: 125, taxRate: '0.10', available: true },
+          { id: 'prod-soupe',        name: 'Soupe du jour',      categoryId: 'cat-entrees',  priceInMicrounits: 6_500_000,  foodCostInMicrounits: 1_500_000, costPriceInCents: 150, taxRate: '0.10', available: true },
+          { id: 'prod-entrecote',    name: 'Entrecôte Frites',   categoryId: 'cat-plats',    priceInMicrounits: 24_000_000, foodCostInMicrounits: 7_200_000, costPriceInCents: 720, taxRate: '0.10', available: true },
+          { id: 'prod-poulet',       name: 'Poulet Rôti',        categoryId: 'cat-plats',    priceInMicrounits: 18_000_000, foodCostInMicrounits: 5_000_000, costPriceInCents: 500, taxRate: '0.10', available: true },
+          { id: 'prod-mousse-choco', name: 'Mousse au Chocolat', categoryId: 'cat-desserts', priceInMicrounits: 7_000_000,  foodCostInMicrounits: 1_800_000, costPriceInCents: 180, taxRate: '0.10', available: true },
+          { id: 'prod-cafe',         name: 'Café Expresso',      categoryId: 'cat-boissons', priceInMicrounits: 2_500_000,  foodCostInMicrounits: 400_000,   costPriceInCents: 40,  taxRate: '0.10', available: true },
+          { id: 'prod-eau',          name: 'Eau Minérale 50cl',  categoryId: 'cat-boissons', priceInMicrounits: 3_000_000,  foodCostInMicrounits: 600_000,   costPriceInCents: 60,  taxRate: '0.10', available: true },
         ];
         await Promise.all([
           ...demoCategories.map(c => Nexus.adapter.set(`tenants/${tenantId}/categories/${c.id}`, c)),

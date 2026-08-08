@@ -47,10 +47,12 @@ function buildFECLines(entries: JournalEntry[], _month: string): string {
   return [header, ...lines].join('\n');
 }
 
+import { withRoleGuard } from '../middleware/withRoleGuard';
+
 export function registerMonthlyFECExportHandler() {
   return NexusEventBus.on(
     'finance.month_closed',
-    async (payload) => {
+    withRoleGuard('admin', async (payload) => {
       const { tenantId, month } = payload;
 
       logger.info(`[FECExport] Génération export FEC pour ${month}...`);
@@ -104,7 +106,7 @@ export function registerMonthlyFECExportHandler() {
         read: false,
         timestamp: new Date().toISOString(),
       });
-    },
+    }),
     { id: 'monthly-fec-export-handler', priority: 'BACKGROUND' }
   );
 }

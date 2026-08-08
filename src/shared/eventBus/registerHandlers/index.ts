@@ -22,9 +22,26 @@ export function registerNexusHandlers(): void {
     logger.warn(
       '[registerNexusHandlers] Appelé en contexte serveur (SSR/API route). ' +
       'Les handlers NexusEventBus ne recevront pas les événements émis par les API routes. ' +
-      'Pour un traitement SSR, enregistrez les handlers directement dans la route API.'
+      'Pour un traitement SSR, utilisez dispatchServerEvent().'
     );
   }
+  if (initialized) return;
+  initialized = true;
+
+  unsubs.push(
+    ...registerLogisticsHandlers(),
+    ...registerFinanceHandlers(),
+    ...registerComplianceHandlers(),
+    ...registerOpsHandlers(),
+    ...registerHumanHandlers(),
+    ...registerCommerceHandlers(),
+    ...registerIntelligenceHandlers(),
+    ...registerCrmHandlers(),
+    ...registerMccHandlers()
+  );
+}
+
+export function registerServerNexusHandlers(): void {
   if (initialized) return;
   initialized = true;
 

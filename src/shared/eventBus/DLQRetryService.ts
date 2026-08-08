@@ -54,6 +54,20 @@ async function processRetryQueue(): Promise<void> {
         error: `[retry ${newAttempts}/${MAX_ATTEMPTS}] ${toError(err).message}`,
         failedAt: Date.now(),
       });
+
+      if (willQuarantine) {
+        // Alerte MCC : un event est définitivement en quarantaine
+        const tenantId = (entry.payload as Record<string, unknown>)?.tenantId as string ?? 'unknown';
+        NexusEventBus.emit('mcc.dlq_quarantine', {
+          tenantId,
+          eventName: entry.eventName,
+          handlerId: entry.handlerId,
+          attempts: newAttempts,
+          lastError: toError(err).message,
+          quarantinedAt: Date.now(),
+        }).catch(e => logger.error('[DLQRetry] Failed to emit quarantine alert', e));
+      }
+
       logger.warn(
         `[DLQRetry] ❌ ${entry.eventName}#${entry.handlerId} — ` +
         `tentative ${newAttempts}/${MAX_ATTEMPTS}` +

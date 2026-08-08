@@ -184,10 +184,23 @@ class NexusEventBusClass {
         }));
       }
 
-      // 3 — BACKGROUND : fire-and-forget
+      // 3 — BACKGROUND : fire-and-forget AVEC écriture DLQ en cas d'échec
       background.forEach(h => {
-        Promise.resolve().then(() => h.handler(payload)).catch(err => {
+        Promise.resolve().then(() => h.handler(payload)).catch(async (err) => {
           logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
+          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
+            await db.deadLetterEvents.put({
+              id: crypto.randomUUID(),
+              eventName: event,
+              payload,
+              handlerId: h.id,
+              error: toError(err).message,
+              failedAt: Date.now(),
+              attempts: 1,
+              nextRetryAt: Date.now() + 2000,
+              status: 'retry'
+            }).catch(e => logger.error('[EventBus] DLQ write failed (BACKGROUND)', e));
+          }
         });
       });
 

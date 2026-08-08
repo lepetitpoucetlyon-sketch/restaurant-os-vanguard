@@ -1,2 +1,1 @@
-// Variant: tip-pooling
-export {};
+export * from '../../effectifs/hr/services/tipDistribution';

@@ -12,6 +12,8 @@ const PCG_REFUND_ACCOUNTS: Record<string, { code: string; name: string }> = {
   default: { code: '411000', name: 'Clients — Remboursement' },
 };
 
+import { withRoleGuard } from '../middleware/withRoleGuard';
+
 /**
  * RefundJournalHandler (P01-H)
  * Écoute order.refunded et génère une écriture extourne miroir NF525 :
@@ -23,7 +25,7 @@ const PCG_REFUND_ACCOUNTS: Record<string, { code: string; name: string }> = {
 export function registerRefundJournalHandler(): () => void {
   return NexusEventBus.on(
     'order.refunded',
-    async (payload) => {
+    withRoleGuard('admin', async (payload) => {
       const { tenantId, orderId, operatorId, amountInMicrounits, originalPaymentMode } = payload;
 
       const entryId = SharedKernel.generateId('JE-REFUND');
@@ -84,7 +86,7 @@ export function registerRefundJournalHandler(): () => void {
         severity: 'medium',
         timestamp: new Date(),
       });
-    },
+    }),
     { id: 'refund-journal', priority: 'HIGH' },
   );
 }

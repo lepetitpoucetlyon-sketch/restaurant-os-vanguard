@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { dispatchServerEvent } from '@/shared/eventBus/ServerEventBus';
 
 export async function POST(req: Request) {
   const caller = await requireTenantUser(req);
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const body = await req.json();
   const { userId, timestamp } = body;
 
-  await NexusEventBus.emitDurable('hr.clock_in', {
+  await dispatchServerEvent('hr.clock_in', {
     v: 1,
     tenantId: caller.tenantId,
     userId,

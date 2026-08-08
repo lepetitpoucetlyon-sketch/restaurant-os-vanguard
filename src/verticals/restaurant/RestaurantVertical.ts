@@ -4,7 +4,8 @@ import React from 'react';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { menuEngineeringService } from '@/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService';
-import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
+import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/domain/schemas/rbac';
+import { ordersAtom, tablesAtom } from '@/modules/ops';
 import {
   RestaurantComplianceAdapter,
   RestaurantFinanceAdapter,
@@ -31,7 +32,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       icon: 'ChartPie',
       roles: ['super_admin', 'directeur', 'manager'],
       componentLoader: () =>
-        import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard })),
+        import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard as unknown as React.ComponentType })),
     },
     {
       path: '/floor-plan',
@@ -39,7 +40,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       icon: 'Layout',
       roles: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
       componentLoader: () =>
-        import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage })),
+        import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage as unknown as React.ComponentType })),
     },
     {
       path: '/nf525',
@@ -47,23 +48,34 @@ export class RestaurantVertical implements IVerticalPlugin {
       icon: 'FileText',
       roles: ['super_admin', 'directeur', 'comptable'],
       componentLoader: () =>
-        import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage })),
+        import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage as unknown as React.ComponentType })),
     },
   ];
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation verticale restaurant…`);
 
-    // RBAC — config par défaut (overrides vides, les valeurs réelles sont chargées depuis Nexus par fetchRbacConfigAtom)
-    context.registerRbacConfig(TenantRBACConfigSchema.parse({}));
+    // RBAC — enregistrer la config par défaut avec les permissions réelles
+    context.registerRbacConfig(TenantRBACConfigSchema.parse({
+      pageOverrides: Object.fromEntries(
+        Object.entries(DEFAULT_PAGE_ACCESS).map(([page, roles]) => [page, { allowed: roles }])
+      ),
+      tabOverrides: Object.fromEntries(
+        Object.entries(DEFAULT_TAB_ACCESS).map(([page, tabs]) => [
+          page,
+          Object.fromEntries(Object.entries(tabs).map(([tab, level]) => [tab, { minLevel: level }])),
+        ])
+      ),
+    }));
 
-    // Routes
-    context.registerRoute('/menu-engineering', React.lazy(() =>
-      import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard }))));
-    context.registerRoute('/floor-plan', React.lazy(() =>
-      import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage }))));
-    context.registerRoute('/nf525', React.lazy(() =>
-      import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage }))));
+    // Atomes du store vertical
+    context.registerStoreAtom('ordersAtom', ordersAtom);
+    context.registerStoreAtom('tablesAtom', tablesAtom);
+
+    // Enregistrement dynamique des routes sans doublons
+    for (const route of this.routes) {
+      context.registerRoute(route.path, React.lazy(route.componentLoader));
+    }
 
     // Ops — commande → sceau fiscal + déduction stock
     context.registerEventHandler<{ tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number }>(

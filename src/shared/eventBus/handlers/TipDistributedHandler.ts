@@ -4,10 +4,13 @@ import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 
+import { withRoleGuard } from '../middleware/withRoleGuard';
+
 export function registerTipDistributedHandler(): () => void {
   return NexusEventBus.on(
     'hr.tip_distributed',
-    async ({ tenantId, orderId, tipInMicrounits, staffIds }) => {
+    withRoleGuard('manager', async (payload) => {
+      const { tenantId, orderId, tipInMicrounits, staffIds } = payload;
       try {
         const shareInMicrounits = staffIds.length > 0
           ? Math.floor(tipInMicrounits / staffIds.length)
@@ -40,7 +43,7 @@ export function registerTipDistributedHandler(): () => void {
       } catch (err) {
         logger.error(`[TipDistributedHandler] Échec distribution pourboire: ${toError(err).message}`);
       }
-    },
+    }),
     { id: 'tip-distributed', priority: 'BACKGROUND' },
   );
 }

@@ -8,7 +8,7 @@ interface ShiftRecord {
 }
 
 export function registerOvertimeAlertHandler() {
-  return NexusEventBus.on(
+  const unsubShiftEnded = NexusEventBus.on(
     'hr.shift_ended',
     async (payload) => {
       const { tenantId, shiftId, employeeId, endedAt } = payload;
@@ -21,9 +21,6 @@ export function registerOvertimeAlertHandler() {
         // Règle métier : Alerte si la durée du shift dépasse 10 heures (légal HCR)
         if (durationHours > 10) {
           logger.warn(`[OvertimeAlert] Employé ${employeeId} a effectué un shift de ${durationHours.toFixed(2)} heures. (Dépassement du plafond légal de 10h).`);
-          
-          // On ne bloque pas (car l'employé doit pouvoir pointer), mais on trace une infraction légale
-          // qui remontera dans le tableau de bord RH.
           
           await Nexus.adapter.set(`tenants/${tenantId}/hrAlerts/${shiftId}`, {
             employeeId,
@@ -44,7 +41,36 @@ export function registerOvertimeAlertHandler() {
           });
         }
       }
-    },
-    { id: 'overtime-alert', priority: 'HIGH' }
+    }
   );
+
+  const unsubOvertimeAlert = NexusEventBus.on(
+    'hr.overtime_alert',
+    async (payload) => {
+      const { tenantId, employeeId, extraMinutes } = payload;
+      logger.warn(`[OvertimeAlert] Employé ${employeeId} a cumulé ${extraMinutes} minutes d'heures supplémentaires.`);
+      
+      const alertId = `ot_${employeeId}_${Date.now()}`;
+      await Nexus.adapter.set(`tenants/${tenantId}/hrAlerts/${alertId}`, {
+        employeeId,
+        extraMinutes,
+        alertType: 'OVERTIME_ALERT',
+        status: 'unresolved',
+        createdAt: Date.now()
+      });
+
+      empireAudit.log({
+        module: 'human',
+        action: 'OVERTIME_ALERT',
+        details: { employeeId, extraMinutes },
+        severity: 'medium',
+        timestamp: new Date(),
+      });
+    }
+  );
+
+  return () => {
+    unsubShiftEnded();
+    unsubOvertimeAlert();
+  };
 }

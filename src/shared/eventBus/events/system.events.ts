@@ -98,6 +98,14 @@ export interface SYSTEMEvents {
   // ── MCC platform ──────────────────────────────────────────────────────────
   'mcc.health_ping': { tenantId: string; status: 'healthy' | 'degraded'; [key: string]: unknown };
   'mcc.fiscal_audit_required': { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' };
+  'mcc.dlq_quarantine': {
+    tenantId: string;
+    eventName: string;
+    handlerId: string;
+    attempts: number;
+    lastError: string;
+    quarantinedAt: number;
+  };
 
   // ── Tenant lifecycle ───────────────────────────────────────────────────────
   'tenant.ready': { tenantId: string };

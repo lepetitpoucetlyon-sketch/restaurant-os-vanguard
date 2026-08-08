@@ -55,8 +55,25 @@ export function registerPayrollTimeclockHandler(): () => void {
   const unsubIn = NexusEventBus.on('staff.clock_in', (p) => handleClockEvent('staff.clock_in', p), { id: 'payroll-clock-in', priority: 'HIGH' });
   const unsubOut = NexusEventBus.on('staff.clock_out', (p) => handleClockEvent('staff.clock_out', p), { id: 'payroll-clock-out', priority: 'HIGH' });
 
+  // Bridge: l'API route /api/hr/clock-in émet hr.clock_in (payload avec timestamp: number)
+  // On le traduit vers le même format que staff.clock_in pour le persister en registre de paie
+  const unsubHrClockIn = NexusEventBus.on(
+    'hr.clock_in',
+    async (p) => {
+      await handleClockEvent('staff.clock_in', {
+        tenantId: p.tenantId,
+        userId: p.userId,
+        userName: p.userId, // hr.clock_in n'a pas de userName — on utilise l'ID
+        terminalId: 'api',
+        timestamp: new Date(p.timestamp).toISOString(),
+      });
+    },
+    { id: 'payroll-hr-clock-in', priority: 'HIGH' }
+  );
+
   return () => {
     unsubIn();
     unsubOut();
+    unsubHrClockIn();
   };
 }

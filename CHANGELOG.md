@@ -1,5 +1,22 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.0.3] - 2026-08-08 - EVENTBUS AUDIT REMEDIATION & RESTAURANT VERTICAL PARITY 🛡️
+
+### 🛡️ ÉCOSYSTÈME EVENTBUS & SÉCURITÉ DE DONNÉES
+- **DLQ pour Handlers BACKGROUND (R1)** : Persistance automatique en Dead Letter Queue (`db.deadLetterEvents`) pour les 50+ handlers à priorité `BACKGROUND` en cas d'échec.
+- **Mismatch Pointage RH (R2)** : Ajout du listener `hr.clock_in` dans `PayrollTimeclockHandler` avec adaptation du payload vers `staff.clock_in`.
+- **Défense en Profondeur RBAC (R3)** : Création de `withRoleGuard()` et protection RBAC des 6 handlers sensibles (`PayrollAutoCalc`, `RefundJournal`, `SepaExport`, `MonthlyFECExport`, `TipDistributed`, `PayrollExport`).
+- **Alerte Quarantaine & Hook MCC (R4 & R5)** : Émission de `mcc.dlq_quarantine` lors de la mise en quarantaine, création de `DLQQuarantineAlertHandler`, de l'atome `dlqQuarantineEntriesAtom` et du hook `useDLQQuarantine()`.
+- **Bus Serveur-Side (R7)** : Module `ServerEventBus.ts` (`dispatchServerEvent`) et `registerServerNexusHandlers()` pour l'exécution des handlers dans le contexte Node.js / API routes.
+- **Typage Strict (R8)** : Overloads dans `ICoreContext` (`IVerticalPlugin.ts`) et `CoreContext.ts` avec inférence automatique `NexusEventName` / `NexusEventPayload` sans cast.
+
+### 🍕 VERTICALE RESTAURANT & DÉMO
+- **Pages Next.js Débloquées (P0)** : Création des pages route `/menu-engineering` (`MenuEngineeringDashboard`) et `/nf525` (`FECExportPage`) sécurisées avec `withPageGuard`.
+- **Alignement Events & Handlers (P1 & P2)** : Enregistrement de `FacilityHandlers` (`floor_plan_updated`, `maintenance_required`), listener `inventory.waste_logged` pour `WasteToFoodCostHandler`.
+- **Données Démo Enrichies (P2)** : Ajout des coûts matières `foodCostInMicrounits` (25-30%) sur les produits de démo dans `TenantSeeder.ts`.
+- **Garde Flotte MCC (P3)** : Câblage de `requiredCapability: 'mod_fleet_management'` dans `navConfig.ts`.
+- **Tests Unitaires 24/24 Verts** : Couverture complète des 9 vertical adapters et des handlers `RestaurantVertical`.
+
 ## [2.0.2] - 2026-08-08 - PLAN QUALITÉ — 6 DETTES POST-`/SIMPLIFY` 🧹
 
 ### 🧹 DETTES TECHNIQUES & SOUVERAINETÉ PLATFORME

@@ -12,6 +12,7 @@ import { registerBigGroupAlertHandler } from '../handlers/BigGroupAlertHandler';
 import { registerRushModeIntegrationHandler } from '../handlers/RushModeIntegrationHandler';
 import { registerEndOfServiceActionHandler } from '../handlers/EndOfServiceActionHandler';
 import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverUnlockHandler';
+import { registerFacilityHandlers } from '../handlers/FacilityHandlers';
 import { registerOpsKdsHandlers } from './ops-kds';
 import { registerOpsDeliveryHandlers } from './ops-delivery';
 
@@ -30,6 +31,7 @@ export function registerOpsHandlers(): Array<() => void> {
     registerRushModeIntegrationHandler(),
     registerEndOfServiceActionHandler(),
     registerDeliveryDriverUnlockHandler(),
+    registerFacilityHandlers(),
     ...registerOpsKdsHandlers(),
     ...registerOpsDeliveryHandlers(),
   ];

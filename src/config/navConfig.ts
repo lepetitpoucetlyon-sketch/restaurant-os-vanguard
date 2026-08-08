@@ -97,9 +97,9 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#3B82F6',
         mode: 'mcc',
         items: [
-            { label: "Console MCC", key: "mcc_console", href: "/admin/mcc", icon: Building2, category: "mcc" },
-            { label: "Flotte & Tenants", key: "mcc_fleet", href: "/admin/mcc?tab=fleet", icon: Building2, category: "mcc" },
-            { label: "Conformité", key: "mcc_compliance", href: "/admin/mcc?tab=compliance", icon: ShieldCheck, category: "mcc" },
+            { label: "Console MCC", key: "mcc_console", href: "/admin/mcc", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management" },
+            { label: "Flotte & Tenants", key: "mcc_fleet", href: "/admin/mcc?tab=fleet", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management" },
+            { label: "Conformité", key: "mcc_compliance", href: "/admin/mcc?tab=compliance", icon: ShieldCheck, category: "mcc", requiredCapability: "mod_fleet_management" },
         ]
     },
     {

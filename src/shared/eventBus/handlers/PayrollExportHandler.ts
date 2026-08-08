@@ -8,9 +8,13 @@ import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuil
 import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 import { toError } from "@/lib/toError";
 
+import { withRoleGuard } from '../middleware/withRoleGuard';
+
 export class PayrollExportHandler {
   static register() {
-    return NexusEventBus.on('hr.preroll_validated', async (payload) => {
+    return NexusEventBus.on(
+      'hr.preroll_validated',
+      withRoleGuard('admin', async (payload) => {
       if (payload.isSimulation) return;
       const { tenantId, periodId, validatedBy, totalEmployees } = payload;
 
@@ -78,6 +82,6 @@ export class PayrollExportHandler {
           timestamp: new Date(),
         });
       }
-    }, { id: 'payroll-export', priority: 'HIGH' });
+    }), { id: 'payroll-export', priority: 'HIGH' });
   }
 }

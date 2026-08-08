@@ -32,11 +32,14 @@ export interface IVerticalPlugin {
     verticalTokens?: Record<string, string>;
 }
 
+import type { NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+
 export interface ICoreContext {
     // Services exposés par le Core pour que la verticale s'y greffe (ex: NexusEventBus, store global)
     registerRoute(path: string, component: React.ComponentType<unknown>): void;
     registerStoreAtom<T>(key: string, atom: T): void;
-    registerEventHandler<T = unknown>(event: string, handler: (payload: T) => void): void;
+    registerEventHandler<E extends NexusEventName>(event: E, handler: (payload: NexusEventPayload<E>) => void | Promise<void>): void;
+    registerEventHandler<T = unknown>(event: string, handler: (payload: T) => void | Promise<void>): void;
     registerRbacConfig(config: TenantRBACConfig): void;
     getRegisteredRoutes(): string[];
     getRegisteredAtoms(): string[];

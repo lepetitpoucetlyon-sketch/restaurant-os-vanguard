@@ -1,1 +1,1 @@
-// Finance restaurant — voir @/modules/finance
+export * from '@/modules/finance';

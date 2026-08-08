@@ -6,9 +6,13 @@ import { PrepaieBuilder } from '@/modules/human';
 import { browserPush } from '@/lib/push/browserPush';
 import { toError } from "@/lib/toError";
 
+import { withRoleGuard } from '../middleware/withRoleGuard';
+
 export class PayrollAutoCalcHandler {
   static register() {
-    return NexusEventBus.on('payroll.submitted', async (payload) => {
+    return NexusEventBus.on(
+      'payroll.submitted',
+      withRoleGuard('manager', async (payload) => {
       if (payload.isSimulation) return;
       const { tenantId, period, submissionId, employeeCount } = payload;
       logger.info(
@@ -88,6 +92,6 @@ export class PayrollAutoCalcHandler {
           timestamp: new Date(),
         });
       }
-    }, { id: 'payroll-auto-calc', priority: 'HIGH' });
+    }), { id: 'payroll-auto-calc', priority: 'HIGH' });
   }
 }

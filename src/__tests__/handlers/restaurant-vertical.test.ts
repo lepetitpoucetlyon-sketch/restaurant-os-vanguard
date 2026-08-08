@@ -47,7 +47,7 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
 }));
 
 vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 vi.mock('@/lib/audit', () => ({
@@ -88,6 +88,7 @@ const registeredHandlers: Record<string, ((...args: unknown[]) => unknown)[]> = 
 const ctxMock = {
   registerRoute:        vi.fn(),
   registerAtom:         vi.fn(),
+  registerStoreAtom:    vi.fn(),
   registerRbacConfig:   vi.fn(),
   getRegisteredRoutes:  vi.fn(() => []),
   getRegisteredAtoms:   vi.fn(() => []),
@@ -131,12 +132,12 @@ describe('RestaurantVertical — initialisation', () => {
     expect(paths).toContain('/nf525');
   });
 
-  it('appelle registerRbacConfig avec les overrides vides par défaut', () => {
+  it('appelle registerRbacConfig avec les permissions par défaut', () => {
     expect(ctxMock.registerRbacConfig).toHaveBeenCalledOnce();
     const config = ctxMock.registerRbacConfig.mock.calls[0][0] as Record<string, unknown>;
     expect(config.version).toBe(1);
-    expect(config.pageOverrides).toEqual({});
-    expect(config.tabOverrides).toEqual({});
+    expect(config.pageOverrides).toBeDefined();
+    expect(Object.keys(config.pageOverrides as object).length).toBeGreaterThan(0);
   });
 
   it('enregistre les handlers pour tous les events critiques', () => {
