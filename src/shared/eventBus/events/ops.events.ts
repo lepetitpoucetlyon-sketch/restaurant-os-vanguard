@@ -230,4 +230,13 @@ export interface OPSEvents {
     wasteId: string;
     items: Array<{ productId: string; quantity: number }>;
   };
+
+  // ── Déduction stock post-commande ─────────────────────────────────────────
+  'inventory.deducted': { tenantId: string; orderId: string; lines: { stockItemId: string; quantity: number }[] };
+
+  // ── Notifications ops ─────────────────────────────────────────────────────
+  'ops.order_notification': { tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number };
+
+  // ── KDS enrichi ───────────────────────────────────────────────────────────
+  'kds.course_passed': { tenantId: string; orderId: string; courseId: string };
 }

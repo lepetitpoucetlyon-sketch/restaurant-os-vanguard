@@ -94,4 +94,11 @@ export interface SYSTEMEvents {
     collections: string[];
     promotedBy: string;
   };
+
+  // ── MCC platform ──────────────────────────────────────────────────────────
+  'mcc.health_ping': { tenantId: string; status: 'healthy' | 'degraded'; [key: string]: unknown };
+  'mcc.fiscal_audit_required': { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' };
+
+  // ── Tenant lifecycle ───────────────────────────────────────────────────────
+  'tenant.ready': { tenantId: string };
 }

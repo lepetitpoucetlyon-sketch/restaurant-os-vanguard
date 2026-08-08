@@ -673,4 +673,18 @@ export interface COMMONEvents {
     invoiceId: string;
     discrepancies: string[];
   };
+
+  // ── CRM / Intelligence ────────────────────────────────────────────────────
+  'crm.rfm_trigger': { tenantId: string; customerId: string };
+  'intelligence.menu_engineering_requested': { tenantId: string; periodDays: number };
+  'analytics.sales_data_ready': { tenantId: string; periodStart: string; periodEnd: string; totalInMicrounits: number; covers: number };
+  'analytics.anomaly_detected': { tenantId: string; metric: string; value: number; threshold: number; detectedAt: string };
+
+  // ── HR enrichis ───────────────────────────────────────────────────────────
+  'hr.overtime_alert': { tenantId: string; employeeId: string; extraMinutes: number };
+  'hr.tip_distributed': { tenantId: string; orderId: string; tipInMicrounits: number; staffIds: string[] };
+
+  // ── Facility ──────────────────────────────────────────────────────────────
+  'facility.floor_plan_updated': { tenantId: string; floorId: string; tables: { id: string; capacity: number; x: number; y: number }[] };
+  'facility.maintenance_required': { tenantId: string; assetId: string; assetType: string; description: string };
 }

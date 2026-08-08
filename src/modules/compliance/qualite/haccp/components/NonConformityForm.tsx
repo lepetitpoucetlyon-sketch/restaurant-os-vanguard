@@ -5,7 +5,6 @@ import {
     AlertOctagon,
     Plus,
     CheckCircle2,
-    Clock,
     ChevronDown,
     ChevronUp,
     Paperclip,
@@ -15,97 +14,19 @@ import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+import {
+    type NonConformityType,
+    type NonConformity,
+    NC_TYPES,
+    STAFF_LIST,
+    TYPE_LABELS,
+    buildNcPath,
+    buildNcCollectionPath,
+    fileToBase64,
+} from './nonConformityTypes';
+import { NCStatusBadge } from './NCStatusBadge';
 
-export type NonConformityType =
-    | 'température hors norme'
-    | 'produit non-conforme'
-    | 'livraison refusée'
-    | 'contamination'
-    | 'autre';
-
-export interface NonConformity {
-    id: string;
-    type: NonConformityType;
-    description: string;
-    photoRef?: string;       // base64 data URI or file name reference
-    correctiveAction: string;
-    responsible: string;
-    date: string;            // ISO date string
-    status: 'open' | 'resolved';
-    createdAt: number;
-    resolutionNote?: string;
-    resolvedAt?: number;
-}
-
-// ── Configuration ──────────────────────────────────────────────────────────────
-
-const NC_TYPES: NonConformityType[] = [
-    'température hors norme',
-    'produit non-conforme',
-    'livraison refusée',
-    'contamination',
-    'autre',
-];
-
-const STAFF_LIST = [
-    'Chef de cuisine',
-    'Second de cuisine',
-    'Chef de partie',
-    'Responsable HACCP',
-    'Responsable de salle',
-    'Directeur / Manager',
-];
-
-const TYPE_LABELS: Record<NonConformityType, string> = {
-    'température hors norme': 'Température hors norme',
-    'produit non-conforme': 'Produit non-conforme',
-    'livraison refusée': 'Livraison refusée',
-    'contamination': 'Contamination',
-    'autre': 'Autre',
-};
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function buildPath(tenantId: string, id: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/nonConformities/${id}`;
-    }
-    return `nonConformities/${id}`;
-}
-
-function buildCollectionPath(tenantId: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/nonConformities`;
-    }
-    return 'nonConformities';
-}
-
-function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = () => reject(new Error('Lecture du fichier échouée'));
-        reader.readAsDataURL(file);
-    });
-}
-
-// ── Sous-composant : badge statut ─────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: NonConformity['status'] }) {
-    if (status === 'resolved') {
-        return (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-success/15 text-status-success text-xs font-medium">
-                <CheckCircle2 className="w-3 h-3" /> Résolu
-            </span>
-        );
-    }
-    return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-danger/15 text-status-danger text-xs font-medium animate-pulse">
-            <Clock className="w-3 h-3" /> Ouvert
-        </span>
-    );
-}
+export type { NonConformityType, NonConformity };
 
 // ── Composant principal ────────────────────────────────────────────────────────
 
@@ -141,7 +62,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
     const loadRecords = useCallback(async () => {
         setLoading(true);
         try {
-            const path = buildCollectionPath(tenantId ?? '');
+            const path = buildNcCollectionPath(tenantId ?? '');
             const raw = await Nexus.adapter.query<NonConformity>(path, {
                 orderBy: { field: 'createdAt', direction: 'desc' },
             });
@@ -197,7 +118,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                 status: 'open',
                 createdAt: Date.now(),
             };
-            await Nexus.adapter.set(buildPath(tenantId ?? '', id), nc);
+            await Nexus.adapter.set(buildNcPath(tenantId ?? '', id), nc);
             setRecords(prev => [nc, ...prev]);
             onCountChange?.(records.filter(r => r.status === 'open').length + 1);
             toast.success('Non-conformité enregistrée');
@@ -227,7 +148,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                 resolutionNote: resolutionNote.trim(),
                 resolvedAt: Date.now(),
             };
-            await Nexus.adapter.update(buildPath(tenantId ?? '', nc.id), update);
+            await Nexus.adapter.update(buildNcPath(tenantId ?? '', nc.id), update);
             setRecords(prev =>
                 prev.map(r => r.id === nc.id ? { ...r, ...update } : r)
             );
@@ -398,7 +319,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                                 className="w-full flex items-center justify-between px-4 py-3 text-left"
                             >
                                 <div className="flex items-center gap-3 min-w-0">
-                                    <StatusBadge status={nc.status} />
+                                    <NCStatusBadge status={nc.status} />
                                     <span className="font-medium text-sm text-text-primary truncate">{TYPE_LABELS[nc.type]}</span>
                                     <span className="text-xs text-text-muted hidden sm:block">
                                         {new Date(nc.date).toLocaleDateString('fr-FR')} — {nc.responsible}
