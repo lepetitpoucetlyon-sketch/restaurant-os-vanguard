@@ -15,6 +15,8 @@ import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
 import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
 import { JsonObject } from "@/shared/types/json";
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { IdGenerator } from '@/lib/utils/IdGenerator';
 
 import type { PlatformVariant } from '@/domain/schemas/tenant';
 import { resolveCollectiveAgreement } from '../../conventions';
@@ -177,6 +179,47 @@ export const PrepaieBuilder = {
             totalBrut: Math.round(totalBrut * 100) / 100,
             totalHeures: Math.round(totalHeures * 100) / 100,
         };
+    },
+
+    /**
+     * Soumet une période de paie pour calcul automatique.
+     * Émet `payroll.submitted` → déclenche PayrollAutoCalcHandler.
+     */
+    async submitPayrollPeriod(
+        tenantId: string,
+        periode: string,
+        employeeCount: number,
+        isSimulation = false,
+    ): Promise<string> {
+        const submissionId = IdGenerator.generateWithPrefix('payroll-sub');
+        await NexusEventBus.emitDurable('payroll.submitted', {
+            v: 1,
+            tenantId,
+            period: periode,
+            submissionId,
+            employeeCount,
+            isSimulation,
+        });
+        return submissionId;
+    },
+
+    /**
+     * Valide une pré-paie calculée et la transmet au prestataire externe (Silae).
+     * Émet `hr.preroll_validated` → déclenche PayrollExportHandler + SilaeExportHandler.
+     */
+    async validatePayrollPeriod(
+        tenantId: string,
+        submissionId: string,
+        validatedBy: string,
+        summary: PayrollPeriodSummary,
+    ): Promise<void> {
+        await NexusEventBus.emitDurable('hr.preroll_validated', {
+            v: 1,
+            tenantId,
+            periodId: submissionId,
+            validatedBy,
+            totalEmployees: summary.rows.length,
+        });
     },
 
     /** Sérialise les lignes en CSV UTF-8 BOM (compatible Excel FR). */

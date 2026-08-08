@@ -9,7 +9,8 @@ import { registerIntelligenceHandlers } from './intelligence';
 import { registerCrmHandlers } from './crm';
 import { registerMccHandlers } from './mcc';
 
-let initialized = false;
+let clientInitialized = false;
+let serverInitialized = false;
 const unsubs: Array<() => void> = [];
 
 /**
@@ -25,8 +26,8 @@ export function registerNexusHandlers(): void {
       'Pour un traitement SSR, utilisez dispatchServerEvent().'
     );
   }
-  if (initialized) return;
-  initialized = true;
+  if (clientInitialized) return;
+  clientInitialized = true;
 
   unsubs.push(
     ...registerLogisticsHandlers(),
@@ -42,8 +43,8 @@ export function registerNexusHandlers(): void {
 }
 
 export function registerServerNexusHandlers(): void {
-  if (initialized) return;
-  initialized = true;
+  if (serverInitialized) return;
+  serverInitialized = true;
 
   unsubs.push(
     ...registerLogisticsHandlers(),
@@ -61,5 +62,6 @@ export function registerServerNexusHandlers(): void {
 export function unregisterNexusHandlers(): void {
   unsubs.forEach(fn => fn());
   unsubs.length = 0;
-  initialized = false;
+  clientInitialized = false;
+  serverInitialized = false;
 }

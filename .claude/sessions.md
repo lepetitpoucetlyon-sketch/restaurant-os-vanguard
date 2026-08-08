@@ -110,4 +110,4 @@
 | versionbase-exec | docs/versionbase.md S1→S7 : SystemTenantRegistry, SovereignGuard write-guard, TenantSeeder brandTokens, bootstrap script, SplashGate Simulacra, cloneFromReference, seed-demo-data, SystemTenantsTab MCC + API routes, CTASection showcase | 2026-08-07 | terminée |
 | audit-complet-v3 | Audit global structure projet tous angles : TSC, tests, arborescence, barrels, cycles, orphelins, CLAUDE.md drift | 2026-08-07 | active |
 | typing-unknown-eradication | Éradication des 913 `unknown` — typage strict par catégorie (catch/Record/casts/generics/adapters). Périmètre large src/ + nouveaux types partagés (JsonValue, toError) | 2026-08-07 | active |
-| dlq-rbac-audit | Audit lecture seule — logique métier DLQ + bus événementiel + RBAC : NexusEventBus, handlers, DLQ, RBAC guards, intégration cross-piliers | 2026-08-08 | active |
+| dlq-rbac-audit | Audit lecture seule — logique métier DLQ + bus événementiel + RBAC : NexusEventBus, handlers, DLQ, RBAC guards, intégration cross-piliers | 2026-08-08 | terminée |
