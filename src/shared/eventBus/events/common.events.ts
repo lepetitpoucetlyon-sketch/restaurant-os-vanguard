@@ -687,4 +687,78 @@ export interface COMMONEvents {
   // ── Facility ──────────────────────────────────────────────────────────────
   'facility.floor_plan_updated': { tenantId: string; floorId: string; tables: { id: string; capacity: number; x: number; y: number }[] };
   'facility.maintenance_required': { tenantId: string; assetId: string; assetType: string; description: string };
+
+  // ── Réservation — accueil client (I3: Résa → KDS allergens) ──────────────
+  'reservation.matched': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reservationId: string;
+    customerId?: string;
+    tableId: string;
+    allergens: string[];
+    covers: number;
+    matchedAt: number;
+  };
+
+  // ── HR — vérification pause légale HCR (6h → 30 min) ────────────────────
+  'hr.break_checked': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    employeeId: string;
+    shiftId: string;
+    shiftDurationHours: number;
+    breakMinutes: number;
+    required: boolean;
+    compliant: boolean;
+  };
+
+  // ── CRM — allergens signalés sur profil client ────────────────────────────
+  'crm.allergen_flagged': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    customerId: string;
+    reservationId: string;
+    allergens: string[];
+    tableId: string;
+    flaggedAt: number;
+  };
+
+  // ── HACCP — cycle de refroidissement légal ────────────────────────────────
+  'haccp.cooling_cycle_logged': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    batchId: string;
+    productId: string;
+    productName: string;
+    startTempCelsius: number;
+    endTempCelsius: number;
+    durationMinutes: number;
+    operatorId: string;
+    compliant: boolean;
+    loggedAt: number;
+  };
+
+  // ── Intelligence — BCG calculé ────────────────────────────────────────────
+  'intelligence.bcg_calculated': {
+    tenantId: string;
+    stars: string[];
+    plowhorses: string[];
+    puzzles: string[];
+    dogs: string[];
+    calculatedAt: string;
+  };
+
+  // ── Crypto — intégrité chaîne NF525 rompue ────────────────────────────────
+  'crypto.integrity_failed': {
+    v: 1;
+    tenantId: string;
+    journalId: string;
+    expectedHash: string;
+    actualHash: string;
+    detectedAt: number;
+  };
 }

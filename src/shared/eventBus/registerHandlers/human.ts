@@ -13,6 +13,8 @@ import { MedicalVisitAlertHandler } from '../handlers/MedicalVisitAlertHandler';
 import { RecruitmentRouterHandler } from '../handlers/RecruitmentRouterHandler';
 import { SilaeExportHandler } from '../handlers/SilaeExportHandler';
 import { registerTipDistributedHandler } from '../handlers/TipDistributedHandler';
+import { registerShiftAutoAuditHandler } from '../handlers/ShiftAutoAuditHandler';
+import { registerHRBreakCheckHandler } from '../handlers/HRBreakCheckHandler';
 
 export function registerHumanHandlers(): Array<() => void> {
   return [
@@ -31,5 +33,9 @@ export function registerHumanHandlers(): Array<() => void> {
     MedicalVisitAlertHandler.register(),
     RecruitmentRouterHandler.register(),
     SilaeExportHandler.register(),
+    // ── I5 : Clôture Z → audit pointages oubliés ─────────────────────────
+    registerShiftAutoAuditHandler(),
+    // ── HR 6.3 : pause légale HCR ────────────────────────────────────────
+    registerHRBreakCheckHandler(),
   ];
 }

@@ -239,4 +239,84 @@ export interface OPSEvents {
 
   // ── KDS enrichi ───────────────────────────────────────────────────────────
   'kds.course_passed': { tenantId: string; orderId: string; courseId: string };
+
+  // ── Cadençage KDS (fire next course + rebound) ────────────────────────────
+  'kds.fire_next_course': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    orderId: string;
+    course: number;
+    stationId?: string;
+    firedBy: string;
+    firedAt: number;
+  };
+
+  'kds.dish_rebound': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    orderId: string;
+    itemId: string;
+    productName: string;
+    reason: 'client_refusal' | 'quality' | 'allergen' | 'other';
+    operatorId: string;
+    reboundAt: number;
+  };
+
+  // ── Tables — lock / transfert ─────────────────────────────────────────────
+  'table.locked': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    lockedBy: string;
+    reason: string;
+    lockedAt: number;
+  };
+
+  'table.transferred': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    fromTableId: string;
+    toTableId: string;
+    orderId: string;
+    operatorId: string;
+    transferredAt: number;
+  };
+
+  // ── Hardware — imprimante mappée ──────────────────────────────────────────
+  'hardware.printer_mapped': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    printerId: string;
+    stationId: string;
+    name: string;
+    printerType: 'receipt' | 'kitchen' | 'bar';
+    mappedAt: number;
+  };
+
+  // ── POS — login terminal ──────────────────────────────────────────────────
+  'pos.terminal_login': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    terminalId: string;
+    operatorId: string;
+    loggedAt: number;
+  };
+
+  // ── Proforma ──────────────────────────────────────────────────────────────
+  'order.proforma_printed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    orderId: string;
+    tableId?: string;
+    operatorId: string;
+    totalInMicrounits: number;
+    printedAt: number;
+  };
 }

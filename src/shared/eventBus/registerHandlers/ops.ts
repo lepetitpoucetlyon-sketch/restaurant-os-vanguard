@@ -13,6 +13,12 @@ import { registerRushModeIntegrationHandler } from '../handlers/RushModeIntegrat
 import { registerEndOfServiceActionHandler } from '../handlers/EndOfServiceActionHandler';
 import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverUnlockHandler';
 import { registerFacilityHandlers } from '../handlers/FacilityHandlers';
+import { registerHRClockInGuardHandler } from '../handlers/HRClockInGuardHandler';
+import { registerResaAllergenCheckHandler } from '../handlers/ResaAllergenCheckHandler';
+import { registerTableLockHandler } from '../handlers/TableLockHandler';
+import { registerTableTransferHandler } from '../handlers/TableTransferHandler';
+import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler';
+import { registerProformaHandler } from '../handlers/ProformaHandler';
 import { registerOpsKdsHandlers } from './ops-kds';
 import { registerOpsDeliveryHandlers } from './ops-delivery';
 
@@ -32,6 +38,17 @@ export function registerOpsHandlers(): Array<() => void> {
     registerEndOfServiceActionHandler(),
     registerDeliveryDriverUnlockHandler(),
     registerFacilityHandlers(),
+    // ── I2 : POS → RH ─────────────────────────────────────────────────────
+    registerHRClockInGuardHandler(),
+    // ── I3 : Résa → KDS ───────────────────────────────────────────────────
+    registerResaAllergenCheckHandler(),
+    // ── Ops table management ───────────────────────────────────────────────
+    registerTableLockHandler(),
+    registerTableTransferHandler(),
+    // ── Hardware ──────────────────────────────────────────────────────────
+    registerPrinterMappingHandler(),
+    // ── Proforma NF525 ────────────────────────────────────────────────────
+    registerProformaHandler(),
     ...registerOpsKdsHandlers(),
     ...registerOpsDeliveryHandlers(),
   ];

@@ -9,6 +9,8 @@ import { registerGroupPrepTasksHandler } from '../handlers/GroupPrepTasksHandler
 import { registerRecipeChangeKDSHandler } from '../handlers/RecipeChangeKDSHandler';
 import { registerKdsPrepDelayAlertHandler } from '../handlers/KdsPrepDelayAlertHandler';
 import { registerKdsCoursePassedHandler } from '../handlers/KdsCoursePassedHandler';
+import { registerFireNextCourseHandler } from '../handlers/FireNextCourseHandler';
+import { registerDishReboundHandler } from '../handlers/DishReboundHandler';
 
 export function registerOpsKdsHandlers(): Array<() => void> {
   return [
@@ -23,5 +25,7 @@ export function registerOpsKdsHandlers(): Array<() => void> {
     registerGroupPrepTasksHandler(),
     registerRecipeChangeKDSHandler(),
     registerKdsPrepDelayAlertHandler(),
+    registerFireNextCourseHandler(),
+    registerDishReboundHandler(),
   ];
 }

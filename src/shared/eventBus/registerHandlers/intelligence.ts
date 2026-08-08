@@ -12,6 +12,8 @@ import { registerLLMFallbackHandler } from '../handlers/LLMFallbackHandler';
 import { registerSupportTicketAnalysisHandler } from '../handlers/SupportTicketAnalysisHandler';
 import { registerSalesDataReadyHandler } from '../handlers/SalesDataReadyHandler';
 import { registerAnomalyDetectedHandler } from '../handlers/AnomalyDetectedHandler';
+import { registerMenuEngineeringHandler } from '../handlers/MenuEngineeringHandler';
+import { registerMenu86IntelligenceHandler } from '../handlers/Menu86IntelligenceHandler';
 
 export function registerIntelligenceHandlers(): Array<() => void> {
   return [
@@ -29,5 +31,9 @@ export function registerIntelligenceHandlers(): Array<() => void> {
     registerReportRetryHandler(),
     registerLLMFallbackHandler(),
     registerSupportTicketAnalysisHandler(),
+    // ── 9.1 : Menu Engineering BCG ────────────────────────────────────────
+    registerMenuEngineeringHandler(),
+    // ── I4 : Stock zéro → recalcul menu 86 ───────────────────────────────
+    registerMenu86IntelligenceHandler(),
   ];
 }
