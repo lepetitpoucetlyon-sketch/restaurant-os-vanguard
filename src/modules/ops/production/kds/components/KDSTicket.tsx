@@ -290,7 +290,6 @@ export function KDSTicket({
                             <KDSItemCard
                                 key={item._key}
                                 item={item}
-                                recipes={recipes}
                                 recipeByName={recipeByName}
                                 setSelectedRecipe={setSelectedRecipe}
                             />
