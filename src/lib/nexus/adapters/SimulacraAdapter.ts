@@ -146,7 +146,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return IdGenerator.generateWithPrefix('sim');
     }
 
-    serverTimestamp(): unknown {
+    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return this.realAdapter.serverTimestamp();
     }
 

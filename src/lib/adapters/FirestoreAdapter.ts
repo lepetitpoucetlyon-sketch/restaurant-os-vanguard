@@ -128,8 +128,9 @@ export class FirestoreAdapter implements INexusAdapter {
         return doc(collection(this.db, collectionPath)).id;
     }
 
-    serverTimestamp(): unknown {
-        return firestoreServerTimestamp();
+    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+        // FieldValue est opaque au SDK Firestore — le double-cast est intentionnel.
+        return firestoreServerTimestamp() as unknown as import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
     }
 
     async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, _context?: NexusContext): Promise<T> {

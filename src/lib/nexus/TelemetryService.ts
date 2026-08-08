@@ -82,7 +82,7 @@ export class TelemetryService {
       const payload: TelemetryPulse = {
         version: '9.0.0-grade-ix',
         status: 'ACTIVE',
-        lastPulse: Nexus.adapter.serverTimestamp() as unknown as Date,
+        lastPulse: Nexus.adapter.serverTimestamp(),
         health: {
           uptime: typeof process !== 'undefined' && process.uptime ? Math.floor(process.uptime()) : 0,
           battery: batteryInfo,

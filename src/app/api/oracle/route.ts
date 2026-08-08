@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getFirestore } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
 import { LLMManager } from '@/modules/intelligence';
 import { AI_MODELS } from '@/modules/intelligence';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
+import { ensureServerNexus } from '@/lib/nexus/serverNexus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { sovereignQuery } from '@/modules/intelligence';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
@@ -15,12 +15,11 @@ const BLOCKED_STATUSES: UserStatus[] = ['suspended', 'inactive', 'on_leave', 'RE
 
 async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean> {
     try {
-        initFirebaseAdmin();
-        const doc = await getFirestore().doc(`tenants/${tenantId}/users/${uid}`).get();
-        if (!doc.exists) return true; // pas dans Nexus = fleet admin ou service account → ok
-        const status = doc.data()?.status as UserStatus | undefined;
-        if (!status) return true; // champ absent → on ne bloque pas (compat legacy)
-        return !BLOCKED_STATUSES.includes(status);
+        ensureServerNexus(); // idempotent — no-op si déjà initialisé par instrumentation.ts
+        const user = await Nexus.adapter.get<{ status?: UserStatus }>(`tenants/${tenantId}/users/${uid}`);
+        if (!user) return true; // pas dans Nexus = fleet admin ou service account → ok
+        if (!user.status) return true; // champ absent → on ne bloque pas (compat legacy)
+        return !BLOCKED_STATUSES.includes(user.status);
     } catch (err) {
         logger.warn('[Oracle] Impossible de vérifier le statut employé, accès accordé par défaut', toError(err).message);
         return true; // fail-open : on ne bloque pas sur erreur Nexus

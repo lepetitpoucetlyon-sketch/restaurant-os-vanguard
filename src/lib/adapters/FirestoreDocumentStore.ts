@@ -56,7 +56,7 @@ export class FirestoreDocumentStore implements IDocumentStore {
         return doc(collection(this.db, collectionPath)).id;
     }
 
-    serverTimestamp(): unknown {
-        return firestoreServerTimestamp();
+    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+        return firestoreServerTimestamp() as unknown as import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
     }
 }

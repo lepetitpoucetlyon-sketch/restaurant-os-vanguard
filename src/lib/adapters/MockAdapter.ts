@@ -94,7 +94,7 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         return `mock_${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    serverTimestamp(): unknown {
+    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return new Date();
     }
 

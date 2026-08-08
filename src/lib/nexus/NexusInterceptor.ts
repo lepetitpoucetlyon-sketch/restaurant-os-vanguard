@@ -211,7 +211,7 @@ export class NexusInterceptor implements INexusAdapter {
         return this.adapter.generateId(collectionPath);
     }
 
-    serverTimestamp(): unknown {
+    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return this.adapter.serverTimestamp();
     }
 

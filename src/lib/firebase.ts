@@ -64,7 +64,9 @@ export const storage = getStorage(firebaseApp);
 // Moved to NexusCoreProvider to avoid circular dependency ReferenceErrors
 
 // EXPORTS
-export const db = firestore;
+// ⚠️ Ne pas exporter `db` directement — toute lecture/écriture doit passer par
+// Nexus.adapter (NexusAdapter.ts). L'export `firestore` est conservé uniquement
+// pour l'initialisation interne de FirestoreAdapter / FirestoreDocumentStore.
 export const isMock = !DEFAULT_CONFIG.apiKey || DEFAULT_CONFIG.apiKey.startsWith('AIzaDummy');
 
 /**

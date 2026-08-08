@@ -1,12 +1,13 @@
-export type { 
-    IQueryOptions, 
-    IBatchProcessor, 
-    IDocumentStore, 
-    IQueryEngine, 
-    IRealtimeSubscriber 
+export type {
+    IQueryOptions,
+    IBatchProcessor,
+    IDocumentStore,
+    IQueryEngine,
+    IRealtimeSubscriber,
+    NexusTimestamp,
 } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
-import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { IQueryOptions, NexusTimestamp } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 export interface NexusContext {
     vassalId: string;
@@ -39,6 +40,11 @@ export interface INexusAdapter {
     create<T = import('@/shared/nexus-contract').SovereignData>(path: string, data: T, context?: NexusContext): Promise<void>;
     delete(path: string, context?: NexusContext): Promise<void>;
     generateId(collectionPath: string): string;
-    serverTimestamp(): unknown;
+    /**
+     * Retourne un timestamp serveur opaque (NexusTimestamp).
+     * ÉCRITURE SEULE — stocker dans Nexus.adapter.set(), jamais caster ou lire directement.
+     * Pour convertir en Date JS : importer `toNexusDate` depuis `@/shared/nexus/contracts/infrastructure/storage.contracts`.
+     */
+    serverTimestamp(): NexusTimestamp;
     runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, context?: NexusContext): Promise<T>;
 }

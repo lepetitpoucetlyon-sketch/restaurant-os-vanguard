@@ -3,10 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Bot,
     Mic,
-    Wand2,
-    Zap,
     Plus,
     Trash2,
     Volume2,
@@ -14,12 +11,16 @@ import {
     Cpu,
     Eye,
     EyeOff,
-    Server
+    Server,
+    Bot,
+    Wand2,
+    Zap
 } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { GEMINI_VOICES, NexusMacro, NexusConfig, AI_PROVIDER_MODELS, AIProvider } from '@nexus/contracts/settings/nexus';
-import { NexusSphereIndicator } from "@components/layout/NexusSphereIndicator";
 import { cn } from '@/lib/ui.foundations';
+import { NexusHeroHeader } from './nexus-settings/NexusHeroHeader';
+import { NexusIdentitySection } from './nexus-settings/NexusIdentitySection';
 
 const PROVIDER_META: Record<AIProvider, { label: string; color: string; hint: string; keyLabel: string }> = {
     gemini:    { label: 'Google Gemini',  color: '#4285F4', hint: 'Fournisseur par défaut. Requis pour Nexus Live (voix).', keyLabel: 'Clé API Gemini' },
@@ -30,11 +31,8 @@ const PROVIDER_META: Record<AIProvider, { label: string; color: string; hint: st
 
 export default function NexusSettings() {
     const { settings, updateSLM } = useSettings();
-    const [_isSaving, _setIsSaving] = useState(false);
     const [showApiKey, setShowApiKey] = useState(false);
     
-    // Local state for Nexus Config (mapped from slmConfig or its own field)
-    // For now, we use nexusConfig from settings
     const config = settings.nexusConfig || {
         aiName: 'NEXUS',
         voiceId: 'aoede',
@@ -45,7 +43,6 @@ export default function NexusSettings() {
     };
 
     const updateConfig = (updates: Partial<NexusConfig>) => {
-        // Proper immutable update via the settings context
         updateSLM?.({ nexusConfig: { ...config, ...updates } });
     };
 
@@ -94,108 +91,11 @@ export default function NexusSettings() {
             animate="visible"
             className="space-y-8 pb-20"
         >
-            {/* --- HERO SECTION: IDENTITY PREVIEW --- */}
-            <div className="relative rounded-[2.5rem] bg-gradient-to-br from-bg-secondary to-bg-tertiary border border-border p-10 overflow-hidden group shadow-premium">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/10 transition-all duration-1000" />
-                
-                <div className="flex flex-col md:flex-row items-center gap-10">
-                    <div className="relative">
-                        <div className="w-40 h-40 rounded-full bg-bg-primary/50 backdrop-blur-md border border-border flex items-center justify-center shadow-2xl relative z-10">
-                            <NexusSphereIndicator isActive={false} isProcessing={false} />
-                        </div>
-                        <motion.div 
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                            className="absolute inset-0 bg-accent/20 blur-[40px] rounded-full"
-                        />
-                    </div>
-
-                    <div className="flex-1 space-y-4 text-center md:text-left">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-2">
-                            <Zap className="w-3.5 h-3.5 text-accent" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-accent">Souveraineté Digitale</span>
-                        </div>
-                        <h2 className="text-4xl font-serif text-text-primary tracking-tight">
-                            Personalisez votre <span className="text-accent italic">Nexus</span>
-                        </h2>
-                        <p className="text-text-muted max-w-xl text-lg font-medium leading-relaxed">
-                            Configurez l'intelligence centrale de votre établissement. 
-                            Modifiez son identité, sa voix et créez des raccourcis opérationnels sur-mesure pour votre équipe.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <NexusHeroHeader />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* --- CONFIGURATION D'IDENTITÉ --- */}
-                <motion.div variants={itemVariants} className="space-y-6">
-                    <div className="bg-bg-secondary border border-border rounded-[2rem] p-8 shadow-sm h-full">
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border">
-                                <Bot className="w-6 h-6 text-accent" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-serif text-text-primary">Identité Assistée</h3>
-                                <p className="text-[10px] text-text-muted uppercase tracking-widest font-black">ADN Système</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Nom du Nexus</label>
-                                <input 
-                                    type="text"
-                                    value={config.aiName}
-                                    onChange={(e) => updateConfig({ aiName: e.target.value })}
-                                    className="w-full bg-bg-tertiary/50 border border-border rounded-2xl px-6 py-4 text-text-primary focus:outline-none focus:border-accent transition-all font-bold text-lg"
-                                    placeholder="ex: ALBERT, NEXUS, ETIENNE..."
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Personnalité</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {['expert', 'concise', 'friendly', 'protective'].map((p) => (
-                                        <button
-                                            key={p}
-                                            onClick={() => updateConfig({ personality: p as NexusConfig['personality'] })}
-                                            className={cn(
-                                                "px-4 py-3 rounded-xl border transition-all text-[11px] font-bold uppercase tracking-widest",
-                                                config.personality === p 
-                                                    ? "bg-accent text-primary border-accent" 
-                                                    : "bg-bg-tertiary border-border text-text-muted hover:border-accent/40"
-                                            )}
-                                        >
-                                            {p}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="pt-4 flex items-center gap-3">
-                                <div className={cn(
-                                    "w-4 h-4 rounded-full",
-                                    config.historyEnabled ? "bg-success" : "bg-text-muted"
-                                )} />
-                                <div className="flex-1">
-                                    <p className="text-sm font-bold text-text-primary">Mémoire Opérationnelle</p>
-                                    <p className="text-xs text-text-muted">Sauvegarde les transcriptions vocales pour analyse.</p>
-                                </div>
-                                <button 
-                                    onClick={() => updateConfig({ historyEnabled: !config.historyEnabled })}
-                                    className={cn(
-                                        "w-12 h-6 rounded-full transition-all relative",
-                                        config.historyEnabled ? "bg-success" : "bg-bg-tertiary border border-border"
-                                    )}
-                                >
-                                    <div className={cn(
-                                        "absolute top-1 w-4 h-4 rounded-full bg-surface-card transition-all",
-                                        config.historyEnabled ? "right-1" : "left-1"
-                                    )} />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <motion.div variants={itemVariants}>
+                    <NexusIdentitySection config={config} updateConfig={updateConfig} />
                 </motion.div>
 
                 {/* --- CHOIX DE LA VOIX --- */}
@@ -263,7 +163,6 @@ export default function NexusSettings() {
                         </div>
                     </div>
 
-                    {/* Provider selector */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                         {(Object.keys(PROVIDER_META) as AIProvider[]).map((p) => {
                             const meta = PROVIDER_META[p];
@@ -302,7 +201,6 @@ export default function NexusSettings() {
                         {providerMeta.hint}
                     </p>
 
-                    {/* Model selector */}
                     <div className="space-y-2 mb-5">
                         <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Modèle</label>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -330,7 +228,6 @@ export default function NexusSettings() {
                         </div>
                     </div>
 
-                    {/* API key / endpoint */}
                     <div className="space-y-2">
                         <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">
                             {activeProvider === 'local' ? 'URL du serveur' : providerMeta.keyLabel}

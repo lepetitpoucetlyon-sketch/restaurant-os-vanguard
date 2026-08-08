@@ -1,7 +1,46 @@
-export type StorageQueryOperator = 
-  | '==' | '!=' | '<' | '<=' | '>' | '>=' 
+export type StorageQueryOperator =
+  | '==' | '!=' | '<' | '<=' | '>' | '>='
   | 'array-contains' | 'array-contains-unknown' | 'contains'
   | 'in' | 'not-in';
+
+/**
+ * NexusTimestamp — type canonique opaque pour les timestamps serveur.
+ *
+ * Traiter comme une boîte noire en écriture : stocker dans Nexus.adapter.set(),
+ * ne jamais caster, comparer ou lire directement.
+ *
+ * Chaque adapter retourne sa représentation native :
+ * - Firestore client : FieldValue.serverTimestamp() — résolu côté serveur à l'écriture
+ * - Firestore Admin  : FieldValue.serverTimestamp() (firebase-admin)
+ * - SQLite / Mock    : ISO string ou Date
+ * - Futur Postgres   : 'NOW()' SQL literal ou Date JS
+ *
+ * Pour lire un timestamp stocké, utiliser `toNexusDate(value)`.
+ */
+export type NexusTimestamp =
+  | Date
+  | string
+  | number
+  | { seconds: number; nanoseconds: number }         // Firestore Timestamp (lecture)
+  | { readonly _methodName: string };                 // Firestore FieldValue (écriture seule)
+
+/**
+ * Convertit un NexusTimestamp en Date JS exploitable.
+ * À utiliser dans les composants/hooks qui ont besoin d'afficher ou comparer des dates.
+ */
+export function toNexusDate(ts: NexusTimestamp): Date {
+  if (ts instanceof Date) return ts;
+  if (typeof ts === 'string') return new Date(ts);
+  if (typeof ts === 'number') return new Date(ts);
+  // Narrowing explicite via unknown pour les variants objet
+  const obj = ts as unknown as Record<string, unknown>;
+  if (typeof obj['toDate'] === 'function') return (obj['toDate'] as () => Date)();
+  if (typeof obj['seconds'] === 'number') {
+    return new Date(obj['seconds'] * 1000 + ((obj['nanoseconds'] as number) ?? 0) / 1_000_000);
+  }
+  // FieldValue write-only sentinel — ne devrait jamais être lu
+  return new Date();
+}
 
 export interface QueryFilter {
   field: string;
@@ -35,7 +74,7 @@ export interface IDocumentStore {
   create<T>(path: string, data: T): Promise<void>;
   delete(path: string): Promise<void>;
   generateId(collectionPath: string): string;
-  serverTimestamp(): unknown;
+  serverTimestamp(): NexusTimestamp;
 }
 
 export interface IQueryEngine {
@@ -43,9 +82,21 @@ export interface IQueryEngine {
 }
 
 export interface IRealtimeSubscriber {
+  /**
+   * Souscrit aux changements d'un document ou d'une collection.
+   *
+   * @required OBLIGATOIRE dans tout adapter client — le POS (ops.sync.ts) et le KDS
+   * en dépendent. Sans implémentation, ces modules échouent silencieusement.
+   *
+   * Pour les adapters sans real-time natif (Postgres, Neon, PlanetScale) :
+   * utiliser `pollingSnapshot` / `pollingQuerySnapshot` depuis
+   * `@/lib/nexus/adapters/PollingSnapshotMixin`.
+   *
+   * @returns Fonction de désinscription — DOIT être appelée au unmount/cleanup.
+   */
   onSnapshot<T>(
-    path: string, 
-    callback: (data: T) => void, 
+    path: string,
+    callback: (data: T) => void,
     options?: IQueryOptions & { onError?: (error: Error) => void }
   ): () => void;
 }

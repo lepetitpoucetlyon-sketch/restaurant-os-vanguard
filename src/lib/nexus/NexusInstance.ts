@@ -1,4 +1,5 @@
 import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+import { NexusTimestamp } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 
@@ -31,7 +32,12 @@ export interface INexusAdapter {
     update<T = SovereignData>(path: string, data: Partial<T>): Promise<void>;
     delete(path: string): Promise<void>;
     generateId(collectionPath: string): string;
-    serverTimestamp(): unknown;
+    /**
+     * Retourne un timestamp serveur opaque (NexusTimestamp).
+     * ÉCRITURE SEULE — stocker dans Nexus.adapter.set(), jamais caster ou lire directement.
+     * @required Tout adapter client DOIT implémenter cette méthode.
+     */
+    serverTimestamp(): NexusTimestamp;
 }
 
 import { logger } from '@/lib/logger';

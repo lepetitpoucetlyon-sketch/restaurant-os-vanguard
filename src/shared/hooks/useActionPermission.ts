@@ -8,9 +8,7 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-// FIXME (FIX-04): shared/hooks ne doit pas importer de module métier.
-// Extraire policyEngine vers shared/nexus/contracts ou shared/eventBus.
-import { policyEngine } from '@/modules/compliance/securite/PolicyEngine';
+import { policyEngine } from '@/modules/compliance';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts
 import { ACTION_MAP } from './actionPermissionMap';
