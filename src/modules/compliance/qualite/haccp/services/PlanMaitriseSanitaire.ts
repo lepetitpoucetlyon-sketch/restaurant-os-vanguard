@@ -4,7 +4,7 @@
  * Utilise jsPDF + jspdf-autotable (client-side only, lazy import).
  */
 
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { Nexus, buildTenantPath } from '@/lib/nexus';
 
 // ── Types internes ─────────────────────────────────────────────────────────────
 
@@ -255,9 +255,7 @@ export class PlanMaitriseSanitaire {
         // Fetch 30 last temperature logs from Nexus
         let tempRows: Array<string[]> = [];
         try {
-            const basePath = tenantId && tenantId !== 'restaurant-os'
-                ? `tenants/${tenantId}/temperatureLogs`
-                : 'temperatureLogs';
+            const basePath = buildTenantPath(tenantId, 'temperatureLogs');
 
             const logs = await Nexus.adapter.query<TemperatureLogRaw>(basePath, {
                 orderBy: { field: 'createdAt', direction: 'desc' },

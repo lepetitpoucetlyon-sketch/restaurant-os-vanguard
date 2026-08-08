@@ -13,7 +13,7 @@ import {
     Wine,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { Nexus, buildTenantPath } from '@/lib/nexus';
 import { useTenant } from '@/shared/hooks';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -78,17 +78,11 @@ function taskKey(zone: string, dayIdx: number, task: string): string {
 }
 
 function buildRecordPath(tenantId: string, id: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/cleaningRecords/${id}`;
-    }
-    return `cleaningRecords/${id}`;
+    return buildTenantPath(tenantId, 'cleaningRecords', id);
 }
 
 function buildQueryPath(tenantId: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/cleaningRecords`;
-    }
-    return 'cleaningRecords';
+    return buildTenantPath(tenantId, 'cleaningRecords');
 }
 
 // ── Composant principal ────────────────────────────────────────────────────────

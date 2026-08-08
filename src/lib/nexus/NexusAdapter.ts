@@ -4,6 +4,8 @@ import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/domain/schemas/ui';
 
+import { buildTenantPath } from './utils/tenantPath';
+
 /**
  * 🛰️ INexusAdapter - Restaurant OS (Grade VI)
  * Data Abstraction Layer for total portability and high-speed testing.
@@ -110,10 +112,7 @@ class NexusManager {
                          (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('tenant') : null) ||
                          SovereignStorage.get('nexus_tenant_id', TenantIdSchema, 'restaurant-os').data;
 
-        let resolvedPath = relativePath;
-        if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-            resolvedPath = `tenants/${tenantId}/${relativePath}`;
-        }
+        const resolvedPath = buildTenantPath(tenantId, relativePath);
 
         // 🛡️ NOTE: Access validation is handled by NexusInterceptor.intercept()
         // which properly awaits the async SovereignGuard. Calling it here (sync context)

@@ -1,4 +1,5 @@
 import { getDefaultStore } from 'jotai';
+import { nexusStatusAtom } from '@/shared/atoms/nexusStatus.atom';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from '@/lib/offline/offline-store';
@@ -45,6 +46,7 @@ export const NexusSyncService = {
 
         // 0. ANCHOR CONTEXT (Security Barrier)
         Nexus.tenantOverride = tenantId;
+        store.set(nexusStatusAtom, { isActive: true, isProcessing: false });
 
         logger.info(`[NexusSyncService] Initializing Atomic Discovery for Tenant: ${tenantId}...`);
 
@@ -119,6 +121,7 @@ export const NexusSyncService = {
    */
   async _stopAllInternal() {
     logger.info('[NexusSyncService] Orchestrating Global Stop...');
+    getDefaultStore().set(nexusStatusAtom, { isActive: false, isProcessing: false });
     if (this.healing_interval) {
         clearInterval(this.healing_interval);
         this.healing_interval = null;

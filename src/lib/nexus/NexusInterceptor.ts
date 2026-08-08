@@ -7,6 +7,7 @@ import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
  
 import { auditService } from '@/shared/nexus/vault/audits/audit/AuditService';
+import { isSuzerainTenant } from './utils/tenantPath';
 
 /**
  * 🛰️ NexusInterceptor - Grade X Middleware
@@ -309,7 +310,7 @@ export class NexusInterceptor implements INexusAdapter {
     }
 
     private scopePath(path: string, vassalId: string): string {
-        if (!vassalId || vassalId === 'restaurant-os' || vassalId === 'main') return path;
+        if (!vassalId || isSuzerainTenant(vassalId)) return path;
         
         // If path is already scoped to a tenant
         if (path.startsWith('tenants/')) {

@@ -41,6 +41,7 @@ export interface INexusAdapter {
 }
 
 import { logger } from '@/lib/logger';
+import { buildTenantPath } from './utils/tenantPath';
 
 /**
  * 🏛️ Nexus Singleton Manager
@@ -89,10 +90,7 @@ class NexusManager {
                          (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('tenant') : null) ||
                          (typeof window !== 'undefined' ? localStorage.getItem('nexus_tenant_id') : null);
 
-        let resolvedPath = relativePath;
-        if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-            resolvedPath = `tenants/${tenantId}/${relativePath}`;
-        }
+        const resolvedPath = buildTenantPath(tenantId, relativePath);
 
         // 🛡️ SOVEREIGN GUARD - Injection Pattern to break circularity
         if (this._validator) {

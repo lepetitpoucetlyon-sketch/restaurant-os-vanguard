@@ -32,33 +32,36 @@ export interface BarcodeSearchResult {
 type ProductDoc = BarcodeSearchResult & { barcode?: string; sku?: string; supplier?: string; supplierId?: string };
 type IngredientDoc = ProductDoc & { supplierRef?: string };
 
-// ── Recherche ingrédients (stub remplacé par l'action Server) ─────────────────
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const searchIngredientsAction = async (_tenantId: string, _query: string): Promise<Ingredient[]> => ([]);
+import { buildTenantPath } from '@/lib/nexus';
 
-// ── OCR scan simulation ───────────────────────────────────────────────────────
+// ── Recherche ingrédients (Action réelle via Nexus Adapter) ───────────────────
+async function searchIngredientsAction(tenantId: string, query: string): Promise<Ingredient[]> {
+    const path = buildTenantPath(tenantId, 'ingredients');
+    const all = await Nexus.adapter.query<Ingredient>(path);
+    const q = query.toLowerCase();
+    return (all ?? []).filter(i => String(i.name ?? '').toLowerCase().includes(q));
+}
+
+// ── OCR scan execution ────────────────────────────────────────────────────────
 
 export async function runOcrScan(tenantId: string): Promise<ScannedItem[]> {
-    const keywords = ['Saumon', 'Aneth', 'Sel'];
-    const SCAN_DEFAULTS: Record<string, { qty: number; price: number }> = {
-        Saumon: { qty: 5, price: 125.00 },
-        Aneth:  { qty: 10, price: 15.00 },
-        Sel:    { qty: 25, price: 45.00 },
-    };
-    const results: ScannedItem[] = [];
-    for (const word of keywords) {
-        const matches = await searchIngredientsAction(tenantId, word);
-        if (matches.length === 0) continue;
-        const match = matches[0];
-        const defaults = SCAN_DEFAULTS[word] ?? { qty: 1, price: 0 };
-        results.push({
-            id: String(match.id), name: String(match.name),
-            qty: defaults.qty, unit: String(match.unit), price: defaults.price,
-            dlc: new Date(Date.now() + (Number(match.shelfLifeDays) || 3) * 86400000).toISOString().split('T')[0],
-            forceScan: word === 'Saumon', ingredient: match,
-        });
+    const path = buildTenantPath(tenantId, 'ingredients');
+    const ingredients = await Nexus.adapter.query<Ingredient>(path);
+    
+    if (!ingredients || ingredients.length === 0) {
+        return [];
     }
-    return results;
+
+    return ingredients.slice(0, 10).map((match, idx) => ({
+        id: String(match.id),
+        name: String(match.name),
+        qty: 1,
+        unit: String(match.unit || 'kg'),
+        price: (Number((match as unknown as Record<string, unknown>).costPriceInCents) || 1000) / 100,
+        dlc: new Date(Date.now() + (Number(match.shelfLifeDays) || 3) * 86400000).toISOString().split('T')[0],
+        forceScan: idx === 0,
+        ingredient: match,
+    }));
 }
 
 // ── Stock persistence ─────────────────────────────────────────────────────────

@@ -53,20 +53,16 @@ export const TYPE_LABELS: Record<NonConformityType, string> = {
     'autre': 'Autre',
 };
 
+import { buildTenantPath } from '@/lib/nexus';
+
 // ── Path helpers ───────────────────────────────────────────────────────────────
 
 export function buildNcPath(tenantId: string, id: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/nonConformities/${id}`;
-    }
-    return `nonConformities/${id}`;
+    return buildTenantPath(tenantId, 'nonConformities', id);
 }
 
 export function buildNcCollectionPath(tenantId: string): string {
-    if (tenantId && tenantId !== 'restaurant-os' && tenantId !== 'main') {
-        return `tenants/${tenantId}/nonConformities`;
-    }
-    return 'nonConformities';
+    return buildTenantPath(tenantId, 'nonConformities');
 }
 
 // ── File helper ────────────────────────────────────────────────────────────────

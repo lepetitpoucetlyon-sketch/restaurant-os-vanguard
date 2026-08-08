@@ -20,12 +20,15 @@ function SeatBadge({ seat }: SeatBadgeProps) {
 export interface KDSItemCardProps {
     item: OrderItem & { _key: string };
     recipes: Recipe[];
+    recipeByName?: Map<string, Recipe>;
     setSelectedRecipe: (recipe: Recipe) => void;
 }
 
-export function KDSItemCard({ item, recipes, setSelectedRecipe }: KDSItemCardProps) {
+export function KDSItemCard({ item, recipes, recipeByName, setSelectedRecipe }: KDSItemCardProps) {
     const itemStation = resolveStation(item.name);
-    const product = recipes.find(p => p.name.includes(item.name) || item.name.includes(p.name));
+    const product = recipeByName
+        ? recipeByName.get(item.name.toLowerCase())
+        : recipes.find(p => p.name.includes(item.name) || item.name.includes(p.name));
     const imageUrl = product?.imageUrl || product?.standardImage;
     const isDrink = itemStation === 'bar';
     const isCold  = itemStation === 'cold';

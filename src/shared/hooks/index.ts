@@ -25,6 +25,7 @@ export { useActionPermission } from "./useActionPermission";
 export { useTabAccess } from "./useTabAccess";
 
 // 🏛️ Sovereign Core Hooks (Grade X)
+export { useNexusStatus } from "./useNexusStatus";
 export {
     useNexusCore,
     useAuth,

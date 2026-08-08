@@ -1,5 +1,14 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.0.2] - 2026-08-08 - PLAN QUALITÉ — 6 DETTES POST-`/SIMPLIFY` 🧹
+
+### 🧹 DETTES TECHNIQUES & SOUVERAINETÉ PLATFORME
+- **01 Centralisation `buildTenantPath()`** : Ajout de `src/lib/nexus/utils/tenantPath.ts` (`isSuzerainTenant`, `buildTenantPath`) et refactoring des 7 occurrences pour une gestion centralisée du nommage multi-tenant.
+- **02 Suppression Stub OCR** : Remplacement de `searchIngredientsAction` hardcodé par des requêtes réelles `Nexus.adapter.query` sur la collection `ingredients` du tenant.
+- **03 & 04 Moteur de Conventions Paie** : Extension de `resolveCollectiveAgreement` pour inclure Coiffure (`salon`), Santé privée (`clinic`) et Commerce non-alimentaire (`retail`). Dynamicisation des helpers de paie (`payrollHelpers.ts` & `PrepaieBuilder.ts`).
+- **05 Sphère Nexus Réactive** : Création de `useNexusStatus()` et `nexusStatusAtom` pour piloter `NexusSphereIndicator` selon l'état réel de `NexusSyncService`.
+- **06 Performance KDS (O(1))** : Memoïsation de `recipeByName: Map<string, Recipe>` dans `KDSTicket` et lookup direct dans `KDSItemCard`.
+
 ## [2.0.1] - 2026-08-01 - SUB-HANDLERS SPLIT & PAGE BARRELS ALIGNMENT 🧩
 
 ### 🧩 EVENT BUS SUB-HANDLERS & CONNECTORS

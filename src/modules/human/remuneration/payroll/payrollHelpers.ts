@@ -1,8 +1,7 @@
+import type { ICollectiveAgreement } from '../../conventions/types';
+import { HCR_CONVENTION } from '../../conventions/hcr.convention';
+
 export const MU_TO_EUR = 1_000_000;
-export const NORMAL_WEEKLY_HOURS = 35;
-export const OT_25_BAND_HOURS = 8;
-export const NIGHT_START_HOUR = 21;
-export const MEAL_BENEFIT_EUR = 4.15;
 
 export const FR_PUBLIC_HOLIDAYS = new Set([
     '2025-01-01','2025-04-21','2025-05-01','2025-05-08','2025-05-29',
@@ -69,14 +68,15 @@ export function isPublicHoliday(ts: string): boolean {
     return FR_PUBLIC_HOLIDAYS.has(toDateStr(ts));
 }
 
-export function isNightHour(ts: string): boolean {
-    return new Date(ts).getUTCHours() >= NIGHT_START_HOUR;
+export function isNightHour(ts: string, nightStartHour: number = HCR_CONVENTION.nightStartHour): boolean {
+    return new Date(ts).getUTCHours() >= nightStartHour;
 }
 
 export function analyseSession(
     clockIn: number,
     clockOut: number,
     breaks: Array<{ start: number; end: number }>,
+    convention: ICollectiveAgreement = HCR_CONVENTION,
 ): {
     netMinutes: number;
     nightMinutes: number;
@@ -108,7 +108,7 @@ export function analyseSession(
 
         const minuteTs = new Date(t).toISOString();
         netMinutes++;
-        if (isNightHour(minuteTs)) nightMinutes++;
+        if (isNightHour(minuteTs, convention.nightStartHour)) nightMinutes++;
         if (isSunday(minuteTs)) sundayMinutes++;
         if (isPublicHoliday(minuteTs)) holidayMinutes++;
 
@@ -120,7 +120,10 @@ export function analyseSession(
     return { netMinutes, nightMinutes, sundayMinutes, holidayMinutes, mealCount };
 }
 
-export function weeklyOvertimeBreakdown(weekMinutes: Map<string, number>): {
+export function weeklyOvertimeBreakdown(
+    weekMinutes: Map<string, number>,
+    convention: ICollectiveAgreement = HCR_CONVENTION,
+): {
     normal: number;
     ot25: number;
     ot50: number;
@@ -128,8 +131,8 @@ export function weeklyOvertimeBreakdown(weekMinutes: Map<string, number>): {
     let normal = 0;
     let ot25 = 0;
     let ot50 = 0;
-    const normalWeekMinutes = NORMAL_WEEKLY_HOURS * 60;
-    const ot25BandMinutes = OT_25_BAND_HOURS * 60;
+    const normalWeekMinutes = convention.normalWeeklyHours * 60;
+    const ot25BandMinutes = convention.ot25ThresholdHours * 60;
 
     for (const minutes of weekMinutes.values()) {
         if (minutes <= normalWeekMinutes) {
@@ -154,6 +157,7 @@ export function computeGross(
     ot25Minutes: number,
     ot50Minutes: number,
     rateEur: number,
+    _convention: ICollectiveAgreement = HCR_CONVENTION,
 ): number {
     const ratePerMin = rateEur / 60;
     return (

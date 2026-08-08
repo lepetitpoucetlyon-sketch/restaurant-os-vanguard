@@ -16,9 +16,10 @@ import type { User } from '@nexus/contracts';
 import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
 import { JsonObject } from "@/shared/types/json";
 
+import type { PlatformVariant } from '@/domain/schemas/tenant';
+import { resolveCollectiveAgreement } from '../../conventions';
 import {
     MU_TO_EUR,
-    MEAL_BENEFIT_EUR,
     splitName,
     isoWeekStart,
     analyseSession,
@@ -36,7 +37,8 @@ export const PrepaieBuilder = {
      * Construit les lignes pré-paie pour tous les employés actifs du tenant
      * sur une période donnée (YYYY-MM).
      */
-    async build(tenantId: string, periode: string): Promise<PayrollPeriodSummary> {
+    async build(tenantId: string, periode: string, variant?: PlatformVariant): Promise<PayrollPeriodSummary> {
+        const convention = resolveCollectiveAgreement(variant);
         const startTs = new Date(`${periode}-01T00:00:00Z`).getTime();
         const endDate = new Date(`${periode}-01T00:00:00Z`);
         endDate.setUTCMonth(endDate.getUTCMonth() + 1);
@@ -107,7 +109,7 @@ export const PrepaieBuilder = {
                         break;
                     case 'CLOCK_OUT':
                         if (pendingIn !== null) {
-                            const session = analyseSession(pendingIn, ts, [...currentBreaks]);
+                            const session = analyseSession(pendingIn, ts, [...currentBreaks], convention);
                             const week = isoWeekStart(new Date(pendingIn));
                             weekMinutes.set(week, (weekMinutes.get(week) ?? 0) + session.netMinutes);
                             nightMin += session.nightMinutes;
@@ -121,13 +123,13 @@ export const PrepaieBuilder = {
                 }
             }
 
-            const { normal, ot25, ot50 } = weeklyOvertimeBreakdown(weekMinutes);
+            const { normal, ot25, ot50 } = weeklyOvertimeBreakdown(weekMinutes, convention);
             const hourlyRateEur = (user.hourlyRateInMicrounits ?? 0) / MU_TO_EUR;
 
             const cpDays  = extractLeaveDays(leavesRaw, user.id, ['paid_leave'],     startTs, endTs);
             const absDays = extractLeaveDays(leavesRaw, user.id, ['sick', 'unpaid'], startTs, endTs);
 
-            const grossEur = computeGross(normal, ot25, ot50, hourlyRateEur);
+            const grossEur = computeGross(normal, ot25, ot50, hourlyRateEur, convention);
             const { nom, prenom } = splitName(user.name as string | undefined);
 
             rows.push({
@@ -178,7 +180,7 @@ export const PrepaieBuilder = {
     },
 
     /** Sérialise les lignes en CSV UTF-8 BOM (compatible Excel FR). */
-    toCsv(summary: PayrollPeriodSummary): string {
+    toCsv(summary: PayrollPeriodSummary, mealBenefitEur: number = 4.15): string {
         const BOM = '﻿';
         const SEP = ';';
         const headers = [
@@ -210,7 +212,7 @@ export const PrepaieBuilder = {
             '',
             `TOTAL${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${SEP}${toFr(summary.totalBrut)}`,
             '',
-            `Avantage en nature repas : ${MEAL_BENEFIT_EUR} € / repas (valeur URSSAF 2026 — à vérifier avec votre expert-comptable)`,
+            `Avantage en nature repas : ${mealBenefitEur} € / repas (valeur URSSAF — à vérifier avec votre expert-comptable)`,
             'Ce document est un pré-paie indicatif. La conformité des bulletins de paie relève de la responsabilité de l\'employeur et de son prestataire de paie.',
         ];
 

@@ -169,16 +169,16 @@ export function KDSTicket({
                 body: ticket.items.slice(0, 3).map(i => i.name).join(', '),
                 url: '/pos',
             };
-            if (serverId) {
-                pushToUser(tenantId, serverId, pushPayload);
-            } else {
-                pushToRole(tenantId, 'serveur', pushPayload);
-            }
             if (process.env.NODE_ENV !== 'production') {
                 console.info('[KDS] Push envoyé pour ticket', ticket.id);
             }
         }
     }, [ticket, recipes, updateOrderStatus, setAuditTicket, setIsAuditOpen]);
+
+    const recipeByName = useMemo(
+        () => new Map(recipes.map(r => [r.name.toLowerCase(), r])),
+        [recipes]
+    );
 
     return (
         <motion.div
@@ -291,6 +291,7 @@ export function KDSTicket({
                                 key={item._key}
                                 item={item}
                                 recipes={recipes}
+                                recipeByName={recipeByName}
                                 setSelectedRecipe={setSelectedRecipe}
                             />
                         ))}
