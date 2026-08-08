@@ -68,7 +68,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'CONTRACT_SIGNED',
     severity: 'high',
-    details: { tenantId, contractId, version, contentHash } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, contractId, version, contentHash },
     timestamp: new Date(),
   });
 

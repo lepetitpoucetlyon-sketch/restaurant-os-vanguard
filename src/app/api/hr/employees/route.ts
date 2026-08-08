@@ -149,7 +149,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'EMPLOYEE_CREATED',
     severity: 'medium',
-    details: { tenantId, employeeId, dpaeMethod: dpaeResult.method } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, employeeId, dpaeMethod: dpaeResult.method },
     timestamp: new Date(),
   });
 

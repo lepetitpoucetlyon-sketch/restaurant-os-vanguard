@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
           ...entry,
           id,
           syncedAt: new Date().toISOString()
-      } as unknown as SovereignData);
+      });
     }
 
     return NextResponse.json({ success: true, count: entries.length });

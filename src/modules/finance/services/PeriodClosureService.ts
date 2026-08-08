@@ -98,7 +98,7 @@ export class PeriodClosureService {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/periodClosures/${periodKey}`,
-            closure as unknown as JsonObject
+            closure
         );
 
         return closure;

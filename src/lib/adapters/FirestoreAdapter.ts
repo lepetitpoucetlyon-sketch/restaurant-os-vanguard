@@ -42,7 +42,7 @@ export class FirestoreAdapter implements INexusAdapter {
         try {
             const docRef = doc(this.db, path);
             const snap = await getDoc(docRef);
-            return snap.exists() ? ({ id: snap.id, ...snap.data() } as unknown as T) : null;
+            return snap.exists() ? ({ id: snap.id, ...snap.data() } as unknown as T) : null; // as unknown as: snap.data() retourne DocumentData (Firestore) — frontière runtime irréductible
         } catch (error) {
             Sentry.captureException(error);
             throw error;
@@ -72,7 +72,7 @@ export class FirestoreAdapter implements INexusAdapter {
 
             const q = query(collection(this.db, collectionPath), ...constraints);
             const snap = await getDocs(q);
-            return snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as T));
+            return snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as T)); // as unknown as: DocumentData → T — frontière Firestore
         } catch (error) {
             Sentry.captureException(error);
             throw error;
@@ -90,12 +90,12 @@ export class FirestoreAdapter implements INexusAdapter {
             const q = query(collection(this.db, path));
             return onSnapshot(q, (snap) => {
                 const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-                callback(data as unknown as T);
+                callback(data as unknown as T); // as unknown as: Firestore snapshot.data() → T
             }, options?.onError);
         } else {
             return onSnapshot(doc(this.db, path), (snap) => {
                 const data = snap.exists() ? { id: snap.id, ...snap.data() } : null;
-                callback(data as unknown as T);
+                callback(data as unknown as T); // as unknown as: Firestore snapshot.data() → T
             }, options?.onError);
         }
     }

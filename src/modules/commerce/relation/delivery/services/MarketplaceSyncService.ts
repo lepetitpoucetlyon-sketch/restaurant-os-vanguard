@@ -1,6 +1,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/domain/schemas/pos';
+import { toMicrounits } from '@/domain/schemas/primitives';
 
 export interface MarketplaceOrderPayload {
     platform: 'ubereats' | 'deliveroo' | 'wolt';
@@ -24,17 +25,18 @@ export class MarketplaceSyncService {
 
         const orderId = crypto.randomUUID();
         const tableId = `delivery-${payload.platform}`;
-        const mappedItems = payload.items.map(item => ({
+        // L7 Pattern D: toMicrounits() pour les champs brandés — cast supprimé
+        const mappedItems: CartItem[] = payload.items.map(item => ({
             cartId: item.id,
             productId: item.id,
             categoryId: 'marketplace',
             name: item.id,
             quantity: item.quantity,
-            unitPriceInMicrounits: item.priceInMicrounits,
-            discountInMicrounits: 0,
+            unitPriceInMicrounits: toMicrounits(item.priceInMicrounits),
+            discountInMicrounits: toMicrounits(0),
             taxRate: '0.10' as const,
             modifiers: [],
-        })) as unknown as CartItem[];
+        }));
 
         // 1. Émettre l'événement de commande passée (KDS, déduction stock, etc.)
         await NexusEventBus.emitDurable('order.placed', {

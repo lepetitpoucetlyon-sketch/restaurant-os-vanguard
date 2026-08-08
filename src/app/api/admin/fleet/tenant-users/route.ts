@@ -25,7 +25,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'TENANT_USERS_LISTED',
       severity: 'low',
-      details: { tenantId, count: users.length } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, count: users.length },
       timestamp: new Date(),
     });
 

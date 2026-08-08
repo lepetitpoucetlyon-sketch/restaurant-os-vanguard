@@ -57,7 +57,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: enabled ? 'MODULE_ENABLED' : 'MODULE_DISABLED',
       severity: 'medium',
-      details: { tenantId, module: mod, enabled } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, module: mod, enabled },
       timestamp: new Date(),
     });
 

@@ -98,7 +98,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'RAG_ORPHANS_PURGED',
       severity: 'medium',
-      details: { tenantId, workspaceId, purgedCount } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, workspaceId, purgedCount },
       timestamp: new Date(),
     });
 

@@ -1,7 +1,7 @@
 import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
-import type { JournalEntry, JournalLine, FiscalSeal } from '@nexus/contracts';
+import type { JournalEntry, JournalLine, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
@@ -139,7 +139,11 @@ export const FinancialNexusBridge = {
         timestamp: now,
       } as import('@/shared/nexus-contract').SovereignData);
 
-    const buildEntryBase = (pieceNumber: string, status: string) => ({
+    // L7 Pattern C: `updatedAt` inclus dans la base — le type inféré a `id: string` explicite,
+    // ce qui rend l'objet assignable à `Record<string, unknown> & { id: string }` sans cast.
+    // `Omit<JournalEntry, ...>` était impossible : SovereignNode a `[key: string]: SovereignField`
+    // → TypeScript perd les propriétés nommées après un Omit sur un type indexé.
+    const buildEntryBase = (pieceNumber: string, status: JournalEntryStatus) => ({
       id: entryId,
       date: now,
       pieceNumber,
@@ -152,6 +156,7 @@ export const FinancialNexusBridge = {
       amountInCents: microToCents(totalTTCInMicrounits),
       amountInMicrounits: totalTTCInMicrounits,
       status,
+      updatedAt: now,
       lines: buildJournalLines(ttcByRateAndAxis, payload, pieceNumber, now),
     });
 
@@ -178,7 +183,7 @@ export const FinancialNexusBridge = {
       sealId = sealResult.sealId;
       previousHash = sealResult.previousHash;
 
-      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now } as unknown as JournalEntry;
+      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now };
       finalReceiptNumber = receiptNumber;
       finalSnapshot = dataSnapshot;
     } else {
@@ -190,7 +195,7 @@ export const FinancialNexusBridge = {
       sealId = SharedKernel.generateId('seal_pending');
       previousHash = 'PENDING_OFFLINE';
 
-      finalJournalEntry = { ...journalEntryBase, updatedAt: now } as unknown as JournalEntry;
+      finalJournalEntry = { ...journalEntryBase, updatedAt: now };
       finalReceiptNumber = provisional;
       finalSnapshot = buildSnapshot(provisional);
 
@@ -312,7 +317,7 @@ export const FinancialNexusBridge = {
       sealId = sealResult.sealId;
       previousHash = sealResult.previousHash;
 
-      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now } as unknown as JournalEntry;
+      finalJournalEntry = { ...journalEntryBase, fiscalSealHash: hash, sealedAt: now, updatedAt: now } as unknown as JournalEntry; // as unknown as: referenceType:'refund' et type:'EXTOURNE' hors union JournalEntry — frontière NF525 extourne
       finalReceiptNumber = receiptNumber;
       finalSnapshot = dataSnapshot;
     } else {
@@ -324,7 +329,7 @@ export const FinancialNexusBridge = {
       sealId = SharedKernel.generateId('seal_pending');
       previousHash = 'PENDING_OFFLINE';
 
-      finalJournalEntry = { ...journalEntryBase, updatedAt: now } as unknown as JournalEntry;
+      finalJournalEntry = { ...journalEntryBase, updatedAt: now } as unknown as JournalEntry; // as unknown as: idem extourne offline — types non-standard légitimes NF525
       finalReceiptNumber = provisional;
       finalSnapshot = buildSnapshot(provisional);
 

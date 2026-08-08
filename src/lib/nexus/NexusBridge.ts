@@ -158,7 +158,7 @@ export class NexusBridge {
         ...(RESTAURANT_FULL_DNA.status || DEFAULT_TENANT_CONFIG.status), 
         ...(remoteData.status || {}),
         layoutType: (remoteData.status?.layoutType || remoteData.layout || (RESTAURANT_FULL_DNA.status?.layoutType ?? 'default')) as unknown as string,
-        businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {})) as unknown as JsonObject
+        businessLaws: (remoteData.status?.businessLaws || remoteData.laws || (RESTAURANT_FULL_DNA.status?.businessLaws ?? {}))
       };
   }
 

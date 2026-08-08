@@ -48,7 +48,7 @@ export const AIWorkshop: React.FC = () => {
         module: 'system',
         action: status === 'DEPLOYED' ? 'AI_PATCH_DEPLOYED' : 'AI_PATCH_REJECTED',
         severity: 'medium',
-        details: { patchId: patch.id, ticketId: patch.ticketId } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { patchId: patch.id, ticketId: patch.ticketId },
         timestamp: new Date(),
       });
       setPatches(prev => prev.map(p => p.id === patch.id ? { ...p, status } : p));

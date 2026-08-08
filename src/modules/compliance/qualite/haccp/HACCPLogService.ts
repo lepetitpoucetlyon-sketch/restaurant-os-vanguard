@@ -108,7 +108,7 @@ export const HACCPLogService = {
       recordedAt: now,
       source: input.source,
     };
-    await Nexus.adapter.set(`${logPath}/${logId}`, logEntry as unknown as JsonObject);
+    await Nexus.adapter.set(`${logPath}/${logId}`, logEntry);
 
     // 2. Dossier de suivi — MÊME forme que celle attendue par NonConformityForm,
     //    pour apparaître dans la liste du manager et y être résolu.

@@ -21,10 +21,10 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
 
   // Memotize the chain nodes from real fiscal seals
   const nodes = useMemo(() => {
-    // Filter by instance if provided
-    const filteredSeals = instanceId 
-      ? (fiscalSeals as unknown as FiscalSeal[]).filter(s => s.instanceId === instanceId)
-      : (fiscalSeals as unknown as FiscalSeal[]);
+    // Filter by instance if provided — seals est FiscalSeal[] depuis L7 Pattern E (fiscalSealsNodeAtom)
+    const filteredSeals = instanceId
+      ? fiscalSeals.filter(s => s.instanceId === instanceId)
+      : fiscalSeals;
 
     return filteredSeals
       .sort((a, b) => (b.sequence || 0) - (a.sequence || 0)) // Most recent first

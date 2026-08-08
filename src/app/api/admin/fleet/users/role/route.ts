@@ -93,7 +93,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         module: 'fleet',
         action: 'USER_ROLE_CHANGED',
         severity: 'high',
-        details: { tenantId, userId, email: existing.email ?? '', previousRole, newRole, changedBy: caller.uid } as Record<string, string> as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { tenantId, userId, email: existing.email ?? '', previousRole, newRole, changedBy: caller.uid } as Record<string, string>,
         timestamp: new Date(),
     });
 

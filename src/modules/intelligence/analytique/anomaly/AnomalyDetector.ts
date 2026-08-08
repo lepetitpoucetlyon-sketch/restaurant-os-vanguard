@@ -119,7 +119,7 @@ export const AnomalyDetector = {
             empireAudit.log({
                 module: 'compliance', action: 'anomaly_detection_alert', timestamp: new Date(),
                 severity: anomalies.some(a => a.severity === 'critical') ? 'critical' : 'medium',
-                details: { date, anomalyCount: anomalies.length, types: [...new Set(anomalies.map(a => a.type))] } as unknown as import('@/shared/nexus-contract').SovereignData,
+                details: { date, anomalyCount: anomalies.length, types: [...new Set(anomalies.map(a => a.type))] },
             });
             logger.warn(`[AnomalyDetector] ${anomalies.length} anomalies detected for ${date}`);
         }

@@ -130,7 +130,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'RGPD_PURGE_COMPLETED',
     severity: 'high',
-    details: { tenantId, certificateId, certHash, purgeResults } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, certificateId, certHash, purgeResults },
     timestamp: new Date(),
   });
 

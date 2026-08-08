@@ -253,7 +253,7 @@ export const PrepaieBuilder = {
         const rows: PrepaieRow[] = [];
 
         for (const user of usersRaw) {
-            if ((user as unknown as JsonObject).status === 'inactive') continue;
+            if ((user as { status?: string }).status === 'inactive') continue;
 
             const entries = (entriesByUser.get(user.id) ?? []).sort(
                 (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()

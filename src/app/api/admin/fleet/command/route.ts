@@ -74,7 +74,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             module: 'fleet',
             action: `FLEET_CMD_${action}`,
             severity: action === 'HARD_LOCK' || action === 'LOCK' ? 'high' : 'medium',
-            details: { instanceId, newStatus } as unknown as import('@/shared/nexus-contract').SovereignData,
+            details: { instanceId, newStatus },
             timestamp: new Date(),
         });
 

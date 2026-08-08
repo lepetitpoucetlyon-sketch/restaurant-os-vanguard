@@ -48,7 +48,7 @@ export const CustomerAccountService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/accountCharges/${chargeId}`,
-            charge as unknown as import('@/shared/nexus-contract').SovereignData
+            charge
         );
 
         return charge;
@@ -85,7 +85,7 @@ export const CustomerAccountService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/accountCharges/${chargeId}`,
-            charge as unknown as import('@/shared/nexus-contract').SovereignData
+            charge
         );
 
         return charge;

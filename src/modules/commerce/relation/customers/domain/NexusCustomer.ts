@@ -20,7 +20,7 @@ export class NexusCustomer {
      * GRADE VI: Préparé pour intégration Twilio/SendGrid.
      */
     static async notify(clientId: string, payload: ContactPayload) {
-        logger.info(`[NexusCustomer] QUEUEING NOTIFICATION for ${clientId}`, payload as unknown as JsonObject);
+        logger.info(`[NexusCustomer] QUEUEING NOTIFICATION for ${clientId}`, payload);
         
         // Simulation de latence réseau
         await new Promise(resolve => setTimeout(resolve, 100));

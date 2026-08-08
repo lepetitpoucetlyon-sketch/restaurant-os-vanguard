@@ -41,7 +41,7 @@ export const GiftCardService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/giftCards/${id}`,
-            card as unknown as import('@/shared/nexus-contract').SovereignData
+            card
         );
 
         await this._logTransaction(tenantId, {
@@ -119,7 +119,7 @@ export const GiftCardService = {
         GiftCardTransactionSchema.parse(tx);
         await Nexus.adapter.set(
             `tenants/${tenantId}/giftCardTransactions/${id}`,
-            tx as unknown as import('@/shared/nexus-contract').SovereignData
+            tx
         );
     },
 };

@@ -42,7 +42,7 @@ export const AnalyticalAccountingService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/analyticalEntries/${id}`,
-            entry as unknown as import('@/shared/nexus-contract').SovereignData
+            entry
         );
 
         return entry;

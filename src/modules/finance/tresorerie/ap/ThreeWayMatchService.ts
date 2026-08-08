@@ -143,7 +143,7 @@ export const ThreeWayMatchService = {
                     poId: po.id,
                     dnId: dn.id,
                     discrepancyCount: discrepancies.length,
-                } as unknown as import('@/shared/nexus-contract').SovereignData,
+                },
             });
         }
 

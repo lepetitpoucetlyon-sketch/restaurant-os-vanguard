@@ -126,7 +126,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'NF525_CERTIFICATE_DOWNLOADED',
     severity: 'medium',
-    details: { tenantId, fingerprint: fingerprint.slice(0, 16) } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, fingerprint: fingerprint.slice(0, 16) },
     timestamp: new Date(),
   });
 

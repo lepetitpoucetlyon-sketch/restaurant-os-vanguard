@@ -1,3 +1,27 @@
+/**
+ * ⚠️  SPLIT INACHEVÉ — À COMPLÉTER (voir TODO ci-dessous)
+ *
+ * Ce fichier est le seul importé par NexusEventBus :
+ *   `export type { NexusEvents } from './events/catalog'`
+ *
+ * Les fichiers common.events.ts / ops.events.ts / finance.events.ts /
+ * support.events.ts / system.events.ts existent mais NE SONT PAS câblés —
+ * leurs interfaces (COMMONEvents, OPSEvents…) sont des orphelins (2321 lignes
+ * mortes). Le split a été commencé dans le commit 2ddb8a053 mais pas terminé.
+ *
+ * TODO — Sprint dédié (1 PR, jamais inline) :
+ *   1. Extraire les events verticaux (hotel/health/auto/bakery/salon/retail)
+ *      vers `vertical.events.ts` (interface VERTICALEvents)
+ *   2. Valider que chaque fichier couvre exactement son domaine sans trou
+ *      (diff les interfaces contre ce fichier, vérifier les events orphelins)
+ *   3. Transformer ce fichier en pur agrégateur :
+ *        import type { COMMONEvents } from './common.events';
+ *        …
+ *        export type NexusEvents = COMMONEvents & OPSEvents & … & VERTICALEvents;
+ *   4. `npx tsc --noEmit` vert + 691 tests verts avant de merger.
+ *
+ * NE PAS toucher ce fichier sans faire les 4 étapes.
+ */
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface NexusEvents {

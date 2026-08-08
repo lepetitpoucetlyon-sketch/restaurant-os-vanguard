@@ -120,7 +120,7 @@ export function CashDrawerModal({
             };
             const path = `tenants/${tenantId}/cashDrawerSessions/${sessionId}`;
             const batch = Nexus.adapter.batch();
-            batch.set(path, newSession as unknown as JsonObject);
+            batch.set(path, newSession);
             await batch.commit();
             setSession(newSession);
             setOpeningInput("");
@@ -155,7 +155,7 @@ export function CashDrawerModal({
                 closingInMicrounits: actualMu,
                 collectedInMicrounits,
                 changeGivenInMicrounits,
-            } as unknown as JsonObject);
+            });
             await batch.commit();
 
             const diffMu = actualMu - theoreticalMu;

@@ -1,8 +1,9 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { 
-    JournalEntry, 
-    HygieneLabel, 
+import type { FiscalSeal } from '@/modules/finance/domain/schemas/finance';
+import {
+    JournalEntry,
+    HygieneLabel,
     HygieneLog,
     ReceptionLog,
     OilLog,
@@ -19,6 +20,12 @@ const _fiscalLedger = createProxyDomain<JournalEntry>('fiscalLedger');
 export const fiscalLedgerNodeAtom = _fiscalLedger.node;
 export const fiscalLedgerAtom = _fiscalLedger.data;
 export const fiscalLoadingAtom = _fiscalLedger.loading;
+
+// L7 Pattern E fix: fiscalSeals est distinct de fiscalLedger (JournalEntry).
+// NexusFiscalProvider.compliance.seals doit utiliser cet atome, pas fiscalLedgerNodeAtom.
+const _fiscalSeals = createProxyDomain<FiscalSeal>('fiscalSeals');
+export const fiscalSealsNodeAtom = _fiscalSeals.node;
+export const fiscalSealsAtom = _fiscalSeals.data;
 
 // GUARD / HACCP
 const _hygieneLabels = createProxyDomain<HygieneLabel>('hygieneLabels');

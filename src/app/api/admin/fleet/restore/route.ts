@@ -102,7 +102,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'TENANT_RESTORE_INITIATED',
     severity: 'high',
-    details: { tenantId, jobId, targetTimestamp, status } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, jobId, targetTimestamp, status },
     timestamp: new Date(),
   });
 

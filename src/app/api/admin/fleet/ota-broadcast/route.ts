@@ -78,7 +78,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: maintenanceMode ? 'OTA_MAINTENANCE_ON' : 'OTA_MAINTENANCE_OFF',
     severity: 'high',
-    details: { targetCount: targetIds.length, maintenanceMode, message } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { targetCount: targetIds.length, maintenanceMode, message },
     timestamp: new Date(),
   });
 

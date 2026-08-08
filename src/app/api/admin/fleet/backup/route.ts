@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
         action: 'backup_completed',
         module: 'fleet',
         userId: caller.uid,
-        details: { provider: provider.name, tenants: tenantIds.length, succeeded } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { provider: provider.name, tenants: tenantIds.length, succeeded },
         timestamp: new Date(),
     });
 

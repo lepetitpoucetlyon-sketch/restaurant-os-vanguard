@@ -81,7 +81,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'ROLLOUT_CREATED',
     severity: 'medium',
-    details: { featureKey, pilotCount: pilotTenantIds.length } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { featureKey, pilotCount: pilotTenantIds.length },
     timestamp: new Date(),
   });
 
@@ -127,7 +127,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: action === 'promote' ? 'ROLLOUT_PROMOTED' : 'ROLLOUT_ROLLEDBACK',
     severity: 'high',
-    details: { featureKey, affectedCount: allIds.length } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { featureKey, affectedCount: allIds.length },
     timestamp: new Date(),
   });
 

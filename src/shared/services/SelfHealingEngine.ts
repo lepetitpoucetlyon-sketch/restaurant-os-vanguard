@@ -77,6 +77,7 @@ export const SelfHealingEngine = {
     const currentState = store.get(atom);
     
     // 🧬 CRC CALCULATION
+    // as unknown as: T est un generic atom — calculateCRC attend SovereignData, frontière runtime légitime
     const currentHash = this.calculateCRC(currentState as unknown as import('@/shared/nexus-contract').SovereignData);
 
     if (currentHash === expectedHash && expectedHash !== 'FORCE_SYNC') return;

@@ -107,7 +107,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'UPGRADE_PUSHED',
     severity: breaking ? 'critical' : 'high',
-    details: { version, targetState, affectedCount: targetIds.length, breaking } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { version, targetState, affectedCount: targetIds.length, breaking },
     timestamp: new Date(),
   });
 

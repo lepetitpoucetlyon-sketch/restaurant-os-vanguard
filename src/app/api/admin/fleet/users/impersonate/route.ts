@@ -55,7 +55,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'IMPERSONATION_STARTED',
       severity: 'high',
-      details: { sessionId, operatorId, tenantId, userId, expiresAt } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { sessionId, operatorId, tenantId, userId, expiresAt },
       timestamp: new Date(),
     });
 
@@ -92,7 +92,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'IMPERSONATION_REVOKED',
     severity: 'high',
-    details: { sessionId, operatorId: caller.uid } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { sessionId, operatorId: caller.uid },
     timestamp: new Date(),
   });
 

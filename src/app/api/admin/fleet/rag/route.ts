@@ -77,7 +77,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             module: 'system',
             action: 'OTA_VERSION_PUSH',
             severity: 'medium',
-            details: { version, otaUrl: otaUrl ?? '' } as unknown as import('@/shared/nexus-contract').SovereignData,
+            details: { version, otaUrl: otaUrl ?? '' },
             timestamp: new Date(),
         });
         logger.info(`[FleetRAG] OTA push_version: ${version}`);
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             module: 'system',
             action: 'OTA_VERSION_ROLLBACK',
             severity: 'high',
-            details: { rollbackTo: version, otaUrl: otaUrl ?? '' } as unknown as import('@/shared/nexus-contract').SovereignData,
+            details: { rollbackTo: version, otaUrl: otaUrl ?? '' },
             timestamp: new Date(),
         });
         logger.info(`[FleetRAG] OTA rollback_version: ${version}`);

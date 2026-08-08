@@ -72,7 +72,7 @@ export class PiiVault {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/piiVault/${subjectId}`,
-            record as unknown as JsonObject
+            record
         );
     }
 
@@ -100,7 +100,7 @@ export class PiiVault {
                 encryptedPayload: '',
                 keyFingerprint: 'ERASED',
                 updatedAt: new Date().toISOString(),
-            } as unknown as JsonObject
+            }
         );
         return true;
     }

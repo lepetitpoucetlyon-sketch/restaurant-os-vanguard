@@ -173,7 +173,7 @@ class NexusEventBusClass {
                 eventName: event,
                 payload,
                 handlerId: h.id,
-                error: String(r.reason),
+                error: toError(r.reason).message,
                 failedAt: Date.now(),
                 attempts: 1,
                 nextRetryAt: Date.now() + 2000,

@@ -136,7 +136,7 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
     )[0];
 
     const dataSnapshot = CryptoService.canonicalStringify(
-      journalEntry as unknown as import('@/shared/nexus-contract').SovereignData
+      journalEntry
     );
     const seal = await FiscalEngine.sealEntry(
       jeId,

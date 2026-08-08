@@ -59,7 +59,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'CRON_NF525_AUDIT',
       severity: anomalies > 0 ? 'critical' : 'low',
-      details: { tenantsAudited: tenantIds.length, anomaliesCount: anomalies } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantsAudited: tenantIds.length, anomaliesCount: anomalies },
       timestamp: new Date(),
     });
 

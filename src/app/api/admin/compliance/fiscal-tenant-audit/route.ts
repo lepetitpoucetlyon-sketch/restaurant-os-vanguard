@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
             action: 'fiscal_tenant_audit_accessed',
             module: 'fleet',
             userId: caller.uid,
-            details: { tenantId, from: from ?? '', to: to ?? '', journalCount: journalEntries.length, sealCount: fiscalSeals.length } as unknown as import('@/shared/nexus-contract').SovereignData,
+            details: { tenantId, from: from ?? '', to: to ?? '', journalCount: journalEntries.length, sealCount: fiscalSeals.length },
             timestamp: new Date(),
         });
 

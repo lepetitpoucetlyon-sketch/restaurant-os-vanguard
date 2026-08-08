@@ -24,7 +24,7 @@ export const FoodDonationService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/foodDonations/${id}`,
-            entry as unknown as import('@/shared/nexus-contract').SovereignData
+            entry
         );
 
         empireAudit.log({
@@ -38,7 +38,7 @@ export const FoodDonationService = {
                 recipient: donation.recipientOrg,
                 itemCount: donation.items.length,
                 totalValueInMicrounits,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
 
         return entry;

@@ -111,7 +111,7 @@ export class FleetTelemetryService {
         module: 'fleet',
         action: 'FLEET_HEALTH_ALERT',
         severity: alert.severity as 'critical' | 'high',
-        details: alert as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: alert,
         instanceId: site.id,
         timestamp: new Date(now),
       });

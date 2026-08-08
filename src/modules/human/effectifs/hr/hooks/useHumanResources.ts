@@ -79,7 +79,7 @@ export function useHumanResources() {
                 const days = (request as JsonObject).daysCount || (request as JsonObject).days || 1;
                 const { Nexus } = await import('@/lib/nexus/NexusAdapter');
                 const tenantId = (request as JsonObject).tenantId;
-                const balanceId = (userBalance as unknown as JsonObject).id || userBalance.userId;
+                const balanceId = (userBalance as { id?: string }).id || userBalance.userId;
                 const balancePath = tenantId ? `tenants/${tenantId}/leaveBalances/${balanceId}` : `leaveBalances/${balanceId}`;
                 await Nexus.adapter.update(balancePath, {
                     remaining: Math.max(0, (userBalance.remaining || 0) - (days as number)),

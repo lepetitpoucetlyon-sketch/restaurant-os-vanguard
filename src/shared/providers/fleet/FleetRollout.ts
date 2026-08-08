@@ -33,7 +33,7 @@ export const FleetRollout = {
                     const docId = Nexus.adapter.generateId(`tenants/${targetId}/${collection}`);
                     await Nexus.adapter.set(
                         `tenants/${targetId}/${collection}/${docId}`,
-                        { ...(value as JsonObject), id: docId, sourceRef: `${sourceTenantId}/${key}` } as unknown as import('@/shared/nexus-contract').SovereignData
+                        { ...(value as JsonObject), id: docId, sourceRef: `${sourceTenantId}/${key}` }
                     );
                 }
 
@@ -54,7 +54,7 @@ export const FleetRollout = {
                 targets: targetTenantIds,
                 successCount: results.filter(r => r.success).length,
                 failCount: results.filter(r => !r.success).length,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
 
         return results;

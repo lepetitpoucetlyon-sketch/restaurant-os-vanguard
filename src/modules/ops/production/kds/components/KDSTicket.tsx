@@ -33,7 +33,6 @@ import {
     arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { JsonObject } from "@/shared/types/json";
 
 import { isTicketWarning, hasAllergens, formatElapsed, timerColorClass } from './kds-ticket/kdsTicketHelpers';
 export { hasAllergens };
@@ -175,7 +174,7 @@ export function KDSTicket({
         if (!fullOrder) return {};
         const grouped: Record<string, import('@/domain/schemas/pos').CartItem[]> = {};
         for (const item of fullOrder.items) {
-            const seat = (item as JsonObject).seatNumber as string || 'Partagé';
+            const seat = (item as { seatNumber?: string }).seatNumber || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
             grouped[seat].push(item as unknown as import('@/domain/schemas/pos').CartItem);
         }
@@ -490,11 +489,11 @@ export function KDSTicket({
                                             </div>
                                             {items.map((cItem, i: number) => {
                                                 const station = resolveStation(cItem.name as string);
-                                                // Highlight the item if it belongs to the current ticket
-                                                const cItemAny = cItem as unknown as JsonObject;
-                                                const isActiveStation = ticket.items.some(ti => { const tiAny = ti as unknown as JsonObject; return (tiAny.cartId || ti.name) === (cItemAny.cartId || cItemAny.name); });
+                                                // L7 Pattern B: cartId et name sont des propriétés de CartItem — cast supprimé
+                                                const cItemKey = (cItem as { cartId?: string }).cartId || cItem.name;
+                                                const isActiveStation = ticket.items.some(ti => ((ti as { cartId?: string }).cartId || ti.name) === cItemKey);
                                                 return (
-                                                    <div key={`${cItemAny.cartId || cItemAny.name}-${i}`}
+                                                    <div key={`${cItemKey}-${i}`}
                                                          className={cn(
                                                              "flex items-center justify-between p-2 rounded-lg border",
                                                              isActiveStation 

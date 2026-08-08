@@ -49,7 +49,7 @@ export class ErasureService {
                     customerName: '[EFFACÉ]',
                     customerEmail: undefined,
                     customerPhone: undefined,
-                } as unknown as JsonObject);
+                });
             }
 
             if (docs.length > 0) {

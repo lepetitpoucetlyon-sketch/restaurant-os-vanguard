@@ -40,7 +40,7 @@ export const WaitlistService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/waitlist/${id}`,
-            entry as unknown as import('@/shared/nexus-contract').SovereignData
+            entry
         );
 
         return entry;

@@ -1,11 +1,15 @@
 "use client";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { SupportTicket } from '@/domain/schemas';
 
 export function useSupportTickets() {
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Ref pour lire l'état courant dans le setInterval sans le mettre en dep de l'effect
+  const ticketsRef = useRef<SupportTicket[]>(tickets);
+  ticketsRef.current = tickets;
 
   const fetchTickets = useCallback(async () => {
     try {
@@ -24,13 +28,17 @@ export function useSupportTickets() {
   useEffect(() => {
     fetchTickets();
 
-    // Poll every 15s if any ticket is in analyzing status
-    const hasAnalyzing = tickets.some(t => t.status === 'analyzing' || t.status === 'new');
-    if (!hasAnalyzing) return;
+    // Poll toutes les 15s uniquement si des tickets sont en cours d'analyse.
+    // On lit ticketsRef pour éviter d'ajouter `tickets` aux deps (boucle de recréation d'interval).
+    const timer = setInterval(() => {
+      const hasAnalyzing = ticketsRef.current.some(
+        t => t.status === 'analyzing' || t.status === 'new'
+      );
+      if (hasAnalyzing) fetchTickets();
+    }, 15000);
 
-    const timer = setInterval(fetchTickets, 15000);
     return () => clearInterval(timer);
-  }, [fetchTickets, tickets]);
+  }, [fetchTickets]);
 
   const submitTicket = async (description: string, screenshotUrl?: string) => {
     const res = await fetch('/api/tenant/support/tickets', {

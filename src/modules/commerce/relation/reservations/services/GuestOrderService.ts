@@ -44,7 +44,7 @@ export const GuestOrderService = {
         GuestOrderSchema.parse(order);
         await Nexus.adapter.set(
             `tenants/${tenantId}/guestOrders/${id}`,
-            order as unknown as import('@/shared/nexus-contract').SovereignData
+            order
         );
         return order;
     },

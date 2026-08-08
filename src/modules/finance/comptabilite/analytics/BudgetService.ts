@@ -65,7 +65,7 @@ export const BudgetService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/budgetLines/${id}`,
-            line as unknown as import('@/shared/nexus-contract').SovereignData
+            line
         );
 
         return line;

@@ -240,14 +240,14 @@ const entry = JournalEntrySchema.parse(snap.data());
 | **L0** ✅ | `json.ts` + `toError.ts` — fondation | nul | `tsc` vert |
 | **L0b** ✅ | `withVerticalOverride<P extends object>` + `StatCard` sans cast | nul | `tsc` vert |
 | **L0c** ✅ | 9 non-null assertions `!` → guards propres | faible | `tsc` vert |
-| **L1** | CAT-A catch (~56) — remplacer `String(error)` par `toError(e).message` | faible | `tsc` vert |
-| **L2** | CAT-C sous-cas 1 — Zod parse là où schéma existe | moyen | `tsc` vert |
-| **L3** | CAT-B — JsonObject + interfaces dédiées | moyen | `tsc` vert |
-| **L4** | `@ts-ignore` (Commerce) + `@ts-expect-error` (Finance) — corriger cause | élevé | `tsc` vert |
-| **L5** | 5 `any` restants dans `src/modules/finance/` | élevé | `tsc` vert |
-| **L6** | CAT-D adapters + CAT-E events | élevé | `tsc` vert |
-| **L7** | CAT-C sous-cas 2 — fix types sources | élevé | `tsc` vert |
-| **L8** | Re-scan complet, documenter `unknown` légitimes restants | — | `tsc` vert |
+| **L1** ✅ | CAT-A catch (~56) — remplacer `String(error)` par `toError(e).message` | faible | `tsc` vert |
+| **L2** ✅ | CAT-C sous-cas 1 — Zod parse là où schéma existe | moyen | `tsc` vert |
+| **L3** ✅ | CAT-B — JsonObject + interfaces dédiées | moyen | `tsc` vert |
+| **L4** ✅ | `@ts-ignore` (Commerce) + `@ts-expect-error` (Finance) — corriger cause | élevé | `tsc` vert |
+| **L5** ✅ | 5 `any` restants dans `src/modules/finance/` | élevé | `tsc` vert |
+| **L6** ✅ | CAT-D adapters + CAT-E events | élevé | `tsc` vert |
+| **L7** ✅ | CAT-C sous-cas 2 — fix types sources (A:86+, B:16, C:4, D:2, E:1 bug) | élevé | `tsc` vert |
+| **L8** ✅ | Re-scan + doc légitimes + suppression obsolètes post-E | — | `tsc` vert |
 
 **Règle absolue** : 1 lot = 1 commit. `tsc --noEmit` vert avant merge.
 
@@ -262,8 +262,9 @@ const entry = JournalEntrySchema.parse(snap.data());
 | Non-null `!` (prod) | 9 | 0 |
 | `@ts-ignore` | 1 | 0 |
 | `@ts-expect-error` | 1 | 0 |
-| `unknown` non justifiés | ~500 | 0 |
-| `unknown` légitimes documentés | non documentés | tous commentés |
+| `as unknown as` non justifiés | ~500 | ~136 non documentés (frontières) |
+| `as unknown as` documentés `// as unknown as:` | 0 | 7 commentés |
+| `as unknown as` éliminés (L7+L8) | 0 | ~109 (86+16+4+2+1) |
 | `tsc --noEmit` | vert | vert (invariant) |
 
 ---

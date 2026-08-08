@@ -83,7 +83,7 @@ export const Auto86Service = {
                     eightySixed,
                     restored,
                     criticalItems: Array.from(criticalItems.values()).map(c => c.stockItemName),
-                } as unknown as import('@/shared/nexus-contract').SovereignData,
+                },
             });
             logger.info(`[Auto86] 86'd ${eightySixed.length} products, restored ${restored.length}`);
         }

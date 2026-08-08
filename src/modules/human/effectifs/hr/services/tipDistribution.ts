@@ -129,7 +129,7 @@ export const TipDistributionService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/tipPools/${id}`,
-            pool as unknown as import('@/shared/nexus-contract').SovereignData
+            pool
         );
 
         empireAudit.log({
@@ -141,7 +141,7 @@ export const TipDistributionService = {
                 rule,
                 totalEur: totalInMicrounits / 1_000_000,
                 staffCount: staff.length,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
 
         return pool;

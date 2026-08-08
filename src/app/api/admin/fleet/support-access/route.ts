@@ -101,7 +101,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                     module: 'fleet',
                     action: 'SUPPORT_ACCESS_REQUESTED',
                     severity: 'medium',
-                    details: { tenantId, requestId, durationHours } as unknown as import('@/shared/nexus-contract').SovereignData,
+                    details: { tenantId, requestId, durationHours },
                     timestamp: new Date(),
                 });
 
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                     module: 'fleet',
                     action: 'SUPPORT_ACCESS_REVOKED',
                     severity: 'high',
-                    details: { tenantId } as unknown as import('@/shared/nexus-contract').SovereignData,
+                    details: { tenantId },
                     timestamp: new Date(),
                 });
 

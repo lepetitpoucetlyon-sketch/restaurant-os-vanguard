@@ -41,7 +41,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
         setStep('deploying');
         try {
             const newInstance = await ProvisioningEngine.provisionNewInstance(formData);
-            onSuccess(newInstance as unknown as import('@/shared/nexus-contract').SovereignData);
+            onSuccess(newInstance);
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Unknown Deployment Error';
             setError(message);

@@ -80,7 +80,7 @@ export const FoodCostRecompute = {
                         recipe: a.recipeName,
                         delta: `${a.deltaPercent}%`,
                     })),
-                } as unknown as import('@/shared/nexus-contract').SovereignData,
+                },
             });
             logger.warn(`[FoodCost] ${alerts.length} recipes with margin alert (>${ALERT_THRESHOLD_PERCENT}% change)`);
         }

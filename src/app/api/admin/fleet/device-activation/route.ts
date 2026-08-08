@@ -60,7 +60,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'DEVICE_TOKEN_GENERATED',
     severity: 'medium',
-    details: { tenantId, deviceType, tokenId } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, deviceType, tokenId },
     timestamp: new Date(),
   });
 

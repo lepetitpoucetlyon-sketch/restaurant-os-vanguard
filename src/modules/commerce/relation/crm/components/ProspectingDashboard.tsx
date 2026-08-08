@@ -83,7 +83,7 @@ export function ProspectingDashboard() {
         setTokens({
             brandName:    input.name,
             primaryColor: input.primaryColor ?? undefined,
-            surfaceBg:    (theme as unknown as JsonObject).backgroundColor as string ?? '#0A0A0A',
+            surfaceBg:    (theme as { backgroundColor?: string }).backgroundColor as string ?? '#0A0A0A',
         });
         setPhase('preview_ready');
     };

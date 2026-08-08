@@ -40,7 +40,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'SHADOW_MODE_ACTIVATED',
       severity: 'critical',
-      details: { tenantId, mode, reason } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, mode, reason },
       timestamp: new Date(),
     });
 

@@ -62,7 +62,7 @@ export const PurchaseApprovalService = {
             details: {
                 amountCents,
                 approved,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
     },
 };

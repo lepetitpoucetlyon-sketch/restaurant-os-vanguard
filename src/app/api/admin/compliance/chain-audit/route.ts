@@ -78,7 +78,7 @@ async function runChainAudit(tenantId: string): Promise<ChainAuditResult> {
       module: 'fleet',
       action: 'NF525_CHAIN_BREACH',
       severity: 'high',
-      details: { tenantId, auditId, breachCount: breaches.length } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, auditId, breachCount: breaches.length },
       timestamp: new Date(),
     });
     logger.error(`[ChainAudit] BREACH détecté sur ${tenantId} — ${breaches.length} entrée(s) compromise(s)`);

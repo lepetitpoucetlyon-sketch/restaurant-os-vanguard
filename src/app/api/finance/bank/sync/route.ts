@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
 
                 // fin-6 : scellement NF525
                 const dataSnapshot = CryptoService.canonicalStringify(
-                    journalEntry as unknown as import('@/shared/nexus-contract').SovereignData
+                    journalEntry
                 );
                 const seal = await FiscalEngine.sealEntry(jeId, journalEntry as Record<string, string | number | boolean | null | undefined | object>, { lastSeal });
                 batch.set(`tenants/${tenantId}/fiscalSeals/${seal.id}`, {

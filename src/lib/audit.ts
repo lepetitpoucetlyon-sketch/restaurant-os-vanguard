@@ -14,7 +14,10 @@ export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'ha
 export interface AuditEvent {
     module: AuditModule;
     action: string;
-    details?: import('@/shared/nexus-contract').SovereignData;
+    // L7: Record<string, unknown> accepte les objets littéraux directement sans cast.
+    // SovereignData = SovereignMap = { [key: string]: SovereignField } refusait les
+    // objets typés nominalement → 86 × `as unknown as SovereignData` dans le codebase.
+    details?: Record<string, unknown>;
     severity?: AuditSeverity;
     userId?: string;
     timestamp: Date;

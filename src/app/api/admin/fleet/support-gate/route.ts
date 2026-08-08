@@ -73,7 +73,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'SUPPORT_GATE_CREATED',
     severity: 'high',
-    details: { gateId, action, targetTenantId, requestedBy } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { gateId, action, targetTenantId, requestedBy },
     timestamp: new Date(),
   });
 
@@ -109,7 +109,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: decision === 'approved' ? 'SUPPORT_GATE_APPROVED' : 'SUPPORT_GATE_REJECTED',
     severity: 'high',
-    details: { gateId, action: gate.action, reviewedBy } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { gateId, action: gate.action, reviewedBy },
     timestamp: new Date(),
   });
 

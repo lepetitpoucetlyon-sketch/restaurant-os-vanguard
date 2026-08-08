@@ -3,6 +3,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { toMicrounits } from '@/domain/schemas/primitives';
 import type { Order } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
@@ -91,14 +92,21 @@ export function registerStockRestitutionHandler(): () => void {
 
       // 4. (P01-I) Création de l'avoir comptable
       try {
-        const cartItemsForRefund = order.items.map(i => ({
+        // L7 Pattern D: cartId synthétique + champs brandés → cast supprimé.
+        // quantity négative = avoir comptable (CartLine.quantity.min(1) est une contrainte Zod runtime, pas TypeScript).
+        const cartItemsForRefund: CartItem[] = order.items.map(i => ({
+          cartId: `refund-${orderId}-${i.productId}`,
           productId: i.productId,
           name: i.name,
-          quantity: -1 * (i.quantity ?? 1), // Quantité négative = Avoir
-          unitPriceInMicrounits: i.unitPriceInMicrounits ?? 0,
-          categoryId: i.categoryId,
-          taxRate: i.taxRate
-        })) as unknown as CartItem[];
+          quantity: -1 * (i.quantity ?? 1),
+          unitPriceInMicrounits: i.unitPriceInMicrounits,
+          categoryId: i.categoryId ?? '',
+          taxRate: i.taxRate,
+          discountInMicrounits: i.discountInMicrounits ?? toMicrounits(0),
+          modifiers: (i.modifiers ?? []).filter(
+            (m): m is Extract<typeof m, { id: string }> => typeof m === 'object' && m !== null
+          ),
+        }));
 
         await FinancialNexusBridge.processOrder({
           cartItems: cartItemsForRefund,

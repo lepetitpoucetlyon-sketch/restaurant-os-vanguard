@@ -111,7 +111,7 @@ export const RecallService = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/recalls/${recallRecord.id}`,
-            recallRecord as unknown as import('@/shared/nexus-contract').SovereignData
+            recallRecord
         );
 
         empireAudit.log({
@@ -126,7 +126,7 @@ export const RecallService = {
                 reason,
                 affectedOrders: impact.orderLines.length,
                 affectedCovers: impact.totalCovers,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
 
         const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');

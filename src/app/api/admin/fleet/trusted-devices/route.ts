@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
         action: 'trusted_device_registered',
         module: 'fleet',
         userId: caller.uid,
-        details: { deviceId, name: device.name, role: device.role, ownerUid: device.ownerUid } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { deviceId, name: device.name, role: device.role, ownerUid: device.ownerUid },
         timestamp: new Date(),
     });
 
@@ -144,7 +144,7 @@ export async function PATCH(request: NextRequest) {
         action: 'trusted_device_updated',
         module: 'fleet',
         userId: caller.uid,
-        details: { deviceId: body.deviceId, role: updates.role ?? '', name: updates.name ?? '' } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { deviceId: body.deviceId, role: updates.role ?? '', name: updates.name ?? '' },
         timestamp: new Date(),
     });
 
@@ -172,7 +172,7 @@ export async function DELETE(request: NextRequest) {
         action: 'trusted_device_revoked',
         module: 'fleet',
         userId: caller.uid,
-        details: { deviceId, name: device.name, role: device.role, ownerUid: device.ownerUid } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { deviceId, name: device.name, role: device.role, ownerUid: device.ownerUid },
         timestamp: new Date(),
     });
 

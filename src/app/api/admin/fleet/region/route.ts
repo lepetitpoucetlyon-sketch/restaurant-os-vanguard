@@ -71,7 +71,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     module: 'fleet',
     action: 'REGION_ASSIGNED',
     severity: 'medium',
-    details: { tenantId, region, firestoreId: regionMeta.id } as unknown as import('@/shared/nexus-contract').SovereignData,
+    details: { tenantId, region, firestoreId: regionMeta.id },
     timestamp: new Date(),
   });
 

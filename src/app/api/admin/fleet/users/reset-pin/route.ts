@@ -67,7 +67,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         module: 'fleet',
         action: 'MCC_PIN_RESET',
         severity: 'high',
-        details: { tenantId, userId, email: existing.email ?? '—' } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { tenantId, userId, email: existing.email ?? '—' },
         timestamp: new Date(),
     });
 

@@ -47,7 +47,7 @@ export const AggregatorBridge = {
 
         await Nexus.adapter.set(
             `tenants/${tenantId}/aggregatorOrders/${id}`,
-            order as unknown as import('@/shared/nexus-contract').SovereignData
+            order
         );
 
         empireAudit.log({
@@ -59,7 +59,7 @@ export const AggregatorBridge = {
                 externalOrderId: externalOrder.externalOrderId,
                 totalEur: externalOrder.totalInMicrounits / 1_000_000,
                 commissionPct,
-            } as unknown as import('@/shared/nexus-contract').SovereignData,
+            },
         });
 
         return order;

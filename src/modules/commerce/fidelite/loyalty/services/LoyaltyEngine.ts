@@ -39,7 +39,7 @@ export const LoyaltyEngine = {
         LoyaltyAccountSchema.parse(account);
         await Nexus.adapter.set(
             `tenants/${tenantId}/loyaltyAccounts/${id}`,
-            account as unknown as import('@/shared/nexus-contract').SovereignData
+            account
         );
         return account;
     },
@@ -113,7 +113,7 @@ export const LoyaltyEngine = {
         LoyaltyTransactionSchema.parse(tx);
         await Nexus.adapter.set(
             `tenants/${tenantId}/loyaltyTransactions/${id}`,
-            tx as unknown as import('@/shared/nexus-contract').SovereignData
+            tx
         );
     },
 };

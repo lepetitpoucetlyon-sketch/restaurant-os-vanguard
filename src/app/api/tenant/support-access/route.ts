@@ -76,7 +76,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
             module: 'fleet',
             action: 'SUPPORT_ACCESS_APPROVED',
             severity: 'medium',
-            details: { tenantId, requestId, supportAccessUntil, approvedBy: caller.uid } as unknown as import('@/shared/nexus-contract').SovereignData,
+            details: { tenantId, requestId, supportAccessUntil, approvedBy: caller.uid },
             timestamp: now,
         });
 
@@ -95,7 +95,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
         module: 'fleet',
         action: 'SUPPORT_ACCESS_DENIED',
         severity: 'low',
-        details: { tenantId, requestId, deniedBy: caller.uid } as unknown as import('@/shared/nexus-contract').SovereignData,
+        details: { tenantId, requestId, deniedBy: caller.uid },
         timestamp: now,
     });
 

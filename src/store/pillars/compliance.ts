@@ -6,6 +6,8 @@ export {
     fiscalLedgerNodeAtom,     // COMPLIANCE
     fiscalLedgerAtom,         // COMPLIANCE
     fiscalLoadingAtom,        // COMPLIANCE
+    fiscalSealsNodeAtom,      // COMPLIANCE — L7 Pattern E: FiscalSeal distinct de JournalEntry
+    fiscalSealsAtom,          // COMPLIANCE
     hygieneLabelsNodeAtom,    // COMPLIANCE
     hygieneLabelsAtom,        // COMPLIANCE
     maintenanceLogsNodeAtom,  // COMPLIANCE

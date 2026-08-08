@@ -150,7 +150,7 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
     taxBreakdown: ticketZ.taxBreakdown,
     ordersCount: ticketZ.ordersCount,
     date,
-  } as unknown as SovereignData);
+  });
 
   // Scellement NF525 : écrit JournalEntry + FiscalSeal + clôture TicketZ atomiquement.
   // Le Ticket Z est marqué closed: true dans la MÊME transaction que le sceau — si

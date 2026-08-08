@@ -117,7 +117,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       module: 'fleet',
       action: 'DNS_PROVISIONED',
       severity: 'medium',
-      details: { tenantId, domain, provider } as unknown as import('@/shared/nexus-contract').SovereignData,
+      details: { tenantId, domain, provider },
       timestamp: new Date(),
     });
 

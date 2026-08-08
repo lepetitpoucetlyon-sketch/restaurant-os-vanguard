@@ -141,7 +141,7 @@ export const OfflineMasteryEngine = {
                 const { Nexus } = await import('@/lib/nexus/NexusAdapter');
                 await Nexus.adapter.set(
                     `tenants/${tenantId}/${op.collection}/${op.targetId}`,
-                    op.payload as unknown as import('@/shared/nexus-contract').SovereignData
+                    op.payload
                 );
 
                 await db.syncQueue.delete(op.id!);
