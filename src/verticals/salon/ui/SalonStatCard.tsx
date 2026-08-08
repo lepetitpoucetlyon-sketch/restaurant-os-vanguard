@@ -17,13 +17,15 @@ interface SalonStatCardProps {
   className?: string;
 }
 
+// Utiliser les CSS variables du design system — pas de hex hardcodé.
+// Fallback hex uniquement pour brand (couleur tenant personnalisable → pas de token fixe).
 const intentAccent: Record<StatCardIntent, string> = {
   brand:   'var(--action-primary, #D4A5C7)',
-  success: '#10b981',
-  warning: '#f59e0b',
-  danger:  '#ef4444',
-  info:    '#9B59B6',
-  neutral: '#94a3b8',
+  success: 'var(--status-success, #10b981)',
+  warning: 'var(--status-warning, #f59e0b)',
+  danger:  'var(--status-danger, #ef4444)',
+  info:    'var(--action-secondary, #9B59B6)',
+  neutral: 'var(--text-muted, #94a3b8)',
 };
 
 /**

@@ -26,7 +26,10 @@ function checkAdminApiGate(request: NextRequest, url: string): NextResponse | nu
   if (!url.startsWith('/api/admin/')) return null;
   if (url.startsWith('/api/admin/git/') && process.env.NODE_ENV === 'production') return new NextResponse(null, { status: 404 });
   const auth = request.headers.get('authorization');
-  if (!auth || !auth.startsWith('Bearer ')) return new NextResponse(null, { status: 404 });
+  // Vérifie la présence ET la valeur du token contre MCC_ADMIN_SECRET.
+  // Retourne 404 (pas 401) pour ne pas révéler l'existence de la route.
+  const secret = process.env.MCC_ADMIN_SECRET;
+  if (!secret || !auth || auth !== `Bearer ${secret}`) return new NextResponse(null, { status: 404 });
   return null;
 }
 

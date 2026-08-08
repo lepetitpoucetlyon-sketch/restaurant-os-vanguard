@@ -17,13 +17,15 @@ interface GarageStatCardProps {
   className?: string;
 }
 
+// Utiliser les CSS variables du design system — pas de hex hardcodé.
+// Fallback hex uniquement pour brand (couleur tenant personnalisable → pas de token fixe).
 const intentAccent: Record<StatCardIntent, string> = {
   brand:   'var(--action-primary, #2C3E50)',
-  success: '#10b981',
-  warning: '#f59e0b',
-  danger:  '#E74C3C',
-  info:    '#3498DB',
-  neutral: '#64748B',
+  success: 'var(--status-success, #10b981)',
+  warning: 'var(--status-warning, #f59e0b)',
+  danger:  'var(--status-danger, #E74C3C)',
+  info:    'var(--action-secondary, #3498DB)',
+  neutral: 'var(--text-muted, #64748B)',
 };
 
 /**
@@ -51,7 +53,7 @@ export function GarageStatCard({
       animate={{ opacity: 1, y: 0 }}
       className={cn(
         "bg-bg-secondary border border-border rounded-sm transition-all duration-200 hover:border-[color:var(--action-primary)] group",
-        isWarning && "border-[#E74C3C]/40",
+        isWarning && "border-status-danger/40",
         isCompact ? "p-4" : variant === 'large' ? "p-8" : "p-6",
         className
       )}
@@ -84,7 +86,7 @@ export function GarageStatCard({
           <div className={cn(
             "font-mono text-[10px] font-bold tracking-wider",
             trend.direction === 'up'   && "text-status-success",
-            trend.direction === 'down' && "text-[#E74C3C]",
+            trend.direction === 'down' && "text-status-danger",
             trend.direction === 'neutral' && "text-text-muted"
           )}>
             {trend.direction === 'up' ? '▲' : trend.direction === 'down' ? '▼' : '—'} {trend.value}%
