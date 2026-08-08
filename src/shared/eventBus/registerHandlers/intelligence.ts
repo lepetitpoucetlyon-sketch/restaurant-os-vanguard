@@ -14,6 +14,7 @@ import { registerSalesDataReadyHandler } from '../handlers/SalesDataReadyHandler
 import { registerAnomalyDetectedHandler } from '../handlers/AnomalyDetectedHandler';
 import { registerMenuEngineeringHandler } from '../handlers/MenuEngineeringHandler';
 import { registerMenu86IntelligenceHandler } from '../handlers/Menu86IntelligenceHandler';
+import { registerBCGActionSuggestionHandler } from '../handlers/BCGActionSuggestionHandler';
 
 export function registerIntelligenceHandlers(): Array<() => void> {
   return [
@@ -35,5 +36,6 @@ export function registerIntelligenceHandlers(): Array<() => void> {
     registerMenuEngineeringHandler(),
     // ── I4 : Stock zéro → recalcul menu 86 ───────────────────────────────
     registerMenu86IntelligenceHandler(),
+    registerBCGActionSuggestionHandler(),
   ];
 }

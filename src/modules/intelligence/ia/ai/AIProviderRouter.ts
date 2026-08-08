@@ -25,6 +25,7 @@ export interface AIResponse {
 export interface AIProviderOptions {
   maxTokens?: number;
   temperature?: number;
+  contextScope?: { userId?: string; scope?: string };
 }
 
 export class AIProviderRouter {
@@ -38,6 +39,14 @@ export class AIProviderRouter {
   ): Promise<AIResponse> {
     if (this.geminiKey) {
       try {
+        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        NexusEventBus.emit('ai.query_received', {
+          v: 1,
+          tenantId,
+          userId: opts.contextScope?.userId ?? 'system_oracle',
+          query: prompt.slice(0, 200),
+          contextScope: opts.contextScope?.scope ?? 'general',
+        });
         return await this.callGemini(prompt, opts);
       } catch (err) {
         logger.warn(`[AIRouter] Gemini indisponible (${toError(err).message.slice(0, 80)}) — fallback Claude`);

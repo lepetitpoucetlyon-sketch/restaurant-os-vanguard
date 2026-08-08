@@ -365,6 +365,11 @@ export interface COMMONEvents {
     tenantId: string;
     reservationId: string;
     customerId?: string;
+    customerName?: string;
+    covers?: number;
+    date?: string;
+    time?: string;
+    chargedAmount?: number;
   };
 
   'reservation.large_group': {

@@ -11,12 +11,20 @@ import { BankConnectionExpiredHandler } from '../handlers/BankConnectionExpiredH
 import { registerFinanceNf525Handlers } from './finance-nf525';
 import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
 import { registerCompMealHandler } from '../handlers/CompMealHandler';
+import { registerCashCountReconciliationHandler } from '../handlers/CashCountReconciliationHandler';
+import { registerFoodCostImpactedHandler } from '../handlers/FoodCostImpactedHandler';
+import { registerDailyDigestHandler } from '../handlers/DailyDigestHandler';
+import { registerDigitalReceiptHandler } from '../handlers/DigitalReceiptHandler';
 
 export function registerFinanceHandlers(): Array<() => void> {
   return [
     ...registerFinanceNf525Handlers(),
     registerPaymentLedgerHandler(),
     registerCompMealHandler(),
+    registerCashCountReconciliationHandler(),
+    registerFoodCostImpactedHandler(),
+    registerDailyDigestHandler(),
+    registerDigitalReceiptHandler(),
     registerSupplierInvoiceLedgerHandler(),
     registerSepaExportHandler(),
     registerBankSyncAuditHandler(),

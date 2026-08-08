@@ -112,6 +112,19 @@ export function useHumanResources() {
             createdAt: now,
             updatedAt: now
         } as unknown as LeaveRequest;
+
+        // Émission EventBus (P1-3.2)
+        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        const reqObj = request as unknown as Record<string, unknown>;
+        NexusEventBus.emitDurable('hr.absence_declared', {
+            v: 1,
+            tenantId: (reqObj.tenantId as string) || 'restaurant-os',
+            userId: (reqObj.userId as string) || (reqObj.employeeId as string) || 'emp_default',
+            absenceType: (reqObj.type === 'sick' ? 'sick' : reqObj.type === 'paid' ? 'vacation' : 'unjustified'),
+            startDate: (reqObj.startDate as string) || now.split('T')[0],
+            endDate: reqObj.endDate as string,
+        }).catch(() => { /* non blocking */ });
+
         return leaveForge.mutate('SET', id, toSovereignData(newRequest));
     }, [leaveForge]);
 

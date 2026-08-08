@@ -1,6 +1,15 @@
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
-
 export interface SYSTEMEvents {
+  "mcc.feature_flag_toggled": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    flagKey: string;
+    enabled: boolean;
+    rolloutPercentage: number;
+    tenantIds: string[];
+    updatedBy: string;
+  };
+
   "integration.reservation_received": {
     v: 1;
     isSimulation?: boolean;

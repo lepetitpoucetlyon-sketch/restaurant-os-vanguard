@@ -15,6 +15,7 @@ import { useTables } from '../../../../ops/providers/hooks/floorHooks';
 import { useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
 
@@ -85,6 +86,15 @@ async function recordNoShow(
 ) {
     await updateReservation(reservationId, { status: "no_show", noShowAt: Date.now() } as Partial<Reservation> & { noShowAt: number });
     const res = reservations.find((r: Reservation) => r.id === reservationId);
+
+    // Émission EventBus (P0-1.8 & 7.3)
+    await NexusEventBus.emitDurable('reservation.no_show', {
+        v: 1,
+        tenantId,
+        reservationId,
+        customerId: res?.customerId,
+    });
+
     if (!res?.customerId) return;
     const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
     if (!crmRecord) return;
@@ -94,10 +104,20 @@ async function recordNoShow(
 
 async function cancelReservationById(
     id: string,
+    tenantId: string,
     updateReservation: (id: string, data: Partial<Reservation> & Record<string, unknown>) => Promise<void>
 ): Promise<void> {
     try {
         await updateReservation(id, { status: "cancelled", cancelledAt: new Date().toISOString() } as Partial<Reservation> & { cancelledAt: string });
+        
+        // Émission EventBus (P0-1.8)
+        await NexusEventBus.emitDurable('reservation.cancelled', {
+            v: 1,
+            tenantId,
+            reservationId: id,
+            reason: 'Annulation client',
+        });
+
         toast.success("Réservation annulée");
     } catch { toast.error("Erreur lors de l'annulation"); }
 }
@@ -109,12 +129,17 @@ async function syncFloorPlan(reservations: Reservation[], tenantId: string) {
     const updates: Array<Promise<void>> = [];
     for (const res of reservations) {
         if (!res.tableId || res.status === "cancelled" || res.status === "no_show") continue;
-        const newStatus = computeTableStatus(res, now, in15Min);
-        if (newStatus) {
-            updates.push(Nexus.adapter.update(`tenants/${tenantId}/ops_nodes/${res.tableId}`, { status: newStatus, updatedAt: ts }));
+        const resTime = new Date(`${res.date}T${res.time || "12:00"}`).getTime();
+        const path = `tenants/${tenantId}/ops_tables/${res.tableId}`;
+        if (isNaN(resTime)) continue;
+
+        if (res.status === "seated") {
+            updates.push(Nexus.adapter.update(path, { isOccupied: true, activeReservationId: res.id, status: "occupied", updatedAt: ts }));
+        } else if (resTime >= now && resTime <= in15Min) {
+            updates.push(Nexus.adapter.update(path, { status: "reserved", activeReservationId: res.id, updatedAt: ts }));
         }
     }
-    await Promise.all(updates);
+    await Promise.allSettled(updates);
 }
 
 export function useReservationsPage() {
@@ -198,16 +223,29 @@ export function useReservationsPage() {
         if (!cancelResPerm.allowed) { toast.error("Permission insuffisante pour annuler une réservation"); return; }
         if (cancelResPerm.requiresPin) {
             setPinError(undefined);
-            setPinModal({ open: true, action: "cancel_reservation", reservationId: id, onConfirm: () => cancelReservationById(id, updateReservation) });
+            setPinModal({ open: true, action: "cancel_reservation", reservationId: id, onConfirm: () => cancelReservationById(id, tenantId, updateReservation) });
         } else {
-            await cancelReservationById(id, updateReservation);
+            await cancelReservationById(id, tenantId, updateReservation);
         }
-    }, [cancelResPerm, updateReservation]);
+    }, [cancelResPerm, tenantId, updateReservation]);
 
     const handleSaveReservation = useCallback(async (data: Partial<Reservation> & { suggestedTable?: OpsTable }) => {
         try {
             const { suggestedTable: _st, ...resData } = data;
-            await addReservation({ ...resData, type: "reservation", updatedAt: new Date().toISOString() } as Parameters<typeof addReservation>[0]);
+            const newResId = Nexus.adapter.generateId(`tenants/${tenantId}/ops_relations`);
+            await addReservation({ ...resData, id: newResId, type: "reservation", updatedAt: new Date().toISOString() } as Parameters<typeof addReservation>[0]);
+
+            // Émission EventBus (P0-1.8)
+            await NexusEventBus.emitDurable('reservation.created', {
+                v: 1,
+                tenantId,
+                reservationId: newResId,
+                guestName: resData.customerName ?? 'Client Inconnu',
+                partySize: resData.covers ?? 1,
+                scheduledAt: Date.now(),
+                hasDeposit: false,
+            });
+
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
             const customer = customers.find((c: Customer) => c.id === resData.customerId);
             if (customer?.email) {
@@ -229,6 +267,27 @@ export function useReservationsPage() {
             toast.success(`Groupe "${formData.name}" créé`);
         } catch { toast.error("Erreur lors de la création du groupe"); throw new Error("Nexus write failed"); }
     }, [tenantId]);
+
+    const handleMarkArrived = useCallback(async (id: string) => {
+        try {
+            await markArrived(id);
+            const res = reservations.find((r: Reservation) => r.id === id);
+            const customer = customers.find((c: Customer) => c.id === res?.customerId);
+
+            await NexusEventBus.emitDurable('reservation.matched', {
+                v: 1,
+                tenantId,
+                reservationId: id,
+                customerId: res?.customerId,
+                tableId: res?.tableId ?? 'table_default',
+                allergens: customer ? ((customer as Record<string, unknown>).allergens as string[] ?? []) : [],
+                covers: res?.covers ?? 2,
+                matchedAt: Date.now(),
+            });
+
+            toast.success("Client accueilli à la table");
+        } catch { toast.error("Erreur lors de la validation d'arrivée"); }
+    }, [markArrived, reservations, customers, tenantId]);
 
     const handlePinConfirm = useCallback((_pin: string) => {
         pinModal.onConfirm?.();
@@ -252,7 +311,7 @@ export function useReservationsPage() {
         pinError, setPinError,
         // data
         reservations, customers, tables, groups, opsTables,
-        isLoading, markArrived,
+        isLoading, markArrived: handleMarkArrived,
         // computed
         weekDays, todayReservations, tablesByZone, weekLabel, displayDate,
         // handlers

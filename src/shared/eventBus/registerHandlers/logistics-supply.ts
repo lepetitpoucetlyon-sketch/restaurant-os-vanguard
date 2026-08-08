@@ -6,6 +6,8 @@ import { registerAutoSupplierDraftHandler } from '../handlers/AutoSupplierDraftH
 import { registerSupplierDeliveryReceivedHandler } from '../handlers/SupplierDeliveryReceivedHandler';
 import { registerWasteValidatedHandler } from '../handlers/WasteValidatedHandler';
 import { registerFoodDonationHandler } from '../handlers/FoodDonationHandler';
+import { registerProcurementMismatchHandler } from '../handlers/ProcurementMismatchHandler';
+import { registerWasteDailyAggregatorHandler } from '../handlers/WasteDailyAggregatorHandler';
 
 export function registerSupplyHandlers(): Array<() => void> {
   return [
@@ -17,5 +19,7 @@ export function registerSupplyHandlers(): Array<() => void> {
     registerSupplierDeliveryReceivedHandler(),
     registerWasteValidatedHandler(),
     registerFoodDonationHandler(),
+    registerProcurementMismatchHandler(),
+    registerWasteDailyAggregatorHandler(),
   ];
 }

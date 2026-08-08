@@ -15,9 +15,11 @@ import { SilaeExportHandler } from '../handlers/SilaeExportHandler';
 import { registerTipDistributedHandler } from '../handlers/TipDistributedHandler';
 import { registerShiftAutoAuditHandler } from '../handlers/ShiftAutoAuditHandler';
 import { registerHRBreakCheckHandler } from '../handlers/HRBreakCheckHandler';
+import { registerShiftStartedHandler } from '../handlers/ShiftStartedHandler';
 
 export function registerHumanHandlers(): Array<() => void> {
   return [
+    registerShiftStartedHandler(),
     registerTipDistributedHandler(),
     registerPayrollTimeclockHandler(),
     registerRainStaffingHandler(),

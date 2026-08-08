@@ -19,11 +19,17 @@ import { registerTableLockHandler } from '../handlers/TableLockHandler';
 import { registerTableTransferHandler } from '../handlers/TableTransferHandler';
 import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler';
 import { registerProformaHandler } from '../handlers/ProformaHandler';
+import { registerKDSTicketDoneNotifier } from '../handlers/KDSTicketDoneNotifier';
+import { registerKDSRushAlertNotifier } from '../handlers/KDSRushAlertNotifier';
+import { registerNoShowHandler } from '../handlers/NoShowHandler';
 import { registerOpsKdsHandlers } from './ops-kds';
 import { registerOpsDeliveryHandlers } from './ops-delivery';
 
 export function registerOpsHandlers(): Array<() => void> {
   return [
+    registerNoShowHandler(),
+    registerKDSTicketDoneNotifier(),
+    registerKDSRushAlertNotifier(),
     registerCashDrawerAnomalyHandler(),
     registerReservationNotifierHandler(),
     registerFloorPlanCapacityHandler(),

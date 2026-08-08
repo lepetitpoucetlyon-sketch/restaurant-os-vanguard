@@ -6,6 +6,7 @@ import { registerStockReceptionHandler } from '../handlers/StockReceptionHandler
 import { registerFoodCostRecomputer } from '../handlers/FoodCostRecomputer';
 import { registerMarginWarningHandler } from '../handlers/MarginWarningHandler';
 import { registerStockZeroBlockerHandler } from '../handlers/StockZeroBlockerHandler';
+import { registerOrderCancelRestockHandler } from '../handlers/OrderCancelRestockHandler';
 
 export function registerStockHandlers(): Array<() => void> {
   return [
@@ -18,5 +19,6 @@ export function registerStockHandlers(): Array<() => void> {
     registerFoodCostRecomputer(),
     registerMarginWarningHandler(),
     registerStockZeroBlockerHandler(),
+    registerOrderCancelRestockHandler(),
   ];
 }

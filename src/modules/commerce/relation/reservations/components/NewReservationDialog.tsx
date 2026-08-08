@@ -264,6 +264,12 @@ export function NewReservationDialog({ isOpen, onClose, onSave, customers }: New
                                                     >+</button>
                                                 </div>
                                             </div>
+                                            {formData.covers >= 5 && (
+                                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-semibold">
+                                                    <ShieldCheck className="w-4 h-4" />
+                                                    Empreinte bancaire requise (Groupe ≥ 5)
+                                                </div>
+                                            )}
                                         </motion.div>
                                     </div>
 

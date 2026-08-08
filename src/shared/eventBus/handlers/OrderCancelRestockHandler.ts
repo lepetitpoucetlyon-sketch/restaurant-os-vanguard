@@ -52,10 +52,20 @@ export function registerOrderCancelRestockHandler() {
           }
         }
         
+        if (order.tableId) {
+          await NexusEventBus.emitDurable('table.released', {
+            v: 1,
+            tenantId,
+            tableId: order.tableId,
+            orderId,
+          });
+          logger.info(`[Restock] Table ${order.tableId} libérée suite à l'annulation de la commande ${orderId}`);
+        }
+
         empireAudit.log({
           module: 'inventory',
           action: 'ORDER_RESTOCKED',
-          details: { orderId },
+          details: { orderId, tableId: order.tableId },
           severity: 'low',
           timestamp: new Date(),
         });

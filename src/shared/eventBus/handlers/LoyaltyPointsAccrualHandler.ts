@@ -40,7 +40,7 @@ export function registerLoyaltyPointsAccrualHandler() {
         timestamp: new Date(),
       });
       
-      // On déclenche l'événement points_earned
+      // On déclenche l'événement points_earned et rfm_trigger (P0-1.10)
       Promise.resolve().then(() => {
         NexusEventBus.emitDurable('crm.points_earned', {
           v: 1,
@@ -48,6 +48,11 @@ export function registerLoyaltyPointsAccrualHandler() {
           customerId,
           points: pointsEarned,
           sourceOrderId: orderId,
+        });
+
+        NexusEventBus.emitDurable('crm.rfm_trigger', {
+          tenantId,
+          customerId,
         });
         
         // Simuler le déblocage d'une récompense si on atteint 100 points par exemple

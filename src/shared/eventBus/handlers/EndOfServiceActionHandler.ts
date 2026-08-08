@@ -18,7 +18,7 @@ export function registerEndOfServiceActionHandler() {
         timestamp: new Date(),
       });
       
-      // Suspendre les commandes externes si ce n'est pas déjà fait
+      // Suspendre les commandes externes
       await NexusEventBus.emit('store.rush_mode_toggled', {
         v: 1,
         tenantId,
@@ -26,17 +26,14 @@ export function registerEndOfServiceActionHandler() {
         requestedBy: 'system',
       });
       
-      // Générer le rapport de pertes (Waste) du service
-      await NexusEventBus.emit('notification.created', {
+      // Envoi alerte résumé de fin de service aux managers (P1-4.5)
+      await NexusEventBus.emitDurable('notification.urgent', {
         v: 1,
         tenantId,
-        id: `waste-report-${shiftId}`,
-        type: 'info',
-        title: 'Action requise : Validation des pertes',
-        message: 'Le service est terminé. Veuillez valider le pré-rapport des pertes.',
-        priority: 'high',
-        read: false,
-        timestamp: new Date().toISOString(),
+        message: `Fin de service (Shift ${shiftId}) : Bilan disponible. Penser à valider les pertes et le comptage de caisse.`,
+        roles: ['manager', 'directeur'],
+        priority: 'HIGH',
+        metadata: { shiftId, endTime },
       });
     },
     { id: 'end-of-service-action-handler', priority: 'BACKGROUND' }

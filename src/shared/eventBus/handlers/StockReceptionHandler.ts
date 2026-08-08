@@ -45,6 +45,7 @@ export function registerStockReceptionHandler(): () => void {
           ...existing, // préserver les autres attributs s'ils existent (P1 n'écrase pas)
           id: item.itemId,
           quantity: newQty,
+          ...(item.unitPrice ? { lastCostInMicrounits: Math.round(item.unitPrice * 1_000_000) } : {}),
           updatedAt: new Date().toISOString(),
           lastDeliveryNoteId: deliveryId,
         });
@@ -73,6 +74,15 @@ export function registerStockReceptionHandler(): () => void {
           timestamp: new Date(),
         });
       }
+
+      // Émission EventBus (P1-4.9) : Impact food cost suite à réception stock
+      await NexusEventBus.emitDurable('finance.food_cost_impacted', {
+        v: 1,
+        tenantId,
+        reason: `stock_received_${deliveryId}`,
+        affectedItems: items.map(i => i.itemId),
+        impactDate: new Date().toISOString(),
+      });
 
       if (driftReport.length > 0) {
         const driftId = `drift_${deliveryId}_${Date.now()}`;

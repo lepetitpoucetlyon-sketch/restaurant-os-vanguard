@@ -13,9 +13,11 @@ import { registerComplianceDeadlineHandler } from '../handlers/ComplianceDeadlin
 import { registerCertExpiryHandler } from '../handlers/CertExpiryHandler';
 import { registerComplianceCalendarHandler } from '../handlers/ComplianceCalendarHandler';
 import { registerCoolingCycleHandler } from '../handlers/CoolingCycleHandler';
+import { registerHaccpCorrectiveActionHandler } from '../handlers/HaccpCorrectiveActionHandler';
 
 export function registerComplianceHandlers(): Array<() => void> {
   return [
+    registerHaccpCorrectiveActionHandler(),
     registerSovereignBreachHandler(),
     registerQuarantineHandler(),
     registerWasteToFoodCostHandler(),

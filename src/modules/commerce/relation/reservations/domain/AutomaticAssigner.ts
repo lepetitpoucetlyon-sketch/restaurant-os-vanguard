@@ -45,18 +45,56 @@ export class AutomaticAssigner {
     return sortedTables[0].id;
   }
 
-  /**
-   * Suggests table combining for large groups if no single table fits
-   */
   static findTableCombo(
-    _covers: number,
-    _date: string,
-    _time: string,
-    _tables: Table[],
-    _existingReservations: Reservation[]
+    covers: number,
+    date: string,
+    time: string,
+    tables: Table[],
+    existingReservations: Reservation[]
   ): string[] | null {
-    // Phase 2: Implementation of table merging logic
-    // For now, we only support single tables
+    const reservationStart = parse(`${date} ${time}`, 'yyyy-MM-dd HH:mm', new Date());
+    const requestEnd = addMinutes(reservationStart, 120);
+
+    const available = tables.filter(table =>
+      !existingReservations.some(res => {
+        if (res.tableId !== table.id || res.date !== date) return false;
+        const resStart = parse(`${res.date} ${res.time}`, 'yyyy-MM-dd HH:mm', new Date());
+        const resEnd = addMinutes(resStart, Number(res.duration || 120));
+        return areIntervalsOverlapping(
+          { start: resStart, end: resEnd },
+          { start: reservationStart, end: requestEnd }
+        );
+      })
+    );
+
+    // Group tables by zoneId (only allow merging tables in the same zone)
+    const tablesByZone = new Map<string, Table[]>();
+    for (const t of available) {
+      const zoneId = (t as { zoneId?: string }).zoneId || 'default';
+      const list = tablesByZone.get(zoneId) || [];
+      list.push(t);
+      tablesByZone.set(zoneId, list);
+    }
+
+    for (const [, zoneTables] of tablesByZone.entries()) {
+      const sorted = [...zoneTables].sort((a, b) => b.seats - a.seats);
+
+      const findCombo = (remaining: number, pool: Table[], selected: Table[]): string[] | null => {
+        if (remaining <= 0) return selected.map(t => t.id);
+        if (pool.length === 0) return null;
+        const [head, ...tail] = pool;
+        return (
+          findCombo(remaining - head.seats, tail, [...selected, head]) ??
+          findCombo(remaining, tail, selected)
+        );
+      };
+
+      const combo = findCombo(covers, sorted, []);
+      if (combo && combo.length <= 3) {
+        return combo;
+      }
+    }
+
     return null;
   }
 }

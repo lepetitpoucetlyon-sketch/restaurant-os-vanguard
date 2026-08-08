@@ -8,6 +8,7 @@ import { registerCommerceHandlers } from './commerce';
 import { registerIntelligenceHandlers } from './intelligence';
 import { registerCrmHandlers } from './crm';
 import { registerMccHandlers } from './mcc';
+import { registerNotificationHandlers } from './notifications';
 
 let clientInitialized = false;
 let serverInitialized = false;
@@ -38,7 +39,8 @@ export function registerNexusHandlers(): void {
     ...registerCommerceHandlers(),
     ...registerIntelligenceHandlers(),
     ...registerCrmHandlers(),
-    ...registerMccHandlers()
+    ...registerMccHandlers(),
+    ...registerNotificationHandlers()
   );
 }
 
@@ -55,7 +57,8 @@ export function registerServerNexusHandlers(): void {
     ...registerCommerceHandlers(),
     ...registerIntelligenceHandlers(),
     ...registerCrmHandlers(),
-    ...registerMccHandlers()
+    ...registerMccHandlers(),
+    ...registerNotificationHandlers()
   );
 }
 

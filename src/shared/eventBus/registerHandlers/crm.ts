@@ -5,6 +5,7 @@ import { registerLoyaltyPointsAccrualHandler } from '../handlers/LoyaltyPointsAc
 import { registerLoyaltyRewardAlertHandler } from '../handlers/LoyaltyRewardAlertHandler';
 import { registerBirthdayCampaignHandler } from '../handlers/BirthdayCampaignHandler';
 import { registerSegmentTargetingHandler } from '../handlers/SegmentTargetingHandler';
+import { registerLoyaltyNotificationHandler } from '../handlers/LoyaltyNotificationHandler';
 
 export function registerCrmHandlers(): Array<() => void> {
   return [
@@ -15,5 +16,6 @@ export function registerCrmHandlers(): Array<() => void> {
     registerLoyaltyRewardAlertHandler(),
     registerBirthdayCampaignHandler(),
     registerSegmentTargetingHandler(),
+    registerLoyaltyNotificationHandler(),
   ];
 }

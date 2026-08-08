@@ -1,6 +1,6 @@
 import { ReservationSlotSettings, GlobalSettings } from '@nexus/contracts';
 import { Reservation, Table } from '@nexus/contracts';
-import { format, parse, addMinutes, isBefore } from 'date-fns';
+import { format, parse, addMinutes, isBefore, areIntervalsOverlapping } from 'date-fns';
 
 export interface AvailableSlot {
   time: string;
@@ -71,12 +71,20 @@ export class AvailabilityEngine {
 
     while (isBefore(current, end)) {
       const timeStr = format(current, 'HH:mm');
-      
-      // Calculate how many people are already booked for this slot OR are still eating
-      // For simplicity in this v1, we check if someone is arriving at this time
-      // But a better version would check duration overlaps.
+      const slotStart = parse(`${format(date, 'yyyy-MM-dd')} ${timeStr}`, 'yyyy-MM-dd HH:mm', date);
+      const slotEnd = addMinutes(slotStart, slotSettings.slotDuration || 15);
+
       const bookedCovers = existingReservations
-        .filter(r => r.date === format(date, 'yyyy-MM-dd') && r.time === timeStr)
+        .filter(r => {
+          if (r.date !== format(date, 'yyyy-MM-dd')) return false;
+          const resStart = parse(`${r.date} ${r.time}`, 'yyyy-MM-dd HH:mm', date);
+          const resEnd = addMinutes(resStart, Number(r.duration || 120));
+          return areIntervalsOverlapping(
+            { start: resStart, end: resEnd },
+            { start: slotStart, end: slotEnd },
+            { inclusive: false }
+          );
+        })
         .reduce((sum, r) => sum + (r.covers ?? 0), 0);
 
       const remainingCovers = totalCap - bookedCovers;

@@ -83,7 +83,7 @@ export interface OPSEvents {
     tenantId: string;
     deliveryId: string;
     purchaseOrderId?: string;
-    items: Array<{ itemId: string; quantity: number }>;
+    items: Array<{ itemId: string; quantity: number; unitPrice?: number }>;
   };
 
   'inventory.stock_adjusted': {

@@ -42,15 +42,18 @@ export function registerNoShowCRMHandler(): () => void {
       const crmScore = Math.max(0, (customer.crmScore ?? 100) - 20);
       const tags: string[] = Array.isArray(customer.tags) ? [...customer.tags] : [];
 
-      if (noShowCount >= 3 && !tags.includes('frequent_noshow')) {
+      const isDepositRequired = noShowCount >= 2;
+
+      if (noShowCount >= 2 && !tags.includes('frequent_noshow')) {
         tags.push('frequent_noshow');
-        logger.warn(`[NoShowCRM] Client ${customerId} tagué 'frequent_noshow' (${noShowCount} no-shows)`);
+        logger.warn(`[NoShowCRM] Client ${customerId} tagué 'frequent_noshow' (${noShowCount} no-shows) — Acompte 100% désormais obligatoire.`);
       }
 
       await Nexus.adapter.update(`tenants/${tenantId}/customers/${customerId}`, {
         noShowCount,
         crmScore,
         tags,
+        depositRequired: isDepositRequired,
         updatedAt: new Date().toISOString(),
       });
 

@@ -106,6 +106,15 @@ export function registerMonthlyFECExportHandler() {
         read: false,
         timestamp: new Date().toISOString(),
       });
+
+      // Émission EventBus (P1-3.3) : Verrouillage de la période comptable
+      await NexusEventBus.emitDurable('finance.period_locked', {
+        v: 1,
+        tenantId,
+        periodId: month,
+        lockedAt: new Date().toISOString(),
+        lockedBy: 'SYSTEM_FEC_EXPORT',
+      });
     }),
     { id: 'monthly-fec-export-handler', priority: 'BACKGROUND' }
   );

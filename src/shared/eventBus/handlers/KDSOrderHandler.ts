@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export function registerKDSOrderHandler() {
   return NexusEventBus.on(
-    'order.paid',
+    'order.placed',
     async (payload) => {
       const { orderId, tenantId, items, tableId } = payload;
       

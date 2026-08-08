@@ -18,6 +18,15 @@ export interface FINANCEEvents {
     countedBy: string;
   };
 
+  'finance.food_cost_impacted': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reason: string;
+    affectedItems?: string[];
+    impactDate: string;
+  };
+
   'supplier.invoice_processed': {
     v: 1;
     isSimulation?: boolean;
