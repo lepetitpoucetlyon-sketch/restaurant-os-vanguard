@@ -67,6 +67,7 @@ export function registerNoShowHandler(): () => void {
         });
       } catch (err) {
         logger.error('[NoShowHandler] Erreur lors du traitement du no-show', err);
+        throw err; // Débit pénalité Stripe possible → DLQ pour retry
       }
     },
     { id: 'no-show-handler', priority: 'HIGH' }

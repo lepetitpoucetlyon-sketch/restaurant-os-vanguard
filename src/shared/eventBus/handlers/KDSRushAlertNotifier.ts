@@ -26,6 +26,7 @@ export function registerKDSRushAlertNotifier(): () => void {
         });
       } catch (err) {
         logger.error(`[KDSRushAlertNotifier] Échec alerte rush KDS`, toError(err).message);
+        throw err; // Alerte critique cuisine → DLQ pour retry
       }
     },
     { id: 'kds-rush-alert-notifier', priority: 'CRITICAL' }

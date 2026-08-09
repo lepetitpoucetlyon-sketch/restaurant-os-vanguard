@@ -91,6 +91,7 @@ export class PayrollAutoCalcHandler {
           severity: 'critical',
           timestamp: new Date(),
         });
+        throw error; // Calcul pré-paie → DLQ pour retry
       }
     }), { id: 'payroll-auto-calc', priority: 'HIGH' });
   }

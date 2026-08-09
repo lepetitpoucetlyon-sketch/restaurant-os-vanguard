@@ -21,6 +21,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { PositionSettings, StaffConfig } from "@nexus/contracts";
+import { TipsDistributionSettingsSection } from "./TipsDistributionSettingsSection";
 
 interface PositionConfig {
     id: string;
@@ -352,6 +353,9 @@ export default function StaffSettings() {
                     ))}
                 </div>
             </motion.div>
+
+            {/* Répartition Automatique des Pourboires CB (Gérable Admin & Manager) */}
+            <TipsDistributionSettingsSection />
 
             {/* Global Dispatch */}
             <div className="flex justify-end pt-4">

@@ -49,6 +49,7 @@ export function registerHaccpCorrectiveActionHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[HaccpCorrectiveActionHandler] Erreur création action corrective HACCP ${checkId}`, toError(err).message);
+        throw err; // HACCP légal — action corrective obligatoire → DLQ pour retry
       }
     },
     { id: 'haccp-corrective-action-handler', priority: 'CRITICAL' }

@@ -129,6 +129,7 @@ export function registerStockRestitutionHandler(): () => void {
         logger.info(`[StockRestitution] Avoir comptable généré avec succès pour l'annulation ${orderId}`);
       } catch (err) {
         logger.error(`[StockRestitution] Erreur lors de la génération de l'avoir pour ${orderId}`, err);
+        throw err; // Réintégration stock obligatoire → DLQ pour retry
       }
     },
     { id: 'stock-restitution', priority: 'HIGH' }

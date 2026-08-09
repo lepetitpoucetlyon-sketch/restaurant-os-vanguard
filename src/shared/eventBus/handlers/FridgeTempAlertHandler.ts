@@ -8,14 +8,31 @@ interface ProductRecord {
   available?: boolean;
 }
 
+/**
+ * FridgeTempAlertHandler (Item R7)
+ * Gère les anomalies de température des enceintes réfrigérées.
+ * Enregistre chaque relevé dans le registre légal immuable HACCP (`haccpTemperatureLog`) et déclenche le protocole correctif.
+ */
 export function registerFridgeTempAlertHandler() {
   return NexusEventBus.on(
     'sensor.temperature_anomaly',
     async (payload) => {
       const { tenantId, sensorId, temperature, durationInMinutes } = payload;
-      
+      const logId = `temp_log_${sensorId}_${Date.now()}`;
+      const isCritical = durationInMinutes > 30 || temperature > 10;
+
+      // ── Item R7: Enregistrement dans le Registre Légal Immuable HACCP ──────
+      await Nexus.adapter.set(`tenants/${tenantId}/haccpTemperatureLog/${logId}`, {
+        id: logId,
+        sensorId,
+        temperature,
+        durationInMinutes,
+        isCritical,
+        recordedAt: new Date().toISOString(),
+      });
+
       // Si la température est anormale pendant plus de 30 minutes, risque de rupture de chaîne du froid
-      if (durationInMinutes > 30) {
+      if (isCritical) {
         logger.error(`[IoT] Rupture de la chaîne du froid détectée (Capteur: ${sensorId}, Temp: ${temperature}°C, Durée: ${durationInMinutes}min)`);
         
         empireAudit.log({
@@ -24,6 +41,14 @@ export function registerFridgeTempAlertHandler() {
           details: { sensorId, temperature, durationInMinutes },
           severity: 'critical',
           timestamp: new Date(),
+        });
+
+        // Déclenchement de l'action corrective HACCP légale
+        await NexusEventBus.emit('haccp.nonconform', {
+          v: 1,
+          tenantId,
+          checkId: `sensor_${sensorId}`,
+          correctionDeadline: Date.now() + 86400000,
         });
         
         await NexusEventBus.emit('notification.urgent', {

@@ -18,6 +18,7 @@ export function registerOrderSealedNF525Handler(): () => void {
         logger.info(`[OrderSealedNF525Handler] Order ${orderId} scellé NF525 pour tenant ${tenantId}`);
       } catch (err) {
         logger.error(`[OrderSealedNF525Handler] Échec scellement order ${orderId}`, err);
+        throw err; // NF525 — scellement fiscal obligatoire → DLQ pour retry
       }
     },
     { id: 'order-sealed-nf525', priority: 'CRITICAL' }

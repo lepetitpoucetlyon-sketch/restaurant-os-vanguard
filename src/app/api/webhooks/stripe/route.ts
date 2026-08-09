@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MosyleClient } from '@/lib/MosyleClient';
 import { TenantProvisioningService } from '@/lib/mcc/provisioning/TenantProvisioningService';
+import { dispatchServerEvent } from '@/shared/eventBus/ServerEventBus';
 
 // ── Plan-to-features mapping (P12-D / P12-J) ────────────────────────────────
 const PLAN_FEATURES: Record<string, string[]> = {
@@ -347,6 +348,34 @@ export async function POST(req: NextRequest) {
           })();
         }
 
+        break;
+      }
+
+      case 'payment_intent.payment_failed':
+      case 'invoice.payment_failed': {
+        const obj = event.data.object as unknown as Record<string, unknown>;
+        const tenantId = (obj.metadata as Record<string, unknown>)?.tenantId as string || 'tenant_default';
+        const amount = (obj.amount_due ?? obj.amount ?? 0) as number * 10000;
+
+        const payload = {
+          v: 1 as const,
+          tenantId,
+          invoiceId: (obj.id as string) || `inv_${Date.now()}`,
+          customerId: (obj.customer as string) || `cust_${tenantId}`,
+          amountInMicrounits: amount,
+          reason: (obj.last_payment_error as { message?: string })?.message ?? 'Échec paiement Stripe',
+        };
+
+        // 1. Émission directe sur ServerEventBus (déclenche FleetOutboxHandler)
+        await dispatchServerEvent('finance.payment_failed', payload);
+
+        // 2. Persistance d'événements
+        await Nexus.adapter.set(
+          `tenants/${tenantId}/events/payment_failed_${Date.now()}`,
+          payload
+        );
+
+        logger.warn(`[Stripe Webhook] finance.payment_failed émis et outboxé pour tenant ${tenantId}`);
         break;
       }
 

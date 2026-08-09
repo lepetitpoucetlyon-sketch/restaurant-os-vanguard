@@ -258,6 +258,19 @@ export function useReservationsPage() {
         } catch { toast.error("Erreur lors de la création de la réservation"); }
     }, [tenantId, customers, addReservation]);
 
+    const handleUpdateReservation = useCallback(async (id: string, updates: Partial<Reservation>) => {
+        try {
+            await updateReservation(id, updates);
+            await NexusEventBus.emitDurable('reservation.updated', {
+                v: 1,
+                tenantId,
+                reservationId: id,
+                updates: updates as Record<string, unknown>,
+            });
+            toast.success("Réservation mise à jour");
+        } catch { toast.error("Erreur lors de la mise à jour"); }
+    }, [updateReservation, tenantId]);
+
     const handleCreateGroup = useCallback(async (formData: GroupFormData) => {
         try {
             const arr = new Uint32Array(1);
@@ -319,6 +332,7 @@ export function useReservationsPage() {
         handleMarkNoShow,
         handleCancelReservation,
         handleSaveReservation,
+        handleUpdateReservation,
         handleCreateGroup,
         handlePinConfirm,
         // permissions

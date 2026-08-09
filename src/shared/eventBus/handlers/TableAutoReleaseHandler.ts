@@ -4,10 +4,8 @@ import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
 /**
- * TableAutoReleaseHandler (P05-I)
- * L'événement 'table.seated' n'existe pas dans NexusEventBus.
- * L'événement 'table.cleared' a été ajouté dans NexusEventBus.ts — il convient mieux
- * (table vidée, fin de service). Ce handler libère la table uniquement si sessionEnd=true.
+ * TableAutoReleaseHandler (Item R6)
+ * Libère la table en fin de service et envoie une notification push instantanée à l'hôtesse et au chef de rang.
  */
 export function registerTableAutoReleaseHandler(): () => void {
   return NexusEventBus.on(
@@ -27,6 +25,15 @@ export function registerTableAutoReleaseHandler(): () => void {
       });
 
       logger.info(`[TableAutoRelease] Table ${tableId} libérée automatiquement (fin de service)`);
+
+      // ── Item R6: Notification WebPush Hôtesse & Chef de rang ───────────────
+      await NexusEventBus.emit('notification.urgent', {
+        v: 1,
+        tenantId,
+        message: `La Table ${tableId} est maintenant nettoyée et disponible pour accueil.`,
+        roles: ['hotesse', 'chef_rang', 'manager'],
+        priority: 'HIGH',
+      });
 
       empireAudit.log({
         module: 'ops',

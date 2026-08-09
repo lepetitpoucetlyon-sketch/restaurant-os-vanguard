@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Tag, PlusCircle, Power, AlertCircle, Loader2, Gift, Percent, Euro } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { toast } from "sonner";
 import { toMicrounits } from "@/domain/schemas/primitives";
 import { useTenant } from "@/shared/hooks/useTenant";
@@ -123,10 +124,20 @@ export function PromoCodeManager() {
         updatedAt: now,
       };
       await Nexus.adapter.set(getPath(id), record);
+
+      // Émission EventBus (R4 - commerce.promotion_activated)
+      await NexusEventBus.emitDurable('commerce.promotion_activated', {
+        v: 1,
+        tenantId: tenantId ?? 'restaurant-os',
+        promotionId: id,
+        discountBps: record.discountType === 'percent' ? Math.round(record.value * 100) : 1000,
+        productIds: [],
+      });
+
       setCodes((prev) => [record, ...prev]);
       setForm(DEFAULT_FORM);
       setShowForm(false);
-      toast.success(`Code ${record.code} créé`);
+      toast.success(`Code ${record.code} créé et activé`);
     } catch {
       toast.error("Erreur lors de la création");
     } finally {
@@ -138,6 +149,17 @@ export function PromoCodeManager() {
     try {
       const updated = { ...promo, isActive: !promo.isActive, updatedAt: new Date().toISOString() };
       await Nexus.adapter.update(getPath(promo.id), { isActive: updated.isActive, updatedAt: updated.updatedAt });
+
+      if (updated.isActive) {
+        await NexusEventBus.emitDurable('commerce.promotion_activated', {
+          v: 1,
+          tenantId: tenantId ?? 'restaurant-os',
+          promotionId: promo.id,
+          discountBps: promo.discountType === 'percent' ? Math.round(promo.value * 100) : 1000,
+          productIds: [],
+        });
+      }
+
       setCodes((prev) => prev.map((c) => (c.id === promo.id ? updated : c)));
       toast.success(updated.isActive ? `${promo.code} réactivé` : `${promo.code} désactivé`);
     } catch {
