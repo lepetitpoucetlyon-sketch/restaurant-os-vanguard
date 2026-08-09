@@ -81,6 +81,7 @@ export class PayrollExportHandler {
           severity: 'critical',
           timestamp: new Date(),
         });
+        throw error; // Export paie critique → DLQ pour retry
       }
     }), { id: 'payroll-export', priority: 'HIGH' });
   }

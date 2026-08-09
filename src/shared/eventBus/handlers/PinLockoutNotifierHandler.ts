@@ -29,6 +29,7 @@ export class PinLockoutNotifierHandler {
         });
       } catch (err) {
         logger.warn('[PinLockoutNotifier] Push indisponible', toError(err).message);
+        throw err;
       }
 
       empireAudit.log({

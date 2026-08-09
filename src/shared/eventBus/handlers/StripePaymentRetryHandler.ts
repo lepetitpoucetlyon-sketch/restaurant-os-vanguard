@@ -76,6 +76,7 @@ export class StripePaymentRetryHandler {
         });
       } catch (err) {
         logger.error('[StripePaymentRetryHandler] Error queuing retry', toError(err).message);
+        throw err;
       }
     }, { id: 'stripe-payment-retry', priority: 'HIGH' });
   }

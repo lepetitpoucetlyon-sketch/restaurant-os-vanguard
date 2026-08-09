@@ -61,6 +61,7 @@ export class PromotionPriceHandler {
         });
       } catch (err) {
         logger.error('[PromotionPriceHandler] Error activating promotion', toError(err).message);
+        throw err;
       }
     }, { id: 'promotion-price', priority: 'HIGH' });
   }

@@ -40,6 +40,7 @@ export class BankConnectionExpiredHandler {
         });
       } catch (err) {
         logger.error('[BankConnectionExpiredHandler] Error updating bank connection status', toError(err).message);
+        throw err;
       }
     }, { id: 'bank-connection-expired', priority: 'HIGH' });
   }

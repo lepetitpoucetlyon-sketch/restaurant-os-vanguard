@@ -143,6 +143,7 @@ export class SilaeExportHandler {
           severity: 'critical',
           timestamp: new Date(),
         });
+        throw error; // Export Silae → DLQ pour retry (en plus du mode dégradé outbox)
       }
     }, { id: 'silae-export', priority: 'HIGH' });
   }

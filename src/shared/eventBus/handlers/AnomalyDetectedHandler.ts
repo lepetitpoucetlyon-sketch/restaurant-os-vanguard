@@ -32,6 +32,7 @@ export function registerAnomalyDetectedHandler(): () => void {
         logger.warn(`[AnomalyDetectedHandler] Anomalie détectée — ${metric}: ${value} (seuil: ${threshold})`);
       } catch (err) {
         logger.error(`[AnomalyDetectedHandler] Échec enregistrement anomalie: ${toError(err).message}`);
+        throw err;
       }
     },
     { id: 'anomaly-detected', priority: 'HIGH' },

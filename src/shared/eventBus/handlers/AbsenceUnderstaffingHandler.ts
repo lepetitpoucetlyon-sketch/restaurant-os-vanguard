@@ -67,6 +67,7 @@ export class AbsenceUnderstaffingHandler {
         }
       } catch (err) {
           logger.error('[AbsenceUnderstaffingHandler] Error checking schedule', toError(err).message);
+          throw err;
       }
     }, { id: 'absence-understaffing', priority: 'HIGH' });
   }

@@ -58,6 +58,7 @@ export class PromotionExpiryHandler {
         });
       } catch (err) {
         logger.error('[PromotionExpiryHandler] Error expiring promotion', toError(err).message);
+        throw err;
       }
     }, { id: 'promotion-expiry', priority: 'HIGH' });
   }

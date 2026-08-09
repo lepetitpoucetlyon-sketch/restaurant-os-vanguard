@@ -60,6 +60,7 @@ export function registerCashCountReconciliationHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[CashCountReconciliation] Erreur lors de la réconciliation de caisse ${drawerId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'cash-count-reconciliation-handler', priority: 'HIGH' }

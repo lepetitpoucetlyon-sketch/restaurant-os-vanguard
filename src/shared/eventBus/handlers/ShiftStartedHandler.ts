@@ -52,6 +52,7 @@ export function registerShiftStartedHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[ShiftStartedHandler] Erreur lors de l'enregistrement du début de shift ${shiftId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'shift-started-handler', priority: 'HIGH' }

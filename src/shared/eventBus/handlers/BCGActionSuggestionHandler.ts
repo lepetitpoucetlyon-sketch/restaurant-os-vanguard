@@ -47,6 +47,7 @@ export function registerBCGActionSuggestionHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[BCGActionSuggestionHandler] Échec suggestions BCG`, toError(err).message);
+        throw err;
       }
     },
     { id: 'bcg-action-suggestion-handler', priority: 'BACKGROUND' }

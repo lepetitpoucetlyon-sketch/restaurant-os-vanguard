@@ -59,6 +59,7 @@ export function registerProcurementMismatchHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[ProcurementMismatchHandler] Échec du traitement de l'écart PO ${purchaseOrderId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'procurement-mismatch-handler', priority: 'HIGH' }

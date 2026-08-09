@@ -27,6 +27,7 @@ export function registerNotificationCreatedHandler(): () => void {
         logger.info(`[NotificationCreatedHandler] Notification persistant enregistrée: ${title} (${id})`);
       } catch (err) {
         logger.error(`[NotificationCreatedHandler] Échec persistance notification ${id}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'notification-created-handler', priority: 'HIGH' }

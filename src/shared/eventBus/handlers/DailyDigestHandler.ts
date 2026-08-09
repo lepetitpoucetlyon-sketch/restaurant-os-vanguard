@@ -43,6 +43,7 @@ export function registerDailyDigestHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[DailyDigestHandler] Échec enregistrement digest quotidien ${date}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'daily-digest-handler', priority: 'HIGH' }

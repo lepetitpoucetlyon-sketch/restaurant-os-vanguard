@@ -15,6 +15,7 @@ export function registerKdsCoursePassedHandler(): () => void {
         logger.info(`[KdsCoursePassedHandler] Cours ${courseId} passé pour commande ${orderId}`);
       } catch (err) {
         logger.error(`[KdsCoursePassedHandler] Échec mise à jour cours: ${toError(err).message}`);
+        throw err;
       }
     },
     { id: 'kds-course-passed', priority: 'HIGH' },

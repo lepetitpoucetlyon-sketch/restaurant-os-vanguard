@@ -25,6 +25,7 @@ export function registerKDSTicketDoneNotifier(): () => void {
         });
       } catch (err) {
         logger.error(`[KDSTicketDoneNotifier] Échec notification KDS ticket_done ${orderId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'kds-ticket-done-notifier', priority: 'HIGH' }

@@ -136,6 +136,7 @@ async function analyze(payload: NexusEventPayload<'support.ticket_submitted'>): 
       analysisError: toError(err).message,
     }, { merge: true });
     logger.error(`[SupportTicketAnalysis] Échec analyse ticket ${ticketId}`, err);
+    throw err;
   }
 }
 

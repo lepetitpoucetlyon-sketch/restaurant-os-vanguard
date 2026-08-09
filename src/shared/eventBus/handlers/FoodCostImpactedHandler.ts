@@ -34,6 +34,7 @@ export function registerFoodCostImpactedHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[FoodCostImpactedHandler] Échec traitement impact food cost`, toError(err).message);
+        throw err;
       }
     },
     { id: 'food-cost-impacted-handler', priority: 'HIGH' }

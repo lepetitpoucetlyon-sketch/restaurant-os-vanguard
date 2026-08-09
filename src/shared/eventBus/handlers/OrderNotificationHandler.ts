@@ -28,6 +28,7 @@ export function registerOrderNotificationHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[OrderNotificationHandler] Échec notification commande ${orderId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'order-notification-handler', priority: 'HIGH' }
