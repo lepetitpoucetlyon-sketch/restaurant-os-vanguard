@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { toMicrounits, type Microunits } from '@/domain/schemas/primitives';
+import { toMicrounits, type Microunits } from '@/shared/schemas/primitives';
 
 interface CampaignAttribution {
     campaignId: string;

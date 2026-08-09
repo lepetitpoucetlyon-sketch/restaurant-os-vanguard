@@ -43,3 +43,7 @@ export { OraclePredictor } from './analytique/analytics/components';
 export { LightRAGClient } from './knowledge/rag/LightRAGClient';
 export { HermesKnowledgeManager } from './knowledge/rag/HermesKnowledgeManager';
 export { ConnectorHub } from './connectors/hub';
+
+
+// 🏛️ Domaine Schemas
+export * from './domain/schemas/supportTicket';

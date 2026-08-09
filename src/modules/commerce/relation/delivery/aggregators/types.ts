@@ -1,4 +1,4 @@
-import type { Microunits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 
 export type AggregatorPlatform = 'uber_eats' | 'deliveroo' | 'just_eat';
 

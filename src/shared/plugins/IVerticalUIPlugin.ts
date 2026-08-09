@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 // ── Slots surchargeables ──────────────────────────────────────────────────────
 

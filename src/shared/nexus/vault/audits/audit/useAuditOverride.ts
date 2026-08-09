@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { auditService } from './AuditService';
-import type { AuditAction } from '@/domain/schemas';
+import type { AuditAction } from '@/shared/schemas';
 
 interface OverrideContext {
     tenantId: string;

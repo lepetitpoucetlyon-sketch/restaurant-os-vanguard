@@ -8,7 +8,7 @@ import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Table, OrderItem } from "@nexus/contracts";
 import { CartItem, CourseType } from "../../../workflow/engine/types";
-import type { ConsumptionMode } from "@/domain/schemas/orders";
+import type { ConsumptionMode } from "@/modules/ops";
 import {
     COURSE_LABELS,
     getUnsentCourseItems,

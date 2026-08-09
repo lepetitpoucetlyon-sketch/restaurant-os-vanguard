@@ -5,8 +5,21 @@ import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";
 import { toError } from "@/lib/toError";
 
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 5;           // Enterprise grade : 5 tentatives avant quarantaine
 const SCAN_INTERVAL_MS = 30_000;
+
+/**
+ * Events dont l'échec définitif requiert un audit fiscal NF525.
+ * Correspond aux handlers CRITICAL qui scellent la chaîne fiscale.
+ */
+const FISCAL_CRITICAL_EVENTS = new Set([
+  'order.sealed_nf525',
+  'order.completed',
+  'order.cancelled',
+  'payment.captured',
+  'payment.refunded',
+  'fiscal.seal_required',
+]);
 
 /**
  * Calcule le délai de backoff exponentiel plafonné à 60s.
@@ -66,6 +79,18 @@ async function processRetryQueue(): Promise<void> {
           lastError: toError(err).message,
           quarantinedAt: Date.now(),
         }).catch(e => logger.error('[DLQRetry] Failed to emit quarantine alert', e));
+
+        // Si l'événement est fiscal/NF525 → escalade audit obligatoire
+        if (FISCAL_CRITICAL_EVENTS.has(entry.eventName)) {
+          NexusEventBus.emit('mcc.fiscal_audit_required', {
+            tenantId,
+            reason: `DLQ quarantine: ${entry.eventName}#${entry.handlerId} — ${newAttempts} tentatives échouées. Intégrité fiscale NF525 à vérifier manuellement.`,
+            urgency: 'critical',
+          }).catch(e => logger.error('[DLQRetry] Failed to emit fiscal audit alert', e));
+          logger.error(
+            `[DLQRetry] 🚨 FISCAL AUDIT REQUIRED — ${entry.eventName} en quarantaine après ${newAttempts} tentatives (tenant: ${tenantId})`
+          );
+        }
       }
 
       logger.warn(
@@ -99,7 +124,7 @@ export function startDLQRetryService(): void {
     );
   }, SCAN_INTERVAL_MS);
 
-  logger.info('[DLQRetry] Service démarré — scan toutes les 30s, max 3 tentatives avant quarantaine');
+  logger.info('[DLQRetry] Service démarré — scan toutes les 30s, max 5 tentatives avant quarantaine (fiscal: 6 events surveillés)');
 }
 
 export function stopDLQRetryService(): void {

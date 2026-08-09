@@ -27,6 +27,13 @@ export { SilaeClient } from './remuneration/payroll';
 export type { PayrollProviderConfig } from './remuneration/payroll/types';
 export { PROVIDER_CATALOG } from './connectors/payroll/catalog';
 export type { ProviderCatalogEntry } from './connectors/payroll/catalog';
-export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffingHandler';
-export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
 export { DSNBuilder } from './remuneration/payroll/DSNBuilder';
+
+// 🏛️ Handlers (enregistrement bus événementiel)
+export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffingHandler';
+
+// 🏛️ Domaine Schemas
+export * from './domain/schemas/hr';
+export * from './domain/schemas/users';
+export * from './domain/schemas/rbac';
+export * from './domain/schemas/employeeDocument';

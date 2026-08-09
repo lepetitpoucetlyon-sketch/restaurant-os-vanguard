@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { Microunits } from '@/domain/schemas/primitives';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 interface BudgetLine {
     id: string;

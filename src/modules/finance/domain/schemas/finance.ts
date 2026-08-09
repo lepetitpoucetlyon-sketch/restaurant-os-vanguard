@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/shared/schemas/primitives';
 
 // ── Taux TVA légaux France ─────────────────────────────────────────────────
 export const TaxRateSchema = z.enum(['0.055', '0.10', '0.20'])

@@ -1,4 +1,4 @@
-import { Microunits, TaxRate } from '@/domain/schemas/primitives';
+import { Microunits, TaxRate } from '@/shared/schemas/primitives';
 import type { Order, OrderItem, OrderStatus, Product } from '@nexus/contracts/nexus-internal-mapper';
 export type { Order, OrderItem, OrderStatus };
 

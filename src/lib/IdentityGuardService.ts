@@ -6,7 +6,7 @@ import {
     ComplianceExtractionErrorSchema,
     type IdentityExtraction,
     type ComplianceExtractionError
-} from '@/domain/schemas/compliance.schemas';
+} from '@/modules/compliance';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
  
 import { AI_MODELS } from '@/modules/intelligence';

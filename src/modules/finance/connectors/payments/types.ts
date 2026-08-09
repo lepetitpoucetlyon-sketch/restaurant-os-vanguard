@@ -1,4 +1,4 @@
-import type { Microunits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 
 export type PaymentEventType = 'payment.succeeded' | 'payment.failed' | 'refund.succeeded';
 

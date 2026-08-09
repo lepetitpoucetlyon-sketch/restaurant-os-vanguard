@@ -9,10 +9,10 @@ import { useProducts, useCategories } from '../../../providers/hooks/catalogHook
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useToast } from "@components/ui/Toast";
 import { Table, OrderItem } from "@nexus/contracts";
-import { toMicrounits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/shared/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine/types";
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
-import type { ConsumptionMode } from "@/domain/schemas/orders";
+import type { ConsumptionMode } from "@/modules/ops";
 import { POSService } from "../domain";
 
 // Pure helpers (zéro effets de bord)

@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import type { Customer, Reservation } from "@nexus/contracts";
-import type { Table } from "@/domain/schemas/ops";
+import type { Table } from "@/modules/ops";
 
 interface ReservationCreateDialogProps {
     isOpen: boolean;

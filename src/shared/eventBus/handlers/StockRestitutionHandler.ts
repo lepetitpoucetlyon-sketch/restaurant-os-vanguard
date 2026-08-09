@@ -3,7 +3,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import type { Order } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';

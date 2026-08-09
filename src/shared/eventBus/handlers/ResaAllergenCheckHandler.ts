@@ -68,7 +68,7 @@ export function registerResaAllergenCheckHandler(): () => void {
           action: 'ALLERGEN_TRANSMITTED_TO_KDS',
           details: { reservationId, tableId, allergens, customerId },
           severity: 'high',
-          timestamp: new Date(matchedAt),
+          timestamp: matchedAt ? new Date(matchedAt) : new Date(),
         });
       } catch (err) {
         logger.error('[ResaAllergenCheck] Erreur transmission allergènes KDS', err);

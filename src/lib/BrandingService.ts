@@ -4,7 +4,7 @@ import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
 import { LLMManager } from '@/modules/intelligence';
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)

@@ -17,7 +17,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
-import type { PrivatisationFormule, PrivatisationData } from "@/domain/schemas/commerce";
+import type { PrivatisationFormule, PrivatisationData } from "@/modules/commerce";
 import { EventQuoteClientSection } from "./event-quote/EventQuoteClientSection";
 import { EventQuoteDetailsSection } from "./event-quote/EventQuoteDetailsSection";
 import { EventQuoteTariffSection } from "./event-quote/EventQuoteTariffSection";

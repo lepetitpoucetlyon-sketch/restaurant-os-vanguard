@@ -7,7 +7,7 @@ import { QuantumCrypto } from '@/lib/QuantumCrypto';
 const SyncCompliance = { 
     init: vi.fn().mockResolvedValue(undefined) 
 };
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**
  * 🛡️ OMNI-VANGUARD : BATAILLON DOMAINE (GRADE VI)

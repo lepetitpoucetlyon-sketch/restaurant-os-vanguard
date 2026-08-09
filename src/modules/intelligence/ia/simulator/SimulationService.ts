@@ -1,6 +1,6 @@
 import { Order, StockItem, Ingredient, FiscalSeal } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**
  * 🌀 SimulationEngine - Grade X "Quantique"

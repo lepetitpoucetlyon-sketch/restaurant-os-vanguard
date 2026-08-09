@@ -1,7 +1,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/domain/schemas/pos';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import type { CartItem } from '@/modules/ops';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 export interface MarketplaceOrderPayload {
     platform: 'ubereats' | 'deliveroo' | 'wolt';

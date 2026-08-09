@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
-import { PlatformVariantSchema } from '@/domain/schemas/tenant';
+import { PlatformVariantSchema } from '@/modules/system';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { toError } from "@/lib/toError";

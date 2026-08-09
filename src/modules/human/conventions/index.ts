@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 import type { ICollectiveAgreement } from './types';
 import { HCR_CONVENTION } from './hcr.convention';
 import { AUTO_CONVENTION } from './auto.convention';

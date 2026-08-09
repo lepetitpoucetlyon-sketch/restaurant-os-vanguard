@@ -15,7 +15,7 @@ import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { VisionScanner } from "@/shared/components/VisionScanner";
-import type { ExtractedInvoice } from "@/domain/schemas/inventory";
+import type { ExtractedInvoice } from "@/modules/ops";
 
 interface SupplierRecord {
     id: string;

@@ -12,7 +12,7 @@ import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ListFilter } from "lucide-react";
-import { toMicrounits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/shared/schemas/primitives";
 
 interface ExpenseClaimDialogProps {
     isOpen: boolean;

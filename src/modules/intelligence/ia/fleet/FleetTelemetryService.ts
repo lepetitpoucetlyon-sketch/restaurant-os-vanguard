@@ -1,4 +1,4 @@
-import { TenantID, SiteTelemetry } from '@/domain/types/brands';
+import { TenantID, SiteTelemetry } from '@/shared/types/brands';
 import { TelemetryStream, TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

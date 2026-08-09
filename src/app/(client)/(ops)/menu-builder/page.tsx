@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { formatMu } from "@/modules/finance";
-import { toMicrounits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/shared/schemas/primitives";
 import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@components/ui/PageHeader";
 import { Plus, GripVertical, Settings2, ChefHat, Tag, Link2, AlertTriangle, Loader2, Save } from "lucide-react";

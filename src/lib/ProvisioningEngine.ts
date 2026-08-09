@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { EmpireInstance, ProvisioningDNA } from '@/domain/types/empire';
+import { EmpireInstance, ProvisioningDNA } from '@/shared/types/empire';
 import { fleetTelemetry } from '@/modules/intelligence';
 import { TenantSeeder } from './TenantSeeder';
 import { sovereignCreateWorkspace } from '@/modules/intelligence';
@@ -8,7 +8,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
-import { TenantRBACConfigSchema } from '@/domain/schemas/rbac';
+import { TenantRBACConfigSchema } from '@/modules/human';
 import { toError } from "@/lib/toError";
 
 /**
@@ -90,7 +90,7 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
-            await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@domain/types/brands').TenantID, {
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@/shared/types/brands').TenantID, {
                 ...newInstance,
                 healthScore: newInstance.metrics.healthScore,
                 complianceScore: newInstance.metrics.complianceScore,
@@ -195,7 +195,7 @@ export const ProvisioningEngine = {
                 // Marquer l'entrée fleet comme FAILED (évite les ghost entries ONLINE)
                 registeredInstanceId
                     ? fleetTelemetry.pushSiteTelemetry(
-                        registeredInstanceId as import('@domain/types/brands').TenantID,
+                        registeredInstanceId as import('@/shared/types/brands').TenantID,
                         { status: 'PROVISIONING_FAILED' }
                       ).catch(() => {})
                     : Promise.resolve(),

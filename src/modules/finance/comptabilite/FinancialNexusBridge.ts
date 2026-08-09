@@ -8,7 +8,7 @@ import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate } from '../fiscalite/tax/vatResolver';
 import { inferCategory } from '../fiscalite/tax/vatResolver';
-import type { ConsumptionMode } from '@/domain/schemas/orders';
+import type { ConsumptionMode } from '@/modules/ops';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
 
@@ -120,7 +120,7 @@ export const FinancialNexusBridge = {
       const taxRate = isTrainingMode ? '0.00' : resolveVatRate({ category, consumptionMode: lineMode }) as "0.055" | "0.10" | "0.20";
       const analyticalAxis = (category === 'beverage_soft' || category === 'alcohol') ? 'Beverage' : 'Food';
       return { ...item, taxRate, analyticalAxis };
-    }) as (import('@/domain/schemas/pos').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
+    }) as (import('@/modules/ops').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
     const ttcByRateAndAxis = computeTtcByRateAndAxis(resolvedItems);

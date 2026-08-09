@@ -7,7 +7,7 @@
 import { logger } from "@/lib/logger";
 import { DataDigester } from "@modules/intelligence/services/DataDigester";
 import { LegacyOrder, Order } from "@nexus/contracts";
-import { toMicrounits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/shared/schemas/primitives";
 import { FinanceCore } from "@/modules/finance";
 import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';

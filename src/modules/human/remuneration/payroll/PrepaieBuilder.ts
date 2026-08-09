@@ -18,7 +18,7 @@ import { JsonObject } from "@/shared/types/json";
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 import { resolveCollectiveAgreement } from '../../conventions';
 import {
     MU_TO_EUR,

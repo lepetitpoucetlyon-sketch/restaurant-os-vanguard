@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { Reservation } from "@nexus/contracts";
-import type { Order } from "@/domain/schemas/orders";
+import type { Order } from "@/modules/ops";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

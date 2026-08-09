@@ -17,8 +17,8 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
-import { sanitized } from '@/domain/schemas/primitives';
-import type { SupportTicket } from '@/domain/schemas';
+import { sanitized } from '@/shared/schemas/primitives';
+import type { SupportTicket } from '@/shared/schemas';
 import { logger } from '@/lib/logger';
 
 registerSupportTicketAnalysisHandler();

@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 import type { IVerticalUIPlugin } from './IVerticalUIPlugin';
 
 const registry = new Map<PlatformVariant, IVerticalUIPlugin>();

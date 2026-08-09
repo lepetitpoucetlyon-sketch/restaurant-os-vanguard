@@ -5,14 +5,17 @@ import { useTables } from '../../../providers/hooks/floorHooks';
 import { cn } from "@/lib/ui.foundations";
 import { Users, LayoutGrid, Layers, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import { Table } from "@/domain/schemas/ops";
+import { Table } from "@/modules/ops";
 
 interface TableSelectorProps {
     onSelectTable: (tableId: string) => void;
 }
 
 export function TableSelector({ onSelectTable }: TableSelectorProps) {
-    const { tables, zones } = useTables();
+    // tables est typé par Zod (status: string) ; toTable() a déjà narrowé via isTable()
+    // → cast en Table[] pour aligner avec la définition facility (status: TableStatus)
+    const { tables: rawTables, zones } = useTables();
+    const tables = rawTables as unknown as Table[];
     const [viewMode, setViewMode] = useState<'grid' | 'zones'>('grid');
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -218,7 +221,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                         >
                             <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
                             <p className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap">
-                                {tables.filter((t: import("@nexus/contracts").Table) => ['seated', 'ordered', 'eating', 'paying'].includes(t.status)).length} / {tables.length} Actives
+                                {tables.filter((t) => (['seated', 'ordered', 'eating', 'paying'] as const).includes(t.status as 'seated')).length} / {tables.length} Actives
                             </p>
                         </motion.div>
 
@@ -275,7 +278,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                 >
                     {viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                            {tables.map((table: Table) => (
+                            {tables.map((table) => (
                                 <motion.div
                                     key={table.id}
                                     variants={{

@@ -54,5 +54,16 @@ export { useProducts } from './providers';
 export { useCategories } from './providers';
 export { RecipeTechnicalSheet } from './production/kitchen/components/RecipeTechnicalSheet';
 export { CONN_ICON, AddPrinterWizard } from './service/printers/components/settings/AddPrinterWizard';
-export { registerCashDrawerAnomalyHandler } from './service/pos/handlers/CashDrawerAnomalyHandler';
 export { ordersAtom } from './service/pos/store/orderAtoms';
+
+// 🏛️ Domaine Schemas
+// orders: source canonique de ConsumptionMode, CartLine, PosTicket…
+export * from './domain/schemas/orders';
+// ops: TableSchema, ReservationSchema, FloorSchema, ZoneSchema, FloorTable…
+// TableShape/TableStatus/Reservation sont aussi dans workflow/engine — disambiguation ci-dessous
+export * from './domain/schemas/ops';
+export * from './domain/schemas/inventory';
+export * from './domain/schemas/cash';
+// Résolution TS2308 : types dupliqués entre domain/schemas et sous-barrels
+export type { TableShape, TableStatus, Reservation } from './domain/schemas/ops';
+export type { CourseType, SplitMode, PaymentMethod, ConvivePayment } from './domain/schemas/pos';

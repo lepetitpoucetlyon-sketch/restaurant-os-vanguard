@@ -8,7 +8,7 @@ import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import type { BrandInput } from '@/lib/BrandingService';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

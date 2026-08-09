@@ -6,7 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
-import type { TenantID } from '@domain/types/brands';
+import type { TenantID } from '@/shared/types/brands';
 import { FiscalKeyService } from '@/modules/finance';
 import { toError } from "@/lib/toError";
 import type { ProvisioningRequest } from '../TenantProvisioningService';

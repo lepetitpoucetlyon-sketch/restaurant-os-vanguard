@@ -88,7 +88,7 @@ export function registerCryptoIntegrityHandler(): () => void {
             breachId,
           },
           severity: 'critical',
-          timestamp: new Date(detectedAt),
+          timestamp: detectedAt ? new Date(detectedAt) : new Date(),
         });
       } catch (err) {
         logger.error('[CryptoIntegrity] Erreur persistance breach NF525', err);

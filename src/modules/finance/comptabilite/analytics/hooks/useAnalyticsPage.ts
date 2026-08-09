@@ -12,7 +12,7 @@ import { fr } from "date-fns/locale";
 // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useQuality } from '../../../../compliance/qualite/haccp/hooks/useQuality';
-import type { ComplianceAlert } from "@/domain/schemas/compliance.schemas";
+import type { ComplianceAlert } from "@/modules/compliance";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';

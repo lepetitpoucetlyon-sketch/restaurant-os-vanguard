@@ -35,7 +35,7 @@ export {
 import { atom as _atom } from 'jotai';
 import { atomWithStorage as _atomWithStorage } from 'jotai/utils';
 import { tenantConfigAtom as _tenantConfigAtom } from '@nexus/state/SovereignGenome';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 export const activeTenantIdAtom = _atomWithStorage<string | null>('nexus_tenant_id', null);
 export const isTenantLoadingAtom = _atom((get: (a: ReturnType<typeof _atomWithStorage>) => string | null) => !get(activeTenantIdAtom));

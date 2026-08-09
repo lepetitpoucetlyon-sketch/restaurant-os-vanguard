@@ -4,7 +4,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PinHashService } from '@/lib/server/PinHashService';
 import { logger } from '@/lib/logger';
-import type { User } from '@/domain/schemas/users';
+import type { User } from '@/modules/human';
 import { toError } from "@/lib/toError";
 
 /**

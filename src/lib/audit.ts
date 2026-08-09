@@ -61,11 +61,14 @@ class EmpireAuditLogger {
      * Integrates with Axiom for long-term storage and observability.
      */
     public log(event: AuditEvent) {
-        // ASYNCHRONOUS LOGGING: Prevents blocking the main UI thread during navigation
         setTimeout(() => {
+            const safeTimestamp = (event.timestamp && !isNaN(event.timestamp.getTime()))
+                ? event.timestamp.toISOString()
+                : new Date().toISOString();
+
             const payload: AxiomLogPayload = {
                 ...event,
-                timestamp: event.timestamp.toISOString(),
+                timestamp: safeTimestamp,
                 env: process.env.NODE_ENV || 'development',
                 context: 'RESTAURANT-OS-EMPIRE'
             };

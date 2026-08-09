@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { User, Shield, Clock, RefreshCw, ChevronDown } from 'lucide-react';
 import type { EmpireInstance } from '@/shared/nexus/contracts/fleet.types';
-import type { User as TenantUser } from '@/domain/schemas/users';
+import type { User as TenantUser } from '@/modules/human';
 import { authedFetch } from '@/lib/client/authedFetch';
 
 interface Props {

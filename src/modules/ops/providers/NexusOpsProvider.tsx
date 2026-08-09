@@ -7,9 +7,9 @@ import { NexusSyncService } from '@/lib/NexusSyncService';
 import { TelemetryHook } from '@/modules/intelligence/analytique/TelemetryHook';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
-import { EmpireInstance } from '@/domain/types/empire';
+import { EmpireInstance } from '@/shared/types/empire';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
-import { TenantIdSchema } from '@/domain/schemas/ui';
+import { TenantIdSchema } from '@/shared/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 

@@ -1,7 +1,7 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Category, Product, CartItem } from "@nexus/contracts";
 import { SharedKernel } from "@/lib/shared-kernel";
-import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
+import { toMicrounits, Microunits } from "@/shared/schemas/primitives";
 
 /**
  * POS Business Logic Service - The "Translator" between UI and Reality

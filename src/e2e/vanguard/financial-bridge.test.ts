@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { CartItem } from '@/modules/ops';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 // --- Mocks ---
 

@@ -1,6 +1,6 @@
 import { SovereignNode } from '@/shared/nexus-contract';
 
-import { Product } from '@/domain/schemas/commerce';
+import { Product } from '@/modules/commerce';
 export type { Product };
 
 export interface Quote extends SovereignNode {

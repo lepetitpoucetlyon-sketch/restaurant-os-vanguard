@@ -36,3 +36,17 @@ export { HACCPLogService } from './qualite/haccp/HACCPLogService';
 export { registerWasteToFoodCostHandler } from './qualite/haccp/handlers/WasteToFoodCostHandler';
 export { policyEngine } from './services';
 export { useRegistre, RegistreProvider } from './qualite/haccp/contexts/RegistreContext';
+
+// 🏛️ Domaine Schemas
+// haccp: ReceptionSchema, OilCheckSchema, SensorReadingSchema (Zod — version autoritaire)
+// SensorReading collision : qualite/haccp/types/domain.ts a son propre SensorReading interface
+// → on prend la version Zod de domain/schemas/haccp
+export * from './domain/schemas/haccp';
+export * from './domain/schemas/compliance.schemas';
+export * from './domain/schemas/foodDonation';
+export * from './domain/schemas/audit';
+export * from './domain/schemas/pii';
+export * from './domain/schemas/policy';
+export * from './domain/schemas/quality';
+// Disambiguation SensorReading : version Zod (domain/schemas/haccp) prend la précédence
+export type { SensorReading, IoTSensor, SensorTransport } from './domain/schemas/haccp';

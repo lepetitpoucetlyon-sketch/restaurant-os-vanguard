@@ -78,20 +78,23 @@
       "@infrastructure/*": [
         "./src/infrastructure/*"
       ],
+      // @domain/* — alias legacy supprimé (src/domain/ rapatrié en S11 vers src/modules/)
+      // Conservé ici comme redirections vers shared/schemas pour compatibilité résiduelle.
+      // À supprimer définitivement en S12 une fois vérification ESLint complète.
       "@domain/schemas": [
-        "./src/domain/schemas/index"
+        "./src/shared/schemas/index"
       ],
       "@domain/schemas/*": [
-        "./src/domain/schemas/*"
+        "./src/shared/schemas/*"
       ],
       "@domain/types": [
-        "./src/domain/types/index"
+        "./src/shared/types/index"
       ],
       "@domain/types/*": [
-        "./src/domain/types/*"
+        "./src/shared/types/*"
       ],
       "@domain/*": [
-        "./src/domain/*"
+        "./src/shared/*"
       ],
       "@lib/*": [
         "./src/lib/*"

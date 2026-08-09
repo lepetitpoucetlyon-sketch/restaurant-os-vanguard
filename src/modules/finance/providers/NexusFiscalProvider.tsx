@@ -29,7 +29,7 @@ import { useBilling } from '../comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { Sentry } from '@/lib/sentry';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**
  * 🏛️ SovereignSignable

@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { PurchaseOrder, DeliveryNote } from '@/domain/schemas/inventory';
-import type { ExtractedSupplierInvoice } from '@/domain/schemas/supplier-invoice.schemas';
+import type { PurchaseOrder, DeliveryNote } from '@/modules/ops';
+import type { ExtractedSupplierInvoice } from '@/modules/finance';
 import { empireAudit } from '@/lib/audit';
 
 type MatchStatus = 'matched' | 'quantity_discrepancy' | 'price_discrepancy' | 'missing_delivery' | 'missing_po' | 'blocked';

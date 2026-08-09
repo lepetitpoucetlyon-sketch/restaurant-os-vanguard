@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Customer, Reservation } from "@nexus/contracts";
-import { Order } from "@/domain/schemas/orders";
+import { Order } from "@/modules/ops";
 import { Button } from "@ui/button";
 import { ScrollArea } from "@ui/scroll-area";
 import { Phone, Mail, Star, Calendar, Clock, ShoppingBag, TrendingUp, History } from "lucide-react";

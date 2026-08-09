@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { useToast } from '@ui/Toast';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 // ── Catalogue de fonts par rôle et par vertical ───────────────────────────────
 

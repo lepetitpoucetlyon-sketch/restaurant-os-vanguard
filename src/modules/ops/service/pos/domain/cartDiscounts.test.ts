@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { applyItemDiscount, applyItemOffer } from './cartDiscounts';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import type { CartItem } from '../../../workflow/engine/types';
 
 /**

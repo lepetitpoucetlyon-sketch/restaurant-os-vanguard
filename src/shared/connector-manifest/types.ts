@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 export type ConnectorCategory =

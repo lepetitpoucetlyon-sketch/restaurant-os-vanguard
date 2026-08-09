@@ -6,7 +6,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { pushToRole } from '@/lib/push/pushClient';
 import { useTenant } from "@/shared/hooks";
-import type { OrderLine } from "@/domain/schemas/orders";
+import type { OrderLine } from "@/modules/ops";
 
 interface RecipeIngredient {
     ingredientId: string;

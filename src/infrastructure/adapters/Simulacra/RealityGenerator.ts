@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 import { Order } from '@nexus/contracts';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**
  * 🌀 RealityGenerator - The Vital Heart of the Simulacra

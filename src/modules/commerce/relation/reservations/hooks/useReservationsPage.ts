@@ -20,7 +20,7 @@ import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
 
 import type { Table, Reservation } from "@nexus/contracts";
-import type { Table as OpsTable } from "@/domain/schemas/ops";
+import type { Table as OpsTable } from "@/modules/ops";
 import type { Customer } from "@nexus/contracts";
 import type { GroupFormData } from "../components/GroupFormModal";
 import { JsonObject } from "@/shared/types/json";

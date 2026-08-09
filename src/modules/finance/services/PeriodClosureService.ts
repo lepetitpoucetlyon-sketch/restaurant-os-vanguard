@@ -3,8 +3,8 @@ import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import type { PeriodClosure, PeriodType } from '@/modules/finance/domain/schemas/periodClosure';
 import type { JournalEntry } from '@nexus/contracts';
-import type { Microunits } from '@/domain/schemas/primitives';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import { JsonObject } from "@/shared/types/json";
 
 const GENESIS_HASH = '0'.repeat(64);

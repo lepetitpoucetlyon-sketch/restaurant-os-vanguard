@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { Microunits } from '@/domain/schemas/primitives';
+import { Microunits } from '@/shared/schemas/primitives';
 
 export type MenuItemCategory = 'star' | 'plow-horse' | 'puzzle' | 'dog';
 

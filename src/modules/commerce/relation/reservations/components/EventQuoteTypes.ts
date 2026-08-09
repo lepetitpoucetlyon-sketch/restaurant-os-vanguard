@@ -1,4 +1,4 @@
-import type { PrivatisationFormule } from "@/domain/schemas/commerce";
+import type { PrivatisationFormule } from "@/modules/commerce";
 
 export interface EventQuoteFormData {
     // Client

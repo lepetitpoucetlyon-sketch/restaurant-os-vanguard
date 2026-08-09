@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Loader2, Globe, WifiOff } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TableSchema } from '@/domain/schemas/ops';
+import { TableSchema } from '@/modules/ops';
 import { toast } from 'sonner';
 import { z } from 'zod';
 

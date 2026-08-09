@@ -12,7 +12,7 @@ export function registerKdsRoutingHandler() {
       // Pour l'implémentation de base V5, on sépare en 2 stations fictives (chaud / froid) 
       // ou on envoie tout à une station globale.
       
-      const kdsItems = (items || []).map((item: import('@/domain/schemas/pos').CartItem & { course?: number }, _idx: number) => ({
+      const kdsItems = (items || []).map((item: import('@/modules/ops').CartItem & { course?: number }, _idx: number) => ({
         id: crypto.randomUUID(),
         productId: item.productId,
         name: item.name,

@@ -1,6 +1,6 @@
 // src/domain/schemas/pos.ts
 import { z } from 'zod';
-import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/shared/schemas/primitives';
 import { TaxRateSchema } from '@/modules/finance/domain/schemas/finance';
 import { ConsumptionModeSchema } from '@/modules/ops/domain/schemas/orders';
 
@@ -75,7 +75,7 @@ export type CartLine  = z.infer<typeof CartLineSchema>;
 export type PaymentSplit = z.infer<typeof PaymentSplitSchema>;
 
 // ─── CartItem (ops/engine canonical type, promoted to domain) ────────────────
-import type { Microunits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 
 export type CourseType = 'entree' | 'plat' | 'dessert';
 

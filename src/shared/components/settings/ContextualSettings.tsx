@@ -17,7 +17,7 @@ import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 import { SovereignStorage } from "@/shared/services/SovereignStorage";
-import { PageSettingsSchema } from "@/domain/schemas/ui";
+import { PageSettingsSchema } from "@/shared/schemas/ui";
 
 
 // ============ CONTEXT & PROVIDER ============

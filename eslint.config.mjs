@@ -23,6 +23,12 @@ const eslintConfig = defineConfig([
           {
             "group": ["@/modules/*/*", "@modules/*/*"],
             "message": "Barrel Contract : importez uniquement '@/modules/<pilier>' (racine). Profondeur domaine/module interdite."
+          },
+          {
+            // Bloque les imports vers l'ancien src/domain/ (rapatriement terminé en S11)
+            // Utiliser @/modules/<pilier> ou @/shared/schemas selon le type.
+            "group": ["@/domain", "@/domain/*", "@/domain/**"],
+            "message": "Legacy src/domain/ supprimé — remplacer par @/modules/<pilier> ou @/shared/schemas."
           }
         ]
       }],

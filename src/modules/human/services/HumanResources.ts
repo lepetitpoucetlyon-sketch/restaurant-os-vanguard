@@ -1,4 +1,4 @@
-import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@domain/schemas/hr";
+import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/modules/human";
 import { format, addDays, isSameDay } from 'date-fns';
 import { SovereignData } from "@shared/nexus-contract";
 

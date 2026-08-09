@@ -7,7 +7,7 @@ import { VERTICAL_STYLE_PRESETS } from '@/shared/nexus/tokens/verticals/presets'
 import { BrandImportWizard } from './BrandImportWizard';
 import { cn } from '@/lib/ui.foundations';
 import type { StylePreset } from '@/shared/nexus/tokens/verticals/presets';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 
 // ── Types ─────────────────────────────────────────────────────────────────────

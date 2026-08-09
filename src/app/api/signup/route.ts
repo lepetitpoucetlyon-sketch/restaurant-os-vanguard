@@ -10,7 +10,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { sendEmail } from '@/lib/email-service';
-import { PlatformVariantSchema } from '@/domain/schemas/tenant';
+import { PlatformVariantSchema } from '@/modules/system';
 import { toError } from "@/lib/toError";
 
 const SignupSchema = z.object({

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UUIDSchema, TimestampSchema } from '@/domain/schemas/primitives';
+import { UUIDSchema, TimestampSchema } from '@/shared/schemas/primitives';
 
 export const LoyaltyTierSchema = z.enum(['bronze', 'silver', 'gold', 'platinum']);
 

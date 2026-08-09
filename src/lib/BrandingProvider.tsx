@@ -10,7 +10,7 @@ import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/bra
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 import { themeModeAtom } from '@/shared/nexus/tokens/themeAtoms';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 function getContrastTextColor(hexColor: string): string {
   const clean = hexColor.replace('#', '');

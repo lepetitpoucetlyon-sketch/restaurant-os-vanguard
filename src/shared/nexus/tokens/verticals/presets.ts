@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 export interface StylePreset {
   id: string;

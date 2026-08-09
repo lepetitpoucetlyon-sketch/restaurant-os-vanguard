@@ -20,7 +20,7 @@ export interface SeedInput {
   tenantId: string;
   name: string;
   adminEmail: string;
-  variant?: import('@/domain/schemas/tenant').PlatformVariant;
+  variant?: import('@/modules/system').PlatformVariant;
   /** 4-digit PIN for the admin user — omit to let TenantSeeder generate a secure one */
   adminPin?: string;
   siren?: string;

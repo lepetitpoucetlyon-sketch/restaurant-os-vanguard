@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 const makePayload = () => ({
   v: 1 as const,

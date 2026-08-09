@@ -12,9 +12,16 @@ export * from './intelligence';
 export * from './logistics';
 export * from './ops';
 
-// Resolve cross-pilier TS2308 ambiguities (ops/commerce sovereign versions take precedence)
+// Resolve cross-pilier TS2308 ambiguities (pilier canonique prend la précédence)
 export { useMarketing, useQuotes, useRegistre } from './ops';
 export { useProducts, useCategories } from './ops';
 export { useCRM } from './commerce';
 export { useReservations } from './commerce';
 export { useInventory } from './logistics';
+// Types cross-piliers — version canonique explicite
+export type { StockItem } from './logistics';
+export type { Reservation } from './commerce';
+export type { DeliveryNote, PurchaseOrder } from './logistics';
+export type { ComplianceAlert } from './compliance';
+export type { DocumentType } from './human';
+export type { ProductCategory } from './compliance';

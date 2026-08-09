@@ -53,7 +53,7 @@ export function registerDishReboundHandler(): () => void {
             action: 'DISH_REBOUND_ALLERGEN',
             details: { orderId, itemId, productName, reason, operatorId },
             severity: 'critical',
-            timestamp: new Date(reboundAt),
+            timestamp: reboundAt ? new Date(reboundAt) : new Date(),
           });
         } else {
           // Retour standard — gaspillage cuisine
@@ -78,7 +78,7 @@ export function registerDishReboundHandler(): () => void {
             action: 'DISH_REBOUND',
             details: { orderId, itemId, productName, reason, operatorId },
             severity: 'medium',
-            timestamp: new Date(reboundAt),
+            timestamp: reboundAt ? new Date(reboundAt) : new Date(),
           });
         }
       } catch (err) {

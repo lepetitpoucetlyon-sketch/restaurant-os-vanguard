@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { HumanResourcesService } from './HumanResources';
-import { ShiftEntry } from "@domain/schemas/hr";
+import { ShiftEntry } from "@/modules/human";
 
 describe('HumanResourcesService (Grade VI Validation)', () => {
     describe('calculatePayroll', () => {

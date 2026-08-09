@@ -25,12 +25,12 @@ import {
     TreasurySnapshot,
     FiscalSeal
 } from '@modules/finance/types';
-import type { TreasuryMetrics } from '@/domain/schemas/finance';
+import type { TreasuryMetrics } from '@/modules/finance';
 import { useBilling } from '@/modules/finance/comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 
 import { Sentry } from '@/lib/sentry';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**
  * 🏛️ SovereignSignable

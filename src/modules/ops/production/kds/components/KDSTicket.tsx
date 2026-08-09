@@ -139,11 +139,11 @@ export function KDSTicket({
     // ── kds-7: Compute full order grouped by seat ─────────────────────────
     const fullOrderGroupedBySeat = useMemo(() => {
         if (!fullOrder) return {};
-        const grouped: Record<string, import('@/domain/schemas/pos').CartItem[]> = {};
+        const grouped: Record<string, import('@/modules/ops').CartItem[]> = {};
         for (const item of fullOrder.items) {
             const seat = (item as { seatNumber?: string }).seatNumber || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
-            grouped[seat].push(item as unknown as import('@/domain/schemas/pos').CartItem);
+            grouped[seat].push(item as unknown as import('@/modules/ops').CartItem);
         }
         return grouped;
     }, [fullOrder]);

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/shared/schemas/primitives';
 
 export const FoodDonationSchema = z.object({
     id: UUIDSchema,

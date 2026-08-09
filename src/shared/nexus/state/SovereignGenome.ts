@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
 import { DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
-import { TenantConfigSchema, type TenantConfig } from '@/domain/schemas/tenant';
-import { UserSchema, type User } from '@/domain/schemas/users';
-import { EmpireInstance } from '@/domain/types/empire';
+import { TenantConfigSchema, type TenantConfig } from '@/modules/system/domain/schemas/tenant';
+import { UserSchema, type User } from '@/modules/human/domain/schemas/users';
+import { EmpireInstance } from '@/shared/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
 import type { Notification as AppNotification, Floor, Zone } from '@nexus/contracts';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';

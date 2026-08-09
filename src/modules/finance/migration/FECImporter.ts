@@ -13,7 +13,7 @@
  */
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

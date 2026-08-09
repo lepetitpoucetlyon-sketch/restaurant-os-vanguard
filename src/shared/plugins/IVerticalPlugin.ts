@@ -1,5 +1,5 @@
 import React from 'react';
-import type { TenantRBACConfig } from '@/domain/schemas/rbac';
+import type { TenantRBACConfig } from '@/modules/human';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 
 export interface IVerticalPlugin {

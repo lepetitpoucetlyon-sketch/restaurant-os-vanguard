@@ -1,4 +1,4 @@
-import { Microunits } from '@/domain/schemas/primitives';
+import { Microunits } from '@/shared/schemas/primitives';
 
 // ─── NF525 ────────────────────────────────────────────────────────────────────
 

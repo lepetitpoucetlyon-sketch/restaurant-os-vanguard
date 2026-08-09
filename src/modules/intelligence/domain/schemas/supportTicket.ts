@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TimestampSchema, UUIDSchema, sanitized } from '@/domain/schemas/primitives';
+import { TimestampSchema, UUIDSchema, sanitized } from '@/shared/schemas/primitives';
 
 export const SupportTicketSourceSchema = z.enum(['tenant_submission', 'mcc_manual']);
 export type SupportTicketSource = z.infer<typeof SupportTicketSourceSchema>;

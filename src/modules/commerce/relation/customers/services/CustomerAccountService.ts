@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { AccountChargeSchema, type CustomerAccount, type AccountCharge } from '@/modules/commerce/domain/schemas/customerAccount';
-import type { Microunits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 
 export const CustomerAccountService = {
     async getBySubject(tenantId: string, subjectId: string): Promise<CustomerAccount | null> {

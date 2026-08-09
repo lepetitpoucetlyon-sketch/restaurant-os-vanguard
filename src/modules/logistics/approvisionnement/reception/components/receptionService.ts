@@ -5,7 +5,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Ingredient } from '@nexus/contracts';
 import { toast } from 'sonner';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

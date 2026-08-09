@@ -1,6 +1,6 @@
 import type { IPaymentProvider, PaymentEvent, Transaction, CheckoutOrder } from '../types';
-import { toMicrounits } from '@/domain/schemas/primitives';
-import type { Microunits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 import { logger } from '@/lib/logger';
 
 /**

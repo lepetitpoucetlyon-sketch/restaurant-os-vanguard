@@ -2,7 +2,7 @@
  * posHelpers — Fonctions pures du POS (zéro React, zéro effets de bord).
  * Testables unitairement sans monter de composant.
  */
-import { toMicrounits } from "@/domain/schemas/primitives";
+import { toMicrounits } from "@/shared/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine/types";
 import { OrderItem } from "@nexus/contracts";
 import { IdGenerator } from "@/lib/utils/IdGenerator";

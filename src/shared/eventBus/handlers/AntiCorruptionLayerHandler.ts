@@ -58,7 +58,7 @@ export function registerAntiCorruptionLayerHandler() {
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) as unknown as import('@/domain/schemas/pos').CartItem[] ?? []
+          })) as unknown as import('@/modules/ops').CartItem[] ?? []
         });
         
         await NexusEventBus.emitDurable('order.paid', {
@@ -73,7 +73,7 @@ export function registerAntiCorruptionLayerHandler() {
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) as unknown as import('@/domain/schemas/pos').CartItem[] ?? [],
+          })) as unknown as import('@/modules/ops').CartItem[] ?? [],
           totalInMicrounits: amount,
           paymentMode: platform
         });

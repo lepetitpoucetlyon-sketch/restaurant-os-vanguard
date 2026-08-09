@@ -7,7 +7,7 @@ import {
     type LoyaltyTransaction,
     type LoyaltyTier,
 } from '@/modules/commerce/domain/schemas/loyalty';
-import type { Microunits } from '@/domain/schemas/primitives';
+import type { Microunits } from '@/shared/schemas/primitives';
 
 function resolveTier(lifetimePoints: number): LoyaltyTier {
     if (lifetimePoints >= TIER_THRESHOLDS.platinum) return 'platinum';

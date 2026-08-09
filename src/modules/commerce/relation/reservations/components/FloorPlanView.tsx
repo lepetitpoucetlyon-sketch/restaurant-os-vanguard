@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { Users } from "lucide-react";
 import { cinematicItem, TABLES_DATA } from '../constants';
-import type { FloorTable as Table } from "@/domain/schemas/ops";
+import type { FloorTable as Table } from "@/modules/ops";
 
 interface FloorPlanViewProps {
     setSelectedTable: (table: Table) => void;

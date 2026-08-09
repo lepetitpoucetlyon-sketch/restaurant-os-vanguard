@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { StockItem } from "@/domain/schemas/inventory";
+import { StockItem } from "@/modules/ops";
 
 const POLL_INTERVAL_MS = 30_000; // Re-check every 30 seconds
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema } from '@/domain/schemas/primitives';
+import { MicrounitsSchema } from '@/shared/schemas/primitives';
 import { TaxRateSchema } from '@/modules/finance/domain/schemas/finance';
 
 export const PeriodTypeSchema = z.enum(['monthly', 'annual']);

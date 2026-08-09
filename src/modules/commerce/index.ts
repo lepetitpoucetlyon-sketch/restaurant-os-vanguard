@@ -49,3 +49,8 @@ export { default as EmbedSnippets } from './fidelite/widgets/EmbedSnippets';
 export { default as ROICalculator } from './fidelite/widgets/ROICalculator';
 export { default as OnlineBookingToggle } from './fidelite/widgets/OnlineBookingToggle';
 export { registerCRMVipHandler } from './acquisition/marketing/handlers/CRMVipHandler';
+
+// 🏛️ Domaine Schemas & Types
+export * from './domain/schemas/commerce';
+export * from './domain/types/brands';
+export * from './domain/schemas/giftcard';

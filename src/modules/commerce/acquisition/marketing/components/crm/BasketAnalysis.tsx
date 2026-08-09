@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { BarChart2, ShoppingBag, TrendingUp, Loader2 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import type { Order } from "@/domain/schemas/orders";
+import type { Order } from "@/modules/ops";
 
 // ---------------------------------------------------------------------------
 // Types

@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import { PERMISSION_ROLE_LEVELS } from '@/shared/nexus/contracts/permissions.types';
 import type { ParsedFile, ImportResult } from '../types';

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema, UUIDSchema, TimestampSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, UUIDSchema, TimestampSchema, sanitized } from '@/shared/schemas/primitives';
 
 export const GiftCardSchema = z.object({
     id: UUIDSchema,

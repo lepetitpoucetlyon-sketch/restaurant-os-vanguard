@@ -68,3 +68,9 @@ export { OpenBankingProviderFactory } from './tresorerie/banking/openBanking/Ope
 export { BankConnectionStore } from './tresorerie/banking/openBanking/BankConnectionStore';
 export { signBankConnectState, verifyBankConnectState } from './tresorerie/banking/openBanking/tokenCipher';
 export { GoCardlessProvider } from './tresorerie/banking/openBanking/GoCardlessProvider';
+
+// 🏛️ Domaine Schemas
+export * from './domain/schemas/finance';
+export * from './domain/schemas/cash';
+export * from './domain/schemas/periodClosure';
+export * from './domain/schemas/supplier-invoice.schemas';

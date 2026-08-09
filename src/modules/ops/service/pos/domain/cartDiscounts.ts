@@ -1,4 +1,4 @@
-import { toMicrounits, Microunits } from "@/domain/schemas/primitives";
+import { toMicrounits, Microunits } from "@/shared/schemas/primitives";
 import type { CartItem } from "../../../workflow/engine/types";
 
 /**

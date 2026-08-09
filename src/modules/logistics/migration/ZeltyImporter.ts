@@ -5,7 +5,7 @@
  * This module provides a canonical price parser and a thin import helper.
  */
 
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 /** Raw row from a Zelty CSV export. */
 export interface ZeltyRow {

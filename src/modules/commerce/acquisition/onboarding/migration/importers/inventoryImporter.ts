@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import type { ParsedFile, ImportResult } from '../types';
-import type { StockItem } from '@/domain/schemas/inventory';
+import type { StockItem } from '@/modules/ops';
 
 type ValidUnit = StockItem['unit'];
 

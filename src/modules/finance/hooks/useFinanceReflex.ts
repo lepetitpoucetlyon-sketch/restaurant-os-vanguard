@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { nexusPulseAtom } from '../store/accountingAtoms';
 import { useAccounting } from './useAccounting';
 import { logger } from '@/lib/logger';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 
 export function useFinanceReflex() {

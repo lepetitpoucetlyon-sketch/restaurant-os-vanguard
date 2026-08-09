@@ -142,7 +142,7 @@ export async function suggestChickenProcurement(qty: number, tenantId: string): 
  * Generates Genomic Suture reports if flaws are detected.
  */
 export async function superviseChaos(tenantId: string): Promise<string> {
-  const { MonkeyChaos } = await import('@/domain/chaos/MonkeyChaos');
+  const { MonkeyChaos } = await import('@/lib/chaos/MonkeyChaos');
   const result = await MonkeyChaos.attackLedger(tenantId);
   
   if (result.success) {

@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
-import { TenantConfigSchema } from '@/domain/schemas/tenant';
+import { TenantConfigSchema } from '@/modules/system';
 import { ReservationWidget } from '@/modules/commerce';
 import { JsonObject } from "@/shared/types/json";
 

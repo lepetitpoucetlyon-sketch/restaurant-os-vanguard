@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SanitizedStringSchema, TimestampSchema, UUIDSchema } from '@/domain/schemas/primitives';
+import { SanitizedStringSchema, TimestampSchema, UUIDSchema } from '@/shared/schemas/primitives';
 
 export const TableShapeSchema = z.enum(['rect', 'circle']).or(z.string());
 

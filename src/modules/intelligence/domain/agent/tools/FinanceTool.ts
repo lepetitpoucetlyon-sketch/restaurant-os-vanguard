@@ -4,7 +4,7 @@ import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { SovereignMath } from '@/shared/services/SovereignMath';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 import { ToolDefinition } from './types';
 

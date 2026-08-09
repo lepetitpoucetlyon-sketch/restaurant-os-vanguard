@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Percent, Tag, Gift, Trash2, X, Check, MessageSquare, Store, ShoppingBag, PackageOpen } from "lucide-react";
-import type { ConsumptionMode } from "@/domain/schemas/orders";
+import type { ConsumptionMode } from "@/modules/ops";
 import { cn } from "@/lib/ui.foundations";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import type { PendingAction } from "../_hooks/useRbacGate";

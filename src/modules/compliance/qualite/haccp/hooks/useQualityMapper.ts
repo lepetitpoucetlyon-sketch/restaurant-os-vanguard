@@ -67,7 +67,7 @@ export const useQualityMapper = () => {
         try {
             // 👑 Transform UI state into Sovereign Domain Contract
             // 💍 LE SERTI MYSTÉRIEUX : Utilisation de l'Adapter Agnostique
-            const receptionData: import('@domain/schemas/haccp').ReceptionData = {
+            const receptionData: import('@/modules/compliance').ReceptionData = {
                 deliveryId: activeControl.delivery?.id || 'manual',
                 supplierName: activeControl.supplier_name || 'UNKNOWN',
                 truckTemp: activeControl.delivery_conditions?.vehicle_temperature?.measured || 0,

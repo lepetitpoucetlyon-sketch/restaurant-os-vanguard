@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
-import { toMicrounits } from '@/domain/schemas/primitives';
+import { toMicrounits } from '@/shared/schemas/primitives';
 import type { AggregatorOrder, AggregatorPlatform, AggregatorConfig } from './types';
 
 export const AggregatorBridge = {

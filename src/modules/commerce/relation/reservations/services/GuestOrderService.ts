@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MicrounitsSchema, UUIDSchema, TimestampSchema, sanitized } from '@/domain/schemas/primitives';
+import { MicrounitsSchema, UUIDSchema, TimestampSchema, sanitized } from '@/shared/schemas/primitives';
 
 export const GuestOrderItemSchema = z.object({
     productId: UUIDSchema,

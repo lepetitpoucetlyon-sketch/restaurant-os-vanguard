@@ -19,8 +19,8 @@ import {
     Clock, Loader2, ChevronDown, ChevronUp, Database,
     FlaskConical, Star, Play, X
 } from 'lucide-react';
-import { PLATFORM_VARIANTS, VERTICAL_META } from '@/domain/schemas/tenant';
-import type { PlatformVariant } from '@/domain/schemas/tenant';
+import { PLATFORM_VARIANTS, VERTICAL_META } from '@/modules/system';
+import type { PlatformVariant } from '@/modules/system';
 import { getSystemTenantId, getAllSystemTenantIds } from '@/lib/mcc/SystemTenantRegistry';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';

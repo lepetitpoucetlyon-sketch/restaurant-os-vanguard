@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MicrounitsSchema } from '@/domain/schemas/primitives';
+import { MicrounitsSchema } from '@/shared/schemas/primitives';
 
 export const CashSessionSchema = z.object({
     id: z.string(),

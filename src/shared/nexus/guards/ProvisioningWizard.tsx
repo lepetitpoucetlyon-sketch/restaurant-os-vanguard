@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, Zap, Globe, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
-import { ProvisioningDNA } from '@/domain/types/empire';
+import { ProvisioningDNA } from '@/shared/types/empire';
 import { Button } from '@ui/button';
 
 interface ProvisioningWizardProps {
