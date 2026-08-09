@@ -44,6 +44,7 @@ export function registerDigitalReceiptHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[DigitalReceiptHandler] Échec envoi ticket numérique pour commande ${orderId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'digital-receipt-handler', priority: 'BACKGROUND' }

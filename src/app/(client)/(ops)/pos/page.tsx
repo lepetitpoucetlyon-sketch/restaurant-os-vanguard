@@ -8,14 +8,24 @@ import {
     Store, ShoppingBag,
 } from "lucide-react";
 
-import { ProductGrid, Cart, TableSelector, PaymentDialog, SplitBillDialog } from "@modules/ops";
+import dynamic from "next/dynamic";
+import { ProductGrid, Cart, TableSelector } from "@modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";
-// eslint-disable-next-line no-restricted-imports
-import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager } from "@/modules/commerce/ui/pos";
+import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
+
+// Dynamic Lazy Imports for Heavy POS Modals & Panes
+const PaymentDialog = dynamic(() => import("@modules/ops").then(m => m.PaymentDialog), { loading: () => <POSModalSkeleton /> });
+const SplitBillDialog = dynamic(() => import("@modules/ops").then(m => m.SplitBillDialog), { loading: () => <POSModalSkeleton /> });
+const CashDrawerModal = dynamic(() => import("@modules/ops").then(m => m.CashDrawerModal), { loading: () => <POSModalSkeleton /> });
+const PinModal = dynamic(() => import("@modules/ops").then(m => m.PinModal), { loading: () => <POSModalSkeleton /> });
+const VoidModal = dynamic(() => import("@modules/ops").then(m => m.VoidModal), { loading: () => <POSModalSkeleton /> });
+const CourseManager = dynamic(() => import("@modules/ops").then(m => m.CourseManager), { loading: () => <POSModalSkeleton /> });
+const TipPanel = dynamic(() => import("@modules/ops").then(m => m.TipPanel), { loading: () => <POSModalSkeleton /> });
+
 import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";

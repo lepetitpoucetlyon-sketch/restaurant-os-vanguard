@@ -20,7 +20,7 @@ export function registerNoShowCRMHandler(): () => void {
         subjectId?: string;
       }>(`tenants/${tenantId}/reservations/${reservationId}`);
 
-      const customerId = reservation?.customerId ?? reservation?.subjectId;
+      const customerId = payload.customerId || reservation?.customerId || reservation?.subjectId;
 
       if (!customerId) {
         logger.warn(`[NoShowCRM] Aucun customerId pour la réservation ${reservationId} — dégradation CRM ignorée`);
@@ -31,16 +31,11 @@ export function registerNoShowCRMHandler(): () => void {
         noShowCount?: number;
         crmScore?: number;
         tags?: string[];
-      }>(`tenants/${tenantId}/customers/${customerId}`);
+      }>(`tenants/${tenantId}/customers/${customerId}`) || {};
 
-      if (!customer) {
-        logger.warn(`[NoShowCRM] Client ${customerId} introuvable`);
-        return;
-      }
-
-      const noShowCount = (customer.noShowCount ?? 0) + 1;
-      const crmScore = Math.max(0, (customer.crmScore ?? 100) - 20);
-      const tags: string[] = Array.isArray(customer.tags) ? [...customer.tags] : [];
+      const noShowCount = ((customer as { noShowCount?: number }).noShowCount ?? 0) + 1;
+      const crmScore = Math.max(0, ((customer as { crmScore?: number }).crmScore ?? 100) - 20);
+      const tags: string[] = Array.isArray((customer as { tags?: string[] }).tags) ? [...((customer as { tags?: string[] }).tags || [])] : [];
 
       const isDepositRequired = noShowCount >= 2;
 
@@ -55,6 +50,13 @@ export function registerNoShowCRMHandler(): () => void {
         tags,
         depositRequired: isDepositRequired,
         updatedAt: new Date().toISOString(),
+      });
+
+      await NexusEventBus.emit('crm.customer_updated', {
+        v: 1,
+        tenantId,
+        customerId,
+        updates: { noShowCount, crmScore, tags, depositRequired: isDepositRequired },
       });
 
       logger.info(

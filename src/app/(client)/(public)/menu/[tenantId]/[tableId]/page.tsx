@@ -6,6 +6,7 @@ import { Leaf, AlertTriangle, Search, ChefHat, Beef } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { formatCurrency } from '@/lib/formatters';
+import { isProductInCategory } from "@/shared/utils/categoryMatcher";
 
 interface ProductItem {
     id: string;
@@ -72,7 +73,7 @@ export default function PublicMenuPage() {
 
     const filteredProducts = useMemo(() => {
         return products.filter(p => {
-            if (selectedCategory !== 'all' && p.categoryId !== selectedCategory) return false;
+            if (!isProductInCategory(p, selectedCategory, categories)) return false;
             if (searchQuery) {
                 const q = searchQuery.toLowerCase();
                 if (!p.name.toLowerCase().includes(q) && !(p.description ?? '').toLowerCase().includes(q)) return false;
@@ -80,7 +81,7 @@ export default function PublicMenuPage() {
             if (excludedAllergens.size > 0 && p.allergens?.some(a => excludedAllergens.has(a))) return false;
             return true;
         });
-    }, [products, selectedCategory, searchQuery, excludedAllergens]);
+    }, [products, selectedCategory, categories, searchQuery, excludedAllergens]);
 
     const toggleAllergen = (allergen: string) => {
         setExcludedAllergens(prev => {

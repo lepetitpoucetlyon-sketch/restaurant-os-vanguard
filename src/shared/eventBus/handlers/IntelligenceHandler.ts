@@ -59,6 +59,7 @@ export function registerIntelligenceHandler(): () => void {
             }
           } catch (e) {
             logger.error('[Intelligence] Batch processing failed', e);
+            throw e;
           }
         }, 30_000);
       }

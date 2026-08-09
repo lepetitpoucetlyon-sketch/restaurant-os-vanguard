@@ -11,6 +11,10 @@ import { TaskContext, TASK_MAPS, readZcpoState, degradeImportanceMap } from '@/l
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
 import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
 import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
+// VerticalRegistry / CoreContext sont importés dynamiquement dans init() :
+// VerticalRegistry lazy-importe les verticales, qui remontent jusqu'ici — un
+// import statique referme le cycle et laisse RestaurantVertical partiellement
+// initialisée (ses handlers ne s'enregistrent plus).
 import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
 import { initMasterBridgeListener } from './sync/masterBridgeInit';
 import { startSelfHealingInterval } from './sync/selfHealingInit';
@@ -90,6 +94,25 @@ export const NexusSyncService = {
         logger.info(`[NexusSyncService][ICM] Task="${icm.taskId}" — chargement sélectif activé.`);
         const initStart = performance.now();
         try {
+            // --- VERTICAL PLUGIN ACTIVATION (H-01) ---
+            // Le variant vient de la config tenant (défaut 'restaurant'). Imports
+            // dynamiques : cf. note en tête de fichier (cycle d'initialisation).
+            try {
+                const [{ VerticalRegistry }, { CoreContext }] = await Promise.all([
+                    import('@/shared/plugins/VerticalRegistry'),
+                    import('@/shared/plugins/CoreContext'),
+                ]);
+                const tenantConfig = await Nexus.adapter.get<{ variant?: string }>(
+                    `tenants/${tenantId}/config/main`
+                );
+                const variant = (tenantConfig?.variant ?? 'restaurant') as import('@/modules/system/domain/schemas/tenant').PlatformVariant;
+                const vertical = VerticalRegistry.resolve(variant);
+                await vertical.initialize(new CoreContext());
+                logger.info(`[NexusSyncService] Vertical "${variant}" initialisée pour le tenant ${tenantId}`);
+            } catch (verticalError) {
+                logger.warn('[NexusSyncService] Init verticale échouée (non bloquant)', verticalError);
+            }
+
             await initPillarSyncs(imp, tenantId, store);
 
             const duration = performance.now() - initStart;

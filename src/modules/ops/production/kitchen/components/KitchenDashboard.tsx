@@ -27,14 +27,23 @@ const ProductFormModal = dynamic(
   () => import("@/modules/ops/service/pos/components/ProductFormModal").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
-import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
-import { RecipeDetailDialog } from "./RecipeDetailDialog";
+const PrepTaskDetailDialog = dynamic(() => import("./PrepTaskDetailDialog").then(m => m.PrepTaskDetailDialog));
+const RecipeDetailDialog = dynamic(() => import("./RecipeDetailDialog").then(m => m.RecipeDetailDialog));
+
+// Dynamic Lazy Imports for Kitchen Tabs
+const MiseEnPlaceTab = dynamic(() => import("./tabs/MiseEnPlaceTab").then(m => m.MiseEnPlaceTab));
+const RecipesTab = dynamic(() => import("./tabs/RecipesTab").then(m => m.RecipesTab));
+const WasteTab = dynamic(() => import("./tabs/WasteTab").then(m => m.WasteTab));
+const MarginsTab = dynamic(() => import("./tabs/MarginsTab").then(m => m.MarginsTab));
+const SuppliersTab = dynamic(() => import("./tabs/SuppliersTab").then(m => m.SuppliersTab));
+const AllergensTab = dynamic(() => import("./tabs/AllergensTab").then(m => m.AllergensTab));
+const CookingTimesTab = dynamic(() => import("./tabs/CookingTimesTab").then(m => m.CookingTimesTab));
+const IngredientsTab = dynamic(() => import("./tabs/IngredientsTab").then(m => m.IngredientsTab));
+const DailyPrepList = dynamic(() => import("../../recipes/DailyPrepList").then(m => m.DailyPrepList));
+
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { ExpertHub } from '@/modules/commerce';
-
-import { MiseEnPlaceTab, RecipesTab, WasteTab, MarginsTab, SuppliersTab, AllergensTab, CookingTimesTab, IngredientsTab } from "./tabs";
-import { DailyPrepList } from '../../recipes/DailyPrepList';
 import { useAtomValue } from "jotai";
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 

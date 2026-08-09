@@ -32,6 +32,7 @@ export function registerSepaExportHandler() {
         logger.info(`[SepaExport] ${pendingInvoices.length} facture(s) marquées payées pour le batch ${paymentBatchId}`);
       } catch (err) {
         logger.error(`[SepaExport] Erreur lors de la mise à jour des factures du batch ${paymentBatchId}`, toError(err).message);
+        throw err;
       }
 
       empireAudit.log({

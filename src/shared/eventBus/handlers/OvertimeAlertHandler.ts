@@ -69,8 +69,22 @@ export function registerOvertimeAlertHandler() {
     }
   );
 
+  const unsubThreshold = NexusEventBus.on(
+    'overtime.threshold',
+    async (payload) => {
+      const { tenantId, employeeId, hoursWorked, hoursLimit } = payload;
+      const extraMinutes = Math.max(0, Math.round(((hoursWorked ?? 0) - (hoursLimit ?? 35)) * 60));
+      await NexusEventBus.emit('hr.overtime_alert', {
+        tenantId,
+        employeeId,
+        extraMinutes,
+      });
+    }
+  );
+
   return () => {
     unsubShiftEnded();
     unsubOvertimeAlert();
+    unsubThreshold();
   };
 }

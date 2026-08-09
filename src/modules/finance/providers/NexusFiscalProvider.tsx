@@ -8,7 +8,7 @@ import {
     bankTransactionsAtom, 
     expenseClaimsAtom 
 } from '@/store/pillars/finance';
-import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
+import { fiscalSealsNodeAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 
 import { SovereignMath } from '@shared/services/SovereignMath';
@@ -94,7 +94,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
     const accounts = useAtomValue(accountsAtom);
     const bankTransactions = useAtomValue(bankTransactionsAtom);
     const expenseClaims = useAtomValue(expenseClaimsAtom);
-    const fiscalSeals = useAtomValue(fiscalLedgerNodeAtom);
+    const fiscalSeals = useAtomValue(fiscalSealsNodeAtom);
 
     // 🛡️ SOVEREIGN MATH: Total elimination of native operators
     const netProfitInMicrounits = useMemo(() => {
@@ -200,7 +200,7 @@ export const NexusFiscalProvider: React.FC<{ children: ReactNode }> = ({ childre
             submitExpense
         },
         compliance: {
-            seals: fiscalSeals.data as unknown as FiscalSeal[],
+            seals: fiscalSeals.data,
             runAudit: runFiscalAudit,
             documents: [] as ComplianceDocument[] 
         },

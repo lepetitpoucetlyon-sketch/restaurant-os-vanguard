@@ -76,6 +76,7 @@ export class OnboardingProgressHandler {
         }
       } catch (err) {
         logger.error('[OnboardingProgressHandler] Error updating onboarding step', toError(err).message);
+        throw err;
       }
     }, { id: 'onboarding-progress', priority: 'BACKGROUND' });
   }

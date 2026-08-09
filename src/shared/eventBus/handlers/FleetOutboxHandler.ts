@@ -35,6 +35,7 @@ export class FleetOutboxHandler {
       logger.info(`[FleetOutboxHandler] Événement ${eventName} placé dans l'outbox MCC du tenant ${tenantId}`);
     } catch (err) {
       logger.error(`[FleetOutboxHandler] Erreur lors de l'outboxing de ${eventName}`, toError(err).message);
+      throw err;
     }
   }
 }

@@ -17,21 +17,25 @@ import {
     Sparkles,
 } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import {
     useInventoryPage,
-    StockReceptionModal,
-    StockTransferModal,
-    CreatePreparationModal,
-    OracleModal,
-    ThresholdModal,
-    PhysicalCountModal,
-    AdjustStockModal,
     computeDLCStatus,
     RotatingCount,
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
+import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
+
+// Dynamic Lazy Imports for Inventory Modals
+const StockReceptionModal = dynamic(() => import("@/modules/logistics").then(m => m.StockReceptionModal), { loading: () => <POSModalSkeleton /> });
+const StockTransferModal = dynamic(() => import("@/modules/logistics").then(m => m.StockTransferModal), { loading: () => <POSModalSkeleton /> });
+const CreatePreparationModal = dynamic(() => import("@/modules/logistics").then(m => m.CreatePreparationModal), { loading: () => <POSModalSkeleton /> });
+const OracleModal = dynamic(() => import("@/modules/logistics").then(m => m.OracleModal), { loading: () => <POSModalSkeleton /> });
+const ThresholdModal = dynamic(() => import("@/modules/logistics").then(m => m.ThresholdModal), { loading: () => <POSModalSkeleton /> });
+const PhysicalCountModal = dynamic(() => import("@/modules/logistics").then(m => m.PhysicalCountModal), { loading: () => <POSModalSkeleton /> });
+const AdjustStockModal = dynamic(() => import("@/modules/logistics").then(m => m.AdjustStockModal), { loading: () => <POSModalSkeleton /> });
 
 function InventoryPage() {
     const {

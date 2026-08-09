@@ -105,6 +105,7 @@ export function registerScheduleNotifierHandler() {
         });
       } catch (error) {
         logger.error('[ScheduleNotifier] Erreur lors de la notification:', toError(error).message);
+        throw error;
       }
     },
     { id: 'schedule-notifier', priority: 'BACKGROUND' }

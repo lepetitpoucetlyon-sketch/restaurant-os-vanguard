@@ -16,8 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { useReservationsPage } from '@/modules/commerce';
  
-// eslint-disable-next-line no-restricted-imports
-import { PinModal } from "@/modules/commerce/ui/pos/PinModal";
+import { PinModal } from "@modules/ops";
 import { DailyListView } from '@/modules/commerce';
 import { WeeklyView } from '@/modules/commerce';
 import { GroupFormModal } from '@/modules/commerce';

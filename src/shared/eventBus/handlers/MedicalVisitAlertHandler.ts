@@ -52,6 +52,7 @@ export class MedicalVisitAlertHandler {
         }
       } catch (err) {
         logger.error('[MedicalVisitAlertHandler] Error fetching employee data', toError(err).message);
+        throw err;
       }
     }, { id: 'medical-visit-alert', priority: 'BACKGROUND' });
   }

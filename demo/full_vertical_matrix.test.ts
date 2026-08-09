@@ -4,6 +4,8 @@ import { EventCollector } from './verifier/EventCollector';
 import { CoherenceVerifier } from './verifier/CoherenceVerifier';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
+import { registerServerNexusHandlers } from '@/shared/eventBus/registerHandlers';
+
 function uid(prefix: string) {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
@@ -16,6 +18,7 @@ describe('🌌 AUDIT DE L\'ARBORESCENCE & MATRICE TOTALE VERTICALE RESTAURANT OS
   let engine: SimulacraEngine;
 
   beforeAll(async () => {
+    registerServerNexusHandlers();
     collector = new EventCollector();
     collector.start();
 

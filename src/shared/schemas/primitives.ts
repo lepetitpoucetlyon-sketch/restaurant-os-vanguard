@@ -14,8 +14,37 @@ export const MicrounitsSchema = z.number()
 
 export type Microunits = z.infer<typeof MicrounitsSchema>;
 
-// Helper to safely cast number to Microunits for TS
-export const toMicrounits = (val: number): Microunits => val as Microunits;
+/**
+ * Convertit un nombre en `Microunits` avec application réelle de l'invariant.
+ *
+ * Avant : simple `val as Microunits` — le type brandé n'offrait AUCUNE garantie
+ * runtime, et rien n'empêchait un flottant, un négatif ou une valeur en centimes
+ * d'entrer dans la chaîne financière (cf. `MicrounitsSchema` : entier ≥ 0).
+ *
+ * Stratégie par environnement :
+ *  - dev / test : lève immédiatement — la violation doit être corrigée à la source.
+ *  - production : normalise (arrondi + clamp) et journalise en `error`. Un artefact
+ *    d'arrondi ne doit jamais faire échouer une vente en cours, mais il doit rester
+ *    visible et diagnosticable côté observabilité.
+ */
+export const toMicrounits = (val: number): Microunits => {
+  if (Number.isInteger(val) && val >= 0) return val as Microunits;
+
+  const reason = !Number.isFinite(val)
+    ? `valeur non finie (${val})`
+    : !Number.isInteger(val)
+      ? `flottant (${val}) — les microunités doivent être entières`
+      : `négatif (${val}) — une valeur financière ne peut pas être négative`;
+
+  if (process.env.NODE_ENV !== 'production') {
+    throw new Error(`MICROUNITS_INVARIANT_VIOLATION: ${reason}`);
+  }
+
+  // Production : normalisation défensive + trace.
+  const normalized = Number.isFinite(val) ? Math.max(0, Math.round(val)) : 0;
+  console.error(`[Microunits] Invariant violé — ${reason}. Normalisé en ${normalized}.`);
+  return normalized as Microunits;
+};
 
 // Raw string with sanitization - to be used via .pipe(SanitizedStringSchema)
 // Raw string with sanitization - internal base

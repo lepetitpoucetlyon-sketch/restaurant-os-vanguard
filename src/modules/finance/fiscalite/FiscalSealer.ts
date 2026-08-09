@@ -119,6 +119,7 @@ export class FiscalSealer {
         tx.set(sealPath, {
           id: sealId, hash, signature,
           previousHash: FISCAL_CONSTANTS.GENESIS_ROOT,
+          dataSnapshot,
           timestamp,
           serverRecordedAt,
           isTrainingMode: true,
@@ -146,6 +147,7 @@ export class FiscalSealer {
 
         tx.set(sealPath, {
           id: sealId, hash, signature, previousHash,
+          dataSnapshot,
           timestamp,
           serverRecordedAt,
           isTrainingMode: false,

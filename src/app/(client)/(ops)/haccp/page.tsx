@@ -5,14 +5,19 @@ import {
     Download, PackageSearch, BellRing, Search, Package,
 } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import { useHaccpPage, HACCP_TOOLS } from '@/modules/compliance';
-import {
-    ReleveTemperatures, GestionHuiles, PlanNettoyage, GestionAnomalies,
-    ProductControlList, SanitaryReport,
-} from "@/modules/compliance/qualite/haccp/components";
-import { CleaningPlan } from '@/modules/compliance';
-import { DLCTracker } from '@/modules/compliance';
-import { NonConformityForm } from '@/modules/compliance';
+import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
+
+const ReleveTemperatures = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.ReleveTemperatures), { loading: () => <POSModalSkeleton /> });
+const GestionHuiles = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.GestionHuiles), { loading: () => <POSModalSkeleton /> });
+const PlanNettoyage = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.PlanNettoyage), { loading: () => <POSModalSkeleton /> });
+const GestionAnomalies = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.GestionAnomalies), { loading: () => <POSModalSkeleton /> });
+const ProductControlList = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.ProductControlList), { loading: () => <POSModalSkeleton /> });
+const SanitaryReport = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.SanitaryReport), { loading: () => <POSModalSkeleton /> });
+const CleaningPlan = dynamic(() => import("@/modules/compliance").then(m => m.CleaningPlan), { loading: () => <POSModalSkeleton /> });
+const DLCTracker = dynamic(() => import("@/modules/compliance").then(m => m.DLCTracker), { loading: () => <POSModalSkeleton /> });
+const NonConformityForm = dynamic(() => import("@/modules/compliance").then(m => m.NonConformityForm), { loading: () => <POSModalSkeleton /> });
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
 

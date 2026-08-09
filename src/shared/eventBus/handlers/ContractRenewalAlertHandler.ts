@@ -51,6 +51,7 @@ export class ContractRenewalAlertHandler {
         }
       } catch (err) {
         logger.error('[ContractRenewalAlertHandler] Error fetching contract', toError(err).message);
+        throw err;
       }
     }, { id: 'contract-renewal-alert', priority: 'BACKGROUND' });
   }

@@ -33,6 +33,7 @@ export class OracleQueryAuditHandler {
         });
       } catch (err) {
         logger.error('[OracleQueryAuditHandler] Error auditing AI query', toError(err).message);
+        throw err;
       }
     }, { id: 'oracle-query-audit', priority: 'BACKGROUND' });
   }

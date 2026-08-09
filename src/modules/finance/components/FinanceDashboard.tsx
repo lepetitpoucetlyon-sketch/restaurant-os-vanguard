@@ -15,7 +15,6 @@ import { toast } from "sonner";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
-import { ExpenseClaimDialog } from './accounting';
 import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
@@ -24,6 +23,8 @@ import { useOrders } from '@/modules/ops';
 import type { Order } from "@/modules/ops";
 import type { JournalEntry } from "@nexus/contracts";
 import dynamic from "next/dynamic";
+
+const ExpenseClaimDialog = dynamic(() => import('./accounting').then(m => m.ExpenseClaimDialog));
 
 // dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)
 const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));

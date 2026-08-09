@@ -131,6 +131,7 @@ export class FleetStratBriefingHandler {
         });
       } catch (err) {
         logger.error('[FleetStratBriefingHandler] Error generating briefing', toError(err).message);
+        throw err;
       }
     }, { id: 'fleet-strat-briefing', priority: 'BACKGROUND' });
   }

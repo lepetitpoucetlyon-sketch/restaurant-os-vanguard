@@ -13,6 +13,8 @@ import {
   RestaurantIntelligenceAdapter,
   RestaurantLogisticsAdapter,
   RestaurantMccAdapter,
+  RestaurantOpsAdapter,
+  RestaurantCommerceAdapter,
 } from './adapters';
 import { toError } from "@/lib/toError";
 

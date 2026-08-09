@@ -84,7 +84,7 @@ export async function runImporterWithSnapshot(
     const result = await runImporter(category, file, rawFile, (p) => onProgress(5 + Math.round(p * 0.95)));
     return { ...result, snapshotId: snapshot.id };
   } catch (err) {
-    await ImportSnapshotService.restore(snapshot.id).catch(() => null);
+    await ImportSnapshotService.restore(snapshot.id, tenantId).catch(() => null);
     throw err;
   }
 }

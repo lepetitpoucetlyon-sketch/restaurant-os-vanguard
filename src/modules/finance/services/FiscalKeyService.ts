@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * 🔑 FiscalKeyService — source unique de la clé de scellement NF525.
  *
@@ -18,6 +20,10 @@ export class FiscalKeyService {
   /** Charge la clé d'un tenant (appelé au sync de tenantConfig / au login). */
   static provision(tenantId: string, signingKey: string): void {
     if (!tenantId || !signingKey) return;
+    const existing = this.keys.get(tenantId);
+    if (existing && existing !== signingKey) {
+      logger.warn(`[FiscalKeyService] Key re-provisioning with different key for tenant ${tenantId}`);
+    }
     this.keys.set(tenantId, signingKey);
   }
 

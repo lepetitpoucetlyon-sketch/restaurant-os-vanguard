@@ -20,6 +20,7 @@ export function registerSalesDataReadyHandler(): () => void {
         logger.info(`[SalesDataReadyHandler] Snapshot enregistré ${snapshotId} pour ${tenantId}`);
       } catch (err) {
         logger.error(`[SalesDataReadyHandler] Échec enregistrement snapshot: ${toError(err).message}`);
+        throw err;
       }
     },
     { id: 'sales-data-ready', priority: 'BACKGROUND' },

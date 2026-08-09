@@ -42,6 +42,7 @@ export function registerTipDistributedHandler(): () => void {
         logger.info(`[TipDistributedHandler] ${tipInMicrounits}µ distribués entre ${staffIds.length} staff pour commande ${orderId}`);
       } catch (err) {
         logger.error(`[TipDistributedHandler] Échec distribution pourboire: ${toError(err).message}`);
+        throw err;
       }
     }),
     { id: 'tip-distributed', priority: 'BACKGROUND' },

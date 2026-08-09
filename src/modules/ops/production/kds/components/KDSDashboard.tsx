@@ -15,14 +15,16 @@ import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 
+import dynamic from "next/dynamic";
 import { KDSHeader } from "./KDSHeader";
 import { KDSTicket, hasAllergens } from "./KDSTicket";
 import { KDSEmptyState } from "./KDSEmptyState";
+import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 
-// UI Components (Modals)
-import { ModificationAlertsPanel } from "../../kitchen/components/ModificationAlerts";
-import { RecipeDetailDialog } from "../../kitchen/components/RecipeDetailDialog";
-import { PlateAuditWizard } from "../../kitchen/components/PlateAuditWizard";
+// Dynamic Lazy Imports for KDS Dialogs & Wizards
+const ModificationAlertsPanel = dynamic(() => import("../../kitchen/components/ModificationAlerts").then(m => m.ModificationAlertsPanel), { loading: () => <POSModalSkeleton /> });
+const RecipeDetailDialog = dynamic(() => import("../../kitchen/components/RecipeDetailDialog").then(m => m.RecipeDetailDialog), { loading: () => <POSModalSkeleton /> });
+const PlateAuditWizard = dynamic(() => import("../../kitchen/components/PlateAuditWizard").then(m => m.PlateAuditWizard), { loading: () => <POSModalSkeleton /> });
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -25,9 +25,9 @@ export function DesktopTopbar() {
                         <Link
                             key={section.id}
                             href={section.items[0]?.href || '#'}
-                            prefetch={false}
+                            prefetch={true}
                             className={cn(
-                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all",
+                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-150",
                                 pathname.startsWith(section.items[0]?.href) ? "text-accent-gold" : "text-text-muted hover:text-text-primary"
                             )}
                         >

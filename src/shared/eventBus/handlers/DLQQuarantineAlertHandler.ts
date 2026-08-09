@@ -29,6 +29,14 @@ export function registerDLQQuarantineAlertHandler() {
         severity: 'critical',
         timestamp: new Date(quarantinedAt),
       });
+
+      if (attempts >= 5) {
+        await NexusEventBus.emit('mcc.fiscal_audit_required', {
+          tenantId,
+          reason: `DLQ Quarantine: ${eventName}#${handlerId} (${attempts} échecs)`,
+          urgency: 'critical',
+        });
+      }
     },
     { id: 'dlq-quarantine-alert-handler', priority: 'HIGH' }
   );

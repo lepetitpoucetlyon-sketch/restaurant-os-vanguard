@@ -212,6 +212,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'tenant',
         items: [
             { label: "Gestion Comptable", key: "accounting_management", href: "/finance?tab=accounting", icon: BookOpen, category: "accounting", requiredCapability: "mod_accounting_management" },
+            { label: "Export FEC / NF525", key: "nf525_export", href: "/nf525", icon: ScrollText, category: "accounting", requiredCapability: "mod_accounting_management" },
         ]
     },
     {
@@ -238,6 +239,9 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Paramètres", key: "settings", href: "/settings", icon: Settings, category: "settings" },
             { label: "Intégrations", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings" },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: UserCog, category: "account-settings" },
+            { label: "Simulateur Vanguard", key: "vanguard_simulator", href: "/vanguard-simulator", icon: Activity, category: "settings" },
+            { label: "POS Mobile", key: "pos_mobile", href: "/pos-mobile", icon: Smartphone, category: "settings" },
+            { label: "Mon Espace Staff", key: "mon_espace", href: "/mon-espace", icon: Users, category: "settings" },
         ]
     },
 ];

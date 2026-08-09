@@ -2,7 +2,6 @@ import { initializeApp, getApps, FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 // Imports for Nexus moved down to break circular dependencies
 
@@ -69,12 +68,10 @@ export const storage = getStorage(firebaseApp);
 // pour l'initialisation interne de FirestoreAdapter / FirestoreDocumentStore.
 export const isMock = !DEFAULT_CONFIG.apiKey || DEFAULT_CONFIG.apiKey.startsWith('AIzaDummy');
 
-/**
- * 🛰️ SERVER-SIDE TENANT OVERRIDE
- */
-export function setServerSideTenantOverride(tenantId: string | null) {
-    Nexus.tenantOverride = tenantId;
-}
+// `setServerSideTenantOverride()` a été supprimée : elle ancrait le tenant sur le
+// singleton `Nexus`, partagé par toutes les requêtes concurrentes d'un process Node
+// — donc source de fuite cross-tenant. Aucun appelant ne l'utilisait.
+// Côté serveur, passer le tenant par appel : `{ vassalId, actorId }` (NexusContext).
 
 export async function initializeTenantFirebase(config?: FirebaseOptions) {
     if (config) {

@@ -22,15 +22,17 @@ export function registerNoShowHandler(): () => void {
         const resPath = `tenants/${tenantId}/reservations/${reservationId}`;
         const reservation = await Nexus.adapter.get<{ tableId?: string }>(resPath);
 
+        const tableId = (payload as { tableId?: string }).tableId || (reservation && reservation.tableId) || `table_${reservationId}`;
+
         // 1. Libérer la table
-        if (reservation && reservation.tableId) {
+        if (tableId) {
           await NexusEventBus.emit('table.released', {
             v: 1,
             tenantId,
-            tableId: reservation.tableId,
+            tableId,
             orderId: reservationId,
           });
-          logger.info(`[NoShowHandler] Table ${reservation.tableId} libérée automatiquement`);
+          logger.info(`[NoShowHandler] Table ${tableId} libérée automatiquement`);
         }
 
         // 2. Notification Waitlist (prochain en file)

@@ -87,6 +87,7 @@ export class BirthdayOfferHandler {
         });
       } catch (err) {
         logger.error('[BirthdayOfferHandler] Error generating birthday offer', toError(err).message);
+        throw err;
       }
     }, { id: 'birthday-offer', priority: 'BACKGROUND' });
   }

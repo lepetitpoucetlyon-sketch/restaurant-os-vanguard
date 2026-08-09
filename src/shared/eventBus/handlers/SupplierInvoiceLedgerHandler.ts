@@ -81,6 +81,7 @@ export function registerSupplierInvoiceLedgerHandler() {
         }
       } catch (err) {
         logger.error(`[SupplierInvoiceLedger] Erreur lors du matching PO auto`, err);
+        throw err;
       }
     },
     { id: 'supplier-invoice-ledger', priority: 'HIGH' }

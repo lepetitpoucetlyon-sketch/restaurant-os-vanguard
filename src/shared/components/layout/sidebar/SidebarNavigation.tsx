@@ -131,7 +131,7 @@ export function SidebarNavigation({
                                                 <div key={item.href} className="relative group">
                                                     <Link
                                                         href={item.key === 'system_map' ? '#' : item.href}
-                                                        prefetch={false}
+                                                        prefetch={true}
                                                         onClick={(e) => {
                                                             empireAudit.log({
                                                                 module: 'system',
@@ -148,7 +148,7 @@ export function SidebarNavigation({
                                                         rel={item.href.startsWith('http') && item.key !== 'system_map' ? 'noopener noreferrer' : undefined}
                                                         onMouseEnter={() => setHoveredIndex(currentIndex)}
                                                         className={cn(
-                                                            "flex items-center rounded-2xl text-[13px] font-medium transition-all duration-700 relative overflow-hidden outline-none",
+                                                            "flex items-center rounded-2xl text-[13px] font-medium transition-all duration-150 relative overflow-hidden outline-none",
                                                             isActive
                                                                 ? "text-text-primary bg-bg-secondary dark:bg-surface-card/10 border border-border/50 shadow-premium font-bold"
                                                                 : "text-text-secondary dark:text-text-primary/80 hover:text-text-primary hover:bg-bg-tertiary/50",
@@ -164,14 +164,14 @@ export function SidebarNavigation({
                                                         )}
                                                         <div className={cn("relative z-10 flex items-center", isReallyCollapsed ? "justify-center" : "gap-4 w-full")}>
                                                             <div className={cn(
-                                                                "transition-all duration-700 p-2 rounded-xl",
+                                                                "transition-all duration-150 p-2 rounded-xl",
                                                                 isActive ? "bg-accent-gold/10 text-accent-gold scale-110 shadow-inner" : "text-text-muted group-hover:text-text-primary group-hover:scale-110"
                                                             )}>
                                                                 <Icon strokeWidth={isActive ? 2 : 1.5} className="w-[18px] h-[18px]" />
                                                             </div>
                                                             {!isReallyCollapsed && (
                                                                 <span className={cn(
-                                                                    "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1 flex items-center gap-2",
+                                                                    "tracking-tight transition-colors duration-150 font-serif italic text-lg font-bold leading-none py-1 flex items-center gap-2",
                                                                     isActive ? "text-text-primary" : "text-text-secondary dark:text-text-primary/90"
                                                                 )}>
                                                                     {t(`nav.${item.key}`)}

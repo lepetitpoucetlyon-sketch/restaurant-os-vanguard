@@ -61,6 +61,7 @@ export class WeeklyReportHandler {
         });
       } catch (err) {
         logger.error('[WeeklyReportHandler] Error generating weekly report', toError(err).message);
+        throw err;
       }
     }, { id: 'weekly-report', priority: 'BACKGROUND' });
   }

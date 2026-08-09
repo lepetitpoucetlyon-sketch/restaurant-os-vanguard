@@ -8,39 +8,34 @@ import { logger } from '@/lib/logger';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
 export function useFinanceReflex() {
     const pulse = useAtomValue(nexusPulseAtom);
-    const { addJournalEntry } = useAccounting();
     const lastPulseId = useRef<string | null>(null);
 
     useEffect(() => {
-        if (!pulse || pulse.id === lastPulseId.current) return;
-        lastPulseId.current = pulse.id;
+        // Écoute de l'événement waste validé via NexusEventBus (pas de hashes falsifiés)
+        const unsub = NexusEventBus.on('inventory.waste_logged', async (payload) => {
+            logger.info(`[FINANCE_REFLEX] Pertes inventaire détectées : ${payload.wasteId}`);
+            await NexusEventBus.emit('finance.food_cost_impacted', {
+                v: 1,
+                tenantId: payload.tenantId,
+                reason: `perte_inventory_${payload.wasteId}`,
+                affectedItems: payload.items.map(item => item.productId),
+                impactDate: new Date().toISOString(),
+            });
+        });
 
-        // 🏛️ RÉFLEXE : HACCP WASTE -> FINANCE EXPENSE
-        if (pulse.type === 'HACCP_SET_WASTELOGS' || pulse.type === 'HACCP_WASTE') {
-            logger.info(`[FINANCE_REFLEX] Reaction to HACCP Waste: ${pulse.id}`);
-            
-            const wasteData = pulse.payload.data as { item?: string; quantity?: number };
-            // toMicrounits and SovereignMath are imported at the top of the file
-            
-            addJournalEntry({
-                id: `ref_${pulse.id.substring(0, 8)}`,
-                serverTimestamp: Date.now(),
-                pieceNumber: `WST-${pulse.id.substring(0, 5)}`,
-                description: `Pertes HACCP automatiques : ${wasteData.item || 'Produit inconnu'}`,
-                type: 'expense',
-                amountInMicrounits: toMicrounits(SovereignMath.fromCents((wasteData.quantity || 1) * 1000)), // 10€ par unité
-                taxRate: '0.20',
-                taxAmountInMicrounits: toMicrounits(0),
-                operatorId: 'SYSTEM',
-                deviceId: 'HACCP_SCANNER',
-                correlationId: pulse.id,
-                status: 'validated',
-                hash: '1'.repeat(64),
-                hashPrecedent: '0'.repeat(64),
-            } as unknown as Parameters<typeof addJournalEntry>[0]);
+        if (pulse && pulse.id !== lastPulseId.current) {
+            lastPulseId.current = pulse.id;
+            if (pulse.type === 'HACCP_SET_WASTELOGS' || pulse.type === 'HACCP_WASTE') {
+                logger.info(`[FINANCE_REFLEX] Traitement pulse waste : ${pulse.id}`);
+            }
         }
 
-    }, [pulse, addJournalEntry]);
+        return () => {
+            unsub();
+        };
+    }, [pulse]);
 }

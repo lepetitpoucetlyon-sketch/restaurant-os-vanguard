@@ -22,7 +22,7 @@ export { useFinanceReflex } from './hooks/useFinanceReflex';
 export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { FinanceCore } from './services/FinanceCore';
 export { TransactionService } from './services/TransactionService';
-export { FiscalEngine, FISCAL_CONSTANTS } from './services/FiscalEngine';
+export { FiscalEngine, FISCAL_CONSTANTS } from './fiscalite/FiscalAdapter';
 export { SovereignLedger } from './services/SovereignLedger';
 export { FiscalKeyService } from './services/FiscalKeyService';
 

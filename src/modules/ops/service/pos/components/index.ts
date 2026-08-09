@@ -5,11 +5,18 @@
  */
 
 export * from './Cart';
+export * from './CashCounterModal';
+export * from './CashDrawerModal';
 export * from './CategoryList';
+export * from './CourseManager';
+export * from './ModifierModal';
 export * from './PaymentDialog';
+export * from './PinModal';
 export * from './ProductDetailsDialog';
 export * from './ProductFormModal';
 export * from './ProductGrid';
 export * from './SplitBillDialog';
 export * from './TableSelector';
+export * from './TipPanel';
+export * from './VoidModal';
 export * from './bar';

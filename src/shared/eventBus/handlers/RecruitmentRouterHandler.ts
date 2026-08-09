@@ -128,6 +128,7 @@ export class RecruitmentRouterHandler {
         });
       } catch (err) {
         logger.error('[RecruitmentRouterHandler] Error saving application', toError(err).message);
+        throw err;
       }
     }, { id: 'recruitment-router', priority: 'BACKGROUND' });
   }

@@ -43,6 +43,7 @@ export function registerWasteDailyAggregatorHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[WasteDailyAggregatorHandler] Échec agrégation gaspillage ${wasteId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'waste-daily-aggregator-handler', priority: 'BACKGROUND' }

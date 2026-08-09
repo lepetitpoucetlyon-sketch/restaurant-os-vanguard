@@ -43,7 +43,7 @@ function writeLog(level: LogLevel, message: string, meta?: LogMetadata) {
         message,
         timestamp,
         level,
-        audit_id: `AUD-${Math.random().toString(36).substring(7).toUpperCase()}`,
+        audit_id: `AUD-${crypto.randomUUID().replace(/-/g, '').toUpperCase()}`,
         node: 'COCKPIT_MCC_PRIMARY'
     };
 

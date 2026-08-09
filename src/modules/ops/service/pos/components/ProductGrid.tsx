@@ -6,13 +6,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search, AlertTriangle, Clock } from "lucide-react";
 import { Product, Option } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
+import dynamic from "next/dynamic";
 import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from '../store/posAtoms';
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { quarantinedProductsAtom } from "@/store/pillars/compliance";
-import { ProductDetailsDialog } from "./ProductDetailsDialog";
+import { categoriesAtom } from "@/store/pillars/logistics";
+import { isProductInCategory } from "@/shared/utils/categoryMatcher";
+import { POSModalSkeleton } from "./POSModalSkeleton";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";
 import { useInventory } from '../../../providers/hooks/catalogHooks';
+
+const ProductDetailsDialog = dynamic(() => import("./ProductDetailsDialog").then(m => m.ProductDetailsDialog), { loading: () => <POSModalSkeleton /> });
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useNexusFleet } from "@/modules/intelligence";
@@ -43,23 +48,21 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
 
     return (
     <motion.div
-        layout={performanceMode ? false : "position"}
-        initial={performanceMode ? false : { opacity: 0, y: 30 }}
-        animate={performanceMode ? false : { opacity: 1, y: 0 }}
+        initial={performanceMode ? false : { opacity: 0, scale: 0.96 }}
+        animate={performanceMode ? false : { opacity: 1, scale: 1 }}
         transition={performanceMode ? { duration: 0 } : { 
-            delay: idx * 0.02, 
-            duration: 0.8, 
-            ease: [0.16, 1, 0.3, 1] 
+            duration: 0.15, 
+            ease: "easeOut" 
         }}
-        exit={performanceMode ? { opacity: 0 } : { opacity: 0, scale: 0.9, transition: { duration: 0.4 } }}
+        exit={performanceMode ? { opacity: 0 } : { opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
         onClick={() => !isDisabled && onClick(product)}
         className={cn(
-            "group rounded-[42px] border border-border/40 overflow-hidden transition-all relative flex flex-col h-full",
-            performanceMode ? "duration-0" : "duration-700",
+            "group rounded-[32px] border border-border/40 overflow-hidden transition-all relative flex flex-col h-full",
+            performanceMode ? "duration-0" : "duration-200",
             !performanceMode && "backdrop-blur-xl",
             isDisabled 
-                ? "bg-surface-sidebar/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
-                : "bg-surface-card dark:bg-surface-card/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
+                ? "opacity-50 grayscale cursor-not-allowed bg-bg-tertiary/20" 
+                : "bg-surface-card dark:bg-surface-card/10 hover:border-accent-gold/40 hover:shadow-premium hover:-translate-y-1 cursor-pointer active:scale-[0.98]"
         )}
     >
         {/* Compliance Overlays */}
@@ -180,55 +183,69 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
     const { priceMultiplier } = useNexusFleet();
     const performanceMode = useAtomValue(performanceModeAtom);
     const quarantinedProducts = useAtomValue(quarantinedProductsAtom);
-    const stockItems = inventory.data || [];
+    const categories = useAtomValue(categoriesAtom);
+    // Référence stable : `inventory.data || []` créait un nouveau tableau à chaque
+    // render, invalidant availableStockMap puis toute la grille filtrée.
+    const stockItems = useMemo(() => inventory.data ?? [], [inventory.data]);
 
     // Read show_images setting from context (defaults to true)
     const showImages = usePageSetting('pos', 'show_images', true);
     const buttonSize = usePageSetting<'small' | 'medium' | 'large'>('pos', 'button_size', 'medium');
 
+    // FAST O(1) STOCK LOOKUP MAP
+    const { availableStockMap, expiredIngredientIds } = useMemo(() => {
+        const now = Date.now();
+        const map = new Map<string, number>();
+        const expiredSet = new Set<string>();
+
+        for (let i = 0; i < stockItems.length; i++) {
+            const s = stockItems[i];
+            if (!s.ingredientId) continue;
+            if (s.status === 'expired' || s.status === 'discarded') {
+                expiredSet.add(s.ingredientId);
+                continue;
+            }
+            if (s.dlc) {
+                const dlcTime = new Date(String(s.dlc)).getTime();
+                if (!isNaN(dlcTime) && dlcTime <= now) {
+                    expiredSet.add(s.ingredientId);
+                    continue;
+                }
+            }
+            const current = map.get(s.ingredientId) || 0;
+            map.set(s.ingredientId, current + (Number(s.quantity) || 0));
+        }
+        return { availableStockMap: map, expiredIngredientIds: expiredSet };
+    }, [stockItems]);
+
     const filteredProductsWithStatus = useMemo(() => {
         const query = searchQuery.toLowerCase();
-        const now = new Date();
 
         return products.filter(p => {
             const matchesSearch = String(p.name || '').toLowerCase().includes(query);
-            const matchesCategory = categoryFilter === "all" || String(p.category || '') === categoryFilter || String(p.categoryId || '') === categoryFilter;
+            const matchesCategory = isProductInCategory(p, categoryFilter, categories);
             return matchesSearch && matchesCategory;
         }).map(product => {
-            // COMPLIANCE GUARD LOGIC
-            // Check if unknown required ingredient is completely unavailable or expired
             let isDisabled = false;
             let disabledReason: 'expired' | 'stockout' | 'quarantine' | undefined;
 
-            // P2: Check Quarantine HACCP first
             if (quarantinedProducts[product.id]) {
                 isDisabled = true;
                 disabledReason = 'quarantine';
             }
 
             if (!isDisabled && product.ingredients && product.ingredients.length > 0) {
-                for (const req of product.ingredients) {
-                    const relatedStock = stockItems.filter(s => s.ingredientId === req.ingredientId);
-                    
-                    const nonExpiredStock = relatedStock.filter(s => {
-                        const dlc = new Date(String(s.dlc || ''));
-                        return dlc > now && s.status !== 'expired' && s.status !== 'discarded';
-                    });
-
-                    const totalQty = nonExpiredStock.reduce((acc, s) => acc + Number(s.quantity || 0), 0);
-
+                for (let i = 0; i < product.ingredients.length; i++) {
+                    const req = product.ingredients[i];
+                    const totalQty = availableStockMap.get(req.ingredientId) || 0;
                     if (totalQty < req.quantity) {
                         isDisabled = true;
-                        // If there IS stock but it's all expired, reason is 'expired'
-                        // Otherwise it's a simple 'stockout'
-                        const expiredOnly = relatedStock.length > 0 && nonExpiredStock.length === 0;
-                        disabledReason = expiredOnly ? 'expired' : 'stockout';
+                        disabledReason = expiredIngredientIds.has(req.ingredientId) ? 'expired' : 'stockout';
                         break;
                     }
                 }
             }
 
-            // Secondary stockout check: useStockAlerts set (matches by productId or lowercased name)
             if (!isDisabled && outOfStockIds && outOfStockIds.size > 0) {
                 const nameKey = (product.name || '').toLowerCase();
                 if (outOfStockIds.has(product.id) || outOfStockIds.has(nameKey)) {
@@ -239,7 +256,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
 
             return { ...product, isDisabled, disabledReason };
         });
-    }, [products, searchQuery, categoryFilter, stockItems]);
+    }, [products, searchQuery, categoryFilter, availableStockMap, expiredIngredientIds, quarantinedProducts, outOfStockIds]);
 
     const handleProductClick = useCallback((product: Product) => {
         if (product.optionGroups && product.optionGroups.length > 0) {
@@ -272,7 +289,10 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
             {/* Product Grid - Exhibition Deck */}
             <div className="flex-1 p-6 md:p-12 overflow-y-auto scrollbar-hide relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-10 md:gap-14">
-                    <AnimatePresence mode="wait">
+                    {/* Pas de mode="wait" : il sérialise les sorties de TOUS les produits
+                        avant de monter les nouveaux → grille figée au changement de catégorie.
+                        Le mode par défaut anime entrées et sorties en parallèle. */}
+                    <AnimatePresence>
                         {isLoading ? (
                             <div className="col-span-full flex items-center justify-center py-20">
                                 <div className="w-12 h-12 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin" />

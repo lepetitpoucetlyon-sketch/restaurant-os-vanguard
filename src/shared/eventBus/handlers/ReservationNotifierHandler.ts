@@ -107,6 +107,7 @@ export function registerReservationNotifierHandler() {
       });
     } catch (err) {
       logger.error(`[ReservationNotifier] Erreur envoi notif pour ${reservationId}`, toError(err).message);
+      throw err;
     }
   };
 

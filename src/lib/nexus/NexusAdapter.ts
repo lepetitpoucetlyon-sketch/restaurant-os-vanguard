@@ -92,7 +92,25 @@ class NexusManager {
         return this._isSimulacraActive;
     }
 
+    /**
+     * Ancrage tenant du singleton — **client uniquement**.
+     *
+     * Côté serveur, `Nexus` est partagé par toutes les requêtes concurrentes du
+     * même process Node : entre l'affectation et le premier `await`, une requête
+     * d'un autre tenant peut écraser l'ancrage et provoquer une écriture
+     * cross-tenant. Passer le tenant par appel — `NexusContext.vassalId` — qui
+     * scope le chemin et alimente SovereignGuard :
+     *
+     *     Nexus.adapter.query(col, options, { vassalId: tenantId, actorId });
+     */
     set tenantOverride(tenantId: string | null) {
+        if (typeof window === 'undefined') {
+            throw new Error(
+                '[Nexus] tenantOverride est interdit côté serveur : le singleton est partagé ' +
+                'entre requêtes concurrentes (fuite cross-tenant). Passer le tenant par appel ' +
+                'via NexusContext.vassalId.'
+            );
+        }
         this._tenantOverride = tenantId;
     }
 

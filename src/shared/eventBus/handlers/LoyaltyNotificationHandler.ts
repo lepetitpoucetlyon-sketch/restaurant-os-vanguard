@@ -33,6 +33,7 @@ export function registerLoyaltyNotificationHandler(): () => void {
         });
       } catch (err) {
         logger.error(`[LoyaltyNotificationHandler] Échec notification fidélité pour ${customerId}`, toError(err).message);
+        throw err;
       }
     },
     { id: 'loyalty-notification-handler', priority: 'BACKGROUND' }
