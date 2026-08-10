@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { EmployeeDocument } from '@/modules/human/domain/schemas/employeeDocument';
+import type { EmployeeDocument } from '../../../domain/schemas/employeeDocument';
 
 interface RegistreEntry {
     userId: string;

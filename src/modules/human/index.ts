@@ -28,7 +28,9 @@ export type { PayrollProviderConfig } from './remuneration/payroll/types';
 export { PROVIDER_CATALOG } from './connectors/payroll/catalog';
 export type { ProviderCatalogEntry } from './connectors/payroll/catalog';
 export { DSNBuilder } from './remuneration/payroll/DSNBuilder';
-
+export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
+export * from './effectifs/hr/components/leaves';
+export * from './effectifs/hr/store/staffAtoms';
 // 🏛️ Handlers (enregistrement bus événementiel)
 export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffingHandler';
 

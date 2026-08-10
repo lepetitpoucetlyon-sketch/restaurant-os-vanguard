@@ -3,10 +3,8 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SilaeClient } from '@/modules/human/remuneration/payroll/SilaeClient';
-import { MergePayrollClient } from '@/modules/human/remuneration/payroll/MergePayrollClient';
-import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
-import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
+import { SilaeClient, MergePayrollClient, PrepaieBuilder } from '@/modules/human';
+import type { PayrollProviderConfig } from '@/modules/human';
 import { toError } from "@/lib/toError";
 
 export class SilaeExportHandler {

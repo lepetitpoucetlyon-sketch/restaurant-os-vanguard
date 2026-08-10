@@ -1,1 +1,1 @@
-export * from '@/modules/human/domain/schemas/hr';
+export * from '@/modules/human';

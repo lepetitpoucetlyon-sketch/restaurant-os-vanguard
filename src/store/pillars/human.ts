@@ -16,4 +16,4 @@ export {
     leaveBalancesNodeAtom,    // HUMAN
     leaveBalancesAtom,        // HUMAN
     hrStaffLoadingAtom,       // HUMAN (Original mapping: hrLoadingAtom)
-} from '@/modules/human/effectifs/hr/store/staffAtoms';
+} from '@/modules/human';
