@@ -78,12 +78,13 @@ export function useTimeclock(tenantId: string | null) {
         try {
             const timestamp = new Date().toISOString();
 
-            const result = await submitTimeclockAction(type, {
+            const result = await submitTimeclockAction(tenantId || 'default', type, {
                 userId: foundUser.id,
                 userName: foundUser.name,
                 tenantId: tenantId || 'default',
                 terminalId: "kiosk-1",
                 timestamp,
+                pin, // PIN must be passed for Server Action validation
             });
 
             if (!result.success) {

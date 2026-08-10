@@ -7,20 +7,25 @@ import { toError } from '@/lib/toError';
 import { processTimeclockAction, ClockAction, TimeclockPayload } from '../services/timeclock.domain';
 import { SharedKernel } from '@/lib/shared-kernel';
 
-export async function submitTimeclockAction(action: ClockAction, data: TimeclockPayload) {
-    try {
-        await requireSession(data.tenantId);
+import { createSafeAction } from "@/lib/server/actionWrapper";
+import { z } from "zod";
 
-        const result = processTimeclockAction(action, data, () => SharedKernel.generateId('sc'));
+export const submitTimeclockAction = createSafeAction(
+    z.tuple([z.string(), z.unknown()]),
+    { page: "timeclock", action: "clock_self" },
+    async (tenantId, action: ClockAction, data: TimeclockPayload) => {
+        try {
+            const result = processTimeclockAction(action, data, () => SharedKernel.generateId('sc'));
 
-        if (result.type === 'EVENT') {
-            await NexusEventBus.emitDurable(result.eventName as any, result.payload);
-        } else if (result.type === 'DB_WRITE') {
-            await Nexus.adapter.set(result.path, result.payload);
+            if (result.type === 'EVENT') {
+                await NexusEventBus.emitDurable(result.eventName as any, result.payload);
+            } else if (result.type === 'DB_WRITE') {
+                await Nexus.adapter.set(result.path, result.payload);
+            }
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: toError(err).message };
         }
-
-        return { success: true };
-    } catch (err) {
-        return { success: false, error: toError(err).message };
     }
-}
+);

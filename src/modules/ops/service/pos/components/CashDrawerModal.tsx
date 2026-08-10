@@ -137,11 +137,17 @@ export function CashDrawerModal({
             const actualMu = eurosToMicrounits(actualEuros);
             const theoreticalMu =
                 session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits;
+            const diffMu = actualMu - theoreticalMu;
 
-            const result = await closeCashDrawerAction(tenantId, session, actualMu, collectedInMicrounits, changeGivenInMicrounits);
+            const result = await closeCashDrawerAction(
+                tenantId,
+                session,
+                actualMu,
+                diffMu > 0 ? diffMu : 0,
+                diffMu < 0 ? Math.abs(diffMu) : 0
+            );
             if (!result.success) throw new Error(result.error);
 
-            const diffMu = actualMu - theoreticalMu;
             const sign = diffMu >= 0 ? "+" : "";
             toast.success(
                 `Caisse clôturée — Écart : ${sign}${(diffMu / 1_000_000).toFixed(2)} €`
