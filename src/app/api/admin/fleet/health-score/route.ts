@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Tenant Health Score — mcc-growth-4
  *

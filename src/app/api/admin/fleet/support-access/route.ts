@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/support-access
  * Flow consentement support : demande MCC → approbation tenant → accès temporisé.

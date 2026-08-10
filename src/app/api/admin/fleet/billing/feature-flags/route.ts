@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/billing/feature-flags
  * Active/désactive un module payant pour un tenant.

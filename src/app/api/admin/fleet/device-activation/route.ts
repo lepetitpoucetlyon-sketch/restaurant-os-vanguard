@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * QR Code Device Activation — mcc-deploy-adv-2
  *

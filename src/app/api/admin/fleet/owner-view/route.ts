@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/owner-view
  * Vue agrégée de la flotte d'un Owner B2B depuis le MCC.

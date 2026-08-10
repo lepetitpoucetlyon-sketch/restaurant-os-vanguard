@@ -21,7 +21,7 @@ interface ReservationCreateDialogProps {
 
 type Step = 1 | 2;
 
-import { filterAvailableTables, TERRACE_ZONE_IDS } from './reservation-create/reservationHelpers';
+import { filterAvailableTables } from './reservation-create/reservationHelpers';
 
 export function ReservationCreateDialog({
     isOpen,

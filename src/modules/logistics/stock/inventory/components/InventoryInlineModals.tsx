@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { StockItem } from '../types';
 import { JsonObject } from "@/shared/types/json";
 import { useAtomValue } from "jotai";

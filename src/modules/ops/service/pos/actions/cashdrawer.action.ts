@@ -2,7 +2,6 @@
 
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
-import { requireSession } from "@/lib/server/verifySession";
 import { toError } from "@/lib/toError";
 import type { CashDrawerSession } from "../components/CashDrawerModal";
 

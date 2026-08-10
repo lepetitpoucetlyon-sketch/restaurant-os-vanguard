@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/admin/fleet/billing/treasury-report
  *
@@ -11,7 +11,7 @@ import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/admin
  * Protégé : fleet_admin minimum.
  */
 import { NextRequest, NextResponse } from 'next/server';
-// eslint-disable-next-line no-restricted-imports
+ 
 import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

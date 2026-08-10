@@ -8,11 +8,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toast } from "sonner";
 import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
 import { openCashDrawerAction, closeCashDrawerAction } from "../actions/cashdrawer.action";
-import { JsonObject } from "@/shared/types/json";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

@@ -5,7 +5,6 @@ import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";
-import { requireSession } from "@/lib/server/verifySession";
 import { toError } from "@/lib/toError";
 
 import { createSafeAction } from "@/lib/server/actionWrapper";

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
+import { SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Table, toTable, toFloor, toZone, toReservation } from '@nexus/contracts/nexus-internal-mapper';
 import { logger } from '@/lib/logger';
 import { guardedAction, sanitizeToSovereign } from '../opsCore';

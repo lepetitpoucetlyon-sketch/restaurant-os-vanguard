@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
+ 
 // Domaine : acquisition (marketing, SEO, landing)
 export * from './acquisition/marketing';
 export { LandingDashboard } from './acquisition/landing/components/LandingDashboard';
@@ -24,7 +24,7 @@ export { ReservationWidget } from './fidelite/widgets';
 
 // Infrastructure pilier (connectors, ui)
 export { ReviewProviderFactory } from './connectors/reviews';
-// eslint-disable-next-line no-restricted-imports
+ 
 export { CustomerImportPanel } from '@/modules/commerce/acquisition/onboarding/migration';
 
 export { menuEngineeringService } from './catalog/menu-engineering';

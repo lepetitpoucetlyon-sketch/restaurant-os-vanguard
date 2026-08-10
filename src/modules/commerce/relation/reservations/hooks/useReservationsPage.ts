@@ -9,7 +9,7 @@ import { logger } from "@/lib/logger";
 import { toError } from "@/lib/toError";
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useReservations, useGroups } from '../../../../ops/providers/hooks/commerceHooks';
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.

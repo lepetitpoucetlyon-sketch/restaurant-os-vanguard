@@ -86,7 +86,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                 transition:      'transform 600ms cubic-bezier(0.16,1,0.3,1)',
             }}>
                 {logoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
+                     
                     <img src={logoUrl} alt={brandName} style={{ maxWidth: '220px', maxHeight: '120px', objectFit: 'contain' }} />
                 ) : (
                     <span style={{

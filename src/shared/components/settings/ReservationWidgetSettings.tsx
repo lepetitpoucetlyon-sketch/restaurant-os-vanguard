@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Globe, Settings2, Eye, Save, Loader2, Clock, CalendarDays } from 'lucide-react';
 import { useTenant } from '@/shared/hooks';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateTenantSettingsAction } from '@/shared/actions/settings.action';
 import { toast } from 'sonner';
 import { EmbedSnippets, ROICalculator, OnlineBookingToggle } from '@/modules/commerce';

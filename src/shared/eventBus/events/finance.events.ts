@@ -1,4 +1,3 @@
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface FINANCEEvents {
   "finance.bank_connection_expired": {

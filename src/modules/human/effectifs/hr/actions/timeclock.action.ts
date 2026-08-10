@@ -1,6 +1,5 @@
 "use server";
 
-import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from '@/lib/toError';

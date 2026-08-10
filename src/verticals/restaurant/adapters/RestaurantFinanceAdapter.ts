@@ -1,5 +1,4 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import type { JournalEntry } from '@nexus/contracts';
 
 export const RestaurantFinanceAdapter = {
   emitOrderFiscalSeal(payload: { tenantId: string; orderId: string; totalInMicrounits: number; operatorId: string }) {

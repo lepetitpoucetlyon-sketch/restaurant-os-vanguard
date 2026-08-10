@@ -17,13 +17,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useInventory } from '../../../../logistics/stock/inventory/hooks/useInventory';
 import { useAuth } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";;

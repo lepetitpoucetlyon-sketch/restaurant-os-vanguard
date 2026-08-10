@@ -9,9 +9,7 @@ import { Plus, GripVertical, Settings2, ChefHat, Tag, Link2, AlertTriangle, Load
 import { SearchInput } from "@components/ui/SearchInput";
 import { useProducts } from '@/modules/logistics';
 import { useCategories } from '@/modules/logistics';
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { updateProductAction } from "@/shared/actions/settings.action";
-import { useTenant } from "@/shared/hooks";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";

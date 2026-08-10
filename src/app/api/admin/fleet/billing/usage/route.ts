@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/admin/fleet/billing/usage?tenantId=xxx
  * Retourne le résumé d'usage (SMS, emails, IA) du mois courant pour un tenant.

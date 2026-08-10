@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createSafeAction } from '@/lib/server/actionWrapper';
 import * as verifySessionModule from '@/lib/server/verifySession';
-import * as checkPermissionModule from '@/shared/rbac/checkPermission';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { PinHashService } from '@/lib/server/PinHashService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -10,11 +10,11 @@ import {
 import { fr } from "date-fns/locale";
 
 // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-// eslint-disable-next-line vanguard/no-inter-module-imports
+ 
 import { useQuality } from '../../../../compliance/qualite/haccp/hooks/useQuality';
 import type { ComplianceAlert } from "@/modules/compliance";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
 import { SovereignMath } from "@/shared/services/SovereignMath";

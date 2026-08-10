@@ -1,4 +1,3 @@
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface SUPPORTEvents {
   'support.ticket_submitted': {

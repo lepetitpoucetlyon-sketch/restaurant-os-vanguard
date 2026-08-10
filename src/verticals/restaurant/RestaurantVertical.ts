@@ -7,14 +7,10 @@ import { menuEngineeringService } from '@/modules/commerce/catalog/menu-engineer
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
 import { ordersAtom, tablesAtom } from '@/modules/ops';
 import {
-  RestaurantComplianceAdapter,
   RestaurantFinanceAdapter,
   RestaurantFacilityAdapter,
   RestaurantIntelligenceAdapter,
-  RestaurantLogisticsAdapter,
   RestaurantMccAdapter,
-  RestaurantOpsAdapter,
-  RestaurantCommerceAdapter,
 } from './adapters';
 import { toError } from "@/lib/toError";
 

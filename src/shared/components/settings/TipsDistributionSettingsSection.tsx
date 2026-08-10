@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Coins, Percent, Clock, Users, Award, FileSpreadsheet, ShieldCheck, Check } from "lucide-react";
+import { Coins, Clock, Users, Award, FileSpreadsheet, ShieldCheck, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import {

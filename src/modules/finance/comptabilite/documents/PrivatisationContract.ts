@@ -60,8 +60,6 @@ import {
   padZero,
   todayISO,
   generateRef,
-  drawHeaderBanner,
-  drawBox,
 } from './pdf/pdfLayoutHelpers';
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { PolicyEngine } from './PolicyEngine';
 import type { Policy } from '@/modules/compliance/domain/schemas/policy';
 

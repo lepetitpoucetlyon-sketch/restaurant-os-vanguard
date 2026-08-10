@@ -9,11 +9,10 @@
  */
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { X, FileText, Sparkles, ChevronDown } from "lucide-react";
+import { X, FileText, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { cn } from "@/lib/ui.foundations";
 import { logger } from "@/lib/logger";
 import { toError } from "@/lib/toError";
 import { saveEventQuoteDraft } from '../actions/eventQuote.action';

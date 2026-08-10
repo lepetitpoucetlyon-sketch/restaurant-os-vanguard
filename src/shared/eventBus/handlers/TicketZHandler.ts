@@ -5,7 +5,6 @@ import { empireAudit } from '@/lib/audit';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
 import { TaxCalculator } from '@/modules/finance/utils/TaxCalculator';
 import { CryptoService } from '@/lib/CryptoService';
-import type { SovereignData } from '@shared/nexus-contract';
 import { toSovereignData } from "@/lib/toSovereignData";
 
 type TicketZDoc = {

@@ -21,7 +21,6 @@ import {
     NC_TYPES,
     STAFF_LIST,
     TYPE_LABELS,
-    buildNcPath,
     buildNcCollectionPath,
     fileToBase64,
 } from './nonConformityTypes';

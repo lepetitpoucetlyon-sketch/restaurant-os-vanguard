@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import {
-    ChefHat,
-    Wine,
     Save,
 } from "lucide-react";
 import type { ServingMethod } from "@nexus/contracts";

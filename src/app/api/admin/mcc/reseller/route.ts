@@ -1,4 +1,4 @@
-import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET  /api/admin/mcc/reseller       — lister les revendeurs
  * POST /api/admin/mcc/reseller       — créer un revendeur (génère un code d'affiliation)

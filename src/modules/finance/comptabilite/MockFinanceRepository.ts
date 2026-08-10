@@ -1,7 +1,6 @@
 import { IFinanceRepository } from '@/modules/finance';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
 
 /**
  * 🧪 MockFinanceRepository - Validation of Sovereignty

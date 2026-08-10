@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState, useCallback, type DragEvent } from 'react';
-import { Upload, FileText, AlertTriangle, CheckCircle, XCircle, Info, ArrowRight, RotateCcw, Loader2 } from 'lucide-react';
-import type { ImportCategory, ColumnMapping, ImportWarning, TargetField } from './types';
+import { Upload, FileText, XCircle, Info, RotateCcw, Loader2 } from 'lucide-react';
+import type { ImportCategory, ColumnMapping } from './types';
 import { CATEGORY_CONFIGS } from './types';
 import { useImportPipeline } from './hooks/useImportPipeline';
 import { ColumnMapperUI } from './components/ColumnMapperUI';

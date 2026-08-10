@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
 import type { IAutonomousAgent, AgentAction, AgentContext } from './types';
 

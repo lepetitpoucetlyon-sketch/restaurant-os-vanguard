@@ -17,14 +17,13 @@ import { cn } from "@/lib/ui.foundations";;
 import { Modal } from '@ui/Modal';
 import { PremiumSelect } from '@ui/PremiumSelect';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useQuotes } from '../../../../../ops/providers/hooks/commerceHooks';
 import { useInventory } from '../../../../../logistics/stock/inventory/hooks/useInventory';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
+         
 import { useCRM } from '../../../../../ops/providers/hooks/commerceHooks';
 import { QuoteLine } from '../../types';
-import { Quote } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 

@@ -19,7 +19,6 @@ import {
 // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useNexusOps } from '@/modules/ops';
-import { toast } from 'sonner';
 
 import {
     type ScannedItem,

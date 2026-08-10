@@ -11,7 +11,6 @@ import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 import type { BrandInput } from '@/lib/BrandingService';
-import { JsonObject } from "@/shared/types/json";
 
 type ExtractedTokens = Partial<BrandConfig>;
 type Phase = 'idle' | 'scanning' | 'preview_ready' | 'applying' | 'done';

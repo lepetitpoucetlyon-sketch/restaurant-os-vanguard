@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useCallback } from 'react';
-import { dlqQuarantineEntriesAtom, DLQQuarantineEntry } from '@/shared/atoms/dlqQuarantine.atom';
+import { dlqQuarantineEntriesAtom } from '@/shared/atoms/dlqQuarantine.atom';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';

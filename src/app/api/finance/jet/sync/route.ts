@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/axiom';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import type { SovereignData } from '@/shared/nexus-contract';
 import { toError } from "@/lib/toError";
 
 /**

@@ -1,4 +1,3 @@
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface COMMONEvents {
   "crm.birthday_approaching": {

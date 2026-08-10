@@ -1,7 +1,7 @@
 import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
-import type { JournalEntry, JournalLine, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
+import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
@@ -30,10 +30,8 @@ export interface BridgeResult {
 }
 
 import {
-  PCG_PAYMENT_ACCOUNTS,
   microToCents,
   computeTtcByRateAndAxis,
-  makeLine,
   buildJournalLines,
 } from './FinancialJournalBuilder';
 

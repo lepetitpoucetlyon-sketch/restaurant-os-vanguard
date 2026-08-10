@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChefHat, Clock, CheckCircle2, UtensilsCrossed } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-// eslint-disable-next-line vanguard/no-inter-module-imports
+ 
 import { CartItem, CourseType } from "@modules/ops/workflow/engine/types";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";

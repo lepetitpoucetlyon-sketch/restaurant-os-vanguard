@@ -6,7 +6,7 @@
  * et que l'absence de clé échoue explicitement (pas de repli silencieux).
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { FiscalEngine, FISCAL_CONSTANTS } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { CryptoService } from '@/lib/CryptoService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { activeTenantIdAtom } from "@/store/pillars/sovereign";
-import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     LogIn,
@@ -15,7 +13,7 @@ import {
 } from "lucide-react";
 import { Clock } from "lucide-react";
 import { ClockAction } from "../services/timeclock.domain";
-import { useTimeclock, type FoundUser } from "./useTimeclock";
+import { useTimeclock } from "./useTimeclock";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 

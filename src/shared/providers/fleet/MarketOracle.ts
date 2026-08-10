@@ -17,7 +17,7 @@
 
 import { logger } from '@/lib/logger';
 
-// eslint-disable-next-line no-restricted-imports
+ 
 import type {
     SanitizedPulse,
     PulseCategory,

@@ -13,11 +13,6 @@ import { Recipe, RecipeIngredient } from "@nexus/contracts";
 import { RecipeCostBadge } from '../../recipes/RecipeCostBadge';
 import {
     scaleIngredient,
-    computeRecipeFoodCostInMu,
-    recipeSalePriceInMu,
-    foodCostPct,
-    marginPct,
-    formatMicrounits,
 } from "../../recipes/recipeUtils";
 
 import { printRecipeTechnicalSheet } from './recipe-detail/recipePrintHelper';

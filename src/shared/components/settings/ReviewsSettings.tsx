@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { updateTenantSettingsAction } from "@/shared/actions/settings.action";
 import { useTenant } from "@/shared/hooks";
 

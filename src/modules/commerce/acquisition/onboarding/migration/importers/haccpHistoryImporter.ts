@@ -91,7 +91,7 @@ export async function importHaccpHistory(
 
   const batch = Nexus.adapter.batch();
   let created = 0;
-  let skipped = 0;
+  const skipped = 0;
 
   for (const reading of readings) {
     const id = Nexus.adapter.generateId('haccp_historical');

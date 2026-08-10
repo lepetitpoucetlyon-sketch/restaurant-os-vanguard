@@ -5,7 +5,6 @@
  */
 
 import { logger } from "@/lib/logger";
-import { JsonObject } from "@/shared/types/json";
 
 export interface ContactPayload {
     email?: string;

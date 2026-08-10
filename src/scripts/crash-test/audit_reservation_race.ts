@@ -1,6 +1,5 @@
 import { logger } from '../../lib/logger';
 import { Nexus } from '../../lib/nexus/NexusAdapter';
-import crypto from 'crypto';
 
 async function runReservationRaceConditionAudit() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 5 : CRM & Réservation (Double-Booking)');

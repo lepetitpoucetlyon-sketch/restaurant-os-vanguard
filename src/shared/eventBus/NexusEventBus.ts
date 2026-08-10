@@ -1,6 +1,5 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
