@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/modules/system';
+import type {  PlatformVariant  } from '@/bootstrap/legacy';;
 
 export interface StylePreset {
   id: string;

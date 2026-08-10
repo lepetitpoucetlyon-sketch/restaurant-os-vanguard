@@ -1,14 +1,14 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@/shared/types/empire';
-import { fleetTelemetry } from '@/modules/intelligence';
+import { fleetTelemetry } from '@/src/modules/intelligence/ia/fleet/FleetTelemetryService';;
 import { TenantSeeder } from './TenantSeeder';
-import { sovereignCreateWorkspace } from '@/modules/intelligence';
+import {  sovereignCreateWorkspace  } from '@/bootstrap/legacy';;
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
-import { TenantRBACConfigSchema } from '@/modules/human';
+import { TenantRBACConfigSchema } from '@/src/modules/compliance/domain/schemas/rbac';;
 import { toError } from "@/lib/toError";
 
 /**

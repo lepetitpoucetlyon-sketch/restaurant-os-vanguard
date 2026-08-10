@@ -4,12 +4,12 @@ import { shouldEagerLoad, type ICMImportanceMap } from '@/lib/icm/TaskContext';
 import { TimeSync } from '@/lib/TimeSync';
 
 // Sous-services de synchronisation : un par pilier métier + l'horloge (TimeSync).
-import { OpsSyncService as SyncOrders } from '@/modules/ops/workflow/engine/ops.sync';
-import { InventorySyncService as SyncStocks } from '@/modules/logistics/stock/inventory/inventory.sync';
-import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
-import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/qualite/haccp/haccp.sync';
-import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/acquisition/marketing/marketing.sync';
-import { HRSyncService as SyncStaff } from '@/modules/human/effectifs/hr/hr.sync';
+import {  OpsSyncService as SyncOrders  } from '@/bootstrap/legacy';;
+import {  InventorySyncService as SyncStocks  } from '@/bootstrap/legacy';;
+import { FinanceSyncService as SyncFinance } from '@/src/modules/finance/finance.sync';;
+import {  HACCPSyncService as SyncHACCP  } from '@/bootstrap/legacy';;
+import {  MarketingSyncService as SyncMarketing  } from '@/bootstrap/legacy';;
+import {  HRSyncService as SyncStaff  } from '@/bootstrap/legacy';;
 
 type Store = ReturnType<typeof getDefaultStore>;
 

@@ -14,8 +14,8 @@ import {
     oilLogsAtom,
     oilLogsNodeAtom,
     guardLoadingAtom
-} from '@/store/pillars/compliance';
-import { updateNexusNode } from '@/store/pillars/core';
+} from '@/bootstrap/store/pillars/compliance';
+import { updateNexusNode } from '@/bootstrap/store/pillars/core';
 import { logger } from '@/lib/logger';
 
 import { 

@@ -9,7 +9,7 @@ import { Package, MapPin, Calendar, AlertTriangle, RefreshCw, Plus, Check, X, Tr
 import { useInventory } from "@/modules/ops";
 // import { receiveStockAction } from "@/app/actions/inventory";
 import { useAtomValue } from "jotai";
-import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { tenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
 import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
@@ -17,6 +17,17 @@ import { logger } from "@/lib/logger";
 import { receiveStockAction } from "../../actions/inventory.action";
 import { VisionScanner } from "@/shared/components/VisionScanner";
 import type { ExtractedInvoice } from "@/modules/ops";
+import { z } from "zod";
+
+const StockReceptionClientSchema = z.object({
+    ingredientId: z.string().min(1),
+    quantity: z.number().min(0.01),
+    unit: z.string().min(1),
+    storageLocationId: z.string().min(1),
+    receptionDate: z.string(),
+    dlc: z.string(),
+    unitCost: z.number().min(0)
+});
 
 interface SupplierRecord {
     id: string;
@@ -108,16 +119,26 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         if (!ing) { setIsSubmitting(false); return; }
 
         try {
-            await receiveStockAction(tenantId, {
+            const validated = StockReceptionClientSchema.parse({
                 ingredientId: selectedIngredient,
-                ingredientName: ing.name,
-                category: ing.category,
                 quantity: parseFloat(quantity),
                 unit,
                 storageLocationId: storageLocation,
                 receptionDate,
                 dlc,
-                unitCost: parseFloat(unitCost) || 0,
+                unitCost: parseFloat(unitCost) || 0
+            });
+
+            await receiveStockAction(tenantId, {
+                ingredientId: validated.ingredientId,
+                ingredientName: ing.name,
+                category: ing.category,
+                quantity: validated.quantity,
+                unit: validated.unit as any,
+                storageLocationId: validated.storageLocationId,
+                receptionDate: validated.receptionDate,
+                dlc: validated.dlc,
+                unitCost: validated.unitCost,
                 ...(batchNumber && { batchNumber }),
                 ...(lotNumber && { lotNumber }),
                 ...(selectedSupplierId && { supplierId: selectedSupplierId }),

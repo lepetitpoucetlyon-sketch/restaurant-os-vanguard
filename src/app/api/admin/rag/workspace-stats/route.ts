@@ -12,7 +12,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
  * Protégé : mcc_support pour GET, fleet_admin pour DELETE.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { LightRAGClient } from '@/modules/intelligence';
+import { LightRAGClient } from '@/src/modules/intelligence/knowledge/rag/LightRAGClient';;
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

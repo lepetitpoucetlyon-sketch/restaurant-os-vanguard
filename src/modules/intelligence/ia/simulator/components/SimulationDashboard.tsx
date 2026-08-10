@@ -23,7 +23,7 @@ import { SimulationService, SimulationMode, MonteCarloResult } from '../Simulati
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from '@/modules/logistics';
+import { useInventory } from '@/src/modules/ops/providers/hooks/catalogHooks';;
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {

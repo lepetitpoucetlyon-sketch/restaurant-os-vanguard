@@ -6,7 +6,7 @@ import {
     createNexusNode, 
     updateNexusNode, 
     tenantIdAtom
-} from '@/store/pillars';
+} from '@/bootstrap/store/pillars';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 
 

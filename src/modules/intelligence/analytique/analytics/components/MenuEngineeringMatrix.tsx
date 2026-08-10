@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useAtomValue } from "jotai";
 import { Star, Tractor, Puzzle, MinusCircle } from "lucide-react";
-import { menuAnalysisSelector } from "@/store/pillars/commerce";
+import { menuAnalysisSelector } from "@/bootstrap/store/pillars/commerce";
 import { cn } from "@/lib/ui.foundations";
 
 /**

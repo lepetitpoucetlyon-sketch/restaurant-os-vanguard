@@ -113,10 +113,10 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerCompJournalHandler } from '@/shared/eventBus/handlers/CompJournalHandler';
-import { registerRefundJournalHandler } from '@/shared/eventBus/handlers/RefundJournalHandler';
-import { registerTaxMismatchAlertHandler } from '@/shared/eventBus/handlers/TaxMismatchAlertHandler';
-import { registerPaymentRejectAuditHandler } from '@/shared/eventBus/handlers/PaymentRejectAuditHandler';
+import { registerCompJournalHandler } from '@/bootstrap/eventBus/handlers/CompJournalHandler';
+import { registerRefundJournalHandler } from '@/bootstrap/eventBus/handlers/RefundJournalHandler';
+import { registerTaxMismatchAlertHandler } from '@/bootstrap/eventBus/handlers/TaxMismatchAlertHandler';
+import { registerPaymentRejectAuditHandler } from '@/bootstrap/eventBus/handlers/PaymentRejectAuditHandler';
 
 // ─── CompJournalHandler ───────────────────────────────────────────────────────
 

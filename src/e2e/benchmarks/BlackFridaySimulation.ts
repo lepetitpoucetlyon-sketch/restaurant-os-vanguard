@@ -1,6 +1,6 @@
 import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
-import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
+import { ordersNodeAtom, updateNexusNode } from '@/bootstrap/store/pillars';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence';
-import { AI_MODELS } from '@/modules/intelligence';
+import { LLMManager } from '@/src/modules/intelligence/ia/ai/LLMManager';;
+import { AI_MODELS } from '@/src/modules/intelligence/ia/GeminiProvider';;
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

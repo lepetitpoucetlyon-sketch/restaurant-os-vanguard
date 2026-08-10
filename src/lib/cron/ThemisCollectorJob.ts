@@ -1,5 +1,5 @@
-import { CollectionService } from '@/modules/finance';
-import type { InvoiceTarget } from '@/modules/finance';
+import { CollectionService } from '@/src/modules/finance/tresorerie/collection/CollectionService';;
+import type {  InvoiceTarget  } from '@/bootstrap/legacy';;
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 

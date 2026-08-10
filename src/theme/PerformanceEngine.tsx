@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { performanceModeAtom } from '@/store/pillars/sovereign';
+import { performanceModeAtom } from '@/bootstrap/store/pillars/sovereign';
 import { useToast } from '@ui/Toast';
 import { logger } from '@/lib/logger';
 

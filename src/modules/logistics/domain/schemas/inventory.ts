@@ -18,7 +18,7 @@ const StockItemBaseSchema = z.object({
   locationXYZ:       z.tuple([z.number(), z.number(), z.number()]).nullable().optional(),
   schemaVersion:     z.literal(2).default(2),
   updatedAt:         TimestampSchema.default(() => Date.now()),
-}).catchall(z.any());
+}).catchall(z.unknown());
 
 export const StockItemSchema = StockItemBaseSchema.refine(
   data => {

@@ -1,0 +1,22 @@
+rules:
+  - id: no-literal-tenant
+    languages: [typescript]
+    severity: WARNING
+    message: "Aucun tenantId littéral hors sentinelles"
+    patterns:
+      - pattern: 'tenantId: "$TENANT"'
+      - metavariable-regex:
+          metavariable: $TENANT
+          regex: '^(?!(__FLEET__|fleet|default|main|nexus_core|_demo_.*|_test_.*|_ref_.*)$).*'
+
+  - id: no-external-call-demo
+    languages: [typescript]
+    severity: WARNING
+    message: "Aucun appel externe (Stripe, Resend) autorisé explicitement avec un tenant _demo_*"
+    patterns:
+      - pattern-either:
+          - pattern: stripe.$METHOD(...)
+          - pattern: resend.$METHOD(...)
+      - pattern-inside: |
+          $TENANT === "_demo_..."
+          ...

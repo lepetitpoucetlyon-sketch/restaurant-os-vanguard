@@ -22,14 +22,14 @@ Structure canonique : `src/modules/<pilier>/<domaine>/<module>/` — l'infrastru
 
 | Pilier | Domaines | Modules principaux |
 |--------|----------|-------------------|
-| **ops** | `service/` · `production/` · `workflow/` | service: pos, bar, printers, frontdesk · production: kds, kitchen, recipes · workflow: engine |
-| **commerce** | `catalog/` · `acquisition/` · `relation/` · `fidelite/` | catalog: products, menus · acquisition: marketing, seo, landing · relation: reservations, crm, customers, delivery · fidelite: loyalty, quotes, widgets |
-| **finance** | `comptabilite/` · `tresorerie/` · `fiscalite/` | comptabilite: accounting, billing, fec, documents, analytics · tresorerie: banking, payout, collection, ap · fiscalite: tax |
-| **compliance** | `qualite/` · `securite/` · `reglementaire/` | qualite: haccp, iot, recall, donation, calendar · securite: audit · reglementaire: rgpd |
-| **human** | `effectifs/` · `remuneration/` | effectifs: hr · remuneration: payroll |
-| **logistics** | `stock/` · `approvisionnement/` · `fleet/` · `dispatch/` | stock: inventory · approvisionnement: reception, procurement · fleet: vehicles, drivers · dispatch: routing |
-| **intelligence** | `analytique/` · `ia/` · `knowledge/` | analytique: analytics, reports, attendance, anomaly · ia: ai, agency, fleet, simulator, resilience, tools · knowledge: rag |
-| **facility** | `spaces/` · `maintenance/` · `assets/` | spaces: floor-plan, settings · maintenance: registre |
+| **commerce** | `acquisition/` · `catalog/` · `fidelite/` · `relation/` | acquisition: core, doctolib-sync, landing, marketing, onboarding, ota-sync, seo · catalog: core, menu-engineering, spare-parts · fidelite: loyalty, quotes, widgets · relation: appointments, core, crm, customers, delivery, loyalty, reservations |
+| **compliance** | `qualite/` · `reglementaire/` · `securite/` | qualite: bio-hazard, calendar, core, donation, haccp, iot, recall, safety-protocols · reglementaire: core, medical-secrecy, rgpd, waivers · securite: audit |
+| **facility** | `maintenance/` · `spaces/` | maintenance: core, iot-monitoring · spaces: bays, beds, core, floor-plan, rooms, settings |
+| **finance** | `comptabilite/` · `fiscalite/` · `tresorerie/` | comptabilite: accounting, analytics, billing, core, documents, fec, insurance-billing, repositories, warranty-claims · fiscalite: core, nf525, tax · tresorerie: ap, banking, collection, core, deposit, payout, split-bill |
+| **human** | `conventions/` · `effectifs/` · `remuneration/` | effectifs: core, hr, resource-booking, shift-bidding · remuneration: commissions, core, payroll, tip-pooling |
+| **intelligence** | `agents/` · `analytique/` · `ia/` · `knowledge/` · `simulation/` | analytique: analytics, anomaly, attendance, core, reports, yield-management · ia: agency, ai, core, diagnostic-assist, fleet, realtime, resilience, simulator, tools · knowledge: rag · simulation: chaos, core, pricing-simulator |
+| **logistics** | `approvisionnement/` · `fleet/` · `stock/` | approvisionnement: core, edi-b2b, procurement, reception · fleet: core, courtesy-cars, delivery · stock: core, inventory, perishables, serial-tracking |
+| **ops** | `production/` · `service/` · `workflow/` | production: batch-planner, core, kds, kitchen, lab, recipes, repair-bay · service: bar, consultation, core, front-desk, pos, printers, repair-intake · workflow: core, engine, housekeeping, table-management |
 
 **Règle du Barrel renforcée** : importer uniquement depuis `@/modules/<pilier>` (barrel racine). Tout import vers `@/modules/<pilier>/<domaine>/...` est une violation — sauf pour les tests qui mockent des chemins spécifiques.
 
@@ -73,6 +73,7 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 - Contrats dans `src/shared/nexus/contracts/` (interfaces runtime)
 - `CartItem` ops = `src/modules/ops/workflow/engine/types.ts` (microunits)
 - `CartItem` legacy = `src/modules/ops/service/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
+- **Règle de validation différée** : tout payload non validé entrant dans le backend (API ou Event) DOIT être typé `unknown`, jamais `any`. La validation se fait via `createSafeAction` ou `onValidated`.
 
 ### PlatformVariant — multi-industrie
 - Variants supportés : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom`

@@ -7,7 +7,7 @@ import { Button } from "@ui/button";
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useMarketing } from '@/modules/ops';
+import { useMarketing } from '@/src/modules/commerce/acquisition/marketing/hooks/useMarketing';;
 
 interface NewCampaignModalProps {
     isOpen: boolean;

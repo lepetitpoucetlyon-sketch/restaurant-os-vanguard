@@ -4,12 +4,12 @@ import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-in
 import { createSovereignHook } from '../opsCore';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from '@/modules/logistics';
+import { useInventory } from '@/src/modules/ops/providers/hooks/catalogHooks';;
 
-import { productsNodeAtom, categoriesNodeAtom } from '@/store/pillars/logistics';
-import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
-import { leaveRequestsNodeAtom } from '@/store/pillars/human';
-import { menuAnalysisSelector, staffPerformanceSelector, laborCostRatioSelector } from '@/store/pillars/commerce';
+import { productsNodeAtom, categoriesNodeAtom } from '@/bootstrap/store/pillars/logistics';
+import { fiscalLedgerNodeAtom } from '@/bootstrap/store/pillars/compliance';
+import { leaveRequestsNodeAtom } from '@/bootstrap/store/pillars/human';
+import { menuAnalysisSelector, staffPerformanceSelector, laborCostRatioSelector } from '@/bootstrap/store/pillars/commerce';
 
 /**
  * 📦 Hooks catalogue & transverses (produits / catégories / fiscal / RH / intelligence)

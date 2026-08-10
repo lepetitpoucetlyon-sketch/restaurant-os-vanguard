@@ -12,7 +12,7 @@ import {
     RefreshCw,
 } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { TreasuryEngine } from '@/modules/finance';
+import { TreasuryEngine } from '@/src/modules/finance/services/TreasuryEngine';;
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { FleetTreasuryReport } from '@/modules/finance';
 

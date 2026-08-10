@@ -29,7 +29,7 @@ export const UserSchema = z.object({
   schemaVersion:     z.literal(2).default(2),
   createdAt:         TimestampSchema.optional(),
   updatedAt:         TimestampSchema.default(() => Date.now()),
-}).catchall(z.any());
+}).catchall(z.unknown());
 
 export type User = z.infer<typeof UserSchema>;
 export type UserPermissions = z.infer<typeof UserPermissionsSchema>;

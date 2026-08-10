@@ -1,10 +1,10 @@
 import { getDefaultStore } from 'jotai';
 import {
     reservationStatsAtom
-} from '@/store/pillars/commerce';
+} from '@/bootstrap/store/pillars/commerce';
 import {
     nexusPulseAtom
-} from '@/store/pillars/core';
+} from '@/bootstrap/store/pillars/core';
 
 import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';

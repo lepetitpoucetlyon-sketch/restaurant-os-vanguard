@@ -4,7 +4,7 @@ import { getDefaultStore } from 'jotai';
 import { ResilienceSlayer } from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
 
 // No jotai mock, we use the real store
-vi.mock('@/store/pillars', () => ({
+vi.mock('@/bootstrap/store/pillars', () => ({
     ordersNodeAtom: { toString: () => 'ordersNodeAtom' },
     stockItemsNodeAtom: { toString: () => 'stockItemsNodeAtom' },
     journalEntriesNodeAtom: { toString: () => 'journalEntriesNodeAtom' },

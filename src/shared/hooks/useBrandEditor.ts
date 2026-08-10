@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { tenantIdAtom, tenantBrandTokensAtom } from '@/store/pillars/sovereign';
+import { tenantIdAtom, tenantBrandTokensAtom } from '@/bootstrap/store/pillars/sovereign';
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 
 /**

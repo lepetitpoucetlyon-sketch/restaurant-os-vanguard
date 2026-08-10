@@ -7,7 +7,7 @@ import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";
 import { toError } from "@/lib/toError";
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 const VoidPayloadSchema = z.tuple([

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantConfigSchema } from '@/modules/system';
+import { TenantConfigSchema } from '@/src/modules/system/domain/schemas/tenant';;
 import { MapPin, Phone, Mail, Clock, CalendarCheck } from 'lucide-react';
 import { JsonObject } from "@/shared/types/json";
 

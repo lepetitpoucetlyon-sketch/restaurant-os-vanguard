@@ -22,7 +22,7 @@ const DAY_MS = 86_400_000;
 // Cohérent avec FinancialNexusBridge : amountInCents = microunits / 10 000.
 const CENTS_TO_MICRO = 10_000;
 
-/** Une ligne d'écriture telle que stockée (schema `lines: z.array(z.any())`). */
+/** Une ligne d'écriture telle que stockée (schema `lines: z.array(z.unknown())`). */
 interface RawLine {
     accountCode?: string;
     debitInCents?: number;

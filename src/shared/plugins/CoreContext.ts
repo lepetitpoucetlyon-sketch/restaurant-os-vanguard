@@ -3,8 +3,8 @@
 import React from 'react';
 import { getDefaultStore } from 'jotai';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { rbacConfigAtom } from '@/store/pillars/rbac';
-import type { TenantRBACConfig } from '@/modules/human';
+import { rbacConfigAtom } from '@/bootstrap/store/pillars/rbac';
+import type {  TenantRBACConfig  } from '@/bootstrap/legacy';;
 import type { ICoreContext } from './IVerticalPlugin';
 
 import type { NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';

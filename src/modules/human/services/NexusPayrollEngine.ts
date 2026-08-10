@@ -1,9 +1,10 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
-import { ShiftEntrySchema, ShiftEntry } from "@/modules/human";
+import { ShiftEntrySchema } from '@/src/modules/human/domain/schemas/hr';
+import { ShiftEntry } from '@/src/modules/human/remuneration/payroll/payrollHelpers';;
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalEngine } from '@/modules/finance';
+import { FiscalEngine } from '@/src/modules/finance/fiscalite/FiscalAdapter';;
 import { logger } from '@/lib/logger';
 import { FiscalSeal } from '@nexus/contracts';
 

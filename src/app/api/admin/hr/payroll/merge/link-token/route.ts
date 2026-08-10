@@ -7,7 +7,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { MergePayrollClient } from '@/modules/human';
+import { MergePayrollClient } from '@/src/modules/human/remuneration/payroll/MergePayrollClient';;
 import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

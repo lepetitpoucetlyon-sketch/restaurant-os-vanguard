@@ -1,6 +1,6 @@
-import { AgentEngine, AgentDomain, ZeusPulseResult, ZeusAnomaly,
-    ZeusManifest,
-} from '@/modules/intelligence';
+import { AgentEngine } from '@/src/modules/intelligence/ia/ai/AgentEngine';
+import { AgentDomain } from '@/src/modules/intelligence/domain/agency/types';
+import { ZeusPulseResult, ZeusAnomaly, ZeusManifest } from '@/src/modules/intelligence/domain/agency/Zeus';;
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalHACCPMapper } from '@modules/finance';

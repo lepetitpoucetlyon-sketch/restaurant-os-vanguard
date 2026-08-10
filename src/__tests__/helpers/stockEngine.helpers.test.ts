@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { aggregateRecipeIngredients } from '@/modules/logistics';
+import { aggregateRecipeIngredients } from '@/src/modules/logistics/services/StockEngine';;
 import type { Recipe } from '@nexus/contracts';
 
 const makeRecipe = (ingredients: { id: string; name: string; quantity: number }[]): Recipe =>

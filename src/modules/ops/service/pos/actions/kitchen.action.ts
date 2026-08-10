@@ -3,7 +3,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const respondToModificationAction = createSafeAction(
@@ -26,7 +26,7 @@ export const respondToModificationAction = createSafeAction(
 );
 
 export const updateRecipeAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "kitchen", action: "modify_recipe" },
     async (tenantId, id: string, data: any) => {
         try {
@@ -52,7 +52,7 @@ export const togglePrepTaskAction = createSafeAction(
 );
 
 export const submitOrderAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([z.custom<unknown>(() => true)]),
     { page: "pos", action: "send_to_kitchen" },
     async (tenantId, sanitizedOrder: any) => {
         try {
@@ -83,7 +83,7 @@ export const updateOrderStatusAction = createSafeAction(
 );
 
 export const updateDailyPrepListAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "kitchen", action: "manage_prep_task" },
     async (tenantId, dateIso: string, data: any) => {
         try {

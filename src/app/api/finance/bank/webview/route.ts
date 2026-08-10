@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { OpenBankingProviderFactory } from '@/modules/finance';
-import { signBankConnectState } from '@/modules/finance';
+import { OpenBankingProviderFactory } from '@/src/modules/finance/tresorerie/banking/openBanking/OpenBankingProviderFactory';;
+import { signBankConnectState } from '@/src/modules/finance/tresorerie/banking/openBanking/tokenCipher';;
 /**
  * GET /api/finance/bank/webview
  * Retourne l'URL de connexion bancaire (webview de l'agrégateur configuré pour le tenant).

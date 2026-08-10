@@ -4,11 +4,11 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 import { SovereignNode } from '@/shared/nexus-contract';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const updateFloorNodeAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "floor_plan", action: "move_table" },
     async (tenantId, id: string, data: Partial<SovereignNode>) => {
         try {
@@ -21,7 +21,7 @@ export const updateFloorNodeAction = createSafeAction(
 );
 
 export const createFloorNodeAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([z.custom<unknown>(() => true)]),
     { page: "floor_plan", action: "add_table" },
     async (tenantId, data: Partial<SovereignNode>) => {
         try {
@@ -47,7 +47,7 @@ export const deleteFloorNodeAction = createSafeAction(
 );
 
 export const updateFloorZoneAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "floor_plan", action: "modify_seats" },
     async (tenantId, id: string, data: Partial<SovereignNode>) => {
         try {
@@ -60,7 +60,7 @@ export const updateFloorZoneAction = createSafeAction(
 );
 
 export const createFloorZoneAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([z.custom<unknown>(() => true)]),
     { page: "floor_plan", action: "create_zone" },
     async (tenantId, data: Partial<SovereignNode>) => {
         try {

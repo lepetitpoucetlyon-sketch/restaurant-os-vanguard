@@ -17,6 +17,22 @@ import { logger } from "@/lib/logger";
 import { toError } from "@/lib/toError";
 import { saveEventQuoteDraft } from '../actions/eventQuote.action';
 import { whiteLabelInstanceConfig } from "@/config/instance";
+import { z } from "zod";
+
+const EventQuoteClientSchema = z.object({
+    clientNom: z.string().min(1),
+    clientPrenom: z.string().min(1),
+    clientEmail: z.string().email(),
+    clientTelephone: z.string().optional(),
+    evenementNom: z.string().min(1),
+    dateEvenement: z.string(),
+    heureDebut: z.string(),
+    heureFin: z.string(),
+    nombreConvives: z.number().min(1),
+    formule: z.enum(["menu", "cocktail_dinatoire", "buffet"]),
+    descriptionFormule: z.string().optional(),
+    montantHT: z.number().min(0)
+});
 
 import type { PrivatisationFormule, PrivatisationData } from "@/modules/commerce";
 import { EventQuoteClientSection } from "./event-quote/EventQuoteClientSection";
@@ -99,12 +115,14 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
         setSaving(true);
         try {
             const id = savedId || `eq-${Date.now()}`;
+            const validated = EventQuoteClientSchema.parse(form);
+
             const payload: Record<string, unknown> = {
                 id,
                 tenantId,
                 status: "draft",
                 createdAt: new Date().toISOString(),
-                ...form,
+                ...validated,
                 acompte30,
                 montantTTC,
             };

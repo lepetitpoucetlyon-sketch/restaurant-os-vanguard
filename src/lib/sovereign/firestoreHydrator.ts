@@ -1,15 +1,11 @@
 import { ZodSchema } from 'zod';
-import { UserSchema } from '@/modules/human';
-import { OrderSchema } from '@/modules/ops';
-import { StockItemSchema } from '@/modules/ops';
-import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@/modules/ops';
-import { ModuleSchema } from '@/modules/system';
-import { 
-  JournalEntrySchema, 
-  AccountSchema, 
-  BankTransactionSchema, 
-  ExpenseClaimSchema 
-} from '@/modules/finance';
+import { UserSchema } from '@/src/modules/hr/domain/schemas/users';;
+import { OrderSchema } from '@/src/modules/ops/domain/schemas/orders';;
+import { StockItemSchema } from '@/src/modules/logistics/domain/schemas/inventory';;
+import { TableSchema, FloorSchema, ZoneSchema } from '@/src/modules/ops/domain/schemas/ops';
+import { ReservationSchema } from '@/src/modules/intelligence/domain/agent/tools/ReservationTool';;
+import { ModuleSchema } from '@/src/modules/system/domain/schemas/modules';;
+import { JournalEntrySchema, AccountSchema, BankTransactionSchema, ExpenseClaimSchema } from '@/src/modules/finance/domain/schemas/finance';;
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { logger } from '@/lib/axiom';
 

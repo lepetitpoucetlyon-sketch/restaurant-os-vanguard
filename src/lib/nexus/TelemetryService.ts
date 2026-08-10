@@ -2,7 +2,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
  
-import { fiscalLedgerAtom } from '@/modules/compliance/qualite/haccp/store/complianceAtoms';
+import {  fiscalLedgerAtom  } from '@/bootstrap/legacy';;
 import { TelemetryPulse } from '@/shared/nexus-contract';
 import { logger } from '@/lib/logger';
 

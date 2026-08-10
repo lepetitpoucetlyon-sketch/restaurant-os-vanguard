@@ -8,7 +8,7 @@ import {
     expenseClaimsAtom,
     accountingViewModeAtom
 } from '../store/accountingAtoms';
-import { fiscalLedgerAtom } from '@/store/pillars/compliance';
+import { fiscalLedgerAtom } from '@/bootstrap/store/pillars/compliance';
 import { 
     AccountingMetrics, 
     FinancialMetrics,

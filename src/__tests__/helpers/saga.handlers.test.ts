@@ -50,7 +50,7 @@ vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: mockJotaiGet, set: mockJotaiSet })),
 }));
 
-vi.mock('@/store/pillars/compliance', () => ({
+vi.mock('@/bootstrap/store/pillars/compliance', () => ({
   quarantinedProductsAtom: {},
 }));
 
@@ -132,9 +132,9 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerWasteStockReconciliationHandler } from '@/shared/eventBus/handlers/WasteStockReconciliationHandler';
-import { registerMarginWarningHandler }            from '@/shared/eventBus/handlers/MarginWarningHandler';
-import { PayrollExportHandler }                    from '@/shared/eventBus/handlers/PayrollExportHandler';
+import { registerWasteStockReconciliationHandler } from '@/bootstrap/eventBus/handlers/WasteStockReconciliationHandler';
+import { registerMarginWarningHandler }            from '@/bootstrap/eventBus/handlers/MarginWarningHandler';
+import { PayrollExportHandler }                    from '@/bootstrap/eventBus/handlers/PayrollExportHandler';
 
 // ─── WasteStockReconciliationHandler ─────────────────────────────────────────
 

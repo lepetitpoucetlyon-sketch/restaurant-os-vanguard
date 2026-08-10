@@ -5,11 +5,11 @@ import { toError } from '@/lib/toError';
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const createPromoCodeAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([z.custom<unknown>(() => true)]),
     { page: "marketing", action: "manage_promotions" },
     async (tenantId, promoCodeData: any) => {
         try {
@@ -36,7 +36,7 @@ export const createPromoCodeAction = createSafeAction(
 );
 
 export const updatePromoCodeAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "marketing", action: "manage_promotions" },
     async (tenantId, promoCodeId: string, promoCodeData: any) => {
         try {
@@ -64,7 +64,7 @@ export const updatePromoCodeAction = createSafeAction(
 );
 
 export const issueLoyaltyCardAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "crm", action: "adjust_loyalty_points" },
     async (tenantId, customerId: string, data: any) => {
         try {
@@ -80,7 +80,7 @@ export const issueLoyaltyCardAction = createSafeAction(
 );
 
 export const updateLoyaltyCardAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "crm", action: "adjust_loyalty_points" },
     async (tenantId, customerId: string, data: any) => {
         try {
@@ -93,7 +93,7 @@ export const updateLoyaltyCardAction = createSafeAction(
 );
 
 export const createCustomerAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "crm", action: "create_client" },
     async (tenantId, customerId: string, data: any) => {
         try {
@@ -106,7 +106,7 @@ export const createCustomerAction = createSafeAction(
 );
 
 export const updateCustomerAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "crm", action: "modify_client" },
     async (tenantId, customerId: string, data: any) => {
         try {

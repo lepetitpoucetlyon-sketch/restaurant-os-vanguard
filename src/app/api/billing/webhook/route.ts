@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
  
-import { BillingService } from '@/modules/finance';
+import { BillingService } from '@/src/modules/finance/services/BillingService';;
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 

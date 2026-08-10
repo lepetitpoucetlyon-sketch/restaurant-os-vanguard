@@ -21,7 +21,7 @@ export const ZeusAnomalySchema = z.object({
     severity: z.enum(['low', 'medium', 'high', 'critical']),
     message: z.string(),
     detectedAt: z.string(),
-    metadata: z.record(z.string(), z.any()).optional()
+    metadata: z.record(z.string(), z.unknown()).optional()
 });
 
 export type ZeusAnomaly = z.infer<typeof ZeusAnomalySchema>;
@@ -30,7 +30,7 @@ export const ZeusPulseResultSchema = z.object({
     timestamp: z.string(),
     anomalies: z.array(ZeusAnomalySchema),
     actionsTaken: z.array(z.string()),
-    insights: z.array(z.any()) // AgentResponse can be complex
+    insights: z.array(z.unknown()) // AgentResponse can be complex
 });
 
 export type ZeusPulseResult = z.infer<typeof ZeusPulseResultSchema>;

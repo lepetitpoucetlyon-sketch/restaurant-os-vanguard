@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { StockItem } from '../types';
 import { JsonObject } from "@/shared/types/json";
 import { useAtomValue } from "jotai";
-import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { tenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
 import { adjustStockAction, updateIngredientThresholdsAction } from "../actions/inventory.action";
 
 export interface DLCStatus {

@@ -6,7 +6,7 @@ import {
   leaveRequestsNodeAtom, 
   leaveBalancesNodeAtom, 
   staffMembersNodeAtom 
-} from '@/store/pillars/human';
+} from '@/bootstrap/store/pillars/human';
 
 
 import { logger } from '@/lib/logger';

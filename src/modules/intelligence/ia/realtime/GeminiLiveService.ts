@@ -1,9 +1,9 @@
 import { AccessPolicyManager, CategoryKey, RolePermissions } from '@/lib/AccessPolicyManager';
 import { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '@/modules/intelligence';
-import { ToolDefinition } from '@/modules/intelligence';
+import { ToolDefinition } from '@/src/modules/intelligence/domain/agent/tools/types';;
 import { SovereignData, SovereignValue } from '@shared/nexus-contract';
-import { ShieldedContext } from '@/modules/intelligence';
+import { ShieldedContext } from '@/src/modules/intelligence/ia/ai/ShieldedContext';;
 import { logger } from '@/lib/logger';
 import type { IRealtimeVoiceService, RealtimeVoiceCallbacks, RealtimeVoiceConfig } from './IRealtimeVoiceService';
 import { toError } from "@/lib/toError";

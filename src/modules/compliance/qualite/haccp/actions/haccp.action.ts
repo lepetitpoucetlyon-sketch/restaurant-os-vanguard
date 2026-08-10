@@ -3,11 +3,11 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const signCleaningTaskAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([z.custom<unknown>(() => true)]),
     { page: "haccp", action: "validate_checklist" },
     async (tenantId, record: any) => {
         try {

@@ -2,9 +2,9 @@ import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
-import { LLMManager } from '@/modules/intelligence';
+import { LLMManager } from '@/src/modules/intelligence/ia/ai/LLMManager';;
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
-import type { PlatformVariant } from '@/modules/system';
+import type {  PlatformVariant  } from '@/bootstrap/legacy';;
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)

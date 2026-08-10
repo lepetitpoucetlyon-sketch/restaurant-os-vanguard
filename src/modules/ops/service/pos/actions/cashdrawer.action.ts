@@ -5,7 +5,7 @@ import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toError } from "@/lib/toError";
 import type { CashDrawerSession } from "../components/CashDrawerModal";
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const openCashDrawerAction = createSafeAction(
@@ -36,7 +36,7 @@ export const openCashDrawerAction = createSafeAction(
 );
 
 export const closeCashDrawerAction = createSafeAction(
-    z.tuple([z.unknown(), z.number(), z.number(), z.number()]),
+    z.tuple([z.custom<unknown>(() => true), z.number(), z.number(), z.number()]),
     { page: "pos", action: "close_register" },
     async (tenantId, session: CashDrawerSession, actualMu: number, collectedInMicrounits: number, changeGivenInMicrounits: number) => {
         try {

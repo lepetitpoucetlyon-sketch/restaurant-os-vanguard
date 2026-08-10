@@ -54,7 +54,7 @@ export const OrchestratorSignalSchema = z
                 currency: z.string(),
                 pmsEnabled: z.boolean(),
             })
-            .catchall(z.any()),
+            .catchall(z.unknown()),
         expert: z
             .object({
                 role: z.string(),
@@ -69,7 +69,7 @@ export const OrchestratorSignalSchema = z
         priceMultiplier: z.number().optional(),
         lastSignalId: z.string().optional(),
     })
-    .catchall(z.any());
+    .catchall(z.unknown());
 
 export const TenantOverridesSchema = z
     .object({
@@ -100,7 +100,7 @@ export const TenantOverridesSchema = z
         capabilities: z.record(z.string(), z.boolean()).optional(),
         custom: z.record(z.string(), z.unknown()).optional(),
     })
-    .catchall(z.any());
+    .catchall(z.unknown());
 
 export type TenantOverrides = z.infer<typeof TenantOverridesSchema>;
 
@@ -116,13 +116,13 @@ export const TenantConfigSchema = z
                 plan: z.string(),
                 nextBillingDate: z.string().optional(),
             })
-            .catchall(z.any())
+            .catchall(z.unknown())
             .optional(),
         marketplace: z
             .object({
                 enabledModules: z.array(z.string()),
             })
-            .catchall(z.any())
+            .catchall(z.unknown())
             .optional(),
         ai: z
             .object({
@@ -151,7 +151,7 @@ export const TenantConfigSchema = z
         customFeatures: z.record(z.string(), z.boolean()).optional(),
         firebase: z.record(z.string(), z.string().optional()).optional(),
     })
-    .catchall(z.any());
+    .catchall(z.unknown());
 
 export type TenantConfig = z.infer<typeof TenantConfigSchema>;
 export type OrchestratorSignal = z.infer<typeof OrchestratorSignalSchema>;

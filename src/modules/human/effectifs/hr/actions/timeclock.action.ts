@@ -6,11 +6,11 @@ import { toError } from '@/lib/toError';
 import { processTimeclockAction, ClockAction, TimeclockPayload } from '../services/timeclock.domain';
 import { SharedKernel } from '@/lib/shared-kernel';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const submitTimeclockAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "timeclock", action: "clock_self" },
     async (tenantId, action: ClockAction, data: TimeclockPayload) => {
         try {

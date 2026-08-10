@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Play, Loader2, ChevronRight, AlertTriangle } from "lucide-react";
 import { useToast } from "@ui/Toast";
 import { useDataMigration } from "@/shared/hooks/useDataMigration";
-import { UniversalImportDropzone } from '@/modules/commerce/acquisition/onboarding';
-import { OnboardingProgress } from '@/modules/commerce/acquisition/onboarding';
-import { CATEGORY_CONFIGS } from '@/modules/commerce/acquisition/onboarding';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding';
+import {  UniversalImportDropzone  } from '@/bootstrap/legacy';;
+import {  OnboardingProgress  } from '@/bootstrap/legacy';;
+import {  CATEGORY_CONFIGS  } from '@/bootstrap/legacy';;
+import type {  ImportCategory  } from '@/bootstrap/legacy';;
 import { toError } from "@/lib/toError";
 
 const IMPORT_CATEGORIES: ImportCategory[] = [

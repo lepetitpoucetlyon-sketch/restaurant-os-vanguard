@@ -7,7 +7,7 @@ import { useInventory } from '..';
 import type { StockItem } from '../types';
 import { adjustStockAction } from '../actions/inventory.action';
 import { useAtomValue } from 'jotai';
-import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
 
 /**
  * log-7: Rotating inventory (comptage tournant)

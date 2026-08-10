@@ -2,7 +2,7 @@
 
 import { useSetAtom, WritableAtom } from 'jotai';
 import { useCallback } from 'react';
-import { updateNexusNode, emitPulseAtom } from '@/store/pillars/core';
+import { updateNexusNode, emitPulseAtom } from '@/bootstrap/store/pillars/core';
 import { NexusNode } from '@/store/base';
 import { validateMutation } from '@shared/nexus/engines/MutationValidator';
 import { logger } from '@/lib/logger';

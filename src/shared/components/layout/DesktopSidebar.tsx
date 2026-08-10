@@ -11,7 +11,7 @@ import { SidebarProfile } from "./sidebar/SidebarProfile";
 import { SidebarQuickActions } from "./sidebar/SidebarQuickActions";
 import { cn } from "@/lib/ui.foundations";
 import { useAtom } from 'jotai';
-import { isSidebarCollapsedAtom } from '@/store/pillars/sovereign';
+import { isSidebarCollapsedAtom } from '@/bootstrap/store/pillars/sovereign';
 
 export function DesktopSidebar() {
     const pathname = usePathname();

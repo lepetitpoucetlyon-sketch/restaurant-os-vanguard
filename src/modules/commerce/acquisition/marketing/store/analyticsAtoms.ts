@@ -1,10 +1,10 @@
 import { atom } from 'jotai';
 import { SovereignMath } from '@/shared/services/SovereignMath';
-// ⚠️ Imports par fichier de pilier, jamais via le barrel '@/store/pillars' :
+// ⚠️ Imports par fichier de pilier, jamais via le barrel '@/bootstrap/store/pillars' :
 // pillars/index ré-exporte pillars/commerce qui ré-exporte CE fichier (cycle SSR).
-import { ordersAtom } from '@/store/pillars/ops';
-import { productsAtom, recipesAtom, stockItemsAtom } from '@/store/pillars/logistics';
-import { staffMembersAtom } from '@/store/pillars/human';
+import { ordersAtom } from '@/bootstrap/store/pillars/ops';
+import { productsAtom, recipesAtom, stockItemsAtom } from '@/bootstrap/store/pillars/logistics';
+import { staffMembersAtom } from '@/bootstrap/store/pillars/human';
 
 // --- 📈 ANALYTICS DOMAIN (Cross-domain computed selectors) ---
 

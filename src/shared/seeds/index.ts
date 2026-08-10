@@ -1,5 +1,5 @@
 import type { TenantConfig } from '@shared/nexus-contract';
-import type { PlatformVariant } from '@/modules/system';
+import type {  PlatformVariant  } from '@/bootstrap/legacy';;
 import { RESTAURANT_FULL_DNA } from './restaurant-full-dna';
 import { HOTEL_FULL_DNA } from './hotel-full-dna';
 import { BAKERY_FULL_DNA } from './bakery-full-dna';

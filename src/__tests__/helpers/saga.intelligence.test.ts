@@ -147,22 +147,22 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerLLMFallbackHandler } from '@/shared/eventBus/handlers/LLMFallbackHandler';
-import { FleetOutboxHandler } from '@/shared/eventBus/handlers/FleetOutboxHandler';
-import { FleetStratBriefingHandler } from '@/shared/eventBus/handlers/FleetStratBriefingHandler';
-import { OracleQueryAuditHandler } from '@/shared/eventBus/handlers/OracleQueryAuditHandler';
-import { registerSovereignBreachHandler } from '@/shared/eventBus/handlers/SovereignBreachHandler';
-import { PinLockoutNotifierHandler } from '@/shared/eventBus/handlers/PinLockoutNotifierHandler';
-import { registerPrivacyConsentHandler } from '@/shared/eventBus/handlers/PrivacyConsentHandler';
-import { registerReportRetryHandler } from '@/shared/eventBus/handlers/ReportRetryHandler';
-import { WeeklyReportHandler } from '@/shared/eventBus/handlers/WeeklyReportHandler';
-import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
-import { GracePeriodHandler } from '@/shared/eventBus/handlers/GracePeriodHandler';
-import { StripePaymentRetryHandler } from '@/shared/eventBus/handlers/StripePaymentRetryHandler';
-import { registerDeliveryDriverUnlockHandler } from '@/shared/eventBus/handlers/DeliveryDriverUnlockHandler';
-import { registerDeliveryRushModeHandler } from '@/shared/eventBus/handlers/DeliveryRushModeHandler';
-import { registerAntiCorruptionLayerHandler } from '@/shared/eventBus/handlers/AntiCorruptionLayerHandler';
-import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
+import { registerLLMFallbackHandler } from '@/bootstrap/eventBus/handlers/LLMFallbackHandler';
+import { FleetOutboxHandler } from '@/bootstrap/eventBus/handlers/FleetOutboxHandler';
+import { FleetStratBriefingHandler } from '@/bootstrap/eventBus/handlers/FleetStratBriefingHandler';
+import { OracleQueryAuditHandler } from '@/bootstrap/eventBus/handlers/OracleQueryAuditHandler';
+import { registerSovereignBreachHandler } from '@/bootstrap/eventBus/handlers/SovereignBreachHandler';
+import { PinLockoutNotifierHandler } from '@/bootstrap/eventBus/handlers/PinLockoutNotifierHandler';
+import { registerPrivacyConsentHandler } from '@/bootstrap/eventBus/handlers/PrivacyConsentHandler';
+import { registerReportRetryHandler } from '@/bootstrap/eventBus/handlers/ReportRetryHandler';
+import { WeeklyReportHandler } from '@/bootstrap/eventBus/handlers/WeeklyReportHandler';
+import { registerSupportTicketAnalysisHandler } from '@/bootstrap/eventBus/handlers/SupportTicketAnalysisHandler';
+import { GracePeriodHandler } from '@/bootstrap/eventBus/handlers/GracePeriodHandler';
+import { StripePaymentRetryHandler } from '@/bootstrap/eventBus/handlers/StripePaymentRetryHandler';
+import { registerDeliveryDriverUnlockHandler } from '@/bootstrap/eventBus/handlers/DeliveryDriverUnlockHandler';
+import { registerDeliveryRushModeHandler } from '@/bootstrap/eventBus/handlers/DeliveryRushModeHandler';
+import { registerAntiCorruptionLayerHandler } from '@/bootstrap/eventBus/handlers/AntiCorruptionLayerHandler';
+import { registerIntelligenceHandler } from '@/bootstrap/eventBus/handlers/IntelligenceHandler';
 
 const T = 'tenant-intel';
 

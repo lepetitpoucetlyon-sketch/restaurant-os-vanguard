@@ -1,0 +1,11 @@
+rules:
+  - id: no-new-incents-field
+    languages: [typescript]
+    severity: WARNING
+    message: "Convention microunits — utiliser *InMicrounits (plan §5)"
+    pattern-regex: '\b\w+InCents\b'
+    paths:
+      exclude:
+        - "src/modules/finance/**"
+        - "src/modules/ops/**"
+        - "**/*.test.ts"

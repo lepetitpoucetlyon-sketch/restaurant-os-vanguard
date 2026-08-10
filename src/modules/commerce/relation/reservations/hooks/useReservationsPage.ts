@@ -18,7 +18,7 @@ import { useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
-import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { tenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
 
 import type { Table, Reservation } from "@nexus/contracts";

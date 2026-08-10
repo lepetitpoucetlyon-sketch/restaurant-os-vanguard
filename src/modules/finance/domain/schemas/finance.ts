@@ -40,7 +40,7 @@ export const JournalEntrySchema = z.object({
   date:               TimestampSchema.optional(), // Added for interface parity
   pieceNumber:        z.string().optional(),       // Added for interface parity
   description:        z.string().default(''),      // Added for interface parity
-  lines:              z.array(z.any()).default([]), // Added for interface parity
+  lines:              z.array(z.unknown()).default([]), // Added for interface parity
   isValidated:        z.boolean().default(true),    // NF525 Requirement
   isSystemGenerated:  z.boolean().default(false),   // Audit requirement
   updatedAt:          TimestampSchema.optional(),   // Interface parity

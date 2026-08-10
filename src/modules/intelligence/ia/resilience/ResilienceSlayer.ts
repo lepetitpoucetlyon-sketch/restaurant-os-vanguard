@@ -4,9 +4,9 @@ import {
     ordersNodeAtom, 
     stockItemsNodeAtom, 
     journalEntriesNodeAtom 
-} from '@/store/pillars';
+} from '@/bootstrap/store/pillars';
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { qualityActiveControlAtom } from '@/modules/compliance';
+import { qualityActiveControlAtom } from '@/src/modules/compliance/qualite/haccp/store/qualityAtoms';;
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';

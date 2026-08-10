@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/ui.foundations';
 import { useAtomValue } from 'jotai';
-import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { useToast } from '@ui/Toast';
-import type { PlatformVariant } from '@/modules/system';
+import type {  PlatformVariant  } from '@/bootstrap/legacy';;
 
 // ── Catalogue de fonts par rôle et par vertical ───────────────────────────────
 

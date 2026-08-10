@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_APPEARANCE, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
 import { StatCard, StatsGrid } from '@/shared/components/ui/StatCard';
 import { StatusBadge } from '@/shared/components/ui/StatusBadge';

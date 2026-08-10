@@ -11,6 +11,11 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
 import { openCashDrawerAction, closeCashDrawerAction } from "../actions/cashdrawer.action";
+import { z } from "zod";
+
+const CashDrawerClientSchema = z.object({
+    euros: z.number().min(0, "Montant invalide")
+});
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -108,7 +113,8 @@ export function CashDrawerModal({
         }
         setIsOpening(true);
         try {
-            const result = await openCashDrawerAction(tenantId, userId, eurosToMicrounits(euros));
+            const validated = CashDrawerClientSchema.parse({ euros });
+            const result = await openCashDrawerAction(tenantId, userId, eurosToMicrounits(validated.euros));
             if (!result.success || !result.session) throw new Error(result.error);
             
             setSession(result.session);
@@ -132,7 +138,8 @@ export function CashDrawerModal({
         }
         setIsClosing(true);
         try {
-            const actualMu = eurosToMicrounits(actualEuros);
+            const validated = CashDrawerClientSchema.parse({ euros: actualEuros });
+            const actualMu = eurosToMicrounits(validated.euros);
             const theoreticalMu =
                 session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits;
             const diffMu = actualMu - theoreticalMu;

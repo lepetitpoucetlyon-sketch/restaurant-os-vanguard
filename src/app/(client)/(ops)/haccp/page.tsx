@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 import dynamic from "next/dynamic";
-import { useHaccpPage, HACCP_TOOLS } from '@/modules/compliance';
+import { useHaccpPage, HACCP_TOOLS } from '@/src/modules/compliance/qualite/haccp/hooks/useHaccpPage';;
 import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 
 const ReleveTemperatures = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.ReleveTemperatures), { loading: () => <POSModalSkeleton /> });

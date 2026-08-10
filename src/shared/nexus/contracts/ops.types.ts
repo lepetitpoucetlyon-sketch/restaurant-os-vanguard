@@ -5,17 +5,9 @@
  */
 
 import { z } from 'zod';
-import { 
-  TableSchema, 
-  ReservationSchema, 
-  FloorSchema, 
-  ZoneSchema 
-} from '@/modules/ops';
-import { 
-  OrderSchema, 
-  OrderLineSchema,
-  OrderItemModificationSchema
-} from '@/modules/ops';
+import { TableSchema, FloorSchema, ZoneSchema } from '@/src/modules/ops/domain/schemas/ops';
+import { ReservationSchema } from '@/src/modules/intelligence/domain/agent/tools/ReservationTool';;
+import { OrderSchema, OrderLineSchema, OrderItemModificationSchema } from '@/src/modules/ops/domain/schemas/orders';;
 
 export type Table = z.infer<typeof TableSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;

@@ -125,21 +125,21 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerBirthdayCampaignHandler } from '@/shared/eventBus/handlers/BirthdayCampaignHandler';
-import { BirthdayOfferHandler } from '@/shared/eventBus/handlers/BirthdayOfferHandler';
-import { registerCustomerProfileInitHandler } from '@/shared/eventBus/handlers/CustomerProfileInitHandler';
-import { registerCustomerRFMAnalyzerHandler } from '@/shared/eventBus/handlers/CustomerRFMAnalyzerHandler';
-import { registerCustomerRiskTagHandler } from '@/shared/eventBus/handlers/CustomerRiskTagHandler';
-import { registerInactiveCustomerHandler } from '@/shared/eventBus/handlers/InactiveCustomerHandler';
-import { registerLoyaltyRewardAlertHandler } from '@/shared/eventBus/handlers/LoyaltyRewardAlertHandler';
-import { registerSegmentTargetingHandler } from '@/shared/eventBus/handlers/SegmentTargetingHandler';
-import { registerMarketingCampaignRouterHandler } from '@/shared/eventBus/handlers/MarketingCampaignRouterHandler';
-import { registerNegativeReviewHandler } from '@/shared/eventBus/handlers/NegativeReviewHandler';
-import { PromotionExpiryHandler } from '@/shared/eventBus/handlers/PromotionExpiryHandler';
-import { PromotionPriceHandler } from '@/shared/eventBus/handlers/PromotionPriceHandler';
-import { registerAggregatorMenuSyncHandler } from '@/shared/eventBus/handlers/AggregatorMenuSyncHandler';
-import { registerAggregatorStockSyncHandler } from '@/shared/eventBus/handlers/AggregatorStockSyncHandler';
-import { registerQuoteFollowUpHandler } from '@/shared/eventBus/handlers/QuoteFollowUpHandler';
+import { registerBirthdayCampaignHandler } from '@/bootstrap/eventBus/handlers/BirthdayCampaignHandler';
+import { BirthdayOfferHandler } from '@/bootstrap/eventBus/handlers/BirthdayOfferHandler';
+import { registerCustomerProfileInitHandler } from '@/bootstrap/eventBus/handlers/CustomerProfileInitHandler';
+import { registerCustomerRFMAnalyzerHandler } from '@/bootstrap/eventBus/handlers/CustomerRFMAnalyzerHandler';
+import { registerCustomerRiskTagHandler } from '@/bootstrap/eventBus/handlers/CustomerRiskTagHandler';
+import { registerInactiveCustomerHandler } from '@/bootstrap/eventBus/handlers/InactiveCustomerHandler';
+import { registerLoyaltyRewardAlertHandler } from '@/bootstrap/eventBus/handlers/LoyaltyRewardAlertHandler';
+import { registerSegmentTargetingHandler } from '@/bootstrap/eventBus/handlers/SegmentTargetingHandler';
+import { registerMarketingCampaignRouterHandler } from '@/bootstrap/eventBus/handlers/MarketingCampaignRouterHandler';
+import { registerNegativeReviewHandler } from '@/bootstrap/eventBus/handlers/NegativeReviewHandler';
+import { PromotionExpiryHandler } from '@/bootstrap/eventBus/handlers/PromotionExpiryHandler';
+import { PromotionPriceHandler } from '@/bootstrap/eventBus/handlers/PromotionPriceHandler';
+import { registerAggregatorMenuSyncHandler } from '@/bootstrap/eventBus/handlers/AggregatorMenuSyncHandler';
+import { registerAggregatorStockSyncHandler } from '@/bootstrap/eventBus/handlers/AggregatorStockSyncHandler';
+import { registerQuoteFollowUpHandler } from '@/bootstrap/eventBus/handlers/QuoteFollowUpHandler';
 
 const T = 'tenant-crm';
 

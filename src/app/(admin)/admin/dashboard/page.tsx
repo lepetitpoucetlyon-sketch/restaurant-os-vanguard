@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 
 // Nexus Data Hooks
-import { useAccounting, useCompliance } from '@/modules/finance';
-import { useOrders, useTables, useReservations } from "@/modules/ops";
+import { useAccounting, useCompliance } from '@/src/modules/finance/providers/NexusFiscalProvider';;
+import { useOrders } from '@/src/modules/ops/providers/hooks/kitchenHooks';
+import { useTables } from '@/src/modules/facility/spaces/hooks/useFloorPlan';
+import { useReservations } from '@/src/modules/ops/providers/hooks/commerceHooks';;
 
 // Define an interface for the orders since useOrders() might return generic objects
 interface Order {

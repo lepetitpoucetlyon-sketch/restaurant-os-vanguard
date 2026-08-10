@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { usePathname } from 'next/navigation';
-import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 import type { IVerticalUIPlugin } from '@/shared/plugins/IVerticalUIPlugin';
 

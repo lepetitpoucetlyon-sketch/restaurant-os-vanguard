@@ -8,6 +8,13 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
 import { processVoidOrRefundAction } from "../actions/void.action";
+import { z } from "zod";
+
+const VoidClientSchema = z.object({
+    pieceNumber: z.string().min(1, "Référence requise"),
+    negativeAmountInMicrounits: z.number().max(0),
+    reason: z.string().optional()
+});
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -78,13 +85,19 @@ export function VoidModal({
             const negativeAmount = -refundCents; // NEGATIVE for extourne NF525
             const negativeAmountInMicrounits = negativeAmount * 10_000;
 
+            const validatedData = VoidClientSchema.parse({
+                pieceNumber,
+                negativeAmountInMicrounits,
+                reason
+            });
+
             const result = await processVoidOrRefundAction(
                 tenantId,
                 operatorId,
                 mode,
-                pieceNumber,
-                negativeAmountInMicrounits,
-                reason
+                validatedData.pieceNumber,
+                validatedData.negativeAmountInMicrounits,
+                validatedData.reason
             );
 
             if (!result.success) throw new Error(result.error);

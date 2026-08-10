@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { useAtom, useAtomValue } from 'jotai';
-import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
+import { tenantIdAtom, fleetSnapshotAtom } from '@/bootstrap/store/pillars/sovereign';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Globe, 
@@ -17,7 +17,7 @@ import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useToast } from '@components/ui/Toast';
 
-import { FleetCommander } from '@/modules/intelligence/ia/fleet/FleetCommander';
+import {  FleetCommander  } from '@/bootstrap/legacy';;
 
 /**
  * 🛰️ TenantOrchestrator - Restaurant OS

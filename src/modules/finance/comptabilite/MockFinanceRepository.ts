@@ -1,4 +1,4 @@
-import { IFinanceRepository } from '@/modules/finance';
+import { IFinanceRepository } from '@/src/modules/finance/comptabilite/repositories/IFinanceRepository';;
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { PlanningDashboard } from '@/modules/human';
+import { PlanningDashboard } from '@/src/modules/human/effectifs/hr/components/PlanningDashboard';;
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function PlanningPage() {

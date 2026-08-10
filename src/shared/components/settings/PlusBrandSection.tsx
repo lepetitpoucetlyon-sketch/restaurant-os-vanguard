@@ -2,12 +2,12 @@
 
 import React, { useState, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
 import { VERTICAL_STYLE_PRESETS } from '@/shared/nexus/tokens/verticals/presets';
 import { BrandImportWizard } from './BrandImportWizard';
 import { cn } from '@/lib/ui.foundations';
 import type { StylePreset } from '@/shared/nexus/tokens/verticals/presets';
-import type { PlatformVariant } from '@/modules/system';
+import type {  PlatformVariant  } from '@/bootstrap/legacy';;
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 
 // ── Types ─────────────────────────────────────────────────────────────────────

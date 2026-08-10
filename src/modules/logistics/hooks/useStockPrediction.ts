@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { inventoryMovementsAtom } from '../stock/inventory/store/inventoryAtoms';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { OracleEngine } from '@/modules/intelligence';
+import { OracleEngine } from '@/src/modules/intelligence/services/OracleEngine';;
 import type { OraclePrediction } from '@/modules/logistics/domain/schemas/inventory';
 import type { Quantity } from '@/lib/branding/brands';
 

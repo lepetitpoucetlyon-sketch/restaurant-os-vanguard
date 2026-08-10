@@ -1,5 +1,5 @@
 import { OrderItem } from "@nexus/contracts";
-import { CartItem } from "@/modules/ops/workflow/engine/types";
+import { CartItem } from "@/shared/nexus/contracts/ops.engine.types";
 import { toMicrounits, Microunits } from "@/shared/schemas/primitives";
 
 export class POSService {

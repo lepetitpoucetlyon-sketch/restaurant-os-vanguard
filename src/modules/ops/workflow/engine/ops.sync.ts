@@ -6,11 +6,11 @@ import {
     tablesNodeAtom,
     zonesAtom,
     floorsAtom
-} from '@/store/pillars/ops';
+} from '@/bootstrap/store/pillars/ops';
 import { 
     reservationsNodeAtom, 
     groupsNodeAtom
-} from '@/store/pillars/commerce';
+} from '@/bootstrap/store/pillars/commerce';
 
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";

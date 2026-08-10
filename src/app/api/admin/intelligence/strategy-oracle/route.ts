@@ -20,7 +20,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { aiRouter } from '@/modules/intelligence';
+import { aiRouter } from '@/src/modules/intelligence/ia/ai/AIProviderRouter';;
 import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";
 

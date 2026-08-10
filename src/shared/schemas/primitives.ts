@@ -76,7 +76,7 @@ export const SanitizedStringSchema = RawSanitizer;
 export const TimestampSchema = z.union([
   z.number().int().positive(),
   z.string().datetime({ offset: true }),
-  z.object({ toMillis: z.any() }),
+  z.object({ toMillis: z.unknown() }),
 ]).transform((val): number => {
   if (typeof val === 'number') return val;
   if (typeof val === 'string') return new Date(val).getTime();

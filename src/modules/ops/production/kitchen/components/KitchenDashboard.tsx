@@ -43,9 +43,9 @@ const DailyPrepList = dynamic(() => import("../../recipes/DailyPrepList").then(m
 
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { ExpertHub } from '@/modules/commerce';
+import { ExpertHub } from '@/src/modules/commerce/acquisition/marketing/components/agency/ExpertHub';;
 import { useAtomValue } from "jotai";
-import { performanceModeAtom } from "@/store/pillars/sovereign";
+import { performanceModeAtom } from "@/bootstrap/store/pillars/sovereign";
 
 type KitchenTab = 'mise-en-place' | 'recipes' | 'ingredients' | 'margins' | 'waste' | 'suppliers' | 'allergens' | 'cooking-times' | 'prep-journalier';
 

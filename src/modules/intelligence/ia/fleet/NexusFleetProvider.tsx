@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 import { useSetAtom, useAtomValue } from 'jotai';
-import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
+import { fleetSnapshotAtom } from '@/bootstrap/store/pillars/sovereign';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { FleetComplianceService } from './FleetComplianceService';
 // eslint-disable-next-line vanguard/no-inter-module-imports

@@ -3,9 +3,9 @@ import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
 import { Quote, Campaign, toReservation, toCampaign, toCustomer, toGroup, toQuote } from '@nexus/contracts/nexus-internal-mapper';
 import { createSovereignHook, guardedAction } from '../opsCore';
 
-import { reservationsNodeAtom, groupsNodeAtom, quotesNodeAtom } from '@/store/pillars/commerce';
-import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/store/pillars/commerce';
-import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { reservationsNodeAtom, groupsNodeAtom, quotesNodeAtom } from '@/bootstrap/store/pillars/commerce';
+import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/bootstrap/store/pillars/commerce';
+import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
 import { 
   markReservationArrivedAction,
   upsertCampaignAction,

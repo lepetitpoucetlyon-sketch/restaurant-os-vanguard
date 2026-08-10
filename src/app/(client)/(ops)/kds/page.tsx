@@ -1,6 +1,6 @@
 "use client";
 
-import { KDSDashboard } from '@/modules/ops';
+import { KDSDashboard } from '@/src/modules/ops/production/kds/components/KDSDashboard';;
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function KDSPage() {

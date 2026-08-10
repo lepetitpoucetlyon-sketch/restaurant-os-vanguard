@@ -15,7 +15,7 @@ import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
-import { tenantVariantAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 
 /**

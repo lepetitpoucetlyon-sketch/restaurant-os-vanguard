@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { quotesNodeAtom } from "@/store/pillars/commerce";
+import { quotesNodeAtom } from "@/bootstrap/store/pillars/commerce";
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 
 export function useQuotes() {

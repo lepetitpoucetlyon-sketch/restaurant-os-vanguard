@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports -- infrastructure: deep path required */
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/shared/nexus/contracts/ops.engine.types';
 
 export class TaxCalculator {
   static computeTvaBreakdown(items: CartItem[]): Record<string, number> {

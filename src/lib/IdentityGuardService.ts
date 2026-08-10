@@ -1,15 +1,15 @@
 import { logger } from '@/lib/logger';
  
-import { LLMManager } from '@/modules/intelligence';
-import {
+import { LLMManager } from '@/src/modules/intelligence/ia/ai/LLMManager';;
+import { 
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
     type IdentityExtraction,
     type ComplianceExtractionError
-} from '@/modules/compliance';
+ } from '@/bootstrap/legacy';;
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
  
-import { AI_MODELS } from '@/modules/intelligence';
+import { AI_MODELS } from '@/src/modules/intelligence/ia/GeminiProvider';;
 import { toError } from "@/lib/toError";
 
 export type IdentityExtractionResult =

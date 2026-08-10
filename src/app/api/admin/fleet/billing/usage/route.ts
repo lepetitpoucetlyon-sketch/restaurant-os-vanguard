@@ -5,7 +5,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
  * Protégé : mcc_support minimum.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { UsageTracker } from '@/modules/finance';
+import { UsageTracker } from '@/src/modules/finance/comptabilite/billing/UsageTracker';;
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller as NextResponse;

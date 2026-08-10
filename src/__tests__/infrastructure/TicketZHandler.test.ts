@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { closeTicketZForDay, registerTicketZHandler } from '@/shared/eventBus/handlers/TicketZHandler';
+import { closeTicketZForDay, registerTicketZHandler } from '@/bootstrap/eventBus/handlers/TicketZHandler';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 

@@ -15,7 +15,7 @@ export const OrderItemModificationSchema = z.object({
   respondedBy:  z.string().optional(),
   respondedAt:  TimestampSchema.optional(),
   responseNote: z.string().optional(),
-}).catchall(z.any());
+}).catchall(z.unknown());
 
 export const ConsumptionModeSchema = z.enum(['dine_in', 'takeaway']);
 export type ConsumptionMode = z.infer<typeof ConsumptionModeSchema>;
@@ -72,7 +72,7 @@ const OrderBaseSchema = z.object({
   covers:        z.number().int().min(1).max(50).optional(),
   notes:         z.string().max(500).pipe(SanitizedStringSchema).optional(),
   schemaVersion: z.literal(2).default(2),
-}).catchall(z.any());
+}).catchall(z.unknown());
 
 export const OrderSchema = OrderBaseSchema.refine(
   data => data.paidAt === null || data.paidAt === undefined || data.paidAt >= data.createdAt,

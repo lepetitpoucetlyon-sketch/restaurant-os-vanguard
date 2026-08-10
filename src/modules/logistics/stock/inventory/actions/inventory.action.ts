@@ -3,7 +3,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/lib/server/actionWrapper";
+import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
 import { z } from "zod";
 
 export const adjustStockAction = createSafeAction(
@@ -28,7 +28,7 @@ export const adjustStockAction = createSafeAction(
 );
 
 export const receiveStockAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([z.string(), z.custom<unknown>(() => true)]),
     { page: "inventory", action: "add_stock" },
     async (tenantId, data: any) => {
         try {

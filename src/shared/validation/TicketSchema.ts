@@ -7,7 +7,7 @@ export const TicketSchema_v1 = z.object({
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   category: z.enum(['ui', 'logic', 'performance', 'security', 'other']),
   metadata: z.object({
-    jotaiSnapshot: z.any().optional(),
+    jotaiSnapshot: z.unknown().optional(),
     consoleLogs: z.array(z.string()).optional(),
     timestamp: z.number(),
     screenshotBase64: z.string().optional()

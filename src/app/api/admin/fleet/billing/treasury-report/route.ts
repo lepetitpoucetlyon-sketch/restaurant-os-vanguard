@@ -12,7 +12,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
  */
 import { NextRequest, NextResponse } from 'next/server';
  
-import { BillingService } from '@/modules/finance';
+import { BillingService } from '@/src/modules/finance/services/BillingService';;
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
