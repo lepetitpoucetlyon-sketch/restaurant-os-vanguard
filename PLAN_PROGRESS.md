@@ -66,13 +66,14 @@ de complexité de 4 à **33**. Ce durcissement n'était pas au plan. À assumer 
 
 | # | Tâche | Statut | Réel |
 |---|-------|--------|------|
-| 1bis.1 | Invariants fast-check | ⚠️ **5 / 7** | 5 fichiers, **4 verts + 2 expected fail** |
+| 1bis.1 | Invariants fast-check | ⚠️ **5 / 7** | 5 fichiers, **6 tests verts + 1 expected fail** |
 | 1bis.2 | Règles Semgrep | ⚠️ **1 / 7 active** | 1 active (`WARNING`), **5 dans `.semgrep/disabled/`** |
 | 1bis.3 | Knip | ✅ | `.knip.json` présent |
 | 1bis.4 | Doc générée | ✅ | `scripts/gen-pillars-doc.ts` |
 
 ### Invariants présents
-- `money-conservation.pbt.test.ts` → 🔴 **`it.fails` — prouve le bug pourboire §7.4**
+- `money-conservation.pbt.test.ts` ✅ **2 tests verts** — `.fails` retiré, §7.4 câblé
+  (conservation `Σ débits = encaissé` · pourboire hors base TVA)
 - `currency-conversion.pbt.test.ts` ✅
 - `fiscal-chain.pbt.test.ts` ✅ (dont 1 `it.fails`)
 - `split-invariants.pbt.test.ts` ✅
