@@ -13,7 +13,7 @@ import {
     type InvoiceExtractionError,
     type InvoiceLineItem,
     type InvoiceFlag,
-} from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
+} from '../domain/schemas/supplier-invoice.schemas';
 import {
     INVOICE_EXTRACTION_SYSTEM_PROMPT,
     PRICE_REFERENCE_TABLE,
