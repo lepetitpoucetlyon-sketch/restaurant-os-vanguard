@@ -3,6 +3,13 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { toError } from "@/lib/toError";
+import { z } from 'zod';
+
+const PayloadSchema = z.object({
+  tenantId: z.string(),
+  checkId: z.string(),
+  correctionDeadline: z.union([z.string(), z.number(), z.date()])
+});
 
 /**
  * HaccpCorrectiveActionHandler (P0-1.12)
@@ -10,8 +17,9 @@ import { toError } from "@/lib/toError";
  * Enregistre l'action corrective obligatoire dans le registre sanitaire HACCP et alerte le chef cuisinier et manager.
  */
 export function registerHaccpCorrectiveActionHandler(): () => void {
-  return NexusEventBus.on(
+  return NexusEventBus.onValidated(
     'haccp.nonconform',
+    PayloadSchema,
     async (payload) => {
       const { tenantId, checkId, correctionDeadline } = payload;
       const deadlineIso = new Date(correctionDeadline).toISOString();
@@ -52,6 +60,6 @@ export function registerHaccpCorrectiveActionHandler(): () => void {
         throw err; // HACCP légal — action corrective obligatoire → DLQ pour retry
       }
     },
-    { id: 'haccp-corrective-action-handler', priority: 'CRITICAL' }
+    { id: 'haccp-corrective-action', priority: 'CRITICAL' }
   );
 }

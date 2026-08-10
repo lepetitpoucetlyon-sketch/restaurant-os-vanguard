@@ -2,6 +2,14 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { z } from 'zod';
+
+const PayloadSchema = z.object({
+  tenantId: z.string(),
+  drawerId: z.string(),
+  operatorId: z.string().optional(),
+  detectedAt: z.union([z.string(), z.number(), z.date()]).optional()
+});
 
 /**
  * P3-3: Cash Drawer Anomaly Handler (Sovereign Guard)
@@ -10,8 +18,9 @@ import { empireAudit } from '@/lib/audit';
  * ou déclenche un verrouillage POS de sécurité.
  */
 export function registerCashDrawerAnomalyHandler(): () => void {
-  return NexusEventBus.on(
+  return NexusEventBus.onValidated(
     'cash_drawer.opened_unauthorized',
+    PayloadSchema,
     async (payload) => {
       const { drawerId, operatorId, tenantId, detectedAt } = payload;
       
@@ -22,9 +31,9 @@ export function registerCashDrawerAnomalyHandler(): () => void {
         empireAudit.log({
           module: 'finance',
           action: 'UNAUTHORIZED_DRAWER_OPEN',
-          details: { drawerId: drawerId as string, operatorId: operatorId as string, detectedAt: detectedAt as unknown as string },
+          details: { drawerId, operatorId, detectedAt },
           severity: 'critical',
-          timestamp: new Date(detectedAt),
+          timestamp: detectedAt ? new Date(detectedAt) : new Date(),
         });
 
         // 2. Vérification de la propriété du hardware (Sovereign Check)

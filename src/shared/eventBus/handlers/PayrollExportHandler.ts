@@ -7,13 +7,22 @@ import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/Payr
 import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 import { toError } from "@/lib/toError";
-
 import { withRoleGuard } from '../middleware/withRoleGuard';
+import { z } from 'zod';
+
+const PayloadSchema = z.object({
+  tenantId: z.string(),
+  periodId: z.string(),
+  validatedBy: z.string(),
+  totalEmployees: z.number(),
+  isSimulation: z.boolean().optional()
+});
 
 export class PayrollExportHandler {
   static register() {
-    return NexusEventBus.on(
+    return NexusEventBus.onValidated(
       'hr.preroll_validated',
+      PayloadSchema,
       withRoleGuard('admin', async (payload) => {
       if (payload.isSimulation) return;
       const { tenantId, periodId, validatedBy, totalEmployees } = payload;

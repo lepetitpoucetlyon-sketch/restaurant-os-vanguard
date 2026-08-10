@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AmbianceService, RestaurantAmbiance } from '@/modules/facility/spaces/AmbianceService';
+import { AmbianceService, RestaurantAmbiance } from '@/modules/facility';
 
 export function useAmbiance() {
     const [ambiance, setAmbiance] = useState<RestaurantAmbiance>(AmbianceService.getCurrentAmbiance());

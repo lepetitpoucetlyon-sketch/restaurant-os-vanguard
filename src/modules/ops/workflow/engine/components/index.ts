@@ -7,4 +7,4 @@ export * from './dashboard';
 // Re-export from canonical location (facility pillar)
  
 // eslint-disable-next-line no-restricted-imports -- cycle prevention: facility/spaces/hooks re-exports from ops barrel
-export * from '@/modules/facility/maintenance/registre';
+export { DUERPSection, IncendieSection, Cerfa13984Section, InterventionLogSection, PMRSection, PrestatairesSection, SanitaryComplianceSection } from '@/modules/facility';

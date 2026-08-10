@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { z } from 'zod';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
@@ -60,6 +61,25 @@ class NexusEventBusClass {
   off(event: NexusEventName, id: string): void {
     const existing = this.handlers.get(event) ?? [];
     this.handlers.set(event, existing.filter(h => h.id !== id));
+  }
+
+  onValidated<E extends NexusEventName, T>(
+      event: E,
+      schema: z.ZodType<T>,
+      handler: (payload: T) => Promise<void>,
+      options?: { id: string; priority?: 'CRITICAL' | 'HIGH' | 'BACKGROUND' }
+  ) {
+      return this.on(event, async (raw: unknown) => {
+          const parsed = schema.safeParse(raw);
+          if (!parsed.success) {
+              throw new NexusError(
+                  NexusErrorCode.VALIDATION_ERROR,
+                  `Payload d'événement invalide sur ${event}`,
+                  parsed.error.issues,
+              );
+          }
+          return handler(parsed.data);
+      }, options);
   }
 
   private enforceTierPolicies(payload: any): void {

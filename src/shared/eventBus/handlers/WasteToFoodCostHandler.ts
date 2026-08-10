@@ -1,7 +1,23 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
+const WasteLoggedSchema = z.object({
+  tenantId: z.string(),
+  ingredientId: z.string(),
+  quantity: z.number().nonnegative(),
+  wasteId: z.string().optional()
+});
+
+const InventoryWasteLoggedSchema = z.object({
+  tenantId: z.string(),
+  wasteId: z.string(),
+  items: z.array(z.object({
+    productId: z.string(),
+    quantity: z.number().nonnegative()
+  })).optional()
+});
 /**
  * P3-4: Waste To Food Cost Handler
  * Écoute les enregistrements de pertes (waste.logged et inventory.waste_logged).
@@ -10,8 +26,9 @@ import { logger } from '@/lib/logger';
  * qui sera récupérée par l'Inflation Shield.
  */
 export function registerWasteToFoodCostHandler(): () => void {
-  const unsubWasteLogged = NexusEventBus.on(
+  const unsubWasteLogged = NexusEventBus.onValidated(
     'waste.logged',
+    WasteLoggedSchema,
     async (payload) => {
       const { tenantId, ingredientId, quantity } = payload;
       
@@ -56,8 +73,9 @@ export function registerWasteToFoodCostHandler(): () => void {
     { id: 'waste-to-food-cost-handler', priority: 'BACKGROUND' }
   );
 
-  const unsubInventoryWasteLogged = NexusEventBus.on(
+  const unsubInventoryWasteLogged = NexusEventBus.onValidated(
     'inventory.waste_logged',
+    InventoryWasteLoggedSchema,
     async (payload) => {
       const { tenantId, wasteId, items } = payload;
       logger.info(`[WasteToFoodCost] Réconciliation stock pour perte wasteId=${wasteId} (${items?.length ?? 0} articles)`);
@@ -76,7 +94,8 @@ export function registerWasteToFoodCostHandler(): () => void {
           }
         }
       }
-    }
+    },
+    { id: 'inventory-waste-food-cost-handler', priority: 'BACKGROUND' }
   );
 
   return () => {

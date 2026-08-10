@@ -2,6 +2,15 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { z } from 'zod';
+
+const PayloadSchema = z.object({
+  tenantId: z.string(),
+  productId: z.string().optional(),
+  currentMarginBps: z.number().optional(),
+  thresholdBps: z.number().optional(),
+  triggerEventId: z.string().optional()
+});
 
 /**
  * P2-3: Inflation Shield - MarginWarningHandler
@@ -9,8 +18,9 @@ import { empireAudit } from '@/lib/audit';
  * pour affichage dans le MarginAlertPanel du MCC.
  */
 export function registerMarginWarningHandler(): () => void {
-  return NexusEventBus.on(
+  return NexusEventBus.onValidated(
     'commerce.margin_warning',
+    PayloadSchema,
     async (payload) => {
       const { tenantId, productId, currentMarginBps, thresholdBps, triggerEventId } = payload;
       
@@ -42,7 +52,7 @@ export function registerMarginWarningHandler(): () => void {
         if (typeof window !== 'undefined' && 'Notification' in window) {
             if (Notification.permission === 'granted') {
               new Notification('⚠️ ALERTE INFLATION SHIELD', {
-                body: `Marge dégradée détectée (${(currentMarginBps/100).toFixed(2)}%) suite à la dernière facture.`,
+                body: `Marge dégradée détectée (${((currentMarginBps ?? 0)/100).toFixed(2)}%) suite à la dernière facture.`,
               });
             }
         }
@@ -51,6 +61,6 @@ export function registerMarginWarningHandler(): () => void {
           throw e; // Reprise par la DLQ
       }
     },
-    { id: 'margin-warning-handler', priority: 'HIGH' }
+    { id: 'margin-warning-handler', priority: 'BACKGROUND' }
   );
 }
