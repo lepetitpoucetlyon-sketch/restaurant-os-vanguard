@@ -25,4 +25,3 @@ export { ProductAvailabilityService } from './stock/services/ProductAvailability
 
 // ── Domaine Types ─────────────────────────────────────────────────────────────
 // Delivery/DeliveryItem = types Livraison fournisseur (réception)
-export type { Delivery, DeliveryItem } from './domain/types/delivery';

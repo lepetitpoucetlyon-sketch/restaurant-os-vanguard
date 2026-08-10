@@ -2,13 +2,14 @@ import { logger } from '@/lib/axiom';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { InvoiceExtractionService } from '@modules/logistics/services/InvoiceExtractionService';
 import { IdentityGuardService } from '@/lib/IdentityGuardService';
-import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/finance';
+import { toLegacyInvoice } from '@nexus/contracts';;
+import { type ExtractedInvoiceItem } from '@nexus/contracts';;
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
-export type { ExtractedInvoiceItem } from '@/modules/finance';
+export type { ExtractedInvoiceItem } from '@nexus/contracts';
 
 export interface ExtractedInvoice {
     supplierName: string;

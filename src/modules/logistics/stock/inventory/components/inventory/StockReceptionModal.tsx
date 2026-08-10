@@ -16,7 +16,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { receiveStockAction } from "../../actions/inventory.action";
 import { VisionScanner } from "@/shared/components/VisionScanner";
-import type { ExtractedInvoice } from "@/modules/ops";
+import type { ExtractedInvoice } from "@nexus/contracts";
 
 interface SupplierRecord {
     id: string;

@@ -13,7 +13,7 @@ import {
     type InvoiceExtractionError,
     type InvoiceLineItem,
     type InvoiceFlag,
-} from '../domain/schemas/supplier-invoice.schemas';
+} from '@nexus/contracts';
 import {
     INVOICE_EXTRACTION_SYSTEM_PROMPT,
     PRICE_REFERENCE_TABLE,

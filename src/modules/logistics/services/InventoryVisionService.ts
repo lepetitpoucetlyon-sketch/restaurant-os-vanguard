@@ -1,6 +1,6 @@
 import { Ingredient, StockItem } from '@nexus/contracts';
-import { ExtractedInvoiceItem } from '../domain/schemas/supplier-invoice.schemas';
-import type { InvoiceLineItem } from '../domain/schemas/supplier-invoice.schemas';
+import { ExtractedInvoiceItem } from '@nexus/contracts';
+import type { InvoiceLineItem } from '@nexus/contracts';
 
 export interface VisionMatchResult {
     extracted: ExtractedInvoiceItem;

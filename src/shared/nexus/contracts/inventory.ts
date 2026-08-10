@@ -40,7 +40,7 @@ export const InventoryTransactionSchema = z.object({
   userId:            UUIDSchema,
 });
 
-export type StockItem = z.infer<typeof StockItemSchema>;
+export type ZodStockItem = z.infer<typeof StockItemSchema>;
 export type InventoryTransaction = z.infer<typeof InventoryTransactionSchema>;
 
 export const StockItemPatchSchema = StockItemBaseSchema.partial().omit({ id: true });

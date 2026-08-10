@@ -71,6 +71,4 @@ export { GoCardlessProvider } from './tresorerie/banking/openBanking/GoCardlessP
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/finance';
-export * from './domain/schemas/cash';
 export * from './domain/schemas/periodClosure';
-export * from './domain/schemas/supplier-invoice.schemas';

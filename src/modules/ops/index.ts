@@ -62,8 +62,6 @@ export * from './domain/schemas/orders';
 // ops: TableSchema, ReservationSchema, FloorSchema, ZoneSchema, FloorTable…
 // TableShape/TableStatus/Reservation sont aussi dans workflow/engine — disambiguation ci-dessous
 export * from './domain/schemas/ops';
-export * from './domain/schemas/inventory';
-export * from './domain/schemas/cash';
 // Résolution TS2308 : types dupliqués entre domain/schemas et sous-barrels
 export type { TableShape, TableStatus, Reservation } from './domain/schemas/ops';
 export type { CourseType, SplitMode, PaymentMethod, ConvivePayment } from './domain/schemas/pos';

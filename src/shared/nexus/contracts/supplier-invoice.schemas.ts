@@ -135,7 +135,7 @@ export const InvoiceExtractionErrorSchema = z.object({
 export type KnownSupplierId = z.infer<typeof KnownSupplierIdEnum>;
 export type DocumentType = z.infer<typeof DocumentTypeEnum>;
 export type MeasureUnit = z.infer<typeof MeasureUnitEnum>;
-export type ProductCategory = z.infer<typeof ProductCategoryEnum>;
+export type SupplierProductCategory = z.infer<typeof ProductCategoryEnum>;
 export type TvaRate = z.infer<typeof TvaRateEnum>;
 export type InvoiceFlag = z.infer<typeof InvoiceFlagEnum>;
 

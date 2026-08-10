@@ -24,7 +24,7 @@ export type IngredientCategory =
     | 'bakery' | 'dry' | 'condiment' | 'spice' | 'oil' | 'beverage'
     | 'wine' | 'spirits' | 'frozen' | 'other';
 
-export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'piece' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
+export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'portion' | 'piece' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
 
 // Predefined storage locations
 export const DEFAULT_STORAGE_LOCATIONS: StorageLocation[] = [

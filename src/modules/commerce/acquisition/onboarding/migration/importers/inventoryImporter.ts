@@ -1,11 +1,11 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { ParsedFile, ImportResult } from '../types';
-import type { StockItem } from '@/modules/ops';
+import type { ZodStockItem } from '@nexus/contracts';
 
-type ValidUnit = StockItem['unit'];
+type ValidUnit = ZodStockItem['unit'];
 
-// Cross-impact: StockItemSchema unit enum is strict
+// Cross-impact: ZodStockItemSchema unit enum is strict
 const UNIT_ALIASES: Record<string, ValidUnit> = {
   // kg
   kg: 'kg', kilogramme: 'kg', kilogrammes: 'kg', kilo: 'kg', kilos: 'kg',

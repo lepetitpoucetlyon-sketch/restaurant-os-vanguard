@@ -1,11 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-    ExtractedSupplierInvoiceSchema,
-    InvoiceExtractionErrorSchema,
-    InvoiceLineItemSchema,
-    toLegacyInvoice,
-    type ExtractedSupplierInvoice,
-} from '@/modules/finance';
+import { ExtractedSupplierInvoiceSchema, InvoiceExtractionErrorSchema, InvoiceLineItemSchema, toLegacyInvoice, type ExtractedSupplierInvoice } from '@nexus/contracts';;
 import { InvoiceExtractionService } from '@/modules/logistics';
 
 // ─── Fixtures ───────────────────────────────────────────────────────────────────

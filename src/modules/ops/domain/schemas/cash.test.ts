@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CashSessionSchema, fromLegacyCents } from './cash';
+import { CashSessionSchema, fromLegacyCents } from '@nexus/contracts';
 
 describe('CashSessionSchema', () => {
     it('validates a complete session', () => {
