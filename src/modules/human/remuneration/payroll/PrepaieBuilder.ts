@@ -65,9 +65,13 @@ export const PrepaieBuilder = {
             }),
         ]);
 
+        const users   = Array.isArray(usersRaw)   ? usersRaw   : [];
+        const entries = Array.isArray(entriesRaw) ? entriesRaw : [];
+        const leaves  = Array.isArray(leavesRaw)  ? leavesRaw  : [];
+
         // ── Regrouper les entrées par employé ──────────────────────────────────
         const entriesByUser = new Map<string, ShiftEntry[]>();
-        for (const e of entriesRaw) {
+        for (const e of entries) {
             const arr = entriesByUser.get(e.userId) ?? [];
             arr.push(e);
             entriesByUser.set(e.userId, arr);
@@ -75,7 +79,7 @@ export const PrepaieBuilder = {
 
         const rows: PrepaieRow[] = [];
 
-        for (const user of usersRaw) {
+        for (const user of users) {
             if ((user as { status?: string }).status === 'inactive') continue;
 
             const entries = (entriesByUser.get(user.id) ?? []).sort(
@@ -128,8 +132,8 @@ export const PrepaieBuilder = {
             const { normal, ot25, ot50 } = weeklyOvertimeBreakdown(weekMinutes, convention);
             const hourlyRateEur = (user.hourlyRateInMicrounits ?? 0) / MU_TO_EUR;
 
-            const cpDays  = extractLeaveDays(leavesRaw, user.id, ['paid_leave'],     startTs, endTs);
-            const absDays = extractLeaveDays(leavesRaw, user.id, ['sick', 'unpaid'], startTs, endTs);
+            const cpDays  = extractLeaveDays(leaves, user.id, ['paid_leave'],     startTs, endTs);
+            const absDays = extractLeaveDays(leaves, user.id, ['sick', 'unpaid'], startTs, endTs);
 
             const grossEur = computeGross(normal, ot25, ot50, hourlyRateEur, convention);
             const { nom, prenom } = splitName(user.name as string | undefined);
@@ -158,7 +162,8 @@ export const PrepaieBuilder = {
             });
         }
 
-        const tipPools = await TipDistributionService.getByPeriode(tenantId, periode);
+        const tipPoolsRaw = await TipDistributionService.getByPeriode(tenantId, periode);
+        const tipPools = Array.isArray(tipPoolsRaw) ? tipPoolsRaw : [];
         for (const pool of tipPools) {
             for (const share of pool.shares) {
                 const row = rows.find(r => r.userId === share.userId);
