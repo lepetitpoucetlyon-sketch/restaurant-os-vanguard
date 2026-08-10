@@ -37,9 +37,15 @@ max_coupling = "B"
 # Chantier 7 : 20→15. Les fonctions >15 branches ont besoin d'être découpées.
 max_cc = 12
 
-# Pas de fichier "dieu" (>300 lignes de logique + >10 dépendances).
+# Pas de fichier "dieu" (max 400 lignes de code + fan_out > 12).
 # Les agents IA ont tendance à tout mettre dans un seul fichier.
 no_god_files = true
+
+# Aggregation Roots — fan-out élevé autorisé (charte .agents/agents.md §30)
+# Condition : zéro calcul métier direct + next/dynamic pour les panneaux lourds.
+[[god_file_exceptions]]
+paths = ["src/app/**", "**/*Provider.tsx", "**/*Dashboard.tsx"]
+max_fan_out = 30
 
 # Interdit d'importer un module sans passer par son index.ts (Barrel Contract)
 no_barrel_violations = true
