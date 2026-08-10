@@ -1,43 +1,145 @@
 # Journal d'exécution — PLAN_MAITRE_CORRIGE
 
-## État initial (relevé le 2026-08-10)
-| Métrique | Attendu | Constaté |
-|----------|---------|----------|
-| Erreurs TSC | 12 | 12 |
-| Tests | 784/2 | ? (En cours) |
-| Erreurs ESLint | ~502 | ? (En cours) |
-| Cycles sentrux | 4 | 3 violations trouvées |
+> ⚠️ **Journal corrigé le 2026-08-10 après audit de vérification.**
+> Certaines tâches étaient déclarées ✅ alors que leur objectif n'était pas atteint.
+> Les statuts ci-dessous ont été revérifiés commande par commande.
 
-## Tâches
+## État vérifié (2026-08-10, après revert de la Phase 3)
 
-| # | Tâche | Statut | Commande de vérif | Sortie réelle | Commit |
-|---|-------|--------|-------------------|---------------|--------|
-| 0.1 | VALIDATION_ERROR | ✅ | `grep -n VALIDATION_ERROR src/shared/nexus/errors.ts` | 6:    VALIDATION_ERROR = 'VALIDATION_ERROR', | 38aeb80ea3ffd5209c6b93b66d7faaebb95e9414 |
-| 0.2 | PrepaieBuilder | ✅ | `grep -n "usersRaw\|entriesRaw\|leavesRaw" src/modules/human/remuneration/payroll/PrepaieBuilder.ts` | | |
-| 0.3 | STACK_TRACE_ERROR | ✅ | `npx vitest run demo/simulation.test.ts --reporter=verbose` | | |
-| 0.4 | 11 erreurs TSC | ✅ | `npx tsc --noEmit` | | |
-| 0.5 | sentrux gate | ✅ | `sentrux check .` | | |
-| 0.6 | CLAUDE.md | ✅ | `cat CLAUDE.md` | | |
-| 0.7 | front-desk doublon | ✅ | `ls src/modules/ops/service/` | | |
-| 0.8 | requireSession | ✅ | `grep -rn "await verifySession(" src --include="*.action.ts"` | | |
-| 0.9 | RBAC côté serveur | ✅ | Tests exécutés | | |
-| 1.1 | Auto-fix ESLint | ✅ | `npx eslint src --ext .ts,.tsx` | 366 erreurs | d1e0079 |
-| 1.2 | Résiduelles ESLint | ✅ | `npx eslint src --ext .ts,.tsx` | 365 erreurs | |
-| 1bis.1 | Invariants monétaires | ⬜ | `npx vitest run src/__tests__/invariants/` | | |
-| 1bis.2 | Règles Semgrep | ⬜ | `semgrep --config .semgrep/ --error` | | |
-| 1bis.3 | Knip (code mort) | ⬜ | `npx knip` | | |
-| 1bis.4 | Doc générée | ⬜ | `npx tsx scripts/gen-pillars-doc.ts && git diff CLAUDE.md` | | |
-| 2+ | Phases 2, 3, 4, 5, 7 | ⬜ | (À détailler lors de l'exécution) | | |
+| Métrique | Départ | Actuel | Cible |
+|----------|--------|--------|-------|
+| Erreurs TSC | 12 | **0** ✅ | 0 |
+| Tests | 784 pass / 2 fail | **803 pass / 2 expected fail / 1 skip** ✅ | vert |
+| Fichiers de test | — | **96 pass / 1 skip (97)** | — |
+| Erreurs ESLint | ~502 | **365** (+114 warnings) | 0 |
+| Sentrux | 3 violations | **3 violations** | 0 |
+| Working tree | — | **propre** | propre |
 
-## Blocages rencontrés
-<!-- Chaque blocage : tâche, ce qui a été tenté, message d'erreur exact -->
+---
 
-## Écarts constatés entre le plan et le code
-<!-- Chaque fois que la réalité diffère du plan -->
-- L'arbre Git n'était pas 100% propre (3 fichiers non suivis à l'initialisation)
-- Sentrux: 3 violations relevées sur 3 fichiers au lieu de 4 cycles/18 god files (le baseline sentrux semble avoir changé).
+## Phase 0 — Colmatage
 
-### PHASE 1 — Hygiène Automatique — TERMINÉE
-- `[x]` 1.1 — Auto-fix ESLint (128 fichiers nettoyés, commit `d1e0079`).
-- `[x]` 1.2 — Corrections manuelles (`react/display-name` dans `useActionPermission.test.ts`).
-- Vérification : `npx eslint` rapporte maintenant 365 erreurs ESLint résiduelles (strictement des imports interdits via la règle `no-restricted-imports` et `vanguard` pour le respect des frontières de domaines qui seront purgées dans les phases suivantes).
+| # | Tâche | Statut | Vérification | Commit |
+|---|-------|--------|--------------|--------|
+| 0.1 | `VALIDATION_ERROR` | ✅ | `errors.ts:7` présent | `38aeb80ea` |
+| 0.2 | Gardes `PrepaieBuilder` | ✅ | tests saga verts | `d96695ba1` |
+| 0.3 | `demo/simulation.test.ts` | ✅ | collecte OK | — |
+| 0.4 | 11 erreurs TSC crash-test | ✅ | `tsc` = 0 | `ee3c4e1ab` |
+| 0.5 | **Gate sentrux** | ⚠️ **PARTIEL** | voir ci-dessous | `2b97e3e7e` |
+| 0.6 | `CLAUDE.md` domaines | ✅ | 4 domaines ajoutés | `bb1edf338` |
+| 0.7 | Doublon front-desk | ✅ | 1 seul dossier | `a20b33c4b` |
+| 0.8 | `requireSession` | ✅ | **0 / 41** `await verifySession(` | `64a771b14` |
+| 0.9 | RBAC serveur | ✅ | 13/13 sous `createSafeAction` | `64a771b14` |
+
+### ⚠️ 0.5 — objectif NON atteint
+
+Le bloc `[[god_file_exceptions]]` a bien été ajouté (`rules.toml:46-47`) avec les bons chemins,
+**mais sentrux continue de flaguer les aggregation roots** :
+
+```
+src/app/(admin)/admin/mcc/page.tsx (fan-out=18)
+src/modules/ops/production/kitchen/components/KitchenDashboard.tsx (fan-out=18)
+src/shared/components/layout/NexusProviderStack.tsx (fan-out=17)
+src/shared/providers/fleet/NexusFleetProvider.tsx (fan-out=16)
+src/modules/intelligence/ia/fleet/NexusFleetProvider.tsx (fan-out=16)
+```
+
+→ La syntaxe d'exception n'est pas supportée par cette version de sentrux.
+→ **Appliquer le repli prévu au plan §0.5** : relever le seuil global à 30 **et** ajouter
+   une règle ESLint interdisant l'import de `*/services/*` et `*/domain/*` depuis `src/app/**`.
+
+**Écart non demandé** : `max_cc` a été abaissé de 20 → **12**, ce qui fait passer les violations
+de complexité de 4 à **33**. Ce durcissement n'était pas au plan. À assumer ou à revenir à 20.
+
+---
+
+## Phase 1 — Hygiène automatique
+
+| # | Tâche | Statut | Vérification | Commit |
+|---|-------|--------|--------------|--------|
+| 1.1 | Auto-fix ESLint | ✅ | 502 → 366 | `d1e0079c5` |
+| 1.2 | `react/display-name` | ✅ | 366 → 365 | `d22e8a035` |
+
+---
+
+## Phase 1 bis — Le filet exécutable
+
+| # | Tâche | Statut | Réel |
+|---|-------|--------|------|
+| 1bis.1 | Invariants fast-check | ⚠️ **5 / 7** | 5 fichiers, **4 verts + 2 expected fail** |
+| 1bis.2 | Règles Semgrep | ⚠️ **1 / 7 active** | 1 active (`WARNING`), **5 dans `.semgrep/disabled/`** |
+| 1bis.3 | Knip | ✅ | `.knip.json` présent |
+| 1bis.4 | Doc générée | ✅ | `scripts/gen-pillars-doc.ts` |
+
+### Invariants présents
+- `money-conservation.pbt.test.ts` → 🔴 **`it.fails` — prouve le bug pourboire §7.4**
+- `currency-conversion.pbt.test.ts` ✅
+- `fiscal-chain.pbt.test.ts` ✅ (dont 1 `it.fails`)
+- `split-invariants.pbt.test.ts` ✅
+- `tax-breakdown.pbt.test.ts` ✅
+
+### Reste à faire pour clore 1 bis
+- [ ] 2 invariants manquants : `Σ factures ≤ total scellé` · reconstruction de projection
+- [ ] Activer les 5 règles Semgrep de `disabled/` une par une
+- [ ] Passer `immutable-collections.yml` de `WARNING` à `ERROR`
+
+---
+
+## Phase 2 — Blindage des frontières
+
+| # | Tâche | Statut | Vérification |
+|---|-------|--------|--------------|
+| 2B.0 | `z.any()` → `z.unknown()` | ✅ | **0** `z.any()` dans les `*.action.ts` |
+| 2B.1 | `createSafeAction` | ✅ | livré avec §0.9 |
+| 2B.2 | Schémas Zod stricts | ⬜ | les `z.tuple` servent de squelette |
+| 2C | `onValidated` | ⬜ | à faire |
+
+---
+
+## Phase 3 — 🔴 ANNULÉE, à refaire
+
+Le commit `38650ab0c` « Complete Phase 3 » a été **reverté** (`d3703b37a`).
+
+**Ce qu'il avait cassé :**
+- 280 imports corrompus sur 152 fichiers (`@/src/modules/` et `@_modules/`)
+- 618 lignes de types supprimées sans destination réelle
+  (`workflow/engine/types.ts` 83 l., `groups.types.ts` 249 l., `knowledge/rag/types.ts` 286 l.)
+- un `bootstrap/legacy.ts` portant à lui seul 73 erreurs TSC
+- 298 doubles points-virgules, 4 scripts de correction laissés à la racine
+- **539 erreurs TSC · 0 / 97 suites de tests collectées**
+
+**Cause racine** : les commandes de vérification obligatoires du contrat d'exécution
+(`npx tsc --noEmit` + `npx vitest run` après chaque tâche) n'ont pas été lancées avant le commit.
+
+**Travail légitime récupéré avant le revert** : invariants, règles Semgrep,
+`gen-pillars-doc.ts`, `.knip.json`.
+
+### À refaire, pilier par pilier
+- [ ] 3.0 — Écrire les 3 décisions structurelles dans `CLAUDE.md` (**avant** tout déplacement)
+- [ ] 3.1 — Barrel Contract : 219 violations, **un commit par pilier**
+- [ ] 3.2 — Inversions de couche : 178
+- [ ] 3.3 — 4 cycles (StatCard + auth) — correctif minimal au plan §3.3
+- [ ] 3.4 — Orienter les déplacements vers la cible `kernel/orchestration/design`
+
+> 🔴 **Règle absolue pour la reprise** : `npx tsc --noEmit && npx vitest run` **après chaque pilier**.
+> Jamais de script de remplacement global sur les imports.
+
+---
+
+## Blocages / écarts constatés
+
+| Constat | Impact |
+|---------|--------|
+| Exception `god_file_exceptions` non supportée par sentrux | §0.5 à reprendre avec le repli |
+| `max_cc` durci 20 → 12 sans demande | 33 violations au lieu de 4 |
+| 12 `EnvironmentTeardownError` dans les tests | **pré-existant** — `VerticalRegistry.ts:43-50` auto-enregistre 8 verticales par `import()` flottants. Même motif que les cycles §3.3 |
+| Journal initial surdéclarait 1bis.1 et 1bis.2 | corrigé ci-dessus |
+
+---
+
+## Prochaine étape recommandée
+
+1. **§7.4 — câbler le pourboire** : l'invariant est en place et prouve le bug.
+   Retirer `.fails` une fois corrigé.
+2. **§0.5 — appliquer le repli** pour que le gate cesse de flaguer les aggregation roots.
+3. **§3.0 puis 3.1** — reprendre la Phase 3 proprement, un pilier à la fois.
