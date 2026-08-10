@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/owner-view
  * Vue agrégée de la flotte d'un Owner B2B depuis le MCC.
@@ -11,7 +12,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { fleetTelemetry } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';

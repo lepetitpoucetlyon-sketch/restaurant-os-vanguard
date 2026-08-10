@@ -9,6 +9,7 @@ import { registerIntelligenceHandlers } from './intelligence';
 import { registerCrmHandlers } from './crm';
 import { registerMccHandlers } from './mcc';
 import { registerNotificationHandlers } from './notifications';
+import { registerTechAuditLedgerHandler } from '../handlers/TechAuditLedgerHandler';
 
 let clientInitialized = false;
 let serverInitialized = false;
@@ -40,7 +41,8 @@ export function registerNexusHandlers(): void {
     ...registerIntelligenceHandlers(),
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
-    ...registerNotificationHandlers()
+    ...registerNotificationHandlers(),
+    registerTechAuditLedgerHandler()
   );
 }
 
@@ -58,7 +60,8 @@ export function registerServerNexusHandlers(): void {
     ...registerIntelligenceHandlers(),
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
-    ...registerNotificationHandlers()
+    ...registerNotificationHandlers(),
+    registerTechAuditLedgerHandler()
   );
 }
 

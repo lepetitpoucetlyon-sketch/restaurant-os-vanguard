@@ -319,8 +319,7 @@ export function KDSDashboard() {
                     ) : (
                         <motion.div
                             layout
-                            className="grid gap-6 md:gap-10 relative z-10"
-                            style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` }}
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative z-10"
                         >
                             {displayOrders.map(ticket => (
                                 <KDSTicket

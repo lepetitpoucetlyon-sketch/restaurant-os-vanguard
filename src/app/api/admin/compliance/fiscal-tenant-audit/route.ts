@@ -1,5 +1,5 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -38,6 +38,8 @@ interface TenantConfig {
  * La clé de signature n'est JAMAIS retournée — seul son statut (configurée: oui/non).
  */
 export async function GET(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'mcc_support');
     if (isDenied(caller)) return caller;
 

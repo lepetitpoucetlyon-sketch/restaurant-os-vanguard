@@ -3,9 +3,11 @@
 import { useState, useMemo } from "react";
 import { RotateCcw, CheckCircle, Package } from "lucide-react";
 import { toast } from "sonner";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { useInventory } from '..';
 import type { StockItem } from '../types';
+import { adjustStockAction } from '../actions/inventory.action';
+import { useAtomValue } from 'jotai';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 
 /**
  * log-7: Rotating inventory (comptage tournant)
@@ -25,6 +27,7 @@ function getTodayIndex(): number {
 
 export function RotatingCount() {
     const { stockItems, isLoading } = useInventory();
+    const tenantId = useAtomValue(tenantIdAtom);
 
     const todayIndex = useMemo(getTodayIndex, []);
 
@@ -57,26 +60,7 @@ export function RotatingCount() {
                 const expected = item.quantity ?? 0;
                 const delta = actual - expected;
 
-                await Nexus.adapter.update(`stockItems/${item.id}`, {
-                    quantityInStock: actual,
-                    quantity: actual,
-                    lastPhysicalCountAt: now,
-                });
-
-                // log-7: Record any discrepancy in inventoryAdjustments
-                if (Math.abs(delta) >= 0.001) {
-                    await Nexus.adapter.set(
-                        `inventoryAdjustments/${crypto.randomUUID()}`,
-                        {
-                            ingredientId: item.ingredientId,
-                            expected,
-                            actual,
-                            delta,
-                            date: Date.now(),
-                            type: "rotating_count",
-                        }
-                    );
-                }
+                await adjustStockAction(tenantId, item.id, expected, actual, `Ecart de ${delta}`, 'System');
             }
             toast.success("Comptage tournant enregistré.");
             setCounts({});

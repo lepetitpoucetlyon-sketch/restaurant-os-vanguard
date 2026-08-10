@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/mcc/reseller/commissions
  * Calcule et archive les commissions revendeur pour un mois donné.
@@ -12,7 +13,6 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

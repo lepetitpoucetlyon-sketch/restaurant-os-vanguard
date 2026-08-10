@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Churn Predictor IA — mcc-growth-3
  *
@@ -15,7 +16,6 @@
  * Protégé : mcc_support.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";

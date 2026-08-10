@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Digital Contract Vault — mcc-crm-2
  *
@@ -12,7 +13,6 @@
  * Protégé : fleet_admin pour POST, mcc_support pour GET.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

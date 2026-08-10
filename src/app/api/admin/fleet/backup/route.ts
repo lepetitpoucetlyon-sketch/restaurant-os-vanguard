@@ -1,9 +1,9 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'node:crypto';
 import { createGzip } from 'node:zlib';
 import { pipeline } from 'node:stream/promises';
 import { PassThrough } from 'node:stream';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getBackupProvider } from '@/infrastructure/services/backup/BackupProvider';
 import type { BackupManifest } from '@/infrastructure/services/backup/BackupProvider';
@@ -33,6 +33,8 @@ const FULL_COLLECTIONS  = [...NF525_COLLECTIONS, 'tenantConfig', 'products', 'ba
 const RETAIN_YEARS = 7;
 
 export async function GET(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'fleet_admin');
     if (isDenied(caller)) return caller;
 
@@ -53,6 +55,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'fleet_admin');
     if (isDenied(caller)) return caller;
 

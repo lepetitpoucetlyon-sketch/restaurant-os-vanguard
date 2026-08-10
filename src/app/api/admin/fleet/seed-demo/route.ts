@@ -1,5 +1,5 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
@@ -17,6 +17,8 @@ const BodySchema = z.object({
  * Auth: fleet_admin
  */
 export async function POST(req: NextRequest) {
+    const _caller = await requireFleetAdmin(req);
+    if (isDenied(_caller)) return _caller;
   const auth = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(auth)) return auth;
 

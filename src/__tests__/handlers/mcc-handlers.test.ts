@@ -14,24 +14,7 @@ const batchMock = {
   commit:    vi.fn().mockResolvedValue(undefined),
 };
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      get:   vi.fn(),
-      set:   vi.fn().mockResolvedValue(undefined),
-      query: vi.fn().mockResolvedValue([]),
-      batch: vi.fn(() => batchMock),
-    },
-  },
-}));
 
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: {
-    on: vi.fn((_event: string, handler: (...args: unknown[]) => unknown) => () => handler),
-    emit: vi.fn().mockResolvedValue(undefined),
-    emitDurable: vi.fn().mockResolvedValue(undefined),
-  },
-}));
 
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: {
@@ -48,8 +31,13 @@ vi.mock('@/lib/logger', () => ({
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
-function captureHandler(): (...args: unknown[]) => Promise<void> {
+function captureHandler(eventName?: string): (...args: unknown[]) => Promise<void> {
   const calls = vi.mocked(NexusEventBus.on).mock.calls;
+  if (eventName) {
+    const match = calls.find(c => c[0] === eventName);
+    if (!match) throw new Error(`No handler registered for event "${eventName}"`);
+    return match[1] as (...args: unknown[]) => Promise<void>;
+  }
   const last = calls[calls.length - 1];
   return last[1] as (...args: unknown[]) => Promise<void>;
 }
@@ -58,9 +46,14 @@ beforeEach(() => {
   vi.clearAllMocks();
   batchMock.delete.mockReset();
   batchMock.commit.mockResolvedValue(undefined);
-  vi.mocked(Nexus.adapter.set).mockResolvedValue(undefined);
-  vi.mocked(Nexus.adapter.query).mockResolvedValue([]);
-  vi.mocked(Nexus.adapter.batch).mockReturnValue(batchMock);
+  
+  vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined as any);
+  vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([] as any);
+  vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(batchMock as any);
+  
+  vi.spyOn(NexusEventBus, 'on').mockImplementation((_event: string, handler: any) => () => handler);
+  vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
 });
 
 // ── MccHealthPingHandler ──────────────────────────────────────────────────────
@@ -140,7 +133,7 @@ describe('MccFiscalAuditHandler', () => {
       '@/shared/eventBus/handlers/MccFiscalAuditHandler'
     );
     registerMccFiscalAuditHandler();
-    const handler = captureHandler();
+    const handler = captureHandler('mcc.fiscal_audit_required');
 
     const payload = {
       tenantId: 'tenant-hotel',
@@ -168,8 +161,10 @@ describe('MccFiscalAuditHandler', () => {
 
     for (const urgency of ['low', 'high', 'critical'] as const) {
       vi.clearAllMocks();
+      vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined as any);
+      vi.spyOn(NexusEventBus, 'on').mockImplementation((_event: string, handler: any) => () => handler);
       registerMccFiscalAuditHandler();
-      const handler = captureHandler();
+      const handler = captureHandler('mcc.fiscal_audit_required');
       await handler({ tenantId: 't', reason: 'test', urgency });
       const data = vi.mocked(Nexus.adapter.set).mock.calls[0]![1] as Record<string, unknown>;
       expect(data.urgency).toBe(urgency);

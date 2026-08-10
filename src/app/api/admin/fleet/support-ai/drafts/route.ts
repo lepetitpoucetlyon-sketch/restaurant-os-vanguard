@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Support Drafts — review MCC des brouillons générés par l'agent IA.
  *
@@ -17,7 +18,6 @@
  *   Protégé : mcc_support.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { SupportDraftSchema } from '@/shared/schemas';

@@ -2,7 +2,6 @@ import { useMemo, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-internal-mapper';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
@@ -10,6 +9,13 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { ordersNodeAtom } from '@/store/pillars/ops';
 import { recipesNodeAtom, prepTasksNodeAtom, miseEnPlaceTargetSelector } from '@/store/pillars/logistics';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { 
+  respondToModificationAction, 
+  updateRecipeAction, 
+  togglePrepTaskAction, 
+  submitOrderAction, 
+  updateOrderStatusAction 
+} from '../../service/pos/actions/kitchen.action';
 
 /**
  * 🍳 Hooks cuisine (commandes / recettes / mise en place) — extraits de NexusOpsProvider.
@@ -38,12 +44,7 @@ export const useOrders = () => {
     ...base,
     respondToModification: async (orderId: string, itemId: string, approved: boolean, responder: string, note?: string) => {
       await guardedAction('KDS', 'FIRE_KDS', async () => {
-        await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}/${orderId}`, {
-          [`items.${itemId}.modification.approved`]: approved,
-          [`items.${itemId}.modification.respondedBy`]: responder,
-          [`items.${itemId}.modification.responseNote`]: note,
-          [`items.${itemId}.modification.respondedAt`]: new Date().toISOString(),
-        });
+        await respondToModificationAction(tenantId, orderId, itemId, approved, responder, note);
       });
     },
     getPendingModifications,
@@ -58,7 +59,7 @@ export const useRecipes = () => {
     addRecipe: async (data: Partial<Recipe>) => base.add(data as Partial<SovereignNode>),
     updateRecipe: async (id: string, data: Partial<Recipe>) => {
       await guardedAction('KITCHEN', 'MANAGE_RECIPES', async () => {
-        await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`, data);
+        await updateRecipeAction(tenantId, id, data);
       });
     },
     deleteRecipe: async (id: string) => base.remove(id),
@@ -95,16 +96,13 @@ export const useKitchen = () => {
       const task = tasks.find(t => t.id === id);
       if (!task) return;
       const currentStatus = (task.attributes as Record<string, SovereignField>)?.status === 'completed';
-      await Nexus.adapter.update(`tenants/${tenantId}/prepTasks/${id}`, {
-        attributes: { status: currentStatus ? 'pending' : 'completed' },
-        updatedAt: new Date().toISOString()
-      });
+      await togglePrepTaskAction(tenantId, id, currentStatus ? 'pending' : 'completed');
     },
 
     submitOrder: async (order: Partial<Order>) => {
       await guardedAction('KITCHEN', 'FIRE_KDS', async () => {
         const sanitized = sanitizeToSovereign(order);
-        await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}`, {
+        await submitOrderAction(tenantId, {
           ...sanitized,
           updatedAt: new Date().toISOString()
         });
@@ -129,11 +127,7 @@ export const useKitchen = () => {
 
     updateOrderStatus: async (id: string, status: string) => {
       await guardedAction('KITCHEN', 'FIRE_KDS', async () => {
-        await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.FLOWS)}/${id}`, {
-          status,
-          attributes: { status },
-          updatedAt: new Date().toISOString()
-        });
+        await updateOrderStatusAction(tenantId, id, status);
         
         if (status === 'cancelled') {
           await NexusEventBus.emitDurable('order.cancelled', {

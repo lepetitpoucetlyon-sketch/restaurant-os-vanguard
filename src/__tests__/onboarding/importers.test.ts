@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { runImporter } from '@/modules/commerce/acquisition/onboarding/migration/importers';
 
 // ─── Mock Nexus (vi.hoisted garantit que les variables sont prêtes avant les factories) ──
 const { mockBatch, mockAdapter } = vi.hoisted(() => {
@@ -31,9 +32,8 @@ const { mockBatch, mockAdapter } = vi.hoisted(() => {
   return { mockBatch, mockAdapter };
 });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: mockAdapter },
-}));
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
@@ -66,7 +66,10 @@ function parsedFile(overrides: Partial<ParsedFile> = {}): ParsedFile {
 
 // ─── menuImporter ─────────────────────────────────────────────
 describe('menuImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+  });
 
   it('importe des produits CSV au format euros', async () => {
     const { importMenuFromRows } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/menuImporter');
@@ -123,7 +126,10 @@ describe('menuImporter', () => {
 
 // ─── staffImporter ────────────────────────────────────────────
 describe('staffImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+  });
 
   it('importe des employés CSV', async () => {
     const { importStaff } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/staffImporter');
@@ -143,7 +149,11 @@ describe('staffImporter', () => {
 
 // ─── crmImporter ──────────────────────────────────────────────
 describe('crmImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+    vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([] as any);
+  });
 
   it('importe des clients CRM', async () => {
     const { importCRM } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/crmImporter');
@@ -161,9 +171,9 @@ describe('crmImporter', () => {
   });
 
   it('déduplique par email', async () => {
-    mockAdapter.query.mockResolvedValueOnce([
+    vi.spyOn(Nexus.adapter, 'query').mockResolvedValueOnce([
       { email: 'client1@test.com', id: 'existing_id' },
-    ]);
+    ] as any);
     const { importCRM } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/crmImporter');
     const file = parsedFile({
       rows: [
@@ -179,7 +189,10 @@ describe('crmImporter', () => {
 
 // ─── suppliersImporter ────────────────────────────────────────
 describe('suppliersImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+  });
 
   it('importe des fournisseurs CSV', async () => {
     const { importSuppliers } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/suppliersImporter');
@@ -198,7 +211,10 @@ describe('suppliersImporter', () => {
 
 // ─── inventoryImporter ────────────────────────────────────────
 describe('inventoryImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+  });
 
   it('importe un inventaire CSV', async () => {
     const { importInventory } = await import('@/modules/commerce/acquisition/onboarding/migration/importers/inventoryImporter');
@@ -218,15 +234,14 @@ describe('inventoryImporter', () => {
 
 // ─── runImporter dispatch ─────────────────────────────────────
 describe('runImporter', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(mockBatch as any);
+    vi.spyOn(Nexus.adapter, 'generateId').mockImplementation((col: string) => `${col}_test_id`);
+    mockBatch.commit.mockResolvedValue(undefined);
+  });
 
   it('dispatche vers le bon importer selon la catégorie', async () => {
-    // Ré-applique les implementations après vi.clearAllMocks() des tests précédents
-    mockAdapter.batch.mockReturnValue(mockBatch);
-    mockAdapter.generateId.mockImplementation((col: string) => `${col}_test_id`);
-    mockBatch.commit.mockResolvedValue(undefined);
-
-    const { runImporter } = await import('@/modules/commerce/acquisition/onboarding/migration/importers');
     const file = parsedFile({ rows: [{ nom: 'Test', categorie: 'A', prix: '5' }] });
     const rawFile = new File([''], 'test.csv', { type: 'text/csv' });
 

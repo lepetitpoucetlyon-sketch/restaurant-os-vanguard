@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/mdm/lock
  * Verrouille un appareil via Mosyle MDM.
@@ -5,7 +6,6 @@
  * Body : { serialNumber: string }
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient } from '@/lib/MosyleClient';
 import { logger } from '@/lib/logger';
 
@@ -24,6 +24,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   await MosyleClient.lockDevice(serialNumber);
-  logger.info(`[MDM] lock ${serialNumber} — OK (caller: ${(caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid})`);
   return NextResponse.json({ ok: true });
 }

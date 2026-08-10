@@ -13,6 +13,7 @@ import {
 import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';
+import { saveNonConformity, resolveNonConformity } from '../actions/nonConformity.action';
 
 import {
     type NonConformityType,
@@ -118,7 +119,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                 status: 'open',
                 createdAt: Date.now(),
             };
-            await Nexus.adapter.set(buildNcPath(tenantId ?? '', id), nc);
+            const result = await saveNonConformity(tenantId ?? '', nc as unknown as Record<string, unknown>);
+            if (!result.success) throw new Error(result.error);
             setRecords(prev => [nc, ...prev]);
             onCountChange?.(records.filter(r => r.status === 'open').length + 1);
             toast.success('Non-conformité enregistrée');
@@ -148,7 +150,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
                 resolutionNote: resolutionNote.trim(),
                 resolvedAt: Date.now(),
             };
-            await Nexus.adapter.update(buildNcPath(tenantId ?? '', nc.id), update);
+            const result = await resolveNonConformity(tenantId ?? '', nc.id, update);
+            if (!result.success) throw new Error(result.error);
             setRecords(prev =>
                 prev.map(r => r.id === nc.id ? { ...r, ...update } : r)
             );

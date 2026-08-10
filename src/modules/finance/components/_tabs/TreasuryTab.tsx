@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { useTenant } from "@/shared/hooks";
-import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { dispatchPaymentAction } from "../../actions/finance.action";
 
 interface CashflowForecast {
   id?: string;
@@ -143,20 +143,7 @@ export function TreasuryTab() {
       URL.revokeObjectURL(url);
 
       const batchId = `batch_${Date.now()}`;
-      await NexusEventBus.emitDurable("finance.payment_dispatched", {
-        v: 1,
-        tenantId: activeTenantId,
-        paymentBatchId: batchId,
-        totalAmountInMicrounits: totalPending,
-        dispatchedBy: "treasury-ui",
-      });
-
-      for (const inv of pendingInvoices) {
-        await Nexus.adapter.update(
-          `tenants/${activeTenantId}/supplierInvoices/${inv.id}`,
-          { status: "paid", paidAt: Date.now(), sepaBatchId: batchId }
-        );
-      }
+      await dispatchPaymentAction(activeTenantId, batchId, pendingInvoices.map((inv) => inv.id), totalPending);
 
       setInvoices((prev) =>
         prev.map((i) =>

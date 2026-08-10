@@ -14,37 +14,14 @@ const txMock = {
   delete: vi.fn(),
 };
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      get: vi.fn(),
-      set: vi.fn(),
-      update: vi.fn(),
-      create: vi.fn(),
-      delete: vi.fn(),
-      query: vi.fn(),
-      runTransaction: vi.fn(async (cb: (tx: typeof txMock) => Promise<unknown>) => cb(txMock)),
-    },
-  },
-}));
+import { logger } from '@/lib/logger';
+import { MasterBridge } from '@/lib/adapters/MasterBridge';
 
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: {
-    on: vi.fn((_event: string, handler: (...args: unknown[]) => unknown) => {
-      return () => {};
-    }),
-    emit: vi.fn().mockResolvedValue(undefined),
-    emitDurable: vi.fn().mockResolvedValue(undefined),
-  },
-}));
+// The txMock is used for the runTransaction mock
 
-vi.mock('@/lib/audit', () => ({
-  empireAudit: { log: vi.fn() },
-}));
+// The txMock is used for the runTransaction mock
 
-vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
-}));
+// The txMock is used for the runTransaction mock
 
 vi.mock('@/lib/axiom', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
@@ -58,24 +35,9 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
   },
 }));
 
-vi.mock('@/lib/CryptoService', () => ({
-  CryptoService: {
-    generateHash: vi.fn().mockResolvedValue('expected-hash'),
-    canonicalStringify: vi.fn().mockReturnValue('{"data":"snapshot"}'),
-  },
-}));
+import { CryptoService } from '@/lib/CryptoService';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
-vi.mock('@/lib/adapters/MasterBridge', () => ({
-  MasterBridge: {
-    pushGlobalConfig: vi.fn().mockResolvedValue(undefined),
-  },
-}));
-
-vi.mock('@/lib/adapters/NotificationGateway', () => ({
-  NotificationGateway: {
-    sendEmail: vi.fn().mockResolvedValue(undefined),
-  },
-}));
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -91,12 +53,37 @@ function captureHandler(): (...args: unknown[]) => Promise<void> {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  
+  // Spies to replace the old vi.mock behavior
+  vi.spyOn(NexusEventBus, 'on').mockImplementation((_event: string, handler: (...args: unknown[]) => unknown) => {
+    return () => {};
+  });
+  vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
+
+  vi.spyOn(Nexus.adapter, 'get').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'update').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'create').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'delete').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
+  vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(
+    async (cb: (tx: typeof txMock) => Promise<unknown>) => cb(txMock),
+  );
+
+  vi.spyOn(Object.getPrototypeOf(empireAudit), 'log').mockReturnValue(undefined as any);
+  vi.spyOn(logger, 'info').mockReturnValue(undefined as any);
+  vi.spyOn(logger, 'error').mockReturnValue(undefined as any);
+  vi.spyOn(logger, 'warn').mockReturnValue(undefined as any);
+  
+  vi.spyOn(CryptoService, 'generateHash').mockResolvedValue('expected-hash');
+  vi.spyOn(CryptoService, 'canonicalStringify').mockReturnValue('{"data":"snapshot"}');
+  vi.spyOn(MasterBridge, 'pushGlobalConfig').mockResolvedValue(undefined as any);
+  vi.spyOn(NotificationGateway, 'send').mockResolvedValue(undefined as any);
+
   txMock.get.mockReset();
   txMock.set.mockReset();
   txMock.update.mockReset();
-  vi.mocked(Nexus.adapter.runTransaction).mockImplementation(
-    async (cb: (tx: typeof txMock) => Promise<unknown>) => cb(txMock),
-  );
 });
 
 // ── C01 — TicketZHandler ─────────────────────────────────────────────────────

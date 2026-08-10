@@ -11,17 +11,14 @@ import {
     Coffee,
     Play,
     Delete,
-    RotateCcw,
-    Clock,
+    RotateCcw
 } from "lucide-react";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
-
-type FoundUser = { id: string; name: string; role: string; avatar: string | null };
+import { Clock } from "lucide-react";
+import { ClockAction } from "../services/timeclock.domain";
+import { useTimeclock, type FoundUser } from "./useTimeclock";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-type ClockAction = "CLOCK_IN" | "CLOCK_OUT" | "BREAK_START" | "BREAK_END";
 
 const ACTION_CONFIG: Record<
     ClockAction,
@@ -65,118 +62,16 @@ function getInitials(name: string): string {
 
 export function TimeclockDashboard() {
     const [tenantId] = useAtom(activeTenantIdAtom);
-    const [now, setNow] = useState(new Date());
-    const [pin, setPin] = useState("");
-    const [foundUser, setFoundUser] = useState<FoundUser | null>(null);
-    const [isLooking, setIsLooking] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Update clock every second
-    useEffect(() => {
-        const id = setInterval(() => setNow(new Date()), 1000);
-        return () => clearInterval(id);
-    }, []);
-
-    // Look up user via API server-side (PIN hashed + rate limit persistant)
-    const lookupUser = useCallback(async (enteredPin: string) => {
-        setIsLooking(true);
-        try {
-            const res = await fetch('/api/timeclock/verify-pin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pin: enteredPin, terminalId: 'kiosk-1' }),
-            });
-
-            if (res.ok) {
-                const user = await res.json() as FoundUser;
-                setFoundUser(user);
-            } else if (res.status === 429) {
-                const data = await res.json() as { error: string };
-                toast.error(data.error ?? 'Kiosque temporairement verrouillé');
-                setPin("");
-            } else {
-                toast.error('PIN incorrect — réessayez');
-                setPin("");
-            }
-        } catch {
-            toast.error("Erreur de connexion — réessayez");
-            setPin("");
-        } finally {
-            setIsLooking(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (pin.length === 4) {
-            lookupUser(pin);
-        }
-    }, [pin, lookupUser]);
-
-    const handlePinKey = (key: string) => {
-        if (foundUser || isLooking) return;
-        if (key === "clear") {
-            setPin("");
-            return;
-        }
-        if (key === "back") {
-            setPin((p) => p.slice(0, -1));
-            return;
-        }
-        if (pin.length < 4) {
-            setPin((p) => p + key);
-        }
-    };
-
-    const handleAction = async (type: ClockAction) => {
-        if (!foundUser || isSubmitting) return;
-        setIsSubmitting(true);
-
-        try {
-            const idArr = crypto.getRandomValues(new Uint32Array(1));
-            const timestamp = new Date().toISOString();
-
-            if (type === 'CLOCK_IN' || type === 'CLOCK_OUT') {
-                const eventName = type === 'CLOCK_IN' ? 'staff.clock_in' : 'staff.clock_out';
-                await NexusEventBus.emitDurable(eventName, {
-                    v: 1,
-                    tenantId: tenantId || 'default',
-                    userId: foundUser.id,
-                    userName: foundUser.name,
-                    terminalId: "kiosk-1",
-                    timestamp,
-                });
-            } else {
-                // Break logic fallback (hors spec P1, juste pour ne pas casser)
-                const entryId = idArr[0].toString(16);
-                const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${entryId}` : `shiftEntries/${entryId}`;
-                await Nexus.adapter.set(shiftPath, {
-                    id: entryId,
-                    userId: foundUser.id,
-                    userName: foundUser.name,
-                    type,
-                    timestamp,
-                    location: { terminalId: "kiosk-1" },
-                });
-            }
-
-            toast.success(`${ACTION_CONFIG[type].label} — ${foundUser.name}`);
-
-            // Reset kiosk after 2 s
-            setTimeout(() => {
-                setFoundUser(null);
-                setPin("");
-            }, 2000);
-        } catch {
-            toast.error("Enregistrement échoué — réessayez");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    const reset = () => {
-        setFoundUser(null);
-        setPin("");
-    };
+    const {
+        now,
+        pin,
+        foundUser,
+        isLooking,
+        isSubmitting,
+        handlePinKey,
+        handleAction,
+        reset
+    } = useTimeclock(tenantId);
 
     // ─── PIN pad ─────────────────────────────────────────────────────────────
     const pinPad = [
@@ -246,7 +141,7 @@ export function TimeclockDashboard() {
                                     return (
                                         <button
                                             key={type}
-                                            onClick={() => handleAction(type)}
+                                            onClick={() => handleAction(type, cfg.label)}
                                             disabled={isSubmitting}
                                             className={`flex flex-col items-center gap-2 py-5 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all disabled:opacity-40 ${cfg.color}`}
                                         >

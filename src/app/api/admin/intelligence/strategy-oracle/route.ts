@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * StrategyOracle API — mcc-ai-4
  *
@@ -18,7 +19,6 @@
  * Protégé : mcc_support.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { aiRouter } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';

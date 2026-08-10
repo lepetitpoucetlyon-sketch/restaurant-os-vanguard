@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET  /api/admin/mcc/reseller       — lister les revendeurs
  * POST /api/admin/mcc/reseller       — créer un revendeur (génère un code d'affiliation)
@@ -16,7 +17,6 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';

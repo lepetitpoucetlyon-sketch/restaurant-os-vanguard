@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Tag, PlusCircle, Power, AlertCircle, Loader2, Gift, Percent, Euro } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { toast } from "sonner";
 import { toMicrounits } from "@/shared/schemas/primitives";
 import { useTenant } from "@/shared/hooks/useTenant";
+import { createPromoCodeAction, updatePromoCodeAction } from '../../../../actions/marketing.action';
 
 import type { PromoCodeRecord } from './types';
 export type { PromoCodeRecord };
@@ -79,9 +79,8 @@ export function PromoCodeManager() {
         // Seed default codes if none exist
         const now = new Date().toISOString();
         for (const seed of SEED_CODES) {
-          const id = Nexus.adapter.generateId(collPath);
-          const record: PromoCodeRecord = { ...seed, id, createdAt: now, updatedAt: now };
-          await Nexus.adapter.set(getPath(id), record);
+          const record: Omit<PromoCodeRecord, "id"> = { ...seed, createdAt: now, updatedAt: now };
+          await createPromoCodeAction(tenantId ?? '', record);
         }
         const seeded = await Nexus.adapter.query<PromoCodeRecord>(collPath);
         setCodes(seeded);
@@ -107,10 +106,7 @@ export function PromoCodeManager() {
     setSaving(true);
     try {
       const now = new Date().toISOString();
-      const collPath = getPath();
-      const id = Nexus.adapter.generateId(collPath);
-      const record: PromoCodeRecord = {
-        id,
+      const record: Omit<PromoCodeRecord, "id"> = {
         code: form.code.trim().toUpperCase(),
         discountType: form.discountType,
         value: Number(form.value),
@@ -123,21 +119,13 @@ export function PromoCodeManager() {
         createdAt: now,
         updatedAt: now,
       };
-      await Nexus.adapter.set(getPath(id), record);
-
-      // Émission EventBus (R4 - commerce.promotion_activated)
-      await NexusEventBus.emitDurable('commerce.promotion_activated', {
-        v: 1,
-        tenantId: tenantId ?? 'restaurant-os',
-        promotionId: id,
-        discountBps: record.discountType === 'percent' ? Math.round(record.value * 100) : 1000,
-        productIds: [],
-      });
-
-      setCodes((prev) => [record, ...prev]);
+      const result = await createPromoCodeAction(tenantId ?? '', record);
+      
+      const newRecord = { ...record, id: result.id! } as PromoCodeRecord;
+      setCodes((prev) => [newRecord, ...prev]);
       setForm(DEFAULT_FORM);
       setShowForm(false);
-      toast.success(`Code ${record.code} créé et activé`);
+      toast.success(`Code ${newRecord.code} créé et activé`);
     } catch {
       toast.error("Erreur lors de la création");
     } finally {
@@ -148,17 +136,12 @@ export function PromoCodeManager() {
   const toggleActive = async (promo: PromoCodeRecord) => {
     try {
       const updated = { ...promo, isActive: !promo.isActive, updatedAt: new Date().toISOString() };
-      await Nexus.adapter.update(getPath(promo.id), { isActive: updated.isActive, updatedAt: updated.updatedAt });
-
-      if (updated.isActive) {
-        await NexusEventBus.emitDurable('commerce.promotion_activated', {
-          v: 1,
-          tenantId: tenantId ?? 'restaurant-os',
-          promotionId: promo.id,
-          discountBps: promo.discountType === 'percent' ? Math.round(promo.value * 100) : 1000,
-          productIds: [],
-        });
-      }
+      await updatePromoCodeAction(tenantId ?? '', promo.id, { 
+        isActive: updated.isActive, 
+        updatedAt: updated.updatedAt,
+        discountType: promo.discountType,
+        value: promo.value
+      });
 
       setCodes((prev) => prev.map((c) => (c.id === promo.id ? updated : c)));
       toast.success(updated.isActive ? `${promo.code} réactivé` : `${promo.code} désactivé`);

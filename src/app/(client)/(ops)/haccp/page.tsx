@@ -2,7 +2,7 @@
 
 import {
     Thermometer, Droplets, SprayCan, AlertOctagon,
-    Download, PackageSearch, BellRing, Search, Package,
+    Download, PackageSearch, BellRing, Search, Package, Trash2
 } from "lucide-react";
 
 import dynamic from "next/dynamic";
@@ -13,6 +13,7 @@ const ReleveTemperatures = dynamic(() => import("@/modules/compliance/qualite/ha
 const GestionHuiles = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.GestionHuiles), { loading: () => <POSModalSkeleton /> });
 const PlanNettoyage = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.PlanNettoyage), { loading: () => <POSModalSkeleton /> });
 const GestionAnomalies = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.GestionAnomalies), { loading: () => <POSModalSkeleton /> });
+const WasteManagementHACCP = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.WasteManagementHACCP), { loading: () => <POSModalSkeleton /> });
 const ProductControlList = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.ProductControlList), { loading: () => <POSModalSkeleton /> });
 const SanitaryReport = dynamic(() => import("@/modules/compliance/qualite/haccp/components").then(m => m.SanitaryReport), { loading: () => <POSModalSkeleton /> });
 const CleaningPlan = dynamic(() => import("@/modules/compliance").then(m => m.CleaningPlan), { loading: () => <POSModalSkeleton /> });
@@ -26,6 +27,7 @@ const TOOL_ICONS: Record<string, typeof Thermometer> = {
     huiles: Droplets,
     nettoyage: SprayCan,
     anomalies: AlertOctagon,
+    dechets: Trash2,
 };
 
 function HaccpPage() {
@@ -99,6 +101,7 @@ function HaccpPage() {
                         {activeTool === "huiles"       && <GestionHuiles />}
                         {activeTool === "nettoyage"    && <PlanNettoyage />}
                         {activeTool === "anomalies"    && <GestionAnomalies />}
+                        {activeTool === "dechets"      && <WasteManagementHACCP />}
                     </section>
                 )}
 

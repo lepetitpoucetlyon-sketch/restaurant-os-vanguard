@@ -1,17 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// --- Mock de l'adapter Nexus ---
-const { mockSet, mockGenerateId } = vi.hoisted(() => ({
-  mockSet: vi.fn().mockResolvedValue(undefined),
-  mockGenerateId: vi.fn((path: string) => `${path.split('/').pop()}-id`),
-}));
-
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { set: mockSet, generateId: mockGenerateId } },
-}));
-
 import { HACCPLogService } from './HACCPLogService';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { SensorReading } from '@/modules/compliance/domain/schemas/haccp';
+
+let mockSet: any;
+let mockGenerateId: any;
 
 const reading: SensorReading = {
   sensorId: 'frigo-1',
@@ -24,7 +18,11 @@ const reading: SensorReading = {
 };
 
 describe('🌡️ HACCPLogService — registre sanitaire', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockSet = vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined);
+    mockGenerateId = vi.spyOn(Nexus.adapter, 'generateId').mockImplementation((path: string) => `${path.split('/').pop()}-id`);
+  });
 
   it("appendTemperatureHistory écrit dans iotHistory (append-only, clé sensorId_ts)", async () => {
     await HACCPLogService.appendTemperatureHistory(reading, 'NON_CONFORM');
@@ -45,16 +43,16 @@ describe('🌡️ HACCPLogService — registre sanitaire', () => {
       source: 'push',
     });
 
-    const paths = mockSet.mock.calls.map((c) => c[0] as string);
+    const paths = mockSet.mock.calls.map((c: any) => c[0] as string);
     // 1. journal immuable
-    expect(paths.some((p) => p.startsWith('tenants/t1/haccpLogs/'))).toBe(true);
+    expect(paths.some((p: any) => p.startsWith('tenants/t1/haccpLogs/'))).toBe(true);
     // 2. dossier de suivi (même collection que le formulaire manager)
-    expect(paths.some((p) => p.startsWith('tenants/t1/nonConformities/'))).toBe(true);
+    expect(paths.some((p: string) => p.startsWith('tenants/t1/nonConformities/'))).toBe(true);
 
-    const haccpLog = mockSet.mock.calls.find((c) => (c[0] as string).includes('/haccpLogs/'))?.[1];
+    const haccpLog = mockSet.mock.calls.find((c: any) => (c[0] as string).includes('/haccpLogs/'))?.[1];
     expect(haccpLog).toMatchObject({ type: 'NON_CONFORMITY', status: 'NON_CONFORM', severity: 'critical' });
 
-    const nc = mockSet.mock.calls.find((c) => (c[0] as string).includes('/nonConformities/'))?.[1] as Record<string, unknown>;
+    const nc = mockSet.mock.calls.find((c: any) => (c[0] as string).includes('/nonConformities/'))?.[1] as Record<string, unknown>;
     // Forme compatible NonConformityForm : type / description / correctiveAction / responsible / status / createdAt.
     expect(nc.status).toBe('open');
     expect(nc.type).toBe('température hors norme');

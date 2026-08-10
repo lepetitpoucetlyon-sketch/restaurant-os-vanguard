@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { Nexus, buildTenantPath } from '@/lib/nexus';
 import { useTenant } from '@/shared/hooks';
+import { signCleaningTaskAction } from '../actions/haccp.action';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -161,8 +162,7 @@ export function CleaningPlan() {
                 signedByName: nameInput.trim(),
             };
 
-            const path = buildRecordPath(tenantId ?? '', id);
-            await Nexus.adapter.set(path, record);
+            await signCleaningTaskAction(tenantId ?? '', record);
             setRecords(prev => [...prev, record]);
             toast.success(`Tâche signée par ${nameInput.trim()}`);
             setPinDialog(null);

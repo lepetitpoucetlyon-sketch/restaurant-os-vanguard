@@ -1,9 +1,8 @@
+import { requireFleetAdmin, requireMccLevel, isDenied, type MccRole } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { toError } from "@/lib/toError";
 
 export interface TrustedDevice {
@@ -29,6 +28,8 @@ const COLLECTION = 'mcc/trustedDevices';
  * Auth: mcc_support (lecture) — les détails fingerprint sont masqués pour mcc_support.
  */
 export async function GET(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'mcc_support');
     if (isDenied(caller)) return caller;
 
@@ -57,6 +58,8 @@ export async function GET(request: NextRequest) {
  * Body: { fingerprint, name, role, allowedRoutes?, ownerUid?, ownerEmail? }
  */
 export async function POST(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'fleet_admin');
     if (isDenied(caller)) return caller;
 
@@ -119,6 +122,8 @@ export async function POST(request: NextRequest) {
  * Body: { deviceId, role?, allowedRoutes?, name? }
  */
 export async function PATCH(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'fleet_admin');
     if (isDenied(caller)) return caller;
 
@@ -157,6 +162,8 @@ export async function PATCH(request: NextRequest) {
  * Auth: fleet_admin uniquement.
  */
 export async function DELETE(request: NextRequest) {
+    const _caller = await requireFleetAdmin(request);
+    if (isDenied(_caller)) return _caller;
     const caller = await requireMccLevel(request, 'fleet_admin');
     if (isDenied(caller)) return caller;
 

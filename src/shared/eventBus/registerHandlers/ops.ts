@@ -18,7 +18,6 @@ import { registerResaAllergenCheckHandler } from '../handlers/ResaAllergenCheckH
 import { registerTableLockHandler } from '../handlers/TableLockHandler';
 import { registerTableTransferHandler } from '../handlers/TableTransferHandler';
 import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler';
-import { registerProformaHandler } from '../handlers/ProformaHandler';
 import { registerKDSTicketDoneNotifier } from '../handlers/KDSTicketDoneNotifier';
 import { registerKDSRushAlertNotifier } from '../handlers/KDSRushAlertNotifier';
 import { registerNoShowHandler } from '../handlers/NoShowHandler';
@@ -53,8 +52,6 @@ export function registerOpsHandlers(): Array<() => void> {
     registerTableTransferHandler(),
     // ── Hardware ──────────────────────────────────────────────────────────
     registerPrinterMappingHandler(),
-    // ── Proforma NF525 ────────────────────────────────────────────────────
-    registerProformaHandler(),
     ...registerOpsKdsHandlers(),
     ...registerOpsDeliveryHandlers(),
   ];

@@ -17,6 +17,8 @@ import type { Reservation, Recipe } from '@nexus/contracts';
 import { fadeInUp, cinematicContainer, cinematicItem } from '@/shared/utils/motion';
 import { smartQuantity } from './recipeUtils';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { updateDailyPrepListAction } from '../../service/pos/actions/kitchen.action';
+import { useTenant } from '@/shared/hooks';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -78,6 +80,7 @@ export interface DailyPrepListProps {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
+  const { tenantId } = useTenant();
   const todayISO = format(new Date(), 'yyyy-MM-dd');
   const todayLabel = format(new Date(), 'EEEE d MMMM yyyy', { locale: fr });
 
@@ -150,16 +153,13 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
 
     setIsSaving(true);
     try {
-      await Nexus.adapter.set<PrepTaskDoc>(
-        `prepTasks/${todayISO}`,
-        {
+      if (!tenantId) throw new Error('Tenant ID missing');
+      await updateDailyPrepListAction(tenantId, todayISO, {
           date: todayISO,
           checkedKeys: Array.from(next),
           totalCovers,
           updatedAt: new Date().toISOString(),
-        },
-        { merge: true },
-      );
+      });
     } catch (err) {
       console.error('[DailyPrepList] save error:', err);
       addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer la liste de préparation.' });

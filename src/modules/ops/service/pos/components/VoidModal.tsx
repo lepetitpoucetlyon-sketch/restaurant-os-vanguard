@@ -6,12 +6,8 @@ import {
     X, AlertTriangle, ReceiptText, RotateCcw, MinusCircle, ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
-import { IdGenerator } from "@/lib/utils/IdGenerator";
-import { CryptoService } from "@/lib/CryptoService";
-import type { JournalEntry } from "@nexus/contracts";
 import { toast } from "sonner";
+import { processVoidOrRefundAction } from "../actions/void.action";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -79,55 +75,19 @@ export function VoidModal({
         if (!canSubmit) return;
         setIsSubmitting(true);
         try {
-            const entryId       = IdGenerator.generateWithPrefix("JE");
-            const now           = new Date().toISOString();
             const negativeAmount = -refundCents; // NEGATIVE for extourne NF525
             const negativeAmountInMicrounits = negativeAmount * 10_000;
 
-            // Canonical snapshot for hash chain
-            const dataSnapshot = CryptoService.canonicalStringify({
-                id:            entryId,
-                type:          mode === "void" ? "void" : "refund",
-                linkedTicketId: pieceNumber,
+            const result = await processVoidOrRefundAction(
+                tenantId,
                 operatorId,
-                amountInMicrounits: negativeAmountInMicrounits,
-                timestamp:     now,
-            } as import("@/shared/nexus-contract").SovereignData);
+                mode,
+                pieceNumber,
+                negativeAmountInMicrounits,
+                reason
+            );
 
-            const { hash, signature, sealId, previousHash } =
-                await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, false);
-
-            // Build extourne JournalEntry (NEGATIVE, NF525-compliant)
-            const voidEntry: Partial<JournalEntry> & Record<string, unknown> = {
-                id:              entryId,
-                date:            now,
-                pieceNumber:     IdGenerator.generateWithPrefix("VOID"),
-                description:     `${mode === "void" ? "Extourne" : "Remb. partiel"} — réf: ${pieceNumber}${reason ? ` — ${reason}` : ""}`,
-                referenceId:     pieceNumber,
-                referenceType:   "order",
-                isSystemGenerated: true,
-                isValidated:     true,
-                fiscalSealHash:  hash,
-                sealedAt:        now,
-                type:            mode === "void" ? "loss" : "other",
-                // Negative amount is the NF525 extourne signal (microunits canonical)
-                amountInMicrounits: negativeAmountInMicrounits,
-                status:          mode === "void" ? "cancelled" : "refunded",
-                updatedAt:       now,
-                cancellationRef: pieceNumber,
-                // Extra traceability fields (catchall in Firestore)
-                linkedTicketId:  pieceNumber,
-                voidMode:        mode,
-                totalInMicrounits: negativeAmountInMicrounits,
-                sealId,
-                previousHash,
-                signature,
-                lines:           [],
-            };
-
-            const batch = Nexus.adapter.batch();
-            batch.set(`tenants/${tenantId}/journalEntries/${entryId}`, voidEntry);
-            await batch.commit();
+            if (!result.success) throw new Error(result.error);
 
             const label = mode === "void" ? "Annulation" : "Remboursement";
             toast.success(`${label} enregistré — réf: ${pieceNumber}`);

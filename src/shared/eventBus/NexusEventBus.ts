@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
+import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
@@ -29,6 +30,9 @@ class NexusEventBusClass {
   private handlers = new Map<NexusEventName, RegisteredHandler<NexusEventName>[]>();
   /** Events currently being dispatched in the current call stack — circuit-breaker anti-loop */
   private readonly inFlight = new Set<string>();
+  
+  /** Fallback server-side in-memory outbox (utilisé quand window n'est pas dispo) */
+  private readonly serverOutbox = new Map<string, any>();
 
   /**
    * Souscrit à un événement.
@@ -59,6 +63,19 @@ class NexusEventBusClass {
     this.handlers.set(event, existing.filter(h => h.id !== id));
   }
 
+  private enforceTierPolicies(payload: any): void {
+    const targetTenantId = payload?.targetTenantId || '';
+    if (!targetTenantId) return;
+
+    const isWritable = !targetTenantId.startsWith('_ref_');
+    if (!isWritable) {
+      throw new NexusError(NexusErrorCode.ACCESS_DENIED, `[EventBus] Writes to reference tenant ${targetTenantId} are forbidden.`);
+    }
+
+    const isSimulation = !!payload.isSimulation || targetTenantId.startsWith('_demo_');
+    payload.isSimulation = isSimulation;
+  }
+
   /**
    * Émet un événement métier de manière durable via l'EventOutbox.
    * Protège contre les crashs entre le persist state (Nexus) et l'exécution des handlers.
@@ -67,6 +84,8 @@ class NexusEventBusClass {
     event: E,
     payload: NexusEventPayload<E>
   ): Promise<void> {
+    this.enforceTierPolicies(payload);
+    
     const id = crypto.randomUUID();
     
     // 1. Outbox : Persister l'intention d'émettre
@@ -83,6 +102,16 @@ class NexusEventBusClass {
       } catch (err) {
         logger.error(`[EventBus] Failed to write to Outbox for ${event}`, err);
       }
+    } else {
+      logger.warn(`[EventBus] Server-side durable emit fallback used for ${event}`);
+      this.serverOutbox.set(id, {
+        id,
+        eventName: event,
+        payload,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending'
+      });
     }
 
     // 2. Émettre en RAM
@@ -94,6 +123,11 @@ class NexusEventBusClass {
         await db.busOutbox.update(id, { status: 'done' });
       } catch (err) {
         logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
+      }
+    } else {
+      const pending = this.serverOutbox.get(id);
+      if (pending) {
+        pending.status = 'done';
       }
     }
   }
@@ -118,6 +152,8 @@ class NexusEventBusClass {
     payload: NexusEventPayload<E>,
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
+    this.enforceTierPolicies(payload);
+
     if (this.inFlight.has(event)) {
       logger.warn(`[NexusEventBus] Boucle détectée sur "${event}" — émission bloquée`);
       return;

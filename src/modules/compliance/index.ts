@@ -31,7 +31,7 @@ export { NonConformityForm } from './qualite/haccp/components/NonConformityForm'
 export { HACCPSyncService } from './qualite/haccp/haccp.sync';
 export { PlanMaitriseSanitaire } from './qualite/haccp/services/PlanMaitriseSanitaire';
 export { qualityActiveControlAtom } from './qualite/haccp/store/qualityAtoms';
-export { wasteLogsNodeAtom } from './qualite/haccp/store';
+export { wasteLogsNodeAtom, wasteLogsAtom } from './qualite/haccp/store';
 export { HACCPLogService } from './qualite/haccp/HACCPLogService';
 export { registerWasteToFoodCostHandler } from './qualite/haccp/handlers/WasteToFoodCostHandler';
 export { policyEngine } from './services';

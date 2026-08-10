@@ -1,5 +1,5 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import crypto from 'crypto';
 
@@ -13,6 +13,8 @@ function generateMDMAuthToken() {
 }
 
 export async function POST(req: NextRequest) {
+    const _caller = await requireFleetAdmin(req);
+    if (isDenied(_caller)) return _caller;
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 

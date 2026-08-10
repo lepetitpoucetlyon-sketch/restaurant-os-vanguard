@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export type HaccpTab = "haccp" | "quality" | "planning" | "compliance" | "lots";
-export type HaccpTool = "temperatures" | "huiles" | "nettoyage" | "anomalies";
+export type HaccpTool = "temperatures" | "huiles" | "nettoyage" | "anomalies" | "dechets";
 
 interface TemperatureLogDoc {
     id: string;
@@ -77,6 +77,7 @@ export const HACCP_TOOLS: { id: HaccpTool; label: string }[] = [
     { id: "huiles",       label: "Huiles de friture" },
     { id: "nettoyage",    label: "Plan de nettoyage" },
     { id: "anomalies",    label: "Anomalies" },
+    { id: "dechets",      label: "Gestion des déchets" },
 ];
 
 export function useHaccpPage() {

@@ -5,14 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('server-only', () => ({}));
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      set:   vi.fn().mockResolvedValue(undefined),
-      query: vi.fn().mockResolvedValue([]),
-    },
-  },
-}));
+
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService, autoCategory } from '@/lib/mcc/ChangelogService';
@@ -26,7 +19,11 @@ const BASE_INPUT: ChangelogInput = {
   scope:       'tenant',
 };
 
-beforeEach(() => vi.clearAllMocks());
+beforeEach(() => {
+  vi.clearAllMocks();
+  vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined as any);
+  vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([] as any);
+});
 
 // ── autoCategory ─────────────────────────────────────────────────────────────
 

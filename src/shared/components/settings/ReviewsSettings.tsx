@@ -19,6 +19,8 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { updateTenantSettingsAction } from "@/shared/actions/settings.action";
+import { useTenant } from "@/shared/hooks";
 
 interface ReviewSource {
     id: string;
@@ -50,15 +52,19 @@ export default function ReviewsSettings() {
         neutral: "Merci {name} pour votre avis ! Nous apprécions vos retours et espérons vous accueillir à nouveau très prochainement."
     });
 
+    const { tenantId } = useTenant();
+    const slug = tenantId ?? '';
+
     const handleSave = async () => {
+        if (!slug) return;
         setIsSaving(true);
         try {
-            await Nexus.adapter.set('marketingSettings/reputation', {
-                sources,
-                autoReply,
-                templates,
-            });
-            toast.success("Paramètres réputation sauvegardés.");
+            const res = await updateTenantSettingsAction(slug, 'reputation', { sources, autoReply, templates });
+            if (res.success) {
+                toast.success("Paramètres réputation sauvegardés.");
+            } else {
+                toast.error(res.error || "Échec de la sauvegarde des paramètres réputation.");
+            }
         } catch (_error) {
             toast.error("Échec de la sauvegarde des paramètres réputation.");
         } finally {

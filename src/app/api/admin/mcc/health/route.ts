@@ -1,5 +1,5 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 export interface MCCHealthStatus {
   provisioningEngine: 'ready' | 'degraded' | 'offline';

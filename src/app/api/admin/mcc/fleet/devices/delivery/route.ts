@@ -1,5 +1,5 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -13,6 +13,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock_key', {
 const HARDWARE_RENTAL_PRICE_ID = process.env.STRIPE_HARDWARE_PRICE_ID || 'price_hardware_ipad_monthly';
 
 export async function POST(req: NextRequest) {
+    const _caller = await requireFleetAdmin(req);
+    if (isDenied(_caller)) return _caller;
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
 

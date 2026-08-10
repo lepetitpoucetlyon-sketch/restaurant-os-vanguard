@@ -27,10 +27,10 @@ export function CRMContactForm() {
             const { activeTenantIdAtom } = await import('@/store/tenantAtoms');
             const { getDefaultStore } = await import('jotai');
             const tenantId = getDefaultStore().get(activeTenantIdAtom);
+            const { createCustomerAction } = await import('../../../../actions/marketing.action');
             
-            const path = tenantId ? `tenants/${tenantId}/customers` : 'customers';
             const id = `crm_${Date.now()}`;
-            await Nexus.adapter.set(`${path}/${id}`, {
+            await createCustomerAction(tenantId ?? '', id, {
                 id,
                 name: formState.name,
                 phone: formState.phone,

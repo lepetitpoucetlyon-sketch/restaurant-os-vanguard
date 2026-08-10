@@ -11,12 +11,16 @@ import { PlatformVariantSchema } from '@/modules/system';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { toError } from "@/lib/toError";
+import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 const BodySchema = z.object({ variant: PlatformVariantSchema });
 
 const RESETTABLE = ['orders', 'reservations', 'quotes', 'analytics'];
 
 export async function POST(req: NextRequest) {
+    const caller = await requireFleetAdmin(req);
+    if (isDenied(caller)) return caller;
+
     ensureServerNexus();
 
     const parsed = BodySchema.safeParse(await req.json());

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, Gift, Trophy, Loader2, Award } from "lucide-react";
+import { Trophy, Loader2, Award, Gift, Star } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
+import { useTenant } from "@/shared/hooks/useTenant";
+import { issueLoyaltyCardAction, updateLoyaltyCardAction, updateCustomerAction } from "../../../../actions/marketing.action";
 
 interface LoyaltyData {
   loyaltyPoints: number;
@@ -45,6 +47,7 @@ const REWARDS = [
 ] as const;
 
 export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
+  const { tenantId } = useTenant();
   const [loyalty, setLoyalty] = useState<LoyaltyData | null>(null);
   const [activeRewards, setActiveRewards] = useState<LoyaltyReward[]>([]);
   const [loading, setLoading] = useState(true);
@@ -97,10 +100,8 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
     }
     setRedeeming(rewardDef.type);
     try {
-      const id = Nexus.adapter.generateId("loyaltyRewards");
       const now = new Date().toISOString();
-      const reward: LoyaltyReward = {
-        id,
+      const reward: Omit<LoyaltyReward, "id"> = {
         customerId,
         rewardType: rewardDef.type,
         label: `${rewardDef.label} — ${customerName}`,
@@ -108,17 +109,19 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
         isRedeemed: false,
         createdAt: now,
       };
-      await Nexus.adapter.set(`loyaltyRewards/${id}`, reward);
+      
+      const result = await issueLoyaltyCardAction(tenantId ?? '', customerId, reward);
+      const newReward = { ...reward, id: result.id! } as LoyaltyReward;
 
       // Deduct points
       const newPoints = loyalty.loyaltyPoints - rewardDef.pointsCost;
-      await Nexus.adapter.update(`customers/${customerId}`, {
+      await updateCustomerAction(tenantId ?? '', customerId, {
         loyaltyPoints: newPoints,
         updatedAt: now,
       });
 
       setLoyalty((prev) => prev ? { ...prev, loyaltyPoints: newPoints } : prev);
-      setActiveRewards((prev) => [...prev, reward]);
+      setActiveRewards((prev) => [...prev, newReward]);
       toast.success(`Récompense "${rewardDef.label}" débloquée !`);
     } catch {
       toast.error("Erreur lors du déblocage de la récompense");

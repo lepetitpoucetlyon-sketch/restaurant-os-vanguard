@@ -10,6 +10,40 @@ export interface COMMONEvents {
     daysUntil: number;
   };
 
+  "eventQuote.draft.saved": {
+    v: 1;
+    tenantId: string;
+    quoteId: string;
+    payload?: any;
+    timestamp?: number;
+  };
+
+  "haccp.nonconformity.saved": {
+    v: 1;
+    tenantId: string;
+    nonconformityId?: string;
+    id?: string;
+    payload?: any;
+    data?: any;
+    timestamp?: number;
+  };
+
+  "haccp.nonconformity.resolved": {
+    v: 1;
+    tenantId: string;
+    nonconformityId?: string;
+    id?: string;
+    payload?: any;
+    timestamp?: number;
+  };
+
+  "haccp.cleaning.completed": {
+    tenantId: string;
+    taskId?: string;
+    id?: string;
+    data?: any;
+  };
+
   "commerce.promotion_activated": {
     v: 1;
     isSimulation?: boolean;
@@ -684,6 +718,20 @@ export interface COMMONEvents {
   'intelligence.menu_engineering_requested': { tenantId: string; periodDays: number };
   'analytics.sales_data_ready': { tenantId: string; periodStart: string; periodEnd: string; totalInMicrounits: number; covers: number };
   'analytics.anomaly_detected': { tenantId: string; metric: string; value: number; threshold: number; detectedAt: string };
+  'commerce.campaign.updated': { tenantId: string; id: string; data: any };
+  'commerce.campaign.created': { tenantId: string; data: any };
+  'commerce.post.updated': { tenantId: string; id: string; data: any };
+  'commerce.post.created': { tenantId: string; data: any };
+  'commerce.customer.updated': { tenantId: string; id: string; data: any };
+  'commerce.customer.created': { tenantId: string; data: any };
+  'commerce.reservation.arrived': { tenantId: string; id: string; data: any };
+  'marketing.promocode.created': { tenantId: string; id?: string; code?: string; data?: any };
+  'marketing.promocode.updated': { tenantId: string; id?: string; code?: string; data?: any };
+  'marketing.loyaltycard.issued': { tenantId: string; id?: string; cardId?: string; data?: any; customerId?: string };
+  'marketing.loyaltycard.updated': { tenantId: string; id?: string; cardId?: string; data?: any; customerId?: string };
+  'crm.customer.created': { tenantId: string; id?: string; data?: any };
+  'crm.customer.updated': { tenantId: string; id?: string; data?: any };
+  'marketing.booking.toggled': { tenantId: string; id?: string; status?: string; enabled?: boolean };
 
   // ── HR enrichis ───────────────────────────────────────────────────────────
   'hr.overtime_alert': { tenantId: string; employeeId: string; extraMinutes: number };
@@ -718,6 +766,9 @@ export interface COMMONEvents {
     required: boolean;
     compliant: boolean;
   };
+
+  // ── Paramètres Système ───────────────────────────────────────────────────
+  'system.settings.updated': { v: 1; tenantId: string; section: string; settings: any; timestamp: number };
 
   // ── CRM — allergens signalés sur profil client ────────────────────────────
   'crm.allergen_flagged': {

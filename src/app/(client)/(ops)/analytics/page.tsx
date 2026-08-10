@@ -10,36 +10,43 @@ import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
-import {
-    ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
-} from "@modules/intelligence/analytique/analytics/components";
+import dynamic from "next/dynamic";
+
+const ProfitabilityView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ProfitabilityView));
+const ReputationView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ReputationView));
+const ComplianceView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ComplianceView));
+const MenuEngineeringMatrix = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.MenuEngineeringMatrix));
+
+import { GlassCard } from "@/shared/components/ui/glass";
 
 // ── Local sub-components (presentation only) ──────────────────────────────────
 
 function KpiCard({ label, value, change, up }: { label: string; value: string; change: string; up: boolean }) {
     return (
-        <div className="rounded-xl border border-border bg-surface-base p-4 flex flex-col gap-2">
-            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted">{label}</p>
-            <p className="text-2xl font-light tracking-tight text-text-primary">{value}</p>
-            <span className={`inline-flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-[9px] font-bold ${up ? "bg-status-success/10 text-status-success" : "bg-status-danger/10 text-status-danger"}`}>
+        <GlassCard variant="light" lift className="p-4 flex flex-col gap-2 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
+            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted relative z-10">{label}</p>
+            <p className="text-2xl font-light tracking-tight text-text-primary relative z-10">{value}</p>
+            <span className={`relative z-10 inline-flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-[9px] font-bold ${up ? "bg-status-success/10 text-status-success" : "bg-status-danger/10 text-status-danger"}`}>
                 {up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                 {change}
             </span>
-        </div>
+        </GlassCard>
     );
 }
 
 function AlertCard({ alert }: { alert: MacroBrainAlert }) {
-    const colorMap: Record<MacroBrainAlert["severity"], string> = {
-        critical: "border-red-500/30 bg-status-danger/5 text-status-danger",
-        warning: "border-yellow-500/30 bg-action-primary/5 text-yellow-400",
-        info: "border-blue-500/30 bg-status-info/5 text-blue-400",
+    const colorMap: Record<MacroBrainAlert["severity"], "danger" | "primary" | "none"> = {
+        critical: "danger",
+        warning: "primary",
+        info: "none",
     };
     const IconMap: Record<MacroBrainAlert["severity"], typeof AlertTriangle> = { critical: AlertTriangle, warning: TrendingUp, info: Zap };
     const Icon = IconMap[alert.severity];
+    
     return (
-        <div className={`rounded-xl border p-4 flex gap-3 ${colorMap[alert.severity]}`}>
-            <Icon className="w-4 h-4 mt-0.5 shrink-0" />
+        <GlassCard variant="dark" glow={colorMap[alert.severity]} className="p-4 flex gap-3">
+            <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${alert.severity === 'critical' ? 'text-status-danger' : alert.severity === 'warning' ? 'text-action-primary' : 'text-status-info'}`} />
             <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1">
                     <p className="text-sm font-semibold text-text-primary leading-tight">{alert.title}</p>
@@ -48,7 +55,7 @@ function AlertCard({ alert }: { alert: MacroBrainAlert }) {
                 <p className="text-xs text-text-secondary leading-relaxed">{alert.message}</p>
                 {alert.suggestedAction && <p className="text-[9px] font-bold uppercase tracking-wider mt-2 opacity-70">→ {alert.suggestedAction}</p>}
             </div>
-        </div>
+        </GlassCard>
     );
 }
 
@@ -86,7 +93,7 @@ function AnalyticsPage() {
                 <KpiCard label="CA Ce Mois" value={fmt(monthCA)} change={percentChange(monthCA, prevMonthCA)} up={monthCA >= prevMonthCA} />
             </div>
 
-            <nav className="flex gap-1 border-b border-border mb-6">
+            <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto no-scrollbar pb-1">
                 {([
                     { id: "profitability", label: "Rentabilité", icon: TrendingUp },
                     { id: "reputation", label: "Réputation", icon: Star },

@@ -127,6 +127,7 @@ export const NAV_SECTIONS: NavSection[] = [
         items: [
             { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos", requiredCapability: "mod_pos" },
             { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos", requiredCapability: "mod_pos" },
+            { label: "Ingénierie Menu", key: "menu_engineering", href: "/menu-engineering", icon: TrendingUp, category: "pos", requiredCapability: "mod_pos" },
             { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan", requiredCapability: "mod_floor_plan" },
             { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds", requiredCapability: "mod_kds" },
             { label: "Opérations", key: "operations", href: "/operations", icon: ClipboardCheck, category: "operations" },
@@ -173,6 +174,7 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding", requiredCapability: "mod_onboarding" },
             { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff", requiredCapability: "mod_hr" },
             { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning", requiredCapability: "mod_planning" },
+            { label: "Pointeuse", key: "timeclock", href: "/timeclock", icon: CalendarDays, category: "planning", requiredCapability: "mod_planning" },
             { label: "Congés & Absences", key: "leaves", href: "/staff?tab=leaves", icon: Palmtree, category: "planning", requiredCapability: "mod_leaves" },
             { label: "Recrutement", key: "recruitment", href: "/staff?tab=recruitment", icon: UserPlus, category: "recruitment", requiredCapability: "mod_recruitment" },
         ]
@@ -189,7 +191,7 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Analyse Rentabilité", key: "google_analytics", href: "/analytics?tab=profitability", icon: BarChart3, category: "analytics", requiredCapability: "mod_google_analytics" },
             { label: "Marketing & Social", key: "social_marketing", href: "/marketing", icon: Instagram, category: "analytics", requiredCapability: "mod_social_marketing" },
             { label: "Référencement IA", key: "ai_referencing", href: "/marketing?tab=ai", icon: Bot, category: "analytics", requiredCapability: "mod_ai_referencing" },
-            { label: "SEO & Référencement", key: "seo", href: "/marketing?tab=seo", icon: Globe, category: "analytics", requiredCapability: "mod_seo" },
+            { label: "SEO & Référencement", key: "seo", href: "/marketing/seo", icon: Globe, category: "analytics", requiredCapability: "mod_seo" },
         ]
     },
     {
@@ -239,6 +241,9 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Paramètres", key: "settings", href: "/settings", icon: Settings, category: "settings" },
             { label: "Intégrations", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings" },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: UserCog, category: "account-settings" },
+            { label: "Assistant Migration", key: "migration", href: "/migration", icon: Settings, category: "settings" },
+            { label: "Onboarding B2B", key: "onboarding_b2b", href: "/onboarding", icon: Users, category: "settings" },
+            { label: "Aide & Support", key: "aide", href: "/aide", icon: Settings, category: "settings" },
             { label: "Simulateur Vanguard", key: "vanguard_simulator", href: "/vanguard-simulator", icon: Activity, category: "settings" },
             { label: "POS Mobile", key: "pos_mobile", href: "/pos-mobile", icon: Smartphone, category: "settings" },
             { label: "Mon Espace Staff", key: "mon_espace", href: "/mon-espace", icon: Users, category: "settings" },

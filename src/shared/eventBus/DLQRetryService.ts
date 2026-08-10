@@ -1,5 +1,5 @@
 import { db } from '@/lib/offline/offline-store';
-import { NexusEventBus, NexusEventName } from './NexusEventBus';
+import { NexusEventBus, NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from './PayloadMigrator';
 import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";

@@ -79,14 +79,14 @@ function CrmPage() {
 
             <main>
                 {activeTab === "pipeline" && (
-                    <section className="flex gap-4 min-h-[60vh]">
-                        <div className="w-56 shrink-0">
+                    <section className="flex flex-col lg:flex-row gap-4 min-h-[60vh]">
+                        <div className="w-full lg:w-56 shrink-0">
                             <CRMSidebar />
                         </div>
                         <div className="flex-1">
                             <CRMList />
                         </div>
-                        <div className="w-80 shrink-0">
+                        <div className="w-full lg:w-80 shrink-0">
                             <CRMDetailView />
                         </div>
                     </section>

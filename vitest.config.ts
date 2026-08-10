@@ -5,6 +5,7 @@ export default defineConfig({
     test: {
         environment: 'jsdom',
         globals: true,
+        clearMocks: true,
         setupFiles: ['tests/setup.ts'],
         include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}', 'demo/**/*.test.{ts,tsx}'],
         exclude: ['tests/e2e/**', 'src/e2e/**'],

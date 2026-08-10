@@ -5,6 +5,9 @@ import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { StockItem } from '../types';
 import { JsonObject } from "@/shared/types/json";
+import { useAtomValue } from "jotai";
+import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { adjustStockAction, updateIngredientThresholdsAction } from "../actions/inventory.action";
 
 export interface DLCStatus {
     daysLeft: number | null;
@@ -42,6 +45,7 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
     const [minQty, setMinQty] = useState(String(item.minQuantity ?? ""));
     const [reorderQty, setReorderQty] = useState(String((item as JsonObject).reorderQuantity ?? ""));
     const [saving, setSaving] = useState(false);
+    const tenantId = useAtomValue(tenantIdAtom);
 
     const handleSave = async () => {
         setSaving(true);
@@ -52,7 +56,7 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
             if (!isNaN(parsedMin)) updates.minQuantity = parsedMin;
             if (!isNaN(parsedReorder)) updates.reorderQuantity = parsedReorder;
             if (Object.keys(updates).length === 0) { toast.error("Veuillez saisir au moins une valeur valide."); return; }
-            await Nexus.adapter.update(`ingredients/${item.ingredientId}`, updates);
+            await updateIngredientThresholdsAction(tenantId, item.ingredientId, updates.minQuantity, updates.reorderQuantity);
             toast.success("Seuil mis à jour.");
             onClose();
         } catch { toast.error("Erreur lors de la mise à jour du seuil."); }
@@ -77,13 +81,14 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
 export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose: () => void }) {
     const [counted, setCounted] = useState(String(item.quantity));
     const [saving, setSaving] = useState(false);
+    const tenantId = useAtomValue(tenantIdAtom);
 
     const handleSave = async () => {
         const qty = parseFloat(counted);
         if (isNaN(qty) || qty < 0) { toast.error("Quantité invalide."); return; }
         setSaving(true);
         try {
-            await Nexus.adapter.update(`stockItems/${item.id}`, { quantity: qty, lastPhysicalCountAt: new Date().toISOString() });
+            await adjustStockAction(tenantId, item.id, item.quantity, qty, "Comptage physique", "System");
             toast.success("Comptage enregistré.");
             onClose();
         } catch { toast.error("Erreur lors de l'enregistrement du comptage."); }
@@ -108,13 +113,15 @@ export function AdjustStockModal({ item, onClose }: { item: StockItem; onClose: 
     const [delta, setDelta] = useState("0");
     const [reason, setReason] = useState("");
     const [saving, setSaving] = useState(false);
+    const tenantId = useAtomValue(tenantIdAtom);
 
     const handleSave = async () => {
         const d = parseFloat(delta);
         if (isNaN(d)) { toast.error("Valeur invalide."); return; }
         setSaving(true);
         try {
-            await Nexus.adapter.update(`stockItems/${item.id}`, { quantity: Math.max(0, item.quantity + d), lastAdjustmentAt: new Date().toISOString(), lastAdjustmentReason: reason || "Ajustement manuel" });
+            const newQuantity = Math.max(0, item.quantity + d);
+            await adjustStockAction(tenantId, item.id, item.quantity, newQuantity, reason || "Ajustement manuel", "System");
             toast.success(d >= 0 ? `+${d} ${item.unit} ajouté(s) au stock.` : `${Math.abs(d)} ${item.unit} retiré(s) du stock.`);
             onClose();
         } catch { toast.error("Erreur lors de l'ajustement."); }

@@ -14,6 +14,7 @@ import { IngredientCategory, IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
+import { receiveStockAction } from "../../actions/inventory.action";
 import { VisionScanner } from "@/shared/components/VisionScanner";
 import type { ExtractedInvoice } from "@/modules/ops";
 
@@ -107,9 +108,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         if (!ing) { setIsSubmitting(false); return; }
 
         try {
-            const id = Nexus.adapter.generateId('stockItems');
-            await Nexus.adapter.set(`tenants/${tenantId}/stockItems/${id}`, {
-                id,
+            await receiveStockAction(tenantId, {
                 ingredientId: selectedIngredient,
                 ingredientName: ing.name,
                 category: ing.category,

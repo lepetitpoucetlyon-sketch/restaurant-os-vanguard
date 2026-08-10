@@ -5,6 +5,8 @@ import { useAtomValue } from "jotai";
 import { startOfWeek, addDays, addWeeks, subWeeks, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
+import { toError } from "@/lib/toError";
 
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
@@ -119,7 +121,10 @@ async function cancelReservationById(
         });
 
         toast.success("Réservation annulée");
-    } catch { toast.error("Erreur lors de l'annulation"); }
+    } catch (err) { 
+        logger.error("Erreur lors de l'annulation", { error: toError(err).message, reservationId: id });
+        toast.error("Erreur lors de l'annulation"); 
+    }
 }
 
 async function syncFloorPlan(reservations: Reservation[], tenantId: string) {

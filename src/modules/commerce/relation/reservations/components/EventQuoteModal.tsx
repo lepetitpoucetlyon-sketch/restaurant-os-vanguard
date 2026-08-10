@@ -14,7 +14,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { cn } from "@/lib/ui.foundations";
-import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { logger } from "@/lib/logger";
+import { toError } from "@/lib/toError";
+import { saveEventQuoteDraft } from '../actions/eventQuote.action';
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
 import type { PrivatisationFormule, PrivatisationData } from "@/modules/commerce";
@@ -107,10 +109,16 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                 acompte30,
                 montantTTC,
             };
-            await Nexus.adapter.set(`tenants/${tenantId}/eventQuotes/${id}`, payload);
+            
+            const result = await saveEventQuoteDraft(tenantId, id, payload);
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            
             setSavedId(id);
-            toast.success("Brouillon enregistré avec succès");
-        } catch {
+            toast.success("Brouillon enregistré avec succès (Optimistic)");
+        } catch (err) {
+            logger.error("Erreur lors de l'enregistrement du devis", { error: toError(err).message, savedId });
             toast.error("Erreur lors de l'enregistrement du devis");
         } finally {
             setSaving(false);
@@ -144,7 +152,8 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
 
             await generatePrivatisationContract(contractData);
             toast.success("Contrat PDF généré et téléchargé");
-        } catch {
+        } catch (err) {
+            logger.error("Erreur lors de la génération du contrat PDF", { error: toError(err).message, clientEmail: form.clientEmail });
             toast.error("Erreur lors de la génération du contrat PDF");
         } finally {
             setGenerating(false);

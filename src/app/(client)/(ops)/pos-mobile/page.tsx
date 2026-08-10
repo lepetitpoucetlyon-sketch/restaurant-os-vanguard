@@ -32,7 +32,7 @@ function POSMobilePage() {
 
     if (!selectedTableId) {
         return (
-            <div className="h-[100dvh] bg-bg-primary p-4">
+            <div className="h-[100dvh] bg-surface-sidebar p-4">
                 <div className="mb-4">
                     <h1 className="text-lg font-black uppercase tracking-widest text-text-primary">
                         POS Mobile
@@ -41,7 +41,9 @@ function POSMobilePage() {
                         {currentUser?.name ?? 'Serveur'} — sélectionnez une table
                     </p>
                 </div>
-                <TableSelector onSelectTable={setSelectedTableId} />
+                <div className="glass-panel-dark rounded-[2.5rem] h-[calc(100%-80px)] p-4 overflow-auto">
+                    <TableSelector onSelectTable={setSelectedTableId} />
+                </div>
             </div>
         );
     }

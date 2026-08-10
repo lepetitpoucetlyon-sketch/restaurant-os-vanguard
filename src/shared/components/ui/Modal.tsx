@@ -119,7 +119,7 @@ export function Modal({
                             dragElastic={{ top: 0, bottom: 0.5 }}
                             onDragEnd={handleDragEnd}
                             className={cn(
-                                "relative w-full bg-bg-primary rounded-t-[2rem] shadow-2xl overflow-hidden",
+                                "relative w-full glass-panel-light rounded-t-[2rem] rounded-b-none shadow-premium overflow-hidden",
                                 mobileSizeClasses[size],
                                 className
                             )}
@@ -185,11 +185,7 @@ export function Modal({
                         animate="visible"
                         exit="exit"
                         className={cn(
-                            "relative w-full rounded-[2.5rem] shadow-[0_32px_128px_rgba(0,0,0,0.3)] overflow-hidden",
-                            "border border-border/10",
-                            variant === "premium"
-                                ? "bg-bg-secondary/90 backdrop-blur-2xl"
-                                : "bg-bg-secondary",
+                            "relative w-full rounded-[2.5rem] overflow-hidden shadow-premium glass-panel-light",
                             sizeClasses[size],
                             className
                         )}

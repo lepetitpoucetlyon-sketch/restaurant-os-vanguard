@@ -14,6 +14,7 @@ import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import type { ConsumptionMode } from "@/modules/ops";
 import { POSService } from "../domain";
+import { logger } from "@/lib/logger";
 
 // Pure helpers (zéro effets de bord)
 import {
@@ -162,7 +163,8 @@ export function usePOSController() {
             );
             showToast(`Table ${currentTable.number} : Commande envoyée`, "success");
             setCartItems([]);
-        } catch (_error) {
+        } catch (error) {
+            logger.error('[POS] Failed to send to kitchen', error);
             showToast("Erreur lors de l'envoi en cuisine", "error");
         }
     }, [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast, activeTenantId]);
@@ -186,7 +188,8 @@ export function usePOSController() {
             setIsSplitOpen(false);
             if (opts?.split) setPartialPayments([]);
             await updateTable(currentTable.id, { status: "dirty" });
-        } catch (_error) {
+        } catch (error) {
+            logger.error('[POS] Fiscal signature failed', error, { context: 'NF525' });
             showToast("Transaction Échouée", "error");
         }
     }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, handleClearCart, updateTable, showToast]);

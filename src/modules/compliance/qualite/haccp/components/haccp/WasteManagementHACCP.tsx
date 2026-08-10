@@ -12,24 +12,80 @@ import {
     ArrowRight,
     Shield
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
 import { Button } from "@ui/button";
+import { useAtomValue } from "jotai";
+import { wasteLogsAtom } from "@/modules/compliance";
+import { useState, useMemo } from "react";
+import { RegulatoryWasteLog } from "@/modules/compliance/qualite/haccp/types/domain";
+import { toast } from "sonner";
+import { toError } from "@/lib/toError";
 
 export function WasteManagementHACCP() {
-    const { logWaste: _logWaste } = useHACCP();
-    const { hottesDoc, prestataires: _prestataires } = useRegistre();
+    const { logWaste } = useHACCP();
+    const { hottesDoc } = useRegistre();
+    const wasteLogsArray = useAtomValue(wasteLogsAtom);
+    const wasteLogs = Array.isArray(wasteLogsArray) ? wasteLogsArray : [];
 
-    // Mock recent waste logs
-    const recentLogs = [
-        { id: '1', type: 'biodechets', quantity: 45, unit: 'kg', provider: 'EcoCollect Lyon', date: '2026-03-27', status: 'collected' },
-        { id: '2', type: 'huiles', quantity: 20, unit: 'L', provider: 'RecupOil', date: '2026-03-20', status: 'collected' },
-        { id: '3', type: 'biodechets', quantity: 12, unit: 'kg', provider: '-', date: '2026-03-29', status: 'pending' },
-    ];
+    const [wasteType, setWasteType] = useState<RegulatoryWasteLog['type']>('biodechets');
+    const [quantity, setQuantity] = useState('');
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!quantity || isNaN(Number(quantity))) {
+            toast.error("Quantité invalide");
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            await logWaste({
+                id: `waste_${Date.now()}`,
+                type: wasteType,
+                quantity: Number(quantity),
+                unit: wasteType === 'huiles' ? 'L' : 'kg',
+                status: 'pending',
+                user: 'staff',
+                timestamp: new Date(date),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+            toast.success("Relevé HACCP enregistré");
+            setQuantity('');
+        } catch (err) {
+            toast.error(`Erreur: ${toError(err).message}`);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const recentLogs = useMemo(() => {
+        if (wasteLogs.length === 0) {
+            // Mock fallback if empty for display
+            return [
+                { id: '1', type: 'biodechets', quantity: 45, unit: 'kg', provider: 'EcoCollect Lyon', date: '2026-03-27', status: 'collected' },
+                { id: '2', type: 'huiles', quantity: 20, unit: 'L', provider: 'RecupOil', date: '2026-03-20', status: 'collected' },
+                { id: '3', type: 'biodechets', quantity: 12, unit: 'kg', provider: '-', date: '2026-03-29', status: 'pending' },
+            ];
+        }
+        return [...wasteLogs]
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .slice(0, 3)
+            .map(log => ({
+                id: log.id,
+                type: log.type,
+                quantity: log.quantity,
+                unit: log.unit,
+                provider: log.provider || '-',
+                date: new Date(log.timestamp).toLocaleDateString('fr-FR'),
+                status: log.status
+            }));
+    }, [wasteLogs]);
 
     const stats = [
-        { label: 'Bio-déchets / Mois', value: '184 kg', icon: Trash2, color: 'text-status-success', bg: 'bg-status-success/10' },
-        { label: 'Huiles récupérées', value: '45 L', icon: Droplets, color: 'text-status-warning', bg: 'bg-status-warning/10' },
-        { label: 'Dernier curage bac', value: '10 Jan.', icon: Shield, color: 'text-brand', bg: 'bg-action-primary/10' },
+        { label: 'Bio-déchets / Mois', value: `${wasteLogs.filter(w => w.type === 'biodechets').reduce((acc, curr) => acc + curr.quantity, 0)} kg`, icon: Trash2, color: 'text-status-success', bg: 'bg-status-success/10' },
+        { label: 'Huiles récupérées', value: `${wasteLogs.filter(w => w.type === 'huiles').reduce((acc, curr) => acc + curr.quantity, 0)} L`, icon: Droplets, color: 'text-status-warning', bg: 'bg-status-warning/10' },
+        { label: 'Dernier curage bac', value: wasteLogs.find(w => w.type === 'graisse')?.timestamp ? new Date(wasteLogs.find(w => w.type === 'graisse')!.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) : '10 Jan.', icon: Shield, color: 'text-brand', bg: 'bg-action-primary/10' },
     ];
 
     return (
@@ -59,12 +115,19 @@ export function WasteManagementHACCP() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-2xl font-serif font-black italic text-text-primary tracking-tight">Nouvelle Entrée</h3>
                                 <div className="flex bg-bg-tertiary p-1.5 rounded-2xl border border-border">
-                                    {['Bio-déchets', 'Huiles', 'Bac à Graisse'].map((t, i) => (
-                                        <button key={i} className={cn(
-                                            "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
-                                            i === 0 ? "bg-surface-card dark:bg-bg-secondary text-accent-gold shadow-sm" : "text-text-muted hover:text-text-primary"
-                                        )}>{t}</button>
-                                    ))}
+                                    {['Bio-déchets', 'Huiles', 'Bac à Graisse'].map((t, i) => {
+                                        const typesMap: RegulatoryWasteLog['type'][] = ['biodechets', 'huiles', 'graisse'];
+                                        const typeVal = typesMap[i];
+                                        return (
+                                            <button 
+                                                key={i} 
+                                                onClick={() => setWasteType(typeVal)}
+                                                className={cn(
+                                                    "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
+                                                    wasteType === typeVal ? "bg-surface-card dark:bg-bg-secondary text-accent-gold shadow-sm" : "text-text-muted hover:text-text-primary"
+                                                )}>{t}</button>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -72,20 +135,34 @@ export function WasteManagementHACCP() {
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Quantité Estimée</label>
                                     <div className="relative">
-                                        <input type="number" placeholder="0.0" className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-xl font-serif font-bold focus:outline-none focus:border-accent-gold/50" />
-                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-muted uppercase tracking-widest">kg</span>
+                                        <input 
+                                            type="number" 
+                                            value={quantity}
+                                            onChange={(e) => setQuantity(e.target.value)}
+                                            placeholder="0.0" 
+                                            className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-xl font-serif font-bold focus:outline-none focus:border-accent-gold/50" 
+                                        />
+                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-muted uppercase tracking-widest">{wasteType === 'huiles' ? 'L' : 'kg'}</span>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Date du relevé</label>
                                     <div className="relative">
-                                        <input type="date" className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-sm font-bold focus:outline-none focus:border-accent-gold/50" defaultValue={new Date().toISOString().split('T')[0]} />
+                                        <input 
+                                            type="date" 
+                                            value={date}
+                                            onChange={(e) => setDate(e.target.value)}
+                                            className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-sm font-bold focus:outline-none focus:border-accent-gold/50" 
+                                        />
                                     </div>
                                 </div>
                             </div>
 
-                            <Button className="w-full h-16 bg-text-primary text-text-primary rounded-[20px] font-black uppercase text-[10px] tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
-                                Enregistrer le relevé HACCP
+                            <Button 
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                                className="w-full h-16 bg-text-primary text-text-primary rounded-[20px] font-black uppercase text-[10px] tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
+                                {isSubmitting ? "Enregistrement..." : "Enregistrer le relevé HACCP"}
                             </Button>
                         </div>
                     </div>

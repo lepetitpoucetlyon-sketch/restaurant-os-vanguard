@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/users/reset-pin
  * Réinitialise le PIN d'un utilisateur admin d'un tenant depuis le MCC.
@@ -10,7 +11,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';

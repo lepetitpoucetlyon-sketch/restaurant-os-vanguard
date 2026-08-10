@@ -11,6 +11,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toast } from "sonner";
 import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
+import { openCashDrawerAction, closeCashDrawerAction } from "../actions/cashdrawer.action";
 import { JsonObject } from "@/shared/types/json";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -109,20 +110,10 @@ export function CashDrawerModal({
         }
         setIsOpening(true);
         try {
-            const sessionId = IdGenerator.generateWithPrefix("cds");
-            const newSession: CashDrawerSession = {
-                id: sessionId,
-                openedAt: new Date().toISOString(),
-                openingInMicrounits: eurosToMicrounits(euros),
-                collectedInMicrounits: 0,
-                changeGivenInMicrounits: 0,
-                userId,
-            };
-            const path = `tenants/${tenantId}/cashDrawerSessions/${sessionId}`;
-            const batch = Nexus.adapter.batch();
-            batch.set(path, newSession);
-            await batch.commit();
-            setSession(newSession);
+            const result = await openCashDrawerAction(tenantId, userId, eurosToMicrounits(euros));
+            if (!result.success || !result.session) throw new Error(result.error);
+            
+            setSession(result.session);
             setOpeningInput("");
             void cashDrawerService.kick();
             toast.success(`Caisse ouverte — Fond : ${euros.toFixed(2)} €`);
@@ -147,16 +138,8 @@ export function CashDrawerModal({
             const theoreticalMu =
                 session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits;
 
-            const path = `tenants/${tenantId}/cashDrawerSessions/${session.id}`;
-            const batch = Nexus.adapter.batch();
-            batch.set(path, {
-                ...session,
-                closedAt: new Date().toISOString(),
-                closingInMicrounits: actualMu,
-                collectedInMicrounits,
-                changeGivenInMicrounits,
-            });
-            await batch.commit();
+            const result = await closeCashDrawerAction(tenantId, session, actualMu, collectedInMicrounits, changeGivenInMicrounits);
+            if (!result.success) throw new Error(result.error);
 
             const diffMu = actualMu - theoreticalMu;
             const sign = diffMu >= 0 ? "+" : "";

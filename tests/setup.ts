@@ -12,6 +12,15 @@ import { MockAdapter } from '@/lib/adapters/MockAdapter';
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();
 
+// Mock LLMManager global
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+LLMManager.provider = {
+    generateText: vi.fn().mockResolvedValue('Mocked LLM Response'),
+    generateJson: vi.fn().mockResolvedValue({ mocked: true }),
+    generateEmbeddings: vi.fn().mockResolvedValue([0.1, 0.2]),
+    generateFromImage: vi.fn().mockResolvedValue('Mocked OCR Text'),
+};
+
 // 1. Mock de Firebase (Tous les services)
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(), getApps: vi.fn(() => []), getApp: vi.fn() }));
 vi.mock('firebase/auth', () => ({ getAuth: vi.fn(() => ({})), onAuthStateChanged: vi.fn() }));

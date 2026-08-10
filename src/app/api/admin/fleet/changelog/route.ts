@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Fleet Changelog — historique complet et catégorisé par tenant ou flotte.
  *
@@ -10,7 +11,6 @@
  * Protégé : mcc_support.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { ChangelogService, type ChangeCategory } from '@/lib/mcc/ChangelogService';
 
 const VALID_CATEGORIES = new Set<ChangeCategory>([

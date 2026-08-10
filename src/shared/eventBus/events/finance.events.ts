@@ -54,6 +54,7 @@ export interface FINANCEEvents {
     paymentBatchId: string;
     totalAmountInMicrounits: number;
     dispatchedBy: string;
+    invoiceIds?: string[];
   };
 
   'finance.period_locked': {

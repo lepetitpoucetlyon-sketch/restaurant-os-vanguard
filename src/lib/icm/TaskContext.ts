@@ -246,6 +246,36 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: { ...OFF_ALL, staff: 'HIGH', orders: 'LAZY' },
   },
 
+  nf525: {
+    taskId: 'nf525',
+    importance: { ...OFF_ALL, compliance: 'HIGH', finance: 'HIGH', orders: 'MEDIUM' },
+  },
+
+  aide: {
+    taskId: 'aide',
+    importance: { ...OFF_ALL, intelligence: 'MEDIUM' },
+  },
+
+  migration: {
+    taskId: 'migration',
+    importance: { ...OFF_ALL, intelligence: 'MEDIUM', finance: 'LAZY', staff: 'LAZY' },
+  },
+
+  onboarding: {
+    taskId: 'onboarding',
+    importance: { ...OFF_ALL, staff: 'HIGH' },
+  },
+
+  'marketing/seo': {
+    taskId: 'marketing/seo',
+    importance: { ...OFF_ALL, marketing: 'HIGH', intelligence: 'MEDIUM' },
+  },
+
+  'menu-engineering': {
+    taskId: 'menu-engineering',
+    importance: { ...OFF_ALL, products: 'HIGH', finance: 'HIGH', categories: 'MEDIUM' },
+  },
+
   admin: {
     taskId: 'admin',
     importance: {

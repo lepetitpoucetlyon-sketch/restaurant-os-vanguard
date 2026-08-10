@@ -5,6 +5,7 @@ import { BarChart2, Globe, XCircle, Copy, Check, Loader2, Save } from 'lucide-re
 import { toast } from 'sonner';
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateTenantSettingsAction } from '@/shared/actions/settings.action';
 
 type AnalyticsProvider = 'ga4' | 'plausible' | 'none';
 
@@ -119,12 +120,12 @@ export default function AnalyticsSettings() {
     if (!slug) return;
     setIsSaving(true);
     try {
-      await Nexus.adapter.update(
-        `tenants/${slug}/settings/analytics`,
-        { ...config, updatedAt: Date.now() },
-        { vassalId: slug, actorId: 'client' }
-      );
-      toast.success('Configuration analytics sauvegardée');
+      const res = await updateTenantSettingsAction(slug, 'analytics', config);
+      if (res.success) {
+        toast.success('Configuration analytics sauvegardée');
+      } else {
+        toast.error(res.error || 'Erreur lors de la sauvegarde');
+      }
     } catch {
       toast.error('Erreur lors de la sauvegarde');
     } finally {

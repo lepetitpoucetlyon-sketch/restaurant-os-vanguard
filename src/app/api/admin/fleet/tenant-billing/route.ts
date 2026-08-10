@@ -1,10 +1,10 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/admin/fleet/tenant-billing?tenantId=xxx
  * Retourne les infos de facturation Nexus d'un tenant.
  * Protégé : mcc_support minimum.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { logger } from '@/lib/logger';

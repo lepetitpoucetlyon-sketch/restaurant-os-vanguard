@@ -1,13 +1,17 @@
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
 import { Quote, Campaign, toReservation, toCampaign, toCustomer, toGroup, toQuote } from '@nexus/contracts/nexus-internal-mapper';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { guardedAction, createSovereignHook } from '../opsCore';
+import { createSovereignHook, guardedAction } from '../opsCore';
 
 import { reservationsNodeAtom, groupsNodeAtom, quotesNodeAtom } from '@/store/pillars/commerce';
 import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/store/pillars/commerce';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
+import { 
+  markReservationArrivedAction,
+  upsertCampaignAction,
+  upsertPostAction,
+  upsertCustomerAction
+} from '../../service/pos/actions/commerce.action';
 
 /**
  * 🛍️ Hooks commerce (réservations / marketing / CRM / devis / groupes) — extraits de NexusOpsProvider.
@@ -21,12 +25,7 @@ export const useAllocations = () => {
       return (base.data || []).filter((r) => r.tableId === tableId || r.assignedTableId === tableId);
     },
     markArrived: async (reservationId: string) => {
-      const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${reservationId}`;
-      await Nexus.adapter.update(path, {
-        status: 'arrived',
-        arrivedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      await markReservationArrivedAction(tenantId, reservationId);
     },
   };
 };
@@ -42,7 +41,7 @@ export const useMarketing = () => {
     upsertCampaign: async (data: Partial<Campaign>) => {
       await guardedAction('MARKETING', 'MANAGE_CAMPAIGNS', async () => {
         if (data.id) {
-          await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}/${data.id}`, data);
+          await upsertCampaignAction(tenantId, data);
         } else {
           await base.add(data as Partial<SovereignNode>);
         }
@@ -50,12 +49,7 @@ export const useMarketing = () => {
     },
     upsertPost: async (data: Partial<SovereignNode> & { id?: string }) => {
       await guardedAction('MARKETING', 'MANAGE_CAMPAIGNS', async () => {
-        const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}`;
-        if (data.id) {
-          await Nexus.adapter.update(`${path}/${data.id}`, data);
-        } else {
-          await Nexus.adapter.create(path, { ...data, type: 'post' });
-        }
+        await upsertPostAction(tenantId, data);
       });
     }
   };
@@ -70,12 +64,7 @@ export const useCRM = () => {
     selectedCRM,
     upsertCustomer: async (data: Partial<SovereignNode> & { id?: string }) => {
       await guardedAction('CRM', 'MANAGE_CRM', async () => {
-        const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RELATIONS)}`;
-        if (data.id) {
-          await Nexus.adapter.update(`${path}/${data.id}`, data);
-        } else {
-          await Nexus.adapter.create(path, { ...data, type: 'customer' });
-        }
+        await upsertCustomerAction(tenantId, data);
       });
     }
   };

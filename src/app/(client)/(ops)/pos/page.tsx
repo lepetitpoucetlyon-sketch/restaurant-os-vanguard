@@ -14,6 +14,7 @@ import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
+import { GlassCard } from "@/shared/components/ui/glass";
 import { formatCurrency } from "@/lib/formatters";
 import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 
@@ -92,9 +93,11 @@ function POSPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 0.4 * tokens.animationMultiplier, ease: [0.16, 1, 0.3, 1] }}
-                className={cn("h-full overflow-hidden transition-colors duration-700", isRushMode ? "bg-surface-sidebar" : "bg-bg-primary")}
+                className={cn("h-full overflow-hidden transition-colors duration-700 p-4 md:p-8", isRushMode ? "bg-surface-sidebar" : "bg-bg-primary")}
             >
-                <TableSelector onSelectTable={setSelectedTableId} />
+                <GlassCard variant={isRushMode ? "dark" : "light"} className="h-full overflow-auto">
+                    <TableSelector onSelectTable={setSelectedTableId} />
+                </GlassCard>
             </motion.div>
         );
     }
@@ -192,7 +195,7 @@ function POSPage() {
                 </div>
 
                 {isCartSidebar && (
-                    <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/30 transition-all overflow-hidden", isRushMode ? "bg-[#0f172a]" : "bg-surface-card")}>
+                    <div className={cn("h-full hidden xl:flex xl:flex-col w-full xl:w-[400px] max-w-full shrink-0 border-l border-border/30 transition-all overflow-hidden", isRushMode ? "bg-[#0f172a]" : "bg-surface-card")}>
                         <div className="flex border-b border-border/40 shrink-0">
                             <button onClick={() => setIsCourseViewOpen(false)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", !isCourseViewOpen ? "border-b-2 border-accent-gold text-accent-gold" : "text-text-muted hover:text-text-primary")}>Panier</button>
                             <button onClick={() => setIsCourseViewOpen(true)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", isCourseViewOpen ? "border-b-2 border-accent-gold text-accent-gold" : "text-text-muted hover:text-text-primary")}>Cours</button>

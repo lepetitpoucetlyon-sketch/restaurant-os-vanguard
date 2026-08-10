@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/admin/mdm/devices
  * Liste les appareils MDM gérés via Mosyle Business API.
@@ -5,7 +6,6 @@
  * Fallback : retourne des appareils mock si MOSYLE_API_KEY est absent.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient, type MosyleDevice } from '@/lib/MosyleClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
@@ -78,6 +78,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
+  const uid = caller.uid;
 
   const { serialNumber, tenantId, deviceName } = await req.json() as {
     serialNumber?: string;
@@ -92,7 +93,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const uid = (caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid;
   const now = Date.now();
 
   try {

@@ -5,6 +5,7 @@ import { motion, Variants } from 'framer-motion';
 import { Globe, Settings2, Eye, Save, Loader2, Clock, CalendarDays } from 'lucide-react';
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { updateTenantSettingsAction } from '@/shared/actions/settings.action';
 import { toast } from 'sonner';
 import { EmbedSnippets, ROICalculator, OnlineBookingToggle } from '@/modules/commerce';
 
@@ -69,12 +70,12 @@ export default function ReservationWidgetSettings() {
     if (!slug) return;
     setSaving(true);
     try {
-      await Nexus.adapter.update(
-        `tenants/${slug}/tenantSettings/widget`,
-        { slotDuration: widgetSettings.slotDuration, minNoticeHours: widgetSettings.minNoticeHours, maxAdvanceDays: widgetSettings.maxAdvanceDays, updatedAt: Date.now() },
-        { vassalId: slug, actorId: 'system' }
-      );
-      toast.success('Parametres widget sauvegardes');
+      const res = await updateTenantSettingsAction(slug, 'reservation_widget', widgetSettings);
+      if (res.success) {
+        toast.success('Parametres widget sauvegardes');
+      } else {
+        toast.error(res.error || 'Echec de la sauvegarde');
+      }
     } catch {
       toast.error('Echec de la sauvegarde');
     } finally {

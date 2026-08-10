@@ -2,14 +2,20 @@ import { useCallback, useMemo } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Table, toTable, toFloor, toZone, toReservation } from '@nexus/contracts/nexus-internal-mapper';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';
 import { guardedAction, sanitizeToSovereign } from '../opsCore';
 
 import { tablesNodeAtom, floorsAtom, zonesAtom, zonesLockedAtom, currentFloorIdAtom } from '@/store/pillars/ops';
 import { reservationsNodeAtom } from '@/store/pillars/commerce';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
+import {
+  updateFloorNodeAction,
+  createFloorNodeAction,
+  deleteFloorNodeAction,
+  updateFloorZoneAction,
+  createFloorZoneAction,
+  deleteFloorZoneAction,
+} from '../../service/pos/actions/floor.action';
 
 /**
  * 🗺️ Hooks du plan de salle (tables / zones / étages) — extraits de NexusOpsProvider.
@@ -32,77 +38,64 @@ export const useOperationalNodes = () => {
   const getZonesForFloor = useCallback((floorId: string) => zones.filter(z => z.floorId === floorId || !z.floorId), [zones]);
   const updateTablePosition = useCallback(async (id: string, x: number, y: number) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, {
-        x, y, updatedAt: new Date().toISOString()
-      });
+      await updateFloorNodeAction(tenantId, id, { x, y });
     });
   }, [tenantId]);
 
   const updateNode = useCallback(async (id: string, data: Partial<SovereignNode>) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, {
-        ...data,
-        updatedAt: new Date().toISOString()
-      });
+      await updateFloorNodeAction(tenantId, id, data);
     });
   }, [tenantId]);
 
   const addNode = useCallback(async (data: Partial<SovereignNode>) => {
     const sanitized = sanitizeToSovereign(data);
-    await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}`, sanitized);
+    await createFloorNodeAction(tenantId, sanitized);
   }, [tenantId]);
 
   const deleteNode = useCallback(async (id: string) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`);
+      await deleteFloorNodeAction(tenantId, id);
     });
   }, [tenantId]);
 
   const updateZone = useCallback(async (id: string, data: Partial<SovereignNode>) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`, {
-        ...data,
-        updatedAt: new Date().toISOString()
-      });
+      await updateFloorZoneAction(tenantId, id, data);
     });
   }, [tenantId]);
 
   const addFloor = useCallback(async (data: Partial<SovereignNode>) => {
     const sanitized = sanitizeToSovereign(data);
-    await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}`, {
+    await createFloorZoneAction(tenantId, {
       ...sanitized,
       attributes: { ...(sanitized.attributes as Record<string, SovereignField>), type: 'floor' },
-      updatedAt: new Date().toISOString()
     });
   }, [tenantId]);
 
   const updateFloor = useCallback(async (id: string, data: Partial<SovereignNode>) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`, {
-        ...data,
-        updatedAt: new Date().toISOString()
-      });
+      await updateFloorZoneAction(tenantId, id, data);
     });
   }, [tenantId]);
 
   const deleteFloor = useCallback(async (id: string) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`);
+      await deleteFloorZoneAction(tenantId, id);
     });
   }, [tenantId]);
 
   const addZone = useCallback(async (data: Partial<SovereignNode>) => {
     const sanitized = sanitizeToSovereign(data);
-    await Nexus.adapter.create(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}`, {
+    await createFloorZoneAction(tenantId, {
       ...sanitized,
       attributes: { ...(sanitized.attributes as Record<string, SovereignField>), type: 'zone' },
-      updatedAt: new Date().toISOString()
     });
   }, [tenantId]);
 
   const deleteZone = useCallback(async (id: string) => {
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`);
+      await deleteFloorZoneAction(tenantId, id);
     });
   }, [tenantId]);
 
@@ -111,7 +104,7 @@ export const useOperationalNodes = () => {
       // 🛡️ PURGE CURRENT FLOOR NODES
       const currentFloorNodes = nodes.filter((n) => (n.attributes as Record<string, SovereignField>)?.floorId === currentLayoutId);
       for (const node of currentFloorNodes) {
-        await Nexus.adapter.delete(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${node.id}`);
+        await deleteFloorNodeAction(tenantId, node.id);
       }
 
       // 🛡️ INJECT TEMPLATE (BISTRO STANDARD)
@@ -187,16 +180,10 @@ export function useFloorOpsValue(tenantId: string) {
     areas: (areasRaw || []) as SovereignNode[],
     isLoading: operationalNodes.loading || allocations.loading,
     updateNodeStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, {
-        ...status,
-        updatedAt: new Date().toISOString(),
-      });
+      await updateFloorNodeAction(tenantId, id, status);
     }),
     updateAreaStatus: (id: string, status: Partial<SovereignNode>) => guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
-      await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.ZONES)}/${id}`, {
-        ...status,
-        updatedAt: new Date().toISOString(),
-      });
+      await updateFloorZoneAction(tenantId, id, status);
     }),
   }), [tenantId, operationalNodes.data, operationalNodes.loading, allocations.data, allocations.loading, areasRaw]);
 }

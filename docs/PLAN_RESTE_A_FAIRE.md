@@ -1,7 +1,10 @@
 # Plan — Reste à faire
 
-> **Repo** : RESTAURANT-OS-CORE · branche `main` · base `31319cc61`
-> **Rédigé le** : 2026-08-09 · session `ui-backend-coherence`
+> **Repo** : RESTAURANT-OS-CORE · branche `fix/coherence-ui-backend-securite` · HEAD `2acb5dab9`
+> **Rédigé le** : 2026-08-09 · **mis à jour** le 2026-08-09 après commit · session `ui-backend-coherence`
+>
+> ⚠️ Le commit `2acb5dab9` n'est **pas** sur `main` (qui reste sur `31319cc61`) et
+> n'a **pas** été poussé — migration GitLab en cours, commits locaux uniquement.
 > **Public** : toute session (humaine ou Claude Code) reprenant ces chantiers.
 >
 > Ce document est **autonome** : chaque chantier contient le diagnostic, la preuve,
@@ -85,8 +88,18 @@ Ne pas refaire ces points, ils sont livrés et vérifiés.
 | Doublon `NexusFiscalProvider` supprimé | `src/shared/providers/finance/` supprimé | Le provider monté lit `fiscalSealsNodeAtom` |
 | 20 handlers — `throw` ajouté dans le `catch` | `src/shared/eventBus/handlers/` | La DLQ voit enfin les échecs |
 | Violation barrel `ops → finance` | `src/modules/ops/domain/schemas/pos.ts` | Import via `@/modules/finance` |
+| **Chantier 14** — `tenantOverride` interdit côté serveur | `src/lib/nexus/NexusAdapter.ts` | Le setter lève hors navigateur |
+| **Chantier 14** — propriété des snapshots vérifiée | `src/modules/.../ImportSnapshotService.ts` | `assertOwnership()` sur `restore`/`delete`, filtrage sur `list` |
+| **Chantier 14** — tenant explicite dans la route | `src/app/api/tenant/onboarding/rollback/route.ts` | `caller.tenantId` passé en paramètre, 403 sinon |
+| **Chantier 14** — `setServerSideTenantOverride()` supprimée | `src/lib/firebase.ts` | Fonction morte qui institutionnalisait l'anti-pattern |
+| **Chantier 16 (phase 1)** — accès anonyme RBAC fermé | `src/shared/hooks/useActionPermission.ts` | Contrôle `!currentUser` remonté avant le cas « action non déclarée » |
 
-**État de référence après ces correctifs** : `npx tsc --noEmit` → **0 erreur** · vanguard → **64/64** · suite globale → **292 échecs / 468 succès** (identique à la baseline `main`, aucune régression introduite).
+**État de référence après ces correctifs** : `npx tsc --noEmit` → **0 erreur** · vanguard → **64/64** · isolation multi-tenant → **8/8** · suite globale → **292 échecs / 476 succès** (les 292 échecs sont ceux de la baseline `main`, aucune régression introduite ; +16 tests ajoutés).
+
+Ces correctifs sont figés dans le commit `2acb5dab9` (84 fichiers), qui regroupe aussi
+des remédiations antérieures restées non commitées (C-01, C-02, `prefetch` navigation,
+plan S11, 4 tests vanguard fiscaux). Sur `NexusSyncService.ts` et `FiscalAdapter.ts`,
+les deux couches sont imbriquées dans les mêmes fonctions.
 
 ---
 
@@ -1270,31 +1283,33 @@ d'écriture avec `isWritable(tenantId)` (`src/lib/mcc/SystemTenantRegistry.ts`).
 ## Ordre d'exécution recommandé
 
 ```
+✅ FAIT ── Chantier 14 ── tenantOverride + propriété des snapshots (commit 2acb5dab9)
+✅ FAIT ── Chantier 16 phase 1 ── accès anonyme RBAC fermé (commit 2acb5dab9)
+
 ── Sécurité / intégrité (avant toute mise en production) ──
-1. Chantier 14 ── tenantOverride (fuite cross-tenant sous concurrence)
-2. Chantier 1  ── 292 tests (débloque la détection de régression)
-3. Chantier 13 ── handlers tier-aware (stoppe l'inondation DLQ sur _ref_/_demo_)
+1. Chantier 1  ── 292 tests (débloque la détection de régression)
+2. Chantier 13 ── handlers tier-aware (stoppe l'inondation DLQ sur _ref_/_demo_)
       ↓
 ── Rapides, valeur immédiate ──
-4. Chantier 5  ── log NF525 (5 min)
-5. Chantier 16 ── RBAC échec ouvert (15 min, phase 1 : warn seul)
-6. Chantier 12 ── sessions.md (2 min)
+3. Chantier 5  ── log NF525 (5 min)
+4. Chantier 12 ── sessions.md (2 min)
       ↓
 ── Fiabilité ──
-7. Chantier 15 ── emitDurable serveur (perte d'événements métier)
-8. Chantier 3  ── StockTransferHandler (cross-tenant, aggravé par le tiering)
-9. Chantier 4  ── événements orphelins prioritaires (allergènes, caisse, HACCP)
+5. Chantier 15 ── emitDurable serveur (perte d'événements métier)
+6. Chantier 3  ── StockTransferHandler (cross-tenant, aggravé par le tiering)
+7. Chantier 4  ── événements orphelins prioritaires (allergènes, caisse, HACCP)
       ↓
 ── Qualité ──
-10. Chantier 6  ── catch silencieux (passe mécanique)
-11. Chantier 7  ── WasteManagementHACCP
-12. Chantier 11 ── ICM TaskContext
+8. Chantier 6  ── catch silencieux (passe mécanique)
+9. Chantier 7  ── WasteManagementHACCP
+10. Chantier 11 ── ICM TaskContext
+11. Chantier 16 phase 2 ── RBAC refus par défaut (après relevé des warns en prod)
       ↓
 ── Décisions produit ──
-13. Chantier 2  ── 54 handlers (par domaine)
-14. Chantier 8  ── routes API
-15. Chantier 9  ── composants inutilisés (voir PLAN_IMPLEMENTATION_UI.md)
-16. Chantier 10 ── routes hors navigation
+12. Chantier 2  ── 54 handlers (par domaine)
+13. Chantier 8  ── routes API
+14. Chantier 9  ── composants inutilisés (voir PLAN_IMPLEMENTATION_UI.md)
+15. Chantier 10 ── routes hors navigation
 ```
 
 **Pourquoi 1 et 13 d'abord** : le chantier 1 rend les régressions détectables, le

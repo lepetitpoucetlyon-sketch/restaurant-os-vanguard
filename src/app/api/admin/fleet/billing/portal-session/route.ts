@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/fleet/billing/portal-session
  * Crée une Stripe Billing Portal Session pour un tenant.
@@ -9,7 +10,6 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";

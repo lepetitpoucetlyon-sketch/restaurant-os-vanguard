@@ -10,6 +10,8 @@ import { SearchInput } from "@components/ui/SearchInput";
 import { useProducts } from '@/modules/logistics';
 import { useCategories } from '@/modules/logistics';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { updateProductAction } from "@/shared/actions/settings.action";
+import { useTenant } from "@/shared/hooks";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
@@ -85,8 +87,7 @@ function MenuBuilderPage() {
         setSaving(true);
         try {
             const priceInMicrounits = toMicrounits(parseFloat(editForm.priceEuros) || 0);
-            const path = Nexus.getTenantPath(`products/${editingProduct.id}`);
-            await Nexus.adapter.update(path, {
+            await updateProductAction(editingProduct.tenantId || 'default', editingProduct.id, {
                 name: editForm.name,
                 priceInMicrounits,
                 taxRate: editForm.taxRate,

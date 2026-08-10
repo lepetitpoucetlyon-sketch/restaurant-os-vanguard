@@ -319,4 +319,15 @@ export interface OPSEvents {
     totalInMicrounits: number;
     printedAt: number;
   };
+  'floor.node.updated': { tenantId: string; id?: string; nodeId?: string; data: any };
+  'floor.node.created': { tenantId: string; id?: string; nodeId?: string; data: any };
+  'floor.node.deleted': { tenantId: string; id?: string; nodeId?: string };
+  'floor.zone.updated': { tenantId: string; id?: string; zoneId?: string; data: any };
+  'floor.zone.created': { tenantId: string; id?: string; zoneId?: string; data: any };
+  'floor.zone.deleted': { tenantId: string; id?: string; zoneId?: string };
+  'kitchen.order.updated': { tenantId: string; id?: string; orderId?: string; data: any };
+  'kitchen.recipe.updated': { tenantId: string; id?: string; recipeId?: string; data: any };
+  'kitchen.preptask.toggled': { tenantId: string; id?: string; taskId?: string; completed?: boolean; status?: string };
+  'kitchen.order.created': { tenantId: string; id?: string; orderId?: string; data: any };
+  'ops.prepTask.completed': { tenantId: string; id?: string; taskId?: string; dateIso?: string; data?: any };
 }

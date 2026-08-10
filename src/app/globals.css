@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./empire-design-system.css";
 
 @theme {
   /* ── ACTIONS ── */

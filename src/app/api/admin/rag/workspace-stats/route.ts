@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * RAG Stats Workspace + Purge Orphelins — mcc-ai-3
  *
@@ -11,7 +12,6 @@
  * Protégé : mcc_support pour GET, fleet_admin pour DELETE.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { LightRAGClient } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';

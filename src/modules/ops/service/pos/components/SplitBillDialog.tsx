@@ -35,20 +35,12 @@ export interface ConvivePayment {
     method?: PaymentMethod;
 }
 
-function createEqualPayments(count: number, total: number): ConvivePayment[] {
-    const baseAmount = Math.floor(total / count);
-    const remainder = total % count;
-    
-    return Array.from({ length: count }, (_, i) => ({ 
-        paid: false, 
-        amount: i < remainder ? baseAmount + 1 : baseAmount 
-    }));
-}
+import { SplitCalculator } from "../domain/splitCalculator";
 
 export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onPaySplit, onSplitComplete }: SplitBillDialogProps) {
     const [mode, setMode] = useState<SplitMode>('equal');
     const [splitCount, setSplitCount] = useState(coverCount || 2);
-    const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => createEqualPayments(coverCount || 2, total));
+    const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => SplitCalculator.createEqualPayments(coverCount || 2, total));
     const [selectedItems, setSelectedItems] = useState<Record<number, string[]>>({}); // conviveIndex -> cartIds
     const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(total / (coverCount || 2)));
     const [payingConvive, setPayingConvive] = useState<number | null>(null);
@@ -60,7 +52,7 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
 
     const syncSplitState = (nextSplitCount: number) => {
         setSplitCount(nextSplitCount);
-        setConvivePayments(createEqualPayments(nextSplitCount, total));
+        setConvivePayments(SplitCalculator.createEqualPayments(nextSplitCount, total));
         setCustomAmounts(Array(nextSplitCount).fill(total / nextSplitCount));
         setSelectedItems({});
         setPayingConvive(null);
@@ -78,16 +70,10 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
 
     const amountPerPerson = total / splitCount;
     const paidCount = convivePayments.filter(g => g.paid).length;
-    const remainingAmount = total - convivePayments.filter(g => g.paid).reduce((sum, g) => sum + g.amount, 0);
+    const remainingAmount = SplitCalculator.calculateRemainingAmount(total, convivePayments);
 
     const getConviveTotal = (conviveIndex: number): number => {
-        if (mode === 'equal') return amountPerPerson;
-        if (mode === 'custom') return customAmounts[conviveIndex] || 0;
-        // by-item mode
-        const conviveItems = selectedItems[conviveIndex] || [];
-        return items
-            .filter(item => conviveItems.includes(item.cartId))
-            .reduce((sum, item) => sum + Number(SovereignMath.multiply(item.unitPriceInMicrounits, item.quantity)), 0);
+        return SplitCalculator.getConviveTotal(mode, conviveIndex, amountPerPerson, customAmounts, selectedItems, items);
     };
 
     const handlePayConvive = (conviveIndex: number) => {

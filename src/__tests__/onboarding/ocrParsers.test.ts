@@ -3,18 +3,12 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // ─── Mock LLMManager ─────────────────────────────────────────────────────────
-const mockGenerateFromImage = vi.fn();
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+let mockGenerateFromImage: any;
 
-vi.mock('@/modules/intelligence/ia/ai/LLMManager', () => ({
-  LLMManager: {
-    provider: {
-      generateFromImage: mockGenerateFromImage,
-      generateText: vi.fn(),
-    },
-  },
-}));
 vi.mock('@/modules/intelligence/ia/ai/LLMProviderFactory', () => ({
   AI_MODELS: { visionFast: 'gemini-1.5-flash', fast: 'gemini-1.5-flash' },
 }));
@@ -44,7 +38,10 @@ describe('ocrPrompts', () => {
 
 // ─── imageParser ─────────────────────────────────────────────────────────────
 describe('imageParser', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+      vi.clearAllMocks();
+      mockGenerateFromImage = vi.spyOn(LLMManager.provider, 'generateFromImage');
+  });
 
   it('parse une image JPEG et retourne OcrResult avec parsed', async () => {
     const payload = { products: [{ name: 'Salade', category: 'Entrées', price: '9.50' }] };
@@ -85,7 +82,10 @@ describe('imageParser', () => {
 
 // ─── pdfParser ───────────────────────────────────────────────────────────────
 describe('pdfParser', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+      vi.clearAllMocks();
+      mockGenerateFromImage = vi.spyOn(LLMManager.provider, 'generateFromImage');
+  });
 
   it('extrait le texte natif si le PDF contient du texte lisible', async () => {
     // LLMManager ne doit PAS être appelé pour un PDF natif
@@ -131,7 +131,12 @@ describe('ImportSnapshotService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.doMock('@/lib/nexus/NexusAdapter', () => ({ Nexus: { adapter: mockAdapter } }));
+    vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockAdapter.get);
+    vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockAdapter.set);
+    vi.spyOn(Nexus.adapter, 'delete').mockImplementation(mockAdapter.delete);
+    vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockAdapter.query);
+    vi.spyOn(Nexus.adapter, 'generateId').mockImplementation(mockAdapter.generateId);
+    vi.spyOn(Nexus.adapter, 'batch').mockImplementation(mockAdapter.batch);
   });
 
   it('take() sauvegarde un snapshot et retourne son id', async () => {

@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * 1-Click Tenant Restore — mcc-support-ai-3
  *
@@ -16,7 +17,6 @@
  * Protégé : fleet_admin. NF525 : journalEntries et fiscalSeals ne sont PAS restaurés.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

@@ -24,13 +24,13 @@ import { logger } from '@/lib/logger';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { PulseSanitizer } from './PulseSanitizer';
-import { sovereignQuery, sovereignIngest, sovereignHealth } from './SovereignRAGClient';
-import type { RAGHealthResult } from './SovereignRAGClient';
+import * as RAGClient from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
+import type { RAGHealthResult } from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
-import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
+import type { LightRAGQueryMode, LightRAGConfig } from '@/modules/intelligence/knowledge/rag/LightRAGConfig';
 
-import { documentToText, resolveQueryMode, hashTenantId } from './subservices/documentHelpers';
+import { documentToText, resolveQueryMode, hashTenantId } from '@/modules/intelligence/knowledge/rag/subservices/documentHelpers';
 import type {
     KnowledgeQuery,
     KnowledgeAnswer,
@@ -65,12 +65,12 @@ export class HermesKnowledgeManager {
     // ============================================
 
     async isReady(): Promise<boolean> {
-        const health = await sovereignHealth();
+        const health = await RAGClient.sovereignHealth();
         return health.status === 'online';
     }
 
     async getHealth(): Promise<RAGHealthResult> {
-        return sovereignHealth();
+        return RAGClient.sovereignHealth();
     }
 
     // ============================================
@@ -98,7 +98,7 @@ export class HermesKnowledgeManager {
                 if (!text) { failed++; continue; }
 
                 const fileName = `${collectionType}_${doc.id ?? Date.now()}.txt`;
-                    await sovereignIngest({
+                    await RAGClient.sovereignIngest({
                     workspaceId: this.tenantId,
                     fileName,
                     fileContent: new Blob([text], { type: 'text/plain' }),
@@ -138,7 +138,7 @@ export class HermesKnowledgeManager {
 
     async indexText(text: string, id?: string): Promise<boolean> {
         try {
-            await sovereignIngest({
+            await RAGClient.sovereignIngest({
                 workspaceId: this.tenantId,
                 fileName: `text_${id ?? Date.now()}.txt`,
                 fileContent: new Blob([text], { type: 'text/plain' }),
@@ -159,7 +159,7 @@ export class HermesKnowledgeManager {
 
         try {
             logger.info(`[HermesKnowledge] Starting media ingestion for ${metadata.fileName} [${metadata.type}]`);
-            await sovereignIngest({
+            await RAGClient.sovereignIngest({
                 workspaceId: this.tenantId,
                 fileName: metadata.fileName,
                 fileContent: fileBlob,
@@ -218,7 +218,7 @@ export class HermesKnowledgeManager {
         const startTime = Date.now();
 
         try {
-            const response = await sovereignQuery(query.question, {
+            const response = await RAGClient.sovereignQuery(query.question, {
                 workspaceId: this.tenantId,
                 role,
             });
@@ -260,7 +260,7 @@ export class HermesKnowledgeManager {
 
     /** Retrieves raw context (no LLM) for prompt injection. */
     async getContext(question: string, role: PermissionRole = 'serveur'): Promise<string> {
-        const result = await sovereignQuery(question, {
+        const result = await RAGClient.sovereignQuery(question, {
             workspaceId: this.tenantId,
             role,
             skipMacroRouting: true,

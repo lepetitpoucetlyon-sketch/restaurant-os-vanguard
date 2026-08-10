@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * POST /api/admin/mdm/erase
  * Efface un appareil via Mosyle MDM (IRRÉVERSIBLE).
@@ -7,7 +8,6 @@
  * La confirmation textuelle côté serveur empêche les appels accidentels/automatisés.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient } from '@/lib/MosyleClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
@@ -18,6 +18,8 @@ const REQUIRED_CONFIRMATION = 'ERASE CONFIRMED';
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');
   if (isDenied(caller)) return caller as NextResponse;
+
+  const uid = caller.uid;
 
   const { serialNumber, confirmation } = await req.json() as {
     serialNumber?: string;
@@ -42,7 +44,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   await MosyleClient.eraseDevice(serialNumber);
 
-  const uid = (caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid;
 
   // P12-I: Audit trail for device erase
   empireAudit.log({

@@ -1,10 +1,10 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/admin/fleet/tenant-users?tenantId=xxx
  * Liste les utilisateurs d'un tenant donné pour la vue MCC.
  * Protégé : mcc_support minimum.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import type { User } from '@/modules/human';

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { Loader2, Globe, WifiOff } from 'lucide-react';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TableSchema } from '@/modules/ops';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { toggleOnlineBookingAction } from '../../actions/marketing.action';
 
 type Table = z.infer<typeof TableSchema> & { onlineBookable?: boolean };
 
@@ -22,26 +22,21 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
     let cancelled = false;
     setLoading(true);
 
-    const unsubscribe = Nexus.adapter.onSnapshot<Table>(
-      'tables',
-      (data) => {
-        if (cancelled) return;
-        // onSnapshot for a collection returns array via options, but here we use query
-        // Fallback: handle both array and single doc
-        if (Array.isArray(data)) {
-          setTables(data);
+    const loadTables = async () => {
+        try {
+            const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+            const path = tenantId ? `tenants/${tenantId}/tables` : 'tables';
+            const data = await Nexus.adapter.query<Table>(path);
+            if (!cancelled) {
+                setTables(data);
+                setLoading(false);
+            }
+        } catch {
+            if (!cancelled) setLoading(false);
         }
-        setLoading(false);
-      },
-      {
-        onError: () => {
-          if (!cancelled) setLoading(false);
-        },
-      },
-      { vassalId: tenantId, actorId: 'system' }
-    );
+    };
+    loadTables();
 
-    // onSnapshot fires immediately with cached data — no fallback query needed.
     // Timeout safety: if onSnapshot hasn't fired after 5s, clear loading.
     const safetyTimeout = setTimeout(() => {
       if (!cancelled && loading) setLoading(false);
@@ -50,7 +45,6 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
     return () => {
       cancelled = true;
       clearTimeout(safetyTimeout);
-      if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [tenantId]);
 
@@ -58,11 +52,7 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
     const next = !table.onlineBookable;
     setUpdating(table.id);
     try {
-      await Nexus.adapter.update(
-        `tables/${table.id}`,
-        { onlineBookable: next, updatedAt: Date.now() },
-        { vassalId: tenantId, actorId: 'system' }
-      );
+      await toggleOnlineBookingAction(tenantId, table.id, next);
       setTables((prev) =>
         prev.map((t) => (t.id === table.id ? { ...t, onlineBookable: next } : t))
       );

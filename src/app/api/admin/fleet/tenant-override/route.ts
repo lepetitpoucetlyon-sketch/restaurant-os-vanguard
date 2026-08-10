@@ -1,3 +1,4 @@
+import { requireFleetAdmin, requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * Tenant Override — MCC granular per-tenant config patches.
  *
@@ -15,7 +16,6 @@
  * Protégé : fleet_admin.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';

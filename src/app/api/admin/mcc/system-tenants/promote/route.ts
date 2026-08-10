@@ -13,6 +13,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { toError } from "@/lib/toError";
+import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
 const BodySchema = z.object({
     variant:     PlatformVariantSchema,
@@ -20,6 +21,9 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+    const caller = await requireFleetAdmin(req);
+    if (isDenied(caller)) return caller;
+
     // MCC-only — vérifié par le middleware (APP_MODE=mcc)
     ensureServerNexus();
 

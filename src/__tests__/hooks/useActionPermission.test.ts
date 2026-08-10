@@ -1,63 +1,67 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-vi.mock('@/shared/providers/NexusCoreContext', () => ({
-  useAuth: vi.fn(),
-}));
+import React from 'react';
 
 import { useActionPermission } from '@/shared/hooks/useActionPermission';
-import { useAuth } from '@/shared/providers/NexusCoreContext';
-
-const mockUseAuth = useAuth as ReturnType<typeof vi.fn>;
+import { NexusCoreContext } from '@/shared/providers/NexusCoreContext';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 describe('useActionPermission', () => {
+  const getWrapper = (role: PermissionRole | null) => {
+    return ({ children }: { children: React.ReactNode }) => (
+      React.createElement(NexusCoreContext.Provider, {
+        value: {
+          auth: { currentUser: role ? { role } : null, verifyPermissionAction: vi.fn() } as any,
+          settings: {} as any,
+          notif: {} as any,
+          lang: 'fr'
+        } as any
+      }, children)
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('allows access to unknown actions', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'serveur' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'unknown_action'));
+    const { result } = renderHook(() => useActionPermission('pos', 'unknown_action'), { wrapper: getWrapper('serveur') });
     expect(result.current.allowed).toBe(true);
   });
 
   it('denies access if user is not authenticated', () => {
-    mockUseAuth.mockReturnValue({ currentUser: null });
-    const { result } = renderHook(() => useActionPermission('pos', 'refund'));
+    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper(null) });
     expect(result.current.allowed).toBe(false);
     expect(result.current.reason).toContain('authentifié');
   });
 
   it('allows manager to refund (requiresPin = true)', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'manager' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'refund'));
+    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper('manager') });
     expect(result.current.allowed).toBe(true);
     expect(result.current.requiresPin).toBe(true);
   });
 
   it('denies serveur to refund', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'serveur' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'refund'));
+    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper('serveur') });
     expect(result.current.allowed).toBe(false);
     expect(result.current.reason).toContain('Niveau insuffisant');
   });
 
   it('allows chef_rang to apply discount (requiresPin = false)', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'chef_rang' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'apply_discount_percent'));
+    const { result } = renderHook(() => useActionPermission('pos', 'apply_discount_percent'), { wrapper: getWrapper('chef_rang') });
     expect(result.current.allowed).toBe(true);
     expect(result.current.requiresPin).toBe(false);
   });
 
   it('denies serveur to apply discount', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'serveur' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'apply_discount_percent'));
+    const { result } = renderHook(() => useActionPermission('pos', 'apply_discount_percent'), { wrapper: getWrapper('serveur') });
     expect(result.current.allowed).toBe(false);
+    expect(result.current.reason).toContain('Niveau insuffisant');
   });
 
   it('allows super_admin to do manager actions', () => {
-    mockUseAuth.mockReturnValue({ currentUser: { role: 'super_admin' } });
-    const { result } = renderHook(() => useActionPermission('pos', 'refund'));
+    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper('super_admin') });
     expect(result.current.allowed).toBe(true);
+    expect(result.current.requiresPin).toBe(true);
   });
 });
