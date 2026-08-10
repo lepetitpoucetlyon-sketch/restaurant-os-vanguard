@@ -23,11 +23,11 @@ Structure canonique : `src/modules/<pilier>/<domaine>/<module>/` — l'infrastru
 | Pilier | Domaines | Modules principaux |
 |--------|----------|-------------------|
 | **ops** | `service/` · `production/` · `workflow/` | service: pos, bar, printers, frontdesk · production: kds, kitchen, recipes · workflow: engine |
-| **commerce** | `acquisition/` · `relation/` · `fidelite/` | acquisition: marketing, seo, landing · relation: reservations, crm, customers, delivery · fidelite: loyalty, quotes, widgets |
+| **commerce** | `catalog/` · `acquisition/` · `relation/` · `fidelite/` | catalog: products, menus · acquisition: marketing, seo, landing · relation: reservations, crm, customers, delivery · fidelite: loyalty, quotes, widgets |
 | **finance** | `comptabilite/` · `tresorerie/` · `fiscalite/` | comptabilite: accounting, billing, fec, documents, analytics · tresorerie: banking, payout, collection, ap · fiscalite: tax |
 | **compliance** | `qualite/` · `securite/` · `reglementaire/` | qualite: haccp, iot, recall, donation, calendar · securite: audit · reglementaire: rgpd |
 | **human** | `effectifs/` · `remuneration/` | effectifs: hr · remuneration: payroll |
-| **logistics** | `stock/` · `approvisionnement/` | stock: inventory · approvisionnement: reception, procurement |
+| **logistics** | `stock/` · `approvisionnement/` · `fleet/` · `dispatch/` | stock: inventory · approvisionnement: reception, procurement · fleet: vehicles, drivers · dispatch: routing |
 | **intelligence** | `analytique/` · `ia/` · `knowledge/` | analytique: analytics, reports, attendance, anomaly · ia: ai, agency, fleet, simulator, resilience, tools · knowledge: rag |
 | **facility** | `spaces/` · `maintenance/` · `assets/` | spaces: floor-plan, settings · maintenance: registre |
 
