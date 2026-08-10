@@ -3,7 +3,7 @@ export * from './workflow/engine';
 export type { Order, OrderItem } from './workflow/engine';
 export { OperationsDashboard } from './workflow/engine/components/OperationsDashboard';
 
-// Domaine : service (POS, bar, frontdesk, printers)
+// Domaine : service (POS, bar, front-desk, printers)
 export * from './service/pos';
 export { usePOSController } from './service/pos/hooks/usePos';
 
