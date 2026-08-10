@@ -14,7 +14,11 @@ export { IoTSensorService } from './qualite/haccp/iot';
 
 // Domaine : securite (audit)
 export { AuditService, auditService } from './securite/audit/AuditService';
-
+export { AuditLogger } from './securite/AuditLogger';
+export { ImmunityAuditLogger } from './securite/ImmunityAuditLogger';
+export { DocumentVault } from './securite/DocumentVault';
+export { ElevationPrompt } from './securite/audit/ElevationPrompt';
+export { OverrideLogView } from './securite/audit/OverrideLogView';
 // Domaine : reglementaire (RGPD)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
 
@@ -29,6 +33,7 @@ export { CleaningPlan } from './qualite/haccp/components/CleaningPlan';
 export { DLCTracker } from './qualite/haccp/components/DLCTracker';
 export { NonConformityForm } from './qualite/haccp/components/NonConformityForm';
 export { HACCPSyncService } from './qualite/haccp/haccp.sync';
+export { HACCPTelemetryBridge } from './qualite/haccp/services/HACCPTelemetryBridge';
 export { PlanMaitriseSanitaire } from './qualite/haccp/services/PlanMaitriseSanitaire';
 export { qualityActiveControlAtom } from './qualite/haccp/store/qualityAtoms';
 export { wasteLogsNodeAtom, wasteLogsAtom } from './qualite/haccp/store';
