@@ -5,7 +5,7 @@ import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";
-import { verifySession } from "@/lib/server/verifySession";
+import { requireSession } from "@/lib/server/verifySession";
 import { toError } from "@/lib/toError";
 
 export async function processVoidOrRefundAction(
@@ -17,7 +17,7 @@ export async function processVoidOrRefundAction(
     reason: string
 ) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         
         const entryId       = IdGenerator.generateWithPrefix("JE");
         const now           = new Date().toISOString();

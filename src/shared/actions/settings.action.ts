@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function updateTenantSettingsAction(tenantId: string, section: string, settings: Record<string, unknown> | object) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
 
         await NexusEventBus.emitDurable('system.settings.updated', {
             v: 1,
@@ -24,7 +24,7 @@ export async function updateTenantSettingsAction(tenantId: string, section: stri
 
 export async function updateProductAction(tenantId: string, productId: string, productData: Record<string, unknown> | object) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
 
         await NexusEventBus.emitDurable('system.settings.updated', {
             v: 1,

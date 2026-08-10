@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function respondToModificationAction(tenantId: string, orderId: string, itemId: string, approved: boolean, responder: string, note?: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         const data = {
             [`items.${itemId}.modification.approved`]: approved,
             [`items.${itemId}.modification.respondedBy`]: responder,
@@ -22,7 +22,7 @@ export async function respondToModificationAction(tenantId: string, orderId: str
 
 export async function updateRecipeAction(tenantId: string, id: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kitchen.recipe.updated', { tenantId, id, data });
         return { success: true };
     } catch (err) {
@@ -32,7 +32,7 @@ export async function updateRecipeAction(tenantId: string, id: string, data: any
 
 export async function togglePrepTaskAction(tenantId: string, id: string, newStatus: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kitchen.preptask.toggled', { tenantId, id, status: newStatus });
         return { success: true };
     } catch (err) {
@@ -42,7 +42,7 @@ export async function togglePrepTaskAction(tenantId: string, id: string, newStat
 
 export async function submitOrderAction(tenantId: string, sanitizedOrder: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kitchen.order.created', { tenantId, data: sanitizedOrder });
         return { success: true };
     } catch (err) {
@@ -52,7 +52,7 @@ export async function submitOrderAction(tenantId: string, sanitizedOrder: any) {
 
 export async function updateOrderStatusAction(tenantId: string, id: string, status: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         const data = {
             status,
             attributes: { status },
@@ -67,7 +67,7 @@ export async function updateOrderStatusAction(tenantId: string, id: string, stat
 
 export async function updateDailyPrepListAction(tenantId: string, dateIso: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('ops.prepTask.completed', { tenantId, dateIso, data });
         return { success: true };
     } catch (err) {
@@ -77,7 +77,7 @@ export async function updateDailyPrepListAction(tenantId: string, dateIso: strin
 
 export async function fireNextCourseAction(tenantId: string, orderId: string, course: number, firedBy: string, stationId?: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kds.fire_next_course', {
             v: 1,
             tenantId,
@@ -95,7 +95,7 @@ export async function fireNextCourseAction(tenantId: string, orderId: string, co
 
 export async function markItemDoneAction(tenantId: string, orderId: string, itemId: string, operatorId?: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kds.item_done', {
             v: 1,
             tenantId,
@@ -118,7 +118,7 @@ export async function reboundDishAction(
     reason: 'client_refusal' | 'quality' | 'allergen' | 'other' = 'other'
 ) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('kds.dish_rebound', {
             v: 1,
             tenantId,

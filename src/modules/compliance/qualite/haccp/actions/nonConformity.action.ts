@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function saveNonConformity(tenantId: string, payload: Record<string, unknown>) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
 
         await NexusEventBus.emitDurable('haccp.nonconformity.saved', {
             v: 1,
@@ -23,7 +23,7 @@ export async function saveNonConformity(tenantId: string, payload: Record<string
 
 export async function resolveNonConformity(tenantId: string, id: string, payload: Record<string, unknown>) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
 
         await NexusEventBus.emitDurable('haccp.nonconformity.resolved', {
             v: 1,

@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function signCleaningTaskAction(tenantId: string, record: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('haccp.cleaning.completed', { tenantId, id: record.id, data: record });
         return { success: true };
     } catch (err) {
@@ -25,7 +25,7 @@ export async function logCoolingCycleAction(
     operatorId: string
 ) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         // Reglementation HCR : refroidissement de +63°C a +10°C en moins de 120 min (2h)
         const compliant = startTempCelsius >= 63 && endTempCelsius <= 10 && durationMinutes <= 120;
         await NexusEventBus.emitDurable('haccp.cooling_cycle_logged', {

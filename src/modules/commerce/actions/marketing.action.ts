@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
@@ -9,7 +9,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export async function createPromoCodeAction(tenantId: string, promoCodeData: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         
         const id = promoCodeData.id || Nexus.adapter.generateId('promoCodes');
         const dataWithId = { ...promoCodeData, id };
@@ -34,7 +34,7 @@ export async function createPromoCodeAction(tenantId: string, promoCodeData: any
 
 export async function updatePromoCodeAction(tenantId: string, promoCodeId: string, promoCodeData: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('marketing.promocode.updated', { tenantId, id: promoCodeId, data: promoCodeData });
 
         if (promoCodeData.isActive !== undefined) {
@@ -61,7 +61,7 @@ export async function updatePromoCodeAction(tenantId: string, promoCodeId: strin
 
 export async function issueLoyaltyCardAction(tenantId: string, customerId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         
         const id = data.id || Nexus.adapter.generateId('loyaltyRewards');
         const dataWithId = { ...data, id };
@@ -75,7 +75,7 @@ export async function issueLoyaltyCardAction(tenantId: string, customerId: strin
 
 export async function updateLoyaltyCardAction(tenantId: string, customerId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('marketing.loyaltycard.updated', { tenantId, customerId, data });
         return { success: true };
     } catch (err) {
@@ -85,7 +85,7 @@ export async function updateLoyaltyCardAction(tenantId: string, customerId: stri
 
 export async function createCustomerAction(tenantId: string, customerId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('crm.customer.created', { tenantId, id: customerId, data });
         return { success: true };
     } catch (err) {
@@ -95,7 +95,7 @@ export async function createCustomerAction(tenantId: string, customerId: string,
 
 export async function updateCustomerAction(tenantId: string, customerId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('crm.customer.updated', { tenantId, id: customerId, data });
         return { success: true };
     } catch (err) {
@@ -105,7 +105,7 @@ export async function updateCustomerAction(tenantId: string, customerId: string,
 
 export async function toggleOnlineBookingAction(tenantId: string, tableId: string, enabled: boolean) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('marketing.booking.toggled', { tenantId, id: tableId, enabled });
         return { success: true };
     } catch (err) {

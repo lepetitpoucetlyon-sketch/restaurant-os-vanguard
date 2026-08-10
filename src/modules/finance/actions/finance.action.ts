@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function dispatchPaymentAction(tenantId: string, batchId: string, invoiceIds: string[], totalAmount: number) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         await NexusEventBus.emitDurable('finance.payment_dispatched', {
             v: 1,
             tenantId,

@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from '@/lib/toError';
@@ -9,7 +9,7 @@ import { SharedKernel } from '@/lib/shared-kernel';
 
 export async function submitTimeclockAction(action: ClockAction, data: TimeclockPayload) {
     try {
-        await verifySession(data.tenantId);
+        await requireSession(data.tenantId);
 
         const result = processTimeclockAction(action, data, () => SharedKernel.generateId('sc'));
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerAuthProvider, DecodedAuthToken } from '@/lib/auth/ServerAuthProvider';
 import { headers } from 'next/headers';
-
+import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 export async function verifySession(requestOrTenant?: NextRequest | Request | string): Promise<DecodedAuthToken | null> {
     let authHeader: string | null = null;
     
@@ -29,6 +29,22 @@ export async function verifySession(requestOrTenant?: NextRequest | Request | st
         console.error('[verifySession] Invalid token:', error);
         return null;
     }
+}
+
+/**
+ * Variante fail-closed : lève si la session est invalide.
+ * À utiliser dans toute Server Action. `verifySession` (nullable) reste
+ * disponible pour les routes API qui gèrent elles-mêmes la réponse 401.
+ */
+export async function requireSession(tenantId: string, request?: NextRequest | Request): Promise<DecodedAuthToken> {
+    const decoded = await verifySession(request);
+    if (!decoded) {
+        throw new NexusError(NexusErrorCode.ACCESS_DENIED, 'Session invalide ou expirée');
+    }
+    if (decoded.tenantId && decoded.tenantId !== tenantId) {
+        throw new NexusError(NexusErrorCode.ACCESS_DENIED, 'Jeton émis pour un autre tenant');
+    }
+    return decoded;
 }
 
 export function unauthorizedResponse() {

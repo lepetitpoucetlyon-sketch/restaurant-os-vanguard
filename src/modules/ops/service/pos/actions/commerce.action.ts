@@ -1,12 +1,12 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function markReservationArrivedAction(tenantId: string, reservationId: string) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         const data = {
             status: 'arrived',
             arrivedAt: new Date().toISOString(),
@@ -21,7 +21,7 @@ export async function markReservationArrivedAction(tenantId: string, reservation
 
 export async function upsertCampaignAction(tenantId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         if (data.id) {
             await NexusEventBus.emitDurable('commerce.campaign.updated', { tenantId, id: data.id, data });
         } else {
@@ -35,7 +35,7 @@ export async function upsertCampaignAction(tenantId: string, data: any) {
 
 export async function upsertPostAction(tenantId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         if (data.id) {
             await NexusEventBus.emitDurable('commerce.post.updated', { tenantId, id: data.id, data });
         } else {
@@ -49,7 +49,7 @@ export async function upsertPostAction(tenantId: string, data: any) {
 
 export async function upsertCustomerAction(tenantId: string, data: any) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         if (data.id) {
             await NexusEventBus.emitDurable('commerce.customer.updated', { tenantId, id: data.id, data });
         } else {

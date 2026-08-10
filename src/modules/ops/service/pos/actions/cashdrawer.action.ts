@@ -2,13 +2,13 @@
 
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
-import { verifySession } from "@/lib/server/verifySession";
+import { requireSession } from "@/lib/server/verifySession";
 import { toError } from "@/lib/toError";
 import type { CashDrawerSession } from "../components/CashDrawerModal";
 
 export async function openCashDrawerAction(tenantId: string, userId: string, openingInMicrounits: number) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         
         const sessionId = IdGenerator.generateWithPrefix("cds");
         const newSession: CashDrawerSession = {
@@ -39,7 +39,7 @@ export async function closeCashDrawerAction(
     changeGivenInMicrounits: number
 ) {
     try {
-        await verifySession(tenantId);
+        await requireSession(tenantId);
         
         const path = `tenants/${tenantId}/cashDrawerSessions/${session.id}`;
         const batch = Nexus.adapter.batch();

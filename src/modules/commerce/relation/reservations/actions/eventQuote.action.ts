@@ -1,13 +1,13 @@
 "use server";
 
-import { verifySession } from '@/lib/server/verifySession';
+import { requireSession } from '@/lib/server/verifySession';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
 export async function saveEventQuoteDraft(tenantId: string, quoteId: string, payload: Record<string, unknown>) {
     try {
         // Validation de sécurité (SovereignGuard)
-        await verifySession(tenantId);
+        await requireSession(tenantId);
 
         // Au lieu d'écrire directement dans NexusAdapter, on émet un événement métier
         // Le ServerEventBus et l'Outbox vont s'occuper de traiter cela de façon sécurisée
