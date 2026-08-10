@@ -3,7 +3,7 @@ import { UserSchema } from '@/modules/human';
 import { OrderSchema } from '@/modules/ops';
 import { StockItemSchema } from '@/modules/ops';
 import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@/modules/ops';
-import { ModuleSchema } from '@/modules/system';
+import { ModuleSchema } from '@nexus/contracts';
 import { 
   JournalEntrySchema, 
   AccountSchema, 

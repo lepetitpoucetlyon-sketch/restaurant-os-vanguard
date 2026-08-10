@@ -17,7 +17,7 @@ import { TipDistributionService } from '../../effectifs/hr/services/tipDistribut
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 import { resolveCollectiveAgreement } from '../../conventions';
 import {
     MU_TO_EUR,

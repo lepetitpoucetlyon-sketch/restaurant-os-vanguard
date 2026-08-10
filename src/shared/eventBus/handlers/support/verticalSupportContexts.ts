@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 
 export interface VerticalSupportContext {
   /** Nom du produit affiché dans le system prompt */

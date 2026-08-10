@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import type { IVerticalPlugin } from './IVerticalPlugin';
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 
 type VerticalFactory = () => IVerticalPlugin;
 

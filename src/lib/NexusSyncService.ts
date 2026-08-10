@@ -105,7 +105,7 @@ export const NexusSyncService = {
                 const tenantConfig = await Nexus.adapter.get<{ variant?: string }>(
                     `tenants/${tenantId}/config/main`
                 );
-                const variant = (tenantConfig?.variant ?? 'restaurant') as import('@/modules/system/domain/schemas/tenant').PlatformVariant;
+                const variant = (tenantConfig?.variant ?? 'restaurant') as import('@nexus/contracts').PlatformVariant;
                 const vertical = VerticalRegistry.resolve(variant);
                 await vertical.initialize(new CoreContext());
                 logger.info(`[NexusSyncService] Vertical "${variant}" initialisée pour le tenant ${tenantId}`);

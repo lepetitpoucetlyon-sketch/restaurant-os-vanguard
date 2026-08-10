@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TenantConfigSchema } from '@/modules/system';
+import { TenantConfigSchema } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { JsonObject } from "@/shared/types/json";

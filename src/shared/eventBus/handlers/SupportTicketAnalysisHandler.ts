@@ -6,7 +6,7 @@ import { GeminiProvider } from '@/modules/intelligence/ia/GeminiProvider';
  
 import { AI_MODELS } from '@/modules/intelligence/ia/ai';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
-import { TenantConfigSchema } from '@/modules/system';
+import { TenantConfigSchema } from '@nexus/contracts';
 import { SupportDraftSchema } from '@/shared/schemas';
 import { toError } from "@/lib/toError";
 

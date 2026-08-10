@@ -5,7 +5,7 @@ import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from 
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';

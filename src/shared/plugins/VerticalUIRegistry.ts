@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 import type { IVerticalUIPlugin } from './IVerticalUIPlugin';
 
 const registry = new Map<PlatformVariant, IVerticalUIPlugin>();

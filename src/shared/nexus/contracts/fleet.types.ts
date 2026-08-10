@@ -166,7 +166,7 @@ export interface ProvisioningDNA {
     name: string;
     key: string;
     ownerEmail: string;
-    variant?: import('@/modules/system').PlatformVariant;
+    variant?: import('@nexus/contracts').PlatformVariant;
     initialPrimaryColor?: string;
     tier?: 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'EMPIRE-LIMITLESS';
     copyBaseTemplates?: boolean;

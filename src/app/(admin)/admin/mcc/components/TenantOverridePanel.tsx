@@ -6,7 +6,7 @@ import { Sliders, Bug, CheckCircle2, AlertCircle, ChevronDown, RotateCcw, Sparkl
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence';
-import type { TenantOverrides } from '@/modules/system';
+import type { TenantOverrides } from '@nexus/contracts';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 
 const BUTTON_RADIUS_PRESETS = [

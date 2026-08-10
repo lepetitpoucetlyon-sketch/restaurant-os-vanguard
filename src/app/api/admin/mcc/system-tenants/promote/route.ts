@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
-import { PlatformVariantSchema } from '@/modules/system';
+import { PlatformVariantSchema } from '@nexus/contracts';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';

@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 import type { BrandConfig } from '../brand';
 
 export { restaurantDefaultTokens, restaurantVerticalTokens, restaurantDefaultAppearance } from './restaurant';

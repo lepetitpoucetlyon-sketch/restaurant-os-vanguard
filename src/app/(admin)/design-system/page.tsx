@@ -8,7 +8,7 @@ import { StatCard, StatsGrid } from '@/shared/components/ui/StatCard';
 import { StatusBadge } from '@/shared/components/ui/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import GlassCard from '@/shared/components/ui/GlassCard';
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 import { cn } from '@/lib/ui.foundations';
 import { Users, ShoppingCart, DollarSign, Star, Clock, Package, Heart } from 'lucide-react';
 
