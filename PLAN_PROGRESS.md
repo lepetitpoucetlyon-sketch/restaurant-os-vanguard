@@ -9,7 +9,7 @@
 | Métrique | Départ | Actuel | Cible |
 |----------|--------|--------|-------|
 | Erreurs TSC | 12 | **0** ✅ | 0 |
-| Tests | 784 pass / 2 fail | **803 pass / 2 expected fail / 1 skip** ✅ | vert |
+| Tests | 784 pass / 2 fail | **805 pass / 1 skip** ✅ | vert |
 | Fichiers de test | — | **96 pass / 1 skip (97)** | — |
 | Erreurs ESLint | ~502 | **365** (+114 warnings) | 0 |
 | Sentrux | 3 violations | **3 violations** | 0 |
@@ -137,9 +137,42 @@ Le commit `38650ab0c` « Complete Phase 3 » a été **reverté** (`d3703b37a`).
 
 ---
 
+---
+
+## Phase 7 — Interopérabilité et facturation
+
+| # | Tâche | Statut | Vérification | Commit |
+|---|-------|--------|--------------|--------|
+| 7.4 | **Pourboire câblé** | ✅ | invariant vert, TVA inchangée | `6dcb3ab80` |
+
+### ✅ 7.4 — détail
+
+Chaîne rétablie de bout en bout :
+`usePos.finalizePayment` → `processPayment` → `BridgePayload.tipInMicrounits` →
+`buildJournalLines` (crédit **708500** hors TVA + débit moyen de paiement) →
+émission `hr.tip_distributed` → `TipDistributedHandler` reverse au personnel.
+
+- Le pourboire n'entre ni dans `TaxCalculator.calculateTotals` ni dans
+  `computeTtcByRateAndAxis` → **TVA collectée strictement inchangée**
+- `Σ débits = Σ crédits = montant réellement encaissé`
+- `TipDistributedHandler` existait déjà mais n'était appelé depuis nulle part
+
+**Invariant `money-conservation.pbt.test.ts`** — `.fails` retiré, 2 défauts corrigés :
+- le test lisait `priceInMicrounits`, inexistant sur `CartItem` (le bridge lit
+  `unitPriceInMicrounits`) → produisait `NaN`
+- prix non alignés au centime → écarts d'arrondi parasites
+- **2e invariant ajouté** : même panier, pourboires différents → TVA identique
+
+**Reste sur §7.4** (non bloquant) :
+- [ ] Facture > 150 € HT : pourboire en pied de document, hors TVA
+- [ ] Split : faire suivre le pourboire à la part du payeur qui l'a donné
+      (aujourd'hui rattaché au `paymentMode` global)
+- [ ] Politique de tip-pooling : `staffIds` vaut `[operatorId]` par défaut
+
+---
+
 ## Prochaine étape recommandée
 
-1. **§7.4 — câbler le pourboire** : l'invariant est en place et prouve le bug.
-   Retirer `.fails` une fois corrigé.
-2. **§0.5 — appliquer le repli** pour que le gate cesse de flaguer les aggregation roots.
-3. **§3.0 puis 3.1** — reprendre la Phase 3 proprement, un pilier à la fois.
+1. ~~**§7.4 — câbler le pourboire**~~ ✅ fait
+2. **§0.5 — appliquer le repli** pour que le gate cesse de flaguer les aggregation roots
+3. **§3.0 puis 3.1** — reprendre la Phase 3 proprement, un pilier à la fois
