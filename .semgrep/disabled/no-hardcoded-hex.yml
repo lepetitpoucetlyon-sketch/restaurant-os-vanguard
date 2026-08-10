@@ -1,9 +1,0 @@
-rules:
-  - id: no-hardcoded-hex
-    languages: [typescript]
-    severity: WARNING
-    message: "Aucun hex en dur dans modules/**/*.tsx"
-    pattern-regex: '#[0-9a-fA-F]{3,6}\b'
-    paths:
-      include:
-        - "src/modules/**/*.tsx"

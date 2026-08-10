@@ -1,5 +1,5 @@
 import type React from 'react';
-import type {  PlatformVariant  } from '@/bootstrap/legacy';;
+import type { PlatformVariant } from '@/modules/system';
 
 // ── Slots surchargeables ──────────────────────────────────────────────────────
 

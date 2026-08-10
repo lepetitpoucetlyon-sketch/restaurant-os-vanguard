@@ -7,8 +7,8 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { MergePayrollClient } from '@/src/modules/human/remuneration/payroll/MergePayrollClient';;
-import { PrepaieBuilder } from '@/src/modules/human/remuneration/payroll/PrepaieBuilder';;
+import { MergePayrollClient } from '@/modules/human';
+import { PrepaieBuilder } from '@/modules/human';
 import type { PayrollProviderConfig } from '@/modules/human';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

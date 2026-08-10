@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Percent, Tag, Gift, Trash2, X, Check, MessageSquare, Store, ShoppingBag, PackageOpen } from "lucide-react";
 import type { ConsumptionMode } from "@/modules/ops";
 import { cn } from "@/lib/ui.foundations";
-import type { CartItem } from "@/shared/nexus/contracts/ops.engine.types";
+import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import type { PendingAction } from "../_hooks/useRbacGate";
 
 const DISCOUNT_PRESETS = [5, 10, 15] as const;

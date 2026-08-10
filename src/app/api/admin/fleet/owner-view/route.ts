@@ -13,7 +13,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { fleetTelemetry } from '@/src/modules/intelligence/ia/fleet/FleetTelemetryService';;
+import { fleetTelemetry } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import type { SiteTelemetry } from '@/shared/nexus/contracts/fleet.types';
 

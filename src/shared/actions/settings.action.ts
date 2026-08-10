@@ -3,11 +3,11 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
+import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
 export const updateTenantSettingsAction = createSafeAction(
-    z.tuple([z.string(), z.custom<unknown>(() => true)]),
+    z.tuple([z.string(), z.unknown()]),
     { page: "settings", action: "modify_identity" },
     async (tenantId, section: string, settings: Record<string, unknown> | object) => {
         try {
@@ -26,7 +26,7 @@ export const updateTenantSettingsAction = createSafeAction(
 );
 
 export const updateProductAction = createSafeAction(
-    z.tuple([z.string(), z.custom<unknown>(() => true)]),
+    z.tuple([z.string(), z.unknown()]),
     { page: "menu_builder", action: "edit_name" },
     async (tenantId, productId: string, productData: Record<string, unknown> | object) => {
         try {

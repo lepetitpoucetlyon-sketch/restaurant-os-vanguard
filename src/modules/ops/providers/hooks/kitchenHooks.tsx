@@ -5,9 +5,9 @@ import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-interna
 import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
-import { ordersNodeAtom } from '@/bootstrap/store/pillars/ops';
-import { recipesNodeAtom, prepTasksNodeAtom, miseEnPlaceTargetSelector } from '@/bootstrap/store/pillars/logistics';
-import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { ordersNodeAtom } from '@/store/pillars/ops';
+import { recipesNodeAtom, prepTasksNodeAtom, miseEnPlaceTargetSelector } from '@/store/pillars/logistics';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { 
   respondToModificationAction, 
   updateRecipeAction, 

@@ -4,9 +4,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import {  FiscalKeyService  } from '@/bootstrap/legacy';;
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
  
-import type {  CommunicationPulse  } from '@/bootstrap/legacy';;
+import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
@@ -117,7 +117,7 @@ export class NexusBridge {
     try {
  
       const { fleetTelemetry } = await import('@/modules/intelligence/ia/fleet/FleetTelemetryService');
-      const { pendingOrdersAtom } = await import('@/bootstrap/store/pillars/ops');
+      const { pendingOrdersAtom } = await import('@/store/pillars/ops');
       let activeOrders = 0;
       try {
         activeOrders = (this.store.get(pendingOrdersAtom) as unknown[])?.length ?? 0;

@@ -120,11 +120,11 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerStockDeductionHandler } from '@/bootstrap/eventBus/handlers/StockDeductionHandler';
-import { registerStockAlertHandler } from '@/bootstrap/eventBus/handlers/StockAlertHandler';
-import { registerStockReceptionHandler } from '@/bootstrap/eventBus/handlers/StockReceptionHandler';
-import { registerStockTransferHandler } from '@/bootstrap/eventBus/handlers/StockTransferHandler';
-import { registerStockZeroBlockerHandler } from '@/bootstrap/eventBus/handlers/StockZeroBlockerHandler';
+import { registerStockDeductionHandler } from '@/shared/eventBus/handlers/StockDeductionHandler';
+import { registerStockAlertHandler } from '@/shared/eventBus/handlers/StockAlertHandler';
+import { registerStockReceptionHandler } from '@/shared/eventBus/handlers/StockReceptionHandler';
+import { registerStockTransferHandler } from '@/shared/eventBus/handlers/StockTransferHandler';
+import { registerStockZeroBlockerHandler } from '@/shared/eventBus/handlers/StockZeroBlockerHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 

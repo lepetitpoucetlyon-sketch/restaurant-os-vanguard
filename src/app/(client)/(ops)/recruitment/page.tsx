@@ -1,6 +1,6 @@
 "use client";
 
-import { RecruitmentDashboard } from '@/src/modules/human/effectifs/hr/components/RecruitmentDashboard';;
+import { RecruitmentDashboard } from '@/modules/human';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function RecruitmentPage() {

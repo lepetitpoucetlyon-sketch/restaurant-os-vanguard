@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
-import { useNexusFleet } from '@/src/modules/intelligence/ia/fleet/NexusFleetProvider';;
+import { useNexusFleet } from '@/modules/intelligence';
 import type { PlatformVariant } from '@/modules/system';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import { authedFetch } from '@/lib/client/authedFetch';

@@ -1,6 +1,6 @@
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
-import { fleetSnapshotAtom } from '@/bootstrap/store/pillars/sovereign';
+import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { EmpireInstance } from '@nexus/contracts';
 
 /**

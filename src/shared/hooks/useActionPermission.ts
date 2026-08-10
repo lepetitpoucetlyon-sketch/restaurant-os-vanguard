@@ -8,7 +8,7 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-import { policyEngine } from '@/src/modules/compliance/securite/PolicyEngine';;
+import { policyEngine } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts

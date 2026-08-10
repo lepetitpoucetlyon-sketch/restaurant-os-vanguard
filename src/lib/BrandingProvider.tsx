@@ -3,14 +3,14 @@
 
 import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { tenantBrandTokensAtom, tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
-import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 import { themeModeAtom } from '@/shared/nexus/tokens/themeAtoms';
-import type {  PlatformVariant  } from '@/bootstrap/legacy';;
+import type { PlatformVariant } from '@/modules/system';
 
 function getContrastTextColor(hexColor: string): string {
   const clean = hexColor.replace('#', '');

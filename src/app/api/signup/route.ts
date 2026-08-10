@@ -5,12 +5,12 @@ import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { BrandingService } from '@/lib/BrandingService';
  
-import { BillingService } from '@/src/modules/finance/services/BillingService';;
+import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { sendEmail } from '@/lib/email-service';
-import { PlatformVariantSchema } from '@/src/modules/system/domain/schemas/tenant';;
+import { PlatformVariantSchema } from '@/modules/system';
 import { toError } from "@/lib/toError";
 
 const SignupSchema = z.object({

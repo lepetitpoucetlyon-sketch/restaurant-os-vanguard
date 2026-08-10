@@ -1,7 +1,7 @@
 // src/domain/schemas/pos.ts
 import { z } from 'zod';
 import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/shared/schemas/primitives';
-import { TaxRateSchema } from '@/src/modules/finance/domain/schemas/finance';;
+import { TaxRateSchema } from '@/modules/finance';
 import { ConsumptionModeSchema } from '@/modules/ops/domain/schemas/orders';
 
 export const CartLineSchema = z.object({

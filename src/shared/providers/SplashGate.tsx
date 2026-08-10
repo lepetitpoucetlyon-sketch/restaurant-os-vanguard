@@ -15,7 +15,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { usePathname, useRouter } from 'next/navigation';
-import { tenantBrandTokensAtom, activeTenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantBrandTokensAtom, activeTenantIdAtom } from '@/store/pillars/sovereign';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 import { SplashScreen } from '@/shared/components/SplashScreen';
 import { z } from 'zod';

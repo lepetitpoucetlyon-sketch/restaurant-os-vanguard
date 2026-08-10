@@ -1,13 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 
-vi.mock('@/bootstrap/store/pillars/compliance', () => ({ fiscalLedgerAtom: {}, fiscalLedgerNodeAtom: {} }));
+vi.mock('@/store/pillars/compliance', () => ({ fiscalLedgerAtom: {}, fiscalLedgerNodeAtom: {} }));
 vi.mock('@/modules/finance/store/accountingAtoms', () => ({
     journalEntriesNodeAtom: {}, accountsAtom: {}, bankTransactionsAtom: {},
     expenseClaimsAtom: {}, accountingViewModeAtom: {},
 }));
 vi.mock('@shared/hooks/useNexusMutation', () => ({ useNexusMutation: vi.fn() }));
 
-import { getAmountInMu, buildEntryAmountInCents } from '@/src/modules/finance/hooks/useAccounting';;
+import { getAmountInMu, buildEntryAmountInCents } from '@/modules/finance';
 
 const toCents = (µ: number) => Math.round(µ / 10_000);
 

@@ -1,4 +1,4 @@
-import type {  PlatformVariant  } from '@/bootstrap/legacy';;
+import type { PlatformVariant } from '@/modules/system';
 import type { BrandConfig } from '../brand';
 
 export { restaurantDefaultTokens, restaurantVerticalTokens, restaurantDefaultAppearance } from './restaurant';

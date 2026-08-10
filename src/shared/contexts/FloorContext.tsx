@@ -1,1 +1,1 @@
-export * from '@/bootstrap/legacy';;
+export * from '@/modules/ops';

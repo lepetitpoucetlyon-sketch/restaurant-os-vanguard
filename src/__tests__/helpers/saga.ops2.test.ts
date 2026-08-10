@@ -125,26 +125,26 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerKdsCourseManagerHandler } from '@/bootstrap/eventBus/handlers/KdsCourseManagerHandler';
-import { registerKdsPassNotifierHandler } from '@/bootstrap/eventBus/handlers/KdsPassNotifierHandler';
-import { registerKdsPrepDelayAlertHandler } from '@/bootstrap/eventBus/handlers/KdsPrepDelayAlertHandler';
-import { registerKdsPrepTimeAnalyzerHandler } from '@/bootstrap/eventBus/handlers/KdsPrepTimeAnalyzerHandler';
-import { registerKdsPrintFallbackHandler } from '@/bootstrap/eventBus/handlers/KdsPrintFallbackHandler';
-import { registerKdsRoutingHandler } from '@/bootstrap/eventBus/handlers/KdsRoutingHandler';
-import { registerRecipeChangeKDSHandler } from '@/bootstrap/eventBus/handlers/RecipeChangeKDSHandler';
-import { registerRushModeIntegrationHandler } from '@/bootstrap/eventBus/handlers/RushModeIntegrationHandler';
-import { registerOrderAcceptanceWindowHandler } from '@/bootstrap/eventBus/handlers/OrderAcceptanceWindowHandler';
-import { registerOrderCancelRestockHandler } from '@/bootstrap/eventBus/handlers/OrderCancelRestockHandler';
-import { registerBigGroupAlertHandler } from '@/bootstrap/eventBus/handlers/BigGroupAlertHandler';
-import { registerGroupPrepTasksHandler } from '@/bootstrap/eventBus/handlers/GroupPrepTasksHandler';
-import { registerResaKitchenTaskHandler } from '@/bootstrap/eventBus/handlers/ResaKitchenTaskHandler';
-import { registerResaReminderHandler } from '@/bootstrap/eventBus/handlers/ResaReminderHandler';
-import { registerReservationNotifierHandler } from '@/bootstrap/eventBus/handlers/ReservationNotifierHandler';
-import { registerNoShowPenaltyHandler } from '@/bootstrap/eventBus/handlers/NoShowPenaltyHandler';
-import { registerFloorPlanCapacityHandler } from '@/bootstrap/eventBus/handlers/FloorPlanCapacityHandler';
-import { registerTableTurnoverAnalyzerHandler } from '@/bootstrap/eventBus/handlers/TableTurnoverAnalyzerHandler';
-import { registerCompEntryHandler } from '@/bootstrap/eventBus/handlers/CompEntryHandler';
-import { registerCompMealHandler } from '@/bootstrap/eventBus/handlers/CompMealHandler';
+import { registerKdsCourseManagerHandler } from '@/shared/eventBus/handlers/KdsCourseManagerHandler';
+import { registerKdsPassNotifierHandler } from '@/shared/eventBus/handlers/KdsPassNotifierHandler';
+import { registerKdsPrepDelayAlertHandler } from '@/shared/eventBus/handlers/KdsPrepDelayAlertHandler';
+import { registerKdsPrepTimeAnalyzerHandler } from '@/shared/eventBus/handlers/KdsPrepTimeAnalyzerHandler';
+import { registerKdsPrintFallbackHandler } from '@/shared/eventBus/handlers/KdsPrintFallbackHandler';
+import { registerKdsRoutingHandler } from '@/shared/eventBus/handlers/KdsRoutingHandler';
+import { registerRecipeChangeKDSHandler } from '@/shared/eventBus/handlers/RecipeChangeKDSHandler';
+import { registerRushModeIntegrationHandler } from '@/shared/eventBus/handlers/RushModeIntegrationHandler';
+import { registerOrderAcceptanceWindowHandler } from '@/shared/eventBus/handlers/OrderAcceptanceWindowHandler';
+import { registerOrderCancelRestockHandler } from '@/shared/eventBus/handlers/OrderCancelRestockHandler';
+import { registerBigGroupAlertHandler } from '@/shared/eventBus/handlers/BigGroupAlertHandler';
+import { registerGroupPrepTasksHandler } from '@/shared/eventBus/handlers/GroupPrepTasksHandler';
+import { registerResaKitchenTaskHandler } from '@/shared/eventBus/handlers/ResaKitchenTaskHandler';
+import { registerResaReminderHandler } from '@/shared/eventBus/handlers/ResaReminderHandler';
+import { registerReservationNotifierHandler } from '@/shared/eventBus/handlers/ReservationNotifierHandler';
+import { registerNoShowPenaltyHandler } from '@/shared/eventBus/handlers/NoShowPenaltyHandler';
+import { registerFloorPlanCapacityHandler } from '@/shared/eventBus/handlers/FloorPlanCapacityHandler';
+import { registerTableTurnoverAnalyzerHandler } from '@/shared/eventBus/handlers/TableTurnoverAnalyzerHandler';
+import { registerCompEntryHandler } from '@/shared/eventBus/handlers/CompEntryHandler';
+import { registerCompMealHandler } from '@/shared/eventBus/handlers/CompMealHandler';
 
 const T = 'tenant-ops';
 

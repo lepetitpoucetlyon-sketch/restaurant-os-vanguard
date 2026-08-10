@@ -10,10 +10,10 @@ import {
 } from "../store/inventoryAtoms";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { wasteLogsNodeAtom } from '@/src/modules/compliance/qualite/haccp/store/complianceAtoms';;
+import { wasteLogsNodeAtom } from '@/modules/compliance';
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
-import { tenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
+import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { StockItem, Preparation, StorageLocation } from "@shared/nexus/contracts/logistics";

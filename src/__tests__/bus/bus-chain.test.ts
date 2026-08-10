@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { registerOpsHandlers } from '@/bootstrap/eventBus/registerHandlers/ops';
-import { registerFinanceHandlers } from '@/bootstrap/eventBus/registerHandlers/finance';
+import { registerOpsHandlers } from '@/shared/eventBus/registerHandlers/ops';
+import { registerFinanceHandlers } from '@/shared/eventBus/registerHandlers/finance';
 
 describe('Bus Chain Integration Tests (R12 - 6 Scenarios)', () => {
   const tenantId = 'test-tenant-chain';

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Loader2, Globe, WifiOff } from 'lucide-react';
-import { TableSchema } from '@/src/modules/ops/domain/schemas/ops';;
+import { TableSchema } from '@/modules/ops';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { toggleOnlineBookingAction } from '../../actions/marketing.action';

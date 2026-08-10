@@ -6,7 +6,7 @@ import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardLi
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useTables } from '@/src/modules/facility/spaces/hooks/useFloorPlan';;
+import { useTables } from '@/modules/ops';
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/shared/hooks";
 import { BottomSheet } from "@ui/BottomSheet";

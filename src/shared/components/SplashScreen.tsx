@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { tenantBrandTokensAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantBrandTokensAtom } from '@/store/pillars/sovereign';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 
 interface SplashScreenProps {

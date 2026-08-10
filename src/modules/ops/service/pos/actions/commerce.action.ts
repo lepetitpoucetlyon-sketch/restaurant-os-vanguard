@@ -3,7 +3,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
+import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
 export const markReservationArrivedAction = createSafeAction(
@@ -25,7 +25,7 @@ export const markReservationArrivedAction = createSafeAction(
 );
 
 export const upsertCampaignAction = createSafeAction(
-    z.tuple([z.custom<unknown>(() => true)]),
+    z.tuple([z.unknown()]),
     { page: "marketing", action: "create_campaign" },
     async (tenantId, data: any) => {
         try {
@@ -42,7 +42,7 @@ export const upsertCampaignAction = createSafeAction(
 );
 
 export const upsertPostAction = createSafeAction(
-    z.tuple([z.custom<unknown>(() => true)]),
+    z.tuple([z.unknown()]),
     { page: "marketing", action: "create_campaign" },
     async (tenantId, data: any) => {
         try {
@@ -59,7 +59,7 @@ export const upsertPostAction = createSafeAction(
 );
 
 export const upsertCustomerAction = createSafeAction(
-    z.tuple([z.custom<unknown>(() => true)]),
+    z.tuple([z.unknown()]),
     { page: "crm", action: "create_client" },
     async (tenantId, data: any) => {
         try {

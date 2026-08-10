@@ -1,6 +1,6 @@
 // src/shared/nexus/tokens/assets.ts
 import { useAtomValue } from 'jotai';
-import { tenantBrandTokensAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantBrandTokensAtom } from '@/store/pillars/sovereign';
 
 // Clés d'assets disponibles
 export type BrandAssetKey = 'logo' | 'favicon' | 'banner' | 'placeholder' | 'texture';

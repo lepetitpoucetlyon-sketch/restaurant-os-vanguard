@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { categoriesAtom } from "@/bootstrap/store/pillars/logistics";
+import { categoriesAtom } from "@/store/pillars/logistics";
 import { cn } from "@/lib/ui.foundations";;
 import { Pizza, Coffee, GlassWater, Beef, UtensilsCrossed, Star, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";

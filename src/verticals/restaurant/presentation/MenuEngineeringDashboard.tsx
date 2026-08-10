@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { menuEngineeringService } from '@/src/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService';;
+import { menuEngineeringService } from '@/modules/commerce';
 import type { IMenuEngineeringReport, MenuItemCategory } from '@/modules/commerce';
 import { useTenant } from '@/shared/hooks/useTenant';
 

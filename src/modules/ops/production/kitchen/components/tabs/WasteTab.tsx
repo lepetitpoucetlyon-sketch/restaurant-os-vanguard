@@ -12,7 +12,7 @@ import { PremiumSelect } from "@ui/PremiumSelect";
 import { useTenant } from "@/shared/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { HACCPLogService } from '@/src/modules/compliance/qualite/haccp/HACCPLogService';;
+import { HACCPLogService } from '@/modules/compliance';
 
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
 

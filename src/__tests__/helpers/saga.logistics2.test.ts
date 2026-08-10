@@ -121,12 +121,12 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerAutoSupplierDraftHandler } from '@/bootstrap/eventBus/handlers/AutoSupplierDraftHandler';
-import { registerFoodCostRecomputer } from '@/bootstrap/eventBus/handlers/FoodCostRecomputer';
-import { registerFoodDonationHandler } from '@/bootstrap/eventBus/handlers/FoodDonationHandler';
-import { registerPhysicalInventoryHandler } from '@/bootstrap/eventBus/handlers/PhysicalInventoryHandler';
-import { registerStockRestitutionHandler } from '@/bootstrap/eventBus/handlers/StockRestitutionHandler';
-import { registerSupplierDeliveryReceivedHandler } from '@/bootstrap/eventBus/handlers/SupplierDeliveryReceivedHandler';
+import { registerAutoSupplierDraftHandler } from '@/shared/eventBus/handlers/AutoSupplierDraftHandler';
+import { registerFoodCostRecomputer } from '@/shared/eventBus/handlers/FoodCostRecomputer';
+import { registerFoodDonationHandler } from '@/shared/eventBus/handlers/FoodDonationHandler';
+import { registerPhysicalInventoryHandler } from '@/shared/eventBus/handlers/PhysicalInventoryHandler';
+import { registerStockRestitutionHandler } from '@/shared/eventBus/handlers/StockRestitutionHandler';
+import { registerSupplierDeliveryReceivedHandler } from '@/shared/eventBus/handlers/SupplierDeliveryReceivedHandler';
 
 const T = 'tenant-log';
 

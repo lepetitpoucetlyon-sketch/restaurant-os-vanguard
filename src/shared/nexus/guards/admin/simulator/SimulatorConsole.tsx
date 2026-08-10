@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import {  simulator, simulationMetricsAtom, isSimulationRunningAtom, type SimulationProfile  } from '@/bootstrap/legacy';;
+import { simulator, simulationMetricsAtom, isSimulationRunningAtom, type SimulationProfile } from '@/modules/intelligence';
 import { ProposalPanel } from '../ProposalPanel';
-import { NexusStaffingOracle as StaffingOracle } from '@/src/modules/human/services/NexusStaffingOracle';;
-import {  SovereignLedger  } from '@/bootstrap/legacy';;
+import { NexusStaffingOracle as StaffingOracle } from '@/modules/human';
+import { SovereignLedger } from '@/modules/finance/tresorerie/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';
 import { SimulatorControlBar } from './components/SimulatorControlBar';

@@ -5,9 +5,9 @@ import { Table, toTable, toFloor, toZone, toReservation } from '@nexus/contracts
 import { logger } from '@/lib/logger';
 import { guardedAction, sanitizeToSovereign } from '../opsCore';
 
-import { tablesNodeAtom, floorsAtom, zonesAtom, zonesLockedAtom, currentFloorIdAtom } from '@/bootstrap/store/pillars/ops';
-import { reservationsNodeAtom } from '@/bootstrap/store/pillars/commerce';
-import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tablesNodeAtom, floorsAtom, zonesAtom, zonesLockedAtom, currentFloorIdAtom } from '@/store/pillars/ops';
+import { reservationsNodeAtom } from '@/store/pillars/commerce';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import {
   updateFloorNodeAction,
   createFloorNodeAction,

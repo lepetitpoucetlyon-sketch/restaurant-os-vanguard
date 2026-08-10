@@ -5,9 +5,17 @@
  */
 
 import { z } from 'zod';
-import { TableSchema, FloorSchema, ZoneSchema } from '@/src/modules/ops/domain/schemas/ops';
-import { ReservationSchema } from '@/src/modules/intelligence/domain/agent/tools/ReservationTool';;
-import { OrderSchema, OrderLineSchema, OrderItemModificationSchema } from '@/src/modules/ops/domain/schemas/orders';;
+import { 
+  TableSchema, 
+  ReservationSchema, 
+  FloorSchema, 
+  ZoneSchema 
+} from '@/modules/ops';
+import { 
+  OrderSchema, 
+  OrderLineSchema,
+  OrderItemModificationSchema
+} from '@/modules/ops';
 
 export type Table = z.infer<typeof TableSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;

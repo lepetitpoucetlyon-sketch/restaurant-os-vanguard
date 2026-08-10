@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { activeTenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
+import { activeTenantIdAtom } from "@/store/pillars/sovereign";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     LogIn,

@@ -7,9 +7,9 @@ import {
     accountsAtom, 
     bankTransactionsAtom, 
     expenseClaimsAtom 
-} from '@/bootstrap/store/pillars/finance';
-import { fiscalSealsNodeAtom } from '@/bootstrap/store/pillars/compliance';
-import { tenantIdAtom, currentUserAtom } from '@/bootstrap/store/pillars/sovereign';
+} from '@/store/pillars/finance';
+import { fiscalSealsNodeAtom } from '@/store/pillars/compliance';
+import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

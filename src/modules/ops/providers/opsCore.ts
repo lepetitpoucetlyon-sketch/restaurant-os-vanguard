@@ -9,7 +9,7 @@ import { genomeValidator } from '@/lib/GenomeValidator';
 import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { SyncManager } from '@/lib/offline/sync-manager';
 import { checkOnlineStatus } from '@/lib/offline/connectivity-hooks';
 

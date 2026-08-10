@@ -6,7 +6,7 @@ import { EpsonPrinter } from "@/modules/ops/service/printers/hardware/EpsonPrint
 import type { ReceiptTicket } from "@/modules/ops/service/printers/hardware/EpsonPrinter";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
-import type { CartItem } from "@/shared/nexus/contracts/ops.engine.types";
+import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import { JsonObject } from "@/shared/types/json";
 
 function parsePrinterConfig(): { ip: string; port: number } {

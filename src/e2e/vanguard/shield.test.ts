@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
-import { ShieldedContext, SovereignSecurityViolation } from '@/src/modules/intelligence/ia/ai/ShieldedContext';;
+import { ShieldedContext, SovereignSecurityViolation } from '@/modules/intelligence';
  
 import { DNAInjector } from '@/modules/intelligence/ia/ai/DNAInjector';
 

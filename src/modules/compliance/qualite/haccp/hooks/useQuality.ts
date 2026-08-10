@@ -10,7 +10,7 @@ import {
     productQualityConfigsAtom,
     supplierScoresAtom,
 } from '../store/qualityAtoms';
-import { deliveriesAtom } from '@/bootstrap/store/pillars/compliance';
+import { deliveriesAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { QualityEngine } from '../../../services/QualityEngine';
 import { ActiveQualityControl, ActiveQualityControlItem } from '@nexus/contracts';

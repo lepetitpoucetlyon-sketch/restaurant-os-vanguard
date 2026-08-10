@@ -17,7 +17,7 @@ export const ProductSchema = z.object({
   allergens:         z.array(z.string()).default([]),
   recipeId:          z.string().optional(),
   updatedAt:         z.number().default(Date.now()),
-}).catchall(z.unknown());
+}).catchall(z.any());
 
 export type Product = z.infer<typeof ProductSchema>;
 

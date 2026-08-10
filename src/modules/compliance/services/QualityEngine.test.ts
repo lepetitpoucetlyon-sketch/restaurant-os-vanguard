@@ -3,7 +3,7 @@ import '@/e2e/vanguard/mocks';
 import { QualityEngine } from './QualityEngine';
 
 // Mock dependencies
-vi.mock('@/bootstrap/store/pillars', () => ({
+vi.mock('@/store/pillars', () => ({
   updateNexusNode: vi.fn((prev, updates) => ({ ...prev, ...updates, lastUpdated: Date.now() })),
   stockItemsNodeAtom: { key: 'stockItems' },
   deliveriesNodeAtom: { key: 'deliveries' },

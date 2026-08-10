@@ -131,11 +131,11 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerKDSOrderHandler } from '@/bootstrap/eventBus/handlers/KDSOrderHandler';
-import { registerPaymentLedgerHandler } from '@/bootstrap/eventBus/handlers/PaymentLedgerHandler';
-import { registerTableAutoReleaseHandler } from '@/bootstrap/eventBus/handlers/TableAutoReleaseHandler';
-import { registerNoShowTableReleaseHandler } from '@/bootstrap/eventBus/handlers/NoShowTableReleaseHandler';
-import { registerKDSReadyHandler } from '@/bootstrap/eventBus/handlers/KDSReadyHandler';
+import { registerKDSOrderHandler } from '@/shared/eventBus/handlers/KDSOrderHandler';
+import { registerPaymentLedgerHandler } from '@/shared/eventBus/handlers/PaymentLedgerHandler';
+import { registerTableAutoReleaseHandler } from '@/shared/eventBus/handlers/TableAutoReleaseHandler';
+import { registerNoShowTableReleaseHandler } from '@/shared/eventBus/handlers/NoShowTableReleaseHandler';
+import { registerKDSReadyHandler } from '@/shared/eventBus/handlers/KDSReadyHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 

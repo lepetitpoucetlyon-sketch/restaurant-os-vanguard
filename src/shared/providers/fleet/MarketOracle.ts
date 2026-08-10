@@ -24,9 +24,9 @@ import type {
     MarketInsight,
     MonetizationTier,
  
-} from '@/shared/nexus/contracts/intelligence.types';
+} from '@/modules/intelligence/knowledge/rag/types';
 
-import { K_ANONYMITY_THRESHOLD } from '@/src/modules/intelligence/knowledge/rag/types';;
+import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
 
 // ============================================
 // MARKET ORACLE

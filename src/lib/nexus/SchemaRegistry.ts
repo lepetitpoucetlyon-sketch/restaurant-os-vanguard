@@ -25,7 +25,7 @@ export const SchemaRegistry: Record<string, Record<string, z.ZodSchema>> = {
             totalInMicrounits: z.number().int().optional(),
             totalInCents: z.number().int().optional(),
             timestamp: z.string().or(z.date())
-        }).catchall(z.unknown())
+        }).catchall(z.any())
     },
     STOCK: {
         items: z.object({

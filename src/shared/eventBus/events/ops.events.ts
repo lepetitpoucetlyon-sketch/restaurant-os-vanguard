@@ -1,4 +1,4 @@
-import type { CartItem } from '@/shared/nexus/contracts/ops.engine.types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface OPSEvents {
   'order.placed': {

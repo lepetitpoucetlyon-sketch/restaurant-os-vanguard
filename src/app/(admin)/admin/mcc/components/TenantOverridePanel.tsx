@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sliders, Bug, CheckCircle2, AlertCircle, ChevronDown, RotateCcw, Sparkles, Palette } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/src/modules/intelligence/ia/fleet/NexusFleetProvider';;
+import { useNexusFleet } from '@/modules/intelligence';
 import type { TenantOverrides } from '@/modules/system';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 

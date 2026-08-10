@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
-import { ordersNodeAtom } from '@/bootstrap/store/pillars/ops';
-import { stockItemsNodeAtom } from '@/bootstrap/store/pillars/logistics';
+import { ordersNodeAtom } from '@/store/pillars/ops';
+import { stockItemsNodeAtom } from '@/store/pillars/logistics';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 
 

@@ -46,7 +46,7 @@ export type JournalEntryStatus = 'draft' | 'validated' | 'closed' | 'pending' | 
  *     Il n'est PAS le schéma de validation NF525.
  *
  * Pour la validation d'entrée (API, Bridge NF525), utiliser :
- *   import { JournalEntrySchema } from '@/src/modules/finance/domain/schemas/finance';
+ *   import { JournalEntrySchema } from '@/modules/finance'
  *
  * Pour lire/afficher des enregistrements Firestore, utiliser ce type.
  */

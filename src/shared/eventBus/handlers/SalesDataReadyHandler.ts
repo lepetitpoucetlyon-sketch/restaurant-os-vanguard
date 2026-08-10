@@ -1,0 +1,28 @@
+import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
+import { toError } from "@/lib/toError";
+
+export function registerSalesDataReadyHandler(): () => void {
+  return NexusEventBus.on(
+    'analytics.sales_data_ready',
+    async ({ tenantId, periodStart, periodEnd, totalInMicrounits, covers }) => {
+      try {
+        const snapshotId = `${periodStart}_${periodEnd}`;
+        await Nexus.adapter.set(`tenants/${tenantId}/analytics/snapshots/${snapshotId}`, {
+          periodStart,
+          periodEnd,
+          totalInMicrounits,
+          covers,
+          averageTicketInMicrounits: covers > 0 ? Math.round(totalInMicrounits / covers) : 0,
+          recordedAt: new Date().toISOString(),
+        });
+        logger.info(`[SalesDataReadyHandler] Snapshot enregistré ${snapshotId} pour ${tenantId}`);
+      } catch (err) {
+        logger.error(`[SalesDataReadyHandler] Échec enregistrement snapshot: ${toError(err).message}`);
+        throw err;
+      }
+    },
+    { id: 'sales-data-ready', priority: 'BACKGROUND' },
+  );
+}

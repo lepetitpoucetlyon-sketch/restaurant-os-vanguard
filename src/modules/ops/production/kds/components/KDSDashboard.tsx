@@ -11,7 +11,7 @@ import { usePageSetting } from "@/shared/components/settings/ContextualSettings"
 import { Recipe } from "@nexus/contracts";
 import type { Order } from "@nexus/contracts";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { tenantIdAtom } from "@/bootstrap/store/pillars/sovereign";
+import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 import { pushToUser, pushToRole } from '@/lib/push/pushClient';
 

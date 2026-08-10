@@ -1,4 +1,4 @@
-import { IFinanceRepository } from '@/src/modules/finance/comptabilite/repositories/IFinanceRepository';;
+import { IFinanceRepository } from '@/modules/finance';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { INexusAdapter, Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';

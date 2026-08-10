@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { activeTenantSlotsAtom, fleetSnapshotAtom } from '@nexus/state/SovereignGenome';
 import { MacroBrain } from '@modules/intelligence/services/MacroBrain';
-import {  QuantumOrchestrator  } from '@/bootstrap/legacy';;
+import { QuantumOrchestrator } from '@/modules/intelligence/ia/fleet/QuantumOrchestrator';
 import { EmpireInstance } from '@nexus/contracts';
 
 /**

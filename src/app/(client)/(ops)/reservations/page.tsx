@@ -14,12 +14,12 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useReservationsPage } from '@/src/modules/commerce/relation/reservations/hooks/useReservationsPage';;
+import { useReservationsPage } from '@/modules/commerce';
  
 import { PinModal } from "@modules/ops";
-import { DailyListView } from '@/src/modules/commerce/relation/reservations/components/DailyListView';;
-import { WeeklyView } from '@/src/modules/commerce/relation/reservations/components/WeeklyView';;
-import { GroupFormModal } from '@/src/modules/commerce/relation/reservations/components/GroupFormModal';;
+import { DailyListView } from '@/modules/commerce';
+import { WeeklyView } from '@/modules/commerce';
+import { GroupFormModal } from '@/modules/commerce';
 import dynamic from "next/dynamic";
 const EventQuoteModal = dynamic(
   () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
@@ -29,10 +29,10 @@ const ReservationCreateDialog = dynamic(
   () => import("@/modules/commerce/relation/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
   { ssr: false, loading: () => null }
 );
-import { ReservationSidebar } from '@/src/modules/commerce/relation/reservations/components/ReservationSidebar';;
-import { TableGrid } from '@/src/modules/commerce/relation/reservations/components/TableGrid';;
-import { CustomerCustomerView } from '@/src/modules/commerce/relation/customers/components/CustomerCustomerView';;
-import { CustomerDetailPanel } from '@/src/modules/commerce/relation/customers/components/CustomerDetailPanel';;
+import { ReservationSidebar } from '@/modules/commerce';
+import { TableGrid } from '@/modules/commerce';
+import { CustomerCustomerView } from '@/modules/commerce';
+import { CustomerDetailPanel } from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";

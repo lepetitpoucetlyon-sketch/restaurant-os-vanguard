@@ -1,5 +1,5 @@
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
-import { ordersNodeAtom } from '@/bootstrap/store/pillars/ops';
+import { ordersNodeAtom } from '@/store/pillars/ops';
 
 /**
  * Démarre l'intervalle de self-healing toutes les 60s.

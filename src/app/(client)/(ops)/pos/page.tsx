@@ -27,7 +27,7 @@ const VoidModal = dynamic(() => import("@modules/ops").then(m => m.VoidModal), {
 const CourseManager = dynamic(() => import("@modules/ops").then(m => m.CourseManager), { loading: () => <POSModalSkeleton /> });
 const TipPanel = dynamic(() => import("@modules/ops").then(m => m.TipPanel), { loading: () => <POSModalSkeleton /> });
 
-import { CourseType } from "@/shared/nexus/contracts/ops.engine.types";
+import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";

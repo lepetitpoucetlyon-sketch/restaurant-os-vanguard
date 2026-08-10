@@ -3,12 +3,12 @@
 import { useAtomValue } from "jotai";
 import { 
     wasteLogsNodeAtom 
-} from "@/bootstrap/store/pillars/compliance";
+} from "@/store/pillars/compliance";
 import { 
     menuAnalysisSelector, 
     staffPerformanceSelector, 
     laborCostRatioSelector 
-} from "@/bootstrap/store/pillars/commerce";
+} from "@/store/pillars/commerce";
 
 
 /**

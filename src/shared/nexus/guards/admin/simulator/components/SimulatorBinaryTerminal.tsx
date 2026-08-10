@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, AlertCircle, Terminal } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import type {  SimulationMetrics  } from '@/bootstrap/legacy';;
+import type { SimulationMetrics } from '@/modules/intelligence';
 
 interface SimulatorBinaryTerminalProps {
     metrics: SimulationMetrics;

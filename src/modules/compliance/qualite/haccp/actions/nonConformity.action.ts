@@ -3,11 +3,11 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toError } from '@/lib/toError';
 
-import { createSafeAction } from "@/shared/nexus/actions/actionWrapper";
+import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
 export const saveNonConformity = createSafeAction(
-    z.tuple([z.custom<unknown>(() => true)]),
+    z.tuple([z.unknown()]),
     { page: "haccp", action: "report_nonconformity" },
     async (tenantId, payload: Record<string, unknown>) => {
         try {
@@ -25,7 +25,7 @@ export const saveNonConformity = createSafeAction(
 );
 
 export const resolveNonConformity = createSafeAction(
-    z.tuple([z.string(), z.custom<unknown>(() => true)]),
+    z.tuple([z.string(), z.unknown()]),
     { page: "haccp", action: "close_nonconformity" },
     async (tenantId, id: string, payload: Record<string, unknown>) => {
         try {

@@ -19,7 +19,7 @@ export const TableSchema = z.object({
   shape:             TableShapeSchema,
   schemaVersion:     z.literal(2).default(2),
   updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
-}).catchall(z.unknown());
+}).catchall(z.any());
 
 export const ReservationSchema = z.object({
   id:                UUIDSchema,
@@ -36,7 +36,7 @@ export const ReservationSchema = z.object({
   notes:             SanitizedStringSchema.optional(),
   schemaVersion:     z.literal(2).default(2),
   updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
-}).catchall(z.unknown());
+}).catchall(z.any());
 
 export const FloorSchema = z.object({
   id:                UUIDSchema,
@@ -48,7 +48,7 @@ export const FloorSchema = z.object({
   description:       SanitizedStringSchema.optional(),
   schemaVersion:     z.literal(2).default(2),
   updatedAt:         TimestampSchema.default(() => Date.now() as number), // TECH_DEBT: Zod union input — refacto primitives
-}).catchall(z.unknown());
+}).catchall(z.any());
 
 export const ZoneSchema = z.object({
   id:                UUIDSchema,

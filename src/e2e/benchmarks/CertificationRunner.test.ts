@@ -3,7 +3,7 @@ import '@/e2e/vanguard/mocks';
 import { BlackFridaySimulation } from './BlackFridaySimulation';
 import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
-import { ordersNodeAtom } from '@/bootstrap/store/pillars';
+import { ordersNodeAtom } from '@/store/pillars';
 import { getDefaultStore } from 'jotai';
 import { SovereignValue } from '@/shared/nexus-contract';
 

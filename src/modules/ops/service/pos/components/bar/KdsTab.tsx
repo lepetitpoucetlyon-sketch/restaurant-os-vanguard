@@ -13,7 +13,7 @@ import {
   GlassWater
 } from "lucide-react";
 import { useAtomValue } from "jotai";
-import { recipesAtom } from "@/bootstrap/store/pillars/logistics";
+import { recipesAtom } from "@/store/pillars/logistics";
 import { Recipe } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 

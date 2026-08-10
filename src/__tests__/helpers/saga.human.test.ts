@@ -115,19 +115,19 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { AbsenceUnderstaffingHandler } from '@/bootstrap/eventBus/handlers/AbsenceUnderstaffingHandler';
-import { PayrollAutoCalcHandler } from '@/bootstrap/eventBus/handlers/PayrollAutoCalcHandler';
-import { registerPayrollComplianceHandler } from '@/bootstrap/eventBus/handlers/PayrollComplianceHandler';
-import { registerPayrollTimeclockHandler } from '@/bootstrap/eventBus/handlers/PayrollTimeclockHandler';
-import { registerOvertimeAlertHandler } from '@/bootstrap/eventBus/handlers/OvertimeAlertHandler';
-import { registerOvertimeJournalHandler } from '@/bootstrap/eventBus/handlers/OvertimeJournalHandler';
-import { registerLaborCostAnalyzerHandler } from '@/bootstrap/eventBus/handlers/LaborCostAnalyzerHandler';
-import { registerScheduleNotifierHandler } from '@/bootstrap/eventBus/handlers/ScheduleNotifierHandler';
-import { MedicalVisitAlertHandler } from '@/bootstrap/eventBus/handlers/MedicalVisitAlertHandler';
-import { ContractRenewalAlertHandler } from '@/bootstrap/eventBus/handlers/ContractRenewalAlertHandler';
-import { registerEndOfServiceActionHandler } from '@/bootstrap/eventBus/handlers/EndOfServiceActionHandler';
-import { RecruitmentRouterHandler } from '@/bootstrap/eventBus/handlers/RecruitmentRouterHandler';
-import { OnboardingProgressHandler } from '@/bootstrap/eventBus/handlers/OnboardingProgressHandler';
+import { AbsenceUnderstaffingHandler } from '@/shared/eventBus/handlers/AbsenceUnderstaffingHandler';
+import { PayrollAutoCalcHandler } from '@/shared/eventBus/handlers/PayrollAutoCalcHandler';
+import { registerPayrollComplianceHandler } from '@/shared/eventBus/handlers/PayrollComplianceHandler';
+import { registerPayrollTimeclockHandler } from '@/shared/eventBus/handlers/PayrollTimeclockHandler';
+import { registerOvertimeAlertHandler } from '@/shared/eventBus/handlers/OvertimeAlertHandler';
+import { registerOvertimeJournalHandler } from '@/shared/eventBus/handlers/OvertimeJournalHandler';
+import { registerLaborCostAnalyzerHandler } from '@/shared/eventBus/handlers/LaborCostAnalyzerHandler';
+import { registerScheduleNotifierHandler } from '@/shared/eventBus/handlers/ScheduleNotifierHandler';
+import { MedicalVisitAlertHandler } from '@/shared/eventBus/handlers/MedicalVisitAlertHandler';
+import { ContractRenewalAlertHandler } from '@/shared/eventBus/handlers/ContractRenewalAlertHandler';
+import { registerEndOfServiceActionHandler } from '@/shared/eventBus/handlers/EndOfServiceActionHandler';
+import { RecruitmentRouterHandler } from '@/shared/eventBus/handlers/RecruitmentRouterHandler';
+import { OnboardingProgressHandler } from '@/shared/eventBus/handlers/OnboardingProgressHandler';
 
 const T = 'tenant-hr';
 

@@ -45,7 +45,7 @@ vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: vi.fn(() => ({})), set: vi.fn() })),
   atom: vi.fn(),
 }));
-vi.mock('@/bootstrap/store/pillars/compliance', () => ({
+vi.mock('@/store/pillars/compliance', () => ({
   quarantinedProductsAtom: {},
 }));
 // // vi.mock('@/lib/shared-kernel', () => ({
@@ -127,16 +127,16 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerFridgeTempAlertHandler } from '@/bootstrap/eventBus/handlers/FridgeTempAlertHandler';
-import { registerDLCExpiryHandler } from '@/bootstrap/eventBus/handlers/DLCExpiryHandler';
-import { registerComplianceCalendarHandler } from '@/bootstrap/eventBus/handlers/ComplianceCalendarHandler';
-import { registerHaccpCheckArchiverHandler } from '@/bootstrap/eventBus/handlers/HaccpCheckArchiverHandler';
-import { registerIotOfflineAlertHandler } from '@/bootstrap/eventBus/handlers/IotOfflineAlertHandler';
-import { registerQuarantineHandler } from '@/bootstrap/eventBus/handlers/QuarantineHandler';
-import { registerNonConformActionHandler } from '@/bootstrap/eventBus/handlers/NonConformActionHandler';
-import { registerTrainingComplianceAlertHandler } from '@/bootstrap/eventBus/handlers/TrainingComplianceAlertHandler';
-import { registerRecallPOSBlockerHandler } from '@/bootstrap/eventBus/handlers/RecallPOSBlockerHandler';
-import { registerWasteValidatedHandler } from '@/bootstrap/eventBus/handlers/WasteValidatedHandler';
+import { registerFridgeTempAlertHandler } from '@/shared/eventBus/handlers/FridgeTempAlertHandler';
+import { registerDLCExpiryHandler } from '@/shared/eventBus/handlers/DLCExpiryHandler';
+import { registerComplianceCalendarHandler } from '@/shared/eventBus/handlers/ComplianceCalendarHandler';
+import { registerHaccpCheckArchiverHandler } from '@/shared/eventBus/handlers/HaccpCheckArchiverHandler';
+import { registerIotOfflineAlertHandler } from '@/shared/eventBus/handlers/IotOfflineAlertHandler';
+import { registerQuarantineHandler } from '@/shared/eventBus/handlers/QuarantineHandler';
+import { registerNonConformActionHandler } from '@/shared/eventBus/handlers/NonConformActionHandler';
+import { registerTrainingComplianceAlertHandler } from '@/shared/eventBus/handlers/TrainingComplianceAlertHandler';
+import { registerRecallPOSBlockerHandler } from '@/shared/eventBus/handlers/RecallPOSBlockerHandler';
+import { registerWasteValidatedHandler } from '@/shared/eventBus/handlers/WasteValidatedHandler';
 
 const T = 'tenant-comp';
 

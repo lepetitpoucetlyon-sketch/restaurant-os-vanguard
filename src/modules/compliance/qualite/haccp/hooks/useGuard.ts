@@ -13,8 +13,8 @@ import {
     oilLogsNodeAtom,
     maintenanceLogsAtom,
     guardLoadingAtom
-} from "@/bootstrap/store/pillars/compliance";
-import { updateNexusNode } from "@/bootstrap/store/pillars/core";
+} from "@/store/pillars/compliance";
+import { updateNexusNode } from "@/store/pillars/core";
 
 import { HygieneLabel, HygieneLog, ReceptionLog, OilLog } from "@nexus/contracts";
 import { HACCPContextType } from "../types/domain";

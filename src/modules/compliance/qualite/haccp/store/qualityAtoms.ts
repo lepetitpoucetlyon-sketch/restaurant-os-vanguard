@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { createNexusNode } from '@/bootstrap/store/pillars/core';
+import { createNexusNode } from '@/store/pillars/core';
 import { currentDateAtom } from '@/store/base';
 import {
     QualityControl,

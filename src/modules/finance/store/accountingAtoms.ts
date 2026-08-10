@@ -34,4 +34,4 @@ export const accountingLoadingAtom = atom(
 
 // Grade X Anchors
 export { nexusPulseAtom } from '@/store/pulseAtoms';
-export { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+export { tenantIdAtom } from '@/store/pillars/sovereign';

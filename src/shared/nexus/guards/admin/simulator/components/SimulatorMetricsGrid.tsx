@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { DollarSign, Activity, Users } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import type {  SimulationMetrics  } from '@/bootstrap/legacy';;
+import type { SimulationMetrics } from '@/modules/intelligence';
 
 interface SimulatorMetricsGridProps {
     metrics: SimulationMetrics;

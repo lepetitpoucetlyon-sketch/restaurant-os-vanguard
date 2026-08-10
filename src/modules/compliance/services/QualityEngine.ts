@@ -5,7 +5,7 @@ import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalEngine } from '@/src/modules/finance/fiscalite/FiscalAdapter';;
+import { FiscalEngine } from '@/modules/finance';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 

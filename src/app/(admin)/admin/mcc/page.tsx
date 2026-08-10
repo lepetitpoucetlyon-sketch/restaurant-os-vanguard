@@ -14,7 +14,7 @@ import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
 import { MCCLocaleProvider, useMCCLocale, LocaleToggle } from './_i18n';
-import { PLATFORM_VARIANTS, VERTICAL_META } from '@/src/modules/system/domain/schemas/tenant';;
+import { PLATFORM_VARIANTS, VERTICAL_META } from '@/modules/system';
 
 const FleetTab        = dynamic(() => import('./_tabs/FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> });
 const FleetSidebar    = dynamic(() => import('./_tabs/FleetSidebar').then(m => m.FleetSidebar));

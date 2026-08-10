@@ -3,13 +3,13 @@
 import { useEffect, useCallback } from 'react';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useOrders } from '@/src/modules/ops/providers/hooks/kitchenHooks';;
+import { useOrders } from '@/modules/ops';
 import type { Order } from '@modules/ops/workflow/engine/types';
 import type { JournalEntry } from '../../../types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
-import { fiscalLedgerNodeAtom } from '@/bootstrap/store/pillars/compliance';
-import { tenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OperationalIdentity } from '@/shared/nexus-contract';

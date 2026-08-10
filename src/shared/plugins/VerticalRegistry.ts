@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import type { IVerticalPlugin } from './IVerticalPlugin';
-import type {  PlatformVariant  } from '@/bootstrap/legacy';;
+import type { PlatformVariant } from '@/modules/system';
 
 type VerticalFactory = () => IVerticalPlugin;
 

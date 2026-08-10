@@ -117,10 +117,10 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerNoShowCRMHandler } from '@/bootstrap/eventBus/handlers/NoShowCRMHandler';
-import { registerLoyaltyEngineHandler } from '@/bootstrap/eventBus/handlers/LoyaltyEngineHandler';
-import { registerLoyaltyPointsAccrualHandler } from '@/bootstrap/eventBus/handlers/LoyaltyPointsAccrualHandler';
-import { registerVipStatusEvaluationHandler } from '@/bootstrap/eventBus/handlers/VipStatusEvaluationHandler';
+import { registerNoShowCRMHandler } from '@/shared/eventBus/handlers/NoShowCRMHandler';
+import { registerLoyaltyEngineHandler } from '@/shared/eventBus/handlers/LoyaltyEngineHandler';
+import { registerLoyaltyPointsAccrualHandler } from '@/shared/eventBus/handlers/LoyaltyPointsAccrualHandler';
+import { registerVipStatusEvaluationHandler } from '@/shared/eventBus/handlers/VipStatusEvaluationHandler';
 
 // ─── NoShowCRMHandler ─────────────────────────────────────────────────────────
 

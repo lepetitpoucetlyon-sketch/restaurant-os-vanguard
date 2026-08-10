@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { FileSpreadsheet, CheckCircle, ShieldCheck, Download } from 'lucide-react';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { activeTenantIdAtom } from '@/bootstrap/store/pillars/sovereign';
+import { activeTenantIdAtom } from '@/store/pillars/sovereign';
 import { logger } from '@/lib/logger';
 
 export function FECExportPage() {

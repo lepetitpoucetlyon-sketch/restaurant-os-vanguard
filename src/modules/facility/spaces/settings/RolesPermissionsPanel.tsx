@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/shared/providers/NexusCoreProvider";
 import { Loader2, Save } from "lucide-react";
 import { useAtom } from "jotai";
-import { rbacConfigAtom, fetchRbacConfigAtom } from "@/bootstrap/store/pillars/rbac";
+import { rbacConfigAtom, fetchRbacConfigAtom } from "@/store/pillars/rbac";
 
 export function RolesPermissionsPanel() {
     const { currentUser } = useAuth();

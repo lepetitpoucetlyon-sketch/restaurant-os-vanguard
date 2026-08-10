@@ -7,7 +7,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { SilaeClient } from '@/src/modules/human/remuneration/payroll/SilaeClient';;
+import { SilaeClient } from '@/modules/human';
 import type { PayrollProviderConfig } from '@/modules/human';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

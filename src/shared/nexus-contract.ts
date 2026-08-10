@@ -100,7 +100,7 @@ export interface TenantFirebaseConfig {
   [key: string]: string | undefined;
 }
 
-import type {  TenantConfig, OrchestratorSignal, TenantTheme  } from '@/bootstrap/legacy';;
+import type { TenantConfig, OrchestratorSignal, TenantTheme } from '@/modules/system';
 export type { TenantConfig, OrchestratorSignal, TenantTheme };
 
 /**

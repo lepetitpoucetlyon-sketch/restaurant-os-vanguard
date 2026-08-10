@@ -1,4 +1,4 @@
-import { ProspectingDashboard } from '@/src/modules/commerce/relation/crm/components/ProspectingDashboard';;
+import { ProspectingDashboard } from '@/modules/commerce';
 
 export default function ProspectingPage() {
   return <ProspectingDashboard />;

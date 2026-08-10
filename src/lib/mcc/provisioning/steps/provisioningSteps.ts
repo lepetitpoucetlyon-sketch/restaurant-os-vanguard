@@ -5,9 +5,9 @@ import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import {  fleetTelemetry, sovereignCreateWorkspace  } from '@/bootstrap/legacy';;
+import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
 import type { TenantID } from '@/shared/types/brands';
-import { FiscalKeyService } from '@/src/modules/finance/services/FiscalKeyService';;
+import { FiscalKeyService } from '@/modules/finance';
 import { toError } from "@/lib/toError";
 import type { ProvisioningRequest } from '../TenantProvisioningService';
 

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TableSchema } from '@/src/modules/ops/domain/schemas/ops';
-import { ReservationSchema } from '@/src/modules/intelligence/domain/agent/tools/ReservationTool';;
+import { TableSchema, ReservationSchema } from '@/modules/ops';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 

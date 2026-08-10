@@ -1,6 +1,6 @@
 "use client";
 
-import { TimeclockDashboard } from '@/src/modules/human/effectifs/hr/components/TimeclockDashboard';;
+import { TimeclockDashboard } from '@/modules/human';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function TimeclockPage() {

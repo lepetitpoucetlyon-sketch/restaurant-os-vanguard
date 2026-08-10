@@ -1,10 +1,10 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { StatementIngestionService } from '@/src/modules/finance/comptabilite/accounting/domain/StatementIngestionService';;
+import { StatementIngestionService } from '@/modules/finance';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { inferPCGAccount } from '@/src/modules/finance/tresorerie/banking/openBanking/pcgHeuristics';;
+import { inferPCGAccount } from '@/modules/finance';
 import type { ParsedFile, ImportResult } from '../types';
 
 // Cross-impact: StatementIngestionService already has a robust CSV parser with SHA-256 dedup.

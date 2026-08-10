@@ -1,4 +1,4 @@
-import { LandingDashboard } from '@/src/modules/commerce/acquisition/landing/components/LandingDashboard';;
+import { LandingDashboard } from '@/modules/commerce';
 
 export default function Home() {
   return <LandingDashboard />;

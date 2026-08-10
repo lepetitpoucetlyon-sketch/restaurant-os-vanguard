@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenBankingProviderFactory } from '@/src/modules/finance/tresorerie/banking/openBanking/OpenBankingProviderFactory';;
-import { BankConnectionStore } from '@/src/modules/finance/tresorerie/banking/openBanking/BankConnectionStore';;
-import { verifyBankConnectState } from '@/src/modules/finance/tresorerie/banking/openBanking/tokenCipher';;
+import { OpenBankingProviderFactory } from '@/modules/finance';
+import { BankConnectionStore } from '@/modules/finance';
+import { verifyBankConnectState } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 
 /**

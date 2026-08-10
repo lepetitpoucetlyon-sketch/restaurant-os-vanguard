@@ -2,7 +2,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
-import type { CartItem } from '@/shared/nexus/contracts/ops.engine.types';
+import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';

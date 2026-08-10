@@ -1,4 +1,4 @@
-import { InventoryReceptionDashboard } from '@/src/modules/logistics/approvisionnement/reception/components/InventoryReceptionDashboard';;
+import { InventoryReceptionDashboard } from '@/modules/logistics';
 
 export default function ReceptionPage() {
   return <InventoryReceptionDashboard />;

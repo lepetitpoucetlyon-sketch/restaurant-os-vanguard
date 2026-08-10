@@ -6,7 +6,7 @@ import type { StockItem } from '../../types';
 import { useStockPrediction } from '../../../../hooks/useStockPrediction';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { OraclePredictor } from '@/src/modules/intelligence/analytique/analytics/components/OraclePredictor';;
+import { OraclePredictor } from '@/modules/intelligence';
 
 interface OracleModalProps {
     item: StockItem;

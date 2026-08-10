@@ -11,7 +11,7 @@ import { EmpireInstance } from '@/shared/types/empire';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/shared/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
-import { tenantIdAtom, fleetSnapshotAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
 import { useFloorOpsValue } from './hooks';
 import { isMCCMode } from '@/config/instance';

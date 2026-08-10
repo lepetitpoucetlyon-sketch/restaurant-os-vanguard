@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { logger } from '@/lib/axiom';
-import { OpenBankingProviderFactory } from '@/src/modules/finance/tresorerie/banking/openBanking/OpenBankingProviderFactory';;
+import { OpenBankingProviderFactory } from '@/modules/finance';
 import { toError } from "@/lib/toError";
 
 /**

@@ -6,9 +6,9 @@ import { cn } from '@/lib/ui.foundations';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { useAtomValue } from 'jotai';
-import { tenantVariantAtom } from '@/bootstrap/store/pillars/sovereign';
+import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import type { BrandInput } from '@/lib/BrandingService';
-import type {  PlatformVariant  } from '@/bootstrap/legacy';;
+import type { PlatformVariant } from '@/modules/system';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

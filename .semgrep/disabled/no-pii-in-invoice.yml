@@ -1,9 +1,0 @@
-rules:
-  - id: no-pii-in-invoice
-    languages: [typescript]
-    severity: WARNING
-    message: "Aucune PII de personne physique dans un schéma de facture (RGPD / e-facture)"
-    pattern-regex: '\b(customerName|guestName|phone|email)\b'
-    paths:
-      include:
-        - "**/*Invoice*Schema*.ts"

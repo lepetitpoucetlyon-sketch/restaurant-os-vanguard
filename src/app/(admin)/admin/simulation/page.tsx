@@ -1,4 +1,4 @@
-import { SimulationDashboard } from '@/src/modules/intelligence/ia/simulator/components/SimulationDashboard';;
+import { SimulationDashboard } from '@/modules/intelligence';
 
 export default function SimulationPage() {
   return <SimulationDashboard />;
