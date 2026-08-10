@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantSeeder } from '@/lib/TenantSeeder';
-import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
+import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@nexus/contracts';;
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';

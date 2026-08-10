@@ -5,7 +5,7 @@ import { assertPermission } from '@/shared/rbac/checkPermission';
 import { ACTION_MAP } from '@/shared/rbac/actionPermissionMap';
 import { PinHashService } from '@/lib/server/PinHashService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { User } from '@/modules/human';
+import type { User } from '@nexus/contracts';
 
 export function createSafeAction<TArgs extends any[], TOutput>(
     schema: z.ZodType<TArgs>,

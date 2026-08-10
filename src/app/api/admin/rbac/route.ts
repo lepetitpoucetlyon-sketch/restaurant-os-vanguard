@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { TenantRBACConfigSchema } from "@/modules/human";
+import { TenantRBACConfigSchema } from '@nexus/contracts';;
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 
 export async function GET(req: Request) {

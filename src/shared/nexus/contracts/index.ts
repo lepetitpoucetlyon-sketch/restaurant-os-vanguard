@@ -125,6 +125,8 @@ export * from './tenant';
 export * from './license';
 export * from './modules';
 export * from './supportTicket';
+export * from './users';
+export * from './rbac';
 export type { InventoryMovement } from './logistics';
 export * from './marketing.types';
 export type { Delivery, DeliveryItem } from '@/modules/logistics';

@@ -1,5 +1,5 @@
 import { ZodSchema } from 'zod';
-import { UserSchema } from '@/modules/human';
+import { UserSchema } from '@nexus/contracts';;
 import { OrderSchema } from '@/modules/ops';
 import { StockItemSchema } from '@/modules/ops';
 import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@/modules/ops';

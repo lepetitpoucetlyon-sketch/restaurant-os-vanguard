@@ -4,7 +4,7 @@
  * Derived from Zod Schemas - Single Source of Truth.
  */
 
-import { UserSchema, UserPermissionsSchema } from '@/modules/human';
+import { UserSchema, UserPermissionsSchema } from '@nexus/contracts';;
 import { z } from 'zod';
 
 export type User = z.infer<typeof UserSchema>;

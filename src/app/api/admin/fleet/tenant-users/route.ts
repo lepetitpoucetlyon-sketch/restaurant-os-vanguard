@@ -7,7 +7,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
-import type { User } from '@/modules/human';
+import type { User } from '@nexus/contracts';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');

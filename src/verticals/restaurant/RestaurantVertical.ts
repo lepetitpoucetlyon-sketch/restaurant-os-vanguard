@@ -4,7 +4,7 @@ import React from 'react';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { menuEngineeringService } from '@/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService';
-import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
+import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@nexus/contracts';;
 import { ordersAtom, tablesAtom } from '@/modules/ops';
 import {
   RestaurantFinanceAdapter,

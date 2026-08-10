@@ -36,6 +36,4 @@ export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffin
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/hr';
-export * from './domain/schemas/users';
-export * from './domain/schemas/rbac';
 export * from './domain/schemas/employeeDocument';
