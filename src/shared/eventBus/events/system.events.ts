@@ -97,6 +97,12 @@ export interface SYSTEMEvents {
     severity: 'low' | 'medium' | 'high' | 'critical';
   };
 
+  'system.alert': {
+    tenantId: string;
+    message: string;
+    severity: string;
+  };
+
   'system.reference_promoted': {
     variant: string;
     timestamp: string;

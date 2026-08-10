@@ -29,12 +29,13 @@ async function runHRPayrollAudit() {
     } as any;
 
     try {
-        const evaluation = await themis.evaluate(illegalAction, { tenantId: 'tenant_crash_test_001', contextOverrides: {} });
+        const evaluations = await themis.evaluate(illegalAction, { tenantId: 'tenant_crash_test_001', contextOverrides: {} });
+        const evaluation = evaluations[0];
 
-        if (evaluation.confidence < 0.8 && evaluation.reason.includes('légal')) {
-            logger.info(`✅ SUCCÈS : L'IA Themis a détecté la violation légale ! Raison: ${evaluation.reason}`);
-        } else if (!evaluation.isApproved) {
-            logger.info(`✅ SUCCÈS : Themis a rejeté l'action. Raison: ${evaluation.reason}`);
+        if (evaluation && evaluation.confidence < 0.8 && evaluation.description.includes('légal')) {
+            logger.info(`✅ SUCCÈS : L'IA Themis a détecté la violation légale ! Raison: ${evaluation.description}`);
+        } else if (evaluation && evaluation.requiresHumanApproval) {
+            logger.info(`✅ SUCCÈS : Themis a rejeté l'action (nécessite approbation). Raison: ${evaluation.description}`);
         } else {
             logger.error('❌ ÉCHEC CRITIQUE : Themis a validé un shift illégal !');
             process.exit(1);
