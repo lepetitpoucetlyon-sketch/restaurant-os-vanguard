@@ -64,15 +64,20 @@ class NexusEventBusClass {
   }
 
   private enforceTierPolicies(payload: any): void {
-    const targetTenantId = payload?.targetTenantId || '';
-    if (!targetTenantId) return;
-
-    const isWritable = !targetTenantId.startsWith('_ref_');
-    if (!isWritable) {
-      throw new NexusError(NexusErrorCode.ACCESS_DENIED, `[EventBus] Writes to reference tenant ${targetTenantId} are forbidden.`);
+    const tenantId = payload?.tenantId || payload?.targetTenantId;
+    if (!tenantId) {
+      throw new NexusError(
+        NexusErrorCode.VALIDATION_ERROR,
+        `[EventBus] SECURITY BREACH: Missing tenantId in event payload. Cross-tenant pollution prevention active.`
+      );
     }
 
-    const isSimulation = !!payload.isSimulation || targetTenantId.startsWith('_demo_');
+    const isWritable = !tenantId.startsWith('_ref_');
+    if (!isWritable) {
+      throw new NexusError(NexusErrorCode.ACCESS_DENIED, `[EventBus] Writes to reference tenant ${tenantId} are forbidden.`);
+    }
+
+    const isSimulation = !!payload.isSimulation || tenantId.startsWith('_demo_');
     payload.isSimulation = isSimulation;
   }
 
