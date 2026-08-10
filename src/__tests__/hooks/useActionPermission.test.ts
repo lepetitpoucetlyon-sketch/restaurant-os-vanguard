@@ -8,16 +8,16 @@ import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 describe('useActionPermission', () => {
   const getWrapper = (role: PermissionRole | null) => {
-    return ({ children }: { children: React.ReactNode }) => (
-      React.createElement(NexusCoreContext.Provider, {
+    return function Wrapper({ children }: { children: React.ReactNode }) {
+      return React.createElement(NexusCoreContext.Provider, {
         value: {
           auth: { currentUser: role ? { role } : null, verifyPermissionAction: vi.fn() } as any,
           settings: {} as any,
           notif: {} as any,
           lang: 'fr'
         } as any
-      }, children)
-    );
+      }, children);
+    };
   };
 
   beforeEach(() => {
