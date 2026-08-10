@@ -26,6 +26,12 @@ export interface PaymentContext {
     tenantId: string;
     consumptionMode: ConsumptionMode;
     partialPayments?: { amount: number; guest: number; method?: string }[];
+    /**
+     * Pourboire encaissé au terminal, en microunits (§7.4).
+     * Doit être transmis au bridge : le client paie `panier + pourboire`,
+     * la chaîne fiscale doit sceller le même montant.
+     */
+    tipInMicrounits?: number;
 }
 
 export async function processPayment(ctx: PaymentContext): Promise<void> {
@@ -36,6 +42,7 @@ export async function processPayment(ctx: PaymentContext): Promise<void> {
         tenantId: ctx.tenantId,
         consumptionMode: ctx.consumptionMode,
         partialPayments: ctx.partialPayments,
+        tipInMicrounits: ctx.tipInMicrounits,
     });
 }
 

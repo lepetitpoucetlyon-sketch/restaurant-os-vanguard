@@ -11,6 +11,13 @@ export const PCG_PAYMENT_ACCOUNTS: Record<PaymentMode, { code: string; name: str
   comp:         { code: '658000', name: 'Charges diverses (Offerts)' },
 };
 
+/**
+ * Compte PCG des pourboires volontaires.
+ * Les pourboires ne sont PAS soumis à la TVA : ils sont crédités ici,
+ * hors base taxable, et n'entrent jamais dans `computeTtcByRateAndAxis`.
+ */
+export const PCG_TIP_ACCOUNT = { code: '708500', name: 'Pourboires collectés' } as const;
+
 export const microToCents = (mu: number): number => Math.round(mu / 10_000);
 
 export function computeTtcByRateAndAxis(
@@ -107,6 +114,26 @@ export function buildJournalLines(
     totalCreditCents += htCents + tvaCents;
   }
 
+  // ── Pourboire — hors base TVA (§7.4) ────────────────────────────────────────
+  // Crédité sur 708500, jamais sur 707000/445710 : un pourboire volontaire
+  // n'est pas soumis à la TVA. Le débit correspondant est ajouté plus bas pour
+  // que `Σ débits = Σ crédits = montant réellement encaissé au terminal`.
+  const tipCents = microToCents(payload.tipInMicrounits ?? 0);
+
+  if (tipCents > 0) {
+    credits.push(
+      makeLine(
+        PCG_TIP_ACCOUNT.code,
+        PCG_TIP_ACCOUNT.name,
+        'credit',
+        tipCents,
+        'Pourboire volontaire — hors TVA',
+        pieceNumber,
+        now
+      )
+    );
+  }
+
   const debits: JournalLine[] = [];
 
   if (payload.partialPayments && payload.partialPayments.length > 0) {
@@ -135,6 +162,25 @@ export function buildJournalLines(
         'debit',
         totalCreditCents,
         `Règlement POS (${acct.name})`,
+        pieceNumber,
+        now
+      )
+    );
+  }
+
+  // Le pourboire est encaissé sur le même moyen de paiement que la note.
+  // Ligne de débit dédiée : elle rend l'écart traçable en rapprochement bancaire
+  // et fonctionne aussi bien en paiement simple qu'en note partagée.
+  if (tipCents > 0) {
+    const tipModeKey = payload.paymentMode || 'card';
+    const tipAcct = PCG_PAYMENT_ACCOUNTS[tipModeKey] ?? PCG_PAYMENT_ACCOUNTS.card;
+    debits.push(
+      makeLine(
+        tipAcct.code,
+        tipAcct.name,
+        'debit',
+        tipCents,
+        `Pourboire encaissé (${tipAcct.name})`,
         pieceNumber,
         now
       )

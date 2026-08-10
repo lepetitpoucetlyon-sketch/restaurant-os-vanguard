@@ -22,6 +22,17 @@ export interface BridgePayload {
   covers?: number;
   isTrainingMode?: boolean;
   partialPayments?: { amount: number; guest: number; method?: string }[];
+  /**
+   * Pourboire volontaire encaissé au terminal, en microunits (§7.4).
+   *
+   * ⚠️ HORS BASE TVA — n'entre jamais dans `TaxCalculator.calculateTotals`
+   * ni dans `ttcByRateAndAxis`. Crédité sur le compte PCG 708500 et débité
+   * sur le moyen de paiement, ce qui préserve `Σ débits = Σ crédits`.
+   *
+   * Sans ce champ, le terminal encaisse `panier + pourboire` alors que la
+   * chaîne fiscale ne scelle que `panier` — écart inexpliqué à chaque service.
+   */
+  tipInMicrounits?: number;
 }
 
 export interface BridgeResult {
@@ -53,6 +64,22 @@ function emitPaymentEvents(
     totalInMicrounits: totalTTCInMicrounits,
     paymentMode: (payload.partialPayments && payload.partialPayments.length > 0) ? 'split' : paymentMode,
   }).catch(() => {});
+
+  // §7.4 — Pourboire encaissé : déclenche la répartition au personnel.
+  // `TipDistributedHandler` divise le montant entre `staffIds` et écrit dans
+  // `payroll/tips/`. Sans cette émission, le pourboire était comptabilisé mais
+  // jamais reversé — le handler existait sans être appelé depuis le POS.
+  const tipInMicrounits = payload.tipInMicrounits ?? 0;
+  if (tipInMicrounits > 0) {
+    NexusEventBus.emitDurable('hr.tip_distributed', {
+      tenantId,
+      orderId: entryId,
+      tipInMicrounits,
+      // Par défaut le pourboire revient à l'opérateur qui a encaissé.
+      // Une politique de pooling (tip-pooling) pourra élargir cette liste.
+      staffIds: [operatorId],
+    }).catch(() => {});
+  }
 
   if (payload.partialPayments && payload.partialPayments.length > 0) {
     NexusEventBus.emitDurable('order.split', {

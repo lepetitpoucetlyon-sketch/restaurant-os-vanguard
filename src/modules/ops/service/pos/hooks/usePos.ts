@@ -180,6 +180,9 @@ export function usePOSController() {
                 tenantId: activeTenantId ?? "restaurant-os",
                 consumptionMode,
                 partialPayments: partials,
+                // §7.4 — le client paie `cartGrandTotal` (panier + pourboire, cf. l. 79).
+                // Sans cette ligne, la chaîne fiscale ne scellait que le panier.
+                tipInMicrounits,
             });
             showToast(`Table ${currentTable.number} — ${label} & scellé NF525`, "success");
             handleClearCart();
@@ -192,7 +195,7 @@ export function usePOSController() {
             logger.error('[POS] Fiscal signature failed', error, { context: 'NF525' });
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, handleClearCart, updateTable, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, tipInMicrounits, handleClearCart, updateTable, showToast]);
 
     const handlePaymentComplete = useCallback(() => finalizePayment(), [finalizePayment]);
 
