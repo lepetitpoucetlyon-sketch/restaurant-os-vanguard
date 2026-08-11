@@ -6,8 +6,24 @@ import { toError } from '@/lib/toError';
 import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
+const ReceiveStockDataSchema = z.object({
+    quantity: z.number().min(0.001, 'quantité positive requise'),
+    unitCost: z.number().min(0).optional(),
+    unitCostInMicrounits: z.number().int().min(0).optional(),
+    name: z.string().optional(),
+    unit: z.string().optional(),
+}).passthrough();
+
+export type ReceiveStockData = z.infer<typeof ReceiveStockDataSchema>;
+
 export const adjustStockAction = createSafeAction(
-    z.tuple([z.string(), z.number(), z.number(), z.string(), z.string()]),
+    z.tuple([
+        z.string().min(1, 'itemId requis'),
+        z.number().min(0, 'quantité initiale doit être >= 0'),
+        z.number().min(0, 'nouvelle quantité doit être >= 0'),
+        z.string().min(1, 'motif obligatoire pour justification du mouvement'),
+        z.string().min(1, 'adjustedBy requis')
+    ]),
     { page: "inventory", action: "adjust_qty" },
     async (tenantId, itemId: string, oldQuantity: number, newQuantity: number, reason: string, adjustedBy: string) => {
         try {
@@ -28,9 +44,9 @@ export const adjustStockAction = createSafeAction(
 );
 
 export const receiveStockAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([ReceiveStockDataSchema]),
     { page: "inventory", action: "add_stock" },
-    async (tenantId, data: any) => {
+    async (tenantId, data: ReceiveStockData) => {
         try {
             const { Nexus } = await import('@/lib/nexus/NexusAdapter');
             const deliveryId = Nexus.adapter.generateId('deliveries');
@@ -63,7 +79,11 @@ export const receiveStockAction = createSafeAction(
 );
 
 export const updateIngredientThresholdsAction = createSafeAction(
-    z.tuple([z.string(), z.number().optional(), z.number().optional()]),
+    z.tuple([
+        z.string().min(1, 'ingredientId requis'),
+        z.number().min(0, 'minQuantity doit être >= 0').optional(),
+        z.number().min(0, 'reorderQuantity doit être >= 0').optional()
+    ]),
     { page: "kitchen", action: "edit_recipe" }, // or inventory.manage_alerts
     async (tenantId, ingredientId: string, minQuantity?: number, reorderQuantity?: number) => {
         try {

@@ -9,8 +9,17 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
+const ClockActionSchema = z.enum(["CLOCK_IN", "CLOCK_OUT", "BREAK_START", "BREAK_END"]);
+const TimeclockPayloadSchema = z.object({
+    userId: z.string().min(1, 'userId requis'),
+    userName: z.string().min(1, 'userName requis'),
+    tenantId: z.string().min(1),
+    terminalId: z.string().min(1, 'terminalId requis'),
+    timestamp: z.string().min(1),
+}).passthrough();
+
 export const submitTimeclockAction = createSafeAction(
-    z.tuple([z.string(), z.unknown()]),
+    z.tuple([ClockActionSchema, TimeclockPayloadSchema]),
     { page: "timeclock", action: "clock_self" },
     async (tenantId, action: ClockAction, data: TimeclockPayload) => {
         try {

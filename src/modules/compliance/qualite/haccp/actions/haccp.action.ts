@@ -6,10 +6,21 @@ import { toError } from '@/lib/toError';
 import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
+const CleaningTaskRecordSchema = z.object({
+    id: z.string().min(1),
+    taskId: z.string().optional(),
+    zoneId: z.string().optional(),
+    operatorId: z.string().min(1),
+    signedAt: z.number().optional(),
+    notes: z.string().optional(),
+}).passthrough();
+
+export type CleaningTaskRecord = z.infer<typeof CleaningTaskRecordSchema>;
+
 export const signCleaningTaskAction = createSafeAction(
-    z.tuple([z.unknown()]),
+    z.tuple([CleaningTaskRecordSchema]),
     { page: "haccp", action: "validate_checklist" },
-    async (tenantId, record: any) => {
+    async (tenantId, record: CleaningTaskRecord) => {
         try {
             await NexusEventBus.emitDurable('haccp.cleaning.completed', { tenantId, id: record.id, data: record });
             return { success: true };
@@ -20,7 +31,15 @@ export const signCleaningTaskAction = createSafeAction(
 );
 
 export const logCoolingCycleAction = createSafeAction(
-    z.tuple([z.string(), z.string(), z.string(), z.number(), z.number(), z.number(), z.string()]),
+    z.tuple([
+        z.string().min(1, 'batchId requis'),
+        z.string().min(1, 'productId requis'),
+        z.string().min(1, 'productName requis'),
+        z.number().min(-50).max(200, 'température invalide'),
+        z.number().min(-50).max(200, 'température invalide'),
+        z.number().min(0).max(1440, 'durée invalide'),
+        z.string().min(1, 'operatorId requis')
+    ]),
     { page: "haccp", action: "record_temperature" },
     async (
         tenantId,

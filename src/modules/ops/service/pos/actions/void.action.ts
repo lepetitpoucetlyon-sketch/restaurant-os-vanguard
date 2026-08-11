@@ -11,12 +11,12 @@ import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
 
 const VoidPayloadSchema = z.tuple([
-    z.string(),
+    z.string().min(1, 'operatorId requis'),
     z.enum(["void", "refund"]),
-    z.string(),
-    z.number(),
-    z.string().optional(),
-    z.string().optional() // pin argument as the last string (optional because maybe UI doesn't send it yet)
+    z.string().min(1, 'pieceNumber requis'),
+    z.number().int('montant en microunits requis'),
+    z.string().min(1, 'motif obligatoire pour traçabilité NF525'),
+    z.string().optional() // pin elevation
 ]);
 
 export const processVoidOrRefundAction = createSafeAction(
