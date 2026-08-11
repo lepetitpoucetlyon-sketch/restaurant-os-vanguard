@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useKitchen } from '../../../providers/hooks/kitchenHooks';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import { Order } from '@nexus/contracts';
-import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
+import { useAuth } from '@/lib/auth/hooks/useAuth';
 
 function resolveLockedStation(role?: string): KitchenStation | null {
     if (!role) return null;

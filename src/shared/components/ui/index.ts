@@ -1,4 +1,5 @@
-export * from "./button"
+export * from "./types";
+export * from "./button";
 export * from "./card"
 export * from "./scroll-area"
 export * from "./Toast"

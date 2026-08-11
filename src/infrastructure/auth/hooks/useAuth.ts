@@ -1,11 +1,6 @@
 "use client";
 
-import { useNexusCore } from '@/shared/providers/NexusCoreContext';
-
 /**
- * 🔒 useAuth - Grade VI
- * Bridge souverain vers la session active et les permissions du Nexus Core.
+ * 🔒 useAuth - Bridge vers la source canonique src/lib/auth
  */
-export function useAuth() {
-    return useNexusCore().auth;
-}
+export { useAuth } from '@/lib/auth/hooks/useAuth';

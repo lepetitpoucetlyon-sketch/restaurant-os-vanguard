@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { ReactNode } from "react";
 import { withVerticalOverride } from "@/shared/hooks/useVerticalComponent";
+import type { StatCardIntent } from "./types";
 
 // ── StatCard CVA ──────────────────────────────────────────────────────────────
 const statCardVariants = cva(
@@ -83,8 +84,7 @@ const labelVariants = cva(
   }
 );
 
-/** Nouveau prop sémantique — `brand` utilise --action-primary (couleur tenant) */
-export type StatCardIntent = "brand" | "success" | "warning" | "danger" | "info" | "neutral";
+export type { StatCardIntent } from "./types";
 
 /** @deprecated Utiliser `intent` à la place */
 type LegacyAccentColor = "accent" | "success" | "warning" | "error" | "info";

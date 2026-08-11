@@ -3,7 +3,7 @@
 import { cn } from '@/lib/ui.foundations';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-import type { StatCardIntent } from '@/shared/components/ui/StatCard';
+import type { StatCardIntent } from '@/shared/components/ui/types';
 
 interface SalonStatCardProps {
   label: string;
