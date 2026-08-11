@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { Order } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@nexus/contracts';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 
 /** Produit avec recette (forme runtime Firestore) */

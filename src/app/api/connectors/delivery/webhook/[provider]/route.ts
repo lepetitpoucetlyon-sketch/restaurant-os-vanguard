@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- server-only factory */
 import { NextRequest, NextResponse } from 'next/server';
-import { DeliveryProviderFactory } from '@/modules/ops/connectors/delivery';
+import { DeliveryProviderFactory } from '@/modules/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';

@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@nexus/contracts';
 
 export interface OPSEvents {
   'order.placed': {

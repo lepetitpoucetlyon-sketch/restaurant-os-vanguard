@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { EpsonPrinter } from "@/modules/ops/service/printers/hardware/EpsonPrinter";
+import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
 import type { ReceiptTicket } from "@/modules/ops/service/printers/hardware/EpsonPrinter";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";

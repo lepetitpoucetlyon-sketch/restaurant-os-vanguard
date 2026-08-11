@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- server-only factory */
 import { NextRequest, NextResponse } from 'next/server';
-import { ReservationProviderFactory } from '@/modules/ops/connectors/reservations';
+import { ReservationProviderFactory } from '@/modules/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';

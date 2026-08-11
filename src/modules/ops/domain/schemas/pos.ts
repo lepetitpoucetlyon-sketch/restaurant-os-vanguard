@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/shared/schemas/primitives';
 import { TaxRateSchema } from '@/modules/finance';
-import { ConsumptionModeSchema } from '@/modules/ops/domain/schemas/orders';
+import { ConsumptionModeSchema } from '@nexus/contracts';
 
 export const CartLineSchema = z.object({
   id:                    UUIDSchema,

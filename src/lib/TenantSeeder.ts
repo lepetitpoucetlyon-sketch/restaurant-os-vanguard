@@ -8,7 +8,7 @@ import { resolveDNA } from '@/shared/seeds';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
-import { FloorSchema, ZoneSchema, TableSchema, type Floor, type Zone, type Table } from '@/modules/ops/domain/schemas/ops';
+import { FloorSchema, ZoneSchema, TableSchema, type Floor, type Zone, type Table } from '@nexus/contracts';
 import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
 import { CONNECTOR_CATALOG } from '@/shared/connector-manifest';
 import type { ConnectorState } from '@/shared/connector-manifest';

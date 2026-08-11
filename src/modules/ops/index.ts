@@ -34,8 +34,8 @@ export { winesAtom } from './service/bar/store/barAtoms';
 export { cocktailsAtom } from './service/bar/store/barAtoms';
 export { wineRegionsAtom } from './service/bar/store/barAtoms';
 export { useTables } from './providers';
-// DeliveryProviderFactory et ReservationProviderFactory sont server-only :
-// les importer directement dans les routes API, jamais via ce barrel.
+export { ReservationProviderFactory } from './connectors/reservations';
+export { DeliveryProviderFactory } from './connectors/delivery';
 export type { Floor } from './workflow/engine/tables.types';
 export type { Zone } from './workflow/engine/tables.types';
 export type { CartItem } from './workflow/engine/types';
