@@ -948,6 +948,46 @@ Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microuni
 - **Stubs/raccourcis évités** : aucune conversion aveugle sur les adaptateurs TPE physiques (limite externe préservée en centimes).
 - **Vérifié par Claude** : ⬜
 
+---
+
+### [§5 P1 Logistics] Migration Monétaire — Support Native Microunits dans Procurement & Stock Logistics — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 21:31
+- **Commit(s)** : `93585d1e9` (`refactor(monetary): migration P1 logistics — supporter microunits nativement dans le procurement et le stock`)
+- **Fichiers touchés** : 8 fichiers dans `modules/logistics` (`ProcurementBridge.ts`, `ThreeWayMatchEngine.ts`, `types.ts`, `InventoryVisionService.ts`, `ProcurementService.ts`, `StockEngine.ts`, `CreatePreparationModal.tsx`, `inventoryMappers.ts`)
+- **Objectif chiffré atteint** : 
+  - `PurchaseOrder` et `DeliveryNote` enrichis de `totalAmountInMicrounits` / `unitPriceInMicrounits`.
+  - `ThreeWayMatchEngine` et `ProcurementBridge` opèrent désormais en microunits avec fallback rétrocompatible.
+  - `StockEngine` et `InventoryVisionService` enregistrent et comparent les coûts unitaires nativement en microunits.
+  - Invariants PBT : **7/7 validés vert** (`npx vitest run __tests__/invariants/`).
+  - `tsc` : **0 erreur**.
+- **Commande de preuve** : `./scripts/agent-gate.sh`
+- **Sortie BRUTE ENTIÈRE** :
+    ```
+    === AGENT-GATE PROOF ============================================
+    commit   : 93585d1e9   (branche agent/antigravity-exec)
+    arbre    : 0 fichier(s) suivi(s) non commité(s)  (doit être 0 pour une preuve valable)
+    ----------------------------------------------------------------
+    TSC error TS            : 0        (cible 0)
+    cycles (madge)          : 0        (cible 0 ; baseline tolérée 3)
+    kernel -> modules       : 0         (cible 0)
+    shared -> modules       : 7         (cible 0)
+    lib    -> modules       : 12         (cible 0)
+    store  -> modules       : 0         (cible 0)
+    barrel (viol/pilier)    : facility=0 logistics=0 human=0 ops=0 compliance=0 finance=0 commerce=0 intelligence=0 
+    InCents                 : 695       (cible 0)
+    as Microunits (direct)  : 7         (cible 0)
+    ----------------------------------------------------------------
+    VERDICT tsc  : ✅ VERT (0 erreur)
+    VERDICT arbre: ✅ propre
+    ================================================================
+    ```
+- **Gate 4 commandes** : tsc=0 · madge cycles=0 · kernel->modules=0 · all 8 pillars barrel=0
+- **Ce que je n'ai PAS fait / reste** : Suite de la Phase 5 (P2 Intelligence/Commerce → P3 Compliance/Facility), puis Refonte UI & Tokens (Phase 6).
+- **Stubs/raccourcis évités** : aucune suppression brute de types `InCents`, surcouche microunits ajoutée sans casser les contrats d'API existants.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 
