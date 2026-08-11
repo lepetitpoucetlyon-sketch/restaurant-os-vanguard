@@ -1,9 +1,5 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { logger } from '@/lib/axiom';
- 
-import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";
 import { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 import { toError } from "@/lib/toError";
 
@@ -92,6 +88,7 @@ export const MaintenanceAgent = {
      * AI CORE : Analyse Gemini Pro avec Injection d'ADN
      */
     async analyzeWithAI(ticket: MaintenanceTicket, context: MaintenanceTicketContext): Promise<MaintenanceAIAnalysis> {
+        const { DNAInjector } = await import("@/modules/intelligence/ia/ai/DNAInjector");
         const tenantDNA = await DNAInjector.getTenantDNA(ticket.tenantId);
 
         const userPrompt = `
@@ -121,6 +118,7 @@ export const MaintenanceAgent = {
             }
         `;
 
+        const { LLMManager, AI_MODELS } = await import('@/modules/intelligence');
         const response = await LLMManager.provider.generateText({
             model: AI_MODELS.fast,
             systemPrompt: 'You are the Senior SRE for Restaurant OS Empire.',

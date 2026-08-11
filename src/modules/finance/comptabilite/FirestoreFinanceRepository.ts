@@ -15,6 +15,7 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
     constructor(tenantId: string) {
         this.adapter = Nexus.adapter;
         this.tenantId = tenantId;
+        FirestoreHydrator.init().catch(() => {});
     }
 
     private getPath(collection: string): string {

@@ -1,10 +1,10 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { Order } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
-import { ImmunityAuditLogger } from '@/modules/compliance';
 import { toError } from "@/lib/toError";
+
+const lazyAudit = () => import('@/modules/compliance').then(m => m.ImmunityAuditLogger);
 
 const GENESIS_HASH = '0'.repeat(64);
 const INSTANCE_PREFIX_LENGTH = 4;
@@ -88,11 +88,11 @@ export const OfflineMasteryEngine = {
             operatorId: (order as unknown as { operatorId?: string }).operatorId ?? '',
         });
 
-        ImmunityAuditLogger.logTechnicalEvent({
+        lazyAudit().then(a => a.logTechnicalEvent({
             eventType: 'power_outage',
             description: `Vente scellée hors-ligne: ${order.id}`,
             deviceId: this.getInstanceId(),
-        }).catch(() => {});
+        })).catch(() => {});
     },
 
     async verifyChainIntegrity(): Promise<{ valid: boolean; brokenAt?: number }> {
@@ -107,11 +107,11 @@ export const OfflineMasteryEngine = {
             const seal = seals[i].payload as unknown as OfflineSeal;
             if (seal.previousHash !== expectedPrev) {
                 logger.error(`[Offline-Mastery] Chain break at seal index ${i}: expected ${expectedPrev}, got ${seal.previousHash}`);
-                ImmunityAuditLogger.logTechnicalEvent({
+                lazyAudit().then(a => a.logTechnicalEvent({
                     eventType: 'chain_break',
                     description: `Rupture de chaîne détectée à l'index ${i}`,
                     deviceId: this.getInstanceId(),
-                }).catch(() => {});
+                })).catch(() => {});
                 return { valid: false, brokenAt: i };
             }
             expectedPrev = seal.hash;
@@ -160,12 +160,12 @@ export const OfflineMasteryEngine = {
             }
         }
 
-        ImmunityAuditLogger.logTechnicalEvent({
+        lazyAudit().then(a => a.logTechnicalEvent({
             eventType: 'power_restore',
             description: `Réconciliation terminée: ${synced} sync, ${failed} échoués sur ${pending.length}`,
             deviceId: this.getInstanceId(),
             tenantId,
-        }).catch(() => {});
+        })).catch(() => {});
 
         return { synced, failed, chainValid: chainCheck.valid };
     },

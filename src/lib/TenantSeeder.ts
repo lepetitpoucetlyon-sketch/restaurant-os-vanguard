@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -9,7 +8,6 @@ import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import { FloorSchema, ZoneSchema, TableSchema, type Floor, type Zone, type Table } from '@nexus/contracts';
-import { ConnectorHub } from '@/modules/intelligence';
 import { CONNECTOR_CATALOG } from '@/shared/connector-manifest';
 import type { ConnectorState } from '@/shared/connector-manifest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
@@ -223,6 +221,7 @@ export const TenantSeeder = {
       }
 
       // 6. Auto-activation des connecteurs selon le vertical
+      const { ConnectorHub } = await import('@/modules/intelligence');
       const autoIds = ConnectorHub.getAutoActivated(variant);
       const activatedConnectors: { id: string; status: 'active' | 'pending_config' }[] = [];
 

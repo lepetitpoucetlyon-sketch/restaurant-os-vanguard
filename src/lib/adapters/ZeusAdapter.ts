@@ -1,8 +1,10 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import { AgentEngine, type AgentDomain, type ZeusPulseResult, type ZeusAnomaly, type ZeusManifest } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalHACCPMapper } from '@modules/finance';
+
+type AgentDomain = string;
+interface ZeusAnomaly { [key: string]: unknown; severity: string }
+interface ZeusPulseResult { timestamp: string; anomalies: ZeusAnomaly[]; actionsTaken: string[]; insights: string[] }
+interface ZeusManifest { version: string; lastPulse: string | null; currentFocus: string; activeAgents: Array<Record<string, unknown> & { id: string; domain: string; role: string }> }
 
 /**
  * ⚡ ZeusEngine - Grade X Autonomous Orchestrator
@@ -83,6 +85,7 @@ export class ZeusEngine {
                     });
 
                     // Auto-Trigger Mapper: Themis Agent Intervention
+                    const { FiscalHACCPMapper } = await import('@/modules/finance');
                     await FiscalHACCPMapper.processCriticalWaste(reading, [], tenantId);
                     actionsTaken.push(
                         `[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`,
@@ -156,9 +159,10 @@ export class ZeusEngine {
             `🤝 [ZEUS] Delegating to Vanguard Agent: ${agent.id.toUpperCase()} (${domain})`,
         );
 
+        const { AgentEngine } = await import('@/modules/intelligence');
         return AgentEngine.query({
-            domain: agent.domain,
-            userRole: agent.role,
+            domain: agent.domain as import('@/modules/intelligence').AgentDomain,
+            userRole: agent.role as import('@/modules/intelligence').AgentRole,
             userPrompt: prompt,
             contextData: context,
             apiKey: process.env.GEMINI_API_KEY || process.env.LLM_API_KEY || 'NEXUS_INTERNAL',

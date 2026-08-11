@@ -1,31 +1,36 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { ZodSchema } from 'zod';
 import { UserSchema, OrderSchema, TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@nexus/contracts';
-import { StockItemSchema } from '@nexus/contracts';;
+import { StockItemSchema } from '@nexus/contracts';
 import { ModuleSchema } from '@nexus/contracts';
-import {
-  JournalEntrySchema,
-  AccountSchema,
-  BankTransactionSchema,
-  ExpenseClaimSchema
-} from '@/modules/finance';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { logger } from '@/lib/axiom';
 
 type AnyRecord = Record<string, unknown>;
+
+type FinanceModule = typeof import('@/modules/finance');
+let _financeSchemas: FinanceModule | null = null;
+function getFinanceSchemas(): FinanceModule {
+  if (!_financeSchemas) throw new NexusError(NexusErrorCode.HYDRATION_FAILURE, 'Finance schemas not loaded — call FirestoreHydrator.init() first');
+  return _financeSchemas;
+}
 
 /**
  * 🏛️ FirestoreHydrator - Grade X
  * Assure la validation runtime et la transformation des données Firestore.
  */
 export class FirestoreHydrator {
+  static async init() {
+    if (!_financeSchemas) _financeSchemas = await import('@/modules/finance');
+  }
+
   static hydrateJournalEntry(raw: AnyRecord) {
+    const { JournalEntrySchema } = getFinanceSchemas();
     const parsed = JournalEntrySchema.safeParse(raw);
     if (!parsed.success) {
       throw new NexusError(
         NexusErrorCode.HYDRATION_FAILURE,
         'JournalEntry document is malformed in Firestore',
-        { issues: parsed.error.issues.map(i => i.message) }
+        { issues: parsed.error.issues.map((i: { message: string }) => i.message) }
       );
     }
 
@@ -44,12 +49,13 @@ export class FirestoreHydrator {
   }
 
   static hydrateAccount(raw: AnyRecord) {
+    const { AccountSchema } = getFinanceSchemas();
     const parsed = AccountSchema.safeParse(raw);
     if (!parsed.success) {
       throw new NexusError(
         NexusErrorCode.HYDRATION_FAILURE,
         'Account document is malformed in Firestore',
-        { issues: parsed.error.issues.map(i => i.message) }
+        { issues: parsed.error.issues.map((i: { message: string }) => i.message) }
       );
     }
     const data = parsed.data;
@@ -62,12 +68,13 @@ export class FirestoreHydrator {
   }
 
   static hydrateBankTransaction(raw: AnyRecord) {
+    const { BankTransactionSchema } = getFinanceSchemas();
     const parsed = BankTransactionSchema.safeParse(raw);
     if (!parsed.success) {
       throw new NexusError(
         NexusErrorCode.HYDRATION_FAILURE,
         'BankTransaction document is malformed in Firestore',
-        { issues: parsed.error.issues.map(i => i.message) }
+        { issues: parsed.error.issues.map((i: { message: string }) => i.message) }
       );
     }
     const data = parsed.data;
@@ -83,12 +90,13 @@ export class FirestoreHydrator {
   }
 
   static hydrateExpenseClaim(raw: AnyRecord) {
+    const { ExpenseClaimSchema } = getFinanceSchemas();
     const parsed = ExpenseClaimSchema.safeParse(raw);
     if (!parsed.success) {
       throw new NexusError(
         NexusErrorCode.HYDRATION_FAILURE,
         'ExpenseClaim document is malformed in Firestore',
-        { issues: parsed.error.issues.map(i => i.message) }
+        { issues: parsed.error.issues.map((i: { message: string }) => i.message) }
       );
     }
     const data = parsed.data;

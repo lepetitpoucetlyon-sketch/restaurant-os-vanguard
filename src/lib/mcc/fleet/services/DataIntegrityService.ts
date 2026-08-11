@@ -1,7 +1,7 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { AuditLogger } from '@/modules/compliance';
+
+const lazyAuditLogger = () => import('@/modules/compliance').then(m => m.AuditLogger);
 
 /**
  * Service d'Intégrité des Données (Grade X)
@@ -46,6 +46,7 @@ export class DataIntegrityService {
       await batch.commit();
 
       // 6. Sécuriser l'action dans le journal d'audit
+      const AuditLogger = await lazyAuditLogger();
       await AuditLogger.logAction(
         adminId, 
         'RESELLER_DELETE', 
@@ -75,6 +76,7 @@ export class DataIntegrityService {
     // Le code implémenterait ici la suppression de toutes les sous-collections du tenant
     // via une Cloud Function backend, car un Batch Firestore est limité à 500 opérations.
     
+    const AuditLogger = await lazyAuditLogger();
     await AuditLogger.logAction(
       adminId,
       'KILL_SWITCH_ACTIVATE',

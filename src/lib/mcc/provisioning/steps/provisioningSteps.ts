@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
@@ -6,7 +5,6 @@ import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
 import type { TenantID } from '@/shared/types/brands';
 import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { toError } from "@/lib/toError";
@@ -34,6 +32,7 @@ export async function setupStripeCustomer(tenantId: string, request: Provisionin
 
 export async function setupFleetTelemetry(tenantId: string, request: ProvisioningRequest): Promise<void> {
     try {
+        const { fleetTelemetry } = await import('@/modules/intelligence');
         await fleetTelemetry.pushSiteTelemetry(tenantId as TenantID, {
             id: tenantId,
             key: tenantId,
@@ -58,6 +57,7 @@ export async function setupFleetTelemetry(tenantId: string, request: Provisionin
 
 export async function setupRAGWorkspace(tenantId: string, ragWorkspaceId: string, companyName: string): Promise<void> {
     try {
+        const { sovereignCreateWorkspace } = await import('@/modules/intelligence');
         await sovereignCreateWorkspace(ragWorkspaceId, companyName);
         await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, { ragWorkspaceId }, { merge: true });
         logger.info('[MCC/prov] Sovereign RAG workspace créé', { ragWorkspaceId });

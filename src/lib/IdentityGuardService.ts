@@ -1,22 +1,10 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
- 
-import { LLMManager, AI_MODELS } from '@/modules/intelligence';
-import {
-    IdentityExtractionSchema,
-    ComplianceExtractionErrorSchema,
-    type IdentityExtraction,
-    type ComplianceExtractionError
-} from '@/modules/compliance';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
- 
 import { toError } from "@/lib/toError";
 
 export type IdentityExtractionResult =
-    | { success: true; data: IdentityExtraction; rawResponse: string }
-    | { success: false; error: ComplianceExtractionError | { error: string; reason: string; flags: string[] }; rawResponse: string };
-
-const getModelId = () => AI_MODELS.fast;
+    | { success: true; data: Record<string, unknown>; rawResponse: string }
+    | { success: false; error: { error: string; reason: string; flags: string[] }; rawResponse: string };
 
 export const IdentityGuardService = {
     /**
@@ -34,6 +22,9 @@ export const IdentityGuardService = {
             const rawResponse = await this.callVisionAPI(base64Image, trustedContext);
             const parsed = this.extractJson(rawResponse);
 
+            const { IdentityExtractionSchema, ComplianceExtractionErrorSchema } =
+                await import('@/modules/compliance');
+
             // 1. Error check
             const errorParse = ComplianceExtractionErrorSchema.safeParse(parsed);
             if (errorParse.success) {
@@ -44,8 +35,8 @@ export const IdentityGuardService = {
             const dataParse = IdentityExtractionSchema.safeParse(parsed);
             if (!dataParse.success) {
                 logger.error('[IdentityGuard] Schema validation failed', dataParse.error);
-                return { 
-                    success: false, 
+                return {
+                    success: false,
                     error: { error: 'NON_PROCESSABLE', reason: 'Invalid JSON Schema', flags: [] },
                     rawResponse 
                 };
@@ -69,8 +60,9 @@ export const IdentityGuardService = {
             ? "\nCONTEXTE : TRUSTED_SECURE_VASSAL. Vous pouvez extraire les raw_values."
             : "\nCONTEXTE : UNTRUSTED_OUTSIDE_VASSAL. raw_value doit être NULL pour tout Tier 4.";
 
+        const { LLMManager, AI_MODELS } = await import('@/modules/intelligence');
         const response = await LLMManager.provider.generateFromImage({
-            model: getModelId(),
+            model: AI_MODELS.fast,
             systemPrompt: IDENTITY_GUARD_SYSTEM_PROMPT + contextInstruction,
             userPrompt: "Analyze this document for GDPR compliance. Return JSON only.",
             image: { base64: imageData, mimeType: 'image/jpeg' },

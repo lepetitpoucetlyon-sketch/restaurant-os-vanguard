@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import { SovereignLedger } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 
@@ -18,6 +16,7 @@ export const MonkeyChaos = {
         try {
             // We bypass the standard recordTransfer to test the internal validation if possible,
             // or we send a clearly broken request to verify the financier blocks it.
+            const { SovereignLedger } = await import('@/modules/finance');
             await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',

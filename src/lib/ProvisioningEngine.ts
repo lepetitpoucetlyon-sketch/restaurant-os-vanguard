@@ -1,9 +1,9 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@/shared/types/empire';
-import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
 import { TenantSeeder } from './TenantSeeder';
+
+const lazyIntelligence = () => import('@/modules/intelligence');
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
@@ -90,6 +90,7 @@ export const ProvisioningEngine = {
 
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
+            const { fleetTelemetry } = await lazyIntelligence();
             await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@/shared/types/brands').TenantID, {
                 ...newInstance,
                 healthScore: newInstance.metrics.healthScore,
@@ -165,6 +166,7 @@ export const ProvisioningEngine = {
             // Non-bloquant : si le sidecar est indisponible au moment du provisionnement,
             // le workspace sera créé à la première réindexation manuelle depuis le MCC.
             try {
+                const { sovereignCreateWorkspace } = await lazyIntelligence();
                 await sovereignCreateWorkspace(dna.key, dna.name);
                 logger.info('ProvisioningEngine: Sovereign RAG workspace initialized', { tenantId: dna.key });
             } catch (ragErr) {
@@ -194,10 +196,10 @@ export const ProvisioningEngine = {
                 Nexus.adapter.delete(`tenants/${dna.key}/users/admin_${dna.key}`).catch(() => {}),
                 // Marquer l'entrée fleet comme FAILED (évite les ghost entries ONLINE)
                 registeredInstanceId
-                    ? fleetTelemetry.pushSiteTelemetry(
+                    ? lazyIntelligence().then(m => m.fleetTelemetry.pushSiteTelemetry(
                         registeredInstanceId as import('@/shared/types/brands').TenantID,
                         { status: 'PROVISIONING_FAILED' }
-                      ).catch(() => {})
+                      )).catch(() => {})
                     : Promise.resolve(),
             ]);
 

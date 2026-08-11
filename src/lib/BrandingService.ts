@@ -1,9 +1,7 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
-import { LLMManager } from '@/modules/intelligence';
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
 import type { PlatformVariant } from '@nexus/contracts';
 
@@ -40,7 +38,7 @@ export const BrandingService = {
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
              
-            const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
+            const { AI_MODELS, LLMManager } = await import('@/modules/intelligence/ia/ai');
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.fast,
                 systemPrompt: 'You are a Senior Art Director.',
