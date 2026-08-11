@@ -17,8 +17,6 @@ import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useToast } from '@components/ui/Toast';
 
-import { FleetCommander } from '@/modules/intelligence/ia/fleet/FleetCommander';
-
 /**
  * 🛰️ TenantOrchestrator - Restaurant OS
  * The fleet commander interface. Allows switching between restaurant instances.

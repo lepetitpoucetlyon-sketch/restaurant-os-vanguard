@@ -1,6 +1,4 @@
 /* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
-import { ChaosMonkey } from '@/modules/intelligence/ia/resilience/ChaosMonkey';
-import { ResilienceSlayer } from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
 import { Sentry } from '@/lib/sentry';
 
 /**
@@ -19,8 +17,10 @@ export class NexusTelemetryEngine {
         }
     }
 
-    static mountChaosMonkeys() {
+    static async mountChaosMonkeys() {
         if (typeof window !== 'undefined') {
+            const { ChaosMonkey } = await import('@/modules/intelligence/ia/resilience/ChaosMonkey');
+            const { ResilienceSlayer } = await import('@/modules/intelligence/ia/resilience/ResilienceSlayer');
             (window as unknown as Record<string, unknown>).awakenTheMonkey = (intensity?: number) => {
                 ChaosMonkey.start(intensity);
                 ResilienceSlayer.start();
