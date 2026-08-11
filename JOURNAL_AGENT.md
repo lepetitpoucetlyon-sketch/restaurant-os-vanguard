@@ -114,9 +114,11 @@ Baseline : facility 2 · logistics 6 · human 13 · ops 26 · compliance 27 · f
 | §3.1 Barrel 245→0 | DONE | `d57d78ebe`→`7d2cc9eed` | ✅ oui | ⚠️ **barrel=0 confirmé** mais build cassé à la livraison ; **réparé** (§AUDIT-2-FIX) |
 | Toutes entrées « Gate : tsc=0 · cycles=0 » | DONE | 11/08 12:05→15:05 | ✅ oui | ❌ **FAUX à la livraison** (tsc=121/cycles=6) → **maintenant tsc=0/cycles=3** après réparation |
 | §AUDIT-2-FIX réparation build 74→0 | DONE | (commits ci-dessous) | ✅ oui | ✅ **CONFIRMÉ** (tsc=0, cycles=3, TicketZHandler 7/7) |
+| §3.1 résidu `commerce=1`→0 + §3.4b kernel→0/cycles→0 | DONE | `e82a3d346` (HEAD `08a5c25d9`) | ✅ oui `--full` | ✅ **CONFIRMÉ** — 1ʳᵉ série propre (gate lié au hash, 0 triche, 0 régression tests) — voir `[AUDIT]` §3 |
 
 **Légende verdict** : ✅ CONFIRMÉ (re-mesure = sortie collée) · ⚠️ ÉCART (à corriger) ·
 ❌ REJETÉ (triche/flemme détectée — voir note) · ⏳ non encore audité.
+**⚠️ Incident de collision 11/08** (working tree partagé, `PLAN_COMPLET.md` failli perdu) → correctif plan §0.9 Règle 0 (worktree). Voir `[AUDIT]` §3.
 
 ---
 
@@ -724,7 +726,7 @@ Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microuni
 - **Gate 4 commandes** : tsc=0 · madge cycles=0 · kernel->modules=0 · all 8 pillars barrel=0
 - **Ce que j'ai PAS fait / reste** : Inversions shared->modules (7) et lib->modules (12) qui sont des inversions d'infrastructure tolérées, puis Phase 2B.2 (schémas Zod stricts).
 - **Stubs/raccourcis évités** : types extraits dans des fichiers `.types.ts` neutres dédiés (sans aucun stub), shims guard non utilisés supprimés proprement, `ProductSchema` promu au kernel.
-- **Vérifié par Claude** : ⬜
+- **Vérifié par Claude** : ✅ **CONFIRMÉ** (re-mesure indépendante `--full` sur `08a5c25d9` = identique ; anti-triche OK — voir entrée `[AUDIT]` ci-dessous)
 
 
 
@@ -740,3 +742,34 @@ Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microuni
 
 
 
+
+### [AUDIT] Vérification indépendante — §3.1 barrel + §3.4b kernel/cycles (HEAD `08a5c25d9`) — par Claude
+
+- **Auditeur** : Claude · **Horodatage** : 2026-08-11 (soir) · **HEAD audité** : `08a5c25d9` (au-dessus de `e82a3d346` d'Antigravity)
+- **Méthode** : re-mesure indépendante `./scripts/agent-gate.sh --full` sur le HEAD + `git show e82a3d346` (diff) +
+  grep motifs de flemme + vérification que les fichiers supprimés étaient morts + `git show a3a38d281:…` (pré-existence).
+- **Re-mesure (ma sortie, ≈ bloc collé par l'agent)** :
+  `TSC=0` ✅ · `cycles(madge)=0` ✅ · `kernel→modules=0` ✅ · `barrel tous piliers=0` ✅ · `store→modules=0` ✅ ·
+  `shared→modules=7`, `lib→modules=12` (déclarés « reste » honnêtement par l'agent — OK).
+- **Vitest `--full` (que l'agent n'avait pas montré)** : `764 passed · 5 fichiers échec · 4 tests échec` = **les mêmes
+  échecs pré-existants** (mock `logger`/timeout LLM, cf. §AUDIT-2), **aucune régression** (baseline 762 → 764).
+- **Contrôles anti-triche** :
+  - Fichiers supprimés `kernel/nexus/guards/HermesDashboard.tsx` + `fleet/QuantumDashboard.tsx` = **shims de
+    ré-export d'1 ligne** ; les vrais composants vivent dans `modules/intelligence/ia/` et y restent exportés.
+    Aucune référence kernel restante → **pas de code vivant détruit**. ✅
+  - `}).catchall(z.any())` (commerce.types.ts) = **relocalisé** depuis `commerce.ts` (présent sur `a3a38d281`
+    ligne 20 AVANT son travail) → **pas une nouvelle violation** §0.4. ✅
+  - 3 cycles cassés par **extraction de types réels** (`ProvisioningRequest`, `BridgePayload/PaymentMode`,
+    `CashDrawerSession`) dans des `.types.ts` neutres — pas de `@ts-ignore`, pas de suppression de test. ✅
+- **Verdict** : ✅ **CONFIRMÉ.** Bon travail, protocole respecté cette fois (gate lié au hash, commits séparés
+  src/journal, entrée ancrée avant vérif). C'est la symbiose qui fonctionne.
+
+#### ⚠️ INCIDENT DE COLLISION (grave — corrigé au plan §0.9)
+
+Pendant cet audit, `agent-gate.sh --full` (vitest ~3 min) tournait ; Claude a fait `git stash -u` + `git checkout
+a3a38d281` **dans le même répertoire** où Antigravity écrivait déjà sa Phase 2B.2 (`*.action.ts` non commités).
+Résultat : WIP 2B.2 happé dans un stash, `PLAN_COMPLET.md` (non suivi) déplacé, HEAD détaché, deux stashs concurrents
+entremêlés → `PLAN_COMPLET.md` **a failli être perdu** (récupéré via `stash@{0}^3`). **Cause : deux acteurs, un seul
+working tree.** Correctif ajouté au plan **§0.9 Règle 0 — isolation physique par worktree** : chaque acteur a son
+répertoire ; l'auditeur vérifie un hash dans un `git worktree add ../audit-<hash>` jetable, jamais dans le répertoire
+de l'exécutant. **À appliquer avant la reprise de 2B.2.**
