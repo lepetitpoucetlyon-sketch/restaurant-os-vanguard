@@ -10,7 +10,7 @@ import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence
 import type { TenantID } from '@/shared/types/brands';
 import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { toError } from "@/lib/toError";
-import type { ProvisioningRequest } from '../TenantProvisioningService';
+import type { ProvisioningRequest } from '../types';
 
 export async function setupStripeCustomer(tenantId: string, request: ProvisioningRequest): Promise<string> {
     const stripeKey = process.env.STRIPE_SECRET_KEY;

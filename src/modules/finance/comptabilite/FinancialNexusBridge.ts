@@ -10,35 +10,8 @@ import { resolveVatRate } from '../fiscalite/tax/vatResolver';
 import { inferCategory } from '../fiscalite/tax/vatResolver';
 import type { ConsumptionMode } from '@/modules/ops';
 
-export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
-
-export interface BridgePayload {
-  cartItems: CartItem[];
-  operatorId: string;
-  tableId: string | null;
-  tenantId: string;
-  consumptionMode?: ConsumptionMode;
-  paymentMode?: PaymentMode;
-  covers?: number;
-  isTrainingMode?: boolean;
-  partialPayments?: { amount: number; guest: number; method?: string }[];
-  /**
-   * Pourboire volontaire encaissé au terminal, en microunits (§7.4).
-   *
-   * ⚠️ HORS BASE TVA — n'entre jamais dans `TaxCalculator.calculateTotals`
-   * ni dans `ttcByRateAndAxis`. Crédité sur le compte PCG 708500 et débité
-   * sur le moyen de paiement, ce qui préserve `Σ débits = Σ crédits`.
-   *
-   * Sans ce champ, le terminal encaisse `panier + pourboire` alors que la
-   * chaîne fiscale ne scelle que `panier` — écart inexpliqué à chaque service.
-   */
-  tipInMicrounits?: number;
-}
-
-export interface BridgeResult {
-  journalEntry: JournalEntry;
-  seal: FiscalSeal;
-}
+import type { PaymentMode, BridgePayload, BridgeResult } from './bridge.types';
+export type { PaymentMode, BridgePayload, BridgeResult };
 
 import {
   microToCents,

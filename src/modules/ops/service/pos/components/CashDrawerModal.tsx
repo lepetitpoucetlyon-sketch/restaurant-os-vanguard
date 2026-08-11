@@ -14,16 +14,8 @@ import { openCashDrawerAction, closeCashDrawerAction } from "../actions/cashdraw
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
-export interface CashDrawerSession {
-    id: string;
-    openedAt: string;
-    openingInMicrounits: number;
-    closedAt?: string;
-    closingInMicrounits?: number;
-    collectedInMicrounits: number;
-    changeGivenInMicrounits: number;
-    userId: string;
-}
+import type { CashDrawerSession } from "../types/cashdrawer.types";
+export type { CashDrawerSession };
 
 interface CashDrawerModalProps {
     isOpen: boolean;

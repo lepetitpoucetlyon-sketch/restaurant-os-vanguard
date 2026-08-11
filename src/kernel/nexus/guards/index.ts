@@ -20,6 +20,5 @@ export * from './admin';
 export * from './fleet';
 
 // Phase 5 transplants — admin components moved from src/components/{admin,fleet}
-export { HermesDashboard } from './HermesDashboard';
 export { ProvisioningWizard } from './ProvisioningWizard';
 export { TenantOrchestrator } from './TenantOrchestrator';

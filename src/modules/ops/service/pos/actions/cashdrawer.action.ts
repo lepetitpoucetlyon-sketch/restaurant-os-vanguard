@@ -3,7 +3,7 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toError } from "@/lib/toError";
-import type { CashDrawerSession } from "../components/CashDrawerModal";
+import type { CashDrawerSession } from "../types/cashdrawer.types";
 
 import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";
