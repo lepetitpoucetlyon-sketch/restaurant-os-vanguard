@@ -1,25 +1,48 @@
-/* eslint-disable no-restricted-imports */
-// 🍽️ OPS PILLAR — Orders, POS, KDS & Floor Plan
-// ⚠️ Ré-exports depuis les fichiers SOURCES des atomes, jamais depuis le
-// barrel `@modules/ops` : la couche état ne doit pas importer les barrels
-// de modules (cycle store → module → hooks/components → store, TDZ au build SSR).
+import { atom } from 'jotai';
+import { Order, Table, OrderItem, OrderItemModification } from '@nexus/contracts';
+import { createProxyDomain } from '@/store/nexusNodeFactory';
+import { SovereignMath } from '@/shared/services/SovereignMath';
 
 export {
-    ordersNodeAtom,           // OPS
-    ordersAtom,               // OPS
-    ordersLoadingAtom,        // OPS
-    tablesNodeAtom,           // OPS
-    tablesAtom,               // OPS
-    tablesLoadingAtom,        // OPS
-    activeCartAtom,           // OPS
-    availableTablesAtom,      // OPS
-    pendingOrdersAtom,        // OPS
-    pendingModificationsAtom, // OPS
-} from '@/modules/ops/service/pos/store/orderAtoms';
-
-export {
-    floorsAtom,               // OPS
-    zonesAtom,                // OPS
-    zonesLockedAtom,          // OPS
-    currentFloorIdAtom,       // OPS
+    floorsAtom,
+    zonesAtom,
+    zonesLockedAtom,
+    currentFloorIdAtom,
 } from '@nexus/state/SovereignGenome';
+
+// --- 🛒 ORDERS & TABLES DOMAIN (Service room, KDS, Additions) ---
+
+const _orders = createProxyDomain<Order>('orders');
+export const ordersNodeAtom = _orders.node;
+export const ordersAtom = _orders.data;
+export const ordersLoadingAtom = _orders.loading;
+
+const _tables = createProxyDomain<Table>('tables');
+export const tablesNodeAtom = _tables.node;
+export const tablesAtom = _tables.data;
+export const tablesLoadingAtom = _tables.loading;
+
+// --- 🛒 UI STATE (Cart, Modifications) ---
+export const activeCartAtom = atom<{ items: OrderItem[]; customerId?: string } | null>(null);
+export const pendingModificationsAtom = atom<OrderItemModification[]>([]);
+
+/** 📊 Orders Statistics (Atomic Scalpel) */
+export const orderStatsAtom = atom((get) => {
+    const orders = get(ordersAtom);
+    const revenueMicro = orders.reduce((sum, o) => sum + SovereignMath.orderTotalMicrounits(o), 0);
+    return {
+        total: orders.length,
+        revenue: SovereignMath.toCents(BigInt(revenueMicro)),
+        pending: orders.filter(o => o.status !== 'paid' && o.status !== 'cancelled').length
+    };
+});
+
+/** 🪑 Available Tables Selector */
+export const availableTablesAtom = atom((get) => {
+    return get(tablesAtom).filter((t: Table) => t.status === 'free');
+});
+
+/** 🕒 Pending Orders Selector (for KDS) */
+export const pendingOrdersAtom = atom((get) => {
+    return get(ordersAtom).filter((o: Order) => o.status === 'new' || o.status === 'preparing');
+});
