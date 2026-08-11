@@ -13,7 +13,7 @@ import {
     CheckCircle2
 } from 'lucide-react';
 import { useStrategicOracle } from '@/shared/hooks/useStrategicOracle';
-import { useFleet } from '@/shared/contexts/FleetContext';
+import { useFleet } from '../contexts/FleetContext';
 import { FleetInsight } from '@/modules/intelligence';
 
 export function StrategyOracle() {

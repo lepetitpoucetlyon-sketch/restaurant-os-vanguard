@@ -8,7 +8,7 @@ import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
-import { useFleet } from '@/shared/contexts/FleetContext';
+import { useFleet } from '../contexts/FleetContext';
 
 const FleetCommandTable    = dynamic(() => import('../components/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
 const FleetDeviceInventory = dynamic(() => import('../components/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { PackageOpen, ToggleLeft, ToggleRight, Loader2, ServerCog, Store } from 'lucide-react';
-import { useFleet } from '@/shared/contexts/FleetContext';
+import { useFleet } from '../contexts/FleetContext';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
 

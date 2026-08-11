@@ -11,7 +11,7 @@ import {
     ShoppingBag,
     RefreshCw,
 } from 'lucide-react';
-import { useFleet } from '@/shared/contexts/FleetContext';
+import { useFleet } from '../contexts/FleetContext';
 import { TreasuryEngine } from '@/modules/finance';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { FleetTreasuryReport } from '@/modules/finance';

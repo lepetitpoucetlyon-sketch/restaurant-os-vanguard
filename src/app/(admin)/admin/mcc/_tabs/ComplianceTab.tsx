@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { MCCWidgetSkeleton } from '../components';
-import { useFleet } from '@/shared/contexts/FleetContext';
+import { useFleet } from '../contexts/FleetContext';
 
 const CertificationCenter = dynamic(() => import('../components/CertificationCenter').then(m => m.CertificationCenter), { loading: () => <MCCWidgetSkeleton /> });
 const FiscalChainExplorer = dynamic(() => import('../components/FiscalChainExplorer').then(m => m.FiscalChainExplorer), { loading: () => <MCCWidgetSkeleton /> });

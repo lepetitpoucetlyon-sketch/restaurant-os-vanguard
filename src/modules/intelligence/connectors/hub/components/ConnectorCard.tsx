@@ -2,7 +2,7 @@
 
 import { Settings2, RefreshCw, PowerOff, Zap, Loader2 } from 'lucide-react';
 import { ConnectorStatusBadge } from './ConnectorStatusBadge';
-import { useConnector } from '@/shared/hooks/useConnector';
+import { useConnector } from '../hooks/useConnector';
 import type { ConnectorEntry } from '../hooks/useIntegrations';
 
 interface Props {

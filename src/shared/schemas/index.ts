@@ -4,7 +4,7 @@
  * l'infrastructure partagée (handlers, vault, API routes).
  * Pour les types métier, importer directement depuis @/modules/<pilier>.
  *
- * NB : les `export * from '@/modules/X'` larges sont interdits ici — chaque
+ * NB : les re-exports larges de barrels pilier sont interdits ici — chaque
  * pilier peut re-exporter des noms identiques, ce qui provoque des TS2308.
  */
 

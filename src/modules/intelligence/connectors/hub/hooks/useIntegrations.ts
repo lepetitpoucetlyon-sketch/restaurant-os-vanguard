@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { IConnectorManifest, ConnectorState } from '@/shared/connector-manifest';
-import { useConnector } from '@/shared/hooks/useConnector';
+import { useConnector } from './useConnector';
 import { toError } from "@/lib/toError";
 
 export interface ConnectorEntry {

@@ -35,5 +35,5 @@ export {
     useNotifications
 } from "@/shared/providers/NexusCoreContext";
 export { useTenant } from "@/shared/hooks/useTenant";
-export { useConnector } from './useConnector';
+// useConnector déplacé vers @/modules/intelligence/connectors/hub/hooks/useConnector
 export type { UseConnectorResult } from './useConnector';

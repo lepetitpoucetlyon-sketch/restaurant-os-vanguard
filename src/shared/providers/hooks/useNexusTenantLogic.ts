@@ -9,7 +9,8 @@ import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { logger } from '@/lib/axiom';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
-import { LLMManager, GeminiProvider } from '@/modules/intelligence';
+// LLMManager + GeminiProvider chargés par dynamic import (évite shared→modules)
+
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
@@ -36,7 +37,10 @@ export function useNexusTenantLogic(): NexusTenantState {
     useEffect(() => {
         try {
             Nexus.adapter = new FirestoreAdapter();
-            LLMManager.provider = new GeminiProvider();
+            // Dynamic import pour éviter l'inversion shared→modules
+            import('@/modules/intelligence').then(({ LLMManager, GeminiProvider }) => {
+                LLMManager.provider = new GeminiProvider();
+            }).catch(() => { /* LLM non disponible — dégradation gracieuse */ });
             StorageManager.provider = new FirebaseStorageProvider();
         } catch { }
     }, []);

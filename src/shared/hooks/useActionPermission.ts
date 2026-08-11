@@ -1,15 +1,12 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
- 
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
 import {
     PERMISSION_ROLE_LEVELS,
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-import { policyEngine } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts
@@ -57,18 +54,8 @@ export function useActionPermission(page: string, action: string): PermissionChe
     }, [currentUser, page, action]);
 }
 
-export function useThresholdCheck(page: string, action: string) {
-    const { currentUser } = useAuth();
-
-    const checkThreshold = useCallback(
-        (field: 'amount' | 'discountPct' | 'quantity', value: number) => {
-            if (!currentUser) return { allowed: false, reason: 'Non authentifié', requiresElevation: false };
-            const role = currentUser.role as PermissionRole;
-            const fullAction = `${page}.${action}`;
-            return policyEngine.checkThreshold(role, fullAction, field, value);
-        },
-        [currentUser, page, action]
-    );
-
-    return { checkThreshold };
-}
+/**
+ * @deprecated useThresholdCheck supprimé (0 consommateurs).
+ * Si besoin, importer policyEngine depuis `@/modules/compliance` dans le
+ * composant appelant — ne pas réintroduire d'inversion shared→modules.
+ */

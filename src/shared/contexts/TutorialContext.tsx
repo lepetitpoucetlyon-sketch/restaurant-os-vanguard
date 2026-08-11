@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
-"use client";
-import { useNexusFleet } from '@/modules/intelligence';
-export const useTutorial = () => useNexusFleet()?.tutorial;
-export const TutorialProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+/**
+ * @deprecated Déplacé vers `@/design/contexts/TutorialContext`.
+ * Ce re-export reste pour la rétrocompatibilité — préférer l'import direct.
+ */
+export { useTutorial, TutorialProvider } from '@/design/contexts/TutorialContext';
