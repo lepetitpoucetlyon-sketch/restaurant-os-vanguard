@@ -21,8 +21,8 @@ const REGISTRY: Record<ConnectorId, ISourceConnector> = {
 };
 
 export const ConnectorRegistry = {
-    get(id: ConnectorId): ISourceConnector {
-        const connector = REGISTRY[id];
+    get(id: string): ISourceConnector {
+        const connector = REGISTRY[id as ConnectorId];
         if (!connector) throw new Error(`[ConnectorRegistry] Connecteur inconnu: ${id}`);
         return connector;
     },

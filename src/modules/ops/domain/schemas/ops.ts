@@ -11,6 +11,7 @@ export {
   type TableStatus,
   type TableShape
 } from '@nexus/contracts';
+import type { TableStatus, TableShape } from '@nexus/contracts';
 
 export interface FloorTable {
     id: string;

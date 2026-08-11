@@ -34,7 +34,8 @@ export const TenantOrchestrator: React.FC = () => {
         { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
     ].map(inst => {
         const metrics = (inst as { metrics?: { alerts?: number; errorRate?: number; uptime?: number } }).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
-        const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);
+        const rawScore = 100 - (metrics.alerts || 0) * 5 - (metrics.errorRate || 0) * 10 - ((metrics.uptime ?? 100) < 99 ? (99 - (metrics.uptime ?? 100)) * 2 : 0);
+        const health = Math.max(0, Math.min(100, rawScore));
         return {
             ...inst,
             metrics: { ...metrics, healthScore: health }

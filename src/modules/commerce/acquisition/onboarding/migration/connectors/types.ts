@@ -12,15 +12,8 @@ export type ConnectorId =
     | 'cashpad'
     | 'popina';
 
-export interface ConnectorCredentials {
-    apiKey?: string;
-    accessToken?: string;
-    refreshToken?: string;
-    clientId?: string;
-    clientSecret?: string;
-    expiresAt?: string;
-    extra?: Record<string, string>;
-}
+import type { ConnectorCredentials } from '@nexus/contracts';
+export type { ConnectorCredentials } from '@nexus/contracts';
 
 export interface ConnectorTestResult {
     ok: boolean;

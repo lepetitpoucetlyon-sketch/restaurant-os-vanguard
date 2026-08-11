@@ -1,6 +1,6 @@
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import type { CartItem } from '../../../workflow/engine/types';
-import type { ConvivePayment, SplitMode } from '../components/SplitBillDialog';
+import type { ConvivePayment, SplitMode } from '../../../domain/schemas/pos';
 
 export const SplitCalculator = {
     createEqualPayments(count: number, total: number): ConvivePayment[] {

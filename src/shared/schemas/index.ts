@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * 🏛️ SHARED SCHEMAS BARREL
  * N'exporte que les primitives transversales + les types tiers utilisés par
@@ -13,20 +12,20 @@
 export * from './primitives';
 export * from './ui';
 
-// ── Intelligence (support tickets) — utilisé par handlers + API routes MCC ───
+// ── Support tickets — utilisé par handlers + API routes MCC ───
 export {
-    SupportTicketSchema, SupportDraftSchema, TicketCategorySchema, TicketPrioritySchema, TicketStatusSchema,
-    type SupportTicket, type SupportDraft, type TicketCategory, type TicketPriority, type TicketStatus
+    SupportTicketSchema, SupportDraftSchema, SupportTicketStatusSchema,
+    type SupportTicket, type SupportDraft, type SupportTicketStatus,
 } from '@nexus/contracts';
 
-// ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
+// ── Compliance (audit, PII) — contrats depuis kernel ────────────
 export {
     AuditEventSchema,
-    AuditSeveritySchema,
-    AuditModuleSchema,
+    AuditActionSchema,
+    AUDITED_COLLECTIONS,
     type AuditEvent,
-    type AuditSeverity,
-    type AuditModule,
-    type PiiFields,
-    type PiiRecord
-} from '@/modules/compliance';
+    type AuditAction,
+    type AuditedCollection,
+} from '@nexus/contracts';
+
+export type { PiiFields, PiiRecord } from '@nexus/contracts';

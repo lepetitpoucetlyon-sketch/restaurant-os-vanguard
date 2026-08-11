@@ -26,6 +26,7 @@ import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { PulseSanitizer } from './PulseSanitizer';
 import * as RAGClient from './SovereignRAGClient';
 import type { RAGHealthResult } from './SovereignRAGClient';
+import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
 import { documentToText, resolveQueryMode, hashTenantId } from './subservices/documentHelpers';
 import type {

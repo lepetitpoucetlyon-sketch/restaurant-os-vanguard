@@ -1,17 +1,7 @@
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
-export type ImportCategory =
-  | 'menu'
-  | 'staff'
-  | 'crm'
-  | 'suppliers'
-  | 'inventory'
-  | 'recipes'
-  | 'reservations'
-  | 'statements'
-  | 'fec'
-  | 'floorplan'
-  | 'haccp_history';
+import type { ImportCategory } from '@nexus/contracts';
+export type { ImportCategory } from '@nexus/contracts';
 
 export type FileFormat = 'csv' | 'xlsx' | 'pdf' | 'image' | 'json' | 'text' | 'fec';
 

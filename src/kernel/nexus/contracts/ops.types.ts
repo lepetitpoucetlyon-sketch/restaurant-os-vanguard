@@ -113,6 +113,10 @@ export const OrderLineSchema = z.object({
   notes:        z.string().max(200).pipe(SanitizedStringSchema).optional(),
   status:       z.enum(['pending', 'cooking', 'ready', 'served', 'cancelled']).default('pending'),
   station:      z.string().optional(),
+  course:       z.string().optional(),
+  createdAt:    TimestampSchema.optional(),
+  updatedAt:    TimestampSchema.optional(),
+  modification: OrderItemModificationSchema.optional(),
 });
 
 export const OrderSchema = z.object({
@@ -122,7 +126,7 @@ export const OrderSchema = z.object({
   tableId:             UUIDSchema.optional(),
   tableName:           z.string().optional(),
   serverName:          z.string().optional(),
-  status:              z.enum(['new', 'pending', 'preparing', 'ready', 'served', 'paid', 'cancelled']),
+  status:              z.enum(['new', 'pending', 'preparing', 'ready', 'served', 'delivered', 'paid', 'cancelled']),
   items:               z.array(OrderLineSchema),
   totalInMicrounits:   MicrounitsSchema,
   totalHTInMicrounits: MicrounitsSchema.optional(),

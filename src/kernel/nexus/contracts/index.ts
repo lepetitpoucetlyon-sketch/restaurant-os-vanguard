@@ -133,3 +133,7 @@ export * from './delivery';
 export * from './cash';
 export * from './inventory';
 export * from './supplier-invoice.schemas';
+export * from './communication.types';
+export * from './policy';
+export * from './audit.types';
+export * from './pii.types';

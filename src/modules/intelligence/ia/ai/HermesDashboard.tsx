@@ -14,7 +14,7 @@ import {
     Crosshair
 } from 'lucide-react';
 import { HermesEngine } from './HermesEngine';
-import type { HermesPulseResult } from '../../../domain/agency/hermes.types';
+import type { HermesPulseResult } from '../../domain/agency/hermes.types';
 import { cn } from '@/lib/ui.foundations';
 
 /**

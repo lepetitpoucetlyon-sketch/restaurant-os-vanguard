@@ -8,6 +8,7 @@ import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import type { CommunicationPulse } from '@nexus/contracts';
 
 // nexus-core ne doit pas dépendre de la couche config (règle sentrux) : on lit
 // l'env directement plutôt que d'importer APP_MODE de @/config/instance.

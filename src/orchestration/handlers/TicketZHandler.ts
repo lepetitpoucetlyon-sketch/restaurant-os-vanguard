@@ -64,10 +64,8 @@ export function registerTicketZHandler(): () => void {
         if (existing.closed) return;
 
         const taxBreakdown = { ...existing.taxBreakdown };
-        for (const item of items) {
-          const rate = item.taxRate ?? '0.10';
-          const lineTotal = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-          const tva = TaxCalculator.applyRate(lineTotal, rate);
+        const lineBreakdown = TaxCalculator.computeTvaBreakdown(items);
+        for (const [rate, tva] of Object.entries(lineBreakdown)) {
           taxBreakdown[rate] = (taxBreakdown[rate] ?? 0) + tva;
         }
 

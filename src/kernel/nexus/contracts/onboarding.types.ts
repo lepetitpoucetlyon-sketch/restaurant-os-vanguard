@@ -3,7 +3,18 @@
  * Persisté dans tenantConfig (merge post-seeding).
  */
 
-export type ImportCategory = 'menu' | 'catalog' | 'inventory' | 'customers' | 'history' | 'suppliers' | 'staff';
+export type ImportCategory =
+  | 'menu'
+  | 'staff'
+  | 'crm'
+  | 'suppliers'
+  | 'inventory'
+  | 'recipes'
+  | 'reservations'
+  | 'statements'
+  | 'fec'
+  | 'floorplan'
+  | 'haccp_history';
 export type ConnectorId = 'lightspeed' | 'zelty' | 'clover' | 'square' | 'sumup' | 'laddition' | 'custom' | string;
 
 export type OnboardingMode = 'from_zero' | 'migration' | 'skipped';
@@ -30,6 +41,16 @@ export interface OnboardingConnectorCredentials {
     encryptedToken: string;
     expiresAt?: string;
     accountName?: string;
+}
+
+export interface ConnectorCredentials {
+    apiKey?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    clientId?: string;
+    clientSecret?: string;
+    expiresAt?: string;
+    extra?: Record<string, string>;
 }
 
 export interface OnboardingState {

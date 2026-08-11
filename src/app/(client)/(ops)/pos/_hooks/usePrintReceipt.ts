@@ -56,7 +56,7 @@ export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
         };
 
         try {
-            await EpsonPrinter.printReceipt(ticket);
+            await printerService.printReceipt(ticket);
             toast.success(`Impression envoyée — ${_ip}:${_port}`);
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Erreur impression";

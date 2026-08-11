@@ -16,14 +16,14 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { BlockchainLedgerService } from '../comptabilite/accounting/domain/BlockchainLedgerService';
 import { computeTreasury } from '../services/TreasuryCalculator';
-import { 
+import {
     JournalEntry,
     Account,
     BankTransaction,
     ExpenseClaim,
-    TreasurySnapshot,
-    FiscalSeal
+    TreasurySnapshot
 } from '../types';
+import type { FiscalSeal } from '@nexus/contracts';
 import type { TreasuryMetrics } from '../domain/schemas/finance';
 import { useBilling } from '../comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';

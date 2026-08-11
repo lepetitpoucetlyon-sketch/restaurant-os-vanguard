@@ -32,8 +32,12 @@ export class NexusTelemetryEngine {
         }
     }
 
-    static unmountChaosMonkeys() {
-        ChaosMonkey.stop();
-        ResilienceSlayer.stop();
+    static async unmountChaosMonkeys() {
+        if (typeof window !== 'undefined') {
+            const { ChaosMonkey } = await import('@/modules/intelligence/ia/resilience/ChaosMonkey');
+            const { ResilienceSlayer } = await import('@/modules/intelligence/ia/resilience/ResilienceSlayer');
+            ChaosMonkey.stop();
+            ResilienceSlayer.stop();
+        }
     }
 }

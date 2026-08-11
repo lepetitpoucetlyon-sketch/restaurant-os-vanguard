@@ -10,12 +10,12 @@ import { Mutex } from '@/lib/utils/Mutex';
 import { TaskContext, TASK_MAPS, readZcpoState, degradeImportanceMap } from '@/lib/icm';
 import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
 import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
-import { initPillarSyncs, stopPillarSyncs } from './sync/pillarSyncRegistry';
+import { initPillarSyncs, stopPillarSyncs } from '@/orchestration/sync/pillarSyncRegistry';
 // VerticalRegistry / CoreContext sont importés dynamiquement dans init() :
 // VerticalRegistry lazy-importe les verticales, qui remontent jusqu'ici — un
 // import statique referme le cycle et laisse RestaurantVertical partiellement
 // initialisée (ses handlers ne s'enregistrent plus).
-import { evaluatePrivacyGate, evaluateGenomeGate } from './sync/syncGates';
+import { evaluatePrivacyGate, evaluateGenomeGate } from '@/orchestration/sync/syncGates';
 import { initMasterBridgeListener } from './sync/masterBridgeInit';
 import { startSelfHealingInterval } from './sync/selfHealingInit';
 import { replayPendingEvents } from './sync/outboxReplayer';

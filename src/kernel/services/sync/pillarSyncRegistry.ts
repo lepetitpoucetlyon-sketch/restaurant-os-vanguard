@@ -1,1 +1,1 @@
-export * from '@/lib/sync/pillarSyncRegistry';
+export * from '@/orchestration/sync/pillarSyncRegistry';

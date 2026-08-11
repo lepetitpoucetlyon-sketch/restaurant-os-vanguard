@@ -1,1 +1,1 @@
-export * from '@/lib/sync/syncGates';
+export * from '@/orchestration/sync/syncGates';
