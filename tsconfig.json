@@ -40,7 +40,7 @@
         "./src/app/*"
       ],
       "@components/*": [
-        "./src/shared/components/*"
+        "./src/design/*"
       ],
       "@/modules/intelligence": [
         "./src/modules/intelligence/index"
@@ -162,11 +162,35 @@
       "@shared/*": [
         "./src/shared/*"
       ],
+      "@components": [
+        "./src/design/index"
+      ],
+      "@components/*": [
+        "./src/design/*"
+      ],
       "@ui": [
-        "./src/shared/components/ui/index"
+        "./src/design/ui/index"
       ],
       "@ui/*": [
-        "./src/shared/components/ui/*"
+        "./src/design/ui/*"
+      ],
+      "@design": [
+        "./src/design/index"
+      ],
+      "@design/*": [
+        "./src/design/*"
+      ],
+      "@/shared/components": [
+        "./src/design/index"
+      ],
+      "@/shared/components/*": [
+        "./src/design/*"
+      ],
+      "@shared/components": [
+        "./src/design/index"
+      ],
+      "@shared/components/*": [
+        "./src/design/*"
       ],
       "@/*": [
         "./src/*"
