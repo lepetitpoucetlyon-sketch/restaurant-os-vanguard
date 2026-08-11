@@ -15,11 +15,9 @@ export * from './ui';
 
 // ── Intelligence (support tickets) — utilisé par handlers + API routes MCC ───
 export {
-    SupportTicketSchema, type SupportTicket,
-    SupportDraftSchema,  type SupportDraft,
-    SupportTicketStatusSchema, type SupportTicketStatus,
-    SupportTicketSourceSchema, type SupportTicketSource,
-} from '@/modules/intelligence/domain/schemas/supportTicket';
+    SupportTicketSchema, SupportDraftSchema, TicketCategorySchema, TicketPrioritySchema, TicketStatusSchema,
+    type SupportTicket, type SupportDraft, type TicketCategory, type TicketPriority, type TicketStatus
+} from '@nexus/contracts';
 
 // ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
 export {

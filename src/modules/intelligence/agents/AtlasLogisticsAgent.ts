@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
+import { HermesKnowledgeManager } from '../knowledge/rag/HermesKnowledgeManager';
 import type { IAutonomousAgent, AgentAction, AgentContext } from './types';
 
 export class AtlasLogisticsAgent implements IAutonomousAgent {

@@ -1,1 +1,1 @@
-export { QuantumDashboard } from '@/modules/intelligence/ia/fleet/QuantumDashboard';
+export { QuantumDashboard } from '@/modules/intelligence';

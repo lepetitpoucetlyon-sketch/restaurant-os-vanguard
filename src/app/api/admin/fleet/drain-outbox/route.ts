@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { FleetOutboxDrainService } from '@/modules/intelligence/ia/fleet/FleetOutboxDrainService';
+import { FleetOutboxDrainService } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";

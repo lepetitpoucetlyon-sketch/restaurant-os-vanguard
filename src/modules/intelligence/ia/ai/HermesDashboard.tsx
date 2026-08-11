@@ -13,8 +13,8 @@ import {
     Clock,
     Crosshair
 } from 'lucide-react';
-import { HermesEngine } from '@/modules/intelligence/ia/ai/HermesEngine';
-import type { HermesPulseResult } from '@/modules/intelligence/domain/agency/hermes.types';
+import { HermesEngine } from './HermesEngine';
+import type { HermesPulseResult } from '../../../domain/agency/hermes.types';
 import { cn } from '@/lib/ui.foundations';
 
 /**

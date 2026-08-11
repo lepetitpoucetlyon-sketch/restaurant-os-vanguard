@@ -1,5 +1,5 @@
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
-import type { PulseCategory } from '@/modules/intelligence/knowledge/rag/types';
+import type { PulseCategory } from '../knowledge/rag/types';
 
 export interface AgentContext {
     tenantId: string;

@@ -7,8 +7,7 @@
  *     comme image via LLMManager.generateFromImage (PDF scanné).
  */
 
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { getOcrPrompt } from './ocrPrompts';
 import type { ImportCategory } from '../types';
 import type { OcrResult } from './imageParser';

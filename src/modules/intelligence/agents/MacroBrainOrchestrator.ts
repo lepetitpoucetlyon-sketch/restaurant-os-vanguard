@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
+import { HermesKnowledgeManager } from '../knowledge/rag/HermesKnowledgeManager';
 import type { IAutonomousAgent, AgentAction, AgentContext } from './types';
 import { ThemisHRAgent } from './ThemisHRAgent';
 import { AtlasLogisticsAgent } from './AtlasLogisticsAgent';

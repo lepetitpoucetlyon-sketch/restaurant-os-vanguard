@@ -4,7 +4,7 @@ import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCal
 import { SovereignNode } from '@/shared/nexus-contract';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
-import { TelemetryHook } from '@/modules/intelligence/analytique/TelemetryHook';
+import { TelemetryHook } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { EmpireInstance } from '@/shared/types/empire';

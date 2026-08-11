@@ -1,1 +1,1 @@
-export { SimulatorMetricsGrid } from '@/modules/intelligence/ia/simulator/components/SimulatorMetricsGrid';
+export { SimulatorMetricsGrid } from '@/modules/intelligence';

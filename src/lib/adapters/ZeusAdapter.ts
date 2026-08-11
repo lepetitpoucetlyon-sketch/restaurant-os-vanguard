@@ -1,7 +1,5 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import { AgentEngine } from '@/modules/intelligence/ia/ai/AgentEngine';
-import type { AgentDomain } from '@/modules/intelligence/domain/agency/types';
-import type { ZeusPulseResult, ZeusAnomaly, ZeusManifest } from '@/modules/intelligence/domain/agency/Zeus';
+import { AgentEngine, type AgentDomain, type ZeusPulseResult, type ZeusAnomaly, type ZeusManifest } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalHACCPMapper } from '@modules/finance';

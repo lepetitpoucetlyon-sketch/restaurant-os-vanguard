@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
+import { ConnectorHub } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { ConnectorState } from '@/shared/connector-manifest';
 

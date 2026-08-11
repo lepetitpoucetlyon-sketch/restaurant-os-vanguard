@@ -2,7 +2,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
+import { HermesKnowledgeManager } from '@/modules/intelligence';
 
 import type { CartItem } from '@nexus/contracts';
 import { toError } from "@/lib/toError";

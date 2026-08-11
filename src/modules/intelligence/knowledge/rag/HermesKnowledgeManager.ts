@@ -24,13 +24,10 @@ import { logger } from '@/lib/logger';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import { PulseSanitizer } from './PulseSanitizer';
-import * as RAGClient from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
-import type { RAGHealthResult } from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
-
-import type { LightRAGQueryMode, LightRAGConfig } from '@/modules/intelligence/knowledge/rag/LightRAGConfig';
-
-import { documentToText, resolveQueryMode, hashTenantId } from '@/modules/intelligence/knowledge/rag/subservices/documentHelpers';
+import * as RAGClient from './SovereignRAGClient';
+import type { RAGHealthResult } from './SovereignRAGClient';
+import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
+import { documentToText, resolveQueryMode, hashTenantId } from './subservices/documentHelpers';
 import type {
     KnowledgeQuery,
     KnowledgeAnswer,

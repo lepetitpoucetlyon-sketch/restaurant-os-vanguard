@@ -42,8 +42,25 @@ export type { FleetInsight } from './services/MacroBrain';
 export { OraclePredictor } from './analytique/analytics/components';
 export { LightRAGClient } from './knowledge/rag/LightRAGClient';
 export { HermesKnowledgeManager } from './knowledge/rag/HermesKnowledgeManager';
+export { GeminiProvider } from './ia/GeminiProvider';
+export { RealtimeVoiceFactory } from './ia/realtime/RealtimeVoiceFactory';
+export type { IRealtimeVoiceService } from './ia/realtime/IRealtimeVoiceService';
+export { AgentEngine } from './ia/ai/AgentEngine';
+export type { ZeusPulseResult, ZeusAnomaly, ZeusManifest } from './domain/agency/Zeus';
+export { HermesDashboard } from './ia/ai/HermesDashboard';
+export { QuantumDashboard } from './ia/fleet/QuantumDashboard';
+export { SimulatorConsole } from './ia/simulator/components/SimulatorConsole';
+export { TelemetryStream } from './analytique/TelemetryStream';
+export type { TelemetryEvent } from './analytique/TelemetryStream';
+export { TelemetryHook } from './analytique/TelemetryHook';
 export { ConnectorHub } from './connectors/hub';
 
 
 // 🏛️ Domaine Schemas
+export { useNexusFleet } from './ia/fleet/NexusFleetProvider';
+export { createLLMProvider } from './ia/ai/LLMProviderFactory';
+export { FleetOutboxDrainService } from './ia/fleet/FleetOutboxDrainService';
+export { IntegrationsPage } from './connectors/hub/components/IntegrationsPage';
+export { fleetEngine } from './ia/fleet/FleetAdapter';
+export type { PulseCategory, SanitizedPulse, MarketInsight, MonetizationTier } from './knowledge/rag/types';
 export * from './domain/schemas/supportTicket';

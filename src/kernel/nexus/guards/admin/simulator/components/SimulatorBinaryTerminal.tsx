@@ -1,1 +1,1 @@
-export { SimulatorBinaryTerminal } from '@/modules/intelligence/ia/simulator/components/SimulatorBinaryTerminal';
+export { SimulatorBinaryTerminal } from '@/modules/intelligence';

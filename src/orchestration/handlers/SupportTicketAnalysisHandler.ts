@@ -2,9 +2,8 @@
 import { NexusEventBus, NexusEventPayload } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { GeminiProvider } from '@/modules/intelligence/ia/GeminiProvider';
+import { GeminiProvider, AI_MODELS } from '@/modules/intelligence';
  
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/index';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { TenantConfigSchema } from '@nexus/contracts';
 import { SupportDraftSchema } from '@/shared/schemas';

@@ -1,1 +1,1 @@
-export { HermesDashboard } from '@/modules/intelligence/ia/ai/HermesDashboard';
+export { HermesDashboard } from '@/modules/intelligence';

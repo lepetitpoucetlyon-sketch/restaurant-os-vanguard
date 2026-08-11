@@ -20,13 +20,11 @@ import { logger } from '@/lib/logger';
  
 import type {
     SanitizedPulse,
-    PulseCategory,
     MarketInsight,
     MonetizationTier,
- 
-} from '@/modules/intelligence/knowledge/rag/types';
-
-import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence/knowledge/rag/types';
+    PulseCategory
+} from '@/modules/intelligence';
+import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
 
 // ============================================
 // MARKET ORACLE

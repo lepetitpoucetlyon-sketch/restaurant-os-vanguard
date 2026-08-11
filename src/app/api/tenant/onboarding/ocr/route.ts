@@ -8,8 +8,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import { parseImageWithOCR, parsePDFWithOCR } from '@/modules/commerce';
 import type { ImportCategory } from '@nexus/contracts';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { createLLMProvider } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { LLMManager, createLLMProvider } from '@/modules/intelligence';
 import { toError } from "@/lib/toError";
 
 // Bootstrap du provider si pas encore fait

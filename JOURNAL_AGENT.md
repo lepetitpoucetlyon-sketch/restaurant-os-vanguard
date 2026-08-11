@@ -562,6 +562,38 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/commerce & @nexus/contracts.
 - **Vérifié par Claude** : ⬜
 
+### [§3.1] Barrel resolution intelligence (66 → 0) & Pillar-by-Pillar Barrel Total (245 → 0) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 13:05
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : 30+ fichiers (design, app, orchestration, lib, shared, kernel & intelligence subdomains)
+- **Objectif chiffré** : 
+  - intelligence barrel imports: 66 → 0
+  - TOTAL ALL 8 PILLARS barrel imports: 245 → 0 (facility: 0, logistics: 0, human: 0, ops: 0, compliance: 0, finance: 0, commerce: 0, intelligence: 0)
+- **Commande de preuve** :
+    ```bash
+    for p in facility logistics human ops compliance finance commerce intelligence; do
+      c=$(grep -rn "from '@/modules/$p/" src --include='*.ts*' | grep -v "__tests__\|\.test\." | wc -l)
+      echo "$p: $c"
+    done
+    ```
+- **Sortie BRUTE** :
+    ```
+    facility: 0
+    logistics: 0
+    human: 0
+    ops: 0
+    compliance: 0
+    finance: 0
+    commerce: 0
+    intelligence: 0
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=0 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : Action 5 (§3.2 - Inversions shared/ 18 & lib/ 35 -> 0).
+- **Stubs/raccourcis évités** : tous les ré-exports & imports migrés proprement vers les barils publics de pilier et @nexus/contracts.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 

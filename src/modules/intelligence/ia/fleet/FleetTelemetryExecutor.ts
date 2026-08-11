@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@/shared/types/brands';
-import { TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
+import { TelemetryEvent } from '../../analytique/TelemetryStream';
 import { logger } from '@/lib/logger';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 

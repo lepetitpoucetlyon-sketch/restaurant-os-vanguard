@@ -4,8 +4,7 @@
  * Retourne le JSON structuré selon la catégorie d'import.
  */
 
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { getOcrPrompt } from './ocrPrompts';
 import type { ImportCategory } from '../types';
 

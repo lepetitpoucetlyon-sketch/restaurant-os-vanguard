@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
  
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import {
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
@@ -10,7 +10,6 @@ import {
 } from '@/modules/compliance';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
  
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/index';
 import { toError } from "@/lib/toError";
 
 export type IdentityExtractionResult =
