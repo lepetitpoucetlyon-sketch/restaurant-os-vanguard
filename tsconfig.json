@@ -73,10 +73,16 @@
         "./src/modules/*"
       ],
       "@infrastructure": [
-        "./src/infrastructure/index"
+        "./src/kernel/index"
       ],
       "@infrastructure/*": [
-        "./src/infrastructure/*"
+        "./src/kernel/*"
+      ],
+      "@/infrastructure": [
+        "./src/kernel/index"
+      ],
+      "@/infrastructure/*": [
+        "./src/kernel/*"
       ],
       // @domain/* — alias legacy supprimé (src/domain/ rapatrié en S11 vers src/modules/)
       // Conservé ici comme redirections vers shared/schemas pour compatibilité résiduelle.
@@ -103,13 +109,37 @@
         "./src/store/*"
       ],
       "@nexus/contracts": [
-        "./src/shared/nexus/contracts/index"
+        "./src/kernel/nexus/contracts/index"
       ],
       "@nexus/contracts/*": [
-        "./src/shared/nexus/contracts/*"
+        "./src/kernel/nexus/contracts/*"
+      ],
+      "@nexus": [
+        "./src/kernel/nexus/index"
       ],
       "@nexus/*": [
-        "./src/shared/nexus/*"
+        "./src/kernel/nexus/*"
+      ],
+      "@kernel/*": [
+        "./src/kernel/*"
+      ],
+      "@/shared/nexus": [
+        "./src/kernel/nexus/index"
+      ],
+      "@/shared/nexus/*": [
+        "./src/kernel/nexus/*"
+      ],
+      "@shared/nexus": [
+        "./src/kernel/nexus/index"
+      ],
+      "@shared/nexus/*": [
+        "./src/kernel/nexus/*"
+      ],
+      "@/lib/nexus": [
+        "./src/kernel/adapter/index"
+      ],
+      "@/lib/nexus/*": [
+        "./src/kernel/adapter/*"
       ],
       "@shared/*": [
         "./src/shared/*"
