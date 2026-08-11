@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from 'react';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useOrders } from '@/modules/ops';
+import { useOrders } from '@/modules/ops/providers/hooks/kitchenHooks';
 import type { Order } from '@modules/ops/workflow/engine/types';
 import type { JournalEntry } from '../../../types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
