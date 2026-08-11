@@ -23,8 +23,12 @@ export {
 
 // ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
 export {
-    AuditEventSchema, AUDITED_COLLECTIONS,
-    type AuditAction, type AuditEvent, type AuditedCollection,
-    AuditActionSchema,
-} from '@/modules/compliance/domain/schemas/audit';
-export type { PiiFields, PiiRecord } from '@/modules/compliance/domain/schemas/pii';
+    AuditEventSchema,
+    AuditSeveritySchema,
+    AuditModuleSchema,
+    type AuditEvent,
+    type AuditSeverity,
+    type AuditModule,
+    type PiiFields,
+    type PiiRecord
+} from '@/modules/compliance';

@@ -21,7 +21,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { HACCPLogService, type ConformityStatus } from '../HACCPLogService';
 
-import { IoTSensor, SensorReading } from '@/modules/compliance/domain/schemas/haccp';
+import { IoTSensor, SensorReading } from '../../../domain/schemas/haccp';
 
 const GATEWAY_URL = process.env.HACCP_GATEWAY_URL;
 const GATEWAY_TOKEN = process.env.HACCP_GATEWAY_TOKEN;

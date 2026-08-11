@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 /**
  * Service d'Intégrité des Données (Grade X)

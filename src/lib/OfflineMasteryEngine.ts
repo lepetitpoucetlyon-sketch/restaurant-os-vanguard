@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { db } from "@/lib/offline/offline-store";
 import { Order } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
-import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
+import { ImmunityAuditLogger } from '@/modules/compliance';
 import { toError } from "@/lib/toError";
 
 const GENESIS_HASH = '0'.repeat(64);

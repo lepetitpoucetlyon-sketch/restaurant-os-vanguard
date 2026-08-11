@@ -7,7 +7,7 @@ import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { FleetComplianceService } from './FleetComplianceService';
  
-import { HACCPTelemetryBridge } from '@/modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
+import { HACCPTelemetryBridge } from '@/modules/compliance';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { TenantID } from '@/shared/types/brands';
 import { fleetEngine } from '@/modules/intelligence/ia/fleet/FleetAdapter';
