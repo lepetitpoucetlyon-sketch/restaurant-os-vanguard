@@ -66,7 +66,8 @@ export class SovereignLedger {
     async recordTransfer(params: {
         debitAccount: LedgerEntry['accountName'],
         creditAccount: LedgerEntry['accountName'],
-        amountInCents: number,
+        amountInCents?: number,
+        amountInMicrounits?: number,
         referenceId: string,
         description: string,
         _monkeyPatch?: { forceAsymmetry: boolean }
@@ -77,6 +78,9 @@ export class SovereignLedger {
             this.handleCorruptionDetected();
             throw new Error('LEDGER_INVIOLABLE: Sabotage rejected.');
         }
+
+        const micro = params.amountInMicrounits ?? ((params.amountInCents || 0) * 10_000);
+        const cents = params.amountInCents ?? Math.round(micro / 10_000);
 
         const date = new Date().toISOString();
         let mode: AccountingMode = 'EXPERT';
@@ -90,8 +94,8 @@ export class SovereignLedger {
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
             date, accountName: acc, type,
-            amountInCents: params.amountInCents,
-            amountInMicrounits: params.amountInCents * 10_000,
+            amountInCents: cents,
+            amountInMicrounits: micro,
             referenceId: params.referenceId, description: params.description, scelledAt: date
         });
 
@@ -99,7 +103,7 @@ export class SovereignLedger {
         const credit = buildEntry(params.creditAccount, 'CREDIT');
 
         this.validateIntegrity(debit, credit, mode);
-        logger.info(`[SovereignLedger] [${mode}] Balanced: ${params.amountInCents/100}€ [${params.debitAccount}/${params.creditAccount}]`);
+        logger.info(`[SovereignLedger] [${mode}] Balanced: ${cents / 100}€ [${params.debitAccount}/${params.creditAccount}]`);
 
         await Promise.all([
             Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`, this.tenantId), debit),

@@ -25,8 +25,8 @@ export async function buildBalanceSheet(asOfDate: number, tenantId?: string): Pr
             const first = code.charAt(0);
             if (!['1', '2', '3', '4', '5'].includes(first)) continue;
 
-            const debit  = (line.debitInCents  ?? 0) * 10_000;
-            const credit = (line.creditInCents ?? 0) * 10_000;
+            const debit  = line.debitInMicrounits  ?? ((line.debitInCents  ?? 0) * 10_000);
+            const credit = line.creditInMicrounits ?? ((line.creditInCents ?? 0) * 10_000);
             const map = isActif(code) ? actifMap : passifMap;
 
             const existing = map.get(code) ?? {

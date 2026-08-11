@@ -46,9 +46,9 @@ export class TransactionService {
             if (!order) throw new Error(`Order ${orderId} not found.`);
             if (order.status === 'paid') throw new Error(`Order ${orderId} is already paid.`);
 
-            // Canonical total (Microunits Protocol). Sealed amount stays in cents for NF525 continuity;
-            // value-preserving for legacy orders (µ = cents × 10 000) and robust for µ-native orders.
-            const orderTotalInCents = SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(order)));
+            // Canonical total (Microunits Protocol)
+            const totalMicrounits = SovereignMath.orderTotalMicrounits(order);
+            const orderTotalInCents = SovereignMath.toCents(BigInt(totalMicrounits));
 
             // 2. NF525 FISCAL SEALING
             const lastSeals = await Nexus.adapter.query<FiscalSeal>(fiscalPath, {
@@ -72,7 +72,6 @@ export class TransactionService {
             // 2b. JOURNAL ENTRY CREATION (Double-Entry PCG Accounting)
             const journalEntriesPath = `tenants/${tenantId}/journalEntries`;
             const entryId = Nexus.adapter.generateId(journalEntriesPath);
-            const amountInMu = SovereignMath.multiply(orderTotalInCents, 10_000).toString();
 
             batch.set(`${journalEntriesPath}/${entryId}`, {
                 id: entryId,
@@ -83,7 +82,7 @@ export class TransactionService {
                 referenceType: 'order',
                 type: 'revenue',
                 amountInCents: orderTotalInCents,
-                amountInMicrounits: amountInMu,
+                amountInMicrounits: totalMicrounits,
                 isSystemGenerated: true,
                 isValidated: true,
                 fiscalSealHash: seal.hash,

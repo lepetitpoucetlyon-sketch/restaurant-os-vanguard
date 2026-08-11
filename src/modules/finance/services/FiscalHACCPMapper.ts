@@ -20,12 +20,13 @@ export class FiscalHACCPMapper {
     ) {
         logger.info(`🚨 [GRADE_X_BRIDGE] Processing Critical Waste for Sensor ${reading.sensorId}`);
 
-        // 1. Calcul de la perte financière
-        const totalLossInCents = impactedStock.reduce((acc, item) => {
-            return acc + (item.quantity * (item.costInCents || 0));
+        // 1. Calcul de la perte financière en microunits
+        const totalLossInMicrounits = impactedStock.reduce((acc, item) => {
+            const unitCost = item.costInMicrounits ?? ((item.costInCents || 0) * 10_000);
+            return acc + Math.round(item.quantity * unitCost);
         }, 0);
 
-        if (totalLossInCents === 0) {
+        if (totalLossInMicrounits === 0) {
             logger.warn('⚠️ [BRIDGE] No financial impact detected. Aborting fiscal seal.');
             return;
         }
@@ -45,8 +46,8 @@ export class FiscalHACCPMapper {
             type: 'loss',
             status: 'validated',
             description: `[HACCP_AUTO] Perte Critique - Capteur ${reading.sensorId || reading.id} - Temp: ${reading.value}${reading.unit}`,
-            amountInCents: totalLossInCents,
-            amountInMicrounits: totalLossInCents * 10_000,
+            amountInCents: Math.round(totalLossInMicrounits / 10_000),
+            amountInMicrounits: totalLossInMicrounits,
             isSystemGenerated: true,
             isValidated: false,
             lines: [],
@@ -59,15 +60,16 @@ export class FiscalHACCPMapper {
             }
         };
 
-        // 4. Ventilation de la TVA (Provision)
-        const tvaRecoverable = Math.round(totalLossInCents * 0.055); // TVA REDUITE 5.5%
+        // 4. Ventilation de la TVA (Provision en microunits)
+        const tvaRecoverableInMicrounits = Math.round(totalLossInMicrounits * 0.055); // TVA REDUITE 5.5%
 
-        logger.info(`💰 [BRIDGE] Fiscal Entry Created: ${totalLossInCents / 100}€ loss (TVA Recov: ${tvaRecoverable / 100}€)`);
+        logger.info(`💰 [BRIDGE] Fiscal Entry Created: ${totalLossInMicrounits / 1_000_000}€ loss (TVA Recov: ${tvaRecoverableInMicrounits / 1_000_000}€)`);
         
         return {
             fiscalEntry,
             digitalSignature,
-            tvaRecoverable
+            tvaRecoverable: Math.round(tvaRecoverableInMicrounits / 10_000),
+            tvaRecoverableInMicrounits
         };
     }
 }

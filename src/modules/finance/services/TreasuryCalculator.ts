@@ -27,6 +27,8 @@ interface RawLine {
     accountCode?: string;
     debitInCents?: number;
     creditInCents?: number;
+    debitInMicrounits?: number;
+    creditInMicrounits?: number;
 }
 
 /**
@@ -79,8 +81,8 @@ export function computeTreasury(
         for (const line of lines) {
             const code = line.accountCode ?? "";
             if (!code) continue;
-            const debit = (line.debitInCents ?? 0) * CENTS_TO_MICRO;
-            const credit = (line.creditInCents ?? 0) * CENTS_TO_MICRO;
+            const debit = line.debitInMicrounits ?? ((line.debitInCents ?? 0) * CENTS_TO_MICRO);
+            const credit = line.creditInMicrounits ?? ((line.creditInCents ?? 0) * CENTS_TO_MICRO);
 
             if (code.startsWith("53")) {
                 cashOnHand += debit - credit;            // actif : le débit augmente le solde

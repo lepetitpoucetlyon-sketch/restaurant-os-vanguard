@@ -21,8 +21,8 @@ export async function buildPnL(startDate: number, endDate: number, tenantId?: st
         for (const line of (entry.lines ?? [])) {
             const code = line.accountCode ?? '';
             const prefix = code.charAt(0);
-            const debit = (line.debitInCents ?? 0) * 10_000;
-            const credit = (line.creditInCents ?? 0) * 10_000;
+            const debit = line.debitInMicrounits ?? ((line.debitInCents ?? 0) * 10_000);
+            const credit = line.creditInMicrounits ?? ((line.creditInCents ?? 0) * 10_000);
 
             if (prefix === '7') {
                 const existing = revenueMap.get(code) ?? {
