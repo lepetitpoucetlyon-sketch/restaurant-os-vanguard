@@ -6,7 +6,7 @@ import { Minus, Plus, Sparkles, CheckCircle2 } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { CartItem } from '../../workflow/engine/types';
+import { CartItem } from '../../../workflow/engine/types';
 
 import { useSplitBillState } from "./split-bill/useSplitBillState";
 import { usePaymentTerminal } from "./split-bill/usePaymentTerminal";

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { CartItem } from '../../../workflow/engine/types';
+import { CartItem } from '../../../../workflow/engine/types';
 import { SplitCalculator } from "../../domain/splitCalculator";
 
 export type SplitMode = 'equal' | 'by-item' | 'custom';
