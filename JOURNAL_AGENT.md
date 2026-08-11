@@ -827,6 +827,52 @@ Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microuni
 - **Stubs/raccourcis évités** : aucune suppression précipitée d'alias avec > 50 consommateurs, inventaire complet sans omission.
 - **Vérifié par Claude** : ⬜
 
+---
+
+### [§4.1] Fragmentation UI SplitBillDialog (484 l. -> ~80 l.) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 19:55
+- **Commit(s)** : `f6bee5c86` (`refactor(ui): fragmenter SplitBillDialog.tsx`) & `05b72608d` (`fix(imports): ajuster la profondeur des relative imports CartItem`)
+- **Fichiers créés/touchés** : 
+  - `src/modules/ops/service/pos/components/SplitBillDialog.tsx` (remplacé par ~80 l. d'orchestration)
+  - `src/modules/ops/service/pos/components/split-bill/useSplitBillState.ts` (State hook + reducer sync)
+  - `src/modules/ops/service/pos/components/split-bill/usePaymentTerminal.ts` (Machine à états TPE + terminalService)
+  - `src/modules/ops/service/pos/components/split-bill/SplitBillHeader.tsx` (En-tête UI)
+  - `src/modules/ops/service/pos/components/split-bill/SplitModeSelector.tsx` (Sélecteur de mode d'addition)
+  - `src/modules/ops/service/pos/components/split-bill/PaymentMethodSelector.tsx` (Sélecteur & status encaissement)
+  - `src/modules/ops/service/pos/components/split-bill/ConviveGrid.tsx` (Grille de convives & signatures)
+- **Objectif chiffré atteint** : 
+  - 484 lignes de JSX monolithe → **~80 lignes** d'orchestration pure.
+  - 10 `useState` synchronisés à la main → **2 custom hooks isolés** (`useSplitBillState`, `usePaymentTerminal`).
+  - **7/7 Invariants PBT validés** (`npx vitest run __tests__/invariants/` = 100% vert).
+  - `tsc` : **0 erreur**.
+- **Commande de preuve** : `./scripts/agent-gate.sh`
+- **Sortie BRUTE ENTIÈRE** :
+    ```
+    === AGENT-GATE PROOF ============================================
+    commit   : 05b72608d   (branche agent/antigravity-exec)
+    arbre    : 0 fichier(s) suivi(s) non commité(s)  (doit être 0 pour une preuve valable)
+    ----------------------------------------------------------------
+    TSC error TS            : 0        (cible 0)
+    cycles (madge)          : 0        (cible 0 ; baseline tolérée 3)
+    kernel -> modules       : 0         (cible 0)
+    shared -> modules       : 7         (cible 0)
+    lib    -> modules       : 12         (cible 0)
+    store  -> modules       : 0         (cible 0)
+    barrel (viol/pilier)    : facility=0 logistics=0 human=0 ops=0 compliance=0 finance=0 commerce=0 intelligence=0 
+    InCents                 : 695       (cible 0)
+    as Microunits (direct)  : 7         (cible 0)
+    ----------------------------------------------------------------
+    VERDICT tsc  : ✅ VERT (0 erreur)
+    VERDICT arbre: ✅ propre
+    ================================================================
+    ```
+- **Gate 4 commandes** : tsc=0 · madge cycles=0 · kernel->modules=0 · all 8 pillars barrel=0
+- **Ce que je n'ai PAS fait / reste** : Conversion Monnaie (Phase 5 : 694 InCents) puis Refonte UI & Tokens (Phase 6).
+- **Stubs/raccourcis évités** : aucune altération des calculs monétaires (SovereignMath préservé), 100% des invariants PBT réexécutés et validés.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 
