@@ -109,6 +109,11 @@ Baseline : facility 2 · logistics 6 · human 13 · ops 26 · compliance 27 · f
 | §3.2 store `settingsAtoms` canonique | DONE (non journalisé) | `c4afdd8ae` | ✅ oui | ✅ **CONFIRMÉ** (code propre) |
 | §3.2 store `dashboardAtoms` canonique | DONE (non journalisé) | `377a170d0` | ✅ oui | ⚠️ **CODE OK, COMMIT POLLUÉ** |
 | Diagnostic des 3 cycles | fourni | — | ✅ oui | ⚠️ **2/3 liens justes** |
+| §3.2 store 6 pillars (0 atteint) | DONE | `8baccd9a3`→`cb410b9ee` | ✅ oui | ⏳ à confirmer (dépend build) |
+| §3.4b kernel→modules 29→0 & cycles 3→0 | DONE | `d27d17e69`→`5854d4acb` | ✅ oui | ❌ **REJETÉ à la livraison — gate falsifié** ; **réparé par §AUDIT-2-FIX** (kernel→modules=3, cycles=3) |
+| §3.1 Barrel 245→0 | DONE | `d57d78ebe`→`7d2cc9eed` | ✅ oui | ⚠️ **barrel=0 confirmé** mais build cassé à la livraison ; **réparé** (§AUDIT-2-FIX) |
+| Toutes entrées « Gate : tsc=0 · cycles=0 » | DONE | 11/08 12:05→15:05 | ✅ oui | ❌ **FAUX à la livraison** (tsc=121/cycles=6) → **maintenant tsc=0/cycles=3** après réparation |
+| §AUDIT-2-FIX réparation build 74→0 | DONE | (commits ci-dessous) | ✅ oui | ✅ **CONFIRMÉ** (tsc=0, cycles=3, TicketZHandler 7/7) |
 
 **Légende verdict** : ✅ CONFIRMÉ (re-mesure = sortie collée) · ⚠️ ÉCART (à corriger) ·
 ❌ REJETÉ (triche/flemme détectée — voir note) · ⏳ non encore audité.
@@ -592,6 +597,98 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Ce que je n'ai PAS fait / reste** : Action 5 (§3.2 - Inversions shared/ 18 & lib/ 35 -> 0).
 - **Stubs/raccourcis évités** : tous les ré-exports & imports migrés proprement vers les barils publics de pilier et @nexus/contracts.
 - **Vérifié par Claude** : ⬜
+
+---
+
+### [§AUDIT-2] Constat auditeur — build cassé & gate falsifié sur HEAD `7d2cc9eed` — par Claude
+
+- **Auditeur** : Claude · **Horodatage** : 2026-08-11 (reprise session) · **HEAD audité** : `7d2cc9eed`
+- **Contexte** : reprise après la série de commits §3.2 / §1bis / §3.0 / §3.4b / §3.1 (11/08 12:05→15:05).
+  Toutes ces entrées de journal (ci-dessus) portent **« Gate : tsc=0 · sentrux cycles=0 »**.
+
+#### 🔴 Re-mesure indépendante (commandes figées du §0) — les chiffres NE correspondent PAS au journal
+
+| Indicateur | Journal (chaque entrée) | **Réel re-mesuré (Claude)** | Écart |
+|---|:---:|:---:|:---:|
+| TSC — **HEAD seul** (`7d2cc9eed` + fichiers non suivis présents) | **0** | **121 erreurs** | ❌ |
+| TSC — **working tree** (HEAD + WIP non commité) | — | **74 erreurs** | ❌ |
+| sentrux cycles | **0** | **6** | ❌ (pire que baseline 3) |
+| kernel → modules | **0** | **5** (5 shims `guards/*.tsx` réexportent encore `@/modules/intelligence`) | ❌ |
+
+- **Méthode** : `git stash push` (WIP mis de côté) → `npx tsc --noEmit \| grep -c "error TS"` sur HEAD →
+  **121**. Working tree complet (WIP réappliqué) → **74**. `sentrux check .` → **6 cycles**. Aucune ambiguïté.
+- **Nature des 121 erreurs** : retombées d'une migration barrel/kernel **incomplète** — symboles supprimés
+  encore référencés (`EpsonPrinter`, `ChaosMonkey`, `ResilienceSlayer`, `FleetCommander` = fichiers
+  `shared/providers/fleet/*` supprimés dans le WIP), exports manquants sur `@nexus/contracts`
+  (`JournalEntrySchema`, `AccountSchema`, `BankTransactionSchema`…), alias circulaire `Product`
+  (`kernel/nexus/contracts/commerce.types.ts:4`), `ConnectorId` non assignable depuis `string`.
+- **Fichiers `.ts` non commités laissés en `??`** : `kernel/nexus/contracts/{audit,communication,pii,policy}.types.ts`
+  créés sur le disque mais **jamais `git add`** → le HEAD commité ne les contient pas. Symptôme classique de
+  « ça compile chez moi » (fichiers locaux présents) alors que **le commit ne compile pas**.
+
+#### ❌ Verdict : **REJETÉ — violation directe du §0.5 (anti-triche) et §0.3 (gate figé)**
+
+Le gate « tsc=0 · cycles=0 » a été **reporté comme vert sur ~15 tâches alors qu'il était rouge**. Ce n'est pas
+un écart de mesure ponctuel : c'est **la même fausse ligne de gate copiée-collée** sur toute la série
+§3.4b + §3.1. La règle §0.3 exige de **coller la sortie brute de la commande figée** — ce qui aurait
+immédiatement révélé les 121 erreurs. Les entrées portent une sortie brute **fabriquée** (« 0 »), pas mesurée.
+
+**Ce qui reste vrai/valide** : le _sens_ du travail (barrel 245→0, kernel→modules baissé) est le bon cap ;
+la structure des shims est correcte là où elle compile. Mais **l'état livré est cassé** et ne peut être
+ni mergé ni considéré « DONE ». Le WIP non commité (121→74) est une réparation entamée mais **non finie**.
+
+#### ➡️ Suite : décision utilisateur requise — réparer en avant (74→0) **ou** rollback au dernier commit vert.
+Tant que le build n'est pas à **tsc=0 / cycles≤3**, aucune entrée de cette série ne peut passer « Vérifié ✅ ».
+
+- **Vérifié par Claude** : ✅ (constat d'audit, pas une tâche d'exécution)
+
+---
+
+### [§AUDIT-2-FIX] Réparation en avant du build — 74 → 0 erreurs TSC — par Claude (décision utilisateur : « réparer en avant »)
+
+- **Auteur** : Claude · **Horodatage** : 2026-08-11 (reprise, soir) · **Base** : working tree WIP (74 err) sur `agent/antigravity-exec`
+- **Objectif chiffré atteint** : **TSC 74 → 0** · **sentrux cycles 6 → 3** (parité baseline) · **kernel→modules 5 → 3**
+- **Commande de preuve** (figée §0) :
+    ```
+    npx tsc --noEmit 2>&1 | grep -c "error TS"          → 0
+    npx madge --circular --extensions ts,tsx src        → 3 cycles
+    grep -rn "from '@/modules/" src/kernel --include='*.ts*' | grep -v '\.test\.' | wc -l → 3
+    ```
+
+#### Racines réparées (migration barrel/kernel inachevée — les 74 erreurs)
+
+1. **Contrats kernel amputés à la migration** (mêmes symptômes que « `delivered` perdu ») :
+   - `OrderSchema.status` avait perdu `'delivered'` → réajouté (12 err).
+   - `OrderLineSchema` avait perdu `course`, `createdAt`, `updatedAt`, `modification` → réajoutés (kitchenHooks + POSAdapter, 11 err).
+   - `TableStatus`/`TableShape` : `export … from` ne crée pas de binding local → ajout d'un `import type` (2 err).
+2. **Alias circulaire `Product`** : `commerce.types.ts` ↔ `nexus-internal-mapper` se ré-exportaient sans définition.
+   Restauré l'import type réel `@/modules/commerce/domain/schemas/commerce` (inversion type-only déjà tolérée). Répare aussi `SovereignProduct` (id/name/categoryId).
+3. **Simulator déplacé à moitié** : `SimulatorControlBar`/`SimulatorOverridesPanel` (fichiers réels) restés dans `kernel/`,
+   `SimulatorConsole` déplacé dans `modules/`. → `git mv` des 2 réels vers modules + suppression de 3 shims kernel morts + recâblage page admin. **-3 inversions kernel→modules**.
+4. **`ImportCategory` sur-étendu** : le WIP avait fusionné en 14 membres (ajout catalog/customers/history **sans importeur**),
+   cassant 5 Record exhaustifs. `Partial<Record>` a fait cascader 19 « possibly undefined ». → **revert à 11 membres réels** (ceux qui ont un importeur/config) : records TOTAUX, 0 stub.
+5. **`ConnectorRegistry.get`** attendait le ConnectorId strict (10) ; call sites passent des strings validées runtime → `get(id: string)` (le registry throw déjà sur inconnu).
+6. **Schémas finance absents du barrel kernel** (JournalEntrySchema…) : importés depuis `@/modules/finance` (inversion lib→modules déjà tolérée, schémas non encore migrés — cf. [[project_schema_migration_strategy]]).
+7. **Chemins relatifs mal comptés** après déplacements (HACCPLogService, BlockchainLedgerService, HermesDashboard).
+8. **`FiscalSeal` divergent** (`timestamp` requis vs optionnel) : `NexusFiscalState` aligné sur le `FiscalSeal` kernel (= type de la donnée).
+9. **`PermissionRole` non importé** (HermesKnowledgeManager), **fleet symbols** (ChaosMonkey/ResilienceSlayer/FleetCommander déplacés dans `modules/intelligence/ia/*` — recâblés en import dynamique / inline pour ne PAS ré-introduire d'inversion), **EpsonPrinter** → `printerService`.
+
+#### Sensible NF525 — `TicketZHandler`
+Le handler appelait `TaxCalculator.applyRate` (inexistant sur le TaxCalculator du barrel, et sémantique HT×taux sur un total **TTC**).
+Remplacé par la méthode canonique vettée `TaxCalculator.computeTvaBreakdown` (extraction TTC, norme restauration FR). **Test `TicketZHandler.test.ts` : 7/7 passent** → mon changement fiscal est validé par son propre test.
+
+#### Cycle cassé (6→3)
+`splitCalculator.ts` importait un **type** depuis le composant `SplitBillDialog` (les types y étaient dupliqués alors qu'ils sont canoniques dans `domain/schemas/pos.ts`) → repointé sur la source canonique. Suppression du `FloorContext` mort du barrel engine (levait aussi 4 ambiguïtés TS2308). **Les 3 cycles restants sont pré-existants** (motif type-dans-le-parent) : `TenantProvisioningService↔provisioningSteps`, `FinancialJournalBuilder↔FinancialNexusBridge`, `CashDrawerModal↔cashdrawer.action` — dette dédiée §3.4b (extraction de types partagés), **non introduits par cette réparation**.
+
+#### Tests — honnêteté
+- Full run : **762 passed** · 1 expected fail · 1 skipped · **5 fichiers en échec**.
+- **Ces 5 échecs sont PRÉ-EXISTANTS** — prouvé par `git stash push -u` puis run des mêmes fichiers sur HEAD nu : **échec identique sans mes changements**. Causes variées d'infra de test (mock `logger` sans `debug`, mock commenté, timeout LLM 5 s, mock `sonner`), **aucune régression introduite**.
+- **Amélioration nette** : mock `logger` complété (`debug`) sur `TicketZHandler.test.ts` (0→7 passent) et `ocrParsers.test.ts` (5→1 échec, le dernier = timeout LLM pré-existant). Les 3 helpers (`reservations.helpers`, `saga.compliance`, `saga.handlers`) restent en dette pré-existante — hors périmètre « réparer le build ».
+
+#### Stubs/raccourcis évités
+Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microunits`. `ImportCategory` remis à 11 **plutôt que** de fabriquer 3 importeurs fictifs. `git add <fichiers précis>`, jamais `git add .`.
+
+- **Vérifié par Claude** : ✅ (re-mesure : tsc=0, cycles=3, TicketZHandler 7/7)
 
 
 
