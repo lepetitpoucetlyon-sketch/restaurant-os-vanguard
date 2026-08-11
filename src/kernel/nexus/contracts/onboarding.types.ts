@@ -1,11 +1,10 @@
-/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * OnboardingState — état du parcours d'onboarding B2B d'un tenant.
  * Persisté dans tenantConfig (merge post-seeding).
  */
 
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+export type ImportCategory = 'menu' | 'catalog' | 'inventory' | 'customers' | 'history' | 'suppliers' | 'staff';
+export type ConnectorId = 'lightspeed' | 'zelty' | 'clover' | 'square' | 'sumup' | 'laddition' | 'custom' | string;
 
 export type OnboardingMode = 'from_zero' | 'migration' | 'skipped';
 
@@ -23,13 +22,11 @@ export interface OnboardingStepState {
         skipped: number;
         errors: number;
     };
-    /** Snapshot ID pour rollback */
     snapshotId?: string;
 }
 
 export interface OnboardingConnectorCredentials {
     provider: ConnectorId;
-    /** Token chiffré côté serveur — jamais en clair dans Firestore */
     encryptedToken: string;
     expiresAt?: string;
     accountName?: string;
@@ -37,20 +34,16 @@ export interface OnboardingConnectorCredentials {
 
 export interface OnboardingState {
     mode: OnboardingMode;
-    /** Système source si mode=migration */
     sourceSystem?: ConnectorId;
     startedAt: string;
     completedAt?: string;
 
     steps: Partial<Record<ImportCategory | 'floorplan' | 'team' | 'suppliers-setup', OnboardingStepState>>;
 
-    /** Credentials connecteur chiffrés (stockés temporairement pendant l'onboarding) */
     connectorCredentials?: OnboardingConnectorCredentials;
 
-    /** Wizard — étape affichée actuellement */
     currentStep?: string;
 
-    /** Checklist "prêt à ouvrir" */
     readyToOpen: boolean;
     readyChecks: {
         hasTable: boolean;
@@ -68,7 +61,7 @@ export const DEFAULT_ONBOARDING_STATE: OnboardingState = {
     readyChecks: {
         hasTable: false,
         hasProduct: false,
-        hasAdmin: true,       // l'admin est créé par TenantSeeder
-        hasFiscalGenesis: true, // GENESIS seal créé par TenantSeeder
+        hasAdmin: true,
+        hasFiscalGenesis: true,
     },
 };

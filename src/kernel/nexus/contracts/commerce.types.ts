@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { SovereignNode } from '@/shared/nexus-contract';
 
-import { Product } from '@/modules/commerce/domain/schemas/commerce';
+import type { Product } from './nexus-internal-mapper';
 export type { Product };
 
 export interface Quote extends SovereignNode {

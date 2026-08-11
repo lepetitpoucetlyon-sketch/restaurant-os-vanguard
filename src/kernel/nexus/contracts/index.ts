@@ -60,6 +60,7 @@ export * from './recruitment';
 export * from './registre.types';
 export * from './compliance.types';
 export * from './commerce.types';
+export * from './onboarding.types';
 
 // 4. Operations Bridge (POS & Groups)
 export type { CartItem, GroupEvent } from './ops.types';
