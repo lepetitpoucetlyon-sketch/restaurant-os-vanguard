@@ -23,11 +23,14 @@ export class ProcurementBridge {
             throw new Error('PROCUREMENT_001: Only submitted orders can be engaged.');
         }
 
+        const amountInMicrounits = po.totalAmountInMicrounits ?? (po.totalAmountInCents * 10_000);
+
         // Création de l'engagement hors-bilan
         await SovereignLedger.getInstance(tenantId).recordTransfer({
             debitAccount: 'ENGAGEMENT_DEBIT_800',
             creditAccount: 'ENGAGEMENT_CREDIT_801',
             amountInCents: po.totalAmountInCents,
+            amountInMicrounits,
             referenceId: `PO-${po.id}`,
             description: `Engagement pour BC #${po.id}`
         });
@@ -35,6 +38,7 @@ export class ProcurementBridge {
         NexusTelemetryService.emitAuditPulse('LOGISTICS', 'PO_ENGAGED', {
             poId: po.id,
             amountInCents: po.totalAmountInCents,
+            amountInMicrounits,
             tenantId
         });
     }

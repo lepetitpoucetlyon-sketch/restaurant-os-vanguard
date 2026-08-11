@@ -11,8 +11,10 @@ export interface SupplierInvoice {
         productId: string;
         quantityBilled: number;
         unitPriceInCents: number;
+        unitPriceInMicrounits?: number;
     }>;
     totalAmountInCents: number;
+    totalAmountInMicrounits?: number;
     issueDate: string;
     dueDate: string;
     status: 'draft' | 'pending_approval' | 'approved' | 'paid' | 'disputed';
@@ -52,8 +54,8 @@ export class ThreeWayMatchEngine {
         }
 
         // 2. Contrôle du montant global (avec tolérance)
-        const expectedAmount = po.totalAmountInCents;
-        const billedAmount = invoice.totalAmountInCents;
+        const expectedAmount = po.totalAmountInMicrounits ?? (po.totalAmountInCents * 10_000);
+        const billedAmount = invoice.totalAmountInMicrounits ?? (invoice.totalAmountInCents * 10_000);
         const diff = Math.abs(billedAmount - expectedAmount);
         const maxDiff = expectedAmount * (tolerancePercent / 100);
 
@@ -80,8 +82,10 @@ export class ThreeWayMatchEngine {
             }
 
             // A. PO vs Facture (Prix)
-            if (line.unitPriceInCents !== poItem.unitPriceInCents) {
-                discrepancies.push(`Prix unitaire différent pour ${line.productId}: PO=${poItem.unitPriceInCents}, Facture=${line.unitPriceInCents}`);
+            const linePriceMu = line.unitPriceInMicrounits ?? (line.unitPriceInCents * 10_000);
+            const poPriceMu = poItem.unitPriceInMicrounits ?? (poItem.unitPriceInCents * 10_000);
+            if (linePriceMu !== poPriceMu) {
+                discrepancies.push(`Prix unitaire différent pour ${line.productId}: PO=${poPriceMu}, Facture=${linePriceMu}`);
             }
 
             // B. BL vs Facture (Quantité)

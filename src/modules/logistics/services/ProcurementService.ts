@@ -82,13 +82,19 @@ export class ProcurementService {
     }
 
     /**
-     * Analyzes current stock batches to find the most recent cost.
+     * Analyzes current stock batches to find the most recent cost in microunits.
      */
-    static getRecentCostForIngredient(ingredientId: string, stockItems: StockItem[]): number {
+    static getRecentCostInMicrounitsForIngredient(ingredientId: string, stockItems: StockItem[]): number {
         const batches = stockItems
             .filter(item => item.ingredientId === ingredientId)
             .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
-        return batches.length > 0 ? batches[0].unitCostInCents : 0;
+        if (batches.length === 0) return 0;
+        return batches[0].unitCostInMicrounits ?? ((batches[0].unitCostInCents ?? 0) * 10_000);
+    }
+
+    static getRecentCostForIngredient(ingredientId: string, stockItems: StockItem[]): number {
+        const mu = ProcurementService.getRecentCostInMicrounitsForIngredient(ingredientId, stockItems);
+        return Math.floor(mu / 10_000);
     }
 }

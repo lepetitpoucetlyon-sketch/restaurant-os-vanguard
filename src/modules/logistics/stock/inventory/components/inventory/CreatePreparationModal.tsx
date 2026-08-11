@@ -104,14 +104,16 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
             await consumeStock(ing.stockItemId, ing.quantityUsed, `Préparation: ${name}`);
         }
 
-        // Calculate total cost in cents
-        const totalCostInCents = usedIngredients.reduce((acc, used) => {
+        // Calculate total cost in microunits
+        const totalCostInMicrounits = usedIngredients.reduce((acc, used) => {
             const stock = stockItems.find(s => s.id === used.stockItemId);
-            if (stock && stock.unitCostInCents) {
-                return acc + Math.round(used.quantityUsed * (Number(stock.unitCostInCents) || 0));
+            if (stock) {
+                const costMu = stock.unitCostInMicrounits ?? ((Number(stock.unitCostInCents) || 0) * 10_000);
+                return acc + Math.round(used.quantityUsed * costMu);
             }
             return acc;
         }, 0);
+        const totalCostInCents = Math.round(totalCostInMicrounits / 10_000);
 
         // Create the preparation
         await addPreparation({
@@ -128,7 +130,8 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
             ingredients: usedIngredients,
             status: 'fresh',
             notes: notes || '',
-            costInCents: totalCostInCents
+            costInCents: totalCostInCents,
+            costInMicrounits: totalCostInMicrounits
         });
 
         setIsSubmitting(false);

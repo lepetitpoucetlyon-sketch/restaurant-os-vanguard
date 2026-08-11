@@ -158,6 +158,7 @@ export class StockEngine {
             : new Date(timestamp.getTime() + shelfLife * 24 * 60 * 60 * 1000);
 
         const itemId = SharedKernel.generateId('BATCH');
+        const costMu = (receivedData as { costInMicrounits?: number }).costInMicrounits ?? (receivedData.cost * 10_000);
         
         const newItem: Partial<StockItem> = {
             id: itemId,
@@ -167,6 +168,7 @@ export class StockEngine {
             initialQuantity: receivedData.quantity,
             unit: ingredient.unit,
             unitCostInCents: receivedData.cost,
+            unitCostInMicrounits: costMu,
             dlc: dlcDate.toISOString(),
             status: 'available',
             storageLocationId: ingredient.defaultStorageLocation || 'general_storage',
@@ -184,6 +186,7 @@ export class StockEngine {
             quantity: receivedData.quantity,
             unit: ingredient.unit,
             unitCostInCents: receivedData.cost, // Now strictly typed
+            unitCostInMicrounits: costMu,
             reason: `Reception from Supplier / NanoID-Authenticated`,
             performedBy: 'System (Industrialized)',
             performedAt: timestamp.toISOString(),
@@ -222,8 +225,8 @@ export class StockEngine {
         if (costMovements.length < 2) return 0;
         
         // Simple % change between last and before-last
-        const first = costMovements[0].unitCostInCents || 0;
-        const last = costMovements[costMovements.length - 1].unitCostInCents || 0;
+        const first = costMovements[0].unitCostInMicrounits ?? ((costMovements[0].unitCostInCents || 0) * 10_000);
+        const last = costMovements[costMovements.length - 1].unitCostInMicrounits ?? ((costMovements[costMovements.length - 1].unitCostInCents || 0) * 10_000);
         
         if (first === 0) return 0;
         return ((last - first) / first) * 100;

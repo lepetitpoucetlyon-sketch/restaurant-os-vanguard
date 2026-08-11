@@ -95,8 +95,10 @@ export const InventoryVisionService = {
      * Prepares stock items from vision matches
      */
     prepareStockEntry(match: VisionMatchResult, lastStocks: StockItem[]): Partial<StockItem> {
-        const lastPrice = lastStocks.find(s => s.ingredientId === match.matchedIngredientId)?.unitCostInCents || 0;
-        const evolution = lastPrice > 0 ? ((match.extracted.unitPriceHT - lastPrice) / lastPrice) * 100 : 0;
+        const lastStockItem = lastStocks.find(s => s.ingredientId === match.matchedIngredientId);
+        const lastPriceMu = lastStockItem?.unitCostInMicrounits ?? ((lastStockItem?.unitCostInCents || 0) * 10_000);
+        const newPriceMu = Math.round(match.extracted.unitPriceHT * 10_000);
+        const evolution = lastPriceMu > 0 ? ((newPriceMu - lastPriceMu) / lastPriceMu) * 100 : 0;
 
         const validUnits: import('@nexus/contracts').IngredientUnit[] = ['kg', 'g', 'l', 'ml', 'cl', 'unit', 'piece', 'bunch', 'crate', 'box', 'bottle', 'can'];
         const normalizedUnit = match.extracted.unit.toLowerCase() as import('@nexus/contracts').IngredientUnit;
@@ -108,6 +110,7 @@ export const InventoryVisionService = {
             quantity: match.extracted.quantity,
             unit,
             unitCostInCents: match.extracted.unitPriceHT,
+            unitCostInMicrounits: newPriceMu,
             expirationDate: match.extracted.expirationDate,
             batchNumber: match.extracted.batchNumber,
             priceEvolution: evolution

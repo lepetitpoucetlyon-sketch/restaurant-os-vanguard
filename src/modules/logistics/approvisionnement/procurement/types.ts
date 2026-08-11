@@ -9,8 +9,10 @@ export interface PurchaseOrder {
         productId: string;
         quantity: number;
         unitPriceInCents: number;
+        unitPriceInMicrounits?: number;
     }>;
     totalAmountInCents: number;
+    totalAmountInMicrounits?: number;
     status: 'draft' | 'submitted' | 'engaged' | 'delivered' | 'cancelled';
     createdAt: string;
 }
@@ -26,4 +28,5 @@ export interface DeliveryNote {
     signatureHash?: string;
     status: 'pending' | 'signed' | 'disputed';
     totalAmountInCents: number;
+    totalAmountInMicrounits?: number;
 }

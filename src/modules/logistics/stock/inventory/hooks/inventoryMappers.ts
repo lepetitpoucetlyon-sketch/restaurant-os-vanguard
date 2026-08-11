@@ -14,6 +14,7 @@ export function mapNodeToIngredient(n: SovereignNode, now: string): Ingredient {
         unit: (attr.unit || 'unit') as IngredientUnit,
         minQuantity: Number(attr.minQuantity || 0),
         costInCents: Number(attr.costInCents || 0),
+        costInMicrounits: Number(attr.costInMicrounits || (Number(attr.costInCents || 0) * 10_000)),
         category: (attr.category || 'other') as IngredientCategory,
         supplier: String(attr.supplier || ''),
         defaultStorageLocation: String(attr.defaultStorageLocation || ''),
