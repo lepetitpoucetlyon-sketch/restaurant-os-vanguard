@@ -309,7 +309,7 @@ réparé. **Chiffres réels aujourd'hui** (`agent-gate.sh`) :
 | **1.1/1.2** | auto-fix ESLint (502→293) | 🟢 **FAIT** | 293 restants (travail manuel = Phase 6.1 + divers) |
 | **1bis** | filet : invariants + Semgrep | 🟢 **FAIT** — **7/7 invariants** · Semgrep `no-cents` **actif** | `ls __tests__/invariants` = 7 |
 | **2B.0/2B.1/2C** | `createSafeAction`, 13 actions, `onValidated` | 🟢 **FAIT** | 13 actions sous `createSafeAction` |
-| **2B.2** | schémas Zod **stricts** | 🔴 **NON FAIT** — **25 `z.any()/z.unknown()`** dans les `.action.ts` | `grep z.any src/**/*.action.ts` = 25 |
+| **2B.2** | schémas Zod **stricts** | 🟢 **FAIT** — 25→0 `z.any()`, 12→0 `z.unknown()` tuples (1 `z.record` settings résiduel OK) · **AUDITÉ CONFIRMÉ** 2026-08-11 | `grep z.any src/**/*.action.ts` = 0 |
 | **3.0** | 3 décisions dans `CLAUDE.md` | 🟢 **FAIT** | `grep "Décision 1\|2\|3" CLAUDE.md` = 3 |
 | **3.1** | barrel 245 → 0 | 🟢 **FAIT** (≈0, résidu `commerce=1`) | `agent-gate.sh` |
 | **3.2** | inversions | 🟠 **store 8→0 FAIT** ; reste **kernel 3 · shared 7 · lib 12** | `agent-gate.sh` |
