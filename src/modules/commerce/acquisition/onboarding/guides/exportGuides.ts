@@ -1,5 +1,4 @@
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ConnectorId, ImportCategory } from '@nexus/contracts';
 
 export interface ExportStep {
   step: number;

@@ -2,7 +2,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ProductAvailabilityService } from '@/modules/logistics';
-import type { Product } from '@/modules/commerce/domain/schemas/commerce';
+import type { Product } from '@nexus/contracts';
 import type { Recipe } from '@shared/nexus/contracts/logistics';
 
 export function registerStockZeroBlockerHandler() {

@@ -25,7 +25,14 @@ export { ReservationWidget } from './fidelite/widgets';
 // Infrastructure pilier (connectors, ui)
 export { ReviewProviderFactory } from './connectors/reviews';
  
-export { CustomerImportPanel } from '@/modules/commerce/acquisition/onboarding/migration';
+export { CustomerImportPanel } from './acquisition/onboarding/migration';
+export * from './acquisition/onboarding';
+export { useGeminiLive } from './acquisition/marketing/hooks/useGeminiLive';
+export { ConnectorRegistry } from './acquisition/onboarding/migration/connectors';
+export { runImporter } from './acquisition/onboarding/migration/importers';
+export { ImportSnapshotService } from './acquisition/onboarding/migration/ImportSnapshotService';
+export { parseImageWithOCR } from './acquisition/onboarding/migration/parsers/imageParser';
+export { parsePDFWithOCR } from './acquisition/onboarding/migration/parsers/pdfParser';
 
 export { menuEngineeringService } from './catalog/menu-engineering';
 export type { MenuItemCategory, IMenuEngineeringItem, IMenuEngineeringReport } from './catalog/menu-engineering';

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import type { ImportCategory, ConnectorId } from '@nexus/contracts';
+import type { ConnectorCredentials } from '../migration/connectors/types';
 import { OCRUploadZone } from './OCRUploadZone';
 import { PreviewTable } from './PreviewTable';
 import { toError } from "@/lib/toError";

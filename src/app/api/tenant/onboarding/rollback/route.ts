@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { ImportSnapshotService } from '@/modules/commerce/acquisition/onboarding/migration/ImportSnapshotService';
+import { ImportSnapshotService } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 

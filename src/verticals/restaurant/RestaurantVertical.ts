@@ -3,7 +3,7 @@ import { restaurantDefaultTokens, restaurantVerticalTokens } from '@/shared/nexu
 import React from 'react';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { menuEngineeringService } from '@/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService';
+import { menuEngineeringService } from '@/modules/commerce';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@nexus/contracts';;
 import { ordersAtom, tablesAtom } from '@/modules/ops';
 import {

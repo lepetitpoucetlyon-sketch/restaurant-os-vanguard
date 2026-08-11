@@ -5,10 +5,8 @@ import { useState } from "react";
 import { Play, Loader2, ChevronRight, AlertTriangle } from "lucide-react";
 import { useToast } from "@ui/Toast";
 import { useDataMigration } from "@/shared/hooks/useDataMigration";
-import { UniversalImportDropzone } from '@/modules/commerce/acquisition/onboarding';
-import { OnboardingProgress } from '@/modules/commerce/acquisition/onboarding';
-import { CATEGORY_CONFIGS } from '@/modules/commerce/acquisition/onboarding';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding';
+import { UniversalImportDropzone, OnboardingProgress, CATEGORY_CONFIGS } from '@/modules/commerce';
+import type { ImportCategory } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
 const IMPORT_CATEGORIES: ImportCategory[] = [

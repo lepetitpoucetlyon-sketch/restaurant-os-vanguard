@@ -5,10 +5,10 @@ import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
-import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors';
+import { ConnectorRegistry } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 import type { ConnectorState } from '@/shared/connector-manifest';
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import type { ConnectorId } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
 /**

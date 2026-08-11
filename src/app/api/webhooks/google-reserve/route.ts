@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-imports -- internal use-cases, not in public barrel */
 import { NextRequest, NextResponse } from 'next/server';
-import { ProcessGoogleBookingUseCase } from '@/modules/commerce/relation/reservations/application/use-cases/ProcessGoogleBooking';
-import { InMemoryReservationRepository } from '@/modules/commerce/relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
-import { RwGCreateBookingRequest } from '@/modules/commerce/relation/reservations/domain/types/GoogleReserveTypes';
+import { ProcessGoogleBookingUseCase, InMemoryReservationRepository } from '@/modules/commerce';
+import type { RwGCreateBookingRequest } from '@/modules/commerce';
 
 // Instantiate dependencies (in a real app, this would use a DI container)
 const reservationRepository = new InMemoryReservationRepository();

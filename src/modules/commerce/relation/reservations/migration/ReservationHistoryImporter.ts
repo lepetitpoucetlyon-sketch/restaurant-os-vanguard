@@ -13,7 +13,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
-import { isMaskedEmail } from '@/modules/commerce/acquisition/onboarding';
+import { isMaskedEmail } from '../../../acquisition/onboarding';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

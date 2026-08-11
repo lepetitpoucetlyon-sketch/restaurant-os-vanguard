@@ -6,13 +6,13 @@ import { SovereignMath } from '@/shared/services/SovereignMath';
 import { ordersAtom } from '@/store/pillars/ops';
 import { productsAtom, recipesAtom, stockItemsAtom } from '@/store/pillars/logistics';
 import { staffMembersAtom } from '@/store/pillars/human';
-import type { MarketingCampaign, SocialAccount } from '@/modules/commerce/acquisition/marketing/types';
-import type { Quote } from '@/modules/commerce/acquisition/marketing/quotes.types';
-import type { SEOProfile, MarketingSegment, ScheduledPost } from '@/modules/commerce/acquisition/marketing/seo.types';
-import type { Customer as CRM } from '@/modules/commerce/relation/customers/types';
+import type { MarketingCampaign, SocialAccount } from '../../modules/commerce/acquisition/marketing/types';
+import type { Quote } from '../../modules/commerce/acquisition/marketing/quotes.types';
+import type { SEOProfile, MarketingSegment, ScheduledPost } from '../../modules/commerce/acquisition/marketing/seo.types';
+import type { Customer as CRM } from '../../modules/commerce/relation/customers/types';
 
-export type { MarketingSegment, ScheduledPost } from '@/modules/commerce/acquisition/marketing/seo.types';
-export type { SocialAccount } from '@/modules/commerce/acquisition/marketing/types';
+export type { MarketingSegment, ScheduledPost } from '../../modules/commerce/acquisition/marketing/seo.types';
+export type { SocialAccount } from '../../modules/commerce/acquisition/marketing/types';
 
 // --- 🏨 RESERVATIONS DOMAIN (Grade IX - Industrial) ---
 

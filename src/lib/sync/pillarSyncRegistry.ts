@@ -8,7 +8,7 @@ import { OpsSyncService as SyncOrders } from '@/modules/ops';
 import { InventorySyncService as SyncStocks } from '@/modules/logistics';
 import { FinanceSyncService as SyncFinance } from '@/modules/finance';
 import { HACCPSyncService as SyncHACCP } from '@/modules/compliance';
-import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/acquisition/marketing/marketing.sync';
+import { MarketingSyncService as SyncMarketing } from '@/modules/commerce';
 import { HRSyncService as SyncStaff } from '@/modules/human';
 
 type Store = ReturnType<typeof getDefaultStore>;

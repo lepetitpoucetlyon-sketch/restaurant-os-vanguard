@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useRef, useState } from 'react';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ImportCategory } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
 interface OcrResult {

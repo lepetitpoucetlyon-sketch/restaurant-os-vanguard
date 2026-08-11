@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
-import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors';
-import { ExportGuidePanel } from '@/modules/commerce/acquisition/onboarding/guides';
+import type { ConnectorId } from '@nexus/contracts';
+import type { ConnectorCredentials } from '../migration/connectors/types';
+import { ConnectorRegistry } from '../migration/connectors';
+import { ExportGuidePanel } from '../guides';
 
 interface ConnectorOAuthPanelProps {
   connectorId: ConnectorId;
