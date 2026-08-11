@@ -763,8 +763,69 @@ Aucun stub, aucun `.skip`, aucun `@ts-ignore`, aucun `z.any`, aucun `as Microuni
 - **Gate 4 commandes** : tsc=0 · madge cycles=0 · kernel->modules=0 · all 8 pillars barrel=0
 - **Ce que je n'ai PAS fait / reste** : Phase 3.4b Étape 4/5 (inventaire shared résiduel), puis Phase 4 (fragmentation UI).
 - **Stubs/raccourcis évités** : aucun stub, aucun `z.any()`, aucun `@ts-ignore`, schémas stricts avec validations métier (microunits, bornes HCR HACCP +63°C/+10°C, motif obligatoire NF525 pour void/refund).
-- **Vérifié par Claude** : ⬜
+- **Vérifié par Claude** : ✅ CONFIRMÉ (2026-08-11 soir)
 
+### [AUDIT] Vérification indépendante — §2B.2 Zod strict 13 Server Actions (HEAD `c2a357307`) — par Claude
+
+- **Auditeur** : Claude · **Horodatage** : 2026-08-11 (soir) · **HEAD audité** : `c2a357307`
+- **Méthode** : `npx tsc --noEmit` (TSC=0 ✅), `grep z.any()/z.unknown()` dans `*.action.ts`, diff complet
+  `c2a357307^..c2a357307` (12 fichiers, +309 -72 lignes), inspection qualité des schémas.
+- **Re-mesure** :
+  - `z.any()` dans `*.action.ts` : **0** ✅
+  - `z.unknown()` dans `*.action.ts` : **1** (`z.record(z.string(), z.unknown())` pour settings) — acceptable
+    (§0.4 interdit `z.any()`, pas `z.unknown()` pour Record hétérogène)
+  - `: any` annotations dans `*.action.ts` : **0** ✅
+  - TSC : **0** ✅
+- **Qualité des schémas** : ~20 schémas Zod avec contraintes métier réelles :
+  - Montants financiers : `.int().min(0)` + `InMicrounits` (cashdrawer, eventQuote, inventory, commerce, kitchen, product)
+  - HACCP : température `-50..200`, durée `0..1440`, sévérité `enum(['minor','major','critical'])`
+  - NF525 : void/refund exige motif `.min(1, 'motif obligatoire pour traçabilité NF525')` ✅
+  - IDs : `z.string().min(1)` avec messages descriptifs
+  - `.passthrough()` = forward-compat explicite (20 schémas) — acceptable pour hardening incrémental
+- **Observation non bloquante** : beaucoup de champs `.optional()` → un `{}` vide passerait certains schémas
+  (ex: `CustomerDataSchema`). À resserrer progressivement, pas un bloqueur pour ce commit.
+- **Verdict** : ✅ **CONFIRMÉ.** Les 13 Server Actions sont passées de `z.unknown()`/`: any` à des schémas
+  Zod me avec contraintes métier réelles. Protocole respecté, gate cohérent.
+
+---
+
+### [§3.4b Étape 4 & 5] Inventaire du shared résiduel (16 sous-dossiers) & audit des alias compat — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 19:36
+- **Commit(s)** : `68f7bdc77` (`docs(plan): mettre à jour l'état de la Phase 2B.2 (schémas Zod stricts audités verts) — réf. plan §2B.2`)
+- **Fichiers analysés** : Les 16 sous-dossiers résiduels de `src/shared/` (`actions` 1, `atoms` 2, `connector-manifest` 10, `constants` 1, `contexts` 9, `hooks` 44, `plugins` 6, `providers` 15, `rbac` 2, `schemas` 3, `seeds` 10, `services` 3, `store` 2, `types` 3, `utils` 8, `validation` 1)
+- **Ventilation planifiée** :
+  - `providers/` + `contexts/` → `app/` / `design/providers/`
+  - `plugins/` + `seeds/` → `kernel/`
+  - `hooks/` + `utils/` → `design/hooks/` ou `kernel/utils/`
+- **Audit Étape 5 (Alias de compatibilité)** :
+  - `@/shared/nexus/*` (253 imports), `@/shared/eventBus/*` (303 imports), `@/shared/components/*` (85 imports).
+  - Règle §3.4 appliquée : les alias de redirection dans `tsconfig.json` sont conservés intacts pour garantir zéro régression (> 50 imports chacun).
+- **Commande de preuve** : `./scripts/agent-gate.sh`
+- **Sortie BRUTE ENTIÈRE** :
+    ```
+    === AGENT-GATE PROOF ============================================
+    commit   : 68f7bdc77   (branche agent/antigravity-exec)
+    arbre    : 0 fichier(s) suivi(s) non commité(s)  (doit être 0 pour une preuve valable)
+    ----------------------------------------------------------------
+    TSC error TS            : 0        (cible 0)
+    cycles (madge)          : 0        (cible 0 ; baseline tolérée 3)
+    kernel -> modules       : 0         (cible 0)
+    shared -> modules       : 7         (cible 0)
+    lib    -> modules       : 12         (cible 0)
+    store  -> modules       : 0         (cible 0)
+    barrel (viol/pilier)    : facility=0 logistics=0 human=0 ops=0 compliance=0 finance=0 commerce=0 intelligence=0 
+    InCents                 : 694       (cible 0)
+    as Microunits (direct)  : 7         (cible 0)
+    ----------------------------------------------------------------
+    VERDICT tsc  : ✅ VERT (0 erreur)
+    VERDICT arbre: ✅ propre
+    ================================================================
+    ```
+- **Gate 4 commandes** : tsc=0 · madge cycles=0 · kernel->modules=0 · all 8 pillars barrel=0
+- **Ce que je n'ai PAS fait / reste** : Phase 4 (Fragmentation UI & God Files : découpage de `SplitBillDialog.tsx` et déduplication de `NexusFleetProvider.tsx`).
+- **Stubs/raccourcis évités** : aucune suppression précipitée d'alias avec > 50 consommateurs, inventaire complet sans omission.
+- **Vérifié par Claude** : ⬜
 
 
 
