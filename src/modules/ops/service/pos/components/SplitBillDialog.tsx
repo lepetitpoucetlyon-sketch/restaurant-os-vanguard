@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { X, Users, DivideCircle, Check, ArrowRight, User, Minus, Plus, CheckCircle2, CreditCard, Banknote, Smartphone, Sparkles } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";
+import React from "react";
 import { Modal } from "@ui/Modal";
-import { motion } from "framer-motion";
-import { useLanguage } from "@/shared/hooks/useLanguage";
+import { Minus, Plus, Sparkles, CheckCircle2 } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
-
-import { CartItem } from '../../../workflow/engine/types';
-export type SplitCartItem = CartItem;
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
-import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
-import { Loader2, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/shared/hooks/useLanguage";
+import { CartItem } from '@/modules/ops/workflow/engine/types';
+
+import { useSplitBillState } from "./split-bill/useSplitBillState";
+import { usePaymentTerminal } from "./split-bill/usePaymentTerminal";
+import { SplitBillHeader } from "./split-bill/SplitBillHeader";
+import { SplitModeSelector } from "./split-bill/SplitModeSelector";
+import { PaymentMethodSelector } from "./split-bill/PaymentMethodSelector";
+import { ConviveGrid } from "./split-bill/ConviveGrid";
+
+export type SplitCartItem = CartItem;
 
 interface SplitBillDialogProps {
     isOpen: boolean;
@@ -26,115 +28,47 @@ interface SplitBillDialogProps {
     onSplitComplete?: () => void;
 }
 
-export type SplitMode = 'equal' | 'by-item' | 'custom';
-export type PaymentMethod = 'card' | 'cash' | 'mobile';
-
-export interface ConvivePayment {
-    paid: boolean;
-    amount: number;
-    method?: PaymentMethod;
-}
-
-import { SplitCalculator } from "../domain/splitCalculator";
-
 export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onPaySplit, onSplitComplete }: SplitBillDialogProps) {
-    const [mode, setMode] = useState<SplitMode>('equal');
-    const [splitCount, setSplitCount] = useState(coverCount || 2);
-    const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => SplitCalculator.createEqualPayments(coverCount || 2, total));
-    const [selectedItems, setSelectedItems] = useState<Record<number, string[]>>({}); // conviveIndex -> cartIds
-    const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(total / (coverCount || 2)));
-    const [payingConvive, setPayingConvive] = useState<number | null>(null);
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [terminalState, setTerminalState] = useState<'idle' | 'pending' | 'manual_wait' | 'error'>('idle');
-    const [terminalError, setTerminalError] = useState<string | null>(null);
     const { t } = useLanguage();
 
-    const syncSplitState = (nextSplitCount: number) => {
-        setSplitCount(nextSplitCount);
-        setConvivePayments(SplitCalculator.createEqualPayments(nextSplitCount, total));
-        setCustomAmounts(Array(nextSplitCount).fill(total / nextSplitCount));
-        setSelectedItems({});
-        setPayingConvive(null);
-        setSelectedPaymentMethod(null);
-    };
+    const {
+        mode,
+        setMode,
+        splitCount,
+        convivePayments,
+        selectedItems,
+        setSelectedItems,
+        customAmounts,
+        setCustomAmounts,
+        payingConvive,
+        setPayingConvive,
+        syncSplitState,
+        handleClose,
+        amountPerPerson,
+        paidCount,
+        remainingAmount,
+        getConviveTotal,
+        handlePayConvive,
+        markConvivePaid,
+        allPaid,
+    } = useSplitBillState({ total, coverCount, items, onClose });
 
-    const handleClose = () => {
-        const initialSplitCount = coverCount || 2;
-        setMode('equal');
-        syncSplitState(initialSplitCount);
-        onClose();
-    };
+    const {
+        selectedPaymentMethod,
+        setSelectedPaymentMethod,
+        isProcessing,
+        terminalState,
+        setTerminalState,
+        terminalError,
+        resetTerminal,
+        processPayment,
+    } = usePaymentTerminal({
+        onPaymentSuccess: (amount, conviveIndex, method) => {
+            markConvivePaid(conviveIndex, method);
+        }
+    });
 
     if (!isOpen) return null;
-
-    const amountPerPerson = total / splitCount;
-    const paidCount = convivePayments.filter(g => g.paid).length;
-    const remainingAmount = SplitCalculator.calculateRemainingAmount(total, convivePayments);
-
-    const getConviveTotal = (conviveIndex: number): number => {
-        return SplitCalculator.getConviveTotal(mode, conviveIndex, amountPerPerson, customAmounts, selectedItems, items);
-    };
-
-    const handlePayConvive = (conviveIndex: number) => {
-        setPayingConvive(conviveIndex);
-        setSelectedPaymentMethod(null);
-    };
-
-    const handleConfirmPayment = async () => {
-        if (payingConvive !== null && selectedPaymentMethod) {
-            const amountInCents = getConviveTotal(payingConvive);
-
-            if (selectedPaymentMethod === 'card') {
-                setIsProcessing(true);
-                setTerminalState('pending');
-                setTerminalError(null);
-
-                const defaultDevice = terminalService.getDefault();
-                try {
-                    if (defaultDevice?.adapter === "manual") {
-                        setTerminalState("manual_wait");
-                        if (terminalService.getStatus(defaultDevice.id) === "disconnected") {
-                            await terminalService.connect(defaultDevice.id);
-                        }
-                    }
-
-                    const result = await terminalService.charge({
-                        amountInMicrounits: amountInCents * 10000,
-                        orderId: `SPLIT_${Date.now()}_C${payingConvive}`,
-                        description: `Split Table`,
-                    });
-
-                    if (result.status !== "approved") {
-                        setTerminalState(result.status === "cancelled" ? "idle" : "error");
-                        if (result.status === "error") setTerminalError(result.error ?? "Paiement refusé");
-                        setIsProcessing(false);
-                        return; // Stop here if not approved
-                    }
-                } catch (err) {
-                    setTerminalState("error");
-                    setTerminalError(err instanceof Error ? err.message : "Erreur terminal");
-                    setIsProcessing(false);
-                    return;
-                }
-            } else if (selectedPaymentMethod === 'cash') {
-                printerService.openCashDrawer();
-            }
-
-            // Success (Cash/Mobile, or Card Approved)
-            setIsProcessing(false);
-            setTerminalState('idle');
-            
-            setConvivePayments(prev => prev.map((g, i) =>
-                i === payingConvive ? { ...g, paid: true, method: selectedPaymentMethod } : g
-            ));
-            onPaySplit(amountInCents, payingConvive);
-            setPayingConvive(null);
-            setSelectedPaymentMethod(null);
-        }
-    };
-
-    const allPaid = convivePayments.every(g => g.paid);
 
     return (
         <Modal
@@ -148,143 +82,35 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
             <div className="bg-surface-sidebar border border-accent-gold/20 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)] w-full overflow-hidden relative flex flex-col h-[85vh]">
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent-gold/5 blur-[120px] pointer-events-none" />
 
-                <div className="p-12 border-b border-white/5 flex items-center justify-between relative z-10 shrink-0">
-                    <div className="flex items-center gap-8">
-                        <div className="w-16 h-16 rounded-[22px] bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 shadow-glow transition-all duration-700 hover:rotate-6">
-                            <DivideCircle className="w-8 h-8 text-accent-gold" strokeWidth={1.5} />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="w-10 h-0.5 bg-accent-gold rounded-full" />
-                                <span className="text-[11px] font-black uppercase tracking-[0.5em] text-accent-gold">{t('pos.split.subtitle')}</span>
-                            </div>
-                            <h1 className="text-4xl font-serif font-black text-text-primary italic tracking-tight leading-none">{t('pos.split.title')}</h1>
-                             <p className="text-[11px] font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
-                                <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
-                                Total TTC: <span className="text-text-primary">{formatCurrency(SovereignMath.toCents(BigInt(total)))}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <button onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-text-primary/40 hover:text-text-primary transition-all duration-500 border border-subtle group">
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
+                <SplitBillHeader
+                    total={total}
+                    paidCount={paidCount}
+                    splitCount={splitCount}
+                    t={t}
+                    onClose={onClose}
+                />
 
                 {payingConvive !== null ? (
-                    <div className="flex-1 p-16 flex flex-col items-center justify-center space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10">
-                        <div className="text-center space-y-8">
-                            <div className="w-24 h-24 rounded-[32px] bg-accent-gold/10 flex items-center justify-center mx-auto mb-8 shadow-premium border border-accent-gold/20">
-                                <User className="w-12 h-12 text-accent-gold" strokeWidth={1} />
-                            </div>
-                            <h2 className="text-3xl font-serif font-black text-text-primary italic tracking-tighter">{t('pos.split.convive_signature_title')}<br />{t('pos.split.convive')} {payingConvive + 1}</h2>
-                            <div className="relative">
-                                <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">{formatCurrency(SovereignMath.toCents(BigInt(getConviveTotal(payingConvive || 0))))}</p>
-                                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-accent-gold/20 rounded-full blur-sm" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-6 w-full max-w-2xl">
-                            {[
-                                { id: 'card', name: t('pos.split.methods.card'), icon: CreditCard },
-                                { id: 'cash', name: t('pos.split.methods.cash'), icon: Banknote },
-                                { id: 'mobile', name: t('pos.split.methods.mobile'), icon: Smartphone }
-                            ].map((method) => (
-                                <button
-                                    key={method.id}
-                                    onClick={() => setSelectedPaymentMethod(method.id as PaymentMethod)}
-                                    className={cn(
-                                        "flex flex-col items-center gap-6 p-8 rounded-[40px] border transition-all duration-500 group",
-                                        selectedPaymentMethod === method.id
-                                            ? "border-accent-gold bg-accent-gold/10 shadow-glow translate-y-[-8px]"
-                                            : "border-white/5 bg-surface-card/[0.02] hover:border-accent-gold/30 hover:bg-surface-card/[0.05]"
-                                    )}
-                                >
-                                    <div className={cn(
-                                        "w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-700 shadow-sm",
-                                        selectedPaymentMethod === method.id ? "bg-accent-gold text-primary rotate-6" : "bg-surface-sidebar/40 text-accent-gold border border-accent-gold/20 group-hover:scale-110"
-                                    )}>
-                                        <method.icon className="w-7 h-7" strokeWidth={1.5} />
-                                    </div>
-                                    <span className={cn("text-[10px] font-black uppercase tracking-[0.3em] transition-colors", selectedPaymentMethod === method.id ? "text-text-primary" : "text-text-primary/20 group-hover:text-text-primary/40")}>
-                                        {method.name}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="flex flex-col items-center gap-6 w-full max-w-2xl pb-10">
-                            {terminalState !== 'idle' && (
-                                <div className="w-full p-6 rounded-3xl border border-accent-gold/20 bg-accent-gold/5 flex flex-col items-center gap-4 animate-in zoom-in duration-500">
-                                    {terminalState === 'pending' || terminalState === 'manual_wait' ? (
-                                        <>
-                                            <div className="w-12 h-12 rounded-full bg-accent-gold/20 flex items-center justify-center">
-                                                <Loader2 className="w-6 h-6 text-accent-gold animate-spin" />
-                                            </div>
-                                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-accent-gold">
-                                                {terminalState === 'manual_wait' ? "Veuillez valider sur le TPE physique" : "Connexion au TPE en cours..."}
-                                            </p>
-                                        </>
-                                    ) : terminalState === 'error' ? (
-                                        <>
-                                            <div className="w-12 h-12 rounded-full bg-status-error/20 flex items-center justify-center">
-                                                <AlertCircle className="w-6 h-6 text-status-error" />
-                                            </div>
-                                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-status-error text-center">
-                                                Erreur de paiement<br/>
-                                                <span className="text-[9px] opacity-70">{terminalError}</span>
-                                            </p>
-                                            <button onClick={() => setTerminalState('idle')} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-text-primary/50 text-[10px] font-bold uppercase hover:bg-white/10 transition-colors mt-2">Réessayer</button>
-                                        </>
-                                    ) : null}
-                                </div>
-                            )}
-
-                            <div className="flex gap-6 w-full">
-                                <button
-                                    onClick={() => { setPayingConvive(null); setTerminalState('idle'); }}
-                                    disabled={isProcessing}
-                                    className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-text-primary/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-text-primary transition-all duration-500 border border-subtle disabled:opacity-20"
-                                >
-                                    {t('pos.split.back')}
-                                </button>
-                                <button
-                                    onClick={handleConfirmPayment}
-                                    disabled={!selectedPaymentMethod || isProcessing}
-                                    className="flex-[2] h-16 rounded-[28px] bg-accent-gold text-primary font-black text-[12px] uppercase tracking-[0.5em] shadow-glow transition-all duration-500 disabled:opacity-20 disabled:grayscale group relative overflow-hidden flex items-center justify-center"
-                                >
-                                    <span className="relative z-10 flex items-center justify-center gap-4">
-                                        {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-                                        {isProcessing ? "Encaissement..." : t('pos.split.seal_transaction')}
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <PaymentMethodSelector
+                        payingConvive={payingConvive}
+                        conviveTotal={getConviveTotal(payingConvive)}
+                        selectedPaymentMethod={selectedPaymentMethod}
+                        isProcessing={isProcessing}
+                        terminalState={terminalState}
+                        terminalError={terminalError}
+                        t={t}
+                        onSelectPaymentMethod={setSelectedPaymentMethod}
+                        onBack={() => { setPayingConvive(null); resetTerminal(); }}
+                        onConfirmPayment={() => processPayment(payingConvive, getConviveTotal(payingConvive), onPaySplit)}
+                        onResetTerminalState={() => setTerminalState('idle')}
+                    />
                 ) : (
                     <>
-                        <div className="p-8 border-b border-white/5 bg-surface-card/[0.02] relative z-10 shrink-0">
-                            <div className="flex gap-4">
-                                {[
-                                    { id: 'equal', label: t('pos.split.modes.equal'), icon: Users },
-                                    { id: 'by-item', label: t('pos.split.modes.by_item'), icon: DivideCircle },
-                                    { id: 'custom', label: t('pos.split.modes.custom'), icon: CreditCard }
-                                ].map((m) => (
-                                    <button
-                                        key={m.id}
-                                        onClick={() => setMode(m.id as SplitMode)}
-                                        className={cn(
-                                            "flex-1 flex items-center justify-center gap-4 py-5 px-8 rounded-[28px] font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-700 border",
-                                            mode === m.id
-                                                ? "bg-accent-gold text-primary border-accent-gold shadow-glow"
-                                                : "bg-surface-card/[0.02] text-text-primary/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"
-                                        )}
-                                    >
-                                        <m.icon className={cn("w-4 h-4", mode === m.id ? "text-primary" : "text-accent-gold")} strokeWidth={2} />
-                                        {m.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+                        <SplitModeSelector
+                            mode={mode}
+                            t={t}
+                            onSelectMode={setMode}
+                        />
 
                         <div className="flex-1 flex flex-col overflow-hidden relative z-10">
                             {mode === 'equal' && (
@@ -343,12 +169,11 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                                                         return updated;
                                                                     });
                                                                 }}
-                                                                className={cn(
-                                                                    "w-7 h-7 rounded-xl text-[10px] font-black transition-all duration-300 border",
+                                                                className={`w-7 h-7 rounded-xl text-[10px] font-black transition-all duration-300 border ${
                                                                     isAssigned
                                                                         ? "bg-accent-gold text-primary border-accent-gold"
                                                                         : "bg-transparent border-white/10 text-text-primary/40 hover:border-accent-gold/40 hover:text-accent-gold"
-                                                                )}
+                                                                }`}
                                                             >{idx + 1}</button>
                                                         );
                                                     })}
@@ -391,63 +216,12 @@ export function SplitBillDialog({ isOpen, items, total, coverCount, onClose, onP
                                 </div>
                             )}
 
-                            <div className="flex-1 p-12 overflow-y-auto elegant-scrollbar">
-                                <div className="grid grid-cols-2 gap-8">
-                                    {convivePayments.map((convive, index) => (
-                                        <motion.div
-                                            layout
-                                            key={index}
-                                            className={cn(
-                                                "group/card p-8 rounded-[40px] border transition-all duration-700 relative overflow-hidden",
-                                                convive.paid
-                                                    ? "bg-accent-gold/10 border-accent-gold/30 shadow-glow"
-                                                    : "bg-surface-card/[0.02] border-white/5 hover:border-accent-gold/20 hover:bg-surface-card/[0.05]"
-                                            )}
-                                        >
-                                            <div className="flex items-center justify-between mb-8">
-                                                <div className="flex items-center gap-2 text-text-primary/60 font-mono text-xs">
-                                                    {(SovereignMath.toCents(BigInt(getConviveTotal(index))) / 100).toFixed(2)}€
-                                                </div>
-                                                <div className={cn(
-                                                    "w-12 h-12 rounded-[20px] flex items-center justify-center font-serif font-black italic text-xl shadow-sm transition-all duration-700",
-                                                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-sidebar/40 text-text-primary/40 border border-white/5 group-hover/card:scale-110"
-                                                )}>
-                                                    {convive.paid ? <Check className="w-6 h-6" /> : index + 1}
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.3em] mb-1">{t('pos.split.convive_spirit')}</span>
-                                                    <span className="font-serif italic font-black text-text-primary text-lg">{t('pos.split.master')} {index + 1}</span>
-                                                </div>
-                                            </div>
-
-                                            <div className="text-4xl font-serif font-black italic text-text-primary mb-8 transition-colors group-hover/card:text-accent-gold group-hover/card:translate-x-2 duration-500">
-                                                {formatCurrency(SovereignMath.toCents(BigInt(getConviveTotal(index))))}
-                                            </div>
-
-                                            {!convive.paid && (
-                                                <button
-                                                    onClick={() => handlePayConvive(index)}
-                                                    className="w-full h-14 rounded-[24px] bg-accent-gold text-primary hover:bg-surface-card font-black text-[11px] uppercase tracking-[0.4em] transition-all duration-500 shadow-glow flex items-center justify-center gap-4 active:scale-95 group/btn"
-                                                >
-                                                    {t('pos.split.collect')}
-                                                    <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" strokeWidth={2.5} />
-                                                </button>
-                                            )}
-
-                                            {convive.paid && convive.method && (
-                                                <div className="flex items-center gap-4 text-[10px] text-accent-gold font-black uppercase tracking-[0.2em] mt-2">
-                                                    <div className="w-8 h-8 rounded-xl bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20">
-                                                        {convive.method === 'card' && <CreditCard className="w-4 h-4" />}
-                                                        {convive.method === 'cash' && <Banknote className="w-4 h-4" />}
-                                                        {convive.method === 'mobile' && <Smartphone className="w-4 h-4" />}
-                                                    </div>
-                                                    <span>{t('pos.split.signature')} {t(`pos.split.methods.${convive.method}`)}</span>
-                                                </div>
-                                            )}
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </div>
+                            <ConviveGrid
+                                convivePayments={convivePayments}
+                                getConviveTotal={getConviveTotal}
+                                t={t}
+                                onPayConvive={handlePayConvive}
+                            />
                         </div>
 
                         <div className="p-12 bg-surface-card/[0.03] backdrop-blur-3xl border-t border-white/5 flex items-center justify-between relative z-10 h-32 shrink-0">
