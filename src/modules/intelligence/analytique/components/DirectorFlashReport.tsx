@@ -53,7 +53,7 @@ export const DirectorFlashReport: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <StatCard
                     label="Chiffre d'Affaires"
-                    value={formatCurrency(report.totalRevenueInCents / 100)}
+                    value={formatCurrency((report.totalRevenueInMicrounits ?? (report.totalRevenueInCents * 10_000)) / 1_000_000)}
                     trend={{ value: 12, direction: 'up' }}
                 />
                 <StatCard
@@ -62,7 +62,7 @@ export const DirectorFlashReport: React.FC = () => {
                 />
                 <StatCard
                     label="Ticket Moyen"
-                    value={formatCurrency(report.averageTicketInCents / 100)}
+                    value={formatCurrency((report.averageTicketInMicrounits ?? (report.averageTicketInCents * 10_000)) / 1_000_000)}
                 />
                 <StatCard
                     label="Incidents Sécurité"

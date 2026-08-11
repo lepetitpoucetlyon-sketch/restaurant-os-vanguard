@@ -7,8 +7,10 @@ import { LaborCostAnalyzer } from '@/modules/human';
 export interface DailyFlashReport {
     date: string;
     totalRevenueInCents: number;
+    totalRevenueInMicrounits?: number;
     totalCovers: number;
     averageTicketInCents: number;
+    averageTicketInMicrounits?: number;
     laborCostPercentage: number;
     foodCostPercentage: number;
     incidentsCount: number;
@@ -34,12 +36,13 @@ export class DailyConsolidationService {
             ) || {};
             
             // Simulation : filtrage par date et type (normalement indexé)
-            let totalRevenueInCents = 0;
+            let totalRevenueInMicrounits = 0;
             for (const entry of Object.values(revenueEntries)) {
                 if (entry.type === 'revenue') {
-                    totalRevenueInCents += Math.round(entry.amountInMicrounits / 10000);
+                    totalRevenueInMicrounits += entry.amountInMicrounits || 0;
                 }
             }
+            const totalRevenueInCents = Math.round(totalRevenueInMicrounits / 10000);
 
             // 2. Récupération des commandes (pour les couverts et les produits phares)
             const orders = await Nexus.adapter.get<Record<string, { items: Array<{id: string; quantity: number}> }>>(
@@ -49,7 +52,8 @@ export class DailyConsolidationService {
             let totalCovers = Object.keys(orders).length * 2.5; // Heuristique basique
             totalCovers = Math.round(totalCovers);
             
-            const averageTicketInCents = totalCovers > 0 ? Math.round(totalRevenueInCents / totalCovers) : 0;
+            const averageTicketInMicrounits = totalCovers > 0 ? Math.round(totalRevenueInMicrounits / totalCovers) : 0;
+            const averageTicketInCents = Math.round(averageTicketInMicrounits / 10000);
 
             // Agrégation des produits vendus
             const itemCounts: Record<string, number> = {};
@@ -87,8 +91,10 @@ export class DailyConsolidationService {
             const report: DailyFlashReport = {
                 date: dateStr,
                 totalRevenueInCents,
+                totalRevenueInMicrounits,
                 totalCovers,
                 averageTicketInCents,
+                averageTicketInMicrounits,
                 laborCostPercentage: Number(laborMetrics.laborCostPercentage.toFixed(1)),
                 foodCostPercentage,
                 incidentsCount,
