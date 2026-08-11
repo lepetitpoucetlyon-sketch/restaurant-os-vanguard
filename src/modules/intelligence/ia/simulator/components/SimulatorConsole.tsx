@@ -6,7 +6,7 @@ import { simulator } from '../TemporalSimulator';
 import { simulationMetricsAtom, isSimulationRunningAtom } from '../store/simulatorAtoms';
 import type { SimulationProfile } from '../SimulationService';
 import { ProposalPanel } from '@/kernel/nexus/guards/admin/ProposalPanel';
-import { NexusStaffingOracle as StaffingOracle } from '@/modules/human/services/NexusStaffingOracle';
+import { NexusStaffingOracle as StaffingOracle } from '@/modules/human';
 import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';

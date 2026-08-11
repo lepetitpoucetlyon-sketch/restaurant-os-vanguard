@@ -460,6 +460,33 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/logistics.
 - **Vérifié par Claude** : ⬜
 
+### [§3.1] Barrel resolution human (13 → 0) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 12:20
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : 
+  - src/design/settings/PayrollIntegrationPanel.tsx
+  - src/orchestration/registerHandlers/human.ts
+  - src/orchestration/handlers/PayrollAutoCalcHandler.ts
+  - src/orchestration/handlers/PayrollExportHandler.ts
+  - src/orchestration/handlers/SilaeExportHandler.ts
+  - src/lib/sync/pillarSyncRegistry.ts
+  - src/modules/intelligence/ia/simulator/components/SimulatorConsole.tsx (7 fichiers)
+- **Objectif chiffré** : human barrel imports: 13 → 0
+- **Commande de preuve** :
+    ```bash
+    grep -rn "from '@/modules/human/" src --include='*.ts*' | grep -v "__tests__\|\.test\." | wc -l
+    ```
+- **Sortie BRUTE** :
+    ```
+    0
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=0 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : pilier ops (22 → 0).
+- **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/human.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 

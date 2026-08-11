@@ -9,7 +9,7 @@ import { InventorySyncService as SyncStocks } from '@/modules/logistics';
 import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
 import { HACCPSyncService as SyncHACCP } from '@/modules/compliance/qualite/haccp/haccp.sync';
 import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/acquisition/marketing/marketing.sync';
-import { HRSyncService as SyncStaff } from '@/modules/human/effectifs/hr/hr.sync';
+import { HRSyncService as SyncStaff } from '@/modules/human';
 
 type Store = ReturnType<typeof getDefaultStore>;
 
