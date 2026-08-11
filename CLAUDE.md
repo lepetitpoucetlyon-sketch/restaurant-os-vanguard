@@ -48,6 +48,12 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 2. `Nexus.adapter.get/set(...)` (Données persistées)
 3. `NexusEventBus.emit/on(...)` (Effets de bord async)
 
+### Décisions d'architecture canoniques (Vibecoder Rescue v4)
+
+1. **Décision 1 — Emplacement du métier** : Le code métier vit exclusivement dans les piliers (`src/modules/<pilier>/`), jamais dans les verticales (`src/verticals/`). *« Un bug = un endroit à toucher »*. Les verticales (`src/verticals/`) déclarent les types, configurations et adapters specifiques, sans dupliquer la logique métier (`repair-intake` va dans `modules/ops/service/`, pas dans `verticals/garage/`).
+2. **Décision 2 — Motif d'architecture interne** : Le motif interne standard des modules est `components/hooks/services/store`. L'architecture hexagonale (ports & adapters) est réservée exclusivement aux modules multi-implémentations (`e-invoicing`, `open-banking`).
+3. **Décision 3 — Modèle RBAC & Libellés** : RBAC basé sur des **NIVEAUX** numériques universels (100 owner ... 10 support) comparés par `minLevel` dans `ACTION_MAP`. Les **LIBELLÉS** de rôles (`roleLabels: Record<number, string>`) sont configurables par verticale sans affecter la matrice de permissions.
+
 **Rapatriement progressif** : Le code métier est encore dispersé sur 8 racines (`components/`, `domain/`, `engines/`, etc.). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`**. À chaque passage sur un fichier orphelin dans `components/` ou `domain/`, le rapatrier vers le bon pilier. Ne jamais créer de nouveau fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
 
 ## Conventions critiques

@@ -320,5 +320,25 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : aucun stub, shim @deprecated propre, 0 @ts-ignore.
 - **Vérifié par Claude** : ⬜
 
+### [§3.0] Écrire les 3 décisions d'architecture dans CLAUDE.md — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 12:11
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : CLAUDE.md (1 fichier)
+- **Objectif chiffré** : documentation des 3 décisions canoniques : 0 → 3 présent dans CLAUDE.md
+- **Commande de preuve** :
+    ```bash
+    grep -E "Décision 1|Décision 2|Décision 3" CLAUDE.md | wc -l
+    ```
+- **Sortie BRUTE** :
+    ```
+    3
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=3 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : Phase 1bis (filet d'invariants) et §3.4b.
+- **Stubs/raccourcis évités** : aucun stub, 3 décisions intégrées sans compromis.
+- **Vérifié par Claude** : ⬜
+
+
 
 
