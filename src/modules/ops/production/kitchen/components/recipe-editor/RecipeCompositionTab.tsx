@@ -57,8 +57,15 @@ export function RecipeCompositionTab({
                             <input
                                 type="number"
                                 placeholder="Coût Unitaire"
-                                value={newIngredient.costInCents ? (newIngredient.costInCents / 100) : ''}
-                                onChange={(e) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, costInCents: Math.round(parseFloat(e.target.value) * 100) || 0 }))}
+                                value={newIngredient.costInMicrounits ? (newIngredient.costInMicrounits / 1_000_000) : newIngredient.costInCents ? (newIngredient.costInCents / 100) : ''}
+                                onChange={(e) => {
+                                    const euros = parseFloat(e.target.value) || 0;
+                                    setNewIngredient((prev: Partial<RecipeIngredient>) => ({
+                                        ...prev,
+                                        costInMicrounits: Math.round(euros * 1_000_000),
+                                        costInCents: Math.round(euros * 100),
+                                    }));
+                                }}
                                 className="w-full h-14 pl-10 pr-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                             />
                         </div>
@@ -92,7 +99,7 @@ export function RecipeCompositionTab({
                                 </div>
                             </div>
                             <div className="flex items-center gap-8">
-                                <span className="text-lg font-black text-accent">{(Number(ing.costInCents || 0) / 100).toFixed(2)}€</span>
+                                <span className="text-lg font-black text-accent">{(Number(ing.costInMicrounits ?? (ing.costInCents || 0) * 10_000) / 1_000_000).toFixed(2)}€</span>
                                 <button
                                     onClick={() => handleRemoveIngredient(String(ing.id || ''))}
                                     className="w-10 h-10 rounded-xl bg-error/5 hover:bg-error/10 text-error flex items-center justify-center transition-all opacity-0 group-hover:opacity-100"

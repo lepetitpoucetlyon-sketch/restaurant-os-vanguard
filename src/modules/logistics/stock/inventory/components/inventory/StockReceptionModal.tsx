@@ -86,7 +86,8 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
         if (ing) {
             setUnit(ing.unit as IngredientUnit);
             setStorageLocation(String(ing.defaultStorageLocation || ''));
-            setUnitCost((Number(ing.costInCents || 0) / 100).toString());
+            const costMu = Number(ing.costInMicrounits ?? (Number(ing.costInCents || 0) * 10_000));
+            setUnitCost((costMu / 1_000_000).toString());
             // Auto-select supplier if ingredient has a supplierId that matches a loaded supplier
             if (ing.supplierId) {
                 setSelectedSupplierId(String(ing.supplierId));
