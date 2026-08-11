@@ -60,7 +60,7 @@ export function useNexusTenantLogic(): NexusTenantState {
         setActiveTenantConfig(config);
         setGlobalTenantConfig(config);
         Nexus.tenantOverride = tenantId;
-        NexusTelemetryEngine.initSession(tenantId);
+        NexusTelemetryEngine.initSession(tenantId, config.variant ?? 'restaurant');
         fetchRbac(tenantId);
         
         // Auto-provision Demo Mode — URL param OU dev local sans Firebase réel

@@ -1,36 +1,36 @@
 "use client";
 
 import { useEffect } from "react";
-import { Sentry } from "@/lib/sentry";
+import { Sentry, configureTenantScope } from "@/lib/sentry";
+import type { PlatformVertical } from "@/lib/sentry";
 import { useAtomValue } from "jotai";
-import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { tenantIdAtom, tenantVariantAtom } from "@/store/pillars/sovereign";
 import { useFinanceReflex } from "@modules/finance";
 import { logger } from "@/lib/logger";
 
-/**
- * 🛰️ NexusPulseOrchestrator - Grade X+++
- * Central point where all cross-domain reflexes are initialized and monitored.
- */
 export function NexusPulseOrchestrator(): null {
     const tenantId = useAtomValue(tenantIdAtom);
+    const vertical = useAtomValue(tenantVariantAtom) as PlatformVertical;
 
-    // 🧬 DOMAIN REFLEXES
     useFinanceReflex();
 
     useEffect(() => {
-        // 🛰️ SENTRY HEARTBEAT (Grade X)
-        Sentry.setTag("nexus.grade", "X+++");
-        Sentry.setTag("tenant_id", tenantId as string);
+        if (!tenantId) return;
 
-        logger.info(`[PulseOrchestrator] System Pulse Activated for tenant: ${tenantId}`);
+        configureTenantScope({
+            tenantId,
+            vertical,
+            appMode: (process.env.NEXT_PUBLIC_APP_MODE as 'tenant' | 'mcc') ?? 'tenant',
+        });
 
-        // 🔬 MOLECULAR SCANNER HEARTBEAT
+        logger.info(`[PulseOrchestrator] System Pulse Activated for tenant: ${tenantId} (${vertical})`);
+
         Sentry.addBreadcrumb({
             category: 'pulse',
-            message: 'Molecular scanner cycle check',
+            message: `Session initialized: ${tenantId} [${vertical}]`,
             level: 'info'
         });
-    }, [tenantId]);
+    }, [tenantId, vertical]);
 
     return null;
 }

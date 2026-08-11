@@ -143,6 +143,7 @@ export interface MaintenanceLog {
     performedBy: string;
     performedAt: string;
     costInCents: number;
+    costInMicrounits?: number;
     status: 'completed' | 'pending';
     createdAt: string;
     updatedAt: string;

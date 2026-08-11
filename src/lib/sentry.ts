@@ -57,3 +57,27 @@ export const Sentry: SentryLike = {
         loadSentry().then(s => s?.addBreadcrumb(b));
     },
 };
+
+export type PlatformVertical = 'restaurant' | 'hotel' | 'bakery' | 'garage' | 'salon' | 'clinic' | 'retail' | 'custom';
+
+export interface SentryTenantScope {
+    tenantId: string;
+    vertical: PlatformVertical;
+    userId?: string;
+    userRole?: string;
+    appMode?: 'tenant' | 'mcc';
+}
+
+export function configureTenantScope(scope: SentryTenantScope): void {
+    Sentry.setTag('tenant.id', scope.tenantId);
+    Sentry.setTag('tenant.vertical', scope.vertical);
+    Sentry.setTag('app.mode', scope.appMode ?? 'tenant');
+    if (scope.userRole) {
+        Sentry.setTag('user.role', scope.userRole);
+    }
+    Sentry.setContext('tenant', {
+        id: scope.tenantId,
+        vertical: scope.vertical,
+        appMode: scope.appMode ?? 'tenant',
+    });
+}

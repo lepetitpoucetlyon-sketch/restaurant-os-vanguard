@@ -1,17 +1,22 @@
 /* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
-import { Sentry } from '@/lib/sentry';
+import { Sentry, configureTenantScope } from '@/lib/sentry';
+import type { PlatformVertical } from '@/lib/sentry';
 
 /**
  * 📡 NexusTelemetryEngine
  * Responsibility: System observation, fault injection, and Sentry context mapping.
  */
 export class NexusTelemetryEngine {
-    static initSession(tenantId: string) {
+    static initSession(tenantId: string, vertical: PlatformVertical = 'restaurant') {
         if (typeof window !== 'undefined') {
-            Sentry.setTag("empire.domain", tenantId);
-            Sentry.setTag("nexus.grade", "X+++");
+            configureTenantScope({
+                tenantId,
+                vertical,
+                appMode: (process.env.NEXT_PUBLIC_APP_MODE as 'tenant' | 'mcc') ?? 'tenant',
+            });
             Sentry.setContext("Sovereign Session", {
                 activeTenant: tenantId,
+                vertical,
                 initializedAt: new Date().toISOString()
             });
         }
