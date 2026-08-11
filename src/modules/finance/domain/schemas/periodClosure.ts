@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { MicrounitsSchema } from '@/shared/schemas/primitives';
-import { TaxRateSchema } from '@/modules/finance/domain/schemas/finance';
+import { TaxRateSchema } from './finance';
 
 export const PeriodTypeSchema = z.enum(['monthly', 'annual']);
 export type PeriodType = z.infer<typeof PeriodTypeSchema>;

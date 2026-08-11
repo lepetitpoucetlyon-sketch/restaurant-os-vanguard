@@ -8,7 +8,7 @@ import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import type { PlatformVariant } from '@nexus/contracts';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
-import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';

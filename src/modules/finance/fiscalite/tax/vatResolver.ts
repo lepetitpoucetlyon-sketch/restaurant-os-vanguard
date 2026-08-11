@@ -1,4 +1,4 @@
-import type { TaxRate } from '@/modules/finance/domain/schemas/finance';
+import type { TaxRate } from '../../domain/schemas/finance';
 import type { ConsumptionMode } from '@/modules/ops';
 
 type ProductCategory = 'food' | 'alcohol' | 'beverage_soft' | 'service' | 'other';

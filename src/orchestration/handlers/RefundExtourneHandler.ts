@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
+import { FinancialNexusBridge } from '@/modules/finance';
 import type { JournalEntry } from '@nexus/contracts';
 
 export function registerRefundExtourneHandler() {

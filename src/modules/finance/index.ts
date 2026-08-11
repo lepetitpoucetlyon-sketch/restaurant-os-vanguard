@@ -23,6 +23,9 @@ export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { FinanceCore } from './services/FinanceCore';
 export { TransactionService } from './services/TransactionService';
 export { FiscalEngine, FISCAL_CONSTANTS } from './fiscalite/FiscalAdapter';
+export { FiscalSealer } from './fiscalite/FiscalSealer';
+export { FinancialNexusBridge } from './comptabilite/FinancialNexusBridge';
+export { TaxCalculator } from './fiscalite/TaxCalculator';
 export { SovereignLedger } from './services/SovereignLedger';
 export { FiscalKeyService } from './services/FiscalKeyService';
 

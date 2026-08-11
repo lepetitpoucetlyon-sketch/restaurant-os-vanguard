@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { FiscalEngine, FiscalSeal } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { FiscalEngine, FiscalSeal } from '../fiscalite/FiscalAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { StockEngine } from '@/modules/logistics';

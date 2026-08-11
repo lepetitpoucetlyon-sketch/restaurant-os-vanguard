@@ -524,6 +524,26 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/compliance & @nexus/contracts.
 - **Vérifié par Claude** : ⬜
 
+### [§3.1] Barrel resolution finance (33 → 0) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 12:26
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : 20+ fichiers (app, orchestration, lib, e2e, store & finance subdomains)
+- **Objectif chiffré** : finance barrel imports: 33 → 0
+- **Commande de preuve** :
+    ```bash
+    grep -rn "from '@/modules/finance/" src --include='*.ts*' | grep -v "__tests__\|\.test\." | wc -l
+    ```
+- **Sortie BRUTE** :
+    ```
+    0
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=0 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : pilier commerce (63 → 0).
+- **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/finance & @nexus/contracts.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 

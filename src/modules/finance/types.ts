@@ -14,7 +14,7 @@ export type {
   AccountingMetrics,
   FinancialMetrics,
   FiscalSeal,
-} from '@/modules/finance/domain/schemas/finance';
+} from './domain/schemas/finance';
 
 export {
   JournalEntrySchema,
@@ -27,12 +27,12 @@ export {
   AccountingMetricsSchema,
   FinancialMetricsSchema,
   FiscalSealSchema,
-} from '@/modules/finance/domain/schemas/finance';
+} from './domain/schemas/finance';
 
 // Schémas partiels pour mutations
 export {
   JournalEntrySchema as JournalEntryPatchSchema,
-} from '@/modules/finance/domain/schemas/finance';
+} from './domain/schemas/finance';
 
 // --- Legacy Exports (to be removed once fully migrated) ---
 export type AccountClass = '1' | '2' | '3' | '4' | '5' | '6' | '7';
@@ -81,7 +81,7 @@ import type {
     JournalEntry, 
     ExpenseClaim,
     AccountingContextData
-} from '@/modules/finance/domain/schemas/finance';
+} from './domain/schemas/finance';
 import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 
 export interface AccountingContextType extends AccountingContextData {

@@ -6,7 +6,7 @@ import { TimeSync } from '@/lib/TimeSync';
 // Sous-services de synchronisation : un par pilier métier + l'horloge (TimeSync).
 import { OpsSyncService as SyncOrders } from '@/modules/ops';
 import { InventorySyncService as SyncStocks } from '@/modules/logistics';
-import { FinanceSyncService as SyncFinance } from '@/modules/finance/finance.sync';
+import { FinanceSyncService as SyncFinance } from '@/modules/finance';
 import { HACCPSyncService as SyncHACCP } from '@/modules/compliance';
 import { MarketingSyncService as SyncMarketing } from '@/modules/commerce/acquisition/marketing/marketing.sync';
 import { HRSyncService as SyncStaff } from '@/modules/human';

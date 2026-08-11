@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 import { validatePin } from '@/lib/auth/validatePin';
 import { hashPin } from '@/lib/shared-kernel';
 import { resolveDNA } from '@/shared/seeds';
-import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import { FloorSchema, ZoneSchema, TableSchema, type Floor, type Zone, type Table } from '@nexus/contracts';

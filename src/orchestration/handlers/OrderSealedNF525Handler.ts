@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 
 export function registerOrderSealedNF525Handler(): () => void {

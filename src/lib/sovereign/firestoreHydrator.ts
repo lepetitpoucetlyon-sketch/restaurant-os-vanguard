@@ -8,7 +8,7 @@ import {
   AccountSchema, 
   BankTransactionSchema, 
   ExpenseClaimSchema 
-} from '@/modules/finance/domain/schemas/finance';
+} from '@nexus/contracts';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { logger } from '@/lib/axiom';
 

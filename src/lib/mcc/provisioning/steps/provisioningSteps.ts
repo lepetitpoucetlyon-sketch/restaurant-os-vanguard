@@ -9,7 +9,7 @@ import { Resend } from 'resend';
 import { fleetTelemetry } from '@/modules/intelligence/ia/fleet/FleetTelemetryService';
 import { sovereignCreateWorkspace } from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
 import type { TenantID } from '@/shared/types/brands';
-import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import type { ProvisioningRequest } from '../TenantProvisioningService';
 

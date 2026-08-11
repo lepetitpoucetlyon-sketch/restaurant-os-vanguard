@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import { SovereignLedger } from '@/modules/finance/tresorerie/SovereignLedgerAdapter';
+import { SovereignLedger } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 
