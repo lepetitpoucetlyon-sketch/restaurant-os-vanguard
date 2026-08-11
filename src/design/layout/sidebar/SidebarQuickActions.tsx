@@ -5,7 +5,7 @@ import { motion, Variants } from "framer-motion";
 import { ReceiptEuro, Sparkles, Flame, Moon } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
-import { AmbianceService, RestaurantAmbiance } from '@/modules/facility/spaces/AmbianceService';
+import { AmbianceService, type RestaurantAmbiance } from '@/modules/facility';
 import { useState, useEffect } from "react";
 
 interface SidebarQuickActionsProps {

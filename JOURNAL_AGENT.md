@@ -417,6 +417,26 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : aucune dépendance directe kernel -> modules conservée, shims de réexport UI propre, 0 stub, 0 z.any().
 - **Vérifié par Claude** : ⬜
 
+### [§3.1] Barrel resolution facility (1 → 0) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 12:18
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : src/design/layout/sidebar/SidebarQuickActions.tsx (1 fichier)
+- **Objectif chiffré** : facility barrel imports: 1 → 0
+- **Commande de preuve** :
+    ```bash
+    grep -rn "from '@/modules/facility/[a-z]" src --include='*.ts*' | grep -v "__tests__\|\.test\." | wc -l
+    ```
+- **Sortie BRUTE** :
+    ```
+    0
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=0 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : pilier logistics (5 → 0).
+- **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/facility.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 
