@@ -212,7 +212,7 @@ describe('OMNI-VANGUARD [Bloc 1] : Domaine & Logique Métier', () => {
         });
 
         it('T15: Isolation Tenant (Paths)', async () => {
-            const { Nexus } = await import('../../lib/nexus/NexusAdapter');
+            const { Nexus } = await import('@/lib/nexus/NexusAdapter');
             const path = Nexus.getTenantPath('orders', 'tenant-A');
             expect(path).toBe('tenants/tenant-A/orders');
 

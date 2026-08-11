@@ -1,4 +1,4 @@
-import { SovereignNode } from "../../nexus-contract";
+import { SovereignNode } from "@/shared/nexus-contract";
 
 export type CandidateStatus = 'new' | 'interview' | 'trial' | 'offer' | 'refused' | 'hired';
 
