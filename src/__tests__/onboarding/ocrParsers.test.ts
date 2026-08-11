@@ -13,7 +13,7 @@ vi.mock('@/modules/intelligence/ia/ai/LLMProviderFactory', () => ({
   AI_MODELS: { visionFast: 'gemini-1.5-flash', fast: 'gemini-1.5-flash' },
 }));
 vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
 // ─── ocrPrompts ──────────────────────────────────────────────────────────────
