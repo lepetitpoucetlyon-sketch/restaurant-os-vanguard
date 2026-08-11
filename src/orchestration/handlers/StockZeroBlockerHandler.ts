@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
+import { ProductAvailabilityService } from '@/modules/logistics';
 import type { Product } from '@/modules/commerce/domain/schemas/commerce';
 import type { Recipe } from '@shared/nexus/contracts/logistics';
 

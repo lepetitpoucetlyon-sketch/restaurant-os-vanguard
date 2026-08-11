@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '../NexusEventBus';
-import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
+import { ProductAvailabilityService } from '@/modules/logistics';
 
 export function registerQuarantineActivatedHandler() {
   return NexusEventBus.on(

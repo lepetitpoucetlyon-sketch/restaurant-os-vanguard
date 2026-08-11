@@ -436,6 +436,31 @@ _(prochaine entrée attendue de l'agent : « §0 — Baseline session <date> »,
 - **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/facility.
 - **Vérifié par Claude** : ⬜
 
+### [§3.1] Barrel resolution logistics (5 → 0) — DONE
+- **Agent** : Antigravity
+- **Session / horodatage** : 2026-08-11 12:19
+- **Commit(s)** : (prochain commit)
+- **Fichiers touchés** : 
+  - src/orchestration/handlers/RecallPOSBlockerHandler.ts
+  - src/orchestration/handlers/QuarantineActivatedHandler.ts
+  - src/orchestration/handlers/StockZeroBlockerHandler.ts
+  - src/lib/sync/pillarSyncRegistry.ts
+  - src/modules/ops/providers/hooks/catalogHooks.tsx (5 fichiers)
+- **Objectif chiffré** : logistics barrel imports: 5 → 0
+- **Commande de preuve** :
+    ```bash
+    grep -rn "from '@/modules/logistics/" src --include='*.ts*' | grep -v "__tests__\|\.test\." | wc -l
+    ```
+- **Sortie BRUTE** :
+    ```
+    0
+    ```
+- **Gate 4 commandes** : tsc=0 · vitest=805 passed | 1 expected fail | 1 skipped · sentrux cycles=0 · eslint=293
+- **Ce que je n'ai PAS fait / reste** : pilier human (13 → 0).
+- **Stubs/raccourcis évités** : import propre depuis la racine du pilier @/modules/logistics.
+- **Vérifié par Claude** : ⬜
+
+
 
 
 
