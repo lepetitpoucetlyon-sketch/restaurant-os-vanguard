@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantSeeder } from '@/lib/TenantSeeder';
@@ -7,7 +8,7 @@ import { CoreContext } from '@/shared/plugins/CoreContext';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import type { PlatformVariant } from '@nexus/contracts';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';

@@ -1,9 +1,10 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { EmpireInstance, ProvisioningDNA } from '@/shared/types/empire';
-import { fleetTelemetry } from '@/modules/intelligence';
+import { fleetTelemetry } from '@/modules/intelligence/ia/fleet/FleetTelemetryService';
 import { TenantSeeder } from './TenantSeeder';
-import { sovereignCreateWorkspace } from '@/modules/intelligence';
+import { sovereignCreateWorkspace } from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';

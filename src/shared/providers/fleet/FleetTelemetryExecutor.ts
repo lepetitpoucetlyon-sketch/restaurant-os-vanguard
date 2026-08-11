@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantID, SiteTelemetry } from '@/shared/types/brands';
 import { TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';

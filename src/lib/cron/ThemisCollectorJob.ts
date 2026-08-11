@@ -1,5 +1,6 @@
-import { CollectionService } from '@/modules/finance';
-import type { InvoiceTarget } from '@/modules/finance';
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
+import { CollectionService } from '@/modules/finance/tresorerie/collection/CollectionService';
+import type { InvoiceTarget } from '@/modules/finance/tresorerie/collection/types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 

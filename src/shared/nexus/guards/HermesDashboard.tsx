@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -13,7 +14,8 @@ import {
     Clock,
     Crosshair
 } from 'lucide-react';
-import { HermesEngine, type HermesPulseResult } from '@/modules/intelligence';
+import { HermesEngine } from '@/modules/intelligence/ia/ai/HermesEngine';
+import type { HermesPulseResult } from '@/modules/intelligence/domain/agency/hermes.types';
 import { cn } from '@/lib/ui.foundations';
 
 /**

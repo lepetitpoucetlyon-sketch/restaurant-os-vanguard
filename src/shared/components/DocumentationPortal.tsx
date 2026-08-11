@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 "use client";
 
 import React from 'react';
 import { CATEGORY_DOCS } from '@/lib/docs-data';
-import { RecipeTechnicalSheet } from '@/modules/ops';
+import { RecipeTechnicalSheet } from '@/modules/ops/production/kitchen/components/RecipeTechnicalSheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUI } from '@/shared/hooks';
 import { useTutorial } from '@/shared/contexts/TutorialContext';

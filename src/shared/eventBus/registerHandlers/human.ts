@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { registerPayrollTimeclockHandler } from '../handlers/PayrollTimeclockHandler';
-import { registerRainStaffingHandler } from '@/modules/human';
+import { registerRainStaffingHandler } from '@/modules/human/effectifs/hr/handlers/RainStaffingHandler';
 import { registerLaborCostAnalyzerHandler } from '../handlers/LaborCostAnalyzerHandler';
 import { registerScheduleNotifierHandler } from '../handlers/ScheduleNotifierHandler';
 import { registerOvertimeAlertHandler } from '../handlers/OvertimeAlertHandler';

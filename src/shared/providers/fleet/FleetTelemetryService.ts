@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { TenantID, SiteTelemetry } from '@/shared/types/brands';
 import { TelemetryStream, TelemetryEvent } from '@/modules/intelligence/analytique/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';

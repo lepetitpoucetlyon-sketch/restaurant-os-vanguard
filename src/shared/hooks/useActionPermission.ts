@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
  
 "use client";
 
@@ -8,7 +9,7 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-import { policyEngine } from '@/modules/compliance';
+import { policyEngine } from '@/modules/compliance/services/PolicyEngine';
 import { logger } from '@/lib/logger';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts

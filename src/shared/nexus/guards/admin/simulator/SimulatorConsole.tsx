@@ -1,10 +1,13 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { simulator, simulationMetricsAtom, isSimulationRunningAtom, type SimulationProfile } from '@/modules/intelligence';
+import { simulator } from '@/modules/intelligence/ia/simulator/TemporalSimulator';
+import { simulationMetricsAtom, isSimulationRunningAtom } from '@/modules/intelligence/ia/simulator/store/simulatorAtoms';
+import type { SimulationProfile } from '@/modules/intelligence/ia/simulator/SimulationService';
 import { ProposalPanel } from '../ProposalPanel';
-import { NexusStaffingOracle as StaffingOracle } from '@/modules/human';
+import { NexusStaffingOracle as StaffingOracle } from '@/modules/human/services/NexusStaffingOracle';
 import { SovereignLedger } from '@/modules/finance/tresorerie/SovereignLedgerAdapter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks';

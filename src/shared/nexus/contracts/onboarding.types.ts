@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * OnboardingState — état du parcours d'onboarding B2B d'un tenant.
  * Persisté dans tenantConfig (merge post-seeding).

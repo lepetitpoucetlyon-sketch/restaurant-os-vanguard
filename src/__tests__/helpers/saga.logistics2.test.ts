@@ -47,7 +47,10 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // //   SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
 // // }));
 vi.mock('@/modules/finance/comptabilite/FinancialNexusBridge', () => ({
-  FinancialNexusBridge: { processRefund: vi.fn(async () => undefined) },
+  FinancialNexusBridge: {
+    processRefund: vi.fn(async () => undefined),
+    processOrder: vi.fn(async () => ({ journalEntry: {}, seal: {} })),
+  },
 }));
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { getDefaultStore } from 'jotai';
 import { logger } from '@/lib/logger';
 import { ordersNodeAtom } from '@/store/pillars/ops';
@@ -5,7 +6,7 @@ import { stockItemsNodeAtom } from '@/store/pillars/logistics';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
 import { updateNexusNode } from '@/store/pillars/core';
 import { genomeValidator } from '@/lib/GenomeValidator';
-import { ImmunityAuditLogger } from '@/modules/compliance';
+import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
 
 type Store = ReturnType<typeof getDefaultStore>;

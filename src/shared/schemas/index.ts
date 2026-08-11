@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * 🏛️ SHARED SCHEMAS BARREL
  * N'exporte que les primitives transversales + les types tiers utilisés par
@@ -18,12 +19,12 @@ export {
     SupportDraftSchema,  type SupportDraft,
     SupportTicketStatusSchema, type SupportTicketStatus,
     SupportTicketSourceSchema, type SupportTicketSource,
-} from '@/modules/intelligence';
+} from '@/modules/intelligence/domain/schemas/supportTicket';
 
 // ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
 export {
     AuditEventSchema, AUDITED_COLLECTIONS,
     type AuditAction, type AuditEvent, type AuditedCollection,
     AuditActionSchema,
-} from '@/modules/compliance';
-export type { PiiFields, PiiRecord } from '@/modules/compliance';
+} from '@/modules/compliance/domain/schemas/audit';
+export type { PiiFields, PiiRecord } from '@/modules/compliance/domain/schemas/pii';

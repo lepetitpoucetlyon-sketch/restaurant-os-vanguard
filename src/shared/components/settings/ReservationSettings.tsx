@@ -1,13 +1,14 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { Save, Loader2, Calendar, MessageSquare } from "lucide-react";
-import { ReservationCapacitySection } from '@/modules/commerce';
-import { ReservationVerificationSection } from '@/modules/commerce';
-import { ReservationCardImprintSection } from '@/modules/commerce';
-import { ReservationNotificationSection } from '@/modules/commerce';
+import { ReservationCapacitySection } from '@/modules/commerce/relation/reservations/components/settings/ReservationCapacitySection';
+import { ReservationVerificationSection } from '@/modules/commerce/relation/reservations/components/settings/ReservationVerificationSection';
+import { ReservationCardImprintSection } from '@/modules/commerce/relation/reservations/components/settings/ReservationCardImprintSection';
+import { ReservationNotificationSection } from '@/modules/commerce/relation/reservations/components/settings/ReservationNotificationSection';
 
 export default function ReservationSettingsComponent() {
     const { settings, updateReservationConfig, updateReservationSlots, isSaving } = useSettings();

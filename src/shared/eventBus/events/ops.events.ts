@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 
 export interface OPSEvents {

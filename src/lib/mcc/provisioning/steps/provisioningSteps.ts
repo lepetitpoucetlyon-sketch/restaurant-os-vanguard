@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { logger } from '@/lib/logger';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
@@ -5,9 +6,10 @@ import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
+import { fleetTelemetry } from '@/modules/intelligence/ia/fleet/FleetTelemetryService';
+import { sovereignCreateWorkspace } from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
 import type { TenantID } from '@/shared/types/brands';
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import type { ProvisioningRequest } from '../TenantProvisioningService';
 

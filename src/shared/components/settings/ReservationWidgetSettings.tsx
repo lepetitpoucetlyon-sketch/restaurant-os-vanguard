@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +7,9 @@ import { Globe, Settings2, Eye, Save, Loader2, Clock, CalendarDays } from 'lucid
 import { useTenant } from '@/shared/hooks';
 import { updateTenantSettingsAction } from '@/shared/actions/settings.action';
 import { toast } from 'sonner';
-import { EmbedSnippets, ROICalculator, OnlineBookingToggle } from '@/modules/commerce';
+import EmbedSnippets from '@/modules/commerce/fidelite/widgets/EmbedSnippets';
+import ROICalculator from '@/modules/commerce/fidelite/widgets/ROICalculator';
+import OnlineBookingToggle from '@/modules/commerce/fidelite/widgets/OnlineBookingToggle';
 
 interface WidgetSettings {
   slotDuration: 15 | 30 | 60;

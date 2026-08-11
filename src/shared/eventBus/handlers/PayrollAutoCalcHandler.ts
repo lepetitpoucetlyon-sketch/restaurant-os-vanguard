@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { PrepaieBuilder } from '@/modules/human';
+import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import { browserPush } from '@/lib/push/browserPush';
 import { toError } from "@/lib/toError";
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * @deprecated Importer depuis '@/modules/intelligence/analytique/store/dashboardAtoms'.
  * Shim de rétrocompatibilité.

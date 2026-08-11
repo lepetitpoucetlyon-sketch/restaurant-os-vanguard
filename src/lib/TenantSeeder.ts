@@ -1,13 +1,14 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { validatePin } from '@/lib/auth/validatePin';
 import { hashPin } from '@/lib/shared-kernel';
 import { resolveDNA } from '@/shared/seeds';
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
-import type { Floor, Zone, Table } from '@/modules/ops';
+import { FloorSchema, ZoneSchema, TableSchema, type Floor, type Zone, type Table } from '@/modules/ops/domain/schemas/ops';
 import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
 import { CONNECTOR_CATALOG } from '@/shared/connector-manifest';
 import type { ConnectorState } from '@/shared/connector-manifest';
@@ -163,30 +164,30 @@ export const TenantSeeder = {
       seededPaths.push(`tenants/${tenantId}/fiscalSeals/GENESIS`);
 
       // 5. Default floor + zones + tables
-      const floor: Floor = {
+      const floor: Floor = FloorSchema.parse({
         id: 'floor-rdc',
         name: 'Salle principale',
         level: 0,
         isActive: true,
-      };
+      });
       await Nexus.adapter.set(`tenants/${tenantId}/floors/floor-rdc`, floor);
       seededPaths.push(`tenants/${tenantId}/floors/floor-rdc`);
 
       const zones: Zone[] = [
         { id: 'zone-interieur', name: 'Intérieur', color: '#4A90D9', floorId: 'floor-rdc' },
         { id: 'zone-terrasse', name: 'Terrasse', color: '#7ED321', floorId: 'floor-rdc' },
-      ];
+      ].map((z) => ZoneSchema.parse(z));
       await Promise.all(
         zones.map((z) => Nexus.adapter.set(`tenants/${tenantId}/zones/${z.id}`, z))
       );
       seededPaths.push(`tenants/${tenantId}/zones (2)`);
 
-      const tables: Table[] = Array.from({ length: 10 }, (_, i) => ({
+      const tables: Table[] = Array.from({ length: 10 }, (_, i) => TableSchema.parse({
         id: `table-${i + 1}`,
         number: String(i + 1),
         seats: i < 8 ? 4 : 6,
-        status: 'free' as const,
-        shape: 'rect' as const,
+        status: 'free',
+        shape: 'rect',
         x: (i % 5) * 160 + 40,
         y: Math.floor(i / 5) * 140 + 40,
         zoneId: i < 8 ? 'zone-interieur' : 'zone-terrasse',

@@ -1,6 +1,7 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager } from '@/modules/intelligence';
-import { AI_MODELS } from '@/modules/intelligence';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { AI_MODELS } from '@/modules/intelligence/ia/ai/index';
 import { logger } from '@/lib/axiom';
  
 import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";

@@ -12,7 +12,7 @@ vi.mock('@/shared/rbac/actionPermissionMap', () => ({
     ACTION_MAP: {
         pos: {
             send_to_kitchen: { minLevel: 10, requiresPin: false },
-            void_receipt: { minLevel: 20, requiresPin: true },
+            void_ticket: { minLevel: 20, requiresPin: true },
         }
     }
 }));

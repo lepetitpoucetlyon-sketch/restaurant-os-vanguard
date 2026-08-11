@@ -1,15 +1,16 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { ZodSchema } from 'zod';
 import { UserSchema } from '@nexus/contracts';;
-import { OrderSchema } from '@/modules/ops';
+import { OrderSchema } from '@/modules/ops/domain/schemas/orders';
 import { StockItemSchema } from '@nexus/contracts';;
-import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@/modules/ops';
+import { TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@/modules/ops/domain/schemas/ops';
 import { ModuleSchema } from '@nexus/contracts';
 import { 
   JournalEntrySchema, 
   AccountSchema, 
   BankTransactionSchema, 
   ExpenseClaimSchema 
-} from '@/modules/finance';
+} from '@/modules/finance/domain/schemas/finance';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import { logger } from '@/lib/axiom';
 

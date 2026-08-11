@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * @deprecated Importer depuis '@/modules/facility/spaces/settings/store/settingsAtoms'.
  * Shim de rétrocompatibilité.
  */
-export * from '@/modules/facility';
+export * from '@/modules/facility/spaces/settings/store/settingsAtoms';

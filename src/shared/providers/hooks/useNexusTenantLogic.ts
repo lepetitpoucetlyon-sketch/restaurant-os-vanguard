@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 "use client";
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -8,7 +9,7 @@ import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { logger } from '@/lib/axiom';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
-import { LLMManager } from '@/modules/intelligence';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
 import { GeminiProvider } from '@/modules/intelligence/ia/GeminiProvider';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';

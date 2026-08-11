@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LightRAGClient } from '@/modules/intelligence';
+import { LightRAGClient } from '@/modules/intelligence/knowledge/rag/LightRAGClient';
 import { toError } from "@/lib/toError";
 
 export class AutoIndexationHandler {

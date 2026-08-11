@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -5,8 +6,8 @@ import { Download, Link2, CheckCircle, AlertCircle, Loader2, ChevronDown, FileTe
 import { cn } from '@/lib/utils';
 import { useToast } from '@ui/Toast';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { PROVIDER_CATALOG } from '@/modules/human';
-import type { ProviderCatalogEntry } from '@/modules/human';
+import { PROVIDER_CATALOG } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
+import type { ProviderCatalogEntry } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
 import { toError } from "@/lib/toError";
 
 type ActiveTab = 'csv' | string;

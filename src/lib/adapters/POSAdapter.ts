@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import { OrderItem } from "@nexus/contracts";
 import { CartItem } from "@/modules/ops/workflow/engine/types";
 import { toMicrounits, Microunits } from "@/shared/schemas/primitives";

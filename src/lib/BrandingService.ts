@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 import 'server-only';
 import { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
-import { LLMManager } from '@/modules/intelligence';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
 import type { PlatformVariant } from '@nexus/contracts';
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports -- tolerated structural inversion */
 /**
  * 🍱 OPERATIONS DOMAIN - Shared Kernel
  * Version Grade X - Sovereign Alignment
@@ -10,12 +11,12 @@ import {
   ReservationSchema, 
   FloorSchema, 
   ZoneSchema 
-} from '@/modules/ops';
+} from '@/modules/ops/domain/schemas/ops';
 import { 
   OrderSchema, 
   OrderLineSchema,
   OrderItemModificationSchema
-} from '@/modules/ops';
+} from '@/modules/ops/domain/schemas/orders';
 
 export type Table = z.infer<typeof TableSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;

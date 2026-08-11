@@ -26,7 +26,7 @@ import type {
  
 } from '@/modules/intelligence/knowledge/rag/types';
 
-import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
+import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence/knowledge/rag/types';
 
 // ============================================
 // MARKET ORACLE
