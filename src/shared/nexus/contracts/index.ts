@@ -62,8 +62,7 @@ export * from './compliance.types';
 export * from './commerce.types';
 
 // 4. Operations Bridge (POS & Groups)
-export type { CartItem } from '@/modules/ops/workflow/engine/types';
-export type { GroupEvent } from '@/modules/ops/workflow/engine/groups.types';
+export type { CartItem, GroupEvent } from './ops.types';
 
 // --- 🛠️ UTILITIES & UI (Selective Export) ---
 export type { 
@@ -94,7 +93,7 @@ export type {
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
 export * from './settings/haccp';
-export * from '@/modules/compliance/qualite/haccp/types';
+export * from './haccp.types';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';
