@@ -249,6 +249,7 @@ export class GoCardlessProvider implements IOpenBankingProvider {
                 const transaction: Omit<BankTransaction, 'id'> = {
                     date:          tx.date,
                     label:         tx.label,
+                    amountInMicrounits: Math.round(Math.abs(tx.amount) * 1_000_000),
                     amountInCents: Math.round(Math.abs(tx.amount) * 100),
                     type:          tx.amount >= 0 ? 'credit' : 'debit',
                     isReconciled:  false,
@@ -283,6 +284,7 @@ export class GoCardlessProvider implements IOpenBankingProvider {
             const transaction: Omit<BankTransaction, 'id'> = {
                 date:          tx.bookingDate ?? tx.valueDate ?? new Date().toISOString().slice(0, 10),
                 label,
+                amountInMicrounits: Math.round(Math.abs(rawAmount) * 1_000_000),
                 amountInCents: Math.round(Math.abs(rawAmount) * 100),
                 type:          rawAmount >= 0 ? 'credit' : 'debit',
                 isReconciled:  false,

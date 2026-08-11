@@ -81,16 +81,16 @@ export class TransactionService {
                 referenceId: orderId,
                 referenceType: 'order',
                 type: 'revenue',
-                amountInCents: orderTotalInCents,
                 amountInMicrounits: totalMicrounits,
+                amountInCents: orderTotalInCents,
                 isSystemGenerated: true,
                 isValidated: true,
                 fiscalSealHash: seal.hash,
                 sealedAt: timestamp.toISOString(),
                 status: 'posted',
                 lines: [
-                    { accountCode: '512000', accountName: 'Banque / Caisse', debit: orderTotalInCents, credit: 0 },
-                    { accountCode: '707000', accountName: 'Ventes de marchandises', debit: 0, credit: orderTotalInCents }
+                    { accountCode: '512000', accountName: 'Banque / Caisse', debitInMicrounits: totalMicrounits, debitInCents: orderTotalInCents, creditInMicrounits: 0, creditInCents: 0 },
+                    { accountCode: '707000', accountName: 'Ventes de marchandises', debitInMicrounits: 0, debitInCents: 0, creditInMicrounits: totalMicrounits, creditInCents: orderTotalInCents }
                 ],
                 createdAt: timestamp.toISOString(),
                 updatedAt: timestamp.toISOString()
@@ -121,10 +121,10 @@ export class TransactionService {
                 const customerFullPath = `${crmPath}/${order.customerId}`;
                 const customer = await Nexus.adapter.get<{ loyaltyPoints?: number; totalRevenue?: number; totalVisits?: number }>(customerFullPath);
                 if (customer) {
-                    const pointsToAdd = Math.floor(orderTotalInCents / 100);
+                    const pointsToAdd = Math.floor(totalMicrounits / 1_000_000);
                     batch.update(customerFullPath, {
                         loyaltyPoints: (customer.loyaltyPoints || 0) + pointsToAdd,
-                        totalRevenue: (customer.totalRevenue || 0) + (orderTotalInCents / 100),
+                        totalRevenue: (customer.totalRevenue || 0) + (totalMicrounits / 1_000_000),
                         totalVisits: (customer.totalVisits || 0) + 1,
                         lastVisitDate: timestamp.toISOString(),
                         updatedAt: timestamp.toISOString()

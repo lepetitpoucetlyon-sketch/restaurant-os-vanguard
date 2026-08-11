@@ -12,7 +12,8 @@ export class StatementIngestionService {
      */
     static async generateSignature(tx: Omit<BankTransaction, 'id'>): Promise<string> {
         const dateStr = new Date(tx.date).toISOString().split('T')[0];
-        const raw = `${dateStr}|${tx.label.trim().toUpperCase()}|${(tx.amountInCents / 100).toFixed(2)}|${tx.type}`;
+        const amountMu = tx.amountInMicrounits ?? ((tx.amountInCents ?? 0) * 10_000);
+        const raw = `${dateStr}|${tx.label.trim().toUpperCase()}|${(amountMu / 1_000_000).toFixed(2)}|${tx.type}`;
         
         // Use crypto for a real signature if available
         if (typeof crypto !== 'undefined' && crypto.subtle) {
@@ -55,10 +56,12 @@ export class StatementIngestionService {
                 const label = fields[1].replace(/["']/g, '').trim();
                 const amount = parseFloat(fields[2].replace(',', '.').replace(/\s/g, ''));
 
+                const amountInMicrounits = Math.round(Math.abs(amount) * 1_000_000);
                 const transaction: Omit<BankTransaction, 'id'> = {
                     date,
                     label,
-                    amountInCents: Math.round(Math.abs(amount) * 100),
+                    amountInMicrounits,
+                    amountInCents: Math.round(amountInMicrounits / 10_000),
                     type: amount >= 0 ? 'credit' : 'debit',
                     isReconciled: false,
                     updatedAt: new Date().toISOString()
@@ -97,6 +100,7 @@ export class StatementIngestionService {
             {
                 date: new Date(),
                 label: 'VIREMENT STRIPE PAYOUT',
+                amountInMicrounits: 12_500_000_000,
                 amountInCents: 1250000,
                 type: 'credit',
                 isReconciled: false,
@@ -105,6 +109,7 @@ export class StatementIngestionService {
             {
                 date: new Date(),
                 label: 'ACHAT METRO PARIS',
+                amountInMicrounits: 450_200_000,
                 amountInCents: 45020,
                 type: 'debit',
                 isReconciled: false,

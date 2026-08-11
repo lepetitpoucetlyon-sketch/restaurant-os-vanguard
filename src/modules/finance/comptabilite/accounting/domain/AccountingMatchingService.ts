@@ -61,13 +61,13 @@ export class AccountingMatchingService {
         const reasons: string[] = [];
 
         // 1. AMOUNT MATCH (Highest Weight - 60pts)
-        const journalTotal = entry.lines.reduce((acc, l) => acc + (l.side === 'debit' ? l.amountInCents : 0), 0);
-        
-        if (tx.amountInCents === journalTotal) {
+        const journalTotal = entry.lines.reduce((acc, l) => acc + (l.side === 'debit' ? (l.amountInMicrounits ?? (l.amountInCents ?? 0) * 10_000) : 0), 0);
+        const txMu = tx.amountInMicrounits ?? ((tx.amountInCents ?? 0) * 10_000);
+
+        if (txMu === journalTotal) {
             score += 60;
-            reasons.push('Montant identique au centime près');
-        } else if (Math.abs(tx.amountInCents - journalTotal) < 10) {
-            // Dealing with small cent differences (écart < 10 centimes)
+            reasons.push('Montant identique au microunit près');
+        } else if (Math.abs(txMu - journalTotal) < 100_000) {
             score += 55;
             reasons.push('Montant quasi-identique (écart < 10cts)');
         }

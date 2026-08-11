@@ -29,20 +29,16 @@ export class BankingNexusBridge {
     /**
      * Exécute un virement SEPA SCT
      */
-    static async executeSepaTransfer(iban: string, amountInCents: number, reference: string): Promise<string> {
-        return this.provider.executeSepaTransfer(iban, amountInCents, reference);
+    static async executeSepaTransfer(iban: string, amountInMicrounits: number, reference: string): Promise<string> {
+        return this.provider.executeSepaTransfer(iban, amountInMicrounits, reference);
     }
 
-    /**
-     * Émet une carte virtuelle plafonnée par Pillar
-     */
-    static async issueVirtualCard(accountId: string, pillarId: string, limitInCents: number): Promise<VirtualCard> {
-        // Le PillarId assure que la carte ne peut être utilisée que pour les dépenses de ce pilier.
-        const card = await this.provider.issueVirtualCard(accountId, pillarId, limitInCents);
-        NexusTelemetryService.emitAuditPulse('FINANCE', 'BAAS_VIRTUAL_CARD_ISSUED', { 
-            cardId: card.id, 
-            pillarId, 
-            limitInCents 
+    static async issueVirtualCard(accountId: string, pillarId: string, limitInMicrounits: number): Promise<VirtualCard> {
+        const card = await this.provider.issueVirtualCard(accountId, pillarId, limitInMicrounits);
+        NexusTelemetryService.emitAuditPulse('FINANCE', 'BAAS_VIRTUAL_CARD_ISSUED', {
+            cardId: card.id,
+            pillarId,
+            limitInMicrounits
         });
         return card;
     }

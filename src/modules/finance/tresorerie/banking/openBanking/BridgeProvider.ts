@@ -71,6 +71,7 @@ export class BridgeProvider implements IOpenBankingProvider {
                 date:           String(t['date'] ?? ''),
                 label:          String(t['description'] ?? ''),
                 amount,
+                amountInMicrounits: Math.round(amount * 1_000_000),
                 amountInCents:  Math.round(amount * 100),
                 type:           amount >= 0 ? 'credit' : 'debit',
                 isReconciled:   false,

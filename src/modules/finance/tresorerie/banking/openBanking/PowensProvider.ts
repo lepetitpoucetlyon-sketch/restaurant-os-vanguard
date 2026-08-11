@@ -162,6 +162,7 @@ export class PowensProvider implements IOpenBankingProvider {
             const transaction: Omit<BankTransaction, 'id'> = {
                 date: tx.date,
                 label,
+                amountInMicrounits: Math.round(Math.abs(tx.value) * 1_000_000),
                 amountInCents: Math.round(Math.abs(tx.value) * 100),
                 type: tx.value >= 0 ? 'credit' : 'debit',
                 isReconciled: false,

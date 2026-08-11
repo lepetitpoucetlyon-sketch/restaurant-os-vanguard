@@ -66,6 +66,7 @@ export class QontoProvider implements IOpenBankingProvider {
                 date:          String(t['settled_at'] ?? t['emitted_at'] ?? ''),
                 label:         String(t['label'] ?? ''),
                 amount,
+                amountInMicrounits: Math.round(amount * 1_000_000),
                 amountInCents: Math.round(amount * 100),
                 type:          t['side'] === 'credit' ? 'credit' : 'debit',
                 isReconciled:  false,

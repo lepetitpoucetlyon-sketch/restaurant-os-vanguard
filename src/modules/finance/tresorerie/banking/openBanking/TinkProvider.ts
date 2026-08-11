@@ -145,6 +145,7 @@ export class TinkProvider implements IOpenBankingProvider {
             const transaction: Omit<BankTransaction, 'id'> = {
                 date:          tx.dates.booked,
                 label,
+                amountInMicrounits: Math.round(Math.abs(rawAmount) * 1_000_000),
                 amountInCents: Math.round(Math.abs(rawAmount) * 100),
                 type:          rawAmount >= 0 ? 'credit' : 'debit',
                 isReconciled:  false,
