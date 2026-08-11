@@ -1,5 +1,5 @@
 import { logger } from '../../lib/logger';
-import { NexusEventBus } from '../../shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 async function runMCCFleetAudit() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 9 : MCC & Architecture Fleet (Fan-Out)');
@@ -10,7 +10,7 @@ async function runMCCFleetAudit() {
     
     // Simulate event handlers registration (we just need 1 global or a few)
     let processedCount = 0;
-    NexusEventBus.on('system.alert', async (payload) => {
+    NexusEventBus.on('system.alert', async (payload: { message: string }) => {
         if (payload.message === 'OTA_UPDATE') {
             processedCount++;
         }
