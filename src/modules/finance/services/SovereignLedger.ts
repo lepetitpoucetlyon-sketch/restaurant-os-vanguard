@@ -66,14 +66,14 @@ export class SovereignLedger {
     async recordTransfer(params: {
         debitAccount: LedgerEntry['accountName'],
         creditAccount: LedgerEntry['accountName'],
-        amountInCents?: number,
         amountInMicrounits?: number,
+        amountInCents?: number,
         referenceId: string,
         description: string,
         _monkeyPatch?: { forceAsymmetry: boolean }
     }): Promise<void> {
         if (this.currentMode === 'LOCAL_LOCK') throw new Error('SYSTEM_LOCKED');
-        
+
         if (params._monkeyPatch?.forceAsymmetry) {
             this.handleCorruptionDetected();
             throw new Error('LEDGER_INVIOLABLE: Sabotage rejected.');
@@ -87,15 +87,15 @@ export class SovereignLedger {
         try {
             const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global', this.tenantId));
             mode = settings?.accounting?.complexityMode || 'EXPERT';
-        } catch { 
-            mode = 'LOCAL_LOCK' as AccountingMode; 
+        } catch {
+            mode = 'LOCAL_LOCK' as AccountingMode;
         }
 
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
             date, accountName: acc, type,
-            amountInCents: cents,
             amountInMicrounits: micro,
+            amountInCents: cents,
             referenceId: params.referenceId, description: params.description, scelledAt: date
         });
 
@@ -103,7 +103,7 @@ export class SovereignLedger {
         const credit = buildEntry(params.creditAccount, 'CREDIT');
 
         this.validateIntegrity(debit, credit, mode);
-        logger.info(`[SovereignLedger] [${mode}] Balanced: ${cents / 100}€ [${params.debitAccount}/${params.creditAccount}]`);
+        logger.info(`[SovereignLedger] [${mode}] Balanced: ${micro / 1_000_000}€ [${params.debitAccount}/${params.creditAccount}]`);
 
         await Promise.all([
             Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`, this.tenantId), debit),
@@ -116,77 +116,63 @@ export class SovereignLedger {
      * Ensures Debit matches Credit with absolute precision.
      */
     private validateIntegrity(debit: LedgerEntry, credit: LedgerEntry, mode: AccountingMode): void {
-        const diff = Math.abs(debit.amountInCents - credit.amountInCents);
-        const tolerance = 0.01;
+        const diff = Math.abs(debit.amountInMicrounits - credit.amountInMicrounits);
 
-        if (diff > tolerance) {
-            const error = `[LDR-ERR-01] Nexus Balance Violation: Diff=${diff.toFixed(4)} | Debit(${debit.amountInCents}) != Credit(${credit.amountInCents}) [Accounts: ${debit.accountName} / ${credit.accountName}]`;
+        if (diff > 0) {
+            const error = `[LDR-ERR-01] Nexus Balance Violation: Diff=${diff}µ | Debit(${debit.amountInMicrounits}) != Credit(${credit.amountInMicrounits}) [Accounts: ${debit.accountName} / ${credit.accountName}]`;
             logger.error(error);
             if (mode === 'EXPERT') {
                 throw new Error(error);
             }
-        } else if (diff > 0) {
-            logger.info(`[SovereignLedger] Rounded precision correction: ${diff.toFixed(4)} centimes difference auto-settled.`);
         }
     }
 
     /**
      * 🖋️ Suture GRADE X+++: Convert Engagement to Debt
      */
-    async convertEngagementToDebt(deliveryNoteId: string, amountInCents: number): Promise<void> {
-        // 1. Contre-passation de l'engagement (Hors-bilan)
+    async convertEngagementToDebt(deliveryNoteId: string, amountInMicrounits: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'ENGAGEMENT_CREDIT_801',
             creditAccount: 'ENGAGEMENT_DEBIT_800',
-            amountInCents,
+            amountInMicrounits,
             referenceId: `ENG-REV-${deliveryNoteId}`,
             description: `Annulation Engagement pour BL #${deliveryNoteId}`
         });
 
-        // 2. Création de la dette réelle (Bilan)
         await this.recordTransfer({
             debitAccount: 'PURCHASES_607',
             creditAccount: 'SUPPLIER_DEBT_401',
-            amountInCents,
+            amountInMicrounits,
             referenceId: `DEBT-${deliveryNoteId}`,
             description: `Dette fournisseur suite BL #${deliveryNoteId}`
         });
     }
 
-    /**
-     * Records a sale (Cash In / Sales Revenue)
-     */
-    async recordSale(orderId: string, amountInCents: number): Promise<void> {
+    async recordSale(orderId: string, amountInMicrounits: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'CASH',
             creditAccount: 'SALES',
-            amountInCents,
+            amountInMicrounits,
             referenceId: orderId,
             description: `Vente Order #${orderId}`
         });
     }
 
-    /**
-     * Records an expense (Purchases / Cash Out)
-     */
-    async recordPurchase(poId: string, amountInCents: number): Promise<void> {
+    async recordPurchase(poId: string, amountInMicrounits: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'PURCHASES',
             creditAccount: 'CASH',
-            amountInCents,
+            amountInMicrounits,
             referenceId: poId,
             description: `Achat Matières Premières PO #${poId}`
         });
     }
 
-    /**
-     * Records a payroll expense (Payroll / Cash Out)
-     */
-    async recordPayroll(staffId: string, amountInCents: number): Promise<void> {
+    async recordPayroll(staffId: string, amountInMicrounits: number): Promise<void> {
         await this.recordTransfer({
             debitAccount: 'PAYROLL',
             creditAccount: 'CASH',
-            amountInCents,
+            amountInMicrounits,
             referenceId: staffId,
             description: `Versement salaire personnel #${staffId}`
         });
@@ -204,19 +190,19 @@ export class SovereignLedger {
 
             const revenue = entries
                 .filter(e => e.accountName === 'SALES' && e.type === 'CREDIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + e.amountInMicrounits, 0);
 
             const cogs = entries
                 .filter(e => e.accountName === 'PURCHASES' && e.type === 'DEBIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + e.amountInMicrounits, 0);
 
             const labor = entries
                 .filter(e => (e.accountName === 'PAYROLL' || e.description.toLowerCase().includes('salaire')) && e.type === 'DEBIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + e.amountInMicrounits, 0);
 
             const ebitda = revenue - (cogs + labor);
-            
-            logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitda / 100}€ (Rev: ${revenue/100}€, COGS: ${cogs/100}€, Labor: ${labor/100}€)`);
+
+            logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitda / 1_000_000}€ (Rev: ${revenue / 1_000_000}€, COGS: ${cogs / 1_000_000}€, Labor: ${labor / 1_000_000}€)`);
             return ebitda;
         } catch (_e) {
             logger.error('[SovereignLedger] EBITDA Calculation Failed. Falling back to safe 0.');
@@ -244,13 +230,13 @@ export class SovereignLedger {
         const transactions = new Map<string, { debit: number, credit: number }>();
         
         entries.forEach(entry => {
-            if (entry.type === 'DEBIT') totalDebit += entry.amountInCents;
-            if (entry.type === 'CREDIT') totalCredit += entry.amountInCents;
+            if (entry.type === 'DEBIT') totalDebit += entry.amountInMicrounits;
+            if (entry.type === 'CREDIT') totalCredit += entry.amountInMicrounits;
 
             if (entry.referenceId) {
                 const tx = transactions.get(entry.referenceId) || { debit: 0, credit: 0 };
-                if (entry.type === 'DEBIT') tx.debit += entry.amountInCents;
-                if (entry.type === 'CREDIT') tx.credit += entry.amountInCents;
+                if (entry.type === 'DEBIT') tx.debit += entry.amountInMicrounits;
+                if (entry.type === 'CREDIT') tx.credit += entry.amountInMicrounits;
                 transactions.set(entry.referenceId, tx);
             }
         });

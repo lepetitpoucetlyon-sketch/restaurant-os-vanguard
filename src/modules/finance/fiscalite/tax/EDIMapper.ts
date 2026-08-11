@@ -9,9 +9,8 @@ import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
  */
 export class EDIMapper {
     static toTDFC(declaration: CA3Declaration): string {
-        const toEuro = (cents: number) => SovereignMath.fromMicrounits(SovereignMath.fromCents(cents)).toFixed(2);
-        
-        // Structure XML TDFC simplifiée pour la simulation
+        const toEuro = (micro: number) => SovereignMath.fromMicrounits(micro).toFixed(2);
+
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
         xml += `<TDFC>\n`;
         xml += `  <Header>\n`;
@@ -19,8 +18,8 @@ export class EDIMapper {
         xml += `    <Period>${declaration.period}</Period>\n`;
         xml += `  </Header>\n`;
         xml += `  <CA3>\n`;
-        xml += `    <TotalRevenue>${toEuro(declaration.breakdown.totalRevenueInCents)}</TotalRevenue>\n`;
-        
+        xml += `    <TotalRevenue>${toEuro(declaration.breakdown.totalRevenueInMicrounits)}</TotalRevenue>\n`;
+
         for (const [rate, amount] of Object.entries(declaration.breakdown.taxBaseByRate)) {
             const taxCollected = declaration.breakdown.taxCollectedByRate[rate] || 0;
             xml += `    <TaxLine rate="${rate}">\n`;
@@ -29,8 +28,8 @@ export class EDIMapper {
             xml += `    </TaxLine>\n`;
         }
 
-        xml += `    <DeductibleTax>${toEuro(declaration.breakdown.deductibleTaxInCents)}</DeductibleTax>\n`;
-        xml += `    <NetTax>${toEuro(declaration.breakdown.netTaxToPayInCents)}</NetTax>\n`;
+        xml += `    <DeductibleTax>${toEuro(declaration.breakdown.deductibleTaxInMicrounits)}</DeductibleTax>\n`;
+        xml += `    <NetTax>${toEuro(declaration.breakdown.netTaxToPayInMicrounits)}</NetTax>\n`;
         xml += `  </CA3>\n`;
         xml += `</TDFC>`;
         NexusTelemetryService.emitAuditPulse('FINANCE', 'EDI_TDFC_MAPPED', { siren: declaration.siren, period: declaration.period });

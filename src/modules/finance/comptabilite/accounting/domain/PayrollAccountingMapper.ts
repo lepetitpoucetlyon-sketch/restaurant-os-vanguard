@@ -26,7 +26,10 @@ export class PayrollAccountingMapper {
         
         const now = new Date().toISOString();
         const pieceNumber = `PAY-${Date.now()}`;
-        const grossTotal = payrollData.grossAmount + payrollData.chargesSociales;
+        const grossTotalMu = (payrollData.grossAmount + payrollData.chargesSociales) * 10_000;
+        const grossTotalCents = Math.round(grossTotalMu / 10_000);
+        const netMu = payrollData.netAmount * 10_000;
+        const netCents = payrollData.netAmount;
         const lines: JournalLine[] = [
             {
                 accountId: this.ACCOUNT_PAYROLL_EXPENSE,
@@ -34,16 +37,16 @@ export class PayrollAccountingMapper {
                 accountName: 'Rémunérations du personnel',
                 description: `Salaire brut + Charges`,
                 side: 'debit',
-                amountInCents: grossTotal,
-                amountInMicrounits: grossTotal * 10_000,
+                amountInMicrounits: grossTotalMu,
+                amountInCents: grossTotalCents,
                 date: now,
                 pieceNumber,
-                debitInCents: grossTotal,
-                debitInMicrounits: grossTotal * 10_000,
-                creditInCents: 0,
+                debitInMicrounits: grossTotalMu,
+                debitInCents: grossTotalCents,
                 creditInMicrounits: 0,
-                runningBalanceInCents: 0,
+                creditInCents: 0,
                 runningBalanceInMicrounits: 0,
+                runningBalanceInCents: 0,
             },
             {
                 accountId: this.ACCOUNT_PAYROLL_LIABILITY,
@@ -51,16 +54,16 @@ export class PayrollAccountingMapper {
                 accountName: 'Personnel - Rémunérations dues',
                 description: `Net à payer`,
                 side: 'credit',
-                amountInCents: payrollData.netAmount,
-                amountInMicrounits: payrollData.netAmount * 10_000,
+                amountInMicrounits: netMu,
+                amountInCents: netCents,
                 date: now,
                 pieceNumber,
-                debitInCents: 0,
                 debitInMicrounits: 0,
-                creditInCents: payrollData.netAmount,
-                creditInMicrounits: payrollData.netAmount * 10_000,
-                runningBalanceInCents: 0,
+                debitInCents: 0,
+                creditInMicrounits: netMu,
+                creditInCents: netCents,
                 runningBalanceInMicrounits: 0,
+                runningBalanceInCents: 0,
             }
         ];
 

@@ -29,18 +29,18 @@ export class SwanProvider implements IBankingProvider {
         return [];
     }
 
-    async issueVirtualCard(accountId: string, pillarId: string, limitInCents: number): Promise<VirtualCard> {
+    async issueVirtualCard(_accountId: string, pillarId: string, limitInMicrounits: number): Promise<VirtualCard> {
         return {
             id: `swan_card_${Date.now()}`,
             panMasked: '**** **** **** 1234',
             expirationDate: '12/28',
             pillarId,
-            monthlyLimitInCents: limitInCents,
+            monthlyLimitInMicrounits: limitInMicrounits,
             status: 'active'
         };
     }
 
-    async executeSepaTransfer(_iban: string, _amountInCents: number, _reference: string): Promise<string> {
+    async executeSepaTransfer(_iban: string, _amountInMicrounits: number, _reference: string): Promise<string> {
         return `SCT_${Date.now()}`;
     }
 }

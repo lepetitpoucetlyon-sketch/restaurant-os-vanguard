@@ -15,7 +15,8 @@ export interface SEPATransaction {
     supplierName: string;
     supplierIban: string;
     supplierBic: string;
-    amountInCents: number;
+    amountInMicrounits: number;
+    amountInCents?: number;
     remittanceInformation: string;
 }
 
@@ -32,7 +33,7 @@ export class AccountsPayableEngine {
         transactions: SEPATransaction[],
         config: SEPAConfig
     ): string {
-        const totalAmount = transactions.reduce((sum, t) => sum + t.amountInCents, 0) / 100;
+        const totalAmount = transactions.reduce((sum, t) => sum + t.amountInMicrounits, 0) / 1_000_000;
         const creationDtTm = new Date().toISOString().substring(0, 19);
         const reqdExctnDt = new Date().toISOString().substring(0, 10);
 
@@ -75,7 +76,7 @@ export class AccountsPayableEngine {
       <ChrgBr>SLEV</ChrgBr>`;
 
         for (const tx of transactions) {
-            const amount = (tx.amountInCents / 100).toFixed(2);
+            const amount = (tx.amountInMicrounits / 1_000_000).toFixed(2);
             
             xml += `
       <CdtTrfTxInf>

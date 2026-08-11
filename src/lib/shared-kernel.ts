@@ -213,8 +213,8 @@ export interface LedgerEntry {
     date: string;
     accountName: 'SALES' | 'PURCHASES' | 'LABOR' | 'PAYROLL' | 'TAX' | 'CASH' | 'EQUITY' | 'PROPOSALS' | 'ENGAGEMENT_DEBIT_800' | 'ENGAGEMENT_CREDIT_801' | 'PURCHASES_607' | 'SUPPLIER_DEBT_401' | 'TAX_COLLECTED_4457' | 'TAX_TO_PAY_4455';
     type: 'DEBIT' | 'CREDIT';
-    amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits: number;
+    amountInCents?: number;
     referenceId: string; // e.g. Order ID, PO ID, Salary ID
     description: string;
     scelledAt: string;

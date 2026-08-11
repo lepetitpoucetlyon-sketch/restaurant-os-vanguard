@@ -9,7 +9,7 @@ import { SovereignLedger } from '../../services/SovereignLedger';
  * Virements Fournisseurs Intégrés avec Approbation Duale
  */
 export class SovereignPayout {
-    private static readonly MCC_APPROVAL_THRESHOLD_CENTS = 50000; // 500.00€
+    private static readonly MCC_APPROVAL_THRESHOLD_MU = 500_000_000;
 
     /**
      * Initie une demande de paiement fournisseur.
@@ -20,17 +20,17 @@ export class SovereignPayout {
         }
 
         const currentBalance = await BankingNexusBridge.getBalance();
-        if (currentBalance < invoice.amountInCents) {
+        if (currentBalance < invoice.amountInMicrounits) {
             throw new Error('PAYOUT_002: Insufficient funds for payout.');
         }
 
-        const isHighValue = invoice.amountInCents > this.MCC_APPROVAL_THRESHOLD_CENTS;
-        
+        const isHighValue = invoice.amountInMicrounits > this.MCC_APPROVAL_THRESHOLD_MU;
+
         const request: PayoutRequest = {
             id: `REQ-${invoice.id}-${Date.now()}`,
             invoiceId: invoice.id,
-            amountInCents: invoice.amountInCents,
-            amountInMicrounits: (invoice.amountInMicrounits ?? invoice.amountInCents * 10_000),
+            amountInMicrounits: invoice.amountInMicrounits,
+            amountInCents: Math.round(invoice.amountInMicrounits / 10_000),
             status: isHighValue ? 'pending_approval' : 'approved',
             approvals: []
         };
@@ -49,7 +49,7 @@ export class SovereignPayout {
 
         NexusTelemetryService.emitAuditPulse('FINANCE', 'PAYOUT_INITIATED', {
             requestId: request.id,
-            amountInCents: request.amountInCents,
+            amountInMicrounits: request.amountInMicrounits,
             requiresDualApproval: isHighValue
         });
 
@@ -103,19 +103,18 @@ export class SovereignPayout {
         try {
             // Exécution du virement SCT SEPA via le Bridge BaaS
             const sepaRef = await BankingNexusBridge.executeSepaTransfer(
-                invoice.bankAccountIban, 
-                request.amountInCents, 
+                invoice.bankAccountIban,
+                request.amountInMicrounits,
                 `INV-${invoice.id}`
             );
 
             request.sepaReference = sepaRef;
             request.status = 'completed';
 
-            // Suture Financière: Extinction de la dette (Débit 401) et sortie de trésorerie (Crédit 512 / CASH)
             await SovereignLedger.getInstance(tenantId).recordTransfer({
                 debitAccount: 'SUPPLIER_DEBT_401',
                 creditAccount: 'CASH',
-                amountInCents: request.amountInCents,
+                amountInMicrounits: request.amountInMicrounits,
                 referenceId: request.id,
                 description: `Paiement fournisseur SEPA ${sepaRef}`
             });

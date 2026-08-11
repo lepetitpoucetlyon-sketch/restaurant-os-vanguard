@@ -5,8 +5,8 @@
 export interface PayoutInvoice {
     id: string;
     supplierId: string;
-    amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits: number;
+    amountInCents?: number;
     status: 'draft' | 'validated' | 'paid' | 'disputed';
     bankAccountIban: string;
 }
@@ -20,8 +20,8 @@ export interface PayoutApproval {
 export interface PayoutRequest {
     id: string;
     invoiceId: string;
-    amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits: number;
+    amountInCents?: number;
     status: 'pending_approval' | 'approved' | 'processing' | 'completed' | 'failed';
     approvals: PayoutApproval[];
     sepaReference?: string;

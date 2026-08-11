@@ -35,9 +35,12 @@ export class AccountingService {
         const timestamp = new Date();
         
         // 1. Generate Fiscal Seal (NF525 Logic)
+        const amountMu = expenseData.amountInMicrounits ?? (expenseData.amountInCents * 10_000);
+        const amountCents = expenseData.amountInCents ?? Math.round(amountMu / 10_000);
+
         const seal = await FiscalEngine.sealEntry(expenseId, {
             type: 'EXPENSE',
-            amountInCents: expenseData.amountInCents,
+            amountInCents: amountCents,
             category: expenseData.category,
             timestamp: timestamp.toISOString()
         }, {
@@ -69,16 +72,16 @@ export class AccountingService {
                     accountName: targetAccount.name,
                     description: expenseData.description,
                     side: 'debit',
-                    amountInCents: expenseData.amountInCents,
-                    amountInMicrounits: expenseData.amountInCents * 10_000,
+                    amountInMicrounits: amountMu,
+                    amountInCents: amountCents,
                     date: timestamp.toISOString(),
                     pieceNumber: `EXP-${timestamp.getTime()}`,
-                    debitInCents: expenseData.amountInCents,
-                    debitInMicrounits: expenseData.amountInCents * 10_000,
-                    creditInCents: 0,
+                    debitInMicrounits: amountMu,
+                    debitInCents: amountCents,
                     creditInMicrounits: 0,
-                    runningBalanceInCents: 0,
+                    creditInCents: 0,
                     runningBalanceInMicrounits: 0,
+                    runningBalanceInCents: 0,
                 },
                 {
                     accountId: 'acc_421',
@@ -86,16 +89,16 @@ export class AccountingService {
                     accountName: 'Personnel - Rémunérations dues',
                     description: 'Remboursement à effectuer',
                     side: 'credit',
-                    amountInCents: expenseData.amountInCents,
-                    amountInMicrounits: expenseData.amountInCents * 10_000,
+                    amountInMicrounits: amountMu,
+                    amountInCents: amountCents,
                     date: timestamp.toISOString(),
                     pieceNumber: `EXP-${timestamp.getTime()}`,
-                    debitInCents: 0,
                     debitInMicrounits: 0,
-                    creditInCents: expenseData.amountInCents,
-                    creditInMicrounits: expenseData.amountInCents * 10_000,
-                    runningBalanceInCents: 0,
+                    debitInCents: 0,
+                    creditInMicrounits: amountMu,
+                    creditInCents: amountCents,
                     runningBalanceInMicrounits: 0,
+                    runningBalanceInCents: 0,
                 }
             ]
         };

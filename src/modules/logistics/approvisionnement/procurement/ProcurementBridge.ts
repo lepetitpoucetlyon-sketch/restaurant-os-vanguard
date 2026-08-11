@@ -29,7 +29,6 @@ export class ProcurementBridge {
         await SovereignLedger.getInstance(tenantId).recordTransfer({
             debitAccount: 'ENGAGEMENT_DEBIT_800',
             creditAccount: 'ENGAGEMENT_CREDIT_801',
-            amountInCents: po.totalAmountInCents,
             amountInMicrounits,
             referenceId: `PO-${po.id}`,
             description: `Engagement pour BC #${po.id}`
@@ -37,7 +36,6 @@ export class ProcurementBridge {
 
         NexusTelemetryService.emitAuditPulse('LOGISTICS', 'PO_ENGAGED', {
             poId: po.id,
-            amountInCents: po.totalAmountInCents,
             amountInMicrounits,
             tenantId
         });
@@ -66,7 +64,8 @@ export class ProcurementBridge {
         });
 
         // 3. Réaction Automatique : Contre-passation de l'engagement et création de la dette réelle
-        await SovereignLedger.getInstance(tenantId).convertEngagementToDebt(deliveryNote.id, deliveryNote.totalAmountInCents);
+        const debtMicrounits = deliveryNote.totalAmountInMicrounits ?? (deliveryNote.totalAmountInCents * 10_000);
+        await SovereignLedger.getInstance(tenantId).convertEngagementToDebt(deliveryNote.id, debtMicrounits);
 
         // 4. Mise à jour du stock physique déléguée à l'événement stock.received (P1)
         await NexusEventBus.emitDurable('stock.received', {

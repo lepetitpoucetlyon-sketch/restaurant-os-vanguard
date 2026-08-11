@@ -248,8 +248,8 @@ export const FinancialNexusBridge = {
     const { original, operatorId, tenantId, reason } = payload;
     
     // Extourne: montants inversés
-    const refundAmountInCents = -Math.abs(original.amountInCents ?? 0);
     const refundAmountInMicrounits = -Math.abs(original.amountInMicrounits ?? 0);
+    const refundAmountInCents = microToCents(refundAmountInMicrounits);
 
     const lines = original.lines.map(line => ({
       ...line,

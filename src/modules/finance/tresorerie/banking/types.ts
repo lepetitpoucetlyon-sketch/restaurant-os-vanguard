@@ -27,7 +27,8 @@ export interface VirtualCard {
     panMasked: string;
     expirationDate: string;
     pillarId: string;
-    monthlyLimitInCents: number;
+    monthlyLimitInMicrounits: number;
+    monthlyLimitInCents?: number;
     status: 'active' | 'frozen' | 'cancelled';
 }
 
@@ -35,6 +36,6 @@ export interface IBankingProvider {
     createAccount(tenantId: string, kyb: KYBData): Promise<BankAccount>;
     getBalance(accountId: string): Promise<number>;
     getTransactions(accountId: string, fromDate: string): Promise<Record<string, unknown>[]>;
-    issueVirtualCard(accountId: string, pillarId: string, limitInCents: number): Promise<VirtualCard>;
-    executeSepaTransfer(iban: string, amountInCents: number, reference: string): Promise<string>;
+    issueVirtualCard(accountId: string, pillarId: string, limitInMicrounits: number): Promise<VirtualCard>;
+    executeSepaTransfer(iban: string, amountInMicrounits: number, reference: string): Promise<string>;
 }

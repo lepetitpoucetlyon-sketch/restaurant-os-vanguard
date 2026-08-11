@@ -43,28 +43,29 @@ export function makeLine(
   accountCode: string,
   accountName: string,
   side: 'debit' | 'credit',
-  cents: number,
+  microunits: number,
   description: string,
   pieceNumber: string,
   now: string,
   analyticalAxis?: string,
 ): JournalLine {
+  const cents = microToCents(microunits);
   return {
     accountId: accountCode,
     accountCode,
     accountName,
     description,
     side,
+    amountInMicrounits: microunits,
     amountInCents: cents,
-    amountInMicrounits: cents * 10_000,
     date: now,
     pieceNumber,
+    debitInMicrounits: side === 'debit' ? microunits : 0,
     debitInCents: side === 'debit' ? cents : 0,
-    debitInMicrounits: side === 'debit' ? cents * 10_000 : 0,
+    creditInMicrounits: side === 'credit' ? microunits : 0,
     creditInCents: side === 'credit' ? cents : 0,
-    creditInMicrounits: side === 'credit' ? cents * 10_000 : 0,
-    runningBalanceInCents: 0,
     runningBalanceInMicrounits: 0,
+    runningBalanceInCents: 0,
     ...(analyticalAxis ? { analyticalAxis } : {}),
   };
 }
@@ -76,21 +77,19 @@ export function buildJournalLines(
   now: string
 ): JournalLine[] {
   const credits: JournalLine[] = [];
-  let totalCreditCents = 0;
+  let totalCreditMu = 0;
 
   for (const [rateAndAxis, { ttcMu, tvaMu }] of Object.entries(ttcByRateAndAxis)) {
     const [rateStr, axis] = rateAndAxis.split('_');
     const ratePercent = (parseFloat(rateStr) * 100).toFixed(1).replace('.0', '');
     const htMu = ttcMu - tvaMu;
-    const htCents = microToCents(htMu);
-    const tvaCents = microToCents(tvaMu);
 
     credits.push(
       makeLine(
         '707000',
         `Ventes de marchandises (${axis.toUpperCase()})`,
         'credit',
-        htCents,
+        htMu,
         `Vente POS — Axe ${axis}`,
         pieceNumber,
         now,
@@ -103,7 +102,7 @@ export function buildJournalLines(
         '445710',
         `TVA collectée (${ratePercent}%)`,
         'credit',
-        tvaCents,
+        tvaMu,
         `TVA ${ratePercent}% sur vente POS`,
         pieceNumber,
         now,
@@ -111,22 +110,18 @@ export function buildJournalLines(
       )
     );
 
-    totalCreditCents += htCents + tvaCents;
+    totalCreditMu += htMu + tvaMu;
   }
 
-  // ── Pourboire — hors base TVA (§7.4) ────────────────────────────────────────
-  // Crédité sur 708500, jamais sur 707000/445710 : un pourboire volontaire
-  // n'est pas soumis à la TVA. Le débit correspondant est ajouté plus bas pour
-  // que `Σ débits = Σ crédits = montant réellement encaissé au terminal`.
-  const tipCents = microToCents(payload.tipInMicrounits ?? 0);
+  const tipMu = payload.tipInMicrounits ?? 0;
 
-  if (tipCents > 0) {
+  if (tipMu > 0) {
     credits.push(
       makeLine(
         PCG_TIP_ACCOUNT.code,
         PCG_TIP_ACCOUNT.name,
         'credit',
-        tipCents,
+        tipMu,
         'Pourboire volontaire — hors TVA',
         pieceNumber,
         now
@@ -140,12 +135,13 @@ export function buildJournalLines(
     for (const p of payload.partialPayments) {
       const modeKey = (p.method as PaymentMode) || payload.paymentMode || 'card';
       const acct = PCG_PAYMENT_ACCOUNTS[modeKey] ?? PCG_PAYMENT_ACCOUNTS.card;
+      const pMu = ((p as Record<string, unknown>).amountInMicrounits as number | undefined) ?? p.amount * 10_000;
       debits.push(
         makeLine(
           acct.code,
           acct.name,
           'debit',
-          p.amount,
+          pMu,
           `Paiement partiel (${modeKey}) — Convive ${p.guest}`,
           pieceNumber,
           now
@@ -160,7 +156,7 @@ export function buildJournalLines(
         acct.code,
         acct.name,
         'debit',
-        totalCreditCents,
+        totalCreditMu,
         `Règlement POS (${acct.name})`,
         pieceNumber,
         now
@@ -168,10 +164,7 @@ export function buildJournalLines(
     );
   }
 
-  // Le pourboire est encaissé sur le même moyen de paiement que la note.
-  // Ligne de débit dédiée : elle rend l'écart traçable en rapprochement bancaire
-  // et fonctionne aussi bien en paiement simple qu'en note partagée.
-  if (tipCents > 0) {
+  if (tipMu > 0) {
     const tipModeKey = payload.paymentMode || 'card';
     const tipAcct = PCG_PAYMENT_ACCOUNTS[tipModeKey] ?? PCG_PAYMENT_ACCOUNTS.card;
     debits.push(
@@ -179,7 +172,7 @@ export function buildJournalLines(
         tipAcct.code,
         tipAcct.name,
         'debit',
-        tipCents,
+        tipMu,
         `Pourboire encaissé (${tipAcct.name})`,
         pieceNumber,
         now

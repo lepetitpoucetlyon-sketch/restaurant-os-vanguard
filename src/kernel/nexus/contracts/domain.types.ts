@@ -8,6 +8,7 @@ import { SovereignData } from '@/shared/nexus-contract';
 
 
 export interface ExpenseData {
+    amountInMicrounits: number;
     amountInCents: number;
     category: TransactionCategory | string;
     description: string;
