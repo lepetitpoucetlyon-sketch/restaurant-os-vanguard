@@ -1,5 +1,5 @@
 import { logger } from '../../lib/logger';
-import { Nexus } from '../../lib/nexus/NexusAdapter';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 async function runReservationRaceConditionAudit() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 5 : CRM & Réservation (Double-Booking)');

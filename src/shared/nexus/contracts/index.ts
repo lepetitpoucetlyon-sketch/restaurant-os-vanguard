@@ -4,8 +4,8 @@
  * Version Grade X - Sovereign Alignment
  */
 
-export type { SovereignField, SovereignNode } from '../../nexus-contract';
-export * from '../../genome.types';
+export type { SovereignField, SovereignNode } from '@/shared/nexus-contract';
+export * from '@/shared/genome.types';
 
 // --- 🏛️ DOMAIN AUTHORITIES ---
 

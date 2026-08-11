@@ -1,5 +1,5 @@
 import { logger } from '../../lib/logger';
-import { Nexus } from '../../lib/nexus/NexusAdapter';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 async function runOfflineStressTest() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 8 : Stress Test POS Offline-First');
