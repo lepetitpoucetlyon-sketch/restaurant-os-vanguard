@@ -41,7 +41,7 @@ export function buildCartItem(
         productId: product.id,
         categoryId: product.categoryId || "other",
         name: product.name,
-        unitPriceInMicrounits: product.priceInMicrounits || toMicrounits((product.priceInCents || 0) * 10000),
+        unitPriceInMicrounits: product.priceInMicrounits ?? ((product.priceInCents || 0) * 10_000),
         discountInMicrounits: toMicrounits(0),
         taxRate: product.taxRate || "0.10",
         quantity,

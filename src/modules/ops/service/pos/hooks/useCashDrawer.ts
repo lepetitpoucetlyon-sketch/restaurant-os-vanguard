@@ -71,7 +71,15 @@ export function useCashDrawer(
         empireAudit.log({
           module: 'finance',
           action: 'CASH_DRAWER_COUNTED',
-          details: { drawerId, expectedAmountInCents, countedAmountInCents, discrepancyInCents },
+          details: {
+            drawerId,
+            expectedAmountInCents,
+            countedAmountInCents,
+            discrepancyInCents,
+            expectedAmountInMicrounits: expectedAmountInCents * 10_000,
+            countedAmountInMicrounits: countedAmountInCents * 10_000,
+            discrepancyInMicrounits: discrepancyInCents * 10_000,
+          },
           severity: Math.abs(discrepancyInCents) > 500 ? 'high' : 'low',
           timestamp: new Date(),
         });
