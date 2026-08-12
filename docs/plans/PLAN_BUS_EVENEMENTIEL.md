@@ -618,7 +618,12 @@ Aucun lien automatique entre le volume de réservations J+1 et les besoins en pe
 
 ---
 
-## PARTIE 8 — Garde-fou runtime : rendre l'invisible visible (P0 — à faire EN PREMIER)
+## PARTIE 8 — Garde-fou runtime : rendre l'invisible visible — ✅ FAIT (12/08)
+
+> ✅ **Livré** : `NexusEventBus.isExpectedUnconsumed()` (liste blanche préfixes verticaux + Classe B),
+> `emit()` warne en dev sur orphelin inattendu, `emitDurable()` marque l'outbox `done_no_consumer`,
+> `listenerCount()` public, `BusOutboxEntry.status += 'done_no_consumer'`. Test `guardrail.test.ts`
+> 8/8 (liste blanche + couverture chaînes critiques). Gate vert. Commits `feat/test(bus): §9.0`.
 
 > **Pourquoi P0 et en premier** : ce plan (et les audits de juillet) décrivent des trous depuis
 > des mois ; ils restent car **rien ne les signale**. `NexusEventBus.emit()` fait

@@ -784,7 +784,7 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 
 | # | Sujet | État vérifié à la main | Prio |
 |---|-------|------------------------|------|
-| Garde-fou | warn 0-handler + outbox `done_no_consumer` + invariant registration | 🔴 absent (le seul manque des 2 plans) | **P0 — 1er** |
+| Garde-fou | warn 0-handler + outbox `done_no_consumer` + invariant registration | 🟢 **FAIT (12/08)** — `isExpectedUnconsumed`, `listenerCount`, test 8/8, gate vert | ~~P0~~ ✅ |
 | `inventory.stock_adjusted` | vrai orphelin, aucun chemin alt → ajust/comptage perdu | 🔴 P0 |
 | `haccp.temperature_logged` | route émet un nom mort ; chaîne du froid OK via `sensor.temperature_anomaly` | 🟠 P1 (mismatch) |
 | `staff.clock_in/out → paie` | `PayrollTimeclockHandler` câblé mais **affamé** (émetteur disparu) | 🟠 P1 |
@@ -796,8 +796,8 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 ## 9.2 — Ordre d'exécution
 
 ```
-9.0 Garde-fou (~2h)      → rend les 94 orphelins visibles + gèle le principe   [FAIRE EN PREMIER]
-9.1 P0 chaînes (~20h)    → inventory.stock_adjusted · order.placed→KDS · WebPush · Cron+ZReport · haccp corrective · cash_counted
+9.0 Garde-fou (~2h)      ✅ FAIT (12/08) — warn 0-handler + outbox done_no_consumer + invariant registration
+9.1 P0 chaînes (~20h)    → inventory.stock_adjusted · order.placed→KDS · WebPush · Cron+ZReport · haccp corrective · cash_counted   [PROCHAIN]
 9.2 P1 (~25h)            → staff.clock→paie · reservation events · SovereignGuard handlers · bank/sync+hr emit · digests
 9.3 P2 + tests (~15h)    → orphelins restants · smoke test intégration bus
 ```
@@ -847,8 +847,8 @@ chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6
 >
 > ⚠️ **N'inscris PAS les tâches déjà acquises** (cf. §0.8 ✅ — table allongée v4.2). Tu les referais à vide.
 
-1. 🔴 **§9.0 — Garde-fou runtime du bus** (`NexusEventBus.emit` warn 0-handler + outbox `done_no_consumer` + invariant registration). ~2h, faible risque. **C'est l'action qui rend visibles les 94 orphelins et gèle le principe** — sans elle, tout recâblage se re-débranche en silence. Détail : `PLAN_BUS_EVENEMENTIEL.md` Partie 8.
-2. 🔴 **§9.1 — P0 chaînes rompues** en commençant par `inventory.stock_adjusted` (data-loss vérifié), puis `order.placed→KDS`, `CronScheduler+ZReport`. Tester dans `_test_restaurant` (seul tier writable).
+1. ~~🔴 **§9.0 — Garde-fou runtime du bus**~~ ✅ **FAIT (12/08)** — `isExpectedUnconsumed` + outbox `done_no_consumer` + `listenerCount` + test couverture 8/8. Le bus signale désormais tout orphelin inattendu.
+2. 🔴 **§9.1 — P0 chaînes rompues** en commençant par `inventory.stock_adjusted` (data-loss vérifié), puis `order.placed→KDS`, `CronScheduler+ZReport`. Tester dans `_test_restaurant` (seul tier writable). **← PROCHAIN**
 3. 🟠 **§9.2 — pont `staff.clock→paie` + `SovereignGuard` dans les handlers** (défense cross-tenant, findings juillet toujours vifs).
 
 > ✅ **Déjà FAIT (ne pas refaire)** : §3.2 inversions · §4 god files · §5 P4 monnaie (cette série de sessions).
