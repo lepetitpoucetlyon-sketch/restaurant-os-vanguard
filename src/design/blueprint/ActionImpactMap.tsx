@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeInUp } from "@/shared/utils/motion";
+import { fadeInUp } from "@/design/utils/motion";
 import { 
     MousePointer2, Database, Receipt, Cpu, ChevronRight, Activity
 } from "lucide-react";

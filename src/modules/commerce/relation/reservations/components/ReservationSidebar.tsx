@@ -5,7 +5,7 @@ import { Search, Filter, Clock, Users, MoreHorizontal, UserCheck } from "lucide-
 import { cn } from "@/lib/ui.foundations";;
 import { ScrollArea } from "@ui/scroll-area";
 import { Reservation } from "@nexus/contracts";
-import { fadeInUp, easing } from "@/shared/utils/motion";
+import { fadeInUp, easing } from "@/design/utils/motion";
 
 const cinematicContainer: Variants = {
     hidden: { opacity: 0 },

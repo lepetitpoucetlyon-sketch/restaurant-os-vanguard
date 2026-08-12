@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Users } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { easing } from "@/shared/utils/motion";
+import { easing } from "@/design/utils/motion";
 
 interface TableData {
     id: string;

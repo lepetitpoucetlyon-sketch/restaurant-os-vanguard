@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeInUp } from "@/shared/utils/motion";
+import { fadeInUp } from "@/design/utils/motion";
 import { Sparkles, Terminal, Activity } from "lucide-react";
 
 export function BlueprintHeader() {

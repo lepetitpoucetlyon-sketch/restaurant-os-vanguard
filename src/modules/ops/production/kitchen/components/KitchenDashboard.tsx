@@ -41,7 +41,7 @@ const CookingTimesTab = dynamic(() => import("./tabs/CookingTimesTab").then(m =>
 const IngredientsTab = dynamic(() => import("./tabs/IngredientsTab").then(m => m.IngredientsTab));
 const DailyPrepList = dynamic(() => import("../../recipes/DailyPrepList").then(m => m.DailyPrepList));
 
-import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
+import { cinematicContainer, fadeInUp } from "@/design/utils/motion";
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { ExpertHub } from '@/modules/commerce';
 import { useAtomValue } from "jotai";

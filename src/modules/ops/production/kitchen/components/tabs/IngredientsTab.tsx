@@ -7,7 +7,7 @@ import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
          
 import { formatMu } from "../../../../../finance/components/financeUtils";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/design/utils/motion";
 import { useInventory } from '../../../../providers/hooks/catalogHooks';
 
 export function IngredientsTab() {

@@ -5,7 +5,7 @@ import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { motion } from "framer-motion";
-import { staggerContainer, staggerItem } from "@/shared/utils/motion";
+import { staggerContainer, staggerItem } from "@/design/utils/motion";
 import type { MiseEnPlaceTask } from "@nexus/contracts";
 
 interface PrepTaskDetailDialogProps {

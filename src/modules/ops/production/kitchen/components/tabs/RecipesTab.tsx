@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChefHat, Book, AlertTriangle, Edit2, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/design/utils/motion";
 import { RecipeCostBadge } from '../../../recipes/RecipeCostBadge';
 import { BarRecipeCard } from '../../../recipes/BarRecipeCard';
 

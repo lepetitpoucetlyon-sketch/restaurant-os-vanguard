@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion";
-import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
+import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/design/utils/motion";
 import { useHasMounted } from "@/lib/hooks/useHasMounted";
 import { useIsMobile } from "@/lib/hooks/useIsMobile";
 

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useCallback, ReactNode } fr
 import { CheckCircle2, AlertCircle, X, Info, Sparkles } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
-import { toastVariants } from '@/shared/utils/motion';
+import { toastVariants } from '@/design/utils/motion';
 
 export type ToastType = 'success' | 'error' | 'info' | 'premium' | 'warning';
 

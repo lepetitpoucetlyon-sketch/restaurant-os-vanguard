@@ -11,7 +11,7 @@ import {
     Phone,
     FileText,
 } from "lucide-react";
-import { staggerContainer, staggerItem } from "@/shared/utils/motion";
+import { staggerContainer, staggerItem } from "@/design/utils/motion";
 import { useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 import { User } from "@nexus/contracts";
 

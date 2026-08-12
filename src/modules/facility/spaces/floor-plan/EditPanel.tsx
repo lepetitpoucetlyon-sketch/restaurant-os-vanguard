@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
-import { slideInLeft } from "@/shared/utils/motion";
+import { slideInLeft } from "@/design/utils/motion";
 import { STATUS_COLORS } from "./constants";
 
 interface EditPanelProps {

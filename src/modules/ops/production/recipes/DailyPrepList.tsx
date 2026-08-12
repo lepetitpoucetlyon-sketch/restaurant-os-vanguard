@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Reservation, Recipe } from '@nexus/contracts';
-import { fadeInUp, cinematicContainer, cinematicItem } from '@/shared/utils/motion';
+import { fadeInUp, cinematicContainer, cinematicItem } from '@/design/utils/motion';
 import { smartQuantity } from './recipeUtils';
 import { useNotifications } from '@/shared/hooks';
 import { updateDailyPrepListAction } from '../../service/pos/actions/kitchen.action';

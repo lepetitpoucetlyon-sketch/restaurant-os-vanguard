@@ -4,7 +4,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";;
-import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { cinematicContainer, fadeInUp, cinematicItem } from "@/design/utils/motion";
 
 export function CookingTimesTab() {
     return (

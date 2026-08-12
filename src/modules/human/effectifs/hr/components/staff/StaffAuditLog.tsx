@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, User as UserIcon } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { cinematicContainer } from "@/shared/utils/motion";
+import { cinematicContainer } from "@/design/utils/motion";
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 
