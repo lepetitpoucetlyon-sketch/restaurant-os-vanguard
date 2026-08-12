@@ -847,9 +847,12 @@ chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6
 >
 > ⚠️ **N'inscris PAS les tâches déjà acquises** (cf. §0.8 ✅ — table allongée v4.2). Tu les referais à vide.
 
-1. ~~**§3.2 — résorber `shared→modules 7`, puis `lib→modules 12`**~~ ✅ **FAIT** (session précédente)
-2. ~~**§4 résidu — god files + doublon FleetProvider**~~ ✅ **FAIT** — 4 god files fragmentés <400L (cette session)
-3. ~~**§5 P4 — monnaie finance core**~~ ✅ **FAIT** — @deprecated sur tous InCents, dual-write vérifié (cette session)
+1. 🔴 **§9.0 — Garde-fou runtime du bus** (`NexusEventBus.emit` warn 0-handler + outbox `done_no_consumer` + invariant registration). ~2h, faible risque. **C'est l'action qui rend visibles les 94 orphelins et gèle le principe** — sans elle, tout recâblage se re-débranche en silence. Détail : `PLAN_BUS_EVENEMENTIEL.md` Partie 8.
+2. 🔴 **§9.1 — P0 chaînes rompues** en commençant par `inventory.stock_adjusted` (data-loss vérifié), puis `order.placed→KDS`, `CronScheduler+ZReport`. Tester dans `_test_restaurant` (seul tier writable).
+3. 🟠 **§9.2 — pont `staff.clock→paie` + `SovereignGuard` dans les handlers** (défense cross-tenant, findings juillet toujours vifs).
+
+> ✅ **Déjà FAIT (ne pas refaire)** : §3.2 inversions · §4 god files · §5 P4 monnaie (cette série de sessions).
+> ⛔ **Aucune promotion `_ref_restaurant` avant que §9.1 soit vert** — sinon les chaînes rompues sont clonées chez les clients.
 
 > ⚠️ **7.3 e-facture (légal, 1ᵉʳ sept.)** reste prioritaire en ressources **mais attend la décision humaine du choix
 > de PA**. Tant qu'elle n'est pas prise, avance sur l'axe dette ci-dessus. **Décisions humaines** : voir §10.
@@ -873,10 +876,12 @@ chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6
 | `JOURNAL_AGENT.md` | **le registre partagé** — tu l'ancres (§3), Claude coche (§2) ; voir §AUDIT-2 + §AUDIT-2-FIX |
 | `PLAN_MAITRE_CORRIGE.md` | détail exhaustif de chaque phase (procédures, pièges, commandes) |
 | `SPEC_SERVICE_TICKET.md` · `MAPPING_EVENEMENTS_VERTICALES.md` · `MAPPING_BASE_VERTICALES.md` | la couche multi-verticale (Phase 8) |
+| `PLAN_BUS_EVENEMENTIEL.md` | **AXE BUS §9** — détail par item (P0→P3, cron, automations par rôle) + garde-fou Partie 8 |
+| `PLAN_AUDIT_BUS_ORPHELINS.md` | **AXE BUS §9** — mécanisme racine, contre-audit restaurant vérifié (faux positifs), tiers TEST/DEMO/REF |
 
 ---
 
-*v4.2 — mis à jour le 11/08/2026 (nuit) post-exécution Symbiose. Chiffres = `agent-gate.sh` @ `dd1ed4813`, pas estimés.*
+*v4.5 — 12/08/2026 : intégration AXE BUS §9 (consolidation des 2 plans bus). v4.2 baseline `agent-gate.sh` @ `dd1ed4813`.*
 *Delta v4.1→v4.2 : §2B.2 FAIT · cycles 3→0 · kernel→modules 3→0 · barrel 0/8 · invariants 9/9 ·*
 *Phase 5 P0-P3 FAIT · Phase 4.1 SplitBill FAIT · Sentry multi-tenant/multi-vertical · Emulateur Firestore.*
 *Détail des phases : `PLAN_MAITRE_CORRIGE.md` (v3) · Abstraction : `SPEC_SERVICE_TICKET.md` ·*
