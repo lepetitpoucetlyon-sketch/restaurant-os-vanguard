@@ -1,7 +1,7 @@
 import Dexie, { Table } from 'dexie';
 import { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@nexus/contracts';
 import { TenantConfig, SovereignField } from '@/shared/nexus-contract';
-import type { ImmunityLogEntry } from '@shared/genome.types';
+import type { ImmunityLogEntry } from '@nexus/contracts/genome.types';
 
 /**
  * 📥 BusOutboxEntry - Restaurant OS Offline
@@ -68,7 +68,7 @@ export class RestaurantOfflineDB extends Dexie {
     /** Grade IX: Boîte Noire des rejets du GenomeValidator */
     immunityLogs!: Table<ImmunityLogEntry>;
     /** NF525 JET — Journal des Événements Techniques */
-    jetEntries!: Table<import('@shared/genome.types').JetEntry>;
+    jetEntries!: Table<import('@nexus/contracts/genome.types').JetEntry>;
     /** Grade X: Suture des Recettes pour le calcul offline */
     recipes!: Table<Recipe>;
     /** P0-1: EventOutbox pour le NexusEventBus */

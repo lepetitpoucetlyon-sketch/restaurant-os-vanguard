@@ -14,7 +14,7 @@
  *  mais de ce qu'il INTERDIT."
  */
 
-import type { ModuleId, PowerAction, ModuleGenome, GenomeRegistry } from '@shared/genome.types';
+import type { ModuleId, PowerAction, ModuleGenome, GenomeRegistry } from '@nexus/contracts/genome.types';
 
 // ═══════════════════════════════════════════════════
 // 🧬 MASTER GENOME REGISTRY (Les 35 ADN)

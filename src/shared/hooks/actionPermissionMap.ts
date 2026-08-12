@@ -1,1 +1,1 @@
-export * from '../rbac/actionPermissionMap';
+export * from '@nexus/guards/rbac/actionPermissionMap';

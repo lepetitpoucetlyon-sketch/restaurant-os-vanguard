@@ -9,7 +9,7 @@ import type { Product, Quote, Group } from './commerce.types';
 import type { Campaign } from './marketing.types';
 import type { LegalInvoice, JournalEntry } from './finance.types';
 import type { Option, OptionGroup, Category } from './common.types';
-import { ModuleId } from '@shared/genome.types';
+import { ModuleId } from '@nexus/contracts/genome.types';
 import type { Customer, CRM_Record } from './customer.types';
 import type { Recipe, RecipeIngredient } from './logistics';
 import { translateError } from './nexus-error-mapper';

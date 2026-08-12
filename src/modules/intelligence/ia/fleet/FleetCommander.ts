@@ -1,5 +1,5 @@
 import { logger } from '@/lib/axiom';
-import { EmpireInstance } from '@/shared/types/empire';
+import { EmpireInstance } from '@nexus/contracts/empire.types';
 
 /**
  * FleetCommander - Domain Service for Multi-Instance Management

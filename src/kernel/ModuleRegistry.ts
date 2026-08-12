@@ -8,7 +8,7 @@
  * "Personne ne rentre dans le Bridge sans être sur la liste VIP."
  */
 
-import type { ModuleId } from './genome.types';
+import type { ModuleId } from '@nexus/contracts/genome.types';
 
 /**
  * Les 35 modules souverains autorisés.

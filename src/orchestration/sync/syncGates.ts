@@ -30,7 +30,7 @@ function clearCoreNodes(store: Store, patch: { error?: string } = {}): void {
  */
 export async function evaluatePrivacyGate(tenantId: string, store: Store): Promise<boolean> {
   const { fleetSnapshotAtom } = await import('@/store/pillars/sovereign');
-  const instances = (store.get(fleetSnapshotAtom) || []) as import('@/shared/types/empire').EmpireInstance[];
+  const instances = (store.get(fleetSnapshotAtom) || []) as import('@nexus/contracts/empire.types').EmpireInstance[];
   const instance = instances.find(i => i.key === tenantId);
 
   const isRestricted = !PRIVILEGED_TENANTS.has(tenantId) &&

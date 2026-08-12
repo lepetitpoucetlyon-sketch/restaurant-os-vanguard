@@ -8,7 +8,7 @@ import { FleetComplianceService } from './FleetComplianceService';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { HACCPTelemetryBridge } from '@modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { TenantID } from '@/shared/types/brands';
+import { TenantID } from '@nexus/tokens/brands.types';
 import { fleetEngine } from './FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight } from '../../services/MacroBrain';

@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 // Removed PinHashService mock
 
-vi.mock('@/shared/rbac/actionPermissionMap', () => ({
+vi.mock('@nexus/guards/rbac/actionPermissionMap', () => ({
     ACTION_MAP: {
         pos: {
             send_to_kitchen: { minLevel: 10, requiresPin: false },

@@ -102,7 +102,7 @@ export class NexusBridge {
  
     import('@/modules/intelligence/ia/fleet/FleetTelemetryService')
       .then(({ fleetTelemetry }) => {
-        fleetTelemetry.registerNode(tenantId as import('@/shared/types/brands').TenantID);
+        fleetTelemetry.registerNode(tenantId as import('@nexus/tokens/brands.types').TenantID);
       })
       .catch((err) => logger.warn('[NexusBridge] registerNode failed', { error: toError(err).message }));
 
@@ -121,7 +121,7 @@ export class NexusBridge {
         activeOrders = (this.store.get(pendingOrdersAtom) as unknown[])?.length ?? 0;
       } catch { /* atomes ops non chargés sur cette route (ICM) — pulse minimal */ }
 
-      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
+      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@nexus/tokens/brands.types').TenantID, {
         status: 'ONLINE',
         lastHeartbeat: new Date().toISOString(),
         healthScore: 100,

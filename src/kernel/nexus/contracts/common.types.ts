@@ -13,7 +13,7 @@ import { SovereignNode, SovereignField, SovereignData } from '@/shared/nexus-con
 import type { Recipe, RecipeIngredient } from './logistics';
 import type { Customer } from './customer.types';
 import type { Product } from './commerce.types';
-import type { ModuleId } from '@/shared/genome.types';
+import type { ModuleId } from '@nexus/contracts/genome.types';
 import type { Floor, Zone } from './ops.types';
 export type { Recipe, RecipeIngredient, Customer, Product, ModuleId, Floor, Zone };
 import { Ingredient } from './logistics';

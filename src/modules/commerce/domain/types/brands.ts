@@ -1,2 +1,2 @@
-// Rapatrié vers @/shared/types/brands — stub de compatibilité backward
-export * from '@/shared/types/brands';
+// Rapatrié vers @nexus/tokens/brands.types — stub de compatibilité backward
+export * from '@nexus/tokens/brands.types';

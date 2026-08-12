@@ -1,4 +1,4 @@
-import { EmpireInstance } from '@/shared/types/empire';
+import { EmpireInstance } from '@nexus/contracts/empire.types';
 import { MacroBrain, FleetInsight } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import type { FiscalSeal } from '@nexus/contracts';

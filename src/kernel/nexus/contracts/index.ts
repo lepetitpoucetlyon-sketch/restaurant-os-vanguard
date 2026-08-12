@@ -5,7 +5,7 @@
  */
 
 export type { SovereignField, SovereignNode } from '@/shared/nexus-contract';
-export * from '@/shared/genome.types';
+export * from './genome.types';
 
 // --- 🏛️ DOMAIN AUTHORITIES ---
 

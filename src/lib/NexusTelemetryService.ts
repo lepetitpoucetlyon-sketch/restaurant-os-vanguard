@@ -85,7 +85,7 @@ class TelemetryService {
       }));
 
       // 2. Push to Nexus fleet-telemetry so the MCC can see this instance's RAG status.
-      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
+      await fleetTelemetry.pushSiteTelemetry(tenantId as import('@nexus/tokens/brands.types').TenantID, {
         status: pulse.status === 'ACTIVE' ? 'ONLINE' : 'OFFLINE',
         lastHeartbeat: pulse.lastPulse,
         ...(ragStatus ? { ragStatus } : {}),

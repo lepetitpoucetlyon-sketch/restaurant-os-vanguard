@@ -7,7 +7,7 @@ import { NexusSyncService } from '@/lib/NexusSyncService';
 import { TelemetryHook } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
-import { EmpireInstance } from '@/shared/types/empire';
+import { EmpireInstance } from '@nexus/contracts/empire.types';
 import { SovereignStorage } from '@/lib/services/SovereignStorage';
 import { TenantIdSchema } from '@/shared/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';

@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { EmpireInstance, ProvisioningDNA } from '@/shared/types/empire';
+import { EmpireInstance, ProvisioningDNA } from '@nexus/contracts/empire.types';
 import { TenantSeeder } from './TenantSeeder';
 
 const lazyIntelligence = () => import('@/modules/intelligence');
@@ -91,7 +91,7 @@ export const ProvisioningEngine = {
             // 2. INDUSTRIAL WELD: Push to Master Registry (Shared Firebase)
             // This enables the "Single Core" to discover the client.
             const { fleetTelemetry } = await lazyIntelligence();
-            await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@/shared/types/brands').TenantID, {
+            await fleetTelemetry.pushSiteTelemetry(newInstance.id as import('@nexus/tokens/brands.types').TenantID, {
                 ...newInstance,
                 healthScore: newInstance.metrics.healthScore,
                 complianceScore: newInstance.metrics.complianceScore,
@@ -197,7 +197,7 @@ export const ProvisioningEngine = {
                 // Marquer l'entrée fleet comme FAILED (évite les ghost entries ONLINE)
                 registeredInstanceId
                     ? lazyIntelligence().then(m => m.fleetTelemetry.pushSiteTelemetry(
-                        registeredInstanceId as import('@/shared/types/brands').TenantID,
+                        registeredInstanceId as import('@nexus/tokens/brands.types').TenantID,
                         { status: 'PROVISIONING_FAILED' }
                       )).catch(() => {})
                     : Promise.resolve(),

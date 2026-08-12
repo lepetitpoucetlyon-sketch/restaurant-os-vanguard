@@ -1,4 +1,4 @@
-import { EmpireInstance } from '@/shared/types/empire';
+import { EmpireInstance } from '@nexus/contracts/empire.types';
 import { logger } from '@/lib/axiom';
 import { PRICING, getPriceEur } from '@/lib/constants/pricing';
 

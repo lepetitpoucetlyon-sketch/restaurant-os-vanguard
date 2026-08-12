@@ -5,7 +5,7 @@ import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import type { TenantID } from '@/shared/types/brands';
+import type { TenantID } from '@nexus/tokens/brands.types';
 import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import type { ProvisioningRequest } from '../types';

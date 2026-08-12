@@ -7,7 +7,7 @@ import { SovereignMath } from '@lib/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { genomeValidator } from '@/lib/GenomeValidator';
 import { ImmunityAuditLogger } from '@/modules/compliance';
-import { ModuleId, PowerAction } from '@shared/genome.types';
+import { ModuleId, PowerAction } from '@nexus/contracts/genome.types';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { SyncManager } from '@/lib/offline/sync-manager';

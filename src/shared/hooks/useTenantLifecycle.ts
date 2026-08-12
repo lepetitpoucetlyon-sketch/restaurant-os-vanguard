@@ -25,7 +25,7 @@ export function useTenantLifecycle(tenantId: string | null) {
         
         // Add to active slots
         setSlots((prev) => {
-            const next = new Map<string, import('@/shared/types/empire').EmpireInstance>(prev);
+            const next = new Map<string, import('@nexus/contracts/empire.types').EmpireInstance>(prev);
             if (!next.has(tenantId)) {
                 next.set(tenantId, { 
                     id: tenantId, 
@@ -41,7 +41,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                     branding: { primaryColor: '#6366f1' },
                     featureFlags: {},
                     security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }
-                } as import('@/shared/types/empire').EmpireInstance);
+                } as import('@nexus/contracts/empire.types').EmpireInstance);
             }
             return next;
         });
@@ -70,7 +70,7 @@ export function useTenantLifecycle(tenantId: string | null) {
             
             // Remove from active slots to free memory
             setSlots((prev) => {
-                const next = new Map<string, import('@/shared/types/empire').EmpireInstance>(prev);
+                const next = new Map<string, import('@nexus/contracts/empire.types').EmpireInstance>(prev);
                 next.delete(tenantId);
                 return next;
             });

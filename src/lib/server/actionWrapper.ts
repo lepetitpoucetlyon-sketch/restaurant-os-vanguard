@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { requireSession } from '@/lib/server/verifySession';
 import { NexusError, NexusErrorCode } from '@nexus/errors';
-import { assertPermission } from '@/shared/rbac/checkPermission';
-import { ACTION_MAP } from '@/shared/rbac/actionPermissionMap';
+import { assertPermission } from '@nexus/guards/rbac/checkPermission';
+import { ACTION_MAP } from '@nexus/guards/rbac/actionPermissionMap';
 import { PinHashService } from '@/lib/server/PinHashService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { User } from '@nexus/contracts';
