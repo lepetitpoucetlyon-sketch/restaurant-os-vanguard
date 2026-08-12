@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { ordersNodeAtom } from '@/store/pillars/ops';
 import { stockItemsNodeAtom } from '@/store/pillars/logistics';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 /**
  * ⚛️ DASHBOARD ATOMS - Grade VI

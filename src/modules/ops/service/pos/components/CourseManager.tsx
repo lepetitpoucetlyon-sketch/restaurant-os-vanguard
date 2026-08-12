@@ -8,7 +8,7 @@ import { cn } from "@/lib/ui.foundations";
  
 import { CartItem, CourseType } from "@modules/ops/workflow/engine/types";
 import { formatCurrency } from "@/lib/formatters";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

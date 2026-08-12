@@ -14,7 +14,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PrepaieBuilder } from './PrepaieBuilder';
 import { logger } from '@/lib/logger';
 import type { PrepaieRow } from './types';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const URSSAF_NET_ENT_URL = 'https://www.net-entreprises.fr/declaration/dsn/depot';
 

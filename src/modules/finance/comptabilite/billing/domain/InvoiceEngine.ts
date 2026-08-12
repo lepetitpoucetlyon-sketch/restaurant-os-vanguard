@@ -1,7 +1,7 @@
 import { LegalInvoice, NexusInternalMapper } from '@nexus/contracts/nexus-internal-mapper';
 import { SovereignNode } from '@/shared/nexus-contract';
 import { JournalEntry, TaxRate } from '../../../types';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import { toMicrounits } from '@/shared/schemas/primitives';
 
 /**

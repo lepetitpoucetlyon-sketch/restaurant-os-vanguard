@@ -4,7 +4,7 @@ import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { DocumentVault } from '@/modules/compliance';
 import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 /**
  * 🏛️ CollectionService - Grade X+++

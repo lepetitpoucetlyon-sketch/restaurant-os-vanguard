@@ -22,7 +22,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { aiRouter } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 interface TenantSnapshot {
   tenantId:     string;

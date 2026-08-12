@@ -22,7 +22,7 @@ import {
     PIIDetection,
     PULSE_SCHEDULE,
 } from './types';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 // ============================================
 // PII DETECTION PATTERNS

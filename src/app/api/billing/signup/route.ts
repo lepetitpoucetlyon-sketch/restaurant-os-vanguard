@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { logger } from '@/lib/logger';
-import { getStripePriceId } from '@/shared/constants/pricing';
-import type { PricingTier } from '@/shared/constants/pricing';
+import { getStripePriceId } from '@/lib/constants/pricing';
+import type { PricingTier } from '@/lib/constants/pricing';
 import { toError } from "@/lib/toError";
 
 /**

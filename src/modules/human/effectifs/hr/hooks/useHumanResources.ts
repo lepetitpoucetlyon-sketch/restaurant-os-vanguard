@@ -12,7 +12,7 @@ import {
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
 import { SovereignData } from '@/shared/nexus-contract';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toSovereignData } from "@/lib/toSovereignData";
 
 /**

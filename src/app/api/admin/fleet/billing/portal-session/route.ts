@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'fleet_admin');

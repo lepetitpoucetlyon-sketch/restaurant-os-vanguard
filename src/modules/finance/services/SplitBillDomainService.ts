@@ -1,4 +1,4 @@
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import type { CartItem as SplitCartItem, ConvivePayment, SplitMode } from '@/modules/ops';
 
 export const SplitBillDomainService = {

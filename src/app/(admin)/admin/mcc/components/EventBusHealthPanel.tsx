@@ -4,7 +4,7 @@ import { NexusEventBus, NexusEventName } from '@orchestration/NexusEventBus';
 import { PayloadMigrator } from '@orchestration/PayloadMigrator';
 import { Button } from '@design/ui/button';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 /**

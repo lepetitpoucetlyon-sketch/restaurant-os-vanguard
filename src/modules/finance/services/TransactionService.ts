@@ -7,7 +7,7 @@ import { StockEngine } from '@/modules/logistics';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 /**
  * 🏛️ TransactionService - Restaurant OS

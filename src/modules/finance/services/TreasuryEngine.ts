@@ -1,6 +1,6 @@
 import { EmpireInstance } from '@/shared/types/empire';
 import { logger } from '@/lib/axiom';
-import { PRICING, getPriceEur } from '@/shared/constants/pricing';
+import { PRICING, getPriceEur } from '@/lib/constants/pricing';
 
 export interface TreasuryReport {
     totalMRR: number;

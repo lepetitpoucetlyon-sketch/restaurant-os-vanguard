@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { Order, Table, OrderItem, OrderItemModification } from '@nexus/contracts';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 export {
     floorsAtom,

@@ -16,7 +16,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const RESERVE_SECRET = process.env.GOOGLE_RESERVE_SECRET;
 

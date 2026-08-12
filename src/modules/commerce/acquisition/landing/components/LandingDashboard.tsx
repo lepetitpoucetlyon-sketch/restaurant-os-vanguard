@@ -31,7 +31,7 @@ import { useToast } from "@ui/Toast";
 import { useLanguage } from "@/shared/hooks";
 import { usePageSetting } from "@design/settings/ContextualSettings";
 import { useIsMobile } from "@/shared/hooks";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/shared/utils/motion";
 
 interface KpiCardProps {

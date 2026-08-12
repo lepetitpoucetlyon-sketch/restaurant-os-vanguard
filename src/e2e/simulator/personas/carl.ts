@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { runAct, type PersonaFn, type PersonaResult } from '../engine/PersonaTypes';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 export const carlPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<PersonaResult> => {
   const start = Date.now();

@@ -11,7 +11,7 @@ import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom }
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { quarantinedProductsAtom } from "@/store/pillars/compliance";
 import { categoriesAtom } from "@/store/pillars/logistics";
-import { isProductInCategory } from "@/shared/utils/categoryMatcher";
+import { isProductInCategory } from "@/lib/utils/categoryMatcher";
 import { POSModalSkeleton } from "./POSModalSkeleton";
 import { usePageSetting } from "@design/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";

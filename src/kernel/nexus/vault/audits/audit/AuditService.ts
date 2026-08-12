@@ -2,7 +2,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { AuditEventSchema, AUDITED_COLLECTIONS, type AuditAction, type AuditEvent } from '@/shared/schemas';
 import { operationalFlags } from '@/config/features';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const GENESIS_HASH = 'AUDIT_GENESIS_0000000000000000';
 

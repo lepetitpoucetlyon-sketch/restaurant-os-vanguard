@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import { describe, it } from 'vitest';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 describe('Invariant: Conversion Monétaire', () => {
   it('fromMicrounits(toMicrounits(x)) === x', () => {

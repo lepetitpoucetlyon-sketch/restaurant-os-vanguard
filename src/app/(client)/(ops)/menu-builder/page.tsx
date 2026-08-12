@@ -12,7 +12,7 @@ import { useCategories } from '@/modules/logistics';
 import { updateProductAction } from "@/shared/actions/settings.action";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@design/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const COMMON_ALLERGENS = [
     { id: 'gluten', name: 'Gluten', icon: '🌾' },

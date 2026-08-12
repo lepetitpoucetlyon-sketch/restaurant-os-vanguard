@@ -6,9 +6,9 @@
 
 import { Order, OrderItem, FiscalSeal } from "@nexus/contracts";
 import { SovereignData } from "@shared/nexus-contract";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { logger } from "@/lib/logger";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 export interface TaxBreakdown {
     total: number;

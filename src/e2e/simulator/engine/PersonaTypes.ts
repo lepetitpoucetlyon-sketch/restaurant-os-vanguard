@@ -1,4 +1,4 @@
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 export interface PersonaContext {

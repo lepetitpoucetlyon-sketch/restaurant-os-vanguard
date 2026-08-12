@@ -29,7 +29,7 @@ const TipPanel = dynamic(() => import("@modules/ops").then(m => m.TipPanel), { l
 const InvoiceRequestModal = dynamic(() => import("@modules/ops").then(m => m.InvoiceRequestModal), { loading: () => <POSModalSkeleton /> });
 
 import { CourseType } from "@/modules/ops/workflow/engine/types";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";
 import { withPageGuard } from "@design/rbac/PageGuard";

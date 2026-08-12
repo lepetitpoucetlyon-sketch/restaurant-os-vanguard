@@ -3,7 +3,7 @@ import type { Atom } from 'jotai';
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
 import { NexusNode } from '@/store/base';
-import { SovereignMath } from '@shared/services/SovereignMath';
+import { SovereignMath } from '@lib/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { genomeValidator } from '@/lib/GenomeValidator';
 import { ImmunityAuditLogger } from '@/modules/compliance';

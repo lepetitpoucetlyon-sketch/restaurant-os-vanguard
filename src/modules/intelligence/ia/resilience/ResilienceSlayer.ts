@@ -7,7 +7,7 @@ import {
 } from '@/store/pillars';
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { qualityActiveControlAtom } from '@/modules/compliance';
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@lib/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 import { toError } from "@/lib/toError";

@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { AssertionLayer, type SealSnapshot } from '../engine/AssertionLayer';
 import { runAct, type PersonaFn, type PersonaResult } from '../engine/PersonaTypes';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 export const davePersona: PersonaFn = async ({ tenantId }): Promise<PersonaResult> => {

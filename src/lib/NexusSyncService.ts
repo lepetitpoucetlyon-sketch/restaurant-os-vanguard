@@ -1,5 +1,5 @@
 import { getDefaultStore } from 'jotai';
-import { nexusStatusAtom } from '@/shared/atoms/nexusStatus.atom';
+import { nexusStatusAtom } from '@/store/atoms/nexusStatus.atom';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { db } from '@/lib/offline/offline-store';

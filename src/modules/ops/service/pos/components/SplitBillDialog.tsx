@@ -4,7 +4,7 @@ import React from "react";
 import { Modal } from "@ui/Modal";
 import { Minus, Plus, Sparkles, CheckCircle2 } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { CartItem } from '../../../workflow/engine/types';
 

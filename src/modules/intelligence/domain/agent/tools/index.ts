@@ -6,7 +6,7 @@ import { FleetTool, FlagSiteTool } from './FleetTool';
 import { ToolDefinition } from './types';
 import { FiscalAuditTool } from './FiscalAuditTool';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 export const AGENT_TOOLS: Record<string, ToolDefinition> = {
     [FinanceTool.name]: FinanceTool,

@@ -1,6 +1,6 @@
 
 import { CA3Declaration } from './types';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**

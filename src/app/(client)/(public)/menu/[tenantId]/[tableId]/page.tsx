@@ -6,7 +6,7 @@ import { Leaf, AlertTriangle, Search, ChefHat, Beef } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { formatCurrency } from '@/lib/formatters';
-import { isProductInCategory } from "@/shared/utils/categoryMatcher";
+import { isProductInCategory } from "@/lib/utils/categoryMatcher";
 
 interface ProductItem {
     id: string;

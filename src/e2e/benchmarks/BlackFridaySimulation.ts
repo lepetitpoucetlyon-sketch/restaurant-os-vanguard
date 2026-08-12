@@ -1,5 +1,5 @@
 import { TimeSync } from '@/lib/TimeSync';
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@lib/services/SelfHealingEngine';
 import { ordersNodeAtom, updateNexusNode } from '@/store/pillars';
 import { logger } from '@/lib/logger';
 import { getDefaultStore } from 'jotai';

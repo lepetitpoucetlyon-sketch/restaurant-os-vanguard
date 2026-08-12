@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PiiFields, PiiRecord } from '@/shared/schemas';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const ENCODER = new TextEncoder();
 const DECODER = new TextDecoder();

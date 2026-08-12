@@ -5,7 +5,7 @@ import { motion, Variants } from 'framer-motion';
 import { Bell, Mail, Phone, Smartphone } from 'lucide-react';
 import { useSettings } from '@/shared/hooks';
 import { cn } from '@/lib/ui.foundations';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 type Config = ReturnType<typeof useSettings>['settings']['reservationConfig'];
 

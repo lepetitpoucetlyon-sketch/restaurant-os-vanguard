@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from '../SimulationService';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          

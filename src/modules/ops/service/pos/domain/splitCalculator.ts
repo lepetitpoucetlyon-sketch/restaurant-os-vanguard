@@ -1,4 +1,4 @@
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import type { CartItem } from '../../../workflow/engine/types';
 import type { ConvivePayment, SplitMode } from '../../../domain/schemas/pos';
 

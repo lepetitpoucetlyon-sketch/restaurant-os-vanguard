@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 describe('🏛️ SovereignMath : Microunits Protocol (Grade X)', () => {
 

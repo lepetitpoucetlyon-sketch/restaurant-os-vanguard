@@ -1,6 +1,6 @@
 import { ResilienceSlayer } from './ResilienceSlayer';
 import { CycleGuard } from '@nexus/guards/CycleGuard';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import { getDefaultStore } from 'jotai';
 import { 
     ordersNodeAtom, 
@@ -12,7 +12,7 @@ import {
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { qualityActiveControlAtom } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@lib/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 import { WritableAtom } from 'jotai';

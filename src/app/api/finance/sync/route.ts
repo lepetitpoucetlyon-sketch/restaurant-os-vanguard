@@ -5,7 +5,7 @@ import { logger } from '@/lib/axiom';
 import { JournalEntry } from '@nexus/contracts';
 import { CryptoService } from '@/lib/CryptoService';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 /**

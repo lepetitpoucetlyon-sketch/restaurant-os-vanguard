@@ -5,7 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const QuerySchema = z.object({
   tenantId: z.string().min(1).max(80),

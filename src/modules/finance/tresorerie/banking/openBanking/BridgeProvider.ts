@@ -7,7 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const BRIDGE_BASE = 'https://api.bridgeapi.io/v2';
 

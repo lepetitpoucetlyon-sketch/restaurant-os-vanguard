@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { toMicrounits } from "@/shared/schemas/primitives";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { formatCurrency } from "@/lib/formatters";
 
 interface TipPanelProps {

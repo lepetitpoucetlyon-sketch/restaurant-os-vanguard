@@ -1,1 +1,1 @@
-export * from '@shared/services/SelfHealingEngine';
+export * from '@lib/services/SelfHealingEngine';

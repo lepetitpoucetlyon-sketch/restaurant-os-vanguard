@@ -16,7 +16,7 @@ import { StyleTab } from "./panels/StyleTab";
 import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
-import { SovereignStorage } from "@/shared/services/SovereignStorage";
+import { SovereignStorage } from "@/lib/services/SovereignStorage";
 import { PageSettingsSchema } from "@/shared/schemas/ui";
 
 

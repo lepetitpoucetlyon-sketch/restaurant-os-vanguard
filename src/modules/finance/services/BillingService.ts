@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { PRICING } from '@/shared/constants/pricing';
+import { PRICING } from '@/lib/constants/pricing';
 
 const STRIPE_API_VERSION = '2026-06-24.dahlia' as const;
 

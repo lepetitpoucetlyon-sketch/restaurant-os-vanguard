@@ -7,7 +7,7 @@ import type { ReceiptTicket } from "@/modules/ops/service/printers/hardware/Epso
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 function parsePrinterConfig(): { ip: string; port: number } {
     const defaults = { ip: "192.168.1.100", port: 8008 };

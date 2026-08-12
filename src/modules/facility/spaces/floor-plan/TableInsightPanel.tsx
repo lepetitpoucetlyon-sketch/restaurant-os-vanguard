@@ -15,7 +15,7 @@ import {
 // eslint-disable-next-line vanguard/no-inter-module-imports, no-restricted-imports
 import { useOrders, useReservations } from "@/modules/ops/providers";
 import { formatCurrency } from "@/lib/formatters";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { cn } from "@/lib/ui.foundations";
 import { ScrollArea } from "@ui/scroll-area";
 

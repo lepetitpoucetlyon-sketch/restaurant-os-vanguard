@@ -25,7 +25,7 @@ import {
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@design/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 
 // Dynamic Lazy Imports for Inventory Modals

@@ -2,7 +2,7 @@ import { db } from '@/lib/offline/offline-store';
 import { NexusEventBus, NexusEventName } from '@orchestration/NexusEventBus';
 import { PayloadMigrator } from './PayloadMigrator';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 const MAX_ATTEMPTS = 5;           // Enterprise grade : 5 tentatives avant quarantaine

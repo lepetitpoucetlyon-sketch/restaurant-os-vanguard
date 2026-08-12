@@ -20,7 +20,7 @@ const CleaningPlan = dynamic(() => import("@/modules/compliance").then(m => m.Cl
 const DLCTracker = dynamic(() => import("@/modules/compliance").then(m => m.DLCTracker), { loading: () => <POSModalSkeleton /> });
 const NonConformityForm = dynamic(() => import("@/modules/compliance").then(m => m.NonConformityForm), { loading: () => <POSModalSkeleton /> });
 import { withPageGuard } from "@design/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
     temperatures: Thermometer,

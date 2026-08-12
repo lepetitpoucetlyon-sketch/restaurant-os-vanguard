@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 export function registerHaccpCheckArchiverHandler(): () => void {
   return NexusEventBus.on(

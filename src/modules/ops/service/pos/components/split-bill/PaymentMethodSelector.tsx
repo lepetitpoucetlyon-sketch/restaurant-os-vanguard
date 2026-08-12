@@ -2,7 +2,7 @@ import React from "react";
 import { User, CreditCard, Banknote, Smartphone, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { formatCurrency } from "@/lib/formatters";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { PaymentMethod } from "./useSplitBillState";
 import { TerminalState } from "./usePaymentTerminal";
 

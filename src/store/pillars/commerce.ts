@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { Reservation, GroupEvent } from '@nexus/contracts';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { currentDateAtom } from '@/store/base';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import { ordersAtom } from '@/store/pillars/ops';
 import { productsAtom, recipesAtom, stockItemsAtom } from '@/store/pillars/logistics';
 import { staffMembersAtom } from '@/store/pillars/human';

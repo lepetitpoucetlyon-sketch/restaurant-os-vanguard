@@ -18,7 +18,7 @@ import { formatMu } from "@/modules/finance";
 import { useIsMobile } from "@/shared/hooks";
 import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 
 interface CartProps {
     items: CartItem[];

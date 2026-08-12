@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 
 interface OrderRecord {
   status: string;

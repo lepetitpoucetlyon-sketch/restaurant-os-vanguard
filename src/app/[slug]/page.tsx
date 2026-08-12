@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@nexus/contracts';
 import { MapPin, Phone, Mail, Clock, CalendarCheck } from 'lucide-react';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

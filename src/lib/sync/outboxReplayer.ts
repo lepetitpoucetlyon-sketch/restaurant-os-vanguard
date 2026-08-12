@@ -4,7 +4,7 @@ import { NexusEventBus, type NexusEventName } from '@orchestration/NexusEventBus
 import { PayloadMigrator } from '@orchestration/PayloadMigrator';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 /**
  * Rejoue les événements bloqués dans l'Outbox au démarrage.

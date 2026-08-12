@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 import { logger } from '@/lib/logger';
 import { parse, differenceInHours, differenceInMinutes } from 'date-fns';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 interface ReservationRecord {
   id: string;

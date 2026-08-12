@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { NexusInterceptor } from './NexusInterceptor';
 import { SovereignGuard } from '@nexus/guards/SovereignGuard';
-import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { SovereignStorage } from '@/lib/services/SovereignStorage';
 import { TenantIdSchema } from '@/shared/schemas/ui';
 
 import { buildTenantPath } from './utils/tenantPath';

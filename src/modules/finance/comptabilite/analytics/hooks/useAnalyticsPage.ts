@@ -17,7 +17,7 @@ import type { ComplianceAlert } from "@/modules/compliance";
          
 import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

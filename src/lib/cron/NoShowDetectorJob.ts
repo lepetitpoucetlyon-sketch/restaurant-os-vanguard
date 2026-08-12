@@ -3,7 +3,7 @@ import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { parse, addMinutes, isBefore } from 'date-fns';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 interface ReservationRecord {
   id: string;

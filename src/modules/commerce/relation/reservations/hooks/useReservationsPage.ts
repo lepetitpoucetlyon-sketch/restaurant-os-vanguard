@@ -25,7 +25,7 @@ import type { Table, Reservation } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/modules/ops";
 import type { Customer } from "@nexus/contracts";
 import type { GroupFormData } from "../components/GroupFormModal";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
 const TERRASSE_SETTINGS_PATH = "settings/terrasse";

@@ -3,7 +3,7 @@ import { FiscalSeal } from '@nexus/contracts';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
-import { SovereignMath } from '@/shared/services/SovereignMath';
+import { SovereignMath } from '@/lib/services/SovereignMath';
 import { toMicrounits } from '@/shared/schemas/primitives';
 
 import { ToolDefinition } from './types';

@@ -20,7 +20,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 const COMMISSION_RATE = 0.10; // 10%
 

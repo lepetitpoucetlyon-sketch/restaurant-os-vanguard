@@ -1,4 +1,4 @@
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@lib/services/SelfHealingEngine';
 import { ordersNodeAtom } from '@/store/pillars/ops';
 
 /**

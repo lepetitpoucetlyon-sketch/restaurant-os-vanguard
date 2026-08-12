@@ -35,7 +35,7 @@ import { CustomerCustomerView } from '@/modules/commerce';
 import { CustomerDetailPanel } from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@design/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 function ReservationsPage() {
     const {

@@ -1,7 +1,7 @@
 import React from "react";
 import { DivideCircle, X } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
-import { SovereignMath } from "@/shared/services/SovereignMath";
+import { SovereignMath } from "@/lib/services/SovereignMath";
 
 interface SplitBillHeaderProps {
     total: number;

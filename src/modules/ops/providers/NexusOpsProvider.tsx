@@ -8,7 +8,7 @@ import { TelemetryHook } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { EmpireInstance } from '@/shared/types/empire';
-import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { SovereignStorage } from '@/lib/services/SovereignStorage';
 import { TenantIdSchema } from '@/shared/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';

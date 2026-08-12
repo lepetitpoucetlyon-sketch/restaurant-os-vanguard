@@ -5,7 +5,7 @@ import { UserSchema, type User } from '@nexus/contracts';
 import { EmpireInstance } from '@/shared/types/empire';
 import { FleetBloomFilter } from '@/lib/bloom-filter';
 import type { Notification as AppNotification, Floor, Zone } from '@nexus/contracts';
-import { SovereignStorage } from '@/shared/services/SovereignStorage';
+import { SovereignStorage } from '@/lib/services/SovereignStorage';
 import { z } from 'zod';
 
 const notifications = atom<AppNotification[]>([]);

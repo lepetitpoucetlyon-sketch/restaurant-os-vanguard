@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
+import { SelfHealingEngine } from '@lib/services/SelfHealingEngine';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { ShieldedContext, SovereignSecurityViolation } from '@/modules/intelligence';
  

@@ -12,7 +12,7 @@ import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetrySe
 import { registerAuditPulseSink } from "@nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@nexus/contracts/fleet.types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
-import { JsonObject } from "@/shared/types/json";
+import { JsonObject } from "@/lib/types/json";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;
