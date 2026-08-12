@@ -17,11 +17,10 @@ export class InvoiceEngine {
   static transform(rawOrder: SovereignNode): LegalInvoice {
     const order = NexusInternalMapper.mapToOrder(rawOrder);
     
-    // Canonical Order total (Microunits Protocol) → cents for the LegalInvoice boundary. Value-preserving for legacy orders.
-    const subTotalInCents = SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(order)));
+    const subTotalMu = SovereignMath.orderTotalMicrounits(order);
     const taxRateValue = parseFloat(this.DEFAULT_TAX_RATE);
-    const taxTotalInCents = Math.round(subTotalInCents * taxRateValue);
-    const totalInCents = subTotalInCents + taxTotalInCents;
+    const taxTotalMu = Math.round(subTotalMu * taxRateValue);
+    const totalMu = subTotalMu + taxTotalMu;
 
     return {
       id: `inv_${order?.id}`,
@@ -29,18 +28,18 @@ export class InvoiceEngine {
       updatedAt: new Date().toISOString(),
       orderId: order?.id ?? 'UNKNOWN',
       invoiceNumber: `FACT-${new Date().getFullYear()}-${(order?.id ?? '').slice(-6).toUpperCase()}`,
-      subTotalInCents,
-      subTotalInMicrounits: subTotalInCents * 10_000,
-      taxTotalInCents,
-      taxTotalInMicrounits: taxTotalInCents * 10_000,
-      totalInCents,
-      totalInMicrounits: totalInCents * 10_000,
+      subTotalInMicrounits: subTotalMu,
+      subTotalInCents: Math.round(subTotalMu / 10_000),
+      taxTotalInMicrounits: taxTotalMu,
+      taxTotalInCents: Math.round(taxTotalMu / 10_000),
+      totalInMicrounits: totalMu,
+      totalInCents: Math.round(totalMu / 10_000),
       taxDetails: [{
         rate: taxRateValue * 100,
-        amountInCents: taxTotalInCents,
-        amountInMicrounits: taxTotalInCents * 10_000,
-        baseInCents: subTotalInCents,
-        baseInMicrounits: subTotalInCents * 10_000,
+        amountInMicrounits: taxTotalMu,
+        amountInCents: Math.round(taxTotalMu / 10_000),
+        baseInMicrounits: subTotalMu,
+        baseInCents: Math.round(subTotalMu / 10_000),
       }],
       status: 'issued',
       issuedAt: new Date().toISOString()
@@ -58,9 +57,9 @@ export class InvoiceEngine {
       receiptNumber: `${new Date().getFullYear()}-${invoice?.id?.slice(-6).padStart(6, '0')}`,
       hashPrecedent: "0".repeat(64), // Should be fetched from previous entry
       hash: "1".repeat(64),          // Should be calculated
-      amountInMicrounits: toMicrounits(SovereignMath.fromCents(invoice.totalInCents)),
+      amountInMicrounits: toMicrounits(invoice.totalInMicrounits ?? (invoice.totalInCents ?? 0) * 10_000),
       taxRate: this.DEFAULT_TAX_RATE,
-      taxAmountInMicrounits: toMicrounits(SovereignMath.fromCents(invoice.taxTotalInCents)),
+      taxAmountInMicrounits: toMicrounits(invoice.taxTotalInMicrounits ?? (invoice.taxTotalInCents ?? 0) * 10_000),
       operatorId: "SYSTEM",
       deviceId: "MAIN_POS",
       serverTimestamp: now,

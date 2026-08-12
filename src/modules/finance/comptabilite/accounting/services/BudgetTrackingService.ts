@@ -4,15 +4,19 @@ import { JsonObject } from "@/shared/types/json";
 
 export interface BudgetLine {
     analyticalAxis: string;
-    budgetedAmountInCents: number;
-    actualAmountInCents: number;
+    budgetedAmountInMicrounits: number;
+    budgetedAmountInCents?: number;
+    actualAmountInMicrounits: number;
+    actualAmountInCents?: number;
     variancePercentage: number;
 }
 
 export interface BudgetReport {
-    period: string; // ex: '2026-07'
-    totalBudgetedRevenueInCents: number;
-    totalActualRevenueInCents: number;
+    period: string;
+    totalBudgetedRevenueInMicrounits: number;
+    totalBudgetedRevenueInCents?: number;
+    totalActualRevenueInMicrounits: number;
+    totalActualRevenueInCents?: number;
     lines: BudgetLine[];
 }
 
@@ -39,45 +43,49 @@ export class BudgetTrackingService {
                 `tenants/${tenantId}/journalEntries`
             ) || {};
 
-            const actualsByAxis: Record<string, number> = { 'Food': 0, 'Beverage': 0 };
+            const actualsByAxisMu: Record<string, number> = { 'Food': 0, 'Beverage': 0 };
 
             for (const entry of Object.values(entries) as JsonObject[]) {
-                // Filtrer par mois (naïf pour l'exemple)
                 if ((entry as {type?: string}).type === 'revenue' && (entry as {date?: string}).date?.startsWith(yearMonth)) {
                     for (const line of ((entry as {lines?: Record<string, unknown>[]}).lines || [])) {
                         if (line.side === 'credit' && line.accountId === '701000' && line.analyticalAxis) {
-                            actualsByAxis[line.analyticalAxis as string] = (actualsByAxis[line.analyticalAxis as string] || 0) + (line.amountInCents as number);
+                            const lineMu = (line.amountInMicrounits as number | undefined) ?? ((line.amountInCents as number) || 0) * 10_000;
+                            actualsByAxisMu[line.analyticalAxis as string] = (actualsByAxisMu[line.analyticalAxis as string] || 0) + lineMu;
                         }
                     }
                 }
             }
 
-            // 3. Calculer les écarts (Variance)
             const lines: BudgetLine[] = [];
-            let totalBudget = 0;
-            let totalActual = 0;
+            let totalBudgetMu = 0;
+            let totalActualMu = 0;
 
             for (const [axis, budgetedAmount] of Object.entries(budgetData)) {
-                const actualAmount = actualsByAxis[axis] || 0;
-                const variance = budgetedAmount > 0 
-                    ? ((actualAmount - budgetedAmount) / budgetedAmount) * 100 
+                const budgetedMu = budgetedAmount * 10_000;
+                const actualMu = actualsByAxisMu[axis] || 0;
+                const variance = budgetedMu > 0
+                    ? ((actualMu - budgetedMu) / budgetedMu) * 100
                     : 0;
 
-                totalBudget += budgetedAmount;
-                totalActual += actualAmount;
+                totalBudgetMu += budgetedMu;
+                totalActualMu += actualMu;
 
                 lines.push({
                     analyticalAxis: axis,
-                    budgetedAmountInCents: budgetedAmount,
-                    actualAmountInCents: actualAmount,
+                    budgetedAmountInMicrounits: budgetedMu,
+                    budgetedAmountInCents: Math.round(budgetedMu / 10_000),
+                    actualAmountInMicrounits: actualMu,
+                    actualAmountInCents: Math.round(actualMu / 10_000),
                     variancePercentage: Number(variance.toFixed(2))
                 });
             }
 
             return {
                 period: yearMonth,
-                totalBudgetedRevenueInCents: totalBudget,
-                totalActualRevenueInCents: totalActual,
+                totalBudgetedRevenueInMicrounits: totalBudgetMu,
+                totalBudgetedRevenueInCents: Math.round(totalBudgetMu / 10_000),
+                totalActualRevenueInMicrounits: totalActualMu,
+                totalActualRevenueInCents: Math.round(totalActualMu / 10_000),
                 lines
             };
 

@@ -22,33 +22,42 @@ import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
 function computeLedger(accounts: Account[], journalEntries: JournalEntry[]): LedgerAccount[] {
+    const muFromLine = (m: { debitInMicrounits?: number; debitInCents?: number; creditInMicrounits?: number; creditInCents?: number; amountInMicrounits?: number; amountInCents?: number }) => ({
+        debitMu: m.debitInMicrounits ?? (m.debitInCents || 0) * 10_000,
+        creditMu: m.creditInMicrounits ?? (m.creditInCents || 0) * 10_000,
+        amountMu: m.amountInMicrounits ?? (m.amountInCents || 0) * 10_000,
+    });
     return accounts.map(account => {
         const movements = journalEntries
             .flatMap(e => e.lines)
             .filter(l => l.accountId === account.id || l.accountCode === account.code);
-        let running = 0;
+        let runningMu = 0;
         const movementsWithBalance = movements.map(m => {
-            running += (m.debitInCents || 0) - (m.creditInCents || 0);
+            const { debitMu, creditMu, amountMu } = muFromLine(m);
+            runningMu += debitMu - creditMu;
             return {
                 ...m,
-                runningBalanceInCents: running,
-                runningBalanceInMicrounits: running * 10_000,
-                debitInMicrounits: (m.debitInCents || 0) * 10_000,
-                creditInMicrounits: (m.creditInCents || 0) * 10_000,
-                amountInMicrounits: (m.amountInCents || 0) * 10_000,
+                runningBalanceInMicrounits: runningMu,
+                runningBalanceInCents: Math.round(runningMu / 10_000),
+                debitInMicrounits: debitMu,
+                debitInCents: Math.round(debitMu / 10_000),
+                creditInMicrounits: creditMu,
+                creditInCents: Math.round(creditMu / 10_000),
+                amountInMicrounits: amountMu,
+                amountInCents: Math.round(amountMu / 10_000),
             };
         });
-        const debitTotal = movements.reduce((s, m) => s + (m.debitInCents || 0), 0);
-        const creditTotal = movements.reduce((s, m) => s + (m.creditInCents || 0), 0);
-        const balance = account.balanceInCents ?? (debitTotal - creditTotal);
+        const debitTotalMu = movements.reduce((s, m) => s + (muFromLine(m).debitMu), 0);
+        const creditTotalMu = movements.reduce((s, m) => s + (muFromLine(m).creditMu), 0);
+        const balanceMu = (account.balanceInMicrounits ?? (account.balanceInCents ?? 0) * 10_000) || (debitTotalMu - creditTotalMu);
         return {
             ...account,
-            balanceInCents: balance,
-            balanceInMicrounits: balance * 10_000,
-            debitTotalInCents: debitTotal,
-            debitTotalInMicrounits: debitTotal * 10_000,
-            creditTotalInCents: creditTotal,
-            creditTotalInMicrounits: creditTotal * 10_000,
+            balanceInMicrounits: balanceMu,
+            balanceInCents: Math.round(balanceMu / 10_000),
+            debitTotalInMicrounits: debitTotalMu,
+            debitTotalInCents: Math.round(debitTotalMu / 10_000),
+            creditTotalInMicrounits: creditTotalMu,
+            creditTotalInCents: Math.round(creditTotalMu / 10_000),
             movements: movementsWithBalance,
         };
     });
@@ -119,35 +128,36 @@ export function useAccounting() {
     }, [accounts, journalEntries]);
 
     const generatePandL = useCallback((periodId: string = 'current'): ProfitAndLossReport => {
-        // Note: JournalEntry.amountInMicrounits (1 cent = 10_000 µunits) is the source of truth.
-        // The hook still exposes xxxInCents fields for the accounting views; convert as we read.
-        const toCents = (µ: number) => Math.round(µ / 10_000);
+        const entryAmountMu = (e: JournalEntry, side: 'credit' | 'debit'): number => {
+            if (e.amountInMicrounits != null) return e.amountInMicrounits;
+            return e.lines.reduce((s, l) => s + (l.side === side ? (l.amountInMicrounits ?? (l.amountInCents ?? 0) * 10_000) : 0), 0);
+        };
         const revenues = journalEntries
             .filter(e => e.type === 'revenue')
             .map(e => {
-                const c = buildEntryAmountInCents(e, 'credit', toCents);
-                return { category: e.type ?? 'revenue', accountCode: e.pieceNumber, accountName: e.description, amountInCents: c, amountInMicrounits: c * 10_000 };
+                const mu = entryAmountMu(e, 'credit');
+                return { category: e.type ?? 'revenue', accountCode: e.pieceNumber, accountName: e.description, amountInMicrounits: mu, amountInCents: Math.round(mu / 10_000) };
             });
         const expenses = journalEntries
             .filter(e => e.type === 'expense')
             .map(e => {
-                const c = buildEntryAmountInCents(e, 'debit', toCents);
-                return { category: e.type ?? 'expense', accountCode: e.pieceNumber, accountName: e.description, amountInCents: c, amountInMicrounits: c * 10_000 };
+                const mu = entryAmountMu(e, 'debit');
+                return { category: e.type ?? 'expense', accountCode: e.pieceNumber, accountName: e.description, amountInMicrounits: mu, amountInCents: Math.round(mu / 10_000) };
             });
-        const totalRevenueInCents = revenues.reduce((s, r) => s + r.amountInCents, 0);
-        const totalExpensesInCents = expenses.reduce((s, e) => s + e.amountInCents, 0);
-        const netResultInCents = totalRevenueInCents - totalExpensesInCents;
+        const totalRevenueMu = revenues.reduce((s, r) => s + r.amountInMicrounits, 0);
+        const totalExpensesMu = expenses.reduce((s, e) => s + e.amountInMicrounits, 0);
+        const netResultMu = totalRevenueMu - totalExpensesMu;
         return {
             periodId,
             periodName: 'Période courante',
             revenues,
             expenses,
-            totalRevenueInCents,
-            totalRevenueInMicrounits: totalRevenueInCents * 10_000,
-            totalExpensesInCents,
-            totalExpensesInMicrounits: totalExpensesInCents * 10_000,
-            netResultInCents,
-            netResultInMicrounits: netResultInCents * 10_000,
+            totalRevenueInMicrounits: totalRevenueMu,
+            totalRevenueInCents: Math.round(totalRevenueMu / 10_000),
+            totalExpensesInMicrounits: totalExpensesMu,
+            totalExpensesInCents: Math.round(totalExpensesMu / 10_000),
+            netResultInMicrounits: netResultMu,
+            netResultInCents: Math.round(netResultMu / 10_000),
             generatedAt: new Date().toISOString(),
         };
     }, [journalEntries]);
@@ -157,27 +167,27 @@ export function useAccounting() {
             (accounts as Account[])
                 .filter(a => a.type === type)
                 .map(a => {
-                    const c = a.balanceInCents ?? 0;
-                    return { category: label, accountCode: a.code, accountName: a.name, amountInCents: c, amountInMicrounits: c * 10_000 };
+                    const mu = a.balanceInMicrounits ?? (a.balanceInCents ?? 0) * 10_000;
+                    return { category: label, accountCode: a.code, accountName: a.name, amountInMicrounits: mu, amountInCents: Math.round(mu / 10_000) };
                 });
         const assets = toLine('asset', 'Actif');
         const liabilities = toLine('liability', 'Passif');
         const equity = toLine('equity', 'Capitaux propres');
-        const totalAssetsInCents = assets.reduce((s, a) => s + a.amountInCents, 0);
-        const totalLiabilitiesInCents = liabilities.reduce((s, l) => s + l.amountInCents, 0);
-        const totalEquityInCents = equity.reduce((s, e) => s + e.amountInCents, 0);
+        const totalAssetsMu = assets.reduce((s, a) => s + a.amountInMicrounits, 0);
+        const totalLiabilitiesMu = liabilities.reduce((s, l) => s + l.amountInMicrounits, 0);
+        const totalEquityMu = equity.reduce((s, e) => s + e.amountInMicrounits, 0);
         return {
             asOfDate: new Date().toISOString(),
             assets,
             liabilities,
             equity,
-            totalAssetsInCents,
-            totalAssetsInMicrounits: totalAssetsInCents * 10_000,
-            totalLiabilitiesInCents,
-            totalLiabilitiesInMicrounits: totalLiabilitiesInCents * 10_000,
-            totalEquityInCents,
-            totalEquityInMicrounits: totalEquityInCents * 10_000,
-            isBalanced: Math.abs(totalAssetsInCents - (totalLiabilitiesInCents + totalEquityInCents)) < 1,
+            totalAssetsInMicrounits: totalAssetsMu,
+            totalAssetsInCents: Math.round(totalAssetsMu / 10_000),
+            totalLiabilitiesInMicrounits: totalLiabilitiesMu,
+            totalLiabilitiesInCents: Math.round(totalLiabilitiesMu / 10_000),
+            totalEquityInMicrounits: totalEquityMu,
+            totalEquityInCents: Math.round(totalEquityMu / 10_000),
+            isBalanced: Math.abs(totalAssetsMu - (totalLiabilitiesMu + totalEquityMu)) < 10_000,
             generatedAt: new Date().toISOString(),
         };
     }, [accounts]);

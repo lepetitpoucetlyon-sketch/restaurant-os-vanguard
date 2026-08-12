@@ -13,11 +13,11 @@ export class FECMapper {
      * Map une ligne de journal en ligne FEC (sans le EcritureHash final)
      */
     static mapLine(entry: JournalEntry, line: JournalLine): Omit<FECLine, 'EcritureHash'> {
-        const debitCents = line.debitInCents ?? 0;
-        const creditCents = line.creditInCents ?? 0;
+        const debitMu = line.debitInMicrounits ?? (line.debitInCents ?? 0) * 10_000;
+        const creditMu = line.creditInMicrounits ?? (line.creditInCents ?? 0) * 10_000;
 
-        const debitStr = debitCents > 0 ? SovereignMath.fromMicrounits(SovereignMath.fromCents(debitCents)).toFixed(2) : '';
-        const creditStr = creditCents > 0 ? SovereignMath.fromMicrounits(SovereignMath.fromCents(creditCents)).toFixed(2) : '';
+        const debitStr = debitMu > 0 ? SovereignMath.fromMicrounits(debitMu).toFixed(2) : '';
+        const creditStr = creditMu > 0 ? SovereignMath.fromMicrounits(creditMu).toFixed(2) : '';
         NexusTelemetryService.emitAuditPulse('FINANCE', 'FEC_LINE_MAPPED', { pieceNumber: entry.pieceNumber });
 
         return {
