@@ -1,6 +1,6 @@
 # ============================================================================
 # sentrux — règles architecturales RESTAURANT-OS-CORE
-# Grade X · Multi-Tenant SaaS · NF525 · v2.0
+# Grade X · Multi-Tenant SaaS · NF525 · v2.1
 # ============================================================================
 # Traduit les conventions du CLAUDE.md en garde-fous vérifiables.
 # Vérifie : sentrux check .
@@ -8,6 +8,11 @@
 # Évolution :
 #   v1.0 — 14 règles, Quality 7011/10000 (2026-06-15)
 #   v2.0 — 47 règles, couverture complète (2026-07-04)
+#   v2.1 — resync post-migration kernel/orchestration (2026-08-12) :
+#          shared/nexus/* → kernel/nexus/* ; lib/nexus/* → kernel/adapter/* ;
+#          domain/schemas/primitives → shared/schemas/primitives ;
+#          components/* → design/* ; infrastructure/* → lib/adapters/* ;
+#          engines/* dissous ; ajout couche orchestration/ (event bus/saga).
 #
 # Groupes de règles :
 #   [1] CONTRAINTES GLOBALES   — cycles, couplage, complexité
@@ -19,6 +24,7 @@
 #   [7] SÉGRÉGATION DES ROUTES — (client) ↮ (admin) ↮ api
 #   [8] DIRECTION INFRA        — les adapters ne descendent pas dans les piliers
 #   [9] GUARDS D'ACCÈS         — admin guards réservés aux routes admin
+#  [10] BARREL CONTRACT        — un module ne se consomme que par son index.ts
 # ============================================================================
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -53,7 +59,7 @@ no_barrel_violations = true
 # ────────────────────────────────────────────────────────────────────────────
 # [2] COUCHES (layers)
 # Direction des dépendances : une couche ne dépend que de couches d'order >= au sien.
-# sentrux semble numéroter : présentation = order 0, socle = order le plus élevé.
+# sentrux numérote : présentation = order 0, socle = order le plus élevé.
 # ────────────────────────────────────────────────────────────────────────────
 
 # Présentation — routes Next.js App Router (la plus en surface).
@@ -62,29 +68,23 @@ name = "app"
 paths = ["src/app/*"]
 order = 0
 
-# Piliers métier (Ops, Finance, Commerce, Human, Logistics, Compliance, Intelligence, KDS).
+# Piliers métier (ops, commerce, finance, compliance, human, logistics,
+# intelligence, facility + mcc). Motif interne : components/hooks/services/store.
 [[layers]]
 name = "pillars"
-paths = ["src/modules/*", "src/engines/*"]
+paths = ["src/modules/*"]
 order = 1
 
-# Hooks React partagés — peuvent consommer engines et domain, jamais app.
-[[layers]]
-name = "hooks"
-paths = ["src/hooks/*"]
-order = 1
+# Note : src/orchestration/* (NexusEventBus + handlers/saga) est délibérément
+# NON classé en couche. Le bus est bidirectionnellement couplé aux piliers
+# (les modules émettent ; les handlers rappellent les services de module) —
+# aucun ordre strict ne le décrit sans créer de fausse violation. Voir ARCHITECTURE.md §3.
 
-# Composants UI — présentation pure, pas de logique métier.
+# Composants UI partagés (Empire Design System) — présentation, pas de métier.
 [[layers]]
 name = "ui-components"
-paths = ["src/components/*"]
+paths = ["src/design/*"]
 order = 1
-
-# Infrastructure : adapters concrets (FinancialNexusBridge, FiscalAdapter...).
-[[layers]]
-name = "infrastructure"
-paths = ["src/infrastructure/*"]
-order = 2
 
 # Configuration (instance config, navigation, defaults) — lecture seule, pas de logique.
 [[layers]]
@@ -92,20 +92,28 @@ name = "config"
 paths = ["src/config/*"]
 order = 2
 
-# Couche Nexus runtime + barrières (SovereignGuard, NexusInterceptor, NexusBridge).
+# Adapters concrets côté lib (FirestoreAdapter, POSAdapter, MasterBridge...).
+# Order 3 = pair de nexus-core : la racine de composition (kernel/adapter) câble
+# légitimement ces adapters concrets au boot. La direction descendante interdite
+# (adapters → piliers/routes) reste gardée par le groupe [8].
+[[layers]]
+name = "infrastructure"
+paths = ["src/lib/adapters/*"]
+order = 3
+
+# Couche Nexus runtime + barrières (NexusAdapter, NexusInterceptor, SovereignGuard...).
 [[layers]]
 name = "nexus-core"
 paths = [
-  "src/lib/nexus/*",
+  "src/kernel/adapter/*",
   "src/lib/NexusSyncService*",
-  "src/lib/NexusBridge*",
   "src/lib/offline/*",
-  "src/shared/nexus/guards/*",
-  "src/shared/nexus/state/*",
-  "src/shared/nexus/engines/*",
-  "src/shared/nexus/components/*",
-  "src/shared/nexus/telemetry/*",
-  "src/shared/nexus/tokens/*",
+  "src/kernel/nexus/guards/*",
+  "src/kernel/nexus/state/*",
+  "src/kernel/nexus/engines/*",
+  "src/kernel/nexus/components/*",
+  "src/kernel/nexus/telemetry/*",
+  "src/kernel/nexus/tokens/*",
 ]
 order = 3
 
@@ -123,27 +131,23 @@ name = "state"
 paths = ["src/store/*"]
 order = 3
 
-# Contrats d'accès données (interfaces runtime Nexus, types partagés).
+# Contrats d'accès données (interfaces runtime Nexus, contrat souverain, génome).
 [[layers]]
 name = "nexus-contracts"
-paths = ["src/shared/nexus/contracts/*"]
+paths = ["src/kernel/nexus/contracts/*"]
 order = 4
 
-# Socle domaine — schémas Zod, services purs, types branded.
+# Socle domaine — schémas Zod partagés, primitives, types branded.
 # Le plus profond : rien ne peut descendre ici sauf les primitives.
 [[layers]]
 name = "domain"
-paths = [
-  "src/domain/*",
-  "src/shared/nexus-contract.ts",
-  "src/shared/genome.types.ts",
-]
+paths = ["src/shared/schemas/*"]
 order = 5
 
 # Primitives absolues — microunits, types branded (ne dépendent de RIEN).
 [[layers]]
 name = "primitives"
-paths = ["src/domain/schemas/primitives*"]
+paths = ["src/shared/schemas/primitives*"]
 order = 6
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -154,12 +158,12 @@ order = 6
 
 [[boundaries]]
 from = "src/modules/*"
-to = "src/infrastructure/adapters/FirestoreAdapter*"
+to = "src/lib/adapters/FirestoreAdapter*"
 reason = "Les piliers ne touchent pas Firestore en direct — passer par Nexus/SovereignGuard"
 
 [[boundaries]]
 from = "src/app/*"
-to = "src/infrastructure/adapters/FirestoreAdapter*"
+to = "src/lib/adapters/FirestoreAdapter*"
 reason = "Les routes ne dépendent pas des adapters Firestore concrets"
 
 [[boundaries]]
@@ -209,11 +213,6 @@ from = "src/store/pillars/*"
 to = "src/modules/human/index*"
 reason = "store/pillars → atoms source directement, jamais barrel human"
 
-[[boundaries]]
-from = "src/store/pillars/*"
-to = "src/engines/*/index*"
-reason = "store/pillars n'importe pas les barrels d'engines — risque TDZ SSR identique"
-
 # ────────────────────────────────────────────────────────────────────────────
 # [5] MATRICE PILIERS — isolation complète inter-piliers
 # Le couplage légitime entre piliers passe TOUJOURS par `modules/<pilier>/index.ts` uniquement.
@@ -224,7 +223,7 @@ reason = "store/pillars n'importe pas les barrels d'engines — risque TDZ SSR i
 [[boundaries]]
 from = "src/modules/ops/*"
 to = "src/modules/finance/*"
-reason = "Ops → Finance : passer par FinancialNexusBridge (infrastructure)"
+reason = "Ops → Finance : passer par FinancialNexusBridge"
 
 [[boundaries]]
 from = "src/modules/ops/*"
@@ -402,44 +401,39 @@ from = "src/modules/intelligence/*"
 to = "src/modules/compliance/*"
 reason = "Intelligence accède aux données via NexusAdapter, jamais par import direct de Compliance"
 
-# --- KDS : déplacé sous src/modules/ops/kds/ (sous-module, plus un pilier autonome)
-#     → son isolation est désormais couverte par les règles OPS ci-dessus (src/modules/ops/*). ---
+# Note : KDS est un sous-module de src/modules/ops/production/kds/ — son isolation
+# est couverte par les règles OPS ci-dessus (src/modules/ops/*).
 
 # ────────────────────────────────────────────────────────────────────────────
 # [6] PURÉTÉ DU DOMAINE
-# Les schémas Zod et types branded ne remontent JAMAIS vers app, lib ou modules.
-# Ils sont consommés, jamais consommateurs.
+# Les schémas Zod partagés et types branded ne remontent JAMAIS vers app, lib,
+# modules ou kernel. Ils sont consommés, jamais consommateurs.
 # ────────────────────────────────────────────────────────────────────────────
 
 [[boundaries]]
-from = "src/domain/*"
-to = "src/infrastructure/*"
-reason = "Les schémas Zod ne dépendent d'aucune infrastructure"
+from = "src/shared/schemas/*"
+to = "src/lib/adapters/*"
+reason = "Les schémas Zod ne dépendent d'aucun adapter"
 
 [[boundaries]]
-from = "src/domain/*"
+from = "src/shared/schemas/*"
 to = "src/modules/*"
 reason = "Le domaine ne dépend pas des piliers"
 
 [[boundaries]]
-from = "src/domain/*"
+from = "src/shared/schemas/*"
 to = "src/lib/*"
 reason = "Le domaine ne dépend pas de lib (logger, nexus, firebase...)"
 
 [[boundaries]]
-from = "src/domain/*"
+from = "src/shared/schemas/*"
 to = "src/app/*"
 reason = "Le domaine ne dépend pas des routes"
 
 [[boundaries]]
-from = "src/domain/*"
-to = "src/engines/*"
-reason = "Le domaine ne dépend pas des engines"
-
-[[boundaries]]
-from = "src/domain/*"
-to = "src/hooks/*"
-reason = "Le domaine ne dépend pas des hooks React"
+from = "src/shared/schemas/*"
+to = "src/kernel/*"
+reason = "Le domaine ne dépend pas du kernel (runtime Nexus)"
 
 # ────────────────────────────────────────────────────────────────────────────
 # [7] SÉGRÉGATION DES ROUTES
@@ -463,14 +457,14 @@ reason = "Les routes admin ne peuvent pas importer des composants client — iso
 # ────────────────────────────────────────────────────────────────────────────
 
 [[boundaries]]
-from = "src/infrastructure/*"
+from = "src/lib/adapters/*"
 to = "src/modules/*"
-reason = "Les adapters infrastructure (FinancialNexusBridge...) n'importent pas les piliers — sens unique"
+reason = "Les adapters (FirestoreAdapter, POSAdapter...) n'importent pas les piliers — sens unique"
 
 [[boundaries]]
-from = "src/infrastructure/*"
+from = "src/lib/adapters/*"
 to = "src/app/*"
-reason = "Les adapters infrastructure n'importent pas les routes Next.js"
+reason = "Les adapters n'importent pas les routes Next.js"
 
 # ────────────────────────────────────────────────────────────────────────────
 # [9] GUARDS D'ACCÈS — adminAuthGuard réservé aux routes /api/admin
@@ -479,12 +473,12 @@ reason = "Les adapters infrastructure n'importent pas les routes Next.js"
 
 [[boundaries]]
 from = "src/app/(client)/*"
-to = "src/shared/nexus/guards/admin/*"
+to = "src/kernel/nexus/guards/admin/*"
 reason = "Les routes client n'utilisent pas les guards admin MCC"
 
 [[boundaries]]
 from = "src/modules/*"
-to = "src/shared/nexus/guards/admin/*"
+to = "src/kernel/nexus/guards/admin/*"
 reason = "Les piliers n'utilisent pas les guards admin — réservés à src/app/(admin)/ et src/app/api/admin/"
 
 [[boundaries]]
@@ -506,4 +500,3 @@ reason = "Un module n'exporte que ce que son index.ts expose."
 from = "src/app/*"
 to = "src/modules/*/*"
 reason = "Les routes n'importent que le barrel des modules."
-
