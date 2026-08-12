@@ -40,7 +40,7 @@ export async function initPillarSyncs(
     (shouldEagerLoad(imp.stocks) || shouldEagerLoad(imp.categories) || shouldEagerLoad(imp.products))
                                     ? SyncStocks.init(tenantId, store, variant) : Promise.resolve(),
     shouldEagerLoad(imp.finance)    ? SyncFinance.init(tenantId, store)   : Promise.resolve(),
-    shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store)     : Promise.resolve(),
+    shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store, variant) : Promise.resolve(),
     shouldEagerLoad(imp.marketing)  ? SyncMarketing.init(tenantId, store) : Promise.resolve(),
     shouldEagerLoad(imp.staff)      ? SyncStaff.init(tenantId, store)     : Promise.resolve(),
   ]);

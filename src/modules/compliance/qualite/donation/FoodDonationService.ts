@@ -3,6 +3,13 @@ import { FoodDonationSchema, type FoodDonation } from '../../domain/schemas/food
 import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/shared/schemas/primitives';
 
+/**
+ * 🍽️ §8.6 Vague 1 — **Service culinaire fondationnel** (loi Garot / dons alimentaires).
+ * Ne monte que pour les verticales `usesCulinaryStock(variant)` — la surface UI
+ * est gatée par `capabilities.mod_haccp` dans le DNA (`salon/garage/retail non-food
+ * /clinic = false`). Ce fichier ne re-vérifie pas le variant : ses appelants sont
+ * déjà filtrés en amont. Aucun call site non-culinaire connu.
+ */
 export const FoodDonationService = {
     async record(
         tenantId: string,

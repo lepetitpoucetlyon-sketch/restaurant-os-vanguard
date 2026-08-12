@@ -1,6 +1,13 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Microunits } from '@/shared/schemas/primitives';
 
+/**
+ * 🍽️ §8.6 Vague 1 — **Service culinaire fondationnel** (Boston Matrix restaurant).
+ * Classifie les plats star/plow-horse/puzzle/dog selon volume × marge.
+ * Surface UI gatée par `capabilities.mod_pos` + route `/menu-engineering`
+ * absente des DNAs `salon/garage/retail non-food/clinic`. Sémantique inhérente
+ * culinaire — pas de généralisation prévue hors verticales `usesCulinaryStock`.
+ */
 export type MenuItemCategory = 'star' | 'plow-horse' | 'puzzle' | 'dog';
 
 export interface IMenuEngineeringItem {
