@@ -7,6 +7,7 @@
 export * from './Cart';
 export * from './CashCounterModal';
 export * from './CashDrawerModal';
+export * from './InvoiceRequestModal';
 export * from './CategoryList';
 export * from './CourseManager';
 export * from './ModifierModal';

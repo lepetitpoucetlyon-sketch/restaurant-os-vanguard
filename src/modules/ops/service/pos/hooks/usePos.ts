@@ -61,6 +61,8 @@ export function usePOSController() {
     const [tipInMicrounits, setTipInMicrounits] = useState<number>(0);
     const [consumptionMode, setConsumptionMode] = useState<ConsumptionMode>('dine_in');
     const [partialPayments, setPartialPayments] = useState<{ amount: number; guest: number; method?: string }[]>([]);
+    const [isInvoiceRequestOpen, setIsInvoiceRequestOpen] = useState(false);
+    const [invoiceRequestData, setInvoiceRequestData] = useState<{ customerName: string; customerSiret: string; customerAddress?: string } | null>(null);
 
     const isLoading = productsLoading || categoriesLoading;
     const resolvedTables = tables ?? [];
@@ -81,6 +83,7 @@ export function usePOSController() {
     const cartCount = useMemo(() => cartItems.reduce((sum, item) => sum + item.quantity, 0), [cartItems]);
 
     const cartTvaInCents = useMemo(() => computeCartTva(cartItems), [cartItems]);
+    const cartHTInMicrounits = useMemo(() => cartTotal - cartTvaInCents * 10_000, [cartTotal, cartTvaInCents]);
 
     // Sync vers activeCartAtom pour posCartCountSelector / posCartTotalSelector
     useEffect(() => {
@@ -180,22 +183,22 @@ export function usePOSController() {
                 tenantId: activeTenantId ?? "restaurant-os",
                 consumptionMode,
                 partialPayments: partials,
-                // §7.4 — le client paie `cartGrandTotal` (panier + pourboire, cf. l. 79).
-                // Sans cette ligne, la chaîne fiscale ne scellait que le panier.
                 tipInMicrounits,
+                invoiceRequest: invoiceRequestData ?? undefined,
             });
             showToast(`Table ${currentTable.number} — ${label} & scellé NF525`, "success");
             handleClearCart();
             setSelectedTableId(null);
             setIsPaymentOpen(false);
             setIsSplitOpen(false);
+            setInvoiceRequestData(null);
             if (opts?.split) setPartialPayments([]);
             await updateTable(currentTable.id, { status: "dirty" });
         } catch (error) {
             logger.error('[POS] Fiscal signature failed', error, { context: 'NF525' });
             showToast("Transaction Échouée", "error");
         }
-    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, tipInMicrounits, handleClearCart, updateTable, showToast]);
+    }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, tipInMicrounits, invoiceRequestData, handleClearCart, updateTable, showToast]);
 
     const handlePaymentComplete = useCallback(() => finalizePayment(), [finalizePayment]);
 
@@ -253,6 +256,11 @@ export function usePOSController() {
         cartGrandTotal,
         cartCount,
         cartTvaInCents,
+        cartHTInMicrounits,
+
+        // Invoice request
+        isInvoiceRequestOpen, setIsInvoiceRequestOpen,
+        invoiceRequestData, setInvoiceRequestData,
 
         // Actions
         handleAddToCart,

@@ -26,6 +26,7 @@ const PinModal = dynamic(() => import("@modules/ops").then(m => m.PinModal), { l
 const VoidModal = dynamic(() => import("@modules/ops").then(m => m.VoidModal), { loading: () => <POSModalSkeleton /> });
 const CourseManager = dynamic(() => import("@modules/ops").then(m => m.CourseManager), { loading: () => <POSModalSkeleton /> });
 const TipPanel = dynamic(() => import("@modules/ops").then(m => m.TipPanel), { loading: () => <POSModalSkeleton /> });
+const InvoiceRequestModal = dynamic(() => import("@modules/ops").then(m => m.InvoiceRequestModal), { loading: () => <POSModalSkeleton /> });
 
 import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
@@ -55,7 +56,8 @@ function POSPage() {
         isMobileCartOpen, setIsMobileCartOpen,
         isPaymentOpen, setIsPaymentOpen,
         isSplitOpen, setIsSplitOpen,
-        cartItems, cartTotal, cartGrandTotal, cartCount, cartTvaInCents,
+        cartItems, cartTotal, cartGrandTotal, cartCount, cartTvaInCents, cartHTInMicrounits,
+        isInvoiceRequestOpen, setIsInvoiceRequestOpen, invoiceRequestData, setInvoiceRequestData,
         currentTable,
         handleAddToCart,
         handleUpdateQuantity, handleClearCart,
@@ -270,7 +272,8 @@ function POSPage() {
                 onToggleDoggyBag={handleToggleDoggyBag}
             />
 
-            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInCents={cartTvaInCents} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
+            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInCents={cartTvaInCents} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} totalHTInMicrounits={cartHTInMicrounits} hasInvoiceRequest={!!invoiceRequestData} onRequestInvoice={() => setIsInvoiceRequestOpen(true)} />
+            <InvoiceRequestModal isOpen={isInvoiceRequestOpen} onClose={() => setIsInvoiceRequestOpen(false)} onSubmit={(data) => { setInvoiceRequestData(data); setIsInvoiceRequestOpen(false); }} totalHTInMicrounits={cartHTInMicrounits} isRequired={cartHTInMicrounits >= 150_000_000} />
             <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)} onSplitComplete={handleSplitComplete} />
             <PinModal isOpen={pendingAction !== null} title={pinModalTitle} onConfirm={handlePinConfirm} onClose={handlePinClose} error={pinError} />
             <CashDrawerModal isOpen={isCashDrawerOpen} onClose={() => setIsCashDrawerOpen(false)} tenantId={activeTenantId ?? ""} userId={posUser?.id ?? "unknown"} />

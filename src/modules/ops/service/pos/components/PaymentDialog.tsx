@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight, AlertCircle, Terminal } from "lucide-react";
+import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight, AlertCircle, Terminal, FileText } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks";
@@ -19,6 +19,12 @@ interface PaymentDialogProps {
     orderId?: string;
     onClose: () => void;
     onPaymentComplete: () => Promise<string | void>;
+    /** Montant HT en microunits — pour alerte seuil 150€ */
+    totalHTInMicrounits?: number;
+    /** true si le client a demandé une facture pro */
+    hasInvoiceRequest?: boolean;
+    /** Ouvre la modale de demande de facture */
+    onRequestInvoice?: () => void;
 }
 
 type PaymentMethod = "card" | "cash" | "mobile";
@@ -29,7 +35,9 @@ function applyHashIfPresent(hash: string | void, setCertifiedHash: (h: string) =
     if (hash) setCertifiedHash(hash);
 }
 
-export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onPaymentComplete }: PaymentDialogProps) {
+const INVOICE_THRESHOLD_HT_MU = 150_000_000;
+
+export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onPaymentComplete, totalHTInMicrounits, hasInvoiceRequest, onRequestInvoice }: PaymentDialogProps) {
     const [method, setMethod] = useState<PaymentMethod | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -206,15 +214,50 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                         </div>
 
                         {/* Amount */}
-                        <div className="bg-bg-tertiary/40 border-y border-border/50 px-10 md:px-14 py-8 md:py-10 flex items-center justify-between shrink-0">
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
-                                <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
-                            </div>
-                            {tvaInCents !== undefined && (
+                        <div className="bg-bg-tertiary/40 border-y border-border/50 px-10 md:px-14 py-8 md:py-10 shrink-0">
+                            <div className="flex items-center justify-between">
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
-                                    <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
+                                    <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
+                                </div>
+                                {tvaInCents !== undefined && (
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
+                                        <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {totalHTInMicrounits != null && totalHTInMicrounits >= INVOICE_THRESHOLD_HT_MU && !hasInvoiceRequest && (
+                                <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3">
+                                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                                    <p className="text-[10px] text-amber-600 font-medium flex-1">
+                                        Montant HT &gt; 150 € — facture obligatoire si note de frais professionnelle
+                                    </p>
+                                    {onRequestInvoice && (
+                                        <button onClick={onRequestInvoice} className="px-3 py-1.5 bg-amber-500/20 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-lg hover:bg-amber-500/30 transition shrink-0">
+                                            Facturer
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+
+                            {!hasInvoiceRequest && onRequestInvoice && (totalHTInMicrounits == null || totalHTInMicrounits < INVOICE_THRESHOLD_HT_MU) && (
+                                <button
+                                    onClick={onRequestInvoice}
+                                    className="mt-4 w-full flex items-center justify-center gap-2 py-2 px-4 bg-surface-sidebar/40 border border-border/30 rounded-xl text-[10px] font-bold uppercase tracking-wider text-text-muted hover:bg-surface-sidebar/60 hover:text-text-primary transition"
+                                >
+                                    <FileText className="w-3.5 h-3.5" />
+                                    Le client demande une facture
+                                </button>
+                            )}
+
+                            {hasInvoiceRequest && (
+                                <div className="mt-4 p-3 bg-accent-gold/10 border border-accent-gold/20 rounded-xl flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-accent-gold" />
+                                    <p className="text-[10px] text-accent-gold font-bold uppercase tracking-wider">
+                                        Facture professionnelle demandée
+                                    </p>
                                 </div>
                             )}
                         </div>

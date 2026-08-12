@@ -26,16 +26,16 @@ export interface PaymentContext {
     tenantId: string;
     consumptionMode: ConsumptionMode;
     partialPayments?: { amount: number; guest: number; method?: string }[];
-    /**
-     * Pourboire encaissé au terminal, en microunits (§7.4).
-     * Doit être transmis au bridge : le client paie `panier + pourboire`,
-     * la chaîne fiscale doit sceller le même montant.
-     */
     tipInMicrounits?: number;
+    invoiceRequest?: {
+        customerName: string;
+        customerSiret: string;
+        customerAddress?: string;
+    };
 }
 
 export async function processPayment(ctx: PaymentContext): Promise<void> {
-    await FinancialNexusBridge.processOrder({
+    const result = await FinancialNexusBridge.processOrder({
         cartItems: ctx.cartItems,
         operatorId: ctx.operatorId,
         tableId: ctx.tableId,
@@ -44,6 +44,19 @@ export async function processPayment(ctx: PaymentContext): Promise<void> {
         partialPayments: ctx.partialPayments,
         tipInMicrounits: ctx.tipInMicrounits,
     });
+
+    if (ctx.invoiceRequest) {
+        const { InvoiceService } = await import(
+            "@/modules/finance/comptabilite/billing/domain/InvoiceService"
+        );
+        await InvoiceService.generateFromTicket({
+            tenantId: ctx.tenantId,
+            journalEntry: result.journalEntry,
+            customerName: ctx.invoiceRequest.customerName,
+            customerSiret: ctx.invoiceRequest.customerSiret,
+            customerAddress: ctx.invoiceRequest.customerAddress,
+        });
+    }
 }
 
 // ── Kitchen order submission ───────────────────────────────────────────────────
