@@ -1,5 +1,5 @@
 import type { INexusAdapter, INexusBatch, INexusTransaction, NexusContext, INexusQueryOptions } from '@/lib/nexus/types';
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from '@nexus/contracts/nexus-contract';
 
 /**
  * 🛰️ SqliteMemoryAdapter — Universal DB Engine Adapter (Agnostic Document & SQL)

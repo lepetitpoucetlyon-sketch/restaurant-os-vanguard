@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from 'react';
 import type { EmpireInstance, FleetInsight, IntelligenceConfig } from '@nexus/contracts';
-import type { SovereignNode, SovereignData } from '@/shared/nexus-contract';
+import type { SovereignNode, SovereignData } from '@nexus/contracts/nexus-contract';
 import type { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 export function useNexusFleetLogic(): NexusFleetState {

@@ -2,7 +2,7 @@
 
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { toError } from '@/lib/toError';
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from '@nexus/contracts/nexus-contract';
 
 import { createSafeAction } from "@/lib/server/actionWrapper";
 import { z } from "zod";

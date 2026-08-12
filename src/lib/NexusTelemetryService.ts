@@ -5,7 +5,7 @@
  * Grade VI - Certified Reliability.
  */
 
-import { TelemetryPulse } from "@shared/nexus-contract";
+import { TelemetryPulse } from "@nexus/contracts/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetryService";

@@ -31,7 +31,7 @@ export class QuoteEngine {
     logger.info(`[QuoteEngine] Generating new quote for ${rawData.customerName}`);
 
     return await NexusTransaction.run(
-      { QUOTE_GENERATION: { schema: QuoteSchema as unknown as import("zod").ZodSchema<import("@/shared/nexus-contract").SovereignValue>, data: rawData } },
+      { QUOTE_GENERATION: { schema: QuoteSchema as unknown as import("zod").ZodSchema<import("@nexus/contracts/nexus-contract").SovereignValue>, data: rawData } },
       async (transaction) => {
         const tenantPath = Nexus.getTenantPath(this.COLLECTION);
         const quoteId = Math.random().toString(36).substring(2, 12) + Math.random().toString(36).substring(2, 12);

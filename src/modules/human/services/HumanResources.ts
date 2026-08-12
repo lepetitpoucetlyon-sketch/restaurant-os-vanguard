@@ -1,6 +1,6 @@
 import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/modules/human";
 import { format, addDays, isSameDay } from 'date-fns';
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@nexus/contracts/nexus-contract";
 
 /** Scheduled shift reference used for punctuality scoring */
 interface ScheduledShiftRef {

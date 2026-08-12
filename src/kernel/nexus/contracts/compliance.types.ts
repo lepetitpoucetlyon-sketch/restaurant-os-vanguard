@@ -1,4 +1,4 @@
-import { SovereignField } from '@/shared/nexus-contract';
+import { SovereignField } from '@nexus/contracts/nexus-contract';
 
 /**
  * 🏛️ COMPLIANCE & QUALITY CONTRACTS - Grade X

@@ -73,7 +73,7 @@ export class PeriodClosureService {
             totalExpense,
             tvaCollected,
             transactionCount: entries.length,
-        } as import("@/shared/nexus-contract").SovereignData);
+        } as import("@nexus/contracts/nexus-contract").SovereignData);
 
         const hash = await CryptoService.generateHash(dataSnapshot, previousHash);
 

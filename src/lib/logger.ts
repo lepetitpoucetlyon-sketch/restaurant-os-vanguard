@@ -66,7 +66,7 @@ export const logger = {
     /**
      * Error log - Errors and exceptions, visible in all environments
      */
-    error: (message: string, error?: unknown, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
+    error: (message: string, error?: unknown, ...args: import("@nexus/contracts/nexus-contract").SovereignValue[]): void => {
         console.error(formatMessage('error', message), error, ...args);
     },
 

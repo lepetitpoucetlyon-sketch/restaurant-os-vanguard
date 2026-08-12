@@ -11,10 +11,10 @@ import { empireAudit } from '@/lib/audit';
 import { hashPin } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 
-async function buildUserPatch(data: Partial<User>, userId: string): Promise<import('@/shared/nexus-contract').SovereignData> {
-    const patch: import('@/shared/nexus-contract').SovereignData = {};
+async function buildUserPatch(data: Partial<User>, userId: string): Promise<import('@nexus/contracts/nexus-contract').SovereignData> {
+    const patch: import('@nexus/contracts/nexus-contract').SovereignData = {};
     for (const [key, value] of Object.entries(data)) {
-        if (value !== undefined) patch[key] = value as import('@/shared/nexus-contract').SovereignField;
+        if (value !== undefined) patch[key] = value as import('@nexus/contracts/nexus-contract').SovereignField;
     }
     if (typeof data.pin === 'string' && data.pin.trim()) {
         patch.pinHash = await hashPin(data.pin.trim(), userId);

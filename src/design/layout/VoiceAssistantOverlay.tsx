@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@nexus/contracts/nexus-contract";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, History, X, Maximize2, Minimize2, AlertTriangle, Minus, Bot } from 'lucide-react';

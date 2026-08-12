@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { Atom } from 'jotai';
 import { useAtomValue } from 'jotai';
-import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
+import { OperationalIdentity, SovereignNode } from '@nexus/contracts/nexus-contract';
 import { NexusNode } from '@/store/base';
 import { SovereignMath } from '@lib/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -100,7 +100,7 @@ export const createSovereignHook = <T,>(
             action: 'CREATE',
             collection: path,
             targetId: (payload as Record<string, unknown>).id as string || crypto.randomUUID(),
-            payload: payload as import('@/shared/nexus-contract').SovereignField,
+            payload: payload as import('@nexus/contracts/nexus-contract').SovereignField,
             priority: 0
           });
         } else {
@@ -116,7 +116,7 @@ export const createSovereignHook = <T,>(
             action: 'UPDATE',
             collection: path,
             targetId: id,
-            payload: payload as import('@/shared/nexus-contract').SovereignField,
+            payload: payload as import('@nexus/contracts/nexus-contract').SovereignField,
             priority: 0
           });
         } else {

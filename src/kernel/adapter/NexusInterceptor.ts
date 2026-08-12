@@ -1,5 +1,5 @@
 import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from './types';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@nexus/contracts/nexus-contract';
 import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 import { NexusTelemetryService } from '@nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@nexus/telemetry/types';

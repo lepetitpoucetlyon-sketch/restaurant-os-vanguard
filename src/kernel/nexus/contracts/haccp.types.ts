@@ -2,7 +2,7 @@
  * 🌿 HYGIENE & COMPLIANCE (HACCP) - Shared Kernel
  * Version Grade X - Sovereign Alignment
  */
-import type { SovereignField } from '@/shared/nexus-contract';
+import type { SovereignField } from '@nexus/contracts/nexus-contract';
 
 export interface CleaningTask {
     id: string;

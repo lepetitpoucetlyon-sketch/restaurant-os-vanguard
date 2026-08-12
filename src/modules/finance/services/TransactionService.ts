@@ -6,7 +6,7 @@ import { FiscalEngine, FiscalSeal } from '../fiscalite/FiscalAdapter';
 import { StockEngine } from '@/modules/logistics';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
-import { OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from '@nexus/contracts/nexus-contract';
 import { SovereignMath } from '@/lib/services/SovereignMath';
 
 /**

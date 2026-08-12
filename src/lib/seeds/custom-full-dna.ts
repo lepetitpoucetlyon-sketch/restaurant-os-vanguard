@@ -1,4 +1,4 @@
-import { TenantConfig } from "@shared/nexus-contract";
+import { TenantConfig } from "@nexus/contracts/nexus-contract";
 
 /**
  * 🏢 Custom Vertical — DNA template générique

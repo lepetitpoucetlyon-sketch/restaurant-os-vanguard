@@ -60,7 +60,7 @@ export class NexusPayrollEngine {
         const newPath = `${tenantPath}/${newId}`;
 
         // 4. Generate Final Sealed Entry
-        const seal: FiscalSeal = await FiscalEngine.sealEntry(newId, rawData as Record<string, import("@/shared/nexus-contract").SovereignValue>, { lastSeal: lastSeal || undefined });
+        const seal: FiscalSeal = await FiscalEngine.sealEntry(newId, rawData as Record<string, import("@nexus/contracts/nexus-contract").SovereignValue>, { lastSeal: lastSeal || undefined });
 
         const finalEntry = {
           ...rawData,

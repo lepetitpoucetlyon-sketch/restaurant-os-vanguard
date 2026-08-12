@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue, OperationalIdentity } from '@nexus/contracts/nexus-contract';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { ToolDefinition } from './types';
 

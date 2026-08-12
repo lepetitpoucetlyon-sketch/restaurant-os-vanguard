@@ -3,7 +3,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { IdentityManager } from '@/lib/IdentityManager';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { User } from '@nexus/contracts';
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from '@nexus/contracts/nexus-contract';
 
 import { useAuthSession } from '@/shared/providers/hooks/auth/AuthSession';
 import { useAuthAccess } from '@/shared/providers/hooks/auth/AuthAccess';

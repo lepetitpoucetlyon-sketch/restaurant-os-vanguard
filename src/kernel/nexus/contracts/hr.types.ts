@@ -1,4 +1,4 @@
-import { SovereignNode, SovereignData, SovereignField } from "@/shared/nexus-contract";
+import { SovereignNode, SovereignData, SovereignField } from "@nexus/contracts/nexus-contract";
 
 /**
  * 👥 HUMAN RESOURCES DOMAIN - Shared Kernel

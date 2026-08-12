@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from '@nexus/contracts/nexus-contract';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
 import { TelemetryHook } from '@/modules/intelligence';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ToolDefinition } from './types';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from '@nexus/contracts/nexus-contract';
 
 export const FleetStatusSchema = z.object({
     includeMaintenance: z.boolean().optional().default(false)

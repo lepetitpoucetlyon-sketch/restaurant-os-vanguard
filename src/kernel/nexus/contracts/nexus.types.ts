@@ -1,6 +1,6 @@
 import { User, UserRole, CategoryKey, RolePermissions } from './auth.types';
 import { IntelligenceConfig } from './common.types';
-import { TenantConfig, SovereignData, SovereignNode } from '@/shared/nexus-contract';
+import { TenantConfig, SovereignData, SovereignNode } from '@nexus/contracts/nexus-contract';
 
 import { GlobalSettings, PerformanceGoals } from './settings';
 import { Language } from '@/i18n/translations';

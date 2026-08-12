@@ -1,4 +1,4 @@
-import { SovereignNode } from "@/shared/nexus-contract";
+import { SovereignNode } from "@nexus/contracts/nexus-contract";
 
 export type RegisterDocStatus = 'certified' | 'attention' | 'expired' | 'pending';
 

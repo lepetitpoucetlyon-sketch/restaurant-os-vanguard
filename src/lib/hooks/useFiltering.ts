@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@nexus/contracts/nexus-contract";
 
 
 interface UseFilteringOptions<T> {

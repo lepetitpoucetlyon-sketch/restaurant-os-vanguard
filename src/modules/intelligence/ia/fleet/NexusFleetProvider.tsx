@@ -242,7 +242,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         complianceService: FleetComplianceService,
         haccpBridge: HACCPTelemetryBridge,
         fleet: globalMetrics, 
-        customer: { customers: [] as import('@/shared/nexus-contract').SovereignData[] },
+        customer: { customers: [] as import('@nexus/contracts/nexus-contract').SovereignData[] },
         intelligence: { 
             globalInflationRate,
             setGlobalInflationRate,
@@ -255,7 +255,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
         isTrainingMode: false,
         toggleTrainingMode: () => { logger.debug('[Fleet] Toggling training mode...'); },
         triggerRebalancing: async () => { logger.debug('[Fleet] Triggering rebalancing...'); },
-        nodes: [] as import('@/shared/nexus-contract').SovereignData[],
+        nodes: [] as import('@nexus/contracts/nexus-contract').SovereignData[],
         health: 'stable',
         tutorial: {
             isActive: false,

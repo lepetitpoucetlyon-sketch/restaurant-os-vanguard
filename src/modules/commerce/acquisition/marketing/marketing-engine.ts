@@ -13,7 +13,7 @@ export const MarketingEngine = {
     ] as KeywordStat[],
     
     analyzeSentiment: (_text: string) => 0.8,
-    suggestOptimization: (_profile: import('@/shared/nexus-contract').SovereignData) => 'SEO baseline established.',
+    suggestOptimization: (_profile: import('@nexus/contracts/nexus-contract').SovereignData) => 'SEO baseline established.',
     
     calculateSEOScore: (): SEOScore => ({
         overall: 84,

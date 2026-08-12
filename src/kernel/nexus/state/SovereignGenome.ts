@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
+import { DEFAULT_TENANT_CONFIG } from '@nexus/contracts/nexus-contract';
 import { TenantConfigSchema, type TenantConfig } from '@nexus/contracts';
 import { UserSchema, type User } from '@nexus/contracts';
 import { EmpireInstance } from '@nexus/contracts/empire.types';

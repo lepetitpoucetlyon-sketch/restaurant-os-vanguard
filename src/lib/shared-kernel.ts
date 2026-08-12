@@ -4,7 +4,7 @@
  */
 
 import { IdGenerator } from './utils/IdGenerator';
-import type { SovereignData, SovereignSchemaField, SovereignField } from '@/shared/nexus-contract';
+import type { SovereignData, SovereignSchemaField, SovereignField } from '@nexus/contracts/nexus-contract';
 import { toSovereignData } from "@/lib/toSovereignData";
 
 export const SharedKernel = {

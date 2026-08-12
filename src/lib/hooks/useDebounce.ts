@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { SovereignValue } from "@shared/nexus-contract";
+import { SovereignValue } from "@nexus/contracts/nexus-contract";
 
 
 interface UseDebounceOptions {

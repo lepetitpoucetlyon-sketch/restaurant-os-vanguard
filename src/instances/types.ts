@@ -1,5 +1,5 @@
-import { TenantConfig as SharedTenantConfig } from '@/shared/nexus-contract';
+import { TenantConfig as SharedTenantConfig } from '@nexus/contracts/nexus-contract';
 
-export type { TenantFirebaseConfig } from '@/shared/nexus-contract';
+export type { TenantFirebaseConfig } from '@nexus/contracts/nexus-contract';
 
 export type TenantConfig = SharedTenantConfig;

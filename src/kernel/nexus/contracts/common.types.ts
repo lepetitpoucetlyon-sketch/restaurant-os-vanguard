@@ -6,7 +6,7 @@
 // NOTIFICATIONS
 // ============================================
 
-import { SovereignNode, SovereignField, SovereignData } from '@/shared/nexus-contract';
+import { SovereignNode, SovereignField, SovereignData } from '@nexus/contracts/nexus-contract';
 // Imports redirigés vers les sources canoniques pour casser le cycle
 // common.types <-> nexus-internal-mapper (détecté par sentrux). La surface
 // publique (re-export ci-dessous) reste identique.

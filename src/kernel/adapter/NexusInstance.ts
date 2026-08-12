@@ -1,4 +1,4 @@
-import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+import { SovereignValue, SovereignData } from '@nexus/contracts/nexus-contract';
 import { NexusTimestamp } from '@nexus/contracts/infrastructure/storage.contracts';
 
 export type NexusQueryOperator = 

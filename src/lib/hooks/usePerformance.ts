@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useMemo, useEffect, useLayoutEffect } from "react";
-import { SovereignValue } from "@shared/nexus-contract";
+import { SovereignValue } from "@nexus/contracts/nexus-contract";
 
 /**
  * Hook to memoize a callback with stable dependencies.

@@ -10,7 +10,7 @@ import { GlassInput } from '@design/atomic/GlassInput';
 import { fadeInUp, staggerContainer } from '@/design/utils/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { SovereignData, SovereignValue, SovereignField } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue, SovereignField } from '@nexus/contracts/nexus-contract';
 import { GlobalSettings } from '@nexus/contracts/settings';
 
 
@@ -79,7 +79,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
             // Pour l'instant on se concentre sur le sync
             
             // 2. Synchronisation via le Kernel (Assainissement + Persistence)
-            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@/shared/nexus-contract').SovereignSchemaField[]);
+            const sanitizedData = SharedKernel.sync(schemaKey, localData, schema.fields as unknown as import('@nexus/contracts/nexus-contract').SovereignSchemaField[]);
             
             // 3. Mise à jour via le Context (Global State + Firestore)
             await updateConfig(schemaKey, sanitizedData as GlobalSettings[K]);

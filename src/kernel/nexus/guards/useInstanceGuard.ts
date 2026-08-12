@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { AUTH_GENOME } from '@nexus/state/SovereignGenome';
 
 export interface InstanceGuardResult {
-    result: import('@/shared/nexus-contract').SovereignData;
+    result: import('@nexus/contracts/nexus-contract').SovereignData;
     isAuthorized: boolean;
     verdict: 'AUTHORIZED' | 'DENIED' | 'PENDING';
     host: string;

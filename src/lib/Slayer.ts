@@ -83,7 +83,7 @@ export class Slayer {
                                     customer: (legacy as JsonObject).customer || { firstName: 'Legacy', lastName: 'Customer' }
                                 };
 
-                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@/shared/nexus-contract').SovereignMap, { isLegacy: true });
+                                const nexusOrder = await DataDigester.digestOrder(rawOrder as import('@nexus/contracts/nexus-contract').SovereignMap, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
                                 // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)

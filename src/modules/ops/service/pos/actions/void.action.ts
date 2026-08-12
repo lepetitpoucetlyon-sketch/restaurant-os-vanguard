@@ -35,7 +35,7 @@ export const processVoidOrRefundAction = createSafeAction(
                 operatorId,
                 amountInMicrounits: negativeAmountInMicrounits,
                 timestamp:     now,
-            } as import("@/shared/nexus-contract").SovereignData);
+            } as import("@nexus/contracts/nexus-contract").SovereignData);
 
             const { hash, signature, sealId, previousHash } =
                 await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, false);

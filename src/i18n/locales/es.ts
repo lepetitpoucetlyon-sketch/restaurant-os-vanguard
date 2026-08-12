@@ -1,4 +1,4 @@
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@nexus/contracts/nexus-contract';
 
 const es: SovereignData = {
     "nav": {

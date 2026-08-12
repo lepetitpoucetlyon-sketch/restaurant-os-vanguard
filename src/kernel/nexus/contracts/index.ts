@@ -4,7 +4,7 @@
  * Version Grade X - Sovereign Alignment
  */
 
-export type { SovereignField, SovereignNode } from '@/shared/nexus-contract';
+export type { SovereignField, SovereignNode } from './nexus-contract';
 export * from './genome.types';
 
 // --- 🏛️ DOMAIN AUTHORITIES ---
@@ -120,7 +120,7 @@ export { defaultSettings } from './settings.defaults';
 export * from './nexus.types';
 export * from './errors.types';
 export type { GlobalSettings } from './settings';
-export type { SovereignData } from '@/shared/nexus-contract';
+export type { SovereignData } from './nexus-contract';
 export * from './tenant';
 export * from './license';
 export * from './modules';

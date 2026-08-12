@@ -5,7 +5,7 @@
  */
 
 import { Order, OrderItem, FiscalSeal } from "@nexus/contracts";
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@nexus/contracts/nexus-contract";
 import { SovereignMath } from "@/lib/services/SovereignMath";
 import { logger } from "@/lib/logger";
 import { JsonObject } from "@/lib/types/json";

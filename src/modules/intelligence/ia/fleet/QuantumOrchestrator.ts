@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { OrchestratorSignal } from '@/shared/nexus-contract';
+import { OrchestratorSignal } from '@nexus/contracts/nexus-contract';
 
 /**
  * 🎰 QuantumOrchestrator - Empire Fleet Master

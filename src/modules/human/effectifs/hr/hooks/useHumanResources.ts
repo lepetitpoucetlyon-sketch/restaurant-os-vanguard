@@ -11,7 +11,7 @@ import {
 } from '../store/staffAtoms';
 import { useNexusMutation } from "@shared/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@nexus/contracts/nexus-contract';
 import { JsonObject } from "@/lib/types/json";
 import { toSovereignData } from "@/lib/toSovereignData";
 

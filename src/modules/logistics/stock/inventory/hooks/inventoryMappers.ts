@@ -1,4 +1,4 @@
-import { SovereignNode, SovereignField } from "@shared/nexus-contract";
+import { SovereignNode, SovereignField } from "@nexus/contracts/nexus-contract";
 import { Ingredient, IngredientUnit, IngredientCategory } from "@nexus/contracts/logistics";
 
 /**

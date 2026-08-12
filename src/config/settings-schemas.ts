@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from '@nexus/contracts/nexus-contract';
 import { GlobalSettings } from '@nexus/contracts/settings';
 
 

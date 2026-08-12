@@ -286,7 +286,7 @@ export const MacroBrain = {
      * 🧠 ORACLE AUDIT BRIDGE (Industrial Grade)
      * Direct interface for Strategic AI Analysis.
      */
-    async getOracleAudit(prompt: string, context: Record<string, import("@/shared/nexus-contract").SovereignValue>): Promise<string> {
+    async getOracleAudit(prompt: string, context: Record<string, import("@nexus/contracts/nexus-contract").SovereignValue>): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
 
         try {

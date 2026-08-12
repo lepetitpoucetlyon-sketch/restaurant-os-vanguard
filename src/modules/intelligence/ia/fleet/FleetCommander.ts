@@ -42,7 +42,7 @@ export const FleetCommander = {
   /**
    * Generates a sync payload for global configuration push
    */
-  generateGlobalSyncPayload(baseConfig: Record<string, import("@/shared/nexus-contract").SovereignValue>, overrides: Record<string, import("@/shared/nexus-contract").SovereignValue>): Record<string, import("@/shared/nexus-contract").SovereignValue> {
+  generateGlobalSyncPayload(baseConfig: Record<string, import("@nexus/contracts/nexus-contract").SovereignValue>, overrides: Record<string, import("@nexus/contracts/nexus-contract").SovereignValue>): Record<string, import("@nexus/contracts/nexus-contract").SovereignValue> {
     logger.info('FleetCommander: Generating global sync payload', { overrideKeys: Object.keys(overrides) });
     return {
       ...baseConfig,

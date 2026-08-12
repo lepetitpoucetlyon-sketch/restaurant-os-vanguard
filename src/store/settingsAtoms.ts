@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { GlobalSettings, defaultSettings } from '@nexus/contracts';
 import { tenantScopedJSONStorage } from '@/kernel/services/storage/tenantScopedKey';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@nexus/contracts/nexus-contract';
 
 /**
  * GLOBAL SETTINGS ATOMS (GRADE VI)

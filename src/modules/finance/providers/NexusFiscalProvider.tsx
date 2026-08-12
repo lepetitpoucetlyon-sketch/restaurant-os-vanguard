@@ -51,7 +51,7 @@ export interface ComplianceDocument {
     status: 'VALID' | 'EXPIRED' | 'PENDING';
     issuedAt: string;
     expiresAt: string;
-    metadata: Record<string, import("@/shared/nexus-contract").SovereignValue>;
+    metadata: Record<string, import("@nexus/contracts/nexus-contract").SovereignValue>;
 }
 
 export interface NexusFiscalState {

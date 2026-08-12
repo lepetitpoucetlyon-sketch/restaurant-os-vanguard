@@ -35,7 +35,7 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
             permissionsPath,
             async (data) => {
                 if (data) {
-                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@shared/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
+                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@nexus/contracts/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
                     if (data.customRoles) {
                         setCustomRoles(data.customRoles as CustomRole[]);
                     } else {

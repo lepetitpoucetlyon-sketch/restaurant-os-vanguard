@@ -38,7 +38,7 @@ export const AI_PROVIDER_MODELS: Record<AIProvider, AIProviderModel[]> = {
 };
 
 export interface NexusMacro {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@nexus/contracts/nexus-contract').SovereignField | undefined;
     id: string;
     trigger: string;
     instruction: string;
@@ -46,7 +46,7 @@ export interface NexusMacro {
 }
 
 export interface NexusConfig {
-    [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;
+    [key: string]: import('@nexus/contracts/nexus-contract').SovereignField | undefined;
     aiName: string;
     voiceId: GeminiVoiceId;
     personality: 'expert' | 'concise' | 'friendly' | 'protective';

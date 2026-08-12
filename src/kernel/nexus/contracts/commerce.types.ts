@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { SanitizedStringSchema, MicrounitsSchema, UUIDSchema, TaxRateSchema } from '@/shared/schemas/primitives';
-import type { SovereignNode } from '@/shared/nexus-contract';
+import type { SovereignNode } from '@nexus/contracts/nexus-contract';
 
 export const ProductSchema = z.object({
   id:                UUIDSchema,

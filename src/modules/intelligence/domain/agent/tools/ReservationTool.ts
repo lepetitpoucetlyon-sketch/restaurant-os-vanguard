@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Reservation } from '@nexus/contracts';
 import { ToolDefinition } from './types';
-import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
+import { SovereignValue, OperationalIdentity } from '@nexus/contracts/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 

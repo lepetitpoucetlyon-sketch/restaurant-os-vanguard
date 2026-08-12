@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from '@nexus/contracts/nexus-contract';
 import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-internal-mapper';
 import { createSovereignHook } from '../opsCore';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.

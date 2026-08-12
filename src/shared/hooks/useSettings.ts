@@ -48,7 +48,7 @@ export const useSettings = () => {
         return updateConfig(key, data);
     }, [updateConfig]);
 
-    const updateSLM = useCallback(async (data: import('@/shared/nexus-contract').SovereignData) => {
+    const updateSLM = useCallback(async (data: import('@nexus/contracts/nexus-contract').SovereignData) => {
         if (!settings) return;
         return updateSettings({ ...settings, ...data } as GlobalSettings);
     }, [settings, updateSettings]);

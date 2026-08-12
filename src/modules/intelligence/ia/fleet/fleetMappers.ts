@@ -1,5 +1,5 @@
 import { SiteTelemetry, EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from '@nexus/contracts/nexus-contract';
 
 /**
  * 🧮 fleetMappers — fonctions pures extraites de NexusFleetProvider.

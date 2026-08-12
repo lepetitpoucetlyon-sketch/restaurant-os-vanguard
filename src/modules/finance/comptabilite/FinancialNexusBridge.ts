@@ -136,7 +136,7 @@ export const FinancialNexusBridge = {
         totalTTCInMicrounits,
         tvaBreakdown,
         timestamp: now,
-      } as import('@/shared/nexus-contract').SovereignData);
+      } as import('@nexus/contracts/nexus-contract').SovereignData);
 
     // L7 Pattern C: `updatedAt` inclus dans la base — le type inféré a `id: string` explicite,
     // ce qui rend l'objet assignable à `Record<string, unknown> & { id: string }` sans cast.
@@ -289,7 +289,7 @@ export const FinancialNexusBridge = {
         timestamp: now,
         reason,
         extourneFor: original.id,
-      } as import('@/shared/nexus-contract').SovereignData);
+      } as import('@nexus/contracts/nexus-contract').SovereignData);
 
     const buildEntryBase = (pieceNumber: string, status: string) => ({
       id: entryId,

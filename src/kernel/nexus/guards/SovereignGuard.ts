@@ -8,7 +8,7 @@ import type {
     SignedSovereignData,
     SovereignData,
     SovereignWriteSignature,
-} from '@/shared/nexus-contract';
+} from '@nexus/contracts/nexus-contract';
 import { isSystemTenant, isWritable, isFleetVisible } from '@/lib/mcc/SystemTenantRegistry';
 export { isFleetVisible };
 

@@ -52,7 +52,7 @@ export function useStrategicOracle() {
         
         await agent.sendMessage(
             "Analyse l'état global de l'empire à partir des insights fournis. Donne-moi 3 priorités stratégiques immédiates.",
-            context as unknown as import("@/shared/nexus-contract").SovereignMap
+            context as unknown as import("@nexus/contracts/nexus-contract").SovereignMap
         );
     }, [agent, instances, insights]);
 

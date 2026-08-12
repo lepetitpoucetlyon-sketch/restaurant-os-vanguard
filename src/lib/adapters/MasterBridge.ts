@@ -5,7 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
 import { MasterConfig, globalPolicyAtom } from '@nexus/state/SovereignGenome';
 import { CryptoService } from '@/lib/CryptoService';
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from '@nexus/contracts/nexus-contract';
 
 type SignedMasterConfig = MasterConfig & {
   pushedAt: string;

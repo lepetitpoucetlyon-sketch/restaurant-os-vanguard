@@ -1,4 +1,4 @@
-import type { SovereignNode } from '@/shared/nexus-contract';
+import type { SovereignNode } from '@nexus/contracts/nexus-contract';
 import type { Dispatch } from 'react';
 
 export interface Vassal extends SovereignNode {

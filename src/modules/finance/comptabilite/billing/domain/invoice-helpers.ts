@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
 import type { LegalInvoice } from '@nexus/contracts';
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from '@nexus/contracts/nexus-contract';
 
 export const INVOICE_COLLECTION = 'invoices';
 

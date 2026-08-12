@@ -100,7 +100,7 @@ export interface TenantFirebaseConfig {
   [key: string]: string | undefined;
 }
 
-import type { TenantConfig, OrchestratorSignal, TenantTheme } from '@nexus/contracts';
+import type { TenantConfig, OrchestratorSignal, TenantTheme } from './tenant';
 export type { TenantConfig, OrchestratorSignal, TenantTheme };
 
 /**

@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { getAllTenants } from '@/instances';
 
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from '@nexus/contracts/nexus-contract';
 
 export interface SiteIntegrityReport extends SovereignNode {
   tenantId: string;

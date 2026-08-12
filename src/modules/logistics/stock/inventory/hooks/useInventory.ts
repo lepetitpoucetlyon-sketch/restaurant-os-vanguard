@@ -12,7 +12,7 @@ import {
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { wasteLogsNodeAtom } from '@/modules/compliance';
 import { useVisibilityPurge } from "@/lib/hooks/useVisibilityPurge";
-import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
+import { SovereignNode, SovereignData, OperationalIdentity } from "@nexus/contracts/nexus-contract";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";

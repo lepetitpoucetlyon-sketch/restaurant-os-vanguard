@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from '@nexus/contracts/nexus-contract';
 import { logger } from '@/lib/logger';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';
 
