@@ -5,3 +5,4 @@
  */
 
 export * from './InvoiceEngine';
+export * from './InvoiceService';

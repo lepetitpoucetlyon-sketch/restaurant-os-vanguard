@@ -8,6 +8,7 @@ import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate } from '../fiscalite/tax/vatResolver';
 import { inferCategory } from '../fiscalite/tax/vatResolver';
+import { InvoiceService } from './billing/domain/InvoiceService';
 import type { ConsumptionMode } from '@/modules/ops';
 
 import type { PaymentMode, BridgePayload, BridgeResult } from './bridge.types';
@@ -120,7 +121,7 @@ export const FinancialNexusBridge = {
       return { ...item, taxRate, analyticalAxis };
     }) as (import('@/modules/ops').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
 
-    const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
+    const { totalTTCInMicrounits, totalHTInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
     const ttcByRateAndAxis = computeTtcByRateAndAxis(resolvedItems);
 
     const entryId = SharedKernel.generateId('JE');
@@ -240,6 +241,13 @@ export const FinancialNexusBridge = {
       severity: 'low',
       timestamp: new Date(),
     });
+
+    if (!isTrainingMode && InvoiceService.shouldAutoInvoice(totalHTInMicrounits)) {
+      InvoiceService.generateFromTicket({
+        tenantId,
+        journalEntry: finalJournalEntry,
+      }).catch(() => {});
+    }
 
     return { journalEntry: finalJournalEntry, seal };
   },
