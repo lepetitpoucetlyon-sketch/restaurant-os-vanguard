@@ -138,4 +138,12 @@ export interface FINANCEEvents {
   'finance.z_report_requested': { tenantId: string; operatorId: string; requestedAt: string };
   'finance.refund_issued': { tenantId: string; referenceId: string; amountInMicrounits: number; reason: string };
   'finance.invoice_generated': { tenantId: string; invoiceId: string; invoiceNumber: string; totalInMicrounits: number; sourceJournalEntryId: string; customerName: string };
+
+  'finance.bank_synced': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    transactionCount: number;
+    syncedAt: string;
+  };
 }

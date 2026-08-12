@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 import { toError } from "@/lib/toError";
 import { z } from 'zod';
 
@@ -24,12 +25,13 @@ export function registerHaccpCorrectiveActionHandler(): () => void {
       const { tenantId, checkId, correctionDeadline } = payload;
       const deadlineIso = new Date(correctionDeadline).toISOString();
       const actionId = Nexus.adapter.generateId(`tenants/${tenantId}/haccpCorrectiveActions`);
+      const writePath = `tenants/${tenantId}/haccpCorrectiveActions/${actionId}`;
+      assertHandlerTenant('haccp-corrective-action', tenantId, writePath);
 
       try {
         logger.warn(`[HaccpCorrectiveActionHandler] Non-conformité HACCP détectée (Check: ${checkId}). Deadline correction: ${deadlineIso}`);
 
-        // 1. Persister l'action corrective légale
-        await Nexus.adapter.set(`tenants/${tenantId}/haccpCorrectiveActions/${actionId}`, {
+        await Nexus.adapter.set(writePath, {
           id: actionId,
           checkId,
           correctionDeadline: deadlineIso,

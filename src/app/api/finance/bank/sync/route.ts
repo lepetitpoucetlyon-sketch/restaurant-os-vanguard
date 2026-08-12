@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { OpenBankingProviderFactory } from '@/modules/finance';
 import { BankConnectionStore } from '@/modules/finance';
 import { inferPCGAccount } from '@/modules/finance';
@@ -131,6 +132,15 @@ export async function POST(request: NextRequest) {
         await batch.commit();
         if (!provider.isDemoMode()) {
             await BankConnectionStore.markSynced(tenantId);
+        }
+
+        if (created > 0) {
+            await NexusEventBus.emitDurable('finance.bank_synced', {
+                v: 1,
+                tenantId,
+                transactionCount: created,
+                syncedAt: new Date().toISOString(),
+            });
         }
 
         return NextResponse.json({

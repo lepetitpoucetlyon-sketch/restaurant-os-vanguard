@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 type StockItem = {
   quantity?: number;
@@ -14,6 +15,7 @@ export function registerStockAdjustedHandler(): () => void {
     'inventory.stock_adjusted',
     async ({ tenantId, itemId, oldQuantity, newQuantity, reason, adjustedBy }) => {
       const path = `tenants/${tenantId}/stockItems/${itemId}`;
+      assertHandlerTenant('stock-adjusted', tenantId, path);
       const existing = await Nexus.adapter.get<StockItem>(path);
 
       await Nexus.adapter.update(path, {

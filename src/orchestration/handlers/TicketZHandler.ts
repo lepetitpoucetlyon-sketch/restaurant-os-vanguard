@@ -3,6 +3,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 import { FiscalSealer, TaxCalculator } from '@/modules/finance';
 import { CryptoService } from '@/lib/CryptoService';
 import { toSovereignData } from "@/lib/toSovereignData";
@@ -48,6 +49,7 @@ export function registerTicketZHandler(): () => void {
 
       const today = new Date().toISOString().split('T')[0];
       const path = `tenants/${tenantId}/ticketZ/${today}`;
+      assertHandlerTenant('ticket-z', tenantId, path);
 
       await Nexus.adapter.runTransaction(async (tx) => {
         const existing = (await tx.get<TicketZDoc>(path)) ?? {

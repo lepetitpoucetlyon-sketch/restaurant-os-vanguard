@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 import { toError } from "@/lib/toError";
 
 const ANOMALY_THRESHOLD_MICROUNITS = 5_000_000; // 5€ (5 millions de microunités)
@@ -18,11 +19,12 @@ export function registerCashCountReconciliationHandler(): () => void {
       const { tenantId, drawerId, expectedAmountInMicrounits, actualAmountInMicrounits, countedBy } = payload;
       const deltaInMicrounits = actualAmountInMicrounits - expectedAmountInMicrounits;
       const logId = Nexus.adapter.generateId(`tenants/${tenantId}/cashCountLogs`);
+      const writePath = `tenants/${tenantId}/cashCountLogs/${logId}`;
+      assertHandlerTenant('cash-count-reconciliation', tenantId, writePath);
       const timestamp = new Date().toISOString();
 
       try {
-        // 1. Persistance du rapport de réconciliation de caisse
-        await Nexus.adapter.set(`tenants/${tenantId}/cashCountLogs/${logId}`, {
+        await Nexus.adapter.set(writePath, {
           id: logId,
           drawerId,
           expectedAmountInMicrounits,

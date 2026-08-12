@@ -733,6 +733,15 @@ export interface COMMONEvents {
   'marketing.booking.toggled': { tenantId: string; id?: string; status?: string; enabled?: boolean };
 
   // ── HR enrichis ───────────────────────────────────────────────────────────
+  'hr.employee_created': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    employeeId: string;
+    role: string;
+    contractType: string;
+    startDate: string;
+  };
   'hr.overtime_alert': { tenantId: string; employeeId: string; extraMinutes: number };
   'hr.tip_distributed': { tenantId: string; orderId: string; tipInMicrounits: number; staffIds: string[] };
 

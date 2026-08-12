@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 export function registerPhysicalInventoryHandler() {
   return NexusEventBus.on(
@@ -16,8 +17,8 @@ export function registerPhysicalInventoryHandler() {
         const diff = physicalQty - theoreticalQty;
         
         if (diff !== 0) {
-          // Mettre à jour la quantité en base
           const path = `tenants/${tenantId}/stockItems/${itemId}`;
+          assertHandlerTenant('physical-inventory', tenantId, path);
           await Nexus.adapter.update(path, {
             quantity: physicalQty,
             updatedAt: Date.now(),

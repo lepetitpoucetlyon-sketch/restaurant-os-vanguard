@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
@@ -151,6 +152,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     severity: 'medium',
     details: { tenantId, employeeId, dpaeMethod: dpaeResult.method },
     timestamp: new Date(),
+  });
+
+  await NexusEventBus.emitDurable('hr.employee_created', {
+    v: 1,
+    tenantId,
+    employeeId,
+    role: body.role,
+    contractType: body.contractType,
+    startDate: body.startDate,
   });
 
   logger.info(`[HR] Employé ${employeeId} créé — DPAE: ${dpaeResult.method}`);

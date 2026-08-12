@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 /** Ligne d'un bon de commande fournisseur */
 interface PurchaseOrderItem {
@@ -35,8 +36,8 @@ export function registerStockReceptionHandler(): () => void {
       const driftReport: { itemId: string; expected: number; received: number; diff: number }[] = [];
 
       for (const item of items) {
-        // ... (update stock logic)
         const stockPath = `tenants/${tenantId}/stockItems/${item.itemId}`;
+        assertHandlerTenant('stock-reception', tenantId, stockPath);
         const existing = await Nexus.adapter.get<{ quantity?: number; name?: string }>(stockPath);
         const currentQty = existing?.quantity ?? 0;
         const newQty = currentQty + item.quantity;

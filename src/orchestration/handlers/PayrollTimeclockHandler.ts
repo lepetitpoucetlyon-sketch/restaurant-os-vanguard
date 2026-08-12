@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 /**
  * PayrollTimeclockHandler (P1)
@@ -22,6 +23,7 @@ export function registerPayrollTimeclockHandler(): () => void {
     const { tenantId, userId, userName, terminalId, timestamp } = payload;
     const dateStr = timestamp.slice(0, 10);
     const path = `tenants/${tenantId}/timeclock/${dateStr}`;
+    assertHandlerTenant('payroll-timeclock', tenantId, path);
     
     // On génère un ID unique pour le pointage
     const entryId = Nexus.adapter.generateId(path);

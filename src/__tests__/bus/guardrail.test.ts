@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { NexusEventBus, isExpectedUnconsumed } from '@orchestration/NexusEventBus';
+import { assertHandlerTenant, TenantMismatchError } from '@orchestration/guards/assertHandlerTenant';
 import { registerOpsHandlers } from '@orchestration/registerHandlers/ops';
 import { registerFinanceHandlers } from '@orchestration/registerHandlers/finance';
 import { registerLogisticsHandlers } from '@orchestration/registerHandlers/logistics';
@@ -56,5 +57,32 @@ describe('§9.0 Garde-fou bus — couverture des chaînes critiques restaurant',
     'order.proforma_printed',
   ])('« %s » a ≥1 handler enregistré', (event) => {
     expect(NexusEventBus.listenerCount(event as never)).toBeGreaterThan(0);
+  });
+});
+
+describe('§9.2 assertHandlerTenant — barrière cross-tenant dans les handlers', () => {
+  it('laisse passer un path cohérent avec le tenantId', () => {
+    expect(() => assertHandlerTenant('test', 'tenant-A', 'tenants/tenant-A/stockItems/x')).not.toThrow();
+  });
+
+  it('laisse passer un path sans préfixe tenants/ (global)', () => {
+    expect(() => assertHandlerTenant('test', 'tenant-A', 'globalCollection/x')).not.toThrow();
+  });
+
+  it('bloque un path cross-tenant', () => {
+    expect(() => assertHandlerTenant('test', 'tenant-A', 'tenants/tenant-B/stockItems/x'))
+      .toThrow(TenantMismatchError);
+  });
+
+  it('inclut les IDs dans le message d\'erreur', () => {
+    try {
+      assertHandlerTenant('my-handler', 'tenant-A', 'tenants/tenant-B/orders/o1');
+      expect.fail('should have thrown');
+    } catch (err) {
+      expect(err).toBeInstanceOf(TenantMismatchError);
+      expect((err as TenantMismatchError).handlerId).toBe('my-handler');
+      expect((err as TenantMismatchError).payloadTenantId).toBe('tenant-A');
+      expect((err as TenantMismatchError).pathTenantId).toBe('tenant-B');
+    }
   });
 });

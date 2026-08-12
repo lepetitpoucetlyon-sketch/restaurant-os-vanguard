@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 import type { Recipe } from '@nexus/contracts/logistics';
 
 type StockProduct = {
@@ -111,6 +112,7 @@ async function _deductStock(
   label: string,
 ): Promise<void> {
   const path = `tenants/${tenantId}/stockItems/${stockItemId}`;
+  assertHandlerTenant('stock-deduction', tenantId, path);
   const stockItem = await Nexus.adapter.get<StockItem>(path);
   if (!stockItem) return;
 
