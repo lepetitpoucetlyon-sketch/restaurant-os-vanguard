@@ -7,6 +7,61 @@
 >
 > **Statut des chiffres** : mesurés le 2026-08-12 @ `759aba211`, reproductibles (§2).
 > **Périmètre code** : `src/**` hors `*.test.ts`.
+>
+> ⚠️ **LIRE LE §0 EN PREMIER.** Les listes automatiques (§4-§5) contiennent des **faux
+> positifs** : la vérification à la main du câblage restaurant (§0) montre que la verticale
+> est **bien plus câblée** que le scan grep ne le suggère. N'agir que sur le §0 (vérifié).
+
+---
+
+## 0. Verticale restaurant — câblage RÉEL, vérifié à la main (12/08)
+
+> Contre-audit de mes propres listes grep, contre l'**arbre de registration réel**
+> (`registerHandlers/*.ts` = 157 handlers câblés) + lecture du `.on(...)` de chaque handler
+> suspect. **C'est la seule partie de ce document sur laquelle agir sans re-trier.**
+
+**Verdict global** : la trame événementielle restaurant est **largement intacte**. Sur 28 events
+restaurant/transverses que mon scan disait « orphelins », la **grande majorité sont des faux
+positifs** (consommés par un handler enregistré, ou avec un chemin alternatif fonctionnel). Les
+vrais trous se comptent sur les doigts d'une main.
+
+### 0.1 — VRAIS trous restaurant (agir)
+
+| Event / feature | Verdict vérifié | Impact | Prio |
+|---|---|---|---|
+| `inventory.stock_adjusted` | **Vrai orphelin, aucun chemin alt.** Pas dans `registerStock/SupplyHandlers`. UI ajuste/compte → rien écrit. | Perte de données stock | **P0** |
+| `haccp.temperature_logged` | **Orphelin, mais mismatch de nommage** : la chaîne du froid EST câblée via `sensor.temperature_anomaly` (`FridgeTempAlertHandler`) + `haccp.cooling_cycle_logged` (`CoolingCycleHandler`). La route `/api/haccp/log-temp` émet un nom que personne n'écoute. | Route perd la donnée ; le path IoT principal fonctionne | **P1** |
+| `staff.clock_in` / `staff.clock_out` | `PayrollTimeclockHandler` **enregistré** mais **aucun émetteur** (producteur `TimeclockDashboard` disparu/renommé). Le suivi de shift marche via `hr.shift_started` (`ShiftStartedHandler`), mais le pont pointage→paie est rompu. | Pointage ne remonte pas à la paie | **P1** |
+| 3 handlers non-enregistrés (§5bis) | `HaccpCorrectiveActionHandler` (réglementaire), `ProformaHandler`, `SupportEscalationHandler` — écrits, jamais câblés. | Fonctions inertes | **P0/P2** |
+
+### 0.2 — FAUX POSITIFS de mon scan (NE PAS toucher — c'est câblé)
+
+| Mon scan disait « orphelin » | Réalité vérifiée |
+|---|---|
+| `anomaly.detected` | consommé par `AnomalyDetectedHandler` (intelligence) ✅ |
+| `cash_drawer.opened_unauthorized` | consommé par `CashDrawerAnomalyHandler` (ops) ✅ |
+| `commerce.margin_warning` | consommé par `MarginWarningHandler` (logistics-stock) ✅ |
+| `hr.transfer_offer` | consommé par `RainStaffingHandler` (human) ✅ |
+| `finance.refund_issued` | redondant — remboursements journalisés via `order.refunded` (`RefundJournal`+`RefundExtourne`) ✅ |
+| `finance.z_report_requested` | redondant — Z construit via `order.paid` (`TicketZHandler`) ✅ |
+| `kds.ticket_received` | redondant — KDS alimenté via `order.placed` (`KDSOrderHandler`) ✅ |
+
+### 0.3 — Orphelins réels mais NON-bugs (fan-out sans abonné / télémétrie)
+
+- **Classe B** (état persisté avant l'emit, event = extension) : `ops.service_ticket_*` (persistés
+  par `ServiceTicketService` avant emit), `crm.allergen_flagged` (flag persisté d'abord).
+- **Télémétrie/notif basse-priorité** (à documenter, pas à corriger en urgence) : `connectors.*`,
+  `mcc.alert_triggered`, `oracle.query`, `commerce.yield_updated`, `finance.invoice_generated`,
+  `system.alert`, `system.reference_promoted`, `fleet.vehicle_assigned`.
+
+### 0.4 — Le vrai enseignement
+
+Le câblage restaurant **n'est pas « rien en place »** — il est à ~95 %. Ce qui manque, c'est :
+1. **2-3 fils précis** (`inventory.stock_adjusted`, route HACCP mal nommée, pont pointage→paie),
+2. **3 handlers écrits jamais branchés**,
+3. les items « écrire sans émettre » de l'audit promesses (§9 : `bank/sync`, `hr/employees`,
+   confiance `payload.tenantId`),
+4. **et surtout aucun filet** (§1) qui rende ces trous visibles → d'où l'impression de vide.
 
 ---
 
@@ -223,11 +278,13 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
    `inventory.physical` mort.
    → Test : émettre l'event, asserter la quantité en base. + test d'intégration modal→base.
 
-2. **`haccp.temperature_logged` → persistance + seuil.**
-   Brancher un handler (ou déléguer à `HACCPLogService` existant : `iotHistory` immuable +
-   `haccpLogs` + `nonConformities` sur seuil). La route `/api/haccp/log-temp` doit aboutir à
-   un relevé persisté ET à une `haccp.alert` si hors plage. Enjeu NF525/sécurité alimentaire.
-   → Test : POST route → relevé en base + `haccp.alert` émis si temp hors seuil.
+2. **`haccp.temperature_logged` → réconcilier le nommage (P1, cf. §0.1).**
+   La chaîne du froid EST câblée via `sensor.temperature_anomaly` (`FridgeTempAlertHandler`) et
+   `haccp.cooling_cycle_logged` (`CoolingCycleHandler`). Le seul défaut : la route
+   `/api/haccp/log-temp` émet `haccp.temperature_logged` que personne n'écoute. **Fix** : soit la
+   route persiste + émet l'event déjà consommé (`sensor.temperature_anomaly` si hors plage, via
+   `HACCPLogService`), soit brancher un handler sur `haccp.temperature_logged`. Ne PAS reconstruire
+   la machinerie d'alerte : elle existe. → Test : POST route → relevé en base + alerte si hors seuil.
 
 ### P1 — Alertes/observabilité perdues
 
