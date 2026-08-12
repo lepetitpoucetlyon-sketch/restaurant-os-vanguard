@@ -78,7 +78,7 @@ Nexus.adapter = new FirestoreAdapter()
 
 On ne peut donc pas écrire en base sans passer la barrière de souveraineté. C'est le pilier de sécurité du système.
 
-### Adapters disponibles (`src/infrastructure/adapters/`)
+### Adapters disponibles (`src/lib/adapters/`)
 
 - **FirestoreAdapter** (+ `FirestoreBatch`, `FirestoreDocumentStore`) — production.
 - **MockAdapter** — tests / dev.
@@ -197,7 +197,7 @@ Groupes de routes sous `src/app/` (mesuré le 2026-08-12). **Deux familles `(pub
 
 - **39 fichiers de test** (Vitest + Playwright).
 - `src/__tests__/` : `lockdown.test.ts`, `stress/` (ex. `NexusInterceptor.stress.test.ts`), `infrastructure/`.
-- `src/tests/vanguard/` : tests « vanguard » (dont `simulacra.test.ts`), benchmarks.
+- `src/e2e/vanguard/` : tests « vanguard » (dont `simulacra.test.ts`), benchmarks.
 - `tests/` (racine) : `e2e/` (Playwright), `falange/`, `verification/`, `benchmarks/`.
 - **Simulacra** (`src/kernel/adapters/Simulacra/`) : `MonkeyChaos` (chaos/dérive réseau), `RealityGenerator` (génère des rafales de ventes — « rush hour »), `SinfoniaGradeXProof`.
 - Vérifications : `npx tsc --noEmit` (✅ **0 erreur** à ce jour), `npx vitest run`, `./scripts/preflight.sh` (TS + ESLint + tests + **sentrux** depuis cette session).
