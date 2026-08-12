@@ -25,6 +25,12 @@ export interface IVerticalInvoicingAdapter {
   buildInvoiceLines(operationData: Record<string, unknown>): InvoiceLineInput[];
   getDefaultAnalyticalAxis(): string;
   formatInvoiceDescription(operationData: Record<string, unknown>): string;
+  /**
+   * Infère la catégorie fiscale d'un produit à partir de son id/nom.
+   * Retourne la catégorie et le taux TVA applicable.
+   * Permet de sortir la liste de produits restaurant en dur de vatResolver.
+   */
+  inferProductCategory(categoryId: string, productName?: string): { category: string; taxRate: number };
 }
 
 export class RestaurantInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -66,6 +72,14 @@ export class RestaurantInvoicingAdapter implements IVerticalInvoicingAdapter {
     const tableId = data.tableId as string | undefined;
     return `Repas — Table ${tableId ?? 'Emporté'}`;
   }
+
+  inferProductCategory(categoryId: string, productName?: string): { category: string; taxRate: number } {
+    const lower = (categoryId + ' ' + (productName ?? '')).toLowerCase();
+    if (/alcool|vin|bière|cocktail|spiritueux|whisky|rhum|vodka|gin|champagne|prosecco|apéritif/.test(lower)) return { category: 'alcohol', taxRate: 20 };
+    if (/boisson|jus|soda|eau|café|thé|limonade|smoothie/.test(lower)) return { category: 'beverage_soft', taxRate: 10 };
+    if (/service|couverts|supplément/.test(lower)) return { category: 'service', taxRate: 20 };
+    return { category: 'food', taxRate: 10 };
+  }
 }
 
 export class HotelInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -100,6 +114,13 @@ export class HotelInvoicingAdapter implements IVerticalInvoicingAdapter {
   formatInvoiceDescription(data: Record<string, unknown>): string {
     const guestName = data.guestName as string | undefined;
     return `Séjour${guestName ? ` — ${guestName}` : ''}`;
+  }
+
+  inferProductCategory(categoryId: string): { category: string; taxRate: number } {
+    const lower = categoryId.toLowerCase();
+    if (/taxe.*séjour|city.*tax/.test(lower)) return { category: 'city_tax', taxRate: 0 };
+    if (/resto|restaur|food|repas/.test(lower)) return { category: 'restaurant', taxRate: 10 };
+    return { category: 'accommodation', taxRate: 10 };
   }
 }
 
@@ -157,6 +178,13 @@ export class GarageInvoicingAdapter implements IVerticalInvoicingAdapter {
     const vehicleReg = data.vehicleRegistration as string | undefined;
     return `Intervention${vehicleReg ? ` — ${vehicleReg}` : ''}`;
   }
+
+  inferProductCategory(categoryId: string): { category: string; taxRate: number } {
+    const lower = categoryId.toLowerCase();
+    if (/garantie|warranty/.test(lower)) return { category: 'warranty', taxRate: 20 };
+    if (/main.*oeuvre|labor|mano/.test(lower)) return { category: 'labor', taxRate: 20 };
+    return { category: 'parts', taxRate: 20 };
+  }
 }
 
 export class ClinicInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -195,6 +223,12 @@ export class ClinicInvoicingAdapter implements IVerticalInvoicingAdapter {
   formatInvoiceDescription(data: Record<string, unknown>): string {
     return `Soins${(data.patientRef as string) ? ` — Réf. ${data.patientRef}` : ''}`;
   }
+
+  inferProductCategory(categoryId: string): { category: string; taxRate: number } {
+    const lower = categoryId.toLowerCase();
+    if (/esthét|aesthetic|cosmét/.test(lower)) return { category: 'aesthetic', taxRate: 20 };
+    return { category: 'medical_act', taxRate: 0 };
+  }
 }
 
 export class BakeryInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -230,6 +264,12 @@ export class BakeryInvoicingAdapter implements IVerticalInvoicingAdapter {
   getDefaultAnalyticalAxis(): string { return 'Viennoiserie'; }
 
   formatInvoiceDescription(): string { return 'Vente boulangerie'; }
+
+  inferProductCategory(categoryId: string, productName?: string): { category: string; taxRate: number } {
+    const lower = (categoryId + ' ' + (productName ?? '')).toLowerCase();
+    if (/boire|boisson|café|jus/.test(lower)) return { category: 'beverage', taxRate: 5.5 };
+    return { category: 'food', taxRate: 5.5 };
+  }
 }
 
 export class SalonInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -258,6 +298,10 @@ export class SalonInvoicingAdapter implements IVerticalInvoicingAdapter {
   getDefaultAnalyticalAxis(): string { return 'Prestations'; }
 
   formatInvoiceDescription(): string { return 'Prestations salon'; }
+
+  inferProductCategory(): { category: string; taxRate: number } {
+    return { category: 'hair_service', taxRate: 20 };
+  }
 }
 
 export class RetailInvoicingAdapter implements IVerticalInvoicingAdapter {
@@ -288,6 +332,14 @@ export class RetailInvoicingAdapter implements IVerticalInvoicingAdapter {
   getDefaultAnalyticalAxis(): string { return 'Vente'; }
 
   formatInvoiceDescription(): string { return 'Vente en magasin'; }
+
+  inferProductCategory(categoryId: string): { category: string; taxRate: number } {
+    const lower = categoryId.toLowerCase();
+    if (/aliment|food|epicerie/.test(lower)) return { category: 'food', taxRate: 5.5 };
+    if (/livre|book/.test(lower)) return { category: 'book', taxRate: 5.5 };
+    if (/pharma|médic|santé/.test(lower)) return { category: 'health', taxRate: 10 };
+    return { category: 'general', taxRate: 20 };
+  }
 }
 
 const ADAPTERS: Record<string, IVerticalInvoicingAdapter> = {
