@@ -2,9 +2,9 @@
 
 > Analyse complète du projet, rédigée après exploration directe du code (≈1300 fichiers).
 > Compagnon du `CLAUDE.md` : ici le **pourquoi** et le **comment global** ; là-bas les **règles à respecter**.
-> Dernière mise à jour : 2026-06-14. Chemins clés (§3, §6, §10) resynchronisés le 2026-08-12 après le rapatriement vers `kernel/`.
+> Dernière mise à jour : 2026-06-14. **Resynchronisé le 2026-08-12** après le rapatriement vers `kernel/` : chemins clés (§3, §4, §5, §6, §8, §10), table des piliers/domaines (§2) et routing (§7).
 >
-> ⚠️ **Zones encore à rafraîchir** (snapshot antérieur) : la table §2 (compte de fichiers par pilier, mention `kds` comme pilier) et le routing §7 datent d'avant la restructuration en 8 piliers + domaines. Pour l'arborescence à jour et les règles exactes, se référer à `CLAUDE.md`.
+> ℹ️ Le §9 (audit de dette) reste un instantané daté : certains chemins/chiffres y reflètent l'état au moment de l'audit, pas forcément le présent.
 
 ---
 
@@ -43,22 +43,25 @@ Le système est pensé pour être piloté par des **agents IA** : conventions st
 
 ## 2. Architecture en piliers
 
-Le code métier vit dans `src/modules/<pilier>/`. Chaque pilier possède typiquement : `store/` (atomes Jotai), `domain/` ou `*.types.ts` (types), `hooks/`, `components/`, `services/`, et un `<pilier>.sync.ts` (synchronisation Nexus).
+Le code métier vit dans `src/modules/<pilier>/<domaine>/<module>/`. L'infrastructure (`providers/`, `connectors/`, `hooks/`, `services/`, `store/`, `domain/`, `migration/`) reste à la racine du pilier. Chaque pilier expose une **couche de domaines universels** (2-4) sous laquelle vivent les modules.
 
-| Pilier | Fichiers | Rôle | Sous-modules |
-|--------|---------:|------|--------------|
-| **ops** | 77 | Cœur opérationnel : caisse, cuisine, moteur de commandes | `pos`, `kitchen`, `engine` |
-| **commerce** | 61 | Clients, réservations, marketing/SEO, devis | `customers`, `reservations`, `marketing` |
-| **compliance** | 49 | Conformité sanitaire et fiscale | `haccp` |
-| **finance** | 40 | Comptabilité, scellement NF525, banque, notes de frais | `accounting`, `billing`, `services` |
-| **human** | 30 | RH, shifts, paie | `hr` |
-| **logistics** | 26 | Stocks et inventaire | `inventory` |
-| **intelligence** | 19 | RAG / Knowledge Graph, migration, analytics | `rag`, `migration`, `analytics` |
-| **kds** | 3 | Affichage cuisine (contrats + hooks ; le gros vit dans `ops/kitchen`) | `contracts`, `hooks` |
+**8 piliers métier** + `mcc` (outillage plateforme). Comptes de fichiers `.ts/.tsx` (mesurés le 2026-08-12, ~1130 au total) :
 
-> Note : `src/store/pillars/` contient les atomes Jotai par pilier (`commerce, compliance, core, finance, human, logistics, marketing, ops, sovereign`). C'est la couche **état** ; je l'ai modélisée comme telle dans `.sentrux/rules.toml` (couche `state`, pair de `nexus-core`).
+| Pilier | Fichiers | Domaines universels | Rôle |
+|--------|---------:|---------------------|------|
+| **commerce** | 246 | `catalog` · `acquisition` · `relation` · `fidelite` | Catalogue, clients, réservations, marketing/SEO, fidélité, devis |
+| **ops** | 213 | `service` · `production` · `workflow` | Caisse (POS), bar, front-desk · cuisine/KDS, recettes · moteur de commandes |
+| **finance** | 175 | `comptabilite` · `tresorerie` · `fiscalite` | Compta, facturation, FEC · banque, encaissement, notes de frais · scellement NF525, TVA |
+| **intelligence** | 149 | `analytique` · `ia` · `knowledge` | Analytics, rapports, anomalies · IA/agents, simulateur · RAG / Knowledge Graph |
+| **compliance** | 122 | `qualite` · `securite` · `reglementaire` | HACCP, IoT, rappels · audit · RGPD |
+| **human** | 104 | `effectifs` · `remuneration` (+ `conventions`) | RH, shifts · paie |
+| **logistics** | 76 | `stock` · `approvisionnement` · `fleet` · `dispatch` | Inventaire · réception, achats · véhicules, chauffeurs · routing |
+| **facility** | 41 | `spaces` · `maintenance` · `assets` | Plan de salle, settings · registre |
+| **mcc** | 2 | — | Outillage Multi-Cloud-Control (l'essentiel vit dans `src/lib/mcc/`) |
 
-Les **piliers sont étanches** : ils ne s'importent pas directement entre eux. Le couplage légitime (ex. POS → Finance) passe par un **bridge** dans `infrastructure/` (voir §4). Sentrux confirme cette étanchéité (aucune violation de frontière inter-piliers).
+> Note : `src/store/pillars/` porte les atomes Jotai par pilier (`commerce, compliance, core, finance, human, logistics, ops, rbac, sovereign`). C'est la couche **état**, modélisée comme telle dans `.sentrux/rules.toml` (couche `state`, pair de `nexus-core`).
+
+Les **piliers sont étanches** (Règle du Barrel) : on importe uniquement depuis le barrel racine `@/modules/<pilier>`, jamais un domaine/module interne. Le couplage légitime (ex. POS → Finance) passe par un **bridge** (`src/modules/finance/comptabilite/FinancialNexusBridge.ts`, voir §4). Sentrux confirme l'étanchéité (aucune violation de frontière inter-piliers).
 
 ---
 
@@ -177,14 +180,16 @@ Schémas **Zod** par pilier dans `src/modules/<pilier>/domain/schemas/`, types d
 
 ## 7. Routing (App Router)
 
-Trois groupes de routes sous `src/app/` :
+Groupes de routes sous `src/app/` (mesuré le 2026-08-12). **Deux familles `(public)` distinctes** — voir aussi `CLAUDE.md` :
 
-- **`(admin)`** : `master-console`, `mcc`, `audit-portal`, `system-map`, `blueprint`, `simulator`, `settings`, `agent`, `prospecting`, `inventory/reception`, `simulation`.
-- **`(client)/(ops)`** : `pos`, `kds`, `kitchen`, `bar`, `floor-plan`, `operations`, `registre`, `reservations`, `migration`.
-- **`(client)/(public)`** : `landing`, `welcome`, `signup`, `showcase`, `groups`, `docs/[category]`, `vanguard-simulator`, `auth/logout`.
-- **`api/`** : `billing/webhook` (Stripe), `finance/fec/export`, `intelligence/vision`, `brand/extract`, `system/health`, `procurement/delivery/[id]/sign`, `nam/analyze`, `git/*`, `signup`.
+- **`(admin)`** — console plateforme (indépendante du tenant) : `admin` (MCC), `audit-portal`, `system-map`, `blueprint`, `design-system`, `simulator`, `settings`, `account-settings`.
+- **`(client)/(ops)`** — app tenant authentifiée (~30 routes) : `pos`, `pos-mobile`, `kds`, `kitchen`, `bar`, `floor-plan`, `operations`, `inventory`, `registre`, `haccp`, `nf525`, `finance`, `reservations`, `crm`, `marketing`, `menu-builder`, `menu-engineering`, `staff`, `planning`, `leaves`, `timeclock`, `recruitment`, `analytics`, `intelligence`, `integrations`, `onboarding`, `migration`, `mon-espace`, `aide`, `welcome-staff`, `vanguard-simulator`.
+- **`(client)/(public)`** — pages **TENANT** (tenant résolu par l'URL) : `landing`, `showcase`, `menu`, `login`, `signup`, `welcome`, `groups`, `auth`, `docs`.
+- **`(public)`** — pages **PLATEFORME** (sans tenant) : `legal`, `status`.
+- **`[slug]`** — route dynamique par tenant : `reservations`.
+- **`api/`** — ~35 handlers : `billing` (Stripe webhook), `finance`, `haccp`, `inventory`, `hr`, `reservations`, `delivery`, `crm`, `promotions`, `connectors`, `brand`, `ai`/`oracle`/`gemini-live`, `agent`, `print`, `push`, `email`, `webhooks`, `tenant`, `resolve-domain`, `health`, `status`, `cron`, `signup`, `auth`, `admin`, `fleet`, `google`, `widget`, `menu.json`.
 
-`src/app/layout.tsx` monte les Providers globaux (dont `NexusPulseOrchestrator`). C'est un point chaud (god file + couplage app→engines).
+`src/app/layout.tsx` monte les Providers globaux (dont `NexusPulseOrchestrator`). C'est un point chaud (god file + couplage app→providers).
 
 ---
 
