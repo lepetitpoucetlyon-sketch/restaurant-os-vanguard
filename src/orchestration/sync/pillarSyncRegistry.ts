@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
 import { getDefaultStore } from 'jotai';
+import type { PlatformVariant } from '@nexus/contracts';
 import { shouldEagerLoad, type ICMImportanceMap } from '@/lib/icm/TaskContext';
 import { TimeSync } from '@/lib/TimeSync';
 
@@ -27,15 +28,17 @@ type Store = ReturnType<typeof getDefaultStore>;
 export async function initPillarSyncs(
   imp: ICMImportanceMap,
   tenantId: string,
-  store: Store
+  store: Store,
+  variant: PlatformVariant = 'restaurant'
 ): Promise<void> {
   await Promise.all([
     TimeSync.init(),
     shouldEagerLoad(imp.orders)     ? SyncOrders.init(tenantId, store)    : Promise.resolve(),
     // SyncStocks gère aussi les catégories et produits (catalog) :
     // on l'active dès que stocks OU categories OU products est HIGH/MEDIUM.
+    // `variant` gate les overlays culinaires (recettes/food-cost/86) — §8.6.
     (shouldEagerLoad(imp.stocks) || shouldEagerLoad(imp.categories) || shouldEagerLoad(imp.products))
-                                    ? SyncStocks.init(tenantId, store)    : Promise.resolve(),
+                                    ? SyncStocks.init(tenantId, store, variant) : Promise.resolve(),
     shouldEagerLoad(imp.finance)    ? SyncFinance.init(tenantId, store)   : Promise.resolve(),
     shouldEagerLoad(imp.compliance) ? SyncHACCP.init(tenantId, store)     : Promise.resolve(),
     shouldEagerLoad(imp.marketing)  ? SyncMarketing.init(tenantId, store) : Promise.resolve(),

@@ -97,6 +97,8 @@ export const NexusSyncService = {
             // --- VERTICAL PLUGIN ACTIVATION (H-01) ---
             // Le variant vient de la config tenant (défaut 'restaurant'). Imports
             // dynamiques : cf. note en tête de fichier (cycle d'initialisation).
+            // Hoisté hors du try : il gate aussi les overlays de sync (§8.6).
+            let variant: import('@nexus/contracts').PlatformVariant = 'restaurant';
             try {
                 const [{ VerticalRegistry }, { CoreContext }] = await Promise.all([
                     import('@/kernel/plugins/VerticalRegistry'),
@@ -105,7 +107,7 @@ export const NexusSyncService = {
                 const tenantConfig = await Nexus.adapter.get<{ variant?: string }>(
                     `tenants/${tenantId}/config/main`
                 );
-                const variant = (tenantConfig?.variant ?? 'restaurant') as import('@nexus/contracts').PlatformVariant;
+                variant = (tenantConfig?.variant ?? 'restaurant') as import('@nexus/contracts').PlatformVariant;
                 const vertical = VerticalRegistry.resolve(variant);
                 await vertical.initialize(new CoreContext());
                 logger.info(`[NexusSyncService] Vertical "${variant}" initialisée pour le tenant ${tenantId}`);
@@ -113,7 +115,7 @@ export const NexusSyncService = {
                 logger.warn('[NexusSyncService] Init verticale échouée (non bloquant)', verticalError);
             }
 
-            await initPillarSyncs(imp, tenantId, store);
+            await initPillarSyncs(imp, tenantId, store, variant);
 
             const duration = performance.now() - initStart;
             logger.info(`[NexusSyncService] Atomic Parallel Sync established for ${tenantId} in ${duration.toFixed(2)}ms.`);

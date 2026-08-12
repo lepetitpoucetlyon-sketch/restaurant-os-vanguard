@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateNexusNode } from "@/store/nexusNodeFactory";
 import { StockItem, Category, Recipe, Product } from '@nexus/contracts';
+import type { PlatformVariant } from '@nexus/contracts';
 import {
     stockItemsNodeAtom,
     categoriesNodeAtom,
@@ -12,6 +13,7 @@ import { db } from "@/lib/offline/offline-store";
 import { getDefaultStore } from 'jotai';
 import { Auto86Service } from './services/Auto86Service';
 import { FoodCostRecompute } from './services/FoodCostRecompute';
+import { usesCulinaryStock } from './stockProfile';
 
 type JotaiStore = ReturnType<typeof getDefaultStore>;
 
@@ -24,10 +26,15 @@ export const InventorySyncService = {
   private_listeners: {} as Record<string, () => void>,
   private_tenantId: '' as string,
 
-  async init(tenantId: string, store: JotaiStore) {
+  async init(tenantId: string, store: JotaiStore, variant: PlatformVariant = 'restaurant') {
     this.private_tenantId = tenantId;
     const path = (coll: string) => Nexus.getTenantPath(coll, tenantId);
-    
+
+    // §8.6 — stock culinaire (recettes / food-cost / auto-86) uniquement pour
+    // les verticales concernées. Un garage/retail gère du stock générique :
+    // ces overlays y sont inertes (voir stockProfile.ts).
+    const culinary = usesCulinaryStock(variant);
+
     // Hydrate for zero-latency start in warehouse views
     await this.hydrate(store);
 
@@ -41,12 +48,14 @@ export const InventorySyncService = {
           loading: false,
           error: null
         }));
-        Auto86Service.evaluate(tenantId).catch(err =>
-          logger.error('[InventorySync] Auto-86 evaluation failed', err)
-        );
-        FoodCostRecompute.recomputeAll(tenantId, data).catch(err =>
-          logger.error('[InventorySync] Food cost recompute failed', err)
-        );
+        if (culinary) {
+          Auto86Service.evaluate(tenantId).catch(err =>
+            logger.error('[InventorySync] Auto-86 evaluation failed', err)
+          );
+          FoodCostRecompute.recomputeAll(tenantId, data).catch(err =>
+            logger.error('[InventorySync] Food cost recompute failed', err)
+          );
+        }
       },
       {
         // Bound the real-time listener: protects against runaway collections.
@@ -94,36 +103,39 @@ export const InventorySyncService = {
       }
     );
 
-    // 3. RECIPES SYNC
-    this.private_listeners.recipes = Nexus.adapter.onSnapshot(
-      path('recipes'),
-      async (data: Recipe[]) => {
-        // 🌀 CYCLEGUARD: Before updating, ensure no circular dependencies exist
-        const { CycleGuard } = await import('@nexus/guards/CycleGuard');
-        
-        try {
-            data.forEach(recipe => {
-                const dependencies = (recipe.ingredients?.map(i => String(i.id)) || []) as string[];
-                CycleGuard.validateRecipe(String(recipe.id), dependencies);
-            });
-            
-            store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {
-                data,
-                loading: false,
-                error: null
-            }));
-        } catch (error) {
-            logger.error('[InventorySync] DAG_VIOLATION detected in remote recipes. Mutation blocked.', error);
-            // We keep previous valid state if corruption is found
+    // 3. RECIPES SYNC — culinaire uniquement (§8.6). Une verticale non-culinaire
+    // n'a pas de recettes : inutile d'ouvrir un abonnement sur une collection vide.
+    if (culinary) {
+      this.private_listeners.recipes = Nexus.adapter.onSnapshot(
+        path('recipes'),
+        async (data: Recipe[]) => {
+          // 🌀 CYCLEGUARD: Before updating, ensure no circular dependencies exist
+          const { CycleGuard } = await import('@nexus/guards/CycleGuard');
+
+          try {
+              data.forEach(recipe => {
+                  const dependencies = (recipe.ingredients?.map(i => String(i.id)) || []) as string[];
+                  CycleGuard.validateRecipe(String(recipe.id), dependencies);
+              });
+
+              store.set(recipesNodeAtom, (prev) => updateNexusNode(prev, {
+                  data,
+                  loading: false,
+                  error: null
+              }));
+          } catch (error) {
+              logger.error('[InventorySync] DAG_VIOLATION detected in remote recipes. Mutation blocked.', error);
+              // We keep previous valid state if corruption is found
+          }
+        },
+        {
+          limit: 2000,
+          onError: (error: Error) => {
+            logger.error('[InventorySync] Recipes Sync Failed', error);
+          }
         }
-      },
-      {
-        limit: 2000,
-        onError: (error: Error) => {
-          logger.error('[InventorySync] Recipes Sync Failed', error);
-        }
-      }
-    );
+      );
+    }
   },
 
   async hydrate(store: JotaiStore) {
