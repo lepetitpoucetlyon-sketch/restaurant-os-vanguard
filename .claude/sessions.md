@@ -119,4 +119,4 @@
 | audit-2b2-soir | Audit §2B.2 (schémas Zod stricts 13 Server Actions) + gate re-mesure sur `c2a357307` — VERDICT CONFIRMÉ | 2026-08-11 | terminée |
 | sentry-java-p3 | Sentry multi-tenant/multi-vertical câblé (8 verticales), Java+emulateur Firestore installé, audit DB-agnostic (17 couplages), Phase 5 P3 migration monétaire compliance+facility+finalisation, afaire.md (6 chantiers infra prod). Commits `3c7653bed` + `dd1ed4813`. Gate GREEN TSC=0 cycles=0 barrel=0. | 2026-08-11 | terminée |
 | inversions-cleanup | §3.2 inversions shared→modules + lib→modules, puis §4 god files, §5 P4 finance | 2026-08-11 | active |
-| antigravity-§8-plan | §7.4-7.8 billing FAIT, mini-plan §8 socle multi-verticale | 2026-08-12 | active |
+| antigravity-§8-plan | §7.4-7.8 billing FAIT + §8.1-8.8 socle multi-verticale complet (ServiceTicket, ServiceSubject, roleLabels ×8, VerticalEventBridge ×25, vatResolver généralisé, gen-vertical-playbook, RepairIntakeService garage) | 2026-08-12 | terminée |

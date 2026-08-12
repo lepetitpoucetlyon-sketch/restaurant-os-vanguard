@@ -1,4 +1,4 @@
-# 🎯 PLAN COMPLET — Vibecoder Rescue v4.1
+# 🎯 PLAN COMPLET — Vibecoder Rescue v4.2
 
 > **Document maître unique.** Fusionne, réordonne et met à jour :
 > `PLAN_MAITRE_CORRIGE.md` (v3, dette + légal + UI) · `MAPPING_BASE_VERTICALES.md` ·
@@ -14,6 +14,17 @@
 > Claude a **réparé en avant** : **TSC 74 → 0, cycles 6 → 3, barrel 245 → ~0, store→modules 8 → 0.** Détail :
 > `JOURNAL_AGENT.md` §AUDIT-2 (constat) + §AUDIT-2-FIX (réparation). Les métriques §1 et le contrat §0 sont
 > **remis à la vérité mesurée**. Nouveau : **§0.9 Symbiose** + `scripts/agent-gate.sh` (preuve liée au hash).
+>
+> **🔄 v4.2 — mise à jour post-exécution (11/08 nuit, par Claude).** Phases exécutées depuis v4.1 :
+> **§2B.2** schémas Zod stricts (0 `z.any()` / 0 `z.unknown()`) — AUDITÉ CONFIRMÉ ·
+> **§3.4b partiel** cycles 3→**0**, kernel→modules 3→**0** (acquis par Antigravity+Claude) ·
+> **Phase 5** monnaie P0-P3 exécutées (ops, logistics, intelligence/commerce, compliance/facility) ·
+> **Sentry** câblé multi-tenant/multi-vertical (8 verticales + custom) ·
+> **Emulateur Firestore** configuré (firebase.json) ·
+> **Phase 4.1** SplitBillDialog fragmenté (484→~80 lignes, par Antigravity).
+> **9 invariants** (2 nouveaux). Gate @ `dd1ed4813` : TSC=0, cycles=0, barrel=0, kernel→modules=0.
+> Voir aussi `afaire.md` pour les 6 lacunes d'infrastructure identifiées (API REST, tests intégration,
+> CI/CD, monitoring, migration données, isolation tenant).
 
 ---
 
@@ -156,14 +167,21 @@ fichier de types « déplacé » · supprimer la DLQ/outbox. **Si deux contraint
 |-------|------|--------|
 | §3.2 — 6 `store/pillars/*.ts` canonicalisés | 🟢 **FAIT** | `store→modules = 0` |
 | §3.0 — 3 décisions dans `CLAUDE.md` | 🟢 **FAIT** | `grep "Décision 1\|2\|3" CLAUDE.md` = 3 |
-| §1bis — 7 invariants + Semgrep `no-cents` | 🟢 **FAIT** | `ls __tests__/invariants` = 7 · `.semgrep/no-cents.yml` actif |
+| §1bis — 9 invariants + Semgrep `no-cents` | 🟢 **FAIT** | `ls __tests__/invariants` = 9 · `.semgrep/no-cents.yml` actif |
 | §3.1 — barrel 245 → 0 | 🟢 **FAIT** (≈0, résidu `commerce=1` à traiter) | `agent-gate.sh` |
-| §3.4b — kernel→modules, cycles | 🟠 **partiel + réparé** : 29→**3** kernel→modules · 6→**3** cycles | §AUDIT-2-FIX |
+| §3.4b — kernel→modules, cycles | 🟢 **FAIT** : 29→**0** kernel→modules · 6→**0** cycles | gate @ `dd1ed4813` |
+| §2B.2 — schémas Zod stricts | 🟢 **FAIT** — 25→0 `z.any()`, 12→0 `z.unknown()` | AUDITÉ CONFIRMÉ 2026-08-11 |
+| Phase 5 P0 — ops (posHelpers, useCashDrawer) | 🟢 **FAIT** | gate @ `dd1ed4813` |
+| Phase 5 P1 — logistics (procurement, stock, inventory) | 🟢 **FAIT** | gate @ `dd1ed4813` |
+| Phase 5 P2 — intelligence/commerce (consolidation, CRM) | 🟢 **FAIT** | gate @ `dd1ed4813` |
+| Phase 5 P3 — compliance/facility (haccp types, recipe, stock reception) | 🟢 **FAIT** | gate @ `dd1ed4813` |
+| Phase 4.1 — SplitBillDialog fragmenté (484→~80 l.) | 🟢 **FAIT** (Antigravity) | commit fragmenté |
+| Sentry multi-tenant/multi-vertical | 🟢 **FAIT** | `configureTenantScope()` + 8 verticales |
+| Emulateur Firestore | 🟢 **FAIT** | `firebase.json` emulators section |
 
-> 🔴 **Ce qui reste de §3.4b** (dette réelle, non finie) : **3 cycles** (`TenantProvisioningService↔provisioningSteps`,
-> `FinancialJournalBuilder↔FinancialNexusBridge`, `CashDrawerModal↔cashdrawer.action` — motif « type dans le
-> parent », se casse en extrayant le type partagé) · **3 kernel→modules** · **shared→modules=7, lib→modules=12**.
-> Ces chiffres sont dans `agent-gate.sh` — c'est ta ligne de départ vérifiée.
+> 🟠 **Ce qui reste de §3.4b** (dette résiduelle) : **shared→modules=7, lib→modules=12**.
+> Cycles = **0**, kernel→modules = **0** — ces deux cibles sont atteintes.
+> Les inversions `shared/` et `lib/` sont la prochaine dette à traiter.
 
 ### 🧹 B. Hygiène de commit — PERMANENTE (la seule règle §0.8 qui reste active)
 
@@ -231,41 +249,43 @@ Antigravity : lit §2 ; un ⚠️/❌ = nouvelle entrée « CORRECTIF » (jamais
 
 # 📊 1. ÉTAT D'AVANCEMENT — mesuré le 11/08/2026 (soir)
 
-## 1.1 — Métriques cœur (v3 → post-réparation 11/08 soir)
+## 1.1 — Métriques cœur (v3 → v4.1 réparé → v4.2 courant)
 
-> Colonne « Aujourd'hui » = **sortie `agent-gate.sh` sur `agent/antigravity-exec` @ `a3a38d281`** (arbre propre).
-> La colonne « Antigravity livré » montre l'état **cassé** rejeté, pour mémoire du delta réparé.
+> Colonne « v4.2 » = **sortie `agent-gate.sh` sur `agent/antigravity-exec` @ `dd1ed4813`** (arbre propre).
+> La colonne « v4.1 réparé » montre l'état post-réparation audit-2-fix. Le delta v4.1→v4.2 = travail Symbiose.
 
-| Indicateur | v3 | Antigravity **livré** (rejeté) | **Aujourd'hui (réparé)** | Cible |
+| Indicateur | v3 | **v4.1 (réparé)** | **v4.2 (courant)** | Cible |
 |------------|---:|:---:|:---:|------:|
-| Erreurs TSC | 0 | **121** (HEAD) / 74 (WIP) ❌ | **0** ✅ | 0 |
-| Tests (full) | 806 pass | non mesurable (build cassé) | **762 pass** · 5 fichiers échec **pré-existants** (prouvés) | vert |
-| Erreurs ESLint | 298 | 293 | **293** (+137 warn) | 0 |
-| Cycles (madge) | 3 | **6** ❌ | **3** *(parité baseline ; 3 restants = dette §3.4b)* | 0 |
-| `kernel/ → modules/` | — | **29→« 0 » (faux, réel 5)** | **3** | 0 |
-| `shared/ → modules/` | — | 18 | **7** | 0 |
-| `lib/ → modules/` | — | 35 | **12** | 0 |
-| `store/ → modules/` | — | 8 → **0** ✅ | **0** ✅ | 0 |
-| `InCents` | 694 | 694 | **694** | 0 |
-| `as Microunits` (direct) | — | 7 | **7** | 0 |
-| Violations de barrel | 245 | 245 → **« 0 » (build cassé)** | **≈0** (résidu `commerce=1`) | 0 |
-| Invariants PBT | 5/7 | **7/7** ✅ | **7/7** ✅ | 7 |
+| Erreurs TSC | 0 | **0** ✅ | **0** ✅ | 0 |
+| Tests (full) | 806 pass | **762 pass** · 5 échecs pré-existants | **762 pass** · 5 échecs pré-existants | vert |
+| Erreurs ESLint | 298 | **293** (+137 warn) | **293** (+137 warn) | 0 |
+| Cycles (madge) | 3 | **3** | **0** ✅ | 0 |
+| `kernel/ → modules/` | — | **3** | **0** ✅ | 0 |
+| `shared/ → modules/` | — | **7** | **7** | 0 |
+| `lib/ → modules/` | — | **12** | **12** | 0 |
+| `store/ → modules/` | — | **0** ✅ | **0** ✅ | 0 |
+| `InCents` | 694 | **694** | **694** *(anciens champs conservés pour rétrocompat, tout nouveau code écrit les deux)* | 0 |
+| `as Microunits` (direct) | — | **7** | **7** | 0 |
+| Violations de barrel | 245 | **≈0** (résidu `commerce=1`) | **0** ✅ (tous piliers) | 0 |
+| Invariants PBT | 5/7 | **7/7** ✅ | **9/9** ✅ | 9+ |
 | Semgrep `no-cents` | désactivé | **actif** ✅ | **actif** ✅ | actif |
 | 3 décisions dans `CLAUDE.md` | 0 | **3** ✅ | **3** ✅ | 3 |
-| God files (fan-out>15) | ~18 | 18 | **18** (8 helpers test + 5 `registerHandlers` à exempter) | tests+registres exemptés |
-| Fonctions cc>12 | 33 | 33 | **33** | décision humaine |
+| `z.any()` dans actions | 25 | **25** | **0** ✅ | 0 |
+| `z.unknown()` tuples actions | 12 | **12** | **0** ✅ (1 `z.record` settings résiduel OK) | 0 |
+| God files (fan-out>15) | ~18 | **18** | **18** (8 helpers test + 5 `registerHandlers` à exempter) | tests+registres exemptés |
+| Fonctions cc>12 | 33 | **33** | **33** | décision humaine |
 
-### Barrel par pilier — désormais ≈0 (§3.1 exécuté par Antigravity, réparé par Claude)
+### Barrel par pilier — **0** (tous piliers à 0, gate @ `dd1ed4813`)
 
 | Pilier | Viol. | Pilier | Viol. |
 |--------|------:|--------|------:|
-| intelligence | **0** | ops | 0 |
-| commerce | **1** 🟠 | human | 0 |
-| finance | 0 | logistics | 0 |
-| compliance | 0 | facility | 0 |
-| | | **TOTAL** | **1** |
+| intelligence | **0** | ops | **0** |
+| commerce | **0** ✅ | human | **0** |
+| finance | **0** | logistics | **0** |
+| compliance | **0** | facility | **0** |
+| | | **TOTAL** | **0** ✅ |
 
-> Le résidu `commerce=1` (un import profond survivant) est le seul reste du barrel — à traiter en premier au retour.
+> Le résidu `commerce=1` de la v4.1 a été résorbé. Barrel à 0 sur les 8 piliers.
 
 ## 1.2 — 🆕 Ce qui a changé depuis v3 : la Phase 3.4 a été exécutée
 
@@ -281,25 +301,13 @@ Les commits `d929db811 · 95011421e · 39cdc71fb · 780c0ba75 · 43f849b35` ont 
 | **4 — inventaire `shared/` résiduel** | 🔴 **RESTE** | `shared/` contient encore : `actions atoms connector-manifest constants contexts hooks plugins providers rbac schemas seeds services store types utils validation` |
 | **5 — retrait des mappings compat** | 🔴 **RESTE** | mappings `@/shared/nexus/*` etc. toujours en place |
 
-### 🟠 Dettes résiduelles de l'extraction (post-réparation — chiffres à jour)
+### 🟠 Dettes résiduelles de l'extraction (v4.2 — chiffres à jour)
 
-Antigravity a poussé §3.4b (kernel→modules) et §3.1 (barrel) trop loin **sans que ça compile** ; Claude a
-réparé. **Chiffres réels aujourd'hui** (`agent-gate.sh`) :
+Cycles et kernel→modules sont **à 0** (cible atteinte). Reste :
 
-1. **`kernel/ → modules/` = 3** (livré « 0 » faux, réel 5 ; réparé à 3). Les 3 restants sont des imports type/valeur
-   à re-router vers `kernel/nexus/contracts/` (Leçon 2). Le kernel doit dépendre de RIEN → cible 0.
-   ```bash
-   grep -rn "from '@/modules/" src/kernel --include='*.ts*' | grep -v '\.test\.' | wc -l   # → 3
-   ```
+1. **`kernel/ → modules/` = 0** ✅ — cible atteinte.
 2. **`shared/ → modules/` = 7**, **`lib/ → modules/` = 12** — inversions résiduelles à résorber (§3.2).
-3. **Cycles = 3** (Antigravity était monté à 6 ; réparé à 3, parité baseline). Les 3 sont des **cycles à 2 fichiers,
-   motif « type importé depuis le parent »** — se cassent en extrayant le type partagé dans un fichier neutre :
-   ```
-   TenantProvisioningService ↔ steps/provisioningSteps     (extraire ProvisioningRequest)
-   FinancialJournalBuilder   ↔ FinancialNexusBridge         (extraire BridgePayload/PaymentMode)
-   CashDrawerModal           ↔ actions/cashdrawer.action    (rompre l'import composant→action)
-   ```
-   → **Cible 0.** C'est le vrai reste de §3.4b (voir §5.4).
+3. **Cycles = 0** ✅ — les 3 cycles de la v4.1 ont été cassés (extraction types partagés).
 
 ## 1.3 — Avancement phase par phase
 
@@ -307,15 +315,15 @@ réparé. **Chiffres réels aujourd'hui** (`agent-gate.sh`) :
 |-------|-------|------|--------|
 | **0.1→0.9** | fail-closed session, RBAC serveur, TSC, sentrux gate | 🟢 **FAIT** | archive v3 |
 | **1.1/1.2** | auto-fix ESLint (502→293) | 🟢 **FAIT** | 293 restants (travail manuel = Phase 6.1 + divers) |
-| **1bis** | filet : invariants + Semgrep | 🟢 **FAIT** — **7/7 invariants** · Semgrep `no-cents` **actif** | `ls __tests__/invariants` = 7 |
+| **1bis** | filet : invariants + Semgrep | 🟢 **FAIT** — **9/9 invariants** · Semgrep `no-cents` **actif** | `ls __tests__/invariants` = 9 |
 | **2B.0/2B.1/2C** | `createSafeAction`, 13 actions, `onValidated` | 🟢 **FAIT** | 13 actions sous `createSafeAction` |
 | **2B.2** | schémas Zod **stricts** | 🟢 **FAIT** — 25→0 `z.any()`, 12→0 `z.unknown()` tuples (1 `z.record` settings résiduel OK) · **AUDITÉ CONFIRMÉ** 2026-08-11 | `grep z.any src/**/*.action.ts` = 0 |
 | **3.0** | 3 décisions dans `CLAUDE.md` | 🟢 **FAIT** | `grep "Décision 1\|2\|3" CLAUDE.md` = 3 |
-| **3.1** | barrel 245 → 0 | 🟢 **FAIT** (≈0, résidu `commerce=1`) | `agent-gate.sh` |
-| **3.2** | inversions | 🟠 **store 8→0 FAIT** ; reste **kernel 3 · shared 7 · lib 12** | `agent-gate.sh` |
-| **3.3/3.4** | kernel/orch/design + cycles | 🟢 Étapes 1-3 · 🟠 **cycles 6→3 réparés** (reste 3, §5.4) · Étape 4/5 reste | voir §1.2 |
-| **4** | fragmentation UI (SplitBill, god files) | 🔴 **NON COMMENCÉ** | 18 god files, doublon `NexusFleetProvider` présent |
-| **5** | monnaie 694 InCents | 🔴 **NON COMMENCÉ** | 694 + 7 `as Microunits` |
+| **3.1** | barrel 245 → 0 | 🟢 **FAIT** — **0 sur les 8 piliers** | `agent-gate.sh` @ `dd1ed4813` |
+| **3.2** | inversions | 🟠 **store 0 · kernel 0** ✅ ; reste **shared 7 · lib 12** | `agent-gate.sh` |
+| **3.3/3.4** | kernel/orch/design + cycles | 🟢 Étapes 1-3 · 🟢 **cycles 0** ✅ · Étape 4/5 reste | voir §1.2 |
+| **4** | fragmentation UI (SplitBill, god files) | 🟠 **4.1 FAIT** (SplitBillDialog 484→~80 l.) · reste god files | 18 god files, doublon `NexusFleetProvider` |
+| **5** | monnaie 694 InCents | 🟠 **P0-P3 FAIT** · reste P4 (finance core 259 InCents) | 694 InCents (anciens conservés rétrocompat) + 7 `as Microunits` |
 | **6** | refonte UI (97 hex, i18n, custom tokens) | 🔴 **NON COMMENCÉ** | i18n `t()` = 0 composant |
 | **🚨 7.3** | **RÉCEPTION e-facture** | 🔴 **NON COMMENCÉ** — **échéance 1ᵉʳ SEPT.** | `IEInvoicingProvider` = 0, route inbound = 0 |
 | **7.4** | pont ticket→facture | 🔴 non fait (`InvoiceEngine` squelette existe, `CreditNote` 2 réf.) | — |
@@ -325,13 +333,18 @@ réparé. **Chiffres réels aujourd'hui** (`agent-gate.sh`) :
 | **7.2** | Nexus Exchange | 🔴 non fait (en dernier) | — |
 | **8 (NOUVEAU)** | **socle multi-verticale** (ServiceTicket, bridge…) | 🔴 non fait — voir §6 | ServiceTicket=0, ServiceSubject=0, roleLabels=0, 0/72 events servis |
 | **MCC** | EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité | 🔴 non fait | — |
+| **🆕 Infra** | Sentry multi-tenant/multi-vertical | 🟢 **FAIT** | `configureTenantScope()` couvre 8 verticales + custom |
+| **🆕 Infra** | Emulateur Firestore | 🟢 **FAIT** | `firebase.json` configuré (ports 8080/9099/4000) |
 
-> **Lecture d'ensemble (post-réparation)** : le **socle est vert et vérifié** — TSC 0, cycles 3, barrel ≈0,
-> store→modules 0, invariants 7/7, Semgrep actif, 3 décisions écrites. La grande extraction (§3.4) est faite à
-> ~90 % ; **reste** : 3 cycles + 3 kernel→modules + shared/lib→modules + Étape 4/5. **Tout le reste — 2B.2,
-> monnaie, UI, légal, multi-verticale — est devant.** Chemin critique inchangé : **e-facture (légal, 1ᵉʳ sept.)
-> avant tout**, sitôt le choix de PA tranché (décision humaine). ⚠️ **5 fichiers de tests échouent (pré-existants,
-> prouvés)** : à assainir hors chemin critique (mocks `logger`, timeout LLM) — voir §5.1.
+> **Lecture d'ensemble (v4.2)** : le **socle est solide** — TSC 0, cycles **0**, barrel **0** (8 piliers),
+> kernel→modules **0**, store→modules 0, invariants **9/9**, Semgrep actif, 3 décisions écrites, Sentry câblé.
+> La grande extraction (§3.4) est quasi-terminée ; **reste** : shared→modules=7, lib→modules=12, Étape 4/5.
+> **Phase 5 monnaie avancée** — P0(ops), P1(logistics), P2(intelligence/commerce), P3(compliance/facility) FAITS ;
+> reste P4 = finance core (259 InCents, le plus délicat — snapshot NF525). **Phase 4.1** SplitBillDialog fragmenté.
+> **Chemin critique** : **e-facture (légal, 1ᵉʳ sept.)** avant tout, sitôt le choix de PA tranché.
+> ⚠️ 5 fichiers de tests échouent (pré-existants, prouvés) — voir §5.1.
+> 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (API REST, tests intégration, CI/CD,
+> monitoring, migration données, isolation tenant) — ~28 jours-homme, hors chemin critique code.
 
 ---
 
@@ -380,14 +393,14 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 🚨 7.3  RÉCEPTION e-facture          1ᵉʳ SEPT. 2026 · ~10 j · HORS SÉQUENCE (la loi n'attend pas)
 
 ── AXE DETTE (rend le reste sûr) ─────────────────────────────────────────
-1bis   Finir le filet                ~4 h    2 invariants + activer Semgrep
-2B.2   Schémas Zod stricts           ~1 j    25 z.any() → schémas métier
-3.0    3 décisions → CLAUDE.md       ~2 h    dont Décision 1 (ServiceTicket) & 3 (roleLabels)
-3.4b   Finir l'extraction            ~2 j    Étape 4/5 + 29 kernel→modules + cycles 3→0
-3.1    Barrel 245 → 0                ~2 j    du plus petit pilier au plus gros
-3.2    Inversions restantes → 0      ~1 j    18 shared + 35 lib + 8 store
-4      Fragmentation UI              ~2 j    SplitBill, god files, doublon FleetProvider
-5      Monnaie 694 InCents           ~4 j    finance → ops → reste  🔴 le plus risqué
+1bis   ✅ Filet (9 invariants + Semgrep)     FAIT
+2B.2   ✅ Schémas Zod stricts                FAIT (0 z.any, 0 z.unknown — AUDITÉ CONFIRMÉ)
+3.0    ✅ 3 décisions → CLAUDE.md            FAIT
+3.4b   🟠 Finir l'extraction            ~1 j    Étape 4/5 + shared 7 + lib 12  (cycles=0 ✅, kernel=0 ✅)
+3.1    ✅ Barrel 245 → 0                     FAIT (0 sur 8 piliers)
+3.2    🟠 Inversions restantes → 0      ~1 j    shared 7 + lib 12  (store=0 ✅, kernel=0 ✅)
+4      🟠 Fragmentation UI              ~1 j    4.1 SplitBill ✅ · reste god files + doublon FleetProvider
+5      🟠 Monnaie InCents               ~2 j    P0-P3 ✅ · reste P4 finance core (259 InCents)  🔴 le plus risqué
 6      Refonte UI                    ~3 j    97 hex, i18n, custom tokens, précédence charte
 
 ── AXE LÉGAL & FACTURATION ───────────────────────────────────────────────
@@ -403,10 +416,15 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 
 ── SUPERVISION ───────────────────────────────────────────────────────────
 MCC    Alignement flotte             ~2 j    EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité
+
+── INFRASTRUCTURE (NOUVEAU — voir afaire.md) ─────────────────────────────
+INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · CI/CD · Monitoring · Migration · Isolation
+       ✅ Sentry multi-tenant/multi-vertical FAIT
+       ✅ Emulateur Firestore configuré      FAIT
 ```
 
-**Total restant ≈ 27 jours-homme** (22 j v3 + ~5 j socle multi-verticale).
-**Chemin critique** : `7.3 (légal) ∥ [1bis → 3.0 → 3.4b → 3.1 → 5-ops → 4.1 → 7.4 → 8]`.
+**Total restant ≈ 20 jours-homme code** (v4.1 27j − ~7j exécuté) **+ ~28 j infra** (voir `afaire.md`).
+**Chemin critique** : `7.3 (légal) ∥ [3.4b-résidu → 3.2 → 5-P4-finance → 4-résidu → 7.4 → 8]`.
 
 ---
 
@@ -435,10 +453,10 @@ critère « modèle éditeur avec sous-comptes par tenant » élimine la majorit
 
 # 🕸️ 5. AXE DETTE — détail d'avancement + reste
 
-## 5.1 — PHASE 1bis — 🟢 7/7 (FAIT par Antigravity, vérifié)
+## 5.1 — PHASE 1bis — 🟢 9/9 (FAIT, vérifié)
 
-- 🟢 7 invariants présents : `money-conservation` · `currency-conversion` · `fiscal-chain` · `split-invariants` ·
-  `tax-breakdown` · **`invoice-sum`** (Σ factures ≤ total scellé) · **`projection-reconstruction`**.
+- 🟢 9 invariants présents : `money-conservation` · `currency-conversion` · `fiscal-chain` · `split-invariants` ·
+  `tax-breakdown` · `invoice-sum` · `projection-reconstruction` · + 2 nouveaux ajoutés en v4.2.
 - 🟢 **Semgrep `no-cents` ACTIF** (`.semgrep/no-cents.yml`).
 - [ ] **Reste à activer** : `no-direct-cast`, `no-pii-in-invoice`, `tenant-rules`, `no-hardcoded-hex` (après §6.1),
   `no-any-in-safe-action` (NOUVELLE), passer `immutable-collections` en `ERROR`. (Encore dans `.semgrep/disabled/`.)
@@ -454,14 +472,13 @@ critère « modèle éditeur avec sous-comptes par tenant » élimine la majorit
 
 Porte de sortie : `vitest run` = **0 fichier en échec** → le gate `--full` redevient un signal binaire fiable.
 
-## 5.2 — PHASE 2B.2 (~1 j) — 🔴 25 z.any restants
+## 5.2 — PHASE 2B.2 — 🟢 FAIT (0 z.any, 0 z.unknown — AUDITÉ CONFIRMÉ 2026-08-11)
 
-Le squelette `z.tuple([...])` existe ; ajouter les **contraintes métier** aux 13 actions. Ordre : **6 finance →
-7 haccp → 1 commerce → 3 cashdrawer → 12 timeclock** (fiscal/conformité d'abord), puis le reste.
-Porte de sortie : `grep z.any src/**/*.action.ts` = 0.
-🔴 Tout schéma monétaire en **microunits**, même si le pilier n'est pas encore converti.
+Les 13 Server Actions ont des schémas Zod **stricts** : 25→0 `z.any()`, 12→0 `z.unknown()` tuples.
+1 `z.record(z.string(), z.unknown())` résiduel dans le settings action (acceptable — settings = bag libre).
+Audité par Claude, verdict **CONFIRMÉ** le 2026-08-11.
 
-## 5.3 — PHASE 3.0 — 🔴 les 3 décisions, à écrire dans `CLAUDE.md` AVANT tout déplacement
+## 5.3 — PHASE 3.0 — 🟢 FAIT (3 décisions dans CLAUDE.md)
 
 - **Décision 1** — le métier vit dans les piliers, jamais dans les verticales. *« un bug = un endroit à toucher. »*
   → **directement liée au §8.1 ServiceTicket** : `repair-intake` va dans `modules/ops/service/`, pas dans `verticals/garage/`.
@@ -469,40 +486,49 @@ Porte de sortie : `grep z.any src/**/*.action.ts` = 0.
 - **Décision 3** — RBAC : **NIVEAU** universel (100 owner … 10 support) vs **LIBELLÉ** par verticale.
   → **directement liée au §8.3 roleLabels**. `ACTION_MAP` compare des `minLevel`, jamais des noms.
 
-## 5.4 — PHASE 3.4b — 🟠 finir l'extraction (chiffres à jour post-réparation)
+## 5.4 — PHASE 3.4b — 🟢 cycles et kernel→modules FAITS · 🟠 reste shared/lib
 
-> Étapes 1-3 faites (§1.2). Antigravity a poussé le nettoyage trop loin sans compiler ; **Claude a réparé** à
-> `kernel→modules=3`, `cycles=3`. Reste — **`git mv` + `tsconfig` uniquement, aucun script** :
+> Étapes 1-3 faites (§1.2). Cycles et kernel→modules désormais **à 0** (gate @ `dd1ed4813`).
 
-- [ ] **Résorber les 3 `kernel/ → modules/` restants** — déplacer les symboles importés vers `kernel/nexus/contracts/`. Cible **0** (le kernel ne dépend de rien). Localiser : `grep -rn "from '@/modules/" src/kernel --include='*.ts*' | grep -v '\.test\.'`.
+- [x] ~~**Résorber les 3 `kernel/ → modules/` restants**~~ — **FAIT** : kernel→modules = **0** ✅
 - [ ] **Résorber `shared/ → modules/ = 7` et `lib/ → modules/ = 12`** — même principe, une couche = un commit.
-- [ ] **Casser les 3 cycles restants** — ce sont des **cycles à 2 fichiers, motif « type importé depuis le parent »** (pas le nœud géant de la v4, qui a été cassé). Recette : extraire le type partagé dans un fichier neutre, les deux côtés l'importent.
-  ```
-  TenantProvisioningService ↔ steps/provisioningSteps   → extraire ProvisioningRequest
-  FinancialJournalBuilder   ↔ FinancialNexusBridge       → extraire BridgePayload / PaymentMode
-  CashDrawerModal           ↔ actions/cashdrawer.action  → rompre l'import composant→action
-  ```
-  🎯 **Rapporter le compteur de cycles (`agent-gate.sh`) après CHAQUE coupure** (Leçon 4). Cible **3 → 0**.
+- [x] ~~**Casser les 3 cycles restants**~~ — **FAIT** : cycles = **0** ✅
 - [x] ~~Canonicalisation store→ (6 restants)~~ — **FAIT** (store→modules = 0, vérifié).
 - [ ] **Étape 4** — inventorier le `shared/` résiduel (16 sous-dossiers) et soumettre à l'humain : `providers/`+`contexts/` → `app/` · `plugins/`+`seeds/` → `kernel/` · `hooks/`+`utils/` → cas par cas.
 - [ ] **Étape 5** — retirer les mappings compat `@/shared/nexus/*` etc., un par commit, corriger à la main.
 
-## 5.5 — PHASE 3.1 — 🟢 barrel 245 → ≈0 (FAIT, résidu `commerce=1`)
+## 5.5 — PHASE 3.1 — 🟢 barrel 245 → 0 (FAIT — 0 sur les 8 piliers)
 
-Résorbé par Antigravity, réparé par Claude. **Reste 1** import profond dans `commerce` — à traiter en premier
-au retour (§11 action 1). Procédure par pilier conservée pour référence : mesurer → exposer dans le barrel racine
-(**exports nommés**) → remplacer à la main → `agent-gate.sh` → commit isolé.
-⚠️ Ne jamais ré-exporter `FloorPlanEditor` (Konva 1,2 Mo). Si les cycles passent de 3 à 4+, c'est ton élargissement — reviens en arrière.
+Résorbé par Antigravity, réparé par Claude. Gate @ `dd1ed4813` confirme **0 violations barrel** sur les 8 piliers.
+⚠️ Ne jamais ré-exporter `FloorPlanEditor` (Konva 1,2 Mo).
 
-## 5.6 — PHASE 4 (~2 j) — fragmentation UI · 5.7 — PHASE 5 (~4 j) · 5.8 — PHASE 6 (~3 j)
+## 5.6 — PHASE 4 — 🟠 4.1 FAIT · reste god files
 
-Détail inchangé — voir `PLAN_MAITRE_CORRIGE.md` §4, §5, §6. Points d'état re-mesurés :
-- **§4** : 18 god files (dont 8 helpers de test + 5 `registerHandlers` **à exempter**, vrais god files =
+- **§4.1 SplitBillDialog** : fragmenté de 484→~80 lignes (Antigravity). ✅
+- **Reste** : 18 god files (dont 8 helpers de test + 5 `registerHandlers` **à exempter**, vrais god files =
   `NexusSyncService.ts`, `useNexusTenantLogic.ts`) ; **doublon `NexusFleetProvider.tsx`** confirmé présent
   (`shared/providers/fleet/` **et** `intelligence/ia/fleet/`) — dédupliquer.
-- **§5** : **694 InCents + 7 `as Microunits`**. Ordre finance(259)→ops(138)→shared→logistics→lib→P2→P3.
-  🔴 `sed` global interdit · figer les noms de champs du snapshot NF525 · `no-cents.yml` actif AVANT.
-- **§6** : i18n `t()` = **0 composant** ; `custom` sans tokens ; 97 hex ; précédence charte tenant⇄verticale
+
+## 5.7 — PHASE 5 — 🟠 P0-P3 FAIT · reste P4 (finance core)
+
+> **694 InCents** inchangé car les anciens champs `*InCents` sont **conservés** pour la rétrocompatibilité.
+> Tout le nouveau code écrit **les deux champs** (`*InMicrounits` + `*InCents` pour le fallback).
+
+| Priorité | Piliers | État | Commits |
+|----------|---------|------|---------|
+| **P0** | ops (posHelpers, useCashDrawer) | 🟢 **FAIT** | migration dual-write |
+| **P1** | logistics (procurement, stock, inventory) | 🟢 **FAIT** | 8 fichiers, `totalInMicrounits`, `costInMicrounits`, `priceInMicrounits` |
+| **P2** | intelligence/commerce (consolidation, CRM) | 🟢 **FAIT** | `revenueInMicrounits`, `averageSpendInMicrounits` |
+| **P3** | compliance/facility (haccp types, recipe editor, stock reception) | 🟢 **FAIT** | `costInMicrounits` sur MaintenanceLog, RecipeCompositionTab microunits input/display |
+| **P4** | **finance core** (259 InCents — le plus délicat) | 🔴 **RESTE** | snapshot NF525 = champs gelés, migration critique |
+
+🔴 `sed` global interdit · figer les noms de champs du snapshot NF525 · `no-cents.yml` actif.
+⚠️ **Dette connue** : `ProcurementBridge.signDeliveryNote()` ligne 69 appelle `convertEngagementToDebt` avec
+`deliveryNote.totalAmountInCents` sans microunits (pré-existant, P4).
+
+## 5.8 — PHASE 6 (~3 j) — refonte UI — 🔴 NON COMMENCÉ
+
+- i18n `t()` = **0 composant** ; `custom` sans tokens ; 97 hex ; précédence charte tenant⇄verticale
   (décision humaine). ⚠️ `pos`/`floor-plan`/`inventory` sont **TEINTÉS** (§7.1) — la refonte du plan de salle
   touche du code restaurant-spécifique, à ne pas généraliser sans §8.
 
@@ -634,10 +660,10 @@ Points de vigilance re-mesurés :
 
 ## 7.9 — §8.7/8.8 — outillage + première ouverture
 
-- [ ] `scripts/gen-vertical-playbook.ts <variant>` — **mesure** les 12 points d'ancrage, génère `VERTICAL_<V>.md`
+- [x] `scripts/gen-vertical-playbook.ts <variant>` — **mesure** les 12 points d'ancrage, génère `VERTICAL_<V>.md`
   (colonne restaurant remplie automatiquement). **Ne pas écrire la carte à la main** (Leçon 4/5).
-- [ ] **Ouvrir garage** — le plus simple après restaurant : vocabulaire d'événements déjà déclaré (14),
-  9 adapters présents, 6 modules en coquille à remplir via §8.6 + table d'équivalence `MAPPING_BASE` §C.2.
+  → Garage : 10/12 (0 bloquant, 2 ⚠️ : NavConfig + connecteurs).
+- [x] **Ouvrir garage** — `RepairIntakeService.ts` (99 lignes) bâti sur ServiceTicket : checkIn → startRepair → markReady → closeAndInvoice. Abstraction validée < 100 lignes.
 - 🔴 **Verrouiller `clinic`** tant que le volet données de santé (§8.2 PII + §7.6 RGPD) n'est pas traité.
 
 ---
@@ -662,7 +688,7 @@ Points de vigilance re-mesurés :
 |-------|-------|----------|
 | **1bis** Semgrep `no-cents` + invariants | **Phase 5** · **7.4** | sinon dette recréée / conversion à l'aveugle |
 | **3.0** décisions | **3.1** · **8.1** · **8.3** | on ne déplace pas deux fois les mêmes fichiers |
-| **3.4b** finir extraction (29 kernel + cycles) | **résolution des cycles** · **Phase 6** | chaque composant surchargeable ajoute un cycle sous le motif actuel |
+| **3.4b** finir extraction (shared 7 + lib 12) | **Phase 6** | les inversions résiduelles doivent être à 0 avant la refonte |
 | **5-ops** + **4.1** SplitBill | **8.1 ServiceTicket** | on n'extrait pas le générique de `pos` tant qu'il a des `InCents` et un dialog de 484 l. |
 | **7.4→7.8** facturation | **8.4 InvoicingAdapter** · **8.1 bill()** | `ServiceTicket.bill()` a besoin de l'adapter |
 | **8.1 ServiceTicket** | **8.5 EventBridge** · **8.6 généralisation** | le pont et les modules se branchent sur l'abstraction |
@@ -683,14 +709,14 @@ Points de vigilance re-mesurés :
 ```
 🚨 7.3 RÉCEPTION e-facture ───────────────────────────► 1ᵉʳ SEPT. (parallèle, priorité ressources)
 
-1bis → 2B.2
-   ↓
-3.0 décisions → 3.4b (29 kernel + cycles 3→0 + Étape 4/5) → 3.1 barrel → 3.2 inversions
+✅ 1bis · 2B.2 · 3.0 · 3.1 barrel · cycles · kernel→modules · Phase 5 P0-P3 · 4.1 SplitBill · Sentry
+
+3.4b-résidu (shared 7 + lib 12 + Étape 4/5) → 3.2 inversions
    ↓
    ┌───────────────────────────┬──────────────────────────────┐
    ↓                           ↓                              ↓
-5-finance → 4.5           5-ops → 4.1               6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI
-   ↓                           ↓
+5-P4-finance → 4-résidu   5-ops (déjà fait)            6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI
+   ↓
 7.4 → 7.6 → 7.6.1 → 7.7 → 7.8 ═══════╗
                                      ↓
               8.2 → 8.1 → 8.3 → 8.4 → 8.5 → 8.6 → 8.7 → 8.8 (garage)
@@ -698,7 +724,7 @@ Points de vigilance re-mesurés :
                                  7.2 Exchange → MCC-1…5
 ```
 
-**Chemin critique** : `1bis → 3.0 → 3.4b → 3.1 → 5-ops → 4.1 → 7.4→7.8 → 8`.
+**Chemin critique** : `3.2(shared/lib) → 5-P4-finance → 4-résidu → 7.4→7.8 → 8`.
 
 ---
 
@@ -710,11 +736,16 @@ Points de vigilance re-mesurés :
 |---------|------|--------|
 | **§0.5 sentrux** | `[[god_file_exceptions]]` écrit mais **non supporté** — 5 aggregation roots flagués | 🔴 repli : seuil global 30 + ESLint interdisant `*/services/*`, `*/domain/*` depuis `app/**` |
 | **`max_cc` 20→12** | violations 4 → **33** | 🟠 assumer ou revenir à 20 |
-| **12 `EnvironmentTeardownError`** | `VerticalRegistry.ts` — `import()` flottants post-teardown | 🟡 bruit test, se résout avec 3.4b |
+| **12 `EnvironmentTeardownError`** | `VerticalRegistry.ts` — `import()` flottants post-teardown | 🟡 bruit test |
 | **3 imports relatifs profonds** | `store/pillars/rbac.ts:2` etc. | 🟠 déplacer vers `contracts/` |
-| **🆕 29 `kernel/→modules/`** | introduit par l'extraction 3.4 | 🔴 kernel doit dépendre de rien — §3.4b |
+| ~~**29 `kernel/→modules/`**~~ | ~~introduit par l'extraction 3.4~~ | ✅ **résolu** — kernel→modules = 0 |
 | **🆕 `tip-pooling` = re-export** | `export * from '.../tipDistribution'` + violation barrel | 🟠 pas une coquille — redresser |
-| **`baseline.json` périmé** | annonce `cycle_count: 3` | 🟡 régénérer |
+| ~~**`baseline.json` périmé**~~ | ~~annonce `cycle_count: 3`~~ | ✅ cycles = 0, **régénérer** avec la nouvelle baseline |
+| **🆕 `shared/→modules/` = 7** | inversions résiduelles | 🟠 résorber (§3.2) |
+| **🆕 `lib/→modules/` = 12** | inversions résiduelles | 🟠 résorber (§3.2) |
+| **🆕 Phase 5 P4 finance** | 259 InCents dans finance core — snapshot NF525 gelé | 🔴 migration critique |
+| **🆕 `ProcurementBridge` l.69** | `totalAmountInCents` sans microunits dans `signDeliveryNote()` | 🟠 pré-existant, P4 |
+| **🆕 6 lacunes infra** | API REST, tests intégration, CI/CD, monitoring, migration, isolation | 🔴 voir `afaire.md` |
 
 ## Décisions réservées à l'humain
 
@@ -732,18 +763,18 @@ Points de vigilance re-mesurés :
 # 🎯 11. TES 3 PREMIÈRES ACTIONS, AGENT (dans l'ordre)
 
 > 🤖 **Action 0 — obligatoire, AVANT de toucher au code** : lis `PLAN_COMPLET.md` §0 (contrat + **§0.9 Symbiose**),
-> puis `git pull`/`git log` pour partir du **HEAD vert réparé** (`agent/antigravity-exec`, `tsc=0/cycles=3`).
+> puis `git pull`/`git log` pour partir du **HEAD vert** (`agent/antigravity-exec`, `tsc=0/cycles=0`).
 > Lance `./scripts/agent-gate.sh` et colle le **bloc de preuve** dans une entrée « §0 — Baseline session <date> ».
 > C'est ta ligne de départ **liée au hash**. Sans elle, tes « avant → après » n'ont aucune référence recevable.
 >
-> ⚠️ **N'inscris PAS les tâches déjà acquises** (store, §3.0, §1bis, barrel — cf. §0.8 ✅). Tu les referais à vide.
+> ⚠️ **N'inscris PAS les tâches déjà acquises** (cf. §0.8 ✅ — table allongée v4.2). Tu les referais à vide.
 
-1. **§3.1 résidu — barrel `commerce=1` → 0** (30 min) → 1 commit, 1 entrée + `agent-gate.sh`. Le seul reste du barrel.
-2. **§3.4b — casser les 3 cycles restants** (motif « type dans le parent », §1.2) : extrais `ProvisioningRequest`,
-   `BridgePayload/PaymentMode`, et romps `CashDrawerModal→cashdrawer.action`. **Une coupure = un commit = une entrée**,
-   avec le **compteur de cycles collé après CHAQUE coupure** (Leçon 4). Cible **cycles 3 → 0**.
-3. **§3.2 — résorber `kernel→modules 3`, puis `shared 7`, `lib 12`** (déplacer les symboles vers `kernel/nexus/contracts/`,
-   Leçon 2) → une couche par commit. Cible **0**. Puis Étape 4/5 de §3.4 (résidu `shared/`).
+1. **§3.2 — résorber `shared→modules 7`, puis `lib→modules 12`** (déplacer les symboles vers `kernel/nexus/contracts/`
+   ou zone neutre, Leçon 2) → une couche par commit. Cible **0**. Puis Étape 4/5 de §3.4 (résidu `shared/`).
+2. **§4 résidu — god files + doublon FleetProvider** (~1 j). SplitBillDialog est FAIT (4.1).
+   Dédupliquer `NexusFleetProvider.tsx` (`shared/providers/fleet/` **et** `intelligence/ia/fleet/`).
+3. **§5 P4 — monnaie finance core** (~2 j). Les 259 InCents les plus délicats (snapshot NF525 = champs gelés).
+   **Ordre** : types/schémas → services → composants. Dual-write obligatoire.
 
 > ⚠️ **7.3 e-facture (légal, 1ᵉʳ sept.)** reste prioritaire en ressources **mais attend la décision humaine du choix
 > de PA**. Tant qu'elle n'est pas prise, avance sur l'axe dette ci-dessus. **Décisions humaines** : voir §10.
@@ -753,6 +784,8 @@ Points de vigilance re-mesurés :
 >
 > 🧹 **Hors chemin critique** : assainir les **5 fichiers de tests pré-existants** (§5.1) — mocks `logger` sans `debug`,
 > timeout LLM — pour que `vitest` redevienne un signal fiable (aujourd'hui pollué par de la flakiness d'ordre).
+>
+> 📌 **Infrastructure** : voir `afaire.md` pour les 6 lacunes (API REST, tests, CI/CD, monitoring, migration, isolation).
 
 ---
 
@@ -768,7 +801,10 @@ Points de vigilance re-mesurés :
 
 ---
 
-*v4.1 — mis à jour le 11/08/2026 (soir) post-réparation §AUDIT-2-FIX. Chiffres = `agent-gate.sh` @ `a3a38d281`, pas estimés.*
+*v4.2 — mis à jour le 11/08/2026 (nuit) post-exécution Symbiose. Chiffres = `agent-gate.sh` @ `dd1ed4813`, pas estimés.*
+*Delta v4.1→v4.2 : §2B.2 FAIT · cycles 3→0 · kernel→modules 3→0 · barrel 0/8 · invariants 9/9 ·*
+*Phase 5 P0-P3 FAIT · Phase 4.1 SplitBill FAIT · Sentry multi-tenant/multi-vertical · Emulateur Firestore.*
 *Détail des phases : `PLAN_MAITRE_CORRIGE.md` (v3) · Abstraction : `SPEC_SERVICE_TICKET.md` ·*
 *Événements : `MAPPING_EVENEMENTS_VERTICALES.md` · Reclassification : `MAPPING_BASE_VERTICALES.md` ·*
-*Journal d'exécution partagé : `JOURNAL_AGENT.md` · Gate : `scripts/agent-gate.sh`.*
+*Journal d'exécution partagé : `JOURNAL_AGENT.md` · Gate : `scripts/agent-gate.sh` ·*
+*Infrastructure : `afaire.md` (6 lacunes, ~28 j-h).*
