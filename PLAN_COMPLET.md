@@ -709,24 +709,22 @@ Résultats mesurés :
 ## Ordre final
 
 ```
-🚨 7.3 RÉCEPTION e-facture ───────────────────────────► 1ᵉʳ SEPT. (parallèle, priorité ressources)
+🚨 7.3 RÉCEPTION e-facture ───────────────────────────► 1ᵉʳ SEPT. (parallèle, priorité ressources ; attend décision PA)
 
-✅ 1bis · 2B.2 · 3.0 · 3.1 barrel · cycles · kernel→modules · Phase 5 P0-P3 · 4.1 SplitBill · Sentry
+✅ DÉJÀ FAIT : 1bis · 2B.2 · 3.0 · 3.1 barrel · cycles · toutes inversions · §3.4 Étapes 4/5 (shared/ vidé)
+              · Phase 4 (SplitBill + 4 god files <400L) · Phase 5 P0-P3 · §7.4-7.8 facturation · §8.1-8.8 multi-verticale · Sentry
 
-3.4b-résidu (shared 7 + lib 12 + Étape 4/5) → 3.2 inversions
-   ↓
-   ┌───────────────────────────┬──────────────────────────────┐
-   ↓                           ↓                              ↓
-5-P4-finance → 4-résidu   5-ops (déjà fait)            6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI
-   ↓
-7.4 → 7.6 → 7.6.1 → 7.7 → 7.8 ═══════╗
-                                     ↓
-              8.2 → 8.1 → 8.3 → 8.4 → 8.5 → 8.6 → 8.7 → 8.8 (garage)
-                                     ↓
-                                 7.2 Exchange → MCC-1…5
+RESTE (chemin critique) :
+5-P4-finance ─► 8.6-résidu (19 modules teintés) ─► 7.2 Exchange ─► MCC-1…5
+                                                                     │
+   (parallèle, périmètres disjoints)                                 │
+6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI  ◄── attend décisions charte + i18n
+                                                                     │
+   (verrouillé)                                                      │
+clinic ◄── attend §8.2 PII + §7.6 RGPD validés en prod
 ```
 
-**Chemin critique** : `3.2(shared/lib) → 5-P4-finance → 4-résidu → 7.4→7.8 → 8`.
+**Chemin critique** : `5-P4-finance → 8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §7.4-7.8, §8.1-8.8 clos).
 
 ---
 
