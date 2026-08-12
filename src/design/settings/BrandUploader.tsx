@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Loader2, Image as ImageIcon, X } from 'lucide-react';
 import { useToast } from '@ui/Toast';
-import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
+import { useBrandEditor } from '@/design/hooks/useBrandEditor';
 
 interface BrandUploaderProps {
   slot: 'logo' | 'favicon' | 'banner';

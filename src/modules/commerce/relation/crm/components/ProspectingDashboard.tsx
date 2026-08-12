@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Globe, Palette, Loader2, ArrowRight, Check, AlertTriangle, RefreshCcw, Wand2 } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
-import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
+import { useBrandEditor } from '@/design/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/hooks';

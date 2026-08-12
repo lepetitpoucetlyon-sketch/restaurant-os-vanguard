@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { ReactNode } from "react";
-import { withVerticalOverride } from "@/shared/hooks/useVerticalComponent";
+import { withVerticalOverride } from "@/design/hooks/useVerticalComponent";
 import type { StatCardIntent } from "./types";
 
 // ── StatCard CVA ──────────────────────────────────────────────────────────────

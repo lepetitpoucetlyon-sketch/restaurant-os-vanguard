@@ -8,7 +8,7 @@ import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { generateCSSVariables, semanticTokens } from '@nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@nexus/tokens/brand';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@nexus/tokens/verticals';
-import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
+import { useFirestoreBrand } from '@/design/hooks/useFirestoreBrand';
 import { themeModeAtom } from '@nexus/tokens/themeAtoms';
 import type { PlatformVariant } from '@nexus/contracts';
 

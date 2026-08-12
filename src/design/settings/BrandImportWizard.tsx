@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import { Loader2, Globe, Palette, CheckCircle2, ChevronRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useToast } from '@ui/Toast';
-import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
+import { useBrandEditor } from '@/design/hooks/useBrandEditor';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import type { BrandInput } from '@/lib/BrandingService';

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { HelpCircle, X, Send, History, Sparkles, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
 import { useSupportTickets } from './useSupportTickets';
-import { withVerticalOverride } from '@/shared/hooks/useVerticalComponent';
+import { withVerticalOverride } from '@/design/hooks/useVerticalComponent';
 import { useTenant } from '@/kernel/providers/NexusCoreProvider';
 
 export interface SupportHelpWidgetProps {

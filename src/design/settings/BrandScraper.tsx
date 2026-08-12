@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Globe, Wand2, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
-import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
+import { useBrandEditor } from '@/design/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { BrandConfig } from '@nexus/tokens/brand';
 
