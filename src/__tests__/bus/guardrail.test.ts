@@ -24,6 +24,8 @@ describe('§9.0 Garde-fou bus — isExpectedUnconsumed (liste blanche)', () => {
     expect(isExpectedUnconsumed('ops.service_ticket_opened')).toBe(true);
     expect(isExpectedUnconsumed('ops.service_ticket_closed')).toBe(true);
     expect(isExpectedUnconsumed('crm.allergen_flagged')).toBe(true);
+    expect(isExpectedUnconsumed('finance.refund_issued')).toBe(true);
+    expect(isExpectedUnconsumed('finance.invoice_generated')).toBe(true);
   });
 
   it('ne whiteliste PAS les events restaurant/transverses (un orphelin ici = bug)', () => {
@@ -55,6 +57,8 @@ describe('§9.0 Garde-fou bus — couverture des chaînes critiques restaurant',
     'haccp.nonconform',
     'support.ticket_escalated',
     'order.proforma_printed',
+    'finance.z_report_requested',
+    'finance.ticket_z_closed',
   ])('« %s » a ≥1 handler enregistré', (event) => {
     expect(NexusEventBus.listenerCount(event as never)).toBeGreaterThan(0);
   });

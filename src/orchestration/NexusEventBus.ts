@@ -26,6 +26,8 @@ const EXPECTED_UNCONSUMED_EVENTS: ReadonlySet<string> = new Set([
   'ops.service_ticket_opened', 'ops.service_ticket_working',
   'ops.service_ticket_closed', 'ops.service_ticket_cancelled',
   'crm.allergen_flagged',
+  'finance.refund_issued',
+  'finance.invoice_generated',
 ]);
 
 /** Vrai si l'absence de handler pour cet event est attendue (verticale fermée ou Classe B). */
