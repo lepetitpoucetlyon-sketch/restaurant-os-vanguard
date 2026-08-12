@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Bell, Settings, Sparkles } from "lucide-react";
 import { useUI } from "@/shared/hooks";
-import { useNotifications } from "@/shared/contexts/NotificationsContext";
+import { useNotifications } from "@/shared/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/shared/hooks";
 import { CommandModal } from "@ui/CommandModal";

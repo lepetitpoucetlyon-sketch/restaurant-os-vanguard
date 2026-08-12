@@ -1,7 +1,7 @@
 "use client";
 
 import { useHACCP } from "@nexus/guards/NexusGuardProvider";
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "../../contexts/RegistreContext";
 import { 
     Trash2, 
     Droplets, 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/shared/hooks";
-import { useSettings } from "@/shared/contexts/SettingsContext";
+import { useSettings } from "@/shared/hooks";
 import { 
     Smartphone, 
     Mail, 

@@ -7,7 +7,7 @@ import {
     CheckCircle2, AlertCircle, Loader2, Star, Zap,
 } from "lucide-react";
 import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useNotifications } from '@/shared/hooks';
 import type { TerminalDevice, TerminalAdapterType, TerminalConnectionType, TerminalStatus } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
 
 // ─── Meta ──────────────────────────────────────────────────────────────────────

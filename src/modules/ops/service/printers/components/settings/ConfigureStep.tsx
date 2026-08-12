@@ -8,7 +8,7 @@ import type {
   PrinterDevice, PrinterConnectionType, PaperWidth, PrinterConnection,
 } from "@/modules/ops/service/printers/hardware/types";
 import { ROLE_LABELS, BRAND_LABELS } from "@/modules/ops/service/printers/hardware/types";
-import { useNotifications } from "@/shared/contexts/NotificationsContext";
+import { useNotifications } from "@/shared/hooks";
 
 export const INPUT_CLS = "w-full px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border text-text-primary text-sm font-mono placeholder:text-text-muted focus:outline-none focus:border-action-primary transition-colors";
 

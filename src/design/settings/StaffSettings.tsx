@@ -18,8 +18,8 @@ import {
     Activity
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useSettings } from "@/shared/contexts/SettingsContext";
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useSettings } from "@/shared/hooks";
+import { useNotifications } from '@/shared/hooks';
 import { PositionSettings, StaffConfig } from "@nexus/contracts";
 import { TipsDistributionSettingsSection } from "./TipsDistributionSettingsSection";
 

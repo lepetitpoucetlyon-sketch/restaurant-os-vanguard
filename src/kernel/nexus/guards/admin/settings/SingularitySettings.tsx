@@ -8,7 +8,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SettingsManager } from '@/lib/SettingsManager';
 import { AccountingMode, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useNotifications } from '@/shared/hooks';
 
 /**
  * ⚙️ SingularitySettings - Grade X

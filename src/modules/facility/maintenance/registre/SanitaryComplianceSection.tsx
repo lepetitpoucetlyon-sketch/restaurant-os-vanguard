@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/modules/compliance";
 import { 
     Calendar, 
     Clock, 

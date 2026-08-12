@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ExternalLink, Building2, Save, Loader2, Info } from 'lucide-react';
 import { toast } from 'sonner';
-import { useSettings } from '@/shared/contexts/SettingsContext';
+import { useSettings } from '@/shared/hooks';
 
 const SIRET_REGEX = /^\d{14}$/;
 

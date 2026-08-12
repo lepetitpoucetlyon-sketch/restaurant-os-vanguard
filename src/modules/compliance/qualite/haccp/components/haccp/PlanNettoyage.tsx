@@ -14,7 +14,7 @@ import { HACCPVisionScanner } from './HACCPVisionScanner';
 import { cn } from "@/lib/ui.foundations";;
 import { ZONES_CONFIG, CleaningTask } from '../../types';
 import { useHygieneLogs, useCreateHygieneLog, useDeleteHygieneLog } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useNotifications } from '@/shared/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 

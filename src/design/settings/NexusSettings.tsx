@@ -16,7 +16,7 @@ import {
     Wand2,
     Zap
 } from 'lucide-react';
-import { useSettings } from '@/shared/contexts/SettingsContext';
+import { useSettings } from '@/shared/hooks';
 import { GEMINI_VOICES, NexusMacro, NexusConfig, AI_PROVIDER_MODELS, AIProvider } from '@nexus/contracts/settings/nexus';
 import { cn } from '@/lib/ui.foundations';
 import { NexusHeroHeader } from './nexus-settings/NexusHeroHeader';

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { useUI } from "@/shared/hooks";
-import { useNotifications } from "@/shared/contexts/NotificationsContext";
+import { useNotifications } from "@/shared/hooks";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import {
     LayoutDashboard,

@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/shared/hooks';
 import { RealtimeVoiceFactory, type IRealtimeVoiceService } from '@/modules/intelligence';
-import { useSettings } from '@/shared/contexts/SettingsContext';
+import { useSettings } from '@/shared/hooks';
 import { SovereignData } from '@/shared/nexus-contract';
 
 declare global {

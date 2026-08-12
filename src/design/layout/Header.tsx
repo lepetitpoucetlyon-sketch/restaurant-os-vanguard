@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Bell, Search, Settings, Menu } from "lucide-react";
 import { useUI } from "@/shared/hooks";
 import { useAuth } from "@/shared/hooks";
-import { useNotifications } from "@/shared/contexts/NotificationsContext";
+import { useNotifications } from "@/shared/hooks";
 import { motion } from "framer-motion";
 import { CommandModal } from "@ui/CommandModal";
 import { NotificationPanel } from "@ui/NotificationPanel";

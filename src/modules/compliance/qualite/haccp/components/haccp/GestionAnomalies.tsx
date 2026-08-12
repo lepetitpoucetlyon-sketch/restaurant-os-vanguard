@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useHygieneLogs, useUpdateHygieneLog } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useNotifications } from '@/shared/hooks';
 
 export function GestionAnomalies() {
     const { data: logs = [] } = useHygieneLogs();

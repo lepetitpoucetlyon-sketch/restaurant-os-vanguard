@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useReceptionLogs, useCreateReceptionLog, useDeleteReceptionLog } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useNotifications } from '@/shared/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 import { StatusBadge } from '@ui/StatusBadge';

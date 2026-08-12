@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/modules/compliance";
 import { ShieldCheck, Calendar, Clock, Building2, FileText, Download, Send, AlertTriangle } from "lucide-react";
 import { Button } from "@ui/button";
 
