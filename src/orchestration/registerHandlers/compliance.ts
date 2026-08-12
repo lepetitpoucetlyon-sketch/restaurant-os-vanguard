@@ -7,6 +7,7 @@ import { registerDLCExpiryHandler } from '../handlers/DLCExpiryHandler';
 import { registerDLCBlockerHandler } from '../handlers/DLCBlockerHandler';
 import { registerIotOfflineAlertHandler } from '../handlers/IotOfflineAlertHandler';
 import { registerHaccpCheckArchiverHandler } from '../handlers/HaccpCheckArchiverHandler';
+import { registerHaccpCorrectiveActionHandler } from '../handlers/HaccpCorrectiveActionHandler';
 import { registerNonConformActionHandler } from '../handlers/NonConformActionHandler';
 import { registerTrainingComplianceAlertHandler } from '../handlers/TrainingComplianceAlertHandler';
 import { registerComplianceDeadlineHandler } from '../handlers/ComplianceDeadlineHandler';
@@ -26,6 +27,7 @@ export function registerComplianceHandlers(): Array<() => void> {
     registerDLCBlockerHandler(),
     registerIotOfflineAlertHandler(),
     registerHaccpCheckArchiverHandler(),
+    registerHaccpCorrectiveActionHandler(),
     registerNonConformActionHandler(),
     registerTrainingComplianceAlertHandler(),
     registerComplianceDeadlineHandler(),

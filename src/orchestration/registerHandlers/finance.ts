@@ -15,6 +15,7 @@ import { registerCashCountReconciliationHandler } from '../handlers/CashCountRec
 import { registerFoodCostImpactedHandler } from '../handlers/FoodCostImpactedHandler';
 import { registerDailyDigestHandler } from '../handlers/DailyDigestHandler';
 import { registerDigitalReceiptHandler } from '../handlers/DigitalReceiptHandler';
+import { registerProformaHandler } from '../handlers/ProformaHandler';
 
 export function registerFinanceHandlers(): Array<() => void> {
   return [
@@ -25,6 +26,7 @@ export function registerFinanceHandlers(): Array<() => void> {
     registerFoodCostImpactedHandler(),
     registerDailyDigestHandler(),
     registerDigitalReceiptHandler(),
+    registerProformaHandler(),
     registerSupplierInvoiceLedgerHandler(),
     registerSepaExportHandler(),
     registerBankSyncAuditHandler(),

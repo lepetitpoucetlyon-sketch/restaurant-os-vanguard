@@ -50,6 +50,10 @@ describe('§9.0 Garde-fou bus — couverture des chaînes critiques restaurant',
     'order.refunded',
     'stock.received',
     'inventory.deducted',
+    'inventory.stock_adjusted',
+    'haccp.nonconform',
+    'support.ticket_escalated',
+    'order.proforma_printed',
   ])('« %s » a ≥1 handler enregistré', (event) => {
     expect(NexusEventBus.listenerCount(event as never)).toBeGreaterThan(0);
   });
