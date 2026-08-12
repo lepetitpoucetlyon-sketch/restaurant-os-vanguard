@@ -2,7 +2,9 @@
 
 > Analyse complète du projet, rédigée après exploration directe du code (≈1300 fichiers).
 > Compagnon du `CLAUDE.md` : ici le **pourquoi** et le **comment global** ; là-bas les **règles à respecter**.
-> Dernière mise à jour : 2026-06-14.
+> Dernière mise à jour : 2026-06-14. Chemins clés (§3, §6, §10) resynchronisés le 2026-08-12 après le rapatriement vers `kernel/`.
+>
+> ⚠️ **Zones encore à rafraîchir** (snapshot antérieur) : la table §2 (compte de fichiers par pilier, mention `kds` comme pilier) et le routing §7 datent d'avant la restructuration en 8 piliers + domaines. Pour l'arborescence à jour et les règles exactes, se référer à `CLAUDE.md`.
 
 ---
 
@@ -64,7 +66,7 @@ Les **piliers sont étanches** : ils ne s'importent pas directement entre eux. L
 
 ### Singleton et bouclier
 
-`src/lib/nexus/NexusAdapter.ts` expose un singleton `Nexus` (classe `NexusManager`). Toute écriture/lecture passe par lui. Point clé : **quand on enregistre un adapter, il est automatiquement enveloppé** par le `NexusInterceptor`, lui-même branché sur le `SovereignGuard` :
+`src/kernel/adapter/NexusAdapter.ts` expose un singleton `Nexus`. Toute écriture/lecture passe par lui. Point clé : **quand on enregistre un adapter, il est automatiquement enveloppé** par le `NexusInterceptor`, lui-même branché sur le `SovereignGuard` :
 
 ```
 Nexus.adapter = new FirestoreAdapter()
@@ -83,7 +85,7 @@ On ne peut donc pas écrire en base sans passer la barrière de souveraineté. C
 
 ### SovereignGuard — la barrière
 
-`src/shared/nexus/guards/SovereignGuard.ts` applique :
+`src/kernel/nexus/guards/SovereignGuard.ts` applique :
 
 - **Isolation tenant** : tout chemin doit être `tenants/{tenantId}/...`. Une fuite déclenche `SHADOW_ISOLATION_BREACH: Execution Terminated.`
 - **Mode maître** : `MasterBridge.isMasterMode()` autorise des écritures globales hors `tenants/` (push de config souveraine).
@@ -108,13 +110,13 @@ C'est le flux le plus sensible du système (conformité fiscale française).
 Panier POS (CartItem[])
    │
    ▼
-FinancialNexusBridge.processOrder(payload)        infrastructure/adapters/FinancialNexusBridge.ts
+FinancialNexusBridge.processOrder(payload)        modules/finance/comptabilite/FinancialNexusBridge.ts
    │  1. computeTvaBreakdown(items)  → ventilation TVA par taux
    │  2. getLastSeal(tenantId)       → dernier sceau (continuité de chaîne)
    │  3. construit un JournalEntry (immuable, NF525)
    │  4. construit un FiscalSeal
    ▼
-FiscalEngine.sealEntry(data, options)             infrastructure/adapters/FiscalAdapter.ts
+FiscalEngine.sealEntry(data, options)             modules/finance/fiscalite/FiscalAdapter.ts
    │  dataSnapshot = CryptoService.canonicalStringify(data)
    │  previousHash = lastSeal?.hash ?? GENESIS_ROOT
    │  hash = SHA-256(dataSnapshot + previousHash)
@@ -135,7 +137,7 @@ Points de conformité :
 
 ## 5. Intelligence / RAG
 
-`src/modules/intelligence/rag/` orchestre un **Knowledge Graph** via un sidecar Python **LightRAG** (port 9621, lancé par `docker-compose`).
+`src/modules/intelligence/knowledge/rag/` orchestre un **Knowledge Graph** via un sidecar Python **LightRAG** (port 9621, lancé par `docker-compose`).
 
 ```
 HermesKnowledgeManager  →  LightRAGClient  →  HTTP REST  →  LightRAG Server (Python)
@@ -149,7 +151,7 @@ HermesKnowledgeManager  →  LightRAGClient  →  HTTP REST  →  LightRAG Serve
 
 ## 6. Modèle de données
 
-Schémas **Zod** dans `src/domain/schemas/`, types dérivés par `z.infer<>`.
+Schémas **Zod** par pilier dans `src/modules/<pilier>/domain/schemas/`, types dérivés par `z.infer<>`. Primitives partagées : `src/shared/schemas/primitives.ts`.
 
 ### Primitives (`primitives.ts`)
 
@@ -169,7 +171,7 @@ Schémas **Zod** dans `src/domain/schemas/`, types dérivés par `z.infer<>`.
 | `hr.ts` | `ShiftEntry`, `PayrollCalculation`, `ShiftStats` |
 | `tenant.ts` | `TenantConfig`, `OrchestratorSignal`, `TenantTheme` |
 
-> Contrats runtime (interfaces) dans `src/shared/nexus/contracts/`. Attention : le « contrat souverain » de base (`SovereignNode`, `TenantConfig`, `SovereignData`) vit dans `src/shared/nexus-contract.ts` (fichier racine, à ne pas confondre avec le dossier `contracts/`).
+> Contrats runtime (interfaces) dans `src/kernel/nexus/contracts/`, dont le « contrat souverain » de base (`SovereignNode`, `TenantConfig`, `SovereignData`) dans `src/kernel/nexus/contracts/nexus-contract.ts`.
 
 ---
 
@@ -192,7 +194,7 @@ Trois groupes de routes sous `src/app/` :
 - `src/__tests__/` : `lockdown.test.ts`, `stress/` (ex. `NexusInterceptor.stress.test.ts`), `infrastructure/`.
 - `src/tests/vanguard/` : tests « vanguard » (dont `simulacra.test.ts`), benchmarks.
 - `tests/` (racine) : `e2e/` (Playwright), `falange/`, `verification/`, `benchmarks/`.
-- **Simulacra** (`src/engines/Simulacra/`) : `MonkeyChaos` (chaos/dérive réseau), `RealityGenerator` (génère des rafales de ventes — « rush hour »), `SinfoniaGradeXProof`.
+- **Simulacra** (`src/kernel/adapters/Simulacra/`) : `MonkeyChaos` (chaos/dérive réseau), `RealityGenerator` (génère des rafales de ventes — « rush hour »), `SinfoniaGradeXProof`.
 - Vérifications : `npx tsc --noEmit` (✅ **0 erreur** à ce jour), `npx vitest run`, `./scripts/preflight.sh` (TS + ESLint + tests + **sentrux** depuis cette session).
 
 ---
@@ -273,25 +275,25 @@ Débris racine : 31 fichiers supprimés. Plan fiscal : `MIGRATION-microunits.md`
 
 | Fichier | Rôle |
 |---------|------|
-| `src/lib/nexus/NexusAdapter.ts` | Singleton Nexus + wrap automatique SovereignGuard |
-| `src/lib/nexus/NexusInterceptor.ts` | Interception des opérations (applique le Guard) |
-| `src/shared/nexus/guards/SovereignGuard.ts` | Barrière multi-tenant + immuabilité fiscale |
-| `src/shared/nexus-contract.ts` | Primitives souveraines (`SovereignNode`, `TenantConfig`) |
-| `src/infrastructure/adapters/FinancialNexusBridge.ts` | Pont POS → JournalEntry NF525 |
-| `src/infrastructure/adapters/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
-| `src/domain/schemas/primitives.ts` | `Microunits`, `sanitized`, `Timestamp` |
-| `src/domain/schemas/finance.ts` | `JournalEntry`, `FiscalSeal`, `Account` (Zod) |
+| `src/kernel/adapter/NexusAdapter.ts` | Singleton Nexus + wrap automatique SovereignGuard |
+| `src/kernel/adapter/NexusInterceptor.ts` | Interception des opérations (applique le Guard) |
+| `src/kernel/nexus/guards/SovereignGuard.ts` | Barrière multi-tenant + immuabilité fiscale |
+| `src/kernel/nexus/contracts/nexus-contract.ts` | Primitives souveraines (`SovereignNode`, `TenantConfig`) |
+| `src/modules/finance/comptabilite/FinancialNexusBridge.ts` | Pont POS → JournalEntry NF525 |
+| `src/modules/finance/fiscalite/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
+| `src/shared/schemas/primitives.ts` | `Microunits`, `sanitized`, `Timestamp` |
+| `src/modules/finance/domain/schemas/finance.ts` | `JournalEntry`, `FiscalSeal`, `Account` (Zod) |
 | `src/lib/icm/TaskContext.ts` | Cartes d'importance ICM-lite par route |
 | `src/lib/NexusSyncService.ts` | Orchestrateur : séquence cleanup → suture → gates → sync (découpé) |
-| `src/lib/sync/pillarSyncRegistry.ts` | Init/stop des sous-services de pilier + TimeSync (extrait) |
-| `src/lib/sync/syncGates.ts` | Gates de sync : privacy shield (Grade X) + génome (Grade IX) (extrait) |
-| `src/lib/events/NexusEventBus.ts` | Bus d'événements (CRITICAL/HIGH/BACKGROUND) — découple les piliers |
-| `src/lib/events/handlers/SovereignBreachHandler.ts` | Kill-switch global sur brèche d'isolation (consomme `sovereign.breach`) |
-| `src/lib/MasterBridge.ts` | Mode maître / push config globale |
+| `src/orchestration/sync/pillarSyncRegistry.ts` | Init/stop des sous-services de pilier + TimeSync (extrait) |
+| `src/orchestration/sync/syncGates.ts` | Gates de sync : privacy shield (Grade X) + génome (Grade IX) (extrait) |
+| `src/orchestration/NexusEventBus.ts` | Bus d'événements (CRITICAL/HIGH/BACKGROUND) — découple les piliers |
+| `src/orchestration/handlers/SovereignBreachHandler.ts` | Kill-switch global sur brèche d'isolation (consomme `sovereign.breach`) |
+| `src/lib/adapters/MasterBridge.ts` | Mode maître / push config globale |
 | `src/store/base.ts` | Module neutre : `NexusNode`, `updateNexusNode` |
 | `src/store/nexusNodeFactory.ts` | Fabrique d'atomes + RBAC (`createProxyDomain`) |
-| `src/modules/intelligence/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
-| `src/engines/Simulacra/` | Simulation / chaos testing |
+| `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
+| `src/kernel/adapters/Simulacra/` | Simulation / chaos testing |
 
 ---
 

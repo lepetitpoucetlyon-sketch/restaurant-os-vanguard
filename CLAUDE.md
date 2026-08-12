@@ -1,185 +1,124 @@
 # RESTAURANT-OS-CORE — Conventions Claude Code
 
-> 📐 Pour une analyse complète (flux NF525, RAG, modèle de données, audit de dette), voir **`ARCHITECTURE.md`**.
+> 📐 Analyse complète (flux NF525, RAG, modèle de données, dette) : **`ARCHITECTURE.md`**.
+> ⚠️ `ARCHITECTURE.md` contient encore des chemins d'avant la migration `kernel/` — se fier à ce fichier-ci pour les chemins.
 
 ## Coordination multi-sessions (OBLIGATOIRE — PREMIÈRE ACTION)
 
-Plusieurs sessions Claude Code tournent en parallèle sur ce repo. **AVANT toute autre action** (même lire du code) :
+Plusieurs sessions Claude Code tournent en parallèle. **AVANT toute autre action** (même lire du code) :
 
 1. **Lire** `.claude/sessions.md`
-2. **S'inscrire** : ajouter une ligne au tableau avec un nom court, ton périmètre (dossiers/fichiers que tu vas toucher), la date, et `active`
-3. **Vérifier** : si une autre session `active` couvre le même périmètre → **STOP, demander à l'utilisateur**
-4. **À la fin** : passer ton status à `terminée`
+2. **S'inscrire** : une ligne au tableau (nom court, périmètre, date, `active`)
+3. **Vérifier** : si une session `active` couvre le même périmètre → **STOP, demander à l'utilisateur**
+4. **À la fin** : passer le status à `terminée`
 
-Si tu ne t'inscris pas, tu risques d'écraser le travail d'une autre session sans le savoir.
+Sans inscription, tu risques d'écraser le travail d'une autre session.
 
-## Architecture
+## Architecture — piliers & domaines
 
-Système multi-tenant en **8 piliers** avec une couche intermédiaire de **domaines universels** (2-3 par pilier).
-Structure canonique : `src/modules/<pilier>/<domaine>/<module>/` — l'infrastructure (providers, connectors, hooks, services, store, domain, migration) reste à la racine du pilier.
+Système multi-tenant en **8 piliers métier** (+ `mcc`, outillage plateforme), avec une couche de **domaines universels** (2-4 par pilier).
+Structure canonique : `src/modules/<pilier>/<domaine>/<module>/`. L'infrastructure (providers, connectors, hooks, services, store, domain, migration) reste à la racine du pilier.
 
-### Arborescence des piliers et domaines
+| Pilier | Domaines |
+|--------|----------|
+| **ops** | `service/` · `production/` · `workflow/` |
+| **commerce** | `catalog/` · `acquisition/` · `relation/` · `fidelite/` |
+| **finance** | `comptabilite/` · `tresorerie/` · `fiscalite/` |
+| **compliance** | `qualite/` · `securite/` · `reglementaire/` |
+| **human** | `effectifs/` · `remuneration/` |
+| **logistics** | `stock/` · `approvisionnement/` · `fleet/` · `dispatch/` |
+| **intelligence** | `analytique/` · `ia/` · `knowledge/` |
+| **facility** | `spaces/` · `maintenance/` · `assets/` |
 
-| Pilier | Domaines | Modules principaux |
-|--------|----------|-------------------|
-| **ops** | `service/` · `production/` · `workflow/` | service: pos, bar, printers, frontdesk · production: kds, kitchen, recipes · workflow: engine |
-| **commerce** | `catalog/` · `acquisition/` · `relation/` · `fidelite/` | catalog: products, menus · acquisition: marketing, seo, landing · relation: reservations, crm, customers, delivery · fidelite: loyalty, quotes, widgets |
-| **finance** | `comptabilite/` · `tresorerie/` · `fiscalite/` | comptabilite: accounting, billing, fec, documents, analytics · tresorerie: banking, payout, collection, ap · fiscalite: tax |
-| **compliance** | `qualite/` · `securite/` · `reglementaire/` | qualite: haccp, iot, recall, donation, calendar · securite: audit · reglementaire: rgpd |
-| **human** | `effectifs/` · `remuneration/` | effectifs: hr · remuneration: payroll |
-| **logistics** | `stock/` · `approvisionnement/` · `fleet/` · `dispatch/` | stock: inventory · approvisionnement: reception, procurement · fleet: vehicles, drivers · dispatch: routing |
-| **intelligence** | `analytique/` · `ia/` · `knowledge/` | analytique: analytics, reports, attendance, anomaly · ia: ai, agency, fleet, simulator, resilience, tools · knowledge: rag |
-| **facility** | `spaces/` · `maintenance/` · `assets/` | spaces: floor-plan, settings · maintenance: registre |
+> Les modules d'un domaine se listent par `ls src/modules/<pilier>/<domaine>/`.
 
-**Règle du Barrel renforcée** : importer uniquement depuis `@/modules/<pilier>` (barrel racine). Tout import vers `@/modules/<pilier>/<domaine>/...` est une violation — sauf pour les tests qui mockent des chemins spécifiques.
+### Règle du Barrel (non négociable)
+Un module n'exporte que via son `index.ts`. On importe **uniquement** depuis le barrel racine du pilier : `import { X } from '@/modules/<pilier>'`. Tout import vers `@/modules/<pilier>/<domaine>/...` est une violation (sauf tests qui mockent un chemin précis).
 
-**Nexus** = couche d'accès données (adapters : Firestore / Simulacra / Mock).
-Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiquement** tout adapter avec `NexusInterceptor` + `SovereignGuard`.
-**SovereignGuard** = barrière cross-tenant — ne jamais contourner.
+### Les 3 canaux légitimes cross-module
+1. `import { X } from '@/modules/<pilier>'` — types, hooks, composants publics
+2. `Nexus.adapter.get/set(...)` — données persistées
+3. `NexusEventBus.emit/on(...)` — effets de bord async
 
-**Anti-cycles** : `src/store/base.ts` est le module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les dépendances circulaires Registry ↔ Atomes.
+### Décisions d'architecture canoniques
+1. **Emplacement du métier** : le code métier vit **exclusivement** dans les piliers (`src/modules/<pilier>/`), jamais dans `src/verticals/`. *« Un bug = un endroit à toucher »*. Les verticales ne déclarent que types/config/adapters spécifiques (ex. `repair-intake` → `modules/ops/service/`, pas `verticals/garage/`).
+2. **Motif interne** : `components/hooks/services/store`. L'hexagonal (ports & adapters) est réservé aux modules multi-implémentations (`e-invoicing`, `open-banking`).
+3. **RBAC** : par **NIVEAUX** numériques universels (100 owner … 10 support) comparés via `minLevel` dans `ACTION_MAP`. Les **LIBELLÉS** (`roleLabels: Record<number, string>`) sont configurables par verticale sans toucher la matrice.
 
-**i18n** : `src/i18n/` existe (domains/ 464 lignes) mais **0 composant UI ne l'utilise** — l'app est monolingue français en dur. Infrastructure conservée en squelette pour une future internationalisation, mais inactive. Ne pas câbler i18n dans de nouveaux composants sans décision explicite.
+**Rapatriement progressif** : du code métier subsiste sur d'anciennes racines (`components/`, `domain/`, `engines/`…). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`** ; à chaque passage sur un orphelin, le rapatrier. Ne jamais créer un fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
 
-**Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture. Le barrel de chaque pilier (ex: `src/modules/ops/index.ts`) est la seule surface d'export publique — les domaines et modules internes ne sont pas importables directement.
+**Anti-cycles** : `src/store/base.ts` = module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les cycles Registry ↔ Atomes.
 
-### Les 3 canaux légitimes de communication cross-module
-1. `import { X } from '@/modules/<pilier>'` (Types, hooks, composants publics)
-2. `Nexus.adapter.get/set(...)` (Données persistées)
-3. `NexusEventBus.emit/on(...)` (Effets de bord async)
-
-### Décisions d'architecture canoniques (Vibecoder Rescue v4)
-
-1. **Décision 1 — Emplacement du métier** : Le code métier vit exclusivement dans les piliers (`src/modules/<pilier>/`), jamais dans les verticales (`src/verticals/`). *« Un bug = un endroit à toucher »*. Les verticales (`src/verticals/`) déclarent les types, configurations et adapters specifiques, sans dupliquer la logique métier (`repair-intake` va dans `modules/ops/service/`, pas dans `verticals/garage/`).
-2. **Décision 2 — Motif d'architecture interne** : Le motif interne standard des modules est `components/hooks/services/store`. L'architecture hexagonale (ports & adapters) est réservée exclusivement aux modules multi-implémentations (`e-invoicing`, `open-banking`).
-3. **Décision 3 — Modèle RBAC & Libellés** : RBAC basé sur des **NIVEAUX** numériques universels (100 owner ... 10 support) comparés par `minLevel` dans `ACTION_MAP`. Les **LIBELLÉS** de rôles (`roleLabels: Record<number, string>`) sont configurables par verticale sans affecter la matrice de permissions.
-
-**Rapatriement progressif** : Le code métier est encore dispersé sur 8 racines (`components/`, `domain/`, `engines/`, etc.). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`**. À chaque passage sur un fichier orphelin dans `components/` ou `domain/`, le rapatrier vers le bon pilier. Ne jamais créer de nouveau fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
+**i18n INACTIF** : `src/i18n/` existe mais **0 composant ne l'utilise** (app monolingue FR en dur). Ne pas câbler i18n dans un nouveau composant sans décision explicite.
 
 ## Conventions critiques
 
 ### Monnaie — MICROUNITS OBLIGATOIRE
 - **1 microunit = 0,000 001 €** (1 000 000 µ = 1 €)
-- Tous les prix en champs `*InMicrounits` (jamais `*InCents` dans le nouveau code)
-- Helper : `toMicrounits(val)` depuis `@/domain/schemas/primitives`
-- Type branded : `Microunits` — cast via `toMicrounits()`, jamais `as Microunits` direct
+- Prix en champs `*InMicrounits` (jamais `*InCents` dans le nouveau code)
+- Helper `toMicrounits(val)` depuis `@/shared/schemas/primitives` — type branded `Microunits`, jamais `as Microunits` direct
 
 ### NF525 — Immuabilité fiscale
 - `journalEntries`, `fiscalSeals`, `fiscalLedger` : **jamais delete, jamais update**
-- Toute vente POS → `FinancialNexusBridge.processOrder()` → JournalEntry + FiscalSeal chaîné
+- Vente POS → `FinancialNexusBridge.processOrder()` → JournalEntry + FiscalSeal chaîné
 - Hash chaîne : SHA-256(dataSnapshot + previousHash) via `CryptoService`
 
 ### Multi-tenancy Suzerain/Vassal
 - Toute écriture Nexus : path `tenants/{tenantId}/{collection}/{id}`
 - `tenantId` = `activeTenantId` depuis `useTenant()` (jamais hardcodé)
-- Collections protégées dans `SovereignGuard` : ne pas ajouter sans autorisation
+- `SovereignGuard` (`src/kernel/nexus/guards/`) = barrière cross-tenant — **ne jamais contourner** ; ne pas ajouter de collection protégée sans autorisation
 
-### Types
-- Schémas Zod dans `src/domain/schemas/` → typage auto via `z.infer<>`
-- Contrats dans `src/shared/nexus/contracts/` (interfaces runtime)
-- `CartItem` ops = `src/modules/ops/workflow/engine/types.ts` (microunits)
-- `CartItem` legacy = `src/modules/ops/service/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
+### Types & schémas
+- Schémas **Zod** par pilier : `src/modules/<pilier>/domain/schemas/` → typage auto via `z.infer<>`. Primitives partagées : `src/shared/schemas/primitives.ts`.
+- Contrats runtime (interfaces) : `src/kernel/nexus/contracts/`
+- `CartItem` ops = `src/modules/ops/workflow/engine/types.ts` (microunits) · `CartItem` legacy = `src/modules/ops/service/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
 
 ### PlatformVariant — multi-industrie
-- Variants supportés : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom`
-- DNA templates dans `src/shared/seeds/` — `resolveDNA(variant)` route vers le bon template
+- Variants : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom`
+- DNA templates dans `src/lib/seeds/` — `resolveDNA(variant)` (`src/lib/seeds/index.ts`) route vers le bon template
 - Nav gating : `filterByCapabilities(sections, tenant.capabilities)` dans `src/config/navConfig.ts`
-- `variant` dans `TenantConfigSchema` (optionnel, défaut `'restaurant'` à runtime dans `TenantSeeder`)
+- `variant` dans `TenantConfigSchema` (défaut `'restaurant'` à runtime dans `TenantSeeder`)
 
-## Structure `lib/` — couches transversales
+## Couches machine — `kernel/` vs `lib/`
 
-`src/lib/` regroupe tout ce qui est **transversal mais pas un pilier métier**.
-Les sous-dossiers ci-dessous sont la cible de migration (barrels logiques déjà en place) :
+> Issu du rapatriement `shared/` + `lib/nexus` → `kernel/` (terminé). `src/lib/nexus/` et `src/shared/nexus/` **n'existent plus**.
 
-```
-lib/
-├── nexus/      ← machine core : NexusAdapter, NexusInterceptor, types, adapters Firestore
-│                 NE PAS y mettre de logique métier
-├── mcc/        ← outils Multi-Cloud-Control (admin platform)
-├── icm/        ← TaskContext, ICM-lite chargement sélectif par route
-├── cron/       ← jobs planifiés (DLCExpiryJob, QuoteReminderJob, IotOfflineMonitor…)
-├── services/   ← barrel → BrandingService, CryptoService, IdentityManager…
-│                 (fichiers sources encore à la racine lib/ — migration post-versionbase)
-├── utils/      ← barrel → dates, formatters, helpers, constants, bloom-filter…
-└── adapters/   ← barrel → firebase, axiom, sentry, audit, email-service…
-```
+- **`src/kernel/`** = machine core Nexus, **aucune logique métier**. Singleton `Nexus` : `src/kernel/adapter/NexusAdapter.ts` (+ `NexusInstance.ts`, `NexusInterceptor.ts`). Guards : `src/kernel/nexus/guards/`. Contrats : `src/kernel/nexus/contracts/`. Le singleton enveloppe **automatiquement** tout adapter avec `NexusInterceptor` + `SovereignGuard`.
+- **`src/lib/`** = services transversaux non-métier : `icm/`, `cron/`, `seeds/`, `sync/`, `services/`, `utils/`, `adapters/`, `mcc/`. Import direct `@/lib/<Service>` (barrels `@/lib/{services,utils,adapters}` dispo mais optionnels).
 
-**Règle lib/nexus vs shared/nexus** :
+## Routes publiques — deux groupes à ne pas confondre
 
-| `lib/nexus/` | `shared/nexus/` |
-|---|---|
-| Machine core : `NexusAdapter.ts`, `NexusInterceptor.ts`, types primitifs, adapters Firestore/Simulacra/Mock | Logique métier : guards, contracts, engines, state, vault, tokens |
-| Aucune dépendance vers `modules/` ou `shared/` | Peut importer `lib/nexus/` |
-| Instanciation du singleton `Nexus` | Utilise le singleton |
+- `app/(public)/` = pages **PLATEFORME** (`legal/`, `status/`) — pas de tenant, pas de `NexusOpsProvider`.
+- `app/(client)/(public)/` = pages **TENANT** (`landing/`, `showcase/`, `login/`) — tenant résolu depuis l'URL (`?tenant=` ou sous-domaine).
+- **Piège** : `app/(public)/demo/` = ancien système démo (à supprimer). La démo officielle = tenants `_demo_*` bootstrappés via `TenantSeeder`.
 
-**Règle d'import** : toujours `@/lib/<ServiceName>` (chemin direct) jusqu'à migration physique.
-Les barrels `@/lib/services`, `@/lib/utils`, `@/lib/adapters` sont disponibles mais non obligatoires.
+## ICM-lite — chargement sélectif par route
 
-## Routes publiques — deux groupes distincts
-
-```
-app/(public)/              ← pages PLATEFORME (indépendantes du tenant)
-│   ├── legal/             — mentions légales, CGV
-│   └── status/            — page statut système
-│
-app/(client)/(public)/     ← pages TENANT (contextuelles au tenant courant)
-    ├── landing/           — landing page personnalisée
-    ├── showcase/          — menu/vitrine publique
-    └── login/             — authentification
-```
-
-Ce n'est **pas un doublon** — les layouts et middlewares sont différents :
-- `(public)` : pas de tenant requis, pas de `NexusOpsProvider`
-- `(client)/(public)` : tenant résolu depuis l'URL (`?tenant=` ou sous-domaine), layout client actif
-
-**Piège courant** : `app/(public)/demo/` est l'**ancien** système de démo (à supprimer post-versionbase Sprint 1).
-La démo officielle passe par `_demo_*` tenants bootstrappés via `TenantSeeder`.
-
-## ICM-lite — Chargement sélectif par route
-
-Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.ts`.
-`NexusOpsProvider` résout automatiquement la map via `useTaskContext()` (lit le pathname).
-`NexusSyncService.init(tenantId, taskContext)` n'initialise que les modules HIGH/MEDIUM.
-
-| Route | Modules chargés |
-|-------|----------------|
-| `/pos` | orders, tables, products, categories |
-| `/kds` | orders, tables, recipes |
-| `/finance` ou `/audit` | finance, compliance |
-| `/operations` | orders, tables, stocks, compliance |
-| `/admin` | tout |
-
-**Pour ajouter une nouvelle route :** ajouter une entrée dans `TASK_MAPS` et un cas dans `resolveTaskContext()`.
+Chaque route déclare une importance map dans `src/lib/icm/TaskContext.ts`. `NexusOpsProvider` la résout via `useTaskContext()` (pathname) ; `NexusSyncService.init()` n'initialise que les modules HIGH/MEDIUM.
+**Nouvelle route** : ajouter une entrée dans `TASK_MAPS` + un cas dans `resolveTaskContext()`.
 
 ## Fichiers clés
 
 | Fichier | Rôle |
 |---------|------|
+| `src/kernel/adapter/NexusAdapter.ts` | Singleton Nexus + wrap auto Interceptor/SovereignGuard |
+| `src/kernel/nexus/guards/SovereignGuard.ts` | Barrière cross-tenant + immuabilité fiscale |
 | `src/modules/finance/comptabilite/FinancialNexusBridge.ts` | Bridge POS → JournalEntry NF525 |
 | `src/modules/finance/fiscalite/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
-| `src/domain/schemas/pos.ts` | `PosTicket`, `CartLine` (schéma canonique) |
-| `src/domain/schemas/finance.ts` | `JournalEntry` (Zod) |
-| `src/lib/nexus/NexusAdapter.ts` | Singleton Nexus |
-| `src/modules/finance/providers/NexusFiscalProvider.tsx` | Context fiscal React |
+| `src/modules/ops/domain/schemas/pos.ts` · `src/modules/finance/domain/schemas/finance.ts` | `PosTicket`/`CartLine` · `JournalEntry` (Zod) |
+| `src/orchestration/NexusEventBus.ts` | Bus d'événements (CRITICAL/HIGH/BACKGROUND) |
 | `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
-| `src/modules/intelligence/knowledge/rag/LightRAGClient.ts` | Client REST LightRAG (retry intégré) |
 
 ## Commandes
 
 ```bash
 npx tsc --noEmit          # Vérification types
-npx vitest run             # Tests
-sentrux check .            # Gate architectural (cycles, god files, couches) — voir .sentrux/
-./scripts/preflight.sh     # Vérification complète avant PR (inclut sentrux)
-docker-compose up          # App + LightRAG sidecar
+npx vitest run            # Tests
+sentrux check .           # Gate architectural (cycles, god files, couches) — voir .sentrux/
+./scripts/preflight.sh    # Vérification complète avant PR (inclut sentrux)
+docker-compose up         # App + LightRAG sidecar
 ```
 
 ## Stack
 
-- Next.js 16 App Router + TypeScript strict
-- Firebase Firestore (local-first IndexedDB cache)
-- Jotai 2 (state management par pilier)
-- Zod 4 (validation + typage)
-- Vitest + Playwright (tests)
-- Google Gemini API (AI)
-- LightRAG Python sidecar (port 9621, Knowledge Graph RAG)
+Next.js 16 App Router · TypeScript strict · Firebase Firestore (cache IndexedDB local-first) · Jotai 2 (state par pilier) · Zod 4 · Vitest + Playwright · Google Gemini API · LightRAG Python sidecar (port 9621, Knowledge Graph RAG).
