@@ -663,8 +663,15 @@ Résultats mesurés :
 
 - [x] `finance/fiscalite/tax` — vatResolver délègue à l'adapter (`inferProductCategory`). ✅
 - [x] `ops/service/pos` — `ServiceTicket` extrait comme socle générique. ✅
-- [ ] `logistics/stock/inventory` — stock d'items génériques (SKU/pièce/lot), pas ingrédients/recettes/DLC en dur.
-- [ ] Puis (19 restants) : `printers`, `reservations`, `onboarding`, `marketing`, `widgets`, `documents`,
+- [~] `logistics/stock/inventory` — **cœur déjà générique** (`inventory-service.ts` : valorisation/risque sur
+  `StockItem` pur). **Overlays culinaires gatés (§8.6, 12/08)** : `usesCulinaryStock(variant)` dans
+  `stockProfile.ts` ; `inventory.sync.ts` ne lance `Auto86Service`, `FoodCostRecompute` et le listener
+  `recipes`/CycleGuard que pour restaurant/hotel/bakery — un garage/retail/salon/clinic n'ouvre plus
+  d'abonnement `recipes` vide ni de recompute food-cost fantôme (`variant` threadé via `initPillarSyncs`).
+  Défaut `'restaurant'` → comportement historique préservé. Test `stockProfile.test.ts` 3/3.
+  **Reste (schéma-gelé, opening-gated)** : rename contractuel `Ingredient`→`StockItem`, `dlc`/`Preparation`
+  comme overlay périssable optionnel — attend le chantier schémas + une ouverture verticale qui l'exige.
+- [ ] Puis (18 restants) : `printers`, `reservations`, `onboarding`, `marketing`, `widgets`, `documents`,
   `reports`, `ia/fleet`, `ia/ai`, `floor-plan`… — hors chemin critique jusqu'à l'ouverture de chaque verticale.
 
 ## 7.9 — §8.7/8.8 — outillage + première ouverture
