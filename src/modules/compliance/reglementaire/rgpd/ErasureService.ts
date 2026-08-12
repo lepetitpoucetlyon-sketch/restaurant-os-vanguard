@@ -1,11 +1,11 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { piiVault } from '@/shared/nexus/vault/PiiVault';
 import { auditService } from '../../securite/audit/AuditService';
+import { RgpdRegisterService } from './RgpdRegisterService';
 
 const COLLECTIONS_WITH_SUBJECT_REF = [
     'orders',
     'reservations',
-    'invoices',
     'quotes',
     'customers',
 ] as const;
@@ -73,6 +73,12 @@ export class ErasureService {
         } catch {
             // Audit failure should not block erasure
         }
+
+        RgpdRegisterService.processRequest(tenantId, `erasure-${subjectId}`, requestedBy, {
+            status: 'completed',
+            nf525Preserved: true,
+            collectionsAnonymized: result.collectionsAnonymized,
+        }).catch(() => {});
 
         return result;
     }

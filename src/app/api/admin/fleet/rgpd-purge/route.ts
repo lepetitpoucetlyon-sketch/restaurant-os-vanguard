@@ -36,7 +36,7 @@ const PURGEABLE_COLLECTIONS = [
   'guestHistory',
 ] as const;
 
-const NF525_IMMUTABLE = ['journalEntries', 'fiscalSeals', 'fiscalLedger'] as const;
+const NF525_IMMUTABLE = ['journalEntries', 'fiscalSeals', 'fiscalLedger', 'invoices'] as const;
 
 async function sha256(text: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
