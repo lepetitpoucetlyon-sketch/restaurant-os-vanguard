@@ -63,6 +63,39 @@ Le code métier vit dans `src/modules/<pilier>/<domaine>/<module>/`. L'infrastru
 
 Les **piliers sont étanches** (Règle du Barrel) : on importe uniquement depuis le barrel racine `@/modules/<pilier>`, jamais un domaine/module interne. Le couplage légitime (ex. POS → Finance) passe par un **bridge** (`src/modules/finance/comptabilite/FinancialNexusBridge.ts`, voir §4). Sentrux confirme l'étanchéité (aucune violation de frontière inter-piliers).
 
+### Le modèle en couches (ce que `.sentrux/rules.toml` garde)
+
+L'architecture réelle n'est pas seulement « des piliers » : c'est une **hiérarchie de couches à sens unique**, vérifiée à chaque `sentrux check`. Règle d'or : **une couche ne dépend que de couches d'ordre égal ou plus profond**. Un import qui remonte = violation (et souvent un cycle TDZ en SSR).
+
+| Ordre | Couche | Chemin | Rôle |
+|------:|--------|--------|------|
+| 0 | `app` | `src/app/*` | Routes Next.js — la surface |
+| 1 | `pillars` | `src/modules/*` | Code métier (motif `components/hooks/services/store`) |
+| 1 | `ui-components` | `src/design/*` | Design System partagé (Empire) — présentation pure |
+| 2 | `config` | `src/config/*` | Config/nav — lecture seule |
+| 3 | `nexus-core` | `src/kernel/adapter/*`, `src/kernel/nexus/{guards,state,engines,…}/*` | Machine Nexus + barrières |
+| 3 | `infrastructure` | `src/lib/adapters/*` | Adapters concrets (Firestore, POS…) câblés au boot |
+| 3 | `lib-server` | `src/lib/server/*` | Guards admin server-only |
+| 3 | `state` | `src/store/*` | Atomes Jotai |
+| 4 | `nexus-contracts` | `src/kernel/nexus/contracts/*` | Interfaces runtime, contrat souverain |
+| 5 | `domain` | `src/shared/schemas/*` | Schémas Zod partagés |
+| 6 | `primitives` | `src/shared/schemas/primitives*` | Microunits, types branded — ne dépendent de **rien** |
+
+**`src/orchestration/*` (NexusEventBus + handlers/saga) est volontairement hors hiérarchie** : le bus est *bidirectionnellement* couplé aux piliers (les modules **émettent** vers lui ; ses handlers **rappellent** les services de module). Aucun ordre strict ne le décrit sans fabriquer de fausse violation — c'est le prix de son rôle de découplage. Détail dans [NEXUS_EVENT_BUS_BIBLE](docs/architecture/NEXUS_EVENT_BUS_BIBLE.md).
+
+> **`src/design/*` (≈23K LOC)** est plus que des « composants » : c'est le **Design System + shell applicatif partagé** — atomes UI (`atomic/`, `ui/`), layout et pile de providers (`layout/NexusProviderStack.tsx`, `providers/`), contextes transverses, gating RBAC visuel (`rbac/`), et surfaces souveraines (`sovereign/`, `blueprint/`). Couche présentation : elle consomme les hooks des piliers, jamais l'inverse.
+
+**Les frontières qui comptent — et *pourquoi* (le mode d'échec qu'elles préviennent) :**
+
+- **Nexus bypass** — aucun pilier/route/atome n'importe `FirestoreAdapter` ni `firebase` en direct. *Sinon* : écriture hors du chemin `tenants/{tenantId}/…`, donc **fuite cross-tenant** (SovereignGuard court-circuité).
+- **Pureté SSR du store** — `src/store/pillars/*` importe les fichiers `*Atoms.ts` **directement**, jamais un barrel `modules/<pilier>/index`. *Sinon* : barrel → hook → atome → cycle → `Cannot access X before initialization` en SSR, indébogable.
+- **Isolation inter-piliers** — un pilier n'importe jamais un autre pilier (matrice complète). Le couplage légitime passe par un **bridge** (infra) ou le **bus**. *Sinon* : « un bug = dix endroits ».
+- **Pureté du domaine** — les schémas Zod (`src/shared/schemas/*`) ne remontent jamais vers `modules`/`lib`/`app`/`kernel`. Ils sont consommés, jamais consommateurs.
+- **Ségrégation des routes** — `(client)` ↮ `(admin)` : isolation MCC stricte (le restaurateur ne peut pas tirer un composant de la console souveraine, et inversement).
+- **Barrel contract** — un module ne se consomme que par son `index.ts` (doublé par ESLint `no-restricted-imports`).
+
+> Le composition root (`src/kernel/adapter/`) et le kill-switch (`SovereignGuard` → `sovereign.breach` via le bus) traversent légitimement des couches : ce sont les seules dérogations assumées, documentées dans le gate.
+
 ---
 
 ## 3. La couche Nexus (accès données)
