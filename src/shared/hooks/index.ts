@@ -21,11 +21,11 @@ export { useVirtualizedList, useInfiniteScroll } from "@/lib/hooks/useVirtualiza
 
 
 // Permissions
-export { useActionPermission } from "./useActionPermission";
-export { useTabAccess } from "./useTabAccess";
+export { useActionPermission } from "@/kernel/hooks/useActionPermission";
+export { useTabAccess } from "@/kernel/hooks/useTabAccess";
 
 // 🏛️ Sovereign Core Hooks (Grade X)
-export { useNexusStatus } from "./useNexusStatus";
+export { useNexusStatus } from "@/kernel/hooks/useNexusStatus";
 export {
     useNexusCore,
     useAuth,
@@ -34,6 +34,6 @@ export {
     useLanguage,
     useNotifications
 } from "@/kernel/providers/NexusCoreContext";
-export { useTenant } from "@/shared/hooks/useTenant";
+export { useTenant } from "@/kernel/hooks/useTenant";
 // useConnector déplacé vers @/modules/intelligence/connectors/hub/hooks/useConnector
 export type { UseConnectorResult } from './useConnector';

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { CalendarCheck, AlertTriangle, Clock, FileText, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/shared/hooks/useTenant';
+import { useTenant } from '@/kernel/hooks/useTenant';
 import type { EmployeeDocument } from '@/modules/human';
 import type { License } from '@nexus/contracts';
 

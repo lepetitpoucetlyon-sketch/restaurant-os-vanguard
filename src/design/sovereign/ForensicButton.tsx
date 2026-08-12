@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from 'react';
-import { useTenant } from '@/shared/hooks/useTenant';
+import { useTenant } from '@/kernel/hooks/useTenant';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toast } from 'sonner';
 import { toError } from "@/lib/toError";

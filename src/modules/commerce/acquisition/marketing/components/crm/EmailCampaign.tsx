@@ -5,7 +5,7 @@ import { Mail, Send, Users, Eye, Loader2, CheckCircle2, ChevronDown } from "luci
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { authedFetch } from "@/lib/client/authedFetch";
-import { useActionPermission } from "@/shared/hooks/useActionPermission";
+import { useActionPermission } from "@/kernel/hooks/useActionPermission";
 
 type CampaignSegment = "all_active" | "inactive_3m" | "birthdays_this_month";
 

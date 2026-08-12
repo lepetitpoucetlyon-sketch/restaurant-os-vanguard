@@ -6,7 +6,7 @@ vi.mock('@/modules/ops/providers', () => ({
     useReservations: vi.fn(), useTables: vi.fn(), useGroups: vi.fn(),
 }));
 vi.mock('@/modules/commerce', () => ({ useCRM: vi.fn() }));
-vi.mock('@/shared/hooks/useActionPermission', () => ({ useActionPermission: vi.fn() }));
+vi.mock('@/kernel/hooks/useActionPermission', () => ({ useActionPermission: vi.fn() }));
 vi.mock('@/lib/nexus/NexusAdapter', () => ({ Nexus: { adapter: {}, getTenantPath: vi.fn() } }));
 vi.mock('@/store/pillars/sovereign', () => ({ tenantIdAtom: {} }));
 vi.mock('@/lib/client/authedFetch', () => ({ authedFetch: vi.fn() }));

@@ -5,7 +5,7 @@ vi.mock('@/modules/finance/store/accountingAtoms', () => ({
     journalEntriesNodeAtom: {}, accountsAtom: {}, bankTransactionsAtom: {},
     expenseClaimsAtom: {}, accountingViewModeAtom: {},
 }));
-vi.mock('@shared/hooks/useNexusMutation', () => ({ useNexusMutation: vi.fn() }));
+vi.mock('@kernel/hooks/useNexusMutation', () => ({ useNexusMutation: vi.fn() }));
 
 import { getAmountInMu, buildEntryAmountInCents } from '@/modules/finance';
 

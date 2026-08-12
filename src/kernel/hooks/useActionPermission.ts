@@ -10,8 +10,8 @@ import {
 import { logger } from '@/lib/logger';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts
-import { ACTION_MAP } from './actionPermissionMap';
-export type { ActionConfig } from './actionPermissionMap';
+import { ACTION_MAP } from '@nexus/guards/rbac/actionPermissionMap';
+export type { ActionConfig } from '@nexus/guards/rbac/actionPermissionMap';
 
 export function useActionPermission(page: string, action: string): PermissionCheckResult {
     const { currentUser } = useAuth();

@@ -15,7 +15,7 @@ import {
     maintenanceLogsNodeAtom,
     sensorReadingsAtom
 } from '../store/complianceAtoms';
-import { useNexusMutation } from '@shared/hooks/useNexusMutation';
+import { useNexusMutation } from '@kernel/hooks/useNexusMutation';
 import { 
     HygieneLog, 
     ReceptionLog, 

@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { FinanceCore } from '@modules/finance/services/FinanceCore';
-import { useTenant } from '@/shared/hooks/useTenant';
+import { useTenant } from '@/kernel/hooks/useTenant';
 import { useToast } from '@ui/Toast';
 import { 
     CheckCircle2, 

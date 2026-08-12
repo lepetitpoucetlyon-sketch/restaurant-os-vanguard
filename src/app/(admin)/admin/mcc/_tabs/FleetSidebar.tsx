@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { Cpu, Zap } from 'lucide-react';
 import { StatusItem, SwitchboardItem, MCCWidgetSkeleton } from '../components';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
-import type { SwitchboardState } from '@/shared/hooks/useSovereignSwitchboard';
+import type { SwitchboardState } from '@/kernel/hooks/useSovereignSwitchboard';
 import { useMCCLocale } from '../_i18n';
 
 const PerformanceMonitor  = dynamic(() => import('@design/dev/PerformanceMonitor').then(m => m.PerformanceMonitor), { loading: () => <MCCWidgetSkeleton /> });

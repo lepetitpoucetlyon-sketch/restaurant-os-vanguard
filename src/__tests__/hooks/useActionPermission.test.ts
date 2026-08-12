@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
 
-import { useActionPermission } from '@/shared/hooks/useActionPermission';
+import { useActionPermission } from '@/kernel/hooks/useActionPermission';
 import { NexusCoreContext } from '@/kernel/providers/NexusCoreContext';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
 

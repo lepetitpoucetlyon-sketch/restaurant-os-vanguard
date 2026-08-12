@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules/finance';
 import { withPageGuard } from "@design/rbac/PageGuard";
 import { TabGuard } from "@design/rbac/TabGuard";
-import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { useTabAccess } from "@/kernel/hooks/useTabAccess";
 import dynamic from "next/dynamic";
 
 const ProfitabilityView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ProfitabilityView));

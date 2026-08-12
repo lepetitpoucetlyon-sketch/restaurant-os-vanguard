@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import { MCCWidgetSkeleton } from './components/MCCWidgetSkeleton';
 import { MFAGate } from './components/MFAGate';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
-import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
+import { useSovereignSwitchboard } from '@/kernel/hooks/useSovereignSwitchboard';
 import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
 import { MCCLocaleProvider, useMCCLocale, LocaleToggle } from './_i18n';
 import { PLATFORM_VARIANTS, VERTICAL_META } from '@nexus/contracts';

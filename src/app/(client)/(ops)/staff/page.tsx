@@ -17,7 +17,7 @@ import { LeavesTab } from "./_tabs/LeavesTab";
 import type { StaffTab } from "./staffUtils";
 import { withPageGuard } from "@design/rbac/PageGuard";
 import { TabGuard } from "@design/rbac/TabGuard";
-import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { useTabAccess } from "@/kernel/hooks/useTabAccess";
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "team",        label: "Équipe",              icon: Users },

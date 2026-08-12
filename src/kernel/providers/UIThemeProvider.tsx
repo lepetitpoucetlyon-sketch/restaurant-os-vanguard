@@ -9,7 +9,7 @@ import {
     themeModeAtom, accentColorAtom, uiDensityAtom, 
     borderRadiusAtom, glassmorphismAtom, animationsEnabledAtom 
 } from '@/store/themeAtoms';
-import { useSettings as useSettingsInternal } from '@/shared/hooks/useSettings';
+import { useSettings as useSettingsInternal } from '@/kernel/hooks/useSettings';
 import type { NexusUIState, NexusTheme } from '@nexus/contracts/nexus.types';
 
 export const UIThemeContext = createContext<{ ui: NexusUIState, theme: NexusTheme, settings: ReturnType<typeof useSettingsInternal> } | undefined>(undefined);

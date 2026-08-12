@@ -1,5 +1,5 @@
 import React from "react";
-import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { useTabAccess } from "@/kernel/hooks/useTabAccess";
 import { PageKey } from "@nexus/contracts/permissions.types";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/kernel/providers/NexusCoreContext";

@@ -9,7 +9,7 @@ import {
     hrStaffLoadingAtom as hrLoadingAtom,
     shiftsNodeAtom
 } from '../store/staffAtoms';
-import { useNexusMutation } from "@shared/hooks/useNexusMutation";
+import { useNexusMutation } from "@kernel/hooks/useNexusMutation";
 import { Shift, LeaveRequest, LeaveBalance, RejectionReason } from "@nexus/contracts";
 import { SovereignData } from '@nexus/contracts/nexus-contract';
 import { JsonObject } from "@/lib/types/json";

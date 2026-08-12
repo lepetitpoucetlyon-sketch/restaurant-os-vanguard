@@ -5,7 +5,7 @@ import { Tag, PlusCircle, Power, AlertCircle, Loader2, Gift, Percent, Euro } fro
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { toMicrounits } from "@/shared/schemas/primitives";
-import { useTenant } from "@/shared/hooks/useTenant";
+import { useTenant } from "@/kernel/hooks/useTenant";
 import { createPromoCodeAction, updatePromoCodeAction } from '../../../../actions/marketing.action';
 
 import type { PromoCodeRecord } from './types';

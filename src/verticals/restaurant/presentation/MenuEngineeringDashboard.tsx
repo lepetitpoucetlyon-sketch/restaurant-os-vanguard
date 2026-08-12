@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { menuEngineeringService } from '@/modules/commerce';
 import type { IMenuEngineeringReport, MenuItemCategory } from '@/modules/commerce';
-import { useTenant } from '@/shared/hooks/useTenant';
+import { useTenant } from '@/kernel/hooks/useTenant';
 
 const CATEGORY_LABELS: Record<MenuItemCategory, string> = {
   star: '⭐ Star',

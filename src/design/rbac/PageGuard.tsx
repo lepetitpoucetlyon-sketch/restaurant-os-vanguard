@@ -1,5 +1,5 @@
 import React from "react";
-import { usePageAccess } from "@/shared/hooks/usePageAccess";
+import { usePageAccess } from "@/kernel/hooks/usePageAccess";
 import { PageKey } from "@nexus/contracts/permissions.types";
 import { AccessDenied } from "./AccessDenied";
 import { Loader2 } from "lucide-react";

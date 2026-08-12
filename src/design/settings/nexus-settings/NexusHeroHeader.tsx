@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap } from 'lucide-react';
 import { NexusSphereIndicator } from "@components/layout/NexusSphereIndicator";
-import { useNexusStatus } from "@/shared/hooks/useNexusStatus";
+import { useNexusStatus } from "@/kernel/hooks/useNexusStatus";
 
 export function NexusHeroHeader() {
     const { isActive, isProcessing } = useNexusStatus();

@@ -18,7 +18,7 @@ import {
     Account
 } from '../types';
 import { useCallback, useMemo } from 'react';
-import { useNexusMutation } from "@shared/hooks/useNexusMutation";
+import { useNexusMutation } from "@kernel/hooks/useNexusMutation";
 import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@nexus/contracts/finance.types';
 
 function computeLedger(accounts: Account[], journalEntries: JournalEntry[]): LedgerAccount[] {

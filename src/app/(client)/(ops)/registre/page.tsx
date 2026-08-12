@@ -29,7 +29,7 @@ import { Modal } from "@ui/Modal";
 import { InterventionLogSection } from "@modules/ops";
 import { withPageGuard } from "@design/rbac/PageGuard";
 import { TabGuard } from "@design/rbac/TabGuard";
-import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { useTabAccess } from "@/kernel/hooks/useTabAccess";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';
 

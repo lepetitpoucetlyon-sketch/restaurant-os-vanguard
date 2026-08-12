@@ -5,7 +5,7 @@ import { Modal } from "@ui/Modal";
 import { Minus, Plus, Sparkles, CheckCircle2 } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/lib/services/SovereignMath";
-import { useLanguage } from "@/shared/hooks/useLanguage";
+import { useLanguage } from "@/kernel/hooks/useLanguage";
 import { CartItem } from '../../../workflow/engine/types';
 
 import { useSplitBillState } from "./split-bill/useSplitBillState";

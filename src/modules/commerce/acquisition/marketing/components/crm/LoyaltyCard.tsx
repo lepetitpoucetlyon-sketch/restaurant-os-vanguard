@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Trophy, Loader2, Award, Gift, Star } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
-import { useTenant } from "@/shared/hooks/useTenant";
+import { useTenant } from "@/kernel/hooks/useTenant";
 import { issueLoyaltyCardAction, updateCustomerAction } from "../../../../actions/marketing.action";
 
 interface LoyaltyData {
