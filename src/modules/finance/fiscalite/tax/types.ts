@@ -4,14 +4,18 @@
 
 export interface TaxBreakdown {
     totalRevenueInMicrounits: number;
+    /** @deprecated use totalRevenueInMicrounits */
     totalRevenueInCents?: number;
     taxBaseByRate: Record<string, number>;
     taxCollectedByRate: Record<string, number>;
     totalTaxCollectedInMicrounits: number;
+    /** @deprecated use totalTaxCollectedInMicrounits */
     totalTaxCollectedInCents?: number;
     deductibleTaxInMicrounits: number;
+    /** @deprecated use deductibleTaxInMicrounits */
     deductibleTaxInCents?: number;
     netTaxToPayInMicrounits: number;
+    /** @deprecated use netTaxToPayInMicrounits */
     netTaxToPayInCents?: number;
 }
 

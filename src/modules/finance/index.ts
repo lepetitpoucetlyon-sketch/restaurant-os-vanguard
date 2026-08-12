@@ -53,6 +53,8 @@ export type { MacroBrainAlert } from './comptabilite/analytics/hooks';
 // UsageTracker est server-only — import direct depuis le chemin complet en contexte serveur uniquement.
 export { resolveVatRate } from './fiscalite/tax/vatResolver';
 export { inferCategory } from './fiscalite/tax/vatResolver';
+export type { BillingUnit } from './comptabilite/billing';
+export { resolveInvoicingAdapter } from './comptabilite/billing';
 export { FinanceSyncService } from './finance.sync';
 export { AccountingReportService } from './services/AccountingReportService';
 export { TreasuryDashboard } from './components/accounting';

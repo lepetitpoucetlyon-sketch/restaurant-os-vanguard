@@ -21,6 +21,7 @@ export { ElevationPrompt } from './securite/audit/ElevationPrompt';
 export { OverrideLogView } from './securite/audit/OverrideLogView';
 // Domaine : reglementaire (RGPD)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
+export { RgpdRegisterService } from './reglementaire/rgpd/RgpdRegisterService';
 
 // Infrastructure pilier (connectors, services, types)
 export type { PiiRecord } from './domain/schemas/pii';

@@ -6,6 +6,8 @@ export { OperationsDashboard } from './workflow/engine/components/OperationsDash
 // Domaine : service (POS, bar, front-desk, printers)
 export * from './service/pos';
 export { usePOSController } from './service/pos/hooks/usePos';
+export { ServiceTicketService } from './service/core';
+export type { ServiceLine, PaymentSplit, ServiceState, ServiceTicket } from './service/core';
 
 // Domaine : production (KDS, kitchen, recipes)
 export * from './production/kitchen';

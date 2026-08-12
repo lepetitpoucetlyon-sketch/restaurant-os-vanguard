@@ -25,16 +25,20 @@ export interface JournalLine extends SovereignMap {
     accountName: string;
     description: string;
     side: AccountSide;
+    /** @deprecated use amountInMicrounits */
     amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits?: number;
     date: string | Date;
     pieceNumber: string;
+    /** @deprecated use debitInMicrounits */
     debitInCents: number;
-    debitInMicrounits?: number; // µ = cents × 10 000
+    debitInMicrounits?: number;
+    /** @deprecated use creditInMicrounits */
     creditInCents: number;
-    creditInMicrounits?: number; // µ = cents × 10 000
+    creditInMicrounits?: number;
+    /** @deprecated use runningBalanceInMicrounits */
     runningBalanceInCents: number;
-    runningBalanceInMicrounits?: number; // µ = cents × 10 000
+    runningBalanceInMicrounits?: number;
 }
 
 export type JournalEntryStatus = 'draft' | 'validated' | 'closed' | 'pending' | 'cancelled' | 'refunded';
@@ -63,8 +67,9 @@ export interface JournalEntry extends SovereignNode {
     fiscalSealHash?: string;
     sealedAt?: string;
     type?: TransactionCategory;
+    /** @deprecated use amountInMicrounits */
     amountInCents?: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits?: number;
     status?: JournalEntryStatus;
     updatedAt: number | string | Date;
     cancellationRef?: string;
@@ -79,8 +84,9 @@ export interface Account extends SovereignMap {
     parentCode?: string;
     isActive: boolean;
     description?: string;
+    /** @deprecated use balanceInMicrounits */
     balanceInCents?: number;
-    balanceInMicrounits?: number; // µ = cents × 10 000
+    balanceInMicrounits?: number;
     updatedAt: number | string | Date;
 }
 
@@ -88,8 +94,9 @@ export interface BankTransaction {
     id: string;
     date: number | string | Date;
     label: string;
+    /** @deprecated use amountInMicrounits */
     amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits?: number;
     amount?: number;
     type: 'credit' | 'debit';
     isReconciled: boolean;
@@ -113,8 +120,9 @@ export interface ExpenseClaim {
     userName: string;
     userRole: string;
     date: number | string | Date;
+    /** @deprecated use amountInMicrounits */
     amountInCents: number;
-    amountInMicrounits?: number; // µ = cents × 10 000
+    amountInMicrounits?: number;
     category: string;
     description: string;
     invoiceId?: string;
@@ -129,56 +137,73 @@ export interface ExpenseClaim {
 }
 
 export interface TreasuryMetrics {
+    /** @deprecated use totalCashInMicrounits */
     totalCashInCents: number;
-    totalCashInMicrounits?: number; // µ = cents × 10 000
+    totalCashInMicrounits?: number;
+    /** @deprecated use totalPendingInMicrounits */
     totalPendingInCents: number;
-    totalPendingInMicrounits?: number; // µ = cents × 10 000
+    totalPendingInMicrounits?: number;
+    /** @deprecated use totalOwedInMicrounits */
     totalOwedInCents: number;
-    totalOwedInMicrounits?: number; // µ = cents × 10 000
+    totalOwedInMicrounits?: number;
+    /** @deprecated use forecastedCashFlowInMicrounits */
     forecastedCashFlowInCents: number;
-    forecastedCashFlowInMicrounits?: number; // µ = cents × 10 000
+    forecastedCashFlowInMicrounits?: number;
+    /** @deprecated use burnRateInMicrounits */
     burnRateInCents: number;
-    burnRateInMicrounits?: number; // µ = cents × 10 000
+    burnRateInMicrounits?: number;
     runwayInDays: number;
     [key: string]: unknown;
 }
 
 export interface FinancialMetrics {
+    /** @deprecated use totalRevenueInMicrounits */
     totalRevenueInCents: number;
-    totalRevenueInMicrounits?: number; // µ = cents × 10 000
+    totalRevenueInMicrounits?: number;
+    /** @deprecated use totalExpensesInMicrounits */
     totalExpensesInCents: number;
-    totalExpensesInMicrounits?: number; // µ = cents × 10 000
+    totalExpensesInMicrounits?: number;
+    /** @deprecated use grossMarginInMicrounits */
     grossMarginInCents: number;
-    grossMarginInMicrounits?: number; // µ = cents × 10 000
+    grossMarginInMicrounits?: number;
     grossMarginPercent: number;
     foodCostPercent: number;
     laborCostPercent: number;
+    /** @deprecated use operatingExpensesInMicrounits */
     operatingExpensesInCents: number;
-    operatingExpensesInMicrounits?: number; // µ = cents × 10 000
+    operatingExpensesInMicrounits?: number;
+    /** @deprecated use ebitdaInMicrounits */
     ebitdaInCents: number;
-    ebitdaInMicrounits?: number; // µ = cents × 10 000
+    ebitdaInMicrounits?: number;
+    /** @deprecated use netProfitInMicrounits */
     netProfitInCents: number;
-    netProfitInMicrounits?: number; // µ = cents × 10 000
+    netProfitInMicrounits?: number;
     [key: string]: unknown;
 }
 
 export interface LedgerAccount extends Account {
+    /** @deprecated use balanceInMicrounits */
     balanceInCents: number;
-    balanceInMicrounits?: number; // µ = cents × 10 000
+    balanceInMicrounits?: number;
+    /** @deprecated use debitTotalInMicrounits */
     debitTotalInCents: number;
-    debitTotalInMicrounits?: number; // µ = cents × 10 000
+    debitTotalInMicrounits?: number;
+    /** @deprecated use creditTotalInMicrounits */
     creditTotalInCents: number;
-    creditTotalInMicrounits?: number; // µ = cents × 10 000
+    creditTotalInMicrounits?: number;
     movements: JournalLine[];
 }
 
 export interface AccountingMetrics extends FinancialMetrics {
+    /** @deprecated use cashOnHandInMicrounits */
     cashOnHandInCents: number;
-    cashOnHandInMicrounits?: number; // µ = cents × 10 000
+    cashOnHandInMicrounits?: number;
+    /** @deprecated use ebitdaInMicrounits */
     ebitdaInCents: number;
-    ebitdaInMicrounits?: number; // µ = cents × 10 000
+    ebitdaInMicrounits?: number;
+    /** @deprecated use operatingExpensesInMicrounits */
     operatingExpensesInCents: number;
-    operatingExpensesInMicrounits?: number; // µ = cents × 10 000
+    operatingExpensesInMicrounits?: number;
 }
 
 export interface TrialBalance {
@@ -187,43 +212,53 @@ export interface TrialBalance {
         accountId: string;
         accountCode: string;
         accountName: string;
+        /** @deprecated use debitInMicrounits */
         debitInCents: number;
-        debitInMicrounits?: number; // µ = cents × 10 000
+        debitInMicrounits?: number;
+        /** @deprecated use creditInMicrounits */
         creditInCents: number;
-        creditInMicrounits?: number; // µ = cents × 10 000
+        creditInMicrounits?: number;
     }[];
+    /** @deprecated use totalDebitInMicrounits */
     totalDebitInCents: number;
-    totalDebitInMicrounits?: number; // µ = cents × 10 000
+    totalDebitInMicrounits?: number;
+    /** @deprecated use totalCreditInMicrounits */
     totalCreditInCents: number;
-    totalCreditInMicrounits?: number; // µ = cents × 10 000
+    totalCreditInMicrounits?: number;
     isBalanced: boolean;
 }
 
 export interface ProfitAndLossReport {
     periodId: string;
     periodName: string;
-    revenues: { category: string; accountCode?: string; accountName?: string; amountInCents: number; amountInMicrounits?: number }[];
-    expenses: { category: string; accountCode?: string; accountName?: string; amountInCents: number; amountInMicrounits?: number }[];
+    revenues: { category: string; accountCode?: string; accountName?: string; /** @deprecated use amountInMicrounits */ amountInCents: number; amountInMicrounits?: number }[];
+    expenses: { category: string; accountCode?: string; accountName?: string; /** @deprecated use amountInMicrounits */ amountInCents: number; amountInMicrounits?: number }[];
+    /** @deprecated use totalRevenueInMicrounits */
     totalRevenueInCents: number;
-    totalRevenueInMicrounits?: number; // µ = cents × 10 000
+    totalRevenueInMicrounits?: number;
+    /** @deprecated use totalExpensesInMicrounits */
     totalExpensesInCents: number;
-    totalExpensesInMicrounits?: number; // µ = cents × 10 000
+    totalExpensesInMicrounits?: number;
+    /** @deprecated use netResultInMicrounits */
     netResultInCents: number;
-    netResultInMicrounits?: number; // µ = cents × 10 000
+    netResultInMicrounits?: number;
     generatedAt: Date | string;
 }
 
 export interface BalanceSheetReport {
     asOfDate: Date | string;
-    assets: { category: string; accountCode?: string; accountName?: string; amountInCents: number; amountInMicrounits?: number }[];
-    liabilities: { category: string; accountCode?: string; accountName?: string; amountInCents: number; amountInMicrounits?: number }[];
-    equity: { category: string; accountCode?: string; accountName?: string; amountInCents: number; amountInMicrounits?: number }[];
+    assets: { category: string; accountCode?: string; accountName?: string; /** @deprecated use amountInMicrounits */ amountInCents: number; amountInMicrounits?: number }[];
+    liabilities: { category: string; accountCode?: string; accountName?: string; /** @deprecated use amountInMicrounits */ amountInCents: number; amountInMicrounits?: number }[];
+    equity: { category: string; accountCode?: string; accountName?: string; /** @deprecated use amountInMicrounits */ amountInCents: number; amountInMicrounits?: number }[];
+    /** @deprecated use totalAssetsInMicrounits */
     totalAssetsInCents: number;
-    totalAssetsInMicrounits?: number; // µ = cents × 10 000
+    totalAssetsInMicrounits?: number;
+    /** @deprecated use totalLiabilitiesInMicrounits */
     totalLiabilitiesInCents: number;
-    totalLiabilitiesInMicrounits?: number; // µ = cents × 10 000
+    totalLiabilitiesInMicrounits?: number;
+    /** @deprecated use totalEquityInMicrounits */
     totalEquityInCents: number;
-    totalEquityInMicrounits?: number; // µ = cents × 10 000
+    totalEquityInMicrounits?: number;
     isBalanced: boolean;
     generatedAt: Date | string;
 }
@@ -255,12 +290,15 @@ export interface FiscalPeriod {
 }
 
 export interface CalculatedFinancialMetrics extends FinancialMetrics {
+    /** @deprecated use foodCostInMicrounits */
     foodCostInCents: number;
-    foodCostInMicrounits?: number; // µ = cents × 10 000
+    foodCostInMicrounits?: number;
+    /** @deprecated use laborCostInMicrounits */
     laborCostInCents: number;
-    laborCostInMicrounits?: number; // µ = cents × 10 000
+    laborCostInMicrounits?: number;
+    /** @deprecated use opExInMicrounits */
     opExInCents: number;
-    opExInMicrounits?: number; // µ = cents × 10 000
+    opExInMicrounits?: number;
 }
 
 export interface AccountingContextType {
@@ -323,18 +361,23 @@ export interface LegalInvoice extends SovereignNode {
     orderId: string;
     invoiceNumber: string;
     customerName?: string;
+    /** @deprecated use subTotalInMicrounits */
     subTotalInCents: number;
-    subTotalInMicrounits?: number; // µ = cents × 10 000
+    subTotalInMicrounits?: number;
+    /** @deprecated use taxTotalInMicrounits */
     taxTotalInCents: number;
-    taxTotalInMicrounits?: number; // µ = cents × 10 000
+    taxTotalInMicrounits?: number;
+    /** @deprecated use totalInMicrounits */
     totalInCents: number;
-    totalInMicrounits?: number; // µ = cents × 10 000
+    totalInMicrounits?: number;
     taxDetails: Array<{
         rate: number;
+        /** @deprecated use amountInMicrounits */
         amountInCents: number;
-        amountInMicrounits?: number; // µ = cents × 10 000
+        amountInMicrounits?: number;
+        /** @deprecated use baseInMicrounits */
         baseInCents: number;
-        baseInMicrounits?: number; // µ = cents × 10 000
+        baseInMicrounits?: number;
     }>;
     status: 'draft' | 'issued' | 'paid' | 'cancelled';
     issuedAt: string;

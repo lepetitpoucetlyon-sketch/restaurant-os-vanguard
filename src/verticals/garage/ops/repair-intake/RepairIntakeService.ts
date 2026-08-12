@@ -3,11 +3,11 @@
  * Prise en charge véhicule garage, bâtie sur ServiceTicket.
  * <100 lignes = abstraction ServiceTicket validée.
  */
-import { ServiceTicketService } from '@/modules/ops/service/core';
+import { ServiceTicketService } from '@/modules/ops';
 import { createSubject } from '@/kernel/nexus/contracts/ServiceSubject';
 import { AutoOpsAdapter } from '../../adapters/AutoOpsAdapter';
 import { toMicrounits } from '@/shared/schemas/primitives';
-import type { PaymentSplit, ServiceLine } from '@/modules/ops/service/core';
+import type { PaymentSplit, ServiceLine } from '@/modules/ops';
 
 interface CheckInParams {
     tenantId: string;

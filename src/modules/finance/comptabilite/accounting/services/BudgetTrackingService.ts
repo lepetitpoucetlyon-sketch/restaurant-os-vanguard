@@ -5,8 +5,10 @@ import { JsonObject } from "@/shared/types/json";
 export interface BudgetLine {
     analyticalAxis: string;
     budgetedAmountInMicrounits: number;
+    /** @deprecated use budgetedAmountInMicrounits */
     budgetedAmountInCents?: number;
     actualAmountInMicrounits: number;
+    /** @deprecated use actualAmountInMicrounits */
     actualAmountInCents?: number;
     variancePercentage: number;
 }
@@ -14,8 +16,10 @@ export interface BudgetLine {
 export interface BudgetReport {
     period: string;
     totalBudgetedRevenueInMicrounits: number;
+    /** @deprecated use totalBudgetedRevenueInMicrounits */
     totalBudgetedRevenueInCents?: number;
     totalActualRevenueInMicrounits: number;
+    /** @deprecated use totalActualRevenueInMicrounits */
     totalActualRevenueInCents?: number;
     lines: BudgetLine[];
 }

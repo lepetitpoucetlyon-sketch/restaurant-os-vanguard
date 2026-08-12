@@ -8,7 +8,7 @@
 import type { TaxRate } from '../../domain/schemas/finance';
 import type { ConsumptionMode } from '@/modules/ops';
 import type { PlatformVariant } from '@nexus/contracts';
-import { resolveInvoicingAdapter } from '@/modules/finance/comptabilite/billing/domain/IVerticalInvoicingAdapter';
+import { resolveInvoicingAdapter } from '../../comptabilite/billing/domain/IVerticalInvoicingAdapter';
 
 type ProductCategory = 'food' | 'alcohol' | 'beverage_soft' | 'service' | 'other';
 

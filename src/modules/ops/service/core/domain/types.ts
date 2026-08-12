@@ -11,7 +11,7 @@
  */
 import type { Microunits } from '@/shared/schemas/primitives';
 import type { ServiceSubject } from '@nexus/contracts';
-import type { BillingUnit } from '@/modules/finance/comptabilite/billing/domain/IVerticalInvoicingAdapter';
+import type { BillingUnit } from '@/modules/finance';
 
 // ── Machine à états ────────────────────────────────────────────────────────────
 

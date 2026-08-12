@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { X, Calendar, Clock, Users, MapPin, Search, ChevronLeft, ChevronRight, Sparkles, ArrowRight, ShieldCheck, Check } from "lucide-react";
+import { X, Calendar, Clock, Users, MapPin, ChevronLeft, Sparkles, ShieldCheck, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { cn } from "@/lib/ui.foundations";
@@ -22,6 +22,8 @@ interface ReservationCreateDialogProps {
 type Step = 1 | 2;
 
 import { filterAvailableTables } from './reservation-create/reservationHelpers';
+import { CustomerSearchStep } from './reservation-create/CustomerSearchStep';
+import { ReservationSummaryPanel } from './reservation-create/ReservationSummaryPanel';
 
 export function ReservationCreateDialog({
     isOpen,
@@ -172,71 +174,13 @@ export function ReservationCreateDialog({
                     <div className="flex-1 p-10 overflow-y-auto border-r border-border">
                         <AnimatePresence mode="wait">
                             {step === 1 ? (
-                                <motion.div
-                                    key="step1"
-                                    initial={{ opacity: 0, x: -16 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 16 }}
-                                    className="space-y-8"
-                                >
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-2">
-                                            <Search className="w-3.5 h-3.5 text-accent" />
-                                            Identification du client
-                                        </label>
-                                        <div className="relative group">
-                                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted/40 group-focus-within:text-accent transition-colors" />
-                                            <input
-                                                type="text"
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                placeholder="Nom, prénom ou téléphone…"
-                                                className="w-full h-16 bg-bg-secondary border border-border rounded-[1.5rem] pl-14 pr-6 text-base font-serif italic text-text-primary focus:outline-none focus:border-accent/40 transition-all"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        {filteredCustomers.slice(0, 6).map((customer, idx) => (
-                                            <motion.button
-                                                key={customer.id}
-                                                initial={{ opacity: 0, y: 8 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: idx * 0.04 }}
-                                                onClick={() => { setSelectedCustomer(customer); setStep(2); }}
-                                                className={cn(
-                                                    "w-full flex items-center justify-between p-5 rounded-[1.5rem] border transition-all duration-300",
-                                                    selectedCustomer?.id === customer.id
-                                                        ? "bg-accent border-accent text-bg-primary shadow-xl shadow-amber-500/15"
-                                                        : "bg-bg-secondary border-border hover:border-accent/30 hover:shadow-lg hover:bg-bg-tertiary"
-                                                )}
-                                            >
-                                                <div className="flex items-center gap-5">
-                                                    <div className={cn(
-                                                        "w-12 h-12 rounded-xl flex items-center justify-center font-serif text-lg italic shadow-sm",
-                                                        selectedCustomer?.id === customer.id ? "bg-surface-card/10 text-bg-primary" : "bg-bg-tertiary text-text-primary"
-                                                    )}>
-                                                        {(customer.firstName || " ").charAt(0)}{(customer.lastName || " ").charAt(0)}
-                                                    </div>
-                                                    <div className="text-left">
-                                                        <p className={cn("text-lg font-serif italic", selectedCustomer?.id === customer.id ? "text-bg-primary" : "text-text-primary")}>
-                                                            {customer.firstName} {customer.lastName}
-                                                        </p>
-                                                        <p className={cn("text-[10px] font-black tracking-widest", selectedCustomer?.id === customer.id ? "text-bg-primary/60" : "text-text-muted")}>
-                                                            {customer.phone} · {customer.visitCount ?? 0} séjours
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <ChevronRight className={cn("w-5 h-5", selectedCustomer?.id === customer.id ? "text-bg-primary" : "text-text-muted/30")} />
-                                            </motion.button>
-                                        ))}
-                                        {filteredCustomers.length === 0 && (
-                                            <p className="text-center text-[11px] text-text-muted uppercase tracking-widest py-8">
-                                                Aucun client trouvé
-                                            </p>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                <CustomerSearchStep
+                                    searchQuery={searchQuery}
+                                    onSearchChange={setSearchQuery}
+                                    filteredCustomers={filteredCustomers}
+                                    selectedCustomer={selectedCustomer}
+                                    onSelectCustomer={(customer) => { setSelectedCustomer(customer); setStep(2); }}
+                                />
                             ) : (
                                 <motion.div
                                     key="step2"
@@ -376,64 +320,15 @@ export function ReservationCreateDialog({
                     </div>
 
                     {/* Right — Summary panel */}
-                    <div className="w-[300px] bg-bg-secondary p-10 flex flex-col justify-between shrink-0 border-l border-border">
-                        <div className="space-y-6">
-                            {selectedCustomer ? (
-                                <>
-                                    <div>
-                                        <p className="text-[9px] font-black text-text-muted uppercase tracking-widest mb-3 flex items-center gap-2">
-                                            <Sparkles className="w-3 h-3 text-accent" /> Profil client
-                                        </p>
-                                        <p className="text-xl font-serif italic text-text-primary">
-                                            {selectedCustomer.firstName} {selectedCustomer.lastName}
-                                        </p>
-                                        <p className="text-[11px] text-text-muted mt-1">{selectedCustomer.phone}</p>
-                                        {selectedCustomer.email && (
-                                            <p className="text-[10px] text-text-muted">{selectedCustomer.email}</p>
-                                        )}
-                                    </div>
-
-                                    {selectedCustomer.preferences.length > 0 && (
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {selectedCustomer.preferences.slice(0, 4).map((p, i) => (
-                                                <span key={i} className="px-3 py-1 bg-bg-tertiary text-[9px] font-black text-text-muted rounded-xl border border-border uppercase tracking-widest">
-                                                    {p}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
-                                        <p className="text-[9px] font-black text-accent uppercase tracking-widest mb-2">Résumé</p>
-                                        <p className="text-[11px] text-text-muted leading-relaxed">
-                                            {formData.date} à {formData.time} — {formData.covers} couv.
-                                            {(formData.tableId || suggestedTable) && (
-                                                <> — Table #{(formData.tableId ? availableTables.find((t) => t.id === formData.tableId)?.number : suggestedTable?.number) ?? "?"}</>
-                                            )}
-                                        </p>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="py-12 text-center space-y-4">
-                                    <div className="w-16 h-16 rounded-full bg-bg-tertiary flex items-center justify-center mx-auto border border-dashed border-border">
-                                        <Users strokeWidth={1} className="w-8 h-8 text-text-muted/30" />
-                                    </div>
-                                    <p className="text-[11px] font-black uppercase tracking-widest text-text-muted max-w-[160px] mx-auto leading-relaxed italic">
-                                        Sélectionnez un client pour continuer
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-
-                        <button
-                            disabled={!selectedCustomer || step !== 2 || saving}
-                            onClick={handleSubmit}
-                            className="w-full h-16 bg-accent text-bg-primary rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] transition-all shadow-2xl shadow-amber-500/20 disabled:opacity-20 disabled:cursor-not-allowed hover:scale-[1.02] flex items-center justify-center gap-3"
-                        >
-                            <ArrowRight className="w-4 h-4" />
-                            {saving ? "Enregistrement…" : "Confirmer"}
-                        </button>
-                    </div>
+                    <ReservationSummaryPanel
+                        selectedCustomer={selectedCustomer}
+                        formData={formData}
+                        availableTables={availableTables}
+                        suggestedTable={suggestedTable}
+                        step={step}
+                        saving={saving}
+                        onSubmit={handleSubmit}
+                    />
                 </div>
             </div>
         </Modal>

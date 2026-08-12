@@ -16,6 +16,7 @@ export interface SEPATransaction {
     supplierIban: string;
     supplierBic: string;
     amountInMicrounits: number;
+    /** @deprecated use amountInMicrounits */
     amountInCents?: number;
     remittanceInformation: string;
 }

@@ -54,8 +54,9 @@ export interface Ingredient {
     unit: IngredientUnit;
     minQuantity: number;
     parLevel?: number;
+    /** @deprecated use costInMicrounits */
     costInCents: number;
-    costInMicrounits?: number; // microunits = cents × 10 000
+    costInMicrounits?: number;
     supplier: string;
     supplierRef?: string;
     defaultStorageLocation: string;
@@ -91,18 +92,21 @@ export interface StockItem {
     supplierId?: string;
     supplierName?: string;
     invoiceReference?: string;
+    /** @deprecated use unitCostInMicrounits */
     unitCostInCents: number;
-    unitCostInMicrounits?: number; // microunits = cents × 10 000
+    unitCostInMicrounits?: number;
+    /** @deprecated use priceInMicrounits */
     priceInCents?: number;
-    priceInMicrounits?: number; // microunits = cents × 10 000
+    priceInMicrounits?: number;
     taxRate?: number;
     shelfLifeDays?: number;
     unitCost?: number;
     status: 'available' | 'reserved' | 'expired' | 'low' | 'quarantine' | 'depleted' | 'discarded';
     notes?: string;
     initialQuantity?: number;
+    /** @deprecated use costInMicrounits */
     costInCents?: number;
-    costInMicrounits?: number; // microunits = cents × 10 000
+    costInMicrounits?: number;
     reorderQuantity?: number; // log-3: configurable per ingredient (g/unit), fallback 10 000
     createdAt?: string;
     updatedAt?: string;
@@ -115,8 +119,9 @@ export interface SupplierOrderItem {
     ingredientName: string;
     quantity: number;
     unit: IngredientUnit;
+    /** @deprecated use unitPriceInMicrounits */
     unitPriceInCents: number;
-    unitPriceInMicrounits?: number; // microunits = cents × 10 000
+    unitPriceInMicrounits?: number;
     receivedQuantity?: number;
 }
 
@@ -126,8 +131,9 @@ export interface SupplierOrder {
     supplierName: string;
     status: SupplierOrderStatus;
     items: SupplierOrderItem[];
+    /** @deprecated use totalCostInMicrounits */
     totalCostInCents: number;
-    totalCostInMicrounits?: number; // microunits = cents × 10 000
+    totalCostInMicrounits?: number;
     createdAt: string;
     updatedAt: string;
     deliveryDate?: string;
@@ -148,8 +154,9 @@ export interface InventoryMovement {
     performedAt: string;
     performedBy: string;
     timestamp: string; // Grade X Alias for performedAt
+    /** @deprecated use unitCostInMicrounits */
     unitCostInCents?: number;
-    unitCostInMicrounits?: number; // microunits = cents × 10 000
+    unitCostInMicrounits?: number;
 }
 
 export type PreparationType =
@@ -201,8 +208,9 @@ export interface Preparation extends SovereignNode {
     lastCheckedBy?: string;
 
     notes: string;
+    /** @deprecated use costInMicrounits */
     costInCents?: number;
-    costInMicrounits?: number; // microunits = cents × 10 000 // Total cost in cents
+    costInMicrounits?: number;
     isCompleted?: boolean; // Grade X Task Tracking
 }
 
@@ -212,8 +220,9 @@ export interface RecipeIngredient extends SovereignMap {
     name: string;
     quantity: number;
     unit: string;
+    /** @deprecated use costInMicrounits */
     costInCents: number;
-    costInMicrounits?: number; // microunits = cents × 10 000
+    costInMicrounits?: number;
     cost?: number; // Alias for UI compatibility
 }
 
@@ -248,10 +257,12 @@ export interface Recipe extends SovereignNode {
     steps?: unknown[]; // Alias for UI compatibility
     category?: RecipeCategory | string;
     portions?: number;
+    /** @deprecated use costPriceInMicrounits */
     costPriceInCents?: number;
-    costPriceInMicrounits?: number; // microunits = cents × 10 000
+    costPriceInMicrounits?: number;
+    /** @deprecated use sellingPriceInMicrounits */
     sellingPriceInCents?: number;
-    sellingPriceInMicrounits?: number; // microunits = cents × 10 000
+    sellingPriceInMicrounits?: number;
     isActive?: boolean;
     // ── Bar / cocktail fields (cui-3) ─────────────────────────────────────────
     /** Primary spirit(s) used in the recipe (e.g. "Rhum blanc"). */

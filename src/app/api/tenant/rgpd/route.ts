@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { RgpdRegisterService } from '@/modules/compliance/reglementaire/rgpd/RgpdRegisterService';
+import { RgpdRegisterService } from '@/modules/compliance';
 import { z } from 'zod';
 
 const CreateRequestSchema = z.object({

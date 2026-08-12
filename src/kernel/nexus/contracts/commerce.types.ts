@@ -26,8 +26,9 @@ export interface Quote extends SovereignNode {
     title: string;
     number?: string;
     amount?: number;
+    /** @deprecated use amountInMicrounits */
     amountInCents: number;
-    amountInMicrounits?: number; // microunits = cents × 10 000
+    amountInMicrounits?: number;
     status: 'draft' | 'sent' | 'viewed' | 'accepted' | 'converted' | 'rejected' | 'expired';
     customerId: string;
     customerName: string;
@@ -56,8 +57,9 @@ export interface Quote extends SovereignNode {
         id: string;
         name: string;
         quantity: number;
+        /** @deprecated use priceInMicrounits */
         priceInCents: number;
-        priceInMicrounits?: number; // microunits = cents × 10 000
+        priceInMicrounits?: number;
     }>;
 }
 

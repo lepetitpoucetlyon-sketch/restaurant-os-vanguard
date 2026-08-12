@@ -12,7 +12,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { ServiceTicket, ServiceLine, PaymentSplit, ServiceState } from '../../domain/types';
 import type { ServiceSubject } from '@nexus/contracts';
-import type { BillingUnit } from '@/modules/finance/comptabilite/billing/domain/IVerticalInvoicingAdapter';
+import type { BillingUnit } from '@/modules/finance';
 
 // ── Transitions valides ────────────────────────────────────────────────────────
 
