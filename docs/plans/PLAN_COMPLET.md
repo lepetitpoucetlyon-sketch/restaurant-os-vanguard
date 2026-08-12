@@ -1,4 +1,4 @@
-# 🎯 PLAN COMPLET — Vibecoder Rescue v4.4
+# 🎯 PLAN COMPLET — Vibecoder Rescue v4.5
 
 > **Document maître unique.** Fusionne, réordonne et met à jour :
 > `PLAN_MAITRE_CORRIGE.md` (v3, dette + légal + UI) · `MAPPING_BASE_VERTICALES.md` ·
@@ -14,6 +14,16 @@
 > Claude a **réparé en avant** : **TSC 74 → 0, cycles 6 → 3, barrel 245 → ~0, store→modules 8 → 0.** Détail :
 > `JOURNAL_AGENT.md` §AUDIT-2 (constat) + §AUDIT-2-FIX (réparation). Les métriques §1 et le contrat §0 sont
 > **remis à la vérité mesurée**. Nouveau : **§0.9 Symbiose** + `scripts/agent-gate.sh` (preuve liée au hash).
+>
+> **🔄 v4.5 — intégration de l'AXE BUS (12/08, par Claude).** Consolidation de deux plans bus
+> épars dans ce document maître : `PLAN_BUS_EVENEMENTIEL.md` (audit « spider web » 09/08 — 94
+> orphelins, chaînes rompues, 0 cron, P0→P3, ~70h) + `PLAN_AUDIT_BUS_ORPHELINS.md` (contre-audit
+> 12/08 — mécanisme racine « 0-handler = succès silencieux, hors DLQ », garde-fou runtime,
+> vérification à la main du câblage restaurant : **faux positifs** du scan → restaurant ~95 %
+> câblé). **Constat clé** : ces sujets sont **audités depuis juillet** (AUDIT_GLOBAL_PROMESSE_OS,
+> dlq-rbac-audit) mais **jamais exécutés** → nouvel **AXE BUS** §9, placé **avant la surface**
+> (§8.6/§7.2/MCC/UI) car prérequis à toute promotion `_ref_restaurant`. Détail par item : voir
+> les deux plans référencés. Ordre & chemin critique mis à jour.
 >
 > **🔄 v4.4 — mise à jour post-exécution (12/08, par Claude).** Chantier **« vider `src/shared/` »** CLOS :
 > **§3.4 Étapes 4 & 5 FAITES** — `src/shared/` (123 fichiers) rapatrié couche par couche vers
@@ -367,7 +377,7 @@ Toutes les cibles structurelles de l'extraction sont atteintes :
 > **Axe facturation (§7.4-7.8) TERMINÉ** : `InvoiceService` + 150€ HT + RGPD + variantes + `IVerticalInvoicingAdapter`.
 > **Axe multi-verticale (§8.1-8.8) TERMINÉ** : `ServiceTicket` · `ServiceSubject` · roleLabels ×8 · `VerticalEventBridge`
 > 25 rules · vatResolver généralisé · gen-vertical-playbook · garage ouvert (`RepairIntakeService` 99L validé).
-> **Reste** : §7.3 e-facture 🔴 1er SEPT · §8.6 généralisation résiduelle (19 modules) · §7.2 Nexus Exchange · MCC EInvoicing/Exchange · §6 refonte UI. *(§5 monnaie P0-P4 SOLDÉ, audité 12/08.)*
+> **Reste** : **§9 AXE BUS 🔴 (garde-fou + chaînes rompues — à faire AVANT la surface)** · §7.3 e-facture 🔴 1er SEPT · §8.6 généralisation résiduelle (19 modules) · §7.2 Nexus Exchange · MCC EInvoicing/Exchange · §6 refonte UI. *(§5 monnaie P0-P4 SOLDÉ, audité 12/08.)*
 > ⚠️ 5 fichiers de tests échouent (pré-existants, prouvés) — voir §5.1.
 > 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 jours-homme, hors chemin critique code).
 
@@ -417,6 +427,13 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 ```
 🚨 7.3  RÉCEPTION e-facture          1ᵉʳ SEPT. 2026 · ~10 j · HORS SÉQUENCE (la loi n'attend pas)
 
+── AXE BUS §9 (fondations — AVANT toute surface · prérequis promotion _ref_) ──
+9.0    🔴 Garde-fou runtime          ~2h    warn 0-handler + outbox done_no_consumer + invariant registration
+9.1    🔴 P0 chaînes rompues         ~20h   inventory.stock_adjusted · order.placed→KDS · notif→WebPush · CronScheduler+ZReport · haccp corrective · cash_counted
+9.2    🟠 P1 émetteurs/automations   ~25h   staff.clock→paie · reservation events · handlers non-câblés · digests/crons · confiance payload.tenantId (SovereignGuard)
+9.3    🟠 P2 orphelins + tests bus   ~15h   waste/table/loyalty · bank/sync+hr/employees émettent · smoke test intégration
+       (détail : PLAN_BUS_EVENEMENTIEL.md P1-8 + PLAN_AUDIT_BUS_ORPHELINS.md §0 vérifié)
+
 ── AXE DETTE (rend le reste sûr) ─────────────────────────────────────────
 1bis   ✅ Filet (9 invariants + Semgrep)     FAIT
 2B.2   ✅ Schémas Zod stricts                FAIT (0 z.any, 0 z.unknown — AUDITÉ CONFIRMÉ)
@@ -455,8 +472,9 @@ INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · C
        ✅ Emulateur Firestore configuré      FAIT
 ```
 
-**Total restant ≈ 8 jours-homme code** (v4.4 — §3 structure soldée · §7.4-7.8 + §8.1-8.8 terminés) **+ ~28 j infra**.
-**Chemin critique** : `7.3 (légal 🔴 1er sept.) ∥ [8.6-résidu → 7.2 → MCC]`  (axes structure §3 + monnaie §5 clos).
+**Total restant ≈ 8 j code + AXE BUS ~8 j (§9)** **+ ~28 j infra**. (v4.5 — §3 structure + §5 monnaie soldés · §7.4-7.8 + §8.1-8.8 terminés.)
+**Chemin critique** : `9.0 garde-fou → 9.1 P0 bus → [8.6-résidu → 7.2 → MCC]` ∥ `7.3 (légal 🔴 1er sept.)`.
+> ⛔ **Le garde-fou (9.0) passe en premier** : il rend visibles les 94 orphelins (dont ~faux positifs, cf. §0 vérifié) et gèle le principe. **Aucune promotion `_ref_restaurant` avant que 9.1 soit vert** (sinon les chaînes rompues sont clonées chez les clients).
 
 ---
 
@@ -729,6 +747,9 @@ Résultats mesurés :
               · Phase 4 (SplitBill + 4 god files <400L) · Phase 5 P0-P3 · §7.4-7.8 facturation · §8.1-8.8 multi-verticale · Sentry
 
 RESTE (chemin critique) :
+§9 BUS : 9.0 garde-fou ─► 9.1 P0 chaînes ─► 9.2 P1 ─► 9.3 P2   ◄── FONDATIONS, avant la surface
+   │        (prérequis dur : aucune promotion _ref_restaurant avant 9.1 vert)
+   ▼
 8.6-résidu (19 modules teintés) ─► 7.2 Exchange ─► MCC-1…5
                                                                      │
    (parallèle, périmètres disjoints)                                 │
@@ -738,7 +759,50 @@ RESTE (chemin critique) :
 clinic ◄── attend §8.2 PII + §7.6 RGPD validés en prod
 ```
 
-**Chemin critique** : `8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §5 monnaie, §7.4-7.8, §8.1-8.8 clos).
+**Chemin critique** : `§9 (9.0 garde-fou → 9.1 P0 bus) → 8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §5 monnaie, §7.4-7.8, §8.1-8.8 clos ; e-facture §7.3 en parallèle).
+
+---
+
+# 🕸️ 9. AXE BUS — orphelins, succès silencieux, DLQ, RBAC (fondations)
+
+> **Consolidation** de `PLAN_BUS_EVENEMENTIEL.md` (audit spider-web 09/08, P0→P3, ~70h) +
+> `PLAN_AUDIT_BUS_ORPHELINS.md` (contre-audit 12/08 : mécanisme racine + garde-fou + vérif main).
+> **Ces deux plans restent la source de détail par item.** Ici : l'axe, l'ordre, la vérité mesurée.
+
+## 9.0 — La racine (pourquoi ça dure)
+
+`NexusEventBus.emit()` fait `if (all.length === 0) return;` — **émettre un event que personne
+n'écoute ressemble à un succès**. `emitDurable` marque même l'outbox `done` → **jamais en DLQ**.
+Aucun filet ⇒ un fil débranché (ou renommé) pendant un refactor ne produit **aucune erreur**.
+D'où l'impression « rien n'est en place » alors que le restaurant est **~95 % câblé** (vérifié main).
+
+**Constat historique** : ces trous sont **audités depuis juillet** (`AUDIT_GLOBAL_PROMESSE_OS.md`,
+`dlq-rbac-audit` 08/08, spider-web 09/08) mais **jamais exécutés**. Ce chantier doit finir en
+**commits**, pas en 4ᵉ document.
+
+## 9.1 — État vérifié (contre les faux positifs du scan)
+
+| # | Sujet | État vérifié à la main | Prio |
+|---|-------|------------------------|------|
+| Garde-fou | warn 0-handler + outbox `done_no_consumer` + invariant registration | 🔴 absent (le seul manque des 2 plans) | **P0 — 1er** |
+| `inventory.stock_adjusted` | vrai orphelin, aucun chemin alt → ajust/comptage perdu | 🔴 P0 |
+| `haccp.temperature_logged` | route émet un nom mort ; chaîne du froid OK via `sensor.temperature_anomaly` | 🟠 P1 (mismatch) |
+| `staff.clock_in/out → paie` | `PayrollTimeclockHandler` câblé mais **affamé** (émetteur disparu) | 🟠 P1 |
+| 3 handlers non-câblés | `HaccpCorrectiveAction` (légal), `Proforma`, `SupportEscalation` | P0/P2 |
+| `bank/sync`, `hr/employees` | écrivent **sans emit** (audit juillet, **toujours vif**) | 🟠 P1 |
+| handlers font confiance à `payload.tenantId` | 0 `SovereignGuard` (défense cross-tenant) | 🟠 P1 sécurité |
+| **Faux positifs** (NE PAS toucher) | `cash_drawer`, `anomaly.detected`, `commerce.margin_warning`, `finance.refund_issued`, `kds.ticket_received`… **sont câblés** | ✅ |
+
+## 9.2 — Ordre d'exécution
+
+```
+9.0 Garde-fou (~2h)      → rend les 94 orphelins visibles + gèle le principe   [FAIRE EN PREMIER]
+9.1 P0 chaînes (~20h)    → inventory.stock_adjusted · order.placed→KDS · WebPush · Cron+ZReport · haccp corrective · cash_counted
+9.2 P1 (~25h)            → staff.clock→paie · reservation events · SovereignGuard handlers · bank/sync+hr emit · digests
+9.3 P2 + tests (~15h)    → orphelins restants · smoke test intégration bus
+```
+⛔ **Prérequis dur** : `9.1` vert avant toute promotion `_ref_restaurant` (sinon on clone les
+chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6/§7.2/MCC/§6).
 
 ---
 
