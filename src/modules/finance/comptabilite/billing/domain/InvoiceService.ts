@@ -20,10 +20,17 @@ export interface InvoiceFromTicketParams {
   customerSiret?: string;
 }
 
+export type InvoiceType = 'invoice' | 'credit_note' | 'deposit' | 'from_quote';
+
 export interface GeneratedInvoice extends LegalInvoice {
   sourceJournalEntryId: string;
   customerAddress?: string;
   customerSiret?: string;
+  invoiceType?: InvoiceType;
+  originalInvoiceId?: string;
+  originalInvoiceNumber?: string;
+  depositGroupId?: string;
+  quoteId?: string;
 }
 
 export const InvoiceService = {
@@ -186,5 +193,242 @@ export const InvoiceService = {
         limit: opts?.limit ?? 100,
       }
     );
+  },
+
+  async generateCreditNote(
+    tenantId: string,
+    originalInvoiceId: string,
+    params: { reason: string; operatorId: string },
+  ): Promise<GeneratedInvoice> {
+    const original = await this.getInvoice(tenantId, originalInvoiceId);
+    if (!original) throw new Error(`Invoice ${originalInvoiceId} not found`);
+    if (original.status === 'cancelled') throw new Error(`Invoice ${originalInvoiceId} already cancelled`);
+
+    const origSubMu = original.subTotalInMicrounits ?? (original.subTotalInCents ?? 0) * 10_000;
+    const origTaxMu = original.taxTotalInMicrounits ?? (original.taxTotalInCents ?? 0) * 10_000;
+    const origTotalMu = original.totalInMicrounits ?? (original.totalInCents ?? 0) * 10_000;
+
+    const invoiceId = SharedKernel.generateId('AV');
+    const now = new Date().toISOString();
+    const year = new Date().getFullYear();
+    const sequenceNumber = await this.getNextInvoiceNumber(tenantId, year);
+    const invoiceNumber = `AV-${year}-${String(sequenceNumber).padStart(6, '0')}`;
+
+    const creditNote: GeneratedInvoice = {
+      id: invoiceId,
+      createdAt: now,
+      updatedAt: now,
+      orderId: original.orderId,
+      sourceJournalEntryId: original.sourceJournalEntryId,
+      invoiceNumber,
+      invoiceType: 'credit_note',
+      originalInvoiceId: original.id,
+      originalInvoiceNumber: original.invoiceNumber,
+      customerName: original.customerName,
+      customerAddress: original.customerAddress,
+      customerSiret: original.customerSiret,
+      subTotalInMicrounits: -origSubMu,
+      subTotalInCents: -Math.round(origSubMu / 10_000),
+      taxTotalInMicrounits: -origTaxMu,
+      taxTotalInCents: -Math.round(origTaxMu / 10_000),
+      totalInMicrounits: -origTotalMu,
+      totalInCents: -Math.round(origTotalMu / 10_000),
+      taxDetails: original.taxDetails.map(d => ({
+        rate: d.rate,
+        baseInMicrounits: -(d.baseInMicrounits ?? 0),
+        baseInCents: -(d.baseInCents ?? 0),
+        amountInMicrounits: -(d.amountInMicrounits ?? 0),
+        amountInCents: -(d.amountInCents ?? 0),
+      })),
+      status: 'issued',
+      issuedAt: now,
+      seal: await this.computeSeal(invoiceId, invoiceNumber, -origTotalMu, original.taxDetails, now),
+    };
+
+    await Nexus.adapter.set(`tenants/${tenantId}/${INVOICE_COLLECTION}/${invoiceId}`, creditNote);
+
+    empireAudit.log({
+      module: 'finance',
+      action: 'CREDIT_NOTE_GENERATED',
+      severity: 'medium',
+      timestamp: new Date(),
+      details: {
+        creditNoteId: invoiceId,
+        creditNoteNumber: invoiceNumber,
+        originalInvoiceId: original.id,
+        originalInvoiceNumber: original.invoiceNumber,
+        totalMu: -origTotalMu,
+        reason: params.reason,
+        operatorId: params.operatorId,
+      },
+    });
+
+    logger.info(`[InvoiceService] Avoir ${invoiceNumber} émis pour ${original.invoiceNumber}`);
+    return creditNote;
+  },
+
+  async generateDeposit(
+    tenantId: string,
+    params: {
+      customerName: string;
+      customerSiret?: string;
+      depositAmountHTInMicrounits: number;
+      taxRate: number;
+      groupId: string;
+      description?: string;
+    },
+  ): Promise<GeneratedInvoice> {
+    const invoiceId = SharedKernel.generateId('AC');
+    const now = new Date().toISOString();
+    const year = new Date().getFullYear();
+    const sequenceNumber = await this.getNextInvoiceNumber(tenantId, year);
+    const invoiceNumber = `AC-${year}-${String(sequenceNumber).padStart(6, '0')}`;
+
+    const baseMu = params.depositAmountHTInMicrounits;
+    const taxMu = Math.round(baseMu * params.taxRate / 100);
+    const totalMu = baseMu + taxMu;
+
+    const deposit: GeneratedInvoice = {
+      id: invoiceId,
+      createdAt: now,
+      updatedAt: now,
+      orderId: params.groupId,
+      sourceJournalEntryId: '',
+      invoiceNumber,
+      invoiceType: 'deposit',
+      depositGroupId: params.groupId,
+      customerName: params.customerName,
+      customerSiret: params.customerSiret,
+      subTotalInMicrounits: baseMu,
+      subTotalInCents: Math.round(baseMu / 10_000),
+      taxTotalInMicrounits: taxMu,
+      taxTotalInCents: Math.round(taxMu / 10_000),
+      totalInMicrounits: totalMu,
+      totalInCents: Math.round(totalMu / 10_000),
+      taxDetails: [{
+        rate: params.taxRate,
+        baseInMicrounits: baseMu,
+        baseInCents: Math.round(baseMu / 10_000),
+        amountInMicrounits: taxMu,
+        amountInCents: Math.round(taxMu / 10_000),
+      }],
+      status: 'issued',
+      issuedAt: now,
+      seal: await this.computeSeal(invoiceId, invoiceNumber, totalMu, [{
+        rate: params.taxRate,
+        baseInMicrounits: baseMu,
+        baseInCents: Math.round(baseMu / 10_000),
+        amountInMicrounits: taxMu,
+        amountInCents: Math.round(taxMu / 10_000),
+      }], now),
+    };
+
+    await Nexus.adapter.set(`tenants/${tenantId}/${INVOICE_COLLECTION}/${invoiceId}`, deposit);
+
+    empireAudit.log({
+      module: 'finance',
+      action: 'DEPOSIT_INVOICE_GENERATED',
+      severity: 'low',
+      timestamp: new Date(),
+      details: {
+        depositId: invoiceId,
+        invoiceNumber,
+        groupId: params.groupId,
+        totalMu,
+        customerName: params.customerName,
+      },
+    });
+
+    logger.info(`[InvoiceService] Acompte ${invoiceNumber} — groupe ${params.groupId} (${totalMu}µ)`);
+    return deposit;
+  },
+
+  async convertQuoteToInvoice(
+    tenantId: string,
+    quoteId: string,
+    params?: { customerSiret?: string },
+  ): Promise<GeneratedInvoice> {
+    const quote = await Nexus.adapter.get<{
+      id: string;
+      customerId: string;
+      customerName: string;
+      items: Array<{ id: string; name: string; quantity: number; price: number }>;
+      total: number;
+      status: string;
+    }>(`tenants/${tenantId}/quotes/${quoteId}`);
+
+    if (!quote) throw new Error(`Quote ${quoteId} not found`);
+    if (quote.status !== 'accepted') throw new Error(`Quote ${quoteId} is ${quote.status}, must be accepted`);
+
+    const invoiceId = SharedKernel.generateId('INV');
+    const now = new Date().toISOString();
+    const year = new Date().getFullYear();
+    const sequenceNumber = await this.getNextInvoiceNumber(tenantId, year);
+    const invoiceNumber = `FACT-${year}-${String(sequenceNumber).padStart(6, '0')}`;
+
+    const subTotalMu = Math.round(quote.total * 1_000_000);
+    const taxMu = Math.round(subTotalMu * 0.2);
+    const totalMu = subTotalMu + taxMu;
+
+    const invoice: GeneratedInvoice = {
+      id: invoiceId,
+      createdAt: now,
+      updatedAt: now,
+      orderId: quoteId,
+      sourceJournalEntryId: '',
+      invoiceNumber,
+      invoiceType: 'from_quote',
+      quoteId,
+      customerName: quote.customerName,
+      customerSiret: params?.customerSiret,
+      subTotalInMicrounits: subTotalMu,
+      subTotalInCents: Math.round(subTotalMu / 10_000),
+      taxTotalInMicrounits: taxMu,
+      taxTotalInCents: Math.round(taxMu / 10_000),
+      totalInMicrounits: totalMu,
+      totalInCents: Math.round(totalMu / 10_000),
+      taxDetails: [{
+        rate: 20,
+        baseInMicrounits: subTotalMu,
+        baseInCents: Math.round(subTotalMu / 10_000),
+        amountInMicrounits: taxMu,
+        amountInCents: Math.round(taxMu / 10_000),
+      }],
+      status: 'issued',
+      issuedAt: now,
+      seal: await this.computeSeal(invoiceId, invoiceNumber, totalMu, [{
+        rate: 20,
+        baseInMicrounits: subTotalMu,
+        baseInCents: Math.round(subTotalMu / 10_000),
+        amountInMicrounits: taxMu,
+        amountInCents: Math.round(taxMu / 10_000),
+      }], now),
+    };
+
+    await Nexus.adapter.set(`tenants/${tenantId}/${INVOICE_COLLECTION}/${invoiceId}`, invoice);
+
+    await Nexus.adapter.set(`tenants/${tenantId}/quotes/${quoteId}`, {
+      status: 'invoiced',
+      invoiceId,
+      invoiceNumber,
+      invoicedAt: now,
+    }, { merge: true } as Parameters<typeof Nexus.adapter.set>[2]);
+
+    empireAudit.log({
+      module: 'finance',
+      action: 'QUOTE_CONVERTED_TO_INVOICE',
+      severity: 'low',
+      timestamp: new Date(),
+      details: {
+        invoiceId,
+        invoiceNumber,
+        quoteId,
+        totalMu,
+        customerName: quote.customerName,
+      },
+    });
+
+    logger.info(`[InvoiceService] Devis ${quoteId} → ${invoiceNumber} (${totalMu}µ)`);
+    return invoice;
   },
 };
