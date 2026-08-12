@@ -13,7 +13,7 @@ export interface BusOutboxEntry {
     payload: unknown;
     createdAt: number;
     attempts: number;
-    status: 'pending' | 'done' | 'failed';
+    status: 'pending' | 'done' | 'done_no_consumer' | 'failed';
 }
 
 /**

@@ -13,6 +13,27 @@ import type { NexusEvents } from './events/catalog';
 export type NexusEventName = keyof NexusEvents;
 export type NexusEventPayload<E extends NexusEventName> = NexusEvents[E];
 
+// ── §9.0 Garde-fou : orphelins ATTENDUS (pas des bugs) ─────────────────────────
+// Un event émis sans handler ressemble à un succès (emit() retourne, emitDurable
+// marque l'outbox 'done', rien ne part en DLQ). On rend ça visible — SAUF pour :
+//  1. les préfixes des verticales NON OUVERTES (events publiés pour branchement
+//     futur ; table préfixe→verticale : scripts/gen-vertical-playbook.ts:69).
+//     Quand une verticale ouvre (playbook « ✅ Prête »), retirer son préfixe ici.
+//  2. la Classe B : l'état est persisté AVANT l'emit, l'event est un fan-out
+//     d'extension sans abonné obligatoire.
+const EXPECTED_UNCONSUMED_PREFIXES = ['auto.', 'bakery.', 'health.', 'hotel.', 'salon.', 'retail.'] as const;
+const EXPECTED_UNCONSUMED_EVENTS: ReadonlySet<string> = new Set([
+  'ops.service_ticket_opened', 'ops.service_ticket_working',
+  'ops.service_ticket_closed', 'ops.service_ticket_cancelled',
+  'crm.allergen_flagged',
+]);
+
+/** Vrai si l'absence de handler pour cet event est attendue (verticale fermée ou Classe B). */
+export function isExpectedUnconsumed(event: string): boolean {
+  return EXPECTED_UNCONSUMED_EVENTS.has(event)
+    || EXPECTED_UNCONSUMED_PREFIXES.some(p => event.startsWith(p));
+}
+
 type Handler<E extends NexusEventName> = (
   payload: NexusEventPayload<E>
 ) => Promise<void> | void;
@@ -61,6 +82,11 @@ class NexusEventBusClass {
   off(event: NexusEventName, id: string): void {
     const existing = this.handlers.get(event) ?? [];
     this.handlers.set(event, existing.filter(h => h.id !== id));
+  }
+
+  /** §9.0 — Nombre de handlers enregistrés pour un event (0 = orphelin runtime). */
+  listenerCount(event: NexusEventName): number {
+    return this.handlers.get(event)?.length ?? 0;
   }
 
   onValidated<E extends NexusEventName, T>(
@@ -141,17 +167,23 @@ class NexusEventBusClass {
     // 2. Émettre en RAM
     await this.emit(event, payload);
 
-    // 3. Outbox : Marquer comme terminé
+    // §9.0 Garde-fou : distinguer « traité par ≥1 handler » de « aucun consommateur ».
+    // Un orphelin non-attendu est marqué done_no_consumer → observable en base, jamais
+    // confondu avec un succès, sans jamais polluer la DLQ (qui ne rattrape que les échecs).
+    const hadConsumer = (this.handlers.get(event)?.length ?? 0) > 0;
+    const finalStatus = hadConsumer || isExpectedUnconsumed(event) ? 'done' : 'done_no_consumer';
+
+    // 3. Outbox : Marquer comme terminé (ou done_no_consumer si orphelin inattendu)
     if (typeof window !== 'undefined') {
       try {
-        await db.busOutbox.update(id, { status: 'done' });
+        await db.busOutbox.update(id, { status: finalStatus });
       } catch (err) {
-        logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
+        logger.error(`[EventBus] Failed to mark Outbox for ${event}`, err);
       }
     } else {
       const pending = this.serverOutbox.get(id);
       if (pending) {
-        pending.status = 'done';
+        pending.status = finalStatus;
       }
     }
   }
@@ -184,7 +216,13 @@ class NexusEventBusClass {
     }
 
     const all = this.handlers.get(event) ?? [];
-    if (all.length === 0) return;
+    if (all.length === 0) {
+      // §9.0 Garde-fou : un orphelin non-attendu = un fil débranché en silence.
+      if (process.env.NODE_ENV !== 'production' && !isExpectedUnconsumed(event)) {
+        logger.warn(`[EventBus] ⚠️ émis SANS handler (orphelin) : "${event}" — voir PLAN_COMPLET §9`);
+      }
+      return;
+    }
 
     this.inFlight.add(event);
 
