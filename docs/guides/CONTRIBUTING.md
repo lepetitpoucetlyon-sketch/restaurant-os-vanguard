@@ -79,7 +79,7 @@ docs: mettre à jour le README
 1. Créer le dossier dans `src/app/<nom-page>/`
 2. Ajouter `page.tsx` (composant principal)
 3. Ajouter `loading.tsx` (skeleton loader)
-4. Mettre à jour la navigation dans `src/config/navigation.ts`
+4. Mettre à jour la navigation dans `src/config/navConfig.ts`
 
 ### Créer un nouveau composant
 
@@ -108,13 +108,12 @@ export function NomComposant({ ...props }: NomComposantProps) {
 }
 ```
 
-### Créer un nouveau Context
+### Gérer un nouvel état
 
-Voir `src/context/OrdersContext.tsx` comme exemple. Points clés:
-1. Définir l'interface du state
-2. Utiliser `useMemo` pour le value du Provider
-3. Exporter un hook `useNomContext()`
-4. Ajouter le Provider dans `src/app/layout.tsx`
+⚠️ Le Context API React n'est plus le pattern d'état ici — on utilise des **atomes Jotai par pilier** + des **hooks de module**. Voir `src/modules/ops/service/pos/hooks/usePos.ts` comme exemple. Points clés :
+1. Définir les atomes dans le `store/` du pilier (ou `src/store/pillars/`), types partagés neutres dans `src/store/base.ts`
+2. Exposer un hook `useX()` dans le `hooks/` du module
+3. Communication cross-module uniquement via les 3 canaux : barrel `@/modules/<pilier>`, `Nexus.adapter`, `NexusEventBus`
 
 ---
 

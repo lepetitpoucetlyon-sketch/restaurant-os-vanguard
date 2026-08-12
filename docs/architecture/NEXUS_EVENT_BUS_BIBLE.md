@@ -24,4 +24,4 @@ Restaurant OS n'est pas qu'un logiciel de caisse, c'est un ERP neuro-réactif. L
 | `cash_drawer.opened_unauthorized` | `CashDrawerAnomalyHandler` | CRITICAL | Anti-fraude & `sovereign.breach` |
 
 ## 4. Règle d'or : Isolation (Sentrux)
-Aucun composant de présentation (UI) ne doit embarquer de logique métier (ex: "si telle marge, alors faire ça"). Les composants émettent des événements (via `emitDurable`), et les handlers isolés dans `src/shared/eventBus/handlers/` orchestrent les cascades.
+Aucun composant de présentation (UI) ne doit embarquer de logique métier (ex: "si telle marge, alors faire ça"). Les composants émettent des événements (via `emitDurable`), et les handlers isolés dans `src/orchestration/handlers/` orchestrent les cascades.

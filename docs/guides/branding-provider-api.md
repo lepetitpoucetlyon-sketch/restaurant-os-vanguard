@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
 ```
 
 ### Logique de Fallback
-En l'absence de configuration spécifique au tenant, le système utilise `defaultBrandTokens` défini dans `src/shared/nexus/tokens/brand.ts`.
+En l'absence de configuration spécifique au tenant, le système utilise `defaultBrandTokens` défini dans `src/kernel/nexus/tokens/brand.ts`.
 
 ## 📜 Interface BrandConfig (159 Tokens)
 
