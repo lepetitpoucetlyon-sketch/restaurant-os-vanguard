@@ -10,6 +10,7 @@ import { registerCrmHandlers } from './crm';
 import { registerMccHandlers } from './mcc';
 import { registerNotificationHandlers } from './notifications';
 import { registerTechAuditLedgerHandler } from '../handlers/TechAuditLedgerHandler';
+import { initVerticalEventBridge } from '../VerticalEventBridge';
 
 let clientInitialized = false;
 let serverInitialized = false;
@@ -31,6 +32,8 @@ export function registerNexusHandlers(): void {
   if (clientInitialized) return;
   clientInitialized = true;
 
+  initVerticalEventBridge();
+
   unsubs.push(
     ...registerLogisticsHandlers(),
     ...registerFinanceHandlers(),
@@ -49,6 +52,8 @@ export function registerNexusHandlers(): void {
 export function registerServerNexusHandlers(): void {
   if (serverInitialized) return;
   serverInitialized = true;
+
+  initVerticalEventBridge();
 
   unsubs.push(
     ...registerLogisticsHandlers(),
