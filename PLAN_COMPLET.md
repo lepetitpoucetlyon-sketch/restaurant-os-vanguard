@@ -367,7 +367,7 @@ Toutes les cibles structurelles de l'extraction sont atteintes :
 > **Axe facturation (§7.4-7.8) TERMINÉ** : `InvoiceService` + 150€ HT + RGPD + variantes + `IVerticalInvoicingAdapter`.
 > **Axe multi-verticale (§8.1-8.8) TERMINÉ** : `ServiceTicket` · `ServiceSubject` · roleLabels ×8 · `VerticalEventBridge`
 > 25 rules · vatResolver généralisé · gen-vertical-playbook · garage ouvert (`RepairIntakeService` 99L validé).
-> **Reste** : P4 finance core 259 InCents (§5) · §7.3 e-facture 🔴 1er SEPT · §7.2 Nexus Exchange · MCC EInvoicing/Exchange.
+> **Reste** : §7.3 e-facture 🔴 1er SEPT · §8.6 généralisation résiduelle (19 modules) · §7.2 Nexus Exchange · MCC EInvoicing/Exchange · §6 refonte UI. *(§5 monnaie P0-P4 SOLDÉ, audité 12/08.)*
 > ⚠️ 5 fichiers de tests échouent (pré-existants, prouvés) — voir §5.1.
 > 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 jours-homme, hors chemin critique code).
 
@@ -456,7 +456,7 @@ INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · C
 ```
 
 **Total restant ≈ 8 jours-homme code** (v4.4 — §3 structure soldée · §7.4-7.8 + §8.1-8.8 terminés) **+ ~28 j infra**.
-**Chemin critique** : `7.3 (légal 🔴 1er sept.) ∥ [5-P4-finance → 8res → 7.2 → MCC]`  (axe structure §3 clos).
+**Chemin critique** : `7.3 (légal 🔴 1er sept.) ∥ [8.6-résidu → 7.2 → MCC]`  (axes structure §3 + monnaie §5 clos).
 
 ---
 
@@ -545,10 +545,18 @@ Résorbé par Antigravity, réparé par Claude. Gate @ `dd1ed4813` confirme **0 
   `NexusSyncService.ts`, `useNexusTenantLogic.ts`) ; **doublon `NexusFleetProvider.tsx`** confirmé présent
   (`shared/providers/fleet/` **et** `intelligence/ia/fleet/`) — dédupliquer.
 
-## 5.7 — PHASE 5 — 🟠 P0-P3 FAIT · reste P4 (finance core)
+## 5.7 — PHASE 5 — 🟢 P0-P4 FAIT (finance core vérifié 12/08)
 
-> **694 InCents** inchangé car les anciens champs `*InCents` sont **conservés** pour la rétrocompatibilité.
-> Tout le nouveau code écrit **les deux champs** (`*InMicrounits` + `*InCents` pour le fallback).
+> **645 InCents** codebase-wide inchangé car les anciens champs `*InCents` sont **conservés** pour la
+> rétrocompatibilité. Tout le nouveau code écrit **les deux champs** (`*InMicrounits` + `*InCents` fallback).
+>
+> **✅ P4 audité fichier par fichier (session `p4-finance`, 12/08)** — 205 InCents dans `modules/finance` :
+> tous sont soit la moitié cents d'un dual-write (dérivée `Math.round(mu/10_000)`), soit un **snapshot NF525
+> gelé** (`FiscalEngine.sealEntry` — intouchable, hash-chain), soit un **paramètre d'entrée** cents converti
+> aussitôt en µ (`SplitBillDomainService`, `taxCalc`), soit une **lecture microunits-first** (`financeUtils`,
+> vues dashboard, `useAccounting`). **Aucun site d'écriture cents-only**, aucune persistance Nexus cents-only.
+> `ProcurementBridge.signDeliveryNote()` : **déjà corrigé** (dual-write fallback L67, la dette L69 n'existe plus).
+> `calculateVAT`/`extractVAT` cents = `@deprecated`, versions `*Microunits` présentes, **0 appelant**.
 
 | Priorité | Piliers | État | Commits |
 |----------|---------|------|---------|
@@ -556,11 +564,10 @@ Résorbé par Antigravity, réparé par Claude. Gate @ `dd1ed4813` confirme **0 
 | **P1** | logistics (procurement, stock, inventory) | 🟢 **FAIT** | 8 fichiers, `totalInMicrounits`, `costInMicrounits`, `priceInMicrounits` |
 | **P2** | intelligence/commerce (consolidation, CRM) | 🟢 **FAIT** | `revenueInMicrounits`, `averageSpendInMicrounits` |
 | **P3** | compliance/facility (haccp types, recipe editor, stock reception) | 🟢 **FAIT** | `costInMicrounits` sur MaintenanceLog, RecipeCompositionTab microunits input/display |
-| **P4** | **finance core** (259 InCents — le plus délicat) | 🟢 **FAIT** — `@deprecated` sur tous InCents (kernel contracts 48 champs + finance pilier types 10 champs + logistics 11 + commerce 2), services/hooks vérifiés dual-write correct | snapshot NF525 gelé, InCents conservés rétrocompat avec @deprecated signal |
+| **P4** | **finance core** (205 InCents — le plus délicat) | 🟢 **FAIT & AUDITÉ** — `@deprecated` sur tous les champs domaine InCents (kernel contracts 48 + finance types 10 + logistics 11 + commerce 2) ; dual-write vérifié fichier par fichier ; 0 écriture cents-only hors snapshot NF525 gelé | audit session `p4-finance` 12/08 |
 
 🔴 `sed` global interdit · figer les noms de champs du snapshot NF525 · `no-cents.yml` actif.
-⚠️ **Dette connue** : `ProcurementBridge.signDeliveryNote()` ligne 69 appelle `convertEngagementToDebt` avec
-`deliveryNote.totalAmountInCents` sans microunits (pré-existant, P4).
+✅ **Dette résolue** : `ProcurementBridge.signDeliveryNote()` fait le dual-write fallback (`totalAmountInMicrounits ?? totalAmountInCents * 10_000`, L67) — la dette L69 documentée n'existe plus.
 
 ## 5.8 — PHASE 6 (~3 j) — refonte UI — 🔴 NON COMMENCÉ
 
@@ -715,7 +722,7 @@ Résultats mesurés :
               · Phase 4 (SplitBill + 4 god files <400L) · Phase 5 P0-P3 · §7.4-7.8 facturation · §8.1-8.8 multi-verticale · Sentry
 
 RESTE (chemin critique) :
-5-P4-finance ─► 8.6-résidu (19 modules teintés) ─► 7.2 Exchange ─► MCC-1…5
+8.6-résidu (19 modules teintés) ─► 7.2 Exchange ─► MCC-1…5
                                                                      │
    (parallèle, périmètres disjoints)                                 │
 6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI  ◄── attend décisions charte + i18n
@@ -724,7 +731,7 @@ RESTE (chemin critique) :
 clinic ◄── attend §8.2 PII + §7.6 RGPD validés en prod
 ```
 
-**Chemin critique** : `5-P4-finance → 8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §7.4-7.8, §8.1-8.8 clos).
+**Chemin critique** : `8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §5 monnaie, §7.4-7.8, §8.1-8.8 clos).
 
 ---
 
@@ -744,7 +751,7 @@ clinic ◄── attend §8.2 PII + §7.6 RGPD validés en prod
 | ~~**`shared/→modules/` = 7**~~ | ~~inversions résiduelles~~ | ✅ **résolu** — shared→modules = 0 |
 | ~~**`lib/→modules/` = 12**~~ | ~~inversions résiduelles~~ | ✅ **résolu** — lib→modules = 0 |
 | ~~**Phase 5 P4 finance**~~ | ~~259 InCents dans finance core~~ | ✅ **résolu** — @deprecated sur tous, dual-write vérifié |
-| **🆕 `ProcurementBridge` l.69** | `totalAmountInCents` sans microunits dans `signDeliveryNote()` | 🟠 pré-existant, P4 |
+| ~~**`ProcurementBridge` l.69**~~ | ~~`totalAmountInCents` sans microunits dans `signDeliveryNote()`~~ | ✅ **résolu** — dual-write fallback L67 (audit `p4-finance` 12/08) |
 | **🆕 6 lacunes infra** | API REST, tests intégration, CI/CD, monitoring, migration, isolation | 🔴 voir `afaire.md` |
 
 ## Décisions réservées à l'humain
