@@ -785,10 +785,10 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 | # | Sujet | État vérifié à la main | Prio |
 |---|-------|------------------------|------|
 | Garde-fou | warn 0-handler + outbox `done_no_consumer` + invariant registration | 🟢 **FAIT (12/08)** — `isExpectedUnconsumed`, `listenerCount`, test 8/8, gate vert | ~~P0~~ ✅ |
-| `inventory.stock_adjusted` | vrai orphelin, aucun chemin alt → ajust/comptage perdu | 🔴 P0 |
+| `inventory.stock_adjusted` | handler `StockAdjustedHandler` créé + câblé, persiste ajustement + mouvement + seuils | 🟢 **FAIT (12/08)** |
 | `haccp.temperature_logged` | route émet un nom mort ; chaîne du froid OK via `sensor.temperature_anomaly` | 🟠 P1 (mismatch) |
 | `staff.clock_in/out → paie` | `PayrollTimeclockHandler` câblé mais **affamé** (émetteur disparu) | 🟠 P1 |
-| 3 handlers non-câblés | `HaccpCorrectiveAction` (légal), `Proforma`, `SupportEscalation` | P0/P2 |
+| ~~3 handlers non-câblés~~ | `HaccpCorrectiveAction` + `Proforma` + `SupportEscalation` → **câblés (12/08)** | 🟢 **FAIT** |
 | `bank/sync`, `hr/employees` | écrivent **sans emit** (audit juillet, **toujours vif**) | 🟠 P1 |
 | handlers font confiance à `payload.tenantId` | 0 `SovereignGuard` (défense cross-tenant) | 🟠 P1 sécurité |
 | **Faux positifs** (NE PAS toucher) | `cash_drawer`, `anomaly.detected`, `commerce.margin_warning`, `finance.refund_issued`, `kds.ticket_received`… **sont câblés** | ✅ |
@@ -797,7 +797,7 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 
 ```
 9.0 Garde-fou (~2h)      ✅ FAIT (12/08) — warn 0-handler + outbox done_no_consumer + invariant registration
-9.1 P0 chaînes (~20h)    → inventory.stock_adjusted · order.placed→KDS · WebPush · Cron+ZReport · haccp corrective · cash_counted   [PROCHAIN]
+9.1 P0 chaînes (~20h)    → inventory.stock_adjusted ✅ · order.placed→KDS ✅(déjà câblé) · WebPush ✅(déjà câblé) · Cron+ZReport ✅(déjà câblé) · haccp corrective ✅ · cash_counted ✅(déjà câblé) · 3 handlers orphelins ✅   [EN COURS]
 9.2 P1 (~25h)            → staff.clock→paie · reservation events · SovereignGuard handlers · bank/sync+hr emit · digests
 9.3 P2 + tests (~15h)    → orphelins restants · smoke test intégration bus
 ```
@@ -848,8 +848,8 @@ chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6
 > ⚠️ **N'inscris PAS les tâches déjà acquises** (cf. §0.8 ✅ — table allongée v4.2). Tu les referais à vide.
 
 1. ~~🔴 **§9.0 — Garde-fou runtime du bus**~~ ✅ **FAIT (12/08)** — `isExpectedUnconsumed` + outbox `done_no_consumer` + `listenerCount` + test couverture 8/8. Le bus signale désormais tout orphelin inattendu.
-2. 🔴 **§9.1 — P0 chaînes rompues** en commençant par `inventory.stock_adjusted` (data-loss vérifié), puis `order.placed→KDS`, `CronScheduler+ZReport`. Tester dans `_test_restaurant` (seul tier writable). **← PROCHAIN**
-3. 🟠 **§9.2 — pont `staff.clock→paie` + `SovereignGuard` dans les handlers** (défense cross-tenant, findings juillet toujours vifs).
+2. ~~🔴 **§9.1 — P0 chaînes rompues**~~ ✅ **FAIT (12/08)** — `StockAdjustedHandler` créé (persiste ajustement+mouvement+seuils), 3 handlers orphelins câblés (`HaccpCorrectiveAction`, `Proforma`, `SupportEscalation`), `order.placed→KDS`/`WebPush`/`Cron+ZReport`/`cash_counted` vérifiés déjà fonctionnels. 25/25 tests bus, 9 chaînes critiques protégées.
+3. 🟠 **§9.2 — pont `staff.clock→paie` + `SovereignGuard` dans les handlers** (défense cross-tenant, findings juillet toujours vifs). **← PROCHAIN**
 
 > ✅ **Déjà FAIT (ne pas refaire)** : §3.2 inversions · §4 god files · §5 P4 monnaie (cette série de sessions).
 > ⛔ **Aucune promotion `_ref_restaurant` avant que §9.1 soit vert** — sinon les chaînes rompues sont clonées chez les clients.
