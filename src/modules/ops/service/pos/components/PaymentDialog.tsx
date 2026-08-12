@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight, AlertCircle, Terminal, FileText } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { formatCurrency } from "@/lib/formatters";;
 import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
 import type { PaymentResult } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";

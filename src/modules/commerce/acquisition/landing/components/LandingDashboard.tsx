@@ -25,12 +25,12 @@ import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
 import { useInventory } from '../../../../logistics/stock/inventory/hooks/useInventory';
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { usePageSetting } from "@design/settings/ContextualSettings";
-import { useIsMobile } from "@/shared/hooks";
+import { useIsMobile } from "@/kernel/hooks";
 import { SovereignMath } from "@/lib/services/SovereignMath";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/design/utils/motion";
 

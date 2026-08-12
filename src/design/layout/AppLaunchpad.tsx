@@ -6,12 +6,12 @@ import { cn } from "@/lib/ui.foundations";
 import { NavSection } from "@/config/navConfig";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useUI } from "@/shared/hooks";
-import { useLanguage } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { useRouter } from "next/navigation";
 import { LaunchpadStatusHub } from "@components/layout/LaunchpadStatusHub";
-import { useAuth } from "@/shared/hooks";
-import { useHasMounted } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
+import { useHasMounted } from "@/kernel/hooks";
 
 
 interface AppLaunchpadProps {

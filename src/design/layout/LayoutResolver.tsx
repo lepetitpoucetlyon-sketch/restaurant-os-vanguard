@@ -12,7 +12,7 @@ import { Header } from "@components/layout/Header";
 import { AppLaunchpad } from "@components/layout/AppLaunchpad";
 import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
-import { useUI } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
 import { tenantVariantAtom } from '@/store/pillars/sovereign';

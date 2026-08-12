@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Nexus, buildTenantPath } from '@/lib/nexus';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { signCleaningTaskAction } from '../actions/haccp.action';
 
 // ── Types ──────────────────────────────────────────────────────────────────────

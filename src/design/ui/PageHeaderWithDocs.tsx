@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { BookOpen, Menu } from 'lucide-react';
 import { TutorialOverlay } from './TutorialOverlay';
-import { useUI } from '@/shared/hooks';
+import { useUI } from '@/kernel/hooks';
 
 interface PageHeaderWithDocsProps {
     categoryId: string;

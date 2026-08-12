@@ -27,7 +27,7 @@ import {
 import { CustomerCSVImporter } from './CustomerCSVImporter';
 import type { CustomerImportResult, CustomerCSVRow } from './CustomerCSVImporter';
 import { downloadCSVTemplate } from './csvTemplates';
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { toError } from "@/lib/toError";
 
 // ── Types locaux ──────────────────────────────────────────────────────────────

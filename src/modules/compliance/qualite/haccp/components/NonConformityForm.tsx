@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { saveNonConformity, resolveNonConformity } from '../actions/nonConformity.action';
 
 import {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { RefreshCw, CheckCircle, AlertCircle, ExternalLink, Clock } from 'lucide-react';
 import { toast } from 'sonner';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { authedFetch } from '@/lib/client/authedFetch';
 

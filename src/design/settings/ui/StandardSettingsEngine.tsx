@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Save, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { GoldSwitch } from '@design/atomic/GoldSwitch';
 import { GlassInput } from '@design/atomic/GlassInput';

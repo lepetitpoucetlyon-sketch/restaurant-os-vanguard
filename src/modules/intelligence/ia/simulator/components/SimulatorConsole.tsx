@@ -9,7 +9,7 @@ import { ProposalPanel } from '@/kernel/nexus/guards/admin/ProposalPanel';
 import { NexusStaffingOracle as StaffingOracle } from '@/modules/human';
 import { SovereignLedger } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { SimulatorControlBar } from './SimulatorControlBar';
 import { SimulatorMetricsGrid } from './SimulatorMetricsGrid';
 import { SimulatorOverridesPanel } from './SimulatorOverridesPanel';

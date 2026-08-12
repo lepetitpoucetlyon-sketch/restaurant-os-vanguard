@@ -9,7 +9,7 @@ import {
     Check,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";

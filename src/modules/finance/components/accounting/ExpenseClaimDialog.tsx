@@ -8,7 +8,7 @@ import { useAccounting } from '../../hooks/useAccounting';
 import { useNexusFiscal } from '../../providers/NexusFiscalProvider';
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
-import { useUI } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { ListFilter } from "lucide-react";

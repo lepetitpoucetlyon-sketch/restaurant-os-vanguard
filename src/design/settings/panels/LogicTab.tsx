@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Settings } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@design/ui";
 import { PremiumNumberInput } from "@design/settings/ui/PremiumNumberInput";

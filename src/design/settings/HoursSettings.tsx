@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { useSettings } from "@/shared/hooks";
+import { useSettings } from "@/kernel/hooks";
 import { DaySchedule, DayOfWeek, ServiceSettings, ClosedPeriod } from "@nexus/contracts";
 import { Loader2, Save } from "lucide-react";
 

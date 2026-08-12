@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
-import { useUI } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
 
 interface CommandItem {
     id: string;

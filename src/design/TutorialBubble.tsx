@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom';
 import { useTutorial } from '@/design/contexts/TutorialContext';
 import { ChevronRight, X } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
-import { useHasMounted } from '@/shared/hooks';
+import { useHasMounted } from '@/kernel/hooks';
 import { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 import { usePathname, useRouter } from 'next/navigation';

@@ -16,9 +16,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Reservation, Recipe } from '@nexus/contracts';
 import { fadeInUp, cinematicContainer, cinematicItem } from '@/design/utils/motion';
 import { smartQuantity } from './recipeUtils';
-import { useNotifications } from '@/shared/hooks';
+import { useNotifications } from '@/kernel/hooks';
 import { updateDailyPrepListAction } from '../../service/pos/actions/kitchen.action';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

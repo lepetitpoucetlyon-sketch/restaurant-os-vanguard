@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/constants";
 import { useToast } from "@ui/Toast";
 import { getDefaultStaffEmail } from "@/config/instance";

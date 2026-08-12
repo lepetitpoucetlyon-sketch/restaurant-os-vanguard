@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertOctagon, Send, X, ShieldAlert, Cpu, Activity, Info, Zap } from 'lucide-react';
 import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { usePathname } from 'next/navigation';
 import { useToast } from '@ui/Toast';
 import { cn } from '@/lib/utils';

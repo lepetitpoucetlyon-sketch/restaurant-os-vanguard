@@ -1,3 +1,6 @@
+// Barrel canonique des hooks kernel + utilitaires (rapatrié depuis shared/hooks — étape 8g).
+// Surface publique identique a l ancien barrel des hooks partages (126 importers).
+
 // Responsive hooks
 export { useMediaQuery, useResponsive, BREAKPOINTS } from "@/lib/hooks/useMediaQuery";
 export { useIsMobile, useIsTablet, useIsDesktop } from "@/lib/hooks/useIsMobile";

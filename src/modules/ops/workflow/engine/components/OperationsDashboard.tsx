@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useFloorOps as useOMS } from '../../../providers/NexusOpsProvider';
 import { cn } from "@/lib/ui.foundations";
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 

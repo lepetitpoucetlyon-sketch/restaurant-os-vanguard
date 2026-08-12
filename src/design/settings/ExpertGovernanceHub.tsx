@@ -18,7 +18,7 @@ import {
     LucideIcon
 } from "lucide-react";
 
-import { useSettings } from "@/shared/hooks";
+import { useSettings } from "@/kernel/hooks";
 import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
 import { SLMExpert } from "@nexus/contracts";

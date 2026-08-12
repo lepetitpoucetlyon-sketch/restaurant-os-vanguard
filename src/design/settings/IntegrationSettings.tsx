@@ -19,8 +19,8 @@ import {
     Link2
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useSettings } from "@/shared/hooks";
-import { useNotifications } from '@/shared/hooks';
+import { useSettings } from "@/kernel/hooks";
+import { useNotifications } from '@/kernel/hooks';
 import { useExtensions } from '@/kernel/providers/hooks/useExtensions';
 import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 

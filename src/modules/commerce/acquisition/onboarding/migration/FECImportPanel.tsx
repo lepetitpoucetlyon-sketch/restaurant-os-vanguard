@@ -28,7 +28,7 @@ import {
   type FECImportResult,
   parseFECAmount,
 } from "@/modules/finance/migration";
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { toError } from "@/lib/toError";
 
 // ── Types ──────────────────────────────────────────────────────────────────────

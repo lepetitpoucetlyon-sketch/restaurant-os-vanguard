@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2 } from 'lucide-react';
 import { tutorialContent } from '@/lib/tutorialContent';
-import { useHasMounted } from '@/shared/hooks';
+import { useHasMounted } from '@/kernel/hooks';
 
 interface TutorialOverlayProps {
     categoryId: string;

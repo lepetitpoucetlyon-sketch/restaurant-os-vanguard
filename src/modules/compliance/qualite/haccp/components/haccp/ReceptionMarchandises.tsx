@@ -14,13 +14,13 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";;
 import { useReceptionLogs, useCreateReceptionLog, useDeleteReceptionLog } from '@nexus/guards/NexusGuardProvider';
-import { useNotifications } from '@/shared/hooks';
+import { useNotifications } from '@/kernel/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
 import { StatusBadge } from '@ui/StatusBadge';
 import { CameraCapture } from '@design/ui/CameraCapture';
 import { StorageService } from '@/lib/Storage';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { Loader2 } from 'lucide-react';
 
 export function ReceptionMarchandises() {

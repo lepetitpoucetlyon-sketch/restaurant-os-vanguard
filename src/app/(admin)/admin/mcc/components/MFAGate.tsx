@@ -15,7 +15,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 import { ShieldAlert, ShieldCheck, Copy, Check, Loader2, AlertCircle } from 'lucide-react';
 import {

@@ -5,7 +5,7 @@ import { describe, it, expect, vi } from 'vitest';
 vi.mock('next/navigation', () => ({ useSearchParams: vi.fn(() => ({ get: vi.fn(() => null) })) }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() } }));
 vi.mock('@/lib/push/pushClient', () => ({ pushToRole: vi.fn() }));
-vi.mock('@/shared/hooks', () => ({ useTenant: vi.fn(() => ({ tenantId: 'test-tenant' })) }));
+vi.mock('@/kernel/hooks', () => ({ useTenant: vi.fn(() => ({ tenantId: 'test-tenant' })) }));
 vi.mock('@/modules/compliance/qualite/haccp/services/PlanMaitriseSanitaire', () => ({
     PlanMaitriseSanitaire: { getTemperatureLogs: vi.fn() },
 }));

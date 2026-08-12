@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { RealtimeVoiceFactory, type IRealtimeVoiceService } from '@/modules/intelligence';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 import { SovereignData } from '@nexus/contracts/nexus-contract';
 
 declare global {

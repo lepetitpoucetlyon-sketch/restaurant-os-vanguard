@@ -17,7 +17,7 @@ import { useNexusFleet } from '@/modules/intelligence';
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
-import { useNotifications } from "@/shared/hooks";
+import { useNotifications } from "@/kernel/hooks";
 import { Modal } from "@ui/Modal";
 
 export default function SimulatorPage() {

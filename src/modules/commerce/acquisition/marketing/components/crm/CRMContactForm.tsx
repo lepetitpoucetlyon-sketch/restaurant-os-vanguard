@@ -4,10 +4,10 @@ import React from 'react';
 import { useAtom } from 'jotai';
 import { crmFormAtom, crmNewCRMModalAtom } from '../../store/crmAtoms';
 import { motion } from 'framer-motion';
-import { useLanguage } from '@/shared/hooks';
+import { useLanguage } from '@/kernel/hooks';
 import { Button } from '@ui/button';
 import { BottomSheet } from '@ui/BottomSheet';
-import { useIsMobile } from '@/shared/hooks';
+import { useIsMobile } from '@/kernel/hooks';
 
 export function CRMContactForm() {
     const { t } = useLanguage();

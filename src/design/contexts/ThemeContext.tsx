@@ -1,5 +1,5 @@
 "use client";
-import { useNexusCore } from '@/shared/hooks';
+import { useNexusCore } from '@/kernel/hooks';
 
 /**
  * Pont léger vers l'état thème du Nexus Core (couche design).

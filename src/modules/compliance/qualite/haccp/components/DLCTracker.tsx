@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AlertTriangle, Clock, Package, RefreshCw } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserCircle, Search } from "lucide-react";
 ;
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ProfileSwitcher } from "./ProfileSwitcher";
 import { PageKey } from "@nexus/contracts/permissions.types";

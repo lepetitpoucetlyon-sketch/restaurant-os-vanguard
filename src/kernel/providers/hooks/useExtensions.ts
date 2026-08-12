@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 
 /**
  * useExtensions — état runtime des intégrations actives pour le tenant courant.

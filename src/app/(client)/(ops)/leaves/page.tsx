@@ -25,9 +25,9 @@ import {
 // Modular Components
 import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar, useHumanResources } from '@/modules/human';
 import { Button } from '@design/ui/button';
-import { useLanguage } from '@/shared/hooks';
+import { useLanguage } from '@/kernel/hooks';
 
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { withPageGuard } from "@design/rbac/PageGuard";
 
 function LeavesPage() {

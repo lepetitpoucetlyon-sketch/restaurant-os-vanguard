@@ -17,7 +17,7 @@ import {
   Archive,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { authedFetch } from '@/lib/client/authedFetch';
 

@@ -8,7 +8,7 @@ import {
     crmFilterSegmentAtom
 } from '../../store/crmAtoms';
 import { crmsAtom, selectedCRMAtom } from '../../store/marketingAtoms';
-import { useLanguage } from '@/shared/hooks';
+import { useLanguage } from '@/kernel/hooks';
 import { CRM } from '@nexus/contracts';
 
 // Helper functions (extracted from page.tsx logic)

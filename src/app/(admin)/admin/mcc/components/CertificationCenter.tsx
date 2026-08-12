@@ -9,7 +9,7 @@ import { CertPreviewPanel } from './CertPreviewPanel';
 import { CertHistoryTab } from './CertHistoryTab';
 import { useNexusFleet, type SiteIntegrityReport, type GlobalComplianceCertificate } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
 

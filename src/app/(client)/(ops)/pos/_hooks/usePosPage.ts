@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { usePOSController } from "@modules/ops";
 import { useKitchen, useTables } from "@/modules/ops";
 import { useAuth, useTenant } from "@/kernel/providers/NexusCoreProvider";
-import { useIsMobile } from "@/shared/hooks";
+import { useIsMobile } from "@/kernel/hooks";
 import { useAmbiance, useTabletMode, usePrintReceipt, useRbacGate } from "../_posSlices";
 import { useActionPermission } from "@/kernel/hooks/useActionPermission";
 import { useStockAlerts } from "../useStockAlerts";

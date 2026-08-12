@@ -3,7 +3,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Fingerprint, Users, Euro, CreditCard, Clock } from 'lucide-react';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 import { cn } from '@/lib/ui.foundations';
 
 type Config = ReturnType<typeof useSettings>['settings']['reservationConfig'];

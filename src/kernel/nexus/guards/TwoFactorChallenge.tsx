@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/shared/hooks";
-import { useSettings } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
+import { useSettings } from "@/kernel/hooks";
 import { 
     Smartphone, 
     Mail, 

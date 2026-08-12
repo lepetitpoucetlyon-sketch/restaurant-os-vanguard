@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { BarChart2, Globe, XCircle, Copy, Check, Loader2, Save } from 'lucide-react';
 import { toast } from 'sonner';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { updateTenantSettingsAction } from '@/lib/actions/settings.action';
 

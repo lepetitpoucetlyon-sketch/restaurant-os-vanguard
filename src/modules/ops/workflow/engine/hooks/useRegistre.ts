@@ -5,7 +5,7 @@ import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { useCallback, useState, useEffect } from 'react';
 import { ReceptionData } from '@/modules/compliance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import type { RegisterDocStatus, RegistreEntry, InterventionLog } from '@nexus/contracts/registre.types';
 
 interface RegisterDoc {

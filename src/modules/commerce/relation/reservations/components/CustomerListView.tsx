@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { cinematicContainer, cinematicItem } from '../constants';
 import { useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 

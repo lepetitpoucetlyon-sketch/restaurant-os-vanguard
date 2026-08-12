@@ -3,7 +3,7 @@
 import { useState, Suspense, useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSettings } from "@/shared/hooks";
+import { useSettings } from "@/kernel/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 

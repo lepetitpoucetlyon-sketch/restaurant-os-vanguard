@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { PinLogin } from "@nexus/guards/PinLogin";
 import type { OnboardingState } from "@nexus/contracts/onboarding.types";
 

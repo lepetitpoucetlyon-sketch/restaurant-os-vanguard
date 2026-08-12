@@ -5,7 +5,7 @@ import React from 'react';
 import { CATEGORY_DOCS } from '@/lib/docs-data';
 import { RecipeTechnicalSheet } from '@/modules/ops';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useUI } from '@/shared/hooks';
+import { useUI } from '@/kernel/hooks';
 import { useTutorial } from '@/design/contexts/TutorialContext';
 import { cn } from "@/lib/ui.foundations";
 import { X, BookOpen, Zap } from 'lucide-react';

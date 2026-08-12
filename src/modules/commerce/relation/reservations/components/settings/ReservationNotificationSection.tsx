@@ -3,7 +3,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Bell, Mail, Phone, Smartphone } from 'lucide-react';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 import { cn } from '@/lib/ui.foundations';
 import { JsonObject } from "@/lib/types/json";
 

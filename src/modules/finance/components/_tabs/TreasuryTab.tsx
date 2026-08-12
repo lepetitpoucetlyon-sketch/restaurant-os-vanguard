@@ -14,7 +14,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { dispatchPaymentAction } from "../../actions/finance.action";
 
 interface CashflowForecast {

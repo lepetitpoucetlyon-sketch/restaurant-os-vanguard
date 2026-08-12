@@ -14,7 +14,7 @@ import { categoriesAtom } from "@/store/pillars/logistics";
 import { isProductInCategory } from "@/lib/utils/categoryMatcher";
 import { POSModalSkeleton } from "./POSModalSkeleton";
 import { usePageSetting } from "@design/settings/ContextualSettings";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { useInventory } from '../../../providers/hooks/catalogHooks';
 
 const ProductDetailsDialog = dynamic(() => import("./ProductDetailsDialog").then(m => m.ProductDetailsDialog), { loading: () => <POSModalSkeleton /> });

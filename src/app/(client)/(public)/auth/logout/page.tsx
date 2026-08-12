@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { ShieldAlert, RefreshCcw, Home } from 'lucide-react';
 
 /**

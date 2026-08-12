@@ -6,7 +6,7 @@ import { format, isSameDay, isSameMonth } from "date-fns";
 import { fr } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 
 interface ReservationCalendarPopupProps {
     isOpen: boolean;

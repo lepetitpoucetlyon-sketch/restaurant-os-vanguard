@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 

@@ -8,7 +8,7 @@ import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/design/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { BrandingUI } from '@/lib/BrandingUI';
-import { useSettings } from '@/shared/hooks';
+import { useSettings } from '@/kernel/hooks';
 import type { BrandConfig } from '@nexus/tokens/brand';
 import type { BrandInput } from '@/lib/BrandingService';
 

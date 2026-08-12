@@ -15,7 +15,7 @@ import {
   ReservationHistoryImporter,
   type ImportReservationResult,
 } from "@/modules/commerce/relation/reservations/migration";
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { toError } from "@/lib/toError";
 
 // ── Types locaux ────────────────────────────────────────────────────────────────

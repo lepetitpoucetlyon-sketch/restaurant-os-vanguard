@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X, Check, AlertTriangle, ChefHat, Clock, Minus, Plus, MessageSquare } from "lucide-react";
 ;
 import { useOrders } from '../../../providers/hooks/kitchenHooks';
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { Order, OrderItem, OrderItemModification } from "@nexus/contracts";
 

@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToRole } from "@/lib/push/pushClient";
 import { PlanMaitriseSanitaire } from '../services/PlanMaitriseSanitaire';

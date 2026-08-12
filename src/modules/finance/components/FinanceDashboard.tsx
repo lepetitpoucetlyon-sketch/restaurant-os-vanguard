@@ -15,7 +15,7 @@ import { toast } from "sonner";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@design/rbac/TabGuard";
-import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
+import { useTenant, useActionPermission, useTabAccess } from "@/kernel/hooks";
 import { closeTicketZForDay } from "@orchestration/handlers/TicketZHandler";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

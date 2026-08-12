@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Globe, Settings2, Eye, Save, Loader2, Clock, CalendarDays } from 'lucide-react';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { updateTenantSettingsAction } from '@/lib/actions/settings.action';
 import { toast } from 'sonner';
 import { EmbedSnippets, ROICalculator, OnlineBookingToggle } from '@/modules/commerce';

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield } from 'lucide-react';
 import { Modal } from './Modal';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/kernel/hooks';
 import { useToast } from './Toast';
 
 interface SecurityPinModalProps {

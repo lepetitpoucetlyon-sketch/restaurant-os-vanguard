@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ShieldAlert, LogOut, Terminal, Lock } from "lucide-react";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { useAtomValue } from "jotai";
 import { tenantConfigAtom } from "@nexus/state/SovereignGenome";
 

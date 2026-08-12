@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
-import { useSettings } from "@/shared/hooks";
+import { useSettings } from "@/kernel/hooks";
 import { Save, Loader2, Calendar, MessageSquare } from "lucide-react";
 import { ReservationCapacitySection, ReservationVerificationSection, ReservationCardImprintSection, ReservationNotificationSection } from '@/modules/commerce';
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useSettings } from "@/shared/hooks";
+import { useSettings } from "@/kernel/hooks";
 import {
     Target,
     Loader2,

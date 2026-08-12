@@ -3,17 +3,17 @@
 
 import { useState } from "react";
 import { Bell, Settings, Sparkles } from "lucide-react";
-import { useUI } from "@/shared/hooks";
-import { useNotifications } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
+import { useNotifications } from "@/kernel/hooks";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { CommandModal } from "@ui/CommandModal";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import { useContextualSettings } from "@design/settings/ContextualSettings";
 import { usePathname } from "next/navigation";
 ;
 import { LANGUAGES } from "@/config/languages";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 
 
 interface LaunchpadStatusHubProps {

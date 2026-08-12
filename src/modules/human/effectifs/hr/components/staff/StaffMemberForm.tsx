@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { User, UserRole } from "@nexus/contracts";
 import { Button } from "@ui/button";
 import { Modal, PremiumSelect, SecurityPinModal } from "@ui";

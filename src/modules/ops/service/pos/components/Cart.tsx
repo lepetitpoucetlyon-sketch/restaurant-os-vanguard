@@ -11,11 +11,11 @@ import { useIntelligence } from '../../../providers/hooks/catalogHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { useNexusFleet } from "@/modules/intelligence";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { formatMu } from "@/modules/finance";
-import { useIsMobile } from "@/shared/hooks";
+import { useIsMobile } from "@/kernel/hooks";
 import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
 import { SovereignMath } from "@/lib/services/SovereignMath";

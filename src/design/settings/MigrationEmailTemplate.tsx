@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Mail, AlignLeft, PenLine, Send, Save, Loader2, Info } from 'lucide-react';
 import { toast } from 'sonner';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { authedFetch } from '@/lib/client/authedFetch';
 

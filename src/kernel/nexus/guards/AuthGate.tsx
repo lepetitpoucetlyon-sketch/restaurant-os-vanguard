@@ -2,10 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/ui.foundations";
-import { useAuth } from "@/shared/hooks";
+import { useAuth } from "@/kernel/hooks";
 import { PinLogin } from "./PinLogin";
-import { useUI } from "@/shared/hooks";
-import { useTenant } from "@/shared/hooks";
+import { useUI } from "@/kernel/hooks";
+import { useTenant } from "@/kernel/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwoFactorChallenge } from "./TwoFactorChallenge";
 import { useAtomValue } from "jotai";

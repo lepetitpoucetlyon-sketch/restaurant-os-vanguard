@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { stockItemsAtom } from '../store/inventoryAtoms';
 import { StockEngine } from '../../../services/StockEngine';
 import { logger } from '@/lib/logger';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/kernel/hooks';
 
 /**
  * 🛰️ useStockMapper - Grade VI

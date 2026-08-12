@@ -4,7 +4,7 @@ import React from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { Users, Search, Star, Heart, Plus, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { useLanguage } from '@/shared/hooks';
+import { useLanguage } from '@/kernel/hooks';
 import { motion } from 'framer-motion';
 import { 
     crmSearchQueryAtom, 

@@ -5,9 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
-import { useUI } from "@/shared/hooks";
-import { useNotifications } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
+import { useUI } from "@/kernel/hooks";
+import { useNotifications } from "@/kernel/hooks";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import {
     LayoutDashboard,

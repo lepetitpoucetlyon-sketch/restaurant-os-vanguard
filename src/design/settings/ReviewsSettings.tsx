@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
 import { updateTenantSettingsAction } from "@/lib/actions/settings.action";
-import { useTenant } from "@/shared/hooks";
+import { useTenant } from "@/kernel/hooks";
 
 interface ReviewSource {
     id: string;

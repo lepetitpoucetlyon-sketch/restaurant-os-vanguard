@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Check, Zap } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useTheme } from "@/design/contexts/ThemeContext";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@design/ui";
 import { PremiumNumberInput } from "@design/settings/ui/PremiumNumberInput";

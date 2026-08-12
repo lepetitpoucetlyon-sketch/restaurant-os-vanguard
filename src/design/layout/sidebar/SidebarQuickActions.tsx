@@ -4,7 +4,7 @@
 import { motion, Variants } from "framer-motion";
 import { ReceiptEuro, Sparkles, Flame, Moon } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { AmbianceService, type RestaurantAmbiance } from '@/modules/facility';
 import { useState, useEffect } from "react";
 

@@ -11,7 +11,7 @@ import {
 import dynamic from "next/dynamic";
 import { ProductGrid, Cart, TableSelector } from "@modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
-import { useLanguage } from "@/shared/hooks";
+import { useLanguage } from "@/kernel/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { GlassCard } from "@design/ui/glass";
