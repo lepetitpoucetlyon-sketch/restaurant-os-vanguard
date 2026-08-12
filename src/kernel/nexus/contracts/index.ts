@@ -137,3 +137,4 @@ export * from './communication.types';
 export * from './policy';
 export * from './audit.types';
 export * from './pii.types';
+export * from './ServiceSubject';

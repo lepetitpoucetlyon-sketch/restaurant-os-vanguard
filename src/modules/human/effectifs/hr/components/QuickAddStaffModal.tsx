@@ -1,24 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, UserPlus, Copy, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useAuth } from "@/shared/hooks";
+import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
-
-const ROLES: { value: UserRole; label: string }[] = [
-    { value: "server", label: "Serveur(se)" },
-    { value: "bartender", label: "Barman / Barmaid" },
-    { value: "kitchen_chef", label: "Chef de cuisine" },
-    { value: "kitchen_line", label: "Commis de cuisine" },
-    { value: "host", label: "Hôte(sse) d'accueil" },
-    { value: "cashier", label: "Caissier(ère)" },
-    { value: "floor_manager", label: "Resp. de salle" },
-    { value: "manager", label: "Directeur" },
-    { value: "admin", label: "Administrateur" },
-];
+import { resolveRoleSuggestions } from "@/verticals/_shared/roles";
 
 function generatePin(): string {
     return String(Math.floor(1000 + Math.random() * 9000));
@@ -33,6 +23,11 @@ type Step = "form" | "reveal";
 
 export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps) {
     const { addUser, logAction } = useAuth();
+    const { activeTenantConfig } = useTenant();
+    const ROLES = useMemo(
+        () => resolveRoleSuggestions(activeTenantConfig?.variant ?? 'restaurant'),
+        [activeTenantConfig?.variant],
+    );
     const [step, setStep] = useState<Step>("form");
     const [name, setName] = useState("");
     const [role, setRole] = useState<UserRole>("server");

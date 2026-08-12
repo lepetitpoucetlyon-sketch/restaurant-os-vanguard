@@ -2,27 +2,15 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { Microunits } from '@/shared/schemas/primitives';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import { empireAudit } from '@/lib/audit';
+import type { PlatformVariant } from '@nexus/contracts';
+import { resolveTipWeightsByLevel } from '@/verticals/_shared/roles';
 
 type DistributionRule = 'equal' | 'hours_worked' | 'rank_weighted';
 
-interface RankWeight {
-    role: string;
-    weight: number;
-}
-
-const DEFAULT_RANK_WEIGHTS: RankWeight[] = [
-    { role: 'manager', weight: 1.5 },
-    { role: 'chef', weight: 1.3 },
-    { role: 'sous_chef', weight: 1.2 },
-    { role: 'barman', weight: 1.1 },
-    { role: 'server', weight: 1.0 },
-    { role: 'runner', weight: 0.8 },
-    { role: 'plongeur', weight: 0.6 },
-];
-
 interface StaffMember {
     userId: string;
-    role: string;
+    /** Niveau RBAC numérique (PERMISSION_ROLE_LEVELS) — universel toutes verticales. */
+    level: number;
     hoursWorked: number;
 }
 
@@ -47,12 +35,12 @@ export const TipDistributionService = {
         totalInMicrounits: Microunits,
         staff: StaffMember[],
         rule: DistributionRule = 'hours_worked',
-        customWeights?: RankWeight[]
+        variant: PlatformVariant = 'restaurant'
     ): TipShare[] {
         if (staff.length === 0 || totalInMicrounits <= 0) return [];
 
-        const weights = customWeights ?? DEFAULT_RANK_WEIGHTS;
-        const weightMap = new Map(weights.map(w => [w.role, w.weight]));
+        const weights = resolveTipWeightsByLevel(variant);
+        const weightMap = new Map(weights.map(w => [w.level, w.weight]));
 
         let shares: TipShare[];
 
@@ -88,7 +76,7 @@ export const TipDistributionService = {
 
                 const weightedPoints = staff.map(s => ({
                     ...s,
-                    points: s.hoursWorked * (weightMap.get(s.role) ?? 1.0),
+                    points: s.hoursWorked * (weightMap.get(s.level) ?? 1.0),
                 }));
                 const totalPoints = weightedPoints.reduce((sum, s) => sum + s.points, 0);
 
@@ -112,9 +100,10 @@ export const TipDistributionService = {
         periode: string,
         totalInMicrounits: Microunits,
         staff: StaffMember[],
-        rule: DistributionRule = 'hours_worked'
+        rule: DistributionRule = 'hours_worked',
+        variant: PlatformVariant = 'restaurant'
     ): Promise<TipPool> {
-        const shares = this.distribute(totalInMicrounits, staff, rule);
+        const shares = this.distribute(totalInMicrounits, staff, rule, variant);
 
         const id = Nexus.adapter.generateId(`tenants/${tenantId}/tipPools`);
         const pool: TipPool = {
