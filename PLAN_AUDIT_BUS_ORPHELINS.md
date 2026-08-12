@@ -279,9 +279,25 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
    (`auto./health./salon./…`) sont orphelins parce que leur `_ref_V` n'est pas encore
    construit (verticale non ouverte). C'est **attendu**. Un event `restaurant`/transverse
    orphelin, lui, concerne une verticale vivante (`_ref_restaurant` = le gabarit) → **bug réel**.
-   → La liste blanche du garde-fou (P3-9/11) **n'est pas statique** : c'est une fonction de
-   l'état d'ouverture (`PRODUCTION / BÊTA / SQUELETTE`). Verticale SQUELETTE → ses events sont
-   whitelistés ; verticale ouverte → ses events DOIVENT avoir un consommateur.
+
+   > **⚠️ Réalité mesurée (traque 12/08)** : le statut d'ouverture `PRODUCTION/BÊTA/SQUELETTE`
+   > de `PLAN_COMPLET.md` §8 **n'existe PAS en runtime**. Aucun champ sur `IVerticalPlugin`,
+   > ni config verticale, ni tenant. `ProvisioningEngine` ne gate PAS sur un statut. Le statut
+   > est seulement **calculé** par `scripts/gen-vertical-playbook.ts` (score /12 sur 12 points
+   > d'ancrage) → `statusBadge` = `✅ Prête à ouvrir` / `⚠️ N avert.` / `❌ N bloquants`,
+   > matérialisé en `docs/specs/VERTICAL_<V>.md`. Lancé **uniquement pour garage** à ce jour
+   > (seul `VERTICAL_GARAGE.md` existe). Donc : **implémenter le statut persistant = un vrai
+   > chantier ouvert (PLAN_COMPLET §8 MCC, non fait).**
+
+   → **Liste blanche concrète, disponible AUJOURD'HUI** (sans attendre le statut persistant) :
+   dérivée de la **table préfixe→verticale** (`gen-vertical-playbook.ts:69` :
+   `garage→auto`, `clinic→health`, sinon `préfixe = variant`). Restaurant étant la **seule
+   verticale ouverte** (gabarit) :
+   - **Whitelistés** (orphelins attendus) : préfixes `auto. bakery. health. hotel. salon. retail.`
+   - **DOIVENT avoir un consommateur** : `restaurant`-implicite + transverses
+     (`finance. inventory. haccp. ops. kds. crm. stock. order. table. cash_drawer. …`).
+   → Le jour où une verticale ouvre, on régénère son playbook ; quand il passe `✅ Prête`,
+   on **retire son préfixe de la whitelist** → ses orphelins deviennent des erreurs de test.
 
 2. **On ne peut valider le câblage que dans `_test_V`.** `_ref_` bloque l'écriture (SovereignGuard),
    `_demo_` est en Simulacra (mutations interceptées). Donc les tests P0 (« émettre
