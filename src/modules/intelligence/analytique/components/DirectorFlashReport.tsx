@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DailyFlashReport, DailyConsolidationService } from '../services/DailyConsolidationService';
-import { useTenant } from '@/shared/providers/NexusCoreProvider';
+import { useTenant } from '@/kernel/providers/NexusCoreProvider';
 import { formatCurrency } from '@/lib/formatters';
 import { PremiumCard, StatCard, PageHeader } from '@design/ui';
 import { logger } from '@/lib/logger';

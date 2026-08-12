@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from 'react';
-import { useAuth, useTenant } from '@/shared/providers/NexusCoreProvider';
+import { useAuth, useTenant } from '@/kernel/providers/NexusCoreProvider';
 import { ConnectorHub } from '../ConnectorHub';
 import type { ConnectorPerm, ConnectorState, ConnectorUserContext } from '@/lib/connectors/manifest/types';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';

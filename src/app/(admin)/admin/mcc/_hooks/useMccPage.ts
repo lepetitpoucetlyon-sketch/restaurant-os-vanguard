@@ -5,7 +5,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { useNexusFleet } from '@/modules/intelligence';
 import type { PlatformVariant } from '@nexus/contracts';
-import { useAuth } from '@/shared/providers/NexusCoreProvider';
+import { useAuth } from '@/kernel/providers/NexusCoreProvider';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 

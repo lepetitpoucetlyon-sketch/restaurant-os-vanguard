@@ -3,7 +3,7 @@ import { usePageAccess } from "@/shared/hooks/usePageAccess";
 import { PageKey } from "@nexus/contracts/permissions.types";
 import { AccessDenied } from "./AccessDenied";
 import { Loader2 } from "lucide-react";
-import { useAuth } from "@/shared/providers/NexusCoreProvider";
+import { useAuth } from "@/kernel/providers/NexusCoreProvider";
 
 interface PageGuardProps {
     pageKey: PageKey | string;

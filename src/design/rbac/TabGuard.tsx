@@ -2,7 +2,7 @@ import React from "react";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { PageKey } from "@nexus/contracts/permissions.types";
 import { Loader2 } from "lucide-react";
-import { useAuth } from "@/shared/providers/NexusCoreContext";
+import { useAuth } from "@/kernel/providers/NexusCoreContext";
 
 interface TabGuardProps {
     pageKey: PageKey | string;

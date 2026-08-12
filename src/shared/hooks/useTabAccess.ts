@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { rbacConfigAtom } from "@/store/pillars/rbac";
 import { DEFAULT_TAB_ACCESS } from '@nexus/contracts';;
-import { useAuth } from "@/shared/providers/NexusCoreContext";
+import { useAuth } from "@/kernel/providers/NexusCoreContext";
 import { PageKey, PermissionRole, PERMISSION_ROLE_LEVELS } from "@nexus/contracts/permissions.types";
 
 export function useTabAccess(pageKey: PageKey | string, tabKey: string): boolean {

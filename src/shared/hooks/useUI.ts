@@ -1,6 +1,6 @@
 "use client";
 
-import { useNexusCore } from '@/shared/providers/NexusCoreContext';
+import { useNexusCore } from '@/kernel/providers/NexusCoreContext';
 
 /**
  * 🎨 useUI - Grade X

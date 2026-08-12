@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
 
 import { useActionPermission } from '@/shared/hooks/useActionPermission';
-import { NexusCoreContext } from '@/shared/providers/NexusCoreContext';
+import { NexusCoreContext } from '@/kernel/providers/NexusCoreContext';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 describe('useActionPermission', () => {

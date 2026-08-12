@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useTenant } from '@/shared/providers/NexusCoreProvider';
+import { useTenant } from '@/kernel/providers/NexusCoreProvider';
 import {
   IVerticalLexicon,
   DEFAULT_RESTAURANT_LEXICON,

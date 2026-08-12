@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { ShieldAlert, DatabaseBackup, ActivitySquare, Loader2, RotateCcw } from 'lucide-react';
 import { useFleet } from '../contexts/FleetContext';
-import { useAuth } from '@/shared/providers/NexusCoreProvider';
+import { useAuth } from '@/kernel/providers/NexusCoreProvider';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
 

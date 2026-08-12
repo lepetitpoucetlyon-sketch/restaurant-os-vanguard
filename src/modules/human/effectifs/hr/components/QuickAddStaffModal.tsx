@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, UserPlus, Copy, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useAuth } from "@/shared/hooks";
-import { useTenant } from "@/shared/providers/NexusCoreProvider";
+import { useTenant } from "@/kernel/providers/NexusCoreProvider";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
 import { resolveRoleSuggestions } from "@/verticals/_shared/roles";

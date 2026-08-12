@@ -5,9 +5,9 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { User } from '@nexus/contracts';
 import type { SovereignData } from '@nexus/contracts/nexus-contract';
 
-import { useAuthSession } from '@/shared/providers/hooks/auth/AuthSession';
-import { useAuthAccess } from '@/shared/providers/hooks/auth/AuthAccess';
-import { useAuthStaff } from '@/shared/providers/hooks/auth/AuthStaff';
+import { useAuthSession } from '@/kernel/providers/hooks/auth/AuthSession';
+import { useAuthAccess } from '@/kernel/providers/hooks/auth/AuthAccess';
+import { useAuthStaff } from '@/kernel/providers/hooks/auth/AuthStaff';
 import { logger } from '@/lib/logger';
 
 /**

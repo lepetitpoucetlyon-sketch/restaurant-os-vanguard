@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/shared/providers/NexusCoreProvider";
+import { useAuth } from "@/kernel/providers/NexusCoreProvider";
 import { Loader2, Save } from "lucide-react";
 import { useAtom } from "jotai";
 import { rbacConfigAtom, fetchRbacConfigAtom } from "@/store/pillars/rbac";

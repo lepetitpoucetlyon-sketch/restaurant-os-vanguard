@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { useSettings } from "@/shared/hooks";
 import { useNotifications } from '@/shared/hooks';
-import { useExtensions } from '@/shared/providers/hooks/useExtensions';
+import { useExtensions } from '@/kernel/providers/hooks/useExtensions';
 import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [

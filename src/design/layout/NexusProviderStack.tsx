@@ -3,7 +3,7 @@
 import React from 'react';
 
 // Providers Layers
-import { NexusCoreProvider } from "@/shared/providers/NexusCoreProvider";
+import { NexusCoreProvider } from "@/kernel/providers/NexusCoreProvider";
 import { NexusOpsProvider } from "@/modules/ops";
 import { NexusFiscalProvider } from "@/modules/finance";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
@@ -24,10 +24,10 @@ import { ClientComponents } from "@components/layout/ClientComponents";
 import { TrainingOverlay } from "@components/layout/TrainingOverlay";
 import { SovereignLockout } from "@components/layout/SovereignLockout";
 import { BrandingProvider } from "@/lib/BrandingProvider";
-import { SplashGate } from "@/shared/providers/SplashGate";
-import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
+import { SplashGate } from "@/design/providers/SplashGate";
+import { VerticalUIProvider } from "@/kernel/providers/VerticalUIProvider";
 import { PerformanceEngine } from "@/theme/PerformanceEngine";
-import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
+import { NexusPulseOrchestrator } from "@/design/providers/NexusPulseOrchestrator";
 
 export function NexusProviderStack({ children }: { children: React.ReactNode }) {
     return (

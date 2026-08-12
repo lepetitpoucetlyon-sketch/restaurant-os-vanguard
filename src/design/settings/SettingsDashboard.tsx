@@ -137,7 +137,7 @@ export function SettingsDashboard() {
                 label: 'Confirmer',
                 onClick: async () => {
                     try {
-                        const { defaultSettings } = await import('@/shared/contexts/settings/defaults');
+                        const { defaultSettings } = await import('@nexus/contracts/settings/defaults');
                         await updateSettings?.(defaultSettings);
                         toast.success('Réglages réinitialisés aux valeurs par défaut');
                     } catch {

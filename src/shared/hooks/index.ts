@@ -33,7 +33,7 @@ export {
     useSettings,
     useLanguage,
     useNotifications
-} from "@/shared/providers/NexusCoreContext";
+} from "@/kernel/providers/NexusCoreContext";
 export { useTenant } from "@/shared/hooks/useTenant";
 // useConnector déplacé vers @/modules/intelligence/connectors/hub/hooks/useConnector
 export type { UseConnectorResult } from './useConnector';

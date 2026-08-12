@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useVerticalUI } from '@/shared/providers/VerticalUIProvider';
+import { useVerticalUI } from '@/kernel/providers/VerticalUIProvider';
 import type { OverrideableComponent } from '@/kernel/plugins/IVerticalUIPlugin';
 
 /**

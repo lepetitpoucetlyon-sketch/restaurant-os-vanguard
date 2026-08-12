@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { FileText, ShieldCheck, AlertTriangle, Download, Search, ChevronDown, Lock } from 'lucide-react';
 import { useNexusFleet } from '@/modules/intelligence';
-import { useAuth } from '@/shared/providers/NexusCoreProvider';
+import { useAuth } from '@/kernel/providers/NexusCoreProvider';
 
 const JOURNAL_DISPLAY_LIMIT = 200;
 
