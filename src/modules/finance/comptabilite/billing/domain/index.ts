@@ -6,3 +6,4 @@
 
 export * from './InvoiceEngine';
 export * from './InvoiceService';
+export * from './IVerticalInvoicingAdapter';
