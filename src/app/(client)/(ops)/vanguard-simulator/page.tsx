@@ -13,7 +13,7 @@ import {
     Zap,
     BarChart3
 } from "lucide-react";
-import { useNexusFleet } from '@/shared/hooks/useNexusFleet';
+import { useNexusFleet } from '@/modules/intelligence';
 import { Button } from "@ui/button";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";

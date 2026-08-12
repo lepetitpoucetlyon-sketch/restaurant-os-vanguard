@@ -1,0 +1,225 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "baseUrl": ".",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@components/*": [
+        "./src/design/*"
+      ],
+      "@/modules/intelligence": [
+        "./src/modules/intelligence/index"
+      ],
+      "@/modules/intelligence/*": [
+        "./src/modules/intelligence/*"
+      ],
+      "@modules/intelligence": [
+        "./src/modules/intelligence/index"
+      ],
+      "@modules/intelligence/*": [
+        "./src/modules/intelligence/*"
+      ],
+      "@modules/compliance": [
+        "./src/modules/compliance/index"
+      ],
+      "@modules/compliance/*": [
+        "./src/modules/compliance/*"
+      ],
+      "@modules/ops": [
+        "./src/modules/ops/index"
+      ],
+      "@modules/ops/*": [
+        "./src/modules/ops/*"
+      ],
+      "@/modules/*": [
+        "./src/modules/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@infrastructure": [
+        "./src/kernel/index"
+      ],
+      "@infrastructure/*": [
+        "./src/kernel/*"
+      ],
+      "@/infrastructure": [
+        "./src/kernel/index"
+      ],
+      "@/infrastructure/*": [
+        "./src/kernel/*"
+      ],
+      // @domain/* — alias legacy supprimé (src/domain/ rapatrié en S11 vers src/modules/)
+      // Conservé ici comme redirections vers shared/schemas pour compatibilité résiduelle.
+      // À supprimer définitivement en S12 une fois vérification ESLint complète.
+      "@domain/schemas": [
+        "./src/shared/schemas/index"
+      ],
+      "@domain/schemas/*": [
+        "./src/shared/schemas/*"
+      ],
+      "@domain/types": [
+        "./src/shared/types/index"
+      ],
+      "@domain/types/*": [
+        "./src/shared/types/*"
+      ],
+      "@domain/*": [
+        "./src/shared/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@store/*": [
+        "./src/store/*"
+      ],
+      "@nexus/contracts": [
+        "./src/kernel/nexus/contracts/index"
+      ],
+      "@nexus/contracts/*": [
+        "./src/kernel/nexus/contracts/*"
+      ],
+      "@nexus": [
+        "./src/kernel/nexus/index"
+      ],
+      "@nexus/*": [
+        "./src/kernel/nexus/*"
+      ],
+      "@kernel/*": [
+        "./src/kernel/*"
+      ],
+      "@/shared/nexus": [
+        "./src/kernel/nexus/index"
+      ],
+      "@/shared/nexus/*": [
+        "./src/kernel/nexus/*"
+      ],
+      "@shared/nexus": [
+        "./src/kernel/nexus/index"
+      ],
+      "@shared/nexus/*": [
+        "./src/kernel/nexus/*"
+      ],
+      "@/lib/nexus": [
+        "./src/kernel/adapter/index"
+      ],
+      "@/lib/nexus/*": [
+        "./src/kernel/adapter/*"
+      ],
+      "@orchestration": [
+        "./src/orchestration/index"
+      ],
+      "@orchestration/*": [
+        "./src/orchestration/*"
+      ],
+      "@/shared/eventBus": [
+        "./src/orchestration/index"
+      ],
+      "@/shared/eventBus/*": [
+        "./src/orchestration/*"
+      ],
+      "@shared/eventBus": [
+        "./src/orchestration/index"
+      ],
+      "@shared/eventBus/*": [
+        "./src/orchestration/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@components": [
+        "./src/design/index"
+      ],
+      "@components/*": [
+        "./src/design/*"
+      ],
+      "@ui": [
+        "./src/design/ui/index"
+      ],
+      "@ui/*": [
+        "./src/design/ui/*"
+      ],
+      "@design": [
+        "./src/design/index"
+      ],
+      "@design/*": [
+        "./src/design/*"
+      ],
+      "@/shared/components": [
+        "./src/design/index"
+      ],
+      "@/shared/components/*": [
+        "./src/design/*"
+      ],
+      "@shared/components": [
+        "./src/design/index"
+      ],
+      "@shared/components/*": [
+        "./src/design/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "@verticals/*": [
+        "./src/verticals/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.mts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    ".next-mcc/types/**/*.ts",
+    ".next-mcc/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "functions",
+    "graphify_tool",
+    "graphify-out",
+    "scratch",
+    "scripts",
+    "playwright-report",
+    "src_VANGUARD_AUDIT",
+    "src_OLD_VIBE_BACKUP",
+    ".nexus/agents"
+  ]
+}

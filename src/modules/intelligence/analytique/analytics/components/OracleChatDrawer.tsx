@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useOracleAgent } from "@/shared/hooks/useGeminiAgent";
+import { useOracleAgent } from "../../../hooks/useGeminiAgent";
 
 export function OracleChatDrawer({
   isOpen,

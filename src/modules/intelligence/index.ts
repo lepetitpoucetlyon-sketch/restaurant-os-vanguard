@@ -64,3 +64,10 @@ export { IntegrationsPage } from './connectors/hub/components/IntegrationsPage';
 export { fleetEngine } from './ia/fleet/FleetAdapter';
 export type { PulseCategory, SanitizedPulse, MarketInsight, MonetizationTier } from './knowledge/rag/types';
 export * from './domain/schemas/supportTicket';
+
+// 🧠 Hooks Oracle / Intelligence (rapatriés depuis shared/hooks — étape 8c)
+export { useGeminiAgent, useOracleAgent } from './hooks/useGeminiAgent';
+export { useStrategicOracle } from './hooks/useStrategicOracle';
+export { useCoreOracle } from './hooks/useCoreOracle';
+// useIntelligence : le hook public vient de analytique/analytics (IntelligenceContext).
+// L'ancien wrapper legacy shared/hooks/useIntelligence (0 importer) a été supprimé.

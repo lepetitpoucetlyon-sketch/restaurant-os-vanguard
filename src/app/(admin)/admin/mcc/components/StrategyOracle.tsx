@@ -12,7 +12,7 @@ import {
     AlertTriangle,
     CheckCircle2
 } from 'lucide-react';
-import { useStrategicOracle } from '@/shared/hooks/useStrategicOracle';
+import { useStrategicOracle } from '@/modules/intelligence';
 import { useFleet } from '../contexts/FleetContext';
 import { FleetInsight } from '@/modules/intelligence';
 
