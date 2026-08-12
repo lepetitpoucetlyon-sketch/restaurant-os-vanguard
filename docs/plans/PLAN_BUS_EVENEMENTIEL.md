@@ -611,12 +611,56 @@ Aucun lien automatique entre le volume de réservations J+1 et les besoins en pe
   - Pour chaque handler : vérifier qu'au moins 1 émetteur existe
   - Alerte CI si nouveau trou apparaît
 
+> ⚠️ **Limite du smoke test statique** : il raisonne sur des **noms littéraux**. Un `emit(\`${x}\`)`
+> dynamique, un handler enregistré via une forme inhabituelle, ou un handler **écrit mais jamais
+> câblé dans `registerHandlers`** lui échappent. Il faut le **doubler** d'un garde-fou runtime
+> (Partie 8). Détail du contre-audit et des faux positifs du scan : `PLAN_AUDIT_BUS_ORPHELINS.md`.
+
+---
+
+## PARTIE 8 — Garde-fou runtime : rendre l'invisible visible (P0 — à faire EN PREMIER)
+
+> **Pourquoi P0 et en premier** : ce plan (et les audits de juillet) décrivent des trous depuis
+> des mois ; ils restent car **rien ne les signale**. `NexusEventBus.emit()` fait
+> `if (all.length === 0) return;` — émettre un event que personne n'écoute **ressemble à un
+> succès** ; `emitDurable` marque même l'outbox `done` → **ça n'atteint jamais la DLQ**. Tant
+> que ce filet n'existe pas, chaque fil recâblé peut se re-débrancher en silence au prochain
+> refactor. Le garde-fou transforme « 94 orphelins invisibles » en « liste au boot » et
+> **gèle définitivement le principe**. Faible risque, effet de levier maximal.
+
+### 8.1 Instrumenter `emit()` sur le cas zéro-handler
+
+**Fichier** : `src/orchestration/NexusEventBus.ts` (à la ligne `if (all.length === 0) return;`)
+
+- [ ] En dev (`process.env.NODE_ENV !== 'production'`) : `logger.warn('[EventBus] émis sans handler: ' + event)`
+- [ ] Liste blanche `KNOWN_UNCONSUMED` = **préfixes des verticales non ouvertes** (`auto. bakery.
+  health. hotel. salon. retail.`) + Classe B assumée (`ops.service_ticket_*`, `crm.allergen_flagged`).
+  Dérivée de la table préfixe→verticale (`gen-vertical-playbook.ts:69`). Ne warner que sur l'imprévu.
+- [ ] Quand une verticale ouvre (playbook `✅ Prête`), retirer son préfixe → ses orphelins deviennent des erreurs.
+
+### 8.2 Distinguer l'outbox `done` de `done_no_consumer`
+
+**Fichier** : `src/orchestration/NexusEventBus.ts` (`emitDurable`)
+
+- [ ] Faire remonter par `emit()` le nombre de handlers exécutés.
+- [ ] Si 0 handler (et event hors liste blanche) → marquer l'outbox `done_no_consumer` au lieu de `done`.
+- [ ] Rend l'anomalie **observable et auditable** (requête outbox), sans jamais polluer la DLQ.
+
+### 8.3 Invariant de couverture (complète 7.2, dimension registration)
+
+- [ ] Étendre `bus-smoke.test.ts` : « tout event émis avec `emitDurable` a ≥1 handler **enregistré
+  dans `registerHandlers`** (pas seulement un fichier qui existe), SAUF liste blanche §8.1 ».
+- [ ] Détecte les **handlers écrits-non-câblés** (Partie 6) que le smoke test actuel rate.
+
+**Effort total Partie 8 : ~2h. Prérequis d'exécution de tout le reste du plan.**
+
 ---
 
 ## Récapitulatif priorisé
 
 | Priorité | Item | Impact | Effort |
 |----------|------|--------|--------|
+| **P0 ★** | **8. Garde-fou runtime (warn 0-handler + outbox done_no_consumer + invariant registration)** | **STRUCTUREL — rend tout le reste visible, gèle le principe** | **2h** |
 | **P0** | 1.1 order.placed → KDS (flow inversé) | CRITIQUE | 2h |
 | **P0** | 1.2 notification.urgent → WebPush | CRITIQUE (tous rôles) | 3h |
 | **P0** | 2.1 CronScheduler central | CRITIQUE (0 cron actif) | 4h |
