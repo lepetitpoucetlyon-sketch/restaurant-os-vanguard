@@ -1,5 +1,5 @@
 import { SovereignNode, SovereignField } from "@shared/nexus-contract";
-import { Ingredient, IngredientUnit, IngredientCategory } from "@shared/nexus/contracts/logistics";
+import { Ingredient, IngredientUnit, IngredientCategory } from "@nexus/contracts/logistics";
 
 /**
  * 🛡️ SOVEREIGN MAPPING (Grade X) — pure, hors hook.

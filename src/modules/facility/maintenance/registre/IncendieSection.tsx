@@ -55,7 +55,7 @@ export function IncendieSection() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
-                            {(extincteurs || []).map((ext: import("@/shared/nexus/contracts/context/registre.contracts").ExtincteurDocument) => (
+                            {(extincteurs || []).map((ext: import("@nexus/contracts/context/registre.contracts").ExtincteurDocument) => (
                                 <tr key={ext.id} className="hover:bg-bg-tertiary/10 transition-colors">
                                     <td className="px-8 py-5 font-serif font-semibold text-text-primary">{ext.location}</td>
                                     <td className="px-8 py-5 text-text-muted font-mono text-[12px]">{ext.type}</td>
@@ -90,7 +90,7 @@ export function IncendieSection() {
                     </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {(exercices || []).map((ex: import("@/shared/nexus/contracts/context/registre.contracts").ExerciceDocument) => (
+                    {(exercices || []).map((ex: import("@nexus/contracts/context/registre.contracts").ExerciceDocument) => (
                         <div key={ex.id} className={cn(
                             "bg-surface-card dark:bg-bg-secondary rounded-2xl border p-8 shadow-sm relative overflow-hidden",
                             ex.status === 'planifie' ? 'border-dashed border-accent/30' : 'border-border'

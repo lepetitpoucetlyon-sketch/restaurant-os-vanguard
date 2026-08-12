@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@nexus/contracts/permissions.types';
 import { auditService } from './AuditService';
 
 interface ElevationPromptProps {

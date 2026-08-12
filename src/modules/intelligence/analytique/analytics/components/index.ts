@@ -6,7 +6,7 @@
 
 export * from './ComplianceView';
 export * from './MenuEngineeringMatrix';
-export { MindMap } from '@/shared/nexus/components/MindMap';
+export { MindMap } from '@nexus/components/MindMap';
 export * from './OracleChatDrawer';
 export * from './OraclePredictor';
 export * from './ProfitabilityView';

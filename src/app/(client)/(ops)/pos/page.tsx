@@ -14,7 +14,7 @@ import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { GlassCard } from "@/shared/components/ui/glass";
+import { GlassCard } from "@design/ui/glass";
 import { formatCurrency } from "@/lib/formatters";
 import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 
@@ -32,7 +32,7 @@ import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 const ICON_MAP: Record<string, LucideIcon> = {
     all:      Star,

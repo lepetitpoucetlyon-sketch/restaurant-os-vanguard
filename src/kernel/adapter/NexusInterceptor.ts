@@ -1,12 +1,12 @@
 import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from './types';
 import { SovereignData } from '@/shared/nexus-contract';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
-import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
-import { AuditPulseType } from '@/shared/nexus/telemetry/types';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
-import { IQueryOptions } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
+import { NexusTelemetryService } from '@nexus/telemetry/NexusTelemetryService';
+import { AuditPulseType } from '@nexus/telemetry/types';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
+import { IQueryOptions } from '@nexus/contracts/infrastructure/storage.contracts';
  
-import { auditService } from '@/shared/nexus/vault/audits/audit/AuditService';
+import { auditService } from '@nexus/vault/audits/audit/AuditService';
 import { isSuzerainTenant } from './utils/tenantPath';
 
 /**
@@ -212,7 +212,7 @@ export class NexusInterceptor implements INexusAdapter {
         return this.adapter.generateId(collectionPath);
     }
 
-    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+    serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return this.adapter.serverTimestamp();
     }
 

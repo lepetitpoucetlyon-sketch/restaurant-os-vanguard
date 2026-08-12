@@ -1,5 +1,5 @@
 import type { PlatformVariant } from '@nexus/contracts';
-import type { TenantConfig } from '@/shared/nexus/contracts';
+import type { TenantConfig } from '@nexus/contracts';
 import type {
   IConnectorManifest,
   ConnectorPerm,
@@ -9,7 +9,7 @@ import type {
 } from '@/shared/connector-manifest/types';
 import { CONNECTOR_CATALOG } from '@/shared/connector-manifest/catalog';
 import { CONNECTOR_PERM_LEVELS } from '@/shared/connector-manifest/types';
-import { PERMISSION_ROLE_LEVELS } from '@/shared/nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS } from '@nexus/contracts/permissions.types';
 
 export class ConnectorHub {
 

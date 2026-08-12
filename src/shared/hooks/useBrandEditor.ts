@@ -5,7 +5,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { tenantIdAtom, tenantBrandTokensAtom } from '@/store/pillars/sovereign';
-import type { BrandConfig } from '@/shared/nexus/tokens/brand';
+import type { BrandConfig } from '@nexus/tokens/brand';
 
 /**
  * Gère la lecture/écriture des BrandTokens pour le tenant courant.
@@ -28,7 +28,7 @@ export function useBrandEditor() {
         ...patch,
         updatedAt: new Date().toISOString(),
       }, { merge: true });
-      setBrandTokens(patch as unknown as import("@/shared/nexus/tokens/brand").BrandConfig);
+      setBrandTokens(patch as unknown as import("@nexus/tokens/brand").BrandConfig);
     } finally {
       setIsSaving(false);
     }

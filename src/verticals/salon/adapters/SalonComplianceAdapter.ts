@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const SalonComplianceAdapter = {
   emitProductSafetyCheck(payload: { tenantId: string; checkId: string; operatorId: string; timestamp: number }) {

@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HealthIntelligenceAdapter = {
   emitPatientFlowSnapshot(payload: { tenantId: string; date: string; admissions: number; discharges: number; occupancyRate: number }) {

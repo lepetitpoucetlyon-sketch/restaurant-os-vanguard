@@ -5,7 +5,7 @@ import {
     IQueryEngine, 
     IRealtimeSubscriber, 
     IQueryOptions 
-} from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+} from '@nexus/contracts/infrastructure/storage.contracts';
 
 /**
  * 🧊 MockAdapter - In-memory implementation for high-speed testing (Grade VI - Pure I/O)
@@ -94,7 +94,7 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         return `mock_${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+    serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return new Date();
     }
 

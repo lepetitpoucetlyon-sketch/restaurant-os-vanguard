@@ -99,7 +99,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (nextAttempts >= MAX_ATTEMPTS) {
       update.lockedUntil = Date.now() + LOCKOUT_MS;
       
-      const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+      const { NexusEventBus } = await import('@orchestration/NexusEventBus');
       await NexusEventBus.emitDurable('security.pin_locked', {
         v: 1,
         tenantId,

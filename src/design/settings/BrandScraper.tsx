@@ -6,7 +6,7 @@ import { Button } from '@ui/button';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
-import type { BrandConfig } from '@/shared/nexus/tokens/brand';
+import type { BrandConfig } from '@nexus/tokens/brand';
 
 type ExtractedTokens = Partial<BrandConfig>
 

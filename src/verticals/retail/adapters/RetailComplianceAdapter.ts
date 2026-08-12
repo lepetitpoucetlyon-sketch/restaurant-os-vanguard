@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RetailComplianceAdapter = {
   emitAuditLog(payload: { tenantId: string; patientId: string; action: string; performedBy: string; timestamp: string }) {

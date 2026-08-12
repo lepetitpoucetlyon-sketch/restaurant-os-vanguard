@@ -8,7 +8,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
 import { empireAudit } from '@/lib/audit';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { ServiceTicket, ServiceLine, PaymentSplit, ServiceState } from '../../domain/types';
 import type { ServiceSubject } from '@nexus/contracts';

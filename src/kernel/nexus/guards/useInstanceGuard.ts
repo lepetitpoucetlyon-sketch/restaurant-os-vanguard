@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { AUTH_GENOME } from '@/shared/nexus/state/SovereignGenome';
+import { AUTH_GENOME } from '@nexus/state/SovereignGenome';
 
 export interface InstanceGuardResult {
     result: import('@/shared/nexus-contract').SovereignData;

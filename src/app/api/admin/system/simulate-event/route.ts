@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { NexusEventBus, NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus, NexusEventName, NexusEventPayload } from '@orchestration/NexusEventBus';
 
 export async function POST(req: Request) {
   const caller = await requireFleetAdmin(req);

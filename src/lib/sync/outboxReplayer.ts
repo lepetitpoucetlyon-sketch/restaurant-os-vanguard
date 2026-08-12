@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
-import { NexusEventBus, type NexusEventName } from '@/shared/eventBus/NexusEventBus';
-import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
+import { NexusEventBus, type NexusEventName } from '@orchestration/NexusEventBus';
+import { PayloadMigrator } from '@orchestration/PayloadMigrator';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { JsonObject } from "@/shared/types/json";

@@ -1,5 +1,5 @@
 import { logger } from '../../lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 async function runEventBusCrashTest() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 10 : Sécurité Event Bus (DLQ & IDOR)');

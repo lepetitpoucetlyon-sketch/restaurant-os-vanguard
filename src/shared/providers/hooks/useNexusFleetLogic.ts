@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import type { EmpireInstance, FleetInsight, IntelligenceConfig } from '@nexus/contracts';
 import type { SovereignNode, SovereignData } from '@/shared/nexus-contract';
-import type { NexusFleetState } from '@/shared/nexus/contracts/nexus.types';
+import type { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 export function useNexusFleetLogic(): NexusFleetState {
     return useMemo((): NexusFleetState => ({

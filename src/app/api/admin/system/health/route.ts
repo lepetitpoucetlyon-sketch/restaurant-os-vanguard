@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ArchitecturalHealthService } from '@/lib/ArchitecturalHealthService';
-import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
+import { CoreErrorCode } from '@nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
         // P09-K: Notification proactive si des routes admin non protégées sont détectées
         if (report.blockers.length > 0) {
-            const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+            const { NexusEventBus } = await import('@orchestration/NexusEventBus');
             NexusEventBus.emitDurable('notification.created', {
                 v: 1,
                 tenantId: 'fleet',

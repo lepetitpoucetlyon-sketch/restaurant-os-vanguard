@@ -1,8 +1,8 @@
 import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, increment, serverTimestamp as firestoreServerTimestamp } from 'firebase/firestore';
-import { SovereignSecurityViolation } from '@/shared/nexus/contracts/security.errors';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
+import { SovereignSecurityViolation } from '@nexus/contracts/security.errors';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
-import { IDocumentStore } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { IDocumentStore } from '@nexus/contracts/infrastructure/storage.contracts';
 
 function hydrateBasedOnPath(pathOrCollection: string, data: Record<string, unknown>) {
     if (!data) return data;
@@ -56,7 +56,7 @@ export class FirestoreDocumentStore implements IDocumentStore {
         return doc(collection(this.db, collectionPath)).id;
     }
 
-    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
-        return firestoreServerTimestamp() as unknown as import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
+    serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+        return firestoreServerTimestamp() as unknown as import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
     }
 }

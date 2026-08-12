@@ -4,7 +4,7 @@ import { Eye, Zap, TrendingUp, AlertTriangle } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/commerce';
 import { ScoreGauge } from "../ScoreGauge";
-import { StatCard } from "@/shared/components/ui";
+import { StatCard } from "@design/ui";
 import { PageCard } from "../PageCard";
 import { GoogleProfileCard } from "../GoogleProfileCard";
 import { KeywordsCard } from "../KeywordsCard";

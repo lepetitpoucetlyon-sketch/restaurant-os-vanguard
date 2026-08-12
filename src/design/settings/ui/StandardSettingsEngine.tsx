@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Save, CheckCircle2, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { SharedKernel } from '@/lib/shared-kernel';
-import { GoldSwitch } from '@/shared/components/atomic/GoldSwitch';
-import { GlassInput } from '@/shared/components/atomic/GlassInput';
+import { GoldSwitch } from '@design/atomic/GoldSwitch';
+import { GlassInput } from '@design/atomic/GlassInput';
 import { fadeInUp, staggerContainer } from '@/shared/utils/motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { SovereignData, SovereignValue, SovereignField } from '@/shared/nexus-contract';
-import { GlobalSettings } from '@/shared/nexus/contracts/settings';
+import { GlobalSettings } from '@nexus/contracts/settings';
 
 
 export interface SettingsOption {

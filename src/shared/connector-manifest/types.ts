@@ -1,5 +1,5 @@
 import type { PlatformVariant } from '@nexus/contracts';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 export type ConnectorCategory =
   | 'reservations'

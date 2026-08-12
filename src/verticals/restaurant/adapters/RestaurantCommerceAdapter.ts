@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RestaurantCommerceAdapter = {
   emitReservationConfirmed(payload: { tenantId: string; reservationId: string; customerName: string; covers: number; date: string; time: string }) {

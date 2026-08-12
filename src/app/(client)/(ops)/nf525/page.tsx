@@ -1,7 +1,7 @@
 "use client";
 
 import { FECExportPage } from '@/modules/finance';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function NF525Page() {
   return <FECExportPage />;

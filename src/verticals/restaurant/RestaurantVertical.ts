@@ -1,8 +1,8 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { restaurantDefaultTokens, restaurantVerticalTokens } from '@/shared/nexus/tokens/verticals/restaurant';
+import { restaurantDefaultTokens, restaurantVerticalTokens } from '@nexus/tokens/verticals/restaurant';
 import React from 'react';
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { menuEngineeringService } from '@/modules/commerce';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@nexus/contracts';;
 import { ordersAtom, tablesAtom } from '@/modules/ops';

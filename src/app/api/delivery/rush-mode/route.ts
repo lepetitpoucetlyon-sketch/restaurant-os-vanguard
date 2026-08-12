@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { logger } from '@/lib/axiom';
 import { toError } from "@/lib/toError";
 

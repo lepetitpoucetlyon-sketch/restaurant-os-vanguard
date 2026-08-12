@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RetailCommerceAdapter = {
   emitPromotionActivated(payload: { tenantId: string; promotionId: string; discountPercent: number; productIds: string[]; validUntil: string }) {

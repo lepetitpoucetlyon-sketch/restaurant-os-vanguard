@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PremiumCard } from '@/shared/components/ui/PremiumCard';
+import { PremiumCard } from '@design/ui/PremiumCard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 interface PaySlipViewerProps {

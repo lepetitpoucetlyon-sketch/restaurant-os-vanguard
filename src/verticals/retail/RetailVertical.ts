@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { retailDefaultTokens, retailVerticalTokens } from '@/shared/nexus/tokens/verticals/retail';
+import { retailDefaultTokens, retailVerticalTokens } from '@nexus/tokens/verticals/retail';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

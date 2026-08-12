@@ -9,8 +9,8 @@ import { TelemetryPulse } from "@shared/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetryService";
-import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
-import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
+import { registerAuditPulseSink } from "@nexus/telemetry/NexusTelemetryService";
+import type { SiteTelemetry } from "@nexus/contracts/fleet.types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { JsonObject } from "@/shared/types/json";
 

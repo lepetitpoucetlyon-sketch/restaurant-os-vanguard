@@ -8,7 +8,7 @@ const mockNexusUpdate = vi.fn();
 const mockQuery = vi.fn();
 const mockEmitDurable = vi.fn();
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -38,7 +38,7 @@ const { mockGet, mockSet, mockUpdate, mockEmit, mockOn, mockSendToRole, captured
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: vi.fn() },
 // // }));
 // // vi.mock('@/lib/logger', () => ({
@@ -131,11 +131,11 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerKDSOrderHandler } from '@/shared/eventBus/handlers/KDSOrderHandler';
-import { registerPaymentLedgerHandler } from '@/shared/eventBus/handlers/PaymentLedgerHandler';
-import { registerTableAutoReleaseHandler } from '@/shared/eventBus/handlers/TableAutoReleaseHandler';
-import { registerNoShowTableReleaseHandler } from '@/shared/eventBus/handlers/NoShowTableReleaseHandler';
-import { registerKDSReadyHandler } from '@/shared/eventBus/handlers/KDSReadyHandler';
+import { registerKDSOrderHandler } from '@orchestration/handlers/KDSOrderHandler';
+import { registerPaymentLedgerHandler } from '@orchestration/handlers/PaymentLedgerHandler';
+import { registerTableAutoReleaseHandler } from '@orchestration/handlers/TableAutoReleaseHandler';
+import { registerNoShowTableReleaseHandler } from '@orchestration/handlers/NoShowTableReleaseHandler';
+import { registerKDSReadyHandler } from '@orchestration/handlers/KDSReadyHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 

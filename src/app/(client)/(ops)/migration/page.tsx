@@ -3,7 +3,7 @@
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { MigrationPlaceholder } from '@/modules/commerce';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function MigrationContent() {
     const searchParams = useSearchParams();

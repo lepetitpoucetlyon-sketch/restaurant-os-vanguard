@@ -39,7 +39,7 @@ export class AIProviderRouter {
   ): Promise<AIResponse> {
     if (this.geminiKey) {
       try {
-        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        const { NexusEventBus } = await import('@orchestration/NexusEventBus');
         NexusEventBus.emit('ai.query_received', {
           v: 1,
           tenantId,

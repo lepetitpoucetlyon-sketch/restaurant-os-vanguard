@@ -4,8 +4,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Removed vi.mock for NexusEventBus
 
-import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { registerIntelligenceHandler } from '@orchestration/handlers/IntelligenceHandler';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import * as IntelligenceModule from '@/modules/intelligence';
 

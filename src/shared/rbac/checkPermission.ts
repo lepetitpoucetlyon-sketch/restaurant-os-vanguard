@@ -1,6 +1,6 @@
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 import { ACTION_MAP } from './actionPermissionMap';
-import { PERMISSION_ROLE_LEVELS, PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS, PermissionRole } from '@nexus/contracts/permissions.types';
 
 export function assertPermission(role: string | undefined, page: string, action: string) {
     const config = ACTION_MAP[page]?.[action];

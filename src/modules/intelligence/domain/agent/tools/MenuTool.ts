@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { SovereignData, SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { ToolDefinition } from './types';
 
 export const UpdateMenuSchema = z.object({

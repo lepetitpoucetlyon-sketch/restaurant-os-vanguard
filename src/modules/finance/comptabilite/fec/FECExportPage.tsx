@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { FileSpreadsheet, CheckCircle, ShieldCheck, Download } from 'lucide-react';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { activeTenantIdAtom } from '@/store/pillars/sovereign';
 import { logger } from '@/lib/logger';
 

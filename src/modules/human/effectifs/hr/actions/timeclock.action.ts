@@ -1,6 +1,6 @@
 "use server";
 
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from '@/lib/toError';
 import { processTimeclockAction, ClockAction, TimeclockPayload } from '../services/timeclock.domain';

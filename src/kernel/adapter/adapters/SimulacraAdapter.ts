@@ -10,7 +10,7 @@ import {
     IQueryEngine, 
     IRealtimeSubscriber, 
     IQueryOptions 
-} from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+} from '@nexus/contracts/infrastructure/storage.contracts';
 
 /**
  * 🌀 SimulacraAdapter - Restaurant OS (Grade X - Pure I/O)
@@ -146,7 +146,7 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return IdGenerator.generateWithPrefix('sim');
     }
 
-    serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+    serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
         return this.realAdapter.serverTimestamp();
     }
 

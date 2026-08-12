@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { nexusPulseAtom } from '../store/accountingAtoms';
 import { logger } from '@/lib/logger';
 
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export function useFinanceReflex() {
     const pulse = useAtomValue(nexusPulseAtom);

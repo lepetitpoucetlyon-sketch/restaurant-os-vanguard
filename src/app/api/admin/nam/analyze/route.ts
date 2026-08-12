@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { GatewayErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
+import { GatewayErrorCode, CoreErrorCode } from '@nexus/contracts/errors.types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 

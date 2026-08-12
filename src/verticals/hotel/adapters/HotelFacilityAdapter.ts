@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HotelFacilityAdapter = {
   emitRoomMaintenanceRequired(payload: { tenantId: string; roomId: string; issue: string; priority: 'low' | 'medium' | 'high' }) {

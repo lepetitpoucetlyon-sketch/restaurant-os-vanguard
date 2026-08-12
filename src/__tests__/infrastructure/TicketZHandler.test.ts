@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { closeTicketZForDay, registerTicketZHandler } from '@/shared/eventBus/handlers/TicketZHandler';
+import { closeTicketZForDay, registerTicketZHandler } from '@orchestration/handlers/TicketZHandler';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ vi.mock('@/lib/logger', () => ({
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
-import { NexusEventBus, type NexusEvents } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus, type NexusEvents } from '@orchestration/NexusEventBus';
 import { MockAdapter } from '@/lib/adapters/MockAdapter';
 
 

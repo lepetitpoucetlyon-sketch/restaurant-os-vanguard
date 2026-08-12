@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { salonDefaultTokens, salonVerticalTokens } from '@/shared/nexus/tokens/verticals/salon';
+import { salonDefaultTokens, salonVerticalTokens } from '@nexus/tokens/verticals/salon';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

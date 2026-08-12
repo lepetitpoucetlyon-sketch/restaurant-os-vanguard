@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FECGenerator } from '@/modules/finance';
 import { DocumentVault } from '@/modules/compliance';
-import { FinanceErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
-import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
+import { FinanceErrorCode, CoreErrorCode } from '@nexus/contracts/errors.types';
+import { JournalEntry } from '@nexus/contracts/finance.types';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RestaurantOpsAdapter = {
   emitOrderPlaced(payload: { tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number }) {

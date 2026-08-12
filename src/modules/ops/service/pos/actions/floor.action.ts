@@ -1,6 +1,6 @@
 "use server";
 
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { toError } from '@/lib/toError';
 import { SovereignNode } from '@/shared/nexus-contract';
 

@@ -34,7 +34,7 @@ export const leaveRequestsNodeAtom = _leaveRequests.node;
 export const leaveRequestsAtom = _leaveRequests.data;
 
 // 🧬 IDENTITY-BASED SUTURE (My Context)
-import { currentUserAtom, userRoleAtom } from '@shared/nexus/state/SovereignGenome';
+import { currentUserAtom, userRoleAtom } from '@nexus/state/SovereignGenome';
 
 export const myLeaveRequestsAtom = atom((get) => {
     const all = get(leaveRequestsAtom);

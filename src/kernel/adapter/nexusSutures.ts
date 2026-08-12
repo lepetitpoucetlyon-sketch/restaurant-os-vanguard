@@ -6,7 +6,7 @@ import {
     nexusPulseAtom
 } from '@/store/pillars/core';
 
-import { expectedCoversAtom } from '@shared/nexus/state/SovereignGenome';
+import { expectedCoversAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
 
 

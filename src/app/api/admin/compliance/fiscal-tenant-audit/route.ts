@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
+import type { FiscalSeal } from '@nexus/contracts/finance.types';
 import { toError } from "@/lib/toError";
 
 interface JournalEntry {

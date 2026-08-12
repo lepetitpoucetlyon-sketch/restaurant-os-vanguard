@@ -9,7 +9,7 @@ import { NexusFiscalProvider } from "@/modules/finance";
 import { NexusGuardProvider } from "@nexus/guards/NexusGuardProvider";
 import { NexusFleetProvider } from "@/modules/intelligence";
 import { ToastProvider } from "@ui/Toast";
-import { ContextualSettingsProvider } from "@/shared/components/settings/ContextualSettings";
+import { ContextualSettingsProvider } from "@design/settings/ContextualSettings";
 
 // Gates & Orchestrators
 import { 
@@ -19,7 +19,7 @@ import {
   ComplianceGate, 
   RoleGate 
 } from "@nexus/guards";
-import { AlertSync } from "@/shared/components/AlertSync";
+import { AlertSync } from "@design/AlertSync";
 import { ClientComponents } from "@components/layout/ClientComponents";
 import { TrainingOverlay } from "@components/layout/TrainingOverlay";
 import { SovereignLockout } from "@components/layout/SovereignLockout";

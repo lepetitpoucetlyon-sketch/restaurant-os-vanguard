@@ -1,7 +1,7 @@
 "use client";
 
 import { KitchenDashboard } from '@/modules/ops';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function KitchenPage() {
   return <KitchenDashboard />;

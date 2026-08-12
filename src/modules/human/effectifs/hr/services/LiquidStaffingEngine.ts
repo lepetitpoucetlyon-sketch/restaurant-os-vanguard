@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { ClockEntry } from '../../../connectors/timeclock/types';
 import { toError } from "@/lib/toError";

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { TaxCalculator } from '@/modules/finance/fiscalite/TaxCalculator';
 import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // Removed NexusAdapter mock, will use spyOn in beforeEach

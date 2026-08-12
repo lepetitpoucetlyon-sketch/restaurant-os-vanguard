@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantBrandTokensAtom } from '@/store/pillars/sovereign';
-import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
+import { BrandTokensSchema, defaultBrandTokens } from '@nexus/tokens/brand';
 
 interface SplashScreenProps {
     onDone: () => void;

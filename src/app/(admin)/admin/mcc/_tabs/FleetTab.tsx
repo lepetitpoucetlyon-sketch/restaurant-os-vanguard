@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 import { LayoutGrid, TrendingUp, Activity, ShieldCheck, Plus, FlaskConical, Loader2 } from 'lucide-react';
 import { TenantUsersPanel, MCCWidgetSkeleton, VerticalActivePanel, HealthHistorySparkline } from '../components';
-import { StatCard } from '@/shared/components/ui';
+import { StatCard } from '@design/ui';
 import type { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { useMCCLocale } from '../_i18n';
 import { useState } from 'react';

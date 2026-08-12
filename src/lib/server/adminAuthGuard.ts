@@ -4,7 +4,7 @@ import { getAuth, type DecodedIdToken } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@nexus/contracts/permissions.types';
 import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
 import { toError } from "@/lib/toError";
 

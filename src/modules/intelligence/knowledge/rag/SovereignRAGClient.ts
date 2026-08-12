@@ -1,4 +1,4 @@
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 const BASE_URL = process.env.SOVEREIGN_RAG_URL ?? 'http://localhost:9621';
 const ADMIN_KEY = process.env.SOVEREIGN_RAG_ADMIN_KEY ?? '';

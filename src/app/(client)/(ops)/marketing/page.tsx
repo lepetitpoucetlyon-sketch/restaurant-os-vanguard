@@ -10,7 +10,7 @@ const NewQuoteDialog = dynamic(
   () => import("@/modules/commerce").then(m => m.NewQuoteDialog),
   { ssr: false, loading: () => null }
 );
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 type MktTab = "campaigns" | "social" | "quotes" | "ai" | "seo";
 

@@ -1,8 +1,8 @@
 import { randomBytes } from 'crypto';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toMicrounits } from '@/shared/schemas/primitives';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
-import { PERMISSION_ROLE_LEVELS } from '@/shared/nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS } from '@nexus/contracts/permissions.types';
 import type { ParsedFile, ImportResult } from '../types';
 import { validatePin } from '@/lib/auth/validatePin';
 

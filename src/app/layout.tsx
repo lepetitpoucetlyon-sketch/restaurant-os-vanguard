@@ -4,11 +4,11 @@ import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
-import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
+import { ErrorBoundary } from "@design/ErrorBoundary";
 import { NexusProviderStack } from "@components/layout/NexusProviderStack";
 import { ImpersonationBanner } from "@components/layout/ImpersonationBanner";
 import { ServiceWorkerRegistration } from "@components/ServiceWorkerRegistration";
-import { ThemeApplicator } from "@/shared/components/ThemeApplicator";
+import { ThemeApplicator } from "@design/ThemeApplicator";
 
 // Fonts
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });

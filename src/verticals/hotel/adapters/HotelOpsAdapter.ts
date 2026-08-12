@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HotelOpsAdapter = {
   emitCheckIn(payload: { tenantId: string; reservationId: string; guestId: string; roomId: string; checkedInAt: string }) {

@@ -1,5 +1,5 @@
 /**
- * @deprecated Importer depuis '@/shared/nexus/tokens/themeAtoms'.
+ * @deprecated Importer depuis '@nexus/tokens/themeAtoms'.
  * Shim de rétrocompatibilité.
  */
-export * from '@/shared/nexus/tokens/themeAtoms';
+export * from '@nexus/tokens/themeAtoms';

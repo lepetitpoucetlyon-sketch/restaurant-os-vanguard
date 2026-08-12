@@ -4,7 +4,7 @@
  * Pas de React ici.
  */
 import { FinancialNexusBridge } from "@/modules/finance/comptabilite/FinancialNexusBridge";
-import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { NexusEventBus } from "@orchestration/NexusEventBus";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Table, OrderItem } from "@nexus/contracts";
 import { CartItem, CourseType } from "../../../workflow/engine/types";

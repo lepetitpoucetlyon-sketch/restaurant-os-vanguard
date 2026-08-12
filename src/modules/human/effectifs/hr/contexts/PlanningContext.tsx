@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useReducer } from 'react';
-import { PlanningContextValue, PlanningState, PlanningAction } from '@/shared/nexus/contracts/context/planning.contracts';
-import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
+import { PlanningContextValue, PlanningState, PlanningAction } from '@nexus/contracts/context/planning.contracts';
+import { CoreErrorCode } from '@nexus/contracts/errors.types';
 import { Shift as DomainShift } from '@nexus/contracts';
 
 export type Shift = DomainShift;

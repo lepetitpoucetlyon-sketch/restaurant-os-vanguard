@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/shared/hooks";
-import { PinLogin } from "@/shared/nexus/guards/PinLogin";
-import type { OnboardingState } from "@/shared/nexus/contracts/onboarding.types";
+import { PinLogin } from "@nexus/guards/PinLogin";
+import type { OnboardingState } from "@nexus/contracts/onboarding.types";
 
 export default function LoginPage() {
     const { isAuthenticated } = useAuth();

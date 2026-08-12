@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { bakeryDefaultTokens, bakeryVerticalTokens } from '@/shared/nexus/tokens/verticals/bakery';
+import { bakeryDefaultTokens, bakeryVerticalTokens } from '@nexus/tokens/verticals/bakery';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

@@ -11,7 +11,7 @@ import { cn } from '@/lib/ui.foundations';
 import { usePOSController } from '@modules/ops';
 import { formatCurrency } from '@/lib/formatters';
 import { useStockAlerts } from '../pos/useStockAlerts';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function POSMobilePage() {
     const { currentUser } = useAuth();

@@ -4,8 +4,8 @@ import { logger } from '@/lib/logger';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
          
 import { LLMManager } from '../../intelligence/ia/ai';
-import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
-import { AuditPulseType } from '@/shared/nexus/telemetry/types';
+import { NexusTelemetryService } from '@nexus/telemetry/NexusTelemetryService';
+import { AuditPulseType } from '@nexus/telemetry/types';
 import {
     ExtractedSupplierInvoiceSchema,
     InvoiceExtractionErrorSchema,

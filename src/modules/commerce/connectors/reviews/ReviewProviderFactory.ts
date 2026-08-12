@@ -27,7 +27,7 @@ export class ReviewProviderFactory {
                 if (prop === 'fetchRecent') {
                     return async (tenantId: string, since: Date) => {
                         const reviews = await target.fetchRecent(tenantId, since);
-                        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+                        const { NexusEventBus } = await import('@orchestration/NexusEventBus');
                         
                         for (const review of reviews) {
                             const eventName = review.rating <= 3 ? 'review.negative' : 'review.positive';

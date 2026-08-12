@@ -1,6 +1,6 @@
 import type { Policy, ThresholdRule } from '../domain/schemas/policy';
 import { operationalFlags, type PolicyMode } from '@/config/features';
-import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@nexus/contracts/permissions.types';
 import { logger } from '@/lib/logger';
 
 export interface PolicyCheckResult {

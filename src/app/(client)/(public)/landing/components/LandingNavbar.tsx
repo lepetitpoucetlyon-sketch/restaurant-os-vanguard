@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { X, Menu } from "lucide-react";
 import Link from "next/link";
 
-import { useBrandAsset } from "@/shared/nexus/tokens/assets";
+import { useBrandAsset } from "@nexus/tokens/assets";
 
 export function LandingNavbar() {
     const [isOpen, setIsOpen] = useState(false);

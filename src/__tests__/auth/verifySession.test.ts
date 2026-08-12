@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { requireSession } from '@/lib/server/verifySession';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 
 vi.mock('@/lib/firebase-admin-init', () => ({
     initFirebaseAdmin: vi.fn(),

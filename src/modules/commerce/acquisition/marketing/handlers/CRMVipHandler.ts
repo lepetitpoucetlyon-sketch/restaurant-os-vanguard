@@ -1,8 +1,8 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import type { Customer } from '@shared/nexus/contracts/nexus-internal-mapper';
+import type { Customer } from '@nexus/contracts/nexus-internal-mapper';
 import { JsonObject } from "@/shared/types/json";
 
 /**

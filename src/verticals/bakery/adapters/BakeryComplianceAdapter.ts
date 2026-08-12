@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const BakeryComplianceAdapter = {
   emitAllergenDeclared(payload: { tenantId: string; productId: string; allergens: string[]; updatedAt: string }) {

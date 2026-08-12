@@ -21,7 +21,7 @@ import {
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
-import { StandardSettingsEngine } from "@/shared/components/settings/ui/StandardSettingsEngine";
+import { StandardSettingsEngine } from "@design/settings/ui/StandardSettingsEngine";
 import { 
     IDENTITY_SCHEMA, 
     CONTACT_SCHEMA, 

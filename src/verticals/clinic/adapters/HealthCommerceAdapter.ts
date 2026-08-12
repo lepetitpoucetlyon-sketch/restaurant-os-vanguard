@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HealthCommerceAdapter = {
   emitAppointmentBooked(payload: { tenantId: string; appointmentId: string; patientId: string; practitionerId: string; slot: string }) {

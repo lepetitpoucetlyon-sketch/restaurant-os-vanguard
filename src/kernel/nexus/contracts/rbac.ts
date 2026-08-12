@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PermissionRole, PageKey } from '@/shared/nexus/contracts/permissions.types';
+import { PermissionRole, PageKey } from '@nexus/contracts/permissions.types';
 
 export const TenantRBACConfigSchema = z.object({
     version: z.number().default(1),

@@ -46,8 +46,8 @@ vi.mock('@/modules/intelligence/ia/simulator/SimulatorDB', () => {
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/lib/adapters/MockAdapter';
 import { FiscalKeyService } from '@/modules/finance';
-import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusTelemetryService } from '@nexus/telemetry/NexusTelemetryService';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 

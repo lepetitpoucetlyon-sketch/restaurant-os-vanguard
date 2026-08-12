@@ -2,7 +2,7 @@
 import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 import { z } from 'zod';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────

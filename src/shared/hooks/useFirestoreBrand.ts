@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { tenantBrandTokensAtom } from '@/shared/nexus/state/SovereignGenome';
-import { BrandTokensSchema } from '@/shared/nexus/tokens/brand';
+import { tenantBrandTokensAtom } from '@nexus/state/SovereignGenome';
+import { BrandTokensSchema } from '@nexus/tokens/brand';
 import { logger } from '@/lib/logger';
 
 /**

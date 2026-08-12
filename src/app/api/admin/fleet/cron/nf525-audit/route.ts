@@ -38,7 +38,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         }, { merge: true });
 
         // Déclencher le kill-switch via EventBus
-        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        const { NexusEventBus } = await import('@orchestration/NexusEventBus');
         await NexusEventBus.emitDurable('sovereign.breach', {
             v: 1,
             targetTenantId: tenantId,

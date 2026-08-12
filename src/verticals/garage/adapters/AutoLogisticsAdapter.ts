@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoLogisticsAdapter = {
   emitPartConsumed(payload: { tenantId: string; partId: string; workOrderId: string; quantity: number }) {

@@ -19,7 +19,7 @@ import { cn } from "@/lib/ui.foundations";
 
 // Tab Components
 import { OverviewTab, PagesTab, AnalyticsTab, SettingsTab } from "@/modules/commerce/acquisition/marketing/components/seo/tabs";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function SEOPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'pages' | 'analytics' | 'settings'>('overview');

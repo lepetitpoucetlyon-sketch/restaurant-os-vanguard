@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ConnectorId, ImportCategory } from '@nexus/contracts';
 import type { ConnectorCredentials } from '../migration/connectors/types';
-import type { OnboardingMode } from '@/shared/nexus/contracts/onboarding.types';
+import type { OnboardingMode } from '@nexus/contracts/onboarding.types';
 import { ProgressStepper, type WizardStep } from './ProgressStepper';
 import { SourceSystemSelector } from './SourceSystemSelector';
 import { ConnectorOAuthPanel } from './ConnectorOAuthPanel';

@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { hotelDefaultTokens, hotelVerticalTokens } from '@/shared/nexus/tokens/verticals/hotel';
+import { hotelDefaultTokens, hotelVerticalTokens } from '@nexus/tokens/verticals/hotel';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

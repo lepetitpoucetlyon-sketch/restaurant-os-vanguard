@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HotelIntelligenceAdapter = {
   emitOccupancySnapshot(payload: { tenantId: string; date: string; occupancyRate: number; revpar: number }) {

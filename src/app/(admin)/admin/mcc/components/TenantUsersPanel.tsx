@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { User, Shield, Clock, RefreshCw, ChevronDown } from 'lucide-react';
-import type { EmpireInstance } from '@/shared/nexus/contracts/fleet.types';
+import type { EmpireInstance } from '@nexus/contracts/fleet.types';
 import type { User as TenantUser } from '@nexus/contracts';
 import { authedFetch } from '@/lib/client/authedFetch';
 

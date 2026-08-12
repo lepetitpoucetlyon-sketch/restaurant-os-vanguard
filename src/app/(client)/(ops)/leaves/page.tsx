@@ -24,11 +24,11 @@ import {
 
 // Modular Components
 import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar, useHumanResources } from '@/modules/human';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@design/ui/button';
 import { useLanguage } from '@/shared/hooks';
 
 import { useAuth } from '@/shared/hooks';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function LeavesPage() {
     const { currentUser } = useAuth() || {};

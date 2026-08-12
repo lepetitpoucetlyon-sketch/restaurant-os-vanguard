@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Sparkles, Map, BarChart3, MessageSquare, TrendingUp, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 /**
  * Hub /intelligence — passerelle vers les surfaces d'analyse et d'IA du produit.

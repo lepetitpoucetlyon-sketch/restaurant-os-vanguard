@@ -6,8 +6,8 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { sovereignQuery } from '@/modules/intelligence';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
-import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
+import type { UserStatus } from '@nexus/contracts/auth.types';
 import { toError } from "@/lib/toError";
 
 // Statuts bloquant l'accès RAG — JWT valide ne suffit pas.

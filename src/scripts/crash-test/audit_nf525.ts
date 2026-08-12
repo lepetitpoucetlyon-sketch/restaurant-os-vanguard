@@ -1,5 +1,5 @@
 import { logger } from '../../lib/logger';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 
 async function runNF525CrashTest() {
     logger.info('🧨 [CRASH-TEST] Démarrage de l\'Audit 2 : Inviolabilité Fiscale NF525');

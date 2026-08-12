@@ -8,7 +8,7 @@ const mockSendToRole = vi.fn();
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { AggregatorMappingService } from '@/modules/commerce/relation/delivery/services/AggregatorMappingService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -40,7 +40,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery, create: mockCreate } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
@@ -147,22 +147,22 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerLLMFallbackHandler } from '@/shared/eventBus/handlers/LLMFallbackHandler';
-import { FleetOutboxHandler } from '@/shared/eventBus/handlers/FleetOutboxHandler';
-import { FleetStratBriefingHandler } from '@/shared/eventBus/handlers/FleetStratBriefingHandler';
-import { OracleQueryAuditHandler } from '@/shared/eventBus/handlers/OracleQueryAuditHandler';
-import { registerSovereignBreachHandler } from '@/shared/eventBus/handlers/SovereignBreachHandler';
-import { PinLockoutNotifierHandler } from '@/shared/eventBus/handlers/PinLockoutNotifierHandler';
-import { registerPrivacyConsentHandler } from '@/shared/eventBus/handlers/PrivacyConsentHandler';
-import { registerReportRetryHandler } from '@/shared/eventBus/handlers/ReportRetryHandler';
-import { WeeklyReportHandler } from '@/shared/eventBus/handlers/WeeklyReportHandler';
-import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
-import { GracePeriodHandler } from '@/shared/eventBus/handlers/GracePeriodHandler';
-import { StripePaymentRetryHandler } from '@/shared/eventBus/handlers/StripePaymentRetryHandler';
-import { registerDeliveryDriverUnlockHandler } from '@/shared/eventBus/handlers/DeliveryDriverUnlockHandler';
-import { registerDeliveryRushModeHandler } from '@/shared/eventBus/handlers/DeliveryRushModeHandler';
-import { registerAntiCorruptionLayerHandler } from '@/shared/eventBus/handlers/AntiCorruptionLayerHandler';
-import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
+import { registerLLMFallbackHandler } from '@orchestration/handlers/LLMFallbackHandler';
+import { FleetOutboxHandler } from '@orchestration/handlers/FleetOutboxHandler';
+import { FleetStratBriefingHandler } from '@orchestration/handlers/FleetStratBriefingHandler';
+import { OracleQueryAuditHandler } from '@orchestration/handlers/OracleQueryAuditHandler';
+import { registerSovereignBreachHandler } from '@orchestration/handlers/SovereignBreachHandler';
+import { PinLockoutNotifierHandler } from '@orchestration/handlers/PinLockoutNotifierHandler';
+import { registerPrivacyConsentHandler } from '@orchestration/handlers/PrivacyConsentHandler';
+import { registerReportRetryHandler } from '@orchestration/handlers/ReportRetryHandler';
+import { WeeklyReportHandler } from '@orchestration/handlers/WeeklyReportHandler';
+import { registerSupportTicketAnalysisHandler } from '@orchestration/handlers/SupportTicketAnalysisHandler';
+import { GracePeriodHandler } from '@orchestration/handlers/GracePeriodHandler';
+import { StripePaymentRetryHandler } from '@orchestration/handlers/StripePaymentRetryHandler';
+import { registerDeliveryDriverUnlockHandler } from '@orchestration/handlers/DeliveryDriverUnlockHandler';
+import { registerDeliveryRushModeHandler } from '@orchestration/handlers/DeliveryRushModeHandler';
+import { registerAntiCorruptionLayerHandler } from '@orchestration/handlers/AntiCorruptionLayerHandler';
+import { registerIntelligenceHandler } from '@orchestration/handlers/IntelligenceHandler';
 
 const T = 'tenant-intel';
 

@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { garageDefaultTokens, garageVerticalTokens } from '@/shared/nexus/tokens/verticals/garage';
+import { garageDefaultTokens, garageVerticalTokens } from '@nexus/tokens/verticals/garage';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

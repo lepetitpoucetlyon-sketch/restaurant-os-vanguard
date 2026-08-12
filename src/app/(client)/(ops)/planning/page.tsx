@@ -1,7 +1,7 @@
 "use client";
 
 import { PlanningDashboard } from '@/modules/human';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function PlanningPage() {
   return <PlanningDashboard />;

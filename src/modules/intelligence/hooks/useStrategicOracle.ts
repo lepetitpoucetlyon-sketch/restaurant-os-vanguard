@@ -13,7 +13,7 @@ import { toError } from "@/lib/toError";
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const fleet = useFleet() as import('@/shared/nexus/contracts/nexus.types').NexusFleetState;
+    const fleet = useFleet() as import('@nexus/contracts/nexus.types').NexusFleetState;
     const { instances, refreshFleet: _refreshFleet } = fleet;
     const agent = useGeminiAgent();
     const notifiedInsightIds = useRef<Set<string>>(new Set());

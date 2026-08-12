@@ -144,7 +144,7 @@ export const FiscalEngine = {
           // Import dynamique : le bus ne doit pas entrer dans le graphe
           // d'initialisation du domaine fiscal.
           try {
-              const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+              const { NexusEventBus } = await import('@orchestration/NexusEventBus');
               await NexusEventBus.emitDurable('crypto.integrity_failed', {
                   v: 1,
                   tenantId: instanceId,

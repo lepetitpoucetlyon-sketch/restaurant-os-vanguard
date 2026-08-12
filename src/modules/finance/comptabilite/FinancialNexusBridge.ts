@@ -3,7 +3,7 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
 import type { CartItem } from '@nexus/contracts';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate } from '../fiscalite/tax/vatResolver';

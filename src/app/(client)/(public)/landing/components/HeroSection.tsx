@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Play } from "lucide-react";
 import { STATS } from "@/app/(client)/(public)/landing/constants";
 
-import { useBrandAsset } from "@/shared/nexus/tokens/assets";
+import { useBrandAsset } from "@nexus/tokens/assets";
 
 export function HeroSection() {
     const brandBanner = useBrandAsset('banner');

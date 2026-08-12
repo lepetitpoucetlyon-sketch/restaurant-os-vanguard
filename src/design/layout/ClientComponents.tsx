@@ -12,15 +12,15 @@ import { SovereignLock } from "@components/layout/SovereignLock";
 
 // Lazy load system components
 const VoiceCommandListener = dynamic(
-    () => import("@/shared/components/voice/VoiceCommandListener").then(mod => ({ default: mod.VoiceCommandListener })),
+    () => import("@design/voice/VoiceCommandListener").then(mod => ({ default: mod.VoiceCommandListener })),
     { ssr: false }
 );
 const DocumentationPortal = dynamic(
-    () => import("@/shared/components/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
+    () => import("@design/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
     { ssr: false }
 );
 const TutorialBubble = dynamic(
-    () => import("@/shared/components/TutorialBubble").then(mod => ({ default: mod.TutorialBubble })),
+    () => import("@design/TutorialBubble").then(mod => ({ default: mod.TutorialBubble })),
     { ssr: false }
 );
 const OracleChatDrawer = dynamic(

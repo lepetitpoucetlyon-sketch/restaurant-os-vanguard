@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import { ConnectorHub } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
 import { logger } from '@/lib/logger';
 import type { ConnectorState } from '@/shared/connector-manifest';

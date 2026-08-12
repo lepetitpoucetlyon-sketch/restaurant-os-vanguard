@@ -81,7 +81,7 @@ export interface OrchestratorSignal {
 export interface TelemetryPulse {
   version: string;
   status: 'ACTIVE' | 'MAINTENANCE' | 'CRITICAL';
-  lastPulse: import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
+  lastPulse: import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
   health: {
     uptime: number;
     battery: {

@@ -1,5 +1,5 @@
 import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
-import { NexusTimestamp } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { NexusTimestamp } from '@nexus/contracts/infrastructure/storage.contracts';
 
 export type NexusQueryOperator = 
     | '==' | '!=' | '<' | '<=' | '>' | '>=' 

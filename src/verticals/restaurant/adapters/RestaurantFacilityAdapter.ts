@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RestaurantFacilityAdapter = {
   emitTableLayoutChanged(payload: { tenantId: string; floorId: string; tables: { id: string; capacity: number; x: number; y: number }[] }) {

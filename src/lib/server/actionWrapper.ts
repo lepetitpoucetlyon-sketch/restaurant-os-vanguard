@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { requireSession } from '@/lib/server/verifySession';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 import { assertPermission } from '@/shared/rbac/checkPermission';
 import { ACTION_MAP } from '@/shared/rbac/actionPermissionMap';
 import { PinHashService } from '@/lib/server/PinHashService';

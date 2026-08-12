@@ -114,7 +114,7 @@ export function useHumanResources() {
         } as unknown as LeaveRequest;
 
         // Émission EventBus (P1-3.2)
-        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        const { NexusEventBus } = await import('@orchestration/NexusEventBus');
         const reqObj = request as unknown as Record<string, unknown>;
         NexusEventBus.emitDurable('hr.absence_declared', {
             v: 1,

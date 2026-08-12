@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerAuthProvider, DecodedAuthToken } from '@/lib/auth/ServerAuthProvider';
 import { headers } from 'next/headers';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 export async function verifySession(requestOrTenant?: NextRequest | Request | string): Promise<DecodedAuthToken | null> {
     let authHeader: string | null = null;
     

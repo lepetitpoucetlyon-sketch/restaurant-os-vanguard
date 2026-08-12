@@ -13,7 +13,7 @@ import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@nexus/contracts";
 import type { FloorPlanEditorRef } from '@/modules/facility';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 
 const FloorPlanEditor = dynamic(

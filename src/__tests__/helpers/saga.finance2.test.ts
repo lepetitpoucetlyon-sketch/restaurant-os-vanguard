@@ -3,7 +3,7 @@ import { LightRAGClient } from '@/modules/intelligence/knowledge/rag/LightRAGCli
 import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import { CryptoService } from '@/lib/CryptoService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -34,7 +34,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
@@ -132,22 +132,22 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerMonthlyFECExportHandler } from '@/shared/eventBus/handlers/MonthlyFECExportHandler';
-import { BankConnectionExpiredHandler } from '@/shared/eventBus/handlers/BankConnectionExpiredHandler';
-import { registerBankSyncAuditHandler } from '@/shared/eventBus/handlers/BankSyncAuditHandler';
-import { CashflowForecastHandler } from '@/shared/eventBus/handlers/CashflowForecastHandler';
-import { registerSepaExportHandler } from '@/shared/eventBus/handlers/SepaExportHandler';
-import { registerOverdueInvoiceHandler } from '@/shared/eventBus/handlers/OverdueInvoiceHandler';
-import { registerSplitPaymentHandler } from '@/shared/eventBus/handlers/SplitPaymentHandler';
-import { registerRefundExtourneHandler } from '@/shared/eventBus/handlers/RefundExtourneHandler';
-import { registerReconciliationEngineHandler } from '@/shared/eventBus/handlers/ReconciliationEngineHandler';
-import { registerSupplierInvoiceLedgerHandler } from '@/shared/eventBus/handlers/SupplierInvoiceLedgerHandler';
-import { registerTechAuditLedgerHandler } from '@/shared/eventBus/handlers/TechAuditLedgerHandler';
-import { PeriodLockGuardHandler } from '@/shared/eventBus/handlers/PeriodLockGuardHandler';
-import { registerTicketZArchiveHandler } from '@/shared/eventBus/handlers/TicketZArchiveHandler';
-import { registerCryptoIntegrityCheckHandler } from '@/shared/eventBus/handlers/CryptoIntegrityCheckHandler';
-import { AutoIndexationHandler } from '@/shared/eventBus/handlers/AutoIndexationHandler';
-import { registerCertExpiryHandler } from '@/shared/eventBus/handlers/CertExpiryHandler';
+import { registerMonthlyFECExportHandler } from '@orchestration/handlers/MonthlyFECExportHandler';
+import { BankConnectionExpiredHandler } from '@orchestration/handlers/BankConnectionExpiredHandler';
+import { registerBankSyncAuditHandler } from '@orchestration/handlers/BankSyncAuditHandler';
+import { CashflowForecastHandler } from '@orchestration/handlers/CashflowForecastHandler';
+import { registerSepaExportHandler } from '@orchestration/handlers/SepaExportHandler';
+import { registerOverdueInvoiceHandler } from '@orchestration/handlers/OverdueInvoiceHandler';
+import { registerSplitPaymentHandler } from '@orchestration/handlers/SplitPaymentHandler';
+import { registerRefundExtourneHandler } from '@orchestration/handlers/RefundExtourneHandler';
+import { registerReconciliationEngineHandler } from '@orchestration/handlers/ReconciliationEngineHandler';
+import { registerSupplierInvoiceLedgerHandler } from '@orchestration/handlers/SupplierInvoiceLedgerHandler';
+import { registerTechAuditLedgerHandler } from '@orchestration/handlers/TechAuditLedgerHandler';
+import { PeriodLockGuardHandler } from '@orchestration/handlers/PeriodLockGuardHandler';
+import { registerTicketZArchiveHandler } from '@orchestration/handlers/TicketZArchiveHandler';
+import { registerCryptoIntegrityCheckHandler } from '@orchestration/handlers/CryptoIntegrityCheckHandler';
+import { AutoIndexationHandler } from '@orchestration/handlers/AutoIndexationHandler';
+import { registerCertExpiryHandler } from '@orchestration/handlers/CertExpiryHandler';
 
 const T = 'tenant-fin';
 

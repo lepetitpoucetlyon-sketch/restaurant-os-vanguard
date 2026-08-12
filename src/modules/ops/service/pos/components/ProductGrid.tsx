@@ -13,7 +13,7 @@ import { quarantinedProductsAtom } from "@/store/pillars/compliance";
 import { categoriesAtom } from "@/store/pillars/logistics";
 import { isProductInCategory } from "@/shared/utils/categoryMatcher";
 import { POSModalSkeleton } from "./POSModalSkeleton";
-import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { usePageSetting } from "@design/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";
 import { useInventory } from '../../../providers/hooks/catalogHooks';
 

@@ -129,7 +129,7 @@ export const RecallService = {
             },
         });
 
-        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        const { NexusEventBus } = await import('@orchestration/NexusEventBus');
         await NexusEventBus.emitDurable('recall.declared', {
             v: 1,
             tenantId,

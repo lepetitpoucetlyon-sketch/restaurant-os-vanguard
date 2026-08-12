@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { registerOpsHandlers } from '@/shared/eventBus/registerHandlers/ops';
-import { registerFinanceHandlers } from '@/shared/eventBus/registerHandlers/finance';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
+import { registerOpsHandlers } from '@orchestration/registerHandlers/ops';
+import { registerFinanceHandlers } from '@orchestration/registerHandlers/finance';
 
 describe('EventBus CI Smoke Test (R13 Guard)', () => {
   beforeEach(() => {

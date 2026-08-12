@@ -1,4 +1,4 @@
-import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
+import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { TimeSync } from '@/lib/TimeSync';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

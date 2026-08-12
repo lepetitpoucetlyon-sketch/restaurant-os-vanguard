@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DeliveryProviderFactory } from '@/modules/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
 

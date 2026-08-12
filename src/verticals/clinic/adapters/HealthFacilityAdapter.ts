@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HealthFacilityAdapter = {
   emitEquipmentMaintenanceRequired(payload: { tenantId: string; equipmentId: string; type: string; dueDate: string; critical: boolean }) {

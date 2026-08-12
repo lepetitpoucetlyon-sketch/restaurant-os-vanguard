@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { registerKDSOrderHandler } from '@/shared/eventBus/handlers/KDSOrderHandler';
-import { registerCashCountReconciliationHandler } from '@/shared/eventBus/handlers/CashCountReconciliationHandler';
-import { registerHaccpCorrectiveActionHandler } from '@/shared/eventBus/handlers/HaccpCorrectiveActionHandler';
-import { registerShiftStartedHandler } from '@/shared/eventBus/handlers/ShiftStartedHandler';
-import { registerNotificationUrgentDispatchHandler } from '@/shared/eventBus/handlers/NotificationUrgentDispatchHandler';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
+import { registerKDSOrderHandler } from '@orchestration/handlers/KDSOrderHandler';
+import { registerCashCountReconciliationHandler } from '@orchestration/handlers/CashCountReconciliationHandler';
+import { registerHaccpCorrectiveActionHandler } from '@orchestration/handlers/HaccpCorrectiveActionHandler';
+import { registerShiftStartedHandler } from '@orchestration/handlers/ShiftStartedHandler';
+import { registerNotificationUrgentDispatchHandler } from '@orchestration/handlers/NotificationUrgentDispatchHandler';
 
 describe('NexusEventBus Chain Integration Tests', () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 import type { ImportCategory } from '@nexus/contracts';
 export type { ImportCategory } from '@nexus/contracts';

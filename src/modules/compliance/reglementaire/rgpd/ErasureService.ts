@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { piiVault } from '@/shared/nexus/vault/PiiVault';
+import { piiVault } from '@nexus/vault/PiiVault';
 import { auditService } from '../../securite/audit/AuditService';
 import { RgpdRegisterService } from './RgpdRegisterService';
 

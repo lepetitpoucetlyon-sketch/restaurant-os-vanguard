@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { HelpCircle, Sparkles, CheckCircle2, Clock, AlertTriangle, ShieldAlert } from 'lucide-react';
-import { useSupportTickets } from '@/shared/components/support/useSupportTickets';
+import { useSupportTickets } from '@design/support/useSupportTickets';
 
 export default function TenantAidePage() {
   const { tickets, loading, refresh } = useSupportTickets();

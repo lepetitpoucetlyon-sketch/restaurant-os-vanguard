@@ -1,7 +1,7 @@
 "use client";
 
 import { FinanceDashboard } from '@/modules/finance';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function FinancePage() {
   return <FinanceDashboard />;

@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoCommerceAdapter = {
   emitAppointmentBooked(payload: { tenantId: string; appointmentId: string; customerId: string; vehicleId: string; serviceType: string; slot: string }) {

@@ -7,7 +7,7 @@ const mockNexusSet = vi.fn();
 const mockNexusUpdate = vi.fn();
 const mockSendToRole = vi.fn();
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -38,7 +38,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
@@ -124,12 +124,12 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerAutoSupplierDraftHandler } from '@/shared/eventBus/handlers/AutoSupplierDraftHandler';
-import { registerFoodCostRecomputer } from '@/shared/eventBus/handlers/FoodCostRecomputer';
-import { registerFoodDonationHandler } from '@/shared/eventBus/handlers/FoodDonationHandler';
-import { registerPhysicalInventoryHandler } from '@/shared/eventBus/handlers/PhysicalInventoryHandler';
-import { registerStockRestitutionHandler } from '@/shared/eventBus/handlers/StockRestitutionHandler';
-import { registerSupplierDeliveryReceivedHandler } from '@/shared/eventBus/handlers/SupplierDeliveryReceivedHandler';
+import { registerAutoSupplierDraftHandler } from '@orchestration/handlers/AutoSupplierDraftHandler';
+import { registerFoodCostRecomputer } from '@orchestration/handlers/FoodCostRecomputer';
+import { registerFoodDonationHandler } from '@orchestration/handlers/FoodDonationHandler';
+import { registerPhysicalInventoryHandler } from '@orchestration/handlers/PhysicalInventoryHandler';
+import { registerStockRestitutionHandler } from '@orchestration/handlers/StockRestitutionHandler';
+import { registerSupplierDeliveryReceivedHandler } from '@orchestration/handlers/SupplierDeliveryReceivedHandler';
 
 const T = 'tenant-log';
 

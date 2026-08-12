@@ -1,7 +1,7 @@
 "use client";
 
-import { PageGuard } from "@/shared/components/rbac/PageGuard";
-import { SettingsDashboard } from '@/shared/components/settings/SettingsDashboard';
+import { PageGuard } from "@design/rbac/PageGuard";
+import { SettingsDashboard } from '@design/settings/SettingsDashboard';
 
 export default function SettingsPage() {
   return (

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { dispatchServerEvent } from '@/shared/eventBus/ServerEventBus';
+import { dispatchServerEvent } from '@orchestration/ServerEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 

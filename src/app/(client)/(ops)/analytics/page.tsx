@@ -7,8 +7,8 @@ import {
 import { format } from "date-fns";
 
 import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules/finance';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
+import { TabGuard } from "@design/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import dynamic from "next/dynamic";
 
@@ -17,7 +17,7 @@ const ReputationView = dynamic(() => import("@modules/intelligence/analytique/an
 const ComplianceView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ComplianceView));
 const MenuEngineeringMatrix = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.MenuEngineeringMatrix));
 
-import { GlassCard } from "@/shared/components/ui/glass";
+import { GlassCard } from "@design/ui/glass";
 
 // ── Local sub-components (presentation only) ──────────────────────────────────
 

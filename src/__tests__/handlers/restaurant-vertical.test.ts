@@ -38,7 +38,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
   },
 }));
 
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+vi.mock('@orchestration/NexusEventBus', () => ({
   NexusEventBus: {
     on:          mocks.on,
     emit:        mocks.emit,

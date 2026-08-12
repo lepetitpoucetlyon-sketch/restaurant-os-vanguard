@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { PremiumCard } from '@/shared/components/ui/PremiumCard';
-import { StatCard, StatsGrid } from '@/shared/components/ui/StatCard';
-import { ActionToolbar, ToolbarGroup } from '@/shared/components/ui/ActionToolbar';
+import { PremiumCard } from '@design/ui/PremiumCard';
+import { StatCard, StatsGrid } from '@design/ui/StatCard';
+import { ActionToolbar, ToolbarGroup } from '@design/ui/ActionToolbar';
 import { PaySlipViewer } from './PaySlipViewer';
 
 interface StaffPortalProps {

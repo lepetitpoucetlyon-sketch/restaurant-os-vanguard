@@ -22,7 +22,7 @@ import { SommelierTab } from "@modules/ops";
 import { CocktailTab } from "@modules/ops";
 import { StocksTab } from "@modules/ops";
 import { WineDetailPanel } from "@modules/ops";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function BarPage() {
     const { showToast } = useToast();

@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports -- tolerated structural inversion */
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { FiscalSealer } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 

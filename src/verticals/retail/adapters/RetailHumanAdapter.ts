@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RetailHumanAdapter = {
   emitShiftStarted(payload: { tenantId: string; shiftId: string; employeeId: string; role: string; startedAt: number }) {

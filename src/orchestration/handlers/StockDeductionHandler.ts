@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import type { Recipe } from '@shared/nexus/contracts/logistics';
+import type { Recipe } from '@nexus/contracts/logistics';
 
 type StockProduct = {
   linkedStockItemId?: string;

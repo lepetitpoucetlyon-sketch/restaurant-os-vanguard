@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useAuth, useTenant } from '@/shared/providers/NexusCoreProvider';
 import { ConnectorHub } from '../ConnectorHub';
 import type { ConnectorPerm, ConnectorState, ConnectorUserContext } from '@/shared/connector-manifest/types';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
 export interface UseConnectorResult {
   /** Le connecteur est disponible pour ce vertical + les capabilities du tenant */

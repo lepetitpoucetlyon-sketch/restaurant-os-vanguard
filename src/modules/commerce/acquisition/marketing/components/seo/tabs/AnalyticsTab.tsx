@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Eye, Zap, TrendingUp, BarChart3, Search } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { seoProfileAtom, seoLoadingAtom } from '@/store/pillars/commerce';
-import { StatCard } from "@/shared/components/ui";
+import { StatCard } from "@design/ui";
 import { cn } from "@/lib/ui.foundations";
 
 export const AnalyticsTab = () => {

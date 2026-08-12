@@ -15,8 +15,8 @@ import { TimesheetTab } from "./_tabs/TimesheetTab";
 import { PayrollTab } from "./_tabs/PayrollTab";
 import { LeavesTab } from "./_tabs/LeavesTab";
 import type { StaffTab } from "./staffUtils";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
+import { TabGuard } from "@design/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [

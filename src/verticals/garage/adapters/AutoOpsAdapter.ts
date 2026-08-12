@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoOpsAdapter = {
   emitVehicleCheckedIn(payload: { tenantId: string; vehicleId: string; vin: string; customerId: string; mileage: number; checkedInAt: string }) {

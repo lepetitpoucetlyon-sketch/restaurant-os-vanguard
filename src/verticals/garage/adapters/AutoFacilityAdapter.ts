@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoFacilityAdapter = {
   emitLiftMaintenanceRequired(payload: { tenantId: string; liftId: string; issue: string; dueDate: string }) {

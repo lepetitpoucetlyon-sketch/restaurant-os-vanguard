@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusInterceptor } from '@/lib/nexus/NexusInterceptor';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 
 describe('NexusInterceptor - Stress & Race Condition Audit', () => {
     let mockAdapter: any;

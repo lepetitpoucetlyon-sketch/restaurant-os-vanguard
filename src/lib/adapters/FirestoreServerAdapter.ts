@@ -99,9 +99,9 @@ export class FirestoreServerAdapter implements INexusAdapter {
     return this.db.collection(collectionPath).doc().id;
   }
 
-  serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+  serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
     // FieldValue Admin est opaque au SDK — le double-cast est intentionnel.
-    return FieldValue.serverTimestamp() as unknown as import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
+    return FieldValue.serverTimestamp() as unknown as import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp;
   }
 
   async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>): Promise<T> {

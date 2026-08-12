@@ -42,7 +42,7 @@ import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 
 function captureHandler(): (...args: unknown[]) => Promise<void> {
@@ -91,7 +91,7 @@ beforeEach(() => {
 describe('C01 · TicketZHandler (order.paid → ticketZ aggregate)', () => {
   it('crée le ticketZ du jour si absent et accumule le total', async () => {
     const { registerTicketZHandler } = await import(
-      '@/shared/eventBus/handlers/TicketZHandler'
+      '@orchestration/handlers/TicketZHandler'
     );
     registerTicketZHandler();
     const handler = captureHandler();
@@ -115,7 +115,7 @@ describe('C01 · TicketZHandler (order.paid → ticketZ aggregate)', () => {
 
   it('accumule sur un ticketZ existant', async () => {
     const { registerTicketZHandler } = await import(
-      '@/shared/eventBus/handlers/TicketZHandler'
+      '@orchestration/handlers/TicketZHandler'
     );
     registerTicketZHandler();
     const handler = captureHandler();
@@ -149,7 +149,7 @@ describe('C01 · TicketZHandler (order.paid → ticketZ aggregate)', () => {
 describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () => {
   it('déduit 1:1 si le produit a un linkedStockItemId', async () => {
     const { registerStockDeductionHandler } = await import(
-      '@/shared/eventBus/handlers/StockDeductionHandler'
+      '@orchestration/handlers/StockDeductionHandler'
     );
     registerStockDeductionHandler();
     const handler = captureHandler();
@@ -174,7 +174,7 @@ describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () =>
 
   it('émet stock.zero si la quantité atteint 0', async () => {
     const { registerStockDeductionHandler } = await import(
-      '@/shared/eventBus/handlers/StockDeductionHandler'
+      '@orchestration/handlers/StockDeductionHandler'
     );
     registerStockDeductionHandler();
     const handler = captureHandler();
@@ -203,7 +203,7 @@ describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () =>
 describe('C03 · StockReceptionHandler (stock.received → mise à jour stock)', () => {
   it('incrémente le stock existant à la réception', async () => {
     const { registerStockReceptionHandler } = await import(
-      '@/shared/eventBus/handlers/StockReceptionHandler'
+      '@orchestration/handlers/StockReceptionHandler'
     );
     registerStockReceptionHandler();
     const handler = captureHandler();
@@ -229,7 +229,7 @@ describe('C03 · StockReceptionHandler (stock.received → mise à jour stock)',
 
   it('enregistre un rapport de dérive si écart avec bon de commande', async () => {
     const { registerStockReceptionHandler } = await import(
-      '@/shared/eventBus/handlers/StockReceptionHandler'
+      '@orchestration/handlers/StockReceptionHandler'
     );
     registerStockReceptionHandler();
     const handler = captureHandler();
@@ -263,7 +263,7 @@ describe('C03 · StockReceptionHandler (stock.received → mise à jour stock)',
 describe('C04 · CertExpiryHandler (cert.expired → notification)', () => {
   it('crée une notification critique et log audit', async () => {
     const { registerCertExpiryHandler } = await import(
-      '@/shared/eventBus/handlers/CertExpiryHandler'
+      '@orchestration/handlers/CertExpiryHandler'
     );
     registerCertExpiryHandler();
     const handler = captureHandler();
@@ -288,7 +288,7 @@ describe('C04 · CertExpiryHandler (cert.expired → notification)', () => {
 
   it('ignore les événements simulation', async () => {
     const { registerCertExpiryHandler } = await import(
-      '@/shared/eventBus/handlers/CertExpiryHandler'
+      '@orchestration/handlers/CertExpiryHandler'
     );
     registerCertExpiryHandler();
     const handler = captureHandler();
@@ -304,7 +304,7 @@ describe('C04 · CertExpiryHandler (cert.expired → notification)', () => {
 describe('C05 · ComplianceCalendarHandler (compliance.calendar → notification)', () => {
   it('crée une notification urgente si daysUntilDue ≤ 7', async () => {
     const { registerComplianceCalendarHandler } = await import(
-      '@/shared/eventBus/handlers/ComplianceCalendarHandler'
+      '@orchestration/handlers/ComplianceCalendarHandler'
     );
     registerComplianceCalendarHandler();
     const handler = captureHandler();
@@ -326,7 +326,7 @@ describe('C05 · ComplianceCalendarHandler (compliance.calendar → notification
 
   it('ignore si isSimulation', async () => {
     const { registerComplianceCalendarHandler } = await import(
-      '@/shared/eventBus/handlers/ComplianceCalendarHandler'
+      '@orchestration/handlers/ComplianceCalendarHandler'
     );
     registerComplianceCalendarHandler();
     const handler = captureHandler();
@@ -341,7 +341,7 @@ describe('C05 · ComplianceCalendarHandler (compliance.calendar → notification
 describe('C06 · DLCExpiryHandler (dlc.expired → déduction + waste.logged)', () => {
   it('déduit la quantité et émet waste.logged', async () => {
     const { registerDLCExpiryHandler } = await import(
-      '@/shared/eventBus/handlers/DLCExpiryHandler'
+      '@orchestration/handlers/DLCExpiryHandler'
     );
     registerDLCExpiryHandler();
     const handler = captureHandler();
@@ -367,7 +367,7 @@ describe('C06 · DLCExpiryHandler (dlc.expired → déduction + waste.logged)', 
 
   it('ne déduit pas si item inconnu', async () => {
     const { registerDLCExpiryHandler } = await import(
-      '@/shared/eventBus/handlers/DLCExpiryHandler'
+      '@orchestration/handlers/DLCExpiryHandler'
     );
     registerDLCExpiryHandler();
     const handler = captureHandler();
@@ -386,7 +386,7 @@ describe('C06 · DLCExpiryHandler (dlc.expired → déduction + waste.logged)', 
 describe('C07 · SupplierInvoiceLedgerHandler (finance.invoice_approved → fiscalLedger)', () => {
   it('écrit une entrée ACCOUNTS_PAYABLE dans le Grand Livre', async () => {
     const { registerSupplierInvoiceLedgerHandler } = await import(
-      '@/shared/eventBus/handlers/SupplierInvoiceLedgerHandler'
+      '@orchestration/handlers/SupplierInvoiceLedgerHandler'
     );
     registerSupplierInvoiceLedgerHandler();
     const handler = captureHandler();
@@ -412,7 +412,7 @@ describe('C07 · SupplierInvoiceLedgerHandler (finance.invoice_approved → fisc
 
   it('ignore si isSimulation', async () => {
     const { registerSupplierInvoiceLedgerHandler } = await import(
-      '@/shared/eventBus/handlers/SupplierInvoiceLedgerHandler'
+      '@orchestration/handlers/SupplierInvoiceLedgerHandler'
     );
     registerSupplierInvoiceLedgerHandler();
     const handler = captureHandler();
@@ -427,7 +427,7 @@ describe('C07 · SupplierInvoiceLedgerHandler (finance.invoice_approved → fisc
 describe('C08 · CompJournalHandler (order.comp → journal NF525 doublement équilibré)', () => {
   it('crée journalEntry avec deux lignes débit/crédit équilibrées', async () => {
     const { registerCompJournalHandler } = await import(
-      '@/shared/eventBus/handlers/CompJournalHandler'
+      '@orchestration/handlers/CompJournalHandler'
     );
     registerCompJournalHandler();
     const handler = captureHandler();
@@ -457,7 +457,7 @@ describe('C08 · CompJournalHandler (order.comp → journal NF525 doublement éq
 describe('C09 · SovereignBreachHandler (sovereign.breach → kill-switch)', () => {
   it('crée une alerte MCC et appelle pushGlobalConfig', async () => {
     const { registerSovereignBreachHandler } = await import(
-      '@/shared/eventBus/handlers/SovereignBreachHandler'
+      '@orchestration/handlers/SovereignBreachHandler'
     );
     registerSovereignBreachHandler();
     const handler = captureHandler();
@@ -483,7 +483,7 @@ describe('C09 · SovereignBreachHandler (sovereign.breach → kill-switch)', () 
 
   it('ne push pas le kill-switch en mode simulation', async () => {
     const { registerSovereignBreachHandler } = await import(
-      '@/shared/eventBus/handlers/SovereignBreachHandler'
+      '@orchestration/handlers/SovereignBreachHandler'
     );
     registerSovereignBreachHandler();
     const handler = captureHandler();
@@ -501,7 +501,7 @@ describe('C09 · SovereignBreachHandler (sovereign.breach → kill-switch)', () 
 describe('C10 · CryptoIntegrityCheckHandler (finance.daily_audit → vérification chaîne NF525)', () => {
   it('valide la chaîne si les hashes correspondent', async () => {
     const { registerCryptoIntegrityCheckHandler } = await import(
-      '@/shared/eventBus/handlers/CryptoIntegrityCheckHandler'
+      '@orchestration/handlers/CryptoIntegrityCheckHandler'
     );
     registerCryptoIntegrityCheckHandler();
     const handler = captureHandler();
@@ -524,7 +524,7 @@ describe('C10 · CryptoIntegrityCheckHandler (finance.daily_audit → vérificat
 
   it('détecte une rupture de chaîne et crée une alerte', async () => {
     const { registerCryptoIntegrityCheckHandler } = await import(
-      '@/shared/eventBus/handlers/CryptoIntegrityCheckHandler'
+      '@orchestration/handlers/CryptoIntegrityCheckHandler'
     );
     registerCryptoIntegrityCheckHandler();
     const handler = captureHandler();
@@ -549,7 +549,7 @@ describe('C10 · CryptoIntegrityCheckHandler (finance.daily_audit → vérificat
 describe('C11 · CustomerRFMAnalyzerHandler (crm.points_earned → segment RFM)', () => {
   it('passe le client en segment "regular" après 5 visites', async () => {
     const { registerCustomerRFMAnalyzerHandler } = await import(
-      '@/shared/eventBus/handlers/CustomerRFMAnalyzerHandler'
+      '@orchestration/handlers/CustomerRFMAnalyzerHandler'
     );
     registerCustomerRFMAnalyzerHandler();
     const handler = captureHandler();
@@ -566,7 +566,7 @@ describe('C11 · CustomerRFMAnalyzerHandler (crm.points_earned → segment RFM)'
 
   it('passe en "vip" après 11 visites', async () => {
     const { registerCustomerRFMAnalyzerHandler } = await import(
-      '@/shared/eventBus/handlers/CustomerRFMAnalyzerHandler'
+      '@orchestration/handlers/CustomerRFMAnalyzerHandler'
     );
     registerCustomerRFMAnalyzerHandler();
     const handler = captureHandler();
@@ -587,7 +587,7 @@ describe('C11 · CustomerRFMAnalyzerHandler (crm.points_earned → segment RFM)'
 describe('C12 · ReservationNotifierHandler (reservation.confirmed → email)', () => {
   it('lit la config tenant et audit la notification envoyée', async () => {
     const { registerReservationNotifierHandler } = await import(
-      '@/shared/eventBus/handlers/ReservationNotifierHandler'
+      '@orchestration/handlers/ReservationNotifierHandler'
     );
     registerReservationNotifierHandler();
     const handler = captureHandler();
@@ -612,7 +612,7 @@ describe('C12 · ReservationNotifierHandler (reservation.confirmed → email)', 
 
   it('ne fait rien en mode simulation', async () => {
     const { registerReservationNotifierHandler } = await import(
-      '@/shared/eventBus/handlers/ReservationNotifierHandler'
+      '@orchestration/handlers/ReservationNotifierHandler'
     );
     registerReservationNotifierHandler();
     const handler = captureHandler();
@@ -627,7 +627,7 @@ describe('C12 · ReservationNotifierHandler (reservation.confirmed → email)', 
 describe('C13 · StockAlertHandler (stock.low → alerte persistée)', () => {
   it('crée un document stockAlert avec status PENDING', async () => {
     const { registerStockAlertHandler } = await import(
-      '@/shared/eventBus/handlers/StockAlertHandler'
+      '@orchestration/handlers/StockAlertHandler'
     );
     registerStockAlertHandler();
     const handler = captureHandler();
@@ -648,7 +648,7 @@ describe('C13 · StockAlertHandler (stock.low → alerte persistée)', () => {
 
   it('marque le produit indisponible si currentQuantity = 0', async () => {
     const { registerStockAlertHandler } = await import(
-      '@/shared/eventBus/handlers/StockAlertHandler'
+      '@orchestration/handlers/StockAlertHandler'
     );
     registerStockAlertHandler();
     const handler = captureHandler();
@@ -667,7 +667,7 @@ describe('C13 · StockAlertHandler (stock.low → alerte persistée)', () => {
 describe('C14 · WasteValidatedHandler (inventory.waste_logged → déduction transactionnelle)', () => {
   it('déduit la quantité de chaque item perdu via une transaction', async () => {
     const { registerWasteValidatedHandler } = await import(
-      '@/shared/eventBus/handlers/WasteValidatedHandler'
+      '@orchestration/handlers/WasteValidatedHandler'
     );
     registerWasteValidatedHandler();
     const handler = captureHandler();
@@ -696,7 +696,7 @@ describe('C14 · WasteValidatedHandler (inventory.waste_logged → déduction tr
 describe('C15 · TableAutoReleaseHandler (table.cleared → libération si sessionEnd)', () => {
   it('libère la table si sessionEnd=true', async () => {
     const { registerTableAutoReleaseHandler } = await import(
-      '@/shared/eventBus/handlers/TableAutoReleaseHandler'
+      '@orchestration/handlers/TableAutoReleaseHandler'
     );
     registerTableAutoReleaseHandler();
     const handler = captureHandler();
@@ -714,7 +714,7 @@ describe('C15 · TableAutoReleaseHandler (table.cleared → libération si sessi
 
   it('ne libère pas si sessionEnd != true', async () => {
     const { registerTableAutoReleaseHandler } = await import(
-      '@/shared/eventBus/handlers/TableAutoReleaseHandler'
+      '@orchestration/handlers/TableAutoReleaseHandler'
     );
     registerTableAutoReleaseHandler();
     const handler = captureHandler();

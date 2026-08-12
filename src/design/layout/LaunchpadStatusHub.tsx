@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/shared/hooks";
 import { CommandModal } from "@ui/CommandModal";
 import { NotificationPanel } from "@ui/NotificationPanel";
-import { useContextualSettings } from "@/shared/components/settings/ContextualSettings";
+import { useContextualSettings } from "@design/settings/ContextualSettings";
 import { usePathname } from "next/navigation";
 ;
 import { LANGUAGES } from "@/config/languages";

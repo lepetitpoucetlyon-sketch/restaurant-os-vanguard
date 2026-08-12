@@ -99,7 +99,7 @@ export const InventorySyncService = {
       path('recipes'),
       async (data: Recipe[]) => {
         // 🌀 CYCLEGUARD: Before updating, ensure no circular dependencies exist
-        const { CycleGuard } = await import('@shared/nexus/guards/CycleGuard');
+        const { CycleGuard } = await import('@nexus/guards/CycleGuard');
         
         try {
             data.forEach(recipe => {

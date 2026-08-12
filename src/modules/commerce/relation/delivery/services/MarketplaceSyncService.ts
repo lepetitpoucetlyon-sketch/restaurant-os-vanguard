@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops';
 import { toMicrounits } from '@/shared/schemas/primitives';

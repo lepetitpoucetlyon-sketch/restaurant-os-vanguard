@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { Microunits } from '@/shared/schemas/primitives';

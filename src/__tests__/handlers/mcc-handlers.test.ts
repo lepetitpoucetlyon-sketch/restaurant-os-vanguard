@@ -29,7 +29,7 @@ vi.mock('@/lib/logger', () => ({
 // ── Imports après mocks ───────────────────────────────────────────────────────
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 function captureHandler(eventName?: string): (...args: unknown[]) => Promise<void> {
   const calls = vi.mocked(NexusEventBus.on).mock.calls;
@@ -61,7 +61,7 @@ beforeEach(() => {
 describe('MccHealthPingHandler', () => {
   it('écrit l\'état courant + le snapshot historique du jour', async () => {
     const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
+      '@orchestration/handlers/MccHealthPingHandler'
     );
     registerMccHealthPingHandler();
     const handler = captureHandler();
@@ -96,7 +96,7 @@ describe('MccHealthPingHandler', () => {
     ] as unknown[]);
 
     const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
+      '@orchestration/handlers/MccHealthPingHandler'
     );
     registerMccHealthPingHandler();
     const handler = captureHandler();
@@ -111,7 +111,7 @@ describe('MccHealthPingHandler', () => {
     vi.mocked(Nexus.adapter.query).mockRejectedValue(new Error('Firestore timeout'));
 
     const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
+      '@orchestration/handlers/MccHealthPingHandler'
     );
     registerMccHealthPingHandler();
     const handler = captureHandler();
@@ -130,7 +130,7 @@ describe('MccHealthPingHandler', () => {
 describe('MccFiscalAuditHandler', () => {
   it('crée un document d\'audit fiscal avec status pending', async () => {
     const { registerMccFiscalAuditHandler } = await import(
-      '@/shared/eventBus/handlers/MccFiscalAuditHandler'
+      '@orchestration/handlers/MccFiscalAuditHandler'
     );
     registerMccFiscalAuditHandler();
     const handler = captureHandler('mcc.fiscal_audit_required');
@@ -156,7 +156,7 @@ describe('MccFiscalAuditHandler', () => {
 
   it('gère les trois niveaux d\'urgence', async () => {
     const { registerMccFiscalAuditHandler } = await import(
-      '@/shared/eventBus/handlers/MccFiscalAuditHandler'
+      '@orchestration/handlers/MccFiscalAuditHandler'
     );
 
     for (const urgency of ['low', 'high', 'critical'] as const) {

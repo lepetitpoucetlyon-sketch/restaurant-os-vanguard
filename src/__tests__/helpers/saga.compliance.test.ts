@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -32,7 +32,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({
@@ -127,16 +127,16 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerFridgeTempAlertHandler } from '@/shared/eventBus/handlers/FridgeTempAlertHandler';
-import { registerDLCExpiryHandler } from '@/shared/eventBus/handlers/DLCExpiryHandler';
-import { registerComplianceCalendarHandler } from '@/shared/eventBus/handlers/ComplianceCalendarHandler';
-import { registerHaccpCheckArchiverHandler } from '@/shared/eventBus/handlers/HaccpCheckArchiverHandler';
-import { registerIotOfflineAlertHandler } from '@/shared/eventBus/handlers/IotOfflineAlertHandler';
-import { registerQuarantineHandler } from '@/shared/eventBus/handlers/QuarantineHandler';
-import { registerNonConformActionHandler } from '@/shared/eventBus/handlers/NonConformActionHandler';
-import { registerTrainingComplianceAlertHandler } from '@/shared/eventBus/handlers/TrainingComplianceAlertHandler';
-import { registerRecallPOSBlockerHandler } from '@/shared/eventBus/handlers/RecallPOSBlockerHandler';
-import { registerWasteValidatedHandler } from '@/shared/eventBus/handlers/WasteValidatedHandler';
+import { registerFridgeTempAlertHandler } from '@orchestration/handlers/FridgeTempAlertHandler';
+import { registerDLCExpiryHandler } from '@orchestration/handlers/DLCExpiryHandler';
+import { registerComplianceCalendarHandler } from '@orchestration/handlers/ComplianceCalendarHandler';
+import { registerHaccpCheckArchiverHandler } from '@orchestration/handlers/HaccpCheckArchiverHandler';
+import { registerIotOfflineAlertHandler } from '@orchestration/handlers/IotOfflineAlertHandler';
+import { registerQuarantineHandler } from '@orchestration/handlers/QuarantineHandler';
+import { registerNonConformActionHandler } from '@orchestration/handlers/NonConformActionHandler';
+import { registerTrainingComplianceAlertHandler } from '@orchestration/handlers/TrainingComplianceAlertHandler';
+import { registerRecallPOSBlockerHandler } from '@orchestration/handlers/RecallPOSBlockerHandler';
+import { registerWasteValidatedHandler } from '@orchestration/handlers/WasteValidatedHandler';
 
 const T = 'tenant-comp';
 

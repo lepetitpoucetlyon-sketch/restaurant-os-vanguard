@@ -1,5 +1,5 @@
 
-import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
+import { JournalEntry } from '@nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';
 import { FECExportResult, FECLine } from './types';
 import { CryptoService } from '@/lib/CryptoService';

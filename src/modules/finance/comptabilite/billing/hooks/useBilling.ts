@@ -13,7 +13,7 @@ import { tenantIdAtom } from '@/store/pillars/sovereign';
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OperationalIdentity } from '@/shared/nexus-contract';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';
 
 /**

@@ -22,7 +22,7 @@ export * from './MCCInsights';
 export * from './MCCTreasury';
 export * from './MCCWidgetSkeleton';
 export * from './MFAGate';
-export { PerformanceMonitor } from '@/shared/components/dev/PerformanceMonitor';
+export { PerformanceMonitor } from '@design/dev/PerformanceMonitor';
 export * from './PluginCatalogManager';
 export * from './PluginEnginePanel';
 export * from './ResellerPortal';

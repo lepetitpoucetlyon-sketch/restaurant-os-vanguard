@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusInterceptor } from '@/lib/nexus/NexusInterceptor';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 import type { INexusAdapter, NexusContext } from '@/lib/nexus/types';
-import { NexusError } from '@/shared/nexus/errors';
+import { NexusError } from '@nexus/errors';
 
 const mockAdapter: INexusAdapter = {
   get: vi.fn(),

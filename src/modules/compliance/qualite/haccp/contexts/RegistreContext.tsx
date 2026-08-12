@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useReducer } from 'react';
-import { RegistreContextValue, RegistreState, RegistreAction } from '@/shared/nexus/contracts/context/registre.contracts';
-import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
+import { RegistreContextValue, RegistreState, RegistreAction } from '@nexus/contracts/context/registre.contracts';
+import { CoreErrorCode } from '@nexus/contracts/errors.types';
 
 const RegistreContext = createContext<RegistreContextValue | null>(null);
 

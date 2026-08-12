@@ -3,7 +3,7 @@ import { Reservation } from '@nexus/contracts';
 import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 
 /**
  * 📅 RESERVATION TOOL - Grade X

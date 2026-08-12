@@ -9,7 +9,7 @@ import {
     CreditCard, User,
 } from "lucide-react";
 import { TipDistributionService } from "@/modules/human";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 type Tab = 'planning' | 'pointage' | 'conges' | 'pourboires' | 'bulletin' | 'formations';
 

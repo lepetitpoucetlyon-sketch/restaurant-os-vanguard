@@ -1,5 +1,5 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { clinicDefaultTokens, clinicVerticalTokens } from '@/shared/nexus/tokens/verticals/clinic';
+import { clinicDefaultTokens, clinicVerticalTokens } from '@nexus/tokens/verticals/clinic';
 import React from 'react';
 import { logger } from '@/lib/logger';
 import {

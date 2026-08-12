@@ -5,11 +5,11 @@ import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
-import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
-import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
-import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
+import { generateCSSVariables, semanticTokens } from '@nexus/tokens/semantic';
+import { BrandTokensSchema, defaultBrandTokens } from '@nexus/tokens/brand';
+import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
-import { themeModeAtom } from '@/shared/nexus/tokens/themeAtoms';
+import { themeModeAtom } from '@nexus/tokens/themeAtoms';
 import type { PlatformVariant } from '@nexus/contracts';
 
 function getContrastTextColor(hexColor: string): string {

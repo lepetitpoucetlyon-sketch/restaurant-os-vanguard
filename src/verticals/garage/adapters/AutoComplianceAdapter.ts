@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoComplianceAdapter = {
   emitCertificationExpiry(payload: { tenantId: string; vehicleId: string; certType: 'ct' | 'pollution'; expiresAt: string }) {

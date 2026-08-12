@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HotelFinanceAdapter = {
   emitFolioCharged(payload: { tenantId: string; guestId: string; reservationId: string; amountInMicrounits: number; description: string }) {

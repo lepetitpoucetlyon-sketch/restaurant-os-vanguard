@@ -108,7 +108,7 @@ export class SqliteMemoryAdapter implements INexusAdapter {
     return `${collectionPath.replace(/\//g, '_')}_${crypto.randomUUID()}`;
   }
 
-  serverTimestamp(): import('@/shared/nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
+  serverTimestamp(): import('@nexus/contracts/infrastructure/storage.contracts').NexusTimestamp {
     return new Date().toISOString();
   }
 

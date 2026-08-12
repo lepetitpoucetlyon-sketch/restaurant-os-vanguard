@@ -8,7 +8,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useAuth } from "@/shared/hooks";
 import { toast } from "sonner";
 import type { UserRole } from "@nexus/contracts";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 // ── Role configuration ────────────────────────────────────────────────────────
 

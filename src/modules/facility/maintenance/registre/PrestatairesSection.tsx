@@ -46,7 +46,7 @@ export function PrestatairesSection() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {(prestataires || []).map((p: import("@/shared/nexus/contracts/context/registre.contracts").PrestataireDocument) => (
+                {(prestataires || []).map((p: import("@nexus/contracts/context/registre.contracts").PrestataireDocument) => (
                     <div key={p.id} className="group bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm hover:shadow-2xl transition-all duration-500">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex items-center gap-4">

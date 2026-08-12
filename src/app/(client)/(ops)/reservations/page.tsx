@@ -34,7 +34,7 @@ import { TableGrid } from '@/modules/commerce';
 import { CustomerCustomerView } from '@/modules/commerce';
 import { CustomerDetailPanel } from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
 
 function ReservationsPage() {

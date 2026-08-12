@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RetailIntelligenceAdapter = {
   emitMetricsSnapshot(payload: { tenantId: string; date: string; transactions: number; revenueInMicrounits: number; avgBasketInMicrounits: number }) {

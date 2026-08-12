@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const HotelLogisticsAdapter = {
   emitAmenityConsumed(payload: { tenantId: string; roomId: string; itemId: string; quantity: number }) {

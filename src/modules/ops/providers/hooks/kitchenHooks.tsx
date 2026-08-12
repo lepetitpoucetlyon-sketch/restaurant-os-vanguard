@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-internal-mapper';
 import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 import { ordersNodeAtom } from '@/store/pillars/ops';
 import { recipesNodeAtom, prepTasksNodeAtom, miseEnPlaceTargetSelector } from '@/store/pillars/logistics';

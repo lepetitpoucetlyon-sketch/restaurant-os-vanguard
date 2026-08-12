@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RestaurantIntelligenceAdapter = {
   emitSalesDataReady(payload: { tenantId: string; periodStart: string; periodEnd: string; totalInMicrounits: number; covers: number }) {

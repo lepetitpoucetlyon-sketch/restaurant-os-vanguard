@@ -14,9 +14,9 @@ import { wasteLogsNodeAtom } from '@/modules/compliance';
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
-import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
+import { DomainRegistry } from "@nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { StockItem, Preparation, StorageLocation } from "@shared/nexus/contracts/logistics";
+import { StockItem, Preparation, StorageLocation } from "@nexus/contracts/logistics";
 import { mapNodeToIngredient } from "./inventoryMappers";
 import { logger } from "@/lib/logger";
 

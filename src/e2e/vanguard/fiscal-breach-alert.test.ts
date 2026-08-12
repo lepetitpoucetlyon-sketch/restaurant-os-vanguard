@@ -20,7 +20,7 @@ import type { FiscalSeal } from '@nexus/contracts';
 vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
 
 const emitDurable = vi.fn().mockResolvedValue(undefined);
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+vi.mock('@orchestration/NexusEventBus', () => ({
   NexusEventBus: {
     emitDurable: (...args: unknown[]) => emitDurable(...args),
     emit: vi.fn(),

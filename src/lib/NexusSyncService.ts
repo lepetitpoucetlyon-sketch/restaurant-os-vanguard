@@ -8,8 +8,8 @@ import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { Mutex } from '@/lib/utils/Mutex';
 import { TaskContext, TASK_MAPS, readZcpoState, degradeImportanceMap } from '@/lib/icm';
-import { registerNexusHandlers, unregisterNexusHandlers } from '@/shared/eventBus/registerHandlers';
-import { startDLQRetryService, stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
+import { registerNexusHandlers, unregisterNexusHandlers } from '@orchestration/registerHandlers';
+import { startDLQRetryService, stopDLQRetryService } from '@orchestration/DLQRetryService';
 import { initPillarSyncs, stopPillarSyncs } from '@/orchestration/sync/pillarSyncRegistry';
 // VerticalRegistry / CoreContext sont importés dynamiquement dans init() :
 // VerticalRegistry lazy-importe les verticales, qui remontent jusqu'ici — un

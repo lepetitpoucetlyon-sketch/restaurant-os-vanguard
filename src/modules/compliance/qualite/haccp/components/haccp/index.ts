@@ -4,7 +4,7 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export { CameraCapture } from '@/shared/components/ui/CameraCapture';
+export { CameraCapture } from '@design/ui/CameraCapture';
 export * from './GestionAnomalies';
 export * from './GestionHuiles';
 export * from './HACCPVisionScanner';

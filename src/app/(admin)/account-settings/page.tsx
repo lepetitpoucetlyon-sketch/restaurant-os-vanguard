@@ -1,4 +1,4 @@
-import { AccountSettingsDashboard } from '@/shared/components/settings/AccountSettingsDashboard';
+import { AccountSettingsDashboard } from '@design/settings/AccountSettingsDashboard';
 
 export default function AccountSettingsPage() {
   return <AccountSettingsDashboard />;

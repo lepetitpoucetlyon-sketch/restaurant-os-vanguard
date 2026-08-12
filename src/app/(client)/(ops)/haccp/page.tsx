@@ -19,7 +19,7 @@ const SanitaryReport = dynamic(() => import("@/modules/compliance/qualite/haccp/
 const CleaningPlan = dynamic(() => import("@/modules/compliance").then(m => m.CleaningPlan), { loading: () => <POSModalSkeleton /> });
 const DLCTracker = dynamic(() => import("@/modules/compliance").then(m => m.DLCTracker), { loading: () => <POSModalSkeleton /> });
 const NonConformityForm = dynamic(() => import("@/modules/compliance").then(m => m.NonConformityForm), { loading: () => <POSModalSkeleton /> });
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {

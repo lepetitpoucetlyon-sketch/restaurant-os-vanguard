@@ -1,6 +1,6 @@
 import type { IIoTProvider, SensorReading, Sensor } from '../types';
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { toError } from "@/lib/toError";
 
 /**

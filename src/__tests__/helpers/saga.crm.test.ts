@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -38,7 +38,7 @@ const { mockGet, mockSet, mockUpdate, mockRunTransaction, mockEmitDurable, mockE
 //     },
 //   },
 // }));
-// vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// vi.mock('@orchestration/NexusEventBus', () => ({
 //   NexusEventBus: { on: mockOn, emitDurable: mockEmitDurable, emit: mockEmit },
 // }));
 // vi.mock('@/lib/logger', () => ({
@@ -117,10 +117,10 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerNoShowCRMHandler } from '@/shared/eventBus/handlers/NoShowCRMHandler';
-import { registerLoyaltyEngineHandler } from '@/shared/eventBus/handlers/LoyaltyEngineHandler';
-import { registerLoyaltyPointsAccrualHandler } from '@/shared/eventBus/handlers/LoyaltyPointsAccrualHandler';
-import { registerVipStatusEvaluationHandler } from '@/shared/eventBus/handlers/VipStatusEvaluationHandler';
+import { registerNoShowCRMHandler } from '@orchestration/handlers/NoShowCRMHandler';
+import { registerLoyaltyEngineHandler } from '@orchestration/handlers/LoyaltyEngineHandler';
+import { registerLoyaltyPointsAccrualHandler } from '@orchestration/handlers/LoyaltyPointsAccrualHandler';
+import { registerVipStatusEvaluationHandler } from '@orchestration/handlers/VipStatusEvaluationHandler';
 
 // ─── NoShowCRMHandler ─────────────────────────────────────────────────────────
 

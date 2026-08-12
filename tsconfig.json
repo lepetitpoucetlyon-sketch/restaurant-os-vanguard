@@ -123,18 +123,6 @@
       "@kernel/*": [
         "./src/kernel/*"
       ],
-      "@/shared/nexus": [
-        "./src/kernel/nexus/index"
-      ],
-      "@/shared/nexus/*": [
-        "./src/kernel/nexus/*"
-      ],
-      "@shared/nexus": [
-        "./src/kernel/nexus/index"
-      ],
-      "@shared/nexus/*": [
-        "./src/kernel/nexus/*"
-      ],
       "@/lib/nexus": [
         "./src/kernel/adapter/index"
       ],
@@ -145,18 +133,6 @@
         "./src/orchestration/index"
       ],
       "@orchestration/*": [
-        "./src/orchestration/*"
-      ],
-      "@/shared/eventBus": [
-        "./src/orchestration/index"
-      ],
-      "@/shared/eventBus/*": [
-        "./src/orchestration/*"
-      ],
-      "@shared/eventBus": [
-        "./src/orchestration/index"
-      ],
-      "@shared/eventBus/*": [
         "./src/orchestration/*"
       ],
       "@shared/*": [
@@ -178,18 +154,6 @@
         "./src/design/index"
       ],
       "@design/*": [
-        "./src/design/*"
-      ],
-      "@/shared/components": [
-        "./src/design/index"
-      ],
-      "@/shared/components/*": [
-        "./src/design/*"
-      ],
-      "@shared/components": [
-        "./src/design/index"
-      ],
-      "@shared/components/*": [
         "./src/design/*"
       ],
       "@/*": [

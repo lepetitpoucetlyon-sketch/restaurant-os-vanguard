@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const SalonLogisticsAdapter = {
   emitProductConsumed(payload: { tenantId: string; productId: string; quantity: number; appointmentId: string }) {

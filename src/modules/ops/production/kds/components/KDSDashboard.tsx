@@ -7,7 +7,7 @@ import { useKDSController } from '..';
 import { useNexusOps } from "../../../providers/NexusOpsProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { usePageSetting } from "@design/settings/ContextualSettings";
 import { Recipe } from "@nexus/contracts";
 import type { Order } from "@nexus/contracts";
 import { Nexus } from "@/lib/nexus/NexusAdapter";

@@ -9,7 +9,7 @@ import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { PlatformVariantSchema } from '@nexus/contracts';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { toError } from "@/lib/toError";

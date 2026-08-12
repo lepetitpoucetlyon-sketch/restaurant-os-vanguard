@@ -11,7 +11,7 @@ import { useProducts } from '@/modules/logistics';
 import { useCategories } from '@/modules/logistics';
 import { updateProductAction } from "@/shared/actions/settings.action";
 import { Product } from "@nexus/contracts";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
 
 const COMMON_ALLERGENS = [

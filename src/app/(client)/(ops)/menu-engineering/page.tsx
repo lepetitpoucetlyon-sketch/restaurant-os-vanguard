@@ -1,7 +1,7 @@
 "use client";
 
 import { MenuEngineeringDashboard } from '@/verticals/restaurant/presentation/MenuEngineeringDashboard';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function MenuEngineeringPage() {
   return <MenuEngineeringDashboard />;

@@ -4,12 +4,12 @@ import { useSetAtom, WritableAtom } from 'jotai';
 import { useCallback } from 'react';
 import { updateNexusNode, emitPulseAtom } from '@/store/pillars/core';
 import { NexusNode } from '@/store/base';
-import { validateMutation } from '@shared/nexus/engines/MutationValidator';
+import { validateMutation } from '@nexus/engines/MutationValidator';
 import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 
-import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { canDoAtom } from '@nexus/state/SovereignGenome';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { useAtomValue } from 'jotai';
 
 function applyNodeMutation<T extends { id: string }>(

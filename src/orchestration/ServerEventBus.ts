@@ -1,4 +1,4 @@
-import { NexusEventBus, NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus, NexusEventName, NexusEventPayload } from '@orchestration/NexusEventBus';
 import { registerServerNexusHandlers } from './registerHandlers';
 
 let serverInitialized = false;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
@@ -34,7 +34,7 @@ const { mockNexusGet, mockNexusUpdate, mockNexusSet, mockEmitDurable, mockEmit, 
 //   Nexus: { adapter: { get: mockNexusGet, update: mockNexusUpdate, set: mockNexusSet, query: vi.fn() } },
 // }));
 
-// vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// vi.mock('@orchestration/NexusEventBus', () => ({
 //   NexusEventBus: { on: mockOn, emitDurable: mockEmitDurable },
 // }));
 
@@ -132,9 +132,9 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerWasteStockReconciliationHandler } from '@/shared/eventBus/handlers/WasteStockReconciliationHandler';
-import { registerMarginWarningHandler }            from '@/shared/eventBus/handlers/MarginWarningHandler';
-import { PayrollExportHandler }                    from '@/shared/eventBus/handlers/PayrollExportHandler';
+import { registerWasteStockReconciliationHandler } from '@orchestration/handlers/WasteStockReconciliationHandler';
+import { registerMarginWarningHandler }            from '@orchestration/handlers/MarginWarningHandler';
+import { PayrollExportHandler }                    from '@orchestration/handlers/PayrollExportHandler';
 
 // ─── WasteStockReconciliationHandler ─────────────────────────────────────────
 

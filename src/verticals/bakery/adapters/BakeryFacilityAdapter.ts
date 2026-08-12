@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const BakeryFacilityAdapter = {
   emitOvenMaintenanceRequired(payload: { tenantId: string; assetId: string; assetType: string; description: string }) {

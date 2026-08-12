@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { getDefaultStore } from 'jotai';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { rbacConfigAtom } from '@/store/pillars/rbac';
 import type { TenantRBACConfig } from '@nexus/contracts';
 import type { ICoreContext } from './IVerticalPlugin';
 
-import type { NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import type { NexusEventName, NexusEventPayload } from '@orchestration/NexusEventBus';
 
 export class CoreContext implements ICoreContext {
   private routes = new Map<string, React.ComponentType<unknown>>();

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { FiscalSeal } from '@nexus/contracts';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { toMicrounits } from '@/shared/schemas/primitives';
 

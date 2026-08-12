@@ -8,7 +8,7 @@ vi.mock('@/modules/intelligence/knowledge/rag/PulseSanitizer', () => ({
   },
 }));
 
-vi.mock('@/shared/nexus/telemetry/NexusTelemetryService', () => ({
+vi.mock('@nexus/telemetry/NexusTelemetryService', () => ({
   NexusTelemetryService: { emit: vi.fn().mockResolvedValue(undefined) },
 }));
 

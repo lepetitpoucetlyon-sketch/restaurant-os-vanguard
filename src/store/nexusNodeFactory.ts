@@ -39,8 +39,8 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
     return nodeAtom;
 }
 
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { canDoAtom } from '@shared/nexus/state/SovereignGenome';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
+import { canDoAtom } from '@nexus/state/SovereignGenome';
 
 // --- ⚛️ PROXY PATTERN FACTORY (Grade VI Stability) ---
 

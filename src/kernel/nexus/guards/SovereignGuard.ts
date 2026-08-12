@@ -1,9 +1,9 @@
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { CryptoService } from '@/lib/CryptoService';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 import type {
     SignedSovereignData,
     SovereignData,

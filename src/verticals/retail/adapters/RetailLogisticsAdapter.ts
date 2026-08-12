@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const RetailLogisticsAdapter = {
   emitStockDeducted(payload: { tenantId: string; orderId: string; lines: { stockItemId: string; quantity: number }[] }) {

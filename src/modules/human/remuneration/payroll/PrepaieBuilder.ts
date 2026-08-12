@@ -14,7 +14,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
 import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 
 import type { PlatformVariant } from '@nexus/contracts';

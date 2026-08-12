@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TenantRBACConfig } from '@nexus/contracts';
-import type { BrandConfig } from '@/shared/nexus/tokens/brand';
+import type { BrandConfig } from '@nexus/tokens/brand';
 
 export interface IVerticalPlugin {
     id: string;
@@ -32,7 +32,7 @@ export interface IVerticalPlugin {
     verticalTokens?: Record<string, string>;
 }
 
-import type { NexusEventName, NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import type { NexusEventName, NexusEventPayload } from '@orchestration/NexusEventBus';
 
 export interface ICoreContext {
     // Services exposés par le Core pour que la verticale s'y greffe (ex: NexusEventBus, store global)

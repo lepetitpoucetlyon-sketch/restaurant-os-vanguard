@@ -1,7 +1,7 @@
 "use client";
 
 import { RecruitmentDashboard } from '@/modules/human';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 function RecruitmentPage() {
   return <RecruitmentDashboard />;

@@ -2,7 +2,7 @@ import { ZodSchema } from 'zod';
 import { UserSchema, OrderSchema, TableSchema, ReservationSchema, FloorSchema, ZoneSchema } from '@nexus/contracts';
 import { StockItemSchema } from '@nexus/contracts';
 import { ModuleSchema } from '@nexus/contracts';
-import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
+import { NexusError, NexusErrorCode } from '@nexus/errors';
 import { logger } from '@/lib/axiom';
 
 type AnyRecord = Record<string, unknown>;

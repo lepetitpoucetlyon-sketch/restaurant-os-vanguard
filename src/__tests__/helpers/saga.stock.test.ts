@@ -9,7 +9,7 @@ const mockDelete = vi.fn();
 const mockSendToRole = vi.fn();
 const mockEmit = vi.fn();
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -39,7 +39,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmitDurable, mockOn, captur
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({
@@ -120,11 +120,11 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerStockDeductionHandler } from '@/shared/eventBus/handlers/StockDeductionHandler';
-import { registerStockAlertHandler } from '@/shared/eventBus/handlers/StockAlertHandler';
-import { registerStockReceptionHandler } from '@/shared/eventBus/handlers/StockReceptionHandler';
-import { registerStockTransferHandler } from '@/shared/eventBus/handlers/StockTransferHandler';
-import { registerStockZeroBlockerHandler } from '@/shared/eventBus/handlers/StockZeroBlockerHandler';
+import { registerStockDeductionHandler } from '@orchestration/handlers/StockDeductionHandler';
+import { registerStockAlertHandler } from '@orchestration/handlers/StockAlertHandler';
+import { registerStockReceptionHandler } from '@orchestration/handlers/StockReceptionHandler';
+import { registerStockTransferHandler } from '@orchestration/handlers/StockTransferHandler';
+import { registerStockZeroBlockerHandler } from '@orchestration/handlers/StockZeroBlockerHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 

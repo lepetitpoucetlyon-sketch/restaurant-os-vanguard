@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { fleetTelemetry } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
-import type { SiteTelemetry } from '@/shared/nexus/contracts/fleet.types';
+import type { SiteTelemetry } from '@nexus/contracts/fleet.types';
 
 interface OwnerViewRequest {
     ownerId: string;

@@ -7,7 +7,7 @@ import { TestimonialsSection } from './components/TestimonialsSection';
 import { CTASection } from './components/CTASection';
 import { LandingFooter } from './components/LandingFooter';
 
-import { getBrandAsset } from '@/shared/nexus/tokens/assets';
+import { getBrandAsset } from '@nexus/tokens/assets';
 
 export const metadata: Metadata = {
     title: "Restaurant OS | Le Système d'Exploitation Souverain pour la Restauration",

@@ -4,4 +4,4 @@
  * Manual changes will be overwritten unless you remove this header.
  */
 
-export { MindMap } from '@/shared/nexus/components/MindMap';
+export { MindMap } from '@nexus/components/MindMap';

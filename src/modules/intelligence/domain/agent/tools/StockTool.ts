@@ -3,7 +3,7 @@ import { StockItem, Ingredient } from '@nexus/contracts';
 import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { StockEngine } from '@modules/logistics/services/StockEngine';
 

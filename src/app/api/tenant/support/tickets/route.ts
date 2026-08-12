@@ -15,8 +15,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
+import { registerSupportTicketAnalysisHandler } from '@orchestration/handlers/SupportTicketAnalysisHandler';
 import { sanitized } from '@/shared/schemas/primitives';
 import type { SupportTicket } from '@/shared/schemas';
 import { logger } from '@/lib/logger';

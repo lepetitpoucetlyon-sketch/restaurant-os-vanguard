@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Users, Calendar, Clock, Euro, ArrowUpRight } from "lucide-react";
-import { StatusBadge, BadgeStatus } from "@/shared/components/ui/StatusBadge";
+import { StatusBadge, BadgeStatus } from "@design/ui/StatusBadge";
 
 import { Group } from "@nexus/contracts";
 

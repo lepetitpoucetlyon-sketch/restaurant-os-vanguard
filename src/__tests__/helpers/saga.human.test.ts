@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -32,7 +32,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery, generateId: vi.fn((path: string) => `id-${path.split('/').pop()}`) } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
@@ -115,19 +115,19 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { AbsenceUnderstaffingHandler } from '@/shared/eventBus/handlers/AbsenceUnderstaffingHandler';
-import { PayrollAutoCalcHandler } from '@/shared/eventBus/handlers/PayrollAutoCalcHandler';
-import { registerPayrollComplianceHandler } from '@/shared/eventBus/handlers/PayrollComplianceHandler';
-import { registerPayrollTimeclockHandler } from '@/shared/eventBus/handlers/PayrollTimeclockHandler';
-import { registerOvertimeAlertHandler } from '@/shared/eventBus/handlers/OvertimeAlertHandler';
-import { registerOvertimeJournalHandler } from '@/shared/eventBus/handlers/OvertimeJournalHandler';
-import { registerLaborCostAnalyzerHandler } from '@/shared/eventBus/handlers/LaborCostAnalyzerHandler';
-import { registerScheduleNotifierHandler } from '@/shared/eventBus/handlers/ScheduleNotifierHandler';
-import { MedicalVisitAlertHandler } from '@/shared/eventBus/handlers/MedicalVisitAlertHandler';
-import { ContractRenewalAlertHandler } from '@/shared/eventBus/handlers/ContractRenewalAlertHandler';
-import { registerEndOfServiceActionHandler } from '@/shared/eventBus/handlers/EndOfServiceActionHandler';
-import { RecruitmentRouterHandler } from '@/shared/eventBus/handlers/RecruitmentRouterHandler';
-import { OnboardingProgressHandler } from '@/shared/eventBus/handlers/OnboardingProgressHandler';
+import { AbsenceUnderstaffingHandler } from '@orchestration/handlers/AbsenceUnderstaffingHandler';
+import { PayrollAutoCalcHandler } from '@orchestration/handlers/PayrollAutoCalcHandler';
+import { registerPayrollComplianceHandler } from '@orchestration/handlers/PayrollComplianceHandler';
+import { registerPayrollTimeclockHandler } from '@orchestration/handlers/PayrollTimeclockHandler';
+import { registerOvertimeAlertHandler } from '@orchestration/handlers/OvertimeAlertHandler';
+import { registerOvertimeJournalHandler } from '@orchestration/handlers/OvertimeJournalHandler';
+import { registerLaborCostAnalyzerHandler } from '@orchestration/handlers/LaborCostAnalyzerHandler';
+import { registerScheduleNotifierHandler } from '@orchestration/handlers/ScheduleNotifierHandler';
+import { MedicalVisitAlertHandler } from '@orchestration/handlers/MedicalVisitAlertHandler';
+import { ContractRenewalAlertHandler } from '@orchestration/handlers/ContractRenewalAlertHandler';
+import { registerEndOfServiceActionHandler } from '@orchestration/handlers/EndOfServiceActionHandler';
+import { RecruitmentRouterHandler } from '@orchestration/handlers/RecruitmentRouterHandler';
+import { OnboardingProgressHandler } from '@orchestration/handlers/OnboardingProgressHandler';
 
 const T = 'tenant-hr';
 

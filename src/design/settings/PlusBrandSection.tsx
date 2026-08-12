@@ -3,10 +3,10 @@
 import React, { useState, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
-import { VERTICAL_STYLE_PRESETS } from '@/shared/nexus/tokens/verticals/presets';
+import { VERTICAL_STYLE_PRESETS } from '@nexus/tokens/verticals/presets';
 import { BrandImportWizard } from './BrandImportWizard';
 import { cn } from '@/lib/ui.foundations';
-import type { StylePreset } from '@/shared/nexus/tokens/verticals/presets';
+import type { StylePreset } from '@nexus/tokens/verticals/presets';
 import type { PlatformVariant } from '@nexus/contracts';
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 

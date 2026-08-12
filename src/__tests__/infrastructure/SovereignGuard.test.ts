@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
+import { SovereignGuard } from '@nexus/guards/SovereignGuard';
 
 // Mock Jotai store
 vi.mock('jotai', () => ({

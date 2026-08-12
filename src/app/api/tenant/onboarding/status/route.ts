@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { DEFAULT_ONBOARDING_STATE } from '@/shared/nexus/contracts/onboarding.types';
-import type { OnboardingState } from '@/shared/nexus/contracts/onboarding.types';
+import { DEFAULT_ONBOARDING_STATE } from '@nexus/contracts/onboarding.types';
+import type { OnboardingState } from '@nexus/contracts/onboarding.types';
 
 export async function GET(req: NextRequest) {
     const caller = await requireTenantUser(req);

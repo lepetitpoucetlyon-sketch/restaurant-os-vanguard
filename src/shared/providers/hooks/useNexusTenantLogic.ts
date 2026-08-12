@@ -13,7 +13,7 @@ import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
 
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
-import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
+import { NexusTelemetryEngine } from '@nexus/engines/NexusTelemetryEngine';
 import { tenantConfigAtom } from '@/store/pillars/sovereign';
 import { fetchRbacConfigAtom } from '@/store/pillars/rbac';
 import { DemoSeeder } from '@/infrastructure/services/demo/DemoSeeder';

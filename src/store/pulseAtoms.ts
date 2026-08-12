@@ -1,5 +1,5 @@
 /**
- * @deprecated Importer depuis '@/shared/nexus/telemetry/pulseAtoms'.
+ * @deprecated Importer depuis '@nexus/telemetry/pulseAtoms'.
  * Shim de rétrocompatibilité.
  */
-export * from '@/shared/nexus/telemetry/pulseAtoms';
+export * from '@nexus/telemetry/pulseAtoms';

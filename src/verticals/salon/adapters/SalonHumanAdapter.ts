@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const SalonHumanAdapter = {
   emitStylistAssigned(payload: { tenantId: string; stylistId: string; appointmentId: string }) {

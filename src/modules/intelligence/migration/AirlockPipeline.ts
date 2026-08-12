@@ -9,8 +9,8 @@
  */
 
 import { logger } from '@/lib/logger';
-import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
-import { AuditPulseType } from '@/shared/nexus/telemetry/types';
+import { NexusTelemetryService } from '@nexus/telemetry/NexusTelemetryService';
+import { AuditPulseType } from '@nexus/telemetry/types';
 
 import type {
     LegacyImportConfig,

@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MosyleClient } from '@/lib/MosyleClient';
 import { TenantProvisioningService } from '@/lib/mcc/provisioning/TenantProvisioningService';
-import { dispatchServerEvent } from '@/shared/eventBus/ServerEventBus';
+import { dispatchServerEvent } from '@orchestration/ServerEventBus';
 
 // ── Plan-to-features mapping (P12-D / P12-J) ────────────────────────────────
 const PLAN_FEATURES: Record<string, string[]> = {

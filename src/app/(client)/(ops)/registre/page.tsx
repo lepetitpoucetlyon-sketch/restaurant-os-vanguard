@@ -27,8 +27,8 @@ import { PMRSection } from "@modules/ops";
 import { SanitaryComplianceSection } from "@modules/ops";
 import { Modal } from "@ui/Modal";
 import { InterventionLogSection } from "@modules/ops";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
+import { TabGuard } from "@design/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 
 type TabType = 'overview' | 'duerp' | 'incendie' | 'prestataires' | 'pmr' | 'conformite' | 'interventions';

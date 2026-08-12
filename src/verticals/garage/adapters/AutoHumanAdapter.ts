@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const AutoHumanAdapter = {
   emitTechnicianAssigned(payload: { tenantId: string; technicianId: string; workOrderId: string; estimatedHours: number }) {

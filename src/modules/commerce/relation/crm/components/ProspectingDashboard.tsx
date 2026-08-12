@@ -9,7 +9,7 @@ import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/contexts/SettingsContext';
-import type { BrandConfig } from '@/shared/nexus/tokens/brand';
+import type { BrandConfig } from '@nexus/tokens/brand';
 import type { BrandInput } from '@/lib/BrandingService';
 
 type ExtractedTokens = Partial<BrandConfig>;

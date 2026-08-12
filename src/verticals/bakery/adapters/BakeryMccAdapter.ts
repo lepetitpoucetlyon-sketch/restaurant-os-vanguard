@@ -1,4 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 
 export const BakeryMccAdapter = {
   emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; ovensOnline: number; activeBatches: number }) {

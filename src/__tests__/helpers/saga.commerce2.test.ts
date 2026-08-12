@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -31,7 +31,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
 // // }));
 // // vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
@@ -125,21 +125,21 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerBirthdayCampaignHandler } from '@/shared/eventBus/handlers/BirthdayCampaignHandler';
-import { BirthdayOfferHandler } from '@/shared/eventBus/handlers/BirthdayOfferHandler';
-import { registerCustomerProfileInitHandler } from '@/shared/eventBus/handlers/CustomerProfileInitHandler';
-import { registerCustomerRFMAnalyzerHandler } from '@/shared/eventBus/handlers/CustomerRFMAnalyzerHandler';
-import { registerCustomerRiskTagHandler } from '@/shared/eventBus/handlers/CustomerRiskTagHandler';
-import { registerInactiveCustomerHandler } from '@/shared/eventBus/handlers/InactiveCustomerHandler';
-import { registerLoyaltyRewardAlertHandler } from '@/shared/eventBus/handlers/LoyaltyRewardAlertHandler';
-import { registerSegmentTargetingHandler } from '@/shared/eventBus/handlers/SegmentTargetingHandler';
-import { registerMarketingCampaignRouterHandler } from '@/shared/eventBus/handlers/MarketingCampaignRouterHandler';
-import { registerNegativeReviewHandler } from '@/shared/eventBus/handlers/NegativeReviewHandler';
-import { PromotionExpiryHandler } from '@/shared/eventBus/handlers/PromotionExpiryHandler';
-import { PromotionPriceHandler } from '@/shared/eventBus/handlers/PromotionPriceHandler';
-import { registerAggregatorMenuSyncHandler } from '@/shared/eventBus/handlers/AggregatorMenuSyncHandler';
-import { registerAggregatorStockSyncHandler } from '@/shared/eventBus/handlers/AggregatorStockSyncHandler';
-import { registerQuoteFollowUpHandler } from '@/shared/eventBus/handlers/QuoteFollowUpHandler';
+import { registerBirthdayCampaignHandler } from '@orchestration/handlers/BirthdayCampaignHandler';
+import { BirthdayOfferHandler } from '@orchestration/handlers/BirthdayOfferHandler';
+import { registerCustomerProfileInitHandler } from '@orchestration/handlers/CustomerProfileInitHandler';
+import { registerCustomerRFMAnalyzerHandler } from '@orchestration/handlers/CustomerRFMAnalyzerHandler';
+import { registerCustomerRiskTagHandler } from '@orchestration/handlers/CustomerRiskTagHandler';
+import { registerInactiveCustomerHandler } from '@orchestration/handlers/InactiveCustomerHandler';
+import { registerLoyaltyRewardAlertHandler } from '@orchestration/handlers/LoyaltyRewardAlertHandler';
+import { registerSegmentTargetingHandler } from '@orchestration/handlers/SegmentTargetingHandler';
+import { registerMarketingCampaignRouterHandler } from '@orchestration/handlers/MarketingCampaignRouterHandler';
+import { registerNegativeReviewHandler } from '@orchestration/handlers/NegativeReviewHandler';
+import { PromotionExpiryHandler } from '@orchestration/handlers/PromotionExpiryHandler';
+import { PromotionPriceHandler } from '@orchestration/handlers/PromotionPriceHandler';
+import { registerAggregatorMenuSyncHandler } from '@orchestration/handlers/AggregatorMenuSyncHandler';
+import { registerAggregatorStockSyncHandler } from '@orchestration/handlers/AggregatorStockSyncHandler';
+import { registerQuoteFollowUpHandler } from '@orchestration/handlers/QuoteFollowUpHandler';
 
 const T = 'tenant-crm';
 

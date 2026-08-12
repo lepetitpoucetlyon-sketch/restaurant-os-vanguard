@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
@@ -29,7 +29,7 @@ const { mockGet, mockSet, mockUpdate, mockEmit, mockOn, capturedHandlers } =
 // // vi.mock('@/lib/nexus/NexusAdapter', () => ({
 // //   Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate } },
 // // }));
-// // vi.mock('@/shared/eventBus/NexusEventBus', () => ({
+// // vi.mock('@orchestration/NexusEventBus', () => ({
 // //   NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: vi.fn() },
 // // }));
 // // vi.mock('@/lib/logger', () => ({
@@ -113,10 +113,10 @@ if (typeof capturedHandlers !== 'undefined') {
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerCompJournalHandler } from '@/shared/eventBus/handlers/CompJournalHandler';
-import { registerRefundJournalHandler } from '@/shared/eventBus/handlers/RefundJournalHandler';
-import { registerTaxMismatchAlertHandler } from '@/shared/eventBus/handlers/TaxMismatchAlertHandler';
-import { registerPaymentRejectAuditHandler } from '@/shared/eventBus/handlers/PaymentRejectAuditHandler';
+import { registerCompJournalHandler } from '@orchestration/handlers/CompJournalHandler';
+import { registerRefundJournalHandler } from '@orchestration/handlers/RefundJournalHandler';
+import { registerTaxMismatchAlertHandler } from '@orchestration/handlers/TaxMismatchAlertHandler';
+import { registerPaymentRejectAuditHandler } from '@orchestration/handlers/PaymentRejectAuditHandler';
 
 // ─── CompJournalHandler ───────────────────────────────────────────────────────
 

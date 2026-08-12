@@ -29,7 +29,7 @@ import { useAuth } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";;
 import { useToast } from "@ui/Toast";
 import { useLanguage } from "@/shared/hooks";
-import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { usePageSetting } from "@design/settings/ContextualSettings";
 import { useIsMobile } from "@/shared/hooks";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { kpiContainerVariants, kpiCardVariants, fadeInUp } from "@/shared/utils/motion";

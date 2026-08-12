@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
-import { VERTICAL_DEFAULT_TOKENS, VERTICAL_APPEARANCE, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
-import { StatCard, StatsGrid } from '@/shared/components/ui/StatCard';
-import { StatusBadge } from '@/shared/components/ui/StatusBadge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import GlassCard from '@/shared/components/ui/GlassCard';
+import { VERTICAL_DEFAULT_TOKENS, VERTICAL_APPEARANCE, VERTICAL_EXTRA_TOKENS } from '@nexus/tokens/verticals';
+import { StatCard, StatsGrid } from '@design/ui/StatCard';
+import { StatusBadge } from '@design/ui/StatusBadge';
+import { Card, CardContent, CardHeader, CardTitle } from '@design/ui/card';
+import GlassCard from '@design/ui/GlassCard';
 import type { PlatformVariant } from '@nexus/contracts';
 import { cn } from '@/lib/ui.foundations';
 import { Users, ShoppingCart, DollarSign, Star, Clock, Package, Heart } from 'lucide-react';

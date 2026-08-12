@@ -18,7 +18,7 @@ import { VisitHistory } from '@/modules/commerce';
 import { CustomerImportPanel } from '@/modules/commerce';
 import { RFMSegmentation } from '@/modules/commerce';
 import { EmailAutomations } from '@/modules/commerce';
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 

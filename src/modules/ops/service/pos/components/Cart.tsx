@@ -6,7 +6,7 @@ import { ScrollArea } from "@ui/scroll-area";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
-import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { usePageSetting } from "@design/settings/ContextualSettings";
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

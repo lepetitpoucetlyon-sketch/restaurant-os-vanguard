@@ -24,7 +24,7 @@ import {
     RotatingCount,
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
-import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { withPageGuard } from "@design/rbac/PageGuard";
 import { JsonObject } from "@/shared/types/json";
 import { POSModalSkeleton } from "@/modules/ops/service/pos/components/POSModalSkeleton";
 

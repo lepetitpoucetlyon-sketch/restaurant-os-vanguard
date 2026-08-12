@@ -1,5 +1,5 @@
 import { ResilienceSlayer } from './ResilienceSlayer';
-import { CycleGuard } from '@/shared/nexus/guards/CycleGuard';
+import { CycleGuard } from '@nexus/guards/CycleGuard';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { getDefaultStore } from 'jotai';
 import { 

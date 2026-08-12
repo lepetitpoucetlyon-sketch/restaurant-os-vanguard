@@ -5,7 +5,7 @@ import { FiscalEngine, FiscalSeal } from '../fiscalite/FiscalAdapter';
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { StockEngine } from '@/modules/logistics';
 import { Order, StockItem, Recipe } from '@nexus/contracts';
-import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
+import { DomainRegistry } from '@nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { SovereignMath } from '@/shared/services/SovereignMath';
 

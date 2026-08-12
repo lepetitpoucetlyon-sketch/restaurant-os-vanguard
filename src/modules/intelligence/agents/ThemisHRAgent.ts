@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { HermesKnowledgeManager } from '../knowledge/rag/HermesKnowledgeManager';
 import type { IAutonomousAgent, AgentAction, AgentContext } from './types';
 
