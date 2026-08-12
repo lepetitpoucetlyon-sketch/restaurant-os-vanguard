@@ -155,6 +155,34 @@ jamais construit**, soit un **mismatch de nommage**. Extrait le plus parlant :
 
 ---
 
+## 5bis. Handlers ÉCRITS mais JAMAIS ENREGISTRÉS (la couche invisible)
+
+> Distinct des « handlers morts » (§5, qui sont *enregistrés* mais écoutent un event non émis).
+> Ici : le fichier existe, exporte un `register*`, contient une vraie logique — mais **aucun
+> `registerXHandlers()` ne l'appelle**. À l'exécution, son `.on(...)` ne s'exécute jamais.
+
+**Mesure** : `registerNexusHandlers()` ([registerHandlers/index.ts](src/orchestration/registerHandlers/index.ts)) câble **157** handlers via 10 groupes-domaine. Sur les fichiers `handlers/*Handler.ts` exportant un `register*`, **3 ne sont appelés nulle part** :
+
+| Handler | Écoute (intention) | Event mort correspondant (§5) |
+|---|---|---|
+| `HaccpCorrectiveActionHandler` | action corrective HACCP (non-conformité → mesure) | — HACCP |
+| `ProformaHandler` | impression proforma | `order.proforma_printed` |
+| `SupportEscalationHandler` | escalade SAV niveau sup. | `support.ticket_escalated` |
+
+`git log -S` sur `registerHandlers.ts` : **ces 3 noms n'y sont jamais apparus** — écrits (commits `feat(eventbus)`), jamais branchés. Enjeu HACCP pour le premier (action corrective = obligation réglementaire).
+
+> **Nuance importante (auto-correction)** : `PhysicalInventoryHandler` est **bien enregistré**
+> (dans `logistics-supply.ts`, pas `-stock`). Le problème inventory n'est donc **pas** un
+> dé-enregistrement — c'est un **pur mismatch de nommage** : handler câblé qui écoute
+> `inventory.physical`, UI qui émet `inventory.stock_adjusted`. Deux moitiés jamais reliées.
+
+**Pourquoi c'est invisible** : même racine qu'au §1. Un `register...Handler()` qui saute pendant
+un refactor (l'historique montre `revert: annuler Phase 3 — build cassé`) ne produit **aucune
+erreur** — ni au build, ni au runtime. Le handler devient inerte en silence. **95 % du travail
+présent + 1 ligne de registration manquante = indiscernable, de l'extérieur, de 0 %.**
+
+---
+
 ## 6. RBAC — état des lieux (ce n'est PAS le trou principal)
 
 Les points d'entrée émetteurs vérifiés **sont protégés** :
@@ -178,6 +206,12 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
 ## 7. Plan de remédiation priorisé
 
 ### P0 — Bugs de perte de données (à corriger en premier)
+
+0. **Trancher les 3 handlers non-enregistrés (§5bis).** Pour chacun : soit l'ajouter au
+   `registerXHandlers()` de son domaine (si le producteur existe / doit exister), soit le
+   supprimer (mort). `HaccpCorrectiveActionHandler` = **P0 réglementaire** (action corrective
+   HACCP obligatoire) : vérifier qu'un producteur émet bien l'event qu'il écoute, puis câbler.
+   `ProformaHandler` / `SupportEscalationHandler` : brancher ou supprimer selon usage réel.
 
 1. **`inventory.stock_adjusted` → écriture réelle.**
    Créer `StockAdjustmentHandler` (calqué sur `PhysicalInventoryHandler`) consommant
@@ -218,12 +252,59 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
     0 handler, marquer l'outbox `done_no_consumer` au lieu de `done` → observable, auditable,
     et ça n'atteint jamais la DLQ silencieusement.
 11. **Test d'invariant** (`__tests__/invariants/`) : « tout event déclaré dans `ops.events.ts`
-    qui est émis avec `emitDurable` a ≥1 handler enregistré, SAUF liste blanche verticale ».
-    Gèle le principe : un futur orphelin non-blanchi casse le test.
+    qui est émis avec `emitDurable` a ≥1 handler enregistré ET ENREGISTRÉ (§5bis), SAUF liste
+    blanche pilotée par l'état d'ouverture des verticales (§10) ». Gèle le principe : un futur
+    orphelin non-blanchi, ou un handler écrit-non-câblé, casse le test.
 
 ---
 
-## 8. Ce qui est vérifié vs ce qui reste à trier (honnêteté)
+## 8. Tiers TEST / DEMO / REF par verticale — ordre & dépendances
+
+> **Pourquoi cette section dans un audit du bus** : la validité d'un orphelin et **le lieu où
+> on peut prouver le câblage** dépendent entièrement de cette structure. On ne peut pas
+> raisonner « event X sans handler = bug » sans savoir si la verticale de X est ouverte, ni
+> tester un handler sans savoir quel tenant accepte l'écriture.
+
+**24 tenants système = 8 verticales × 3 tiers** ([SystemTenantRegistry.ts](src/lib/mcc/SystemTenantRegistry.ts)) :
+
+| Tier | Convention | Écriture | Rôle |
+|---|---|---|---|
+| **REFERENCE** | `_ref_V` | ❌ bloquée (promotion MCC only) | **maître cloneable** — les clients de V en sont clonés |
+| **TEST** | `_test_V` | ✅ libre (reset à la demande) | **bac à sable dev** — seul endroit où valider une mutation |
+| **DEMO** | `_demo_V` | ❌ Simulacra (intercepté) | vitrine prospect, lecture seule |
+
+### Conséquences directes sur cet audit (l'ordre & les dépendances)
+
+1. **Un orphelin n'est un bug que si sa verticale est OUVERTE.** Les ~67 events verticaux
+   (`auto./health./salon./…`) sont orphelins parce que leur `_ref_V` n'est pas encore
+   construit (verticale non ouverte). C'est **attendu**. Un event `restaurant`/transverse
+   orphelin, lui, concerne une verticale vivante (`_ref_restaurant` = le gabarit) → **bug réel**.
+   → La liste blanche du garde-fou (P3-9/11) **n'est pas statique** : c'est une fonction de
+   l'état d'ouverture (`PRODUCTION / BÊTA / SQUELETTE`). Verticale SQUELETTE → ses events sont
+   whitelistés ; verticale ouverte → ses events DOIVENT avoir un consommateur.
+
+2. **On ne peut valider le câblage que dans `_test_V`.** `_ref_` bloque l'écriture (SovereignGuard),
+   `_demo_` est en Simulacra (mutations interceptées). Donc les tests P0 (« émettre
+   `inventory.stock_adjusted` → asserter la quantité en base ») **doivent viser `_test_restaurant`**,
+   jamais `_demo_` ni `_ref_`. Tester le bug inventory sur un tenant demo ne prouverait rien
+   (l'écriture n'arrive jamais au store, indépendamment du handler).
+
+3. **Ordre de traitement par verticale** (dépendance dure) :
+   ```
+   câbler events+handlers de V ──► valider dans _test_V ──► promouvoir _ref_V (MCC) ──► cloner clients
+   ```
+   Corriger le câblage du bus est donc un **prérequis** à la construction d'un `_ref_V` sain :
+   un `_ref_restaurant` promu alors que `inventory.stock_adjusted` est orphelin **cloné le bug
+   chez tous les futurs clients restaurant**. → Les P0/P1 de ce plan précèdent toute promotion REF.
+
+4. **La démo ment deux fois.** En Simulacra, un ajustement de stock « réussit » à l'écran sans
+   écrire (normal, c'est le mode) — mais avec le bug actuel, il « réussirait » **aussi** sur un
+   tenant client réel (émet, 0 handler). Le mode demo **masque** donc le bug : impossible de le
+   voir en démo, il ne se révèle que sur `_test_` ou en prod client.
+
+---
+
+## 9. Ce qui est vérifié vs ce qui reste à trier (honnêteté)
 
 **Vérifié à la main dans cette passe :**
 - Le mécanisme racine (zéro-handler = silent, hors DLQ) — lecture de `NexusEventBus.ts`.
@@ -243,16 +324,22 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
 
 ---
 
-## 9. Ordre d'attaque recommandé
+## 10. Ordre d'attaque recommandé
 
 ```
-P0-1 inventory.stock_adjusted   (bug actif, données perdues, UI ment)      ← commencer ici
+P3-9/10 garde-fou bus (warn 0-handler + outbox done_no_consumer)  ← D'ABORD : rend tout le reste visible
+P0-0 trancher les 3 handlers non-câblés (HACCP corrective = réglementaire)
+P0-1 inventory.stock_adjusted   (bug actif, données perdues, UI ment)
 P0-2 haccp.temperature_logged   (data-loss + sécurité alimentaire/NF525)
-P3-9/10/11 garde-fou bus        (empêche toute récidive — à faire tôt, peu risqué)
+     └─ tests P0 exécutés contre _test_restaurant (seul tier writable, §8-2)
+P3-11 test d'invariant (gèle le principe, liste blanche = état d'ouverture verticale)
 P1-3..5 alertes perdues         (sécurité caisse, MCC, finance : vérifier avant de brancher)
 P2-6 tri des 51 handlers morts  (long, mécanique, un commit par lot cohérent)
+────────────────────────────────────────────────────────────
+⛔ DÉPENDANCE DURE : aucune promotion `_ref_restaurant` (MCC) tant que les P0 ne sont pas
+   verts — sinon le bug est cloné chez tous les futurs clients restaurant (§8-3).
 ```
 
-> Le garde-fou (P3) mérite d'être fait **tôt** malgré sa priorité nominale : c'est lui qui
-> transforme « 91 orphelins invisibles » en « liste qui apparaît au moindre warning », et qui
-> empêche le prochain `stock_adjusted` de passer inaperçu.
+> Le garde-fou (P3-9/10) passe **en premier** malgré sa priorité nominale : c'est lui qui
+> transforme « 91 orphelins + 3 handlers morts invisibles » en « liste qui apparaît au boot »,
+> et qui empêche le prochain fil débranché de passer inaperçu. On corrige ensuite à la lumière.
