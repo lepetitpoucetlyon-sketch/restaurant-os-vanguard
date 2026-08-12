@@ -428,10 +428,10 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 🚨 7.3  RÉCEPTION e-facture          1ᵉʳ SEPT. 2026 · ~10 j · HORS SÉQUENCE (la loi n'attend pas)
 
 ── AXE BUS §9 (fondations — AVANT toute surface · prérequis promotion _ref_) ──
-9.0    🔴 Garde-fou runtime          ~2h    warn 0-handler + outbox done_no_consumer + invariant registration
-9.1    🔴 P0 chaînes rompues         ~20h   inventory.stock_adjusted · order.placed→KDS · notif→WebPush · CronScheduler+ZReport · haccp corrective · cash_counted
-9.2    🟠 P1 émetteurs/automations   ~25h   staff.clock→paie · reservation events · handlers non-câblés · digests/crons · confiance payload.tenantId (SovereignGuard)
-9.3    🟠 P2 orphelins + tests bus   ~15h   waste/table/loyalty · bank/sync+hr/employees émettent · smoke test intégration
+9.0    ✅ Garde-fou runtime                  FAIT — isExpectedUnconsumed() whitelist + couverture 9 chaînes critiques
+9.1    ✅ P0 chaînes rompues                 FAIT — StockAdjustedHandler créé + 3 handlers orphelins câblés (HACCP/Proforma/Support)
+9.2    ✅ P1 émetteurs/automations           FAIT — assertHandlerTenant() 7 handlers + bank_synced/hr.employee_created events + staff.clock vérifié OK
+9.3    ✅ P2 orphelins + tests bus            FAIT — 0 handlers non-enregistrés + smoke test 24 assertions (boot complet, chaînes §9.1/§9.2)
        (détail : PLAN_BUS_EVENEMENTIEL.md P1-8 + PLAN_AUDIT_BUS_ORPHELINS.md §0 vérifié)
 
 ── AXE DETTE (rend le reste sûr) ─────────────────────────────────────────
@@ -797,12 +797,18 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 
 ```
 9.0 Garde-fou (~2h)      ✅ FAIT (12/08) — warn 0-handler + outbox done_no_consumer + invariant registration
-9.1 P0 chaînes (~20h)    → inventory.stock_adjusted ✅ · order.placed→KDS ✅(déjà câblé) · WebPush ✅(déjà câblé) · Cron+ZReport ✅(déjà câblé) · haccp corrective ✅ · cash_counted ✅(déjà câblé) · 3 handlers orphelins ✅   [EN COURS]
+9.1 P0 chaînes (~20h)    ✅ FAIT (12/08) — StockAdjustedHandler + 3 handlers orphelins câblés (HACCP/Proforma/Support)
 9.2 P1 (~25h)            ✅ FAIT (12/08) — staff.clock→paie vérifié · SovereignGuard 7 handlers · bank/sync+hr emit · assertHandlerTenant()
-9.3 P2 + tests (~15h)    → orphelins restants · smoke test intégration bus
+9.3 P2 + tests (~15h)    ✅ FAIT (12/08) — 0 handlers non-enregistrés · bus-integration-smoke 24/24 (boot complet)
 ```
-⛔ **Prérequis dur** : `9.1` vert avant toute promotion `_ref_restaurant` (sinon on clone les
-chaînes rompues chez tous les clients). Ordre : **§9 avant la surface** (§8.6/§7.2/MCC/§6).
+✅ **AXE BUS §9 COMPLET.** Prérequis promotion `_ref_restaurant` rempli côté bus.
+
+**Vérification NF525 E2E (12/08)** — audit chaîne fiscale post-§9 :
+- 🔴 **BUG P0 corrigé** : `finance.z_report_requested` (cron 23h59 + 4 verticals) avait **0 handler**
+  → `closeTicketZForDay()` jamais appelée → Z-report auto-close **mort** → créé `ZReportCloseHandler`
+- Classe B ajoutée : `finance.refund_issued` + `finance.invoice_generated` (état persisté avant emit)
+- Test `nf525-chain-e2e.test.ts` 19/19 : 8 maillons NF525 vérifiés + Classe B + chaîne complète
+- Chaîne NF525 vérifiée de bout en bout : POS→seal→TicketZ→Z-close→archive→audit→integrity
 
 ---
 
