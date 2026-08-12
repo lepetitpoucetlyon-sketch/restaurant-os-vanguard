@@ -6,9 +6,9 @@ import type {
   ConnectorUserContext,
   ConnectorWithState,
   ConnectorState,
-} from '@/shared/connector-manifest/types';
-import { CONNECTOR_CATALOG } from '@/shared/connector-manifest/catalog';
-import { CONNECTOR_PERM_LEVELS } from '@/shared/connector-manifest/types';
+} from '@/lib/connectors/manifest/types';
+import { CONNECTOR_CATALOG } from '@/lib/connectors/manifest/catalog';
+import { CONNECTOR_PERM_LEVELS } from '@/lib/connectors/manifest/types';
 import { PERMISSION_ROLE_LEVELS } from '@nexus/contracts/permissions.types';
 
 export class ConnectorHub {

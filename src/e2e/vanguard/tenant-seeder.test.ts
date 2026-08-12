@@ -20,7 +20,7 @@ vi.mock('@/lib/logger', () => ({
 }));
 
 import { TenantSeeder } from '@/lib/TenantSeeder';
-import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
+import { PCG_ACCOUNTS } from '@/lib/seeds/pcg-accounts';
 
 describe('TenantSeeder', () => {
   beforeEach(() => {

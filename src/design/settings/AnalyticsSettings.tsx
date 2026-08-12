@@ -5,7 +5,7 @@ import { BarChart2, Globe, XCircle, Copy, Check, Loader2, Save } from 'lucide-re
 import { toast } from 'sonner';
 import { useTenant } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { updateTenantSettingsAction } from '@/shared/actions/settings.action';
+import { updateTenantSettingsAction } from '@/lib/actions/settings.action';
 
 type AnalyticsProvider = 'ga4' | 'plausible' | 'none';
 

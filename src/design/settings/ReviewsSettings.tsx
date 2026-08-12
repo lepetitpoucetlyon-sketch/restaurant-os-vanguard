@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
-import { updateTenantSettingsAction } from "@/shared/actions/settings.action";
+import { updateTenantSettingsAction } from "@/lib/actions/settings.action";
 import { useTenant } from "@/shared/hooks";
 
 interface ReviewSource {

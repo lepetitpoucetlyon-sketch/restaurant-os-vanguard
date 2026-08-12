@@ -6,7 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { encryptCredentials, validateCredentialFields } from '@/lib/server/credentialCipher';
 import { logger } from '@/lib/logger';
-import type { ConnectorState } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/lib/connectors/manifest';
 
 /**
  * PUT /api/connectors/[id]/credentials

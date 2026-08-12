@@ -5,7 +5,7 @@ import { ConnectorHub } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { logger } from '@/lib/logger';
-import type { ConnectorState } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/lib/connectors/manifest';
 
 /**
  * POST /api/connectors/[id]/activate

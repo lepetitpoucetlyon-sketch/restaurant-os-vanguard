@@ -7,7 +7,7 @@ import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
 import { ConnectorRegistry } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
-import type { ConnectorState } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/lib/connectors/manifest';
 import type { ConnectorId } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 

@@ -5,7 +5,7 @@ import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
 import { FiscalKeyService } from '@/kernel/services/crypto/FiscalKeyService';
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
-import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
+import { RESTAURANT_FULL_DNA } from '@lib/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 import type { CommunicationPulse } from '@nexus/contracts';

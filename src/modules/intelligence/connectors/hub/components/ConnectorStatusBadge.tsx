@@ -1,6 +1,6 @@
 "use client";
 
-import type { ConnectorState } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/lib/connectors/manifest';
 
 const CONFIG: Record<NonNullable<ConnectorState['status']>, { label: string; cls: string }> = {
   active:         { label: 'Actif',           cls: 'bg-status-success/15 text-status-success' },

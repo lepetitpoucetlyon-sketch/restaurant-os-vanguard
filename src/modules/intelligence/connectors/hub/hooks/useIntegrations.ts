@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import type { IConnectorManifest, ConnectorState } from '@/shared/connector-manifest';
+import type { IConnectorManifest, ConnectorState } from '@/lib/connectors/manifest';
 import { useConnector } from './useConnector';
 import { toError } from "@/lib/toError";
 

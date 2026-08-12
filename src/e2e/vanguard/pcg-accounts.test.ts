@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PCG_ACCOUNTS } from '@/shared/seeds/pcg-accounts';
+import { PCG_ACCOUNTS } from '@/lib/seeds/pcg-accounts';
 
 describe('PCG Accounts seed data', () => {
   it('contains accounts across all 7 classes', () => {

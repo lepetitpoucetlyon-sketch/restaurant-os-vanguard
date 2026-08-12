@@ -7,7 +7,7 @@ import { ConnectorCard } from './ConnectorCard';
 import { ConnectorConfigModal } from './ConnectorConfigModal';
 import { ConnectorHub } from '../ConnectorHub';
 import type { ConnectorEntry } from '../hooks/useIntegrations';
-import type { IConnectorManifest } from '@/shared/connector-manifest';
+import type { IConnectorManifest } from '@/lib/connectors/manifest';
 
 const CATEGORY_LABELS: Record<string, string> = {
   reservations:      '🗓️  Réservations',

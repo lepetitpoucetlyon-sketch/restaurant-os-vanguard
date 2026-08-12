@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Eye, EyeOff, Loader2 } from 'lucide-react';
-import type { IConnectorManifest } from '@/shared/connector-manifest';
+import type { IConnectorManifest } from '@/lib/connectors/manifest';
 
 interface Props {
   manifest: IConnectorManifest;

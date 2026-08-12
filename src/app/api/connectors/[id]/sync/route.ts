@@ -6,7 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
 import { logger } from '@/lib/logger';
-import type { ConnectorState } from '@/shared/connector-manifest';
+import type { ConnectorState } from '@/lib/connectors/manifest';
 import { toError } from "@/lib/toError";
 
 // Pilier-specific factories — importés à la demande selon la catégorie du manifest
