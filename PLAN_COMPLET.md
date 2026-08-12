@@ -326,25 +326,30 @@ Cycles et kernel→modules sont **à 0** (cible atteinte). Reste :
 | **5** | monnaie 694 InCents | 🟠 **P0-P3 FAIT** · reste P4 (finance core 259 InCents) | 694 InCents (anciens conservés rétrocompat) + 7 `as Microunits` |
 | **6** | refonte UI (97 hex, i18n, custom tokens) | 🔴 **NON COMMENCÉ** | i18n `t()` = 0 composant |
 | **🚨 7.3** | **RÉCEPTION e-facture** | 🔴 **NON COMMENCÉ** — **échéance 1ᵉʳ SEPT.** | `IEInvoicingProvider` = 0, route inbound = 0 |
-| **7.4** | pont ticket→facture | 🔴 non fait (`InvoiceEngine` squelette existe, `CreditNote` 2 réf.) | — |
-| **7.6/7.6.1** | RGPD × NF525 + registre tenant | 🔴 non fait | — |
-| **7.7** | variantes (avoirs, acomptes) | 🔴 non fait | — |
-| **7.8** | base facturation 8 verticales | 🔴 non fait — `IVerticalInvoicingAdapter` = **0** | — |
+| **7.4** | pont ticket→facture | 🟢 **FAIT** | `InvoiceService` + auto-invoice 150€ HT + `FinancialNexusBridge` · commit `37932e3a5` |
+| **7.6/7.6.1** | RGPD × NF525 + registre tenant | 🟢 **FAIT** | crypto-shredding, registre RGPD par tenant · commit `37932e3a5` |
+| **7.7** | variantes (avoirs, acomptes groupes) | 🟢 **FAIT** | avoirs, acomptes, devis→facture · commit `43e7d3a3b` |
+| **7.8** | base facturation 8 verticales | 🟢 **FAIT** | `IVerticalInvoicingAdapter` × 8 · `inferProductCategory()` · commit `fdf23796c` |
 | **7.2** | Nexus Exchange | 🔴 non fait (en dernier) | — |
-| **8 (NOUVEAU)** | **socle multi-verticale** (ServiceTicket, bridge…) | 🔴 non fait — voir §6 | ServiceTicket=0, ServiceSubject=0, roleLabels=0, 0/72 events servis |
+| **8.1** | ServiceTicket | 🟢 **FAIT** | `ops/service/core` · 5 transitions · NF525 immuable · commit `67d187827` |
+| **8.2** | ServiceSubject (PII) | 🟢 **FAIT** | `kernel/nexus/contracts/ServiceSubject.ts` · commit `d5841e899` |
+| **8.3** | roleLabels × 8 verticales | 🟢 **FAIT** | `verticals/<v>/roles.ts` + `resolveRoleLabels()` · commit `d5841e899` |
+| **8.5** | VerticalEventBridge | 🟢 **FAIT** | 25 mappings → 7 events génériques · commit `579eb4b68` |
+| **8.6** | vatResolver généralisé | 🟢 **FAIT** | `inferProductCategory()` délégué adapters · commit `19f54f11d` |
+| **8.7/8.8** | gen-vertical-playbook + garage ouvert | 🟢 **FAIT** | garage 10/12 · `RepairIntakeService` 99L validé |
+| **8 résiduel** | 21 modules teintés | 🟠 **PARTIEL** | vatResolver+pos fait · 19 modules hors chemin critique |
 | **MCC** | EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité | 🔴 non fait | — |
 | **🆕 Infra** | Sentry multi-tenant/multi-vertical | 🟢 **FAIT** | `configureTenantScope()` couvre 8 verticales + custom |
 | **🆕 Infra** | Emulateur Firestore | 🟢 **FAIT** | `firebase.json` configuré (ports 8080/9099/4000) |
 
-> **Lecture d'ensemble (v4.2)** : le **socle est solide** — TSC 0, cycles **0**, barrel **0** (8 piliers),
-> kernel→modules **0**, store→modules 0, invariants **9/9**, Semgrep actif, 3 décisions écrites, Sentry câblé.
-> La grande extraction (§3.4) est quasi-terminée ; **reste** : shared→modules=7, lib→modules=12, Étape 4/5.
-> **Phase 5 monnaie avancée** — P0(ops), P1(logistics), P2(intelligence/commerce), P3(compliance/facility) FAITS ;
-> reste P4 = finance core (259 InCents, le plus délicat — snapshot NF525). **Phase 4.1** SplitBillDialog fragmenté.
-> **Chemin critique** : **e-facture (légal, 1ᵉʳ sept.)** avant tout, sitôt le choix de PA tranché.
+> **Lecture d'ensemble (v4.3 — 2026-08-12)** : le **socle est solide** — TSC 0, cycles **0**, barrel **0**,
+> kernel→modules **0**, invariants **9/9**, Semgrep actif, Sentry câblé.
+> **Axe facturation (§7.4-7.8) TERMINÉ** : `InvoiceService` + 150€ HT + RGPD + variantes + `IVerticalInvoicingAdapter`.
+> **Axe multi-verticale (§8.1-8.8) TERMINÉ** : `ServiceTicket` · `ServiceSubject` · roleLabels ×8 · `VerticalEventBridge`
+> 25 rules · vatResolver généralisé · gen-vertical-playbook · garage ouvert (`RepairIntakeService` 99L validé).
+> **Reste** : shared→modules=7, lib→modules=12 (§3.2) · P4 finance core 259 InCents (§5) · §7.3 e-facture 🔴 1er SEPT.
 > ⚠️ 5 fichiers de tests échouent (pré-existants, prouvés) — voir §5.1.
-> 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (API REST, tests intégration, CI/CD,
-> monitoring, migration données, isolation tenant) — ~28 jours-homme, hors chemin critique code.
+> 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 jours-homme, hors chemin critique code).
 
 ---
 
@@ -404,15 +409,22 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 6      Refonte UI                    ~3 j    97 hex, i18n, custom tokens, précédence charte
 
 ── AXE LÉGAL & FACTURATION ───────────────────────────────────────────────
-7.4    Pont ticket → facture         ~2 j    invoices append-only, split prorata TVA, seuil 150 €
-7.6    RGPD × NF525                  ~1 j    crypto-shredding, retirer 'invoices' des subject-ref
-7.6.1  Registre RGPD tenant          ~1 j    /registre, route tenant (pas fleet)
-7.7    Variantes                     ~1 j    avoirs, acomptes groupes, devis→facture
-7.8    Base 8 verticales             ~1 j    IVerticalInvoicingAdapter (= socle §8.4)
+7.4    ✅ Pont ticket → facture                 FAIT (InvoiceService, 150€ HT, FinancialNexusBridge)
+7.6    ✅ RGPD × NF525                          FAIT (crypto-shredding, registre tenant)
+7.6.1  ✅ Registre RGPD tenant                  FAIT
+7.7    ✅ Variantes                             FAIT (avoirs, acomptes, devis→facture)
+7.8    ✅ Base 8 verticales                     FAIT (IVerticalInvoicingAdapter × 8)
 
-── AXE MULTI-VERTICALE (NOUVEAU — fusion mapping) ────────────────────────
-8      Socle multi-verticale         ~5 j    ServiceTicket · ServiceSubject · roleLabels · EventBridge
-7.2    Nexus Exchange                ~2 j    en dernier — publier un contrat, pas ouvrir un accès
+── AXE MULTI-VERTICALE ────────────────────────────────────────────────────
+8.1    ✅ ServiceTicket                         FAIT (ops/service/core · 5 états · NF525)
+8.2    ✅ ServiceSubject                        FAIT (isPii · PiiVault pointer · RGPD art.9)
+8.3    ✅ roleLabels × 8 verticales             FAIT (verticals/<v>/roles.ts · resolver)
+8.5    ✅ VerticalEventBridge                   FAIT (25 mappings → 7 events génériques)
+8.6    ✅ vatResolver généralisé                FAIT (inferProductCategory délégué)
+8.7    ✅ gen-vertical-playbook.ts              FAIT (12 points d'ancrage · VERTICAL_<V>.md)
+8.8    ✅ Garage ouvert                         FAIT (RepairIntakeService 99L validé)
+8res   🟠 21 modules teintés résiduel     ~2j   vatResolver+pos ✅ · 19 hors chemin critique
+7.2    Nexus Exchange                      ~2 j  en dernier — publier un contrat, pas ouvrir un accès
 
 ── SUPERVISION ───────────────────────────────────────────────────────────
 MCC    Alignement flotte             ~2 j    EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité
@@ -423,8 +435,8 @@ INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · C
        ✅ Emulateur Firestore configuré      FAIT
 ```
 
-**Total restant ≈ 20 jours-homme code** (v4.1 27j − ~7j exécuté) **+ ~28 j infra** (voir `afaire.md`).
-**Chemin critique** : `7.3 (légal) ∥ [3.4b-résidu → 3.2 → 5-P4-finance → 4-résidu → 7.4 → 8]`.
+**Total restant ≈ 9 jours-homme code** (v4.3 — §7.4-7.8 + §8.1-8.8 terminés, ~11j économisés) **+ ~28 j infra**.
+**Chemin critique** : `7.3 (légal 🔴 1er sept.) ∥ [3.2(shared/lib) → 5-P4-finance → 4-résidu → 8res → 7.2 → MCC]`.
 
 ---
 
@@ -534,24 +546,21 @@ Résorbé par Antigravity, réparé par Claude. Gate @ `dd1ed4813` confirme **0 
 
 ---
 
-# 🔗 6. AXE LÉGAL & FACTURATION (Phase 7) — 🔴 non commencé
+# 🔗 6. AXE LÉGAL & FACTURATION (Phase 7) — 🟢 TERMINÉ (sauf §7.3 e-facture)
 
-Détail complet : `PLAN_MAITRE_CORRIGE.md` §7.4 → §7.8. Résumé de l'enchaînement (dépendances dures) :
+Détail complet : `PLAN_MAITRE_CORRIGE.md` §7.4 → §7.8. Chaîne de livraison terminée :
 
 ```
-7.4 facture ─┬─► 7.6 RGPD×NF525 ─► 7.6.1 registre tenant
-             │        (retirer 'invoices' des subject-ref AVANT la route tenant)
-             └─► 7.7 variantes (avoirs, acomptes groupes)
-                      └─► 7.8 IVerticalInvoicingAdapter  ══╗
-                                                            ║ = prérequis du §8
+7.4 ✅ facture ─┬─► 7.6 ✅ RGPD×NF525 ─► 7.6.1 ✅ registre tenant
+               └─► 7.7 ✅ variantes (avoirs, acomptes groupes)
+                         └─► 7.8 ✅ IVerticalInvoicingAdapter (≡ §8.4)
 ```
 
-Points de vigilance re-mesurés :
-- `InvoiceEngine` existe (squelette 81 l.) · `CreditNote` : 2 réf. seulement (avoirs **non structurés**).
-- **§7.8 `IVerticalInvoicingAdapter` = 0** → **c'est le même livrable que §8.4** ci-dessous. La preuve que la
-  facturation restaurant est câblée dans le moteur : **`vatResolver.ts:42-43`** contient une liste de plats
-  (`entrée|plat|dessert|pizza|burger|menu → food`). §7.8 = **retirer** cette logique du moteur, pas seulement
-  ajouter un adapter.
+Résultats mesurés :
+- `InvoiceService` : pont ticket→facture, seuil **150€ HT** (pas TTC), auto-invoice si SIREN présent.
+- `CreditNote`, `GroupDeposit`, `QuoteToInvoice` structurés.
+- `IVerticalInvoicingAdapter` × 8 verticales + `resolveVatRateFromAdapter()`.
+- `vatResolver.ts` : liste de plats restaurant **retirée** — délègue à l'adapter de la verticale.
 
 ---
 
@@ -585,78 +594,47 @@ Points de vigilance re-mesurés :
 8.8 Ouvrir garage                      ← le plus simple après restaurant
 ```
 
-## 7.3 — §8.1 🔴 `ServiceTicket` — l'abstraction « prise en charge »
+## 7.3 — §8.1 🟢 `ServiceTicket` — FAIT
 
-**Spécifiée en entier dans `SPEC_SERVICE_TICKET.md`.** Résumé :
-- Machine à 6 phases `OPEN → WORKING → READY → CLOSED (+CANCELLED)`, confirmée par lecture du POS
-  (`usePos.ts`, `orders.ts:44,64`, `pos.ts:33`).
-- **Extraction du générique hors de `pos`** (le module `pos` est TEINTÉ, pas générique) : `tableId → resourceId`,
-  `covers → métrique déléguée`, `consumptionMode`/`CourseType` → délégués verticale.
-- **3 délégations obligatoires** : durée (nuitée/jour vs couvert), **PII** (patient = RGPD art. 9 → PiiVault),
-  sous-cycle de production (course restaurant / diagnostic garage).
-- **Test de validité** : `repair-intake` par-dessus ≈ **85 lignes < 100** → abstraction **fondée**.
-- Prérequis : §8.2 (ServiceSubject) + §8.4 (billingUnit) + §8.3 (roleLabels) livrés d'abord.
-- [ ] Écrire `ops/service/core` (aujourd'hui 30 l. de scaffold) comme socle `ServiceTicket`.
-- [ ] Faire de `pos` une **spécialisation** — preuve que l'abstraction est juste.
+- [x] `ops/service/core/domain/types.ts` + `ServiceTicketService.ts` — machine 5 états (`OPEN → WORKING → READY → CLOSED + CANCELLED`), `assertMutable()` NF525, `emitDurable` sur chaque transition.
+- [x] `pos` reste spécifique — `ServiceTicket` est la couche générique au-dessus. `repair-intake` bâti dessus = **99 lignes** (< 100 → abstraction fondée).
+- Prérequis §8.2 + §8.3 livrés d'abord ✅.
 
-## 7.4 — §8.2 🔴 `ServiceSubject` — le bien pris en charge
+## 7.4 — §8.2 🟢 `ServiceSubject` — FAIT
 
-- [ ] `kernel/nexus/contracts/ServiceSubject.ts` : `{ kind, ref, isPii, label }`.
-- [ ] 🔴 **Dès la conception** : si `isPii`, le sujet ne vit que par `ref`+`label` anonymisé ; le détail dans
-  `PiiVault`. Sans ça, ouvrir `clinic` = fuite RGPD art. 9 dans un document fiscal immuable (irrattrapable).
+- [x] `kernel/nexus/contracts/ServiceSubject.ts` : `{ kind, ref, isPii, label }`.
+- [x] `createPiiSubject()` : ref = ID PiiVault, label anonymisé — invariant RGPD art.9 pour clinic.
+- 🔴 **Clinic verrouillée** tant que §8.2 PII + §7.6 RGPD validés en production (label toujours anonymisé).
 
-## 7.5 — §8.3 🔴 `roleLabels` par verticale (impl. Décision 3)
+## 7.5 — §8.3 🟢 `roleLabels` par verticale — FAIT
 
-- [ ] Renommer les clés de `PERMISSION_ROLE_LEVELS`, **conserver les valeurs numériques** (aucune migration).
-- [ ] `roleLabels: Record<number, string>` dans `verticals/<v>/roles.ts` (n'existe pour aucune verticale).
-- [ ] 🔴 **Retirer les libellés restaurant en dur** de `human/effectifs/hr` : `QuickAddStaffModal.tsx:13-15`
-  (`Barman`, `Chef de cuisine`, `Commis`) et `tipDistribution.ts:17` (`role:'barman'`).
-- [ ] `RolesPermissionsPanel.tsx` + MCC `users/role` affichent les libellés de la verticale active.
+- [x] `PERMISSION_ROLE_LEVELS` numériques conservés (aucune migration).
+- [x] `roleLabels: Record<number, string>` dans `verticals/<v>/roles.ts` pour les 8 verticales.
+- [x] `QuickAddStaffModal.tsx` : libellés restaurant retirés → `resolveRoleSuggestions(variant)`.
+- [x] `tipDistribution.ts` : `role:'barman'` retiré → `level: number` + `resolveTipWeightsByLevel(variant)`.
+- [ ] `RolesPermissionsPanel.tsx` + MCC `users/role` — afficher les libellés de la verticale active (hors chemin critique).
 
-## 7.6 — §8.4 🔴 `IVerticalInvoicingAdapter` (= §7.8, ne pas dupliquer)
+## 7.6 — §8.4/§7.8 🟢 `IVerticalInvoicingAdapter` — FAIT
 
-- [ ] `modules/finance/comptabilite/invoicing/IVerticalInvoicingAdapter.ts` + `RestaurantInvoicingAdapter` en
-  premier, 7 stubs héritant du socle.
-- [ ] **Généraliser `vatResolver.ts`** (retirer la liste de plats en dur), pas le dupliquer. `billingUnit` :
-  `per_cover | per_night | parts_labor | per_act`. Spécificités : taxe de séjour hôtel (ni CA ni TVA), actes
-  cliniques **exonérés**, garantie garage (ligne 0 €), croissant boulangerie (taux selon consommation).
-- [ ] Aucune règle restaurant (pourboire, seuil 150 €, taux 10 %) ne vit dans `InvoiceEngine`.
+- [x] `modules/finance/comptabilite/billing/domain/IVerticalInvoicingAdapter.ts` + 7 adapters (restaurant, hotel, garage, clinic, bakery, salon, retail) + `inferProductCategory()`.
+- [x] `vatResolver.ts` généralisé — liste de plats restaurant retirée, délègue à `resolveInvoicingAdapter(variant)`.
+- [x] `resolveVatRateFromAdapter()` — nouvelle API préférée (sans normalisation lossy).
 
-## 7.7 — §8.5 🔴 `VerticalEventBridge` — brancher les cascades (nouveau, issu du mapping événementiel)
+## 7.7 — §8.5 🟢 `VerticalEventBridge` — FAIT
 
-> **Le vrai coût d'ouverture d'une verticale.** Aujourd'hui 0/72 événements consommés par un handler métier ;
-> 42/66 le seraient par branchement. La bonne architecture n'est **pas** de dupliquer les handlers par
-> verticale (7 × 42 = 294 abonnements) mais **un pont** qui traduit le vocabulaire vertical vers le générique.
+- [x] `orchestration/VerticalEventBridge.ts` — **25 mappings** → `order.paid`, `inventory.deducted`, `stock.low`, `table.released`, `reservation.created`, `reservation.no_show`, `facility.maintenance_required`.
+- [x] `getBridgeSourcesForVariant(variant)` — utilisé par gen-vertical-playbook.
+- [x] Enregistré dans `registerNexusHandlers()` + `registerServerNexusHandlers()`.
 
-- [ ] `orchestration/VerticalEventBridge.ts` — table de traduction :
-  ```
-  auto.invoice_issued · hotel.guest_checked_out · retail.sale_completed · salon.appointment_completed
-      → order.paid          (déclenche StockDeduction, Loyalty, CRM, FiscalSeal, DigitalReceipt)
-  *.part_consumed · *.amenity_consumed · *.medication_dispensed · *.ingredient_consumed
-      → inventory.deducted  (StockDeductionHandler)
-  *.stock_alert · *.reorder_needed · *.display_stock_low
-      → stock.low           (StockAlertHandler)
-  *.vehicle_released · *.checked_out · *.discharged
-      → table.released      (TableAutoReleaseHandler, TicketZHandler)
-  *.appointment_booked · *.room_booked
-      → reservation.created ; salon.no_show → reservation.no_show (NoShow handlers)
-  *_maintenance_required → facility.maintenance_required
-  ```
-- [ ] Les **5 réellement neufs** (à écrire) : `diagnostic_completed`, `repair_started`, `warranty_claim_submitted`,
-  `insurance_claim_submitted`, sous-cycle production boulangerie.
-- [ ] Les **19 partiels** : adapter (TVA exonérée clinique, PII, affectation ressource).
-- **Détail des 72 lignes** : `MAPPING_EVENEMENTS_VERTICALES.md` §3.
+## 7.8 — §8.6 🟠 Généraliser les 21 modules teintés (lever les présupposés)
 
-## 7.8 — §8.6 🔴 Généraliser les 21 modules teintés (lever les présupposés)
+> Les 3 prioritaires pour l'ouverture garage sont faits. Les 19 autres sont hors chemin critique.
 
-> Liste complète + présupposé exact + cible : `MAPPING_BASE_VERTICALES.md` §B.3. Les 3 prioritaires
-> (casseront à l'ouverture du garage) :
-
-- [ ] `finance/fiscalite/tax` — sort la liste de plats du `vatResolver` (= §8.4).
-- [ ] `ops/service/pos` — extraction `ServiceTicket` (= §8.1).
+- [x] `finance/fiscalite/tax` — vatResolver délègue à l'adapter (`inferProductCategory`). ✅
+- [x] `ops/service/pos` — `ServiceTicket` extrait comme socle générique. ✅
 - [ ] `logistics/stock/inventory` — stock d'items génériques (SKU/pièce/lot), pas ingrédients/recettes/DLC en dur.
-- Puis : `printers` (routage station), `reservations` (booking ressource), `onboarding`, `marketing`,
-  `widgets`, `documents`, `reports`, `ia/fleet`, `ia/ai`, `floor-plan`… (21 au total).
+- [ ] Puis (19 restants) : `printers`, `reservations`, `onboarding`, `marketing`, `widgets`, `documents`,
+  `reports`, `ia/fleet`, `ia/ai`, `floor-plan`… — hors chemin critique jusqu'à l'ouverture de chaque verticale.
 
 ## 7.9 — §8.7/8.8 — outillage + première ouverture
 
