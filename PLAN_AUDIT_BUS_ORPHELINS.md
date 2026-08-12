@@ -330,13 +330,39 @@ et **rien ne se passe** ». RBAC protège l'entrée d'un tuyau **débranché à 
 - RBAC des 4 émetteurs listés (§6).
 - Le mismatch `inventory.physical` ⇄ `inventory.stock_adjusted`.
 
-**Mesuré mécaniquement, à trier item par item (non encore vérifié individuellement) :**
-- Les 24 orphelins non-verticaux au-delà des 2 Classe-A (surtout Classe C/finance/connecteurs).
-- Les 51 handlers morts (§5) — statut réel (producteur absent vs mismatch vs mort).
-- Défense en profondeur cross-tenant **dans** les handlers (§6, non contrôlée ici).
+**Mesuré mécaniquement — ⚠️ CONTIENT DES FAUX POSITIFS, à trier item par item :**
+- Les 24 orphelins non-verticaux au-delà des 2 Classe-A, et les 51 handlers morts (§5), sont
+  issus d'un **diff grep** qui sous-compte les consommateurs quand la forme du `.on(...)` varie
+  (nom d'event sur une autre ligne, constante au lieu d'un littéral).
+- **Faux positif prouvé** : `cash_drawer.opened_unauthorized` était listé orphelin — il est en
+  fait **bien consommé** par `CashDrawerAnomalyHandler` (enregistré). Donc **ne jamais agir sur
+  ces listes sans vérifier chaque item à la main** (relire le handler + sa registration).
+- Défense en profondeur cross-tenant **dans** les handlers : **confirmée manquante** sur
+  échantillon (`SplitPaymentHandler`, `CertExpiryHandler`, `CompEntryHandler` : 0 `SovereignGuard`).
+
+**Solide, vérifié à la main (agir sans re-trier) :** le mécanisme §1, les 2 P0 (§4-A), les 3
+handlers non-enregistrés (§5bis), la table préfixe→verticale (§8).
 
 **Explicitement hors périmètre (attendu, documenté) :**
 - Les ~67 orphelins verticaux (`auto./bakery./health./hotel./salon./retail.`) — §7.1 du plan maître.
+
+### Recoupement avec les audits « promesses » (docs/audits/) — MÊME FAMILLE
+
+L'`AUDIT_GLOBAL_PROMESSE_OS.md` (31/07) avait déjà cartographié ce problème sous un autre angle
+(**écrire sans émettre** = l'inverse de l'orphelin). Re-vérifié le 12/08 :
+
+| Finding juillet | Statut 12/08 | Preuve |
+|---|---|---|
+| 0-day `api-keys/validate` (tenantId depuis body) | ✅ **corrigé** | lit `body.key` désormais |
+| `finance/bank/sync` écrit `journalEntries`+scelle **sans emit** | 🔴 **toujours vif** | 0 `emit` dans la route |
+| `hr/employees` crée staff **sans emit** `hr.employee_created` | 🔴 **toujours vif** | 0 `emit` |
+| Handlers font confiance à `payload.tenantId` sans `SovereignGuard` | 🔴 **toujours vif** | échantillon 0 enforce |
+| `IntelligenceHandler` `setTimeout`+buffer RAM (perte en serverless) | ⏳ à re-vérifier | (non contrôlé cette passe) |
+
+> **Ce recoupement valide l'intuition initiale** : ces sujets ont été **audités** (juillet, puis
+> `dlq-rbac-audit` 08/08) mais **l'exécution n'a pas suivi**. Ce n'est pas « du travail perdu »,
+> c'est « des audits sans remédiation ». Le présent plan est le 3ᵉ à décrire la même famille —
+> il doit se conclure par des **commits**, pas par un 4ᵉ document.
 
 ---
 
