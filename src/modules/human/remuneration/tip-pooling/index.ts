@@ -1,1 +1,1 @@
-export * from '../../effectifs/hr/services/tipDistribution';
+export * from './tipDistribution';

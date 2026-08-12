@@ -13,7 +13,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PrepaieRow, PayrollPeriodSummary } from './types';
 import type { User } from '@nexus/contracts';
-import { TipDistributionService } from '../../effectifs/hr/services/tipDistribution';
+import { TipDistributionService } from '../tip-pooling/tipDistribution';
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
 
