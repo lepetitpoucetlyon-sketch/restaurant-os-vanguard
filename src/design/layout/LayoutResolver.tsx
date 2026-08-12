@@ -16,7 +16,7 @@ import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
-import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
+import { VerticalUIRegistry } from '@/kernel/plugins/VerticalUIRegistry';
 
 /**
  * 🌀 LayoutResolver

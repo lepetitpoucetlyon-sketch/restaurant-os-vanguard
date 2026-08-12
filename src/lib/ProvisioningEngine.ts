@@ -6,8 +6,8 @@ import { TenantSeeder } from './TenantSeeder';
 const lazyIntelligence = () => import('@/modules/intelligence');
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
-import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
-import { CoreContext } from '@/shared/plugins/CoreContext';
+import { VerticalRegistry } from '@/kernel/plugins/VerticalRegistry';
+import { CoreContext } from '@/kernel/plugins/CoreContext';
 import { TenantRBACConfigSchema } from '@nexus/contracts';;
 import { toError } from "@/lib/toError";
 

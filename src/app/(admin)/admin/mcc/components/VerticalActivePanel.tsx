@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
+import { VerticalRegistry } from '@/kernel/plugins/VerticalRegistry';
 
 const VERTICAL_META: Record<string, { emoji: string; label: string; color: string }> = {
   restaurant: { emoji: '🍽️', label: 'Restaurant', color: 'text-amber-400' },

@@ -1,4 +1,4 @@
-import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { IVerticalPlugin, ICoreContext } from '@/kernel/plugins/IVerticalPlugin';
 import { salonDefaultTokens, salonVerticalTokens } from '@nexus/tokens/verticals/salon';
 import React from 'react';
 import { logger } from '@/lib/logger';

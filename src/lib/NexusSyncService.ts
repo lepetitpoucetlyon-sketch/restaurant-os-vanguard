@@ -99,8 +99,8 @@ export const NexusSyncService = {
             // dynamiques : cf. note en tête de fichier (cycle d'initialisation).
             try {
                 const [{ VerticalRegistry }, { CoreContext }] = await Promise.all([
-                    import('@/shared/plugins/VerticalRegistry'),
-                    import('@/shared/plugins/CoreContext'),
+                    import('@/kernel/plugins/VerticalRegistry'),
+                    import('@/kernel/plugins/CoreContext'),
                 ]);
                 const tenantConfig = await Nexus.adapter.get<{ variant?: string }>(
                     `tenants/${tenantId}/config/main`

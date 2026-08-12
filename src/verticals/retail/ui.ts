@@ -1,4 +1,4 @@
-import type { IVerticalUIPlugin } from '@/shared/plugins/IVerticalUIPlugin';
+import type { IVerticalUIPlugin } from '@/kernel/plugins/IVerticalUIPlugin';
 
 /**
  * RetailUIPlugin

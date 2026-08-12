@@ -1,4 +1,4 @@
-import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { IVerticalPlugin, ICoreContext } from '@/kernel/plugins/IVerticalPlugin';
 import { retailDefaultTokens, retailVerticalTokens } from '@nexus/tokens/verticals/retail';
 import React from 'react';
 import { logger } from '@/lib/logger';

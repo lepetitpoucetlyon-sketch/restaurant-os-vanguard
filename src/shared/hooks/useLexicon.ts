@@ -9,7 +9,7 @@ import {
   SALON_LEXICON,
   CLINIC_LEXICON,
   HOTEL_LEXICON,
-} from '../plugins/IVerticalLexicon';
+} from '@/kernel/plugins/IVerticalLexicon';
 
 export function useLexicon(): IVerticalLexicon {
   const tenantState = useTenant();

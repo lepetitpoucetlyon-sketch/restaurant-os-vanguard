@@ -8,7 +8,7 @@ import { BrandImportWizard } from './BrandImportWizard';
 import { cn } from '@/lib/ui.foundations';
 import type { StylePreset } from '@nexus/tokens/verticals/presets';
 import type { PlatformVariant } from '@nexus/contracts';
-import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
+import { VerticalUIRegistry } from '@/kernel/plugins/VerticalUIRegistry';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

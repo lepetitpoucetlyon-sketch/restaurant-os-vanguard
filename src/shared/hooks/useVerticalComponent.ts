@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useVerticalUI } from '@/shared/providers/VerticalUIProvider';
-import type { OverrideableComponent } from '@/shared/plugins/IVerticalUIPlugin';
+import type { OverrideableComponent } from '@/kernel/plugins/IVerticalUIPlugin';
 
 /**
  * useVerticalComponent

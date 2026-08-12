@@ -1,4 +1,4 @@
-import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
+import { IVerticalPlugin, ICoreContext } from '@/kernel/plugins/IVerticalPlugin';
 import { customDefaultTokens, customVerticalTokens } from '@nexus/tokens/verticals/custom';
 import { logger } from '@/lib/logger';
 import { CustomMccAdapter, CustomOpsAdapter } from './adapters';
