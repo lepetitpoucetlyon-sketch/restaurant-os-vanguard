@@ -12,7 +12,7 @@ import {
     FileText,
 } from "lucide-react";
 import { staggerContainer, staggerItem } from "@/shared/utils/motion";
-import { useInfiniteScroll } from "@/shared/hooks/useVirtualization";
+import { useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 import { User } from "@nexus/contracts";
 
 interface StaffCardProps {

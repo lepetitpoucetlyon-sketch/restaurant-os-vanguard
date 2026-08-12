@@ -5,7 +5,7 @@ import { motion, Variants } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { Customer } from "@nexus/contracts";
 import { easing } from "@/shared/utils/motion";
-import { useInfiniteScroll } from "@/shared/hooks/useVirtualization";
+import { useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 
 const cinematicContainer: Variants = {
     hidden: { opacity: 0 },

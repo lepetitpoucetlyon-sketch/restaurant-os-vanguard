@@ -2,7 +2,7 @@
 
 import { useAtomValue } from "jotai";
 import { marketingCampaignsNodeAtom, socialAccountsNodeAtom, seoProfileAtom } from "@/store/pillars/commerce";
-import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
+import { useVisibilityPurge } from "@/lib/hooks/useVisibilityPurge";
 
 /**
  * 📣 useMarketing - Marketing Connector

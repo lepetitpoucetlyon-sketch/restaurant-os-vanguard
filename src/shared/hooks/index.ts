@@ -1,23 +1,23 @@
 // Responsive hooks
-export { useMediaQuery, useResponsive, BREAKPOINTS } from "./useMediaQuery";
-export { useIsMobile, useIsTablet, useIsDesktop } from "./useIsMobile";
+export { useMediaQuery, useResponsive, BREAKPOINTS } from "@/lib/hooks/useMediaQuery";
+export { useIsMobile, useIsTablet, useIsDesktop } from "@/lib/hooks/useIsMobile";
 
 // Phase 5 - Custom hooks
-export { useAsync } from "./useAsync";
-export { useDisclosure } from "./useDisclosure";
-export { usePagination } from "./usePagination";
-export { useSorting } from "./useSorting";
-export { useFiltering } from "./useFiltering";
-export { useDebounce, useDebouncedCallback } from "./useDebounce";
-export { useClickOutside, useEscapeKey } from "./useInteractions";
-export { useLocalStorage, useSessionStorage } from "./useStorage";
-export { useList } from "./useList";
-export { useHasMounted } from "./useHasMounted";
+export { useAsync } from "@/lib/hooks/useAsync";
+export { useDisclosure } from "@/lib/hooks/useDisclosure";
+export { usePagination } from "@/lib/hooks/usePagination";
+export { useSorting } from "@/lib/hooks/useSorting";
+export { useFiltering } from "@/lib/hooks/useFiltering";
+export { useDebounce, useDebouncedCallback } from "@/lib/hooks/useDebounce";
+export { useClickOutside, useEscapeKey } from "@/lib/hooks/useInteractions";
+export { useLocalStorage, useSessionStorage } from "@/lib/hooks/useStorage";
+export { useList } from "@/lib/hooks/useList";
+export { useHasMounted } from "@/lib/hooks/useHasMounted";
 
 // Phase 6 - Performance hooks
-export { useIntersectionObserver, useLazyImage } from "./useIntersectionObserver";
-export { useEventCallback, useDeepMemo, useRenderCount, usePerformanceMeasure } from "./usePerformance";
-export { useVirtualizedList, useInfiniteScroll } from "./useVirtualization";
+export { useIntersectionObserver, useLazyImage } from "@/lib/hooks/useIntersectionObserver";
+export { useEventCallback, useDeepMemo, useRenderCount, usePerformanceMeasure } from "@/lib/hooks/usePerformance";
+export { useVirtualizedList, useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 
 
 // Permissions

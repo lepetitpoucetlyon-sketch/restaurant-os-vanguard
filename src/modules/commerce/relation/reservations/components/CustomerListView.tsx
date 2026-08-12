@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Search, Star } from "lucide-react";
 import { useLanguage } from "@/shared/hooks";
 import { cinematicContainer, cinematicItem } from '../constants';
-import { useInfiniteScroll } from "@/shared/hooks/useVirtualization";
+import { useInfiniteScroll } from "@/lib/hooks/useVirtualization";
 
 interface CustomerListViewProps {
     customers: import('@modules/commerce/relation/customers').CRM[];

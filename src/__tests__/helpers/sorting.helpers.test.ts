@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { compareValues } from '@/shared/hooks/useSorting';
+import { compareValues } from '@/lib/hooks/useSorting';
 
 describe('compareValues', () => {
     describe('égalité', () => {
