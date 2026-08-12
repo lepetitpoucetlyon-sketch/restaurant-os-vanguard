@@ -1,5 +1,9 @@
-# 📋 Roadmap & Spécifications
+# 📋 Profils UX & Modes Métier — Spécifications
 
+> ⟵ ex-`A_FAIRE.md` (racine), renommé le 2026-08-12. Ce n'est **pas** un doublon de
+> `afaire.md` (→ [`../plans/PLAN_INFRA_PROD.md`](../plans/PLAN_INFRA_PROD.md), infra prod) :
+> ce document couvre les **specs fonctionnelles** des profils UX, pas l'infra.
+>
 > **Partie 1** — Profils UX & Modes Métier (specs fonctionnelles)
 > **Partie 2** — Stratégie de personnalisation & angles morts écosystème *(voir plus bas)*
 

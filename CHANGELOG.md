@@ -252,3 +252,43 @@ Lancement du protocole Grade X. L'Empire est désormais souverain, audité et mu
 
 ---
 *Fait en présence de Mohammed, par Antigravity.*
+
+---
+
+# Archive — Historique antérieur (avant versionnage SemVer)
+
+> Fusionné depuis l'ancien `docs/CHANGELOG.md` le 2026-08-12 (rangement doc).
+> Ces entrées précèdent l'adoption du versionnage `[x.y.z]` (démarré à `[1.3.0]`).
+
+## [2026-01-16] - Refactoring Phase 1-4
+
+### Phase 1.1 - Modularisation des Types
+Ajout : `src/types/{auth,tables,orders,reservations,inventory,accounting,staff,haccp,common,quotes,groups,seo}.types.ts` — `src/types/index.ts` restructuré en barrel export.
+
+### Phase 1.2 - Composants UI Réutilisables
+Ajout : `PremiumCard`, `SearchInput`, `DateNavigator`, `ToolbarTabs`, `StatCard`/`StatsGrid`, `EmptyState`, `SectionHeader`, `StatusBadge`.
+
+### Phase 1.3 - Migration des Couleurs
+`#C5A059` → `text/bg/border-accent`, `#0A0A0A` → `bg-bg-primary` — ~100+ occurrences migrées vers tokens sémantiques.
+
+### Phase 2.1 - Composants Page
+Ajout : `PageHeader`, `ActionToolbar`, `FilterBar`, `ContentSection`/`ContentGrid`.
+
+### Phase 2.2 - Composants Layout
+Ajout : `PageLayout`, `SplitLayout`, `GridLayout`/`GridItem`, `DashboardLayout`.
+
+### Phase 3 - Loading & Feedback
+Ajout : `Skeleton` (+`CardSkeleton`/`TableSkeleton`/`PageSkeleton`), `LoadingState`, `Spinner`, `LoadingOverlay`, `FeedbackBanner`, `InlineMessage`, `ConfirmationDialog`.
+
+### Phase 4 - Documentation
+Ajout : `docs/COMPONENT_LIBRARY.md`, `docs/CODING_STANDARDS.md`, `docs/ARCHITECTURE.md`, `docs/CHANGELOG.md`.
+
+### Phase 5 - Hooks & Utilitaires
+Hooks : `useAsync`, `useDisclosure`, `usePagination`, `useSorting`, `useFiltering`, `useDebounce`/`useDebouncedCallback`, `useClickOutside`/`useEscapeKey`, `useLocalStorage`/`useSessionStorage`, `useList`.
+Utils : `lib/formatters.ts` (formatSmartDate, formatCurrency, formatPhone…), `lib/helpers.ts` (groupBy, unique, sortBy, omit, pick…).
+
+### Phase 6 - Accessibilité & Performance
+A11y : `FormField`/`AccessibleInput`, `VisuallyHidden`, `SkipLink`, `LiveRegion`, `AccessibleButton`/`IconButton`, `AccessibleTable`/`SortableHeader`, `AccessibleList`/`DescriptionList`.
+Perf : `useIntersectionObserver`, `useLazyImage`, `useEventCallback`, `useDeepMemo`, `useVirtualizedList`, `useInfiniteScroll`.
+
+**Bilan** : types 1 fichier (1900 l.) → 14 modulaires · UI ~15 → 29 · Layout ~4 → 11 · A11y 0 → 12 · hooks 2 → 15 · utils ~3 → 22+ · couleurs hardcodées ~150 → ~50.

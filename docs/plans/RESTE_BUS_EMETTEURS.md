@@ -1,6 +1,11 @@
-# Ce qui reste à faire — Restaurant OS Core
-> État après v2.2.0 · 2026-08-09
-> Bus : ~80% connecté — ce document couvre les ~20% restants
+# Reste à faire — Émetteurs du bus événementiel (R1-R13)
+> ⟵ ex-`PLAN_RESTE_A_FAIRE.md` (racine), renommé le 2026-08-12 pour lever l'ambiguïté
+> avec [`PLAN_RESTE_A_FAIRE.md`](PLAN_RESTE_A_FAIRE.md) (chantiers cohérence/sécu — périmètre distinct, 0 recouvrement).
+>
+> **Périmètre** : émetteurs manquants dans les modules — le bus écoute, mais personne n'émet.
+> État après v2.2.0 · rédigé 2026-08-09. ⚠️ Snapshot daté : vérifier l'avancement réel
+> contre [`../../.claude/sessions.md`](../../.claude/sessions.md) et `git log` avant reprise.
+> Bus : ~80% connecté — ce document couvre les ~20% restants.
 
 ---
 

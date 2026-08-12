@@ -230,11 +230,11 @@ npm run format
 
 | Fichier | Contenu |
 |---------|---------|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Structure technique |
+| [ARCHITECTURE.md](../../ARCHITECTURE.md) | Structure technique |
 | [CODING_STANDARDS.md](./CODING_STANDARDS.md) | Standards de code |
 | [COMPONENT_LIBRARY.md](./COMPONENT_LIBRARY.md) | Composants UI |
 | [HOOKS_AND_UTILITIES.md](./HOOKS_AND_UTILITIES.md) | Hooks et utilitaires |
-| [CHANGELOG.md](./CHANGELOG.md) | Historique des versions |
+| [CHANGELOG.md](../../CHANGELOG.md) | Historique des versions |
 
 ---
 

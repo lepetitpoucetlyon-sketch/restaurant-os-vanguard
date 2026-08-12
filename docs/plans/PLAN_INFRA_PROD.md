@@ -1,5 +1,9 @@
-# A FAIRE — Infrastructure manquante pour la prod
+# Infrastructure manquante pour la prod
 
+> ⟵ ex-`afaire.md` (racine), renommé le 2026-08-12. À ne pas confondre avec
+> [`../specs/SPECS_PROFILS_UX.md`](../specs/SPECS_PROFILS_UX.md) (ex-`A_FAIRE.md`, specs UX) :
+> périmètres distincts. ⚠️ Snapshot daté : recouper l'avancement avec `git log` / sessions.md.
+>
 > Constat : le projet a un front riche et un modèle de données solide, mais **aucune fondation backend/infra de production**. Ce plan comble les 6 lacunes critiques identifiées.
 
 ---

@@ -76,8 +76,9 @@ Les variables les plus importantes sont :
 
 Documentation détaillée :
 
-- [White-label Setup](./docs/WHITE_LABEL_SETUP.md)
-- [Client Instance Runbook](./docs/CLIENT_INSTANCE_RUNBOOK.md)
-- [Multi-Instance Maintenance](./docs/MULTI_INSTANCE_MAINTENANCE.md)
-- [Architecture](./docs/ARCHITECTURE.md)
-- [Architecture Tooling](./docs/ARCHITECTURE_TOOLING.md)
+- [White-label Setup](./docs/guides/WHITE_LABEL_SETUP.md)
+- [Client Instance Runbook](./docs/guides/CLIENT_INSTANCE_RUNBOOK.md)
+- [Multi-Instance Maintenance](./docs/guides/MULTI_INSTANCE_MAINTENANCE.md)
+- [Architecture](./ARCHITECTURE.md)
+- [Architecture Tooling](./docs/architecture/ARCHITECTURE_TOOLING.md)
+- [📚 Index de la documentation](./docs/README.md)

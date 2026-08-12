@@ -1,6 +1,6 @@
 # RESTAURANT-OS-CORE — Tickets prêts à coder (toutes vagues)
 
-> Découpage PR-par-PR du [plan d'implémentation](PLAN-IMPLEMENTATION.md). Chaque ticket = 1 PR mergeable.
+> Découpage PR-par-PR du [plan d'implémentation](../plans/PLAN-IMPLEMENTATION.md). Chaque ticket = 1 PR mergeable.
 > **Chemins** : seuls les fichiers **vérifiés** sont cités en dur. Pour les composants non localisés par leur nom (grille POS, wizard de clôture), on cite le **répertoire/la page** — à confirmer en ouvrant le dossier.
 > **Branche de base** : `grade-x-vanguard`. Nommage : `feat/<vague>-<id>-<slug>`.
 > **Avant chaque PR** : `npx tsc --noEmit` · `npx vitest run` · `sentrux check .` · respect des invariants §0 du plan.
