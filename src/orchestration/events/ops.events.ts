@@ -331,4 +331,10 @@ export interface OPSEvents {
   'kitchen.preptask.toggled': { tenantId: string; id?: string; taskId?: string; completed?: boolean; status?: string };
   'kitchen.order.created': { tenantId: string; id?: string; orderId?: string; data: any };
   'ops.prepTask.completed': { tenantId: string; id?: string; taskId?: string; dateIso?: string; data?: any };
+
+  // §8.1 ServiceTicket — cycle de vie générique (toutes verticales)
+  'ops.service_ticket_opened':   { v: 1; tenantId: string; ticketId: string; resourceId: string | null };
+  'ops.service_ticket_working':  { v: 1; tenantId: string; ticketId: string };
+  'ops.service_ticket_closed':   { v: 1; tenantId: string; ticketId: string; resourceId: string | null; journalEntryId: string; totalTTCInMicrounits: number };
+  'ops.service_ticket_cancelled': { v: 1; tenantId: string; ticketId: string; reason: string };
 }
