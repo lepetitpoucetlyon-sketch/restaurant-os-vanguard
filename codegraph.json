@@ -1,0 +1,16 @@
+{
+  "exclude": [
+    "docs/",
+    "scripts/crash-test/",
+    "demo/",
+    ".firebase/",
+    ".next/",
+    "coverage/",
+    "dist/",
+    "public/icons/",
+    "public/images/",
+    "sovereign-rag/",
+    "tests/falange/fixtures/",
+    "src/extraction/wasm/"
+  ]
+}

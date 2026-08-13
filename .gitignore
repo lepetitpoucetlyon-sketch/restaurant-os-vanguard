@@ -142,3 +142,7 @@ scratch/
 # NE DOIT PAS être versionné : ~66k fichiers, pollue le gate sentrux.
 # Déjà suivi par erreur → à dé-tracker : `git rm -r --cached .firebase/`
 .firebase/
+
+# Indexes générés par les outils MCP (CodeGraph 71 Mo, Serena 74 Mo)
+.codegraph/
+.serena/

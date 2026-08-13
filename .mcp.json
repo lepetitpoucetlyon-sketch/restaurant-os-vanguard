@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ]
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "serena",
+      "args": [
+        "start-mcp-server",
+        "--project",
+        "/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE",
+        "--context",
+        "ide-assistant"
+      ]
+    },
+    "octofs": {
+      "type": "stdio",
+      "command": "octofs",
+      "args": [
+        "mcp",
+        "--path",
+        "/Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE"
+      ]
+    }
+  }
+}
