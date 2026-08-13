@@ -3,9 +3,9 @@
  * Phase 2 = intégration EDI Pomona ou catalogue XML partenaire.
  */
 
-import type { SupplierProduct } from './MetroCatalog';
+import type { SupplierCatalogEntry } from './MetroCatalog';
 
-export const POMONA_PRODUCTS: SupplierProduct[] = [
+export const POMONA_PRODUCTS: SupplierCatalogEntry[] = [
   // ── Viandes élaborées ──────────────────────────────
   { name: 'Steak Haché 5/5 Bœuf pur', category: 'Viandes élaborées', unit: 'carton 8kg', supplierId: 'pomona', supplierName: 'Pomona' },
   { name: 'Escalope de Veau pré-parée', category: 'Viandes élaborées', unit: 'kg', supplierId: 'pomona', supplierName: 'Pomona' },
@@ -42,7 +42,7 @@ export const POMONA_PRODUCTS: SupplierProduct[] = [
   { name: 'Chocolat couverture noir 64%', category: 'Confiserie', unit: 'tablette 5kg', supplierId: 'pomona', supplierName: 'Pomona' },
 ];
 
-export function searchPomonaProducts(query: string, limit = 10): SupplierProduct[] {
+export function searchPomonaProducts(query: string, limit = 10): SupplierCatalogEntry[] {
   const q = query.toLowerCase().trim();
   if (!q) return POMONA_PRODUCTS.slice(0, limit);
   return POMONA_PRODUCTS.filter(p =>

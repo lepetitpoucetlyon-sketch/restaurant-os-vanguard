@@ -1,9 +1,9 @@
-import type { ISupplierProvider, SupplierProduct, OrderItem, DeliveryNote } from '../types';
+import type { ISupplierProvider, SupplierProduct, OrderItem, SupplierDeliveryNote } from '../types';
 import { logger } from '@/lib/logger';
 
 /**
  * Email PDF fournisseur — pipeline mutualisé avec InvoiceExtractionService.
- * Les bons de livraison arrivent par email → extraction Gemini Vision → DeliveryNote.
+ * Les bons de livraison arrivent par email → extraction Gemini Vision → SupplierDeliveryNote.
  * Pas de catalogue produit (saisie manuelle depuis l'app stock).
  */
 export class EmailPdfSupplierProvider implements ISupplierProvider {
@@ -18,13 +18,13 @@ export class EmailPdfSupplierProvider implements ISupplierProvider {
         throw new Error('EmailPdfSupplierProvider ne supporte pas la commande automatique — utiliser le catalogue fournisseur natif');
     }
 
-    async fetchDeliveryNotes(_since: Date): Promise<DeliveryNote[]> {
+    async fetchDeliveryNotes(_since: Date): Promise<SupplierDeliveryNote[]> {
         // Traitées par InvoiceExtractionService via le pipeline email — retournées via Nexus
         logger.info('[EmailPdfSupplierProvider] fetchDeliveryNotes — traitement via InvoiceExtractionService');
         return [];
     }
 
-    onWebhook(payload: unknown): DeliveryNote {
-        return payload as DeliveryNote;
+    onWebhook(payload: unknown): SupplierDeliveryNote {
+        return payload as SupplierDeliveryNote;
     }
 }

@@ -14,7 +14,11 @@ export interface OrderItem {
     unitPrice?: number;
 }
 
-export interface DeliveryNote {
+/**
+ * Bon de livraison côté **provider externe** (webhook / catalogue tiers).
+ * Distinct du `DeliveryNote` interne de `@nexus/contracts` utilisé par ProcurementBridge.
+ */
+export interface SupplierDeliveryNote {
     externalId: string;
     orderId?: string;
     supplierName: string;
@@ -29,6 +33,6 @@ export interface ISupplierProvider {
     fetchCatalog(tenantId: string): Promise<SupplierProduct[]>;
     /** Places an order and returns the provider's order ID. */
     placeOrder(items: OrderItem[]): Promise<string>;
-    fetchDeliveryNotes(since: Date): Promise<DeliveryNote[]>;
-    onWebhook(payload: unknown): DeliveryNote;
+    fetchDeliveryNotes(since: Date): Promise<SupplierDeliveryNote[]>;
+    onWebhook(payload: unknown): SupplierDeliveryNote;
 }

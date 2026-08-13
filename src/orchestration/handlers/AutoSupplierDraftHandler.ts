@@ -7,7 +7,7 @@ import { empireAudit } from '@/lib/audit';
 interface StockItemRecord {
   supplierId?: string;
   idealStock?: number;
-  reorderThreshold?: number;
+  minQuantity?: number;
   reorderQuantity?: number;
   name?: string;
 }

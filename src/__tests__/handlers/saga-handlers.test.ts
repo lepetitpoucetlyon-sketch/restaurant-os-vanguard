@@ -156,7 +156,7 @@ describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () =>
 
     vi.mocked(Nexus.adapter.get).mockImplementation(async (path: string) => {
       if (path.includes('/products/')) return { linkedStockItemId: 'stock-001' };
-      if (path.includes('/stockItems/')) return { quantity: 10, reorderThreshold: 2 };
+      if (path.includes('/stockItems/')) return { quantity: 10, minQuantity: 2 };
       return null;
     });
 

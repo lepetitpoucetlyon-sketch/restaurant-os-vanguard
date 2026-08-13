@@ -145,7 +145,7 @@ describe('WasteStockReconciliationHandler', () => {
   });
 
   it('soustrait la quantité de déchet du stock existant', async () => {
-    mockNexusGet.mockResolvedValueOnce({ quantity: 100, reorderThreshold: 10 });
+    mockNexusGet.mockResolvedValueOnce({ quantity: 100, minQuantity: 10 });
     mockNexusUpdate.mockResolvedValueOnce(undefined);
 
     await capturedHandlers['waste.logged']({
@@ -160,7 +160,7 @@ describe('WasteStockReconciliationHandler', () => {
   });
 
   it('ne tombe pas en dessous de 0 si déchet > stock', async () => {
-    mockNexusGet.mockResolvedValueOnce({ quantity: 5, reorderThreshold: 10 });
+    mockNexusGet.mockResolvedValueOnce({ quantity: 5, minQuantity: 10 });
     mockNexusUpdate.mockResolvedValueOnce(undefined);
 
     await capturedHandlers['waste.logged']({
@@ -175,7 +175,7 @@ describe('WasteStockReconciliationHandler', () => {
   });
 
   it('émet stock.low si le nouveau stock passe sous le seuil', async () => {
-    mockNexusGet.mockResolvedValueOnce({ quantity: 15, reorderThreshold: 10 });
+    mockNexusGet.mockResolvedValueOnce({ quantity: 15, minQuantity: 10 });
     mockNexusUpdate.mockResolvedValueOnce(undefined);
 
     await capturedHandlers['waste.logged']({

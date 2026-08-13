@@ -6,7 +6,7 @@ import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 type StockItem = {
   quantity?: number;
-  reorderThreshold?: number;
+  minQuantity?: number;
   name?: string;
 };
 
@@ -47,7 +47,7 @@ export function registerStockAdjustedHandler(): () => void {
         timestamp: new Date(),
       });
 
-      const threshold = existing?.reorderThreshold;
+      const threshold = existing?.minQuantity;
       if (threshold !== undefined && newQuantity <= threshold && oldQuantity > threshold) {
         await NexusEventBus.emitDurable('stock.low', {
           v: 1,

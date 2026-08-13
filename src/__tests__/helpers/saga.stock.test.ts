@@ -152,7 +152,7 @@ describe('StockDeductionHandler', () => {
   it('déduit le stock via linkedStockItemId (déduction 1:1)', async () => {
     mockGet
       .mockResolvedValueOnce({ linkedStockItemId: 'stock-1' })
-      .mockResolvedValueOnce({ quantity: 50, reorderThreshold: 5 });
+      .mockResolvedValueOnce({ quantity: 50, minQuantity: 5 });
     mockUpdate.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid'](baseOrderPaid);
@@ -172,8 +172,8 @@ describe('StockDeductionHandler', () => {
           { ingredientId: 'ing-2', name: 'Tomate', quantity: 100 },
         ],
       })
-      .mockResolvedValueOnce({ quantity: 1000, reorderThreshold: 50 })
-      .mockResolvedValueOnce({ quantity: 500, reorderThreshold: 20 });
+      .mockResolvedValueOnce({ quantity: 1000, minQuantity: 50 })
+      .mockResolvedValueOnce({ quantity: 500, minQuantity: 20 });
     mockUpdate.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid']({
@@ -210,7 +210,7 @@ describe('StockDeductionHandler', () => {
   it('émet stock.low si le stock passe sous le seuil', async () => {
     mockGet
       .mockResolvedValueOnce({ linkedStockItemId: 'stock-low' })
-      .mockResolvedValueOnce({ quantity: 8, reorderThreshold: 10 });
+      .mockResolvedValueOnce({ quantity: 8, minQuantity: 10 });
     mockUpdate.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid']({
@@ -224,7 +224,7 @@ describe('StockDeductionHandler', () => {
   it('émet stock.zero si le stock atteint 0', async () => {
     mockGet
       .mockResolvedValueOnce({ linkedStockItemId: 'stock-zero' })
-      .mockResolvedValueOnce({ quantity: 1, reorderThreshold: 5 });
+      .mockResolvedValueOnce({ quantity: 1, minQuantity: 5 });
     mockUpdate.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid']({

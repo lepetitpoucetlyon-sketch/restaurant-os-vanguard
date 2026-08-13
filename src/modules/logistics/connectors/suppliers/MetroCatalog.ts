@@ -3,7 +3,11 @@
  * Phase 2 = appel API partenariat ou scraping Metro.fr avec parsing HTML.
  */
 
-export interface SupplierProduct {
+/**
+ * Entrée de catalogue statique fournisseur (Metro, Pomona, …).
+ * Distinct de `SupplierProduct` (provider integration : ISupplierProvider.fetchCatalog).
+ */
+export interface SupplierCatalogEntry {
   name: string;
   category: string;
   unit: string;
@@ -14,7 +18,7 @@ export interface SupplierProduct {
   eanBarcode?: string;
 }
 
-export const METRO_PRODUCTS: SupplierProduct[] = [
+export const METRO_PRODUCTS: SupplierCatalogEntry[] = [
   // ── Viandes ──────────────────────────────────────
   { name: 'Entrecôte Bœuf France', category: 'Viandes', unit: 'kg', supplierId: 'metro', supplierName: 'Metro' },
   { name: 'Rumsteck Bœuf France', category: 'Viandes', unit: 'kg', supplierId: 'metro', supplierName: 'Metro' },
@@ -66,7 +70,7 @@ export const METRO_PRODUCTS: SupplierProduct[] = [
   { name: 'Chocolat en poudre', category: 'Boissons', unit: 'boîte 1kg', supplierId: 'metro', supplierName: 'Metro' },
 ];
 
-export function searchMetroProducts(query: string, limit = 10): SupplierProduct[] {
+export function searchMetroProducts(query: string, limit = 10): SupplierCatalogEntry[] {
   const q = query.toLowerCase().trim();
   if (!q) return METRO_PRODUCTS.slice(0, limit);
   return METRO_PRODUCTS.filter(p =>

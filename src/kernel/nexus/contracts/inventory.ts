@@ -50,8 +50,14 @@ export type StockItemPatch = z.infer<typeof StockItemPatchSchema>;
 export interface PurchaseOrder {
     id: string;
     supplierId: string;
-    items: Array<{ productId: string; quantity: number; unitPriceInCents: number }>;
+    items: Array<{
+        productId: string;
+        quantity: number;
+        unitPriceInCents: number;
+        unitPriceInMicrounits?: number;
+    }>;
     totalAmountInCents: number;
+    totalAmountInMicrounits?: number;
     status: 'draft' | 'submitted' | 'engaged' | 'delivered' | 'cancelled';
     createdAt: string;
 }
@@ -64,6 +70,7 @@ export interface DeliveryNote {
     signatureHash?: string;
     status: 'pending' | 'signed' | 'disputed';
     totalAmountInCents: number;
+    totalAmountInMicrounits?: number;
 }
 
 // ─── Intelligence prediction (promoted from intelligence/services/OracleEngine) ─

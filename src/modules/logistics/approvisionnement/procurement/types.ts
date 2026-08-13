@@ -1,32 +1,5 @@
 /**
- * 🏛️ Procurement Types - Grade X+++
+ * Procurement Types — canonisés dans `@nexus/contracts` (inventory.ts).
+ * Ce fichier ne fait que ré-exporter pour préserver les chemins existants.
  */
-
-export interface PurchaseOrder {
-    id: string;
-    supplierId: string;
-    items: Array<{
-        productId: string;
-        quantity: number;
-        unitPriceInCents: number;
-        unitPriceInMicrounits?: number;
-    }>;
-    totalAmountInCents: number;
-    totalAmountInMicrounits?: number;
-    status: 'draft' | 'submitted' | 'engaged' | 'delivered' | 'cancelled';
-    createdAt: string;
-}
-
-export interface DeliveryNote {
-    id: string;
-    purchaseOrderId: string;
-    deliveredItems: Array<{
-        productId: string;
-        quantityDelivered: number;
-    }>;
-    deliveryDate: string;
-    signatureHash?: string;
-    status: 'pending' | 'signed' | 'disputed';
-    totalAmountInCents: number;
-    totalAmountInMicrounits?: number;
-}
+export type { PurchaseOrder, DeliveryNote } from '@nexus/contracts';

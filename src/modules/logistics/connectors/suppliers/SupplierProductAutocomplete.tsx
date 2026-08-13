@@ -2,12 +2,12 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { searchMetroProducts } from './MetroCatalog';
 import { searchPomonaProducts } from './PomonaCatalog';
-import type { SupplierProduct } from './MetroCatalog';
+import type { SupplierCatalogEntry } from './MetroCatalog';
 
 type CatalogSource = 'metro' | 'pomona' | 'all';
 
 interface SupplierProductAutocompleteProps {
-  onSelect: (product: SupplierProduct) => void;
+  onSelect: (product: SupplierCatalogEntry) => void;
   placeholder?: string;
   sources?: CatalogSource;
 }
@@ -18,7 +18,7 @@ export function SupplierProductAutocomplete({
   sources = 'all',
 }: SupplierProductAutocompleteProps) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SupplierProduct[]>([]);
+  const [results, setResults] = useState<SupplierCatalogEntry[]>([]);
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,7 +36,7 @@ export function SupplierProductAutocomplete({
 
   useEffect(() => { search(query); }, [query, search]);
 
-  const handleSelect = (product: SupplierProduct) => {
+  const handleSelect = (product: SupplierCatalogEntry) => {
     setQuery(product.name);
     setOpen(false);
     onSelect(product);

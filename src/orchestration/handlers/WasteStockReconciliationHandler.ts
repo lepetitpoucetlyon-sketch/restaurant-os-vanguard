@@ -5,7 +5,7 @@ import { empireAudit } from '@/lib/audit';
 
 type StockItem = {
   quantity?: number;
-  reorderThreshold?: number;
+  minQuantity?: number;
 };
 
 /**
@@ -45,14 +45,14 @@ export function registerWasteStockReconciliationHandler(): () => void {
       });
 
       // Cascade stock.low si on tombe sous le seuil
-      if (stockItem.reorderThreshold !== undefined && newQty <= stockItem.reorderThreshold) {
+      if (stockItem.minQuantity !== undefined && newQty <= stockItem.minQuantity) {
         await NexusEventBus.emitDurable('stock.low', {
           v: 1,
           tenantId,
           itemId: ingredientId,
           itemName: ingredientName,
           currentQuantity: newQty,
-          threshold: stockItem.reorderThreshold,
+          threshold: stockItem.minQuantity,
         });
       }
     },
