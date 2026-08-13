@@ -125,6 +125,16 @@ export async function POST(request: NextRequest) {
                     importedAt: Date.now(),
                     source: provider.id,
                 });
+
+                await NexusEventBus.emitDurable('finance.bank_transaction_synced', {
+                    v: 1,
+                    tenantId,
+                    transactionId: txId,
+                    bankAccountId: account.id,
+                    amountInMicrounits: tx.amountInMicrounits ?? tx.amountInCents * 10_000,
+                    syncedAt: Date.now(),
+                });
+
                 created++;
             }
         }
