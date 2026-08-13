@@ -3,6 +3,7 @@ import { Calendar, Users, Coins, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import type { EventQuoteFormData } from "./EventQuoteTypes";
 import type { PrivatisationFormule } from "@/modules/commerce";
+import type { EventFormuleOption } from "@/verticals/_shared/eventFormules";
 
 const inputClass =
     "w-full bg-bg-secondary border border-border rounded-2xl px-5 py-3 text-sm text-text-primary focus:outline-none focus:border-accent/50 transition-all";
@@ -42,12 +43,6 @@ export function Row({
 export function fmt(amount: number): string {
     return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(amount);
 }
-
-const FORMULE_OPTIONS: { value: PrivatisationFormule; label: string; desc: string }[] = [
-    { value: "menu", label: "Menu assis", desc: "Service à la table, menu servi" },
-    { value: "cocktail_dinatoire", label: "Cocktail dînatoire", desc: "Buffet debout, service circulant" },
-    { value: "buffet", label: "Buffet libre", desc: "Self-service, convives libres" },
-];
 
 export function EventQuoteClientSection({ form, set }: { form: EventQuoteFormData, set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void }) {
     return (
@@ -97,7 +92,14 @@ export function EventQuoteClientSection({ form, set }: { form: EventQuoteFormDat
     );
 }
 
-export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData, set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void }) {
+interface EventQuoteEventSectionProps {
+    form: EventQuoteFormData;
+    set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void;
+    formuleOptions: EventFormuleOption[];
+    unitLabel?: string;
+}
+
+export function EventQuoteEventSection({ form, set, formuleOptions, unitLabel = 'couverts' }: EventQuoteEventSectionProps) {
     return (
         <section className="space-y-4">
             <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
@@ -139,7 +141,7 @@ export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData
                 </Field>
             </div>
             <div className="grid grid-cols-2 gap-4">
-                <Field label="Nb couverts estimés *">
+                <Field label={`Nb ${unitLabel} estimés *`}>
                     <div className="flex items-center justify-between bg-bg-secondary border border-border rounded-2xl p-2 gap-2">
                         <button
                             type="button"
@@ -169,14 +171,14 @@ export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData
                             onChange={(e) => set("formule", e.target.value as PrivatisationFormule)}
                             className={cn(inputClass, "appearance-none pr-10 cursor-pointer")}
                         >
-                            {FORMULE_OPTIONS.map((o) => (
+                            {formuleOptions.map((o) => (
                                 <option key={o.value} value={o.value}>{o.label}</option>
                             ))}
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
                     </div>
                     <p className="text-[9px] text-text-muted mt-1 pl-1">
-                        {FORMULE_OPTIONS.find((o) => o.value === form.formule)?.desc}
+                        {formuleOptions.find((o) => o.value === form.formule)?.desc}
                     </p>
                 </Field>
             </div>

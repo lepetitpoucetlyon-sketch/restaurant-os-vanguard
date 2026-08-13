@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { ConnectorId, ImportCategory } from '@nexus/contracts';
+import type { ConnectorId, ImportCategory, PlatformVariant } from '@nexus/contracts';
+import { useTenant } from '@/kernel/hooks';
 import type { ConnectorCredentials } from '../migration/connectors/types';
 import type { OnboardingMode } from '@nexus/contracts/onboarding.types';
 import { ProgressStepper, type WizardStep } from './ProgressStepper';
@@ -44,6 +45,8 @@ const WIZARD_STEPS: WizardStep[] = [
 
 export function OnboardingWizard() {
   const router = useRouter();
+  const { activeTenantConfig } = useTenant();
+  const variant = (activeTenantConfig?.variant ?? 'restaurant') as PlatformVariant;
   const [currentStep, setCurrentStep] = useState<WizardStepId>('mode');
   const [completedSteps, setCompletedSteps] = useState<WizardStepId[]>([]);
   const [mode, setMode] = useState<OnboardingMode | null>(null);
@@ -248,6 +251,7 @@ export function OnboardingWizard() {
                     <h3 className="font-semibold text-gray-900">Plan de salle</h3>
                   </div>
                   <SimpleFloorPlanEditor
+                    variant={variant}
                     onSave={async (tables: SimpleTable[], zones: SimpleZone[]) => {
                       await fetch('/api/tenant/onboarding/status', {
                         method: 'POST',

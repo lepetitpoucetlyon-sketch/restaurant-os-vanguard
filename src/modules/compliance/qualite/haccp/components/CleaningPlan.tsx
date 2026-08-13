@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { Nexus, buildTenantPath } from '@/lib/nexus';
 import { useTenant } from '@/kernel/hooks';
+import type { PlatformVariant } from '@nexus/contracts';
 import { signCleaningTaskAction } from '../actions/haccp.action';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -38,13 +39,22 @@ interface PinDialogState {
 
 // ── Configuration ──────────────────────────────────────────────────────────────
 
-const ZONES = [
+const BASE_ZONES = [
     { id: 'cuisine', label: 'Cuisine', icon: ChefHat, tasks: ['Désinfecter les plans de travail', 'Nettoyer les équipements de cuisson', 'Laver les sols'] },
     { id: 'stockage_froid', label: 'Stockage froid', icon: Refrigerator, tasks: ['Contrôler les T° chambres froides', 'Nettoyer les joints de portes', 'Ranger selon FIFO'] },
     { id: 'salle', label: 'Salle', icon: UtensilsCrossed, tasks: ['Nettoyer les tables', 'Aspirer/laver le sol', 'Désinfecter les menus & supports'] },
     { id: 'sanitaires', label: 'Sanitaires', icon: ShowerHead, tasks: ['Nettoyer WC & lavabos', 'Réapprovisionner consommables', 'Désinfecter les poignées'] },
-    { id: 'bar', label: 'Bar', icon: Wine, tasks: ['Nettoyer la machine à café', 'Désinfecter le plan de bar', 'Vidanger les bacs de rinçage'] },
-] as const;
+];
+
+const BAR_ZONE = { id: 'bar', label: 'Bar', icon: Wine, tasks: ['Nettoyer la machine à café', 'Désinfecter le plan de bar', 'Vidanger les bacs de rinçage'] };
+
+const VARIANTS_WITH_BAR: PlatformVariant[] = ['restaurant', 'hotel', 'custom'];
+
+function resolveCleaningZones(variant: PlatformVariant = 'restaurant') {
+    return VARIANTS_WITH_BAR.includes(variant)
+        ? [...BASE_ZONES, BAR_ZONE]
+        : BASE_ZONES;
+}
 
 
 const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -89,7 +99,9 @@ function buildQueryPath(tenantId: string): string {
 // ── Composant principal ────────────────────────────────────────────────────────
 
 export function CleaningPlan() {
-    const { tenantId } = useTenant();
+    const { tenantId, activeTenantConfig } = useTenant();
+    const variant = (activeTenantConfig?.variant ?? 'restaurant') as PlatformVariant;
+    const ZONES = resolveCleaningZones(variant);
     const weekDates = getWeekDates();
 
     const [records, setRecords] = useState<CleaningRecord[]>([]);

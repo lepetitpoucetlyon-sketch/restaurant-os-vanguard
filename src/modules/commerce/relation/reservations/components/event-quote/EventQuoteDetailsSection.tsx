@@ -13,6 +13,7 @@ interface EventQuoteDetailsSectionProps {
   formule: PrivatisationFormule;
   descriptionFormule: string;
   formuleOptions: { value: PrivatisationFormule; label: string; desc: string }[];
+  unitLabel?: string;
   onChange: (key: string, val: unknown) => void;
   inputClass: string;
 }
@@ -37,6 +38,7 @@ export function EventQuoteDetailsSection({
   formule,
   descriptionFormule,
   formuleOptions,
+  unitLabel = 'couverts',
   onChange,
   inputClass,
 }: EventQuoteDetailsSectionProps) {
@@ -81,7 +83,7 @@ export function EventQuoteDetailsSection({
         </Field>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Nb couverts estimés *">
+        <Field label={`Nb ${unitLabel} estimés *`}>
           <div className="flex items-center justify-between bg-bg-secondary border border-border rounded-2xl p-2 gap-2">
             <button
               type="button"

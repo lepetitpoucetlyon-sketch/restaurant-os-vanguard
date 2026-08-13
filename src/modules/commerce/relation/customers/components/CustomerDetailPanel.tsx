@@ -9,6 +9,9 @@ import { ScrollArea } from "@ui/scroll-area";
 import { Phone, Mail, Star, Calendar, Clock, ShoppingBag, TrendingUp, History } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { LoyaltyCard } from '../../../acquisition/marketing/components/crm/LoyaltyCard';
+import { useTenant } from "@/kernel/hooks";
+import type { PlatformVariant } from "@nexus/contracts";
+import { labelFor } from "@/verticals/_shared/labels";
 
 interface CustomerDetailPanelProps {
     customer: Customer;
@@ -124,7 +127,7 @@ function HistoriqueTab({ customer }: { customer: Customer }) {
             {data.topProducts.length > 0 && (
                 <div>
                     <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <TrendingUp className="w-3.5 h-3.5 text-accent" /> Top 3 plats
+                        <TrendingUp className="w-3.5 h-3.5 text-accent" /> Top 3 {recipeLabelPlural}
                     </h4>
                     <div className="space-y-2">
                         {data.topProducts.map((p, i) => (
@@ -196,6 +199,10 @@ export function CustomerDetailPanel({
     onClose,
     onNewReservation,
 }: CustomerDetailPanelProps) {
+    const { activeTenantConfig } = useTenant();
+    const variant = (activeTenantConfig?.variant ?? 'restaurant') as PlatformVariant;
+    const recipeLabelPlural = `${labelFor('recipeLabel', variant)}s`;
+
     const [activeTab, setActiveTab] = useState<DetailTab>("profil");
 
     const tabs: { id: DetailTab; label: string; icon: React.ElementType }[] = [

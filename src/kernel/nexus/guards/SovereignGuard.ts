@@ -69,6 +69,12 @@ export const SovereignGuard = {
             return false;
         }
 
+        // §7.2 Exchange published data is managed exclusively by ExchangeResolver.
+        // Direct deletes are blocked to prevent unpublishing without audit trail.
+        if (path.includes('/published/') || path.includes('/exchangeGrants/')) {
+            return false;
+        }
+
         return true;
     },
 
@@ -283,7 +289,8 @@ export const SovereignGuard = {
             'time_sync',
             'auth',
         ]);
-        const isWhitelisted = pathParts.some((seg) => WHITELIST.has(seg));
+        const isExchangeRead = this.isExchangePublishedPath(path);
+        const isWhitelisted = pathParts.some((seg) => WHITELIST.has(seg)) || isExchangeRead;
         if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {
             if (process.env.NODE_ENV === 'test' && !process.env.STRICT_ISOLATION_TEST) {
                 return;
@@ -316,6 +323,21 @@ export const SovereignGuard = {
                     : 'ACCESS_DENIED';
             return { granted: false, reason: `SECURITY_VIOLATION_${errCode || 'ACCESS_DENIED'}` };
         }
+    },
+
+    /**
+     * §7.2 Nexus Exchange — published/ path detection.
+     * Returns true for `tenants/{any}/published/{scope}` paths.
+     * These paths allow cross-tenant READ when an ExchangeGrant exists,
+     * but WRITE is restricted to the publisher tenant (enforced by ExchangeResolver).
+     *
+     * validateAccess whitelists published/ for reads because ExchangeResolver
+     * has already validated the grant before touching the adapter. The actual
+     * tenant isolation for writes is enforced server-side by ExchangeResolver.publish().
+     */
+    isExchangePublishedPath(path: string): boolean {
+        const parts = path.split('/');
+        return parts[0] === 'tenants' && parts[2] === 'published' && parts.length >= 4;
     },
 
     async triggerFailSafe(targetId: string, anchoredId: string, fullPath?: string) {

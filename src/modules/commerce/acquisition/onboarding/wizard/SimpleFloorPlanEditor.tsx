@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
+import type { PlatformVariant } from '@nexus/contracts';
 
 export interface SimpleTable {
   id: string;
@@ -18,9 +19,10 @@ export interface SimpleZone {
 
 interface SimpleFloorPlanEditorProps {
   onSave: (tables: SimpleTable[], zones: SimpleZone[]) => void;
+  variant?: PlatformVariant;
 }
 
-const TEMPLATES = [
+const RESTAURANT_TEMPLATES = [
   {
     name: 'Bistrot 20 couverts',
     tables: [
@@ -64,9 +66,52 @@ const TEMPLATES = [
   },
 ];
 
+const HOTEL_TEMPLATES = [
+  {
+    name: 'Hôtel 20 chambres',
+    tables: Array.from({ length: 10 }, (_, i) => ({
+      id: `h${i + 1}`, x: 80 + (i % 5) * 110, y: 80 + Math.floor(i / 5) * 110, capacity: 2, label: String(i + 1), shape: 'rect' as const,
+    })),
+    zones: [{ id: 'z1', name: 'Étage 1', color: '#EFF6FF' }, { id: 'z2', name: 'Étage 2', color: '#F0FDF4' }],
+  },
+];
+
+const GARAGE_TEMPLATES = [
+  {
+    name: 'Atelier 5 baies',
+    tables: Array.from({ length: 5 }, (_, i) => ({
+      id: `b${i + 1}`, x: 80 + i * 120, y: 100, capacity: 1, label: `Baie ${i + 1}`, shape: 'rect' as const,
+    })),
+    zones: [{ id: 'z1', name: 'Atelier principal', color: '#FEF3C7' }],
+  },
+];
+
+const SALON_TEMPLATES = [
+  {
+    name: 'Salon 6 postes',
+    tables: Array.from({ length: 6 }, (_, i) => ({
+      id: `p${i + 1}`, x: 80 + (i % 3) * 130, y: 80 + Math.floor(i / 3) * 130, capacity: 1, label: `Poste ${i + 1}`, shape: 'circle' as const,
+    })),
+    zones: [{ id: 'z1', name: 'Salle principale', color: '#FDF4FF' }],
+  },
+];
+
+const TEMPLATES_BY_VARIANT: Partial<Record<PlatformVariant, typeof RESTAURANT_TEMPLATES>> = {
+  restaurant: RESTAURANT_TEMPLATES,
+  bakery:     RESTAURANT_TEMPLATES,
+  hotel:      HOTEL_TEMPLATES,
+  garage:     GARAGE_TEMPLATES,
+  salon:      SALON_TEMPLATES,
+  clinic:     SALON_TEMPLATES,
+};
+
 const ZONE_COLORS = ['#EFF6FF', '#F0FDF4', '#FEF3C7', '#FDF4FF', '#FFF1F2'];
 
-export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
+export function SimpleFloorPlanEditor({ onSave, variant = 'restaurant' }: SimpleFloorPlanEditorProps) {
+  const TEMPLATES = useMemo(
+    () => TEMPLATES_BY_VARIANT[variant] ?? RESTAURANT_TEMPLATES,
+    [variant],
+  );
   const [tables, setTables] = useState<SimpleTable[]>([]);
   const [zones, setZones] = useState<SimpleZone[]>([{ id: 'z1', name: 'Salle', color: '#EFF6FF' }]);
   const [dragging, setDragging] = useState<{ id: string; offsetX: number; offsetY: number } | null>(null);

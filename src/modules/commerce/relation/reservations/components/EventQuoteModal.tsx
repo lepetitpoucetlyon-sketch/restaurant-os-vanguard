@@ -17,19 +17,15 @@ import { logger } from "@/lib/logger";
 import { toError } from "@/lib/toError";
 import { saveEventQuoteDraft } from '../actions/eventQuote.action';
 import { whiteLabelInstanceConfig } from "@/config/instance";
+import { useTenant } from "@/kernel/hooks";
+import type { PlatformVariant } from "@nexus/contracts";
+import { resolveEventFormules } from "@/verticals/_shared/eventFormules";
+import { resolveMetricLabels } from "@/verticals/_shared/labels";
 
 import type { PrivatisationFormule, PrivatisationData } from "@/modules/commerce";
 import { EventQuoteClientSection } from "./event-quote/EventQuoteClientSection";
 import { EventQuoteDetailsSection } from "./event-quote/EventQuoteDetailsSection";
 import { EventQuoteTariffSection } from "./event-quote/EventQuoteTariffSection";
-
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-const FORMULE_OPTIONS: { value: PrivatisationFormule; label: string; desc: string }[] = [
-    { value: "menu", label: "Menu assis", desc: "Service à la table, menu servi" },
-    { value: "cocktail_dinatoire", label: "Cocktail dînatoire", desc: "Buffet debout, service circulant" },
-    { value: "buffet", label: "Buffet libre", desc: "Self-service, convives libres" },
-];
 
 interface EventQuoteFormData {
     clientNom: string;
@@ -68,6 +64,11 @@ interface EventQuoteModalProps {
 }
 
 export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalProps) {
+    const { activeTenantConfig } = useTenant();
+    const variant = (activeTenantConfig?.variant ?? 'restaurant') as PlatformVariant;
+    const formuleOptions = resolveEventFormules(variant);
+    const labels = resolveMetricLabels(variant);
+
     const [form, setForm] = useState<EventQuoteFormData>(INITIAL);
     const [saving, setSaving] = useState(false);
     const [generating, setGenerating] = useState(false);
@@ -146,7 +147,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                 descriptionFormule: form.descriptionFormule || undefined,
                 montantHT: form.montantHT,
                 restaurantNom: whiteLabelInstanceConfig.appName,
-                restaurantAdresse: "123 Rue de la Gastronomie, Lyon",
+                restaurantAdresse: activeTenantConfig?.branding?.address ?? '',
             };
 
             await generatePrivatisationContract(contractData);
@@ -227,7 +228,8 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                                 nombreConvives={form.nombreConvives}
                                 formule={form.formule}
                                 descriptionFormule={form.descriptionFormule}
-                                formuleOptions={FORMULE_OPTIONS}
+                                formuleOptions={formuleOptions}
+                                unitLabel={labels.unitPlural}
                                 onChange={set}
                                 inputClass={inputClass}
                             />
