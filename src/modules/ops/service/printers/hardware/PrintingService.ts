@@ -90,7 +90,7 @@ export class PrintingService {
 
     let data: Uint8Array;
     if (job.type === 'receipt') data = builder.buildReceipt(job.ticket);
-    else if (job.type === 'kitchen') data = builder.buildKitchen(job.ticket);
+    else if (job.type === 'prep') data = builder.buildKitchen(job.ticket);
     else data = builder.buildTest();
 
     const conn = printer.connection;
@@ -111,7 +111,7 @@ export class PrintingService {
       case 'browser':
       default:
         if (job.type === 'receipt') return printReceiptBrowser(job.ticket);
-        if (job.type === 'kitchen') return printKitchenBrowser(job.ticket);
+        if (job.type === 'prep') return printKitchenBrowser(job.ticket);
         return printReceiptBrowser(buildDummyTestTicket());
     }
   }
@@ -122,7 +122,7 @@ export class PrintingService {
     if (!printer) {
       // Browser fallback
       if (job.type === 'receipt') return printReceiptBrowser(job.ticket);
-      if (job.type === 'kitchen') return printKitchenBrowser(job.ticket);
+      if (job.type === 'prep') return printKitchenBrowser(job.ticket);
       return { success: false, method: 'browser', error: 'Aucune imprimante configurée' };
     }
     return this.print(job, printer);
@@ -133,7 +133,7 @@ export class PrintingService {
   }
 
   async printKitchen(ticket: PrepTicket): Promise<PrintResult> {
-    return this.printToRole('kitchen', { type: 'kitchen', ticket });
+    return this.printToRole('kitchen', { type: 'prep', ticket });
   }
 
   async testPrint(printer: PrinterDevice): Promise<PrintResult> {

@@ -99,7 +99,7 @@ export type KitchenTicket = PrepTicket;
 
 export type PrintJob =
   | { type: 'receipt'; ticket: ReceiptTicket }
-  | { type: 'kitchen'; ticket: PrepTicket }
+  | { type: 'prep'; ticket: PrepTicket }
   | { type: 'test' }
 
 export interface PrintResult {

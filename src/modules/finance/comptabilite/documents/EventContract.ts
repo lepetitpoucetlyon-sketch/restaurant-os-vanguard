@@ -10,6 +10,11 @@ import jsPDF from 'jspdf';
 // Types
 // ---------------------------------------------------------------------------
 
+/**
+ * Formules d'événements — périmètre food-service (restaurant, hôtel, traiteur).
+ * Gated par usesCulinaryStock(variant) côté UI.
+ * Extension pour d'autres verticales : ajouter des valeurs ici + entrées dans FORMULE_LABELS.
+ */
 export type EventFormule = 'menu' | 'cocktail_dinatoire' | 'buffet';
 /** @deprecated use EventFormule */
 export type PrivatisationFormule = EventFormule;
