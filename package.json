@@ -41,8 +41,9 @@
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
     "dexie": "^4.4.2",
+    "exceljs": "^4.4.0",
     "firebase": "^12.11.0",
-    "firebase-admin": "^13.8.0",
+    "firebase-admin": "^14.2.0",
     "framer-motion": "^12.23.26",
     "jose": "^6.2.8",
     "jotai": "^2.19.1",
@@ -62,7 +63,6 @@
     "stripe": "^22.3.2",
     "tailwind-merge": "^3.4.0",
     "web-push": "^3.6.7",
-    "xlsx": "^0.18.5",
     "zod": "^4.3.6",
     "zod-to-json-schema": "^3.25.2"
   },
@@ -87,8 +87,7 @@
     "vitest": "^4.1.2"
   },
   "overrides": {
-    "@sentry/nextjs": {
-      "@opentelemetry/core": "2.6.1"
-    }
+    "@opentelemetry/core": ">=2.8.0",
+    "uuid": ">=11.1.1"
   }
 }
