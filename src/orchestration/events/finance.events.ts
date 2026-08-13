@@ -208,4 +208,26 @@ export interface FINANCEEvents {
     }>;
     allAccepted: boolean;
   };
+
+  'einvoice.outbound_emitted': {
+    v: 1;
+    tenantId: string;
+    internalRef: string;
+    providerInvoiceId: string;
+    invoiceNumber: string;
+    buyerSiret: string;
+    totalHTInMicrounits: number;
+    totalTTCInMicrounits: number;
+    clientType: string;
+  };
+
+  'einvoice.outbound_status_updated': {
+    v: 1;
+    tenantId: string;
+    internalRef: string;
+    providerInvoiceId: string;
+    invoiceNumber: string;
+    newStatus: string;
+    totalTTCInMicrounits: number;
+  };
 }

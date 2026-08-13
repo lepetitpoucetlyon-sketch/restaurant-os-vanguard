@@ -131,7 +131,8 @@ export const EInvoicingService = {
 
     await Nexus.adapter.set(path, record);
 
-    await provider.acknowledgeReceipt(invoiceId, tenantId);
+    const p0 = await EInvoiceProviderFactory.forTenant(tenantId);
+    await p0.acknowledgeReceipt(invoiceId, tenantId);
 
     await NexusEventBus.emitDurable('supplier.invoice_processed', {
       v: 1,
@@ -187,7 +188,8 @@ export const EInvoicingService = {
     });
 
     if (status === 'rejected') {
-      await provider.rejectInvoice(invoiceId, tenantId, reason ?? 'Rejeté par le tenant');
+      const p1 = await EInvoiceProviderFactory.forTenant(tenantId);
+      await p1.rejectInvoice(invoiceId, tenantId, reason ?? 'Rejeté par le tenant');
     }
 
     empireAudit.log({
@@ -200,7 +202,8 @@ export const EInvoicingService = {
   },
 
   async fetchFromProvider(tenantId: string, providerInvoiceId: string): Promise<InboundEInvoice> {
-    return provider.fetchInvoice(providerInvoiceId, tenantId);
+    const p2 = await EInvoiceProviderFactory.forTenant(tenantId);
+    return p2.fetchInvoice(providerInvoiceId, tenantId);
   },
 
   async syncPending(tenantId: string): Promise<number> {
