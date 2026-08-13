@@ -33,11 +33,11 @@ export interface PrivatisationData {
   tauxTVA?: number;               // TVA en % — défaut 20
 
   /** Informations restaurant (depuis tenantConfig / whiteLabelInstanceConfig) */
-  restaurantNom: string;
-  restaurantAdresse: string;
-  restaurantTelephone?: string;
-  restaurantEmail?: string;
-  restaurantSiret?: string;
+  merchantNom: string;
+  merchantAdresse: string;
+  merchantTelephone?: string;
+  merchantEmail?: string;
+  merchantSiret?: string;
 
   /** Métadonnées */
   numeroContrat?: string;         // Référence du contrat
@@ -103,20 +103,20 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setTextColor(197, 160, 89); // #C5A059
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text(data.restaurantNom.toUpperCase(), marginLeft, 15);
+  doc.text(data.merchantNom.toUpperCase(), marginLeft, 15);
 
   doc.setTextColor(220, 220, 220);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text(data.restaurantAdresse, marginLeft, 22);
-  if (data.restaurantTelephone) doc.text(data.restaurantTelephone, marginLeft, 27);
-  if (data.restaurantEmail) doc.text(data.restaurantEmail, marginLeft, 32);
-  if (data.restaurantSiret) doc.text(`SIRET : ${data.restaurantSiret}`, marginLeft, 37);
+  doc.text(data.merchantAdresse, marginLeft, 22);
+  if (data.merchantTelephone) doc.text(data.merchantTelephone, marginLeft, 27);
+  if (data.merchantEmail) doc.text(data.merchantEmail, marginLeft, 32);
+  if (data.merchantSiret) doc.text(`SIRET : ${data.merchantSiret}`, marginLeft, 37);
 
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
-  doc.text('CONTRAT DE PRIVATISATION', pageW - marginRight, 16, { align: 'right' });
+  doc.text('CONTRAT ÉVÉNEMENTIEL', pageW - marginRight, 16, { align: 'right' });
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text(`Réf. : ${numeroContrat}`, pageW - marginRight, 23, { align: 'right' });
@@ -148,13 +148,13 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.text('LE PRESTATAIRE', marginLeft + 4, y + 7);
   doc.setTextColor(26, 26, 26);
   doc.setFontSize(10);
-  doc.text(data.restaurantNom, marginLeft + 4, y + 14);
+  doc.text(data.merchantNom, marginLeft + 4, y + 14);
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  const restLines = doc.splitTextToSize(data.restaurantAdresse, halfW - 8);
+  const restLines = doc.splitTextToSize(data.merchantAdresse, halfW - 8);
   doc.text(restLines, marginLeft + 4, y + 20);
-  if (data.restaurantTelephone) doc.text(`Tél. : ${data.restaurantTelephone}`, marginLeft + 4, y + 32);
-  if (data.restaurantEmail) doc.text(`Email : ${data.restaurantEmail}`, marginLeft + 4, y + 37);
+  if (data.merchantTelephone) doc.text(`Tél. : ${data.merchantTelephone}`, marginLeft + 4, y + 32);
+  if (data.merchantEmail) doc.text(`Email : ${data.merchantEmail}`, marginLeft + 4, y + 37);
 
   // Bloc client
   const clientX = marginLeft + halfW + 6;
@@ -186,7 +186,7 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   const objetText =
-    `Le présent contrat a pour objet la privatisation des espaces du restaurant ${data.restaurantNom} ` +
+    `Le présent contrat a pour objet la privatisation des espaces de ${data.merchantNom} ` +
     `dans le cadre de l'événement « ${data.evenementNom} ». Le Prestataire s'engage à réserver ` +
     `l'établissement exclusivement au Client et à ses convives pour la durée stipulée ci-dessous.`;
   const objetLines = doc.splitTextToSize(objetText, contentW);
@@ -298,7 +298,7 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setFont('helvetica', 'italic');
   doc.setTextColor(150, 150, 150);
   doc.text(
-    `Contrat de privatisation — ${data.restaurantNom} — Réf. ${numeroContrat} — Page 1/2`,
+    `Contrat événementiel — ${data.merchantNom} — Réf. ${numeroContrat} — Page 1/2`,
     pageW / 2,
     pageH - 8,
     { align: 'center' }
@@ -317,7 +317,7 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setTextColor(197, 160, 89);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
-  doc.text('CONTRAT DE PRIVATISATION — SIGNATURES', pageW / 2, 13, { align: 'center' });
+  doc.text('CONTRAT ÉVÉNEMENTIEL — SIGNATURES', pageW / 2, 13, { align: 'center' });
 
   y = 30;
 
@@ -399,9 +399,9 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(26, 26, 26);
   doc.setFontSize(8);
-  doc.text(data.restaurantNom.toUpperCase(), sigX2 + 4, y + 15);
-  if (data.restaurantEmail) doc.text(data.restaurantEmail, sigX2 + 4, y + 21);
-  if (data.restaurantSiret) doc.text(`SIRET : ${data.restaurantSiret}`, sigX2 + 4, y + 27);
+  doc.text(data.merchantNom.toUpperCase(), sigX2 + 4, y + 15);
+  if (data.merchantEmail) doc.text(data.merchantEmail, sigX2 + 4, y + 21);
+  if (data.merchantSiret) doc.text(`SIRET : ${data.merchantSiret}`, sigX2 + 4, y + 27);
   doc.setTextColor(150, 150, 150);
   doc.setFontSize(7);
   doc.text('Signature et cachet du responsable', sigX2 + 4, y + 38);
@@ -431,7 +431,7 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   doc.setFont('helvetica', 'italic');
   doc.setTextColor(150, 150, 150);
   doc.text(
-    `Contrat de privatisation — ${data.restaurantNom} — Réf. ${numeroContrat} — Page 2/2`,
+    `Contrat événementiel — ${data.merchantNom} — Réf. ${numeroContrat} — Page 2/2`,
     pageW / 2,
     pageH - 8,
     { align: 'center' }
@@ -442,5 +442,5 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   // ---------------------------------------------------------------------------
 
   const safeName = data.evenementNom.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-  doc.save(`contrat_privatisation_${safeName}_${numeroContrat}.pdf`);
+  doc.save(`contrat_evenement_${safeName}_${numeroContrat}.pdf`);
 }

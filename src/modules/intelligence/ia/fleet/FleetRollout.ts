@@ -4,7 +4,7 @@ import { JsonObject } from "@/lib/types/json";
 import { toError } from "@/lib/toError";
 
 interface RolloutPayload {
-    type: 'menu' | 'config' | 'template';
+    type: 'catalog' | 'config' | 'template';
     sourceData: Record<string, unknown>;
 }
 
@@ -25,7 +25,7 @@ export const FleetRollout = {
 
         for (const targetId of targetTenantIds) {
             try {
-                const collection = payload.type === 'menu' ? 'products'
+                const collection = payload.type === 'catalog' ? 'products'
                     : payload.type === 'config' ? 'tenantConfig'
                     : 'roleTemplates';
 

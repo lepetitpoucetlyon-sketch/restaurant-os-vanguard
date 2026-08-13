@@ -18,11 +18,11 @@ export interface PrivatisationData {
     descriptionFormule?: string;
     montantHT: number;
     tauxTVA?: number;
-    restaurantNom: string;
-    restaurantAdresse: string;
-    restaurantTelephone?: string;
-    restaurantEmail?: string;
-    restaurantSiret?: string;
+    merchantNom: string;
+    merchantAdresse: string;
+    merchantTelephone?: string;
+    merchantEmail?: string;
+    merchantSiret?: string;
     numeroContrat?: string;
     dateSignature?: string;
 }

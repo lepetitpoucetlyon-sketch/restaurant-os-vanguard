@@ -10,7 +10,7 @@ async function runRAGSecurityAudit() {
     // 1. Initialiser le RAG pour le Tenant A
     const hermesA = new HermesKnowledgeManager(tenantA, { 
         region: 'FR-69', 
-        cuisineType: 'french', 
+        businessType: 'french',
         sizeBand: 'medium', 
         priceBand: 'mid_range' 
     });

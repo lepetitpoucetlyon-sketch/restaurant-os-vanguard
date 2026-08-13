@@ -12,15 +12,13 @@ import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
 import { BatchTableForm, nextKey, SHAPE_LABELS, type TableShape, type WizardTable } from './floor-plan/BatchTableForm';
+import { resolveFloorPlanProfile } from '@/verticals/_shared/onboarding';
+import type { PlatformVariant } from '@nexus/contracts';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type WizardStep = 'zones' | 'tables' | 'preview';
-
-// ── Constants ────────────────────────────────────────────────────────────────
-
-const AVAILABLE_ZONES = ['Salle', 'Terrasse', 'Bar', 'Salon privé'] as const;
-type ZoneName = (typeof AVAILABLE_ZONES)[number];
+type ZoneName = string;
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -89,9 +87,16 @@ function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
 
 // ── Main Wizard ────────────────────────────────────────────────────────────────
 
-export default function FloorPlanSetupWizard() {
+interface FloorPlanSetupWizardProps {
+  variant?: PlatformVariant;
+}
+
+export default function FloorPlanSetupWizard({ variant = 'restaurant' }: FloorPlanSetupWizardProps) {
+  const profile = resolveFloorPlanProfile(variant);
+  const availableZones = profile.zones.map(z => z.name);
+
   const [step, setStep] = useState<WizardStep>('zones');
-  const [selectedZones, setSelectedZones] = useState<ZoneName[]>(['Salle']);
+  const [selectedZones, setSelectedZones] = useState<ZoneName[]>([availableZones[0] ?? 'Salle']);
   const [tables, setTables] = useState<WizardTable[]>([]);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -172,7 +177,7 @@ export default function FloorPlanSetupWizard() {
           Elles sont maintenant disponibles dans le module Réservations et le POS.
         </p>
         <button
-          onClick={() => { setDone(false); setStep('zones'); setTables([]); setSelectedZones(['Salle']); }}
+          onClick={() => { setDone(false); setStep('zones'); setTables([]); setSelectedZones([availableZones[0] ?? 'Salle']); }}
           className="mt-2 rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:text-text-primary hover:border-accent/40 transition-colors"
         >
           Recommencer
@@ -218,7 +223,7 @@ export default function FloorPlanSetupWizard() {
         <div className="space-y-4">
           <p className="text-sm text-text-muted">Sélectionnez les zones que possède votre établissement :</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {AVAILABLE_ZONES.map(zone => {
+            {availableZones.map(zone => {
               const selected = selectedZones.includes(zone);
               return (
                 <button

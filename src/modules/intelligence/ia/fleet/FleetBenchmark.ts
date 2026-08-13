@@ -1,10 +1,12 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { resolveMetricLabels } from '@/verticals/_shared/labels';
+import type { PlatformVariant } from '@nexus/contracts';
 
 interface SiteMetrics {
     tenantId: string;
     revenueInMicrounits: number;
-    couverts: number;
-    additionMoyenneInMicrounits: number;
+    unitCount: number;
+    ticketMoyenInMicrounits: number;
     foodCostPercent: number;
     laborPercent: number;
 }
@@ -36,8 +38,11 @@ function percentile(values: number[], target: number): number {
 export const FleetBenchmark = {
     async benchmark(
         fleetTenantIds: string[],
-        period: string
+        period: string,
+        variant: PlatformVariant = 'restaurant'
     ): Promise<Map<string, BenchmarkResult[]>> {
+        const labels = resolveMetricLabels(variant);
+
         const allMetrics: SiteMetrics[] = await Promise.all(
             fleetTenantIds.map(async (tid) => {
                 const orders = await Nexus.adapter.query<{
@@ -54,14 +59,14 @@ export const FleetBenchmark = {
                 );
 
                 const revenue = orders.reduce((s, o) => s + (o.totalInMicrounits ?? 0), 0);
-                const couverts = orders.reduce((s, o) => s + (o.covers ?? 1), 0);
-                const avgTicket = couverts > 0 ? revenue / couverts : 0;
+                const unitCount = orders.reduce((s, o) => s + (o.covers ?? 1), 0);
+                const avgTicket = unitCount > 0 ? revenue / unitCount : 0;
 
                 return {
                     tenantId: tid,
                     revenueInMicrounits: revenue,
-                    couverts,
-                    additionMoyenneInMicrounits: avgTicket,
+                    unitCount,
+                    ticketMoyenInMicrounits: avgTicket,
                     foodCostPercent: 30,
                     laborPercent: 28,
                 };
@@ -72,8 +77,8 @@ export const FleetBenchmark = {
 
         const metricKeys: Array<{ key: keyof SiteMetrics; label: string }> = [
             { key: 'revenueInMicrounits', label: 'CA' },
-            { key: 'couverts', label: 'Couverts' },
-            { key: 'additionMoyenneInMicrounits', label: 'Addition moyenne' },
+            { key: 'unitCount', label: labels.unitPlural },
+            { key: 'ticketMoyenInMicrounits', label: 'Ticket moyen' },
         ];
 
         for (const site of allMetrics) {

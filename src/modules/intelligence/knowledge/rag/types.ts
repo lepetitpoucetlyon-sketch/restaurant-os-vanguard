@@ -140,7 +140,7 @@ export interface SanitizedPulse {
 
 export type PulseCategory =
     | 'MARKET_PRICE'       // Supplier price trends
-    | 'MENU_PERFORMANCE'   // Dish category performance
+    | 'CATALOG_PERFORMANCE' // Item/dish/service category performance
     | 'LABOR_PATTERN'      // Staffing patterns
     | 'WASTE_TREND'        // Waste/loss trends
     | 'COMPLIANCE_SCORE'   // Aggregated HACCP/NF525 scores
@@ -169,7 +169,7 @@ export interface PulseContext {
     region: string; // e.g. "FR-69" (Rhône), never "Lyon 2ème"
 
     /** Generic cuisine type */
-    cuisineType: string; // e.g. "french_traditional", "asian_fusion"
+    businessType: string; // e.g. "french_traditional", "auto_repair", "hair_salon"
 
     /** Establishment size band */
     sizeBand: 'micro' | 'small' | 'medium' | 'large';
@@ -194,7 +194,7 @@ export interface PulseScheduleEntry {
 
 export const PULSE_SCHEDULE: readonly PulseScheduleEntry[] = [
     { category: 'MARKET_PRICE',     frequency: 'weekly',            maxPerPeriod: 1,  delayHours: 24 },
-    { category: 'MENU_PERFORMANCE', frequency: 'daily',             maxPerPeriod: 1,  delayHours: 6  },
+    { category: 'CATALOG_PERFORMANCE', frequency: 'daily',           maxPerPeriod: 1,  delayHours: 6  },
     { category: 'LABOR_PATTERN',    frequency: 'weekly',            maxPerPeriod: 1,  delayHours: 24 },
     { category: 'WASTE_TREND',      frequency: 'daily',             maxPerPeriod: 1,  delayHours: 6  },
     { category: 'COMPLIANCE_SCORE', frequency: 'monthly',           maxPerPeriod: 1,  delayHours: 48 },
@@ -244,8 +244,8 @@ export interface MarketInsight {
     confidence: number;
     /** Affected regions */
     regions: string[];
-    /** Affected cuisine types */
-    cuisineTypes: string[];
+    /** Affected business types (cuisine type for F&B, activity type for others) */
+    businessTypes: string[];
     /** Monetization tier this insight is available to */
     availableTier: 'TIER_2' | 'TIER_3' | 'INTERNAL_ONLY';
     /** Timestamp of generation */
