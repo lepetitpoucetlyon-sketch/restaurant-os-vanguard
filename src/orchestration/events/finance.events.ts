@@ -147,6 +147,13 @@ export interface FINANCEEvents {
     syncedAt: string;
   };
 
+  'finance.bank_disconnected': {
+    v: 1;
+    tenantId: string;
+    provider: string;
+    disconnectedAt: number;
+  };
+
   'einvoice.validated': {
     v: 1;
     tenantId: string;

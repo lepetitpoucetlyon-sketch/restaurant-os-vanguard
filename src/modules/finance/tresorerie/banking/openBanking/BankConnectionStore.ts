@@ -33,4 +33,12 @@ export class BankConnectionStore {
     static decryptToken(connection: StoredBankConnection): string {
         return decryptBankToken(connection.encryptedUserToken);
     }
+
+    static async disconnect(tenantId: string): Promise<void> {
+        await Nexus.adapter.set(path(tenantId), {
+            encryptedUserToken: '',
+            status: 'disconnected' as const,
+            disconnectedAt: new Date().toISOString(),
+        }, { merge: true });
+    }
 }

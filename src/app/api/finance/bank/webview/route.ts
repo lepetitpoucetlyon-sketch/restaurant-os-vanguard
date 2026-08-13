@@ -24,7 +24,14 @@ export async function GET(request: NextRequest) {
         const state = signBankConnectState(tenantId);
         const url = await provider.getConnectionUrl(token, redirectUri, state);
 
-        return NextResponse.json({ url, isDemoMode: provider.isDemoMode() });
+        return NextResponse.json({
+            url,
+            isDemoMode: provider.isDemoMode(),
+            requiresOwnAccount: provider.id === 'qonto',
+            providerNote: provider.id === 'qonto'
+                ? 'Qonto est une banque fintech directe — uniquement disponible si votre restaurant a un compte Qonto Business.'
+                : undefined,
+        });
     } catch (err) {
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Impossible de générer le lien bancaire.' },

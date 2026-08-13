@@ -146,4 +146,5 @@
 | antigravity-exec-suite | §8.6 généralisation totale : kernel (MerchantIdentity/businessType/merchantName/GENERIC_STORAGE), booking engine appointments, ConsultationService, FrontDeskService, SEOManager multi-vertical, 8 types licences. TSC=0. | 2026-08-13 | terminée |
 | deteinte-finisher | §8.6 résidus partiels : PrivatisationContract→EventContract (git mv), KitchenTicket→PrepTicket printers. Commits c50ba6f1f + docs interfacerestaurant. tip-pooling barrel = déjà corrigé vague0. | 2026-08-13 | terminée |
 | gate-fix-einvoicing | Fix TSC 31→0 : 3 `provider` undefined (EInvoicingService), 2 events einvoice.outbound_* absents (FINANCEEvents), fast-check absent. Gate TSC=0/cycles=2. | 2026-08-13 | terminée |
-| val-complete | Validation complète projet : TSC, tests, cycles, sentrux, barrels, preflight | 2026-08-13 | active |
+| val-complete | Validation complète projet : TSC, tests, cycles, sentrux, barrels, preflight | 2026-08-13 | terminée |
+| infra-prod-plan | 2 fixes banking (disconnect endpoint + Qonto), puis PLAN_INFRA_PROD complet (§2→§17) | 2026-08-13 | active |

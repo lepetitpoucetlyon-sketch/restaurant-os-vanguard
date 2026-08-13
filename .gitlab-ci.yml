@@ -1,0 +1,128 @@
+image: node:22-alpine
+
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .npm/
+    - node_modules/
+    - functions/node_modules/
+
+stages:
+  - gate
+  - test
+  - build
+  - deploy-staging
+  - deploy-prod
+
+# ── Garde-fou architectural ─────────────────────────────────────────────────
+architectural-gate:
+  stage: gate
+  before_script:
+    - npm ci --prefer-offline
+  script:
+    - npx tsc --noEmit
+    - npm run lint 2>/dev/null || npx eslint src --ext .ts,.tsx --max-warnings=0
+    - ./scripts/agent-gate.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# ── Tests unitaires ──────────────────────────────────────────────────────────
+unit-tests:
+  stage: test
+  before_script:
+    - npm ci --prefer-offline
+  script:
+    - npx vitest run
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# ── Tests d'intégration (Firestore émulateur) ────────────────────────────────
+integration-tests:
+  stage: test
+  before_script:
+    - apk add --no-cache openjdk17-jre
+    - npm ci --prefer-offline
+    - npm install -g firebase-tools
+    - firebase emulators:start --only firestore &
+    - sleep 8
+  variables:
+    FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
+    FIREBASE_SERVICE_ACCOUNT_JSON: '{"project_id":"demo-test","client_email":"test@demo-test.iam.gserviceaccount.com","private_key":"PLACEHOLDER"}'
+    DRY_RUN: "true"
+  script:
+    - npx vitest run src/__tests__/integration/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
+
+# ── Build ────────────────────────────────────────────────────────────────────
+build:
+  stage: build
+  before_script:
+    - npm ci --prefer-offline
+  script:
+    - npm run build
+  variables:
+    NEXT_PUBLIC_GEMINI_API_KEY: $GEMINI_API_KEY
+    NEXT_PUBLIC_FIREBASE_API_KEY: $FIREBASE_API_KEY
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID: $FIREBASE_PROJECT_ID
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: $FIREBASE_AUTH_DOMAIN
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: $FIREBASE_STORAGE_BUCKET
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: $FIREBASE_MESSAGING_SENDER_ID
+    NEXT_PUBLIC_FIREBASE_APP_ID: $FIREBASE_APP_ID
+  artifacts:
+    paths:
+      - .next/
+    expire_in: 1 day
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# ── Déploiement staging (push main) ─────────────────────────────────────────
+deploy-staging:
+  stage: deploy-staging
+  script:
+    - echo "Déploiement vers staging (Vercel preview ou OVH VPS)"
+    - npx vercel --token $VERCEL_TOKEN --yes 2>/dev/null || ./scripts/deploy-prod.sh staging
+  environment:
+    name: staging
+    url: https://staging.restaurant-os.io
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  needs:
+    - build
+
+# ── Déploiement production (manuel sur tag) ──────────────────────────────────
+deploy-prod:
+  stage: deploy-prod
+  script:
+    - echo "Déploiement production (approbation manuelle requise)"
+    - npx vercel --token $VERCEL_TOKEN --prod --yes 2>/dev/null || ./scripts/deploy-prod.sh prod
+  environment:
+    name: production
+    url: https://restaurant-os.io
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/'
+      when: manual
+  needs:
+    - build
+
+# ── Notification échec pipeline ──────────────────────────────────────────────
+notify-failure:
+  stage: .post
+  script:
+    - >
+      curl -s -X POST "$SLACK_WEBHOOK_URL"
+      -H 'Content-type: application/json'
+      --data "{\"text\":\"❌ Pipeline ${CI_PIPELINE_URL} échoué sur ${CI_COMMIT_REF_NAME}\"}"
+  rules:
+    - when: on_failure
+      if: '$SLACK_WEBHOOK_URL != ""'

@@ -806,6 +806,15 @@ export interface COMMONEvents {
     loggedAt: number;
   };
 
+  // ── Intelligence — IA proactive ───────────────────────────────────────────
+  'intelligence.insight_ready': {
+    v: 1;
+    tenantId: string;
+    insightId: string;
+    trigger: string;
+    actionType: 'review_menu' | 'adjust_stock' | 'activate_sms' | 'create_draft_order' | 'general';
+  };
+
   // ── Intelligence — BCG calculé ────────────────────────────────────────────
   'intelligence.bcg_calculated': {
     tenantId: string;
@@ -823,6 +832,29 @@ export interface COMMONEvents {
     journalId: string;
     expectedHash: string;
     actualHash: string;
+    detectedAt: number;
+  };
+
+  // ── System — alertes fleet ─────────────────────────────────────────────────
+  'finance.ticket_z_missed': {
+    v: 1;
+    tenantId: string;
+    expectedDate: string;
+    hoursOverdue: number;
+  };
+
+  'compliance.certificate_expired': {
+    v: 1;
+    tenantId: string;
+    certificateType: string;
+    expiredAt: string;
+  };
+
+  'system.tenant_error_rate_high': {
+    v: 1;
+    tenantId: string;
+    errorsPerMinute: number;
+    windowMinutes: number;
     detectedAt: number;
   };
 }

@@ -7,6 +7,9 @@ import { empireAudit } from '@/lib/audit';
 interface StockItemRecord {
   supplierId?: string;
   idealStock?: number;
+  reorderThreshold?: number;
+  reorderQuantity?: number;
+  name?: string;
 }
 interface DraftOrderItem {
   itemId: string;
@@ -43,7 +46,8 @@ export function registerAutoSupplierDraftHandler() {
 
       let draftOrder: SupplierDraftOrder | null = existingDrafts.length > 0 ? existingDrafts[0] as unknown as SupplierDraftOrder : null;
       
-      const qtyToOrder = Math.max(stockItem.idealStock || 0, threshold * 2) - currentQuantity;
+      const qtyToOrder = stockItem.reorderQuantity
+        ?? Math.max(stockItem.idealStock || 0, threshold * 2) - currentQuantity;
       if (qtyToOrder <= 0) return;
       
       if (!draftOrder) {

@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { CRM_CONFIG_DEFAULTS, CRMAutomationConfigSchema, crmConfigPath } from '@/modules/commerce/relation/crm/CRMAutomationConfig';
 
 interface CustomerProfile {
   totalVisits?: number;
@@ -15,6 +16,9 @@ export function registerVipStatusEvaluationHandler() {
       const { tenantId, customerId } = payload;
       if (!customerId) return;
 
+      const rawCfg = await Nexus.adapter.get(crmConfigPath(tenantId));
+      const cfg = CRMAutomationConfigSchema.parse({ ...CRM_CONFIG_DEFAULTS, ...(rawCfg ?? {}) });
+
       const profilePath = `tenants/${tenantId}/crms/${customerId}`;
       const profile = await Nexus.adapter.get<CustomerProfile>(profilePath);
       if (!profile) return;
@@ -22,9 +26,9 @@ export function registerVipStatusEvaluationHandler() {
       const visits = (profile.totalVisits ?? 0) + 1;
       let newTag = null;
 
-      if (visits === 5 && !profile.tags?.includes('regular')) {
+      if (visits === cfg.regularVisitThreshold && !profile.tags?.includes('regular')) {
         newTag = 'regular';
-      } else if (visits === 20 && !profile.tags?.includes('vip')) {
+      } else if (visits === cfg.vipVisitThreshold && !profile.tags?.includes('vip')) {
         newTag = 'vip';
       }
       

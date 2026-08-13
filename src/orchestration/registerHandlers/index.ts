@@ -11,6 +11,9 @@ import { registerMccHandlers } from './mcc';
 import { registerNotificationHandlers } from './notifications';
 import { registerTechAuditLedgerHandler } from '../handlers/TechAuditLedgerHandler';
 import { initVerticalEventBridge } from '../VerticalEventBridge';
+import { registerFleetSystemAlertHandler } from '../handlers/FleetSystemAlertHandler';
+import { registerProactiveInsightHandler } from '../handlers/ProactiveInsightHandler';
+import { registerBenchmarkPushHandler } from '../handlers/BenchmarkPushHandler';
 
 let clientInitialized = false;
 let serverInitialized = false;
@@ -45,7 +48,13 @@ export function registerNexusHandlers(): void {
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
     ...registerNotificationHandlers(),
-    registerTechAuditLedgerHandler()
+    registerTechAuditLedgerHandler(),
+    // §7 IA proactive — seuils opérationnels → insights
+    ...registerProactiveInsightHandler(),
+    // §8 Fleet alertes système uniquement (NF525, crypto, compliance, taux d'erreur)
+    ...registerFleetSystemAlertHandler(),
+    // §17 Benchmark inter-tenants anonymisé
+    registerBenchmarkPushHandler(),
   );
 }
 
@@ -66,7 +75,10 @@ export function registerServerNexusHandlers(): void {
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
     ...registerNotificationHandlers(),
-    registerTechAuditLedgerHandler()
+    registerTechAuditLedgerHandler(),
+    ...registerProactiveInsightHandler(),
+    ...registerFleetSystemAlertHandler(),
+    registerBenchmarkPushHandler(),
   );
 }
 

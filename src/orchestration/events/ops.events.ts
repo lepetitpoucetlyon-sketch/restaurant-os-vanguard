@@ -352,4 +352,13 @@ export interface OPSEvents {
   // §8.6 FrontDesk — hôtel, co-working, clinic
   'ops.guest_checked_in':  { tenantId: string; guestId: string; guestName: string; unitName?: string };
   'ops.guest_checked_out': { tenantId: string; guestId: string };
+
+  // §7 IA proactive — gaspillage validé
+  'ops.waste_validated': {
+    v: 1;
+    tenantId: string;
+    wasteAmountInMicrounits: number;
+    items?: string[];
+    validatedAt: string;
+  };
 }
