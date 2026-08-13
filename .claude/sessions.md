@@ -144,4 +144,4 @@
 | s86-vagues4-6 | §8.6 Vagues 4-6 : fleet cross-verticale (CATALOG_PERFORMANCE/businessType/unitCount/catalog), onboarding profils 7 verticales, EventContract (merchant*) | 2026-08-13 | terminée |
 | teintes-finish-ui-plan | §8.6 vérification finale vagues teintées + mise à jour interfacerestaurant.md → base généraliste. Livré : Phase 0 (5 fichiers teintés), DLQ fix WasteHandler, interfacerestaurant.md §0 + annotations ✅/❌ + métriques post-audit | 2026-08-13 | terminée |
 | antigravity-exec-suite | §8.6 généralisation totale : kernel (MerchantIdentity/businessType/merchantName/GENERIC_STORAGE), booking engine appointments, ConsultationService, FrontDeskService, SEOManager multi-vertical, 8 types licences. TSC=0. | 2026-08-13 | terminée |
-| deteinte-finisher | §8.6 résidus partiels : PrivatisationContract→EventContract, tip-pooling barrel, KitchenTicket→PrepTicket printers | 2026-08-13 | active |
+| deteinte-finisher | §8.6 résidus partiels : PrivatisationContract→EventContract (git mv), KitchenTicket→PrepTicket printers. Commits c50ba6f1f + docs interfacerestaurant. tip-pooling barrel = déjà corrigé vague0. | 2026-08-13 | terminée |
