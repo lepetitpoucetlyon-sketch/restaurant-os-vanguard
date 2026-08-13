@@ -1,10 +1,10 @@
-import { AutoVertical } from './AutoVertical';
+import { GarageVertical } from './GarageVertical';
 
 // Export type & core class for internal use
-export { AutoVertical } from './AutoVertical';
+export { GarageVertical } from './GarageVertical';
 
 // Export par défaut pour l'import dynamique par le VerticalRegistry
-const autoVertical = new AutoVertical();
-export default autoVertical;
+const garageVertical = new GarageVertical();
+export default garageVertical;
 
 export * from './adapters';

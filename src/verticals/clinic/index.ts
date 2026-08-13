@@ -1,10 +1,10 @@
-import { HealthVertical } from './HealthVertical';
+import { ClinicVertical } from './ClinicVertical';
 
 // Export type & core class for internal use
-export { HealthVertical } from './HealthVertical';
+export { ClinicVertical } from './ClinicVertical';
 
 // Export par défaut pour l'import dynamique par le VerticalRegistry
-const healthVertical = new HealthVertical();
-export default healthVertical;
+const clinicVertical = new ClinicVertical();
+export default clinicVertical;
 
 export * from './adapters';

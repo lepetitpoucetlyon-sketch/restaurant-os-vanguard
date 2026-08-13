@@ -13,7 +13,7 @@ import {
   HealthMccAdapter,
 } from './adapters';
 
-export class HealthVertical implements IVerticalPlugin {
+export class ClinicVertical implements IVerticalPlugin {
   public readonly id = 'health';
   public readonly name = 'Clinic OS';
   public readonly version = '1.0.0';

@@ -13,7 +13,7 @@ import {
   AutoMccAdapter,
 } from './adapters';
 
-export class AutoVertical implements IVerticalPlugin {
+export class GarageVertical implements IVerticalPlugin {
   public readonly id = 'auto';
   public readonly name = 'Garage OS';
   public readonly version = '1.0.0';
