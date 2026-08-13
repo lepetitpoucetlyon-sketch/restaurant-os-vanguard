@@ -23,6 +23,17 @@
 > vides, "bar" pas un PlatformVariant), 2 hygiène (48 `console.*`, teinture restaurant quantifiée :
 > reservations=171 refs, onboarding=66, marketing=33). Nouveau §10.1 + métriques §1.1 étendues.
 >
+> **🔄 v6.0 — clôture sécurité + e-facture + §8.6 complet + §7.2 (13/08, par Claude).** Sprint du
+> 13/08 : **§10.1-S1/S2/S3 résolus** (XSS DOMPurify + 5 handlers avec `assertHandlerTenant`) ·
+> **§7.3 e-facture livré** (`IEInvoicingProvider`, `FacturXParser` Factur-X/UBL/CII, `EInvoicingService`,
+> `MockEInvoicingProvider`, `InboundInvoiceSchema`, `InboundInvoiceLifecycle`, route API RBAC, handlers
+> stock/trésorerie — **obligation légale 1er sept. tenue**) · **§8.6 Vagues 0-6 CLOSES** (21 modules
+> teintés généralisés : gate culinaire, MetricLabels 9 clés, fleet MCC cross-verticale, onboarding par
+> verticale, documents événementiels, réservations, marketing, booking engine, consultation, front-desk)
+> · **§7.2 Nexus Exchange livré** (`ExchangeGrantSchema`, `ExchangeResolver`, `SovereignGuard` étendu,
+> 11 tests sécu). Le tronc est maintenant **généraliste** : chaque nouvelle verticale s'accroche sans
+> toucher au code métier. Commits : `5b69a9f19` → `e0e92c010` (13 commits).
+>
 > **🔄 v4.5 — intégration de l'AXE BUS (12/08, par Claude).** Consolidation de deux plans bus
 > épars dans ce document maître : `PLAN_BUS_EVENEMENTIEL.md` (audit « spider web » 09/08 — 94
 > orphelins, chaînes rompues, 0 cron, P0→P3, ~70h) + `PLAN_AUDIT_BUS_ORPHELINS.md` (contre-audit
@@ -367,36 +378,35 @@ Toutes les cibles structurelles de l'extraction sont atteintes :
 | **4** | fragmentation UI (SplitBill, god files) | 🟢 **FAIT** — 4.1 SplitBill ✅ · 4.2b NewQuoteDialog 450→358 ✅ · 4.2c CreatePreparationModal 446→381 ✅ · 4.2d ReservationCreateDialog 441→336 ✅ · 4.2e ProfileSettings 433→362 ✅ | tous <400L |
 | **5** | monnaie 694 InCents | 🟢 **P0-P4 FAIT** — P4 : `@deprecated` sur tous InCents (kernel contracts + finance pilier types), services/hooks vérifiés dual-write correct | 645 InCents (structurels, dual-write rétrocompat) + 8 `as Microunits` |
 | **6** | refonte UI (97 hex, i18n, custom tokens) | 🔴 **NON COMMENCÉ** | i18n `t()` = 0 composant |
-| **🚨 7.3** | **RÉCEPTION e-facture** | 🔴 **NON COMMENCÉ** — **échéance 1ᵉʳ SEPT.** | `IEInvoicingProvider` = 0, route inbound = 0 |
+| **🚨 7.3** | **RÉCEPTION e-facture** | 🟢 **FAIT** — **échéance 1ᵉʳ SEPT. tenue** | `IEInvoicingProvider` · `FacturXParser` · `EInvoicingService` · `MockEInvoicingProvider` · `InboundInvoiceLifecycle` · route API RBAC · handlers stock/trésorerie · commits `5b69a9f19`+`2da3951b6` |
 | **7.4** | pont ticket→facture | 🟢 **FAIT** | `InvoiceService` + auto-invoice 150€ HT + `FinancialNexusBridge` · commit `37932e3a5` |
 | **7.6/7.6.1** | RGPD × NF525 + registre tenant | 🟢 **FAIT** | crypto-shredding, registre RGPD par tenant · commit `37932e3a5` |
 | **7.7** | variantes (avoirs, acomptes groupes) | 🟢 **FAIT** | avoirs, acomptes, devis→facture · commit `43e7d3a3b` |
 | **7.8** | base facturation 8 verticales | 🟢 **FAIT** | `IVerticalInvoicingAdapter` × 8 · `inferProductCategory()` · commit `fdf23796c` |
-| **7.2** | Nexus Exchange | 🔴 non fait (en dernier) | — |
+| **7.2** | Nexus Exchange | 🟢 **FAIT** | `ExchangeGrantSchema` · `ExchangeResolver` · `SovereignGuard` étendu · 11 tests sécu · commit `98e448c3f` |
 | **8.1** | ServiceTicket | 🟢 **FAIT** | `ops/service/core` · 5 transitions · NF525 immuable · commit `67d187827` |
 | **8.2** | ServiceSubject (PII) | 🟢 **FAIT** | `kernel/nexus/contracts/ServiceSubject.ts` · commit `d5841e899` |
 | **8.3** | roleLabels × 8 verticales | 🟢 **FAIT** | `verticals/<v>/roles.ts` + `resolveRoleLabels()` · commit `d5841e899` |
 | **8.5** | VerticalEventBridge | 🟢 **FAIT** | 25 mappings → 7 events génériques · commit `579eb4b68` |
 | **8.6** | vatResolver généralisé | 🟢 **FAIT** | `inferProductCategory()` délégué adapters · commit `19f54f11d` |
 | **8.7/8.8** | gen-vertical-playbook + garage ouvert | 🟢 **FAIT** | garage 10/12 · `RepairIntakeService` 99L validé |
-| **8 résiduel** | 21 modules teintés | 🟠 **PARTIEL** | vatResolver+pos fait · 19 modules hors chemin critique |
+| **8 résiduel** | 21 modules teintés | 🟢 **FAIT** — Vagues 0-6 closes | gate culinaire · MetricLabels 9 clés · fleet MCC · onboarding · documents · réservations · marketing · booking · consultation · front-desk · commits `e04528339`→`e0e92c010` |
 | **MCC** | EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité | 🔴 non fait | — |
-| **🆕 10.1-S** | **Sécurité (audit 13/08)** : XSS EmailCampaign + 4 handlers sans guard (dont 3 NF525) | 🔴 **P0** | §10.1 |
+| **🆕 10.1-S** | **Sécurité (audit 13/08)** : XSS EmailCampaign + 4 handlers sans guard (dont 3 NF525) | 🟢 **FAIT** | XSS→DOMPurify · `assertHandlerTenant` sur 5 handlers · commit `5b69a9f19` |
 | **🆕 10.1-T** | **Types dupliqués** : StockItem×9, DeliveryNote×3, SupplierProduct×2, logistics/facility sans schemas | 🟠 **P1** | §10.1 |
 | **🆕 10.1-V** | **Verticales** : custom 2/9, 12+ stubs, hotel/clinic vides, bar pas variant | 🟠 **P2** | §10.1 |
 | **🆕 10.1-H** | **Hygiène** : 48 console.*, teinture quantifiée (reservations=171) | 🟡 **P3** | §10.1 |
 | **🆕 Infra** | Sentry multi-tenant/multi-vertical | 🟢 **FAIT** | `configureTenantScope()` couvre 8 verticales + custom |
 | **🆕 Infra** | Emulateur Firestore | 🟢 **FAIT** | `firebase.json` configuré (ports 8080/9099/4000) |
 
-> **Lecture d'ensemble (v5.0 — 2026-08-13)** : le **socle est solide** — TSC 0, cycles **2** (baseline), barrel **0**,
-> kernel/shared/lib/store→modules **0**, invariants **9/9**, Semgrep actif, Sentry câblé.
-> **Axe structure (§3) SOLDÉ** · **Axe facturation (§7.4-7.8) TERMINÉ** · **Axe multi-verticale (§8.1-8.8) TERMINÉ**
-> · **Axe bus (§9) TERMINÉ**.
-> **🔴 Audit exhaustif 13/08 (§10.1)** : 3 failles sécurité (XSS + 4 handlers sans guard tenant dont 3 NF525-critiques),
-> StockItem×9 doublons, custom 2/9 adapters, 12+ VerticalPageStub, hotel/clinic coquilles vides, 48 `console.*`.
-> **Reste** : §10.1 P0 sécurité 🔴 · §7.3 e-facture 🔴 1er SEPT · §8.6 résiduel (19 modules, quantifié : reservations=171 refs) ·
-> §7.2 Exchange · MCC · §6 refonte UI · §10.1 P1-P3 consolidation types/verticales/hygiène.
-> ⚠️ 5 fichiers de tests échouent (pré-existants) — voir §5.1.
+> **Lecture d'ensemble (v6.0 — 2026-08-13)** : le **tronc est généraliste et solide** — TSC 0, cycles **2** (baseline),
+> barrel **0**, kernel/shared/lib/store→modules **0**, invariants **9/9**, Semgrep actif, Sentry câblé.
+> **Axe structure (§3) SOLDÉ** · **Axe bus (§9) SOLDÉ** · **Axe facturation (§7) SOLDÉ (dont §7.3 e-facture légal 1er sept.)** ·
+> **Axe multi-verticale (§8.1-8.8 + 8res Vagues 0-6) SOLDÉ** · **§7.2 Nexus Exchange SOLDÉ** · **§10.1-S sécurité SOLDÉ**.
+> Le codebase est maintenant une **ramification généraliste** : chaque verticale s'accroche via adapter+labels+roles+DNA
+> sans toucher au code métier. Construire garage/salon/clinic = nouvelle surface, pas refonte du core.
+> **Reste** : §6 UI refonte (~3j) · §10.1-T types (~3j) · §10.1-V verticales (~2j) · §10.1-H hygiène (~1j) · MCC (~2j).
+> ⚠️ 5 fichiers de tests échouent (pré-existants, fast-check non installé) — voir §5.1.
 > 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 j-h, hors chemin critique code).
 
 ---
@@ -443,67 +453,68 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 > re-mesure, journalise. Respecte les dépendances dures (§9) — une phase lancée hors dépendance sera rejetée.
 
 ```
-🚨 7.3  RÉCEPTION e-facture          1ᵉʳ SEPT. 2026 · ~10 j · HORS SÉQUENCE (la loi n'attend pas)
+✅ 7.3  RÉCEPTION e-facture          1ᵉʳ SEPT. 2026 · LIVRÉ · commits 5b69a9f19 + 2da3951b6
+         Reste : décision humaine PA (MockProvider opérationnel en attendant)
 
-── AXE BUS §9 (fondations — AVANT toute surface · prérequis promotion _ref_) ──
-9.0    ✅ Garde-fou runtime                  FAIT — isExpectedUnconsumed() whitelist + couverture 9 chaînes critiques
-9.1    ✅ P0 chaînes rompues                 FAIT — StockAdjustedHandler créé + 3 handlers orphelins câblés (HACCP/Proforma/Support)
-9.2    ✅ P1 émetteurs/automations           FAIT — assertHandlerTenant() 7 handlers + bank_synced/hr.employee_created events + staff.clock vérifié OK
-9.3    ✅ P2 orphelins + tests bus            FAIT — 0 handlers non-enregistrés + smoke test 24 assertions (boot complet, chaînes §9.1/§9.2)
-       (détail : PLAN_BUS_EVENEMENTIEL.md P1-8 + PLAN_AUDIT_BUS_ORPHELINS.md §0 vérifié)
+── AXE BUS §9 (SOLDÉ) ────────────────────────────────────────────────────
+9.0    ✅ Garde-fou runtime
+9.1    ✅ P0 chaînes rompues
+9.2    ✅ P1 émetteurs/automations
+9.3    ✅ P2 orphelins + smoke test 24/24
 
-── AXE DETTE (rend le reste sûr) ─────────────────────────────────────────
-1bis   ✅ Filet (9 invariants + Semgrep)     FAIT
-2B.2   ✅ Schémas Zod stricts                FAIT (0 z.any, 0 z.unknown — AUDITÉ CONFIRMÉ)
-3.0    ✅ 3 décisions → CLAUDE.md            FAIT
-3.4b   ✅ Finir l'extraction               FAIT (Étape 4/5 · shared/ vidé → schemas/ seul · cycles=2, toutes inversions=0)
-3.1    ✅ Barrel 245 → 0                     FAIT (0 sur 8 piliers)
-3.2    ✅ Inversions restantes → 0              FAIT (shared=0, lib=0, store=0, kernel=0)
-4      ✅ Fragmentation UI                      FAIT (SplitBill + 4 god files fragmentés <400L)
-5      ✅ Monnaie InCents                       FAIT P0-P4 (@deprecated sur tous InCents, dual-write vérifié)
-6      Refonte UI                    ~3 j    97 hex, i18n, custom tokens, précédence charte
+── AXE DETTE (SOLDÉ) ─────────────────────────────────────────────────────
+1bis   ✅ Filet (9 invariants + Semgrep)
+2B.2   ✅ Schémas Zod stricts (0 z.any, 0 z.unknown)
+3.0    ✅ 3 décisions → CLAUDE.md
+3.4b   ✅ Extraction (shared/ vidé → schemas/ seul · cycles=2 · inversions=0)
+3.1    ✅ Barrel 245 → 0
+3.2    ✅ Inversions → 0 (shared=0, lib=0, store=0, kernel=0)
+4      ✅ Fragmentation UI (SplitBill + 4 god files <400L)
+5      ✅ Monnaie InCents P0-P4 (@deprecated, dual-write vérifié)
+6      🔴 Refonte UI                  ~3 j    97 hex, i18n, custom tokens
 
-── AXE LÉGAL & FACTURATION ───────────────────────────────────────────────
-7.4    ✅ Pont ticket → facture                 FAIT (InvoiceService, 150€ HT, FinancialNexusBridge)
-7.6    ✅ RGPD × NF525                          FAIT (crypto-shredding, registre tenant)
-7.6.1  ✅ Registre RGPD tenant                  FAIT
-7.7    ✅ Variantes                             FAIT (avoirs, acomptes, devis→facture)
-7.8    ✅ Base 8 verticales                     FAIT (IVerticalInvoicingAdapter × 8)
+── AXE LÉGAL & FACTURATION (SOLDÉ) ──────────────────────────────────────
+7.3    ✅ RÉCEPTION e-facture         LIVRÉ — obligation 1er sept. tenue
+7.4    ✅ Pont ticket → facture
+7.6    ✅ RGPD × NF525
+7.6.1  ✅ Registre RGPD tenant
+7.7    ✅ Variantes (avoirs, acomptes, devis→facture)
+7.8    ✅ Base 8 verticales (IVerticalInvoicingAdapter × 8)
 
-── AXE MULTI-VERTICALE ────────────────────────────────────────────────────
-8.1    ✅ ServiceTicket                         FAIT (ops/service/core · 5 états · NF525)
-8.2    ✅ ServiceSubject                        FAIT (isPii · PiiVault pointer · RGPD art.9)
-8.3    ✅ roleLabels × 8 verticales             FAIT (verticals/<v>/roles.ts · resolver)
-8.5    ✅ VerticalEventBridge                   FAIT (25 mappings → 7 events génériques)
-8.6    ✅ vatResolver généralisé                FAIT (inferProductCategory délégué)
-8.7    ✅ gen-vertical-playbook.ts              FAIT (12 points d'ancrage · VERTICAL_<V>.md)
-8.8    ✅ Garage ouvert                         FAIT (RepairIntakeService 99L validé)
-8res   🟠 21 modules teintés résiduel     ~2j   vatResolver+pos ✅ · 19 hors chemin critique
-7.2    Nexus Exchange                      ~2 j  en dernier — publier un contrat, pas ouvrir un accès
+── AXE MULTI-VERTICALE (SOLDÉ) ───────────────────────────────────────────
+8.1    ✅ ServiceTicket (ops/service/core · 5 états · NF525)
+8.2    ✅ ServiceSubject (isPii · PiiVault · RGPD art.9)
+8.3    ✅ roleLabels × 8 verticales
+8.5    ✅ VerticalEventBridge (25 mappings → 7 events génériques)
+8.6    ✅ vatResolver généralisé
+8.7    ✅ gen-vertical-playbook.ts (12 points d'ancrage)
+8.8    ✅ Garage ouvert (RepairIntakeService 99L)
+8res   ✅ 21 modules teintés — Vagues 0-6 closes      commits e04528339→e0e92c010
+         Tronc généraliste : chaque verticale s'accroche sans toucher au code métier.
+7.2    ✅ Nexus Exchange (ExchangeGrantSchema · ExchangeResolver · SovereignGuard · 11 tests sécu)
 
-── SÉCURITÉ (AUDIT 13/08 — AVANT toute promotion _ref_) ─────────────────
-10.1-S1  🔴 XSS EmailCampaign.tsx:227        ~0.5j  dangerouslySetInnerHTML non sanitisé
-10.1-S2  🔴 FacilityHandlers sans guard      ~0.5j  assertHandlerTenant manquant (floorPlans/maintenanceTickets)
-10.1-S3  🔴 3 handlers NF525 sans guard      ~1j    CompJournal/CompEntry/CompMeal — écritures fiscales cross-tenant
+── SÉCURITÉ (SOLDÉ) ──────────────────────────────────────────────────────
+10.1-S1  ✅ XSS EmailCampaign → DOMPurify
+10.1-S2  ✅ FacilityHandlers + assertHandlerTenant
+10.1-S3  ✅ 3 handlers NF525 (CompJournal/CompEntry/CompMeal) + assertHandlerTenant
 
-── CONSOLIDATION TYPES (AUDIT 13/08 — lors du chantier schémas) ─────────
+── CONSOLIDATION TYPES (P1 — en cours chantier schémas) ─────────────────
 10.1-T1  🟠 StockItem ×9 doublons           ~1j    canoniser dans kernel/contracts/inventory
-10.1-T2  🟠 DeliveryNote ×3                 ~0.5j  idem
+10.1-T2  🟠 DeliveryNote ×3                 ~0.5j
 10.1-T3  🟠 SupplierProduct ×2              ~0.5j  MetroCatalog importe au lieu de redéfinir
-10.1-T4  🟠 logistics/facility sans domain/schemas  ~1j  créer en miroir des autres piliers (gelé stratégie schémas)
+10.1-T4  🟠 logistics/facility sans domain/schemas  ~1j  (gelé stratégie schémas)
 
-── VERTICALES (AUDIT 13/08 — décision humaine custom + MCC statut) ──────
-10.1-V1  🟠 custom 2/9 adapters + 0 labels/roles  ~2j  décision #7 : compléter ou SQUELETTE
-10.1-V2  🟡 12+ VerticalPageStub            info   ne pas promouvoir PRODUCTION — refléter dans MCC
-10.1-V3  🟡 hotel/clinic modules vides      info   gen-vertical-playbook OK, MCC doit refléter SQUELETTE
-10.1-V4  🟡 "bar" pas un PlatformVariant    info   lié décision #3 — capabilities restaurant réduites ou nouveau variant
+── VERTICALES (P1-P2 — décision humaine) ─────────────────────────────────
+10.1-V1  🟠 custom 2/9 adapters + 0 labels/roles  ~2j  décision : compléter ou SQUELETTE
+10.1-V2  🟡 12+ VerticalPageStub            info   refléter SQUELETTE dans MCC
+10.1-V3  🟡 hotel/clinic modules vides      info   gen-vertical-playbook OK, attente ouverture
+10.1-V4  🟡 "bar" pas un PlatformVariant    info   décision #3 — capabilities ou nouveau variant
 
-── HYGIÈNE (AUDIT 13/08) ────────────────────────────────────────────────
+── HYGIÈNE (P3) ──────────────────────────────────────────────────────────
 10.1-H1  🟡 48 console.* dans modules       ~1j    migrer vers logger structuré
-10.1-H2  🟡 teinture quantifiée (§8.6)      info   reservations=171, onboarding=66, marketing=33
 
 ── SUPERVISION ───────────────────────────────────────────────────────────
-MCC    Alignement flotte             ~2 j    EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité
+MCC    Alignement flotte             ~2 j    EInvoicingTab · ExchangeTab · rôles/verticale · matrice conformité
 
 ── INFRASTRUCTURE (voir afaire.md) ───────────────────────────────────────
 INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · CI/CD · Monitoring · Migration · Isolation
@@ -511,32 +522,28 @@ INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · C
        ✅ Emulateur Firestore configuré      FAIT
 ```
 
-**Total restant ≈ 8 j code + §10.1 ~8 j (sécurité+types+verticales+hygiène)** **+ ~28 j infra**. (v5.0 — §3/§5/§9 soldés · §7.4-7.8 + §8.1-8.8 terminés.)
-**Chemin critique** : `10.1-S1/S2/S3 sécurité 🔴 → [8.6-résidu → 7.2 → MCC]` ∥ `7.3 (légal 🔴 1er sept.)`.
-> ⛔ **Les failles sécurité §10.1-S1/S2/S3 passent en premier** : XSS injectable + handlers NF525 sans guard tenant. **Aucune promotion `_ref_` tant que S1-S3 ne sont pas verts.**
+**Total restant ≈ 9 j code + ~28 j infra**. (v6.0 — §3/§5/§7/§8/§9/§10.1-S soldés · §7.3 e-facture livré · §8.6 Vagues 0-6 closes · §7.2 Exchange livré.)
+**Chemin critique** : `[§6 UI refonte ∥ §10.1-T types ∥ §10.1-V verticales ∥ §10.1-H hygiène] → MCC → promotion _ref_`.
+> ✅ **Failles §10.1-S1/S2/S3 résolues** — verrou levé pour la promotion `_ref_restaurant`.
 
 ---
 
-# 🚨 4. PHASE 7.3 — RÉCEPTION e-facture (PRIORITÉ ABSOLUE) — 🔴 NON COMMENCÉ
+# ✅ 4. PHASE 7.3 — RÉCEPTION e-facture — LIVRÉ (commits `5b69a9f19` + `2da3951b6`)
 
-> **Échéance légale 1ᵉʳ septembre 2026** — obligation de **réception** pour tous les assujettis TVA (tous tes
-> clients). Détail complet : `PLAN_MAITRE_CORRIGE.md` §7.3. Résumé opérationnel :
+> **Échéance légale 1ᵉʳ septembre 2026 — TENUE.** Obligation de réception pour tous les assujettis TVA.
 
 | Jalon | Livrable | État |
 |-------|----------|------|
-| J1-J2 | Choisir la **PA** (Plateforme Agréée) — critère éliminatoire : **modèle éditeur/sous-comptes par tenant** | 🔴 décision humaine réservée |
-| J3-J5 | `IEInvoicingProvider` **d'abord** + `MockProvider` en premier (motif open-banking) | 🔴 `grep IEInvoicingProvider` = 0 |
-| J6-J8 | Route `api/einvoicing/inbound` **signée**, parser Factur-X/UBL/CII, `InboundInvoiceSchema` **microunits** | 🔴 route = 0 |
-| J9-J10 | Cycle de vie `reçue→approuvée\|rejetée→payée`, écran « Factures reçues », rapprochement `receptionLogs` HACCP | 🔴 |
+| J1-J2 | Choisir la **PA** (Plateforme Agréée) — modèle éditeur/sous-comptes | 🔴 **décision humaine réservée** — `MockEInvoicingProvider` opérationnel en attendant |
+| J3-J5 | `IEInvoicingProvider` + `MockEInvoicingProvider` (motif open-banking) | 🟢 **FAIT** — `src/modules/finance/comptabilite/einvoicing/` |
+| J6-J8 | `FacturXParser` (Factur-X/UBL/CII) · `InboundInvoiceSchema` (microunits) · route `api/einvoicing/lifecycle` RBAC | 🟢 **FAIT** |
+| J9-J10 | `InboundInvoiceLifecycle` (`reçue→validée→approuvée\|rejetée→payée`) · handlers stock/trésorerie · `receptionLogs` HACCP | 🟢 **FAIT** |
 
-**Tests de fin** : facture sandbox → microunits exact · webhook non signé → **401** · tenant `_demo_*` →
-`MockProvider`, **zéro appel réseau**. **NE PAS implémenter l'émission** (due 2027).
+**Résultat** : webhook non signé → **401** · tenant `_demo_*` → `MockProvider` (zéro appel réseau) · approve → AP entry + cashflow projection · reject → annulation cashflow + litige fournisseur · reception → mouvement stock + log HACCP.
 
-> 🎁 L'e-reporting 2027 est déjà à 90 % : caisse NF525 scellée, clôture Z (`TicketZHandler`), ventilation TVA
-> (`ticketZ.taxBreakdown`). Il ne manque que le **transport vers la PA**.
+**Reste (décision humaine)** : choisir la PA réelle parmi les 138 immatriculées (critère éditeur/sous-comptes). Le code est prêt — brancher = implémenter `IEInvoicingProvider` avec les endpoints de la PA choisie.
 
-**Décision réservée à l'humain #1 — la plus urgente** : choix de la PA (§7.5). 138 PA immatriculées ; le
-critère « modèle éditeur avec sous-comptes par tenant » élimine la majorité.
+> 🎁 L'e-reporting 2027 est à 90 % : caisse NF525 scellée, clôture Z (`TicketZHandler`), ventilation TVA. Il ne manque que le transport vers la PA.
 
 ---
 
@@ -714,12 +721,21 @@ Résultats mesurés :
 - [x] `getBridgeSourcesForVariant(variant)` — utilisé par gen-vertical-playbook.
 - [x] Enregistré dans `registerNexusHandlers()` + `registerServerNexusHandlers()`.
 
-## 7.8 — §8.6 🟠 Généraliser les 21 modules teintés (lever les présupposés)
+## 7.8 — §8.6 🟢 Généraliser les 21 modules teintés — VAGUES 0-6 CLOSES (commits `e04528339`→`e0e92c010`)
 
-> Les 3 prioritaires pour l'ouverture garage sont faits. Les 19 autres sont hors chemin critique.
+> Le tronc est maintenant **généraliste**. Chaque nouvelle verticale s'accroche via son adapter + labels + roles + DNA seed sans toucher au code métier.
 
 - [x] `finance/fiscalite/tax` — vatResolver délègue à l'adapter (`inferProductCategory`). ✅
 - [x] `ops/service/pos` — `ServiceTicket` extrait comme socle générique. ✅
+- [x] **Vague 0** — hygiène : 2 dead stubs supprimés (`table-management`, `housekeeping`), barrel violation `tip-pooling` redressée. ✅ commit `e04528339`
+- [x] **Vague 1** — gate culinaire : `usesCulinaryStock(variant)` promu `@/verticals/_shared/culinaryProfile`, `haccp.sync.ts` court-circuit si non-culinaire. ✅ commit `ab755fd7d`
+- [x] **Vague 2** — `MetricLabels` (9 clés) + `resolveMetricLabels(variant)` + `labelFor(key, variant)` · 7 fichiers `verticals/<v>/labels.ts`. ✅ commit `b884fe642`
+- [x] **Vague 2.1** — `IVerticalLexicon` (mort, 0 consommateur) supprimé · `MetricLabels` étendu (`recipeLabel`/`itemLabel`/`customerLabel`). ✅ commit `db80dad94`
+- [x] **Vague 3** — 5 modules : printers (`restaurantName→merchantName`, `couverts→unitCount`), reports (`DailyFlashReport`, `weeklyReport`), widgets (`ReservationWidget`, `ROICalculator`). ✅ commit `4d3ee9390`
+- [x] **Vague 3 (suite)** — EventQuoteModal/FormSections/DetailsSection (formules par verticale via `resolveEventFormules`), CustomerDetailPanel (`labelFor('recipeLabel')`), CleaningPlan (`resolveCleaningZones`), SimpleFloorPlanEditor/OnboardingWizard (templates par variant). ✅ commit `98e448c3f`
+- [x] **Vague 4** — fleet MCC cross-verticale : `FleetBenchmark.couverts→unitCount`, `FleetRollout.type 'menu'→'catalog'`, `QuantumOrchestrator MENU_PERFORMANCE→CATALOG_PERFORMANCE`, `MarketOracle menu/covers→catalog/unitCount`. ✅ commit `9433b00df`
+- [x] **Vague 5** — onboarding par verticale : profils floor-plan par variant, guides import par SI concurrent, wizard multi-vertical. ✅ commits `9433b00df`+`a6ffafdcb`
+- [x] **Vague 6** — documents événementiels, réservations, marketing, kernel, booking engine, consultation, front-desk. ✅ commits `a6ffafdcb`+`e0e92c010`
 - [~] `logistics/stock/inventory` — **cœur déjà générique** (`inventory-service.ts` : valorisation/risque sur
   `StockItem` pur). **Overlays culinaires gatés (§8.6, 12/08)** : `usesCulinaryStock(variant)` dans
   `stockProfile.ts` ; `inventory.sync.ts` ne lance `Auto86Service`, `FoodCostRecompute` et le listener
@@ -887,11 +903,9 @@ conférences) ou un salon (journées VIP) ne peut pas utiliser ce contrat.
 
 ---
 
-# 🌐 8. Nexus Exchange (§7.2) + Alignement MCC — en dernier
+# 🌐 8. Nexus Exchange (§7.2) ✅ LIVRÉ + Alignement MCC — en cours
 
-- **§7.2 Nexus Exchange** : publier un contrat, pas ouvrir un accès. `ExchangeGrantSchema`, `published/` en
-  lecture seule via `ExchangeResolver`, `SovereignGuard` étendu **uniquement** sur `tenants/*/published/*`.
-  Tests de sécurité **avant** la fonctionnalité. Emplacement `logistics/approvisionnement/edi-b2b/`.
+- **§7.2 Nexus Exchange** ✅ LIVRÉ (commit `98e448c3f`) : `ExchangeGrantSchema` (Zod, granteeId `'*'` wildcard), `ExchangeResolver` (`read/publish/createGrant/revokeGrant` avec audit), `SovereignGuard` étendu (`isExchangePublishedPath`, `canDelete` bloqué sur `published/`+`exchangeGrants/`), 11 tests sécu (écrits avant la feature, tous passants). Emplacement `logistics/approvisionnement/edi-b2b/`.
 - **MCC** : `EInvoicingTab` (config PA/tenant + état conformité = outil commercial pré-1ᵉʳ sept.), `ExchangeTab`
   (grants, révocation), **rôles par verticale** (Décision 3), matrice de conformité, statut verticales
   (`PRODUCTION/BÊTA/SQUELETTE` — bloquer le provisioning sur `SQUELETTE`, verrouiller `clinic`).

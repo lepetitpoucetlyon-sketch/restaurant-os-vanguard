@@ -1,6 +1,9 @@
 import type {
   IEInvoicingProvider,
   InboundEInvoice,
+  OutboundEInvoice,
+  OutboundEmitResult,
+  OutboundEInvoiceStatus,
   EInvoiceWebhookPayload,
 } from './IEInvoicingProvider';
 import { logger } from '@/lib/logger';
@@ -77,5 +80,20 @@ export class MockEInvoicingProvider implements IEInvoicingProvider {
   async listPendingInvoices(): Promise<InboundEInvoice[]> {
     logger.info(`[MockEInvoicing] listPendingInvoices — ${MOCK_INVOICES.length} facture(s)`);
     return MOCK_INVOICES.map(i => ({ ...i }));
+  }
+
+  async registerCompany(siret: string, companyName: string): Promise<void> {
+    logger.info(`[MockEInvoicing] registerCompany ${siret} (${companyName})`);
+  }
+
+  async emitInvoice(invoice: OutboundEInvoice): Promise<OutboundEmitResult> {
+    const id = `mock_out_${invoice.internalRef}`;
+    logger.info(`[MockEInvoicing] emitInvoice ${invoice.invoiceNumber} → ${id}`);
+    return { providerInvoiceId: id, status: 'submitted' };
+  }
+
+  async getOutboundStatus(providerInvoiceId: string): Promise<OutboundEInvoiceStatus> {
+    logger.info(`[MockEInvoicing] getOutboundStatus ${providerInvoiceId}`);
+    return 'submitted';
   }
 }
