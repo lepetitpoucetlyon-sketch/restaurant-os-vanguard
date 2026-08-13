@@ -18,7 +18,7 @@ import { useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useActionPermission } from "@/kernel/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { NexusEventBus } from "@orchestration/NexusEventBus";
-import { tenantIdAtom } from "@/store/pillars/sovereign";
+import { tenantIdAtom, tenantConfigAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
 
 import type { Table, Reservation } from "@nexus/contracts";
@@ -170,6 +170,7 @@ export function useReservationsPage() {
     const cancelResPerm = useActionPermission("reservations", "cancel_reservation");
 
     const tenantId = useAtomValue(tenantIdAtom) as string;
+    const tenantConfig = useAtomValue(tenantConfigAtom);
     const { data: reservations = [], isLoading: reservationsLoading, markArrived, update: updateReservation, add: addReservation } = useReservations();
     const { data: customers = [], isLoading: customersLoading } = useCRM();
     const { tables = [], isLoading: tablesLoading } = useTables();
@@ -257,7 +258,7 @@ export function useReservationsPage() {
                 authedFetch("/api/email/reservation-confirm", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ to: customer.email, name: `${customer.firstName} ${customer.lastName}`, date: resData.date, time: resData.time, covers: resData.covers, restaurantName: "Restaurant OS" }),
+                    body: JSON.stringify({ to: customer.email, name: `${customer.firstName} ${customer.lastName}`, date: resData.date, time: resData.time, covers: resData.covers, restaurantName: tenantConfig?.name ?? '' }),
                 }).catch(() => { /* email failure is non-blocking */ });
             }
         } catch { toast.error("Erreur lors de la création de la réservation"); }

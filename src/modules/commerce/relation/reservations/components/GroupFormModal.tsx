@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useAtomValue } from "jotai";
 import { X, Users } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
+import { tenantVariantAtom } from "@/store/pillars/sovereign";
+import { labelFor } from "@/verticals/_shared/labels";
 
 export interface GroupFormData {
     name: string;
@@ -21,6 +24,7 @@ interface GroupFormModalProps {
 const INITIAL: GroupFormData = { name: "", minCovers: 10, maxCovers: 50, notes: "" };
 
 export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps) {
+    const variant = useAtomValue(tenantVariantAtom);
     const [form, setForm] = useState<GroupFormData>(INITIAL);
     const [saving, setSaving] = useState(false);
 
@@ -101,7 +105,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
-                                        Couverts min
+                                        {labelFor('unitPlural', variant)} min
                                     </label>
                                     <input
                                         type="number"
@@ -113,7 +117,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
-                                        Couverts max
+                                        {labelFor('unitPlural', variant)} max
                                     </label>
                                     <input
                                         type="number"

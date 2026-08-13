@@ -5,7 +5,7 @@ interface CampaignAttribution {
     campaignId: string;
     campaignName: string;
     reservationsAttributed: number;
-    couverts: number;
+    unitCount: number;
     revenueInMicrounits: Microunits;
     costInMicrounits: Microunits;
     roiPercent: number;
@@ -38,7 +38,7 @@ export const CampaignAttributionService = {
         );
 
         let totalRevenue = 0;
-        let totalCouverts = 0;
+        let totalUnitCount = 0;
 
         const orderIds = [...new Set(reservations.map(r => r.orderId).filter(Boolean))] as string[];
 
@@ -58,7 +58,7 @@ export const CampaignAttributionService = {
         }
 
         for (const resa of reservations) {
-            totalCouverts += resa.covers ?? 1;
+            totalUnitCount += resa.covers ?? 1;
             if (resa.orderId) {
                 const order = orderMap.get(resa.orderId);
                 if (order) {
@@ -76,7 +76,7 @@ export const CampaignAttributionService = {
             campaignId,
             campaignName: campaign.name,
             reservationsAttributed: reservations.length,
-            couverts: totalCouverts,
+            unitCount: totalUnitCount,
             revenueInMicrounits: toMicrounits(totalRevenue),
             costInMicrounits: toMicrounits(cost),
             roiPercent,

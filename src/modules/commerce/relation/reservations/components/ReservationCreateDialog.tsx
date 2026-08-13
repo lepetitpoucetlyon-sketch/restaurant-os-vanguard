@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useAtomValue } from "jotai";
 import { X, Calendar, Clock, Users, MapPin, ChevronLeft, Sparkles, ShieldCheck, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -8,6 +9,8 @@ import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import type { Customer, Reservation } from "@nexus/contracts";
 import type { Table } from "@/modules/ops";
+import { tenantVariantAtom } from "@/store/pillars/sovereign";
+import { labelFor } from "@/verticals/_shared/labels";
 
 interface ReservationCreateDialogProps {
     isOpen: boolean;
@@ -33,6 +36,7 @@ export function ReservationCreateDialog({
     tables,
     terraceClosed = false,
 }: ReservationCreateDialogProps) {
+    const variant = useAtomValue(tenantVariantAtom);
     const [step, setStep] = useState<Step>(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -234,7 +238,7 @@ export function ReservationCreateDialog({
                                         {/* Covers */}
                                         <motion.div variants={itemV} className="space-y-3">
                                             <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
-                                                <Users className="w-3.5 h-3.5 text-accent" /> Couverts
+                                                <Users className="w-3.5 h-3.5 text-accent" /> {labelFor('unitPlural', variant)}
                                             </label>
                                             <div className="flex items-center justify-between bg-bg-secondary border border-border rounded-2xl p-2">
                                                 <button

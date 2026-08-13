@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import type { PlatformVariant } from '@nexus/contracts';
+import { labelFor } from '@/verticals/_shared/labels';
 
 export interface SimpleTable {
   id: string;
@@ -211,7 +212,7 @@ export function SimpleFloorPlanEditor({ onSave, variant = 'restaurant' }: Simple
             >
               Changer de template
             </button>
-            <span className="text-xs text-gray-400 ml-auto">{tables.length} table{tables.length > 1 ? 's' : ''} · {tables.reduce((s, t) => s + t.capacity, 0)} couverts</span>
+            <span className="text-xs text-gray-400 ml-auto">{tables.length} table{tables.length > 1 ? 's' : ''} · {tables.reduce((s, t) => s + t.capacity, 0)} {labelFor('unitPlural', variant)}</span>
           </div>
 
           {/* Zone labels */}
@@ -304,7 +305,7 @@ export function SimpleFloorPlanEditor({ onSave, variant = 'restaurant' }: Simple
                 />
               </label>
               <label className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-600">Couverts</span>
+                <span className="text-xs text-gray-600">{labelFor('unitPlural', variant)}</span>
                 <input
                   type="number" min={1} max={20}
                   className="w-14 border border-indigo-300 rounded px-2 py-1 text-xs"

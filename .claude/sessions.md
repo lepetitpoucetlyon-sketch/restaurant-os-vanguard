@@ -142,3 +142,4 @@
 | p1-vague21-vague3 | P1 Vague 2.1 : suppr IVerticalLexicon+useLexicon, étendre MetricLabels (recipeLabel/itemLabel/customerLabel) ; puis Vague 3 : 5 modules teintés ; P2 dup DNA ; P3 naming | 2026-08-13 | terminée |
 | audit-complet-v4 | Audit complet projet : TSC, tests, cycles, barrels, sécurité, NF525, bus, dette, arbo | 2026-08-13 | active |
 | s86-vagues4-6 | §8.6 Vagues 4-6 : fleet cross-verticale (CATALOG_PERFORMANCE/businessType/unitCount/catalog), onboarding profils 7 verticales, EventContract (merchant*) | 2026-08-13 | terminée |
+| teintes-finish-ui-plan | §8.6 vérification finale vagues teintées + mise à jour interfacerestaurant.md → base généraliste | 2026-08-13 | active |

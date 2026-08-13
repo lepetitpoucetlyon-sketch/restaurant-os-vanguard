@@ -68,6 +68,7 @@ export function registerWasteToFoodCostHandler(): () => void {
         }
       } catch (err) {
         logger.error(`[WasteToFoodCost] Échec du traitement de la perte pour l'ingrédient ${ingredientId}`, err);
+        throw err;
       }
     },
     { id: 'waste-to-food-cost-handler', priority: 'BACKGROUND' }
@@ -79,6 +80,7 @@ export function registerWasteToFoodCostHandler(): () => void {
     async (payload) => {
       const { tenantId, wasteId, items } = payload;
       logger.info(`[WasteToFoodCost] Réconciliation stock pour perte wasteId=${wasteId} (${items?.length ?? 0} articles)`);
+      const failures: string[] = [];
       for (const item of items ?? []) {
         const ingredientId = item.productId;
         const quantity = item.quantity;
@@ -91,8 +93,12 @@ export function registerWasteToFoodCostHandler(): () => void {
             await Nexus.adapter.set(path, metrics);
           } catch (err) {
             logger.error(`[WasteToFoodCost] Échec réconciliation perte article ${ingredientId}`, err);
+            failures.push(ingredientId);
           }
         }
+      }
+      if (failures.length > 0) {
+        throw new Error(`[WasteToFoodCost] Échec partiel pour ${failures.length} article(s) : ${failures.join(', ')}`);
       }
     },
     { id: 'inventory-waste-food-cost-handler', priority: 'BACKGROUND' }
