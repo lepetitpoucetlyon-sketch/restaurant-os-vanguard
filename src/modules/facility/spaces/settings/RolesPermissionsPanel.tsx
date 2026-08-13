@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -40,7 +41,7 @@ export function RolesPermissionsPanel() {
             // Reload config
             await fetchConfig(currentUser.tenantId);
         } catch (error) {
-            console.error("Error saving RBAC config:", error);
+            logger.error("Error saving RBAC config:", error);
         } finally {
             setIsSaving(false);
         }

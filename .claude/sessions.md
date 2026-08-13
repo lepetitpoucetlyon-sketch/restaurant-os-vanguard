@@ -148,3 +148,5 @@
 | gate-fix-einvoicing | Fix TSC 31→0 : 3 `provider` undefined (EInvoicingService), 2 events einvoice.outbound_* absents (FINANCEEvents), fast-check absent. Gate TSC=0/cycles=2. | 2026-08-13 | terminée |
 | val-complete | Validation complète projet : TSC, tests, cycles, sentrux, barrels, preflight | 2026-08-13 | terminée |
 | infra-prod-plan | 2 fixes banking (disconnect endpoint + Qonto), puis PLAN_INFRA_PROD complet (§2→§17). Sauf §1 (Hono server P3), §6b (pagination/load-test P2), §14 (agrégateurs P3 — APIs externes). | 2026-08-13 | terminée |
+| eventbus-fixes | Résolution 5 findings audit EventBus : P0 IDOR promotions/route.ts, P1 haccp.temperature_logged orphan, P2 BankConnectionExpiredHandler loop, P2 table.locked no-emitter, P3 staff.clock as-any | 2026-08-14 | terminée |
+| plan-complet-reste | Reste PLAN_COMPLET : §10.1-H (48 console.*), §10.1-T (types doublons StockItem/DeliveryNote/SupplierProduct), §5.1-bis (5 tests), baseline.json, Semgrep restants, MCC panels, §6 UI refonte | 2026-08-14 | active |

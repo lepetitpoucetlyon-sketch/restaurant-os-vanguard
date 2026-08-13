@@ -14,6 +14,7 @@ import { registerComplianceDeadlineHandler } from '../handlers/ComplianceDeadlin
 import { registerCertExpiryHandler } from '../handlers/CertExpiryHandler';
 import { registerComplianceCalendarHandler } from '../handlers/ComplianceCalendarHandler';
 import { registerCoolingCycleHandler } from '../handlers/CoolingCycleHandler';
+import { registerHaccpTemperatureThresholdHandler } from '../handlers/HaccpTemperatureThresholdHandler';
 
 export function registerComplianceHandlers(): Array<() => void> {
   return [
@@ -34,5 +35,6 @@ export function registerComplianceHandlers(): Array<() => void> {
     registerCertExpiryHandler(),
     registerComplianceCalendarHandler(),
     registerCoolingCycleHandler(),
+    registerHaccpTemperatureThresholdHandler(),
   ];
 }

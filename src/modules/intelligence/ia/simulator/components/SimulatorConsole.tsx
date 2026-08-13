@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -54,7 +55,7 @@ export function SimulatorConsole() {
                 await StaffingOracle.analyzeStaffingGaps(new Date().toISOString().split('T')[0]);
             }
         } catch (e) {
-            console.error("Staff Ratio update failed", e);
+            logger.error("Staff Ratio update failed", e);
         }
     };
 

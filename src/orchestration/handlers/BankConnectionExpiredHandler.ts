@@ -67,6 +67,14 @@ export class BankConnectionExpiredHandler {
         expiredCount++;
         logger.warn(`[BankConnectionExpired] Connexion ${conn.id} expirée (token expiré le ${new Date(conn.tokenExpiresAt).toISOString()})`);
 
+        // Marquer 'expiring' AVANT d'émettre : si le cron tourne à nouveau avant
+        // que le handler ait mis à jour le statut, la connexion n'est plus 'active'
+        // et ne sera pas retraitée (pas de boucle d'émission).
+        await Nexus.adapter.update(`tenants/${tenantId}/banking/connections/${conn.id}`, {
+          status: 'expiring',
+          updatedAt: now,
+        });
+
         await NexusEventBus.emitDurable('finance.bank_connection_expired', {
           v: 1,
           tenantId,

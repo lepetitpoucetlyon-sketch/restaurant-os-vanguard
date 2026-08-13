@@ -8,10 +8,19 @@ export interface TimeclockPayload {
   timestamp: string;
 }
 
+interface ClockEventPayload {
+  v: 1;
+  tenantId: string;
+  userId: string;
+  userName: string;
+  terminalId: string;
+  timestamp: string;
+}
+
 export interface DomainEventResult {
   type: 'EVENT';
-  eventName: string;
-  payload: Record<string, unknown>;
+  eventName: 'staff.clock_in' | 'staff.clock_out';
+  payload: ClockEventPayload;
 }
 
 export interface DomainDbResult {

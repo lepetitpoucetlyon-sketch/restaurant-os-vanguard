@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * receptionService — Types, helpers et orchestration async de la réception marchandise.
  * Pas de React. Testable unitairement.
@@ -141,7 +142,7 @@ export async function performScan(
         }
         setActiveStep('verify');
     } catch (error) {
-        console.error('Scan error:', error);
+        logger.error('Scan error:', error);
         toast.error('Erreur lors du scan intelligent.');
     } finally {
         setIsScanning(false);
@@ -162,7 +163,7 @@ export async function performSaveToStock(
         setActiveStep('scan');
         setScanResult(null);
     } catch (error) {
-        console.error('Failed to save stock:', error);
+        logger.error('Failed to save stock:', error);
         toast.error('Erreur lors de la sauvegarde du stock.');
     } finally {
         setIsSaving(false);

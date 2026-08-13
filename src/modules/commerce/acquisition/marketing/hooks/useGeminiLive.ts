@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from 'react';
@@ -97,7 +98,7 @@ export function useRealtimeVoice() {
             setIsActive(true);
         } catch (err) {
             const errorObj = err as Error;
-            console.error("Gemini Live Hook Error:", errorObj);
+            logger.error("Gemini Live Hook Error:", errorObj);
             setError("Microphone ou Relais inaccessible.");
             stopSession();
         } finally {

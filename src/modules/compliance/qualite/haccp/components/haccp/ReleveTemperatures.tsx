@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -77,7 +78,7 @@ export function ReleveTemperatures() {
                 addNotification({ type: 'success', title: 'Relevé enregistré', message: `Température de ${recordingEq.label} validée.` });
             }
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer le relevé de température.' });
         } finally {
             setRecordingEq(null);

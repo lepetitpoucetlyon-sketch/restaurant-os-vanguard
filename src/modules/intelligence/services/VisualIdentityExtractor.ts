@@ -44,7 +44,7 @@ export const VisualIdentityExtractor = {
             
             return buffer.toString('base64');
         } catch (error) {
-            console.error(`[Nexus Vision] Capture failed:`, error);
+            logger.error(`[Nexus Vision] Capture failed:`, error);
             throw new Error(`Failed to capture visual identity from ${url}`);
         } finally {
             await browser.close();

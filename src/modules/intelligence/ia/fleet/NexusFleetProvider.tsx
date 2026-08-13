@@ -31,7 +31,7 @@ function checkOtaUpdate(
 ): { isUpdateAvailable: boolean; updateInfo: { version: string; url: string } | null } {
   const target = tenantConfig.status?.targetVersion;
   if (target && target !== currentVersion) {
-    console.warn(`[NexusOTA] NEW VERSION DETECTED: ${target}. Current: ${currentVersion}`);
+    logger.warn(`[NexusOTA] NEW VERSION DETECTED: ${target}. Current: ${currentVersion}`);
     return { isUpdateAvailable: true, updateInfo: { version: target, url: tenantConfig.status?.otaUrl || '' } };
   }
   return { isUpdateAvailable: false, updateInfo: null };
@@ -174,7 +174,7 @@ export const NexusFleetProvider: React.FC<{ children: ReactNode }> = ({ children
             applyIntelligenceUpdate(intelligence, mappedInstances, setGlobalMetrics, setMacroInsights);
 
         } catch (error) {
-            console.error('[Fleet] Sync failed:', error);
+            logger.error('[Fleet] Sync failed:', error);
         } finally {
             if (!isBackground) setIsLoading(false);
         }

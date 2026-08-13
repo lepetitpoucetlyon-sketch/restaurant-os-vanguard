@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { VatDeclaration } from '../../domain/entities/VatDeclaration';
 import { InMemoryLedgerRepository } from '../../infrastructure/repositories/InMemoryLedgerRepository';
 import { EdiDgfipAdapter } from '../../infrastructure/adapters/EdiDgfipAdapter';
@@ -38,7 +39,7 @@ export class GenerateCA3DeclarationUseCase {
       return { success: true, ediPayload };
     } catch (error) {
       const msg = toError(error).message;
-      console.error('[GenerateCA3DeclarationUseCase] Error:', msg);
+      logger.error('[GenerateCA3DeclarationUseCase] Error:', msg);
       return { success: false, error: msg };
     }
   }

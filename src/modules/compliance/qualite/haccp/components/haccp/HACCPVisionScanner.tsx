@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState } from 'react';
@@ -40,7 +41,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                 onClose();
             }
         } catch (error) {
-            console.error(error);
+            logger.error('Error', error);
         } finally {
             setIsProcessing(false);
         }

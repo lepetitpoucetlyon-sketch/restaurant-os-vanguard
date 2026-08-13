@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 // eslint-disable-next-line vanguard/no-inter-module-imports
@@ -71,7 +72,7 @@ export function useRegistre() {
                 setInterventions(ints);
                 setRegistreEntries(entries);
             } catch (err) {
-                console.error('[useRegistre] Failed to load data', err);
+                logger.error('[useRegistre] Failed to load data', err);
             } finally {
                 if (!cancelled) setLoaded(true);
             }

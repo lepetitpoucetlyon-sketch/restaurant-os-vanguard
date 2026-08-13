@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 'use client';
 
 import React, { useState } from 'react';
@@ -33,7 +34,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
             const response = await queryExpert(prompt);
             setReasoning(response.insight.reasoning);
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
         } finally {
             setIsAnalyzing(false);
         }

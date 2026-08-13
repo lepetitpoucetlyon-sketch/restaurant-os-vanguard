@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState } from 'react';
@@ -77,7 +78,7 @@ export function TracabiliteEtiquettes() {
             setIsAdding(false);
         } catch (e) {
             const error = e as Error;
-            console.error(error);
+            logger.error('Error', error);
             addNotification({ type: 'critical', title: 'Erreur d\'envoi', message: error.message || 'Impossible d\'enregistrer l\'étiquette.' });
         } finally {
             setIsUploading(false);
@@ -90,7 +91,7 @@ export function TracabiliteEtiquettes() {
             await deleteLabel(id);
             addNotification({ type: 'success', title: 'Produit retiré', message: 'L\'étiquette a été supprimée de l\'historique.' });
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de supprimer l\'étiquette.' });
         }
     };

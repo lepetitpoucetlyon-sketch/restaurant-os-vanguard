@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * @file TelemetryStream.ts
  * @description Event-driven stream for Grade X telemetry collection.
@@ -71,7 +72,7 @@ export class TelemetryStream {
             this.isFlushing = false;
             // Persistence: Put back at the beginning of the queue
             this.queue = [...batch, ...this.queue];
-            console.warn('[TelemetryStream] Flush failed. Reality preserved in local buffer.', error);
+            logger.warn('[TelemetryStream] Flush failed. Reality preserved in local buffer.', error);
             
             // Retry later
             this.startTimer(this.flushInterval * 2); 

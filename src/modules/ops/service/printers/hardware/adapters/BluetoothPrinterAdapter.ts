@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { IPrinterConnection } from '../core/IPrinterConnection';
 import { toError } from "@/lib/toError";
 
@@ -67,7 +68,7 @@ export class BluetoothPrinterAdapter implements IPrinterConnection {
         } catch (error) {
             this.device = null;
             this.writeCharacteristic = null;
-            console.error("Bluetooth connection failed:", error);
+            logger.error("Bluetooth connection failed:", error);
             throw new Error(`Failed to connect to Bluetooth printer: ${toError(error).message}`);
         }
     }
@@ -100,7 +101,7 @@ export class BluetoothPrinterAdapter implements IPrinterConnection {
                 }
             }
         } catch (error) {
-            console.error("Failed to write to Bluetooth printer:", error);
+            logger.error("Failed to write to Bluetooth printer:", error);
             throw new Error(`Print failed: ${toError(error).message}`);
         }
     }

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState } from 'react';
@@ -57,7 +58,7 @@ export function GestionHuiles() {
             });
             setIsAdding(false);
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer le contrôle huile.' });
         }
     };

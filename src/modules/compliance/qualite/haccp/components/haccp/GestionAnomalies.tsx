@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useMemo } from 'react';
@@ -30,7 +31,7 @@ export function GestionAnomalies() {
             await updateLog(id, { status: 'done', notes: 'Résolu par l\'administrateur' });
             addNotification({ type: 'success', title: 'Anomalie résolue', message: 'L\'incident a été archivé dans le registre de conformité.' });
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de résoudre l\'anomalie.' });
         }
     };

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useCallback } from "react";
@@ -34,7 +35,7 @@ export function useLocalStorage<T>(
             const item = window.localStorage.getItem(tenantScopedKey(key));
             return item ? deserializer(item) : initialValue;
         } catch (error) {
-            console.warn(`Error reading localStorage key "${key}":`, error);
+            logger.warn(`Error reading localStorage key "${key}":`, error);
             return initialValue;
         }
     });
@@ -48,7 +49,7 @@ export function useLocalStorage<T>(
                     window.localStorage.setItem(tenantScopedKey(key), serializer(valueToStore));
                 }
             } catch (error) {
-                console.warn(`Error setting localStorage key "${key}":`, error);
+                logger.warn(`Error setting localStorage key "${key}":`, error);
             }
         },
         [key, storedValue, serializer]
@@ -61,7 +62,7 @@ export function useLocalStorage<T>(
                 window.localStorage.removeItem(tenantScopedKey(key));
             }
         } catch (error) {
-            console.warn(`Error removing localStorage key "${key}":`, error);
+            logger.warn(`Error removing localStorage key "${key}":`, error);
         }
     }, [key, initialValue]);
 
@@ -84,7 +85,7 @@ export function useSessionStorage<T>(
             const item = window.sessionStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
-            console.warn(`Error reading sessionStorage key "${key}":`, error);
+            logger.warn(`Error reading sessionStorage key "${key}":`, error);
             return initialValue;
         }
     });
@@ -98,7 +99,7 @@ export function useSessionStorage<T>(
                     window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
                 }
             } catch (error) {
-                console.warn(`Error setting sessionStorage key "${key}":`, error);
+                logger.warn(`Error setting sessionStorage key "${key}":`, error);
             }
         },
         [key, storedValue]

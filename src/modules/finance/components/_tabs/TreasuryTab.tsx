@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -67,7 +68,7 @@ export function TreasuryTab() {
         setForecasts(fc.sort((a, b) => a.date.localeCompare(b.date)));
         setInvoices(inv);
       } catch (err) {
-        console.error("[TreasuryTab] load failed", err);
+        logger.error("[TreasuryTab] load failed", err);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -157,7 +158,7 @@ export function TreasuryTab() {
         `Fichier SEPA généré — ${pendingInvoices.length} paiement(s)`
       );
     } catch (err) {
-      console.error("[TreasuryTab] SEPA generation failed", err);
+      logger.error("[TreasuryTab] SEPA generation failed", err);
       toast.error("Erreur lors de la génération SEPA.");
     } finally {
       setGeneratingSepa(false);

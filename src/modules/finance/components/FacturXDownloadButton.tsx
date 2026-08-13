@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 /**
@@ -50,7 +51,7 @@ export function FacturXDownloadButton({
 
             toast.success("XML Factur-X téléchargé.");
         } catch (err) {
-            console.error("[FacturX]", err);
+            logger.error("[FacturX]", err);
             toast.error("Erreur lors de la génération Factur-X.");
         } finally {
             setLoading(false);

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState } from 'react';
@@ -40,7 +41,7 @@ export const BadgeControl: React.FC = () => {
             }
         } catch (error) {
             showToast("Erreur de transaction RH", "error");
-            console.error(error);
+            logger.error('Error', error);
         } finally {
             setIsProcessing(false);
         }

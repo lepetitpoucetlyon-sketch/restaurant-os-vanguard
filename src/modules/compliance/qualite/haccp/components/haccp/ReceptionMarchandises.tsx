@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState } from 'react';
@@ -80,7 +81,7 @@ export function ReceptionMarchandises() {
             setIsAdding(false);
         } catch (e) {
             const error = e as Error;
-            console.error(error);
+            logger.error('Error', error);
             addNotification({ type: 'critical', title: 'Erreur', message: error.message || 'Impossible d\'enregistrer la réception.' });
         } finally {
             setIsUploading(false);

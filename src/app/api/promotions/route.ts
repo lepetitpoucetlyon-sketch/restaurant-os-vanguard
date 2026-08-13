@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 import { NexusEventBus } from '@orchestration/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export async function POST(req: Request) {
+  const caller = await requireTenantRole(req, 'manager');
+  if (isDenied(caller)) return caller;
+
   try {
     const body = await req.json();
-    const { tenantId, promoId, name, discountPercent, applicableProductIds, expiresAt } = body;
+    const { promoId, name, discountPercent, applicableProductIds, expiresAt } = body;
+    const tenantId = caller.tenantId;
 
-    if (!tenantId || !promoId || !discountPercent) {
-      return NextResponse.json({ error: 'Missing required parameters (tenantId, promoId, discountPercent)' }, { status: 400 });
+    if (!promoId || !discountPercent) {
+      return NextResponse.json({ error: 'Missing required parameters (promoId, discountPercent)' }, { status: 400 });
     }
 
     const promoPath = `tenants/${tenantId}/promotions/${promoId}`;

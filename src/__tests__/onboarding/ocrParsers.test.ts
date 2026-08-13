@@ -5,9 +5,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-// ─── Mock LLMManager ─────────────────────────────────────────────────────────
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-let mockGenerateFromImage: any;
+// ─── Mock LLMManager (hoisted so it's available in vi.mock factory) ──────────
+const { mockGenerateFromImage } = vi.hoisted(() => ({
+  mockGenerateFromImage: vi.fn(),
+}));
+
+vi.mock('@/modules/intelligence/ia/ai/LLMManager', () => ({
+  LLMManager: {
+    get provider() {
+      return { generateFromImage: mockGenerateFromImage, generateText: vi.fn() };
+    },
+    set provider(_: unknown) {},
+  },
+}));
 
 vi.mock('@/modules/intelligence/ia/ai/LLMProviderFactory', () => ({
   AI_MODELS: { visionFast: 'gemini-1.5-flash', fast: 'gemini-1.5-flash' },
@@ -40,7 +50,6 @@ describe('ocrPrompts', () => {
 describe('imageParser', () => {
   beforeEach(() => {
       vi.clearAllMocks();
-      mockGenerateFromImage = vi.spyOn(LLMManager.provider, 'generateFromImage');
   });
 
   it('parse une image JPEG et retourne OcrResult avec parsed', async () => {
@@ -84,7 +93,6 @@ describe('imageParser', () => {
 describe('pdfParser', () => {
   beforeEach(() => {
       vi.clearAllMocks();
-      mockGenerateFromImage = vi.spyOn(LLMManager.provider, 'generateFromImage');
   });
 
   it('extrait le texte natif si le PDF contient du texte lisible', async () => {
@@ -98,7 +106,6 @@ describe('pdfParser', () => {
     const file = new File([pdfWithText], 'menu.pdf', { type: 'application/pdf' });
     const result = await parsePDFWithOCR(file, 'menu');
 
-    // parsePDFWithOCR retourne OcrResult : { raw, parsed, confidence }
     expect(result).toHaveProperty('raw');
     expect(result).toHaveProperty('confidence');
   });
@@ -112,7 +119,6 @@ describe('pdfParser', () => {
     const file = new File([pdfScan], 'scan.pdf', { type: 'application/pdf' });
     const result = await parsePDFWithOCR(file, 'menu');
 
-    // parsePDFWithOCR retourne OcrResult : { raw, parsed, confidence }
     expect(result).toHaveProperty('raw');
     expect(result).toHaveProperty('confidence');
   });

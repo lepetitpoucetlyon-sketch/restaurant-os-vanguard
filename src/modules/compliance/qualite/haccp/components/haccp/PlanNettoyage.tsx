@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -52,7 +53,7 @@ export function PlanNettoyage() {
                 });
             }
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de mettre à jour la tâche de nettoyage.' });
         }
     };
@@ -73,7 +74,7 @@ export function PlanNettoyage() {
             });
             addNotification({ type: 'warning', title: 'Incident consigné', message: 'L\'anomalie a été enregistrée avec succès.' });
         } catch (e) {
-            console.error(e);
+            logger.error('Error', e);
             addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible de consigner l\'incident.' });
         } finally {
             setReportingTask(null);

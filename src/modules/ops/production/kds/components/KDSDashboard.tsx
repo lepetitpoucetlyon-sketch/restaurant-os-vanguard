@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
@@ -379,7 +380,7 @@ export function KDSDashboard() {
                                         pushToRole(tenantId ?? '', 'serveur', pushPayload);
                                     }
                                     if (process.env.NODE_ENV !== 'production') {
-                                        console.info('[KDS] Push envoyé pour ticket', auditTicket.id);
+                                        logger.info('[KDS] Push envoyé pour ticket', auditTicket.id);
                                     }
                                 }
                                 setIsAuditOpen(false);

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -70,7 +71,7 @@ export function IntegrationsPage() {
 
   const handleSync = async (id: string) => {
     const res = await syncNow(id);
-    if (!res.ok && res.error) console.error(`[sync] ${id}:`, res.error);
+    if (!res.ok && res.error) logger.error(`[sync] ${id}:`, res.error);
   };
 
   if (loading) {

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * AUDIT HASHER SERVICE — Restaurant OS
  * Système d'intégrité cryptographique par chaînage de hashes.
@@ -46,7 +47,7 @@ export const AuditHasher = {
             }
         } catch (err) {
             // Mode dégradé: chaîne rompue (offline ou erreur Firestore)
-            console.warn('[AuditHasher] Impossible de lire le dernier hash. Mode dégradé activé.', err);
+            logger.warn('[AuditHasher] Impossible de lire le dernier hash. Mode dégradé activé.', err);
             chainBroken = true;
             previousHash = 'CHAIN_BREAK_' + new Date().toISOString();
         }

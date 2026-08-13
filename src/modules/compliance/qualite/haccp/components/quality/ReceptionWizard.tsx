@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState } from 'react';
@@ -57,7 +58,7 @@ export function ReceptionWizard() {
           await submitControl();
           router.push('/quality');
       } catch (error) {
-          console.error("Submission failed", error);
+          logger.error("Submission failed", error);
       } finally {
           setIsSubmitting(false);
       }

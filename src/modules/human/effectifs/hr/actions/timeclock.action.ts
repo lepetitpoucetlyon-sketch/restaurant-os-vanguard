@@ -26,7 +26,7 @@ export const submitTimeclockAction = createSafeAction(
             const result = processTimeclockAction(action, data, () => SharedKernel.generateId('sc'));
 
             if (result.type === 'EVENT') {
-                await NexusEventBus.emitDurable(result.eventName as any, result.payload);
+                await NexusEventBus.emitDurable(result.eventName, result.payload);
             } else if (result.type === 'DB_WRITE') {
                 await Nexus.adapter.set(result.path, result.payload);
             }

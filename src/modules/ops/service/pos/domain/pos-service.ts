@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Category, Product, CartItem } from "@nexus/contracts";
 import { SharedKernel } from "@/lib/shared-kernel";
@@ -56,7 +57,7 @@ export const POSService = {
                 orderBy: { field: 'name', direction: 'asc' }
             });
         } catch (error) {
-            console.error("Error fetching categories:", error);
+            logger.error("Error fetching categories:", error);
             return [];
         }
     },
@@ -73,7 +74,7 @@ export const POSService = {
             }
             return await Nexus.adapter.query(path, options);
         } catch (error) {
-            console.error("Error fetching products:", error);
+            logger.error("Error fetching products:", error);
             return [];
         }
     },

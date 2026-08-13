@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -161,7 +162,7 @@ export function KDSTicket({
                 url: '/pos',
             };
             if (process.env.NODE_ENV !== 'production') {
-                console.info('[KDS] Push envoyé pour ticket', ticket.id);
+                logger.info('[KDS] Push envoyé pour ticket', ticket.id);
             }
         }
     }, [ticket, recipes, updateOrderStatus, setAuditTicket, setIsAuditOpen]);

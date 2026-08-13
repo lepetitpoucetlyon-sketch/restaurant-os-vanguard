@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import React, { useEffect, useState } from 'react';
 import { PremiumCard } from '@design/ui/PremiumCard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -31,7 +32,7 @@ export function PaySlipViewer({ employeeId, tenantId }: PaySlipViewerProps) {
                     setPayslips(Object.values(data));
                 }
             } catch (err) {
-                console.error("Failed to fetch payslips", err);
+                logger.error("Failed to fetch payslips", err);
             } finally {
                 setLoading(false);
             }

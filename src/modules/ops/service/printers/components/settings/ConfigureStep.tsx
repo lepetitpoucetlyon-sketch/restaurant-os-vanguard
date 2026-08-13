@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import { useState } from "react";
@@ -59,7 +60,7 @@ export function ConfigureStep({
       const dev = await scanBluetoothPrinters(draft.brand ?? "generic");
       if (dev) setBtDevice({ id: dev.id, name: dev.name ?? dev.id });
     } catch (err) {
-      console.warn(err);
+      logger.warn('Bluetooth scan failed', err);
       addNotification({ type: "warning", title: "Bluetooth indisponible", message: "Aucune imprimante Bluetooth détectée. Vérifiez les permissions." });
     } finally { setScanning(false); }
   };
@@ -70,7 +71,7 @@ export function ConfigureStep({
       const dev = await requestUSBPrinter();
       if (dev) setUsbDevice({ vendorId: dev.vendorId, productId: dev.productId, deviceName: dev.productName });
     } catch (err) {
-      console.warn(err);
+      logger.warn('USB scan failed', err);
       addNotification({ type: "warning", title: "USB indisponible", message: "Aucune imprimante USB sélectionnée. Vérifiez la connexion." });
     } finally { setScanning(false); }
   };

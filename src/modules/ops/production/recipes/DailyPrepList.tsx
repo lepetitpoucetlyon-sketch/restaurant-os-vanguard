@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 'use client';
 
 /**
@@ -129,7 +130,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
           setCheckedKeys(savedChecked);
         }
       } catch (err) {
-        console.error('[DailyPrepList] load error:', err);
+        logger.error('[DailyPrepList] load error:', err);
       } finally {
         if (alive) setIsLoading(false);
       }
@@ -161,7 +162,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
           updatedAt: new Date().toISOString(),
       });
     } catch (err) {
-      console.error('[DailyPrepList] save error:', err);
+      logger.error('[DailyPrepList] save error:', err);
       addNotification({ type: 'critical', title: 'Erreur', message: 'Impossible d\'enregistrer la liste de préparation.' });
     } finally {
       setIsSaving(false);

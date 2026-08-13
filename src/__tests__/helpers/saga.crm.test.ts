@@ -388,7 +388,8 @@ describe('VipStatusEvaluationHandler', () => {
   });
 
   it('ajoute le tag regular à la 5ème visite', async () => {
-    mockGet.mockResolvedValueOnce({ totalVisits: 4, tags: [] });
+    mockGet.mockResolvedValueOnce(null); // crmConfig → use defaults
+    mockGet.mockResolvedValueOnce({ totalVisits: 4, tags: [] }); // customer profile
     mockUpdate.mockResolvedValue(undefined);
     mockEmit.mockResolvedValue(undefined);
 
@@ -401,7 +402,8 @@ describe('VipStatusEvaluationHandler', () => {
   });
 
   it('ajoute le tag vip à la 20ème visite', async () => {
-    mockGet.mockResolvedValueOnce({ totalVisits: 19, tags: ['regular'] });
+    mockGet.mockResolvedValueOnce(null); // crmConfig → use defaults
+    mockGet.mockResolvedValueOnce({ totalVisits: 19, tags: ['regular'] }); // customer profile
     mockUpdate.mockResolvedValue(undefined);
     mockEmit.mockResolvedValue(undefined);
 
@@ -414,7 +416,8 @@ describe('VipStatusEvaluationHandler', () => {
   });
 
   it('ne modifie pas le profil si le seuil n\'est pas atteint', async () => {
-    mockGet.mockResolvedValueOnce({ totalVisits: 3, tags: [] });
+    mockGet.mockResolvedValueOnce(null); // crmConfig → use defaults
+    mockGet.mockResolvedValueOnce({ totalVisits: 3, tags: [] }); // customer profile
 
     await capturedHandlers['order.paid']({ tenantId: 'T', customerId: 'c3', totalInMicrounits: 500000 });
 
@@ -428,7 +431,8 @@ describe('VipStatusEvaluationHandler', () => {
   });
 
   it('ignore si profil introuvable', async () => {
-    mockGet.mockResolvedValueOnce(null);
+    mockGet.mockResolvedValueOnce(null); // crmConfig → use defaults
+    mockGet.mockResolvedValueOnce(null); // customer profile → not found
 
     await capturedHandlers['order.paid']({ tenantId: 'T', customerId: 'ghost', totalInMicrounits: 2000000 });
 

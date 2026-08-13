@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 "use client";
 
 import React, { useState } from 'react';
@@ -38,7 +39,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
             );
             setAuditResult(result);
         } catch (error) {
-            console.error("Audit failed", error);
+            logger.error("Audit failed", error);
         } finally {
             setIsScanning(false);
         }
