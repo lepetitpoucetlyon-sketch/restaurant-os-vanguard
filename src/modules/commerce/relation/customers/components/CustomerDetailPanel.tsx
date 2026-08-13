@@ -91,6 +91,9 @@ function useCustomerHistory(customer: Customer): { data: CustomerHistory | null;
 
 function HistoriqueTab({ customer }: { customer: Customer }) {
     const { data, loading } = useCustomerHistory(customer);
+    const { activeTenantConfig } = useTenant();
+    const variant = (activeTenantConfig?.variant ?? 'restaurant') as PlatformVariant;
+    const recipeLabelPlural = `${labelFor('recipeLabel', variant)}s`;
 
     if (loading) {
         return (

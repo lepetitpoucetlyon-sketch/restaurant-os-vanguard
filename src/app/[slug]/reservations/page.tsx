@@ -73,7 +73,7 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
 
       <ReservationWidget
         tenantId={slug}
-        restaurantName={restaurantName}
+        merchantName={restaurantName}
         cardImprintConfig={cardImprintConfig}
       />
     </div>

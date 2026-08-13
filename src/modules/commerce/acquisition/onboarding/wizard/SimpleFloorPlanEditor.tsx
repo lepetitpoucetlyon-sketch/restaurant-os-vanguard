@@ -90,7 +90,7 @@ const SALON_TEMPLATES = [
   {
     name: 'Salon 6 postes',
     tables: Array.from({ length: 6 }, (_, i) => ({
-      id: `p${i + 1}`, x: 80 + (i % 3) * 130, y: 80 + Math.floor(i / 3) * 130, capacity: 1, label: `Poste ${i + 1}`, shape: 'circle' as const,
+      id: `p${i + 1}`, x: 80 + (i % 3) * 130, y: 80 + Math.floor(i / 3) * 130, capacity: 1, label: `Poste ${i + 1}`, shape: 'round' as const,
     })),
     zones: [{ id: 'z1', name: 'Salle principale', color: '#FDF4FF' }],
   },

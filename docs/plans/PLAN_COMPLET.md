@@ -1,4 +1,4 @@
-# 🎯 PLAN COMPLET — Vibecoder Rescue v4.5
+# 🎯 PLAN COMPLET — Vibecoder Rescue v5.0
 
 > **Document maître unique.** Fusionne, réordonne et met à jour :
 > `PLAN_MAITRE_CORRIGE.md` (v3, dette + légal + UI) · `MAPPING_BASE_VERTICALES.md` ·
@@ -14,6 +14,14 @@
 > Claude a **réparé en avant** : **TSC 74 → 0, cycles 6 → 3, barrel 245 → ~0, store→modules 8 → 0.** Détail :
 > `JOURNAL_AGENT.md` §AUDIT-2 (constat) + §AUDIT-2-FIX (réparation). Les métriques §1 et le contrat §0 sont
 > **remis à la vérité mesurée**. Nouveau : **§0.9 Symbiose** + `scripts/agent-gate.sh` (preuve liée au hash).
+>
+> **🔄 v5.0 — audit exhaustif racine→UI (13/08, par Claude).** Audit complet du projet : 8 piliers ×
+> domaines × verticales, schemas, handlers, types, UI. **13 constats nouveaux** intégrés : 3 failles
+> sécurité (XSS EmailCampaign, 4 handlers NF525/facility sans `assertHandlerTenant`), 4 duplications
+> de types (StockItem×9, DeliveryNote×3, SupplierProduct×2, logistics/facility sans `domain/schemas/`),
+> 4 lacunes verticales (custom incomplète 2/9 adapters, 12+ VerticalPageStub, hotel/clinic coquilles
+> vides, "bar" pas un PlatformVariant), 2 hygiène (48 `console.*`, teinture restaurant quantifiée :
+> reservations=171 refs, onboarding=66, marketing=33). Nouveau §10.1 + métriques §1.1 étendues.
 >
 > **🔄 v4.5 — intégration de l'AXE BUS (12/08, par Claude).** Consolidation de deux plans bus
 > épars dans ce document maître : `PLAN_BUS_EVENEMENTIEL.md` (audit « spider web » 09/08 — 94
@@ -302,6 +310,11 @@ Antigravity : lit §2 ; un ⚠️/❌ = nouvelle entrée « CORRECTIF » (jamais
 | `z.unknown()` tuples actions | 12 | **12** | **0** ✅ (1 `z.record` settings résiduel OK) | 0 |
 | God files (fan-out>15) | ~18 | **18** | **18** (8 helpers test + 5 `registerHandlers` à exempter) | tests+registres exemptés |
 | Fonctions cc>12 | 33 | **33** | **33** | décision humaine |
+| `console.*` dans modules | — | — | **48** | 0 (logger structuré) |
+| `assertHandlerTenant` coverage | — | — | **8/22** handlers (36 %) | 22/22 (100 %) |
+| Types dupliqués (StockItem) | — | — | **9 définitions** | 1 canonique |
+| VerticalPageStub (placeholder UI) | — | — | **12+ pages** (bakery/salon/retail/hotel/clinic) | 0 |
+| Verticale custom adapters | — | — | **2/9** (manque 7 + labels + roles) | 9/9 |
 
 ### Barrel par pilier — **0** (tous piliers à 0, gate @ `dd1ed4813`)
 
@@ -368,18 +381,23 @@ Toutes les cibles structurelles de l'extraction sont atteintes :
 | **8.7/8.8** | gen-vertical-playbook + garage ouvert | 🟢 **FAIT** | garage 10/12 · `RepairIntakeService` 99L validé |
 | **8 résiduel** | 21 modules teintés | 🟠 **PARTIEL** | vatResolver+pos fait · 19 modules hors chemin critique |
 | **MCC** | EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité | 🔴 non fait | — |
+| **🆕 10.1-S** | **Sécurité (audit 13/08)** : XSS EmailCampaign + 4 handlers sans guard (dont 3 NF525) | 🔴 **P0** | §10.1 |
+| **🆕 10.1-T** | **Types dupliqués** : StockItem×9, DeliveryNote×3, SupplierProduct×2, logistics/facility sans schemas | 🟠 **P1** | §10.1 |
+| **🆕 10.1-V** | **Verticales** : custom 2/9, 12+ stubs, hotel/clinic vides, bar pas variant | 🟠 **P2** | §10.1 |
+| **🆕 10.1-H** | **Hygiène** : 48 console.*, teinture quantifiée (reservations=171) | 🟡 **P3** | §10.1 |
 | **🆕 Infra** | Sentry multi-tenant/multi-vertical | 🟢 **FAIT** | `configureTenantScope()` couvre 8 verticales + custom |
 | **🆕 Infra** | Emulateur Firestore | 🟢 **FAIT** | `firebase.json` configuré (ports 8080/9099/4000) |
 
-> **Lecture d'ensemble (v4.4 — 2026-08-12)** : le **socle est solide** — TSC 0, cycles **2** (baseline), barrel **0**,
+> **Lecture d'ensemble (v5.0 — 2026-08-13)** : le **socle est solide** — TSC 0, cycles **2** (baseline), barrel **0**,
 > kernel/shared/lib/store→modules **0**, invariants **9/9**, Semgrep actif, Sentry câblé.
-> **Axe structure (§3) SOLDÉ** : `shared/` vidé (ne reste que `schemas/` gelé), toutes inversions à 0.
-> **Axe facturation (§7.4-7.8) TERMINÉ** : `InvoiceService` + 150€ HT + RGPD + variantes + `IVerticalInvoicingAdapter`.
-> **Axe multi-verticale (§8.1-8.8) TERMINÉ** : `ServiceTicket` · `ServiceSubject` · roleLabels ×8 · `VerticalEventBridge`
-> 25 rules · vatResolver généralisé · gen-vertical-playbook · garage ouvert (`RepairIntakeService` 99L validé).
-> **Reste** : **§9 AXE BUS 🔴 (garde-fou + chaînes rompues — à faire AVANT la surface)** · §7.3 e-facture 🔴 1er SEPT · §8.6 généralisation résiduelle (19 modules) · §7.2 Nexus Exchange · MCC EInvoicing/Exchange · §6 refonte UI. *(§5 monnaie P0-P4 SOLDÉ, audité 12/08.)*
-> ⚠️ 5 fichiers de tests échouent (pré-existants, prouvés) — voir §5.1.
-> 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 jours-homme, hors chemin critique code).
+> **Axe structure (§3) SOLDÉ** · **Axe facturation (§7.4-7.8) TERMINÉ** · **Axe multi-verticale (§8.1-8.8) TERMINÉ**
+> · **Axe bus (§9) TERMINÉ**.
+> **🔴 Audit exhaustif 13/08 (§10.1)** : 3 failles sécurité (XSS + 4 handlers sans guard tenant dont 3 NF525-critiques),
+> StockItem×9 doublons, custom 2/9 adapters, 12+ VerticalPageStub, hotel/clinic coquilles vides, 48 `console.*`.
+> **Reste** : §10.1 P0 sécurité 🔴 · §7.3 e-facture 🔴 1er SEPT · §8.6 résiduel (19 modules, quantifié : reservations=171 refs) ·
+> §7.2 Exchange · MCC · §6 refonte UI · §10.1 P1-P3 consolidation types/verticales/hygiène.
+> ⚠️ 5 fichiers de tests échouent (pré-existants) — voir §5.1.
+> 📌 **6 lacunes d'infrastructure** documentées dans `afaire.md` (~28 j-h, hors chemin critique code).
 
 ---
 
@@ -463,18 +481,39 @@ en casse une autre : stop et journal. **Leçon 5** : un gate non lié à un hash
 8res   🟠 21 modules teintés résiduel     ~2j   vatResolver+pos ✅ · 19 hors chemin critique
 7.2    Nexus Exchange                      ~2 j  en dernier — publier un contrat, pas ouvrir un accès
 
+── SÉCURITÉ (AUDIT 13/08 — AVANT toute promotion _ref_) ─────────────────
+10.1-S1  🔴 XSS EmailCampaign.tsx:227        ~0.5j  dangerouslySetInnerHTML non sanitisé
+10.1-S2  🔴 FacilityHandlers sans guard      ~0.5j  assertHandlerTenant manquant (floorPlans/maintenanceTickets)
+10.1-S3  🔴 3 handlers NF525 sans guard      ~1j    CompJournal/CompEntry/CompMeal — écritures fiscales cross-tenant
+
+── CONSOLIDATION TYPES (AUDIT 13/08 — lors du chantier schémas) ─────────
+10.1-T1  🟠 StockItem ×9 doublons           ~1j    canoniser dans kernel/contracts/inventory
+10.1-T2  🟠 DeliveryNote ×3                 ~0.5j  idem
+10.1-T3  🟠 SupplierProduct ×2              ~0.5j  MetroCatalog importe au lieu de redéfinir
+10.1-T4  🟠 logistics/facility sans domain/schemas  ~1j  créer en miroir des autres piliers (gelé stratégie schémas)
+
+── VERTICALES (AUDIT 13/08 — décision humaine custom + MCC statut) ──────
+10.1-V1  🟠 custom 2/9 adapters + 0 labels/roles  ~2j  décision #7 : compléter ou SQUELETTE
+10.1-V2  🟡 12+ VerticalPageStub            info   ne pas promouvoir PRODUCTION — refléter dans MCC
+10.1-V3  🟡 hotel/clinic modules vides      info   gen-vertical-playbook OK, MCC doit refléter SQUELETTE
+10.1-V4  🟡 "bar" pas un PlatformVariant    info   lié décision #3 — capabilities restaurant réduites ou nouveau variant
+
+── HYGIÈNE (AUDIT 13/08) ────────────────────────────────────────────────
+10.1-H1  🟡 48 console.* dans modules       ~1j    migrer vers logger structuré
+10.1-H2  🟡 teinture quantifiée (§8.6)      info   reservations=171, onboarding=66, marketing=33
+
 ── SUPERVISION ───────────────────────────────────────────────────────────
 MCC    Alignement flotte             ~2 j    EInvoicingTab, ExchangeTab, rôles/verticale, matrice conformité
 
-── INFRASTRUCTURE (NOUVEAU — voir afaire.md) ─────────────────────────────
+── INFRASTRUCTURE (voir afaire.md) ───────────────────────────────────────
 INFRA  6 lacunes identifiées        ~28 j   API REST · Tests intégration · CI/CD · Monitoring · Migration · Isolation
        ✅ Sentry multi-tenant/multi-vertical FAIT
        ✅ Emulateur Firestore configuré      FAIT
 ```
 
-**Total restant ≈ 8 j code + AXE BUS ~8 j (§9)** **+ ~28 j infra**. (v4.5 — §3 structure + §5 monnaie soldés · §7.4-7.8 + §8.1-8.8 terminés.)
-**Chemin critique** : `9.0 garde-fou → 9.1 P0 bus → [8.6-résidu → 7.2 → MCC]` ∥ `7.3 (légal 🔴 1er sept.)`.
-> ⛔ **Le garde-fou (9.0) passe en premier** : il rend visibles les 94 orphelins (dont ~faux positifs, cf. §0 vérifié) et gèle le principe. **Aucune promotion `_ref_restaurant` avant que 9.1 soit vert** (sinon les chaînes rompues sont clonées chez les clients).
+**Total restant ≈ 8 j code + §10.1 ~8 j (sécurité+types+verticales+hygiène)** **+ ~28 j infra**. (v5.0 — §3/§5/§9 soldés · §7.4-7.8 + §8.1-8.8 terminés.)
+**Chemin critique** : `10.1-S1/S2/S3 sécurité 🔴 → [8.6-résidu → 7.2 → MCC]` ∥ `7.3 (légal 🔴 1er sept.)`.
+> ⛔ **Les failles sécurité §10.1-S1/S2/S3 passent en premier** : XSS injectable + handlers NF525 sans guard tenant. **Aucune promotion `_ref_` tant que S1-S3 ne sont pas verts.**
 
 ---
 
@@ -689,8 +728,154 @@ Résultats mesurés :
   Défaut `'restaurant'` → comportement historique préservé. Test `stockProfile.test.ts` 3/3.
   **Reste (schéma-gelé, opening-gated)** : rename contractuel `Ingredient`→`StockItem`, `dlc`/`Preparation`
   comme overlay périssable optionnel — attend le chantier schémas + une ouverture verticale qui l'exige.
-- [ ] Puis (18 restants) : `printers`, `reservations`, `onboarding`, `marketing`, `widgets`, `documents`,
-  `reports`, `ia/fleet`, `ia/ai`, `floor-plan`… — hors chemin critique jusqu'à l'ouverture de chaque verticale.
+- [x] **Vague 2.1 (P1)** — `IVerticalLexicon` (mort, 0 consommateur) supprimé ; `MetricLabels` étendu à 9 clés
+  (`recipeLabel` / `itemLabel` / `customerLabel` ajoutées) ; `useLexicon.ts` supprimé. ✅ 13/08
+- [x] **Vague 3** — 5 modules libellés généralisés (`printers/hardware/types.ts`,
+  `EscPosBuilder/ReceiptBuilder/PrintingService/BrowserAdapter`, `usePrintReceipt.ts`,
+  `DailyFlashReport.ts`, `weeklyReport.ts`, `ReservationWidget.tsx`, `ROICalculator.tsx`,
+  `reservation-widget-types.ts`) : `restaurantName→merchantName`, `Couverts→Nombre de personnes`,
+  `couvertsDelta→unitDelta`, `bon cuisine→bon de production`. Gate TSC=0 tenu. ✅ 13/08
+- [ ] Puis (16 restants) — **audit §8.6 complet 13/08** (voir `AUDIT_MODULES_TEINTES.md`) :
+
+### Vague 4 — MCC Fleet cross-verticale (effort M, ~1 j)
+
+**Contexte** : `intelligence/ia/fleet/` contient les outils de supervision MCC (super-admin) qui
+comparent les métriques de *toute la flotte*, quelle que soit la verticale. Or les fichiers
+`FleetBenchmark.ts`, `FleetRollout.ts`, `QuantumOrchestrator.ts` et `MarketOracle.ts` utilisent
+`couverts` comme colonne hardcodée et `type: 'menu' | 'config' | 'template'` comme catégorie de
+contenu. Le super-admin voit donc « couverts » pour un garagiste ou un salon — un non-sens métier.
+
+**Fichiers cibles** :
+- `src/modules/intelligence/ia/fleet/FleetBenchmark.ts` — champ `couverts` hardcodé dans le schéma
+  de benchmark cross-tenant
+- `src/modules/intelligence/ia/fleet/FleetRollout.ts` — `type: 'menu' | 'config' | 'template'`
+  (catégorie générique de contenu déguisée en terminologie restaurant)
+- `src/modules/intelligence/ia/fleet/QuantumOrchestrator.ts` — pulse `MENU_PERFORMANCE` hardcodé
+- `src/modules/intelligence/ia/fleet/MarketOracle.ts` — références `menu`/`covers`
+
+**Transformations** :
+1. `FleetBenchmark.couverts: number` → `unitCount: number` (champ générique)
+2. `FleetRollout.type = 'menu' | 'config' | 'template'` → `'catalog' | 'config' | 'template'`
+   (`menu` est restaurant-specific ; `catalog` est le terme générique pour la carte produits/services)
+3. Ajouter `variant: PlatformVariant` aux signatures de génération de benchmark
+4. `resolveMetricLabels(variant).unitPlural` pour l'affichage du libellé dans les dashboards MCC
+5. `MENU_PERFORMANCE` → `CATALOG_PERFORMANCE` dans QuantumOrchestrator
+
+**Pattern** : même motif que `DailyFlashReport.ts` (Vague 3) — `variant` passé en paramètre,
+`resolveMetricLabels` pour les libellés, `unitCount` pour le champ numérique brut.
+
+**Prérequis** : Vague 2 (labels partagés) ✅ déjà fait.
+
+**Gate** : TSC=0 · cycles=2 · aucune régression `FleetBenchmark` existant.
+
+---
+
+### Vague 5 — Onboarding par verticale (effort M, ~2 j)
+
+**Contexte** : `commerce/acquisition/onboarding/` contient 65+ fichiers dont **66 références
+restaurant** hardcodées. Le wizard d'onboarding guide le tenant à la première connexion pour :
+(a) importer son historique depuis un ancien logiciel, (b) configurer le plan de salle,
+(c) paramétrer les catégories de menu. Ces trois volets sont 100 % restaurant aujourd'hui.
+
+**Fichiers cibles** :
+- `src/modules/commerce/acquisition/onboarding/migration/parsers/xlsxParser.ts` — colonnes
+  `restaurantName`, catégories restaurant dans les guides d'import
+- `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` — catégorie `menu`
+  hardcodée, libellés restaurant dans les étapes
+- `src/modules/commerce/acquisition/onboarding/wizard/SimpleFloorPlanEditor.tsx` — **3 profils
+  restaurant** hardcodés (`Bistrot 20 couverts`, `Terrasse`, `Salle principale`) ; shape `'circle'`
+  au lieu du type union `'round' | 'rect'` (TSC error actuel)
+- `src/modules/commerce/acquisition/onboarding/guides/exportGuides.ts` *(à créer depuis le wizard)*
+  — 4 SI concurrents restaurant (Zelty / L'Addition / Lightspeed Restaurant / Tiller)
+
+**Transformation — pattern extraction par verticale** :
+
+```
+verticals/<v>/onboarding/
+  sourceSystems.ts   ← liste des SI concurrents importables
+  guides.ts          ← exportGuides par SI (instructions d'export spécifiques)
+  floorPlanProfiles.ts ← profils par défaut (nom, tables, zones)
+```
+
+Exemples par verticale :
+- `restaurant/onboarding/sourceSystems.ts` : Zelty, L'Addition, Lightspeed Restaurant, Tiller
+- `salon/onboarding/sourceSystems.ts` : MISTER, Planity, Wavy
+- `clinic/onboarding/sourceSystems.ts` : Doctolib, Maiia, Infi
+- `garage/onboarding/sourceSystems.ts` : Winkler, Autorep, Winmotor
+- `retail/onboarding/sourceSystems.ts` : Cegid Retail, Lightspeed Retail
+
+Dans `OnboardingWizard.tsx` : résoudre à runtime via `import('@/verticals/' + variant +
+'/onboarding/sourceSystems').then(m => setSourceSystems(m.default))`.
+
+**Condition d'ouverture** : ne traiter que si une verticale non-restaurant est en cours d'ouverture
+commerciale. Pas de spéculation (leçon §8.6 audit). Si aucune ouverture prévue, bloquer à
+`restaurant` avec un header UI clair `« Import historique — restaurant uniquement »`.
+
+**Prérequis** : Vague 2 ✅ · ouverture effective d'une verticale non-restaurant.
+
+**Gate** : TSC=0 · `SimpleFloorPlanEditor.tsx` shape union corrigé (bug TSC existant) · tests
+onboarding existants green.
+
+---
+
+### Vague 6 — Documents événementiels (effort S–M, ~½ j)
+
+**Contexte** : `finance/comptabilite/documents/PrivatisationContract.ts` (446 lignes) génère le
+contrat de privatisation pour les événements (mariages, séminaires, repas de groupe). Il hardcode
+`restaurantNom`, `restaurantAdresse`, `restaurantTel`, `restaurantEmail`, `restaurantSiret` et
+`PrivatisationFormule = 'menu' | 'cocktail_dinatoire' | 'buffet'`. Un hôtel (séminaires,
+conférences) ou un salon (journées VIP) ne peut pas utiliser ce contrat.
+
+**Fichiers cibles** :
+- `src/modules/finance/comptabilite/documents/PrivatisationContract.ts` — renommer + généraliser
+- `src/modules/commerce/relation/reservations/components/EventQuoteModal.tsx` — "Menu assis"
+  hardcodé, `restaurantNom` en dur (TSC error actuel : `.address` manquant)
+- `src/modules/commerce/relation/reservations/components/EventQuoteFormSections.tsx` — libellés
+  formule restaurant
+- `src/modules/commerce/relation/reservations/components/event-quote/EventQuoteDetailsSection.tsx`
+  — affichage contrat restaurant-only
+
+**Transformation** :
+1. `PrivatisationContract.ts` → `EventContract.ts` (renommage fichier + classe)
+2. `restaurantNom/Adresse/Tel/Email/Siret` → `merchantName/address/phone/email/siret`
+3. Créer `IVerticalContractAdapter` :
+   ```typescript
+   interface IVerticalContractAdapter {
+     eventFormulas: string[];          // restaurant: ['menu','cocktail_dinatoire','buffet']
+     contractTitle: string;            // 'Contrat de privatisation' / 'Convention séminaire'
+     defaultDuration: number;          // minutes — 180 restaurant, 480 hôtel séminaire
+   }
+   ```
+4. Adapter par verticale concernée :
+   - `restaurant` : `['menu', 'cocktail_dinatoire', 'buffet']`
+   - `hotel` : `['séminaire', 'conférence', 'cocktail_dînatoire']`
+   - `salon` : `['journée VIP', 'atelier groupe']`
+   - `clinic` : aucun contrat événementiel (désactiver le menu)
+5. `EventQuoteModal.tsx` : résoudre l'adapter via `resolveContractAdapter(variant)` au lieu de
+   hardcoder "Menu assis"
+
+**Prérequis** : Vague 3 ✅ (labels merchant déjà généralisés).
+
+**Gate** : TSC=0 · `EventQuoteModal.tsx` error `.address` corrigée · aucune régression NF525
+(contrat événementiel n'est pas un journal fiscal — pas de contrainte immuabilité).
+
+---
+
+### Vagues 7+ — Chantiers schéma-gelés et opening-gated
+
+- **Réservations** (Bucket F, 171 refs, effort M) : libellés UI `Couverts/Table` via
+  `resolveMetricLabels(variant)` — quasi polyvalent structurellement, seule l'UI est teintée.
+  Ouvrir quand salon/clinic est en cours d'ouverture commerciale.
+- **Marketing** (Bucket H, 33 refs, effort S) : `slug||'restaurant'` → `'business'` ;
+  `CampaignAttributionService.couverts` → `unitCount`. À faire à l'ouverture CRM non-restaurant.
+- **Floor-plan** (Bucket J, effort L, schéma-gelé) : contrat `Table→Space { kind: 'table'|'room'|
+  'bay'|'seat'|'station' }` + overlays. **Attend une ouverture qui l'exige** (hôtel `room`, garage
+  `bay`) — ne pas ouvrir en spéculation.
+- **HACCP/donation/menu-engineering/kitchen** (Bucket C, effort S) : gater
+  `usesCulinaryStock(variant)` pour masquer la surface UI chez garage/salon/clinic. Extension
+  retail alimentaire : `variant === 'retail' && capabilities.food`.
+
+  Hors chemin critique jusqu'à l'ouverture de chaque verticale.
 
 ## 7.9 — §8.7/8.8 — outillage + première ouverture
 
@@ -747,19 +932,21 @@ Résultats mesurés :
               · Phase 4 (SplitBill + 4 god files <400L) · Phase 5 P0-P3 · §7.4-7.8 facturation · §8.1-8.8 multi-verticale · Sentry
 
 RESTE (chemin critique) :
-§9 BUS : 9.0 garde-fou ─► 9.1 P0 chaînes ─► 9.2 P1 ─► 9.3 P2   ◄── FONDATIONS, avant la surface
-   │        (prérequis dur : aucune promotion _ref_restaurant avant 9.1 vert)
+§10.1-S : SÉCURITÉ 🔴 (XSS + 4 handlers sans guard)              ◄── BLOQUANT, avant promotion _ref_
+   │
    ▼
 8.6-résidu (19 modules teintés) ─► 7.2 Exchange ─► MCC-1…5
                                                                      │
    (parallèle, périmètres disjoints)                                 │
+§10.1-T : consolidation types (StockItem×9, etc.)                    │
+§10.1-V1 : custom 7 adapters + labels/roles (décision #7)           │
 6.0 → 6.1 → 6.4 → 6.2 → REFONTE UI  ◄── attend décisions charte + i18n
                                                                      │
    (verrouillé)                                                      │
 clinic ◄── attend §8.2 PII + §7.6 RGPD validés en prod
 ```
 
-**Chemin critique** : `§9 (9.0 garde-fou → 9.1 P0 bus) → 8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §5 monnaie, §7.4-7.8, §8.1-8.8 clos ; e-facture §7.3 en parallèle).
+**Chemin critique** : `§10.1-S (sécurité P0) → 8.6-résidu → 7.2 Exchange → MCC` (axes §3, §4, §5, §7.4-7.8, §8.1-8.8, §9 clos ; e-facture §7.3 en parallèle ; §10.1-T/V/H en parallèle hors chemin critique).
 
 ---
 
@@ -791,6 +978,9 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 | ~~3 handlers non-câblés~~ | `HaccpCorrectiveAction` + `Proforma` + `SupportEscalation` → **câblés (12/08)** | 🟢 **FAIT** |
 | `bank/sync`, `hr/employees` | `finance.bank_synced` + `hr.employee_created` ajoutés (emit après écriture) | 🟢 **FAIT (12/08)** |
 | ~~handlers font confiance à `payload.tenantId`~~ | `assertHandlerTenant()` dans 7 handlers critiques + test 4/4 | 🟢 **FAIT (12/08)** |
+| 🔴 **handlers NF525 sans guard (audit 13/08)** | `CompJournalHandler` (journalEntries L73+compLog L75), `CompEntryHandler` (paymentLedger L21), `CompMealHandler` (journalEntries L13) — écrivent NF525 immuable sans `assertHandlerTenant` | 🔴 **P0** |
+| 🔴 **FacilityHandlers sans guard (audit 13/08)** | `FacilityHandlers.ts` L12+L26 : écrit `floorPlans/` + `maintenanceTickets/` avec tenantId du payload sans guard | 🔴 **P1** |
+| **Couverture globale (audit 13/08)** | 8/22 handlers ont `assertHandlerTenant` (36 %) — cible : 100 % des handlers qui font `adapter.set/update` | 🟠 |
 | **Faux positifs** (NE PAS toucher) | `cash_drawer`, `anomaly.detected`, `commerce.margin_warning`, `finance.refund_issued`, `kds.ticket_received`… **sont câblés** | ✅ |
 
 ## 9.2 — Ordre d'exécution
@@ -831,6 +1021,48 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 | ~~**`ProcurementBridge` l.69**~~ | ~~`totalAmountInCents` sans microunits dans `signDeliveryNote()`~~ | ✅ **résolu** — dual-write fallback L67 (audit `p4-finance` 12/08) |
 | **🆕 6 lacunes infra** | API REST, tests intégration, CI/CD, monitoring, migration, isolation | 🔴 voir `afaire.md` |
 
+## 10.1 — Dette découverte par l'audit exhaustif 13/08
+
+> Audit racine→UI : 8 piliers × domaines × verticales, schemas, handlers, types dupliqués, UI stubs,
+> guard coverage, hygiène. 13 constats classés par priorité.
+
+### 🔴 P0 — SÉCURITÉ (à traiter avant toute promotion `_ref_`)
+
+| # | Constat | Fichier(s) | Action |
+|---|---------|------------|--------|
+| **S1** | **XSS** : `dangerouslySetInnerHTML` avec body non sanitisé (textarea utilisateur) | `commerce/acquisition/marketing/components/crm/EmailCampaign.tsx:227` | Sanitiser via DOMPurify ou remplacer par rendu React safe. **Vulnérabilité injectable en l'état.** |
+| **S2** | **FacilityHandlers** écrit `floorPlans/` + `maintenanceTickets/` sans `assertHandlerTenant()` | `orchestration/handlers/FacilityHandlers.ts:12,26` | Ajouter `assertHandlerTenant()` avant chaque `adapter.set` |
+| **S3** | **3 handlers NF525-critiques** écrivent `journalEntries` / `paymentLedger` / `compLog` sans guard | `CompJournalHandler.ts:73,75` · `CompEntryHandler.ts:21` · `CompMealHandler.ts:13` | Ajouter `assertHandlerTenant()` — **risque : écriture comptable cross-tenant** |
+
+> **Couverture assertHandlerTenant** : 8/22 handlers (36 %). Les 7 du §9.2 + ZReportCloseHandler (implicite via
+> path filtré). Les 14 restants : **4 écrivent sans guard** (ci-dessus), les 10 autres sont read-only ou délèguent
+> à un service qui vérifie déjà. À auditer un par un pour atteindre 100 %.
+
+### 🟠 P1 — TYPES DUPLIQUÉS (à consolider lors du chantier schémas)
+
+| # | Type | Occurrences | Canonique proposé | Action |
+|---|------|:-----------:|-------------------|--------|
+| **T1** | `StockItem` | **9** : 5 handlers + useStockDeduction + logistics/stock/core/domain/types + kernel/contracts/inventory + kernel/contracts/logistics | `kernel/contracts/inventory.ts` | Supprimer les 8 doublons, importer le canonique. Attention : les handlers définissent des sous-types locaux — vérifier la compatibilité des champs. |
+| **T2** | `DeliveryNote` | **3** : logistics/connectors/suppliers/types + logistics/approvisionnement/procurement/types + kernel/contracts/inventory | `kernel/contracts/inventory.ts` | Idem — unifier, adapter les imports. |
+| **T3** | `SupplierProduct` | **2** : logistics/connectors/suppliers/types + MetroCatalog.ts | `logistics/connectors/suppliers/types.ts` | MetroCatalog doit importer, pas redéfinir. |
+| **T4** | **logistics et facility n'ont pas de `domain/schemas/`** | types éparpillés entre kernel/contracts/ et fichiers internes | — | Créer `logistics/domain/schemas/` et `facility/domain/schemas/` en miroir des autres piliers. **Bloqué par la stratégie migration schémas** (gelée jusqu'à l'étape 4, pilier par pilier). |
+
+### 🟠 P2 — VERTICALES INCOMPLÈTES
+
+| # | Constat | Détail | Action |
+|---|---------|--------|--------|
+| **V1** | **Verticale `custom` incomplète** | 2/9 adapters (CustomMccAdapter, CustomOpsAdapter). **Pas de `labels.ts`**, **pas de `roles.ts`**. `CustomVertical.ts` minimal (2 events). Viole le contrat §8.3 roleLabels. | **Décision humaine #7** : compléter les 7 adapters manquants + labels + roles, ou marquer `SQUELETTE` dans le MCC et bloquer le provisioning. |
+| **V2** | **12+ pages VerticalPageStub** | bakery (4) : PreorderManagement, AllergenRegistry, BatchProductionDashboard, DisplayStockPage · salon (3) : AppointmentCalendar, StylistDashboard, CabinStockPage · retail (5) : CatalogPage, PromotionsPage, ReturnsPage, RetailPOSPage, RetailStockPage · hotel (3) : YieldManagementPage, HousekeepingPage, CityLedgerPage · clinic (3) : PatientFlowPage, BedManagementPage, InsuranceBillingPage | **Toutes sont `VerticalPageStub({ title })` = zéro UI.** Inventorier dans le MCC comme « fonctionnalité annoncée non livrée » — **ne pas promouvoir ces verticales en PRODUCTION.** |
+| **V3** | **Modules domaine hotel/clinic = coquilles vides** | `hotel/commerce/channel-manager/index.ts` : `export {}` · `hotel/ops/front-desk/index.ts` : `export {}` · `hotel/finance/folio/index.ts` : `export {}` · `clinic/compliance/hds/index.ts` : `export {}` — les autres n'exportent qu'un VERSION | **Pas de code métier.** Ces modules existent pour le gen-vertical-playbook (points d'ancrage), pas pour la production. Le MCC doit refléter ce statut. |
+| **V4** | **"bar" n'est PAS un PlatformVariant** | `PLATFORM_VARIANTS` = 8 entrées, "bar" absent. Existe comme `KitchenStation` (kds-constants) et comme route/taskId ICM (`taskId: 'bar'`). Mutation restaurant→bar impossible sans changement système. | **Lié à décision #3** — développement : soit `bar` = restaurant avec `capabilities` réduites (`mod_kds:true, mod_reservations:false, mod_haccp:false`), soit nouveau variant → coût : 9 adapters + labels + roles + DNA seed + SystemTenantRegistry + 3 tiers (DEMO/TEST/REF). |
+
+### 🟡 P3 — HYGIÈNE
+
+| # | Constat | Mesure | Action |
+|---|---------|--------|--------|
+| **H1** | **48 `console.*` dans modules** (hors tests) | `grep -rn "console\.\(log\|warn\|error\|info\|debug\)" src/modules/ --include='*.ts' --include='*.tsx' \| grep -v test` = 48 | Migrer vers un logger structuré (niveau, tenantId, contexte) ou supprimer. Bruit en production. |
+| **H2** | **Teinture restaurant quantifiée** | reservations/**171** refs · onboarding/**66** · marketing/**33** · EventQuoteModal "Menu assis"/"restaurantNom" · CustomerDetailPanel "Top 3 plats" · CleaningPlan zone "Bar" hardcodée | Confirme l'ampleur du §8.6 résiduel. Les 3 modules les plus lourds sont clairement identifiés. |
+
 ## Décisions réservées à l'humain
 
 | # | Sujet | § | Urgence |
@@ -841,6 +1073,8 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 | 4 | i18n avant ou après la refonte | 6.2 | 🟠 |
 | 5 | `max_cc` : assumer 12 ou revenir à 20 | 4.4 | 🟡 |
 | 6 | Ouverture `clinic` (données de santé) | 7.6 / 8.2 | 🔴 verrouillée jusqu'à PII+RGPD |
+| **7** | **Verticale `custom`** : compléter 7 adapters manquants + labels + roles, ou marquer SQUELETTE | 10.1 V1 | 🟠 avant provisioning custom |
+| **8** | **XSS EmailCampaign** : confirmer la gravité (prévisualisation interne vs exposée client) | 10.1 S1 | 🔴 si exposé client |
 
 ---
 
@@ -887,6 +1121,7 @@ D'où l'impression « rien n'est en place » alors que le restaurant est **~95 %
 
 ---
 
+*v5.0 — 13/08/2026 : audit exhaustif racine→UI, 13 constats (§10.1 : 3 sécurité P0, 4 types dupliqués, 4 verticales, 2 hygiène).*
 *v4.5 — 12/08/2026 : intégration AXE BUS §9 (consolidation des 2 plans bus). v4.2 baseline `agent-gate.sh` @ `dd1ed4813`.*
 *Delta v4.1→v4.2 : §2B.2 FAIT · cycles 3→0 · kernel→modules 3→0 · barrel 0/8 · invariants 9/9 ·*
 *Phase 5 P0-P3 FAIT · Phase 4.1 SplitBill FAIT · Sentry multi-tenant/multi-vertical · Emulateur Firestore.*

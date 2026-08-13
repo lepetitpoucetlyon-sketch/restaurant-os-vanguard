@@ -147,7 +147,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                 descriptionFormule: form.descriptionFormule || undefined,
                 montantHT: form.montantHT,
                 restaurantNom: whiteLabelInstanceConfig.appName,
-                restaurantAdresse: activeTenantConfig?.branding?.address ?? '',
+                restaurantAdresse: (activeTenantConfig?.branding as Record<string, string> | undefined)?.['address'] ?? '',
             };
 
             await generatePrivatisationContract(contractData);
