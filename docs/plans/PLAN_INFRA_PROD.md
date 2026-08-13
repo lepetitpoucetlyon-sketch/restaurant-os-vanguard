@@ -182,8 +182,195 @@
 | **P2** | 5. Migration données | 4j | Nettoyer la dette monétaire |
 | **P2** | 6b. Performance | 3j | Nécessaire avant scaling |
 | **P3** | 1. API REST | 8j | Nécessaire pour mobile/partenaires, pas pour le MVP |
+| **P3** | 7. IA proactive | 4j | Différenciation produit forte, après MVP stabilisé |
+| **P3** | 8. MCC fleet feed | 3j | Nécessaire à partir de 20+ tenants actifs |
+| **P3** | 9. DLQ MCC panel | 3j | Ops quotidien quand le bus est en prod |
+| **P3** | 10. CRM seuils | 3j | Valeur client directe, effort faible |
+| **P3** | 11. Onboarding statut | 2j | Expérience first-run critique pour la rétention |
+| **P3** | 12. Stock bons de commande auto | 3j | Réduit les ruptures, valeur gérant immédiate |
+| **P3** | 13. Menu engineering actions | 3j | Prolonge une feature existante vers du ROI |
+| **P3** | 14. Agrégateurs dashboard | 4j | Élimine les tablets multiples en cuisine |
+| **P3** | 15. Tickets personnalisables | 2j | Feature visible, effort faible |
+| **P3** | 16. Planning RH prévisionnel | 5j | Complète le timeclock existant |
+| **P3** | 17. Benchmarking inter-tenants | 4j | Différenciation unique, données déjà disponibles |
 
-**Total estimé : ~28 jours de travail**
+**Total estimé : ~60 jours de travail**
+
+---
+
+---
+
+## 7. IA proactive — LightRAG en déclencheur, pas en répondeur
+
+**Constat** : LightRAG tourne, Gemini est câblé, mais l'IA reste réactive (l'opérateur pose une question). Elle ne pousse rien sans sollicitation.
+
+**Améliorations** :
+
+- [ ] **7.1** Créer un handler `ProactiveInsightHandler` abonné aux events `finance.food_cost_impacted`, `ops.waste_validated`, `logistics.stock_adjusted` — si un seuil est franchi, émettre un `intelligence.insight_ready` avec la recommandation générée par Gemini
+- [ ] **7.2** Ajouter une surface UI "Recommandations du jour" dans le dashboard opérateur (carte flottante, 3 max, dismissable)
+- [ ] **7.3** Enrichir le context LightRAG avec les données historiques 30j du tenant au moment de la génération (actuellement le graph est global, pas personnalisé par tenant)
+- [ ] **7.4** Cas d'usage concrets à implémenter en priorité : coût matière en hausse → suggérer plat alternatif, taux no-show > seuil → activer confirmations SMS, stock critique → créer brouillon bon de commande
+
+**Effort** : ~4 jours
+
+---
+
+## 8. MCC — feed d'alertes fleet sur événements système uniquement
+
+> ⚠️ **Règle absolue** : le MCC est super admin — il ne lit pas les données métier tenant (CA, commandes, clients). Il ne consomme pas les events métier intra-tenant. Seuls les événements **système / technique / fiscal** peuvent remonter au niveau MCC.
+
+**Constat** : `FleetBenchmark` et `FleetRollout` existent, mais les alertes système ne remontent pas automatiquement. Un tenant dont le ticket Z est manqué ou dont l'app est en erreur n'est pas visible depuis le MCC.
+
+**Améliorations** :
+
+- [ ] **8.1** Créer une collection Firestore `mcc/fleet/alerts` (niveau MCC, hors path tenant) alimentée par un handler `FleetSystemAlertHandler` abonné uniquement aux events **système** : `finance.ticket_z_missed` (obligation NF525), `crypto.integrity_failed`, `compliance.certificate_expired`, `system.tenant_error_rate_high`
+- [ ] **8.2** Panel MCC "Fleet Health" : liste des tenants avec statut technique (🟢 app up / 🟡 erreurs / 🔴 NF525 en faute), nombre d'alertes système actives — mis à jour toutes les 5 min via ICM cron
+- [ ] **8.3** Seuils configurables depuis le MCC pour les alertes système (ex. : alerte si aucun ticket Z depuis 25h, taux d'erreur app > 5%)
+- [ ] **8.4** Notification push MCC (WebPush déjà câblé) si un tenant passe en rouge sur un critère système ou fiscal
+
+**Effort** : ~3 jours
+
+---
+
+## 9. DLQ — la rendre visible et actionnable dans le MCC
+
+**Constat** : `emitDurable` marque les entrées en `done_no_consumer` ou en erreur, mais il n'existe aucune interface pour les voir, les inspecter ou les relancer.
+
+**Améliorations** :
+
+- [ ] **9.1** Route API `GET /api/admin/fleet/dlq?tenantId=&status=&limit=` retournant les entrées outbox en erreur ou `done_no_consumer`
+- [ ] **9.2** Panel MCC "Bus DLQ" : tableau (tenant, event, payload tronqué, date, statut, nb retry), filtrable par tenant et par event
+- [ ] **9.3** Bouton "Rejouer" par entrée → appelle `POST /api/admin/fleet/dlq/:id/retry` qui re-émet l'event dans le bus
+- [ ] **9.4** Bouton "Archiver" pour les entrées `done_no_consumer` légitimes (events sans handler attendu)
+- [ ] **9.5** Alerte MCC si DLQ d'un tenant dépasse 10 entrées en erreur non archivées
+
+**Effort** : ~3 jours
+
+---
+
+## 10. CRM — seuils des déclencheurs configurables par le tenant
+
+**Constat** : `BirthdayOfferHandler`, `VipStatusEvaluationHandler`, `CustomerRFMAnalyzerHandler` fonctionnent mais avec des seuils hardcodés dans le code.
+
+**Améliorations** :
+
+- [ ] **10.1** Créer un schéma `CRMAutomationConfig` (Zod) : `{ noShowThresholdDays: number, vipMinSpend: number, birthdayOfferDaysAhead: number, reactivationAfterDays: number, ... }` stocké dans `tenants/{id}/config/crm`
+- [ ] **10.2** Panel tenant "Automatisations CRM" : formulaire simple pour régler chaque seuil avec preview ("si un client n'est pas revenu depuis X jours → campagne email")
+- [ ] **10.3** Les handlers lisent la config tenant au lieu des constantes — `Nexus.adapter.get('tenants/{id}/config/crm')` avec fallback sur les valeurs par défaut actuelles
+- [ ] **10.4** Ajouter un log d'activation par handler ("Campagne envoyée à 14 clients inactifs depuis 45j") visible dans le tableau de bord CRM
+
+**Effort** : ~3 jours
+
+---
+
+## 11. Onboarding — suivi de progression post-import persistant
+
+**Constat** : le wizard LLM + OCR importe les données mais n'offre aucun retour persistant après fermeture. L'opérateur ne sait pas combien d'éléments ont été importés ni lesquels ont échoué.
+
+**Améliorations** :
+
+- [ ] **11.1** Créer un document Firestore `tenants/{id}/onboarding/import_status` mis à jour par l'importeur au fil de l'import : `{ totalItems, imported, errors: [{ item, reason }], completedAt, status: 'running'|'done'|'partial' }`
+- [ ] **11.2** Page `/onboarding/status` accessible après le wizard et depuis le menu Settings : barre de progression, compteurs par catégorie (produits, clients, fournisseurs, historique), liste des erreurs avec action corrective suggérée
+- [ ] **11.3** Notification WebPush à l'opérateur quand l'import se termine (import peut prendre plusieurs minutes en arrière-plan)
+- [ ] **11.4** Bouton "Relancer les erreurs" pour retenter uniquement les items échoués sans refaire l'import complet
+
+**Effort** : ~2 jours
+
+---
+
+---
+
+## 12. Stock — bons de commande prévisionnels automatiques
+
+**Constat** : `AutoSupplierDraftHandler` existe, les mouvements de stock sont tracés, les fournisseurs enregistrés. Il manque le déclencheur automatique sur seuil.
+
+**Améliorations** :
+
+- [ ] **12.1** Ajouter un champ `reorderThreshold` et `reorderQuantity` sur chaque `StockItem` (schéma + UI formulaire)
+- [ ] **12.2** `AutoSupplierDraftHandler` : s'abonner à `logistics.stock_adjusted` — si `quantityOnHand < reorderThreshold`, créer un brouillon `PurchaseOrder` pré-rempli (fournisseur préféré, quantité habituelle, délai livraison estimé)
+- [ ] **12.3** Page "Bons de commande" : liste des brouillons auto-générés avec statut "en attente de validation", bouton Approuver / Modifier / Ignorer
+- [ ] **12.4** Notification WebPush au gérant dès qu'un brouillon est créé
+
+**Effort** : ~3 jours
+
+---
+
+## 13. Menu engineering — du diagnostic à l'action
+
+**Constat** : la Boston Matrix tourne (`MenuEngineeringService` : stars / dogs / plow-horses / puzzles). Le service s'arrête au classement — aucune action n'est déclenchée.
+
+**Améliorations** :
+
+- [ ] **13.1** Ajouter un cron hebdomadaire qui appelle `MenuEngineeringService.classify()` et émet `commerce.menu_analysis_ready` avec le classement
+- [ ] **13.2** Handler `MenuActionSuggestionHandler` : si un plat est "dog" depuis 2 semaines consécutives → émettre `commerce.menu_action_suggested` avec action proposée (retirer / baisser prix de X% / booster en heure creuse)
+- [ ] **13.3** Enrichir la suggestion via Gemini : contexte saisonnier, plats similaires chez d'autres tenants (anonymisé), tendances de commande
+- [ ] **13.4** Surface UI dans le module catalogue : badge "Action suggérée" sur les plats concernés, avec explication et bouton d'application directe
+
+**Effort** : ~3 jours
+
+---
+
+## 14. Agrégateurs livraison — dashboard unifié
+
+**Constat** : `AggregatorMenuSyncHandler` et `AggregatorStockSyncHandler` existent. La synchro fonctionne, mais il n'y a pas de vue consolidée des commandes en cours sur tous les agrégateurs.
+
+**Améliorations** :
+
+- [ ] **14.1** Créer un schéma `AggregatorOrder` normalisé (Uber Eats / Deliveroo / Just Eat → même structure) dans `modules/commerce/relation/delivery/`
+- [ ] **14.2** Webhook entrant par agrégateur → normalisation → stockage `tenants/{id}/aggregatorOrders/{id}` → émission `ops.order_received` (déjà dans le bus)
+- [ ] **14.3** Écran "Livraisons" : colonnes par agrégateur, commandes en temps réel, statuts (reçue / en préparation / prête / en route), total CA agrégé du jour
+- [ ] **14.4** Depuis cet écran, marquer une commande comme "prête" met à jour le statut sur l'API de l'agrégateur (si l'API le permet)
+
+**Effort** : ~4 jours
+
+---
+
+## 15. Tickets d'impression — mise en page personnalisable par tenant
+
+**Constat** : `PrepTicket` et `ReceiptTicket` ont une structure statique. `EscPosBuilder` supporte déjà les blocs personnalisés mais rien n'est configurable depuis l'interface.
+
+**Améliorations** :
+
+- [ ] **15.1** Schéma `ReceiptLayoutConfig` : `{ showLogo: boolean, footerMessage: string, showQrCode: boolean, qrCodeUrl: string, showLoyaltyPoints: boolean }` stocké dans `tenants/{id}/config/receipt`
+- [ ] **15.2** UI Settings → "Ticket de caisse" : formulaire de configuration avec prévisualisation en temps réel du ticket
+- [ ] **15.3** `EscPosBuilder.buildReceipt()` lit la config tenant et injecte les blocs activés (logo en header EPL/ESC-POS, QR code en footer, message personnalisé)
+- [ ] **15.4** Même principe pour `PrepTicket` : nom du poste configurable, couleur de priorité si imprimante couleur
+
+**Effort** : ~2 jours
+
+---
+
+## 16. Planning RH — du pointage au prévisionnel
+
+**Constat** : le timeclock est câblé, `AbsenceUnderstaffingHandler` existe. Mais il n'y a pas de grille de planning — le handler réagit à l'absence, sans prévenir avant.
+
+**Améliorations** :
+
+- [ ] **16.1** Schéma `ShiftPlan` : `{ employeeId, role, date, startTime, endTime }` dans `tenants/{id}/shiftPlans`
+- [ ] **16.2** Écran "Planning" : grille semaine × poste, drag-and-drop pour affecter un employé à un créneau, lecture des disponibilités déclarées
+- [ ] **16.3** `AbsenceUnderstaffingHandler` compare le planning prévu vs les pointages réels dès l'ouverture du service — alerte push si un poste n'est pas couvert 30 min avant le début
+- [ ] **16.4** Calcul automatique des heures supplémentaires en fin de semaine (pointage réel - contrat) → prévisualisation avant export paie
+- [ ] **16.5** Export planning au format PDF imprimable + iCal par employé (lien unique)
+
+**Effort** : ~5 jours
+
+---
+
+## 17. Benchmarking inter-tenants anonymisé dans les rapports
+
+> ⚠️ **Règle absolue** : le MCC ne lit pas les données métier tenant. Le benchmarking passe par un **push opt-in côté tenant** vers une collection benchmark partagée — jamais par une lecture MCC des données intra-tenant.
+
+**Constat** : `DailyFlashReport` et `WeeklyReportHandler` produisent des métriques par tenant, mais chaque tenant est en silo. Un gérant n'a aucun repère pour savoir si ses chiffres sont bons ou mauvais.
+
+**Améliorations** :
+
+- [ ] **17.1** Schéma `BenchmarkContribution` : résumé anonymisé calculé **localement côté tenant** (ticket moyen, taux occupation, coût matière %) — aucune donnée client, aucune donnée nominative
+- [ ] **17.2** Handler `BenchmarkPushHandler` abonné à `finance.ticket_z_closed` : si le tenant a activé l'opt-in, pousse sa `BenchmarkContribution` dans `benchmarks/{vertical}/{segment}/{date}` (collection **séparée** de toute donnée tenant)
+- [ ] **17.3** Règles strictes : min. 5 contributions dans un segment avant calcul de médiane, jamais de `tenantId` dans les agrégats, TTL 90j sur les contributions
+- [ ] **17.4** `WeeklyReportHandler` lit la médiane du segment (`benchmarks/...`) et l'injecte dans le rapport du tenant — ligne "+ X% vs médiane" sur ticket moyen, CA/couverts, taux no-show
+- [ ] **17.5** Opt-in activable depuis Settings tenant ("Contribuer au benchmark anonyme")
+
+**Effort** : ~4 jours
 
 ---
 
@@ -202,5 +389,16 @@
 | Monitoring prod | Non | Oui (point 4) |
 | Isolation tenant Firestore | Non | Oui (point 6a) |
 | Performance / load test | Non | Oui (point 6b) |
+| IA proactive (recommandations) | Non | Oui (point 7) |
+| MCC feed alertes fleet temps réel | Non | Oui (point 8) |
+| DLQ visible + actionnable MCC | Non | Oui (point 9) |
+| CRM seuils configurables tenant | Non | Oui (point 10) |
+| Onboarding suivi progression import | Non | Oui (point 11) |
+| Stock bons de commande auto | Non | Oui (point 12) |
+| Menu engineering → actions | Non | Oui (point 13) |
+| Agrégateurs dashboard unifié | Non | Oui (point 14) |
+| Tickets impression personnalisables | Non | Oui (point 15) |
+| Planning RH prévisionnel | Non | Oui (point 16) |
+| Benchmarking inter-tenants | Non | Oui (point 17) |
 
-Les deux plans sont **complémentaires** : PLAN_COMPLET nettoie la dette interne, celui-ci construit l'infrastructure de production.
+Les deux plans sont **complémentaires** : PLAN_COMPLET nettoie la dette interne, celui-ci construit l'infrastructure de production et les améliorations produit.
