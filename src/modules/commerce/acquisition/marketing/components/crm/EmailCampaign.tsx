@@ -6,6 +6,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { authedFetch } from "@/lib/client/authedFetch";
 import { useActionPermission } from "@/kernel/hooks/useActionPermission";
+import { sanitizeHtml } from "@/lib/utils/sanitizeHtml";
 
 type CampaignSegment = "all_active" | "inactive_3m" | "birthdays_this_month";
 
@@ -224,7 +225,7 @@ export function EmailCampaign() {
           {preview && (
             <div
               className="mt-3 p-4 rounded-xl border border-border bg-white text-black text-sm max-h-64 overflow-y-auto"
-              dangerouslySetInnerHTML={{ __html: body.replace(/{{prenom}}/g, "Jean") }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(body.replace(/{{prenom}}/g, "Jean")) }}
             />
           )}
         </div>

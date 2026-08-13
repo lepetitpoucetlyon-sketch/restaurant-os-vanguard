@@ -146,4 +146,66 @@ export interface FINANCEEvents {
     transactionCount: number;
     syncedAt: string;
   };
+
+  'einvoice.validated': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    validatedBy: string;
+  };
+
+  'einvoice.approved': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalHTInMicrounits: number;
+    totalTTCInMicrounits: number;
+    dueDate?: string;
+    supplierId: string;
+    supplierName: string;
+    approvedBy: string;
+  };
+
+  'einvoice.rejected': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    dueDate?: string;
+    supplierId: string;
+    supplierName: string;
+    rejectedBy: string;
+    reason: string;
+  };
+
+  'einvoice.paid': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    supplierId: string;
+    paidBy: string;
+    paymentReference: string;
+  };
+
+  'einvoice.goods_received': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    deliveryNoteId: string;
+    receivedBy: string;
+    items: Array<{
+      productId: string;
+      quantityReceived: number;
+      quantityExpected: number;
+      accepted: boolean;
+      rejectionReason?: string;
+    }>;
+    allAccepted: boolean;
+  };
 }

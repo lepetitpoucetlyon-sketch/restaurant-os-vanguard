@@ -3,6 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { JournalLine } from '@nexus/contracts';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 /**
  * CompJournalHandler (P01-G)
@@ -70,9 +71,13 @@ export function registerCompJournalHandler(): () => void {
       };
 
       // Immuable NF525 — set, jamais update
-      await Nexus.adapter.set(`tenants/${tenantId}/journalEntries/${entryId}`, entry);
+      const journalPath = `tenants/${tenantId}/journalEntries/${entryId}`;
+      assertHandlerTenant('comp-journal', tenantId, journalPath);
+      await Nexus.adapter.set(journalPath, entry);
 
-      await Nexus.adapter.set(`tenants/${tenantId}/compLog/COMP-${orderId}`, {
+      const compLogPath = `tenants/${tenantId}/compLog/COMP-${orderId}`;
+      assertHandlerTenant('comp-journal', tenantId, compLogPath);
+      await Nexus.adapter.set(compLogPath, {
         orderId,
         operatorId,
         reason,

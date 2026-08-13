@@ -2,14 +2,17 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 export function registerFacilityHandlers() {
   const unsubFloorPlan = NexusEventBus.on(
     'facility.floor_plan_updated',
     async (payload) => {
       const { tenantId, floorId, tables } = payload;
+      const path = `tenants/${tenantId}/floorPlans/${floorId}`;
+      assertHandlerTenant('facility-floor-plan', tenantId, path);
       logger.info(`[Facility] Mis à jour plan de salle floorId=${floorId} (${tables.length} tables) pour tenant=${tenantId}`);
-      await Nexus.adapter.set(`tenants/${tenantId}/floorPlans/${floorId}`, {
+      await Nexus.adapter.set(path, {
         floorId,
         tables,
         updatedAt: Date.now(),
@@ -21,9 +24,11 @@ export function registerFacilityHandlers() {
     'facility.maintenance_required',
     async (payload) => {
       const { tenantId, assetId, assetType, description } = payload;
-      logger.warn(`[Facility] Ticket de maintenance requis assetId=${assetId} (${assetType}): ${description}`);
       const ticketId = `maint_${assetId}_${Date.now()}`;
-      await Nexus.adapter.set(`tenants/${tenantId}/maintenanceTickets/${ticketId}`, {
+      const path = `tenants/${tenantId}/maintenanceTickets/${ticketId}`;
+      assertHandlerTenant('facility-maintenance', tenantId, path);
+      logger.warn(`[Facility] Ticket de maintenance requis assetId=${assetId} (${assetType}): ${description}`);
+      await Nexus.adapter.set(path, {
         assetId,
         assetType,
         description,

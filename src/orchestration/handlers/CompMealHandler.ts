@@ -1,16 +1,18 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 export function registerCompMealHandler() {
     return NexusEventBus.on(
         'order.comp',
         async (payload) => {
             const { orderId, tenantId, totalValueInMicrounits, operatorId, reason } = payload;
-            
-            // Enregistrer le repas offert dans les entrées du journal
+
             const entryId = `comp_${orderId}_${Date.now()}`;
-            await Nexus.adapter.set(`tenants/${tenantId}/journalEntries/${entryId}`, {
+            const path = `tenants/${tenantId}/journalEntries/${entryId}`;
+            assertHandlerTenant('comp-meal', tenantId, path);
+            await Nexus.adapter.set(path, {
                 id: entryId,
                 orderId,
                 category: 'offerts',

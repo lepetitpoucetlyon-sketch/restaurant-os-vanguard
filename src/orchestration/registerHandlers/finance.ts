@@ -16,6 +16,9 @@ import { registerFoodCostImpactedHandler } from '../handlers/FoodCostImpactedHan
 import { registerDailyDigestHandler } from '../handlers/DailyDigestHandler';
 import { registerDigitalReceiptHandler } from '../handlers/DigitalReceiptHandler';
 import { registerProformaHandler } from '../handlers/ProformaHandler';
+import { registerEInvoiceApprovedHandler } from '../handlers/EInvoiceApprovedHandler';
+import { registerEInvoiceRejectedHandler } from '../handlers/EInvoiceRejectedHandler';
+import { registerEInvoiceGoodsReceivedHandler } from '../handlers/EInvoiceGoodsReceivedHandler';
 
 export function registerFinanceHandlers(): Array<() => void> {
   return [
@@ -37,5 +40,8 @@ export function registerFinanceHandlers(): Array<() => void> {
     StripePaymentRetryHandler.register(),
     CashflowForecastHandler.register(),
     BankConnectionExpiredHandler.register(),
+    registerEInvoiceApprovedHandler(),
+    registerEInvoiceRejectedHandler(),
+    registerEInvoiceGoodsReceivedHandler(),
   ];
 }

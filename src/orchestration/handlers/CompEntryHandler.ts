@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
+import { assertHandlerTenant } from '../guards/assertHandlerTenant';
 
 export function registerCompEntryHandler() {
   return NexusEventBus.on(
@@ -18,7 +19,9 @@ export function registerCompEntryHandler() {
         operatorId: payload.operatorId,
       };
 
-      await Nexus.adapter.set(`tenants/${payload.tenantId}/paymentLedger/${id}`, data);
+      const path = `tenants/${payload.tenantId}/paymentLedger/${id}`;
+      assertHandlerTenant('comp-entry', payload.tenantId, path);
+      await Nexus.adapter.set(path, data);
     },
     { id: 'comp-entry-handler', priority: 'BACKGROUND' }
   );
