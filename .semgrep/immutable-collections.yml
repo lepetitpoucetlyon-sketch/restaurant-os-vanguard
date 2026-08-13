@@ -9,4 +9,4 @@ rules:
           metavariable: $PATH
           regex: '.*(journalEntries|fiscalSeals|fiscalLedger).*'
     message: "Collection immuable NF525 — passer par un avoir (plan §7.7.2)"
-    severity: WARNING
+    severity: ERROR
