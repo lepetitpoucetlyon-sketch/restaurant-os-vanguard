@@ -85,7 +85,7 @@ export interface ReceiptTicket {
   certifiedAt?: string
 }
 
-export interface KitchenTicket {
+export interface PrepTicket {
   orderId: string
   tableLabel: string
   items: Array<{ name: string; qty: number; modifiers?: string[]; course?: string }>
@@ -94,9 +94,12 @@ export interface KitchenTicket {
   isVoid?: boolean
 }
 
+/** @deprecated use PrepTicket */
+export type KitchenTicket = PrepTicket;
+
 export type PrintJob =
   | { type: 'receipt'; ticket: ReceiptTicket }
-  | { type: 'kitchen'; ticket: KitchenTicket }
+  | { type: 'kitchen'; ticket: PrepTicket }
   | { type: 'test' }
 
 export interface PrintResult {

@@ -1,4 +1,4 @@
-import type { ReceiptTicket, KitchenTicket, PrintResult } from '../types';
+import type { ReceiptTicket, PrepTicket, PrintResult } from '../types';
 
 function fmtEur(µ: number): string { return (µ / 1_000_000).toFixed(2) + ' €'; }
 
@@ -42,7 +42,7 @@ export function printReceiptBrowser(ticket: ReceiptTicket): PrintResult {
   return { success: true, method: 'browser' };
 }
 
-export function printKitchenBrowser(ticket: KitchenTicket): PrintResult {
+export function printKitchenBrowser(ticket: PrepTicket): PrintResult {
   const ts = ticket.timestamp.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
   const rows = ticket.items.map(i => `
     <tr style="font-size:18px;font-weight:bold">

@@ -1,4 +1,4 @@
-import type { PrinterDevice, PrintJob, PrintResult, ReceiptTicket, KitchenTicket } from './types';
+import type { PrinterDevice, PrintJob, PrintResult, ReceiptTicket, PrepTicket } from './types';
 import { EscPosBuilder } from './EscPosBuilder';
 import { printNetworkRaw } from './adapters/NetworkAdapter';
 import { printBluetooth } from './adapters/BluetoothAdapter';
@@ -132,7 +132,7 @@ export class PrintingService {
     return this.printToRole('receipt', { type: 'receipt', ticket });
   }
 
-  async printKitchen(ticket: KitchenTicket): Promise<PrintResult> {
+  async printKitchen(ticket: PrepTicket): Promise<PrintResult> {
     return this.printToRole('kitchen', { type: 'kitchen', ticket });
   }
 

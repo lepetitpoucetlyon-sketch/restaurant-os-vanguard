@@ -1,8 +1,12 @@
 export { ProductSchema, type Product } from '@nexus/contracts';
 
-// ─── Privatisation contract (promoted from finance/documents/PrivatisationContract) ─
+// ─── Event contract types — re-exported from finance/documents/EventContract ─
+export type { EventFormule, EventContractData } from '@/modules/finance/comptabilite/documents/EventContract';
+
+/** @deprecated use EventFormule */
 export type PrivatisationFormule = 'menu' | 'cocktail_dinatoire' | 'buffet';
 
+/** @deprecated use EventContractData */
 export interface PrivatisationData {
     clientNom: string;
     clientPrenom: string;

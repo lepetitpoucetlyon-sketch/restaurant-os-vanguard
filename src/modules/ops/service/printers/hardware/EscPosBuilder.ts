@@ -1,4 +1,4 @@
-import type { ReceiptTicket, KitchenTicket, PaperWidth } from './types';
+import type { ReceiptTicket, PrepTicket, PaperWidth } from './types';
 
 const ESC = 0x1b;
 const GS  = 0x1d;
@@ -136,7 +136,7 @@ export class EscPosBuilder {
     }
   }
 
-  buildKitchen(ticket: KitchenTicket): Uint8Array {
+  buildKitchen(ticket: PrepTicket): Uint8Array {
     const lw = this.lw;
     this.push(CMD.INIT);
 

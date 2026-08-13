@@ -1,6 +1,7 @@
 /**
- * PrivatisationContract.ts
- * Génère un contrat de privatisation / événement en PDF via jsPDF.
+ * EventContract.ts
+ * Génère un contrat événementiel en PDF via jsPDF — multi-vertical
+ * (restaurant, hôtel, salle de fêtes, clinique…).
  * Client-side only — importer de façon lazy depuis un composant 'use client'.
  */
 import jsPDF from 'jspdf';
@@ -9,9 +10,11 @@ import jsPDF from 'jspdf';
 // Types
 // ---------------------------------------------------------------------------
 
-export type PrivatisationFormule = 'menu' | 'cocktail_dinatoire' | 'buffet';
+export type EventFormule = 'menu' | 'cocktail_dinatoire' | 'buffet';
+/** @deprecated use EventFormule */
+export type PrivatisationFormule = EventFormule;
 
-export interface PrivatisationData {
+export interface EventContractData {
   /** Informations client */
   clientNom: string;
   clientPrenom: string;
@@ -25,14 +28,14 @@ export interface PrivatisationData {
   heureDebut: string;             // Format "HH:MM"
   heureFin: string;               // Format "HH:MM"
   nombreConvives: number;
-  formule: PrivatisationFormule;
+  formule: EventFormule;
   descriptionFormule?: string;    // Précisions sur le menu / formule
 
   /** Tarification (en euros) */
   montantHT: number;              // Montant total hors taxes en euros
   tauxTVA?: number;               // TVA en % — défaut 20
 
-  /** Informations restaurant (depuis tenantConfig / whiteLabelInstanceConfig) */
+  /** Informations du prestataire (tenant) */
   merchantNom: string;
   merchantAdresse: string;
   merchantTelephone?: string;
@@ -43,12 +46,14 @@ export interface PrivatisationData {
   numeroContrat?: string;         // Référence du contrat
   dateSignature?: string;         // Format ISO — défaut : aujourd'hui
 }
+/** @deprecated use EventContractData */
+export type PrivatisationData = EventContractData;
 
 // ---------------------------------------------------------------------------
 // Helpers internes
 // ---------------------------------------------------------------------------
 
-const FORMULE_LABELS: Record<PrivatisationFormule, string> = {
+const FORMULE_LABELS: Record<EventFormule, string> = {
   menu: 'Menu assis (service à la table)',
   cocktail_dinatoire: 'Cocktail dînatoire (buffet debout)',
   buffet: 'Buffet libre (self-service)',
@@ -67,9 +72,9 @@ import {
 // ---------------------------------------------------------------------------
 
 /**
- * Génère et déclenche le téléchargement d'un contrat de privatisation au format PDF.
+ * Génère et déclenche le téléchargement d'un contrat événementiel au format PDF.
  */
-export function generatePrivatisationContract(data: PrivatisationData): void {
+export function generateEventContract(data: EventContractData): void {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.width;
   const pageH = doc.internal.pageSize.height;
@@ -444,3 +449,6 @@ export function generatePrivatisationContract(data: PrivatisationData): void {
   const safeName = data.evenementNom.replace(/[^a-z0-9]/gi, '_').toLowerCase();
   doc.save(`contrat_evenement_${safeName}_${numeroContrat}.pdf`);
 }
+
+/** @deprecated use generateEventContract */
+export const generatePrivatisationContract = generateEventContract;

@@ -1,2 +1,2 @@
 export * from './FacturXGenerator';
-export * from './PrivatisationContract';
+export * from './EventContract';

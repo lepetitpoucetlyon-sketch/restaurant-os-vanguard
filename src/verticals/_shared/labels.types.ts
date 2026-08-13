@@ -31,7 +31,7 @@ export interface MetricLabels {
   /**
    * Le conteneur spatial atomique (attribué à un ou plusieurs `unit`) —
    * table / chambre / baie / poste / cabine / salle d'attente. Utilisé par
-   * printers (KitchenTicket.contextLabel), reservations, floor-plan (à terme).
+   * printers (PrepTicket.contextLabel), reservations, floor-plan (à terme).
    */
   spatialContext: string;
 
@@ -46,7 +46,7 @@ export interface MetricLabels {
   /**
    * Le libellé de la personne qui accueille / prend la commande / opère —
    * serveur / réceptionniste / mécanicien / coiffeur / praticien / vendeur.
-   * Utilisé par KitchenTicket.serverName et rapports d'activité.
+   * Utilisé par PrepTicket.serverName et rapports d'activité.
    */
   server: string;
 

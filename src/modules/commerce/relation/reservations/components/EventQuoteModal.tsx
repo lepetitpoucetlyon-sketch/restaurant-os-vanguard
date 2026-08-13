@@ -129,8 +129,8 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
         if (!isValid) return;
         setGenerating(true);
         try {
-            const { generatePrivatisationContract } = await import(
-                "@/modules/finance/comptabilite/documents/PrivatisationContract"
+            const { generateEventContract } = await import(
+                "@/modules/finance/comptabilite/documents/EventContract"
             );
 
             const contractData: PrivatisationData = {
@@ -150,7 +150,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                 merchantAdresse: (activeTenantConfig?.branding as Record<string, string> | undefined)?.['address'] ?? '',
             };
 
-            await generatePrivatisationContract(contractData);
+            await generateEventContract(contractData);
             toast.success("Contrat PDF généré et téléchargé");
         } catch (err) {
             logger.error("Erreur lors de la génération du contrat PDF", { error: toError(err).message, clientEmail: form.clientEmail });

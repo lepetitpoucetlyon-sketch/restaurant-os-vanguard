@@ -1,6 +1,6 @@
 // Backward-compat re-export. New code → import from PrintingService.
 export { EpsonPrinter, printerService } from './PrintingService';
-export type { ReceiptTicket, KitchenTicket, PrinterDevice } from './types';
+export type { ReceiptTicket, PrepTicket, KitchenTicket, PrinterDevice } from './types';
 
 export async function printPOSReceipt(ticket: import('./types').ReceiptTicket): Promise<void> {
   const { printerService: svc } = await import('./PrintingService');
