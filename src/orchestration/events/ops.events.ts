@@ -337,4 +337,19 @@ export interface OPSEvents {
   'ops.service_ticket_working':  { v: 1; tenantId: string; ticketId: string };
   'ops.service_ticket_closed':   { v: 1; tenantId: string; ticketId: string; resourceId: string | null; journalEntryId: string; totalTTCInMicrounits: number };
   'ops.service_ticket_cancelled': { v: 1; tenantId: string; ticketId: string; reason: string };
+
+  // §8.6 Appointments — booking générique (salon, clinic, hôtel, restaurant)
+  'appointments.appointment_created':   { tenantId: string; appointmentId: string; kind: string; clientEmail: string; startAt: string };
+  'appointments.appointment_confirmed': { tenantId: string; appointmentId: string };
+  'appointments.appointment_cancelled': { tenantId: string; appointmentId: string };
+  'appointments.appointment_completed': { tenantId: string; appointmentId: string };
+  'appointments.appointment_no_show':   { tenantId: string; appointmentId: string };
+
+  // §8.6 Consultation — clinic, legal, accounting
+  'ops.consultation_scheduled': { tenantId: string; consultationId: string; clientEmail: string; startAt: string };
+  'ops.consultation_completed': { tenantId: string; consultationId: string };
+
+  // §8.6 FrontDesk — hôtel, co-working, clinic
+  'ops.guest_checked_in':  { tenantId: string; guestId: string; guestName: string; unitName?: string };
+  'ops.guest_checked_out': { tenantId: string; guestId: string };
 }

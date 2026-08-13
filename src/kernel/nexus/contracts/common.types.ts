@@ -91,7 +91,9 @@ export interface SEOProfile {
     establishmentId: string;
     site: { title: string; description: string; keywords: string[]; language: string; locale: string; [key: string]: SovereignField };
     organization: { name: string; description: string; logo: string; [key: string]: SovereignField };
-    restaurant: { cuisineTypes: string[]; priceRange: string; [key: string]: SovereignField };
+    business: { businessTypes: string[]; priceRange: string; [key: string]: SovereignField };
+    /** @deprecated Use business.businessTypes */
+    restaurant?: { cuisineTypes: string[]; priceRange: string; [key: string]: SovereignField };
     [key: string]: SovereignField;
 }
 

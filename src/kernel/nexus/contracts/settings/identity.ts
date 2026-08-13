@@ -1,16 +1,21 @@
-export interface RestaurantIdentity {
+export interface MerchantIdentity {
     id: string;
     name: string;
     logo?: string;
     slogan?: string;
-    cuisineType: string;
-    category: 'bistrot' | 'gastronomique' | 'brasserie' | 'fast_casual' | 'cafe' | 'bar' | 'other';
+    /** Generic business type — replaces cuisineType. Ex: "French cuisine", "Auto repair", "Hair salon" */
+    businessType: string;
+    /** Open string — verticals set their own categories via resolveMetricLabels */
+    category?: string;
     shortDescription?: string;
     longDescription?: string;
     foundedYear?: number;
     headChef?: string;
     owner?: string;
 }
+
+/** @deprecated Use MerchantIdentity */
+export type RestaurantIdentity = MerchantIdentity;
 
 export interface RestaurantContact {
     address: string;

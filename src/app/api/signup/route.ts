@@ -16,13 +16,13 @@ import { toError } from "@/lib/toError";
 const SignupSchema = z.object({
   email: z.string().email().max(254),
   password: z.string().min(8).max(128),
-  restaurantName: z.string().min(2).max(80),
+  businessName: z.string().min(2).max(80),
   variant: PlatformVariantSchema.default('restaurant'),
   siret: z.string().max(20).optional(),
   websiteUrl: z.string().url().max(2048).optional().or(z.literal('')),
 });
 
-function welcomeEmailHtml(restaurantName: string, tenantId: string): string {
+function welcomeEmailHtml(businessName: string, tenantId: string): string {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.restaurant-os.app';
   return `<!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -32,7 +32,7 @@ function welcomeEmailHtml(restaurantName: string, tenantId: string): string {
       <span style="color:white;font-size:22px">🚀</span>
     </div>
     <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#f8fafc">Bienvenue sur Restaurant OS</h1>
-    <p style="margin:0 0 24px;color:#94a3b8;font-size:14px">Votre restaurant <strong style="color:#e2e8f0">${restaurantName}</strong> est prêt.</p>
+    <p style="margin:0 0 24px;color:#94a3b8;font-size:14px">Votre restaurant <strong style="color:#e2e8f0">${businessName}</strong> est prêt.</p>
     <a href="${appUrl}/pos" style="display:inline-block;background:#6366f1;color:white;font-weight:700;font-size:13px;padding:12px 24px;border-radius:10px;text-decoration:none;letter-spacing:0.05em;text-transform:uppercase">
       Accéder au tableau de bord →
     </a>
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const { email, password, restaurantName, variant, siret: _siret, websiteUrl } = parsed.data;
+  const { email, password, businessName, variant, siret: _siret, websiteUrl } = parsed.data;
 
   initFirebaseAdmin();
 
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
   // aux claims d'un tenant existant.
   let tenantId: string;
   try {
-    tenantId = await resolveFreeTenantId(toTenantKey(restaurantName));
+    tenantId = await resolveFreeTenantId(toTenantKey(businessName));
   } catch (err) {
     logger.error('[signup] Tenant allocation failed', toError(err).message);
     return NextResponse.json({ error: 'Impossible d\'allouer un identifiant' }, { status: 500 });
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
   // 1. Firebase Auth — create user
   let uid: string;
   try {
-    const userRecord = await getAuth().createUser({ email, password, displayName: restaurantName });
+    const userRecord = await getAuth().createUser({ email, password, displayName: businessName });
     uid = userRecord.uid;
   } catch (err) {
     const message = toError(err).message;
@@ -134,7 +134,7 @@ export async function POST(req: NextRequest) {
     // 4. Provision instance (registers in fleet + seeds tenant data)
     await ProvisioningEngine.provisionNewInstance({
       key: tenantId,
-      name: restaurantName,
+      name: businessName,
       ownerEmail: email,
       variant,
       initialPrimaryColor: primaryColor,
@@ -147,8 +147,8 @@ export async function POST(req: NextRequest) {
     // inf-1 — Email de bienvenue (fire-and-forget, ne bloque pas la réponse)
     sendEmail({
       to: email,
-      subject: `Bienvenue sur Restaurant OS — ${restaurantName}`,
-      html: welcomeEmailHtml(restaurantName, tenantId),
+      subject: `Bienvenue sur Restaurant OS — ${businessName}`,
+      html: welcomeEmailHtml(businessName, tenantId),
     }).catch(err => logger.warn('[signup] Welcome email failed', toError(err).message));
 
     // 5. Create Stripe Checkout session for initial subscription

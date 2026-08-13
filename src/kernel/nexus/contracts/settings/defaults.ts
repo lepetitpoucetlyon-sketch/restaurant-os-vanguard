@@ -117,7 +117,7 @@ export const defaultPOS: POSSettings = {
 };
 
 export const defaultReceipt: ReceiptTemplate = {
-    restaurantName: getInstanceDisplayName(),
+    merchantName: getInstanceDisplayName(),
     address: '',
     siret: '',
     vatNumber: '',

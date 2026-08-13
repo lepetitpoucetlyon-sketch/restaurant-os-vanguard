@@ -90,7 +90,7 @@ export interface NexusSettingsState {
     updateService: (data: import('./settings').ServiceSettings) => Promise<void>;
     addClosedPeriod: (period: import('./settings').ClosedPeriod) => Promise<void>;
     deleteClosedPeriod: (id: string) => Promise<void>;
-    updateIdentity: (data: import('./settings/identity').RestaurantIdentity) => Promise<void>;
+    updateIdentity: (data: import('./settings/identity').MerchantIdentity) => Promise<void>;
     updateReservationConfig?: (data: SovereignData) => Promise<void>;
     updateReservationSlots?: (data: SovereignData) => Promise<void>;
     updateSLM?: (data: SovereignData) => Promise<void>;

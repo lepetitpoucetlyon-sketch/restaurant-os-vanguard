@@ -183,8 +183,8 @@ export interface SEOConfig {
         };
     };
 
-    restaurant: {
-        cuisineTypes: string[];
+    business: {
+        businessTypes: string[];
         priceRange: '€' | '€€' | '€€€' | '€€€€';
         acceptsReservations: boolean;
         reservationUrl?: string;

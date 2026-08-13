@@ -1,14 +1,29 @@
 import { z } from 'zod';
 
 export const LicenseTypeSchema = z.enum([
+    // Food & beverage
     'licence_iv',
     'licence_restaurant',
     'licence_debit_boissons',
-    'erp_authorization',
     'food_safety_permit',
+    'alcohol_permit',
+    // Automotive
+    'vehicle_repair_permit',
+    'controle_technique_agree',
+    // Healthcare
+    'healthcare_facility_license',
+    'pharmacie_agree',
+    // Beauty & wellness
+    'cosmetology_license',
+    'esthetics_permit',
+    // Hospitality
+    'hotel_classification',
+    'tourism_license',
+    // Universal
+    'erp_authorization',
     'music_license',
     'terrace_permit',
-    'alcohol_permit',
+    'data_protection_registration',
     'other',
 ]);
 

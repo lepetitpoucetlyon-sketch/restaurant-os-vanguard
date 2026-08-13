@@ -73,8 +73,8 @@ export const MarketingSyncService = {
                 geo: { latitude: 0, longitude: 0 },
                 socialProfiles: {}
             },
-            restaurant: {
-                cuisineTypes: [],
+            business: {
+                businessTypes: [],
                 priceRange: '€€',
                 acceptsReservations: true,
                 openingHours: [],

@@ -2,36 +2,43 @@ import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { EmpireInstance } from '@nexus/contracts';
+import type { PlatformVariant } from '@nexus/contracts';
 
-/**
- * 🏛️ SEOInstance interface mapping dynamic SEO properties onto the EmpireInstance schema
- */
 export interface SEOInstance extends EmpireInstance {
   address?: string;
   city?: string;
   zip?: string;
+  businessType?: string;
+  /** @deprecated Use businessType */
   cuisineType?: string;
 }
 
-/**
- * 🔍 SEOManager - Restaurant OS
- * Generates dynamic metadata and JSON-LD for Google crawling per tenant.
- */
+/** Maps a PlatformVariant to its schema.org @type */
+function resolveSchemaType(variant: PlatformVariant): string {
+  const map: Record<PlatformVariant, string> = {
+    restaurant: 'Restaurant',
+    hotel: 'LodgingBusiness',
+    bakery: 'Bakery',
+    garage: 'AutoRepair',
+    salon: 'BeautySalon',
+    clinic: 'MedicalBusiness',
+    retail: 'Store',
+    custom: 'LocalBusiness',
+  };
+  return map[variant] ?? 'LocalBusiness';
+}
+
 export const SEOManager = {
-  
-  /**
-   * Generates a dynamic SEO config for the current active tenant.
-   */
-  generateConfig() {
+  generateConfig(variant: PlatformVariant = 'restaurant') {
     const store = getDefaultStore();
     const tenantId = store.get(tenantIdAtom);
     const instances = store.get(fleetSnapshotAtom) as EmpireInstance[];
     const instance = instances.find((i: EmpireInstance) => i.id === tenantId) as SEOInstance | undefined;
-    
+
     const resolvedInstance: SEOInstance = instance || {
       id: tenantId || 'default',
       key: tenantId || 'default',
-      name: 'Restaurant OS',
+      name: 'Nexus OS',
       status: 'ONLINE',
       tier: 'STANDARD',
       version: '1.0.0',
@@ -46,9 +53,7 @@ export const SEOManager = {
         complianceScore: 100,
         lowStockAlerts: 0
       },
-      branding: {
-        primaryColor: '#000000'
-      },
+      branding: { primaryColor: '#000000' },
       security: {
         twoFactorEnabled: false,
         nf525Certified: true,
@@ -58,8 +63,8 @@ export const SEOManager = {
     };
 
     const baseUrl = `https://${tenantId}.restaurant-os.app`;
-    const title = `${resolvedInstance.name} | Réservez en ligne | Cuisine d'Exception`;
-    const description = `Découvrez la carte et réservez votre table chez ${resolvedInstance.name}. Experience gastronomique unique à ${resolvedInstance.city || 'Paris'}.`;
+    const title = `${resolvedInstance.name} — Réservez en ligne`;
+    const description = `Découvrez et réservez chez ${resolvedInstance.name} à ${resolvedInstance.city || 'votre ville'}.`;
 
     return {
       title,
@@ -68,20 +73,18 @@ export const SEOManager = {
         title,
         description,
         url: baseUrl,
-        siteName: 'Restaurant OS Empire',
+        siteName: 'Nexus OS',
         type: 'website',
       },
-      jsonLd: this.generateJsonLd(resolvedInstance, baseUrl)
+      jsonLd: this.generateJsonLd(resolvedInstance, baseUrl, variant)
     };
   },
 
-  /**
-   * Generates Schema.org JSON-LD for LocalBusiness.
-   */
-  generateJsonLd(instance: SEOInstance, url: string) {
-    return {
+  generateJsonLd(instance: SEOInstance, url: string, variant: PlatformVariant = 'restaurant') {
+    const schemaType = resolveSchemaType(variant);
+    const base: Record<string, unknown> = {
       "@context": "https://schema.org",
-      "@type": "Restaurant",
+      "@type": schemaType,
       "name": instance.name,
       "url": url,
       "address": {
@@ -91,7 +94,12 @@ export const SEOManager = {
         "postalCode": instance.zip,
         "addressCountry": "FR"
       },
-      "servesCuisine": instance.cuisineType || "Gastronomique"
     };
+    // servesCuisine only valid for food verticals
+    const businessType = instance.businessType ?? instance.cuisineType;
+    if (businessType && (variant === 'restaurant' || variant === 'bakery' || variant === 'hotel')) {
+      base["servesCuisine"] = businessType;
+    }
+    return base;
   }
 };

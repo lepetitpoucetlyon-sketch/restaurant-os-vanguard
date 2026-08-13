@@ -13,8 +13,8 @@ export const defaultSettings: GlobalSettings = {
         id: "",
         name: "",
         slogan: "",
-        cuisineType: "",
-        category: "gastronomique",
+        businessType: "",
+        category: "",
         shortDescription: "",
         logo: ""
     },
@@ -162,7 +162,7 @@ export const defaultSettings: GlobalSettings = {
     ],
     receiptTemplate: {
         logo: "",
-        restaurantName: "Restaurant OS Elite",
+        merchantName: "Restaurant OS Elite",
         address: "123 Avenue de l'Innovation, 75001 Paris",
         siret: "",
         vatNumber: "",
@@ -174,7 +174,7 @@ export const defaultSettings: GlobalSettings = {
     },
     receipt: {
         logo: "",
-        restaurantName: "Restaurant OS Elite",
+        merchantName: "Restaurant OS Elite",
         address: "123 Avenue de l'Innovation, 75001 Paris",
         siret: "",
         vatNumber: "",

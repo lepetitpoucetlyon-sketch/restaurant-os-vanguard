@@ -38,22 +38,8 @@ export const IDENTITY_SCHEMA: ModuleSchema = {
     fields: [
         { id: 'name', key: 'name', type: 'string', label: 'Nom du Restaurant', required: true, validation: z.string().min(2) },
         { id: 'slogan', key: 'slogan', type: 'string', label: 'Slogan', required: false },
-        { id: 'cuisineType', key: 'cuisineType', type: 'string', label: 'Type de Cuisine' },
-        { 
-            id: 'category',
-            key: 'category', 
-            type: 'select', 
-            label: 'Catégorie', 
-            options: [
-                { label: 'Bistrot', value: 'bistrot' },
-                { label: 'Gastronomique', value: 'gastronomique' },
-                { label: 'Brasserie', value: 'brasserie' },
-                { label: 'Fast Casual', value: 'fast_casual' },
-                { label: 'Café', value: 'cafe' },
-                { label: 'Bar', value: 'bar' },
-                { label: 'Autre', value: 'other' },
-            ]
-        },
+        { id: 'businessType', key: 'businessType', type: 'string', label: 'Type d\'activité' },
+        { id: 'category', key: 'category', type: 'string', label: 'Catégorie' },
         { id: 'shortDescription', key: 'shortDescription', type: 'textarea', label: 'Description Courte' },
         { id: 'logo', key: 'logo', type: 'string', label: 'URL du Logo' },
     ]

@@ -1,4 +1,4 @@
-import type { RestaurantIdentity } from '@nexus/contracts';
+import type { MerchantIdentity } from '@nexus/contracts';
 
 export interface FirebaseInstanceConfig {
     apiKey: string;
@@ -25,7 +25,7 @@ export interface WhiteLabelInstanceConfig {
     secondaryColor: string;
     firebase: FirebaseInstanceConfig;
     ai: AIInstanceConfig;
-    identityDefaults: RestaurantIdentity;
+    identityDefaults: MerchantIdentity;
 }
 
 export type AppMode = 'tenant' | 'mcc';
@@ -75,8 +75,8 @@ export const whiteLabelInstanceConfig: WhiteLabelInstanceConfig = {
         name: process.env.NEXT_PUBLIC_RESTAURANT_NAME || process.env.NEXT_PUBLIC_APP_NAME || 'Mon Restaurant',
         logo: process.env.NEXT_PUBLIC_RESTAURANT_LOGO || '',
         slogan: process.env.NEXT_PUBLIC_RESTAURANT_SLOGAN || '',
-        cuisineType: process.env.NEXT_PUBLIC_RESTAURANT_CUISINE || 'Française',
-        category: (process.env.NEXT_PUBLIC_RESTAURANT_CATEGORY as RestaurantIdentity['category']) || 'bistrot',
+        businessType: process.env.NEXT_PUBLIC_BUSINESS_TYPE || process.env.NEXT_PUBLIC_RESTAURANT_CUISINE || 'Française',
+        category: process.env.NEXT_PUBLIC_BUSINESS_CATEGORY || process.env.NEXT_PUBLIC_RESTAURANT_CATEGORY || '',
         shortDescription: process.env.NEXT_PUBLIC_RESTAURANT_SHORT_DESCRIPTION || '',
         longDescription: process.env.NEXT_PUBLIC_RESTAURANT_LONG_DESCRIPTION || '',
         headChef: process.env.NEXT_PUBLIC_RESTAURANT_HEAD_CHEF || '',

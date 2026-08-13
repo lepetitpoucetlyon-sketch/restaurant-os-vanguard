@@ -26,24 +26,35 @@ export type IngredientCategory =
 
 export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'portion' | 'piece' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
 
-// Predefined storage locations
-export const DEFAULT_STORAGE_LOCATIONS: StorageLocation[] = [
-    { id: 'frigo_1', name: 'Frigo 1 - Produits Frais', type: 'fridge', temperature: 3, temperatureMin: 0, temperatureMax: 4, zone: 'Cuisine', isActive: true },
-    { id: 'frigo_2', name: 'Frigo 2 - Légumes', type: 'fridge', temperature: 4, temperatureMin: 2, temperatureMax: 6, zone: 'Cuisine', isActive: true },
-    { id: 'frigo_3', name: 'Frigo 3 - Viandes', type: 'fridge', temperature: 2, temperatureMin: 0, temperatureMax: 4, zone: 'Cuisine', isActive: true },
-    { id: 'frigo_4', name: 'Frigo 4 - Poissons', type: 'fridge', temperature: 0, temperatureMin: -2, temperatureMax: 2, zone: 'Cuisine', isActive: true },
-    { id: 'frigo_5', name: 'Frigo 5 - Préparations', type: 'fridge', temperature: 3, temperatureMin: 0, temperatureMax: 4, zone: 'Préparation', isActive: true },
+/** Generic storage locations — valid for any vertical with physical stock */
+export const GENERIC_STORAGE_LOCATIONS: StorageLocation[] = [
+    { id: 'frigo_1', name: 'Frigo 1', type: 'fridge', temperature: 3, temperatureMin: 0, temperatureMax: 4, zone: 'Stockage', isActive: true },
+    { id: 'frigo_2', name: 'Frigo 2', type: 'fridge', temperature: 4, temperatureMin: 2, temperatureMax: 6, zone: 'Stockage', isActive: true },
+    { id: 'congelateur_1', name: 'Congélateur', type: 'freezer', temperature: -18, temperatureMin: -22, temperatureMax: -15, zone: 'Stockage', isActive: true },
+    { id: 'reserve_seche', name: 'Réserve Sèche', type: 'dry_storage', zone: 'Réserve', isActive: true },
+];
+
+/** Extra culinary locations — appended for restaurant/hotel/bakery verticals */
+export const CULINARY_EXTRA_LOCATIONS: StorageLocation[] = [
+    { id: 'frigo_3', name: 'Frigo Viandes', type: 'fridge', temperature: 2, temperatureMin: 0, temperatureMax: 4, zone: 'Cuisine', isActive: true },
+    { id: 'frigo_4', name: 'Frigo Poissons', type: 'fridge', temperature: 0, temperatureMin: -2, temperatureMax: 2, zone: 'Cuisine', isActive: true },
+    { id: 'frigo_5', name: 'Frigo Préparations', type: 'fridge', temperature: 3, temperatureMin: 0, temperatureMax: 4, zone: 'Préparation', isActive: true },
     { id: 'frigo_bar', name: 'Frigo Bar', type: 'fridge', temperature: 4, temperatureMin: 2, temperatureMax: 6, zone: 'Bar', isActive: true },
-    { id: 'congelateur_1', name: 'Congélateur 1 - Principal', type: 'freezer', temperature: -18, temperatureMin: -22, temperatureMax: -15, zone: 'Cuisine', isActive: true },
-    { id: 'congelateur_2', name: 'Congélateur 2 - Glaces', type: 'freezer', temperature: -20, temperatureMin: -25, temperatureMax: -18, zone: 'Cuisine', isActive: true },
-    { id: 'congelateur_3', name: 'Congélateur 3 - Réserve', type: 'freezer', temperature: -18, temperatureMin: -22, temperatureMax: -15, zone: 'Réserve', isActive: true },
+    { id: 'congelateur_2', name: 'Congélateur Glaces', type: 'freezer', temperature: -20, temperatureMin: -25, temperatureMax: -18, zone: 'Cuisine', isActive: true },
+    { id: 'congelateur_3', name: 'Congélateur Réserve', type: 'freezer', temperature: -18, temperatureMin: -22, temperatureMax: -15, zone: 'Réserve', isActive: true },
     { id: 'epicerie_1', name: 'Épicerie Sèche', type: 'dry_storage', zone: 'Réserve', isActive: true },
-    { id: 'epicerie_2', name: 'Épicerie - Conserves', type: 'dry_storage', zone: 'Réserve', isActive: true },
-    { id: 'epicerie_3', name: 'Épicerie - Huiles & Vinaigres', type: 'dry_storage', zone: 'Réserve', isActive: true },
+    { id: 'epicerie_2', name: 'Épicerie Conserves', type: 'dry_storage', zone: 'Réserve', isActive: true },
+    { id: 'epicerie_3', name: 'Épicerie Huiles & Vinaigres', type: 'dry_storage', zone: 'Réserve', isActive: true },
     { id: 'cave_vin', name: 'Cave à Vins', type: 'cellar', temperature: 12, temperatureMin: 10, temperatureMax: 14, zone: 'Cave', isActive: true },
     { id: 'cave_spiritueux', name: 'Cave Spiritueux', type: 'cellar', zone: 'Cave', isActive: true },
     { id: 'comptoir_cuisine', name: 'Comptoir Cuisine', type: 'counter', zone: 'Cuisine', isActive: true },
     { id: 'comptoir_patisserie', name: 'Comptoir Pâtisserie', type: 'counter', zone: 'Pâtisserie', isActive: true },
+];
+
+/** @deprecated Culinary-only defaults — prefer GENERIC_STORAGE_LOCATIONS + usesCulinaryStock() gate */
+export const DEFAULT_STORAGE_LOCATIONS: StorageLocation[] = [
+    ...GENERIC_STORAGE_LOCATIONS,
+    ...CULINARY_EXTRA_LOCATIONS,
 ];
 
 export interface Ingredient {
