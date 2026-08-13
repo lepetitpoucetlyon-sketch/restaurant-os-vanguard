@@ -14,6 +14,30 @@ Plusieurs sessions Claude Code tournent en parallèle. **AVANT toute autre actio
 
 Sans inscription, tu risques d'écraser le travail d'une autre session.
 
+## NexusCoder — stack d'économie de tokens (DEUXIÈME ACTION)
+
+Après l'inscription session, invoquer la skill `nexuscoder` (chargée depuis
+`~/.claude/skills/nexuscoder/SKILL.md`). Elle référence :
+
+- `~/.nexuscoder/domain-facts.yml` — 15+ invariants Restaurant OS auto-injectables selon les fichiers touchés
+- `~/.nexuscoder/routing-rules.yml` — table de routage question → outil optimal
+- Slash commands projet : `/audit-pilier`, `/impact`, `/resume-projet`, `/comprendre`
+
+**Règle de routage stricte pour toute question code intelligence** (ordre coût croissant) :
+
+1. **Serena** MCP (`find_symbol`, `find_references`) — refs/definitions, ~200-500 tok
+2. **Graphify** CLI (`graphify query`, `graphify path`, `graphify affected`) — structure/paths sans source, ~500-2k tok
+3. **ast-grep** CLI (`ast-grep -p '<pattern>' -l ts`) — recherche AST structurelle, ~500-2k tok
+4. **octofs** MCP (`view`, `batch_edit`) — Read/Grep optimisés avec IDs ligne-hash, économie 60-75% sur relectures
+5. **CodeGraph** MCP (`codegraph_explore`) — source verbatim, **UNIQUEMENT** si édition prévue, ~15-24k tok
+6. **Read** natif — dernier recours, TOUJOURS avec offset/limit si fichier >500 lignes
+
+**Interdictions dures** :
+- Pas de `grep` textuel sur `src/` sans scope (hook `nexuscoder-pretool.sh` bloque déjà)
+- Pas de `Read` fichier >500 L sans offset (hook bloque)
+- Pas de `Read` sur `.codegraph/`, `node_modules/`, `.next/`, `.git/`, `.firebase/` (hook bloque)
+- Pas de redécouverte d'un invariant listé dans `domain-facts.yml` — le citer
+
 ## Architecture — piliers & domaines
 
 Système multi-tenant en **8 piliers métier** (+ `mcc`, outillage plateforme), avec une couche de **domaines universels** (2-4 par pilier).

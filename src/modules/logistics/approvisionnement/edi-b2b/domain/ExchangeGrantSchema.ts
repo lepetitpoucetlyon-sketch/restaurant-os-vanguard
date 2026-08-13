@@ -30,7 +30,7 @@ export const ExchangePublishedDataSchema = z.object({
   publisherId: z.string().min(1),
   publishedAt: z.string().datetime(),
   version: z.number().int().positive(),
-  data: z.record(z.unknown()),
+  data: z.record(z.string(), z.unknown()),
   checksum: z.string().optional(),
 });
 
