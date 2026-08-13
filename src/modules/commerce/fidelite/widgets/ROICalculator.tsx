@@ -126,7 +126,7 @@ export default function ROICalculator() {
 
       {calc.monthlySavings <= 0 && (
         <p className="text-xs text-text-muted text-center">
-          Augmentez votre budget TheFork ou le nombre de couverts pour voir les economies possibles.
+          Augmentez votre budget TheFork ou le volume de réservations pour voir les économies possibles.
         </p>
       )}
     </div>

@@ -11,7 +11,7 @@ interface Props {
   step: 4 | 5 | 6 | 7;
   form: FormData;
   bookingRef: string | null;
-  restaurantName: string;
+  merchantName: string;
   submitting: boolean;
   cardImprintConfig: CardImprintConfig | undefined;
   inputClass: string;
@@ -22,7 +22,7 @@ interface Props {
   handleProceedFromNotes(): void;
 }
 
-export function ReservationStepsDEFG({ step, form, bookingRef, restaurantName, submitting, cardImprintConfig, inputClass, btnPrimary, btnSecondary, go, setField, handleProceedFromNotes }: Props) {
+export function ReservationStepsDEFG({ step, form, bookingRef, merchantName, submitting, cardImprintConfig, inputClass, btnPrimary, btnSecondary, go, setField, handleProceedFromNotes }: Props) {
   if (step === 4) return (
     <div className="space-y-4">
       <h2 className="text-xl font-serif font-semibold text-gray-900">Vos coordonnées</h2>
@@ -110,7 +110,7 @@ export function ReservationStepsDEFG({ step, form, bookingRef, restaurantName, s
       </motion.div>
       <div className="space-y-2">
         <h2 className="text-2xl font-serif font-bold text-gray-900">Réservation confirmée !</h2>
-        <p className="text-text-muted text-sm">Merci {form.firstName}, votre table est réservée chez {restaurantName}.</p>
+        <p className="text-text-muted text-sm">Merci {form.firstName}, votre réservation est confirmée chez {merchantName}.</p>
       </div>
       <div className="rounded-2xl bg-amber-50 border border-amber-200 px-6 py-4 space-y-1 w-full">
         <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Référence</p>
@@ -121,7 +121,7 @@ export function ReservationStepsDEFG({ step, form, bookingRef, restaurantName, s
       </div>
       <p className="text-xs text-text-secondary">Un email de confirmation a été envoyé à {form.email}</p>
       {bookingRef && form.date && form.time && (
-        <a href={buildICSLink(form, restaurantName)} download={`reservation-${form.date}.ics`} className={btnPrimary}>
+        <a href={buildICSLink(form, merchantName)} download={`reservation-${form.date}.ics`} className={btnPrimary}>
           <CalendarPlus className="w-4 h-4" />
           Ajouter à mon calendrier
         </a>

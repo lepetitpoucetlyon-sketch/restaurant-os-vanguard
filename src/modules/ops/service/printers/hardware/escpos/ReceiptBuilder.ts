@@ -23,12 +23,12 @@ export class ReceiptBuilder {
     /**
      * Print header with restaurant name
      */
-    public header(restaurantName: string, subText?: string): this {
+    public header(merchantName: string, subText?: string): this {
         this.encoder
             .align('center')
             .bold(true)
             .size(2, 2)
-            .text(restaurantName)
+            .text(merchantName)
             .newline()
             .bold(false)
             .size(1, 1);

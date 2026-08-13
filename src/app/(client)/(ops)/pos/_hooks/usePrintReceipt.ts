@@ -44,7 +44,7 @@ export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
         const effectiveTvaPercent = htTotal > 0 ? Math.round((tvaMu / htTotal) * 100 * 10) / 10 : 10;
 
         const ticket: ReceiptTicket = {
-            restaurantName: (activeTenantConfig as { name?: string } | null)?.name ?? "Restaurant",
+            merchantName: (activeTenantConfig as { name?: string } | null)?.name ?? "Établissement",
             ticketNumber: `T-${Date.now()}`,
             tvaRatePercent: effectiveTvaPercent,
             totalInMicrounits: Math.round(cartTotal),

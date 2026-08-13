@@ -51,7 +51,7 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
 
   if (step === 2) return (
     <div className="space-y-4">
-      <h2 className="text-xl font-serif font-semibold text-gray-900">Nombre de couverts</h2>
+      <h2 className="text-xl font-serif font-semibold text-gray-900">Nombre de personnes</h2>
       <p className="text-sm text-text-muted">
         {form.date ? format(parseISO(form.date), 'EEEE d MMMM', { locale: fr }) : ''}
       </p>

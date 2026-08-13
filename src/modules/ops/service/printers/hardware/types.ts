@@ -74,7 +74,7 @@ export interface ReceiptTicket {
   totalInMicrounits: number
   tvaRatePercent: number
   ticketNumber: string
-  restaurantName: string
+  merchantName: string
   paymentMethod?: string
   cashGiven?: number      // microunits
   changeGiven?: number    // microunits
@@ -115,7 +115,7 @@ export const BRAND_LABELS: Record<PrinterBrand, string> = {
 
 export const ROLE_LABELS: Record<PrinterRole, string> = {
   receipt: 'Ticket caisse',
-  kitchen: 'Bon cuisine',
+  kitchen: 'Bon de production',
   bar: 'Bon bar',
   label: 'Étiquettes',
 }

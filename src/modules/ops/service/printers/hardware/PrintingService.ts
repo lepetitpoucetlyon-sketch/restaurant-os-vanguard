@@ -157,7 +157,7 @@ export const printerService = PrintingService.getInstance();
 
 function buildDummyTestTicket(): ReceiptTicket {
   return {
-    restaurantName: 'TEST',
+    merchantName: 'TEST',
     ticketNumber: 'TEST-001',
     tvaRatePercent: 10,
     totalInMicrounits: 12_500_000,

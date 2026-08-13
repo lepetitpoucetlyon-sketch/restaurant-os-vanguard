@@ -19,7 +19,7 @@ import { Calendar, Users, Clock, User, Mail, MessageSquare, CheckCircle2 } from 
 
 const STEPS = [
   { id: 1, label: 'Date',         icon: Calendar },
-  { id: 2, label: 'Couverts',     icon: Users },
+  { id: 2, label: 'Personnes',    icon: Users },
   { id: 3, label: 'Horaire',      icon: Clock },
   { id: 4, label: 'Identité',     icon: User },
   { id: 5, label: 'Contact',      icon: Mail },
@@ -29,11 +29,11 @@ const STEPS = [
 
 interface Props {
   tenantId: string;
-  restaurantName: string;
+  merchantName: string;
   cardImprintConfig?: CardImprintConfig;
 }
 
-export default function ReservationWidget({ tenantId, restaurantName, cardImprintConfig }: Props) {
+export default function ReservationWidget({ tenantId, merchantName, cardImprintConfig }: Props) {
   const [step, setStep]         = useState<Step>(1);
   const [direction, setDirection] = useState(1);
   const [form, setForm]         = useState<FormData>({ date: '', covers: 2, time: '', firstName: '', lastName: '', email: '', phone: '', notes: '' });
@@ -149,7 +149,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                   step={step as 4 | 5 | 6 | 7}
                   form={form}
                   bookingRef={bookingRef}
-                  restaurantName={restaurantName}
+                  merchantName={merchantName}
                   submitting={submitting}
                   cardImprintConfig={cardImprintConfig}
                   inputClass={inputClass}

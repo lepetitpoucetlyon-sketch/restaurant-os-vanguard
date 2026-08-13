@@ -1,11 +1,13 @@
+import type { PlatformVariant } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { LaborCostService } from '@/modules/human';
+import { labelFor } from '@/verticals/_shared/labels';
 
 interface FlashMetrics {
     date: string;
-    couverts: number;
+    unitCount: number;
     additionMoyenneEur: number;
     revenueEur: number;
     foodCostPercent: number;
@@ -16,16 +18,17 @@ interface FlashMetrics {
 
 interface FlashReport {
     date: string;
+    unitLabel: string;
     metrics: FlashMetrics;
     previousDay?: FlashMetrics;
     trend: {
         revenueDelta: number;
-        couvertsDelta: number;
+        unitDelta: number;
     };
 }
 
 export const DailyFlashReport = {
-    async generate(tenantId: string, date: string): Promise<FlashReport> {
+    async generate(tenantId: string, date: string, variant: PlatformVariant = 'restaurant'): Promise<FlashReport> {
         const dayStart = `${date}T00:00:00Z`;
         const dayEnd = `${date}T23:59:59Z`;
 
@@ -76,8 +79,8 @@ export const DailyFlashReport = {
             return sum + (o.totalInMicrounits ?? (o.totalAmountInCents ?? 0) * 10_000);
         }, 0);
         const revenueEur = totalRevenueMu / 1_000_000;
-        const couverts = orders.reduce((sum, o) => sum + (o.covers ?? 1), 0);
-        const additionMoyenne = couverts > 0 ? revenueEur / couverts : 0;
+        const unitCount = orders.reduce((sum, o) => sum + (o.covers ?? 1), 0);
+        const additionMoyenne = unitCount > 0 ? revenueEur / unitCount : 0;
 
         let ecartCaisse = 0;
         for (const s of cashSessions) {
@@ -96,9 +99,10 @@ export const DailyFlashReport = {
             ? Math.round((totalCost / totalSelling) * 10000) / 100
             : 0;
 
+        const unitLabel = labelFor('unitPlural', variant);
         const metrics: FlashMetrics = {
             date,
-            couverts,
+            unitCount,
             additionMoyenneEur: Math.round(additionMoyenne * 100) / 100,
             revenueEur: Math.round(revenueEur * 100) / 100,
             foodCostPercent,
@@ -113,16 +117,16 @@ export const DailyFlashReport = {
 
         let previousDay: FlashMetrics | undefined;
         let revenueDelta = 0;
-        let couvertsDelta = 0;
+        let unitDelta = 0;
 
         try {
-            const prevReport = await this.generate(tenantId, prevDateStr);
+            const prevReport = await this.generate(tenantId, prevDateStr, variant);
             previousDay = prevReport.metrics;
             revenueDelta = previousDay.revenueEur > 0
                 ? Math.round(((revenueEur - previousDay.revenueEur) / previousDay.revenueEur) * 10000) / 100
                 : 0;
-            couvertsDelta = previousDay.couverts > 0
-                ? Math.round(((couverts - previousDay.couverts) / previousDay.couverts) * 10000) / 100
+            unitDelta = previousDay.unitCount > 0
+                ? Math.round(((unitCount - previousDay.unitCount) / previousDay.unitCount) * 10000) / 100
                 : 0;
         } catch {
             // No previous day data
@@ -130,9 +134,10 @@ export const DailyFlashReport = {
 
         return {
             date,
+            unitLabel,
             metrics,
             previousDay,
-            trend: { revenueDelta, couvertsDelta },
+            trend: { revenueDelta, unitDelta },
         };
     },
 };

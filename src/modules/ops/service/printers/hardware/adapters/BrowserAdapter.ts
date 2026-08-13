@@ -23,7 +23,7 @@ export function printReceiptBrowser(ticket: ReceiptTicket): PrintResult {
   .tot{font-weight:bold;font-size:12px}
   .foot{text-align:center;font-size:9px;margin-top:6px}
 </style></head><body>
-<h1>${ticket.restaurantName.toUpperCase()}</h1>
+<h1>${ticket.merchantName.toUpperCase()}</h1>
 <p>Ticket N° ${ticket.ticketNumber}</p>
 <p>${new Date().toLocaleString('fr-FR')}</p>
 <div class="sep"></div>

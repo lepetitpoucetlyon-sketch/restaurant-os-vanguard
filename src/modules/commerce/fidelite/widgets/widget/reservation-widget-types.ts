@@ -34,7 +34,7 @@ export function imprintRequired(cfg: CardImprintConfig | undefined, covers: numb
   return false;
 }
 
-export function buildICSLink(form: FormData, restaurantName: string): string {
+export function buildICSLink(form: FormData, merchantName: string): string {
   if (!form.date || !form.time) return '#';
   const [year, month, day] = form.date.split('-').map(Number);
   const [hour, minute]     = form.time.split(':').map(Number);
@@ -48,8 +48,8 @@ export function buildICSLink(form: FormData, restaurantName: string): string {
     'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Restaurant OS//Reservation//FR',
     'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
     `UID:${uid}`, `DTSTART:${dtStart}`, `DTEND:${dtEnd}`,
-    `SUMMARY:Reservation chez ${restaurantName}`,
-    `DESCRIPTION:${form.covers} couvert${form.covers > 1 ? 's' : ''}\\n${form.firstName} ${form.lastName}`,
+    `SUMMARY:Reservation chez ${merchantName}`,
+    `DESCRIPTION:${form.covers} personne${form.covers > 1 ? 's' : ''}\\n${form.firstName} ${form.lastName}`,
     'END:VEVENT', 'END:VCALENDAR',
   ].join('\r\n');
   return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;

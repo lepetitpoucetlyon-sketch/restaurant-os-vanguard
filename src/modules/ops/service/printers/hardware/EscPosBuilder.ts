@@ -72,7 +72,7 @@ export class EscPosBuilder {
     const NAME_W  = lw - QTY_W - PRICE_W - 2;
 
     this.push(CMD.INIT, CMD.ALIGN_CENTER, CMD.BOLD_ON, CMD.DOUBLE_HEIGHT);
-    this.text(ticket.restaurantName.toUpperCase());
+    this.text(ticket.merchantName.toUpperCase());
     this.push(CMD.NORMAL_SIZE, CMD.BOLD_OFF);
     this.text(sep('=', lw));
     this.text(`TICKET N\xb0 ${ticket.ticketNumber}`);
@@ -178,10 +178,10 @@ export class EscPosBuilder {
     return new Uint8Array(this.bytes);
   }
 
-  buildTest(restaurantName = 'TEST IMPRESSION'): Uint8Array {
+  buildTest(merchantName = 'TEST IMPRESSION'): Uint8Array {
     const lw = this.lw;
     this.push(CMD.INIT, CMD.ALIGN_CENTER, CMD.BOLD_ON, CMD.DOUBLE_HEIGHT);
-    this.text(restaurantName.toUpperCase());
+    this.text(merchantName.toUpperCase());
     this.push(CMD.NORMAL_SIZE, CMD.BOLD_OFF);
     this.text(sep('=', lw));
     this.push(CMD.ALIGN_LEFT);

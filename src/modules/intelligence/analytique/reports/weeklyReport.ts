@@ -1,6 +1,8 @@
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import type { PlatformVariant } from '@nexus/contracts';
 import { SovereignMath } from '@/lib/services/SovereignMath';
+import { resolveMetricLabels } from '@/verticals/_shared/labels';
 
 interface OrderRecord {
   status: string;
@@ -28,8 +30,10 @@ interface ReservationRecord {
 export async function buildWeeklyReportHTML(
   startDate: number,
   endDate: number,
-  tenantId?: string
+  tenantId?: string,
+  variant: PlatformVariant = 'restaurant'
 ): Promise<string> {
+  const labels = resolveMetricLabels(variant);
   // Dynamic import so this module can be used without bundling Nexus at module level
   const { Nexus } = await import('@/lib/nexus/NexusAdapter');
 
@@ -66,7 +70,7 @@ export async function buildWeeklyReportHTML(
     0
   );
   const totalRevenue = SovereignMath.fromMicrounits(totalMicrounits);
-  const totalCovers = weekOrders.reduce((acc, o) => acc + (o.covers ?? 1), 0);
+  const totalUnits = weekOrders.reduce((acc, o) => acc + (o.covers ?? 1), 0);
   const avgSpend =
     weekOrders.length > 0
       ? Math.round(
@@ -131,7 +135,7 @@ export async function buildWeeklyReportHTML(
           ([day, covers]) =>
             `<tr>
                <td style="padding:10px 16px;border-bottom:1px solid #2a2a2a;font-size:13px;">${format(new Date(day), 'EEEE d MMM', { locale: fr })}</td>
-               <td style="padding:10px 16px;border-bottom:1px solid #2a2a2a;text-align:right;font-size:13px;font-weight:700;color:#c9a84c;">${covers} couverts</td>
+               <td style="padding:10px 16px;border-bottom:1px solid #2a2a2a;text-align:right;font-size:13px;font-weight:700;color:#c9a84c;">${covers} ${labels.unitPlural}</td>
              </tr>`
         )
         .join('')
@@ -163,8 +167,8 @@ export async function buildWeeklyReportHTML(
             <div style="font-size:22px;font-weight:300;color:#fff;">${totalRevenue.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} €</div>
           </td>
           <td style="background:#222;border-radius:12px;padding:20px;text-align:center;vertical-align:top;width:33%;">
-            <div style="font-size:9px;font-weight:900;letter-spacing:0.25em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;">Couverts</div>
-            <div style="font-size:22px;font-weight:300;color:#fff;">${totalCovers}</div>
+            <div style="font-size:9px;font-weight:900;letter-spacing:0.25em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;">${labels.unitPlural.charAt(0).toUpperCase() + labels.unitPlural.slice(1)}</div>
+            <div style="font-size:22px;font-weight:300;color:#fff;">${totalUnits}</div>
           </td>
           <td style="background:#222;border-radius:12px;padding:20px;text-align:center;vertical-align:top;width:33%;">
             <div style="font-size:9px;font-weight:900;letter-spacing:0.25em;text-transform:uppercase;color:#c9a84c;margin-bottom:6px;">Dépense moy.</div>
@@ -195,7 +199,7 @@ export async function buildWeeklyReportHTML(
         <thead>
           <tr style="background:#2a2a2a;">
             <th style="padding:8px 16px;text-align:left;font-size:9px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:0.15em;">Jour</th>
-            <th style="padding:8px 16px;text-align:right;font-size:9px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:0.15em;">Couverts</th>
+            <th style="padding:8px 16px;text-align:right;font-size:9px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:0.15em;">${labels.unitPlural}</th>
           </tr>
         </thead>
         <tbody>${dayRows}</tbody>
