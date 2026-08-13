@@ -8,4 +8,7 @@ export const metricLabels: MetricLabels = {
   merchantKind:   'boulangerie',
   server:         'vendeur',
   prepTicket:     'ordre de fournée',
+  recipeLabel:    'recette de pâtisserie',
+  itemLabel:      'matière première',
+  customerLabel:  'client',
 };

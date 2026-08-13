@@ -55,4 +55,26 @@ export interface MetricLabels {
    * « ordre de préparation » ailleurs. Utilisé par printers (types.ts) et KDS.
    */
   prepTicket: string;
+
+  /**
+   * §8.6 Vague 2.1 — Unification IVerticalLexicon (mort, 0 consommateur).
+   * Le nom générique de la recette / forfait / prestation de référence —
+   * recette / forfait réparation / prestation / acte médical / forfait séjour /
+   * recette de fournée / fiche article. Utilisé par catalogue, KDS, rapports.
+   */
+  recipeLabel: string;
+
+  /**
+   * Le nom de l'item de stock / consommable propre à la verticale —
+   * ingrédient / pièce détachée / produit cosmétique / consommable médical /
+   * fourniture chambre / matière première / article. Utilisé par catalog,
+   * inventory modals, commandes fournisseur.
+   */
+  itemLabel: string;
+
+  /**
+   * Le nom de la personne servie — client/convive / patient / automobiliste /
+   * client / résident / habitué / client. Utilisé par CRM, fidélité, réservations.
+   */
+  customerLabel: string;
 }

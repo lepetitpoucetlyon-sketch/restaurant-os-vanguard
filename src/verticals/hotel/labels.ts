@@ -8,4 +8,7 @@ export const metricLabels: MetricLabels = {
   merchantKind:   'hôtel',
   server:         'réceptionniste',
   prepTicket:     'bon housekeeping',
+  recipeLabel:    'forfait séjour',
+  itemLabel:      'fourniture chambre',
+  customerLabel:  'résident',
 };

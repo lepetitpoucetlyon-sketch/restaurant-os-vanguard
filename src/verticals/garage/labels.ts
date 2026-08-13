@@ -8,4 +8,7 @@ export const metricLabels: MetricLabels = {
   merchantKind:   'garage',
   server:         'mécanicien',
   prepTicket:     'ordre de réparation',
+  recipeLabel:    'forfait réparation',
+  itemLabel:      'pièce détachée',
+  customerLabel:  'automobiliste',
 };

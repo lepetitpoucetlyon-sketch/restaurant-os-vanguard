@@ -11,4 +11,7 @@ export const metricLabels: MetricLabels = {
   merchantKind:   'restaurant',
   server:         'serveur',
   prepTicket:     'bon cuisine',
+  recipeLabel:    'recette',
+  itemLabel:      'ingrédient',
+  customerLabel:  'convive',
 };

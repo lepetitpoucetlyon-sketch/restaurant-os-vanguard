@@ -17,6 +17,10 @@ describe('resolveMetricLabels (§8.6 Vague 2 — libellés métier par verticale
       expect(labels.merchantKind).toBeTruthy();
       expect(labels.server).toBeTruthy();
       expect(labels.prepTicket).toBeTruthy();
+      // §8.6 Vague 2.1 — ex-IVerticalLexicon keys
+      expect(labels.recipeLabel).toBeTruthy();
+      expect(labels.itemLabel).toBeTruthy();
+      expect(labels.customerLabel).toBeTruthy();
     }
   });
 
@@ -54,14 +58,29 @@ describe('resolveMetricLabels (§8.6 Vague 2 — libellés métier par verticale
     expect(resolveMetricLabels('bakery').prepTicket).toBe('ordre de fournée');
   });
 
+  it('§8.6 Vague 2.1 — recipeLabel/itemLabel/customerLabel par verticale', () => {
+    expect(resolveMetricLabels('restaurant').recipeLabel).toBe('recette');
+    expect(resolveMetricLabels('restaurant').itemLabel).toBe('ingrédient');
+    expect(resolveMetricLabels('restaurant').customerLabel).toBe('convive');
+    expect(resolveMetricLabels('garage').recipeLabel).toBe('forfait réparation');
+    expect(resolveMetricLabels('garage').itemLabel).toBe('pièce détachée');
+    expect(resolveMetricLabels('garage').customerLabel).toBe('automobiliste');
+    expect(resolveMetricLabels('clinic').recipeLabel).toBe('acte médical');
+    expect(resolveMetricLabels('clinic').itemLabel).toBe('consommable médical');
+    expect(resolveMetricLabels('clinic').customerLabel).toBe('patient');
+    expect(resolveMetricLabels('hotel').customerLabel).toBe('résident');
+    expect(resolveMetricLabels('bakery').recipeLabel).toBe('recette de pâtisserie');
+    expect(resolveMetricLabels('retail').itemLabel).toBe('article');
+  });
+
   it("labelFor() résout une clé unique", () => {
     expect(labelFor('unit', 'garage')).toBe('intervention');
     expect(labelFor('spatialContext', 'hotel')).toBe('chambre');
     expect(labelFor('merchantKind')).toBe('restaurant'); // défaut
   });
 
-  it('type MetricLabels réexporté depuis _shared', () => {
+  it('type MetricLabels réexporté depuis _shared (9 clés après Vague 2.1)', () => {
     const labels: MetricLabels = resolveMetricLabels('restaurant');
-    expect(Object.keys(labels)).toHaveLength(6);
+    expect(Object.keys(labels)).toHaveLength(9);
   });
 });

@@ -14,4 +14,7 @@ export const metricLabels: MetricLabels = {
   merchantKind:   'clinique',
   server:         'praticien',
   prepTicket:     'protocole de soin',
+  recipeLabel:    'acte médical',
+  itemLabel:      'consommable médical',
+  customerLabel:  'patient',
 };
