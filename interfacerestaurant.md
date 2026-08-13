@@ -34,16 +34,25 @@
    - [1.9 RH / Staff](#19-rh--staff--staff)
    - [1.10 Marketing / SEO](#110-marketing--seo--marketing)
    - [1.11 Onboarding / Migration](#111-onboarding--migration--onboarding--migration)
-5. [Partie 2 — Routes hors navigation (17 routes)](#5-partie-2--routes-hors-navigation)
-6. [Partie 3 — Services backend sans UI](#6-partie-3--services-backend-sans-ui)
+5. [**Partie 1.bis — Décontamination des modules teintés (§8.6)**](#5-partie-1bis--décontamination-des-modules-teintés-86) ← **NOUVEAU · plan complet**
+   - [5.1 TL;DR chiffré](#51-tldr-chiffré)
+   - [5.2 Buckets par pattern de teinture (A-J)](#52-buckets-par-pattern-de-teinture)
+   - [5.3 Scoring effort × impact × gate](#53-scoring-effort--impact--gate)
+   - [5.4 Séquence 8 vagues avec état d'avancement](#54-séquence-8-vagues-avec-état-davancement)
+   - [5.5 Dépendances croisées](#55-dépendances-croisées)
+   - [5.6 Risques & pièges](#56-risques--pièges)
+   - [5.7 Ce qui ne fait PAS partie de ce chantier](#57-ce-qui-ne-fait-pas-partie-de-ce-chantier)
+   - [5.8 Fichiers de référence](#58-fichiers-de-référence)
+6. [Partie 2 — Routes hors navigation (17 routes)](#6-partie-2--routes-hors-navigation)
+7. [Partie 3 — Services backend sans UI](#7-partie-3--services-backend-sans-ui)
    - [3.1 Event Bus — 165 handlers silencieux](#31-event-bus--165-handlers-silencieux)
    - [3.2 Engines Métier — 31 engines sans écran](#32-engines-métier--31-engines-sans-écran)
    - [3.3 Cron Jobs — 15 jobs sans monitoring](#33-cron-jobs--15-jobs-sans-monitoring)
-7. [Partie 4 — Verticales SaaS (7 verticales)](#7-partie-4--verticales-saas)
-8. [Partie 5 — Plan d'exécution en 11 sprints](#8-partie-5--plan-dexécution-en-11-sprints)
-9. [Partie 6 — Métriques d'avancement](#9-partie-6--métriques-davancement)
-10. [Corrections à apporter au plan initial](#10-corrections-à-apporter-au-plan-initial)
-11. [Annexe — Fichiers immuables & invariants](#11-annexe--fichiers-immuables--invariants)
+8. [Partie 4 — Verticales SaaS (7 verticales)](#8-partie-4--verticales-saas)
+9. [Partie 5 — Plan d'exécution en 11 sprints](#9-partie-5--plan-dexécution-en-11-sprints)
+10. [Partie 6 — Métriques d'avancement](#10-partie-6--métriques-davancement)
+11. [Corrections à apporter au plan initial](#11-corrections-à-apporter-au-plan-initial)
+12. [Annexe — Fichiers immuables & invariants](#12-annexe--fichiers-immuables--invariants)
 
 ---
 
@@ -488,7 +497,238 @@ Ces pages sont dans la nav et se chargent, mais n'exposent qu'une **fraction** d
 
 ---
 
-## 5. Partie 2 — Routes hors navigation
+## 5. Partie 1.bis — Décontamination des modules teintés (§8.6)
+
+> **Source** : `docs/audits/AUDIT_MODULES_TEINTES.md` (rédigé 2026-08-12, session `tour-s86-teintes`).
+> Ce plan complète la section §0 « Périmètre généraliste vs restaurant » : la §0 documente **les mécanismes** de généralisation (`MetricLabels`, `TEMPLATES_BY_VARIANT`, `FloorPlanProfile`), cette Partie 1.bis inventorie **les modules restants à décontaminer** — bucket par bucket, effort chiffré, vague par vague.
+>
+> **Enjeu** : la verticale restaurant historique **contamine** encore les autres verticales via des libellés en dur (« Couverts », « Bon cuisine », « restaurantName »), des schémas restaurant-only (`Table`, `Ingredient`) et des services conçus pour la cuisine (HACCP, KDS, MenuEngineering) sans gate variant. Sans décontamination, un garagiste voit « Couverts » sur son écran, un salon voit HACCP dans sa nav.
+
+### 5.1 TL;DR chiffré
+
+| Ligne | Chiffre |
+|-------|---------|
+| Modules candidats identifiés | **21** (10 listés au plan + 11 remontés à l'audit) |
+| **Dead stubs** (supprimés au vague 0) | **2 ✅** |
+| **Barrel violation** (déjà notée §0.8) | **1 ❌ tip-pooling encore là** |
+| **Culinaire fondationnel** (garder food-only, gate `usesCulinaryStock`) | **4** |
+| **Neutres** (rien à faire) | **2** |
+| **Vraiment à généraliser** (chantiers) | **12** |
+| Occurrences globales `restaurantName\|couverts\|Couverts` dans `src/modules/` (baseline audit) | **95** (44 fichiers) |
+
+**Observation clé** — La teinture est **implicite** (libellés, catégories, schémas), pas **explicite** (branchement runtime). Quand le variant change, **aucune erreur ne remonte** — le module continue de fonctionner en affichant « Couverts » à un garagiste. C'est une teinture UX/sémantique, pas fonctionnelle.
+
+### 5.2 Buckets par pattern de teinture
+
+#### Bucket A — Dead stubs ✅ FAIT
+
+Supprimés :
+- `ops/workflow/table-management/` (stub 2L)
+- `ops/workflow/housekeeping/` (stub 2L)
+
+#### Bucket B — Barrel violation ❌ NON FAIT
+
+| Module | Ligne | État |
+|--------|-------|------|
+| `human/remuneration/tip-pooling/index.ts` | `export * from '../../effectifs/hr/services/tipDistribution';` | ❌ **Encore là** — vérifié 2026-08-13 |
+
+**Action** — soit remplacer par un vrai module (déplacer `tipDistribution.ts` ici), soit supprimer le dossier et rediriger les importateurs.
+
+#### Bucket C — Culinaire fondationnel (gate variant)
+
+Ces modules sont **conçus** pour la cuisine, pas juste teintés. Le geste juste : gate par `usesCulinaryStock(variant)` (déjà défini dans `logistics/stock/stockProfile.ts`). Un garage/salon/retail n'ouvre plus la surface UI ni les abonnements Nexus.
+
+| Module | Fic | Nature | Verrou proposé | État |
+|--------|-----|--------|----------------|------|
+| `compliance/qualite/haccp/*` | 67 | Chaîne du froid, hygiène | `usesCulinaryStock(v)` | ⚠️ Existe mais pas de gate UI |
+| `compliance/qualite/donation/FoodDonationService.ts` | 64L | Don alimentaire loi Garot | `usesCulinaryStock(v)` | ⚠️ Non gaté |
+| `commerce/catalog/menu-engineering/MenuEngineeringService.ts` | 119L | Boston Matrix (star/dog/plow-horse/puzzle) | `usesCulinaryStock(v)` | ⚠️ Non gaté |
+| `ops/production/kitchen+kds+recipes` | 46 | Cuisine, KDS, fiches recettes | `usesCulinaryStock(v)` (partiel `inventory.sync.ts`) | 🟢 Partiel |
+
+⚠️ **Retail alimentaire** (boulangerie, épicerie fine) doit voir HACCP. Étendre à `variant === 'retail' && capabilities.food`.
+
+#### Bucket D — Neutres ✅ (rien à faire, vérifié)
+
+| Module | Vérification |
+|--------|--------------|
+| `intelligence/ia/ai/*` (12 fic) | LLM router pur, 0 teinture (grep `restaurant\|plat\|couvert` = 0) |
+| `ops/service/bar/store/barAtoms.ts` (16L) | Atomes wines/cocktails — sans teinture UX. Gate `capabilities.bar` si besoin |
+
+#### Bucket E — Libellés UX teintés (config-only, effort S chacun)
+
+Même pattern : libellé français **« Couverts »**, **« Bon cuisine »**, **« Nom restaurant »** en JSX / string. Traité par un même geste : `verticals/<v>/labels.ts` + `resolveMetricLabels(variant)` — voie **§8.3 roleLabels** appliquée aux libellés métier.
+
+| Module | Fic | Symptôme précis | État |
+|--------|-----|-----------------|------|
+| `ops/service/printers/hardware/types.ts` | 1 | 4 renames : `PrinterRole → prep\|receipt\|label`, `KitchenTicket → PrepTicket`, `tableLabel → contextLabel?`, `restaurantName → merchantName` | 🟢 **`merchantName` fait** — `KitchenTicket` encore là ❌ |
+| `commerce/fidelite/widgets/*` | 11 | « Couverts », « votre table est réservée chez restaurantName », `TableSchema` importé | ❌ Non fait |
+| `intelligence/analytique/reports/{weeklyReport,DailyFlashReport}.ts` | 2 | Email HTML `« couverts »`, `couvertsDelta` | 🟢 **`DailyFlashReport` : `unitCount` fait**, `weeklyReport` : `covers` encore |
+| `intelligence/ia/fleet/{FleetBenchmark,FleetRollout,Quantum,MarketOracle}.ts` | 4 | `couverts` col. hardcodée, `type: 'menu'`, `MENU_PERFORMANCE` pulse | 🟢 **`FleetBenchmark.unitCount` fait**, autres ❌ |
+
+#### Bucket F — Réservation multi-contexte (S–M)
+
+| Module | Fic | Nature | État |
+|--------|-----|--------|------|
+| `commerce/relation/reservations/*` | 48 | Schéma `Reservation.covers` OK · UI hardcode « Couverts », `Table[]` importé de ops | 🟢 **`EventQuoteModal` utilise `resolveMetricLabels`**, `useReservationsPage.restaurantName` fixé — reste UI dialogs |
+
+**Note** — Module déjà **quasi polyvalent** : salon, clinic, garage prennent tous des rendez-vous ; le schéma tient. Seuls les libellés UI sont teintés.
+
+#### Bucket G — Onboarding source-spécifique (M) ❌ NON FAIT
+
+| Module | Fic | Symptôme |
+|--------|-----|----------|
+| `commerce/acquisition/onboarding/*` | 65 | `guides/exportGuides.ts` = 4 restaurants (Zelty/L'Addition/Lightspeed/Tiller) · `SimpleFloorPlanEditor` : profils gérés via `TEMPLATES_BY_VARIANT` ✅ |
+
+**Action restante** — extraire dans `verticals/<v>/onboarding/` :
+- `sourceSystems.ts` — SI concurrents à importer (`Zelty/L'Addition/…` pour restaurant, `MISTER/Planity` pour salon, `Doctolib` pour clinic, `Winkler` pour garage, `Cegid` pour retail)
+- `guides.ts` — `exportGuides` par SI
+- ✅ `floorPlanProfiles.ts` — déjà fait (voir §0.2 `TEMPLATES_BY_VARIANT`)
+
+#### Bucket H — Marketing (S)
+
+| Module | Fic | Symptôme | État |
+|--------|-----|----------|------|
+| `commerce/acquisition/marketing/*` | 61 | `marketing-engine.ts` : `slug: '…' \|\| 'restaurant'` + `name \|\| 'Restaurant'` · `CampaignAttributionService.couverts` · `VisitHistory` UI « Couverts » | 🟢 **`CampaignAttributionService.unitCount` fait** — `marketing-engine` slug et `VisitHistory` UI ❌ |
+
+#### Bucket I — Documents événementiels (S–M) ❌ NON FAIT
+
+| Module | Fic | Symptôme |
+|--------|-----|----------|
+| `finance/comptabilite/documents/PrivatisationContract.ts` | 446L | Contrat privatisation événement · `restaurantNom/Adresse/Tel/Email/Siret` en dur · `PrivatisationFormule = 'menu' \| 'cocktail_dinatoire' \| 'buffet'` |
+
+**Action** — renommer en `EventContract.ts` + `merchantName/…` + Formule variant-specific (hôtel : `séminaire\|conférence`, salon : `journée VIP`, clinic : rien). Adapters par verticale.
+
+#### Bucket J — Floor-plan (L, schéma-gelé) ⏸ OPENING-GATED
+
+| Module | Fic | Symptôme |
+|--------|-----|----------|
+| `facility/spaces/floor-plan/*` | 9 | `Table[]` importé de `@nexus/contracts` · `TableInsightPanel` UI restaurant-only · `FloorPlanGeometry.nextTableNumber(tables)` |
+
+**Action** — chantier **schéma-gelé, opening-gated** (identique à `inventory` §8.6 12/08). Contrat `Table` → `Space { id, kind: 'table' \| 'room' \| 'bay' \| 'seat' \| 'station', capacity, position }` + overlay. **À réserver pour l'ouverture d'une verticale qui l'exige** (hôtel `room`, garage `bay`).
+
+### 5.3 Scoring effort × impact × gate
+
+Notation : **Effort** — XS < 1h · S 1-4h · M 1-2j · L > 2j · **Impact** — verticales bloquées si non traité
+
+| # | Bucket | Module | Effort | Impact | État |
+|---|--------|--------|--------|--------|------|
+| 1 | A | `table-management` (stub) | XS | — | ✅ |
+| 2 | A | `housekeeping` (stub) | XS | — | ✅ |
+| 3 | B | `tip-pooling` (barrel viol.) | XS | — | ❌ |
+| 4 | C | `haccp/*` gate variant | S | retail/salon/garage/clinic | ⚠️ non gaté UI |
+| 5 | C | `donation/*` gate variant | XS | idem | ❌ |
+| 6 | C | `menu-engineering/*` gate variant | XS | idem | ❌ |
+| 7 | C | `production/kitchen+kds+recipes` gate | S | idem | 🟢 partiel |
+| 8 | E | `printers/hardware/types.ts` renames | S | garage/salon/clinic | 🟢 partiel (`merchantName` ✅, `KitchenTicket` ❌) |
+| 9 | E | `widgets/*` restaurant-only ou adapter | S | garage/salon/clinic | ❌ |
+| 10 | E | `reports/{weekly,DailyFlash}` `couverts→unitCount` | S | toutes | 🟢 DailyFlash ✅, weekly ❌ |
+| 11 | E | `ia/fleet/{Benchmark,Rollout,Quantum,Oracle}` cross-verticale | M | MCC | 🟢 FleetBenchmark ✅, autres ❌ |
+| 12 | F | `reservations/*` libellés | M | salon/clinic | 🟢 partiel (`EventQuoteModal` ✅) |
+| 13 | G | `onboarding/*` sourceSystems + guides | M | garage/salon/clinic | ❌ (sauf floorPlanProfiles ✅) |
+| 14 | H | `marketing/*` slug + `couverts→unitCount` | S | garage/salon/clinic | 🟢 partiel (`CampaignAttribution` ✅) |
+| 15 | I | `PrivatisationContract → EventContract` + adapters | M | hôtel/salon | ❌ |
+| 16 | J | `floor-plan/*` contrat `Space` + overlays | L | hôtel/garage/toutes | ⏸ opening-gated |
+| — | D | `ia/ai/*` NEUTRE | 0 | — | ✅ |
+| — | D | `bar/barAtoms.ts` NEUTRE | 0 | — | ✅ |
+
+**Total effort restant** : ~**4–5 j-h** (hors bucket J opening-gated). Baseline audit était ~8 j-h, ~3 j-h ont été livrés par la session `teintes-finish-ui-plan` (voir §0).
+
+### 5.4 Séquence 8 vagues avec état d'avancement
+
+```
+✅ Vague 0 — hygiène (30 min)
+   ✅ Supprimer table-management + housekeeping (2 stubs) — FAIT
+   ❌ Redresser tip-pooling (déplacer service OU supprimer dossier) — RESTE
+
+⚠️ Vague 1 — culinaire gate (½ j) — PARTIEL
+   ⚠️ Étendre usesCulinaryStock(variant) à haccp/donation/menu-engineering/kitchen/kds/recipes
+   → Motif identique à inventory.sync.ts §8.6 12/08 — copier/adapter
+   → Prérequis : 0 (stockProfile.ts existe déjà)
+
+✅ Vague 2 — labels métier partagés (1 j) — FAIT
+   ✅ verticals/<v>/labels.ts pour restaurant, salon, bakery, hotel, garage, clinic, retail
+   ✅ resolveMetricLabels(variant) publié dans verticals/_shared/labels.ts
+   ✅ labelFor(key, variant) disponible
+
+🟢 Vague 3 — modules libellés (2 j) — PARTIEL
+   🟢 printers/hardware/types.ts — merchantName ✅, KitchenTicket→PrepTicket ❌
+   ❌ widgets/* — restaurant-only ou adapters par verticale
+   🟢 reports/* — DailyFlashReport ✅, weeklyReport ❌
+   🟢 reservations/* — EventQuoteModal ✅, autres dialogs ❌
+   🟢 marketing/* — CampaignAttributionService.unitCount ✅, marketing-engine.slug + VisitHistory ❌
+   → Prérequis : Vague 2 ✅
+
+🟢 Vague 4 — MCC fleet cross-verticale (1 j) — PARTIEL
+   🟢 FleetBenchmark : colonne dynamique unitCount ✅
+   ❌ FleetRollout.type = 'catalog' | 'config' | 'template' (menu → catalog)
+   ❌ QuantumOrchestrator, MarketOracle
+   → Prérequis : Vague 2 ✅ + MetricAdapter par verticale
+
+❌ Vague 5 — onboarding par verticale (2 j)
+   ✅ floorPlanProfiles par verticale (TEMPLATES_BY_VARIANT §0.2)
+   ❌ sourceSystems.ts par verticale (Zelty/Doctolib/Winkler/Planity/Cegid…)
+   ❌ guides.ts par verticale
+   → Prérequis : Vague 2 ✅ · condition ouverture verticale non-restaurant
+
+❌ Vague 6 — documents événementiels (½ j)
+   ❌ PrivatisationContract → EventContract + IVerticalContractAdapter × verticales concernées
+   → Prérequis : Vague 3 (labels merchant)
+
+⏸ Vague 7 — floor-plan (schéma-gelé, opening-gated)
+   ⏸ Contrat Space + overlays — attend une ouverture qui l'exige
+   → Motif §8.6 inventory 12/08
+```
+
+### 5.5 Dépendances croisées
+
+```
+    ┌─── Vague 0 (stubs, tip-pooling) ── indépendant
+    │
+    ├─── Vague 1 (culinaire gate) ── stockProfile ✓
+    │
+    └─── Vague 2 (labels partagés) ── §8.3 roleLabels ✓
+             ├─── Vague 3 (printers/widgets/reports/reservations/marketing)
+             ├─── Vague 4 (MCC fleet)
+             ├─── Vague 5 (onboarding par verticale)
+             └─── Vague 6 (documents évén.) — dépend aussi Vague 3
+
+    Vague 7 (floor-plan) ── opening-gated
+```
+
+### 5.6 Risques & pièges
+
+| Risque | Mitigation |
+|--------|------------|
+| **Régression restaurant** en généralisant labels | Défaut `resolveMetricLabels()` = restaurant → aucun changement UX pour le tenant existant |
+| **Faux positif teinture** — `<table>` HTML confondu avec `Table` métier | Grep de teinture doit exclure `<table\|Table<\|tableRow` (déjà appliqué dans cet audit) |
+| **Vague 5 (onboarding)** déclenche N×M chantiers importers | Ne l'ouvrir qu'à l'ouverture effective d'une verticale non-restaurant (pas de spéculation) |
+| **Widgets** — 11 fichiers restaurant intégrés | Restaurant-only assumé jusqu'à demande commerciale explicite ; header UI clair (« Widget de réservation restaurant ») |
+| **HACCP** en `usesCulinaryStock` — cas retail alimentaire | Étendre gate à `variant === 'retail' && capabilities.food` avant de gater dur |
+| **Nouveau composant partagé** ajouté sans passer par `labelFor()` | Règle d'or §0.5 : violation = teinture = sprint de refactoring |
+
+### 5.7 Ce qui ne fait PAS partie de ce chantier
+
+- **Ouverture de nouvelles verticales** — c'est la **conséquence** de ce nettoyage, pas ce nettoyage.
+- **Contrats de données schéma-gelés** (`Ingredient → StockItem`, `Table → Space`) — voir `PLAN_COMPLET.md` §7.8 « schéma-gelé, opening-gated ».
+- **Refonte UI** — chantier design system, orthogonal.
+- **MCC EInvoicing/Exchange** — séparé (§7.2 + §8 alignement MCC).
+
+### 5.8 Fichiers de référence
+
+| Fichier | Rôle |
+|---|---|
+| `docs/audits/AUDIT_MODULES_TEINTES.md` | Audit source complet (2026-08-12) |
+| `docs/plans/PLAN_COMPLET.md` §7.8 (§8.6) | Plan général verticalisation |
+| `src/verticals/_shared/labels.ts` | `labelFor()` / `resolveMetricLabels()` |
+| `src/verticals/_shared/labels.types.ts` | Types `MetricLabels`, `LabelKey` |
+| `src/verticals/<v>/labels.ts` | Labels par verticale (7 verticales) |
+| `src/verticals/<v>/onboarding.ts` | `floorPlanProfile` par verticale |
+| `src/modules/logistics/stock/stockProfile.ts` | `usesCulinaryStock(variant)` — gate culinaire |
+| `src/modules/logistics/stock/inventory.sync.ts` | Motif de référence pour gate Nexus |
+
+---
+
+## 6. Partie 2 — Routes hors navigation
 
 Ces pages existent dans Next.js mais n'ont **aucune entrée** dans `src/config/navConfig.ts` — inaccessibles sans URL directe.
 
@@ -539,7 +779,7 @@ Ces pages existent dans Next.js mais n'ont **aucune entrée** dans `src/config/n
 
 ---
 
-## 6. Partie 3 — Services backend sans UI
+## 7. Partie 3 — Services backend sans UI
 
 ### 3.1 Event Bus — 165 handlers silencieux
 
@@ -595,7 +835,7 @@ Ces pages existent dans Next.js mais n'ont **aucune entrée** dans `src/config/n
 
 ---
 
-## 7. Partie 4 — Verticales SaaS
+## 8. Partie 4 — Verticales SaaS
 
 Ces verticales ont des composants construits mais **aucune route** dans le router Next.js. Ordre par ROI estimé :
 
@@ -617,7 +857,7 @@ Ces verticales ont des composants construits mais **aucune route** dans le route
 
 ---
 
-## 8. Partie 5 — Plan d'exécution en 11 sprints
+## 9. Partie 5 — Plan d'exécution en 11 sprints
 
 ### Sprint 1 — Fondations & Bugs P0 (semaine 1-2)
 
@@ -903,7 +1143,7 @@ Composants: tous déjà construits dans commerce/onboarding/
 
 ---
 
-## 9. Partie 6 — Métriques d'avancement
+## 10. Partie 6 — Métriques d'avancement
 
 Utiliser ces métriques pour tracker la progression sprint par sprint :
 
@@ -925,7 +1165,7 @@ Utiliser ces métriques pour tracker la progression sprint par sprint :
 
 ---
 
-## 10. Corrections à apporter au plan initial
+## 11. Corrections à apporter au plan initial
 
 Ce document corrige **trois affirmations fausses** du `PLAN_IMPLEMENTATION_UI.md` original, vérifiées cette session :
 
@@ -949,7 +1189,7 @@ La liste réelle des routes hors navigation est **17**, pas 13. S'ajoutent :
 
 ---
 
-## 11. Annexe — Fichiers immuables & invariants
+## 12. Annexe — Fichiers immuables & invariants
 
 ### 11.1 Fichiers à ne jamais toucher
 
