@@ -1,10 +1,9 @@
 # Plan — Reste à faire
 
-> **Repo** : RESTAURANT-OS-CORE · branche `fix/coherence-ui-backend-securite` · HEAD `2acb5dab9`
-> **Rédigé le** : 2026-08-09 · **mis à jour** le 2026-08-09 après commit · session `ui-backend-coherence`
+> **Repo** : RESTAURANT-OS-CORE · branche `agent/antigravity-exec`
+> **Rédigé le** : 2026-08-09 · **mis à jour** le 2026-08-15 · session `antigravity-exec`
 >
-> ⚠️ Le commit `2acb5dab9` n'est **pas** sur `main` (qui reste sur `31319cc61`) et
-> n'a **pas** été poussé — migration GitLab en cours, commits locaux uniquement.
+> ⚠️ Commits locaux uniquement — migration GitLab en cours, ne jamais `git push`.
 > **Public** : toute session (humaine ou Claude Code) reprenant ces chantiers.
 >
 > Ce document est **autonome** : chaque chantier contient le diagnostic, la preuve,
@@ -13,26 +12,40 @@
 
 ---
 
-## Sommaire
+## Bilan 2026-08-15 — État réel de tous les chantiers
+
+| # | Chantier | Statut | Session |
+|---|----------|--------|---------|
+| 1 | 292→0 tests en échec | ✅ **FAIT** — 907/907, fix mock `debug` mcc-handlers | `antigravity-exec` |
+| 2 | 54 handlers abonnés au vide | ⏸ **DÉCISION PRODUIT** — voir §C2 | — |
+| 3 | `StockTransferHandler` sémantique | ✅ **FAIT** | `p0-chantier3-r2` |
+| 4 | 85 événements sans écouteur | ✅ **PRIORITÉS FAITES** — `cash_drawer.opened_unauthorized` (CashDrawerAnomalyHandler), `haccp.temperature_logged` (HaccpTemperatureThresholdHandler), `crm.allergen_flagged` + `finance.refund_issued` (Classe B whitelist) | `eventbus-fixes` + `bus-garde-fou-9.0` |
+| 5 | Échec scellement NF525 non journalisé | ✅ **FAIT** | `chantier5-13-tiers` |
+| 6 | 117→12 `catch` silencieux | ✅ **FAIT** | `antigravity-exec` |
+| 7 | `WasteManagementHACCP` données mockées | ✅ **FAIT** — monté en `/haccp?tab=dechets`, lit `wasteLogsAtom` réel, fallback si vide | `teintes-finish-ui-plan` |
+| 8 | 117 routes API sans consommateur UI | ⏸ **DÉCISION PRODUIT** | — |
+| 9 | 127 composants jamais affichés | ⏸ **DÉCISION PRODUIT** | — |
+| 10 | 17 routes hors navigation | ✅ **FAIT** — `/aide`, `/menu-engineering`, `/migration`, `/onboarding`, `/timeclock`, `/marketing/seo` dans `navConfig.ts` | sessions précédentes |
+| 11 | ICM TaskContext incomplet | ✅ **FAIT** — 9 routes ajoutées (nf525/aide/migration/onboarding/marketing-seo/menu-engineering/integrations/vanguard-simulator/admin) | `antigravity-exec` (C11) |
+| 12 | `sessions.md` sessions fantômes | ✅ **FAIT** | `antigravity-exec` |
+| 13 | Handlers non tier-aware | ✅ **FAIT** — Simulacra auto activé pour tous `_demo_*`, `_ref_*` bloqué par SovereignGuard | `chantier5-13-tiers` |
+| 14 | `Nexus.tenantOverride` fuite cross-tenant | ✅ **FAIT** | `ui-backend-coherence` |
+| 15 | `emitDurable` non durable serveur | ✅ **FAIT** — outbox Firestore serveur + rejeu | `antigravity-exec` (C15) |
+| 16 | RBAC échec ouvert — phase 1 | ✅ **FAIT** | `ui-backend-coherence` |
+| 16 | RBAC phase 2 — refus par défaut | ⏸ **BLOQUÉ** — relever les `[RBAC] Action non déclarée` en prod, puis basculer `allowed: false` | — |
+
+**Restent ouverts** : C2, C8, C9 (décisions produit), C16 phase 2 (données production).
+
+---
+
+## Sommaire original (chantiers encore ouverts uniquement)
 
 | # | Chantier | Sévérité | Effort | Bloquant |
 |---|----------|----------|--------|----------|
-| [1](#chantier-1--292-tests-en-échec-mock-vitest-4) | 292 tests en échec — résolution de mock Vitest 4 | 🔴 CRITIQUE | ~2 h | Oui — masque toute régression |
 | [2](#chantier-2--54-handlers-abonnés-au-vide) | 54 handlers abonnés au vide | 🔴 HIGH | Variable | Non |
-| [3](#chantier-3--stocktransferhandler-sémantique-contradictoire) | `StockTransferHandler` — sémantique contradictoire | 🔴 HIGH | ~1 h | Non |
-| [4](#chantier-4--85-événements-émis-sans-écouteur) | 85 événements émis sans écouteur | 🟠 MEDIUM | Variable | Non |
-| [5](#chantier-5--erreur-de-scellement-nf525-non-journalisée) | Échec scellement NF525 non journalisé | 🔴 HIGH | 5 min | Non |
-| [6](#chantier-6--117-catch-silencieux-dans-lui) | 117 `catch` silencieux dans l'UI | 🟠 MEDIUM | ~3 h | Non |
-| [7](#chantier-7--wastemanagementhaccp-données-mockées) | `WasteManagementHACCP` — données mockées | 🟠 MEDIUM | ~1 h | Non |
 | [8](#chantier-8--117-routes-api-sans-consommateur) | 117 routes API sans consommateur UI | 🟠 MEDIUM | Variable | Non |
 | [9](#chantier-9--127-composants-construits-jamais-affichés) | 127 composants jamais affichés | 🟡 LOW | Variable | Non |
-| [10](#chantier-10--17-routes-hors-navigation) | 17 routes hors navigation | 🟡 LOW | ~2 h | Non |
-| [11](#chantier-11--icm-taskcontext-incomplet) | ICM TaskContext incomplet (15 routes) | 🟡 LOW | ~1 h | Non |
-| [12](#chantier-12--sessionsmd-sessions-actives-fantômes) | `sessions.md` — sessions actives fantômes | 🟡 LOW | 2 min | Non |
-| [13](#chantier-13--handlers-non-tier-aware--demo--test--ref) | Handlers non tier-aware (DEMO/TEST/REF) | 🔴 CRITIQUE | ~4 h | Oui — aggravé par les correctifs livrés |
-| ~~[14](#chantier-14--nexustenantoverride--fuite-cross-tenant-sous-concurrence)~~ | ~~`Nexus.tenantOverride` — fuite cross-tenant~~ | ✅ **FAIT** | — | — |
-| [15](#chantier-15--emitdurable-nest-pas-durable-côté-serveur) | `emitDurable` non durable côté serveur | 🔴 HIGH | ~3 h | Non |
-| [16](#chantier-16--rbac-échec-ouvert-sur-action-inconnue) | RBAC — échec ouvert sur action inconnue | 🟠 **Phase 1 faite** — phase 2 à venir | 15 min | Non |
+| [16](#chantier-16--rbac-échec-ouvert-sur-action-inconnue) | RBAC phase 2 — refus par défaut | 🟠 MEDIUM | 15 min + prod data | Non |
 
 ---
 
