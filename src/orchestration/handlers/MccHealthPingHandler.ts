@@ -1,5 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 
 const HISTORY_DAYS = 7;
 
@@ -36,8 +37,9 @@ export function registerMccHealthPingHandler() {
           }
           await batch.commit();
         }
-      } catch {
+      } catch (err) {
         // Non bloquant — la purge réessaiera au prochain ping
+        logger.debug('[MccHealthPingHandler] Purge historique health échouée', { tenantId, error: err });
       }
     },
     { id: 'mcc-health-ping-handler', priority: 'BACKGROUND' }

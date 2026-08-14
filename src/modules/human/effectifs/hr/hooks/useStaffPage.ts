@@ -15,6 +15,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
 import { computePayroll, type StaffTab, type StaffDocument } from "@/app/(client)/(ops)/staff/staffUtils";
 import { JsonObject } from "@/lib/types/json";
+import { logger } from "@/lib/logger";
 
 const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
 
@@ -81,7 +82,7 @@ export function useStaffPage() {
         try {
             await Nexus.adapter.update(`users/${user.id}`, { skills: next });
             toast.success(`Compétence ${current.includes(skill) ? "retirée" : "ajoutée"}.`);
-        } catch { toast.error("Erreur lors de la mise à jour des compétences."); }
+        } catch (err) { logger.error("[StaffPage] Échec mise à jour compétences", { userId: user.id, skill, error: err }); toast.error("Erreur lors de la mise à jour des compétences."); }
     };
 
     const handleAddDoc = async () => {
@@ -94,7 +95,7 @@ export function useStaffPage() {
             setStaffDocs(prev => [doc, ...prev]);
             setDocForm(null);
             toast.success("Document enregistré.");
-        } catch { toast.error("Erreur lors de l'enregistrement."); }
+        } catch (err) { logger.error("[StaffPage] Échec enregistrement document", { docId: doc.id, userId: selectedSkillUser?.id, error: err }); toast.error("Erreur lors de l'enregistrement."); }
     };
 
     const handleDeleteDoc = async (doc: StaffDocument) => {
@@ -102,7 +103,7 @@ export function useStaffPage() {
             await Nexus.adapter.delete(`staffDocuments/${doc.id}`);
             setStaffDocs(prev => prev.filter(d => d.id !== doc.id));
             toast.success("Document supprimé.");
-        } catch { toast.error("Erreur lors de la suppression."); }
+        } catch (err) { logger.error("[StaffPage] Échec suppression document", { docId: doc.id, error: err }); toast.error("Erreur lors de la suppression."); }
     };
 
     const handleLeaveSubmit = async (data: Partial<LeaveRequest>) => {

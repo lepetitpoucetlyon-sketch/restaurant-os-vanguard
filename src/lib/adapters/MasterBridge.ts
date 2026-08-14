@@ -70,7 +70,8 @@ export const MasterBridge = {
       const store = getDefaultStore();
       
       return store.get(tenantIdAtom) === this.MASTER_TENANT_ID;
-    } catch {
+    } catch (err) {
+      logger.debug('[MasterBridge] isMasterMode vérification échouée', { error: err });
       return false;
     }
   },

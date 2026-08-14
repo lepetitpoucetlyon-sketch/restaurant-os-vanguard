@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { Copy, Check, Code2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -22,7 +23,8 @@ function CodeBlock({ label, code }: CodeBlockProps) {
       setCopied(true);
       toast.success('Code copie !');
       setTimeout(() => setCopied(false), 2000);
-    } catch {
+    } catch (err) {
+      logger.debug('[EmbedSnippets] Clipboard API indisponible', { error: err });
       toast.error('Echec de la copie');
     }
   };

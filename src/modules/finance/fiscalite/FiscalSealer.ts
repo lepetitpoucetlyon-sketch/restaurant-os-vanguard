@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import { FISCAL_CONSTANTS } from './FiscalAdapter';
 import { CryptoService } from '@/lib/CryptoService';
 import { FiscalKeyService } from '@modules/finance/services/FiscalKeyService';
@@ -56,7 +57,8 @@ export class FiscalSealer {
         { orderBy: { field: 'timestamp', direction: 'desc' }, limit: 1 }
       );
       return seals[0];
-    } catch {
+    } catch (err) {
+      logger.warn('[FiscalSealer] Impossible de lire le dernier sceau fiscal', { tenantId, error: err });
       return undefined;
     }
   }

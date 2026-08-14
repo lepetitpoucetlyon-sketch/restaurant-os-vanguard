@@ -98,7 +98,8 @@ export async function printBluetooth(
       const chunk = data.slice(offset, offset + CHUNK_SIZE);
       try {
         await char.writeValueWithoutResponse(chunk.buffer);
-      } catch {
+      } catch (_noResponseErr) {
+        // writeValueWithoutResponse non supporté → fallback BLE compatible
         await char.writeValue(chunk.buffer);
       }
       // Small delay between chunks to avoid BLE congestion

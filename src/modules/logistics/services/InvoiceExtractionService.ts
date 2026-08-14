@@ -261,8 +261,9 @@ export const InvoiceExtractionService = {
                 severity: invoice.flags.includes('PRICE_ANOMALY') ? 'WARNING' : 'INFO',
                 timestamp: new Date().toISOString(),
             });
-        } catch {
+        } catch (err) {
             // Telemetry failure should never block extraction
+            logger.debug('[InvoiceExtractionService] Écriture télémétrie échouée (non bloquant)', { error: err });
         }
     },
 };

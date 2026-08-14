@@ -7,6 +7,7 @@ import { JsonObject } from "@/lib/types/json";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { adjustStockAction, updateIngredientThresholdsAction } from "../actions/inventory.action";
+import { logger } from "@/lib/logger";
 
 export interface DLCStatus {
     daysLeft: number | null;
@@ -58,7 +59,7 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
             await updateIngredientThresholdsAction(tenantId, item.ingredientId, updates.minQuantity, updates.reorderQuantity);
             toast.success("Seuil mis à jour.");
             onClose();
-        } catch { toast.error("Erreur lors de la mise à jour du seuil."); }
+        } catch (err) { logger.error("[Inventory] Échec mise à jour seuil", { tenantId, ingredientId: item.ingredientId, error: err }); toast.error("Erreur lors de la mise à jour du seuil."); }
         finally { setSaving(false); }
     };
 
@@ -90,7 +91,7 @@ export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose
             await adjustStockAction(tenantId, item.id, item.quantity, qty, "Comptage physique", "System");
             toast.success("Comptage enregistré.");
             onClose();
-        } catch { toast.error("Erreur lors de l'enregistrement du comptage."); }
+        } catch (err) { logger.error("[Inventory] Échec comptage physique", { tenantId, itemId: item.id, error: err }); toast.error("Erreur lors de l'enregistrement du comptage."); }
         finally { setSaving(false); }
     };
 
@@ -123,7 +124,7 @@ export function AdjustStockModal({ item, onClose }: { item: StockItem; onClose: 
             await adjustStockAction(tenantId, item.id, item.quantity, newQuantity, reason || "Ajustement manuel", "System");
             toast.success(d >= 0 ? `+${d} ${item.unit} ajouté(s) au stock.` : `${Math.abs(d)} ${item.unit} retiré(s) du stock.`);
             onClose();
-        } catch { toast.error("Erreur lors de l'ajustement."); }
+        } catch (err) { logger.error("[Inventory] Échec ajustement stock", { tenantId, itemId: item.id, delta: d, error: err }); toast.error("Erreur lors de l'ajustement."); }
         finally { setSaving(false); }
     };
 

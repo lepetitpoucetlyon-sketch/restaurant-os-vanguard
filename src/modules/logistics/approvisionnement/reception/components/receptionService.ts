@@ -183,7 +183,8 @@ export async function performBarcodeSearch(
         const found = await searchBarcode(tenantId, code);
         if (found) { setBarcodeResult(found); toast.success(`Produit trouvé : ${found.name}`); }
         else { toast.warning(`Aucun produit trouvé pour le code : ${code}`); }
-    } catch {
+    } catch (err) {
+        logger.warn('[receptionService] Recherche code-barres échouée', { tenantId, code, error: err });
         toast.error('Erreur lors de la recherche par code-barres.');
     } finally {
         setBarcodeSearching(false);

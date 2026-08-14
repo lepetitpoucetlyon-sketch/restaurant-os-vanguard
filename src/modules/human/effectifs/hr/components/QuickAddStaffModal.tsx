@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { logger } from "@/lib/logger";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, UserPlus, Copy, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
@@ -54,7 +55,8 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
             setCreatedPin(pin);
             setCreatedName(name.trim());
             setStep("reveal");
-        } catch {
+        } catch (err) {
+            logger.error("[QuickAddStaffModal] Création collaborateur échouée", { error: err });
             toast.error("Impossible de créer le collaborateur");
         } finally {
             setIsSaving(false);

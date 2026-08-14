@@ -55,7 +55,8 @@ export const ImmunityAuditLogger = {
   async getAll(): Promise<ImmunityLogEntry[]> {
     try {
       return await db.immunityLogs.toArray();
-    } catch {
+    } catch (err) {
+      logger.warn('[ImmunityAudit] Lecture immunityLogs échouée', err);
       return [];
     }
   },
@@ -70,7 +71,8 @@ export const ImmunityAuditLogger = {
         .reverse()
         .limit(limit)
         .toArray();
-    } catch {
+    } catch (err) {
+      logger.warn('[ImmunityAudit] Lecture immunityLogs (recent) échouée', err);
       return [];
     }
   },
@@ -102,7 +104,8 @@ export const ImmunityAuditLogger = {
         .reverse()
         .limit(limit)
         .toArray();
-    } catch {
+    } catch (err) {
+      logger.warn('[ImmunityAudit] Lecture jetEntries échouée', err);
       return [];
     }
   },

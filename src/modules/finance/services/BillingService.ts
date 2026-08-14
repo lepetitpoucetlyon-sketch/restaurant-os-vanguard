@@ -226,7 +226,8 @@ async function buildTheoreticalReport(): Promise<FleetTreasuryReport> {
       return sum + (PRICING[tier in PRICING ? tier : 'STANDARD']?.monthlyEur ?? 0);
     }, 0);
     return { mrr, collectedMtd: 0, activeSubscriptions: active.length, churnLast30Days: 0, source: 'theoretical' };
-  } catch {
+  } catch (err) {
+    logger.warn('[BillingService] Calcul MRR théorique échoué — retour zéro', { error: err });
     return { mrr: 0, collectedMtd: 0, activeSubscriptions: 0, churnLast30Days: 0, source: 'theoretical' };
   }
 }

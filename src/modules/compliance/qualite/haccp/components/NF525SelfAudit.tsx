@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { useTenant } from '@/kernel/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { logger } from '@/lib/logger';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -159,7 +160,8 @@ export default function NF525SelfAudit() {
         { vassalId: slug, actorId: 'client' }
       );
       sealChainOk = seals.length > 0 ? 'ok' : 'warning';
-    } catch {
+    } catch (err) {
+      logger.debug('[NF525SelfAudit] Probe scellements Firestore non accessible', { slug, error: err });
       sealChainOk = 'warning';
     }
 
@@ -173,7 +175,8 @@ export default function NF525SelfAudit() {
       });
       // 400 bad-request = route exists; 404 = route missing
       fecOk = res.status !== 404 ? 'ok' : 'error';
-    } catch {
+    } catch (err) {
+      logger.debug('[NF525SelfAudit] Probe route FEC non accessible', { error: err });
       fecOk = 'warning';
     }
 

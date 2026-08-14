@@ -33,8 +33,10 @@ async function send(params: {
                 url:      params.payload.url,
             }),
         });
-    } catch {
+    } catch (err) {
         // Push non-critique — ne pas faire planter le handler
+        // eslint-disable-next-line no-console
+        console.debug('[browserPush] Notification push échouée (non bloquant)', String(err));
     }
 }
 

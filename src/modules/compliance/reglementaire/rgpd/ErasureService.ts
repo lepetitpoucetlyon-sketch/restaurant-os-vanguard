@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import { piiVault } from '@nexus/vault/PiiVault';
 import { auditService } from '../../securite/audit/AuditService';
 import { RgpdRegisterService } from './RgpdRegisterService';
@@ -70,8 +71,9 @@ export class ErasureService {
                 },
             });
             result.auditRecorded = true;
-        } catch {
+        } catch (err) {
             // Audit failure should not block erasure
+            logger.warn('[ErasureService] Écriture audit RGPD échouée (non bloquant)', { tenantId, subjectId, error: err });
         }
 
         RgpdRegisterService.processRequest(tenantId, `erasure-${subjectId}`, requestedBy, {

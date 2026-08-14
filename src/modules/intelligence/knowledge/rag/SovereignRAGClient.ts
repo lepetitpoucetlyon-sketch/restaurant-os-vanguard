@@ -1,4 +1,5 @@
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
+import { logger } from '@/lib/logger';
 
 const BASE_URL = process.env.SOVEREIGN_RAG_URL ?? 'http://localhost:9621';
 const ADMIN_KEY = process.env.SOVEREIGN_RAG_ADMIN_KEY ?? '';
@@ -108,7 +109,8 @@ export async function sovereignQuery(
       vetoed: data.vetoed ?? false,
       latencyMs: Date.now() - t0,
     };
-  } catch {
+  } catch (err) {
+    logger.warn('[SovereignRAG] Requête RAG échouée — fallback vide', { error: err });
     return { answer: '', vetoed: false, latencyMs: Date.now() - t0 };
   }
 }
@@ -147,7 +149,8 @@ export async function sovereignHealth(): Promise<RAGHealthResult> {
       lastIndexed: data.last_indexed,
       latencyMs: Date.now() - t0,
     };
-  } catch {
+  } catch (err) {
+    logger.debug('[SovereignRAG] Health check LightRAG — offline ou injoignable', { error: err });
     return { status: 'offline', latencyMs: Date.now() - t0 };
   }
 }

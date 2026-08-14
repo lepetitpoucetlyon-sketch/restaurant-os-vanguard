@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import { submitTimeclockAction } from "../actions/timeclock.action";
 import type { ClockAction } from "../services/timeclock.domain";
+import { logger } from "@/lib/logger";
 
 export type FoundUser = { id: string; name: string; role: string; avatar: string | null };
 
@@ -39,7 +40,8 @@ export function useTimeclock(tenantId: string | null) {
                 toast.error('PIN incorrect — réessayez');
                 setPin("");
             }
-        } catch {
+        } catch (err) {
+            logger.error("[Timeclock] Échec lookup PIN", { tenantId, pinLength: pin.length, error: err });
             toast.error("Erreur de connexion — réessayez");
             setPin("");
         } finally {
@@ -98,7 +100,8 @@ export function useTimeclock(tenantId: string | null) {
                 setFoundUser(null);
                 setPin("");
             }, 2000);
-        } catch {
+        } catch (err) {
+            logger.error("[Timeclock] Échec enregistrement pointage", { tenantId, userId: foundUser?.id, type, error: err });
             toast.error("Enregistrement échoué — réessayez");
         } finally {
             setIsSubmitting(false);

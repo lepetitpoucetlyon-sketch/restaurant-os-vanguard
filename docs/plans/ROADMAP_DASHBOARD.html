@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺️ Roadmap 2026-2029 — Restaurant OS Platform & Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(18, 26, 44, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --accent: #38bdf8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --sidebar-w: 290px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: var(--sidebar-w);
+      background: rgba(10, 15, 29, 0.95);
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      backdrop-filter: blur(20px);
+      z-index: 50;
+    }
+
+    .brand {
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      padding: 16px 12px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.active {
+      background: var(--primary-glow);
+      color: var(--accent);
+      border-left: 3px solid var(--primary);
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-badge.done { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+    .nav-badge.progress { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 60px;
+      position: relative;
+      scroll-behavior: smooth;
+    }
+
+    /* Ambient Background Glows */
+    .glow-1 {
+      position: absolute;
+      top: -100px;
+      left: 20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-2 {
+      position: absolute;
+      bottom: -100px;
+      right: 10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 69, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--card-border);
+      padding: 36px;
+      border-radius: 24px;
+      margin-bottom: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 800px;
+      line-height: 1.6;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-val {
+      font-size: 26px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* Section Styles */
+    section {
+      margin-bottom: 50px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-p {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Timeline / Horizons */
+    .horizon-card {
+      background: rgba(18, 26, 44, 0.5);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--primary);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .horizon-card.h1 { border-left-color: var(--success); }
+    .horizon-card.h2 { border-left-color: var(--accent); }
+    .horizon-card.h3 { border-left-color: var(--primary); }
+    .horizon-card.h4 { border-left-color: #ec4899; }
+    .horizon-card.h5 { border-left-color: #a855f7; }
+
+    .horizon-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .horizon-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .horizon-duration {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .task-bullet {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .task-bullet.done { background: rgba(16, 185, 129, 0.2); color: var(--success); font-weight: 900; }
+    .task-bullet.wait { background: rgba(99, 102, 241, 0.2); color: var(--primary); font-weight: 900; }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(18, 26, 44, 0.4);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px 18px;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #fff;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .tag-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .tag-green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .tag-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <div class="brand">
+      <div class="brand-logo">🏛️</div>
+      <div class="brand-text">
+        <h1>Restaurant OS</h1>
+        <span>Sovereign Platform</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#overview" class="nav-link active">
+        <span>📊</span> Vue Globale
+      </a>
+      <a href="#horizons" class="nav-link">
+        <span>🚀</span> Les 5 Horizons
+        <span class="nav-badge progress">2026-2029</span>
+      </a>
+      <a href="#verticals" class="nav-link">
+        <span>🍽️</span> 8 Verticales Métier
+        <span class="nav-badge done">8 Prêtes</span>
+      </a>
+      <a href="#mcc" class="nav-link">
+        <span>🛰️</span> Mission Control (MCC)
+        <span class="nav-badge done">82 API</span>
+      </a>
+      <a href="#zones" class="nav-link">
+        <span>🎨</span> 16 Zones UI
+        <span class="nav-badge done">806 Composants</span>
+      </a>
+      <a href="#bus" class="nav-link">
+        <span>📡</span> Bus Nexus & Event Saga
+        <span class="nav-badge done">176 Handlers</span>
+      </a>
+      <a href="#security" class="nav-link">
+        <span>🛡️</span> Sécurité & Légal (NF525/HDS)
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main View -->
+  <main>
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <div class="content-wrap">
+      
+      <!-- Top Banner -->
+      <section id="overview" class="hero-banner">
+        <div class="hero-badge">⚡ Version 8.0 Grade X++ Sovereignty</div>
+        <h1 class="hero-title">Ultra-Roadmap 2026–2029</h1>
+        <p class="hero-subtitle">
+          Plan d'industrialisation, d'architecture et de déploiement de la plateforme <strong>Restaurant OS</strong> et de son écosystème d'agents autonomes multi-verticales.
+        </p>
+
+        <div class="stats-row">
+          <div class="stat-box">
+            <span class="stat-val">2 686</span>
+            <span class="stat-lbl">Fichiers Source</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">176</span>
+            <span class="stat-lbl">Handlers Bus Nexus</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">179</span>
+            <span class="stat-lbl">Routes API REST</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">0</span>
+            <span class="stat-lbl">Erreur TypeScript (TSC)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Horizons Section -->
+      <section id="horizons">
+        <div class="section-head">
+          <span class="section-icon">🚀</span>
+          <h2 class="section-title">La Trajectoire en 5 Horizons (2026–2029)</h2>
+        </div>
+
+        <!-- H1 -->
+        <div class="horizon-card h1">
+          <div class="horizon-top">
+            <span class="horizon-title">Horizon 1 · Production Ready & 1er Client</span>
+            <span class="horizon-duration">~7 Jours · Août 2026</span>
+          </div>
+          <p class="card-p">Finalisation des derniers émetteurs bus, déploiement des alertes Sentry et verrouillage fiscal NF525.</p>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet done">✓</span>
+              <span><strong>R10 & R11 Bus</strong> : Émission Stripe webhook deposit et table_closed POS clôture</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet done">✓</span>
+              <span><strong>Sentry DSN</strong> : Câblage production avec alertes SMS/Slack immédiates sur anomalies fiscales</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet done">✓</span>
+              <span><strong>3 Tests E2E Playwright</strong> : Parcours complet encaissement POS, clôture Z et résa/allergènes</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet done">✓</span>
+              <span><strong>WORM 6 Ans</strong> : Verrouillage Firestore sur <code>fiscal_archives/</code></span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- H2 -->
+        <div class="horizon-card h2">
+          <div class="horizon-top">
+            <span class="horizon-title">Horizon 2 · Commercialisation & App Mobile</span>
+            <span class="horizon-duration">M+1 → M+3 · Sept-Nov 2026</span>
+          </div>
+          <p class="card-p">Onboarding des 30 premiers restaurants pilotes, facturation automatique MCC et application mobile compagnon.</p>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>Facturation Récurrente MCC</strong> : Factures SaaS automatiques Stripe Invoicing + relances</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>API REST & OpenAPI 3.1</strong> : Spécification publique et documentation Swagger</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>Mobile POS & Staff App (Expo)</strong> : Prise de commande nomade smartphone + pointeuse géofencée</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- H3 -->
+        <div class="horizon-card h3">
+          <div class="horizon-top">
+            <span class="horizon-title">Horizon 3 · Expansion Multi-Verticales & IA Oracle</span>
+            <span class="horizon-duration">M+3 → M+9 · Déc 2026 – Mai 2027</span>
+          </div>
+          <p class="card-p">Déploiement des modules Boulangerie, Commerce de Détail et Salon de Coiffure.</p>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🥖 Boulangerie (Bakery)</strong> : Cadencement fournées, balance connectée et invendus</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🛍️ Retail</strong> : Scan EAN-13, matrice tailles/couleurs et sync Shopify</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>💇 Salon</strong> : Agenda cabines/collaborateurs, fiches coloration et commissions</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🧠 Sidecar LightRAG 9621</strong> : Réponses conversationnelles en langage naturel sur données réelles</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- H4 -->
+        <div class="horizon-card h4">
+          <div class="horizon-top">
+            <span class="horizon-title">Horizon 4 · Franchises & Verticales Lourdes</span>
+            <span class="horizon-duration">M+9 → M+18 · Juin 2027 – Fév 2028</span>
+          </div>
+          <p class="card-p">Ouverture Garage automobile, Hôtellerie (PMS Lite) et gestion multi-établissements centralisée.</p>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🚗 Garage</strong> : Ordres de Réparation (OR), devis pièces/main d'œuvre, chiffrage Darva</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🏨 Hôtel (PMS)</strong> : Planning des chambres, passerelle 2-ways Booking/Airbnb</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🏢 Chaînes & Franchises</strong> : Consolidation groupe, mutualisation du staff et des stocks</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- H5 -->
+        <div class="horizon-card h5">
+          <div class="horizon-top">
+            <span class="horizon-title">Horizon 5 · Santé Réglementée & IA Autonome</span>
+            <span class="horizon-duration">2028 – 2029</span>
+          </div>
+          <p class="card-p">Agrément HDS pour la Clinique, télétransmission SESAM-Vitale et swarms d'agents autonomes.</p>
+          <ul class="task-list">
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🩺 Clinique & Santé</strong> : Agrément HDS ANSSI, FSE Tiers-Payant et Dossier Patient</span>
+            </li>
+            <li class="task-item">
+              <span class="task-bullet wait">●</span>
+              <span><strong>🛰️ Swarm d'Agents Autonomes</strong> : Atlas (réassort automatique), Themis (fiscal), Cronos (RH)</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Verticals Section -->
+      <section id="verticals">
+        <div class="section-head">
+          <span class="section-icon">🍽️</span>
+          <h2 class="section-title">Les 8 Verticales Métier Spécifiées</h2>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Verticale</th>
+                <th>Écran Principal</th>
+                <th>Unité de Vente</th>
+                <th>Réglementation</th>
+                <th>Connecteur Clé</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🍽️ Restaurant</strong></td>
+                <td>Plan de Salle + KDS</td>
+                <td>Plat / Couvert</td>
+                <td><span class="tag tag-green">NF525 · HACCP · INCO</span></td>
+                <td>TheFork · UberEats</td>
+              </tr>
+              <tr>
+                <td><strong>🥖 Bakery</strong></td>
+                <td>Grille Vente + Balance</td>
+                <td>Pièce / Kg</td>
+                <td><span class="tag tag-green">NF525 · Traçabilité Farine</span></td>
+                <td>Balance Mettler · TGTG</td>
+              </tr>
+              <tr>
+                <td><strong>🛍️ Retail</strong></td>
+                <td>Caisse Scan EAN-13</td>
+                <td>Article (Variantes)</td>
+                <td><span class="tag tag-green">NF525 · Rétractation</span></td>
+                <td>Douchette · Shopify</td>
+              </tr>
+              <tr>
+                <td><strong>💇 Salon</strong></td>
+                <td>Agenda Cabines</td>
+                <td>Prestation / Forfait</td>
+                <td><span class="tag tag-green">NF525 · RGPD Photos</span></td>
+                <td>Planity · Treatwell</td>
+              </tr>
+              <tr>
+                <td><strong>🚗 Garage</strong></td>
+                <td>Ordres Réparation</td>
+                <td>Pièce + Heure MO</td>
+                <td><span class="tag tag-blue">NF525 · CGV Automobile</span></td>
+                <td>Autossimo · Darva</td>
+              </tr>
+              <tr>
+                <td><strong>🏨 Hotel</strong></td>
+                <td>Grille Chambres (Rack)</td>
+                <td>Nuitée + Taxe</td>
+                <td><span class="tag tag-blue">NF525 · Fiche Police</span></td>
+                <td>Booking · Expedia</td>
+              </tr>
+              <tr>
+                <td><strong>🩺 Clinic</strong></td>
+                <td>Agenda Consultations</td>
+                <td>Acte Médical (CCAM)</td>
+                <td><span class="tag tag-purple">HDS · RGPD Santé · CSP</span></td>
+                <td>SESAM-Vitale · Doctolib</td>
+              </tr>
+              <tr>
+                <td><strong>🎨 Custom</strong></td>
+                <td>Tableur Dynamique</td>
+                <td>Entité Paramétrée</td>
+                <td><span class="tag tag-blue">NF525 Généralisé</span></td>
+                <td>Webhooks Universels</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- MCC Section -->
+      <section id="mcc">
+        <div class="section-head">
+          <span class="section-icon">🛰️</span>
+          <h2 class="section-title">Mission Control Center (MCC · Tour de Contrôle)</h2>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🏭 Provisioning Automatisé en 10 Étapes</span>
+              <span class="tag tag-green">Opérationnel</span>
+            </div>
+            <p class="card-p">
+              Génération complète d'un nouveau tenant B2B lors d'un paiement Stripe : création DNA, plan comptable PCG, isolation fiscale GENESIS, configuration RBAC, espace vectoriel RAG et compte propriétaire en moins de 90 secondes.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📊 13 Onglets Dashboard Haute Fidélité</span>
+              <span class="tag tag-blue">43 Composants</span>
+            </div>
+            <p class="card-p">
+              Supervision de flotte temps réel : suivi MRR, télémétrie crash-reports, quarantaine DLQ, explorateur de chaînes NF525, gestion des versions templates (<code>_ref_*</code>) et centre de déploiement OTA.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 16 Zones Summary -->
+      <section id="zones">
+        <div class="section-head">
+          <span class="section-icon">🎨</span>
+          <h2 class="section-title">Matrice des 16 Zones UI (~806 Composants)</h2>
+        </div>
+
+        <div class="grid-4">
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 1 · Service</h4>
+            <p class="card-p">POS tactile, KDS multi-postes, Bar, Runner, Expédition.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 2 · Réservations</h4>
+            <p class="card-p">Plan 2D/3D, Check-in, Waitlist, TheFork & Google Reserve.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 3 · Menu</h4>
+            <p class="card-p">Recettes au gramme, Fiches Food Cost, Allergènes INCO.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 4 · CRM</h4>
+            <p class="card-p">Segmentation RFM, Cagnotte fidélité, Campagnes SMS/Mail.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 5 · Logistics</h4>
+            <p class="card-p">Décrémentation stocks temps réel, DLC, Commandes BL.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 6 · RH</h4>
+            <p class="card-p">Planning glissant, Pointeuse PIN, Exports Silae/Payfit.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 7 · Finance</h4>
+            <p class="card-p">Clôture Z NF525, Export FEC, Factur-X 2026, Grand Livre.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 8 · Compliance</h4>
+            <p class="card-p">Relevés T° IoT, Traçabilité viandes, Coffre fort WORM.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 9 · Facility</h4>
+            <p class="card-p">Fiches machines, Maintenance préventive, Alertes pannes.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 10 · Analytics</h4>
+            <p class="card-p">Cockpit CA/Marges, Menu Engineering BCG, Heatmaps salle.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 11 · Intelligence</h4>
+            <p class="card-p">Majordome Oracle, Briefing vocal, Vision AI anti-gaspillage.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 12 · Extensions</h4>
+            <p class="card-p">Hub Deliveroo, Stripe Terminal, Imprimantes ESC/POS.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 13 · Admin Client</h4>
+            <p class="card-p">Matrice RBAC 14 rôles, Charte white-label, Imprimantes.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 14 · Mobile Staff</h4>
+            <p class="card-p">Prise de commande nomade sur smartphone, notifications haptiques.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 15 · Web Public</h4>
+            <p class="card-p">Menu QR code table, Click & Collect et paiement sécurisé.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom: 6px;">Zone 16 · Design System</h4>
+            <p class="card-p">Glassmorphism, Tokens HSL, SplashGate, Micro-animations.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security Section -->
+      <section id="security">
+        <div class="section-head">
+          <span class="section-icon">🛡️</span>
+          <h2 class="section-title">Sécurité, Légal & FinOps</h2>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🔒 NF525 & Archivage WORM</span>
+              <span class="tag tag-green">Certifié</span>
+            </div>
+            <p class="card-p">
+              Chaque ticket et journal d'audit est scellé par une empreinte SHA-256 inaltérable. La collection <code>fiscal_archives/</code> applique le principe WORM (Write Once Read Many) garantissant 6 ans de conservation légale.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚖️ RGPD & Absence de Biométrie</span>
+              <span class="tag tag-green">Conforme CNIL</span>
+            </div>
+            <p class="card-p">
+              DPA Article 28 intégré aux CGV. Droit à l'oubli via crypto-shredding. Interdiction stricte de reconnaissance faciale au travail (pointage exclusif par code PIN hashé PBKDF2 ou badge NFC).
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // Smooth scrolling & active link highlight
+    const links = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 120) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

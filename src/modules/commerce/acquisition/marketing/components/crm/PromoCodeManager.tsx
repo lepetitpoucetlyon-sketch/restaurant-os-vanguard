@@ -6,6 +6,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { toMicrounits } from "@/shared/schemas/primitives";
 import { useTenant } from "@/kernel/hooks/useTenant";
+import { logger } from "@/lib/logger";
 import { createPromoCodeAction, updatePromoCodeAction } from '../../../../actions/marketing.action';
 
 import type { PromoCodeRecord } from './types';
@@ -87,7 +88,8 @@ export function PromoCodeManager() {
       } else {
         setCodes(data);
       }
-    } catch {
+    } catch (err) {
+      logger.error("[PromoCodeManager] Chargement codes promo échoué", { error: err });
       toast.error("Impossible de charger les codes promo");
     } finally {
       setLoading(false);
@@ -126,7 +128,8 @@ export function PromoCodeManager() {
       setForm(DEFAULT_FORM);
       setShowForm(false);
       toast.success(`Code ${newRecord.code} créé et activé`);
-    } catch {
+    } catch (err) {
+      logger.error("[PromoCodeManager] Échec création code promo", { code: form.code, error: err });
       toast.error("Erreur lors de la création");
     } finally {
       setSaving(false);
@@ -145,7 +148,8 @@ export function PromoCodeManager() {
 
       setCodes((prev) => prev.map((c) => (c.id === promo.id ? updated : c)));
       toast.success(updated.isActive ? `${promo.code} réactivé` : `${promo.code} désactivé`);
-    } catch {
+    } catch (err) {
+      logger.error("[PromoCodeManager] Échec toggle activation code promo", { promoId: promo.id, code: promo.code, error: err });
       toast.error("Erreur lors de la mise à jour");
     }
   };

@@ -50,7 +50,9 @@ async function fetchMenuData(): Promise<{
         .catch(() => [] as ProductRecord[]),
     ]);
     return { categories, products };
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn('[MenuJsonLd] fetchMenuData échoué — JSON-LD omis', err);
     return { categories: [], products: [] };
   }
 }

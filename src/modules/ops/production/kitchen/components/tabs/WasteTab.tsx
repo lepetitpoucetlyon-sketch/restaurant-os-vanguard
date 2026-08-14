@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { logger } from "@/lib/logger";
 import { Trash2 } from "lucide-react";
 import { Button } from "@ui/button";
 import { formatCurrency } from "@/lib/formatters";;
@@ -56,7 +57,8 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
             setSelectedIngredient("");
             setQuantity("");
             setSelectedReason("");
-        } catch {
+        } catch (err) {
+            logger.error("[WasteTab] Enregistrement perte ingrédient échoué", { tenantId, ingredient: selectedIngredient, error: err });
             showToast("Erreur lors de l'enregistrement", "error");
         }
     }, [tenantId, selectedIngredient, quantity, selectedReason, ingredients, showToast]);

@@ -87,7 +87,8 @@ export class SovereignLedger {
         try {
             const settings = await Nexus.adapter.get<GlobalSettings>(Nexus.getTenantPath('settings/global', this.tenantId));
             mode = settings?.accounting?.complexityMode || 'EXPERT';
-        } catch {
+        } catch (err) {
+            logger.warn('[SovereignLedger] Fallback mode LOCAL_LOCK — settings non disponibles', { tenantId: this.tenantId, error: err });
             mode = 'LOCAL_LOCK' as AccountingMode;
         }
 

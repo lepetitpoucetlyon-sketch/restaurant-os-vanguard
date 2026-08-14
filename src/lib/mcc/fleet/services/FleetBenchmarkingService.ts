@@ -38,7 +38,8 @@ export class FleetBenchmarkingService {
         try {
             const data = await Nexus.adapter.get<FleetBenchmarkMetrics>('global/fleet/benchmark_median');
             return data || fallback;
-        } catch {
+        } catch (err) {
+            logger.warn('[FleetBenchmarkingService] Lecture métriques benchmark fleet échouée — fallback', { error: err });
             return fallback;
         }
     }

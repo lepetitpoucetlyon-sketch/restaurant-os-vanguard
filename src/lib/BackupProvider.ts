@@ -207,7 +207,9 @@ export class LocalFSBackupProvider implements IBackupProvider {
                 })
             );
             return entries;
-        } catch {
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn('[BackupProvider/LocalFS] Impossible de lister les backups', this.dir, err);
             return [];
         }
     }

@@ -75,7 +75,8 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
         try {
             user = await auth.getUserByEmail(request.ownerEmail);
             logger.info(`[MCC/prov] Firebase User existant réutilisé: ${user.uid}`);
-        } catch {
+        } catch (_notFound) {
+            logger.debug('[MCC/prov] getUserByEmail — utilisateur absent, création en cours', { email: request.ownerEmail });
             user = await auth.createUser({
                 uid: ownerId,
                 email: request.ownerEmail,

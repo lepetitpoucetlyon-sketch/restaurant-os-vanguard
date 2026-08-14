@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { logger } from '@/lib/logger';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -75,7 +76,8 @@ export function EmailAutomations() {
             if (!res.ok) throw new Error('Erreur serveur');
             const data: { sent: number } = await res.json();
             toast.success(`${data.sent} email(s) envoyé(s) pour « ${AUTOMATION_META[key].label} »`);
-        } catch {
+        } catch (err) {
+            logger.error('[EmailAutomations] Échec envoi automation email', { automation: key, error: err });
             toast.error('Échec de l\'envoi — vérifiez votre configuration');
         } finally {
             setRunning(null);

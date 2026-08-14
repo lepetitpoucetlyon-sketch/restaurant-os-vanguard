@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Globe, Palette, Loader2, ArrowRight, Check, AlertTriangle, RefreshCcw, Wand2 } from 'lucide-react';
 import { Button } from '@ui/button';
@@ -107,7 +108,8 @@ export function ProspectingDashboard() {
             }
             setPhase('done');
             showToast('Charte appliquée — interface mise à jour', 'success');
-        } catch {
+        } catch (err) {
+            logger.error('[ProspectingDashboard] Application charte identité échouée', { error: err });
             showToast('Erreur lors de l\'application', 'error');
             setPhase('preview_ready');
         }

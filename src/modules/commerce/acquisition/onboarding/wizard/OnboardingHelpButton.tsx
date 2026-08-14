@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface OnboardingHelpButtonProps {
   currentStep?: string;
@@ -37,7 +38,8 @@ export function OnboardingHelpButton({ currentStep, category, errorContext }: On
       if (!res.ok) throw new Error('Erreur envoi');
       setSent(true);
       setTimeout(() => { setOpen(false); setSent(false); setMessage(''); }, 3000);
-    } catch {
+    } catch (err) {
+      logger.warn('[OnboardingHelpButton] Envoi ticket support échoué', { error: err });
       setError('Impossible d\'envoyer le ticket. Réessayez ou contactez support@restaurantos.app');
     } finally {
       setSending(false);

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import { processVoidOrRefundAction } from "../actions/void.action";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -92,7 +93,8 @@ export function VoidModal({
             const label = mode === "void" ? "Annulation" : "Remboursement";
             toast.success(`${label} enregistré — réf: ${pieceNumber}`);
             setDone(true);
-        } catch {
+        } catch (err) {
+            logger.error("[VoidModal] Échec enregistrement extourne/remboursement", { mode, pieceNumber, tenantId, operatorId, error: err });
             toast.error("Impossible d'enregistrer l'extourne. Réessayez.");
         } finally {
             setIsSubmitting(false);

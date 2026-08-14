@@ -72,7 +72,9 @@ export async function parsePDFWithOCR(
         try {
             const parsed = extractJSON(response.text);
             return { raw: response.text, parsed, confidence: 'high' };
-        } catch {
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.debug('[pdfParser] extractJSON étape-1 échoué — low-confidence', String(err));
             return { raw: response.text, parsed: null, confidence: 'low' };
         }
     }
@@ -90,7 +92,9 @@ export async function parsePDFWithOCR(
     try {
         const parsed = extractJSON(response.text);
         return { raw: response.text, parsed, confidence: 'medium' };
-    } catch {
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.debug('[pdfParser] extractJSON étape-2 échoué — low-confidence', String(err));
         return { raw: response.text, parsed: null, confidence: 'low' };
     }
 }

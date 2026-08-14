@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { logger } from "@/lib/logger";
 import {
     DndContext,
     DragEndEvent,
@@ -242,7 +243,8 @@ export function RecruitmentBoard({ onHireCandidate }: RecruitmentBoardProps) {
                 await updateCandidateStatus(candidate.id, newStatus);
                 const colLabel = COLUMNS.find((c) => c.id === newStatus)?.label ?? newStatus;
                 toast.success(`${candidate.firstName} déplacé(e) vers "${colLabel}"`);
-            } catch {
+            } catch (err) {
+                logger.error("[RecruitmentBoard] Déplacement candidat échoué", { candidateId: candidate.id, newStatus, error: err });
                 toast.error("Erreur lors du déplacement");
             }
         },

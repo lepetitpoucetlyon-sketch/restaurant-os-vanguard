@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import { CryptoService } from '@/lib/CryptoService';
 import type { ParsedFile, ImportResult } from '../types';
 
@@ -70,7 +71,8 @@ export async function importFEC(file: ParsedFile, onProgress: (n: number) => voi
     let sealHash: string;
     try {
       sealHash = await CryptoService.generateHash(dataSnapshot, previousHash);
-    } catch {
+    } catch (err) {
+      logger.warn('[fecImporter] Scellement crypto FEC échoué', { row: i + 2, error: err });
       errors.push({ row: i + 2, message: `Erreur de scellement ligne ${i + 2}` });
       continue;
     }

@@ -5,6 +5,7 @@ import { Loader2, Globe, WifiOff } from 'lucide-react';
 import { TableSchema } from '@/modules/ops';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 import { toggleOnlineBookingAction } from '../../actions/marketing.action';
 
 type Table = z.infer<typeof TableSchema> & { onlineBookable?: boolean };
@@ -31,7 +32,8 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
                 setTables(data);
                 setLoading(false);
             }
-        } catch {
+        } catch (err) {
+            logger.warn('[OnlineBookingToggle] Chargement tables échoué', { tenantId, error: err });
             if (!cancelled) setLoading(false);
         }
     };
@@ -61,7 +63,8 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
           ? `Table ${table.number} activee en ligne`
           : `Table ${table.number} desactivee en ligne`
       );
-    } catch {
+    } catch (err) {
+      logger.error('[OnlineBookingToggle] Échec toggle réservation en ligne', { tenantId, tableId: table.id, next, error: err });
       toast.error('Echec de la mise a jour');
     } finally {
       setUpdating(null);

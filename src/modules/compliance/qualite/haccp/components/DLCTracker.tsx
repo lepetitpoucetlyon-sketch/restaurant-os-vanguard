@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { AlertTriangle, Clock, Package, RefreshCw } from 'lucide-react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/kernel/hooks';
@@ -97,8 +98,8 @@ export function DLCTracker() {
             expiringEntries.sort((a, b) => a.daysLeft - b.daysLeft);
             setEntries(expiringEntries);
             setLastRefresh(new Date());
-        } catch {
-            // Silent — non-critical
+        } catch (err) {
+            logger.debug('[DLCTracker] Chargement dates limites de consommation échoué', { tenantId, error: err });
         } finally {
             setLoading(false);
         }

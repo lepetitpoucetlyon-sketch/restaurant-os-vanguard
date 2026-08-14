@@ -2,6 +2,7 @@ import { TenantID, SiteTelemetry } from '@nexus/tokens/brands.types';
 import { TelemetryStream, TelemetryEvent } from '../../analytique/TelemetryStream';
 import { executeAdministrativeAction, executeCloudSync, discoverRealFleet, getGlobalMetrics } from './FleetTelemetryExecutor';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 
 /**
@@ -70,7 +71,8 @@ export class FleetTelemetryService {
     let sites: SiteTelemetry[];
     try {
       sites = await discoverRealFleet();
-    } catch {
+    } catch (err) {
+      logger.error('[FleetTelemetry] Découverte fleet échouée — sweep annulé', { error: err });
       return;
     }
 
@@ -105,7 +107,7 @@ export class FleetTelemetryService {
 
       try {
         Nexus.adapter.set(`mcc/alerts/${alertId}`, alert).catch(() => {});
-      } catch { /* non-bloquant */ }
+      } catch (err) { logger.warn('[FleetTelemetry] Écriture alerte fleet Nexus échouée', { alertId, error: err }); }
 
       empireAudit.log({
         module: 'fleet',

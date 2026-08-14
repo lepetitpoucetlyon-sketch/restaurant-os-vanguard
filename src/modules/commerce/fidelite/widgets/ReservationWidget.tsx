@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { CardImprintStep }        from './widget/CardImprintStep';
@@ -84,7 +85,8 @@ export default function ReservationWidget({ tenantId, merchantName, cardImprintC
       const res  = await fetch(`/api/widget/availability?tenantId=${encodeURIComponent(tenantId)}&date=${encodeURIComponent(form.date)}&covers=${form.covers}`);
       if (!res.ok) throw new Error('Erreur réseau');
       setSlots(await res.json());
-    } catch {
+    } catch (err) {
+      logger.warn('[ReservationWidget] Chargement créneaux disponibles échoué', { tenantId, date: form.date, error: err });
       toast.error('Impossible de charger les horaires');
       setSlots([]);
     } finally {

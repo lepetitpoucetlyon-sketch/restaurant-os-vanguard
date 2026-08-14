@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 import { X, Check, AlertTriangle, ChefHat, Clock, Minus, Plus, MessageSquare } from "lucide-react";
 ;
 import { useOrders } from '../../../providers/hooks/kitchenHooks';
@@ -18,7 +19,8 @@ function parseModDetails(modification: OrderItemModification): { removedIngredie
     try {
         const newValue = JSON.parse(String(modification.newValue || '{}'));
         return { removedIngredients: newValue.removed || [], addedIngredients: newValue.added || [], newNotes: newValue.notes || '' };
-    } catch {
+    } catch (err) {
+        logger.debug("[ModificationAlerts] Impossible de parser les détails de modification", { error: err });
         return { removedIngredients: [], addedIngredients: [], newNotes: '' };
     }
 }

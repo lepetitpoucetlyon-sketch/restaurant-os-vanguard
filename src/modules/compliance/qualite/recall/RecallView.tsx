@@ -6,6 +6,7 @@ import { cn } from '@/lib/ui.foundations';
 import { useTenant, useAuth } from '@/kernel/hooks';
 import { RecallService } from './RecallService';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface RecallResult {
     lotId: string;
@@ -37,7 +38,8 @@ export function RecallView() {
         try {
             const impact = await RecallService.traceFromLot(tenantId, lotId.trim());
             setResult(impact);
-        } catch {
+        } catch (err) {
+            logger.error('[RecallView] Échec traçage lot', { tenantId, lotId, error: err });
             toast.error('Erreur lors du traçage');
         } finally {
             setLoading(false);
@@ -51,7 +53,8 @@ export function RecallView() {
             await RecallService.initiateRecall(tenantId, lotId.trim(), currentUser.id, reason.trim());
             setRecalled(true);
             toast.success('Procédure de rappel initiée et tracée');
-        } catch {
+        } catch (err) {
+            logger.error('[RecallView] Échec initiation procédure rappel', { tenantId, lotId, userId: currentUser?.id, error: err });
             toast.error('Erreur lors du rappel');
         } finally {
             setLoading(false);

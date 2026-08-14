@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import type { NexusContext } from '@/lib/nexus/types';
 import type { ImportCategory } from './types';
 
@@ -64,8 +65,9 @@ export class ImportSnapshotService {
           const docId = item.id ?? (item as { _id?: string })._id ?? crypto.randomUUID();
           docs[`${col}/${docId}`] = item;
         }
-      } catch {
+      } catch (err) {
         // collection may not exist yet — empty snapshot is valid
+        logger.debug('[ImportSnapshotService] Collection absente lors du snapshot', { col, error: err });
       }
     }
 
@@ -105,8 +107,9 @@ export class ImportSnapshotService {
           const docId = item.id ?? (item as { _id?: string })._id;
           if (docId) batch.delete(`${col}/${docId}`);
         }
-      } catch {
+      } catch (err) {
         // ignore missing collections
+        logger.debug('[ImportSnapshotService] Collection absente lors de la restauration', { col, error: err });
       }
     }
 

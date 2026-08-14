@@ -73,9 +73,10 @@ export class LightRAGClient {
             this.isHealthy = response.status === 'healthy';
             this.lastHealthCheck = Date.now();
             return response;
-        } catch {
+        } catch (err) {
             this.isHealthy = false;
             this.lastHealthCheck = Date.now();
+            logger.debug('[LightRAGClient] Health check échoué — LightRAG injoignable', { error: err });
             return { status: 'unhealthy' };
         }
     }

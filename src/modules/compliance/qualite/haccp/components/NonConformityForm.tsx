@@ -25,6 +25,7 @@ import {
     fileToBase64,
 } from './nonConformityTypes';
 import { NCStatusBadge } from './NCStatusBadge';
+import { logger } from '@/lib/logger';
 
 export type { NonConformityType, NonConformity };
 
@@ -68,8 +69,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
             });
             setRecords(raw);
             onCountChange?.(raw.filter(r => r.status === 'open').length);
-        } catch {
-            // Silencieux
+        } catch (err) {
+            logger.warn('[NonConformityForm] Chargement non-conformités échoué', { tenantId, error: err });
         } finally {
             setLoading(false);
         }
@@ -90,7 +91,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
             const b64 = await fileToBase64(file);
             setFormPhoto(b64);
             setFormPhotoName(file.name);
-        } catch {
+        } catch (err) {
+            logger.error('[NonConformityForm] Impossible de lire l\'image', { file: file.name, error: err });
             toast.error('Impossible de lire l\'image');
         }
     };
@@ -131,7 +133,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
             setFormPhotoName('');
             setFormDate(new Date().toISOString().split('T')[0]);
             setFormType('température hors norme');
-        } catch {
+        } catch (err) {
+            logger.error('[NonConformityForm] Échec enregistrement non-conformité', { tenantId, type: formType, error: err });
             toast.error('Erreur lors de l\'enregistrement');
         } finally {
             setSubmitting(false);
@@ -159,7 +162,8 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
             setResolvingId(null);
             setResolutionNote('');
             toast.success('Non-conformité résolue');
-        } catch {
+        } catch (err) {
+            logger.error('[NonConformityForm] Échec résolution non-conformité', { tenantId, ncId: nc.id, error: err });
             toast.error('Erreur lors de la résolution');
         }
     };

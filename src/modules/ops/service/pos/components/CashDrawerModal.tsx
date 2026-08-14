@@ -15,6 +15,7 @@ import { openCashDrawerAction, closeCashDrawerAction } from "../actions/cashdraw
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 import type { CashDrawerSession } from "../types/cashdrawer.types";
+import { logger } from "@/lib/logger";
 export type { CashDrawerSession };
 
 interface CashDrawerModalProps {
@@ -75,8 +76,9 @@ export function CashDrawerModal({
                 limit: 1,
             });
             setSession(sessions[0] ?? null);
-        } catch {
-            // No open session — that's fine
+        } catch (err) {
+            // Pas de session ouverte — état normal (pas une erreur bloquante)
+            logger.debug("[CashDrawer] Aucune session de caisse active trouvée", { tenantId, error: err });
             setSession(null);
         } finally {
             setIsFetchingSession(false);
@@ -107,7 +109,8 @@ export function CashDrawerModal({
             setOpeningInput("");
             void cashDrawerService.kick();
             toast.success(`Caisse ouverte — Fond : ${euros.toFixed(2)} €`);
-        } catch {
+        } catch (err) {
+            logger.error("[CashDrawer] Échec ouverture caisse", { tenantId, userId, error: err });
             toast.error("Impossible d'ouvrir la caisse");
         } finally {
             setIsOpening(false);
@@ -144,7 +147,8 @@ export function CashDrawerModal({
             );
             setClosed(true);
             setSession(null);
-        } catch {
+        } catch (err) {
+            logger.error("[CashDrawer] Échec clôture caisse", { tenantId, sessionId: session?.id, error: err });
             toast.error("Impossible de clôturer la caisse");
         } finally {
             setIsClosing(false);

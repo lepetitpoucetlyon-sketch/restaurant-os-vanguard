@@ -5,6 +5,7 @@
  */
 
 import { Nexus, buildTenantPath } from '@/lib/nexus';
+import { logger } from '@/lib/logger';
 
 // ── Types internes ─────────────────────────────────────────────────────────────
 
@@ -283,8 +284,9 @@ export class PlanMaitriseSanitaire {
                     return [dateFormatted, zone, temp, operator, compliant];
                 });
             }
-        } catch {
+        } catch (err) {
             // Pas de logs disponibles ou adaptateur non initialisé
+            logger.debug('[PlanMaitriseSanitaire] Logs température indisponibles — section omise du PDF', { error: err });
         }
 
         if (tempRows.length === 0) {

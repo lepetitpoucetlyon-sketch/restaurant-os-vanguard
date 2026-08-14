@@ -9,6 +9,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToRole } from "@/lib/push/pushClient";
 import { PlanMaitriseSanitaire } from '../services/PlanMaitriseSanitaire';
 import type { StockItem } from "@nexus/contracts";
+import { logger } from "@/lib/logger";
 import {
     ClipboardCheck, FileText, CalendarCheck, ShieldAlert, Package,
 } from "lucide-react";
@@ -106,7 +107,7 @@ export function useHaccpPage() {
                 if (alert) { activeAlerts.push(alert); emitTempAlert(alert, tenantId); }
             }
             setTempAlerts(activeAlerts);
-        } catch { /* silently retry */ }
+        } catch (err) { logger.warn('[HaccpPage] Échec vérification températures', { tenantId, error: err }); }
     }, [tenantId]);
 
     useEffect(() => {
@@ -133,7 +134,7 @@ export function useHaccpPage() {
         try {
             await PlanMaitriseSanitaire.export({ name: activeTenantConfig?.name ?? 'Mon Restaurant', address: 'Adresse à compléter', siret: undefined }, tenantId);
             toast.success("PMS exporté avec succès");
-        } catch { toast.error("Erreur lors de la génération du PDF"); }
+        } catch (err) { logger.error("[HaccpPage] Échec export PMS PDF", { tenantId, error: err }); toast.error("Erreur lors de la génération du PDF"); }
         finally { setPmsLoading(false); }
     };
 

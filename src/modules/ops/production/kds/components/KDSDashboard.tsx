@@ -148,7 +148,8 @@ export function KDSDashboard() {
             await updateOrderStatus(ticket.id, 'preparing');
             setRecalledOrders(prev => prev.filter(t => t.id !== ticket.id));
             toast.success(`Table ${ticket.tableNumber ?? '?'} — remis en préparation`);
-        } catch {
+        } catch (err) {
+            logger.error('[KDS] Échec renvoi ticket en préparation', { ticketId: ticket.id, tableNumber: ticket.tableNumber, error: err });
             toast.error('Impossible de renvoyer le ticket');
         }
     };

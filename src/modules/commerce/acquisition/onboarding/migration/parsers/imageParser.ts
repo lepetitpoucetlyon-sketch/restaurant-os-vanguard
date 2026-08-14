@@ -77,8 +77,10 @@ export async function parseImageWithOCR(
     try {
         const parsed = extractJSON(response.text);
         return { raw: response.text, parsed, confidence: 'high' };
-    } catch {
+    } catch (err) {
         // JSON invalide — retour en mode low-confidence avec le texte brut
+        // eslint-disable-next-line no-console
+        console.debug('[imageParser] extractJSON échoué — low-confidence fallback', String(err));
         return { raw: response.text, parsed: null, confidence: 'low' };
     }
 }

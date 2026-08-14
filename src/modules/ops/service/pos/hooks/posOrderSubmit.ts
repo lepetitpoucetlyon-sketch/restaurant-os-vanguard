@@ -9,6 +9,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Table, OrderItem } from "@nexus/contracts";
 import { CartItem, CourseType } from "../../../workflow/engine/types";
 import type { ConsumptionMode } from "@/modules/ops";
+import { logger } from "@/lib/logger";
 import {
     COURSE_LABELS,
     getUnsentCourseItems,
@@ -125,7 +126,8 @@ export async function handleSendCourseImpl(
         );
         setCartItems((prev) => markCourseAsSent(prev, course, Date.now()));
         showToast(`${COURSE_LABELS[course]} envoyés en cuisine`, "success");
-    } catch {
+    } catch (err) {
+        logger.error("[posOrderSubmit] Échec envoi cours cuisine", { course, tableNumber: currentTable.number, tenantId, error: err });
         showToast("Erreur lors de l'envoi du cours", "error");
     }
 }

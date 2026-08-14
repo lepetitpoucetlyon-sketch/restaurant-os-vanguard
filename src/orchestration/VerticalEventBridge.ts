@@ -10,6 +10,7 @@
  */
 import { NexusEventBus } from '@/orchestration/NexusEventBus';
 import type { PlatformVariant } from '@nexus/contracts';
+import { logger } from '@/lib/logger';
 
 type BridgePayload = Record<string, unknown> & { tenantId: string };
 
@@ -163,8 +164,9 @@ export function initVerticalEventBridge(): void {
             try {
                 const translated = rule.transform(typed);
                 NexusEventBus.emit(rule.target as never, translated as never);
-            } catch {
-                // Erreur de traduction silencieuse — le bridge ne doit pas crasher le bus
+            } catch (err) {
+                // Le bridge ne doit pas crasher le bus — on log la traduction ratée
+                logger.warn('[VerticalEventBridge] Traduction événement vertical échouée', { source: rule.source, target: rule.target, error: err });
             }
         });
     }

@@ -27,8 +27,10 @@ export class UpstashRateLimiter implements IRateLimiter {
       const allowed = count <= limit;
       const resetAt = Date.now() + windowMs;
       return { allowed, remaining: Math.max(0, limit - count), resetAt };
-    } catch {
+    } catch (err) {
       // Si Upstash down → fail open (allowed) pour ne pas bloquer les vrais utilisateurs
+      // eslint-disable-next-line no-console
+      console.warn('[UpstashRateLimiter] Upstash injoignable — fail open', { key, error: String(err) });
       return { allowed: true, remaining: limit, resetAt: Date.now() + windowMs };
     }
   }

@@ -6,6 +6,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 import { useTenant } from "@/kernel/hooks/useTenant";
 import { issueLoyaltyCardAction, updateCustomerAction } from "../../../../actions/marketing.action";
+import { logger } from "@/lib/logger";
 
 interface LoyaltyData {
   loyaltyPoints: number;
@@ -123,7 +124,8 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
       setLoyalty((prev) => prev ? { ...prev, loyaltyPoints: newPoints } : prev);
       setActiveRewards((prev) => [...prev, newReward]);
       toast.success(`Récompense "${rewardDef.label}" débloquée !`);
-    } catch {
+    } catch (err) {
+      logger.error("[LoyaltyCard] Échec déblocage récompense", { customerId, rewardType: rewardDef?.type, error: err });
       toast.error("Erreur lors du déblocage de la récompense");
     } finally {
       setRedeeming(null);

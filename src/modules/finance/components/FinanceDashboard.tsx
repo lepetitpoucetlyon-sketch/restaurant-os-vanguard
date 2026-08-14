@@ -12,6 +12,7 @@ import {
     X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@design/rbac/TabGuard";
@@ -75,7 +76,8 @@ async function performConnectBank(
         const { url } = (await res.json()) as { url: string; isDemoMode?: boolean };
         setBankWebviewUrl(url);
         setBankModalOpen(true);
-    } catch {
+    } catch (err) {
+        logger.error("[FinanceDashboard] Échec ouverture connexion bancaire Powens", { error: err });
         toast.error("Impossible d'ouvrir la connexion bancaire.");
     } finally {
         setConnectingBank(false);
@@ -152,8 +154,9 @@ export function FinanceDashboard() {
                 const { Nexus } = await import("@/lib/nexus/NexusAdapter");
                 const accounts = await Nexus.adapter.query<BankAccount>("bankAccounts");
                 if (!cancelled) setBankAccounts(accounts);
-            } catch {
+            } catch (err) {
                 // Collection may be empty — no-op
+                logger.debug('[FinanceDashboard] Chargement comptes bancaires échoué', { error: err });
             } finally {
                 if (!cancelled) setLoadingBankAccounts(false);
             }
@@ -177,7 +180,8 @@ export function FinanceDashboard() {
             const today = new Date().toISOString().split("T")[0];
             await closeTicketZForDay(activeTenantId, today);
             toast.success("Clôture Z effectuée avec succès.");
-        } catch {
+        } catch (err) {
+            logger.error("[FinanceDashboard] Échec clôture Z", { tenantId: activeTenantId, error: err });
             toast.error("Erreur lors de la clôture Z.");
         } finally {
             setClosingZ(false);
@@ -196,7 +200,8 @@ export function FinanceDashboard() {
             const res = await fetch("/api/finance/bank/sync", { method: "POST" });
             const data = (await res.json()) as { success?: boolean; isDemoMode?: boolean; error?: string };
             await applyBankSyncResult(data, setBankAccounts);
-        } catch {
+        } catch (err) {
+            logger.error("[FinanceDashboard] Échec synchronisation bancaire", { error: err });
             toast.error("Erreur réseau lors de la synchronisation.");
         } finally {
             setSyncingBank(false);
@@ -213,7 +218,8 @@ export function FinanceDashboard() {
             const data = await AccountingReportService.buildPnL(start, end);
             await AccountingReportService.exportPnLPDF(data);
             toast.success("P&L exporté en PDF.");
-        } catch {
+        } catch (err) {
+            logger.error("[FinanceDashboard] Échec export P&L PDF", { month: payrollMonth, error: err });
             toast.error("Erreur lors de l'export P&L.");
         } finally {
             setPnlExporting(false);
@@ -228,7 +234,8 @@ export function FinanceDashboard() {
             const data = await AccountingReportService.buildBalanceSheet(Date.now());
             await AccountingReportService.exportBalanceSheetPDF(data);
             toast.success("Bilan exporté en PDF.");
-        } catch {
+        } catch (err) {
+            logger.error("[FinanceDashboard] Échec export Bilan PDF", { error: err });
             toast.error("Erreur lors de l'export Bilan.");
         } finally {
             setBilanExporting(false);
@@ -242,7 +249,8 @@ export function FinanceDashboard() {
             const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
             await AccountingReportService.exportPayrollCSV(payrollMonth);
             toast.success(`Variables de paie ${payrollMonth} exportées.`);
-        } catch {
+        } catch (err) {
+            logger.error("[FinanceDashboard] Échec export variables de paie CSV", { month: payrollMonth, error: err });
             toast.error("Erreur lors de l'export variables de paie.");
         } finally {
             setPayrollExporting(false);

@@ -8,6 +8,7 @@ import { useLanguage } from '@/kernel/hooks';
 import { Button } from '@ui/button';
 import { BottomSheet } from '@ui/BottomSheet';
 import { useIsMobile } from '@/kernel/hooks';
+import { logger } from '@/lib/logger';
 
 export function CRMContactForm() {
     const { t } = useLanguage();
@@ -40,7 +41,8 @@ export function CRMContactForm() {
             });
             setShowModal(false);
             setFormState(prev => ({ ...prev, name: '', phone: '', notes: '' }));
-        } catch {
+        } catch (err) {
+            logger.error('[CRMContactForm] Échec enregistrement contact', { error: err });
             setShowModal(false);
         }
     };

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
 // eslint-disable-next-line vanguard/no-inter-module-imports
@@ -49,6 +50,7 @@ export const EndOfDayWizard: React.FC = () => {
             }
             setIsClosed(true);
         } catch (_error) {
+            logger.error("[EndOfDayWizard] Clôture fiscale Z-Report échouée", { tenantId: activeTenantId, error: _error });
             showToast("Erreur lors de la clôture fiscale", "error");
         } finally {
             setIsClosing(false);

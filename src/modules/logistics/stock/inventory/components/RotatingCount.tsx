@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { logger } from "@/lib/logger";
 import { RotateCcw, CheckCircle, Package } from "lucide-react";
 import { toast } from "sonner";
 import { useInventory } from '..';
@@ -64,7 +65,8 @@ export function RotatingCount() {
             }
             toast.success("Comptage tournant enregistré.");
             setCounts({});
-        } catch {
+        } catch (err) {
+            logger.error("[RotatingCount] Enregistrement comptage tournant échoué", { tenantId, error: err });
             toast.error("Erreur lors de l'enregistrement du comptage.");
         } finally {
             setSubmitting(false);

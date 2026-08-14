@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState, useCallback } from "react";
+import { logger } from "@/lib/logger";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Circle, Clock, ChevronRight, RefreshCw } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
@@ -34,7 +35,8 @@ export function OnboardingProgress() {
         try {
           const records = await Nexus.adapter.query<{ id: string }>(step.nexusCollection);
           return { step, status: records.length > 0 ? "done" : "pending" };
-        } catch {
+        } catch (err) {
+          logger.debug('[OnboardingProgress] Vérification collection onboarding échouée', { collection: step.nexusCollection, error: err });
           return { step, status: "pending" };
         }
       })

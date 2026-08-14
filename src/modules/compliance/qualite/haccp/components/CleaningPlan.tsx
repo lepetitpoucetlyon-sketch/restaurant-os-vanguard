@@ -17,6 +17,7 @@ import { Nexus, buildTenantPath } from '@/lib/nexus';
 import { useTenant } from '@/kernel/hooks';
 import type { PlatformVariant } from '@nexus/contracts';
 import { signCleaningTaskAction } from '../actions/haccp.action';
+import { logger } from '@/lib/logger';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -123,8 +124,8 @@ export function CleaningPlan() {
                 ],
             });
             setRecords(raw);
-        } catch {
-            // Silencieux — données non critiques
+        } catch (err) {
+            logger.warn('[CleaningPlan] Chargement planning nettoyage échoué', { tenantId, error: err });
         } finally {
             setLoading(false);
         }
@@ -178,7 +179,8 @@ export function CleaningPlan() {
             setRecords(prev => [...prev, record]);
             toast.success(`Tâche signée par ${nameInput.trim()}`);
             setPinDialog(null);
-        } catch {
+        } catch (err) {
+            logger.error('[CleaningPlan] Échec signature tâche nettoyage', { tenantId, error: err });
             toast.error('Erreur lors de la signature — veuillez réessayer');
         }
     };

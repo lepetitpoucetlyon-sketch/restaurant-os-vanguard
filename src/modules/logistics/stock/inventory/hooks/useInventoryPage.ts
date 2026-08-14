@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useInventory } from './useInventory';
 import { useActionPermission } from "@/kernel/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { logger } from "@/lib/logger";
 
 import type { StockItem } from '../types';
 
@@ -66,7 +67,8 @@ export function useInventoryPage() {
         try {
             await Nexus.adapter.delete(`stockItems/${id}`);
             toast.success("Article supprimé.");
-        } catch {
+        } catch (err) {
+            logger.error("[useInventoryPage] Suppression article stock échouée", { stockItemId: id, error: err });
             toast.error("Erreur lors de la suppression.");
         }
     };

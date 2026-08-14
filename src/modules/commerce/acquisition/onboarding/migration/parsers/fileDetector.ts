@@ -96,7 +96,9 @@ export async function parseFile(file: File): Promise<ParsedFile> {
       const rows = arr.map(item => Object.fromEntries(Object.entries(item).map(([k, v]) => [k, String(v ?? '')])));
       const source = detectSourceSystem(headers);
       return { format: 'json', source, headers, rows, warnings: [], encoding: 'utf-8' };
-    } catch {
+    } catch (_parseErr) {
+      // eslint-disable-next-line no-console
+      console.debug('[fileDetector] JSON.parse échoué — fichier malformé');
       return { format: 'json', source: 'generic', headers: [], rows: [], warnings: [{ row: 0, field: '', message: 'JSON invalide', severity: 'error' }] };
     }
   }

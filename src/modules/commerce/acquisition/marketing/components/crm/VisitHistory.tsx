@@ -12,6 +12,7 @@ import {
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import type { Reservation } from "@nexus/contracts";
 import type { Order } from "@/modules/ops";
+import { logger } from "@/lib/logger";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -178,7 +179,8 @@ export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
                         loading: false,
                     });
                 }
-            } catch {
+            } catch (err) {
+                logger.warn('[VisitHistory] Chargement historique visites échoué', { customerId, error: err });
                 if (!cancelled) setState((s) => ({ ...s, loading: false }));
             }
         }

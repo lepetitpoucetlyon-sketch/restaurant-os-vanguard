@@ -1,5 +1,6 @@
 import type { PlatformVariant } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { LaborCostService } from '@/modules/human';
@@ -128,8 +129,9 @@ export const DailyFlashReport = {
             unitDelta = previousDay.unitCount > 0
                 ? Math.round(((unitCount - previousDay.unitCount) / previousDay.unitCount) * 10000) / 100
                 : 0;
-        } catch {
+        } catch (err) {
             // No previous day data
+            logger.debug('[DailyFlashReport] Pas de données J-1 disponibles', { date, error: err });
         }
 
         return {

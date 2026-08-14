@@ -8,6 +8,7 @@ import { useLanguage } from "@/kernel/hooks";
 import { formatCurrency } from "@/lib/formatters";;
 import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
 import type { PaymentResult } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import { logger } from "@/lib/logger";
 import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
 
 interface PaymentDialogProps {
@@ -121,7 +122,8 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
             const hash = await onPaymentComplete();
             applyHashIfPresent(hash, setCertifiedHash);
             setIsSuccess(true);
-        } catch {
+        } catch (err) {
+            logger.error("[PaymentDialog] Échec paiement direct", { method, error: err });
             /* toast handled upstream */
         } finally {
             setIsProcessing(false);

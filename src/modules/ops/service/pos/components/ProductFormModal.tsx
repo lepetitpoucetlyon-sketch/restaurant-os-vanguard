@@ -21,6 +21,7 @@ import { ProductBasicDetails } from "./product-form/ProductBasicDetails";
 import { ProductBarFields } from "./product-form/ProductBarFields";
 
 // Constants
+import { logger } from "@/lib/logger";
 import { ALLERGENS, CATEGORIES_DISH, CATEGORIES_COCKTAIL } from "@/constants/product-form";
 
 interface ProductFormModalProps {
@@ -195,12 +196,13 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
                         message: `Catalog update: ${name}`
                     })
                 });
-            } catch {
-                // non-blocking
+            } catch (webhookErr) {
+                logger.debug("[ProductFormModal] Cache-bust webhook non-bloquant échoué", { error: webhookErr });
             }
 
             onClose();
-        } catch {
+        } catch (err) {
+            logger.error("[ProductFormModal] Échec enregistrement produit", { name, error: err });
             showToast("Erreur lors de l'enregistrement", "error");
         } finally {
             setIsSubmitting(false);

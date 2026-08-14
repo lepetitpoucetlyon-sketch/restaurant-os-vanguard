@@ -213,7 +213,8 @@ export function useReservationsPage() {
         try {
             await Nexus.adapter.set(`tenants/${tenantId}/${TERRASSE_SETTINGS_PATH}`, { open: !newClosed, updatedAt: new Date().toISOString() });
             toast.success(newClosed ? "Terrasse fermée" : "Terrasse ouverte");
-        } catch {
+        } catch (err) {
+            logger.error("[Reservations] Échec sauvegarde préférence terrasse", { tenantId, error: err });
             toast.error("Impossible de sauvegarder la préférence terrasse");
         }
     }, [terraceClosed, tenantId]);
@@ -222,7 +223,7 @@ export function useReservationsPage() {
         try {
             await recordNoShow(id, reservations, customers, tenantId, updateReservation);
             toast.success("No-show enregistré");
-        } catch { toast.error("Erreur lors de l'enregistrement du no-show"); }
+        } catch (err) { logger.error("[Reservations] Échec no-show", { tenantId, id, error: err }); toast.error("Erreur lors de l'enregistrement du no-show"); }
     }, [reservations, customers, tenantId, updateReservation]);
 
     const handleCancelReservation = useCallback(async (id: string) => {
@@ -261,7 +262,7 @@ export function useReservationsPage() {
                     body: JSON.stringify({ to: customer.email, name: `${customer.firstName} ${customer.lastName}`, date: resData.date, time: resData.time, covers: resData.covers, restaurantName: tenantConfig?.name ?? '' }),
                 }).catch(() => { /* email failure is non-blocking */ });
             }
-        } catch { toast.error("Erreur lors de la création de la réservation"); }
+        } catch (err) { logger.error("[Reservations] Échec création réservation", { tenantId, error: err }); toast.error("Erreur lors de la création de la réservation"); }
     }, [tenantId, customers, addReservation]);
 
     const handleUpdateReservation = useCallback(async (id: string, updates: Partial<Reservation>) => {
@@ -274,7 +275,7 @@ export function useReservationsPage() {
                 updates: updates as Record<string, unknown>,
             });
             toast.success("Réservation mise à jour");
-        } catch { toast.error("Erreur lors de la mise à jour"); }
+        } catch (err) { logger.error("[Reservations] Échec mise à jour réservation", { tenantId, error: err }); toast.error("Erreur lors de la mise à jour"); }
     }, [updateReservation, tenantId]);
 
     const handleCreateGroup = useCallback(async (formData: GroupFormData) => {
@@ -284,7 +285,7 @@ export function useReservationsPage() {
             const id = `grp_${arr[0].toString(36)}`;
             await Nexus.adapter.set(`tenants/${tenantId}/ops_relations/${id}`, { id, name: formData.name, minCovers: formData.minCovers, maxCovers: formData.maxCovers, notes: formData.notes, type: "group", status: "pending", updatedAt: new Date().toISOString() });
             toast.success(`Groupe "${formData.name}" créé`);
-        } catch { toast.error("Erreur lors de la création du groupe"); throw new Error("Nexus write failed"); }
+        } catch (err) { logger.error("[Reservations] Échec création groupe", { tenantId, name: formData.name, error: err }); toast.error("Erreur lors de la création du groupe"); throw new Error("Nexus write failed"); }
     }, [tenantId]);
 
     const handleMarkArrived = useCallback(async (id: string) => {
@@ -305,7 +306,7 @@ export function useReservationsPage() {
             });
 
             toast.success("Client accueilli à la table");
-        } catch { toast.error("Erreur lors de la validation d'arrivée"); }
+        } catch (err) { logger.error("[Reservations] Échec validation arrivée", { tenantId, id, error: err }); toast.error("Erreur lors de la validation d'arrivée"); }
     }, [markArrived, reservations, customers, tenantId]);
 
     const handlePinConfirm = useCallback((_pin: string) => {

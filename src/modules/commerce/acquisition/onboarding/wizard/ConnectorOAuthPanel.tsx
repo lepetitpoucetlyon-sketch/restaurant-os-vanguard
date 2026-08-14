@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { logger } from '@/lib/logger';
 import type { ConnectorId } from '@nexus/contracts';
 import type { ConnectorCredentials } from '../migration/connectors/types';
 import { ConnectorRegistry } from '../migration/connectors';
@@ -34,7 +35,8 @@ export function ConnectorOAuthPanel({ connectorId, onConnected }: ConnectorOAuth
       } else {
         setError(json.error ?? 'Connexion échouée');
       }
-    } catch {
+    } catch (err) {
+      logger.warn('[ConnectorOAuthPanel] Test connexion connecteur échoué', { error: err });
       setError('Erreur réseau');
     } finally {
       setTesting(false);
