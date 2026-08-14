@@ -276,6 +276,16 @@ export const TASK_MAPS: Record<string, TaskContext> = {
     importance: { ...OFF_ALL, products: 'HIGH', finance: 'HIGH', categories: 'MEDIUM' },
   },
 
+  integrations: {
+    taskId: 'integrations',
+    importance: { ...OFF_ALL, intelligence: 'HIGH', marketing: 'LAZY' },
+  },
+
+  'vanguard-simulator': {
+    taskId: 'vanguard-simulator',
+    importance: { ...OFF_ALL },
+  },
+
   admin: {
     taskId: 'admin',
     importance: {
@@ -324,8 +334,16 @@ const ROUTE_SEGMENTS: [string, keyof typeof TASK_MAPS][] = [
   ['/intelligence',   'intelligence'],
   ['/menu-builder',   'menu-builder'],
   ['/leaves',         'leaves'],
-  ['/welcome-staff',  'welcome-staff'],
-  ['/admin',          'admin'],
+  ['/welcome-staff',      'welcome-staff'],
+  ['/nf525',              'nf525'],
+  ['/aide',               'aide'],
+  ['/migration',          'migration'],
+  ['/onboarding',         'onboarding'],
+  ['/marketing/seo',      'marketing/seo'],
+  ['/menu-engineering',   'menu-engineering'],
+  ['/integrations',       'integrations'],
+  ['/vanguard-simulator', 'vanguard-simulator'],
+  ['/admin',              'admin'],
 ];
 
 /** Résout le TaskContext depuis un pathname Next.js */
