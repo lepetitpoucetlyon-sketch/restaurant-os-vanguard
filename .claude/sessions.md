@@ -12,7 +12,7 @@
 
 | Session | Périmètre | Dernière activité | Status |
 |---------|-----------|-------------------|--------|
-| antigravity-exec | Chantiers PLAN_RESTE_A_FAIRE : tests 907/907 (C1), bus emitDurable server-side (C15), RBAC phase 2 (C16), catch silencieux (C6 116→12 ✓) | 2026-08-15 | active |
+| antigravity-exec | Chantiers PLAN_RESTE_A_FAIRE : C1 906→907/907 ✓, C6 ✓, C7 ✓, C10 ✓, C11 ✓, C13 ✓ | 2026-08-15 | active |
 | bible-tutos | `docs/BIBLE_TECHNIQUE.html` | 2026-07-24 | terminée |
 | mcc-coord | `CLAUDE.md`, `.claude/` | 2026-07-24 | terminée |
 | mobile-audit | MCC + client layouts, responsive CSS | 2026-07-24 | terminée |
