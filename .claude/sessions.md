@@ -12,7 +12,7 @@
 
 | Session | Périmètre | Dernière activité | Status |
 |---------|-----------|-------------------|--------|
-| antigravity-exec | Chantiers PLAN_RESTE_A_FAIRE : tests 907/907 (C1), bus emitDurable server-side (C15), RBAC phase 2 (C16), catch silencieux (C6) | 2026-08-14 | active |
+| antigravity-exec | Chantiers PLAN_RESTE_A_FAIRE : tests 907/907 (C1), bus emitDurable server-side (C15), RBAC phase 2 (C16), catch silencieux (C6 116→12 ✓) | 2026-08-15 | active |
 | bible-tutos | `docs/BIBLE_TECHNIQUE.html` | 2026-07-24 | terminée |
 | mcc-coord | `CLAUDE.md`, `.claude/` | 2026-07-24 | terminée |
 | mobile-audit | MCC + client layouts, responsive CSS | 2026-07-24 | terminée |
@@ -156,7 +156,7 @@
 | ui-refonte-audit | **LECTURE SEULE** — audit complet couche UI pour refonte : structure composants, design system, perf (bundle/re-renders/Suspense), App Router, Jotai atoms, CSS tokens, dead code UI | 2026-08-14 | terminée |
 | ui-audit-quickwins | 5 `error.tsx` (root+POS+KDS+floor-plan+admin), 4 `loading.tsx` (POS+KDS+floor-plan+inventory), overscroll-behavior contain global sur .overflow-*, 5/14 `<img>`→`<Image>` (StaffList, PlanningDashboard, RecipesTab, MarginsTab, KdsTab bar) — 9 imgs restants (captures caméra base64 HACCP/dépenses/CV) reportés. TSC=0. **Non touchés** : NexusProviderStack, admin layout, Suspense — laissés à plan-complet-reste §6 UI refonte. | 2026-08-14 | terminée |
 | roadmap-par-variant | Écriture doc — développement roadmap détaillé par verticale (8 variants × modules × réglementaire × connecteurs × timeline × pricing). Fichier : `docs/plans/ROADMAP_PAR_VARIANT.md` | 2026-08-14 | terminée |
-| rbac-sweep-100pct | Audit 2 passes CodeGraph+Graphify — éradication totale super_admin/anciens niveaux RBAC dans TOUT le projet (100% coverage verticales/variants/ramifications). | 2026-08-14 | active |
+| rbac-sweep-100pct | Audit 2 passes CodeGraph+Graphify — éradication totale super_admin/anciens niveaux RBAC dans TOUT le projet (100% coverage verticales/variants/ramifications). | 2026-08-14 | terminée |
 | p0-attack | P0 : audit typage L0-L8 (5 any éradiqués, mcc.alert_triggered typé, MacroBrainOrch DEFAULT_PULSE_CONTEXT), Vitest 4.x STACK_TRACE_ERROR résolu (--maxWorkers=4 CLI + ChaosMonkey atoms Jotai réels, fake timer guard global). TSC=0, 854/856 tests (2 flaky cross-worker CLI-only). | 2026-08-14 | terminée |
 | semantic-typing-audit | Audit sémantique global + qualité typage : CodeGraph + Graphify sur l'ensemble du projet (types fantômes, casts dangereux, any/unknown, incohérences de contrats inter-piliers) | 2026-08-14 | terminée |
 | p0-chantier3-r2 | Chantier 3 : StockTransferHandler intra-tenant (storageLocationId, pas tenantId) + émission stock.transfer depuis useInventory + test P0 cross-tenant. R2 : flux allergen déjà câblé, bug statut 'arrived' jamais persisté → fix Nexus.adapter.update direct. TSC=0, 5/5 tests. | 2026-08-14 | terminée |
