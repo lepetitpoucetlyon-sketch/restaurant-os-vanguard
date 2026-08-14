@@ -14,8 +14,8 @@ import {
 import { crmsAtom } from '../../store/marketingAtoms';
 
 const SEGMENTS = {
-    vip: { name: 'VIP', color: '#8B5CF6', icon: Star },
-    regular: { name: 'Régulier', color: '#C5A059', icon: Heart },
+    vip: { name: 'VIP', color: 'var(--color-accent-purple)', icon: Star },
+    regular: { name: 'Régulier', color: 'var(--color-brand)', icon: Heart },
     new: { name: 'Nouveau', color: '#4285F4', icon: Plus },
     lost: { name: 'À réactiver', color: '#FF9900', icon: AlertCircle },
 };

@@ -144,8 +144,8 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                                 const tableTextColor = isDarkMode ? "#000000" : "#1A1A1A";
 
                                 const bgColor = isSelected ? (isDarkMode ? "#000000" : "#F8F9FA") : tableBaseColor;
-                                const strokeColor = "#C5A059";
-                                const textColor = isSelected ? "#C5A059" : tableTextColor;
+                                const strokeColor = "var(--color-brand)";
+                                const textColor = isSelected ? "var(--color-brand)" : tableTextColor;
 
                                 return (
                                     <Group
@@ -167,7 +167,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                                             table.shape === "circle" ? (
                                                 <Circle
                                                     radius={Number(table.radius) || 0}
-                                                    fill='#9CA3AF'
+                                                    fill='var(--color-text-muted)'
                                                     offsetY={-8}
                                                 />
                                             ) : (
@@ -177,7 +177,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                                                     offsetX={(Number(table.width) || 0) / 2}
                                                     offsetY={(Number(table.height) || 0) / 2 - 8}
                                                     cornerRadius={16}
-                                                    fill='#9CA3AF'
+                                                    fill='var(--color-text-muted)'
                                                 />
                                             )
                                         )}

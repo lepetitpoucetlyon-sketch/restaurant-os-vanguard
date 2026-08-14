@@ -66,8 +66,8 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
                             initial={{ width: 0 }} 
                             animate={{ 
                                 width: `${metrics.burnoutIndex}%`,
-                                backgroundColor: metrics.burnoutIndex > 75 ? '#ef4444' : metrics.burnoutIndex > 45 ? '#f59e0b' : '#3b82f6',
-                                boxShadow: metrics.burnoutIndex > 75 ? '0 0 20px #ef4444' : 'none'
+                                backgroundColor: metrics.burnoutIndex > 75 ? 'var(--color-status-danger)' : metrics.burnoutIndex > 45 ? 'var(--color-status-warning)' : '#3b82f6',
+                                boxShadow: metrics.burnoutIndex > 75 ? '0 0 20px var(--color-status-danger)' : 'none'
                             }} 
                             transition={{ type: "spring", bounce: 0.4 }}
                             className="h-full relative" 
@@ -76,7 +76,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
                     <div className="flex justify-between text-[10px] font-bold text-text-muted">
                         <span className="tracking-tighter opacity-50">OPTIMAL FLOW</span>
                         <motion.span 
-                            animate={metrics.burnoutIndex > 75 ? { color: '#ef4444' } : {}}
+                            animate={metrics.burnoutIndex > 75 ? { color: 'var(--color-status-danger)' } : {}}
                             className="font-mono"
                         >
                             {metrics.burnoutIndex.toFixed(1)}%

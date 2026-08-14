@@ -235,12 +235,12 @@ export function OperationsDashboard() {
                                         {/* Example hand-drawn connections */}
                                         <motion.path
                                             d="M 100 100 Q 200 80 300 150 T 500 100"
-                                            stroke="#D1D5DB" strokeWidth="2" fill="none" strokeDasharray="5,5"
+                                            stroke="var(--color-border)" strokeWidth="2" fill="none" strokeDasharray="5,5"
                                             initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5 }}
                                         />
                                         <motion.path
                                             d="M 100 100 Q 50 200 150 300"
-                                            stroke="#D1D5DB" strokeWidth="2" fill="none" strokeDasharray="5,5"
+                                            stroke="var(--color-border)" strokeWidth="2" fill="none" strokeDasharray="5,5"
                                             initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.5 }}
                                         />
                                     </svg>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
     Plus,
@@ -36,7 +37,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                     <div className="relative">
                         <div className="w-20 h-20 rounded-[2rem] bg-bg-tertiary border border-border flex items-center justify-center font-serif text-3xl text-text-primary shadow-inner group-hover:scale-105 transition-all duration-500 overflow-hidden">
                             {user.avatar ? (
-                                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                                <Image src={user.avatar} alt={user.name} fill sizes="80px" className="object-cover" />
                             ) : (user.name || '').charAt(0)}
                         </div>
                         <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-success border-4 border-white shadow-sm" />

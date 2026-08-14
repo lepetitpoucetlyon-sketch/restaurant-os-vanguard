@@ -32,7 +32,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
         >
             <div className="flex flex-col h-[85vh] transition-colors duration-500 bg-surface-card">
                 {/* Modal Header */}
-                <div className="relative p-10 overflow-hidden transition-colors duration-500 bg-gradient-to-br from-[#F1F0EA] via-white to-[#F1F0EA]">
+                <div className="relative p-10 overflow-hidden transition-colors duration-500 bg-gradient-to-br from-[var(--color-bg-tertiary)] via-white to-[var(--color-bg-tertiary)]">
                     <div className="absolute inset-0 opacity-[0.05] transition-opacity" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
 
                     <button

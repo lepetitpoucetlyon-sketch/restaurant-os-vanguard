@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
-    Network, BookOpen, Database
+    Network, BookOpen, Database, FileText, ArrowLeftRight, Layers
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -27,6 +27,9 @@ const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.
 const LifecycleTab    = dynamic(() => import('./_tabs/LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> });
 const TutorialTab       = dynamic(() => import('./_tabs/TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> });
 const SystemTenantsTab  = dynamic(() => import('./_tabs/SystemTenantsTab').then(m => m.SystemTenantsTab), { loading: () => <MCCWidgetSkeleton /> });
+const EInvoicingTab     = dynamic(() => import('./_tabs/EInvoicingTab').then(m => m.EInvoicingTab), { loading: () => <MCCWidgetSkeleton /> });
+const ExchangeTab       = dynamic(() => import('./_tabs/ExchangeTab').then(m => m.ExchangeTab), { loading: () => <MCCWidgetSkeleton /> });
+const VerticalesTab     = dynamic(() => import('./_tabs/VerticalesTab').then(m => m.VerticalesTab), { loading: () => <MCCWidgetSkeleton /> });
 
 export default function MCCDashboard() {
     return (
@@ -69,8 +72,11 @@ function MCCDashboardInner() {
         { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
         { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
         { id: 'lifecycle',    label: t.tabs.lifecycle,    icon: <Network className="w-4 h-4" /> },
-        { id: 'tutorial',       label: 'CLI & Guide',          icon: <BookOpen  className="w-4 h-4" /> },
-        { id: 'systemtenants',  label: 'Tenants Système',      icon: <Database  className="w-4 h-4" /> },
+        { id: 'tutorial',       label: 'CLI & Guide',          icon: <BookOpen      className="w-4 h-4" /> },
+        { id: 'systemtenants',  label: 'Tenants Système',      icon: <Database      className="w-4 h-4" /> },
+        { id: 'einvoicing',     label: 'E-Facture',            icon: <FileText      className="w-4 h-4" /> },
+        { id: 'exchange',       label: 'Exchange',             icon: <ArrowLeftRight className="w-4 h-4" /> },
+        { id: 'verticales',     label: 'Verticales',           icon: <Layers        className="w-4 h-4" /> },
     ] as const;
 
     return (
@@ -167,6 +173,21 @@ function MCCDashboardInner() {
                                 {activeTab === 'systemtenants' && (
                                     <motion.div key="systemtenants" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
                                         <SystemTenantsTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'einvoicing' && (
+                                    <motion.div key="einvoicing" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <EInvoicingTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'exchange' && (
+                                    <motion.div key="exchange" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <ExchangeTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'verticales' && (
+                                    <motion.div key="verticales" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <VerticalesTab />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChefHat, Book, AlertTriangle, Edit2, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@ui/button";
@@ -153,7 +154,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                         >
                             {recipe.image ? (
                                 <div className="h-48 w-full overflow-hidden relative">
-                                    <img src={String(recipe.image)} alt={String(recipe.name)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                    <Image src={String(recipe.image)} alt={String(recipe.name)} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-110" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-50" />
                                     <div className="absolute top-4 left-4 flex gap-2 z-20">
                                         <button
@@ -178,7 +179,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                 <div className="h-32 w-full flex items-center justify-center bg-gradient-to-br from-bg-tertiary/30 to-bg-tertiary/10 relative">
                                     <div
                                         className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
-                                        style={{ backgroundColor: (recipe.color as string | undefined) ?? "#C5A059" }}
+                                        style={{ backgroundColor: (recipe.color as string | undefined) ?? "var(--color-brand)" }}
                                     >
                                         <Book strokeWidth={1.5} className="w-8 h-8 text-text-primary" />
                                     </div>

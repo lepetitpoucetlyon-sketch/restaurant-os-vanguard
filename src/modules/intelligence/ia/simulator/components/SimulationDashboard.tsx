@@ -223,7 +223,7 @@ export function SimulationDashboard() {
                                     <div className="w-2 h-2 rounded-full bg-surface-card" /> Empire
                                 </div>
                                 <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-status-danger">
-                                    <div className="w-2 h-2 rounded-full bg-status-danger shadow-[0_0_10px_#EF4444]" /> Chaos
+                                    <div className="w-2 h-2 rounded-full bg-status-danger shadow-[0_0_10px_var(--color-status-danger)]" /> Chaos
                                 </div>
                             </div>
                         </div>
@@ -242,7 +242,7 @@ export function SimulationDashboard() {
                                                 i < 7 ? "bg-surface-card/20 group-hover:bg-surface-card/40" : "bg-status-danger/20 group-hover:bg-status-danger/40"
                                             )}
                                         >
-                                            <div className={cn("absolute bottom-0 left-0 w-full h-[2px]", i < 7 ? "bg-surface-card" : "bg-status-danger shadow-[0_-5px_15px_#EF4444]")} />
+                                            <div className={cn("absolute bottom-0 left-0 w-full h-[2px]", i < 7 ? "bg-surface-card" : "bg-status-danger shadow-[0_-5px_15px_var(--color-status-danger)]")} />
                                         </motion.div>
                                         <span className="text-[7px] font-black text-secondary uppercase">J{i+1}</span>
                                     </div>

@@ -119,7 +119,7 @@ function BarChartSVG({
   data,
   valueKey,
   labelKey,
-  color = "#c5a059",
+  color = "var(--color-brand)",
   formatValue,
 }: {
   data: Record<string, number | string>[];
@@ -187,7 +187,7 @@ function BarChartSVG({
 function HorizontalBarsSVG({
   items,
   max,
-  color = "#c5a059",
+  color = "var(--color-brand)",
 }: {
   items: { label: string; value: number }[];
   max: number;

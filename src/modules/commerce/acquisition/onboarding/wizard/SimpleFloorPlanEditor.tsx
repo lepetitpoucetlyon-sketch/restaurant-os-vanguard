@@ -274,7 +274,7 @@ export function SimpleFloorPlanEditor({ onSave, variant = 'restaurant' }: Simple
                   width: table.shape === 'round' ? 56 : 72,
                   height: table.shape === 'round' ? 56 : 52,
                   backgroundColor: selected === table.id ? '#EEF2FF' : '#FFFFFF',
-                  border: `2px solid ${selected === table.id ? '#6366F1' : '#D1D5DB'}`,
+                  border: `2px solid ${selected === table.id ? '#6366F1' : 'var(--color-border)'}`,
                   zIndex: selected === table.id ? 10 : 1,
                 }}
               >

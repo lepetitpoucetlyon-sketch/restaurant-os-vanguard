@@ -24,7 +24,7 @@ export function useMccPage() {
     const router       = useRouter();
     const pathname     = usePathname();
 
-    const VALID_TABS = ['fleet', 'compliance', 'intelligence', 'treasury', 'patchcenter', 'plugins', 'eventbus', 'lifecycle', 'tutorial', 'systemtenants'] as const;
+    const VALID_TABS = ['fleet', 'compliance', 'intelligence', 'treasury', 'patchcenter', 'plugins', 'eventbus', 'lifecycle', 'tutorial', 'systemtenants', 'einvoicing', 'exchange', 'verticales'] as const;
     type TabId = typeof VALID_TABS[number];
     const rawTab    = searchParams.get('tab') ?? '';
     const initialTab: TabId = (VALID_TABS as readonly string[]).includes(rawTab) ? rawTab as TabId : 'fleet';

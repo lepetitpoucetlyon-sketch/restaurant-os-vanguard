@@ -171,8 +171,8 @@ export const EditPanel = ({
                         </label>
                         <motion.span
                             key={selectedTable.seats}
-                            initial={{ scale: 1.5, color: isDarkMode ? "#C5A059" : "#000000" }}
-                            animate={{ scale: 1, color: isDarkMode ? "#C5A059" : "#000000" }}
+                            initial={{ scale: 1.5, color: isDarkMode ? "var(--color-brand)" : "#000000" }}
+                            animate={{ scale: 1, color: isDarkMode ? "var(--color-brand)" : "#000000" }}
                             className="text-sm font-black"
                         >
                             {selectedTable.seats}
@@ -206,7 +206,7 @@ export const EditPanel = ({
 
                 <div className="pt-6 border-t border-subtle dark:border-border">
                     <motion.button
-                        whileHover={{ scale: 1.02, backgroundColor: "rgb(254 226 226 / 0.1)", color: "#EF4444" }}
+                        whileHover={{ scale: 1.02, backgroundColor: "rgb(254 226 226 / 0.1)", color: "var(--color-status-danger)" }}
                         whileTap={{ scale: 0.98 }}
                         onClick={async () => {
                             if (confirm('Supprimer cette table ?')) {

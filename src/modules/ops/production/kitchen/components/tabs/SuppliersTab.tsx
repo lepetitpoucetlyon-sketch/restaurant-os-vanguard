@@ -29,9 +29,9 @@ export function SuppliersTab() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                    { name: 'Rungis Express', category: 'Fruits & Légumes', contact: '01 45 67 89 00', email: 'contact@rungis.fr', rating: 4.8, color: '#C5A059' },
+                    { name: 'Rungis Express', category: 'Fruits & Légumes', contact: '01 45 67 89 00', email: 'contact@rungis.fr', rating: 4.8, color: 'var(--color-brand)' },
                     { name: 'Boucherie Dupont', category: 'Viandes d\'Origine', contact: '01 23 45 67 89', email: 'pro@dupont.fr', rating: 4.5, color: '#FF4D4D' },
-                    { name: 'Marée Fraîche', category: 'Poissons & Crustacés', contact: '01 98 76 54 32', email: 'commande@maree.fr', rating: 4.9, color: '#007AFF' },
+                    { name: 'Marée Fraîche', category: 'Poissons & Crustacés', contact: '01 98 76 54 32', email: 'commande@maree.fr', rating: 4.9, color: 'var(--color-accent-ios)' },
                     { name: 'Laiterie Bio', category: 'Produits Laitiers', contact: '01 11 22 33 44', email: 'bio@laiterie.fr', rating: 4.3, color: '#FF9500' },
                     { name: 'Épicerie Fine', category: 'Épicerie & Condiments', contact: '01 55 66 77 88', email: 'fine@epicerie.fr', rating: 4.7, color: '#9B59B6' },
                     { name: 'Caves du Terroir', category: 'Vins & Spiritueux', contact: '01 99 88 77 66', email: 'caves@terroir.fr', rating: 4.6, color: '#1A1A1A' },

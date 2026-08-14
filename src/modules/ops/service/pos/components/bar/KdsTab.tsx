@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Clock, 
@@ -203,7 +204,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                     )}>
                                         <div className="relative aspect-[16/9] w-full overflow-hidden">
                                             {item.image ? (
-                                                <img src={item.image} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-700 opacity-90" />
+                                                <Image src={item.image} alt={item.name || ""} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover group-hover/item:scale-110 transition-transform duration-700 opacity-90" />
                                             ) : (
                                                 <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
                                                     <Martini className="w-8 h-8 text-text-muted/30" />

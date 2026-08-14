@@ -16,9 +16,9 @@ type ExtractedTokens = Partial<BrandConfig>;
 type Phase = 'idle' | 'scanning' | 'preview_ready' | 'applying' | 'done';
 
 const PRESETS: { label: string; color: string; input: BrandInput }[] = [
-    { label: 'Gold Luxury',   color: '#C5A059', input: { name: 'Luxury',  primaryColor: '#C5A059', atmosphere: 'luxury'    } },
+    { label: 'Gold Luxury',   color: 'var(--color-brand)', input: { name: 'Luxury',  primaryColor: 'var(--color-brand)', atmosphere: 'luxury'    } },
     { label: 'Bistrot Rouge', color: '#E11D48', input: { name: 'Bistrot', primaryColor: '#E11D48', atmosphere: 'bistro'    } },
-    { label: 'Vert Nature',   color: '#059669', input: { name: 'Nature',  primaryColor: '#059669', atmosphere: 'zen'       } },
+    { label: 'Vert Nature',   color: 'var(--color-status-success)', input: { name: 'Nature',  primaryColor: 'var(--color-status-success)', atmosphere: 'zen'       } },
     { label: 'Bleu Marine',   color: '#1D4ED8', input: { name: 'Marine',  primaryColor: '#1D4ED8', atmosphere: 'modern'   } },
 ];
 

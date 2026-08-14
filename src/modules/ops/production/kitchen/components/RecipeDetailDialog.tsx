@@ -89,7 +89,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                             <motion.div
                                 initial={{ x: 20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                className="bg-accent px-4 py-2 rounded-xl text-primary font-serif font-black text-xs tracking-widest shadow-lg shadow-[#C5A059]/20"
+                                className="bg-accent px-4 py-2 rounded-xl text-primary font-serif font-black text-xs tracking-widest shadow-lg shadow-[var(--color-brand)]/20"
                             >
                                 SIGNATURE
                             </motion.div>
@@ -320,7 +320,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                                             />
                                             <div className="absolute inset-0 flex flex-col justify-end p-16 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
                                                 <div className="max-w-2xl mx-auto">
-                                                    <Button className="w-full bg-accent text-primary hover:bg-accent/90 h-20 px-12 rounded-[2rem] font-black text-[14px] uppercase tracking-[0.3em] transition-all transform hover:translate-y-[-4px] shadow-2xl shadow-[#C5A059]/20">
+                                                    <Button className="w-full bg-accent text-primary hover:bg-accent/90 h-20 px-12 rounded-[2rem] font-black text-[14px] uppercase tracking-[0.3em] transition-all transform hover:translate-y-[-4px] shadow-2xl shadow-[var(--color-brand)]/20">
                                                         <CheckCircle2 className="w-6 h-6 mr-4 text-primary" />
                                                         Valider comme Appris
                                                     </Button>

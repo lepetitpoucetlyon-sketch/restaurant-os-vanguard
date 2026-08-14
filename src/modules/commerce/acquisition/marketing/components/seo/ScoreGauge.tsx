@@ -9,8 +9,8 @@ export function ScoreGauge({ score, size = 160 }: { score: number; size?: number
 
     const getColor = (value: number) => {
         if (value >= 80) return '#00D9A6';
-        if (value >= 60) return '#f59e0b';
-        return '#ef4444';
+        if (value >= 60) return 'var(--color-status-warning)';
+        return 'var(--color-status-danger)';
     };
 
     return (

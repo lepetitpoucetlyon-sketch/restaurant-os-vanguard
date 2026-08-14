@@ -1,6 +1,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { TrendingUp, Package, AlertTriangle, Calculator, ChefHat } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
@@ -140,7 +141,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                             <div className="flex items-center gap-6">
                                                 <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm relative shrink-0">
                                                     {recipe.image ? (
-                                                        <img src={String(recipe.image)} className="w-full h-full object-cover" alt="" />
+                                                        <Image src={String(recipe.image)} alt={String(recipe.name || "")} fill sizes="48px" className="object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
                                                             <ChefHat className="w-5 h-5 opacity-20" />

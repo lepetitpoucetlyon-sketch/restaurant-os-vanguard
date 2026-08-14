@@ -24,9 +24,9 @@ import { PremiumSelect } from '@components/ui/PremiumSelect';
 const COLUMNS: { id: CandidateStatus; label: string; color: string }[] = [
     { id: 'new', label: 'Nouveaux', color: '#10B981' },
     { id: 'interview', label: 'Entretien', color: '#3B82F6' },
-    { id: 'trial', label: 'Essai', color: '#8B5CF6' },
-    { id: 'refused', label: 'Refusés', color: '#EF4444' },
-    { id: 'hired', label: 'Embauchés', color: '#F59E0B' },
+    { id: 'trial', label: 'Essai', color: 'var(--color-accent-purple)' },
+    { id: 'refused', label: 'Refusés', color: 'var(--color-status-danger)' },
+    { id: 'hired', label: 'Embauchés', color: 'var(--color-status-warning)' },
 ];
 
 export function RecruitmentDashboard() {

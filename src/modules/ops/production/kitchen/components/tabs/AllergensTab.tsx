@@ -23,13 +23,13 @@ export function AllergensTab() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 {[
                     { name: 'Gluten', count: 12, icon: '🌾', color: '#FF9500' },
-                    { name: 'Lactose', count: 8, icon: '🥛', color: '#007AFF' },
+                    { name: 'Lactose', count: 8, icon: '🥛', color: 'var(--color-accent-ios)' },
                     { name: 'Œufs', count: 6, icon: '🥚', color: '#FFD700' },
                     { name: 'Fruits à coque', count: 4, icon: '🥜', color: '#8B4513' },
                     { name: 'Crustacés', count: 3, icon: '🦐', color: '#FF4D4D' },
-                    { name: 'Poisson', count: 5, icon: '🐟', color: '#007AFF' },
-                    { name: 'Soja', count: 2, icon: '🫘', color: '#C5A059' },
-                    { name: 'Céleri', count: 7, icon: '🥬', color: '#C5A059' },
+                    { name: 'Poisson', count: 5, icon: '🐟', color: 'var(--color-accent-ios)' },
+                    { name: 'Soja', count: 2, icon: '🫘', color: 'var(--color-brand)' },
+                    { name: 'Céleri', count: 7, icon: '🥬', color: 'var(--color-brand)' },
                 ].map((allergen, idx) => (
                     <motion.div
                         key={idx}
@@ -51,12 +51,12 @@ export function AllergensTab() {
                 <h3 className="font-black text-lg text-text-primary mb-6">Options Régimes Alimentaires</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                        { name: 'Végétarien', count: 15, icon: '🥗', color: '#C5A059' },
-                        { name: 'Végan', count: 8, icon: '🌱', color: '#C5A059' },
+                        { name: 'Végétarien', count: 15, icon: '🥗', color: 'var(--color-brand)' },
+                        { name: 'Végan', count: 8, icon: '🌱', color: 'var(--color-brand)' },
                         { name: 'Sans Gluten', count: 12, icon: '🚫🌾', color: '#FF9500' },
-                        { name: 'Sans Lactose', count: 10, icon: '🚫🥛', color: '#007AFF' },
-                        { name: 'Halal', count: 6, icon: '☪️', color: '#C5A059' },
-                        { name: 'Casher', count: 4, icon: '✡️', color: '#007AFF' },
+                        { name: 'Sans Lactose', count: 10, icon: '🚫🥛', color: 'var(--color-accent-ios)' },
+                        { name: 'Halal', count: 6, icon: '☪️', color: 'var(--color-brand)' },
+                        { name: 'Casher', count: 4, icon: '✡️', color: 'var(--color-accent-ios)' },
                     ].map((diet, idx) => (
                         <motion.div
                             key={idx}
