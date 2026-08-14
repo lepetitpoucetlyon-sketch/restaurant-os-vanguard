@@ -16,6 +16,7 @@ import { SovereignNode, SovereignData, OperationalIdentity } from "@nexus/contra
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@orchestration/NexusEventBus";
 import { StockItem, Preparation, StorageLocation } from "@nexus/contracts/logistics";
 import { mapNodeToIngredient } from "./inventoryMappers";
 import { logger } from "@/lib/logger";
@@ -114,12 +115,29 @@ export function useInventory() {
         await Nexus.adapter.create(path, { ...data, updatedAt: new Date().toISOString() });
     };
 
-    const transferStock = async (id: string, locationId: string, _qty: number) => {
+    const transferStock = async (id: string, toLocationId: string, qty: number) => {
         if (!tenantId) return;
+
         const path = `tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.RESOURCES)}/${id}`;
+
+        // Lire l'emplacement actuel avant mise à jour (pour le payload d'événement)
+        const item = await Nexus.adapter.get<{ storageLocationId?: string }>(path);
+        const fromLocationId = item?.storageLocationId ?? '';
+
         await Nexus.adapter.update(path, {
-            locationId,
+            storageLocationId: toLocationId,
             updatedAt: new Date().toISOString(),
+        });
+
+        // Émettre l'événement — le handler bus consolide l'audit et les downstream
+        await NexusEventBus.emitDurable('stock.transfer', {
+            v: 1,
+            tenantId,
+            fromLocationId,
+            toLocationId,
+            itemId: id,
+            quantity: qty,
+            operatorId: 'ui',
         });
     };
 

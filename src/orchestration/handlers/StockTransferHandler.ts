@@ -1,45 +1,62 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 
+/**
+ * Gère l'événement `stock.transfer`.
+ *
+ * Sémantique : transfert INTRA-TENANT d'emplacement de stockage.
+ * Un seul document StockItem (identifié par tenantId + itemId) voit son champ
+ * `storageLocationId` passer de `fromLocationId` à `toLocationId`.
+ * Il n'y a pas de déduction/crédit de quantité — la quantité physique ne change pas,
+ * seul l'emplacement change.
+ *
+ * ⚠️ fromLocationId et toLocationId sont des emplacements de stockage (ref. DEFAULT_STORAGE_LOCATIONS),
+ * pas des tenantIds. Le chemin Nexus utilise toujours le `tenantId` fourni dans le payload.
+ */
 export function registerStockTransferHandler() {
   return NexusEventBus.on(
     'stock.transfer',
     async (payload) => {
-      const { tenantId: _tenantId, fromLocationId, toLocationId, itemId, quantity, operatorId } = payload;
-      
-      // En réalité "tenantId" pourrait être the main tenant, et "from/to" seraient des sous-locations.
-      // Si c'est inter-tenant, il faudrait modifier les path. On suppose ici des sous-locations d'un même tenant,
-      // ou bien fromLocation/toLocation sont les tenantIds ?
-      // L'énoncé dit "déduction A, crédit B". Supposons que fromLocationId et toLocationId = tenantIds.
-      
-      const fromPath = `tenants/${fromLocationId}/stockItems/${itemId}`;
-      const toPath = `tenants/${toLocationId}/stockItems/${itemId}`;
+      const { tenantId, fromLocationId, toLocationId, itemId, quantity, operatorId } = payload;
 
-      // 1. Déduire fromLocation
-      const fromItem = await Nexus.adapter.get<{ quantity?: number }>(fromPath);
-      if (fromItem) {
-        await Nexus.adapter.update(fromPath, {
-          quantity: Math.max(0, (fromItem.quantity ?? 0) - quantity),
-          updatedAt: Date.now()
-        });
+      const itemPath = `tenants/${tenantId}/stockItems/${itemId}`;
+
+      const item = await Nexus.adapter.get<{ storageLocationId?: string; quantity?: number }>(itemPath);
+      if (!item) {
+        logger.warn('[StockTransferHandler] stockItem introuvable', { tenantId, itemId });
+        return;
       }
 
-      // 2. Créditer toLocation
-      const toItem = await Nexus.adapter.get<{ quantity?: number }>(toPath);
-      if (toItem) {
-        await Nexus.adapter.update(toPath, {
-          quantity: (toItem.quantity ?? 0) + quantity,
-          updatedAt: Date.now()
-        });
-      }
+      // Mise à jour de l'emplacement — la quantité reste inchangée (transfert physique, pas de scission)
+      await Nexus.adapter.update(itemPath, {
+        storageLocationId: toLocationId,
+        updatedAt: Date.now(),
+      });
 
       empireAudit.log({
         module: 'inventory',
         action: 'STOCK_TRANSFERRED',
-        details: { fromLocationId, toLocationId, itemId, quantity, operatorId },
+        details: {
+          tenantId,
+          itemId,
+          fromLocationId,
+          toLocationId,
+          quantity,
+          operatorId,
+          previousLocationId: item.storageLocationId,
+        },
         severity: 'medium',
         timestamp: new Date(),
+      });
+
+      logger.info('[StockTransferHandler] transfert enregistré', {
+        tenantId,
+        itemId,
+        fromLocationId,
+        toLocationId,
+        quantity,
       });
     },
     { id: 'stock-transfer-handler', priority: 'HIGH' }

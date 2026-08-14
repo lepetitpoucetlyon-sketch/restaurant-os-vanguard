@@ -1,6 +1,7 @@
 "use server";
 
 import { NexusEventBus } from '@orchestration/NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from '@/lib/toError';
 
 import { createSafeAction } from "@/lib/server/actionWrapper";
@@ -38,12 +39,26 @@ export const markReservationArrivedAction = createSafeAction(
     { page: "reservations", action: "mark_arrived" },
     async (tenantId, reservationId: string) => {
         try {
-            const data = {
-                status: 'arrived',
-                arrivedAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-            };
-            await NexusEventBus.emitDurable('commerce.reservation.arrived', { tenantId, id: reservationId, data });
+            const arrivedAt = new Date().toISOString();
+
+            // Écriture directe sur le nœud Nexus — path : tenants/{tenantId}/ops_nodes/{reservationId}
+            // (OperationalIdentity.NODES → 'ops_nodes')
+            await Nexus.adapter.update(
+                `tenants/${tenantId}/ops_nodes/${reservationId}`,
+                {
+                    status: 'arrived',
+                    arrivedAt,
+                    updatedAt: arrivedAt,
+                }
+            );
+
+            // Émettre l'événement pour les downstream handlers éventuels
+            await NexusEventBus.emitDurable('commerce.reservation.arrived', {
+                tenantId,
+                id: reservationId,
+                data: { status: 'arrived', arrivedAt, updatedAt: arrivedAt },
+            });
+
             return { success: true };
         } catch (err) {
             return { success: false, error: toError(err).message };
