@@ -66,7 +66,7 @@ export function registerHRClockInGuardHandler(): () => void {
             v: 1,
             tenantId,
             message: `Opérateur ${operatorId} connecté au POS sans pointage — terminal ${terminalId}`,
-            roles: ['manager', 'directeur', 'admin'],
+            roles: ['manager', 'directeur', 'proprietaire'],
             priority: 'HIGH',
           });
 

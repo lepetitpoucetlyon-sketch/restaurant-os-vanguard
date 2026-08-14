@@ -35,7 +35,7 @@ export interface AdminCaller {
 
 // 'SUPER_ADMIN' : convention historique (SovereignModuleGate) conservée en compat.
 const FLEET_ROLES = ['fleet_admin', 'SUPER_ADMIN'] as const;
-const TENANT_ADMIN_ROLES = ['fleet_admin', 'SUPER_ADMIN', 'admin', 'manager'] as const;
+const TENANT_ADMIN_ROLES = ['fleet_admin', 'SUPER_ADMIN', 'proprietaire', 'admin', 'manager'] as const;
 
 /**
  * RBAC MCC Interne — trois niveaux d'accès opérateurs.
@@ -199,7 +199,7 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
   ) {
     const tenantId = request.headers.get('x-nexus-tenant-id') ?? request.headers.get('x-resolved-tenant-id') ?? 'lepetitpoucet';
     logger.warn('[adminAuth] DEV TENANT BYPASS actif — ne pas utiliser en production');
-    return { uid: 'dev_user', role: 'admin', tenantId };
+    return { uid: 'dev_user', role: 'proprietaire', tenantId };
   }
 
   try {

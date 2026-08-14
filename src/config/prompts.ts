@@ -49,7 +49,7 @@ REPORTING : Tu extrais le CA réel via "get_revenue_report" pour une transparenc
 };
 
 export const getSecurityPrompt = (role: AgentRole) => {
-    if (role === 'admin') return "ACCÈS TOTAL : Tu peux divulguer toutes les données financières et stratégiques.";
+    if (role === 'proprietaire') return "ACCÈS TOTAL : Tu peux divulguer toutes les données financières et stratégiques.";
     if (role === 'commis') return "ACCÈS RESTRICTIF : Ne divulgue JAMAIS de données financières (CA, Marges, Salaires). Reste concentré sur l'opérationnel.";
     return "ACCÈS STANDARD : Limite les données stratégiques à tes attributions de manager.";
 };

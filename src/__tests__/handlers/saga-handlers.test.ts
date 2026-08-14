@@ -38,6 +38,10 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 import { CryptoService } from '@/lib/CryptoService';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
+// ── Imports statiques des handlers (évite le await import() dans les tests
+//    qui provoque des STACK_TRACE_ERROR en suite complète sous pression mémoire)
+import { registerTicketZHandler } from '@orchestration/handlers/TicketZHandler';
+
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -90,9 +94,6 @@ beforeEach(() => {
 
 describe('C01 · TicketZHandler (order.paid → ticketZ aggregate)', () => {
   it('crée le ticketZ du jour si absent et accumule le total', async () => {
-    const { registerTicketZHandler } = await import(
-      '@orchestration/handlers/TicketZHandler'
-    );
     registerTicketZHandler();
     const handler = captureHandler();
 
@@ -114,9 +115,6 @@ describe('C01 · TicketZHandler (order.paid → ticketZ aggregate)', () => {
   });
 
   it('accumule sur un ticketZ existant', async () => {
-    const { registerTicketZHandler } = await import(
-      '@orchestration/handlers/TicketZHandler'
-    );
     registerTicketZHandler();
     const handler = captureHandler();
 

@@ -24,7 +24,7 @@ export function registerNonConformActionHandler(): () => void {
         v: 1,
         tenantId,
         message: `Non-conformité HACCP détectée (relevé ${checkId}). Action corrective requise avant le ${correctionDeadline}.`,
-        roles: ['admin', 'manager'],
+        roles: ['proprietaire', 'manager'],
         priority: 'CRITICAL',
       });
 

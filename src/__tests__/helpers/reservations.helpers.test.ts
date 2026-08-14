@@ -2,6 +2,17 @@
  
 import { describe, it, expect, vi } from 'vitest';
 
+// Mocker les fichiers de hooks concrets (useReservationsPage les importe via chemin relatif,
+// pas via le barrel — le mock du barrel ne suffit pas)
+vi.mock('@/modules/ops/providers/hooks/commerceHooks', () => ({
+    useReservations: vi.fn(() => ({ data: [], isLoading: false, error: null })),
+    useCRM: vi.fn(() => ({ data: [], isLoading: false })),
+    useGroups: vi.fn(() => ({ data: [], isLoading: false })),
+}));
+vi.mock('@/modules/ops/providers/hooks/floorHooks', () => ({
+    useTables: vi.fn(() => ({ data: [], isLoading: false, error: null })),
+    useFloorPlan: vi.fn(() => ({ data: null, isLoading: false })),
+}));
 vi.mock('@/modules/ops/providers', () => ({
     useReservations: vi.fn(), useTables: vi.fn(), useGroups: vi.fn(),
 }));

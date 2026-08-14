@@ -9,7 +9,7 @@ import { withRoleGuard } from '../middleware/withRoleGuard';
 export function registerSepaExportHandler() {
   return NexusEventBus.on(
     'finance.payment_dispatched',
-    withRoleGuard('admin', async (payload) => {
+    withRoleGuard('proprietaire', async (payload) => {
       const { tenantId, paymentBatchId, totalAmountInMicrounits, dispatchedBy } = payload;
 
       logger.info(`[SepaExport] Fichier SEPA ${paymentBatchId} émis par ${dispatchedBy} pour un total de ${totalAmountInMicrounits / 1000000} EUR.`);

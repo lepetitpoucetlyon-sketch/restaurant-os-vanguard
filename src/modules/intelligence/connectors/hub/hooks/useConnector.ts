@@ -37,12 +37,15 @@ export function useConnector(
     // isAvailable : le serveur (/api/connectors) filtre déjà par tenant + variant + capabilities.
     const isAvailable = true;
 
-    // Mapper les alias génériques vers les rôles RBAC canoniques
-    const rawRole = currentUser?.role ?? 'super_admin';
+    // Mapper les alias génériques vers les rôles RBAC canoniques.
+    // 'super_admin' n'existe plus (renommé → 'proprietaire') ; les alias
+    // admin/superadmin/root pointent vers proprietaire (niveau 100 du tenant).
+    // Si l'utilisateur n'est pas authentifié → fallback plongeur (niveau minimal).
+    const rawRole = currentUser?.role ?? 'plongeur';
     const roleAlias: Record<string, PermissionRole> = {
-      admin:      'super_admin',
-      superadmin: 'super_admin',
-      root:       'super_admin',
+      admin:      'proprietaire',
+      superadmin: 'proprietaire',
+      root:       'proprietaire',
     };
     const userCtx: ConnectorUserContext = {
       role: (roleAlias[rawRole] ?? rawRole) as PermissionRole,

@@ -42,17 +42,25 @@ export type VerificationResult =
 
 export async function verifyDevice(uid: string, currentFingerprint: string, isFixedAsset: boolean = false): Promise<VerificationResult> {
   const userData = await Nexus.adapter.get<Record<string, unknown>>(`users/${uid}`);
-  const isSuperAdmin = userData?.role === "SUPER_ADMIN" || userData?.role === "super_admin";
+  /**
+   * Auto-certification réservée au niveau proprietaire (100) du tenant.
+   *
+   * ⚠️  L'ancien test (role === "SUPER_ADMIN" || role === "super_admin") confondait
+   *     le propriétaire du tenant avec le super admin MCC — cette confusion est résolue.
+   *     Le super admin MCC opère via isMCCMode() / FLEET_OPERATOR et n'a PAS de compte
+   *     dans la collection tenant `users/`.
+   */
+  const isProprietaire = userData?.role === "proprietaire";
 
   const devicePath = `users/${uid}/certifiedDevices/${currentFingerprint}`;
   const deviceData = await Nexus.adapter.get<Record<string, unknown>>(devicePath);
 
   if (!deviceData) {
-    if (isSuperAdmin) {
+    if (isProprietaire) {
       await Nexus.adapter.set(devicePath, {
         fingerprint: currentFingerprint,
         certifiedAt: new Date().toISOString(),
-        autoCertifiedAs: "SUPER_ADMIN",
+        autoCertifiedAs: "proprietaire",
         userAgent: navigator.userAgent
       });
       return { status: "CERTIFIED" };

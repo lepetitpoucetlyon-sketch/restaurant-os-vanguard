@@ -8,7 +8,7 @@ import { z } from 'zod';
 export const VanguardAgentConfigSchema = z.object({
     id: z.string(),
     domain: z.enum(['inventory', 'haccp', 'recipes', 'sales', 'fleet', 'accounting', 'general']),
-    role: z.enum(['admin', 'manager', 'staff', 'commis']),
+    role: z.enum(['proprietaire', 'manager', 'staff', 'commis']),
     priority: z.number().int().min(0).max(10),
     description: z.string()
 });

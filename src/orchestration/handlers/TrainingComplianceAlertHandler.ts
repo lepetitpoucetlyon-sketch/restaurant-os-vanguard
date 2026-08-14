@@ -20,7 +20,7 @@ export function registerTrainingComplianceAlertHandler(): () => void {
         v: 1,
         tenantId,
         message: `Formation "${trainingType}" expirée pour l'employé ${employeeId}. Accès pointeuse suspendu jusqu'au renouvellement.`,
-        roles: ['admin', 'manager'],
+        roles: ['proprietaire', 'manager'],
         priority: 'HIGH',
       });
 

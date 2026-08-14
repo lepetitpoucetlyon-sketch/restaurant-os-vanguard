@@ -55,7 +55,7 @@ export function registerFridgeTempAlertHandler() {
           v: 1,
           tenantId,
           message: `ALERTE SÉCURITÉ ALIMENTAIRE: Le capteur ${sensorId} affiche ${temperature}°C depuis ${durationInMinutes} minutes. Blocage préventif des stocks liés.`,
-          roles: ['admin', 'manager', 'kitchen_chef'],
+          roles: ['proprietaire', 'manager', 'chef_cuisinier'],
           priority: 'CRITICAL',
         });
         

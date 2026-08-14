@@ -9,7 +9,9 @@ export function usePageAccess(pageKey: PageKey | string): boolean {
   const config = useAtomValue(rbacConfigAtom);
 
   if (!currentUser) return false;
-  if (currentUser.role === 'admin' || currentUser.role === 'super_admin') return true;
+  // Pas de bypass hardcodé par nom de rôle :
+  // - 'super_admin' n'existe plus (renommé → 'proprietaire').
+  // - Le super admin MCC opère via ses propres routes /app/(admin)/ et n'utilise PAS usePageAccess.
 
   const role = currentUser.role as PermissionRole;
 

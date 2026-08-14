@@ -43,11 +43,16 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 // // }));
 vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: vi.fn(() => ({})), set: vi.fn() })),
-  atom: vi.fn(),
+  // atom doit retourner un objet (WeakRef exige une cible non-primitive)
+  atom: vi.fn((init?: unknown) => ({ init, read: typeof init === 'function' ? init : () => init })),
+  useAtom: vi.fn(() => [undefined, vi.fn()]),
+  useAtomValue: vi.fn(() => undefined),
+  useSetAtom: vi.fn(() => vi.fn()),
 }));
-vi.mock('@/store/pillars/compliance', () => ({
-  quarantinedProductsAtom: {},
-}));
+vi.mock('@/store/pillars/compliance', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return { ...actual, quarantinedProductsAtom: {} };
+});
 // // vi.mock('@/lib/shared-kernel', () => ({
 // //   SharedKernel: { generateId: vi.fn((prefix: string) => `${prefix}-test-id`) },
 // // }));

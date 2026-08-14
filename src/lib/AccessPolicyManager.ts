@@ -51,8 +51,8 @@ function getAccessibleCategories(user: User | null, rolePermissions: RolePermiss
 
 function hasAccess(user: User | null, rolePermissions: RolePermissions, category: CategoryKey): boolean {
     if (!user) return false;
-    // Admin has super-user bypass
-    if (user.role === 'admin') return true;
+    // Propriétaire has super-user bypass
+    if (user.role === 'proprietaire') return true;
     
     return getAccessibleCategories(user, rolePermissions).includes(category);
 }
@@ -62,7 +62,7 @@ function canDo(user: User | null, action: string, actionPermissions: Record<stri
         return false;
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'proprietaire') {
         return true;
     }
 
@@ -80,8 +80,8 @@ function canAccessDocument(user: User | null, documentOwnerId: string): boolean 
     if (user.status === 'RESTRICTED') {
         return user.id === documentOwnerId;
     }
-    // Admin has super-user bypass
-    if (user.role === 'admin') return true;
+    // Propriétaire has super-user bypass
+    if (user.role === 'proprietaire') return true;
     return true; // For ACTIVE users
 }
 
@@ -96,7 +96,7 @@ export const AccessPolicyManager = {
 
 // Default empty permissions for a pure shell
 export const DEFAULT_ROLE_PERMISSIONS: RolePermissions = {
-    admin: ['dashboard', 'account-settings', 'settings'],
+    proprietaire: ['dashboard', 'account-settings', 'settings'],
 };
 
 export const ROLE_LABELS: Record<string, string> = {

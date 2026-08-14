@@ -20,14 +20,14 @@ export class ZeusEngine {
             {
                 id: 'atlas',
                 domain: 'general',
-                role: 'admin',
+                role: 'proprietaire',
                 priority: 1,
                 description: 'The Suture Agent - Technical Debt & Consistency.',
             },
             {
                 id: 'themis',
                 domain: 'accounting',
-                role: 'admin',
+                role: 'proprietaire',
                 priority: 2,
                 description: 'The Compliance Agent - Fiscal & HACCP Integrity.',
             },

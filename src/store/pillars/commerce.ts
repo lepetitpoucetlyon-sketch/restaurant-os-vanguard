@@ -118,7 +118,7 @@ export const staffPerformanceSelector = atom((get) => {
     const products = get(productsAtom);
 
     return staff
-        .filter((u) => u.role === 'server' || u.role === 'admin')
+        .filter((u) => u.role === 'serveur' || u.role === 'proprietaire')
         .map((user) => {
             const serverOrders = orders.filter((o) => o.serverName === user.name);
             const totalSales = SovereignMath.toCents(BigInt(serverOrders.reduce(

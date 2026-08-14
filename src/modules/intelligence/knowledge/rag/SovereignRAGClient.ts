@@ -5,22 +5,31 @@ const ADMIN_KEY = process.env.SOVEREIGN_RAG_ADMIN_KEY ?? '';
 
 // ── RBAC : niveau numérique → catégories de documents autorisées ──────────────
 
+/**
+ * PERMISSION_ROLE_LEVELS inline — miroir de @/kernel/nexus/contracts/permissions.types.
+ * Mis à jour pour correspondre à la nouvelle échelle RBAC tenant :
+ *   10 plongeur · 20 commis · 30 · 40 · 50 · 60 · 70 · 80 · 100 proprietaire
+ * ⚠️  Pas de 'super_admin' ici — renommé 'proprietaire'. Pas de rôle MCC dans ce fichier.
+ */
 const ROLE_LEVEL: Record<PermissionRole, number> = {
-  super_admin: 100,
-  directeur:    90,
-  manager:      70,
-  comptable:    60,
-  chef_rang:    50,
-  chef_cuisinier: 45,
-  serveur:      40,
-  cuisinier:    35,
-  barman:       35,
-  hotesse:      30,
-  plongeur:     10,
+  proprietaire:   100,
+  directeur:       80,
+  manager:         70,
+  chef_cuisinier:  70,
+  sous_chef:       60,
+  comptable:       60,
+  sommelier:       50,
+  chef_rang:       40,
+  serveur:         30,
+  barman:          30,
+  hotesse:         30,
+  cuisinier:       30,
+  commis:          20,
+  plongeur:        10,
 };
 
 // Le veto dans Sovereign RAG utilise workspace_id + role pour filtrer les docs.
-// Rôles niveau ≥ 70 → accès "*" (manager/directeur/super_admin)
+// Rôles niveau ≥ 70 → accès "*" (manager/chef_cuisinier/directeur/proprietaire)
 export function getRoleLevel(role: PermissionRole): number {
   return ROLE_LEVEL[role] ?? 10;
 }

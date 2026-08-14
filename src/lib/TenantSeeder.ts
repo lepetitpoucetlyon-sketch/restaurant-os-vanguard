@@ -140,7 +140,7 @@ export const TenantSeeder = {
         id: adminId,
         email: adminEmail,
         pinHash: adminPinHash,
-        role: 'admin',
+        role: 'proprietaire',
         displayName: `Admin ${name}`,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

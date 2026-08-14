@@ -1,6 +1,6 @@
 export type AgentDomain = 'inventory' | 'haccp' | 'recipes' | 'sales' | 'fleet' | 'accounting' | 'general';
 
-export type AgentRole = 'admin' | 'manager' | 'staff' | 'commis';
+export type AgentRole = 'proprietaire' | 'manager' | 'staff' | 'commis';
 
 export interface AgentReasoningStep {
     id: string;

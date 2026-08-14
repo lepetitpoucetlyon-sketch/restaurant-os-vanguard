@@ -1,6 +1,8 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@nexus/contracts';
+import { PERMISSION_ROLE_LEVELS } from '@nexus/contracts/permissions.types';
+import type { PermissionRole } from '@nexus/contracts/permissions.types';
 import { ShiftEntry } from '@/modules/human';
 
 // --- 👥 STAFF & HR DOMAIN (Personnel, Shifts, Congés) ---
@@ -25,7 +27,7 @@ export const myShiftLogsAtom = atom((get) => {
     const all = get(shiftLogsAtom);
     const user = get(currentUserAtom);
     const role = get(userRoleAtom);
-    if (role === 'admin' || role === 'manager') return all;
+    if ((PERMISSION_ROLE_LEVELS[role as PermissionRole] ?? 0) >= PERMISSION_ROLE_LEVELS.manager) return all;
     return all.filter(s => s.userId === user?.id);
 });
 
@@ -40,7 +42,7 @@ export const myLeaveRequestsAtom = atom((get) => {
     const all = get(leaveRequestsAtom);
     const user = get(currentUserAtom);
     const role = get(userRoleAtom);
-    if (role === 'admin' || role === 'manager') return all;
+    if ((PERMISSION_ROLE_LEVELS[role as PermissionRole] ?? 0) >= PERMISSION_ROLE_LEVELS.manager) return all;
     return all.filter(r => r.userId === user?.id);
 });
 
@@ -52,7 +54,7 @@ export const myLeaveBalancesAtom = atom((get) => {
     const all = get(leaveBalancesAtom);
     const user = get(currentUserAtom);
     const role = get(userRoleAtom);
-    if (role === 'admin' || role === 'manager') return all;
+    if ((PERMISSION_ROLE_LEVELS[role as PermissionRole] ?? 0) >= PERMISSION_ROLE_LEVELS.manager) return all;
     return all.filter(r => r.userId === user?.id);
 });
 

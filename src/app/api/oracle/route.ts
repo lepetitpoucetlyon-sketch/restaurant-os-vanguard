@@ -27,8 +27,9 @@ async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean>
 }
 
 const VALID_ROLES: PermissionRole[] = [
-    'super_admin', 'directeur', 'manager', 'comptable', 'chef_rang',
-    'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur',
+    'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+    'comptable', 'sommelier', 'chef_rang', 'serveur', 'barman', 'hotesse',
+    'cuisinier', 'commis', 'plongeur',
 ];
 
 function normalizeRole(raw: string | undefined): PermissionRole {
@@ -105,16 +106,19 @@ export async function POST(req: NextRequest) {
 
 function buildSystemPrompt(role: PermissionRole, ragContext: string): string {
     const roleInstructions: Record<PermissionRole, string> = {
-        super_admin:    'Tu as accès à toutes les informations du système.',
+        proprietaire:   'Tu as accès à toutes les informations du système.',
         directeur:      'Tu as accès à toutes les informations du restaurant.',
         manager:        'Tu as accès aux données opérationnelles, RH et financières.',
-        comptable:      'Tu peux répondre sur la finance, les factures et les fournisseurs.',
-        chef_rang:      'Tu peux répondre sur le service, les réservations et l\'équipe de salle.',
         chef_cuisinier: 'Tu peux répondre sur les recettes, les coûts matières et la cuisine.',
+        sous_chef:      'Tu peux répondre sur les recettes, les allergènes et les fiches techniques.',
+        comptable:      'Tu peux répondre sur la finance, les factures et les fournisseurs.',
+        sommelier:      'Tu peux répondre sur la carte vins, les accords mets-vins et le stock cave.',
+        chef_rang:      'Tu peux répondre sur le service, les réservations et l\'équipe de salle.',
         serveur:        'Tu peux répondre sur le menu, les allergènes et les promotions.',
         cuisinier:      'Tu peux répondre sur les recettes, les allergènes et les fiches techniques.',
         barman:         'Tu peux répondre sur la carte bar, les cocktails et le stock bar.',
         hotesse:        'Tu peux répondre sur le menu et le plan de salle.',
+        commis:         'Tu peux répondre sur les tâches courantes, les allergènes et le menu.',
         plongeur:       'Tu peux répondre sur les tâches de nettoyage et le planning.',
     };
 

@@ -104,7 +104,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     // rbac-5: Block RESTRICTED users before any other check
     if (isRestricted) return <RestrictedScreen />;
 
-    const isAdmin = permissions?.role === 'admin' || permissions?.permissions?.isSovereignAdmin === true;
+    const isAdmin = permissions?.role === 'proprietaire' || permissions?.permissions?.isSovereignAdmin === true;
     const isAllowed = !requiredCategory || isAdmin || !!(permissions?.permissions && canAccessModule(permissions.permissions, requiredCategory.toUpperCase()));
 
     if (!isAuthenticated) return null; // AuthGate handles this

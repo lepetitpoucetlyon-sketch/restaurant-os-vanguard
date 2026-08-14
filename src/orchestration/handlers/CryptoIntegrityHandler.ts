@@ -69,7 +69,7 @@ export function registerCryptoIntegrityHandler(): () => void {
           v: 1,
           tenantId,
           message: `🔴 INTÉGRITÉ NF525 COMPROMISE — Journal ${journalId} — Rupture chaîne de hachage détectée`,
-          roles: ['super_admin', 'admin', 'directeur'],
+          roles: ['proprietaire', 'directeur'],
           priority: 'CRITICAL',
         });
 

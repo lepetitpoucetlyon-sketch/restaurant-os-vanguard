@@ -33,7 +33,7 @@ export function registerBCGActionSuggestionHandler(): () => void {
           v: 1,
           tenantId,
           message: `Menu Engineering BCG : ${dogs?.length ?? 0} plat(s) à retravailler ou retirer de la carte.`,
-          roles: ['directeur', 'super_admin'],
+          roles: ['directeur', 'proprietaire'],
           priority: 'HIGH',
           metadata: { suggestionId, dogsCount: dogs?.length, starsCount: stars?.length },
         });

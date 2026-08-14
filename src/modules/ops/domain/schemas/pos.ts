@@ -38,7 +38,7 @@ export const PosTicketSchema = z.object({
   serverTimestamp:  TimestampSchema,
   deviceId:         z.string().min(1),
   operatorId:       UUIDSchema,
-  operatorRole:     z.enum(['admin','manager','waiter','cashier','barman']),
+  operatorRole:     z.enum(['proprietaire','manager','serveur','comptable','barman']),
   consumptionMode:  ConsumptionModeSchema.default('dine_in'),
   tableId:          UUIDSchema.nullable(),
   customerId:       UUIDSchema.nullable(),

@@ -25,7 +25,7 @@ import { withRoleGuard } from '../middleware/withRoleGuard';
 export function registerRefundJournalHandler(): () => void {
   return NexusEventBus.on(
     'order.refunded',
-    withRoleGuard('admin', async (payload) => {
+    withRoleGuard('proprietaire', async (payload) => {
       const { tenantId, orderId, operatorId, amountInMicrounits, originalPaymentMode } = payload;
 
       const entryId = SharedKernel.generateId('JE-REFUND');

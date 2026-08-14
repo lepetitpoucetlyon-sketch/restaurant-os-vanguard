@@ -17,7 +17,7 @@ export function registerComplianceDeadlineHandler(): () => void {
         message: isCritical
           ? `URGENT : Échéance de conformité "${type}" DEMAIN. Action immédiate requise.`
           : `Rappel : Échéance de conformité "${type}" dans ${daysLeft} jour(s).`,
-        roles: ['admin', 'manager'],
+        roles: ['proprietaire', 'manager'],
         priority: isCritical ? 'CRITICAL' : 'HIGH',
       });
 

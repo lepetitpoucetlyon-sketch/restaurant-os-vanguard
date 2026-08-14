@@ -59,8 +59,8 @@ describe('useActionPermission', () => {
     expect(result.current.reason).toContain('Niveau insuffisant');
   });
 
-  it('allows super_admin to do manager actions', () => {
-    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper('super_admin') });
+  it('allows proprietaire to do manager actions', () => {
+    const { result } = renderHook(() => useActionPermission('pos', 'refund'), { wrapper: getWrapper('proprietaire') });
     expect(result.current.allowed).toBe(true);
     expect(result.current.requiresPin).toBe(true);
   });

@@ -1,25 +1,24 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { PERMISSION_ROLE_LEVELS } from '@/kernel/nexus/contracts/permissions.types';
 
 interface UserRecord {
   role?: string;
   [key: string]: unknown;
 }
 
+/**
+ * ROLE_HIERARCHY — calqué exactement sur PERMISSION_ROLE_LEVELS.
+ *
+ * ⚠️  Aucun rôle 'super_admin' ni 'admin' ici :
+ *   - 'super_admin' n'existe plus (renommé → 'proprietaire' dans le RBAC tenant).
+ *   - Le super admin MCC opère via isMCCMode() / FLEET_OPERATOR, PAS via ce guard.
+ *
+ * Échelle : 10 plongeur · 20 commis · 30 · 40 · 50 · 60 · 70 · 80 · 100 proprietaire
+ */
 const ROLE_HIERARCHY: Record<string, number> = {
-  super_admin: 100,
-  admin: 90,
-  directeur: 80,
-  comptable: 70,
-  manager: 60,
-  chef_rang: 40,
-  serveur: 30,
-  chef_cuisinier: 40,
-  cuisinier: 30,
-  barman: 30,
-  hotesse: 20,
-  plongeur: 10,
+  ...PERMISSION_ROLE_LEVELS,
 };
 
 export function hasMinimumRole(role: string | undefined, requiredRole: string): boolean {

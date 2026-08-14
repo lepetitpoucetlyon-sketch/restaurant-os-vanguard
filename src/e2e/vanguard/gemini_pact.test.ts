@@ -23,7 +23,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 
 describe('🧠 PACTE NÉVRALGIQUE : TEST ANTI-HALLUCINATION', () => {
     
-    const mockUser: User = { id: 'user_123', role: 'admin', name: 'Majordome' } as any;
+    const mockUser: User = { id: 'user_123', role: 'proprietaire', name: 'Majordome' } as any;
     const mockPermissions: any = { inventory: true, finance: true };
 
     it('P01: Rejet d\'une commande avec arguments manquants (Hallucination)', async () => {

@@ -19,7 +19,7 @@ export function ComplianceGate({ children }: ComplianceGateProps) {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        if (isAuthenticated && currentUser?.role === 'admin' && !currentUser?.setupComplete) {
+        if (isAuthenticated && currentUser?.role === 'proprietaire' && !currentUser?.setupComplete) {
             // EXCEPTION 1: Always allow access to Master Console for the Creator
             const _isMccArea = pathname?.startsWith('/admin');
             

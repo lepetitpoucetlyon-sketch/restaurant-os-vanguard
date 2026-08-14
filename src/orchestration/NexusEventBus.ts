@@ -55,9 +55,6 @@ class NexusEventBusClass {
   /** Events currently being dispatched in the current call stack — circuit-breaker anti-loop */
   private readonly inFlight = new Set<string>();
   
-  /** Fallback server-side in-memory outbox (utilisé quand window n'est pas dispo) */
-  private readonly serverOutbox = new Map<string, any>();
-
   /**
    * Souscrit à un événement.
    * priority CRITICAL  → s'exécute en premier, bloquant si nécessaire
@@ -161,29 +158,29 @@ class NexusEventBusClass {
     const id = crypto.randomUUID();
     
     // 1. Outbox : Persister l'intention d'émettre
+    const outboxEntry = {
+      id,
+      eventName: event,
+      payload,
+      createdAt: Date.now(),
+      attempts: 0,
+      status: 'pending' as const,
+    };
     if (typeof window !== 'undefined') {
       try {
-        await db.busOutbox.put({
-          id,
-          eventName: event,
-          payload,
-          createdAt: Date.now(),
-          attempts: 0,
-          status: 'pending'
-        });
+        await db.busOutbox.put(outboxEntry);
       } catch (err) {
         logger.error(`[EventBus] Failed to write to Outbox for ${event}`, err);
       }
     } else {
-      logger.warn(`[EventBus] Server-side durable emit fallback used for ${event}`);
-      this.serverOutbox.set(id, {
-        id,
-        eventName: event,
-        payload,
-        createdAt: Date.now(),
-        attempts: 0,
-        status: 'pending'
-      });
+      // Côté serveur : outbox Firestore — durable à travers les crashs process.
+      // Collection globale accessible au process Node (pas scopée par tenant car le
+      // replayer serveur tourne en MCC et ne connaît pas le tenant au démarrage).
+      try {
+        await Nexus.adapter.set(`busOutbox/${id}`, outboxEntry);
+      } catch (err) {
+        logger.error(`[EventBus] Failed to write server-side Outbox for ${event}`, err);
+      }
     }
 
     // 2. Émettre en RAM
@@ -203,10 +200,43 @@ class NexusEventBusClass {
         logger.error(`[EventBus] Failed to mark Outbox for ${event}`, err);
       }
     } else {
-      const pending = this.serverOutbox.get(id);
-      if (pending) {
-        pending.status = finalStatus;
+      try {
+        await Nexus.adapter.update(`busOutbox/${id}`, { status: finalStatus });
+      } catch (err) {
+        logger.error(`[EventBus] Failed to mark server-side Outbox for ${event}`, err);
       }
+    }
+  }
+
+  /**
+   * Écrit une entrée dans la Dead Letter Queue (DLQ), côté client (Dexie)
+   * ou côté serveur (Firestore). Ne lève jamais — utilisé dans les catch.
+   */
+  private async writeToDLQ(
+    event: NexusEventName,
+    payload: unknown,
+    handlerId: string,
+    err: unknown,
+    skipDLQWrite?: boolean
+  ): Promise<void> {
+    if (skipDLQWrite) return;
+    const entry = {
+      id: crypto.randomUUID(),
+      eventName: event,
+      payload,
+      handlerId,
+      error: toError(err).message,
+      failedAt: Date.now(),
+      attempts: 1,
+      nextRetryAt: Date.now() + 2000,
+      status: 'retry' as const,
+    };
+    if (typeof window !== 'undefined') {
+      await db.deadLetterEvents.put(entry)
+        .catch(e => logger.error('[EventBus] DLQ write failed', e));
+    } else {
+      await Nexus.adapter.set(`deadLetterEvents/${entry.id}`, entry)
+        .catch(e => logger.error('[EventBus] Server DLQ write failed', e));
     }
   }
 
@@ -261,19 +291,7 @@ class NexusEventBusClass {
           await h.handler(payload);
         } catch (err) {
           logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
-          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-            await db.deadLetterEvents.put({
-              id: crypto.randomUUID(),
-              eventName: event,
-              payload,
-              handlerId: h.id,
-              error: toError(err).message,
-              failedAt: Date.now(),
-              attempts: 1,
-              nextRetryAt: Date.now() + 2000,
-              status: 'retry'
-            }).catch(e => logger.error('[EventBus] DLQ write failed', e));
-          }
+          await this.writeToDLQ(event, payload, h.id, err, options?.skipDLQWrite);
           throw err; // remonte — critique = non négociable
         }
       }
@@ -287,19 +305,7 @@ class NexusEventBusClass {
           if (r.status === 'rejected') {
             const h = high[i];
             logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
-            if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-              await db.deadLetterEvents.put({
-                id: crypto.randomUUID(),
-                eventName: event,
-                payload,
-                handlerId: h.id,
-                error: toError(r.reason).message,
-                failedAt: Date.now(),
-                attempts: 1,
-                nextRetryAt: Date.now() + 2000,
-                status: 'retry'
-              }).catch(e => logger.error('[EventBus] DLQ write failed', e));
-            }
+            await this.writeToDLQ(event, payload, h.id, r.reason, options?.skipDLQWrite);
           }
         }));
       }
@@ -308,19 +314,7 @@ class NexusEventBusClass {
       background.forEach(h => {
         Promise.resolve().then(() => h.handler(payload)).catch(async (err) => {
           logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
-          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-            await db.deadLetterEvents.put({
-              id: crypto.randomUUID(),
-              eventName: event,
-              payload,
-              handlerId: h.id,
-              error: toError(err).message,
-              failedAt: Date.now(),
-              attempts: 1,
-              nextRetryAt: Date.now() + 2000,
-              status: 'retry'
-            }).catch(e => logger.error('[EventBus] DLQ write failed (BACKGROUND)', e));
-          }
+          await this.writeToDLQ(event, payload, h.id, err, options?.skipDLQWrite);
         });
       });
 

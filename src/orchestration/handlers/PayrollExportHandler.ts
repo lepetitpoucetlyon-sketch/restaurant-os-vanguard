@@ -21,7 +21,7 @@ export class PayrollExportHandler {
     return NexusEventBus.onValidated(
       'hr.preroll_validated',
       PayloadSchema,
-      withRoleGuard('admin', async (payload) => {
+      withRoleGuard('proprietaire', async (payload) => {
       if (payload.isSimulation) return;
       const { tenantId, periodId, validatedBy, totalEmployees } = payload;
 

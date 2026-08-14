@@ -161,7 +161,7 @@ const READ_SUFFIXES = ['.view', '.nodes', '.zones', '.resources', '.records'];
 export const canDoAtom = atom<(permission: string) => boolean>((get) => (permission: string): boolean => {
     const role = get(userRoleAtom);
     const permissions = get(userPermissionsAtom);
-    if (role === 'admin' || permissions.includes('*') || permissions.includes(permission)) return true;
+    if (role === 'proprietaire' || permissions.includes('*') || permissions.includes(permission)) return true;
     // En dev local, autoriser la lecture pour tous afin d'éviter les atoms vides
     // avant que l'auth PIN ne soit hydratée.
     if (process.env.NODE_ENV !== 'production' && READ_SUFFIXES.some(s => permission.endsWith(s))) return true;

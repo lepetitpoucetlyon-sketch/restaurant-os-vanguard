@@ -27,7 +27,7 @@ export const ROOT_ADMIN: User = {
     id: 'user_root',
     type: 'user',
     name: 'administrateur',
-    role: 'admin',
+    role: 'proprietaire',
     status: 'active',
     avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80',
     performanceScore: 5.0,
@@ -126,13 +126,12 @@ export const IdentityManager = {
      * Checks if a user has authority to access a specific tenant's business data.
      */
     canAccessTenantData(user: User, instance: import('@nexus/contracts/empire.types').EmpireInstance): boolean {
-        // 1. Ownership Check (Normal User)
-        if (user.role === 'admin' && !this.isSuperAdmin(user)) {
-             // Basic assumption: normal admins are scoped to their own tenant
-             return true; 
+        // 1. Ownership Check (Tenant proprietaire scoped to their own data)
+        if (user.role === 'proprietaire' && !this.isSuperAdmin(user)) {
+             return true;
         }
 
-        // 2. Super-Admin Check (Privacy Shield)
+        // 2. Super-Admin Check (Privacy Shield — dev ROOT_ADMIN only via support portal)
         if (this.isSuperAdmin(user)) {
             // ONLY grant if client explicitly opened the "Support Portal"
             return !!instance.security?.supportAccessGranted;
@@ -142,7 +141,7 @@ export const IdentityManager = {
     },
 
     isSuperAdmin(user: User): boolean {
-        return user.role === 'admin' && user.id === 'user_root';
+        return user.role === 'proprietaire' && user.id === 'user_root';
     },
 
     /**

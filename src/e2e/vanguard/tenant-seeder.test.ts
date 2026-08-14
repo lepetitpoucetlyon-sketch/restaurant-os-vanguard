@@ -54,7 +54,7 @@ describe('TenantSeeder', () => {
     // Admin user — pinHash (SHA-256), jamais le PIN en clair
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/test-resto/users/admin_test-resto',
-      expect.objectContaining({ email: 'admin@test.fr', pinHash: expect.any(String), role: 'admin' })
+      expect.objectContaining({ email: 'admin@test.fr', pinHash: expect.any(String), role: 'proprietaire' })
     );
 
     // Genesis fiscal seal

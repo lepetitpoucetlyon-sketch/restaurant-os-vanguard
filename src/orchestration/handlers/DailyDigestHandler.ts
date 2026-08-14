@@ -29,7 +29,7 @@ export function registerDailyDigestHandler(): () => void {
           v: 1,
           tenantId,
           message: `Rapport quotidien d'exploitation du ${date} généré et disponible.`,
-          roles: ['directeur', 'super_admin'],
+          roles: ['directeur', 'proprietaire'],
           priority: 'HIGH',
           metadata: { date },
         });

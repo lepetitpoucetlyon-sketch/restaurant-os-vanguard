@@ -52,7 +52,7 @@ import { withRoleGuard } from '../middleware/withRoleGuard';
 export function registerMonthlyFECExportHandler() {
   return NexusEventBus.on(
     'finance.month_closed',
-    withRoleGuard('admin', async (payload) => {
+    withRoleGuard('proprietaire', async (payload) => {
       const { tenantId, month } = payload;
 
       logger.info(`[FECExport] Génération export FEC pour ${month}...`);

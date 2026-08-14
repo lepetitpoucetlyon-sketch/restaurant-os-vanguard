@@ -28,7 +28,7 @@ function buildSystemInstruction(role: string, tenantId: string): string {
         `Tu es NEXUS, l'assistant vocal IA de Restaurant OS pour le tenant ${tenantId}.`,
         `Tu réponds exclusivement en français et en anglais selon la langue de l'utilisateur.`,
         `Rôle de l'utilisateur : ${role}.`,
-        role === 'admin' || role === 'manager'
+        role === 'proprietaire' || role === 'directeur' || role === 'manager'
             ? `Tu peux accéder à toutes les commandes de gestion (stock, réservations, finances, équipe).`
             : `Tu réponds aux questions opérationnelles courantes (commandes, tables, plats).`,
         `Sois concis, précis, et ne divulgue jamais de données d'autres tenants.`,

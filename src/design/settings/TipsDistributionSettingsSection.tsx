@@ -14,7 +14,7 @@ import {
 interface Props {
   settings?: TipsDistributionSettings;
   onSave?: (updated: TipsDistributionSettings) => void;
-  userRole?: string; // 'super_admin' | 'admin' | 'directeur' | 'manager'
+  userRole?: string; // 'proprietaire' | 'directeur' | 'manager' (rôles tenant qui peuvent éditer)
 }
 
 const METHOD_OPTIONS: Array<{ value: TipDistributionMethod; label: string; description: string }> = [
@@ -44,7 +44,7 @@ export function TipsDistributionSettingsSection({ settings = DEFAULT_TIPS_SETTIN
   const [config, setConfig] = useState<TipsDistributionSettings>(settings);
   const [isSaved, setIsSaved] = useState(false);
 
-  const canEdit = ["super_admin", "admin", "directeur", "manager"].includes(userRole);
+  const canEdit = ["proprietaire", "directeur", "manager"].includes(userRole);
 
   const handleUpdate = (updated: TipsDistributionSettings) => {
     setConfig(updated);

@@ -101,7 +101,7 @@ export default function ProfileSettings() {
         }
     };
 
-    const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'manager';
+    const isAdmin = currentUser?.role === 'proprietaire' || currentUser?.role === 'directeur' || currentUser?.role === 'manager';
 
     return (
         <div className="space-y-12 pb-20">

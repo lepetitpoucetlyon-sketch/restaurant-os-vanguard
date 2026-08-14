@@ -373,10 +373,9 @@ describe('StockTransferHandler', () => {
     mockUpdate.mockResolvedValue(undefined);
   });
 
-  it('transfère la quantité de la source vers la destination', async () => {
-    mockGet
-      .mockResolvedValueOnce({ quantity: 100 })
-      .mockResolvedValueOnce({ quantity: 20 });
+  it('met à jour storageLocationId vers toLocationId (transfert intra-tenant)', async () => {
+    // Le handler déplace l'emplacement logique du stockItem, sans changer la quantité.
+    mockGet.mockResolvedValueOnce({ storageLocationId: 'loc-A', quantity: 100 });
 
     await capturedHandlers['stock.transfer']({
       tenantId: 'tenant-d', transferId: 'tr-1',
@@ -385,30 +384,23 @@ describe('StockTransferHandler', () => {
     });
 
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-A'),
-      expect.objectContaining({ quantity: 70 }),
+      'tenants/tenant-d/stockItems/ing-1',
+      expect.objectContaining({ storageLocationId: 'loc-B' }),
     );
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-B'),
-      expect.objectContaining({ quantity: 50 }),
-    );
+    // La quantité physique ne change pas — un seul appel update sur l'item
+    expect(mockUpdate).toHaveBeenCalledTimes(1);
   });
 
-  it('ne descend pas sous 0 pour la source', async () => {
-    mockGet
-      .mockResolvedValueOnce({ quantity: 5 })
-      .mockResolvedValueOnce({ quantity: 0 });
+  it('ne fait rien si le stockItem est introuvable', async () => {
+    mockGet.mockResolvedValueOnce(null);
 
     await capturedHandlers['stock.transfer']({
       tenantId: 'tenant-d', transferId: 'tr-2',
       fromLocationId: 'loc-A', toLocationId: 'loc-B',
-      itemId: 'ing-2', quantity: 20, itemName: 'Huile',
+      itemId: 'ing-inexistant', quantity: 20, itemName: 'Huile',
     });
 
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-A'),
-      expect.objectContaining({ quantity: 0 }),
-    );
+    expect(mockUpdate).not.toHaveBeenCalled();
   });
 });
 

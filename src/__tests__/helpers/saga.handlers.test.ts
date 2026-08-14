@@ -48,11 +48,19 @@ const { mockNexusGet, mockNexusUpdate, mockNexusSet, mockEmitDurable, mockEmit, 
 
 vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: mockJotaiGet, set: mockJotaiSet })),
+  // Exports requis par les modules qui importent atom/useAtom depuis jotai
+  atom: vi.fn((init?: unknown) => ({ init, read: typeof init === 'function' ? init : () => init, write: undefined })),
+  useAtom: vi.fn(() => [undefined, vi.fn()]),
+  useAtomValue: vi.fn(() => undefined),
+  useSetAtom: vi.fn(() => vi.fn()),
 }));
 
-vi.mock('@/store/pillars/compliance', () => ({
-  quarantinedProductsAtom: {},
-}));
+vi.mock('@/store/pillars/compliance', async (importOriginal) => {
+  // Spread tous les exports réels (résolu via le mock jotai déjà en place) ;
+  // on surcharge seulement ce dont le test a besoin.
+  const actual = await importOriginal<Record<string, unknown>>();
+  return { ...actual, quarantinedProductsAtom: {} };
+});
 
 vi.mock('@/modules/human/connectors/payroll/PayrollConnectorFactory', () => ({
   PayrollConnectorFactory: {
@@ -247,7 +255,7 @@ describe('PayrollExportHandler', () => {
 
   const basePayload = {
     tenantId: 'tenant-rh', periodId: '2026-07',
-    validatedBy: 'manager-1', totalEmployees: 12, isSimulation: false, emitterRole: 'admin',
+    validatedBy: 'manager-1', totalEmployees: 12, isSimulation: false, emitterRole: 'proprietaire',
   };
 
   it('exporte via le provider configuré et marque le statut completed', async () => {

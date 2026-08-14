@@ -90,7 +90,7 @@ export function registerShiftAutoAuditHandler(): () => void {
           v: 1,
           tenantId,
           message: `⚠️ Clôture Z ${date} — Pointages de sortie manquants : ${names}`,
-          roles: ['manager', 'directeur', 'admin'],
+          roles: ['manager', 'directeur', 'proprietaire'],
           priority: 'HIGH',
         });
 

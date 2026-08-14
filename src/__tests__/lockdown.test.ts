@@ -26,7 +26,7 @@ vi.mock('@/lib/nexus/NexusAdapter', () => {
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 const mockAdapter = Nexus.adapter as unknown as Record<string, ReturnType<typeof vi.fn>>;
 
-describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
+describe('Lockdown Protocol - Auto-Certification Propriétaire', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     if (!global.navigator) {
@@ -85,15 +85,15 @@ describe('Lockdown Protocol - Auto-Certification SUPER_ADMIN', () => {
     expect(result).toEqual({ status: 'REVOKED' });
   });
 
-  it('Scénario 4: SUPER_ADMIN - Auto-certification', async () => {
+  it('Scénario 4: Propriétaire (niveau 100) - Auto-certification', async () => {
     mockAdapter.get.mockImplementation((path: string) => {
       if (path.includes('certifiedDevices')) {
         return Promise.resolve(null);
       }
-      return Promise.resolve({ role: 'SUPER_ADMIN' });
+      return Promise.resolve({ role: 'proprietaire' });
     });
 
-    const result = await verifyDevice('uid_super_admin', 'new_fingerprint_super');
+    const result = await verifyDevice('uid_proprietaire', 'new_fingerprint_proprietaire');
     expect(result).toEqual({ status: 'CERTIFIED' });
     expect(mockAdapter.set).toHaveBeenCalled();
   });

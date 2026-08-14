@@ -56,7 +56,7 @@ export function registerCryptoIntegrityCheckHandler() {
           v: 1,
           tenantId,
           message: `ALERTE CRITIQUE NF525 : Rupture de chaîne cryptographique détectée pour la journée du ${date} (sceau ${brokenAt}). Contactez votre expert-comptable.`,
-          roles: ['admin'],
+          roles: ['proprietaire'],
           priority: 'CRITICAL',
         });
       } else {

@@ -26,6 +26,9 @@ vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 
+// Import statique pour éviter le STACK_TRACE_ERROR en suite complète (await import() dans it())
+import { parseImageWithOCR } from '@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser';
+
 // ─── ocrPrompts ──────────────────────────────────────────────────────────────
 describe('ocrPrompts', () => {
   it('retourne un prompt pour chaque catégorie', async () => {
@@ -56,7 +59,6 @@ describe('imageParser', () => {
     const payload = { products: [{ name: 'Salade', category: 'Entrées', price: '9.50' }] };
     mockGenerateFromImage.mockResolvedValueOnce({ text: JSON.stringify(payload) });
 
-    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['fake-image-bytes'], 'menu.jpg', { type: 'image/jpeg' });
     const result = await parseImageWithOCR(file, 'menu');
 
@@ -71,7 +73,6 @@ describe('imageParser', () => {
       text: '```json\n' + JSON.stringify(payload) + '\n```',
     });
 
-    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'menu.png', { type: 'image/png' });
     const result = await parseImageWithOCR(file, 'menu');
     expect(result.confidence).toBe('high');
@@ -81,7 +82,6 @@ describe('imageParser', () => {
   it('retourne confidence=low si le JSON est invalide', async () => {
     mockGenerateFromImage.mockResolvedValueOnce({ text: 'pas du JSON du tout' });
 
-    const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'brouillon.jpg', { type: 'image/jpeg' });
     const result = await parseImageWithOCR(file, 'menu');
     expect(result.confidence).toBe('low');

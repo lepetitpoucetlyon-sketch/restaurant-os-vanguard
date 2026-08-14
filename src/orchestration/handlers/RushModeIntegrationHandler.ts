@@ -39,7 +39,7 @@ export function registerRushModeIntegrationHandler() {
           v: 1,
           tenantId,
           message: 'Mode RUSH activé. Commandes en ligne suspendues sur UberEats & Deliveroo pour désengorger la cuisine.',
-          roles: ['manager', 'admin'],
+          roles: ['manager', 'proprietaire'],
           priority: 'HIGH',
         });
       } else {

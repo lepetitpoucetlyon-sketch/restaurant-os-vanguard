@@ -63,7 +63,7 @@ describe('Bus Chain Integration Tests (R12 - 6 Scenarios)', () => {
       v: 1,
       tenantId,
       message: 'Alerte Rupture Frigo',
-      roles: ['admin', 'manager'],
+      roles: ['proprietaire', 'manager'],
       priority: 'CRITICAL',
     });
 

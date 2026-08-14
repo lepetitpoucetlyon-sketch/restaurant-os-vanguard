@@ -28,7 +28,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       path: '/menu-engineering',
       label: 'Ingénierie Menus',
       icon: 'ChartPie',
-      roles: ['super_admin', 'directeur', 'manager'],
+      roles: ['proprietaire', 'directeur', 'manager'],
       componentLoader: () =>
         import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard as unknown as React.ComponentType })),
     },
@@ -36,7 +36,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       path: '/floor-plan',
       label: 'Plan de Salle',
       icon: 'Layout',
-      roles: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
+      roles: ['proprietaire', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
       componentLoader: () =>
         import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage as unknown as React.ComponentType })),
     },
@@ -44,7 +44,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       path: '/nf525',
       label: 'Export FEC / NF525',
       icon: 'FileText',
-      roles: ['super_admin', 'directeur', 'comptable'],
+      roles: ['proprietaire', 'directeur', 'comptable'],
       componentLoader: () =>
         import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage as unknown as React.ComponentType })),
     },

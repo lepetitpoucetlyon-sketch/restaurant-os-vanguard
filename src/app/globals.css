@@ -108,6 +108,23 @@
 }
 
 /* ============================================
+   SCROLL — overscroll-behavior global
+   Empêche le rebond iOS et le body scroll chaining Android
+   sur les 65 conteneurs scrollables des modules.
+   ============================================ */
+
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto,
+.overflow-y-scroll,
+.overflow-x-scroll,
+.overflow-scroll,
+[data-scroll-contain] {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
    DARK MODE — tokens redéfinis
    Appliqués via prefers-color-scheme ET via [data-theme="dark"]
    ============================================ */

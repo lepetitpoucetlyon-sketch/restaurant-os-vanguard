@@ -8,15 +8,20 @@ import { Modal, PremiumSelect, SecurityPinModal } from "@ui";
 import { useToast } from "@ui/Toast";
 
 const ROLES = [
-    { value: 'admin', label: 'Administrateur' },
-    { value: 'manager', label: 'Directeur' },
-    { value: 'floor_manager', label: 'Responsable de salle' },
-    { value: 'server', label: 'Serveur(se)' },
-    { value: 'bartender', label: 'Barman/Barmaid' },
-    { value: 'kitchen_chef', label: 'Chef de cuisine' },
-    { value: 'kitchen_line', label: 'Commis de cuisine' },
-    { value: 'host', label: 'Hôte(sse) d\'accueil' },
-    { value: 'cashier', label: 'Caissier(ère)' },
+    { value: 'proprietaire', label: 'Propriétaire' },
+    { value: 'directeur', label: 'Directeur(trice)' },
+    { value: 'manager', label: 'Manager' },
+    { value: 'chef_cuisinier', label: 'Chef Cuisinier' },
+    { value: 'sous_chef', label: 'Sous-Chef' },
+    { value: 'comptable', label: 'Comptable' },
+    { value: 'sommelier', label: 'Sommelier(e)' },
+    { value: 'chef_rang', label: 'Chef de Rang' },
+    { value: 'serveur', label: 'Serveur(se)' },
+    { value: 'barman', label: 'Barman/Barmaid' },
+    { value: 'hotesse', label: 'Hôte(sse) d\'accueil' },
+    { value: 'cuisinier', label: 'Cuisinier(ère)' },
+    { value: 'commis', label: 'Commis' },
+    { value: 'plongeur', label: 'Plongeur(se)' },
 ];
 
 interface StaffMemberFormProps {

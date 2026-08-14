@@ -18,7 +18,7 @@ export function useExpert(domain: AgentDomain) {
     
     // Rôle Power Hierarchy
     const rolePower: Record<AgentRole, number> = {
-        'admin': 3,
+        'proprietaire': 3,
         'manager': 2,
         'staff': 1,
         'commis': 0
@@ -26,9 +26,9 @@ export function useExpert(domain: AgentDomain) {
 
     // Configuration de l'expert spécifique
     const expertConfig = slmConfig?.experts?.find(e => e.domain === domain);
-    
+
     const isEnabled = expertConfig?.enabled ?? false;
-    const isAuthorized = rolePower[userRole] >= rolePower[(expertConfig?.minRole as AgentRole) || 'admin'];
+    const isAuthorized = rolePower[userRole] >= rolePower[(expertConfig?.minRole as AgentRole) || 'proprietaire'];
     const modelId = expertConfig?.modelId || slmConfig?.modelId || AI_MODELS.fast;
 
     const queryExpert = useCallback(async (prompt: string, contextData?: import("@nexus/contracts/nexus-contract").SovereignField): Promise<AgentResponse> => {

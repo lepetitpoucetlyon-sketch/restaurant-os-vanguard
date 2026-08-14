@@ -212,7 +212,7 @@ export function AccountSettingsDashboard() {
                                     const isExpanded = expandedRole === role;
                                     const userCount = getUserCountByRole(role);
                                     const categories = getCategories(role);
-                                    const isAdmin = role === 'admin';
+                                    const isAdmin = role === 'proprietaire';
 
                                     return (
                                         <div

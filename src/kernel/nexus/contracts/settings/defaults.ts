@@ -416,10 +416,10 @@ export const defaultSettings: GlobalSettings = {
         fallbackThreshold: 0.5,
         fallbackTriggerWord: 'FORCE_GEMINI_FALLBACK',
         experts: [
-            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'admin', modelId: DEFAULT_MODEL_ALIAS },
-            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'admin', modelId: DEFAULT_MODEL_ALIAS },
-            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'admin', modelId: DEFAULT_MODEL_ALIAS },
-            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'admin', modelId: DEFAULT_MODEL_ALIAS }
+            { id: 'exp-inv', domain: 'inventory', name: 'Expert Inventaire', enabled: true, minRole: 'proprietaire', modelId: DEFAULT_MODEL_ALIAS },
+            { id: 'exp-haccp', domain: 'haccp', name: 'Expert Hygiène', enabled: true, minRole: 'proprietaire', modelId: DEFAULT_MODEL_ALIAS },
+            { id: 'exp-recipes', domain: 'recipes', name: 'Expert Recettes', enabled: true, minRole: 'proprietaire', modelId: DEFAULT_MODEL_ALIAS },
+            { id: 'exp-sales', domain: 'sales', name: 'Expert Croissance', enabled: true, minRole: 'proprietaire', modelId: DEFAULT_MODEL_ALIAS }
         ],
     },
     nexusConfig: defaultNexusConfig,

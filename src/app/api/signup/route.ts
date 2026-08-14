@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
     await getAuth().setCustomUserClaims(uid, {
       tenantId,
       clientId: tenantId,
-      role: 'admin',
+      role: 'proprietaire',
     });
 
     // 3. Optional brand extraction from URL

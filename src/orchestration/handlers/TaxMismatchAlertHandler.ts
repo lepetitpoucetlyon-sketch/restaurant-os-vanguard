@@ -27,7 +27,7 @@ export function registerTaxMismatchAlertHandler() {
           v: 1,
           tenantId,
           message: `ALERTE COMPTABILITÉ: Décalage de TVA détecté de ${(mismatchAmount/100000).toFixed(2)}€ sur l'ordre ${orderId || date}. Une vérification est requise.`,
-          roles: ['admin', 'manager'],
+          roles: ['proprietaire', 'manager'],
           priority: 'HIGH',
         });
       }

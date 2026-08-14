@@ -4,39 +4,63 @@ import { PERMISSION_ROLE_LEVELS } from '@/kernel/nexus/contracts/permissions.typ
 export const VERTICAL_ID: PlatformVariant = 'clinic';
 
 /**
- * ⚠️ Clinic verrouillée tant que §8.2 PII + §7.6 RGPD art. 9 ne sont pas
- * complètement traités (données de santé dans ServiceSubject).
+ * Libellés RBAC — verticale Clinique / Cabinet Médical.
+ * Niveau 100 = Propriétaire / Médecin Chef (PAS le super admin MCC).
+ *
+ * Note : la hiérarchie médicale ne change pas les niveaux numériques —
+ * seuls les libellés diffèrent. Les accès aux données médicales sont
+ * gérés au niveau applicatif (HACCP/registre → dossiers patients).
  */
 export const roleLabels: Record<number, string> = {
-    [PERMISSION_ROLE_LEVELS.super_admin]:     'Super Administrateur',
-    [PERMISSION_ROLE_LEVELS.directeur]:       'Directeur Médical',
-    [PERMISSION_ROLE_LEVELS.manager]:         'Médecin Responsable',
-    [PERMISSION_ROLE_LEVELS.comptable]:       'Comptable',
-    [PERMISSION_ROLE_LEVELS.chef_rang]:       'Infirmier(ère) en Chef',
-    [PERMISSION_ROLE_LEVELS.chef_cuisinier]:  'Praticien Senior',
-    [PERMISSION_ROLE_LEVELS.serveur]:         'Praticien / Infirmier(ère)',
-    [PERMISSION_ROLE_LEVELS.cuisinier]:       'Aide-soignant(e)',
-    [PERMISSION_ROLE_LEVELS.hotesse]:         'Secrétaire Médicale',
-    [PERMISSION_ROLE_LEVELS.plongeur]:        'Stagiaire',
+    [PERMISSION_ROLE_LEVELS.proprietaire]:  'Médecin Chef / Propriétaire',
+    [PERMISSION_ROLE_LEVELS.directeur]:     'Directeur(trice) Médical(e)',
+    [PERMISSION_ROLE_LEVELS.manager]:       'Responsable Administratif',
+    [PERMISSION_ROLE_LEVELS.chef_cuisinier]:'Médecin Spécialiste',
+    [PERMISSION_ROLE_LEVELS.sous_chef]:     'Médecin Généraliste',
+    [PERMISSION_ROLE_LEVELS.comptable]:     'Comptable / Contrôleur de Gestion',
+    [PERMISSION_ROLE_LEVELS.sommelier]:     'Infirmier(ère) Coordinateur',
+    [PERMISSION_ROLE_LEVELS.chef_rang]:     'Infirmier(ère) Diplômé(e)',
+    [PERMISSION_ROLE_LEVELS.serveur]:       'Assistant(e) Médical(e)',
+    [PERMISSION_ROLE_LEVELS.barman]:        'Aide-Soignant(e)',
+    [PERMISSION_ROLE_LEVELS.hotesse]:       'Secrétaire Médicale / Accueil',
+    [PERMISSION_ROLE_LEVELS.cuisinier]:     'Technicien(ne) de Santé',
+    [PERMISSION_ROLE_LEVELS.commis]:        'Agent de Service',
+    [PERMISSION_ROLE_LEVELS.plongeur]:      'Stagiaire / Étudiant(e)',
 };
 
 export const roleSuggestions: { value: string; label: string }[] = [
-    { value: 'practitioner',   label: 'Praticien / Médecin' },
-    { value: 'nurse',          label: 'Infirmier(ère)' },
-    { value: 'care_assistant', label: 'Aide-soignant(e)' },
-    { value: 'secretary',      label: 'Secrétaire médicale' },
-    { value: 'senior_doctor',  label: 'Praticien senior' },
-    { value: 'head_nurse',     label: 'Infirmier(ère) en chef' },
-    { value: 'manager',        label: 'Directeur médical' },
-    { value: 'admin',          label: 'Administrateur' },
+    { value: 'serveur',         label: 'Assistant(e) Médical(e)' },
+    { value: 'barman',          label: 'Aide-Soignant(e)' },
+    { value: 'chef_cuisinier',  label: 'Médecin Spécialiste' },
+    { value: 'cuisinier',       label: 'Technicien(ne) de Santé' },
+    { value: 'sous_chef',       label: 'Médecin Généraliste' },
+    { value: 'sommelier',       label: 'Infirmier(ère) Coordinateur' },
+    { value: 'chef_rang',       label: 'Infirmier(ère) Diplômé(e)' },
+    { value: 'hotesse',         label: 'Secrétaire Médicale' },
+    { value: 'commis',          label: 'Agent de Service' },
+    { value: 'plongeur',        label: 'Étudiant(e) / Stagiaire' },
+    { value: 'manager',         label: 'Responsable Administratif' },
+    { value: 'directeur',       label: 'Directeur(trice) Médical(e)' },
+    { value: 'comptable',       label: 'Comptable' },
+    { value: 'proprietaire',    label: 'Médecin Chef' },
 ];
 
-export const tipWeightsByLevel: { level: number; weight: number }[] = [
-    { level: PERMISSION_ROLE_LEVELS.manager,         weight: 1.5 },
-    { level: PERMISSION_ROLE_LEVELS.chef_cuisinier,  weight: 1.3 },
-    { level: PERMISSION_ROLE_LEVELS.chef_rang,       weight: 1.2 },
-    { level: PERMISSION_ROLE_LEVELS.serveur,         weight: 1.0 },
-    { level: PERMISSION_ROLE_LEVELS.cuisinier,       weight: 0.8 },
-    { level: PERMISSION_ROLE_LEVELS.hotesse,         weight: 0.7 },
-    { level: PERMISSION_ROLE_LEVELS.plongeur,        weight: 0.5 },
-];
+export const roleDescriptions: Record<number, string> = {
+    [PERMISSION_ROLE_LEVELS.proprietaire]:  'Médecin Chef / Propriétaire. Accès total à la gestion du cabinet : agenda, équipes, finances, conformité.',
+    [PERMISSION_ROLE_LEVELS.directeur]:     'Directeur(trice) Médical(e). Supervise l\'activité médicale et administrative.',
+    [PERMISSION_ROLE_LEVELS.manager]:       'Responsable Administratif. Coordination administrative, plannings et ressources.',
+    [PERMISSION_ROLE_LEVELS.chef_cuisinier]:'Médecin Spécialiste. Expertise spécialisée, chef de service, activité complexe.',
+    [PERMISSION_ROLE_LEVELS.sous_chef]:     'Médecin Généraliste. Consultations, prescriptions, suivi patient.',
+    [PERMISSION_ROLE_LEVELS.comptable]:     'Comptable / Contrôleur. Facturation sécurité sociale, exports comptables.',
+    [PERMISSION_ROLE_LEVELS.sommelier]:     'Infirmier(ère) Coordinateur. Coordination des soins, liaison médecin-patient.',
+    [PERMISSION_ROLE_LEVELS.chef_rang]:     'Infirmier(ère) Diplômé(e). Soins infirmiers, administration des traitements.',
+    [PERMISSION_ROLE_LEVELS.serveur]:       'Assistant(e) Médical(e). Assistance aux praticiens, préparation des consultations.',
+    [PERMISSION_ROLE_LEVELS.barman]:        'Aide-Soignant(e). Soins de confort, aide aux déplacements et à l\'hygiène.',
+    [PERMISSION_ROLE_LEVELS.hotesse]:       'Secrétaire Médicale. Accueil, prise de RDV, dossiers patients.',
+    [PERMISSION_ROLE_LEVELS.cuisinier]:     'Technicien(ne) de Santé. Examens techniques (labo, radio) sur prescription.',
+    [PERMISSION_ROLE_LEVELS.commis]:        'Agent de Service. Entretien, stérilisation, logistique du cabinet.',
+    [PERMISSION_ROLE_LEVELS.plongeur]:      'Stagiaire / Étudiant(e). Observation et apprentissage en milieu médical.',
+};
+
+/** Pas de pourboires en milieu médical — table vide par convention. */
+export const tipWeightsByLevel: { level: number; weight: number }[] = [];

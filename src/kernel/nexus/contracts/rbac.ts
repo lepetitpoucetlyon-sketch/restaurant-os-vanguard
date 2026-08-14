@@ -34,55 +34,285 @@ export const TenantRBACConfigSchema = z.object({
 
 export type TenantRBACConfig = z.infer<typeof TenantRBACConfigSchema>;
 
+/**
+ * Accès par défaut aux pages tenant.
+ *
+ * ⚠️  La page 'mcc' N'EST PAS listée ici — le MCC a ses propres routes
+ *     /app/(admin)/ et son propre système d'auth (isMCCMode + FLEET_OPERATOR).
+ *
+ * Échelle des niveaux :
+ *   10 plongeur · 20 commis · 30 serveur/barman/hotesse/cuisinier
+ *   40 chef_rang · 50 sommelier · 60 sous_chef/comptable
+ *   70 manager/chef_cuisinier · 80 directeur · 100 proprietaire
+ */
 export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
-    pos: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman'],
-    pos_mobile: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman'],
-    kds: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman'],
-    kitchen: ['super_admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
-    bar: ['super_admin', 'directeur', 'manager', 'chef_rang', 'barman'],
-    floor_plan: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
-    reservations: ['super_admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
-    staff: ['super_admin', 'directeur', 'manager', 'chef_rang'],
-    planning: ['super_admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
-    timeclock: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
-    recruitment: ['super_admin', 'directeur', 'manager'],
-    leaves: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
-    finance: ['super_admin', 'directeur', 'manager', 'comptable'],
-    haccp: ['super_admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
-    inventory: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'],
-    crm: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'hotesse'],
-    marketing: ['super_admin', 'directeur', 'manager', 'chef_rang'],
-    analytics: ['super_admin', 'directeur', 'manager', 'comptable'],
-    intelligence: ['super_admin', 'directeur', 'manager'],
-    menu_builder: ['super_admin', 'directeur', 'manager', 'chef_cuisinier'],
-    registre: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier'],
-    operations: ['super_admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
-    settings: ['super_admin', 'directeur', 'manager'],
-    mon_espace: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
-    welcome_staff: ['super_admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
-    migration: ['super_admin', 'directeur'],
-    vanguard: ['super_admin', 'directeur', 'manager'],
-    mcc: ['super_admin', 'directeur'],
+    // ── Opérations service ──────────────────────────────────────────────
+    pos: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang', 'serveur', 'barman', 'commis',
+    ],
+    pos_mobile: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang', 'serveur', 'barman', 'commis',
+    ],
+    kds: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang', 'serveur', 'cuisinier', 'barman', 'commis',
+    ],
+    kitchen: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'cuisinier',
+    ],
+    bar: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang', 'barman', 'sommelier',
+    ],
+    floor_plan: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang', 'serveur', 'hotesse',
+    ],
+    reservations: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+        'chef_rang', 'serveur', 'hotesse',
+    ],
+    operations: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang',
+    ],
+
+    // ── RH & planning ──────────────────────────────────────────────────
+    staff: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang',
+    ],
+    planning: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'chef_rang',
+    ],
+    timeclock: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+        'comptable', 'chef_rang', 'serveur', 'cuisinier', 'barman',
+        'hotesse', 'sommelier', 'commis', 'plongeur',
+    ],
+    recruitment: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+    ],
+    leaves: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+        'comptable', 'chef_rang', 'serveur', 'cuisinier', 'barman',
+        'hotesse', 'sommelier', 'commis', 'plongeur',
+    ],
+    mon_espace: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+        'comptable', 'chef_rang', 'serveur', 'cuisinier', 'barman',
+        'hotesse', 'sommelier', 'commis', 'plongeur',
+    ],
+    welcome_staff: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+        'comptable', 'chef_rang', 'serveur', 'cuisinier', 'barman',
+        'hotesse', 'sommelier', 'commis', 'plongeur',
+    ],
+
+    // ── Finance ─────────────────────────────────────────────────────────
+    finance: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'comptable',
+    ],
+
+    // ── HACCP & conformité ──────────────────────────────────────────────
+    haccp: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier',
+        'sous_chef', 'cuisinier',
+    ],
+
+    // ── Stock & appro ───────────────────────────────────────────────────
+    inventory: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'comptable',
+        'chef_cuisinier', 'cuisinier', 'barman',
+    ],
+
+    // ── CRM & marketing ─────────────────────────────────────────────────
+    crm: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+        'comptable', 'chef_rang', 'hotesse',
+    ],
+    customer: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+        'comptable', 'chef_rang', 'hotesse',
+    ],
+    marketing: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'chef_rang',
+    ],
+
+    // ── Analytics & intelligence ─────────────────────────────────────────
+    analytics: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'comptable',
+    ],
+    intelligence: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+    ],
+    dashboard: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'comptable',
+    ],
+
+    // ── Catalogue ───────────────────────────────────────────────────────
+    menu_builder: [
+        'proprietaire', 'directeur', 'manager', 'chef_cuisinier', 'sous_chef',
+    ],
+
+    // ── Registres & conformité ──────────────────────────────────────────
+    registre: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+        'comptable', 'chef_cuisinier',
+    ],
+
+    // ── Paramétrage ─────────────────────────────────────────────────────
+    settings: [
+        'proprietaire', 'directeur', 'manager',
+    ],
+
+    // ── Divers ──────────────────────────────────────────────────────────
+    seo: ['proprietaire', 'directeur', 'manager'],
+    groups: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef', 'chef_rang', 'hotesse',
+    ],
+    migration: ['proprietaire', 'directeur'],
+    vanguard: ['proprietaire', 'directeur', 'manager'],
+    storage_map: [
+        'proprietaire', 'directeur', 'manager', 'sous_chef',
+        'comptable', 'chef_cuisinier', 'cuisinier',
+    ],
 };
 
+/**
+ * Niveaux minimaux par onglet.
+ * Mis à jour pour correspondre aux niveaux PERMISSION_ROLE_LEVELS révisés.
+ *
+ * Correspondances clés après révision :
+ *   anciens 35 (cuisinier)      → 30
+ *   anciens 45 (chef_cuisinier) → 40 ou 60 selon sensibilité
+ *   anciens 50 (chef_rang)      → 40
+ *   anciens 90 (directeur)      → 80
+ */
 export const DEFAULT_TAB_ACCESS: Record<string, Record<string, number>> = {
-    kitchen: { 'mise-en-place': 35, 'prep-journalier': 35, recipes: 35, ingredients: 45, margins: 70, waste: 35, suppliers: 70, allergens: 45 },
-    bar: { kds: 35, wines: 35, sommelier: 50, cocktails: 35, stocks: 50 },
-    staff: { team: 50, planning: 50, timesheet: 50, payroll: 70, skills: 50, leaves: 50, recruitment: 70 },
-    finance: { accounting: 60, billing: 60, bank: 60, treasury: 70, audit: 90 },
-    haccp: { haccp: 35, quality: 45, planning: 45, compliance: 70, lots: 45 },
-    inventory: { stock: 35, storage: 45, rotating_count: 45 },
-    crm: { pipeline: 30, customers: 30, history: 50, import: 70, promos: 50, emails: 70, automations: 70, rfm: 70, analytics: 60 },
-    marketing: { campaigns: 70, social: 70, quotes: 50, ai: 70, seo: 70 },
-    analytics: { profitability: 70, reputation: 70, compliance: 60, oracle: 90 },
-    registre: { overview: 45, duerp: 90, incendie: 70, prestataires: 70, interventions: 70, pmr: 70, conformite: 45 },
-    leaves: { my_requests: 10, team_calendar: 50, to_approve: 50 },
-    mon_espace: { planning: 10, pointage: 10, conges: 10, pourboires: 10, bulletin: 10, formations: 10 },
+    kitchen: {
+        'mise-en-place': 30,   // cuisinier+
+        'prep-journalier': 30, // cuisinier+
+        recipes: 30,           // cuisinier+ (lecture fiches recettes)
+        ingredients: 40,       // chef_rang+ (gestion ingrédients)
+        margins: 70,           // manager+ (données économiques)
+        waste: 30,             // cuisinier+ (déclaration pertes)
+        suppliers: 70,         // manager+ (gestion fournisseurs)
+        allergens: 30,         // cuisinier+ (sécurité alimentaire — visible à tous les opérationnels)
+    },
+    bar: {
+        kds: 30,               // barman+
+        wines: 30,             // barman+
+        sommelier: 50,         // sommelier+ (expertise)
+        cocktails: 30,         // barman+
+        stocks: 50,            // sommelier+ (gestion cave)
+    },
+    staff: {
+        team: 40,              // chef_rang+ (vue équipe)
+        planning: 40,          // chef_rang+
+        timesheet: 40,         // chef_rang+
+        payroll: 70,           // manager+ (données salariales)
+        skills: 40,            // chef_rang+
+        leaves: 40,            // chef_rang+
+        recruitment: 70,       // manager+
+    },
+    finance: {
+        accounting: 60,        // comptable+ (sous_chef)
+        billing: 60,           // comptable+
+        bank: 60,              // comptable+
+        treasury: 70,          // manager+
+        audit: 80,             // directeur+ (audit fiscal)
+    },
+    haccp: {
+        haccp: 30,             // cuisinier+
+        quality: 40,           // chef_rang+
+        planning: 40,          // chef_rang+
+        compliance: 70,        // manager+
+        lots: 40,              // chef_rang+ (traçabilité lots)
+    },
+    inventory: {
+        stock: 30,             // cuisinier+
+        storage: 40,           // chef_rang+
+        rotating_count: 40,    // chef_rang+
+    },
+    crm: {
+        pipeline: 30,          // chef_rang / hotesse
+        customers: 30,         // chef_rang / hotesse
+        history: 40,           // chef_rang+
+        import: 70,            // manager+
+        promos: 40,            // chef_rang+
+        emails: 70,            // manager+
+        automations: 70,       // manager+
+        rfm: 70,               // manager+
+        analytics: 60,         // comptable+
+    },
+    marketing: {
+        campaigns: 70,         // manager+
+        social: 70,            // manager+
+        quotes: 40,            // chef_rang+
+        ai: 70,                // manager+
+        seo: 70,               // manager+
+    },
+    analytics: {
+        profitability: 70,     // manager+
+        reputation: 70,        // manager+
+        compliance: 60,        // comptable+
+        oracle: 80,            // directeur+ (données stratégiques)
+    },
+    registre: {
+        overview: 40,          // chef_rang+
+        duerp: 80,             // directeur+ (document unique risques)
+        incendie: 70,          // manager+
+        prestataires: 70,      // manager+
+        interventions: 70,     // manager+
+        pmr: 70,               // manager+
+        conformite: 40,        // chef_rang+
+    },
+    leaves: {
+        my_requests: 10,       // tous
+        team_calendar: 40,     // chef_rang+
+        to_approve: 40,        // chef_rang+
+    },
+    mon_espace: {
+        planning: 10,          // tous
+        pointage: 10,          // tous
+        conges: 10,            // tous
+        pourboires: 10,        // tous
+        bulletin: 10,          // tous
+        formations: 10,        // tous
+    },
     settings: {
-        profile: 10, identity: 70, hours: 70, menu: 70, recipes: 45, inventory: 70, staff: 70,
-        planning: 70, reservations: 70, customer: 70, pos: 70, accounting: 60, delivery: 70,
-        reviews: 70, appearance: 70, notifications: 70, security: 90, goals: 70, integrations: 90,
-        legal: 90, haccp: 70, migration: 90, tables: 70, printer: 70, tpe: 70, 'cash-drawer': 70,
-        governance: 90, nexus: 90,
+        profile: 10,           // tous
+        identity: 70,          // manager+
+        hours: 70,             // manager+
+        menu: 70,              // manager+
+        recipes: 60,           // sous_chef+ (config recettes)
+        inventory: 70,         // manager+
+        staff: 70,             // manager+
+        planning: 70,          // manager+
+        reservations: 70,      // manager+
+        customer: 70,          // manager+
+        pos: 70,               // manager+
+        accounting: 60,        // comptable+
+        delivery: 70,          // manager+
+        reviews: 70,           // manager+
+        appearance: 70,        // manager+
+        notifications: 70,     // manager+
+        security: 80,          // directeur+ (paramètres sécurité)
+        goals: 70,             // manager+
+        integrations: 80,      // directeur+ (connecteurs tiers)
+        legal: 80,             // directeur+ (mentions légales, CGV)
+        haccp: 70,             // manager+
+        migration: 80,         // directeur+ (migration données)
+        tables: 70,            // manager+
+        printer: 70,           // manager+
+        tpe: 70,               // manager+
+        'cash-drawer': 70,     // manager+
+        governance: 100,       // proprietaire uniquement (gouvernance RBAC)
+        nexus: 100,            // proprietaire uniquement (config core Nexus)
     },
 };

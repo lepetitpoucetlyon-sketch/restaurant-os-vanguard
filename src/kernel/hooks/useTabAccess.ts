@@ -9,7 +9,9 @@ export function useTabAccess(pageKey: PageKey | string, tabKey: string): boolean
   const config = useAtomValue(rbacConfigAtom);
 
   if (!currentUser) return false;
-  if (currentUser.role === 'admin' || currentUser.role === 'super_admin') return true;
+  // Pas de bypass hardcodé par nom de rôle :
+  // - 'super_admin' n'existe plus (renommé → 'proprietaire').
+  // - Le super admin MCC opère via ses propres routes /app/(admin)/ et n'utilise PAS useTabAccess.
 
   const role = currentUser.role as PermissionRole;
   const userLevel = currentUser.accessLevel ?? PERMISSION_ROLE_LEVELS[role] ?? 0;

@@ -61,7 +61,7 @@ export function registerHRBreakCheckHandler(): () => void {
           v: 1,
           tenantId,
           message: `⚠️ Pause légale manquante — Employé ${employeeId} (shift ${shiftId}) : ${breakMinutes}min / ${MIN_BREAK_MINUTES}min requises après ${shiftDurationHours}h de travail`,
-          roles: ['manager', 'directeur', 'admin'],
+          roles: ['manager', 'directeur', 'proprietaire'],
           priority: 'HIGH',
         });
 

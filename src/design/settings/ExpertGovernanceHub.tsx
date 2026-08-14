@@ -63,7 +63,7 @@ const EXPERT_METADATA: Record<AgentDomain, { icon: LucideIcon; color: string; de
     }
 };
 
-const ROLES = ['admin', 'manager', 'staff', 'commis'] as const;
+const ROLES = ['proprietaire', 'manager', 'staff', 'commis'] as const;
 const MODELS = [
     { id: AI_MODELS.fast, name: 'Standard (Vitesse)', description: 'Idéal pour les tâches rapides et audits simples.' },
     { id: AI_MODELS.reasoning, name: 'Avancé (Raisonnement)', description: 'Puissance maximale pour analyses stratégiques complexes.' }
