@@ -15,6 +15,7 @@ import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import type { ConsumptionMode } from "@/modules/ops";
 import { POSService } from "../domain";
 import { logger } from "@/lib/logger";
+import { toError } from "@/lib/toError";
 
 // Pure helpers (zéro effets de bord)
 import {
@@ -195,7 +196,12 @@ export function usePOSController() {
             if (opts?.split) setPartialPayments([]);
             await updateTable(currentTable.id, { status: "dirty" });
         } catch (error) {
-            logger.error('[POS] Fiscal signature failed', error, { context: 'NF525' });
+            // §5 — log structuré : tenantId + tableId + itemCount diagnosticables en prod
+            logger.error('[POS] Échec finalisation paiement / scellement NF525', toError(error), {
+                tenantId: activeTenantId,
+                tableId: selectedTableId,
+                itemCount: cartItems.length,
+            });
             showToast("Transaction Échouée", "error");
         }
     }, [currentTable, cartItems, currentUser, selectedTableId, activeTenantId, consumptionMode, partialPayments, tipInMicrounits, invoiceRequestData, handleClearCart, updateTable, showToast]);

@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
 import { NexusError, NexusErrorCode } from '@nexus/errors';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { z } from 'zod';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
@@ -110,7 +111,18 @@ class NexusEventBusClass {
       }, options);
   }
 
-  private enforceTierPolicies(payload: any): void {
+  /**
+   * §13 — Politique de tier : bloque _ref_*, auto-active Simulacra pour _demo_*.
+   *
+   * _ref_*  → ACCESS_DENIED immédiat (le tenant de référence est en lecture seule ;
+   *            toute émission depuis ce tenant est une anomalie).
+   * _demo_* → isSimulation=true + activation automatique de Simulacra si pas encore
+   *            actif. Sans cela, un accès direct (URL, rechargement, route hors
+   *            SplashGate) laisse les handlers écrire sur le Nexus réel → SovereignGuard
+   *            lève → DLQ de fausses alertes.
+   * _test_* / tenant_{siret} → passthrough normal.
+   */
+  private async enforceTierPolicies(payload: any): Promise<void> {
     const tenantId = payload?.tenantId || payload?.targetTenantId;
     if (!tenantId) {
       throw new NexusError(
@@ -126,6 +138,14 @@ class NexusEventBusClass {
 
     const isSimulation = !!payload.isSimulation || tenantId.startsWith('_demo_');
     payload.isSimulation = isSimulation;
+
+    // §13 Option C — activation automatique de Simulacra pour les tenants _demo_*.
+    // Idempotent : si Simulacra est déjà actif (SplashGate / useNexusTenantLogic l'a
+    // activé en amont), isSimulacraActive() retourne true et on saute le bloc.
+    if (isSimulation && typeof window !== 'undefined' && !Nexus.isSimulacraActive()) {
+      await Nexus.activateSimulacraMode(`auto_${tenantId}`);
+      logger.debug(`[EventBus] §13 Simulacra auto-activé pour demo tenant : ${tenantId}`);
+    }
   }
 
   /**
@@ -136,7 +156,7 @@ class NexusEventBusClass {
     event: E,
     payload: NexusEventPayload<E>
   ): Promise<void> {
-    this.enforceTierPolicies(payload);
+    await this.enforceTierPolicies(payload);
     
     const id = crypto.randomUUID();
     
@@ -210,7 +230,7 @@ class NexusEventBusClass {
     payload: NexusEventPayload<E>,
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
-    this.enforceTierPolicies(payload);
+    await this.enforceTierPolicies(payload);
 
     if (this.inFlight.has(event)) {
       logger.warn(`[NexusEventBus] Boucle détectée sur "${event}" — émission bloquée`);
