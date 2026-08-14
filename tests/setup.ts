@@ -1,4 +1,9 @@
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
+
+// Garde global : restaure les vrais timers après chaque test (protège des fuites vi.useFakeTimers)
+afterEach(() => {
+    vi.useRealTimers();
+});
 
 // 🔑 Clé de scellement NF525 pour les tests — reflète l'env serveur réel.
 // FiscalKeyService refuse de sceller sans clé (plus de repli 'default_instance').

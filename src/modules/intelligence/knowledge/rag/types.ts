@@ -178,6 +178,17 @@ export interface PulseContext {
     priceBand: 'budget' | 'mid_range' | 'upscale' | 'premium';
 }
 
+/**
+ * Contexte neutre pour les orchestrateurs IA qui n'ont pas de contexte tenant précis
+ * au moment de l'initialisation (ex: MacroBrainOrchestrator).
+ */
+export const DEFAULT_PULSE_CONTEXT: PulseContext = {
+    region: 'FR-00',
+    businessType: 'unknown',
+    sizeBand: 'micro',
+    priceBand: 'budget',
+};
+
 // ============================================
 // PULSE EMISSION SCHEDULE
 // ============================================

@@ -45,10 +45,16 @@ export class ThemisHRAgent implements IAutonomousAgent {
         logger.info(`[Themis] Executing action ${action.id} for tenant ${context.tenantId}`);
         
         if (action.type === 'hr.approve_overtime') {
-            await NexusEventBus.emitDurable('mcc.alert_triggered' as any, {
+            await NexusEventBus.emitDurable('mcc.alert_triggered', {
                 tenantId: context.tenantId,
-                ...action.proposedPayload,
-                approvedBy: 'Themis-AI'
+                agentName: 'Themis',
+                actionType: action.type,
+                urgency: 'low',
+                summary: `Overtime approved by Themis-AI for action ${action.id}`,
+                approvedBy: 'Themis-AI',
+                ...(typeof action.proposedPayload === 'object' && action.proposedPayload !== null
+                    ? action.proposedPayload
+                    : {}),
             });
             return true;
         }

@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { HermesKnowledgeManager } from '../knowledge/rag/HermesKnowledgeManager';
+import { DEFAULT_PULSE_CONTEXT } from '../knowledge/rag/types';
 import type { IAutonomousAgent, AgentAction, AgentContext } from './types';
 import { ThemisHRAgent } from './ThemisHRAgent';
 import { AtlasLogisticsAgent } from './AtlasLogisticsAgent';
@@ -9,7 +10,7 @@ export class MacroBrainOrchestrator {
     private knowledgeManager: HermesKnowledgeManager;
 
     constructor(tenantId: string) {
-        this.knowledgeManager = new HermesKnowledgeManager(tenantId, { correlationId: 'macrobrain-init' } as any);
+        this.knowledgeManager = new HermesKnowledgeManager(tenantId, DEFAULT_PULSE_CONTEXT);
         this.registerAgents();
     }
 

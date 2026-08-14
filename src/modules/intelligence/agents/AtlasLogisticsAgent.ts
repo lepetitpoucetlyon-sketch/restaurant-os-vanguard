@@ -51,10 +51,15 @@ export class AtlasLogisticsAgent implements IAutonomousAgent {
         logger.info(`[Atlas] Executing action ${action.id} for tenant ${context.tenantId}`);
         
         if (action.type === 'ops.create_promotion') {
-            await NexusEventBus.emitDurable('inventory.stock_adjusted' as any, {
+            const payload = typeof action.proposedPayload === 'object' && action.proposedPayload !== null
+                ? action.proposedPayload as { productId?: string; discountPercentage?: number }
+                : {};
+            await NexusEventBus.emitDurable('commerce.promotion_activated', {
+                v: 1,
                 tenantId: context.tenantId,
-                ...action.proposedPayload,
-                createdBy: 'Atlas-AI'
+                promotionId: `atlas-promo-${action.id}`,
+                discountBps: (payload.discountPercentage ?? 0) * 100, // % → bps
+                productIds: payload.productId ? [payload.productId] : [],
             });
             return true;
         }

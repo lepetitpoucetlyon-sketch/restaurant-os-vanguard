@@ -32,8 +32,7 @@ export class CoreContext implements ICoreContext {
   ): void;
   registerEventHandler(
     event: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handler: (payload: any) => void | Promise<void>
+    handler: (payload: unknown) => void | Promise<void>
   ): void {
     const unsub = NexusEventBus.on(
       event as NexusEventName,

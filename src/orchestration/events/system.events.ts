@@ -121,6 +121,15 @@ export interface SYSTEMEvents {
     lastError: string;
     quarantinedAt: number;
   };
+  /** Alert MCC d'une décision prise par un agent IA autonome (Themis, Atlas, etc.) */
+  'mcc.alert_triggered': {
+    tenantId: string;
+    agentName: string;
+    actionType: string;
+    urgency: 'low' | 'medium' | 'high' | 'critical';
+    summary: string;
+    [key: string]: unknown;
+  };
 
   // ── Tenant lifecycle ───────────────────────────────────────────────────────
   'tenant.ready': { tenantId: string };

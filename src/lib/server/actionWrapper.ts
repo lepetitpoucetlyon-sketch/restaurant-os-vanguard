@@ -36,8 +36,8 @@ export function createSafeAction<TArgs extends any[], TOutput>(
             // Le PIN est attendu soit dans le dernier argument s'il s'agit d'un objet { pin: string },
             // soit explicitement défini par le client.
             const lastArg = args[args.length - 1];
-            const pin = typeof lastArg === 'object' && lastArg !== null && 'pin' in lastArg 
-                ? (lastArg as any).pin as string 
+            const pin = typeof lastArg === 'object' && lastArg !== null && 'pin' in lastArg
+                ? (lastArg as Record<string, unknown>).pin as string
                 : undefined;
                 
             if (!pin) {

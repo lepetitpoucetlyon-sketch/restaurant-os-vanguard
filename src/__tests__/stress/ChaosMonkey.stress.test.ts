@@ -1,18 +1,28 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ChaosMonkey } from '@/modules/intelligence/ia/resilience/ChaosMonkey';
 import { getDefaultStore } from 'jotai';
 import { ResilienceSlayer } from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
 
-// No jotai mock, we use the real store
+// No jotai mock, we use the real store with real atoms (plain objects lack atom.write)
+const { mockOrdersAtom, mockStockAtom, mockJournalAtom, mockQualityAtom } = vi.hoisted(() => {
+    const { atom } = require('jotai') as typeof import('jotai');
+    return {
+        mockOrdersAtom: atom<{ data: unknown[] }>({ data: [] }),
+        mockStockAtom: atom<{ data: unknown[] }>({ data: [] }),
+        mockJournalAtom: atom<{ data: unknown[] }>({ data: [] }),
+        mockQualityAtom: atom<{ data: unknown[] }>({ data: [] }),
+    };
+});
+
 vi.mock('@/store/pillars', () => ({
-    ordersNodeAtom: { toString: () => 'ordersNodeAtom' },
-    stockItemsNodeAtom: { toString: () => 'stockItemsNodeAtom' },
-    journalEntriesNodeAtom: { toString: () => 'journalEntriesNodeAtom' },
-    updateNexusNode: vi.fn((prev, update) => ({ ...prev, ...update }))
+    ordersNodeAtom: mockOrdersAtom,
+    stockItemsNodeAtom: mockStockAtom,
+    journalEntriesNodeAtom: mockJournalAtom,
+    updateNexusNode: (prev: unknown, update: unknown) => ({ ...(prev as object), ...(update as object) }),
 }));
 
 vi.mock('@/modules/compliance/qualite/haccp/store/qualityAtoms', () => ({
-    qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
+    qualityActiveControlAtom: mockQualityAtom,
 }));
 
 vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
@@ -40,15 +50,19 @@ describe('ChaosMonkey - Sovereign Resilience Audit', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.useFakeTimers();
-        
+
         // Use the real jotai store and spy on its methods
         mockStore = getDefaultStore();
         storeSpy = {
             get: vi.spyOn(mockStore, 'get'),
             set: vi.spyOn(mockStore, 'set')
         };
-        
+
         vi.spyOn(ResilienceSlayer, 'handleTransactionFailure').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it('should handle ZOMBIE_RUSH concurrency without crashing the engine', async () => {

@@ -6,6 +6,10 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         clearMocks: true,
+        restoreMocks: true,
+        pool: 'threads',
+        // ⚠️ worker cap : Vitest 4.x STACK_TRACE_ERROR au-delà de ~5 workers.
+        // Utiliser `npx vitest run --maxWorkers=4` (option CLI uniquement, non lue depuis ce fichier).
         setupFiles: ['tests/setup.ts'],
         include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}', 'demo/**/*.test.{ts,tsx}'],
         exclude: ['tests/e2e/**', 'src/e2e/**'],

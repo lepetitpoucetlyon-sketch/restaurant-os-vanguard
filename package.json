@@ -13,7 +13,7 @@
     "instance:preflight:sample": "node .nexus/scripts/preflight-instance.js templates/client-instance.sample.json",
     "fleet:list": "node .nexus/scripts/fleet.js list",
     "fleet:switch": "node .nexus/scripts/fleet.js switch",
-    "release:check": "npx eslint . --quiet && npm run instance:preflight:sample && NODE_OPTIONS='--max-old-space-size=8192' npx vitest run",
+    "release:check": "npx eslint . --quiet && npm run instance:preflight:sample && NODE_OPTIONS='--max-old-space-size=8192' npx vitest run --maxWorkers=4",
     "dev": "NODE_OPTIONS='--max-old-space-size=1024' next dev --turbo",
     "dev:mcc": "NEXT_PUBLIC_APP_MODE=mcc NODE_OPTIONS='--max-old-space-size=1024' next dev --turbo -p 3456",
     "build": "next build",
