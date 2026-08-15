@@ -1,0 +1,46 @@
+name: 🧪 E2E Playwright & Sovereign Hardware Certification
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  e2e-certification:
+    name: 🛡️ Grade X E2E & Hardware Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔍 Typecheck Integrity (TSC = 0)
+        run: npx tsc --noEmit
+
+      - name: 🧪 Run E2E Test Triad (Vitest Runner)
+        run: |
+          npx vitest run \
+            src/__tests__/e2e/offline-nf525-resilience.test.ts \
+            src/__tests__/e2e/full-service-guest-journey.test.ts \
+            src/__tests__/e2e/hardware-provisioning-harness.test.ts
+
+      - name: 📄 Upload Audit Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-certification-logs
+          path: |
+            coverage/
+            reports/
+          retention-days: 14

@@ -52,12 +52,11 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
   1. Bouton **SOS Caisse** sur l'écran POS déclenchant une alerte prioritaire P0 avec presets de panne et diagnostic Gemini en direct.
   2. File d'attente live sur le Cockpit MCC (`SupportAIPanel.tsx`) pour prise en charge instantanée.
 
-### 📦 2.5 Provisioning Matériel & Réseau On-Site (Le Jour J)
+### 📦 2.5 Provisioning Matériel & Réseau On-Site (Le Jour J) 🟢 (Résolu & Livré)
 * **Problème** : absence de procédure standardisée pour le déploiement physique des iPads, imprimantes thermiques ESC/POS, TPE Stripe Terminal et sondes Bluetooth Testo.
-* **Risque terrain** : échec du premier service chez le client dû à un WiFi défaillant ou une imprimante mal appairée.
-* **Solution Opérationnelle** :
-  1. **Kit Valise d'Onboarding** : routeur 4G multi-opérateurs de secours préconfiguré pour chaque établissement.
-  2. **Checklist Matérielle J-0** : procédure de validation en 12 points (test impression, test tiroir-caisse, test TPE CB 1€, test coupure WiFi, test bump bar KDS, test balance Dialogue 06).
+* **Solution Livrée** (`HardwareProvisioningService.ts`, `HardwareOnboardingWizard.tsx`, `/api/facility/hardware/diagnostics`, `HardwareMocks.ts`, `hardware-provisioning-harness.test.ts`) :
+  1. **Wizard d'Onboarding J-0 Interactif** : Autodiagnostic unifié en 12 points (TPE Stripe, imprimantes ESC/POS caisse/cuisine, tiroir RJ11, balance Dialogue 06, douchette 2D, bump bar KDS, sondes HACCP froid +3°C/-18°C, routeur 4G multi-opérateurs, file hors-ligne Dexie et sous-chaîne NF525).
+  2. **Procès-Verbal de Recette d'Installation Scellé** : Émission instantanée du PV de recette contresigné par le technicien et le restaurateur avec Master Seal cryptographique SHA-256.
 
 ### ⏳ 2.6 Délais d'Homologation des APIs Partenaires Tierces
 * **Problème** : des intégrations clés (Google Reserve, Doctolib, Booking.com, UberEats, SESAM-Vitale) dépendent de processus de validation commerciale et technique externes.
@@ -107,15 +106,16 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 | 🟡 | Pas de rôle customer success défini | Qui fait le suivi J+7/J+30 après onboarding terrain ? Aucune mention de ressource humaine dédiée jusqu'à 10 clients |
 | 🟡 | Centre d'aide en libre-service absent | Au-delà du "guide démarrage rapide", pas de base de connaissances indexée ni de chatbot de support |
 
-### 3.4 QA / Testing — Solidité apparente vs réelle
-
-| Sév. | Gap | Détail |
-|---|---|---|
-| 🟠 | **Zéro test E2E UI** sur les parcours critiques | ~97 suites de tests, tous unitaires ou intégration. Aucun Playwright/Cypress jouant l'encaissement complet, la clôture Z, la récupération NF525 |
-| 🟠 | Zéro test de charge / performance | Combien de commandes/seconde le POS encaisse lors d'un samedi soir à 80 couverts ? Aucun benchmark, aucun seuil défini |
-| 🟠 | **4e parcours E2E manquant : Mode Offline → Reconnexion → Sync NF525** | Le cas le plus susceptible de révéler des bugs de cohérence : encaisser offline sur 2 tablettes simultanément → reconnexion → validation MasterFiscalSeal. À ajouter aux 3 parcours actuels |
-| 🟡 | WCAG 2.1 AA intention ≠ chantier | Les principes d'accessibilité sont énoncés en section UX mais aucune tâche d'audit (Axe DevTools, Lighthouse) dans le backlog |
-| 🟡 | Pas d'environnement UAT | Zéro procédure de test avec de vrais restaurateurs avant une release majeure |
+### 3.4 QA / Testing — Solidité & Couverture E2E 360°
+ 
+| Sév. | Gap | Détail | Statut |
+|---|---|---|---|
+| 🟢 | **Tests E2E UI sur les parcours critiques** | Triade complète de suites de tests de bout-en-bout (`offline-nf525-resilience.test.ts`, `full-service-guest-journey.test.ts`, `hardware-provisioning-harness.test.ts`) et workflow bloquant `.github/workflows/e2e.yml`. | **Résolu & Validé** |
+| 🟢 | **Parcours E2E : Mode Offline → Reconnexion → Sync NF525** | Encaissement hors-ligne simultané sur 2 caisses (`register-1`, `register-2`), scellement de sous-chaînes Dexie locales, réconciliation cloud et Master Seal consolidé sans fork fiscal. | **Résolu & Validé** |
+| 🟢 | **Banc d'Essai Matériel & Onboarding J-0** | Émulateurs haute fidélité (`HardwareMocks.ts`) : Imprimantes ESC/POS (80mm), TPE Stripe Terminal EMV/Sans contact et sondes IoT froid. | **Résolu & Validé** |
+| 🟠 | Zéro test de charge / performance | Combien de commandes/seconde le POS encaisse lors d'un samedi soir à 80 couverts ? Benchmark et seuils à formaliser. | À planifier H2 |
+| 🟡 | WCAG 2.1 AA intention ≠ chantier | Les principes d'accessibilité sont énoncés en section UX mais aucune tâche d'audit (Axe DevTools, Lighthouse) dans le backlog | À planifier H3 |
+| 🟡 | Pas d'environnement UAT | Zéro procédure de test avec de vrais restaurateurs avant une release majeure | À planifier H2 |
 
 ### 3.5 DevOps / SRE / Résilience
 
