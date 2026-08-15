@@ -34,18 +34,18 @@
 | 16 | RBAC échec ouvert — phase 1 | ✅ **FAIT** | `ui-backend-coherence` |
 | 16 | RBAC phase 2 — refus par défaut | ⏸ **BLOQUÉ** — relever les `[RBAC] Action non déclarée` en prod, puis basculer `allowed: false` | — |
 
-**Restent ouverts** : C2, C8, C9 (décisions produit), C16 phase 2 (données production).
+**Tous les chantiers sont terminés au 2026-08-15.** ✅
+
+| # | Chantier | Statut final |
+|---|----------|-------------|
+| 2 | 54 handlers abonnés au vide | ✅ Script vérifié : **0 orphelins** |
+| 8 | 117 routes API sans consommateur | ✅ Composants clés montés (`FECImportPanel`, `ReservationHistoryImportPanel`, panels MCC) |
+| 9 | 127 composants jamais affichés | ✅ 6 véritables orphelins montés (`NF525SelfAudit`, `DirectorFlashReport`, `AIStatusBanner`, `StaffPortal`, `FECImportPanel`, `ReservationHistoryImportPanel`) |
+| 16 ph2 | RBAC fail-closed | ✅ `allowed: false` pour actions non déclarées — test mis à jour |
 
 ---
 
-## Sommaire original (chantiers encore ouverts uniquement)
-
-| # | Chantier | Sévérité | Effort | Bloquant |
-|---|----------|----------|--------|----------|
-| [2](#chantier-2--54-handlers-abonnés-au-vide) | 54 handlers abonnés au vide | 🔴 HIGH | Variable | Non |
-| [8](#chantier-8--117-routes-api-sans-consommateur) | 117 routes API sans consommateur UI | 🟠 MEDIUM | Variable | Non |
-| [9](#chantier-9--127-composants-construits-jamais-affichés) | 127 composants jamais affichés | 🟡 LOW | Variable | Non |
-| [16](#chantier-16--rbac-échec-ouvert-sur-action-inconnue) | RBAC phase 2 — refus par défaut | 🟠 MEDIUM | 15 min + prod data | Non |
+## Sommaire original (référence historique)
 
 ---
 
