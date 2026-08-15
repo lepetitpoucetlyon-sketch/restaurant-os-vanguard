@@ -4,6 +4,8 @@ import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
 
+import { IdempotencyGuard } from './IdempotencyGuard';
+
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
 export type { NexusEvents } from './events/catalog';
@@ -21,6 +23,13 @@ interface RegisteredHandler<E extends NexusEventName> {
   event: E;
   handler: Handler<E>;
   priority: 'CRITICAL' | 'HIGH' | 'BACKGROUND';
+  idempotent?: boolean;
+}
+
+export interface EventHandlerOptions {
+  id?: string;
+  priority?: 'CRITICAL' | 'HIGH' | 'BACKGROUND';
+  idempotent?: boolean;
 }
 
 // ── Bus ───────────────────────────────────────────────────────────────────────
@@ -35,23 +44,30 @@ class NexusEventBusClass {
    * priority CRITICAL  → s'exécute en premier, bloquant si nécessaire
    * priority HIGH      → parallèle avec les autres HIGH
    * priority BACKGROUND → lancé après les CRITICAL/HIGH, non-bloquant
+   * idempotent: true   → Invariant #1 : déduplique automatiquement sur eventId
    */
   on<E extends NexusEventName>(
     event: E,
     handler: Handler<E>,
-    options: { id: string; priority?: RegisteredHandler<E>['priority'] } = { id: crypto.randomUUID() }
+    options: EventHandlerOptions = { id: crypto.randomUUID() }
   ): () => void {
+    const handlerId = options.id ?? crypto.randomUUID();
+    const effectiveHandler: Handler<E> = options.idempotent
+      ? (IdempotencyGuard.withIdempotencyGuard(handlerId, event, handler as never) as unknown as Handler<E>)
+      : handler;
+
     const registered: RegisteredHandler<E> = {
-      id: options.id,
+      id: handlerId,
       event,
-      handler,
+      handler: effectiveHandler,
       priority: options.priority ?? 'HIGH',
+      idempotent: options.idempotent,
     };
 
     const existing = this.handlers.get(event) ?? [];
     this.handlers.set(event, [...existing, registered]);
 
-    return () => this.off(event, options.id);
+    return () => this.off(event, handlerId);
   }
 
   off(event: NexusEventName, id: string): void {
@@ -213,3 +229,4 @@ class NexusEventBusClass {
 }
 
 export const NexusEventBus = new NexusEventBusClass();
+export { IdempotencyGuard } from './IdempotencyGuard';

@@ -75,6 +75,8 @@ export class RestaurantOfflineDB extends Dexie {
     busOutbox!: Table<BusOutboxEntry>;
     /** P0-2: Dead Letter Queue (DLQ) pour les handlers du NexusEventBus */
     deadLetterEvents!: Table<DeadLetterEntry>;
+    /** Invariant #1: Log d'idempotence et de-duplication des événements du Bus */
+    processedEvents!: Table<{ id: string; eventId: string; handlerId: string; eventName: string; tenantId?: string; processedAt: number }>;
 
     constructor() {
         super('RestaurantOS_Offline');
@@ -118,6 +120,11 @@ export class RestaurantOfflineDB extends Dexie {
         this.version(6).stores({
             busOutbox: 'id, status, eventName',
             deadLetterEvents: 'id, status, eventName, handlerId, nextRetryAt'
+        });
+
+        // Version 7 — Invariant #1 (Idempotence de l'EventBus & De-duplication log)
+        this.version(7).stores({
+            processedEvents: 'id, eventId, handlerId, eventName, processedAt'
         });
     }
 

@@ -31,21 +31,21 @@
 | P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
 |:---:|:---:|:---:|:---:|---|---|---|
 | **P1** | 🔧 | H1 | M | **Terminal de paiement CB** (Stripe Terminal / SumUp / Ingenico) | `src/lib/adapters/StripeTerminalAdapter.ts` | Stripe sandbox opérationnel — SumUp/Ingenico à brancher pour redondance TPE |
-| **P1** | ⬜ | H1 | XL | **Mode hors-ligne POS & Résolution Conflits** | `src/lib/sync/offlineQueue.ts` | **Chantier lourd** : Dexie.js + sync queue + scellage NF525 multi-caisses (voir §3 ARCHITECTURE) |
+| **P1** | ✅ | H1 | — | **Mode hors-ligne POS & Résolution Conflits** | `src/lib/sync/offlineQueue.ts`, `src/lib/offline/sync-manager.ts` | File Dexie + `SyncManager` + scellage NF525 multi-caisses livrés (voir §3 ARCHITECTURE) |
 | **P1** | 🔧 | H1 | S | **Impression tickets thermiques ESC/POS** (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Moteur d'impression prêt ; auto-discovery réseau mDNS/USB à finaliser |
 | **P1** | ⬜ | H2 | S | **Scanner code-barres / QR articles en caisse** | `src/modules/ops/service/pos/` | Support douchette Zebra / Bluetooth pour mode flux rapide et Retail |
 | **P1** | ✅ | H1 | — | **Gestion du pourboire** (pool, individuel, DSN) | `src/modules/human/paie/tips.ts` | Ventilation automatique et export DSN URSSAF opérationnels |
-| **P1** | ⬜ | H1 | S | **Alerte allergènes sur commandes** (colorcode plat) | `src/modules/commerce/catalog/` | 🔴 **Risque Corporel & Légal** : dépend émetteur R2 `reservation.matched` (voir §DEBT P0) |
+| **P1** | ✅ | H1 | — | **Alerte allergènes & Check-In client KDS (R2)** | `TableInsightPanel.tsx`, `ResaAllergenCheckHandler.ts` | 🟢 Chaîne complète livrée : `reservation.matched` → badge table → notification KDS urgente |
 | **P1** | ⬜ | H1 | S | **Vérification âge alcool** (blocage POS + validation) | `src/modules/ops/service/pos/hooks/usePos.ts` | Émet `compliance.age_verification_requested` (obligation L3342-1 Code Santé) |
 | **P1** | 🔧 | H1 | M | **Séquençage des plats** (entrée → plat → dessert) | `src/modules/ops/production/kds/` | Handler prêt, émetteur `ops.course.fired` partiel (nécessite `ops.course.next_requested`) |
 | **P1** | ✅ | H1 | — | **Routage KDS multi-stations** (chaud, froid, bar, pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | Filtrage par station et chronomètres de retardement opérationnels |
-| **P1** | ⬜ | H1 | M | **Split d'addition & Règle du Reliquat** | `src/modules/ops/service/pos/hooks/usePosSplit.ts` | Calcul microunits + reliquat au dernier payeur (Invariant Concurrence #3) |
+| **P1** | ✅ | H1 | — | **Split d'addition & Règle du Reliquat** | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Livré — reliquat au dernier payeur (Invariant Concurrence #5 SovereignMath) |
 | **P1** | ⬜ | H1 | M | **Verrouillage CAS des tables & Concurrence** | `src/shared/eventBus/handlers/TableLockHandler.ts` | Empêche la prise de commande concurrente sur une même table |
 | **P1** | ⬜ | H1 | M | **Session de service & Calculs Shift UTC (Anti-DST)** | `src/modules/ops/workflow/engine/` | Rattachement à la `serviceSessionId` (Invariant Concurrence #4) |
-| **P1** | ⬜ | H1 | L | **Architecture NF525 multi-caisses offline** | `src/modules/finance/fiscalite/FiscalSealer.ts` | Sous-chaîne par `registerId` + `MasterFiscalSeal` consolidé |
-| **P1** | ⬜ | H1 | M | **Idempotence Bus via `events_processed_log`** | `src/shared/eventBus/NexusEventBus.ts` | 🔴 **Bloquant P0 §DEBT** : déduplication stricte des `eventId` |
+| **P1** | ✅ | H1 | — | **Architecture NF525 multi-caisses offline** | `src/modules/finance/fiscalite/FiscalSealer.ts` | 🟢 Sous-chaîne SHA-256 par `registerId` + `MasterFiscalSeal` consolidé livrés |
+| **P1** | ✅ | H1 | — | **Idempotence Bus via `events_processed_log`** | `src/shared/eventBus/IdempotencyGuard.ts`, `NexusEventBus.ts` | 🟢 Invariant #1 validé : déduplication automatique et verrouillage `eventId_handlerId` |
 | **P1** | ⬜ | H2 | M | **Pré-autorisation CB sur table ouverte** | `src/lib/adapters/StripeAdapter.ts` | Dépend du hardware Stripe Terminal en production |
-| **P2** | ⬜ | H2 | S | **Bouton SOS Caisse & Diagnostic d'urgence POS** | `src/modules/ops/service/pos/` | Déclenche alerte prioritaire PagerDuty/Slack vers l'opérateur MCC |
+| **P1** | ✅ | H2 | — | **Bouton SOS Caisse & Diagnostic d'urgence POS** | `src/modules/commerce/ui/pos/SosCaisseModal.tsx`, `SupportAIPanel.tsx` | 🟢 Livré — presets panne + diagnostic Gemini live + prise en charge MCC |
 | **P2** | ⬜ | H2 | M | **Self-ordering QR code table** | `src/app/(client)/(public)/order/` | Dépend de l'API REST publique OpenAPI H2.2 |
 | **P2** | ⬜ | H2 | XL | **Application serveur mobile compagnon** (iOS/Android) | `src/app/(client)/(ops)/mobile-pos/` | 🚧 **Bloquée par l'API REST H2.2** |
 | **P2** | 🔧 | H2 | M | **Estimation temps préparation IA par station KDS** | `src/modules/ops/production/kds/` | Émet `intelligence.prep_time_estimated` |

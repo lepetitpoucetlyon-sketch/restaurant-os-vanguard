@@ -23,13 +23,12 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 
 ## 🧩 2. Les 6 Angles Morts Majeurs d'Architecture & Opérations
 
-### ⚡ 2.1 Idempotence & Ordre des Événements du Bus (`NexusEventBus`)
-* **Problème** : `NexusEventBus.ts` persiste les intentions dans l'Outbox locale (Dexie), mais le backend ne possède pas de table de déduplication des `eventId` consommés.
-* **Risque en production** : lors d'une coupure réseau ou d'un retry, un événement critique (`order.paid`, `finance.journal_entry_created`) rejoué deux fois peut doubler une écriture comptable ou un débit de stock.
-* **Solution d'Ingénierie** :
-  1. Enregistrer un `eventId` UUID unique dans chaque payload.
-  2. Middleware `withIdempotencyGuard(eventId)` vérifiant la collection atomique `events_processed_log/{eventId}` avant exécution.
-  3. Ordre garanti par `aggregateId` — les events dépendants (`order.paid` puis `stock.deduct`) partagent la clé et sont sérialisés.
+### ⚡ 2.1 Idempotence & Ordre des Événements du Bus (`NexusEventBus`) 🟢 (Résolu & Livré)
+* **Problème** : `NexusEventBus.ts` persistait les intentions dans l'Outbox, mais ne dédupliquait pas les `eventId` consommés.
+* **Solution Livrée** (`IdempotencyGuard.ts`, `NexusEventBus.ts`, `processedEvents` Dexie & Nexus) :
+  1. Option `{ idempotent: true }` sur `NexusEventBus.on()` avec wrapper automatique `withIdempotencyGuard`.
+  2. Vérification et verrouillage atomique sur la clé déterministe `${eventId}_${handlerId}`.
+  3. Zéro double écriture comptable et zéro double débit de stock lors des retries réseau.
 
 ### ⛓️ 2.2 NF525 en Environnement Multi-Caisses & Mode Hors-Ligne 🟢 (Résolu & Livré)
 * **Problème** : tension mathématique entre la chaîne SHA-256 séquentielle (`previousHash`) et le mode hors-ligne sur plusieurs tablettes simultanées.
