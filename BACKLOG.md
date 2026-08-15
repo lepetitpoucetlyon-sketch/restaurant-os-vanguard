@@ -100,9 +100,10 @@
 | P1 | ✅ | H1 | — | Gestion de la caisse menue monnaie (fond de caisse + comptage) | `src/modules/finance/comptabilite/CashDrawer.ts` | — |
 | P1 | ✅ | H1 | — | Comptabilité des pourboires (déclaration DSN mensuelle) | `src/modules/human/paie/tips.ts` | — |
 | P1 | 🔧 | H1 | L | Prévision de trésorerie 30 / 60 / 90 jours | `src/modules/finance/comptabilite/CashflowForecast.ts` | Prérequis historique data + cold-start heuristique |
-| P1 | ⬜ | H1 | S | Clés déterministes des écritures Grand Livre / Remboursements | `src/shared/eventBus/handlers/RefundJournalHandler.ts` | Invariant #1 concurrence |
+| P1 | ✅ | H1 | — | Clés déterministes & Idempotence EventBus (Invariant #1) | `src/shared/eventBus/IdempotencyGuard.ts` | Déduplication triple couche |
 | P1 | 🔧 | H2 | L | Facturation inter-sociétés (groupe multi-restaurants) | `src/modules/finance/billing/` | Prérequis multi-établissements H4 |
 | P1 | ✅ | H1 | — | Clôture journalière Z de caisse NF525 (scellement cryptographique) | `src/modules/finance/fiscalite/FiscalSeal.ts` | — |
+| P1 | ✅ | H1 | — | Stockage Froid Immuable WORM NF525 (6 ans de rétention légale) | `src/modules/finance/fiscalite/WormArchiveStorageService.ts` | Art. L102 B LPF |
 | P2 | ✅ | H2 | — | SEPA direct débit fournisseurs récurrents (XML pain.001) | `src/orchestration/handlers/SepaExportHandler.ts` | — |
 | P2 | 🔧 | H2 | M | Analyse du seuil de rentabilité par service / jour | `src/modules/finance/comptabilite/` | — |
 | P2 | ✅ | H1 | — | Budget vs réel en temps réel (dashboard CFO) | `src/modules/finance/comptabilite/BudgetTracker.ts` | — |
@@ -137,7 +138,8 @@
 | P2 | ✅ | H1 | — | Conformité incendie (extincteurs, exercices, ERP) | `src/modules/compliance/securite/` | — |
 | P2 | ⬜ | H3 | M | Audit fournisseur (Bio, MSC, Label Rouge, local) | `src/modules/logistics/approvisionnement/` | — |
 | P2 | ✅ | H1 | — | RGPD — droit à l'oubli client (ErasureService crypto-shredding) | `src/modules/compliance/registre/ErasureService.ts` | — |
-| P1 | ⬜ | H1 | M | **RGPD Art. 9 — Consentement & chiffrement données santé allergies** | `src/modules/commerce/relation/crm/` | **Bloquant P0 §DEBT 2.3** |
+| P1 | ✅ | H1 | — | **RGPD Art. 9 — Consentement & chiffrement données santé allergies** | `src/shared/security/SensitiveDataCryptoService.ts` | AES-256-GCM + Crypto-shredding Art. 17 |
+| P1 | ✅ | H1 | — | **Masquage systématique PII dans les logs (redactPII & Axiom)** | `src/lib/security/redactPII.ts` | Conformité RGPD / PCI-DSS |
 | P3 | ⬜ | H3 | S | Score Nutri-Score calculé automatiquement par plat | `src/modules/commerce/catalog/` | Dépend fiches techniques complètes |
 | P3 | ✅ | H1 | — | Conformité accessibilité PMR (ERP catégorie 3-4-5) | `src/modules/compliance/securite/` | — |
 | P3 | ⬜ | H2 | S | Licence IV (gestion renouvellement, transfert) | `src/modules/compliance/registre/` | — |
