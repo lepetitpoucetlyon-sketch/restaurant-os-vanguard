@@ -93,11 +93,14 @@ export class FiscalSealer {
     tenantId: string,
     isTrainingMode: boolean,
     journalEntry?: Record<string, unknown> & { id: string },
-    additionalMutations?: (tx: INexusTransaction, sealId: string) => void
+    additionalMutations?: (tx: INexusTransaction, sealId: string) => void,
+    registerId?: string
   ): Promise<{ hash: string; signature: string; sealId: string; previousHash: string }> {
     const sealId = IdGenerator.generateWithPrefix('seal');
     const sealPath = `tenants/${tenantId}/fiscalSeals/${sealId}`;
-    const chainHeadPath = `tenants/${tenantId}/fiscalMeta/chainHead`;
+    const chainHeadPath = registerId
+      ? `tenants/${tenantId}/fiscalMeta/chainHead_${registerId}`
+      : `tenants/${tenantId}/fiscalMeta/chainHead`;
 
     let hash: string;
     let signature: string;
@@ -122,8 +125,9 @@ export class FiscalSealer {
           timestamp,
           serverRecordedAt,
           isTrainingMode: true,
+          registerId: registerId ?? 'main',
         } as unknown);
-        tx.set(chainHeadPath, { hash, sealId, updatedAt: timestamp });
+        tx.set(chainHeadPath, { hash, sealId, registerId: registerId ?? 'main', updatedAt: timestamp });
         if (journalEntry) {
            tx.set(`tenants/${tenantId}/journalEntries/${journalEntry.id}`, {
              ...journalEntry,
@@ -149,8 +153,9 @@ export class FiscalSealer {
           timestamp,
           serverRecordedAt,
           isTrainingMode: false,
+          registerId: registerId ?? 'main',
         } as unknown);
-        tx.set(chainHeadPath, { hash, sealId, updatedAt: timestamp });
+        tx.set(chainHeadPath, { hash, sealId, registerId: registerId ?? 'main', updatedAt: timestamp });
         if (journalEntry) {
            tx.set(`tenants/${tenantId}/journalEntries/${journalEntry.id}`, {
              ...journalEntry,

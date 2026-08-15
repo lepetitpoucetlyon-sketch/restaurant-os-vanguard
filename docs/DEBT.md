@@ -31,13 +31,12 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
   2. Middleware `withIdempotencyGuard(eventId)` vérifiant la collection atomique `events_processed_log/{eventId}` avant exécution.
   3. Ordre garanti par `aggregateId` — les events dépendants (`order.paid` puis `stock.deduct`) partagent la clé et sont sérialisés.
 
-### ⛓️ 2.2 NF525 en Environnement Multi-Caisses & Mode Hors-Ligne
+### ⛓️ 2.2 NF525 en Environnement Multi-Caisses & Mode Hors-Ligne 🟢 (Résolu & Livré)
 * **Problème** : tension mathématique entre la chaîne SHA-256 séquentielle (`previousHash`) et le mode hors-ligne sur plusieurs tablettes simultanées.
-* **Risque fiscal** : deux tablettes hors-ligne qui encaissent en parallèle génèrent deux chaînes concurrentes qui "forkent", cassant la validation du vérificateur fiscal NF525 lors de la resynchronisation.
-* **Solution d'Ingénierie** (voir [ARCHITECTURE_METAPLATFORM.md §3](plans/ARCHITECTURE_METAPLATFORM.md#3-moteur-cryptographique--fiscal-nf525-multi-caisses-offline)) :
-  1. **Chaîne Fiscale par Caisse (`registerId`)** : chaque tablette tient sa propre sous-chaîne cryptographique continue `FiscalSeal_{registerId}`.
-  2. **Grand Livre de Clôture Z Consolidé** : lors de la clôture journalière Z, le serveur scelle un `MasterFiscalSeal` qui agrège les derniers hashes de tous les terminaux enregistrés.
-  3. **Résolution de conflit reconnexion** : un trou dans la séquence bloque la sync et déclenche `mcc.fiscal_audit_required`. **Aucune fusion silencieuse n'est jamais permise**.
+* **Solution Livrée** (`FiscalSealer.ts`, `offlineQueue.ts`) :
+  1. **Chaîne Fiscale par Caisse (`registerId`)** : chaque tablette/terminal scelle sa propre sous-chaîne cryptographique continue `FiscalSeal_{registerId}` sans fork.
+  2. **Grand Livre de Clôture Z Consolidé** : agrégation des chaînes de terminaux.
+  3. **File d'attente hors-ligne** : `offlineQueue.ts` avec Dexie et priorité 1 NF525.
 
 ### 🩺 2.3 Traçabilité des Allergies = Données de Santé (RGPD Art. 9)
 * **Problème** : les fiches allergies (`Customer.allergens`) liées à l'identité d'un client sont des **données de santé** au sens de l'Article 9 du RGPD.
@@ -48,13 +47,11 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
   3. Application stricte de la politique de suppression `ErasureService` (crypto-shredding).
 * **Cas Salon** : les photos avant/après cuir chevelu + fiches coloration + réactions allergiques → même traitement Art. 9.
 
-### 🏢 2.4 Support B2B Tenant, Astreinte & Dépendance ("Bus Factor = 1")
+### 🏢 2.4 Support B2B Tenant, Astreinte & Dépendance ("Bus Factor = 1") 🟢 (Résolu & Livré)
 * **Problème** : la plateforme propose un CRM pour les clients des restaurants, mais aucun canal de ticketing dédié pour que le restaurateur appelle l'opérateur en cas de bug en plein service.
-* **Risque opérationnel** : panne un samedi soir à 21h sans astreinte = perte de confiance et churn immédiat.
-* **Solution d'Ingénierie** :
-  1. Intégration d'un bouton **SOS Caisse** sur l'écran POS déclenchant une alerte prioritaire PagerDuty/Slack avec dump de diagnostic chiffré.
-  2. Plan de continuité et d'astreinte formalisé dans [`docs/guides/ON_CALL_RUNBOOK.md`](guides/ON_CALL_RUNBOOK.md).
-  3. Plan RH progressif (voir [ROADMAP_STRATEGY.md §7](plans/ROADMAP_STRATEGY.md)) : Solo → +1 Customer Success à 10 clients → +1 Dev à 50 clients.
+* **Solution Livrée** (`SosCaisseModal.tsx`, `SupportAIPanel.tsx`, `/api/tenant/support/tickets`) :
+  1. Bouton **SOS Caisse** sur l'écran POS déclenchant une alerte prioritaire P0 avec presets de panne et diagnostic Gemini en direct.
+  2. File d'attente live sur le Cockpit MCC (`SupportAIPanel.tsx`) pour prise en charge instantanée.
 
 ### 📦 2.5 Provisioning Matériel & Réseau On-Site (Le Jour J)
 * **Problème** : absence de procédure standardisée pour le déploiement physique des iPads, imprimantes thermiques ESC/POS, TPE Stripe Terminal et sondes Bluetooth Testo.

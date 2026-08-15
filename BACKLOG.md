@@ -31,7 +31,7 @@
 | P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances |
 |---|--------|---------|--------|---------|------------|-------------------------|
 | P1 | 🔧 | H1 | M | Terminal de paiement (Stripe Terminal / SumUp / Ingenico) | `src/lib/adapters/StripeTerminalAdapter.ts` | Stripe câblé sandbox — SumUp/Ingenico ⬜ |
-| P1 | ⬜ | H1 | XL | Mode hors-ligne POS avec sync auto au retour réseau | `src/lib/sync/offlineQueue.ts` | Bloque tout scénario coupure WiFi ; **prérequis Kit J-0 H2** |
+| P1 | ✅ | H1 | — | Mode hors-ligne POS avec sync auto au retour réseau | `src/lib/sync/offlineQueue.ts`, `sync-manager.ts` | File d'attente Dexie & ré-émission automatique |
 | P1 | 🔧 | H1 | S | Impression tickets thermiques ESC/POS (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Fonctionne ; auto-discovery imprimantes ⬜ |
 | P1 | ⬜ | H2 | S | Scanner code-barres / QR articles en caisse | `src/modules/ops/service/pos/` | — |
 | P1 | ✅ | H1 | S | Alerte allergènes sur commandes & Check-In client KDS | `src/modules/facility/spaces/floor-plan/TableInsightPanel.tsx`, `ResaAllergenCheckHandler.ts` | Émission `reservation.matched` & notification urgente cuisine validées |
@@ -41,10 +41,10 @@
 | P1 | ✅ | H1 | — | Split addition (partage par convive ou par article) | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Reliquat au dernier payeur validé (Invariant #5 SovereignMath) |
 | P1 | ⬜ | H1 | M | Verrouillage CAS des tables & Reliquat indivisible de split | `src/shared/eventBus/handlers/TableLockHandler.ts` | Invariants #3 concurrence |
 | P1 | ⬜ | H1 | M | Session de service & Calculs Shift UTC (Anti-DST) | `src/modules/ops/workflow/engine/` | Invariant #5 concurrence |
-| P1 | ⬜ | H1 | L | Architecture NF525 multi-caisses offline (chaîne par terminal) | `src/modules/finance/fiscalite/FiscalSealer.ts` | Prérequis pour offline POS multi-devices |
+| P1 | ✅ | H1 | — | Architecture NF525 multi-caisses offline (chaîne par terminal) | `src/modules/finance/fiscalite/FiscalSealer.ts` | Chaîne cryptographique SHA-256 dédiée par `registerId` |
 | P1 | ⬜ | H1 | M | Idempotence Bus via eventId deduplication log | `src/shared/eventBus/NexusEventBus.ts` | **Bloquant §DEBT** — invariant #1 |
 | P1 | ⬜ | H2 | M | Pré-autorisation CB sur table ouverte | `src/lib/adapters/StripeAdapter.ts` | Dépend Stripe Terminal H1 |
-| P2 | ⬜ | H2 | S | Bouton SOS Caisse & Diagnostic d'urgence POS | `src/modules/ops/service/pos/` | **Dépend API MCC alerte PagerDuty** (H2.1) |
+| P1 | ✅ | H1 | — | Bouton SOS Caisse & Diagnostic d'urgence POS | `src/modules/commerce/ui/pos/SosCaisseModal.tsx` | Déclencheur direct POS & SupportAIPanel MCC |
 | P2 | ⬜ | H2 | M | Self-ordering QR code (commande depuis table) | `src/app/(client)/(public)/order/` | Dépend API REST H2.2 |
 | P2 | ⬜ | H2 | XL | Application serveur mobile-first (iOS/Android) | `src/app/(client)/(ops)/mobile-pos/` | **🚧 Bloquée API REST H2.2** |
 | P2 | 🔧 | H2 | M | Estimation temps de préparation IA par station KDS | `src/modules/ops/production/kds/` | Émet `intelligence.prep_time_estimated` |

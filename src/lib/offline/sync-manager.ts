@@ -84,7 +84,7 @@ export class SyncManager {
             .anyOf('pending', 'failed')
             .toArray())
             // Fiscal (priority 1) d'abord, puis ordre chronologique (chaîne de sceaux).
-            .sort((a, b) => (b.priority - a.priority) || a.timestamp.localeCompare(b.timestamp));
+            .sort((a, b) => (b.priority - a.priority) || String(a.timestamp || '').localeCompare(String(b.timestamp || '')));
 
         if (pendingOps.length === 0) return;
 
