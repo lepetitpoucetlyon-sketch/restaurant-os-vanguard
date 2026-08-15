@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
@@ -20,7 +21,8 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-    // MCC-only — vérifié par le middleware (APP_MODE=mcc)
+    const caller = await requireMccLevel(req, 'fleet_admin');
+    if (isDenied(caller)) return caller;
     ensureServerNexus();
 
     const parsed = BodySchema.safeParse(await req.json());

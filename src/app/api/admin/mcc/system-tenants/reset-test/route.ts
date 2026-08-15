@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantSeeder } from '@/lib/TenantSeeder';
@@ -22,6 +23,8 @@ const PURGEABLE = [
 ];
 
 export async function POST(req: NextRequest) {
+    const caller = await requireMccLevel(req, 'fleet_admin');
+    if (isDenied(caller)) return caller;
     ensureServerNexus();
 
     const parsed = BodySchema.safeParse(await req.json());

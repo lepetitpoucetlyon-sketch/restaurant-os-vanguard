@@ -1,34 +1,16 @@
 /**
  * MCC handlers — tests unitaires
- * MccHealthPingHandler et MccFiscalAuditHandler
+ * Stratégie : import direct des fonctions handler extraites (handleMccHealthPing,
+ * handleMccFiscalAuditRequired). On spy sur le vrai Nexus.adapter initialisé par
+ * tests/setup.ts (MockAdapter) — pas de vi.mock du module NexusAdapter.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-// ── Mocks globaux ─────────────────────────────────────────────────────────────
-
-const batchMock = {
-  set:       vi.fn(),
-  update:    vi.fn(),
-  delete:    vi.fn(),
-  increment: vi.fn(),
-  commit:    vi.fn().mockResolvedValue(undefined),
-};
-
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      get:   vi.fn(),
-      set:   vi.fn().mockResolvedValue(undefined),
-      query: vi.fn().mockResolvedValue([]),
-      batch: vi.fn(() => batchMock),
-    },
-  },
-}));
-
+// NexusEventBus mocké pour que les registerMcc* puissent être importés sans effets de bord
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: {
-    on: vi.fn((_event: string, handler: (...args: unknown[]) => unknown) => () => handler),
-    emit: vi.fn().mockResolvedValue(undefined),
+    on:          vi.fn(() => () => {}),
+    emit:        vi.fn().mockResolvedValue(undefined),
     emitDurable: vi.fn().mockResolvedValue(undefined),
   },
 }));
@@ -40,43 +22,57 @@ vi.mock('@/lib/shared-kernel', () => ({
 }));
 
 vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
+}));
+
+vi.mock('@/lib/audit', () => ({
+  empireAudit: { log: vi.fn() },
 }));
 
 // ── Imports après mocks ───────────────────────────────────────────────────────
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { handleMccHealthPing } from '@/shared/eventBus/handlers/MccHealthPingHandler';
+import { handleMccFiscalAuditRequired } from '@/shared/eventBus/handlers/MccFiscalAuditHandler';
 
-function captureHandler(): (...args: unknown[]) => Promise<void> {
-  const calls = vi.mocked(NexusEventBus.on).mock.calls;
-  const last = calls[calls.length - 1];
-  return last[1] as (...args: unknown[]) => Promise<void>;
-}
+// ── Setup : spy sur le vrai Nexus.adapter (MockAdapter injectée par tests/setup.ts) ──
+
+let setSpy: ReturnType<typeof vi.spyOn>;
+let querySpy: ReturnType<typeof vi.spyOn>;
+let batchSpy: ReturnType<typeof vi.spyOn>;
+
+const batchMock = {
+  set:       vi.fn(),
+  update:    vi.fn(),
+  delete:    vi.fn(),
+  increment: vi.fn(),
+  commit:    vi.fn().mockResolvedValue(undefined),
+};
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
+  setSpy   = vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined);
+  querySpy = vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
+  batchSpy = vi.spyOn(Nexus.adapter, 'batch').mockReturnValue(batchMock as unknown as ReturnType<typeof Nexus.adapter.batch>);
+
+  // Reset batch internals
   batchMock.delete.mockReset();
+  batchMock.commit.mockReset();
   batchMock.commit.mockResolvedValue(undefined);
-  vi.mocked(Nexus.adapter.set).mockResolvedValue(undefined);
-  vi.mocked(Nexus.adapter.query).mockResolvedValue([]);
-  vi.mocked(Nexus.adapter.batch).mockReturnValue(batchMock);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 // ── MccHealthPingHandler ──────────────────────────────────────────────────────
 
 describe('MccHealthPingHandler', () => {
   it('écrit l\'état courant + le snapshot historique du jour', async () => {
-    const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
-    );
-    registerMccHealthPingHandler();
-    const handler = captureHandler();
-
     const payload = { tenantId: 'tenant-abc', status: 'healthy', posOnline: true };
-    await handler(payload);
+    await handleMccHealthPing(payload as unknown as Record<string, unknown>);
 
-    const setCalls = vi.mocked(Nexus.adapter.set).mock.calls;
+    const setCalls = setSpy.mock.calls;
     // Au moins 2 set : état courant + historique journalier
     expect(setCalls.length).toBeGreaterThanOrEqual(2);
 
@@ -89,7 +85,7 @@ describe('MccHealthPingHandler', () => {
     // 2. Historique — chemin de la forme mcc/tenantHealth/tenant-abc/history/YYYY-MM-DD
     const today = new Date().toISOString().slice(0, 10);
     const historyCall = setCalls.find(c =>
-      (c[0] as string).startsWith(`mcc/tenantHealth/tenant-abc/history/`)
+      (c[0] as string).startsWith('mcc/tenantHealth/tenant-abc/history/')
     );
     expect(historyCall).toBeDefined();
     expect(historyCall![0]).toBe(`mcc/tenantHealth/tenant-abc/history/${today}`);
@@ -97,37 +93,27 @@ describe('MccHealthPingHandler', () => {
   });
 
   it('purge les entrées > 7 jours (best-effort) si query en retourne', async () => {
-    vi.mocked(Nexus.adapter.query).mockResolvedValue([
+    querySpy.mockResolvedValue([
       { id: '2020-01-01', updatedAt: '2020-01-01T00:00:00.000Z' },
       { id: '2020-01-02', updatedAt: '2020-01-02T00:00:00.000Z' },
     ] as unknown[]);
 
-    const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
-    );
-    registerMccHealthPingHandler();
-    const handler = captureHandler();
-
-    await handler({ tenantId: 'tenant-xyz', status: 'degraded' });
+    await handleMccHealthPing({ tenantId: 'tenant-xyz', status: 'degraded' });
 
     expect(batchMock.delete).toHaveBeenCalledTimes(2);
     expect(batchMock.commit).toHaveBeenCalled();
   });
 
   it('continue sans erreur si la purge échoue', async () => {
-    vi.mocked(Nexus.adapter.query).mockRejectedValue(new Error('Firestore timeout'));
-
-    const { registerMccHealthPingHandler } = await import(
-      '@/shared/eventBus/handlers/MccHealthPingHandler'
-    );
-    registerMccHealthPingHandler();
-    const handler = captureHandler();
+    querySpy.mockRejectedValue(new Error('Firestore timeout'));
 
     // Ne doit pas propager l'erreur
-    await expect(handler({ tenantId: 'tenant-err', status: 'healthy' })).resolves.not.toThrow();
+    await expect(
+      handleMccHealthPing({ tenantId: 'tenant-err', status: 'healthy' })
+    ).resolves.not.toThrow();
 
     // Les 2 set principaux ont quand même été appelés
-    const setCalls = vi.mocked(Nexus.adapter.set).mock.calls;
+    const setCalls = setSpy.mock.calls;
     expect(setCalls.length).toBeGreaterThanOrEqual(2);
   });
 });
@@ -136,20 +122,14 @@ describe('MccHealthPingHandler', () => {
 
 describe('MccFiscalAuditHandler', () => {
   it('crée un document d\'audit fiscal avec status pending', async () => {
-    const { registerMccFiscalAuditHandler } = await import(
-      '@/shared/eventBus/handlers/MccFiscalAuditHandler'
-    );
-    registerMccFiscalAuditHandler();
-    const handler = captureHandler();
-
     const payload = {
       tenantId: 'tenant-hotel',
       reason: 'Séjour reservation-001 : montant élevé 15000.00 €',
       urgency: 'high' as const,
     };
-    await handler(payload);
+    await handleMccFiscalAuditRequired(payload as unknown as Record<string, unknown>);
 
-    const setCalls = vi.mocked(Nexus.adapter.set).mock.calls;
+    const setCalls = setSpy.mock.calls;
     expect(setCalls).toHaveLength(1);
 
     const [path, data] = setCalls[0] as [string, Record<string, unknown>];
@@ -162,16 +142,10 @@ describe('MccFiscalAuditHandler', () => {
   });
 
   it('gère les trois niveaux d\'urgence', async () => {
-    const { registerMccFiscalAuditHandler } = await import(
-      '@/shared/eventBus/handlers/MccFiscalAuditHandler'
-    );
-
     for (const urgency of ['low', 'high', 'critical'] as const) {
-      vi.clearAllMocks();
-      registerMccFiscalAuditHandler();
-      const handler = captureHandler();
-      await handler({ tenantId: 't', reason: 'test', urgency });
-      const data = vi.mocked(Nexus.adapter.set).mock.calls[0]![1] as Record<string, unknown>;
+      setSpy.mockClear();
+      await handleMccFiscalAuditRequired({ tenantId: 't', reason: 'test', urgency });
+      const data = setSpy.mock.calls[0]![1] as Record<string, unknown>;
       expect(data.urgency).toBe(urgency);
     }
   });

@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
@@ -17,6 +18,8 @@ const BodySchema = z.object({ variant: PlatformVariantSchema });
 const RESETTABLE = ['orders', 'reservations', 'quotes', 'analytics'];
 
 export async function POST(req: NextRequest) {
+    const caller = await requireMccLevel(req, 'fleet_admin');
+    if (isDenied(caller)) return caller;
     ensureServerNexus();
 
     const parsed = BodySchema.safeParse(await req.json());
