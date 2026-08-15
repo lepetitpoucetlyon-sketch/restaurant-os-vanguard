@@ -32,15 +32,20 @@ interface StockItemDoc {
 }
 
 /**
- * log-4: useStockDeduction
+ * ⚛️ useStockDeduction — Invariant #2 : Décrémentation Atomique Anti-Race-Condition
  *
  * After an order is completed (status: 'served' | 'paid'), call deductForOrder
  * with the order's items. For each OrderLine:
  *   1. Query 'recipes' to find the recipe matching item.productId.
  *   2. For each recipe ingredient, compute:
  *        deductQty = ingredient.quantity × orderQty × (1 + (lossRate ?? 0))
- *   3. Decrement the matching stockItem's quantity.
- *   4. If the resulting quantity ≤ minQuantity, show a low-stock warning toast.
+ *   3. Décrémentation atomique via Nexus.adapter.increment(path, field, -deductQty).
+ *      ⚠️ NEVER use get() + update() — race condition garantie sur rush POS.
+ *      L'adapter.increment() est traduit en FieldValue.increment (Firestore),
+ *      transaction CAS (MockAdapter), ou équivalent selon le provider actif.
+ *   4. Si le stock résultant ≤ minQuantity : alerte toast + push WebPush au chef.
+ *      La lecture post-incrément est séparée et tolère une légère inconsistance
+ *      (eventual consistency) — seule la décrémentation elle-même est atomique.
  *
  * Note: deductions happen automatically on order completion — the inventory
  * page shows a reminder about this behaviour in its header text.
@@ -79,41 +84,35 @@ export function useStockDeduction() {
                 const stockId = ing.stockItemId ?? ing.ingredientId;
                 if (!stockId) continue;
 
+                const itemPath = tenantId
+                    ? `tenants/${tenantId}/stockItems/${stockId}`
+                    : `stockItems/${stockId}`;
+
                 try {
-                    const itemPath = tenantId ? `tenants/${tenantId}/stockItems/${stockId}` : `stockItems/${stockId}`;
-                    const stockItem = await Nexus.adapter.get<StockItemDoc>(itemPath);
-                    if (!stockItem) {
-                        logger.debug(
-                            `[useStockDeduction] ${itemPath} not found — skipping`
-                        );
-                        continue;
-                    }
-
-                    const currentQty =
-                        stockItem.quantityInStock ?? stockItem.quantity ?? 0;
-
-                    // log-4: Apply loss rate on top of net quantity
+                    // ⚛️ Invariant #2 : décrémenter via adapter.increment() — atomique
+                    // Traduit en FieldValue.increment (Firestore) ou transaction CAS (Mock)
                     const deductQty =
                         ing.quantity * line.quantity * (1 + (ing.lossRate ?? 0));
-                    const newQty = Math.max(0, currentQty - deductQty);
 
-                    await Nexus.adapter.update(itemPath, {
-                        quantityInStock: newQty,
-                        quantity: newQty,
-                        lastDeductionAt: new Date().toISOString(),
-                    });
+                    await Nexus.adapter.increment(itemPath, 'quantityInStock', -deductQty);
+                    // Mise à jour du champ legacy 'quantity' en parallèle (même montant)
+                    await Nexus.adapter.increment(itemPath, 'quantity', -deductQty);
 
                     logger.debug(
-                        `[useStockDeduction] stockItems/${stockId}: ${currentQty} → ${newQty} (-${deductQty})`
+                        `[useStockDeduction] ⚛️ stockItems/${stockId}: -${deductQty} (atomique, loss×${1 + (ing.lossRate ?? 0)})`
                     );
 
-                    // log-4: Warn when stock falls to or below alert threshold
+                    // Lecture post-incrément pour l'alerte seuil bas (eventual consistency OK)
+                    const stockItem = await Nexus.adapter.get<StockItemDoc>(itemPath);
+                    if (!stockItem) continue;
+
+                    const newQty = stockItem.quantityInStock ?? stockItem.quantity ?? 0;
                     const minQty = stockItem.minQuantity;
                     if (minQty !== undefined && newQty <= minQty) {
                         const ingredientName =
                             stockItem.ingredientName ?? ing.ingredientId;
                         toast.warning(`Stock bas : ${ingredientName}`);
-                        // not-4: Push critical stock alert to kitchen chef
+                        // Push WebPush critique au chef cuisinier
                         if (tenantId) pushToRole(tenantId, 'chef_cuisinier', {
                             title: 'Alerte stock critique',
                             body: `${ingredientName} : stock bas (${newQty} ${ing.unit ?? ''})`,
@@ -122,7 +121,7 @@ export function useStockDeduction() {
                     }
                 } catch (err) {
                     logger.error(
-                        `[useStockDeduction] Failed to update stockItems/${stockId}`,
+                        `[useStockDeduction] ⚛️ Atomic decrement failed for stockItems/${stockId}`,
                         err
                     );
                 }
