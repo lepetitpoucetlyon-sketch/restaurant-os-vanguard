@@ -40,7 +40,7 @@
 | P1 | ✅ | H1 | — | Routage KDS multi-station (chaud / froid / pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | — |
 | P1 | ✅ | H1 | — | Split addition (partage par convive ou par article) | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Reliquat au dernier payeur validé (Invariant #5 SovereignMath) |
 | P1 | ✅ | H1 | — | Verrouillage CAS des tables & Concurrence POS | `src/modules/ops/service/pos/services/TableLockService.ts`, `useTableLock.ts` | Invariants #2 & #3 validés (zéro collision d'accès concurrent) |
-| P1 | ⬜ | H1 | M | Session de service & Calculs Shift UTC (Anti-DST) | `src/modules/ops/workflow/engine/` | Invariant #5 concurrence |
+| P1 | ✅ | H1 | — | Session de service & Calculs Shift UTC (Anti-DST) | `src/modules/ops/workflow/engine/services/ServiceSessionService.ts` | Invariant #4 validé (calcul absolu ms UTC & rattachement nocturne J-1) |
 | P1 | ✅ | H1 | — | Architecture NF525 multi-caisses offline (chaîne par terminal) | `src/modules/finance/fiscalite/FiscalSealer.ts` | Chaîne cryptographique SHA-256 dédiée par `registerId` |
 | P1 | ✅ | H1 | — | Idempotence Bus via eventId deduplication log | `src/shared/eventBus/IdempotencyGuard.ts`, `NexusEventBus.ts` | Invariant #1 validé (zéro double-exécution sur eventId) |
 | P1 | ⬜ | H2 | M | Pré-autorisation CB sur table ouverte | `src/lib/adapters/StripeAdapter.ts` | Dépend Stripe Terminal H1 |

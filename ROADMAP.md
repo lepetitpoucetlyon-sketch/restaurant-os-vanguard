@@ -41,7 +41,7 @@
 | **P1** | ✅ | H1 | — | **Routage KDS multi-stations** (chaud, froid, bar, pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | Filtrage par station et chronomètres de retardement opérationnels |
 | **P1** | ✅ | H1 | — | **Split d'addition & Règle du Reliquat** | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Livré — reliquat au dernier payeur (Invariant Concurrence #5 SovereignMath) |
 | **P1** | ✅ | H1 | — | **Verrouillage CAS des tables & Concurrence** | `src/modules/ops/service/pos/services/TableLockService.ts` | 🟢 Invariants #2 & #3 validés : verrouillage optimiste CAS et déverrouillage automatique |
-| **P1** | ⬜ | H1 | M | **Session de service & Calculs Shift UTC (Anti-DST)** | `src/modules/ops/workflow/engine/` | Rattachement à la `serviceSessionId` (Invariant Concurrence #4) |
+| **P1** | ✅ | H1 | — | **Session de service & Calculs Shift UTC (Anti-DST)** | `src/modules/ops/workflow/engine/services/ServiceSessionService.ts` | 🟢 Invariant #4 validé : calculs absolus Anti-DST et rattachement shift nocturne |
 | **P1** | ✅ | H1 | — | **Architecture NF525 multi-caisses offline** | `src/modules/finance/fiscalite/FiscalSealer.ts` | 🟢 Sous-chaîne SHA-256 par `registerId` + `MasterFiscalSeal` consolidé livrés |
 | **P1** | ✅ | H1 | — | **Idempotence Bus via `events_processed_log`** | `src/shared/eventBus/IdempotencyGuard.ts`, `NexusEventBus.ts` | 🟢 Invariant #1 validé : déduplication automatique et verrouillage `eventId_handlerId` |
 | **P1** | ⬜ | H2 | M | **Pré-autorisation CB sur table ouverte** | `src/lib/adapters/StripeAdapter.ts` | Dépend du hardware Stripe Terminal en production |
