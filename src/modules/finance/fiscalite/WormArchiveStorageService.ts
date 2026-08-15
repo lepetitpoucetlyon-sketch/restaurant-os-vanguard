@@ -69,11 +69,18 @@ export class WormArchiveStorageService {
       ? `worm_${tenantId}_${year}_M${String(month).padStart(2, '0')}`
       : `worm_${tenantId}_${year}_ANNUAL`;
 
-    const sortedSeals = [...seals].sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
+    const sortedSeals = [...seals].sort((a, b) => {
+      const tsA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+      const tsB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+      return tsA - tsB;
+    });
     const firstSeal = sortedSeals[0];
     const lastSeal = sortedSeals[sortedSeals.length - 1];
 
-    const totalAmount = sortedSeals.reduce((sum, s) => sum + (s.totalInMicrounits ?? 0), 0);
+    const totalAmount = sortedSeals.reduce(
+      (sum, s) => sum + ((s as unknown as { totalInMicrounits?: number }).totalInMicrounits ?? 0),
+      0
+    );
 
     const manifest: WormArchiveManifest = {
       tenantId,
@@ -84,7 +91,7 @@ export class WormArchiveStorageService {
       totalAmountInMicrounits: totalAmount,
       firstTransactionHash: firstSeal.hash || 'GENESIS',
       lastTransactionHash: lastSeal.hash || 'TERMINAL',
-      sealIds: sortedSeals.map((s) => s.id),
+      sealIds: sortedSeals.map((s) => s.id).filter((id): id is string => id !== undefined),
     };
 
     // Calcul du Master Hash cryptographique SHA-256 de l'archive
@@ -145,10 +152,17 @@ export class WormArchiveStorageService {
       throw new Error(`Archive WORM introuvable: ${archiveId}`);
     }
 
-    const sortedSeals = [...seals].sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
+    const sortedSeals = [...seals].sort((a, b) => {
+      const tsA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+      const tsB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+      return tsA - tsB;
+    });
     const firstSeal = sortedSeals[0];
     const lastSeal = sortedSeals[sortedSeals.length - 1];
-    const totalAmount = sortedSeals.reduce((sum, s) => sum + (s.totalInMicrounits ?? 0), 0);
+    const totalAmount = sortedSeals.reduce(
+      (sum, s) => sum + ((s as unknown as { totalInMicrounits?: number }).totalInMicrounits ?? 0),
+      0
+    );
 
     const manifest: WormArchiveManifest = {
       tenantId: archive.tenantId,
@@ -159,7 +173,7 @@ export class WormArchiveStorageService {
       totalAmountInMicrounits: totalAmount,
       firstTransactionHash: firstSeal?.hash || 'GENESIS',
       lastTransactionHash: lastSeal?.hash || 'TERMINAL',
-      sealIds: sortedSeals.map((s) => s.id),
+      sealIds: sortedSeals.map((s) => s.id).filter((id): id is string => id !== undefined),
     };
 
     const recomputedHash = await CryptoService.generateHash(JSON.stringify(manifest));

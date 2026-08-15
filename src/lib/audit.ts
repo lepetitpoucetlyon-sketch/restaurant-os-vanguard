@@ -9,7 +9,7 @@ import { Sentry } from '@/lib/sentry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export type AuditSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system' | 'orchestration' | 'fleet' | 'ops' | 'finance' | 'human' | 'compliance' | 'admin' | 'crm' | 'security' | 'fiscal';
+export type AuditModule = 'kitchen' | 'accounting' | 'inventory' | 'staff' | 'haccp' | 'system' | 'orchestration' | 'fleet' | 'ops' | 'finance' | 'human' | 'compliance' | 'admin' | 'crm' | 'security' | 'fiscal' | 'commerce' | 'facility' | 'logistics' | 'intelligence';
 
 export interface AuditEvent {
     module: AuditModule;

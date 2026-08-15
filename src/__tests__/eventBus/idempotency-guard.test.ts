@@ -28,17 +28,17 @@ describe('Invariant #1 : Idempotence de l EventBus & De-duplication Log', () => 
             tenantId: 'bistro-parisien',
             orderId: 'ord-1001',
             tableId: 'tbl-4',
-            items: [],
+            items: [] as unknown[],
             amountInCents: 5000,
             paymentMethod: 'card',
-        } as never;
+        };
 
         // 1. Première émission
-        await NexusEventBus.emit('order.paid', payload1);
+        await NexusEventBus.emit('order.paid', payload1 as never);
         expect(handlerFn).toHaveBeenCalledTimes(1);
 
         // 2. Re-jeu de l'événement (retry réseau ou webhook répété)
-        await NexusEventBus.emit('order.paid', payload1);
+        await NexusEventBus.emit('order.paid', payload1 as never);
         expect(handlerFn).toHaveBeenCalledTimes(1); // Ne doit PAS être ré-exécuté
 
         // 3. Émission d'un nouvel événement avec un eventId différent
@@ -46,9 +46,9 @@ describe('Invariant #1 : Idempotence de l EventBus & De-duplication Log', () => 
             ...payload1,
             eventId: 'evt-order-1002',
             orderId: 'ord-1002',
-        } as never;
+        };
 
-        await NexusEventBus.emit('order.paid', payload2);
+        await NexusEventBus.emit('order.paid', payload2 as never);
         expect(handlerFn).toHaveBeenCalledTimes(2);
     });
 

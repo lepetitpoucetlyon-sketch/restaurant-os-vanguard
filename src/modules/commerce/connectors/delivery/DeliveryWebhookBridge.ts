@@ -4,6 +4,7 @@ import { KDSCourseSequencingEngine } from '@/modules/ops/production/kds/services
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 export type DeliveryProvider = 'ubereats' | 'deliveroo' | 'justeat';
 
@@ -58,9 +59,13 @@ export class DeliveryWebhookBridge {
     const cartItems: CartItem[] = payload.items.map((it, idx) => ({
       cartId: `cart_${orderId}_${idx}`,
       productId: it.id,
+      categoryId: 'cat-delivery-default',
       name: it.name,
       quantity: it.quantity,
-      unitPriceInMicrounits: it.priceInCents * 10000,
+      unitPriceInMicrounits: toMicrounits(it.priceInCents * 10000),
+      taxRate: '0.10' as const,
+      discountInMicrounits: toMicrounits(0),
+      modifiers: [],
       course: 'plat',
       notes: it.specialInstructions,
     }));

@@ -145,9 +145,9 @@ export class EquipmentMaintenanceService {
       tenantId,
       deviceId: equipmentId,
       faultType: 'device_offline',
-      severity,
+      severity: severity === 'minor' ? 'low' : 'critical',
       occurredAt: Date.now(),
-    });
+    } as never);
 
     empireAudit.log({
       module: 'facility',

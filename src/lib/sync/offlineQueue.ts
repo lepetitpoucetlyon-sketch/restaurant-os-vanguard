@@ -124,7 +124,7 @@ export class OfflineQueueService {
 
             return { success: true, drainedCount: Math.max(0, drainedCount) };
         } catch (error) {
-            logger.error('[OfflineQueue] Flush failed', error);
+            logger.error('[OfflineQueue] Flush failed', { error: String(error) });
             return { success: false, drainedCount: 0 };
         }
     }

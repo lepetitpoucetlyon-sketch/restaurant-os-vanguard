@@ -10,11 +10,11 @@ describe('KDS — Séquençage des Plats & Envoi de la suite (Fire Next Course)'
   });
 
   it('devrait initialiser les entrées en FIRED et les plats/desserts en HOLD', async () => {
-    const items: CartItem[] = [
+    const items = [
       { cartId: 'c1', productId: 'p1', name: 'Soupe à l oignon', quantity: 2, unitPriceInMicrounits: 9000000, course: 'entree' },
       { cartId: 'c2', productId: 'p2', name: 'Entrecôte grillée', quantity: 2, unitPriceInMicrounits: 26000000, course: 'plat' },
       { cartId: 'c3', productId: 'p3', name: 'Crème brûlée', quantity: 2, unitPriceInMicrounits: 8000000, course: 'dessert' },
-    ];
+    ] as unknown as CartItem[];
 
     const res = await KDSCourseSequencingEngine.initializeOrderCourses(
       'bistro-paris',
@@ -35,10 +35,10 @@ describe('KDS — Séquençage des Plats & Envoi de la suite (Fire Next Course)'
     NexusEventBus.on('ops.course.fired', fireEventSpy, { id: 'test-kds-fire' });
     NexusEventBus.on('ops.course.next_requested', reqEventSpy, { id: 'test-kds-req' });
 
-    const items: CartItem[] = [
+    const items = [
       { cartId: 'c1', productId: 'p1', name: 'Carpaccio', quantity: 1, unitPriceInMicrounits: 12000000, course: 'entree' },
       { cartId: 'c2', productId: 'p2', name: 'Pavé de saumon', quantity: 1, unitPriceInMicrounits: 22000000, course: 'plat' },
-    ];
+    ] as unknown as CartItem[];
 
     await KDSCourseSequencingEngine.initializeOrderCourses(
       'bistro-paris',

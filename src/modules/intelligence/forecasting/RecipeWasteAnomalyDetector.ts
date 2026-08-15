@@ -144,10 +144,11 @@ export class RecipeWasteAnomalyDetector {
           v: 1,
           tenantId,
           deviceId: `stock-detector-${actual.ingredientId}`,
-          faultType: 'sensor_threshold_exceeded',
+          faultCode: 'SENSOR_OFFLINE',
           severity: 'critical',
-          occurredAt: Date.now(),
-        });
+          message: `Coulage critique détecté sur ingrédient ${actual.ingredientId}`,
+          timestamp: new Date().toISOString(),
+        } as never);
       }
     }
 

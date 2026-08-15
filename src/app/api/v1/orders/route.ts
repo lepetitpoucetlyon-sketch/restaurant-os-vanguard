@@ -3,6 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { KDSCourseSequencingEngine } from '@/modules/ops/production/kds/services/KDSCourseSequencingEngine';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import { toMicrounits } from '@/shared/schemas/primitives';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,9 +25,13 @@ export async function POST(req: NextRequest) {
     const cartItems: CartItem[] = items.map((it, idx) => ({
       cartId: `cart_${orderId}_${idx}`,
       productId: it.productId,
+      categoryId: it.categoryId ?? 'cat-default',
       name: it.name || `Article ${it.productId}`,
       quantity: Number(it.quantity) || 1,
-      unitPriceInMicrounits: Number(it.unitPriceInMicrounits) || 0,
+      unitPriceInMicrounits: toMicrounits(Number(it.unitPriceInMicrounits) || 0),
+      taxRate: (it.taxRate ?? '0.10') as '0.055' | '0.10' | '0.20',
+      discountInMicrounits: toMicrounits(0),
+      modifiers: [],
       course: it.course || 'plat',
       notes: it.notes,
     }));
