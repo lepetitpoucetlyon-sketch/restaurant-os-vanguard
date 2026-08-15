@@ -252,6 +252,29 @@ export interface OPSEvents {
     firedAt: number;
   };
 
+  'ops.course.fired': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    orderId: string;
+    tableId?: string;
+    course: 'entree' | 'plat' | 'dessert' | number;
+    firedBy: string;
+    firedAt: number;
+    stationIds?: string[];
+  };
+
+  'ops.course.next_requested': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    orderId: string;
+    tableId?: string;
+    requestedCourse: 'entree' | 'plat' | 'dessert' | number;
+    requestedBy: string;
+    requestedAt: number;
+  };
+
   'kds.dish_rebound': {
     v: 1;
     isSimulation?: boolean;
