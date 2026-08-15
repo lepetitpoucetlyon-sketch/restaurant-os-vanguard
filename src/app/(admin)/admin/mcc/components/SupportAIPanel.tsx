@@ -1,10 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { BotMessageSquare, AlertTriangle, CheckCircle2, Loader2, ArrowUpRight, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  BotMessageSquare,
+  AlertTriangle,
+  CheckCircle2,
+  Loader2,
+  ArrowUpRight,
+  ChevronDown,
+  AlertOctagon,
+  RefreshCw,
+  Clock,
+  Send,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { toError } from "@/lib/toError";
+import { toError } from '@/lib/toError';
+import { cn } from '@/lib/ui.foundations';
 
 type Severity = 'critical' | 'high' | 'medium' | 'low';
 
@@ -22,6 +34,19 @@ interface DiagnoseResponse {
   createdAt: string;
 }
 
+interface LiveTicket {
+  id: string;
+  tenantId: string;
+  source: string;
+  description: string;
+  status: string;
+  createdAt: number;
+  draft?: {
+    suggestedResponse?: string;
+    solution?: string;
+  };
+}
+
 const SEVERITY_STYLES: Record<Severity, { label: string; cls: string }> = {
   critical: { label: 'Critique',  cls: 'text-status-danger border-red-400/30 bg-red-400/10' },
   high:     { label: 'Élevée',    cls: 'text-orange-400 border-orange-400/30 bg-orange-400/10' },
@@ -36,6 +61,37 @@ export function SupportAIPanel() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<DiagnoseResponse | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // Live incoming tickets queue
+  const [incomingTickets, setIncomingTickets] = useState<LiveTicket[]>([]);
+  const [loadingTickets, setLoadingTickets] = useState(false);
+
+  const fetchLiveTickets = useCallback(async () => {
+    setLoadingTickets(true);
+    try {
+      const res = await authedFetch('/api/admin/fleet/support-ai/drafts');
+      if (res.ok) {
+        const data = await res.json() as { tickets: LiveTicket[] };
+        setIncomingTickets(data.tickets || []);
+      }
+    } catch {
+      // Silencieux si hors connexion
+    } finally {
+      setLoadingTickets(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLiveTickets();
+    const timer = setInterval(fetchLiveTickets, 15000);
+    return () => clearInterval(timer);
+  }, [fetchLiveTickets]);
+
+  const handleSelectIncoming = (ticket: LiveTicket) => {
+    setTenantId(ticket.tenantId);
+    setDescription(ticket.description);
+    toast.info(`Ticket #${ticket.id.slice(0, 8)} chargé pour analyse`);
+  };
 
   const handleDiagnose = async () => {
     if (!tenantId.trim() || !description.trim()) return;
@@ -56,6 +112,7 @@ export function SupportAIPanel() {
         throw new Error(err.error ?? String(res.status));
       }
       setResult(await res.json() as DiagnoseResponse);
+      fetchLiveTickets();
     } catch (err) {
       toast.error(`Erreur diagnostic : ${toError(err).message}`);
     } finally {
@@ -85,19 +142,65 @@ export function SupportAIPanel() {
   const sevStyle = d ? (SEVERITY_STYLES[d.severity] ?? SEVERITY_STYLES.low) : null;
 
   return (
-    <div className="bg-surface-card backdrop-blur-md border border-border-subtle rounded-3xl p-6 space-y-5">
+    <div className="bg-surface-card backdrop-blur-md border border-border-subtle rounded-3xl p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-action-primary/10 border border-action-primary/20 flex items-center justify-center">
-          <BotMessageSquare className="w-5 h-5 text-brand" />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-action-primary/10 border border-action-primary/20 flex items-center justify-center">
+            <BotMessageSquare className="w-5 h-5 text-brand" />
+          </div>
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-text-primary">SAV L0 — IA & SOS Caisse</h3>
+            <p className="text-xs text-secondary">Diagnostic automatique en service • Gemini Flash</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-text-primary">SAV L0 — IA</h3>
-          <p className="text-xs text-secondary">Diagnostic automatique • Gemini Flash</p>
-        </div>
+
+        <button
+          onClick={fetchLiveTickets}
+          disabled={loadingTickets}
+          className="p-2 rounded-xl bg-surface-bg border border-border hover:bg-bg-tertiary text-text-muted transition-all active:scale-95"
+          title="Actualiser la file"
+        >
+          <RefreshCw className={cn('w-4 h-4', loadingTickets && 'animate-spin')} />
+        </button>
       </div>
 
-      {/* Form */}
+      {/* Live Incoming SOS Queue */}
+      {incomingTickets.length > 0 && (
+        <div className="space-y-2 p-4 rounded-2xl bg-red-500/5 border border-red-500/20">
+          <div className="flex items-center gap-2 text-red-500 font-bold text-xs uppercase tracking-wider">
+            <AlertOctagon className="w-4 h-4 animate-pulse" />
+            <span>Alertes Tenants en Attente ({incomingTickets.length})</span>
+          </div>
+
+          <div className="space-y-2 max-h-48 overflow-y-auto elegant-scrollbar pr-1">
+            {incomingTickets.map(t => (
+              <div
+                key={t.id}
+                onClick={() => handleSelectIncoming(t)}
+                className="p-3 rounded-xl bg-surface-card border border-border/50 hover:border-red-500/40 cursor-pointer flex items-center justify-between gap-3 transition-all"
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-xs text-text-primary">[{t.tenantId}]</span>
+                    <span className="text-[10px] text-text-muted flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-muted truncate mt-0.5">{t.description}</p>
+                </div>
+
+                <button className="px-2.5 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg bg-action-primary/10 text-brand border border-focus/20 shrink-0">
+                  Charger
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Manual Diagnostic Form */}
       <div className="space-y-3">
         <input
           type="text"
@@ -107,7 +210,7 @@ export function SupportAIPanel() {
           className="w-full bg-surface-bg border border-subtle rounded-xl py-2.5 px-4 text-sm font-mono text-text-primary focus:outline-none focus:border-focus/50 transition-all placeholder:text-muted"
         />
         <textarea
-          rows={4}
+          rows={3}
           placeholder="Décrivez le problème signalé par l'opérateur restaurant…"
           value={description}
           onChange={e => setDescription(e.target.value)}
@@ -140,7 +243,7 @@ export function SupportAIPanel() {
           {isLoading ? (
             <><Loader2 className="w-4 h-4 animate-spin" />Analyse en cours…</>
           ) : (
-            <><BotMessageSquare className="w-4 h-4" />Diagnostiquer</>
+            <><BotMessageSquare className="w-4 h-4" />Diagnostiquer avec Gemini</>
           )}
         </button>
       </div>

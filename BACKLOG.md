@@ -211,6 +211,7 @@
 | P1 | ✅ | H1 | — | Rapports flash quotidiens automatisés (DailyFlashReport) | `src/orchestration/handlers/DailyDigestHandler.ts` | — |
 | P1 | ✅ | H1 | — | Rapports hebdomadaires consolidés | `src/modules/intelligence/` | — |
 | P1 | ✅ | H1 | — | Détection anomalies cross-domain (revenus, stock, compliance) | `src/modules/intelligence/domain/agency/Zeus.ts` | — |
+| P1 | ✅ | H1 | — | Bouton SOS Caisse & Diagnostic Urgence SAV L0 (Gemini Flash) | `src/modules/commerce/ui/pos/SosCaisseModal.tsx`, `SupportAIPanel.tsx` | Alerte P0 en service, émet `support.ticket_submitted` |
 | P2 | ✅ | H2 | — | Pricing dynamique basé sur la demande (heures creuses / pleines) | `src/modules/commerce/pricing/` | — |
 | P2 | ⬜ | H3 | L | Analyse sentiment clients multi-sources (Google, TripAdvisor, Yelp) | `src/modules/intelligence/` | — |
 | P2 | 🔧 | H2 | M | Optimisation planning RH selon prévisions d'affluence | `src/modules/human/planning/` | Dépend ML forecasting H2 |

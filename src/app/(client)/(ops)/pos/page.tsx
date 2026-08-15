@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     LucideIcon, Plus, ArrowLeft, MoreHorizontal, Star, Pizza,
     UtensilsCrossed, GlassWater, Beef, Coffee, Zap,
     Wallet, RotateCcw, Tablet, BookOpen, Printer,
-    Store, ShoppingBag,
+    Store, ShoppingBag, LifeBuoy,
 } from "lucide-react";
 
 import { ProductGrid, Cart, TableSelector, PaymentDialog, SplitBillDialog } from "@modules/ops";
@@ -15,7 +16,7 @@ import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";
 // eslint-disable-next-line no-restricted-imports
-import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager } from "@/modules/commerce/ui/pos";
+import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager, SosCaisseModal } from "@/modules/commerce/ui/pos";
 import { CourseType } from "@/modules/ops/workflow/engine/types";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
@@ -34,6 +35,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 function POSPage() {
     const { t: _t } = useLanguage();
+    const [isSosModalOpen, setIsSosModalOpen] = useState(false);
     const {
         isMobile, activeTenantId, posUser, allTables,
         tokens, isRushMode,
@@ -135,6 +137,11 @@ function POSPage() {
                         )}
                     </div>
                     <div className="flex items-center gap-2">
+                        <button onClick={() => setIsSosModalOpen(true)} title="SOS Caisse & Urgence Service"
+                            className="h-10 px-3.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 animate-pulse">
+                            <LifeBuoy className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">SOS</span>
+                        </button>
                         <button onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')} title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
                             className={cn("h-10 px-3 rounded-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-all border", consumptionMode === 'dine_in' ? "bg-action-primary/10 border-action-primary/30 text-action-primary" : "bg-action-primary/10 border-action-primary/30 text-action-primary")}>
                             {consumptionMode === 'dine_in' ? <Store className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
@@ -267,6 +274,7 @@ function POSPage() {
                     <CourseManager items={cartItems} onSetCourse={(cartId, course) => handleSetItemCourse(cartId, course as CourseType | undefined)} onSendCourse={(course) => handleSendCourse(course as CourseType)} />
                 </div>
             </BottomSheet>
+            <SosCaisseModal isOpen={isSosModalOpen} onClose={() => setIsSosModalOpen(false)} tableId={selectedTableId} />
         </div>
     );
 }

@@ -106,7 +106,7 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 
 | Sév. | Gap | Détail |
 |---|---|---|
-| 🟠 | Aucun composant UI ticket support dans les 16 zones | Le tenant ne peut pas signaler un bug depuis l'app — aucun bouton, formulaire ou fil de discussion dans la roadmap. Handlers back existent mais rien ne déclenche `support.ticket_submitted` depuis le front |
+| 🟢 | **Composant SOS Caisse & Ticketing livrés** | `SosCaisseModal.tsx` sur la caisse POS déclenchant `support.ticket_submitted` + file d'attente live et analyse Gemini dans `SupportAIPanel.tsx` (MCC). |
 | 🟡 | Pas de mesure de satisfaction côté MCC (NPS/CSAT) | Le CRM restaurants gère les avis des *clients des restaurants* ; rien pour mesurer la satisfaction des *restaurants eux-mêmes* envers le SaaS |
 | 🟡 | Pas de rôle customer success défini | Qui fait le suivi J+7/J+30 après onboarding terrain ? Aucune mention de ressource humaine dédiée jusqu'à 10 clients |
 | 🟡 | Centre d'aide en libre-service absent | Au-delà du "guide démarrage rapide", pas de base de connaissances indexée ni de chatbot de support |
