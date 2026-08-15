@@ -1,17 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-// --- Mock de l'adapter Nexus ---
-const { mockSet, mockGenerateId } = vi.hoisted(() => ({
-  mockSet: vi.fn().mockResolvedValue(undefined),
-  mockGenerateId: vi.fn((path: string) => `${path.split('/').pop()}-id`),
-}));
-
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { set: mockSet, generateId: mockGenerateId } },
-}));
-
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { HACCPLogService } from './HACCPLogService';
 import type { SensorReading } from '@/modules/compliance/domain/schemas/haccp';
+
+const mockSet = vi.fn().mockResolvedValue(undefined);
+const mockGenerateId = vi.fn((path: string) => `${path.split('/').pop()}-id`);
 
 const reading: SensorReading = {
   sensorId: 'frigo-1',
@@ -24,7 +17,12 @@ const reading: SensorReading = {
 };
 
 describe('🌡️ HACCPLogService — registre sanitaire', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    mockSet.mockClear();
+    mockGenerateId.mockClear();
+    vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
+    vi.spyOn(Nexus.adapter, 'generateId').mockImplementation(mockGenerateId as typeof Nexus.adapter.generateId);
+  });
 
   it("appendTemperatureHistory écrit dans iotHistory (append-only, clé sensorId_ts)", async () => {
     await HACCPLogService.appendTemperatureHistory(reading, 'NON_CONFORM');

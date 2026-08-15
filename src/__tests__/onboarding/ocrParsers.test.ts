@@ -3,18 +3,16 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // ─── Mock LLMManager ─────────────────────────────────────────────────────────
 const mockGenerateFromImage = vi.fn();
+LLMManager.provider = {
+  generateFromImage: mockGenerateFromImage,
+  generateText: vi.fn(),
+} as never;
 
-vi.mock('@/modules/intelligence/ia/ai/LLMManager', () => ({
-  LLMManager: {
-    provider: {
-      generateFromImage: mockGenerateFromImage,
-      generateText: vi.fn(),
-    },
-  },
-}));
 vi.mock('@/modules/intelligence/ia/ai/LLMProviderFactory', () => ({
   AI_MODELS: { visionFast: 'gemini-1.5-flash', fast: 'gemini-1.5-flash' },
 }));
@@ -130,8 +128,10 @@ describe('ImportSnapshotService', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.doMock('@/lib/nexus/NexusAdapter', () => ({ Nexus: { adapter: mockAdapter } }));
+    mockAdapter.set.mockClear();
+    mockAdapter.query.mockClear();
+    vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockAdapter.set as typeof Nexus.adapter.set);
+    vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockAdapter.query as typeof Nexus.adapter.query);
   });
 
   it('take() sauvegarde un snapshot et retourne son id', async () => {

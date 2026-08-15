@@ -1,10 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { PolicyEngine } from './PolicyEngine';
+import { operationalFlags } from '@/config/features';
 import type { Policy } from '@/modules/compliance/domain/schemas/policy';
-
-vi.mock('@/config/features', () => ({
-    operationalFlags: { policyEnforce: 'enforce' },
-}));
 
 const NOW = Date.now();
 
@@ -25,6 +22,7 @@ describe('PolicyEngine', () => {
     let engine: PolicyEngine;
 
     beforeEach(() => {
+        operationalFlags.policyEnforce = 'enforce';
         engine = new PolicyEngine();
     });
 

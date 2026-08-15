@@ -26,9 +26,6 @@ vi.mock('@/lib/logger', () => ({
 vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
-vi.mock('@/lib/push/browserPush', () => ({
-  browserPush: { sendToRole: mockSendToRole },
-}));
 vi.mock('@/lib/shared-kernel', () => ({
   SharedKernel: { generateId: vi.fn((prefix: string) => `${prefix}-test-id`) },
 }));
@@ -63,7 +60,6 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { browserPush } from '@/lib/push/browserPush';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -76,13 +72,13 @@ beforeEach(() => {
   vi.spyOn(browserPush, 'sendToRole').mockImplementation(mockSendToRole as typeof browserPush.sendToRole);
 });
 
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
 describe('KDSOrderHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockEmit.mockClear();
+    mockSendToRole.mockClear();
     registerKDSOrderHandler();
   });
 
@@ -124,14 +120,18 @@ describe('KDSOrderHandler', () => {
 
 describe('PaymentLedgerHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockEmit.mockClear();
+    mockSendToRole.mockClear();
     registerPaymentLedgerHandler();
   });
 
   it('crée une entrée paymentLedger avec l\'orderId comme clé (paiement simple)', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.placed']({ ...baseOrderPaid, paymentMode: 'cash' });
+    await capturedHandlers['order.paid']({ ...baseOrderPaid, paymentMode: 'cash' });
 
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/T/paymentLedger/ord-1',
@@ -142,7 +142,7 @@ describe('PaymentLedgerHandler', () => {
   it('crée une entrée par split avec id {orderId}_split_{index}', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.placed']({
+    await capturedHandlers['order.paid']({
       ...baseOrderPaid,
       splits: [
         { amount: 1200000, mode: 'card' },
@@ -163,7 +163,7 @@ describe('PaymentLedgerHandler', () => {
   it('enregistre orderId dans chaque entrée split', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.placed']({
+    await capturedHandlers['order.paid']({
       ...baseOrderPaid,
       splits: [{ amount: 2000000, mode: 'card' }],
     });
@@ -179,7 +179,11 @@ describe('PaymentLedgerHandler', () => {
 
 describe('TableAutoReleaseHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockEmit.mockClear();
+    mockSendToRole.mockClear();
     registerTableAutoReleaseHandler();
   });
 
@@ -211,7 +215,11 @@ describe('TableAutoReleaseHandler', () => {
 
 describe('NoShowTableReleaseHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockEmit.mockClear();
+    mockSendToRole.mockClear();
     registerNoShowTableReleaseHandler();
     mockSendToRole.mockResolvedValue(undefined);
   });
@@ -255,7 +263,11 @@ describe('NoShowTableReleaseHandler', () => {
 
 describe('KDSReadyHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockEmit.mockClear();
+    mockSendToRole.mockClear();
     registerKDSReadyHandler();
     mockEmit.mockResolvedValue(undefined);
   });

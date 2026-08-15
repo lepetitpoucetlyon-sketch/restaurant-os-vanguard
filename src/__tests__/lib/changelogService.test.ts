@@ -2,21 +2,14 @@
  * ChangelogService — tests unitaires
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-vi.mock('server-only', () => ({}));
-
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      set:   vi.fn().mockResolvedValue(undefined),
-      query: vi.fn().mockResolvedValue([]),
-    },
-  },
-}));
-
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService, autoCategory } from '@/lib/mcc/ChangelogService';
 import type { ChangelogEntry, ChangelogInput } from '@/lib/mcc/ChangelogService';
+
+vi.mock('server-only', () => ({}));
+
+const mockSet = vi.fn().mockResolvedValue(undefined);
+const mockQuery = vi.fn().mockResolvedValue([]);
 
 const BASE_INPUT: ChangelogInput = {
   tenantId:    'tenant-001',
@@ -26,7 +19,12 @@ const BASE_INPUT: ChangelogInput = {
   scope:       'tenant',
 };
 
-beforeEach(() => vi.clearAllMocks());
+beforeEach(() => {
+  mockSet.mockClear();
+  mockQuery.mockClear();
+  vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
+  vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
+});
 
 // ── autoCategory ─────────────────────────────────────────────────────────────
 
@@ -55,8 +53,8 @@ describe('ChangelogService.record()', () => {
   it('écrit l\'entrée dans mcc/changelog/{id} et la retourne', async () => {
     const entry = await ChangelogService.record(BASE_INPUT);
 
-    expect(vi.mocked(Nexus.adapter.set)).toHaveBeenCalledOnce();
-    const [path, data] = vi.mocked(Nexus.adapter.set).mock.calls[0] as [string, ChangelogEntry];
+    expect(mockSet).toHaveBeenCalledOnce();
+    const [path, data] = mockSet.mock.calls[0] as [string, ChangelogEntry];
 
     expect(path).toMatch(/^mcc\/changelog\//);
     expect(data.tenantId).toBe('tenant-001');
@@ -96,9 +94,9 @@ describe('ChangelogService.record()', () => {
 
 describe('ChangelogService.getForTenant()', () => {
   it('query mcc/changelog filtré par tenantId', async () => {
-    vi.mocked(Nexus.adapter.query).mockResolvedValue([{ id: 'e1' }] as unknown[]);
+    mockQuery.mockResolvedValue([{ id: 'e1' }] as unknown[]);
     const result = await ChangelogService.getForTenant('tenant-abc', 20);
-    const [col, opts] = vi.mocked(Nexus.adapter.query).mock.calls[0]!;
+    const [col, opts] = mockQuery.mock.calls[0]!;
     expect(col).toBe('mcc/changelog');
     expect(opts?.where?.[0]).toMatchObject({ field: 'tenantId', operator: '==', value: 'tenant-abc' });
     expect(opts?.limit).toBe(20);
@@ -107,7 +105,7 @@ describe('ChangelogService.getForTenant()', () => {
 
   it('utilise limit=50 par défaut', async () => {
     await ChangelogService.getForTenant('t');
-    const opts = vi.mocked(Nexus.adapter.query).mock.calls[0]![1];
+    const opts = mockQuery.mock.calls[0]![1];
     expect(opts?.limit).toBe(50);
   });
 });
@@ -117,7 +115,7 @@ describe('ChangelogService.getForTenant()', () => {
 describe('ChangelogService.getFleet()', () => {
   it('query sans filtre tenantId, triée desc', async () => {
     await ChangelogService.getFleet(30);
-    const [col, opts] = vi.mocked(Nexus.adapter.query).mock.calls[0]!;
+    const [col, opts] = mockQuery.mock.calls[0]!;
     expect(col).toBe('mcc/changelog');
     expect(opts?.where).toBeUndefined();
     expect(opts?.orderBy).toMatchObject({ field: 'appliedAt', direction: 'desc' });
@@ -130,14 +128,14 @@ describe('ChangelogService.getFleet()', () => {
 describe('ChangelogService.getByCategory()', () => {
   it('filtre par catégorie uniquement si pas de tenantId', async () => {
     await ChangelogService.getByCategory('BILLING');
-    const opts = vi.mocked(Nexus.adapter.query).mock.calls[0]![1];
+    const opts = mockQuery.mock.calls[0]![1];
     expect(opts?.where).toHaveLength(1);
     expect(opts?.where?.[0]).toMatchObject({ field: 'category', value: 'BILLING' });
   });
 
   it('filtre par catégorie + tenantId si fourni', async () => {
     await ChangelogService.getByCategory('UPGRADE', 'tenant-x');
-    const opts = vi.mocked(Nexus.adapter.query).mock.calls[0]![1];
+    const opts = mockQuery.mock.calls[0]![1];
     expect(opts?.where).toHaveLength(2);
     const fields = opts!.where!.map(w => w.field);
     expect(fields).toContain('category');

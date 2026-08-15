@@ -23,16 +23,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
   });
 
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/adapters/MasterBridge', () => ({
-  MasterBridge: { pushGlobalConfig: vi.fn(async () => undefined) },
-}));
-vi.mock('@/lib/push/browserPush', () => ({
-  browserPush: { sendToRole: vi.fn(async () => true) },
-}));
-vi.mock('@/lib/adapters/NotificationGateway', () => ({
-  NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
-}));
 vi.mock('@/modules/intelligence', () => ({
   HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
 }));
@@ -50,9 +40,6 @@ vi.mock('@/domain/schemas/tenant', () => ({
 }));
 vi.mock('@/domain/schemas/supportTicket', () => ({
   SupportDraftSchema: { parse: vi.fn((x: unknown) => x) },
-}));
-vi.mock('@/modules/commerce', () => ({
-  AggregatorMappingService: { getActiveAdapters: vi.fn(async () => []) },
 }));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
@@ -76,15 +63,23 @@ import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/Intellig
 
 const T = 'tenant-intel';
 
-// ─── IntelligenceHandler ──────────────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { MasterBridge } from '@/lib/adapters/MasterBridge';
+import { browserPush } from '@/lib/push/browserPush';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockCreate.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -95,14 +90,28 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
   vi.spyOn(Nexus.adapter, 'create').mockImplementation(mockCreate as typeof Nexus.adapter.create);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(MasterBridge, 'pushGlobalConfig').mockResolvedValue(undefined as never);
+  vi.spyOn(browserPush, 'sendToRole').mockResolvedValue(undefined as never);
+  vi.spyOn(browserPush, 'sendToUser').mockResolvedValue(undefined as never);
+  vi.spyOn(NotificationGateway, 'send').mockResolvedValue(undefined as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(MasterBridge.pushGlobalConfig)) (MasterBridge.pushGlobalConfig as any).mockClear();
+  if (vi.isMockFunction(browserPush.sendToRole)) (browserPush.sendToRole as any).mockClear();
+  if (vi.isMockFunction(NotificationGateway.send)) (NotificationGateway.send as any).mockClear();
 });
 
 describe('IntelligenceHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerIntelligenceHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerIntelligenceHandler(); });
 
   it('s\'enregistre sur order.paid sans erreur', () => {
     expect(capturedHandlers['order.paid']).toBeDefined();
@@ -119,7 +128,14 @@ describe('IntelligenceHandler', () => {
 // ─── LLMFallbackHandler ───────────────────────────────────────────────────────
 
 describe('LLMFallbackHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerLLMFallbackHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerLLMFallbackHandler(); });
 
   it('persiste un retry LLM avec le modèle fallback', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -139,7 +155,14 @@ describe('LLMFallbackHandler', () => {
 // ─── FleetOutboxHandler ───────────────────────────────────────────────────────
 
 describe('FleetOutboxHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); FleetOutboxHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); FleetOutboxHandler.register(); });
 
   it('place l\'événement finance.payment_failed dans l\'outbox MCC', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -163,7 +186,14 @@ describe('FleetOutboxHandler', () => {
 // ─── FleetStratBriefingHandler ────────────────────────────────────────────────
 
 describe('FleetStratBriefingHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); FleetStratBriefingHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); FleetStratBriefingHandler.register(); });
 
   it('génère et persiste le briefing MCC', async () => {
     mockQuery.mockResolvedValue([]);
@@ -188,7 +218,14 @@ describe('FleetStratBriefingHandler', () => {
 // ─── OracleQueryAuditHandler ──────────────────────────────────────────────────
 
 describe('OracleQueryAuditHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); OracleQueryAuditHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); OracleQueryAuditHandler.register(); });
 
   it('trace la requête AI dans le ledger d\'audit', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -212,7 +249,14 @@ describe('OracleQueryAuditHandler', () => {
 // ─── SovereignBreachHandler ───────────────────────────────────────────────────
 
 describe('SovereignBreachHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSovereignBreachHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSovereignBreachHandler(); });
 
   it('déclenche le kill-switch MasterBridge en cas de brèche souveraine', async () => {
     const { MasterBridge } = await import('@/lib/adapters/MasterBridge');
@@ -230,7 +274,14 @@ describe('SovereignBreachHandler', () => {
 // ─── PinLockoutNotifierHandler ────────────────────────────────────────────────
 
 describe('PinLockoutNotifierHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); PinLockoutNotifierHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); PinLockoutNotifierHandler.register(); });
 
   it('persiste la notification de verrouillage PIN', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -254,7 +305,14 @@ describe('PinLockoutNotifierHandler', () => {
 // ─── PrivacyConsentHandler ────────────────────────────────────────────────────
 
 describe('PrivacyConsentHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerPrivacyConsentHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerPrivacyConsentHandler(); });
 
   it('anonymise le client si deleteRequested = true (RGPD)', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -280,7 +338,14 @@ describe('PrivacyConsentHandler', () => {
 // ─── ReportRetryHandler ───────────────────────────────────────────────────────
 
 describe('ReportRetryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerReportRetryHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerReportRetryHandler(); });
 
   it('planifie un retry avec backoff si attemptCount < 3', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -314,7 +379,14 @@ describe('ReportRetryHandler', () => {
 // ─── WeeklyReportHandler ─────────────────────────────────────────────────────
 
 describe('WeeklyReportHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); WeeklyReportHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); WeeklyReportHandler.register(); });
 
   it('génère et persiste le rapport hebdomadaire', async () => {
     mockQuery.mockResolvedValue([{ total: 5000000 }, { total: 3000000 }]);
@@ -337,7 +409,14 @@ describe('WeeklyReportHandler', () => {
 // ─── SupportTicketAnalysisHandler ────────────────────────────────────────────
 
 describe('SupportTicketAnalysisHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSupportTicketAnalysisHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSupportTicketAnalysisHandler(); });
 
   it('analyse le ticket support et persiste le statut', async () => {
     mockGet.mockResolvedValue({ tier: 'pro', status: {} });
@@ -358,7 +437,14 @@ describe('SupportTicketAnalysisHandler', () => {
 // ─── GracePeriodHandler ───────────────────────────────────────────────────────
 
 describe('GracePeriodHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); GracePeriodHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); GracePeriodHandler.register(); });
 
   it('passe le tenant en grace_period read-only', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -382,7 +468,14 @@ describe('GracePeriodHandler', () => {
 // ─── StripePaymentRetryHandler ────────────────────────────────────────────────
 
 describe('StripePaymentRetryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); StripePaymentRetryHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); StripePaymentRetryHandler.register(); });
 
   it('planifie un retry de paiement Stripe et trace l\'échec', async () => {
     mockGet.mockResolvedValue({ contact: { emailGeneral: 'owner@res.com' } });
@@ -407,7 +500,14 @@ describe('StripePaymentRetryHandler', () => {
 // ─── DeliveryDriverUnlockHandler ─────────────────────────────────────────────
 
 describe('DeliveryDriverUnlockHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerDeliveryDriverUnlockHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerDeliveryDriverUnlockHandler(); });
 
   it('trace la libération du livreur dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -431,12 +531,19 @@ describe('DeliveryDriverUnlockHandler', () => {
 // ─── DeliveryRushModeHandler ──────────────────────────────────────────────────
 
 describe('DeliveryRushModeHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerDeliveryRushModeHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerDeliveryRushModeHandler(); });
 
   it('suspend les plateformes de livraison en mode rush', async () => {
     const { AggregatorMappingService } = await import('@/modules/commerce');
     const mockAdapter = { suspendStore: vi.fn(async () => true) };
-    (AggregatorMappingService.getActiveAdapters as ReturnType<typeof vi.fn>).mockResolvedValue([{ adapter: mockAdapter }]);
+    vi.spyOn(AggregatorMappingService, 'getActiveAdapters').mockResolvedValue([{ adapter: mockAdapter } as never]);
 
     await capturedHandlers['store.rush_mode_toggled']({ tenantId: T, isPaused: true, requestedBy: 'manager' });
 
@@ -447,7 +554,14 @@ describe('DeliveryRushModeHandler', () => {
 // ─── AntiCorruptionLayerHandler ───────────────────────────────────────────────
 
 describe('AntiCorruptionLayerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerAntiCorruptionLayerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockCreate.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerAntiCorruptionLayerHandler(); });
 
   it('émet les ordres natifs si autoAccept est activé', async () => {
     mockGet.mockResolvedValue({ autoAccept: true });

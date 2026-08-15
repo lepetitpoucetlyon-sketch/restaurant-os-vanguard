@@ -22,27 +22,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
   });
 
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/shared-kernel', () => ({
-  SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
-}));
-vi.mock('@/lib/CryptoService', () => ({
-  CryptoService: { generateHash: vi.fn(async () => 'hash-abc') },
-}));
-vi.mock('@/modules/finance/comptabilite/FinancialNexusBridge', () => ({
-  FinancialNexusBridge: { processRefund: vi.fn(async () => undefined) },
-}));
-vi.mock('@/modules/intelligence', () => ({
-  LightRAGClient: vi.fn().mockImplementation(() => ({
-    insert: vi.fn(async () => ({ status: 'ok', id: 'doc-1' })),
-  })),
-}));
-vi.mock('@/lib/adapters/NotificationGateway', () => ({
-  NotificationGateway: { sendEmail: vi.fn(async () => true) },
-}));
-vi.mock('@/lib/push/browserPush', () => ({
-  browserPush: { sendToRole: vi.fn(async () => true) },
-}));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
@@ -65,15 +44,25 @@ import { registerCertExpiryHandler } from '@/shared/eventBus/handlers/CertExpiry
 
 const T = 'tenant-fin';
 
-// ─── MonthlyFECExportHandler ──────────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { SharedKernel } from '@/lib/shared-kernel';
+import { CryptoService } from '@/lib/CryptoService';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
+import { LightRAGClient } from '@/modules/intelligence';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { browserPush } from '@/lib/push/browserPush';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -83,14 +72,28 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(SharedKernel, 'generateId').mockImplementation((p: string) => `${p}-id`);
+  vi.spyOn(CryptoService, 'generateHash').mockResolvedValue('hash-abc' as never);
+  vi.spyOn(FinancialNexusBridge, 'processRefund').mockResolvedValue(undefined as never);
+  vi.spyOn(LightRAGClient.prototype, 'insert').mockResolvedValue({ status: 'ok', id: 'doc-1' } as never);
+  vi.spyOn(NotificationGateway, 'send').mockResolvedValue(undefined as never);
+  vi.spyOn(browserPush, 'sendToRole').mockResolvedValue(undefined as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(NotificationGateway.send)) (NotificationGateway.send as any).mockClear();
+  if (vi.isMockFunction(browserPush.sendToRole)) (browserPush.sendToRole as any).mockClear();
 });
 
 describe('MonthlyFECExportHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerMonthlyFECExportHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerMonthlyFECExportHandler(); });
 
   it('génère et archive le FEC pour le mois clos', async () => {
     mockQuery.mockResolvedValue([
@@ -110,7 +113,13 @@ describe('MonthlyFECExportHandler', () => {
 // ─── BankConnectionExpiredHandler ────────────────────────────────────────────
 
 describe('BankConnectionExpiredHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); BankConnectionExpiredHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); BankConnectionExpiredHandler.register(); });
 
   it('passe la connexion bancaire à expired', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -134,7 +143,13 @@ describe('BankConnectionExpiredHandler', () => {
 // ─── BankSyncAuditHandler ─────────────────────────────────────────────────────
 
 describe('BankSyncAuditHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerBankSyncAuditHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerBankSyncAuditHandler(); });
 
   it('persiste la transaction bancaire si elle n\'existe pas encore', async () => {
     mockGet.mockResolvedValue(null);
@@ -166,7 +181,13 @@ describe('BankSyncAuditHandler', () => {
 // ─── CashflowForecastHandler ──────────────────────────────────────────────────
 
 describe('CashflowForecastHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); CashflowForecastHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); CashflowForecastHandler.register(); });
 
   it('persiste la prévision de CA J+1', async () => {
     mockQuery.mockResolvedValue([
@@ -188,7 +209,13 @@ describe('CashflowForecastHandler', () => {
 // ─── SepaExportHandler ────────────────────────────────────────────────────────
 
 describe('SepaExportHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSepaExportHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSepaExportHandler(); });
 
   it('marque les factures du batch SEPA comme payées', async () => {
     mockQuery.mockResolvedValue([
@@ -213,7 +240,13 @@ describe('SepaExportHandler', () => {
 // ─── OverdueInvoiceHandler ────────────────────────────────────────────────────
 
 describe('OverdueInvoiceHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerOverdueInvoiceHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerOverdueInvoiceHandler(); });
 
   it('escalade J+30 : met à jour la facture avec le niveau de relance', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -232,7 +265,13 @@ describe('OverdueInvoiceHandler', () => {
 // ─── SplitPaymentHandler ──────────────────────────────────────────────────────
 
 describe('SplitPaymentHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSplitPaymentHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSplitPaymentHandler(); });
 
   it('persiste chaque paiement partiel dans le ledger', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -253,7 +292,13 @@ describe('SplitPaymentHandler', () => {
 // ─── RefundExtourneHandler ────────────────────────────────────────────────────
 
 describe('RefundExtourneHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerRefundExtourneHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerRefundExtourneHandler(); });
 
   it('appelle FinancialNexusBridge.processRefund avec le JE original', async () => {
     const { FinancialNexusBridge } = await import('@/modules/finance/comptabilite/FinancialNexusBridge');
@@ -277,7 +322,13 @@ describe('RefundExtourneHandler', () => {
 // ─── ReconciliationEngineHandler ──────────────────────────────────────────────
 
 describe('ReconciliationEngineHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerReconciliationEngineHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerReconciliationEngineHandler(); });
 
   it('passe la transaction bancaire et l\'entité cible à reconciled', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -299,7 +350,13 @@ describe('ReconciliationEngineHandler', () => {
 // ─── SupplierInvoiceLedgerHandler ─────────────────────────────────────────────
 
 describe('SupplierInvoiceLedgerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSupplierInvoiceLedgerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSupplierInvoiceLedgerHandler(); });
 
   it('inscrit la facture fournisseur approuvée dans le Grand Livre', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -326,7 +383,13 @@ describe('SupplierInvoiceLedgerHandler', () => {
 // ─── TechAuditLedgerHandler ───────────────────────────────────────────────────
 
 describe('TechAuditLedgerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerTechAuditLedgerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerTechAuditLedgerHandler(); });
 
   it('persiste le log système avec un hash crypto', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -345,7 +408,13 @@ describe('TechAuditLedgerHandler', () => {
 // ─── PeriodLockGuardHandler ───────────────────────────────────────────────────
 
 describe('PeriodLockGuardHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); PeriodLockGuardHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); PeriodLockGuardHandler.register(); });
 
   it('verrouille la période fiscale dans le ledger', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -370,7 +439,13 @@ describe('PeriodLockGuardHandler', () => {
 // ─── TicketZArchiveHandler ────────────────────────────────────────────────────
 
 describe('TicketZArchiveHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerTicketZArchiveHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerTicketZArchiveHandler(); });
 
   it('archive le Ticket Z du jour dans la collection froide', async () => {
     mockGet.mockResolvedValue({ total: 5000000, date: '2026-01-15' });
@@ -394,7 +469,13 @@ describe('TicketZArchiveHandler', () => {
 // ─── CryptoIntegrityCheckHandler ─────────────────────────────────────────────
 
 describe('CryptoIntegrityCheckHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCryptoIntegrityCheckHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCryptoIntegrityCheckHandler(); });
 
   it('ne fait rien si aucun sceau pour la journée', async () => {
     mockQuery.mockResolvedValue([]);
@@ -420,7 +501,13 @@ describe('CryptoIntegrityCheckHandler', () => {
 // ─── AutoIndexationHandler ────────────────────────────────────────────────────
 
 describe('AutoIndexationHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); AutoIndexationHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); AutoIndexationHandler.register(); });
 
   it('met à jour le statut du document après indexation LightRAG', async () => {
     mockGet.mockResolvedValue({ content: 'Contenu du doc', docType: 'menu' });
@@ -448,7 +535,13 @@ describe('AutoIndexationHandler', () => {
 // ─── CertExpiryHandler ────────────────────────────────────────────────────────
 
 describe('CertExpiryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCertExpiryHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCertExpiryHandler(); });
 
   it('persiste la notification d\'expiration de certificat', async () => {
     mockUpdate.mockResolvedValue(undefined);

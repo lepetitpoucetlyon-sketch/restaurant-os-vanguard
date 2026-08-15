@@ -1,8 +1,9 @@
 # 🛡️ Registre de Dette Technique, Legal & Angles Morts (DEBT.md)
 
-> **Document Maître de Cadrage des Risques, Angles Morts & Actions Pré-Lancement**  
-> **Dernière révision** : 2026-08-15 (Audit Codebase Empirique & Cadrage Terrain)  
-> **Statut Codebase** : 2 686 fichiers · TSC = 0 · Zero-Defect Standard
+> **Document Maître de Cadrage des Risques, Angles Morts & Actions Pré-Lancement**
+> **Dernière révision** : 2026-08-15 (Audit Codebase Empirique & Cadrage Terrain)
+> **Statut Codebase** : **3 433** fichiers · **TSC = 0** · Zero-Defect Standard
+> **Vue croisée** : [BACKLOG.md](../BACKLOG.md) (features) · [ARCHITECTURE_METAPLATFORM.md](plans/ARCHITECTURE_METAPLATFORM.md) (invariants) · [ROADMAP_STRATEGY.md](plans/ROADMAP_STRATEGY.md) (horizons)
 
 ---
 
@@ -12,11 +13,11 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 
 | # | Bloquant P0 | Domaine | Risque | Action Requise | Effort | Statut |
 |---|-------------|---------|--------|----------------|--------|--------|
-| 1 | **Accord juridique DPA RGPD & CGU/CGV** | Légal | Sanction CNIL (4% CA mondial), invalidité des contrats B2B | Rédaction formelle des CGU/CGV SaaS et du contrat de sous-traitance de données (DPA Art. 28 RGPD) avec avocat spécialisé. | 1-2 sem | 🔴 Bloquant |
-| 2 | **Archivage WORM Long-Terme NF525** | Fiscalité | Invalidation fiscale NF525 (amende 7 500 € par caisse) | Configuration du backup Firestore immutable / Cloud Storage WORM avec rétention légale stricte de 6 ans sans possibilité d'effacement. | ~3 jours | 🔴 Bloquant |
-| 3 | **Émission `WelcomeGuestButton` → `reservation.matched`** | Sécurité Food | Erreur d'allergènes INCO lors du check-in client | Finaliser le bouton d'accueil dans le plan de salle pour garantir la notification immédiate des fiches allergènes au KDS cuisine. | ~1 jour | 🔴 Bloquant |
-| 4 | **Clôture des Handlers Bus Restants (R1-R13)** | Fonctionnel | Perte d'événements asynchrones ou échecs saga | Finaliser les 2 émetteurs manquants (Stripe Deposit Webhook & `ops.table_closed`) et valider la suite `test:bus` à 100% vert. | ~1 sem | 🟠 Prioritaire |
-| 5 | **Pipeline CI/CD Minimal & Staging** | DevOps | Régression en production lors des déploiements | Mettre en place un workflow GitHub Actions bloquant la branche `main` si `tsc --noEmit` ou `vitest` échouent. | ~1 sem | 🟠 Prioritaire |
+| 1 | **Accord juridique DPA RGPD & CGU/CGV** | Légal | Sanction CNIL (4% CA mondial), invalidité des contrats B2B | Rédaction formelle des CGU/CGV SaaS + DPA Art. 28 RGPD avec avocat spécialisé + registre sous-traitants (Stripe, Firebase, Sentry, Axiom, Gemini). | **4-6 sem** (revu — était 1-2 sem) | 🔴 Bloquant |
+| 2 | **Archivage WORM Long-Terme NF525** | Fiscalité | Invalidation fiscale NF525 (amende 7 500 € par caisse) + amende Art. L102 B LPF | Configuration du backup Firestore immutable / Cloud Storage WORM avec rétention légale stricte de 6 ans sans possibilité d'effacement. Backup 90j ≠ archive 6 ans (écart 24×). | ~3 jours | 🔴 Bloquant |
+| 3 | **Émission `WelcomeGuestButton` → `reservation.matched`** | Sécurité Food | Erreur d'allergènes INCO lors du check-in client → **risque santé publique** | Finaliser le bouton d'accueil dans le plan de salle + handler `AllergenKitchenNotificationHandler` qui consomme `reservation.matched`, consulte `Customer.allergens`, push alerte KDS station concernée. | ~2-3 jours | 🔴 Bloquant |
+| 4 | **Clôture des Handlers Bus Restants (R1-R13)** | Fonctionnel | Perte d'événements asynchrones, features vendues silencieusement cassées | Finaliser les 2 émetteurs manquants (Stripe Deposit Webhook & `ops.table_closed`) + idempotence `events_processed_log/{eventId}` + valider suite `test:bus` à 100% vert. | ~1 sem | 🟠 Prioritaire |
+| 5 | **Pipeline CI/CD Minimal & Staging** | DevOps | Régression en production lors des déploiements = churn client payant | Workflow GitHub Actions bloquant `main` si `tsc --noEmit` ou `vitest` échouent + auto-rollback sur health-check. | ~1 sem | 🟠 Prioritaire |
 
 ---
 
@@ -24,88 +25,158 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 
 ### ⚡ 2.1 Idempotence & Ordre des Événements du Bus (`NexusEventBus`)
 * **Problème** : `NexusEventBus.ts` persiste les intentions dans l'Outbox locale (Dexie), mais le backend ne possède pas de table de déduplication des `eventId` consommés.
-* **Risque en production** : Lors d'une coupure réseau ou d'un retry, un événement critique (`order.paid`, `finance.journal_entry_created`) rejoué deux fois peut doubler une écriture comptable ou un débit de stock.
+* **Risque en production** : lors d'une coupure réseau ou d'un retry, un événement critique (`order.paid`, `finance.journal_entry_created`) rejoué deux fois peut doubler une écriture comptable ou un débit de stock.
 * **Solution d'Ingénierie** :
   1. Enregistrer un `eventId` UUID unique dans chaque payload.
   2. Middleware `withIdempotencyGuard(eventId)` vérifiant la collection atomique `events_processed_log/{eventId}` avant exécution.
+  3. Ordre garanti par `aggregateId` — les events dépendants (`order.paid` puis `stock.deduct`) partagent la clé et sont sérialisés.
 
 ### ⛓️ 2.2 NF525 en Environnement Multi-Caisses & Mode Hors-Ligne
-* **Problème** : Tension mathématique entre la chaîne SHA-256 séquentielle (`previousHash`) et le mode hors-ligne sur plusieurs tablettes simultanées.
-* **Risque fiscal** : Deux tablettes hors-ligne qui encaissent en parallèle génèrent deux chaînes concurrentes qui "forkent", cassant la validation du vérificateur fiscal NF525 lors de la resynchronisation.
-* **Solution d'Ingénierie** :
-  1. **Chaîne Fiscale par Caisse (`registerId`)** : Chaque tablette tient sa propre sous-chaîne cryptographique continue `FiscalSeal_{registerId}`.
-  2. **Grand Livre de Clôture Z Consolidé** : Lors de la clôture journalière Z, le serveur scelle un `MasterFiscalSeal` qui agrège les derniers hashes de tous les terminaux enregistrés.
+* **Problème** : tension mathématique entre la chaîne SHA-256 séquentielle (`previousHash`) et le mode hors-ligne sur plusieurs tablettes simultanées.
+* **Risque fiscal** : deux tablettes hors-ligne qui encaissent en parallèle génèrent deux chaînes concurrentes qui "forkent", cassant la validation du vérificateur fiscal NF525 lors de la resynchronisation.
+* **Solution d'Ingénierie** (voir [ARCHITECTURE_METAPLATFORM.md §3](plans/ARCHITECTURE_METAPLATFORM.md#3-moteur-cryptographique--fiscal-nf525-multi-caisses-offline)) :
+  1. **Chaîne Fiscale par Caisse (`registerId`)** : chaque tablette tient sa propre sous-chaîne cryptographique continue `FiscalSeal_{registerId}`.
+  2. **Grand Livre de Clôture Z Consolidé** : lors de la clôture journalière Z, le serveur scelle un `MasterFiscalSeal` qui agrège les derniers hashes de tous les terminaux enregistrés.
+  3. **Résolution de conflit reconnexion** : un trou dans la séquence bloque la sync et déclenche `mcc.fiscal_audit_required`. **Aucune fusion silencieuse n'est jamais permise**.
 
 ### 🩺 2.3 Traçabilité des Allergies = Données de Santé (RGPD Art. 9)
-* **Problème** : Les fiches allergies (`Customer.allergens`) liées à l'identité d'un client sont des **données de santé** au sens de l'Article 9 du RGPD.
-* **Risque légal** : Sanction CNIL si stockées en clair comme de simples métadonnées CRM sans consentement explicite.
+* **Problème** : les fiches allergies (`Customer.allergens`) liées à l'identité d'un client sont des **données de santé** au sens de l'Article 9 du RGPD.
+* **Risque légal** : sanction CNIL si stockées en clair comme de simples métadonnées CRM sans consentement explicite.
 * **Solution d'Ingénierie** :
   1. Case à cocher de consentement explicite sur le formulaire de réservation / CRM.
-  2. Chiffrement de repos sur le champ `allergens` et application stricte de la politique de suppression `ErasureService` (crypto-shredding).
+  2. Chiffrement de repos AES-256-GCM sur le champ `allergens` via `CryptoService`.
+  3. Application stricte de la politique de suppression `ErasureService` (crypto-shredding).
+* **Cas Salon** : les photos avant/après cuir chevelu + fiches coloration + réactions allergiques → même traitement Art. 9.
 
 ### 🏢 2.4 Support B2B Tenant, Astreinte & Dépendance ("Bus Factor = 1")
-* **Problème** : La plateforme propose un CRM pour les clients des restaurants, mais aucun canal de ticketing dédié pour que le restaurateur appelle l'opérateur en cas de bug en plein service.
-* **Risque opérationnel** : Panne un samedi soir à 21h sans astreinte = perte de confiance et churn immédiat.
+* **Problème** : la plateforme propose un CRM pour les clients des restaurants, mais aucun canal de ticketing dédié pour que le restaurateur appelle l'opérateur en cas de bug en plein service.
+* **Risque opérationnel** : panne un samedi soir à 21h sans astreinte = perte de confiance et churn immédiat.
 * **Solution d'Ingénierie** :
   1. Intégration d'un bouton **SOS Caisse** sur l'écran POS déclenchant une alerte prioritaire PagerDuty/Slack avec dump de diagnostic chiffré.
-  2. Plan de continuité et d'astreinte formalisé dans `docs/guides/ON_CALL_RUNBOOK.md`.
+  2. Plan de continuité et d'astreinte formalisé dans [`docs/guides/ON_CALL_RUNBOOK.md`](guides/ON_CALL_RUNBOOK.md).
+  3. Plan RH progressif (voir [ROADMAP_STRATEGY.md §7](plans/ROADMAP_STRATEGY.md)) : Solo → +1 Customer Success à 10 clients → +1 Dev à 50 clients.
 
 ### 📦 2.5 Provisioning Matériel & Réseau On-Site (Le Jour J)
-* **Problème** : Absence de procédure standardisée pour le déploiement physique des iPads, imprimantes thermiques ESC/POS, TPE Stripe Terminal et sondes Bluetooth Testo.
-* **Risque terrain** : Échec du premier service chez le client dû à un WiFi défaillant ou une imprimante mal appairée.
+* **Problème** : absence de procédure standardisée pour le déploiement physique des iPads, imprimantes thermiques ESC/POS, TPE Stripe Terminal et sondes Bluetooth Testo.
+* **Risque terrain** : échec du premier service chez le client dû à un WiFi défaillant ou une imprimante mal appairée.
 * **Solution Opérationnelle** :
-  1. **Kit Valise d'Onboarding** : Routeur 4G multi-opérateurs de secours préconfiguré pour chaque établissement.
-  2. **Checklist Matérielle J-0** : Procédure de validation en 12 points (test impression, test tiroir-caisse, test TPE CB 1€, test coupure WiFi).
+  1. **Kit Valise d'Onboarding** : routeur 4G multi-opérateurs de secours préconfiguré pour chaque établissement.
+  2. **Checklist Matérielle J-0** : procédure de validation en 12 points (test impression, test tiroir-caisse, test TPE CB 1€, test coupure WiFi, test bump bar KDS, test balance Dialogue 06).
 
 ### ⏳ 2.6 Délais d'Homologation des APIs Partenaires Tierces
-* **Problème** : Des intégrations clés (Google Reserve, Doctolib, Booking.com, UberEats) dépendent de processus de validation commerciale et technique externes.
-* **Risque de planning** : Bloquer une roadmap en supposant que l'activation API est instantanée après le développement.
+* **Problème** : des intégrations clés (Google Reserve, Doctolib, Booking.com, UberEats, SESAM-Vitale) dépendent de processus de validation commerciale et technique externes.
+* **Risque de planning** : bloquer une roadmap en supposant que l'activation API est instantanée après le développement.
 * **Solution de Cadrage** :
   - Bufferiser obligatoirement un délai de **3 à 6 mois** pour les homologations tierces dans les Horizons H2 à H4.
+  - **HDS ANSSI cas spécial** : agrément 12-18 mois → démarches lancées en H3 pour agrément en H5. **Verticale Clinic ne peut pas être commercialisée sans HDS**.
 
 ---
 
 ## 🔍 3. Diagnostic Détaillé des 10 Catégories d'Angles Morts
 
-### 1. Sécurité & Conformité Données (RGPD / HDS / WORM)
-- **Constat** : Le moteur `ErasureService` (droit à l'oubli) existe, mais nécessite un masquage systématique des logs (`logger.info`).
-- **Remède** : Masquage automatique des emails, téléphones et données santé dans le middleware de logging.
+### 3.1 Sécurité & Conformité Données (RGPD / HDS / WORM)
 
-### 2. Fiscalité & Garanties Légales NF525
-- **Constat** : Le scellage `FiscalSeal` SHA-256 en mémoire doit être doublé d'un archivage immuable WORM 6 ans.
-- **Remède** : Auto-export au format PDF/A-3 Factur-X avec signature distante à la clôture du Ticket Z.
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | Zéro audit externe / pentest avant premier client payant | Les gates actuels (TSC=0) vérifient la compilation, pas les vulnérabilités comportementales |
+| 🟠 | Pas de gestion des secrets en rotation | Clés API (Stripe, Gemini, Firebase) dans `.env` sans coffre ni rotation planifiée |
+| 🟡 | Pas de scan vulnérabilités dépendances | Dependabot / Snyk absents du pipeline CI/CD |
+| 🟡 | PCI-DSS SAQ-A non documenté | Stripe délègue le chiffrement mais la conformité (aucune carte en clair, logs sécurisés) se documente et s'atteste |
+| 🟠 | Pas de WAF / protection DDoS | Le passage à une API REST publique (S5) ouvre une surface d'attaque nouvelle sans protection devant |
+| 🟡 | `TwoFactorAuthConfig` (Zone 13) jamais rendu obligatoire | Le niveau 100 (Propriétaire) et le MCC lui-même devraient imposer le 2FA, pas le laisser optionnel |
+| 🔴 | **Backups 90j vs NF525 6 ans : écart 24×** | La rétention backup (90j, H4) est 24× inférieure à la rétention fiscale légale (6 ans, art. L102 B LPF). Nécessite une archive froide immuable (WORM) séparée des snapshots opérationnels |
+| 🟡 | Aucun RTO/RPO défini | "SLA monitoring" évoqué sans cibles de disponibilité, temps de reprise ni RPO chiffré |
+| 🟡 | Masquage PII dans logs non systématique | Middleware `redactPII` à appliquer en entrée de logger — un email en clair dans Sentry = incident CNIL |
 
-### 3. Support & Diagnostic d'Urgence (SLA 24/7)
-- **Constat** : Absence de canal direct d'escalade d'urgence en direct.
-- **Remède** : Bouton "SOS Caisse" avec transmission de logs d'état hors-ligne.
+### 3.2 Legal / Contractuel / Gouvernance
 
-### 4. Assurance Qualité & Couverture de Tests (QA)
-- **Constat** : 0 test E2E UI Playwright sur le parcours d'encaissement complet et la clôture Z.
-- **Remède** : Écriture de 3 parcours E2E critiques sous Playwright.
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🔴 | **CGU/CGV absentes** | Impossible de signer légalement un premier client sans contrat encadrant la relation SaaS : propriété des données, SLA, responsabilité |
+| 🔴 | **DPA RGPD (accord sous-traitant) absent** | Art. 28 RGPD impose un DPA signé + registre des sous-traitants (Stripe, Firebase, Sentry, Axiom, Gemini) |
+| 🔴 | **Clinic + données de santé avant agrément HDS** | Traiter des données médicales sans HDS ANSSI est une infraction. Verticale Clinic ne peut pas être commercialisée en l'état — prérequis légal, pas backlog item |
+| 🟠 | Portabilité données à résiliation absente | RGPD art. 20 : le client a droit à la portabilité. À résiliation, procédure d'export final + purge à 30j à documenter |
+| 🟡 | **Aucune assurance RC Pro / cyber-assurance mentionnée** | En cas d'incident (perte données client, attaque) exposition sans couverture. Devis 2-5k€/an typique SaaS B2B |
+| 🟡 | **Transferts hors UE non cartographiés** | Si le LLM derrière Oracle (Gemini) est hébergé aux US, les données passées aux prompts tombent sous les clauses de transfert RGPD. Particulièrement critique pour Clinic |
+| 🟠 | Signature tablette OR Garage sans prestataire eIDAS | La signature manuscrite sur tablette sans horodatage certifié (DocuSign/Universign/Yousign) n'a pas de valeur probante en cas de litige |
 
-### 5. Infrastructure & Résilience (DevOps)
-- **Constat** : Absence d'auto-scaling du sidecar vectoriel LightRAG (port 9621).
-- **Remède** : Encapsulation Docker avec fallback gracieux si timeout > 2s.
+### 3.3 Support Tenant — Ce qui existe et ce qui manque
 
-### 6. Internationalisation & Multi-Devises (i18n)
-- **Constat** : Infrastructure `src/i18n/` dormante (Option B) et devises typées en EUR.
-- **Remède** : Isoler l'affichage de la devise via `formatCurrency(microunits, currencyCode)`.
+> ⚠️ **Correction par rapport à l'analyse brute** : la plomberie backend **existe** — `SupportEscalationHandler`, `SupportTicketAnalysisHandler`, events `support.ticket_submitted` / `support.ticket_escalated` sont câblés dans l'orchestration. Ce qui est absent, c'est **l'UI tenant-facing**.
 
-### 7. Continuité d'Activité (Disaster Recovery Plan)
-- **Constat** : Pas de test documenté de restauration totale à partir de zéro (*Bare-Metal Recovery*).
-- **Remède** : Automatisation du script `restore-tenant-from-vault.ts`.
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | Aucun composant UI ticket support dans les 16 zones | Le tenant ne peut pas signaler un bug depuis l'app — aucun bouton, formulaire ou fil de discussion dans la roadmap. Handlers back existent mais rien ne déclenche `support.ticket_submitted` depuis le front |
+| 🟡 | Pas de mesure de satisfaction côté MCC (NPS/CSAT) | Le CRM restaurants gère les avis des *clients des restaurants* ; rien pour mesurer la satisfaction des *restaurants eux-mêmes* envers le SaaS |
+| 🟡 | Pas de rôle customer success défini | Qui fait le suivi J+7/J+30 après onboarding terrain ? Aucune mention de ressource humaine dédiée jusqu'à 10 clients |
+| 🟡 | Centre d'aide en libre-service absent | Au-delà du "guide démarrage rapide", pas de base de connaissances indexée ni de chatbot de support |
 
-### 8. Produit & Ergonomie Terrain
-- **Constat** : Ergonomie desktop ultra-complète, mais besoin d'un mode "Prise Rapide" à une main sur mobile.
-- **Remède** : Mode Mobile POS avec gros pavés tactiles et retours haptiques.
+### 3.4 QA / Testing — Solidité apparente vs réelle
 
-### 9. Documentation Opérationnelle & Runbooks
-- **Constat** : Manque le guide d'urgence pour les incidents nocturnes.
-- **Remède** : Publication de `docs/guides/ON_CALL_RUNBOOK.md`.
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | **Zéro test E2E UI** sur les parcours critiques | ~97 suites de tests, tous unitaires ou intégration. Aucun Playwright/Cypress jouant l'encaissement complet, la clôture Z, la récupération NF525 |
+| 🟠 | Zéro test de charge / performance | Combien de commandes/seconde le POS encaisse lors d'un samedi soir à 80 couverts ? Aucun benchmark, aucun seuil défini |
+| 🟠 | **4e parcours E2E manquant : Mode Offline → Reconnexion → Sync NF525** | Le cas le plus susceptible de révéler des bugs de cohérence : encaisser offline sur 2 tablettes simultanément → reconnexion → validation MasterFiscalSeal. À ajouter aux 3 parcours actuels |
+| 🟡 | WCAG 2.1 AA intention ≠ chantier | Les principes d'accessibilité sont énoncés en section UX mais aucune tâche d'audit (Axe DevTools, Lighthouse) dans le backlog |
+| 🟡 | Pas d'environnement UAT | Zéro procédure de test avec de vrais restaurateurs avant une release majeure |
 
-### 10. Pilotage Économique (FinOps)
-- **Constat** : Coûts cloud (Firestore, requêtes IA) non réattribués par tenant.
-- **Remède** : Dashboard FinOps dans le MCC attribuant le coût réel à chaque `tenantId`.
+### 3.5 DevOps / SRE / Résilience
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | CI/CD sans rollback automatique | Un déploiement cassé exige une intervention manuelle — pas de canary release ni de rollback automatique sur health-check échoué |
+| 🟡 | Feature flags : infrastructure partielle | `FeatureFlagSyncHandler` existe — il push des flags MCC vers des listes de tenants via `mcc.feature_flag_toggled`. Ce qui manque : UI MCC pour créer/activer ces flags, et rollout progressif par pourcentage (pas juste liste statique) |
+| 🟡 | Mono-fournisseur Firestore + Vercel | Pas de stratégie de bascule ni d'analyse de risque de dépendance unique. Si Vercel down = app down |
+| 🟠 | Pas de runbook d'astreinte formalisé | Qui est réveillé si le POS d'un client tombe un samedi à 21h ? Aucun on-call, aucun escalation path documenté |
+| 🟡 | API REST (S5) sans stratégie de versioning | Les breaking changes futurs ne sont pas anticipés — `v1` doit être stable dès le premier connecteur externe |
+| 🟡 | Auto-scaling sidecar LightRAG (port 9621) absent | Encapsulation Docker avec fallback gracieux si timeout >2s à implémenter |
+
+### 3.6 i18n & Internationalisation
+
+> ⚠️ **Précision** : l'inactivité i18n est une **décision documentée** (CLAUDE.md : "app monolingue FR en dur, ne pas câbler i18n sans décision explicite") — ce n'est pas un angle mort, c'est un choix conscient de focalisation France.
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🔵 | Back-office 100% FR | Pas de blocage court terme (marché France) mais Garage/Salon/Retail s'exportent facilement en Belgique/Suisse sans i18n |
+| 🔵 | Fiscalité FR uniquement | TVA FR (5.5/10/20%) câblée en dur — Belgique (6/12/21%), Suisse nécessiteraient une couche d'abstraction dans `vatResolver` |
+| 🔵 | Multi-devise touristes non scopé | `CurrencyConfigPanel` existe en Zone 13 mais le moteur fiscal multi-devise (TVA EUR vs CHF) n'est pas scopé |
+
+### 3.7 Continuité d'Activité & Dépendances Critiques
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟡 | Aucun plan de continuité si Firestore / GCP tombe | Pas de DR site, pas de mode dégradé documenté |
+| 🔴 | **Rétention NF525 (6 ans) vs backup (90j) — écart 24×** | Cf. §3.1 bloquant absolu. Nécessite archive WORM dédiée distincte des backups opérationnels |
+| 🟡 | Paiement carte 100% Stripe sans plan B | SumUp/Ingenico cités en "futures intégrations", jamais en solution de repli. Si Stripe a un incident le 31/12, le réveillon est compromis |
+| 🟡 | Mode dégradé Oracle/LightRAG non spécifié | Si le sidecar LightRAG (port 9621) est down, le comportement de l'UI Oracle n'est pas défini — erreur silencieuse ? mode local ? message explicite ? |
+
+### 3.8 Produit — Cas limites non couverts
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | **Pas de gestion des chargebacks / litiges carte** | Un client qui conteste sa CB génère un chargeback Stripe — aucun workflow pour le contester, logger la preuve, ou alerter le restaurateur |
+| 🟡 | Multi-devise touristes | Cf. §3.6 |
+| 🟡 | Turnover staff élevé non adressé | Le secteur restauration a 70%+ de turnover annuel. Aucun parcours "réonboarding rapide" (enregistrement PIN, formation express) pour les nouveaux entrants fréquents |
+| 🚫 | **`FacialRecognitionClockIn` sans cadre CNIL** | La biométrie au travail en France est extrêmement encadrée (CNIL délib 2019-001, RGPD Art. 9) : consentement exprès de *chaque* salarié, base légale restrictive, déclaration CNIL, AIPD obligatoire. À marquer **🚫 bloquant légal** — retirer ou conditionner à module optionnel |
+| 🟡 | Oracle en mode hors-ligne non défini | Fallback si Gemini API ou LightRAG down : erreur silencieuse ? mode local ? message explicite ? |
+| 🟠 | **Cold-start ML pour nouveaux tenants** | Prévision ventes / staffing / no-show suppose historique. Nouveaux clients sans historique → besoin modèle heuristique 30 jours + bascule ML au seuil `sales_history > 500 tickets` |
+
+### 3.9 Documentation & Scaling
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟡 | **Pas d'ADR (Architecture Decision Records)** | Les grandes décisions (pourquoi Firestore vs PG, pourquoi Jotai vs Zustand, pourquoi microunits vs cents) doivent être tracées — implémentées désormais dans [ARCHITECTURE_METAPLATFORM.md §10](plans/ARCHITECTURE_METAPLATFORM.md#10-adr--décisions-darchitecture-tracées) |
+| 🟡 | **Pas de doc onboarding développeur** | CLAUDE.md + ARCHITECTURE_METAPLATFORM.md existent mais pas de "README: do this to run the project from scratch in 10 min" |
+| 🔵 | Aucun plan de recrutement détaillé | Toute la roadmap T+0 à T+36 suppose l'opérateur MCC solo. Plan progressif documenté dans [ROADMAP_STRATEGY.md §7](plans/ROADMAP_STRATEGY.md) à partir de 10 clients |
+
+### 3.10 FinOps / Économie unitaire
+
+| Sév. | Gap | Détail |
+|---|---|---|
+| 🟠 | **Pas de suivi du coût d'infrastructure par tenant** | Impossible de savoir si un compte à 79€/mois coûte 5€ ou 40€ d'infra (Firestore reads, Sentry events, Axiom logs, Gemini tokens Oracle). Risque de marge négative silencieuse |
+| 🟡 | Impayés SaaS : handler partiel | `GracePeriodHandler` existe et met le tenant en read-only à J+7 après `tenant.subscription_expired`. Ce qui manque : workflow de réactivation post-paiement, communication vers le Propriétaire pendant la période de grâce |
+| 🟡 | Pas de freemium / trial géré au niveau infra | L'offre trial/freemium éventuelle n'a pas de mécanisme de quota ou de limitation automatique à l'expiration |
 
 ---
 
@@ -115,19 +186,49 @@ Ces 5 items bloquent l'onboarding du **premier client payant en production**. Au
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    CALENDRIER PRÉ-LANCEMENT COMMERCIAL                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ Semaine 1 : Juridique (CGU/DPA) + Backup WORM NF525 + RGPD Art. 9           │
-│ Semaine 2 : Finalisation Bus (R1-R13 + Idempotence) + Sentry / SOS Caisse   │
-│ Semaine 3 : Pipeline CI/CD + 3 Parcours E2E Playwright                      │
-│ Semaine 4 : Kit Matériel J-0 + Runbook Astreinte & Go Live Staging          │
+│ Semaine 1 : Juridique (CGU/DPA — démarrage) + Backup WORM NF525 + RGPD Art.9│
+│ Semaine 2 : Finalisation Bus (R1-R13 + Idempotence) + Sentry + SOS Caisse   │
+│ Semaine 3 : Pipeline CI/CD + 3 Parcours E2E Playwright (+ 4e offline sync)  │
+│ Semaine 4 : Kit Matériel J-0 + Runbook Astreinte + Go Live Staging          │
+│ Semaines 5-6 : Finalisation juridique (délai avocat)                        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-| # | Action | Domaine | Responsable | Durée Réelle | Critère de Validation |
-|---|--------|---------|-------------|--------------|-----------------------|
-| 1 | **Signature DPA RGPD & CGU/CGV** | Légal | Avocat / PO | 1-2 sem | Documents validés, signables électroniquement dans l'onboarding. |
-| 2 | **Vault WORM Firestore 6 ans** | Fiscal | Dev Lead | 3 jours | Test de tentative de suppression d'archive rejeté par la règle Firestore. |
-| 3 | **Émetteurs Bus R2, R10, R11 & Idempotence** | Core | Dev Lead | 3 jours | `reservation.matched`, `deposit_paid`, `table_closed` reçus et dédupliqués via `eventId`. |
-| 4 | **3 Parcours E2E Playwright** | QA | QA / Dev | 3 jours | Encaissement, Clôture Z et Réservation exécutés en vert dans le pipeline. |
-| 5 | **CI/CD GitHub Actions** | DevOps | DevOps | 4 jours | Pull Request bloquée automatiquement si TSC!=0 ou tests en échec. |
-| 6 | **Configuration Sentry & SOS Caisse** | Ops | Ops | 2 jours | Alerte Slack/PagerDuty reçue instantanément sur erreur critique fiscale ou appel SOS. |
-| 7 | **Kit Matériel J-0 & Runbook On-Call** | Ops | Ops | 2 jours | Routeur 4G testé et `docs/guides/ON_CALL_RUNBOOK.md` validé. |
+| # | Action | Domaine | Responsable | Durée Réelle | Critère de Validation Binaire |
+|---|--------|---------|-------------|--------------|-------------------------------|
+| 1 | **Signature DPA RGPD & CGU/CGV** | Légal | Avocat / PO | 4-6 sem | Documents validés, signables électroniquement dans l'onboarding tenant. |
+| 2 | **Vault WORM Firestore 6 ans** | Fiscal | Dev Lead | 3 jours | Test de tentative de suppression d'archive rejeté par la règle Firestore (test automatisé dans CI). |
+| 3 | **Émetteurs Bus R2, R10, R11 & Idempotence** | Core | Dev Lead | 3 jours | `reservation.matched`, `deposit_paid`, `table_closed` reçus + dédupliqués via `eventId`. Suite `test:bus` verte à 24/24. |
+| 4 | **4 Parcours E2E Playwright** | QA | QA / Dev | 4 jours | Encaissement, Clôture Z, Réservation+Allergènes, **Offline→Reconnexion→SyncNF525** exécutés en vert dans le pipeline. |
+| 5 | **CI/CD GitHub Actions + Rollback** | DevOps | DevOps | 4 jours | Pull Request bloquée automatiquement si TSC!=0 ou tests en échec. Auto-rollback sur health-check failed après déploiement. |
+| 6 | **Configuration Sentry + SOS Caisse** | Ops | Ops | 2 jours | Alerte Slack/PagerDuty reçue instantanément sur erreur critique fiscale ou appel SOS. |
+| 7 | **Kit Matériel J-0 + Runbook On-Call** | Ops | Ops | 2 jours | Routeur 4G testé sur 2 sites pilotes + `docs/guides/ON_CALL_RUNBOOK.md` validé + 12-point checklist matériel signée. |
+
+> Les items 8-N (DPoS, WAF, pentest, NPS, WCAG audit, ADR complète, doc onboarding dev) passent en H2/H3 sans bloquer le premier client.
+
+---
+
+## 📋 5. Registre de Suivi Trimestriel
+
+Ce registre doit être révisé chaque trimestre pour :
+1. **Vérifier** que les bloquants P0 résolus le restent (pas de régression).
+2. **Ajouter** les nouveaux angles morts découverts en production.
+3. **Réviser** les projections FinOps avec les données réelles (churn/CAC/LTV).
+4. **Mettre à jour** les métriques codebase (fichiers, handlers, routes, tests).
+
+| Trimestre | Bloquants P0 résolus | Nouveaux angles morts | Métriques codebase |
+|---|---|---|---|
+| 2026-Q3 | À suivre | Cadrage initial | 3 433 fichiers · 163 handlers · 235 routes · 63 pages · 97 tests |
+| 2026-Q4 | — | — | — |
+| 2027-Q1 | — | — | — |
+
+---
+
+## Références Croisées
+
+- **Backlog produit tactique** : [BACKLOG.md](../BACKLOG.md) — statut ✅/🔧/⬜ par feature + Horizon + Code ref
+- **Architecture invariants** : [ARCHITECTURE_METAPLATFORM.md](plans/ARCHITECTURE_METAPLATFORM.md) — 8 piliers, RBAC, NF525 multi-caisses, 6 invariants concurrence, ADR
+- **Horizons stratégiques** : [ROADMAP_STRATEGY.md](plans/ROADMAP_STRATEGY.md) — H1→H5, FinOps, Plan RH Bus Factor
+- **Verticales sectorielles** : [VERTICALS_SPECIFICATION.md](plans/VERTICALS_SPECIFICATION.md) — 8 verticales, connecteurs, cas limites
+- **UI composants** : [UI_MATRIX_16_ZONES.md](plans/UI_MATRIX_16_ZONES.md) — 16 zones × ~806 composants, priorités refonte
+- **Charte ingénierie** : [`.nexus/agents/.agents/AGENTS.md`](../.nexus/agents/.agents/AGENTS.md) — 6 invariants + politique fan-out/god files

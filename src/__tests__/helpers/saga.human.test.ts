@@ -21,20 +21,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
     };
   });
 
-vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/push/browserPush', () => ({
-  browserPush: { sendToRole: vi.fn(async () => true), sendToUser: vi.fn(async () => true) },
-}));
-vi.mock('@/modules/human', () => ({
-  PrepaieBuilder: {
-    build: vi.fn(async () => ({
-      rows: [{ employeeId: 'emp-1', brut: 2500 }],
-      totalBrut: 2500,
-    })),
-  },
-}));
-
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
 import { AbsenceUnderstaffingHandler } from '@/shared/eventBus/handlers/AbsenceUnderstaffingHandler';
@@ -53,15 +39,22 @@ import { OnboardingProgressHandler } from '@/shared/eventBus/handlers/Onboarding
 
 const T = 'tenant-hr';
 
-// ─── AbsenceUnderstaffingHandler ──────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { logger } from '@/lib/logger';
+import { browserPush } from '@/lib/push/browserPush';
+import { PrepaieBuilder } from '@/modules/human';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -71,14 +64,33 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'info').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'warn').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'error').mockImplementation(vi.fn());
+  vi.spyOn(browserPush, 'sendToRole').mockResolvedValue(undefined as never);
+  vi.spyOn(browserPush, 'sendToUser').mockResolvedValue(undefined as never);
+  vi.spyOn(PrepaieBuilder, 'build').mockResolvedValue({
+    rows: [{ employeeId: 'emp-1', brut: 2500 }],
+    totalBrut: 2500,
+    totalHeures: 151.67,
+  } as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(logger.info)) (logger.info as any).mockClear();
+  if (vi.isMockFunction(browserPush.sendToRole)) (browserPush.sendToRole as any).mockClear();
+  if (vi.isMockFunction(browserPush.sendToUser)) (browserPush.sendToUser as any).mockClear();
 });
 
 describe('AbsenceUnderstaffingHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); AbsenceUnderstaffingHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); AbsenceUnderstaffingHandler.register(); });
 
   it('décrémente le planning et alerte si sous-effectif', async () => {
     mockQuery.mockResolvedValue([{ id: 'sched-1', requiredHeadcount: 5, scheduledHeadcount: 5 }]);
@@ -102,7 +114,13 @@ describe('AbsenceUnderstaffingHandler', () => {
 // ─── PayrollAutoCalcHandler ───────────────────────────────────────────────────
 
 describe('PayrollAutoCalcHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); PayrollAutoCalcHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); PayrollAutoCalcHandler.register(); });
 
   it('calcule et persiste la pré-paie pour la période', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -126,7 +144,13 @@ describe('PayrollAutoCalcHandler', () => {
 // ─── PayrollComplianceHandler ─────────────────────────────────────────────────
 
 describe('PayrollComplianceHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerPayrollComplianceHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerPayrollComplianceHandler(); });
 
   it('verrouille les shifts de la période exportée', async () => {
     const now = Date.now();
@@ -152,7 +176,13 @@ describe('PayrollComplianceHandler', () => {
 // ─── PayrollTimeclockHandler ──────────────────────────────────────────────────
 
 describe('PayrollTimeclockHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerPayrollTimeclockHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerPayrollTimeclockHandler(); });
 
   it('persiste un pointage clock_in dans le registre de paie', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -184,7 +214,13 @@ describe('PayrollTimeclockHandler', () => {
 // ─── OvertimeAlertHandler ─────────────────────────────────────────────────────
 
 describe('OvertimeAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerOvertimeAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerOvertimeAlertHandler(); });
 
   it('crée une alerte RH si le shift dépasse 10h', async () => {
     const startedAt = Date.now() - 11 * 3600000;
@@ -212,7 +248,13 @@ describe('OvertimeAlertHandler', () => {
 // ─── OvertimeJournalHandler ───────────────────────────────────────────────────
 
 describe('OvertimeJournalHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerOvertimeJournalHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerOvertimeJournalHandler(); });
 
   it('crée une alerte et un flag de paie pour les heures sup', async () => {
     mockGet.mockResolvedValue({ name: 'Marie Dupont' });
@@ -233,7 +275,13 @@ describe('OvertimeJournalHandler', () => {
 // ─── LaborCostAnalyzerHandler ─────────────────────────────────────────────────
 
 describe('LaborCostAnalyzerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerLaborCostAnalyzerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerLaborCostAnalyzerHandler(); });
 
   it('trace le début de shift sans erreur', async () => {
     const { logger } = await import('@/lib/logger');
@@ -249,7 +297,13 @@ describe('LaborCostAnalyzerHandler', () => {
 // ─── ScheduleNotifierHandler ──────────────────────────────────────────────────
 
 describe('ScheduleNotifierHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerScheduleNotifierHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerScheduleNotifierHandler(); });
 
   it('notifie la brigade après publication du planning', async () => {
     mockQuery.mockResolvedValue([
@@ -274,7 +328,13 @@ describe('ScheduleNotifierHandler', () => {
 // ─── MedicalVisitAlertHandler ─────────────────────────────────────────────────
 
 describe('MedicalVisitAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); MedicalVisitAlertHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); MedicalVisitAlertHandler.register(); });
 
   it('pose le flag d\'alerte visite médicale sur l\'employé actif', async () => {
     mockQuery.mockResolvedValue([{ id: 'emp-1', status: 'active', employeeName: 'Jean' }]);
@@ -296,7 +356,13 @@ describe('MedicalVisitAlertHandler', () => {
 // ─── ContractRenewalAlertHandler ──────────────────────────────────────────────
 
 describe('ContractRenewalAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); ContractRenewalAlertHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); ContractRenewalAlertHandler.register(); });
 
   it('pose l\'alerte renouvellement sur le contrat actif', async () => {
     mockQuery.mockResolvedValue([{ id: 'ctr-1', type: 'CDD', status: 'active' }]);
@@ -318,19 +384,32 @@ describe('ContractRenewalAlertHandler', () => {
 // ─── EndOfServiceActionHandler ────────────────────────────────────────────────
 
 describe('EndOfServiceActionHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerEndOfServiceActionHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerEndOfServiceActionHandler(); });
 
   it('émet les notifications de fin de service', async () => {
     await capturedHandlers['store.shift_ended']({ tenantId: T, shiftId: 'shift-1', endTime: '23:00' });
 
-    expect(mockEmit).toHaveBeenCalledWith('notification.created', expect.objectContaining({ type: 'info' }));
+    expect(mockEmit).toHaveBeenCalledWith('store.rush_mode_toggled', expect.objectContaining({ isPaused: true }));
+    expect(mockEmitDurable).toHaveBeenCalledWith('notification.urgent', expect.objectContaining({ tenantId: T }));
   });
 });
 
 // ─── RecruitmentRouterHandler ─────────────────────────────────────────────────
 
 describe('RecruitmentRouterHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); RecruitmentRouterHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); RecruitmentRouterHandler.register(); });
 
   it('sauvegarde la candidature et alerte le manager', async () => {
     mockQuery.mockResolvedValue([{ id: 'mgr-1', role: 'manager', name: 'Directeur' }]);
@@ -356,7 +435,13 @@ describe('RecruitmentRouterHandler', () => {
 // ─── OnboardingProgressHandler ────────────────────────────────────────────────
 
 describe('OnboardingProgressHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); OnboardingProgressHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); OnboardingProgressHandler.register(); });
 
   it('marque l\'étape onboarding comme complétée', async () => {
     mockUpdate.mockResolvedValue(undefined);

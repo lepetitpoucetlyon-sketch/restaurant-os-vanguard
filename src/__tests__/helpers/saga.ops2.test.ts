@@ -22,16 +22,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
   });
 
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/shared-kernel', () => ({
-  SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
-}));
-vi.mock('@/lib/push/browserPush', () => ({
-  browserPush: { sendToRole: vi.fn(async () => true), sendToUser: vi.fn(async () => true) },
-}));
-vi.mock('@/lib/adapters/NotificationGateway', () => ({
-  NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
-}));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
@@ -64,9 +54,20 @@ const T = 'tenant-ops';
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { browserPush } from '@/lib/push/browserPush';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { SharedKernel } from '@/lib/shared-kernel';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  // Reset all call counts
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -76,14 +77,27 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(browserPush, 'sendToRole').mockResolvedValue(undefined as never);
+  vi.spyOn(browserPush, 'sendToUser').mockResolvedValue(undefined as never);
+  vi.spyOn(NotificationGateway, 'send').mockResolvedValue(undefined as never);
+  vi.spyOn(SharedKernel, 'generateId').mockImplementation((p: string) => `${p}-id`);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(browserPush.sendToRole)) (browserPush.sendToRole as any).mockClear();
+  if (vi.isMockFunction(browserPush.sendToUser)) (browserPush.sendToUser as any).mockClear();
+  if (vi.isMockFunction(NotificationGateway.send)) (NotificationGateway.send as any).mockClear();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
 });
 
 describe('KdsCourseManagerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsCourseManagerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsCourseManagerHandler(); });
 
   it('met les items du course à fired dans le ticket KDS', async () => {
     mockGet.mockResolvedValue({
@@ -111,7 +125,13 @@ describe('KdsCourseManagerHandler', () => {
 // ─── KdsPassNotifierHandler ───────────────────────────────────────────────────
 
 describe('KdsPassNotifierHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsPassNotifierHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsPassNotifierHandler(); });
 
   it('trace la notification ticket prêt au passe', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -123,7 +143,13 @@ describe('KdsPassNotifierHandler', () => {
 // ─── KdsPrepDelayAlertHandler ─────────────────────────────────────────────────
 
 describe('KdsPrepDelayAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsPrepDelayAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsPrepDelayAlertHandler(); });
 
   it('émet une notification d\'urgence en cas de retard', async () => {
     await capturedHandlers['kds.ticket_delayed']({ tenantId: T, orderId: 'ord-1', delayInMinutes: 20 });
@@ -134,7 +160,13 @@ describe('KdsPrepDelayAlertHandler', () => {
 // ─── KdsPrepTimeAnalyzerHandler ───────────────────────────────────────────────
 
 describe('KdsPrepTimeAnalyzerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsPrepTimeAnalyzerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsPrepTimeAnalyzerHandler(); });
 
   it('met l\'item à done et trace le temps de préparation', async () => {
     mockGet.mockResolvedValue({
@@ -154,7 +186,13 @@ describe('KdsPrepTimeAnalyzerHandler', () => {
 // ─── KdsPrintFallbackHandler ──────────────────────────────────────────────────
 
 describe('KdsPrintFallbackHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsPrintFallbackHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsPrintFallbackHandler(); });
 
   it('trace le fallback imprimante dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -166,7 +204,13 @@ describe('KdsPrintFallbackHandler', () => {
 // ─── KdsRoutingHandler ────────────────────────────────────────────────────────
 
 describe('KdsRoutingHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerKdsRoutingHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerKdsRoutingHandler(); });
 
   it('crée le ticket KDS et émet kds.ticket_received', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -187,7 +231,13 @@ describe('KdsRoutingHandler', () => {
 // ─── RecipeChangeKDSHandler ───────────────────────────────────────────────────
 
 describe('RecipeChangeKDSHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerRecipeChangeKDSHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerRecipeChangeKDSHandler(); });
 
   it('notifie les KDS de la mise à jour de recette', async () => {
     await capturedHandlers['recipe.updated']({ tenantId: T, recipeId: 'rec-1', productId: 'prod-1' });
@@ -198,7 +248,13 @@ describe('RecipeChangeKDSHandler', () => {
 // ─── RushModeIntegrationHandler ───────────────────────────────────────────────
 
 describe('RushModeIntegrationHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerRushModeIntegrationHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerRushModeIntegrationHandler(); });
 
   it('émet une notification urgent quand le rush mode s\'active', async () => {
     await capturedHandlers['store.rush_mode_toggled']({ tenantId: T, isPaused: true });
@@ -214,7 +270,13 @@ describe('RushModeIntegrationHandler', () => {
 // ─── OrderAcceptanceWindowHandler ─────────────────────────────────────────────
 
 describe('OrderAcceptanceWindowHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerOrderAcceptanceWindowHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerOrderAcceptanceWindowHandler(); });
 
   it('place la commande en attente si autoAccept est false', async () => {
     mockGet.mockResolvedValue({ autoAccept: false });
@@ -234,7 +296,13 @@ describe('OrderAcceptanceWindowHandler', () => {
 // ─── OrderCancelRestockHandler ────────────────────────────────────────────────
 
 describe('OrderCancelRestockHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerOrderCancelRestockHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerOrderCancelRestockHandler(); });
 
   it('restitue les stocks si la commande annulée n\'était pas en cuisine', async () => {
     const mockTransaction = {
@@ -272,7 +340,13 @@ describe('OrderCancelRestockHandler', () => {
 // ─── BigGroupAlertHandler ─────────────────────────────────────────────────────
 
 describe('BigGroupAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerBigGroupAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerBigGroupAlertHandler(); });
 
   it('alerte le manager pour un groupe > seuil', async () => {
     mockGet.mockResolvedValue({ bigGroupThreshold: 12 });
@@ -301,7 +375,13 @@ describe('BigGroupAlertHandler', () => {
 // ─── GroupPrepTasksHandler ────────────────────────────────────────────────────
 
 describe('GroupPrepTasksHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerGroupPrepTasksHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerGroupPrepTasksHandler(); });
 
   it('crée une tâche de préparation pour le grand groupe', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -320,7 +400,13 @@ describe('GroupPrepTasksHandler', () => {
 // ─── ResaKitchenTaskHandler ───────────────────────────────────────────────────
 
 describe('ResaKitchenTaskHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerResaKitchenTaskHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerResaKitchenTaskHandler(); });
 
   it('crée une tâche cuisine si covers > 8', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -342,7 +428,13 @@ describe('ResaKitchenTaskHandler', () => {
 // ─── ResaReminderHandler ──────────────────────────────────────────────────────
 
 describe('ResaReminderHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerResaReminderHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerResaReminderHandler(); });
 
   it('envoie le rappel et appelle NotificationGateway', async () => {
     mockGet
@@ -362,7 +454,13 @@ describe('ResaReminderHandler', () => {
 // ─── ReservationNotifierHandler ───────────────────────────────────────────────
 
 describe('ReservationNotifierHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerReservationNotifierHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerReservationNotifierHandler(); });
 
   it('envoie une notification de confirmation au client', async () => {
     mockGet.mockResolvedValue({ name: 'Le Bistrot' });
@@ -382,7 +480,13 @@ describe('ReservationNotifierHandler', () => {
 // ─── NoShowPenaltyHandler ─────────────────────────────────────────────────────
 
 describe('NoShowPenaltyHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerNoShowPenaltyHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerNoShowPenaltyHandler(); });
 
   it('crée une pénalité en attente si la réservation avait un dépôt', async () => {
     mockGet.mockResolvedValue({ hasDeposit: true, subjectId: 'cust-1' });
@@ -408,7 +512,13 @@ describe('NoShowPenaltyHandler', () => {
 // ─── FloorPlanCapacityHandler ─────────────────────────────────────────────────
 
 describe('FloorPlanCapacityHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerFloorPlanCapacityHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerFloorPlanCapacityHandler(); });
 
   it('incrémente les couverts réservés pour le service', async () => {
     mockGet.mockResolvedValue({ bookedCovers: 20, maxCovers: 50 });
@@ -428,7 +538,13 @@ describe('FloorPlanCapacityHandler', () => {
 // ─── TableTurnoverAnalyzerHandler ─────────────────────────────────────────────
 
 describe('TableTurnoverAnalyzerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerTableTurnoverAnalyzerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerTableTurnoverAnalyzerHandler(); });
 
   it('persiste la session courante (seatedAt) à l\'assignation', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -445,7 +561,13 @@ describe('TableTurnoverAnalyzerHandler', () => {
 // ─── CompEntryHandler / CompMealHandler ───────────────────────────────────────
 
 describe('CompEntryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCompEntryHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCompEntryHandler(); });
 
   it('trace la comp (remise gratuite) dans le ledger', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -463,7 +585,13 @@ describe('CompEntryHandler', () => {
 });
 
 describe('CompMealHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCompMealHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCompMealHandler(); });
 
   it('trace le repas offert dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');

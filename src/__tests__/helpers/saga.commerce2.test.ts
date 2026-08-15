@@ -22,13 +22,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
   });
 
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/adapters/NotificationGateway', () => ({
-  NotificationGateway: { sendEmail: vi.fn(async () => true), send: vi.fn(async () => true) },
-}));
-vi.mock('@/lib/shared-kernel', () => ({
-  SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
-}));
 vi.mock('@/modules/commerce/relation/delivery/services/AggregatorMappingService', () => ({
   AggregatorMappingService: {
     getActiveAdapters: vi.fn(async () => []),
@@ -61,15 +54,21 @@ import { registerQuoteFollowUpHandler } from '@/shared/eventBus/handlers/QuoteFo
 
 const T = 'tenant-crm';
 
-// ─── BirthdayCampaignHandler ──────────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { SharedKernel } from '@/lib/shared-kernel';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -79,14 +78,23 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(NotificationGateway, 'send').mockResolvedValue(undefined as never);
+  vi.spyOn(SharedKernel, 'generateId').mockImplementation((p: string) => `${p}-id`);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(NotificationGateway.send)) (NotificationGateway.send as any).mockClear();
 });
 
 describe('BirthdayCampaignHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerBirthdayCampaignHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerBirthdayCampaignHandler(); });
 
   it('émet marketing.campaign_launched pour l\'anniversaire', async () => {
     await capturedHandlers['crm.birthday_approaching']({ tenantId: T, customerId: 'cust-1' });
@@ -99,7 +107,13 @@ describe('BirthdayCampaignHandler', () => {
 // ─── BirthdayOfferHandler ─────────────────────────────────────────────────────
 
 describe('BirthdayOfferHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); BirthdayOfferHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); BirthdayOfferHandler.register(); });
 
   it('persiste le coupon anniversaire dans Nexus', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -118,7 +132,13 @@ describe('BirthdayOfferHandler', () => {
 // ─── CustomerProfileInitHandler ───────────────────────────────────────────────
 
 describe('CustomerProfileInitHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCustomerProfileInitHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCustomerProfileInitHandler(); });
 
   it('crée le profil fidélité pour un nouveau client', async () => {
     mockGet.mockResolvedValue(null);
@@ -144,7 +164,13 @@ describe('CustomerProfileInitHandler', () => {
 // ─── CustomerRFMAnalyzerHandler ───────────────────────────────────────────────
 
 describe('CustomerRFMAnalyzerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCustomerRFMAnalyzerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCustomerRFMAnalyzerHandler(); });
 
   it('met à jour le segment RFM du client après gain de points', async () => {
     mockGet.mockResolvedValue({ visitCount: 4, segment: 'regular' });
@@ -168,7 +194,13 @@ describe('CustomerRFMAnalyzerHandler', () => {
 // ─── CustomerRiskTagHandler ───────────────────────────────────────────────────
 
 describe('CustomerRiskTagHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerCustomerRiskTagHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerCustomerRiskTagHandler(); });
 
   it('incrémente le noShowCount du profil CRM', async () => {
     mockGet.mockResolvedValue({ noShowCount: 0, tags: [] });
@@ -191,7 +223,13 @@ describe('CustomerRiskTagHandler', () => {
 // ─── InactiveCustomerHandler ──────────────────────────────────────────────────
 
 describe('InactiveCustomerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerInactiveCustomerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerInactiveCustomerHandler(); });
 
   it('crée une campagne de réactivation pour le client inactif', async () => {
     mockGet.mockResolvedValue({ name: 'Marie Dupont', email: 'marie@ex.com', tags: [] });
@@ -212,7 +250,13 @@ describe('InactiveCustomerHandler', () => {
 // ─── LoyaltyRewardAlertHandler ────────────────────────────────────────────────
 
 describe('LoyaltyRewardAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerLoyaltyRewardAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerLoyaltyRewardAlertHandler(); });
 
   it('émet une notification de récompense débloquée', async () => {
     await capturedHandlers['crm.reward_unlocked']({
@@ -227,7 +271,13 @@ describe('LoyaltyRewardAlertHandler', () => {
 // ─── SegmentTargetingHandler ──────────────────────────────────────────────────
 
 describe('SegmentTargetingHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSegmentTargetingHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSegmentTargetingHandler(); });
 
   it('trace le ciblage de segment dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -241,7 +291,13 @@ describe('SegmentTargetingHandler', () => {
 // ─── MarketingCampaignRouterHandler ───────────────────────────────────────────
 
 describe('MarketingCampaignRouterHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerMarketingCampaignRouterHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerMarketingCampaignRouterHandler(); });
 
   it('trace la campagne dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -255,7 +311,13 @@ describe('MarketingCampaignRouterHandler', () => {
 // ─── NegativeReviewHandler ────────────────────────────────────────────────────
 
 describe('NegativeReviewHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerNegativeReviewHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerNegativeReviewHandler(); });
 
   it('alerte le manager sur un avis négatif', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -274,7 +336,13 @@ describe('NegativeReviewHandler', () => {
 // ─── PromotionExpiryHandler ───────────────────────────────────────────────────
 
 describe('PromotionExpiryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); PromotionExpiryHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); PromotionExpiryHandler.register(); });
 
   it('expire la promotion et rollback les prix des produits', async () => {
     mockGet.mockResolvedValue({ productIds: ['prod-1', 'prod-2'] });
@@ -299,7 +367,13 @@ describe('PromotionExpiryHandler', () => {
 // ─── PromotionPriceHandler ────────────────────────────────────────────────────
 
 describe('PromotionPriceHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); PromotionPriceHandler.register(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); PromotionPriceHandler.register(); });
 
   it('applique la remise promotionnelle sur les produits ciblés', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -318,7 +392,13 @@ describe('PromotionPriceHandler', () => {
 // ─── AggregatorMenuSyncHandler ────────────────────────────────────────────────
 
 describe('AggregatorMenuSyncHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerAggregatorMenuSyncHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerAggregatorMenuSyncHandler(); });
 
   it('ne fait rien si l\'intégration est introuvable', async () => {
     const { AggregatorMappingService } = await import(
@@ -337,7 +417,13 @@ describe('AggregatorMenuSyncHandler', () => {
 // ─── AggregatorStockSyncHandler ───────────────────────────────────────────────
 
 describe('AggregatorStockSyncHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerAggregatorStockSyncHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerAggregatorStockSyncHandler(); });
 
   it('marque l\'article épuisé dans l\'audit de sync', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -351,7 +437,13 @@ describe('AggregatorStockSyncHandler', () => {
 // ─── QuoteFollowUpHandler ─────────────────────────────────────────────────────
 
 describe('QuoteFollowUpHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerQuoteFollowUpHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerQuoteFollowUpHandler(); });
 
   it('planifie la relance du devis envoyé', async () => {
     mockGet.mockResolvedValue({ quoteId: 'quot-1', customerId: 'cust-1' });

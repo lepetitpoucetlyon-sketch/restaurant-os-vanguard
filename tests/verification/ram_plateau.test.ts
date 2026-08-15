@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GlobalRegistryService } from '@/infrastructure/services/GlobalRegistryService';
+import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { createNexusNode } from '@/store/nexusNodeFactory';
 import { getDefaultStore } from 'jotai';
 

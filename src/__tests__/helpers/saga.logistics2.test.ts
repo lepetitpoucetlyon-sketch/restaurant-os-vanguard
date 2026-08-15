@@ -10,25 +10,18 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
       return () => {};
     });
     return {
-      mockGet: vi.fn(),
-      mockSet: vi.fn(),
-      mockUpdate: vi.fn(),
-      mockQuery: vi.fn(),
-      mockEmit: vi.fn(),
-      mockEmitDurable: vi.fn(),
+      mockGet: vi.fn(async () => undefined),
+      mockSet: vi.fn(async () => undefined),
+      mockUpdate: vi.fn(async () => undefined),
+      mockQuery: vi.fn(async () => []),
+      mockEmit: vi.fn(async () => {}),
+      mockEmitDurable: vi.fn(async () => {}),
       mockOn,
       capturedHandlers,
     };
   });
 
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
-vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
-vi.mock('@/lib/shared-kernel', () => ({
-  SharedKernel: { generateId: vi.fn((p: string) => `${p}-id`) },
-}));
-vi.mock('@/modules/finance/comptabilite/FinancialNexusBridge', () => ({
-  FinancialNexusBridge: { processRefund: vi.fn(async () => undefined) },
-}));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
@@ -41,15 +34,21 @@ import { registerSupplierDeliveryReceivedHandler } from '@/shared/eventBus/handl
 
 const T = 'tenant-log';
 
-// ─── AutoSupplierDraftHandler ─────────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { SharedKernel } from '@/lib/shared-kernel';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -59,14 +58,23 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(SharedKernel, 'generateId').mockImplementation(((p: string) => `${p}-id`) as typeof SharedKernel.generateId);
+  vi.spyOn(FinancialNexusBridge, 'processRefund').mockResolvedValue(undefined as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(FinancialNexusBridge.processRefund)) (FinancialNexusBridge.processRefund as any).mockClear();
 });
 
 describe('AutoSupplierDraftHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerAutoSupplierDraftHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerAutoSupplierDraftHandler(); });
 
   it('crée un brouillon de commande fournisseur si aucun existant', async () => {
     mockGet.mockResolvedValue({ supplierId: 'supp-1', idealStock: 50 });
@@ -114,7 +122,13 @@ describe('AutoSupplierDraftHandler', () => {
 // ─── FoodCostRecomputer ───────────────────────────────────────────────────────
 
 describe('FoodCostRecomputer', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerFoodCostRecomputer(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerFoodCostRecomputer(); });
 
   it('met à jour le coût des stocks et trace l\'invoice traitée', async () => {
     // Handler: update stockItems, then get stockItems + products + recipes
@@ -139,7 +153,13 @@ describe('FoodCostRecomputer', () => {
 // ─── FoodDonationHandler ──────────────────────────────────────────────────────
 
 describe('FoodDonationHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerFoodDonationHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerFoodDonationHandler(); });
 
   it('génère un rapport de don pour les items périssables disponibles', async () => {
     mockQuery.mockResolvedValue([
@@ -172,7 +192,13 @@ describe('FoodDonationHandler', () => {
 // ─── PhysicalInventoryHandler ─────────────────────────────────────────────────
 
 describe('PhysicalInventoryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerPhysicalInventoryHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerPhysicalInventoryHandler(); });
 
   it('met à jour les items dont la quantité physique diverge du théorique', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -197,7 +223,13 @@ describe('PhysicalInventoryHandler', () => {
 // ─── StockRestitutionHandler ──────────────────────────────────────────────────
 
 describe('StockRestitutionHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerStockRestitutionHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerStockRestitutionHandler(); });
 
   it('restitue les ingrédients au stock si la commande est en état pending', async () => {
     mockGet
@@ -229,7 +261,13 @@ describe('StockRestitutionHandler', () => {
 // ─── SupplierDeliveryReceivedHandler ──────────────────────────────────────────
 
 describe('SupplierDeliveryReceivedHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerSupplierDeliveryReceivedHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerSupplierDeliveryReceivedHandler(); });
 
   it('met à jour les stocks à réception de la livraison fournisseur', async () => {
     const order = { id: 'po-1', status: 'open', items: [{ itemId: 'item-1', quantity: 50, unitPrice: 2000000 }] };

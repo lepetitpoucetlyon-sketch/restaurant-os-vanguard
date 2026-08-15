@@ -24,21 +24,12 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
-vi.mock('@/lib/audit', () => ({
-  empireAudit: { log: vi.fn() },
-}));
 vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: vi.fn(() => ({})), set: vi.fn() })),
   atom: vi.fn(),
 }));
 vi.mock('@/store/pillars/compliance', () => ({
   quarantinedProductsAtom: {},
-}));
-vi.mock('@/lib/shared-kernel', () => ({
-  SharedKernel: { generateId: vi.fn((prefix: string) => `${prefix}-test-id`) },
-}));
-vi.mock('@/modules/logistics/stock/services/ProductAvailabilityService', () => ({
-  ProductAvailabilityService: { flagUnavailable: vi.fn(async () => undefined) },
 }));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
@@ -56,15 +47,21 @@ import { registerWasteValidatedHandler } from '@/shared/eventBus/handlers/WasteV
 
 const T = 'tenant-comp';
 
-// ─── FridgeTempAlertHandler ───────────────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { SharedKernel } from '@/lib/shared-kernel';
+import { ProductAvailabilityService } from '@/modules/logistics/stock/services/ProductAvailabilityService';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockGet.mockClear();
+  mockSet.mockClear();
+  mockUpdate.mockClear();
+  mockQuery.mockClear();
+  mockEmit.mockClear();
+  mockEmitDurable.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
@@ -74,14 +71,23 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(SharedKernel, 'generateId').mockImplementation((prefix: string) => `${prefix}-test-id`);
+  vi.spyOn(ProductAvailabilityService, 'flagUnavailable').mockResolvedValue(undefined as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
+  if (vi.isMockFunction(ProductAvailabilityService.flagUnavailable)) (ProductAvailabilityService.flagUnavailable as any).mockClear();
 });
 
 describe('FridgeTempAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerFridgeTempAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerFridgeTempAlertHandler(); });
 
   it('désactive les produits du frigo si durée > 30min', async () => {
     mockQuery.mockResolvedValue([{ id: 'prod-lait' }, { id: 'prod-creme' }]);
@@ -107,7 +113,13 @@ describe('FridgeTempAlertHandler', () => {
 // ─── DLCExpiryHandler ─────────────────────────────────────────────────────────
 
 describe('DLCExpiryHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerDLCExpiryHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerDLCExpiryHandler(); });
 
   it('déduit la quantité expirée et émet waste.logged', async () => {
     mockGet.mockResolvedValue({ quantity: 20, name: 'Lait' });
@@ -133,7 +145,13 @@ describe('DLCExpiryHandler', () => {
 // ─── ComplianceCalendarHandler ────────────────────────────────────────────────
 
 describe('ComplianceCalendarHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerComplianceCalendarHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerComplianceCalendarHandler(); });
 
   it('persiste la notification de conformité', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -159,7 +177,13 @@ describe('ComplianceCalendarHandler', () => {
 // ─── HaccpCheckArchiverHandler ────────────────────────────────────────────────
 
 describe('HaccpCheckArchiverHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerHaccpCheckArchiverHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerHaccpCheckArchiverHandler(); });
 
   it('archive le relevé HACCP dans Nexus', async () => {
     mockGet.mockResolvedValue({ checkId: 'chk-1', checkType: 'temperature', result: 'ok' });
@@ -180,7 +204,13 @@ describe('HaccpCheckArchiverHandler', () => {
 // ─── IotOfflineAlertHandler ───────────────────────────────────────────────────
 
 describe('IotOfflineAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerIotOfflineAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerIotOfflineAlertHandler(); });
 
   it('trace l\'alerte capteur hors-ligne dans l\'audit', async () => {
     const { empireAudit } = await import('@/lib/audit');
@@ -198,7 +228,13 @@ describe('IotOfflineAlertHandler', () => {
 // ─── QuarantineHandler ────────────────────────────────────────────────────────
 
 describe('QuarantineHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerQuarantineHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerQuarantineHandler(); });
 
   it('met en quarantaine les produits sur alerte HACCP critique', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -224,7 +260,13 @@ describe('QuarantineHandler', () => {
 // ─── NonConformActionHandler ──────────────────────────────────────────────────
 
 describe('NonConformActionHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerNonConformActionHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerNonConformActionHandler(); });
 
   it('crée une action corrective dans Nexus', async () => {
     mockSet.mockResolvedValue(undefined);
@@ -244,7 +286,13 @@ describe('NonConformActionHandler', () => {
 // ─── TrainingComplianceAlertHandler ──────────────────────────────────────────
 
 describe('TrainingComplianceAlertHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerTrainingComplianceAlertHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerTrainingComplianceAlertHandler(); });
 
   it('bloque l\'employé si la formation est expirée', async () => {
     mockUpdate.mockResolvedValue(undefined);
@@ -263,7 +311,13 @@ describe('TrainingComplianceAlertHandler', () => {
 // ─── RecallPOSBlockerHandler ──────────────────────────────────────────────────
 
 describe('RecallPOSBlockerHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerRecallPOSBlockerHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerRecallPOSBlockerHandler(); });
 
   it('bloque les produits rappelés sur le POS', async () => {
     const { ProductAvailabilityService } = await import('@/modules/logistics/stock/services/ProductAvailabilityService');
@@ -280,7 +334,13 @@ describe('RecallPOSBlockerHandler', () => {
 // ─── WasteValidatedHandler ────────────────────────────────────────────────────
 
 describe('WasteValidatedHandler', () => {
-  beforeEach(() => { vi.clearAllMocks(); registerWasteValidatedHandler(); });
+  beforeEach(() => {
+    mockGet.mockClear();
+    mockSet.mockClear();
+    mockUpdate.mockClear();
+    mockQuery.mockClear();
+    mockEmit.mockClear();
+    mockEmitDurable.mockClear(); registerWasteValidatedHandler(); });
 
   it('déduit le stock et persiste le rapport de perte', async () => {
     const mockTransaction = {

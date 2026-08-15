@@ -1,19 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// ─── Hoisted mocks ────────────────────────────────────────────────────────────
-
-const { mockSovereignHealth, mockSovereignQuery, mockSovereignIngest } = vi.hoisted(() => ({
-  mockSovereignHealth: vi.fn(),
-  mockSovereignQuery:  vi.fn(),
-  mockSovereignIngest: vi.fn(),
-}));
-
-vi.mock('@/modules/intelligence/knowledge/rag/SovereignRAGClient', () => ({
-  sovereignHealth: mockSovereignHealth,
-  sovereignQuery:  mockSovereignQuery,
-  sovereignIngest: mockSovereignIngest,
-}));
-
 vi.mock('@/modules/intelligence/knowledge/rag/PulseSanitizer', () => ({
   PulseSanitizer: class {
     sanitize(p: unknown) { return p; }
@@ -32,6 +18,7 @@ vi.mock('@/lib/logger', () => ({
 // ─── Import après mocks ───────────────────────────────────────────────────────
 
 import { HermesKnowledgeManager } from '@/modules/intelligence/knowledge/rag/HermesKnowledgeManager';
+import * as SovereignRAGClient from '@/modules/intelligence/knowledge/rag/SovereignRAGClient';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
@@ -39,7 +26,7 @@ describe('HermesKnowledgeManager', () => {
   let hermes: HermesKnowledgeManager;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     hermes = new HermesKnowledgeManager('tenant-test', { restaurantName: 'Le Voltaire', country: 'FR' } as never);
   });
 
@@ -47,25 +34,25 @@ describe('HermesKnowledgeManager', () => {
 
   describe('isReady()', () => {
     it('retourne true si Sovereign RAG est online', async () => {
-      mockSovereignHealth.mockResolvedValueOnce({ status: 'online' });
+      vi.spyOn(SovereignRAGClient, 'sovereignHealth').mockResolvedValueOnce({ status: 'online', latencyMs: 10 });
       expect(await hermes.isReady()).toBe(true);
     });
 
     it('retourne false si Sovereign RAG est offline', async () => {
-      mockSovereignHealth.mockResolvedValueOnce({ status: 'offline' });
+      vi.spyOn(SovereignRAGClient, 'sovereignHealth').mockResolvedValueOnce({ status: 'offline', latencyMs: 10 });
       expect(await hermes.isReady()).toBe(false);
     });
 
     it('propage l\'erreur si sovereignHealth rejette', async () => {
-      mockSovereignHealth.mockRejectedValueOnce(new Error('connection refused'));
+      vi.spyOn(SovereignRAGClient, 'sovereignHealth').mockRejectedValueOnce(new Error('connection refused'));
       await expect(hermes.isReady()).rejects.toThrow('connection refused');
     });
   });
 
   describe('getHealth()', () => {
     it('délègue à sovereignHealth et retourne le résultat brut', async () => {
-      const health = { status: 'online', documentCount: 42, version: '1.2.3' };
-      mockSovereignHealth.mockResolvedValueOnce(health);
+      const health = { status: 'online' as const, documentCount: 42, version: '1.2.3', latencyMs: 10 };
+      vi.spyOn(SovereignRAGClient, 'sovereignHealth').mockResolvedValueOnce(health);
       expect(await hermes.getHealth()).toEqual(health);
     });
   });
@@ -74,7 +61,7 @@ describe('HermesKnowledgeManager', () => {
 
   describe('query()', () => {
     it('délègue à sovereignQuery et retourne la réponse structurée', async () => {
-      mockSovereignQuery.mockResolvedValueOnce({
+      const spy = vi.spyOn(SovereignRAGClient, 'sovereignQuery').mockResolvedValueOnce({
         answer: 'Utiliser 200g de farine par portion.',
         sources: [{ title: 'Recette Pain', snippet: '…' }],
         latencyMs: 340,
@@ -87,14 +74,14 @@ describe('HermesKnowledgeManager', () => {
 
       expect(result.answer).toContain('farine');
       expect(result.sources).toContain('Recette Pain');
-      expect(mockSovereignQuery).toHaveBeenCalledWith(
+      expect(spy).toHaveBeenCalledWith(
         'Quelle quantité de farine pour la brioche ?',
         expect.objectContaining({ workspaceId: 'tenant-test', role: 'chef_cuisinier' })
       );
     });
 
     it('retourne un message de fallback si sovereignQuery lève une erreur', async () => {
-      mockSovereignQuery.mockRejectedValueOnce(new Error('timeout'));
+      vi.spyOn(SovereignRAGClient, 'sovereignQuery').mockRejectedValueOnce(new Error('timeout'));
 
       const result = await hermes.query({ question: 'Question quelconque' }, 'serveur');
 
@@ -107,7 +94,7 @@ describe('HermesKnowledgeManager', () => {
 
   describe('indexCollection()', () => {
     it('indexe chaque document et retourne le compteur', async () => {
-      mockSovereignIngest.mockResolvedValue({ jobId: 'job-1', status: 'queued' });
+      const spy = vi.spyOn(SovereignRAGClient, 'sovereignIngest').mockResolvedValue({ jobId: 'job-1', status: 'queued' });
 
       const docs = [
         { id: 'prod-1', name: 'Brioche', description: 'Brioche au beurre' },
@@ -118,18 +105,19 @@ describe('HermesKnowledgeManager', () => {
 
       expect(result.indexed).toBe(2);
       expect(result.failed).toBe(0);
-      expect(mockSovereignIngest).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenCalledTimes(2);
     });
 
     it('retourne failed=0 et n\'appelle pas sovereignIngest si tableau vide', async () => {
+      const spy = vi.spyOn(SovereignRAGClient, 'sovereignIngest');
       const result = await hermes.indexCollection('recipe', []);
       expect(result.indexed).toBe(0);
       expect(result.failed).toBe(0);
-      expect(mockSovereignIngest).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('incrémente failed si sovereignIngest rejette sur un document', async () => {
-      mockSovereignIngest
+      vi.spyOn(SovereignRAGClient, 'sovereignIngest')
         .mockResolvedValueOnce({ jobId: 'job-ok', status: 'queued' })
         .mockRejectedValueOnce(new Error('Blob upload failed'));
 

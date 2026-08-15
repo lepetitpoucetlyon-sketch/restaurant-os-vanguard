@@ -1,15 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PiiVault } from './PiiVault';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 const store: Record<string, unknown> = {};
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-    Nexus: {
-        adapter: {
-            get: vi.fn(async (path: string) => (store[path] as unknown) ?? null),
-            set: vi.fn(async (path: string, data: unknown) => { store[path] = data; }),
-        },
-    },
-}));
 
 describe('PiiVault', () => {
     let vault: PiiVault;
@@ -17,6 +10,8 @@ describe('PiiVault', () => {
     beforeEach(() => {
         vault = new PiiVault();
         Object.keys(store).forEach(k => delete store[k]);
+        vi.spyOn(Nexus.adapter, 'get').mockImplementation(async (path: string) => (store[path] as unknown) ?? null);
+        vi.spyOn(Nexus.adapter, 'set').mockImplementation(async (path: string, data: unknown) => { store[path] = data; });
     });
 
     it('stores and retrieves PII fields', async () => {

@@ -58,6 +58,7 @@ describe('middleware', () => {
     });
 
     it('passes through when Bearer token is present', async () => {
+      vi.stubEnv('MCC_ADMIN_SECRET', 'valid_token_here');
       const req = createMockRequest('/api/admin/system/health', {
         authorization: 'Bearer valid_token_here',
       });
@@ -69,6 +70,7 @@ describe('middleware', () => {
 
   describe('git API in production', () => {
     it('blocks git routes in production', async () => {
+      vi.stubEnv('MCC_ADMIN_SECRET', 'token');
       vi.stubEnv('NODE_ENV', 'production');
       const req = createMockRequest('/api/admin/git/push', {
         authorization: 'Bearer token',

@@ -24,26 +24,12 @@ const { mockNexusGet, mockNexusUpdate, mockNexusSet, mockEmitDurable, mockOn, ca
 
 
 
-vi.mock('@/lib/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
-}));
-
-vi.mock('@/lib/audit', () => ({
-  empireAudit: { log: vi.fn() },
-}));
-
 vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: mockJotaiGet, set: mockJotaiSet })),
 }));
 
 vi.mock('@/store/pillars/compliance', () => ({
   quarantinedProductsAtom: {},
-}));
-
-vi.mock('@/modules/human/connectors/payroll/PayrollConnectorFactory', () => ({
-  PayrollConnectorFactory: {
-    get: vi.fn(() => ({ id: 'silae', syncPeriod: mockConnectorSyncPeriod })),
-  },
 }));
 
 vi.mock('@/modules/human/remuneration/payroll/PrepaieBuilder', () => ({
@@ -56,15 +42,21 @@ import { registerWasteStockReconciliationHandler } from '@/shared/eventBus/handl
 import { registerMarginWarningHandler }            from '@/shared/eventBus/handlers/MarginWarningHandler';
 import { PayrollExportHandler }                    from '@/shared/eventBus/handlers/PayrollExportHandler';
 
-// ─── WasteStockReconciliationHandler ─────────────────────────────────────────
-
-
 // ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { empireAudit } from '@/lib/audit';
+import { logger } from '@/lib/logger';
+import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
 
 beforeEach(() => {
-  vi.restoreAllMocks();
+  mockNexusGet.mockClear();
+  mockNexusSet.mockClear();
+  mockNexusUpdate.mockClear();
+  mockEmitDurable.mockClear();
+  mockConnectorSyncPeriod.mockClear();
+  mockJotaiSet.mockClear();
+
   // NexusEventBus — use mockOn so capturedHandlers is populated
   vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
   vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
@@ -74,15 +66,25 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockNexusSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockNexusUpdate as typeof Nexus.adapter.update);
   vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
-});
+  // Real singletons
+  vi.spyOn(empireAudit, 'log').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'warn').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'info').mockImplementation(vi.fn());
+  vi.spyOn(logger, 'error').mockImplementation(vi.fn());
+  vi.spyOn(PayrollConnectorFactory, 'get').mockReturnValue({ id: 'silae', syncPeriod: mockConnectorSyncPeriod } as never);
 
-afterEach(() => {
-  vi.restoreAllMocks();
+  if (vi.isMockFunction(logger.warn)) (logger.warn as any).mockClear();
+  if (vi.isMockFunction(empireAudit.log)) (empireAudit.log as any).mockClear();
 });
 
 describe('WasteStockReconciliationHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockNexusGet.mockClear();
+    mockNexusSet.mockClear();
+    mockNexusUpdate.mockClear();
+    mockEmitDurable.mockClear();
+    mockConnectorSyncPeriod.mockClear();
+    mockJotaiSet.mockClear();
     registerWasteStockReconciliationHandler();
   });
 
@@ -148,7 +150,12 @@ describe('WasteStockReconciliationHandler', () => {
 
 describe('MarginWarningHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockNexusGet.mockClear();
+    mockNexusSet.mockClear();
+    mockNexusUpdate.mockClear();
+    mockEmitDurable.mockClear();
+    mockConnectorSyncPeriod.mockClear();
+    mockJotaiSet.mockClear();
     vi.stubGlobal('crypto', { randomUUID: () => 'alert-uuid-1' });
     registerMarginWarningHandler();
   });
@@ -183,7 +190,12 @@ describe('MarginWarningHandler', () => {
 
 describe('PayrollExportHandler', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockNexusGet.mockClear();
+    mockNexusSet.mockClear();
+    mockNexusUpdate.mockClear();
+    mockEmitDurable.mockClear();
+    mockConnectorSyncPeriod.mockClear();
+    mockJotaiSet.mockClear();
     PayrollExportHandler.register();
   });
 
@@ -231,7 +243,7 @@ describe('PayrollExportHandler', () => {
     mockConnectorSyncPeriod.mockRejectedValueOnce(new Error('API down'));
     mockNexusUpdate.mockResolvedValueOnce(undefined);
 
-    await capturedHandlers['hr.preroll_validated'](basePayload);
+    await expect(capturedHandlers['hr.preroll_validated'](basePayload)).rejects.toThrow('API down');
 
     expect(mockNexusUpdate).toHaveBeenCalledWith(
       'tenants/tenant-rh/hr/pendingExports/2026-07',

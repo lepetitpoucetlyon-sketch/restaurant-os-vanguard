@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@/e2e/vanguard/mocks';
-import { NexusSyncService } from '@/infrastructure/services/NexusSyncService';
+import { NexusSyncService } from '@/lib/NexusSyncService';
 // ICM-lite : init() ne charge que les piliers demandés par la route. `operations` charge
 // orders+stocks+compliance (les 3 testés ici), finance/marketing/staff restent OFF.
 import { TASK_MAPS } from '@/lib/icm/TaskContext';
