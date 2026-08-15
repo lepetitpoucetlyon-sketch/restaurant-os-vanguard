@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
@@ -19,12 +19,6 @@ const { mockGet, mockSet, mockUpdate, mockEmit, mockOn, capturedHandlers } =
     };
   });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate } },
-}));
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: vi.fn() },
-}));
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
@@ -43,6 +37,27 @@ import { registerTaxMismatchAlertHandler } from '@/shared/eventBus/handlers/TaxM
 import { registerPaymentRejectAuditHandler } from '@/shared/eventBus/handlers/PaymentRejectAuditHandler';
 
 // ─── CompJournalHandler ───────────────────────────────────────────────────────
+
+
+// ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  // NexusEventBus — use mockOn so capturedHandlers is populated
+  vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
+  vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
+  // Nexus.adapter — delegate to hoisted vi.fn() mocks
+  vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockGet as typeof Nexus.adapter.get);
+  vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
+  vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('CompJournalHandler', () => {
   beforeEach(() => {

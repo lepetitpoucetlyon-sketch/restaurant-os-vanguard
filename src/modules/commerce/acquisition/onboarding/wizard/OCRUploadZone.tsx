@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useRef, useState } from 'react';
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 interface OcrResult {
@@ -29,7 +30,7 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
       fd.append('file', file);
       fd.append('category', category);
 
-      const res = await fetch('/api/tenant/onboarding/ocr', { method: 'POST', body: fd });
+      const res = await authedFetch('/api/tenant/onboarding/ocr', { method: 'POST', body: fd });
       const json = await res.json() as { rows?: Record<string, string>[]; confidence?: string; rawText?: string; error?: string };
       if (!res.ok) throw new Error(json.error ?? 'Erreur OCR');
       onResult({

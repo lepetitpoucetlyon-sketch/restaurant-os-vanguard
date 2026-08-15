@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
@@ -22,12 +22,6 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
     };
   });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate, query: mockQuery, create: mockCreate } },
-}));
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: mockEmitDurable },
-}));
 vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
 vi.mock('@/lib/audit', () => ({ empireAudit: { log: vi.fn() } }));
 vi.mock('@/lib/adapters/MasterBridge', () => ({
@@ -83,6 +77,29 @@ import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/Intellig
 const T = 'tenant-intel';
 
 // ─── IntelligenceHandler ──────────────────────────────────────────────────────
+
+
+// ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  // NexusEventBus — use mockOn so capturedHandlers is populated
+  vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
+  vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(mockEmitDurable as typeof NexusEventBus.emitDurable);
+  // Nexus.adapter — delegate to hoisted vi.fn() mocks
+  vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockGet as typeof Nexus.adapter.get);
+  vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
+  vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
+  vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
+  vi.spyOn(Nexus.adapter, 'create').mockImplementation(mockCreate as typeof Nexus.adapter.create);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('IntelligenceHandler', () => {
   beforeEach(() => { vi.clearAllMocks(); registerIntelligenceHandler(); });

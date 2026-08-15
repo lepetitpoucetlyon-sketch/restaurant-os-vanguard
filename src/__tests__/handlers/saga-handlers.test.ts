@@ -1,11 +1,12 @@
 /**
  * SAGA handlers — tests unitaires (15 handlers critiques)
- * Stratégie : mock Nexus.adapter + NexusEventBus, capture le handler via on.mock.calls,
- * invoque directement, assert sur les effets (adapter calls, emitDurable, empireAudit).
+ * Stratégie : vi.spyOn sur les vrais singletons Nexus.adapter + NexusEventBus
+ * (contournement du bug Vitest 4.x : vi.mock ne partage pas le même module entre
+ * le fichier test et les handlers importés dynamiquement).
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-// ── Mocks globaux ────────────────────────────────────────────────────────────
+// ── Transaction mock (réutilisé dans toutes les spyOn de runTransaction) ─────
 
 const txMock = {
   get: vi.fn(),
@@ -13,34 +14,6 @@ const txMock = {
   update: vi.fn(),
   delete: vi.fn(),
 };
-
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: {
-    adapter: {
-      get: vi.fn(),
-      set: vi.fn(),
-      update: vi.fn(),
-      create: vi.fn(),
-      delete: vi.fn(),
-      query: vi.fn(),
-      runTransaction: vi.fn(async (cb: (tx: typeof txMock) => Promise<unknown>) => cb(txMock)),
-    },
-  },
-}));
-
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: {
-    on: vi.fn((_event: string, handler: (...args: unknown[]) => unknown) => {
-      return () => {};
-    }),
-    emit: vi.fn().mockResolvedValue(undefined),
-    emitDurable: vi.fn().mockResolvedValue(undefined),
-  },
-}));
-
-vi.mock('@/lib/audit', () => ({
-  empireAudit: { log: vi.fn() },
-}));
 
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
@@ -58,19 +31,6 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
   },
 }));
 
-vi.mock('@/lib/CryptoService', () => ({
-  CryptoService: {
-    generateHash: vi.fn().mockResolvedValue('expected-hash'),
-    canonicalStringify: vi.fn().mockReturnValue('{"data":"snapshot"}'),
-  },
-}));
-
-vi.mock('@/lib/adapters/MasterBridge', () => ({
-  MasterBridge: {
-    pushGlobalConfig: vi.fn().mockResolvedValue(undefined),
-  },
-}));
-
 vi.mock('@/lib/adapters/NotificationGateway', () => ({
   NotificationGateway: {
     sendEmail: vi.fn().mockResolvedValue(undefined),
@@ -82,21 +42,45 @@ vi.mock('@/lib/adapters/NotificationGateway', () => ({
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
+import { CryptoService } from '@/lib/CryptoService';
+import { MasterBridge } from '@/lib/adapters/MasterBridge';
 
+/** Récupère le dernier handler enregistré via NexusEventBus.on (spy) */
 function captureHandler(): (...args: unknown[]) => Promise<void> {
   const calls = vi.mocked(NexusEventBus.on).mock.calls;
+  if (calls.length === 0) throw new Error('captureHandler: NexusEventBus.on jamais appelé');
   const last = calls[calls.length - 1];
   return last[1] as (...args: unknown[]) => Promise<void>;
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  // Restaurer puis ré-appliquer les spies à chaque test pour repartir de zéro
+  vi.restoreAllMocks();
   txMock.get.mockReset();
   txMock.set.mockReset();
   txMock.update.mockReset();
-  vi.mocked(Nexus.adapter.runTransaction).mockImplementation(
+
+  // vi.spyOn sur les vrais singletons (partagés entre tests et handlers importés)
+  vi.spyOn(NexusEventBus, 'on');
+  vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'get').mockResolvedValue(null);
+  vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'update').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'create').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'delete').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
+  vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(
     async (cb: (tx: typeof txMock) => Promise<unknown>) => cb(txMock),
   );
+  vi.spyOn(empireAudit, 'log').mockImplementation(() => {});
+  vi.spyOn(CryptoService, 'generateHash').mockResolvedValue('expected-hash');
+  vi.spyOn(CryptoService, 'canonicalStringify').mockReturnValue('{"data":"snapshot"}');
+  vi.spyOn(MasterBridge, 'pushGlobalConfig').mockResolvedValue(undefined);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 // ── C01 — TicketZHandler ─────────────────────────────────────────────────────

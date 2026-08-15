@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type { SupportTicket } from '@/shared/schemas';
 
 export function useSupportTickets() {
@@ -13,7 +14,7 @@ export function useSupportTickets() {
 
   const fetchTickets = useCallback(async () => {
     try {
-      const res = await fetch('/api/tenant/support/tickets');
+      const res = await authedFetch('/api/tenant/support/tickets');
       if (!res.ok) throw new Error('Impossible de charger les tickets');
       const data = await res.json() as { tickets: SupportTicket[] };
       setTickets(data.tickets || []);
@@ -41,7 +42,7 @@ export function useSupportTickets() {
   }, [fetchTickets]);
 
   const submitTicket = async (description: string, screenshotUrl?: string) => {
-    const res = await fetch('/api/tenant/support/tickets', {
+    const res = await authedFetch('/api/tenant/support/tickets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ description, screenshotUrl }),

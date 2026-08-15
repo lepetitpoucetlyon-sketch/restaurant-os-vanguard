@@ -1,13 +1,11 @@
-# Restaurant OS — Roadmap Fonctionnelle
+# Restaurant OS — Roadmap Fonctionnelle (Archive & Lecture)
 
-**~170 features** · P1 Core · P2 Important · P3 Future
-
-> **Statut**
-> - ✅ Implémenté — logique métier complète
-> - 🔧 Partiel — scaffoldé ou à compléter
-> - ⬜ À développer
+> ⚠️ **ARCHIVE DE CONSULTATION HISTORIQUE**  
+> **Source unique de vérité active** : [`BACKLOG.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/BACKLOG.md) (avec pointeurs de code et horizons H1-H5).  
+> **Modules d'architecture & exécution** : [`docs/plans/`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/).
 
 ---
+
 
 ## ⚙ Ops — Service & Production
 

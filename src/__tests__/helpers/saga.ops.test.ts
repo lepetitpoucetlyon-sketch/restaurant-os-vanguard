@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
@@ -20,12 +20,6 @@ const { mockGet, mockSet, mockUpdate, mockEmit, mockOn, mockSendToRole, captured
     };
   });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: mockGet, set: mockSet, update: mockUpdate } },
-}));
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { on: mockOn, emit: mockEmit, emitDurable: vi.fn() },
-}));
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
@@ -62,6 +56,30 @@ const baseOrderPaid = {
 
 // ─── KDSOrderHandler ──────────────────────────────────────────────────────────
 
+
+// ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { browserPush } from '@/lib/push/browserPush';
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  // NexusEventBus — use mockOn so capturedHandlers is populated
+  vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
+  vi.spyOn(NexusEventBus, 'emit').mockImplementation(mockEmit as typeof NexusEventBus.emit);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined);
+  // Nexus.adapter — delegate to hoisted vi.fn() mocks
+  vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockGet as typeof Nexus.adapter.get);
+  vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
+  vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
+  // browserPush — same module isolation issue, use vi.spyOn
+  vi.spyOn(browserPush, 'sendToRole').mockImplementation(mockSendToRole as typeof browserPush.sendToRole);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 describe('KDSOrderHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -71,7 +89,7 @@ describe('KDSOrderHandler', () => {
   it('crée un kdsOrder avec status pending lors d\'order.paid', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.paid'](baseOrderPaid);
+    await capturedHandlers['order.placed'](baseOrderPaid);
 
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/T/kdsOrders/ord-1',
@@ -82,7 +100,7 @@ describe('KDSOrderHandler', () => {
   it('inclut tous les items avec status pending', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.paid']({
+    await capturedHandlers['order.placed']({
       ...baseOrderPaid,
       items: [
         { productId: 'p1', name: 'Pizza', quantity: 1, unitPriceInMicrounits: 1000000, priceInMicrounits: 1000000 },
@@ -96,7 +114,7 @@ describe('KDSOrderHandler', () => {
   });
 
   it('ne crée pas de kdsOrder si items vide', async () => {
-    await capturedHandlers['order.paid']({ ...baseOrderPaid, items: [] });
+    await capturedHandlers['order.placed']({ ...baseOrderPaid, items: [] });
 
     expect(mockSet).not.toHaveBeenCalled();
   });
@@ -113,7 +131,7 @@ describe('PaymentLedgerHandler', () => {
   it('crée une entrée paymentLedger avec l\'orderId comme clé (paiement simple)', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.paid']({ ...baseOrderPaid, paymentMode: 'cash' });
+    await capturedHandlers['order.placed']({ ...baseOrderPaid, paymentMode: 'cash' });
 
     expect(mockSet).toHaveBeenCalledWith(
       'tenants/T/paymentLedger/ord-1',
@@ -124,7 +142,7 @@ describe('PaymentLedgerHandler', () => {
   it('crée une entrée par split avec id {orderId}_split_{index}', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.paid']({
+    await capturedHandlers['order.placed']({
       ...baseOrderPaid,
       splits: [
         { amount: 1200000, mode: 'card' },
@@ -145,7 +163,7 @@ describe('PaymentLedgerHandler', () => {
   it('enregistre orderId dans chaque entrée split', async () => {
     mockSet.mockResolvedValue(undefined);
 
-    await capturedHandlers['order.paid']({
+    await capturedHandlers['order.placed']({
       ...baseOrderPaid,
       splits: [{ amount: 2000000, mode: 'card' }],
     });

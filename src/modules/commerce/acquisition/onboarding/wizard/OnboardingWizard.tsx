@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
 import type { OnboardingMode } from '@/shared/nexus/contracts/onboarding.types';
@@ -64,7 +65,7 @@ export function OnboardingWizard() {
     } else {
       complete('mode', 'source');
     }
-    void fetch('/api/tenant/onboarding/status', {
+    void authedFetch('/api/tenant/onboarding/status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mode: m }),
@@ -87,7 +88,7 @@ export function OnboardingWizard() {
 
   const handleDone = () => {
     complete('import', 'done');
-    void fetch('/api/tenant/onboarding/status', {
+    void authedFetch('/api/tenant/onboarding/status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completedAt: new Date().toISOString() }),
@@ -249,7 +250,7 @@ export function OnboardingWizard() {
                   </div>
                   <SimpleFloorPlanEditor
                     onSave={async (tables: SimpleTable[], zones: SimpleZone[]) => {
-                      await fetch('/api/tenant/onboarding/status', {
+                      await authedFetch('/api/tenant/onboarding/status', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ steps: { floorplan: { status: 'completed', source: 'manual', importResult: { created: tables.length, updated: 0, skipped: 0, errors: 0 } } } }),

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/shared/hooks";
 import { PinLogin } from "@/shared/nexus/guards/PinLogin";
+import { authedFetch } from "@/lib/client/authedFetch";
 import type { OnboardingState } from "@/shared/nexus/contracts/onboarding.types";
 
 export default function LoginPage() {
@@ -16,7 +17,7 @@ export default function LoginPage() {
         setChecked(true);
 
         // Vérifier si l'onboarding est terminé avant de rediriger
-        fetch('/api/tenant/onboarding/status')
+        authedFetch('/api/tenant/onboarding/status')
             .then(res => res.ok ? res.json() as Promise<OnboardingState> : null)
             .then(state => {
                 if (!state?.completedAt) {

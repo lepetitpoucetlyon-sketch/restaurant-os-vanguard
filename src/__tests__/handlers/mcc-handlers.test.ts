@@ -77,14 +77,14 @@ describe('MccHealthPingHandler', () => {
     expect(setCalls.length).toBeGreaterThanOrEqual(2);
 
     // 1. État courant
-    const currentCall = setCalls.find(c => c[0] === 'mcc/tenantHealth/tenant-abc');
+    const currentCall = setCalls.find((c: any[]) => c[0] === 'mcc/tenantHealth/tenant-abc');
     expect(currentCall).toBeDefined();
     expect((currentCall![1] as Record<string, unknown>).status).toBe('healthy');
     expect((currentCall![1] as Record<string, unknown>).tenantId).toBe('tenant-abc');
 
     // 2. Historique — chemin de la forme mcc/tenantHealth/tenant-abc/history/YYYY-MM-DD
     const today = new Date().toISOString().slice(0, 10);
-    const historyCall = setCalls.find(c =>
+    const historyCall = setCalls.find((c: any[]) =>
       (c[0] as string).startsWith('mcc/tenantHealth/tenant-abc/history/')
     );
     expect(historyCall).toBeDefined();

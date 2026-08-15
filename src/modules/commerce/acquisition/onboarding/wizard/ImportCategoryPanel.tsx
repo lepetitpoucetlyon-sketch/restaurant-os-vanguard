@@ -4,6 +4,7 @@ import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/m
 import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 import { OCRUploadZone } from './OCRUploadZone';
 import { PreviewTable } from './PreviewTable';
+import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 interface ImportCategoryPanelProps {
@@ -49,7 +50,7 @@ export function ImportCategoryPanel({
     setState('importing');
     setProgress(10);
     try {
-      const res = await fetch('/api/tenant/onboarding/connector/pull', {
+      const res = await authedFetch('/api/tenant/onboarding/connector/pull', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ provider: connectorId, category, credentials: connectorCredentials, autoImport: false }),
@@ -80,7 +81,7 @@ export function ImportCategoryPanel({
       formData.append('category', category);
 
       const interval = setInterval(() => setProgress(p => Math.min(p + 5, 85)), 500);
-      const res = await fetch('/api/tenant/onboarding/ocr', { method: 'POST', body: formData });
+      const res = await authedFetch('/api/tenant/onboarding/ocr', { method: 'POST', body: formData });
       clearInterval(interval);
 
       const json = await res.json() as { snapshotId?: string; created?: number; error?: string };

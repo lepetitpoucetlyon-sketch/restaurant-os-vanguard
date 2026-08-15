@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface OnboardingHelpButtonProps {
   currentStep?: string;
@@ -19,7 +20,7 @@ export function OnboardingHelpButton({ currentStep, category, errorContext }: On
     setSending(true);
     setError(null);
     try {
-      const res = await fetch('/api/tenant/support/tickets', {
+      const res = await authedFetch('/api/tenant/support/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

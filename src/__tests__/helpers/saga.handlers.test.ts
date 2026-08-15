@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 
 // ─── Hoisted mocks (accessibles dans vi.mock factories) ────────────────────────
 
@@ -22,13 +22,7 @@ const { mockNexusGet, mockNexusUpdate, mockNexusSet, mockEmitDurable, mockOn, ca
   };
 });
 
-vi.mock('@/lib/nexus/NexusAdapter', () => ({
-  Nexus: { adapter: { get: mockNexusGet, update: mockNexusUpdate, set: mockNexusSet, query: vi.fn() } },
-}));
 
-vi.mock('@/shared/eventBus/NexusEventBus', () => ({
-  NexusEventBus: { on: mockOn, emitDurable: mockEmitDurable },
-}));
 
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
@@ -63,6 +57,28 @@ import { registerMarginWarningHandler }            from '@/shared/eventBus/handl
 import { PayrollExportHandler }                    from '@/shared/eventBus/handlers/PayrollExportHandler';
 
 // ─── WasteStockReconciliationHandler ─────────────────────────────────────────
+
+
+// ─── Global spy setup (vi.spyOn on real singletons — path-agnostic) ─────────
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  // NexusEventBus — use mockOn so capturedHandlers is populated
+  vi.spyOn(NexusEventBus, 'on').mockImplementation(mockOn as typeof NexusEventBus.on);
+  vi.spyOn(NexusEventBus, 'emit').mockResolvedValue(undefined);
+  vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(mockEmitDurable as typeof NexusEventBus.emitDurable);
+  // Nexus.adapter — delegate to hoisted vi.fn() mocks
+  vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockNexusGet as typeof Nexus.adapter.get);
+  vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockNexusSet as typeof Nexus.adapter.set);
+  vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockNexusUpdate as typeof Nexus.adapter.update);
+  vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('WasteStockReconciliationHandler', () => {
   beforeEach(() => {
