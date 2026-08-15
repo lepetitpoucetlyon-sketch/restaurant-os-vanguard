@@ -137,7 +137,7 @@ describe('ChangelogService.getByCategory()', () => {
     await ChangelogService.getByCategory('UPGRADE', 'tenant-x');
     const opts = mockQuery.mock.calls[0]![1];
     expect(opts?.where).toHaveLength(2);
-    const fields = opts!.where!.map(w => w.field);
+    const fields = opts!.where!.map((w: any) => w.field);
     expect(fields).toContain('category');
     expect(fields).toContain('tenantId');
   });

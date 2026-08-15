@@ -10,12 +10,12 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
       return () => {};
     });
     return {
-      mockGet: vi.fn(async () => undefined),
-      mockSet: vi.fn(async () => undefined),
-      mockUpdate: vi.fn(async () => undefined),
-      mockQuery: vi.fn(async () => []),
-      mockEmit: vi.fn(async () => {}),
-      mockEmitDurable: vi.fn(async () => {}),
+      mockGet: vi.fn<(...args: any[]) => Promise<any>>(async () => undefined),
+      mockSet: vi.fn<(...args: any[]) => Promise<any>>(async () => undefined),
+      mockUpdate: vi.fn<(...args: any[]) => Promise<any>>(async () => undefined),
+      mockQuery: vi.fn<(...args: any[]) => Promise<any[]>>(async () => []),
+      mockEmit: vi.fn<(...args: any[]) => Promise<any>>(async () => {}),
+      mockEmitDurable: vi.fn<(...args: any[]) => Promise<any>>(async () => {}),
       mockOn,
       capturedHandlers,
     };
@@ -175,7 +175,7 @@ describe('FoodDonationHandler', () => {
       expect.stringContaining(`tenants/${T}/donationReports/`),
       expect.objectContaining({ status: 'pending_collection' }),
     );
-    const call = mockSet.mock.calls[0][1];
+    const call = (mockSet.mock.calls[0] as any)?.[1];
     expect(call.items).toHaveLength(1);
     expect(call.items[0].name).toBe('Tomates');
   });
