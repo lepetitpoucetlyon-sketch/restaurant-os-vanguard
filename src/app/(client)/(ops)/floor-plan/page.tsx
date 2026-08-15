@@ -2,13 +2,14 @@
 
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
-import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardList } from "lucide-react";
+import { LayoutTemplate, Users, Layers, Sun, Building2, ChevronDown, ClipboardList, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from '@/modules/ops';
 import { motion, AnimatePresence } from "framer-motion";
-import { useIsMobile } from "@/shared/hooks";
+import { useIsMobile, useTenant } from "@/shared/hooks";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
 import { Table, TableStatus } from "@nexus/contracts";
@@ -215,19 +216,41 @@ function FloorPlanPage() {
                     <div className="grid grid-cols-2 gap-4">
                         <button
                             onClick={() => { router.push(`/pos?table=${selectedTableId}`); setSelectedTableId(null); }}
-                            className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50"
+                            className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50 hover:bg-bg-primary transition-all"
                         >
                             <ClipboardList className="w-8 h-8 text-accent" />
                             <span className="text-[10px] font-black uppercase tracking-widest">Prendre Commande</span>
                         </button>
                         <button
                             onClick={() => { router.push(`/reservations?table=${selectedTableId}`); setSelectedTableId(null); }}
-                            className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50"
+                            className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50 hover:bg-bg-primary transition-all"
                         >
                             <Users className="w-8 h-8 text-accent-gold" />
                             <span className="text-[10px] font-black uppercase tracking-widest">Réservation</span>
                         </button>
                     </div>
+
+                    <button
+                        onClick={async () => {
+                            if (!selectedTableId) return;
+                            updateTable(selectedTableId, { status: 'seated' as TableStatus });
+                            await NexusEventBus.emitDurable('reservation.matched', {
+                                v: 1,
+                                tenantId: 'tenant_default',
+                                reservationId: `resa_${selectedTableId}`,
+                                tableId: selectedTableId,
+                                allergens: [],
+                                covers: selectedTable?.seats ?? 2,
+                                matchedAt: Date.now(),
+                            });
+                            showToast(`Table ${selectedTable?.number} installée — KDS notifié`, 'success');
+                            setSelectedTableId(null);
+                        }}
+                        className="w-full py-4 rounded-2xl bg-accent-gold hover:bg-accent-gold/90 text-text-primary text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                    >
+                        <CheckCircle2 className="w-4 h-4" />
+                        Accueillir Client (Check-In & KDS)
+                    </button>
 
                     <div className="space-y-2 pt-4">
                         <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] px-4">Statut de la Table</p>

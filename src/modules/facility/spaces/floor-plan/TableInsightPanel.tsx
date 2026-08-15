@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Users,
@@ -11,15 +11,21 @@ import {
     Star,
     Wallet,
     Clock,
+    AlertTriangle,
+    Loader2,
 } from "lucide-react";
 // eslint-disable-next-line vanguard/no-inter-module-imports, no-restricted-imports
 import { useOrders, useReservations } from "@/modules/ops/providers";
+import { useTables } from '@/modules/ops';
+import { useTenant } from "@/shared/hooks";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { toast } from "sonner";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { cn } from "@/lib/ui.foundations";
 import { ScrollArea } from "@ui/scroll-area";
 
-import { Table, Order, Reservation } from "@nexus/contracts";
+import { Table, Order, Reservation, TableStatus } from "@nexus/contracts";
 
 interface TableInsightPanelProps {
     selectedTable: Table | null;
@@ -30,6 +36,9 @@ interface TableInsightPanelProps {
 export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableInsightPanelProps) {
     const { data: orders, isLoading: ordersLoading } = useOrders();
     const { data: reservations, isLoading: resLoading } = useReservations();
+    const { updateTable } = useTables();
+    const { activeTenantId } = useTenant();
+    const [welcoming, setWelcoming] = useState(false);
 
     const data = useMemo(() => {
         if (!selectedTable || !orders || !reservations) return null;
@@ -62,6 +71,32 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
     if (!selectedTable || !data) return null;
 
     const { activeOrder, activeReservation, isSeatedWithReservation, displayName } = data;
+
+    const handleWelcomeGuest = async () => {
+        if (!activeReservation || !selectedTable) return;
+        setWelcoming(true);
+        try {
+            const declaredAllergens: string[] = (activeReservation as unknown as { allergens?: string[] }).allergens ?? [];
+
+            await NexusEventBus.emitDurable('reservation.matched', {
+                v: 1,
+                tenantId: activeTenantId || 'tenant_default',
+                reservationId: activeReservation.id,
+                customerId: activeReservation.customerId,
+                tableId: selectedTable.id,
+                allergens: declaredAllergens,
+                covers: activeReservation.covers ?? selectedTable.seats,
+                matchedAt: Date.now(),
+            });
+
+            updateTable(selectedTable.id, { status: 'seated' as TableStatus });
+            toast.success(`Client ${activeReservation.customerName} accueilli — Allergènes transmis au KDS`);
+        } catch {
+            toast.error("Échec lors de l'accueil du client");
+        } finally {
+            setWelcoming(false);
+        }
+    };
 
     return (
         <AnimatePresence mode="wait">
@@ -199,7 +234,6 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="bg-bg-tertiary dark:bg-surface-sidebar p-8 rounded-[40px] space-y-8 shadow-2xl relative overflow-hidden ring-1 ring-black/5 dark:ring-white/10"
                             >
-                                {/* Visual Polish */}
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 -mr-32 -mt-32 rounded-full blur-[100px] pointer-events-none" />
                                 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-action-primary/5 rounded-full blur-[80px] pointer-events-none" />
 
@@ -257,17 +291,37 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                             </motion.div>
                         )}
 
-                        {/* Pre-arrival Alert */}
+                        {/* Pre-arrival Alert & Welcome Guest Button */}
                         {!activeOrder && activeReservation && (
-                            <div className="p-8 bg-status-warning/10 border border-action-primary/20 rounded-[32px] flex gap-5 shadow-inner">
-                                <div className="w-12 h-12 rounded-2xl bg-status-warning/20 flex items-center justify-center shrink-0">
-                                    <Clock className="w-6 h-6 text-status-warning" />
+                            <div className="p-6 bg-status-warning/10 border border-action-primary/20 rounded-[32px] space-y-4 shadow-inner">
+                                <div className="flex gap-4 items-center">
+                                    <div className="w-12 h-12 rounded-2xl bg-status-warning/20 flex items-center justify-center shrink-0">
+                                        <Clock className="w-6 h-6 text-status-warning" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[13px] font-bold text-status-warning/90 leading-relaxed italic font-serif">
+                                            "Arrivée imminente. Protocoles VIP confirmés pour {activeReservation.customerName}."
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-[13px] font-bold text-status-warning/90 leading-relaxed italic font-serif">
-                                        "Arrivée imminente (~12 min). Protocoles VIP confirmés pour {activeReservation.customerName}."
-                                    </p>
-                                </div>
+
+                                <button
+                                    onClick={handleWelcomeGuest}
+                                    disabled={welcoming}
+                                    className="w-full h-12 rounded-2xl bg-accent hover:bg-accent/90 text-bg-primary font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
+                                >
+                                    {welcoming ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Transmission KDS...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <CheckCircle2 className="w-4 h-4" />
+                                            Accueillir le Client (Check-In & Allergènes KDS)
+                                        </>
+                                    )}
+                                </button>
                             </div>
                         )}
                     </div>

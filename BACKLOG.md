@@ -34,8 +34,7 @@
 | P1 | ⬜ | H1 | XL | Mode hors-ligne POS avec sync auto au retour réseau | `src/lib/sync/offlineQueue.ts` | Bloque tout scénario coupure WiFi ; **prérequis Kit J-0 H2** |
 | P1 | 🔧 | H1 | S | Impression tickets thermiques ESC/POS (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Fonctionne ; auto-discovery imprimantes ⬜ |
 | P1 | ⬜ | H2 | S | Scanner code-barres / QR articles en caisse | `src/modules/ops/service/pos/` | — |
-| P1 | ✅ | H1 | — | Gestion du pourboire (pool, individuel, déclaration DSN) | `src/modules/human/paie/tips.ts` | — |
-| P1 | ⬜ | H1 | S | Alerte allergènes sur commandes (colorcode par plat) | `src/modules/commerce/catalog/` | **Dépend R2 `reservation.matched`** (bloquant P0 §DEBT) |
+| P1 | ✅ | H1 | S | Alerte allergènes sur commandes & Check-In client KDS | `src/modules/facility/spaces/floor-plan/TableInsightPanel.tsx`, `ResaAllergenCheckHandler.ts` | Émission `reservation.matched` & notification urgente cuisine validées |
 | P1 | ⬜ | H1 | S | Vérification âge alcool (blocage POS + confirmation) | `src/modules/ops/service/pos/hooks/usePos.ts` | Émet `compliance.age_verification_requested` |
 | P1 | 🔧 | H1 | M | Séquençage des plats (entrée → plat → dessert par table) | `src/modules/ops/production/kds/` | Handler prêt, émetteur `ops.course.fired` partiel |
 | P1 | ✅ | H1 | — | Routage KDS multi-station (chaud / froid / pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | — |
@@ -302,7 +301,7 @@
 
 1. **API REST OpenAPI (Hono) H2.2** → bloque Mobile App, Click & Collect, App PMS externe, Kiosque libre-service.
 2. **NF525 multi-caisses offline H1** → bloque encaissement en mode dégradé, multi-terminal simultané.
-3. **R2 `reservation.matched` H1** → bloque chaîne allergènes KDS (🔴 sécurité alimentaire).
+3. **R2 `reservation.matched` H1** → ✅ **Résolu** (Chaîne allergènes KDS, badge table et notification cuisine opérationnels).
 4. **Idempotence Bus H1** → bloque fiabilité de tous les handlers en cas de retry.
 5. **SovereignGuard cross-tenant H4** → bloque EmpireCockpit, consolidation groupe, mutualisation staff/stocks.
 6. **Homologation partenaires (buffer 3-6 mois)** → bloque Google Reserve, Deliveroo, Booking, SESAM-Vitale.
