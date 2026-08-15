@@ -117,5 +117,25 @@ export const SovereignMath = {
         if (!order) return 0;
         if (typeof order.totalInMicrounits === 'number') return order.totalInMicrounits;
         return (order.totalInCents ?? 0) * 10_000;
-    }
+    },
+
+    /**
+     * ⚖️ Règle du Reliquat de Split (Invariant #5 / Charte Permanente d'Ingénierie)
+     *
+     * Divise une somme en microunités en N parts entières et attribue le résidu indivisible
+     * au dernier payeur pour garantir mathématiquement : sum(parts) === total sans perte de centime.
+     */
+    splitRemainder: (totalInMicrounits: number, partsCount: number): number[] => {
+        if (partsCount <= 0) throw new Error('PARTS_COUNT_MUST_BE_POSITIVE');
+        if (partsCount === 1) return [totalInMicrounits];
+
+        const basePart = Math.floor(totalInMicrounits / partsCount);
+        const parts = Array(partsCount).fill(basePart);
+        const sumBase = basePart * partsCount;
+        const remainder = totalInMicrounits - sumBase;
+
+        // Le reliquat indivisible est alloué au dernier élément
+        parts[partsCount - 1] += remainder;
+        return parts;
+    },
 };

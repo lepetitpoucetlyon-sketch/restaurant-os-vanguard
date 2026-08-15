@@ -36,12 +36,10 @@ export interface ConvivePayment {
 }
 
 function createEqualPayments(count: number, total: number): ConvivePayment[] {
-    const baseAmount = Math.floor(total / count);
-    const remainder = total % count;
-    
-    return Array.from({ length: count }, (_, i) => ({ 
-        paid: false, 
-        amount: i < remainder ? baseAmount + 1 : baseAmount 
+    const parts = SovereignMath.splitRemainder(total, Math.max(1, count));
+    return parts.map(amount => ({
+        paid: false,
+        amount,
     }));
 }
 

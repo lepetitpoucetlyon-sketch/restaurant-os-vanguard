@@ -38,7 +38,7 @@
 | P1 | ⬜ | H1 | S | Vérification âge alcool (blocage POS + confirmation) | `src/modules/ops/service/pos/hooks/usePos.ts` | Émet `compliance.age_verification_requested` |
 | P1 | 🔧 | H1 | M | Séquençage des plats (entrée → plat → dessert par table) | `src/modules/ops/production/kds/` | Handler prêt, émetteur `ops.course.fired` partiel |
 | P1 | ✅ | H1 | — | Routage KDS multi-station (chaud / froid / pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | — |
-| P1 | ⬜ | H1 | M | Split addition (partage par convive ou par article) | `src/modules/ops/service/pos/hooks/usePosSplit.ts` | Reliquat au dernier payeur (invariant #3) |
+| P1 | ✅ | H1 | — | Split addition (partage par convive ou par article) | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Reliquat au dernier payeur validé (Invariant #5 SovereignMath) |
 | P1 | ⬜ | H1 | M | Verrouillage CAS des tables & Reliquat indivisible de split | `src/shared/eventBus/handlers/TableLockHandler.ts` | Invariants #3 concurrence |
 | P1 | ⬜ | H1 | M | Session de service & Calculs Shift UTC (Anti-DST) | `src/modules/ops/workflow/engine/` | Invariant #5 concurrence |
 | P1 | ⬜ | H1 | L | Architecture NF525 multi-caisses offline (chaîne par terminal) | `src/modules/finance/fiscalite/FiscalSealer.ts` | Prérequis pour offline POS multi-devices |
