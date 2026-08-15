@@ -24,9 +24,11 @@ describe('useActionPermission', () => {
     vi.clearAllMocks();
   });
 
-  it('allows access to unknown actions', () => {
+  it('denies access to unknown actions (phase 2 — échec fermé)', () => {
     const { result } = renderHook(() => useActionPermission('pos', 'unknown_action'), { wrapper: getWrapper('serveur') });
-    expect(result.current.allowed).toBe(true);
+    // C16 phase 2 : les actions non déclarées dans ACTION_MAP sont refusées par défaut.
+    expect(result.current.allowed).toBe(false);
+    expect(result.current.reason).toContain('non déclarée');
   });
 
   it('denies access if user is not authenticated', () => {

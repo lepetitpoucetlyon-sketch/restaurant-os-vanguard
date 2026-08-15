@@ -23,8 +23,8 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
         // eslint-disable-next-line vanguard/no-inter-module-imports
 import { predictAttendance } from '@/modules/intelligence';
 
-export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
-const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];
+export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "flash" | "oracle";
+const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "flash", "oracle"];
 
 export interface MacroBrainAlert {
     id: string;

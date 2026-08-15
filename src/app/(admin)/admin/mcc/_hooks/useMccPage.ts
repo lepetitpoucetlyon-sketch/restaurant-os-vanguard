@@ -44,6 +44,7 @@ export function useMccPage() {
     const [newCloneEmail, setNewCloneEmail] = useState('');
     const [newCloneTier, setNewCloneTier] = useState<'STANDARD' | 'PREMIUM' | 'ENTERPRISE'>('STANDARD');
     const [newCloneVariant, setNewCloneVariant] = useState<PlatformVariant>('restaurant');
+    const [newClonePack, setNewClonePack] = useState<'FULL' | 'POS_ONLY' | 'POS_INVENTORY' | 'CUSTOM'>('FULL');
     const [newTrialDays, setNewTrialDays] = useState<number>(14);
     // Charte graphique du nouveau tenant
     const [newCloneBrandingMode, setNewCloneBrandingMode] = useState<'default' | 'custom'>('default');
@@ -87,6 +88,7 @@ export function useMccPage() {
                 initialPrimaryColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : '#C5A059',
                 tier: newCloneTier,
                 variant: newCloneVariant,
+                modulePack: newClonePack,
                 copyBaseTemplates: true,
                 trialDays: newTrialDays > 0 ? newTrialDays : undefined,
                 branding: {
@@ -109,6 +111,7 @@ export function useMccPage() {
                 setNewCloneKey('');
                 setNewCloneEmail('');
                 setNewCloneTier('STANDARD');
+                setNewClonePack('FULL');
                 setNewTrialDays(14);
                 setNewCloneBrandingMode('default');
                 setNewCloneAccentColor('#C5A059');
@@ -131,6 +134,7 @@ export function useMccPage() {
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
+        newClonePack, setNewClonePack,
         newTrialDays, setNewTrialDays,
         newCloneBrandingMode, setNewCloneBrandingMode,
         newCloneAccentColor, setNewCloneAccentColor,

@@ -10,6 +10,12 @@ import {
 } from "lucide-react";
 import { TipDistributionService } from "@/modules/human";
 import { withPageGuard } from "@design/rbac/PageGuard";
+import dynamic from "next/dynamic";
+
+const StaffPortal = dynamic(
+  () => import('@/modules/human/effectifs/hr/components/StaffPortal').then(m => ({ default: m.StaffPortal })),
+  { loading: () => <p className="p-6 text-text-muted italic text-sm">Chargement du portail…</p> }
+);
 
 type Tab = 'planning' | 'pointage' | 'conges' | 'pourboires' | 'bulletin' | 'formations';
 
@@ -150,12 +156,8 @@ function MonEspacePage() {
                     </div>
                 )}
 
-                {activeTab === 'bulletin' && (
-                    <div className="text-text-secondary">
-                        <h2 className="text-text-primary font-medium mb-4">Bulletins de paie</h2>
-                        <p className="text-sm">Les bulletins scellés sont accessibles en lecture seule. L'estimation pré-paie est disponible en fin de mois.</p>
-                        <p className="text-xs text-text-muted mt-2">Intégration Silae/PayFit requise pour les bulletins définitifs.</p>
-                    </div>
+                {activeTab === 'bulletin' && currentUser && (
+                    <StaffPortal employeeId={currentUser.id} tenantId={activeTenantId ?? ''} />
                 )}
 
                 {activeTab === 'formations' && (

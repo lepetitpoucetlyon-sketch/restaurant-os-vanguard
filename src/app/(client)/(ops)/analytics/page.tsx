@@ -16,6 +16,8 @@ const ProfitabilityView = dynamic(() => import("@modules/intelligence/analytique
 const ReputationView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ReputationView));
 const ComplianceView = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.ComplianceView));
 const MenuEngineeringMatrix = dynamic(() => import("@modules/intelligence/analytique/analytics/components").then(m => m.MenuEngineeringMatrix));
+const DirectorFlashReport = dynamic(() => import("@/modules/intelligence/analytique/components/DirectorFlashReport").then(m => m.DirectorFlashReport));
+const AIStatusBanner = dynamic(() => import("@/modules/intelligence/ia/resilience/AIStatusBanner").then(m => ({ default: m.AIStatusBanner })));
 
 import { GlassCard } from "@design/ui/glass";
 
@@ -96,9 +98,10 @@ function AnalyticsPage() {
             <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto no-scrollbar pb-1">
                 {([
                     { id: "profitability", label: "Rentabilité", icon: TrendingUp },
-                    { id: "reputation", label: "Réputation", icon: Star },
-                    { id: "compliance", label: "Conformité", icon: ShieldCheck },
-                    { id: "oracle", label: "Oracle", icon: Brain },
+                    { id: "reputation",   label: "Réputation",  icon: Star },
+                    { id: "compliance",   label: "Conformité",  icon: ShieldCheck },
+                    { id: "flash",        label: "Flash du Jour", icon: Zap },
+                    { id: "oracle",       label: "Oracle",      icon: Brain },
                 ] as const).filter(tab => {
                     if (tab.id === "oracle") return canSeeOracle;
                     return true;
@@ -110,9 +113,11 @@ function AnalyticsPage() {
             </nav>
 
             <main>
+                <AIStatusBanner />
                 {activeTab === "profitability" && <div className="space-y-8"><MenuEngineeringMatrix /><ProfitabilityView alerts={[]} /></div>}
                 {activeTab === "reputation" && <ReputationView reviews={[]} />}
                 {activeTab === "compliance" && <ComplianceView alerts={complianceAlerts} />}
+                {activeTab === "flash" && <DirectorFlashReport />}
 
                 {activeTab === "oracle" && (
                     <TabGuard pageKey="analytics" tabKey="oracle">

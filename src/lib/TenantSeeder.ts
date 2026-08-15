@@ -26,7 +26,50 @@ export interface SeedInput {
   primaryColor?: string;
   /** Nombre de jours d'essai. Si défini et > 0, licenceStatus = 'TRIAL' au lieu de 'ACTIVE'. */
   trialDays?: number;
+  /** Profil de modules / Pack à la carte */
+  modulePack?: 'FULL' | 'POS_ONLY' | 'POS_INVENTORY' | 'CUSTOM';
+  /** Surcharges manuelles de capabilities */
+  capabilitiesOverride?: Record<string, boolean>;
 }
+
+const POS_ONLY_CAPABILITIES: Record<string, boolean> = {
+  'mod_dashboard': true,
+  'mod_pos': true,
+  'mod_floor_plan': false,
+  'mod_kds': false,
+  'mod_reservations': false,
+  'mod_customer': true,
+  'mod_crm': false,
+  'mod_quotes': false,
+  'mod_groups': false,
+  'mod_inventory': false,
+  'mod_storage_map': false,
+  'mod_hr': false,
+  'mod_planning': false,
+  'mod_leaves': false,
+  'mod_timeclock': false,
+  'mod_recruitment': false,
+  'mod_treasury': true,
+  'mod_accounting_management': true,
+  'mod_registre': false,
+  'mod_haccp': false,
+  'mod_quality_control': false,
+  'mod_rgpd': true,
+  'mod_analytics': false,
+  'mod_marketing': false,
+  'mod_social_marketing': false,
+  'mod_ai': false,
+  'mod_oracle': false,
+  'mod_access_management': true,
+  'mod_fleet_management': false,
+  'mod_agent_dashboard': false,
+};
+
+const POS_INVENTORY_CAPABILITIES: Record<string, boolean> = {
+  ...POS_ONLY_CAPABILITIES,
+  'mod_inventory': true,
+  'mod_storage_map': true,
+};
 
 /**
  * Generates a cryptographically secure 4-digit PIN (1000–9999).
@@ -89,12 +132,24 @@ export const TenantSeeder = {
       // Lisible uniquement par le staff du tenant (firestore.rules) ; chargée
       // en mémoire via FiscalKeyService.provision() au sync de la config.
       const fiscalSigningKey = FiscalKeyService.generateKey();
+      
+      let resolvedCapabilities = { ...baseDNA.capabilities };
+      if (input.modulePack === 'POS_ONLY') {
+        resolvedCapabilities = { ...resolvedCapabilities, ...POS_ONLY_CAPABILITIES };
+      } else if (input.modulePack === 'POS_INVENTORY') {
+        resolvedCapabilities = { ...resolvedCapabilities, ...POS_INVENTORY_CAPABILITIES };
+      }
+      if (input.capabilitiesOverride) {
+        resolvedCapabilities = { ...resolvedCapabilities, ...input.capabilitiesOverride };
+      }
+
       const config = {
         ...baseDNA,
         id: tenantId,
         variant,
         name,
         fiscalSigningKey,
+        capabilities: resolvedCapabilities,
         metadata: {
           ...baseDNA.metadata,
           name,

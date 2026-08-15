@@ -271,6 +271,162 @@ Grâce à ce pont, **les 176 handlers du bus (déduction de stock, scellage fisc
 2. **Maintenance Fiscale Centralisée** : Une seule mise à jour du moteur Factur-X 2026 ou NF525 met à niveau les 8 verticales simultanément.
 3. **Le Mode "Custom" pour les Concepts Stores** : Permet d'équiper des commerces hybrides (ex: café-librairie, salon-boutique) en combinant les fonctionnalités à la volée.
 
+
+
+---
+
+## 1.5 🌐 Matrice Croisée d'Impact Inter-Domaines (8x8 Domain Cross-Impact Matrix)
+
+Chaque pilier du domaine DDD interagit avec les 7 autres selon des règles causales strictes et déterministes. Le tableau ci-dessous explicite **qui impacte qui, comment et avec quel mécanisme de compensation** :
+
+| Domaine Source ➔ | Domaine Cible | Déclencheur / Événement Bus | Effet Métier Causal & Mutation d'État | Mécanisme de Rollback / Compensation |
+| :--- | :--- | :--- | :--- | :--- |
+| **P1 (OPS)** | **P2 (COMMERCE)** | `ops.dish.86_toggled` | Dépublication immédiate du plat sur Menu Digital, QR Code et bornes | Réactivation automatique dès réapprovisionnement (`ops.dish.86_restored`) |
+| **P1 (OPS)** | **P3 (FINANCE)** | `ops.order.created` | Création d'une pré-facture draft et calcul préliminaire de la TVA | Annulation de la ligne (`ops.order.line_voided`) avec contre-passation |
+| **P1 (OPS)** | **P4 (COMPLIANCE)** | `ops.guest.checked_in` | Vérification de la présence d'allergènes critiques et alertes KDS | Mise à jour des fiches allergènes en direct sans bloquer le service |
+| **P1 (OPS)** | **P5 (HUMAN)** | `ops.pos.cash_opened` | Contrôle d'éligibilité du serveur (doit avoir pointé son shift) | Alerte bloquante : refus d'ouvrir la caisse sans pointage actif |
+| **P1 (OPS)** | **P6 (LOGISTICS)** | `ops.order.created` | Décomposition de la fiche recette et décrémentation stock instantanée | Réintégration des denrées non cuisinées en cas d'annulation de commande |
+| **P1 (OPS)** | **P7 (FACILITY)** | `ops.printer.error` | Détection de panne d'imprimante thermique et bascule de secours | Failover automatique sur l'imprimante de secours déclarée |
+| **P1 (OPS)** | **P8 (INTELLIGENCE)** | `ops.order.placed` | Alimentation du flux temps réel pour calcul d'affluence et cadence | Nettoyage des données aberrantes lors de tests |
+| **P2 (COMMERCE)** | **P1 (OPS)** | `commerce.menu.price_updated` | Mise à jour des prix affichés sur la grille tactile POS | Versioning à la volée : les tables déjà ouvertes gardent l'ancien tarif |
+| **P2 (COMMERCE)** | **P3 (FINANCE)** | `commerce.gift_card.sold` | Émission d'un titre de paiement différé et écriture au compte 419 | Avoir fiscal si annulation de la carte cadeau sous 14 jours |
+| **P2 (COMMERCE)** | **P4 (COMPLIANCE)** | `commerce.dish.allergen_modified` | Mise à jour de la matrice INCO 14 allergènes et affichage légal | Archivage de l'historique des modifications de recettes |
+| **P2 (COMMERCE)** | **P5 (HUMAN)** | `commerce.target.bonus_unlocked` | Calcul des primes sur objectifs de vente pour les serveurs | Validation mensuelle par le directeur avant export paie |
+| **P2 (COMMERCE)** | **P6 (LOGISTICS)** | `commerce.menu.activated` | Calcul prévisionnel des besoins d'approvisionnement (MRP) | Ajustement des commandes fournisseurs si la carte est modifiée |
+| **P3 (FINANCE)** | **P1 (OPS)** | `finance.payment.completed` | Libération de la table, passage en statut "À débarrasser" | Réouverture de table possible sous code PIN superviseur |
+| **P3 (FINANCE)** | **P2 (COMMERCE)** | `finance.payment.completed` | Calcul et crédit instantané des points de fidélité et cagnotte | Débit des points si remboursement ultérieur du ticket |
+| **P3 (FINANCE)** | **P5 (HUMAN)** | `finance.tips.calculated` | Répartition des pourboires CB au prorata des heures de service | Recalcul lors de la clôture de paie si litige d'heures |
+| **P3 (FINANCE)** | **P6 (LOGISTICS)** | `finance.po.invoice_settled` | Lettrage de la facture fournisseur avec le bon de livraison | Génération d'un litige fournisseur en cas d'écart de prix |
+| **P3 (FINANCE)** | **P8 (INTELLIGENCE)** | `finance.ticket_z.sealed` | Clôture de la journée financière et génération du rapport BI | Recalcul des ratios consolidés sur historique |
+| **P4 (COMPLIANCE)** | **P1 (OPS)** | `compliance.lot.quarantined` | Blocage immédiat de la vente de tous les plats utilisant le lot | Déblocage sur certificat de conformité vétérinaire |
+| **P4 (COMPLIANCE)** | **P6 (LOGISTICS)** | `compliance.temp.alert` | Marquage "À Risque" de toutes les denrées de la chambre froide | PV de destruction si chaîne du froid rompue > seuil légal |
+| **P4 (COMPLIANCE)** | **P7 (FACILITY)** | `compliance.temp.alert` | Création automatique d'un ticket de panne prioritaire frigoriste | Clôture du ticket après intervention et contre-visite |
+| **P5 (HUMAN)** | **P1 (OPS)** | `human.timeclock.clocked_out` | Déconnexion automatique de la session de caisse du serveur | Réassignation automatique des tables au chef de rang |
+| **P5 (HUMAN)** | **P3 (FINANCE)** | `human.payroll.validated` | Écriture des charges de personnel (Comptes 641 et 645) au Grand Livre | Extourne comptable si régularisation de paie le mois suivant |
+| **P5 (HUMAN)** | **P8 (INTELLIGENCE)** | `human.shift.validated` | Calcul en temps réel de la masse salariale pour le Prime Cost | Réajustement des indicateurs si heures supplémentaires |
+| **P6 (LOGISTICS)** | **P1 (OPS)** | `logistics.stock.exhausted` | Grisement du plat au POS et déclenchement du Live 86ing | Restitution du plat dès saisie d'un bon de réception |
+| **P6 (LOGISTICS)** | **P3 (FINANCE)** | `logistics.waste.recorded` | Imputation de la perte au Compte 658 (Charges exceptionnelles) | Contre-passation si erreur de saisie de casse |
+| **P7 (FACILITY)** | **P1 (OPS)** | `facility.machine.down` | Mise en indisponibilité des plats nécessitant l'équipement | Réactivation automatique dès clôture de l'intervention |
+| **P8 (INTELLIGENCE)** | **P2 (COMMERCE)** | `intelligence.price.suggested` | Proposition de réajustement tarifaire basée sur l'élasticité prix | Validation humaine obligatoire avant modification tarifaire |
+| **P8 (INTELLIGENCE)** | **P5 (HUMAN)** | `intelligence.staffing.alert` | Alerte de sous-effectif prévisionnel croisant météo et résas | Proposition de renforts vacataires ou intérim |
+
+---
+
+## 1.6 📐 Dictionnaire des Données & Schémas Entités Unifiés du Kernel
+
+Toutes les entités du noyau partagent une structure immuable, typée et sérialisable, garantissant l'intégrité cross-agents :
+
+### 1. Entité Commande de Caisse (`OrderEntity`)
+```typescript
+export interface OrderEntity {
+  id: string;                               // Identifiant unique UUIDv4
+  tenantId: string;                         // Partition multi-tenant stricte
+  tableId?: string;                         // Null si vente à emporter / livraison
+  serviceMode: 'DINE_IN' | 'TAKEAWAY' | 'DELIVERY' | 'ROOM_SERVICE';
+  status: 'DRAFT' | 'ORDERED' | 'PREPARING' | 'READY' | 'SERVED' | 'PAID' | 'VOIDED';
+  coversCount: number;                      // Nombre de convives déclarés
+  serverId: string;                         // Identifiant employé ayant ouvert la commande
+  lines: Array<{
+    lineId: string;
+    dishId: string;
+    variantId?: string;
+    quantity: number;
+    unitPriceHTInMicrounits: number;        // Arithmétique entière (1€ = 1 000 000 µunits)
+    vatRatePercent: number;                 // 5.5, 10.0, 20.0
+    seatNumber?: number;                    // 1, 2, 3...
+    courseNumber: number;                   // 1 (Entrée), 2 (Plat), 3 (Dessert)
+    modifiers: Array<{ id: string; priceImpactInMicrounits: number }>;
+    freeNotes?: string;
+    isVoided: boolean;
+    voidReason?: string;
+  }>;
+  totals: {
+    totalHTInMicrounits: number;
+    totalTTCInMicrounits: number;
+    vatBreakdown: Record<string, number>;    // Clé: '5.5', '10.0', '20.0' -> Montant TVA
+  };
+  fiscalSeal?: {
+    signatureSHA256: string;
+    jetSequenceNumber: number;
+    sealedAt: string;
+  };
+  version: number;                          // Token d'Optimistic Locking (incrémental)
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### 2. Entité Scellement Fiscal NF525 (`FiscalJETEntry`)
+```typescript
+export interface FiscalJETEntry {
+  sequenceNumber: number;                   // Séquence incrémentale continue sans trou (1, 2, 3...)
+  tenantId: string;
+  timestamp: string;                        // Horodatage ISO 8601 certifié NTP
+  eventType: 'ORDER_CLOSED' | 'TICKET_Z' | 'GRAND_TOTAL_RESET' | 'PERIODIC_ARCHIVE';
+  payloadSummary: {
+    totalTTCInMicrounits: number;
+    vatTotals: Record<string, number>;
+    paymentMethods: Record<string, number>;
+  };
+  previousHash: string;                     // Hash SHA-256 du bloc précédent (chaînage blockchain-like)
+  currentHash: string;                      // HMAC-SHA256(FiscalKey, previousHash + payloadSummary)
+  isArchived: boolean;                      // Statut de transfert vers le coffre WORM
+}
+```
+
+### 3. Entité Fiche Technique & Recette (`RecipeEntity`)
+```typescript
+export interface RecipeEntity {
+  dishId: string;
+  tenantId: string;
+  name: string;
+  sellingPriceTTCInMicrounits: number;
+  vatRate: number;
+  ingredients: Array<{
+    ingredientId: string;
+    quantityInGramsOrMl: number;
+    lossFactorPercent: number;              // Coefficient de freinte / déchet (ex: 15% épluchage)
+    unitCostHTInMicrounits: number;
+  }>;
+  subRecipes: Array<{
+    subRecipeId: string;
+    quantityInGramsOrMl: number;
+  }>;
+  theoreticalFoodCostInMicrounits: number;
+  grossMarginPercent: number;
+  allergens: Array<'GLUTEN' | 'CRUSTACEANS' | 'EGGS' | 'FISH' | 'PEANUTS' | 'SOY' | 'MILK' | 'NUTS' | 'CELERY' | 'MUSTARD' | 'SESAME' | 'SULPHITES' | 'LUPIN' | 'MOLLUSCS'>;
+}
+```
+
+---
+
+## 1.7 🧮 Catalogue des Invariants Algorithmiques & Formules Métier Pures
+
+Pour garantir une exactitude absolue sur tous les calculs financiers, logistiques et analytiques, les algorithmes suivants sont normalisés dans le Kernel :
+
+### 1. Formule Fondamentale du Prime Cost
+$$	ext{Prime Cost Rate (\%)} = \left( rac{	ext{Food Cost (Coût Matières Consommées HT)} + 	ext{Labor Cost (Masse Salariale Réelle Chargée)}}{	ext{Chiffre d'Affaires Net HT}} 
+ight) 	imes 100$$
+* *Cible d'Excellence* : $55\% \le 	ext{Prime Cost} \le 62\%$ en bistronomie ($< 50\%$ en fast-food, $65\%$ en gastronomie étoilée).
+
+### 2. Indicateur de Rendement Spatial RevPASH
+$$	ext{RevPASH} = rac{	ext{Chiffre d'Affaires du Créneau (HT)}}{	ext{Nombre de Sièges Disponibles} 	imes 	ext{Durée du Créneau en Heures}}$$
+* *Utilité* : Mesure la rentabilité nette d'un siège par heure, indépendamment du panier moyen et du taux de remplissage.
+
+### 3. Algorithme du Plus Fort Reste pour le Split Bancaire (*Largest Remainder Method*)
+Lors de la division d'un montant total $T$ en $N$ parts égales :
+1. Calcul de la part brute entière : $P_{	ext{base}} = \lfloor rac{T}{N} 
+floor$.
+2. Calcul du reste de centimes orphelins : $R = T - (P_{	ext{base}} 	imes N)$.
+3. Distribution d'un centime supplémentaire aux $R$ premiers payeurs.
+4. **Invariant vérifié** : $\sum_{i=1}^{N} P_i \equiv T$ exactement au centime près, sans dérive de TVA.
+
+### 4. Arithmétique Entière en Microunités
+* **Règle absolue** : Zéro calcul monétaire en nombre flottant `Number` standard JavaScript.
+* **Conversion** : $	ext{Montant}_{\mu} = 	ext{Math.round}(	ext{Montant}_{€} 	imes 1\,000\,000)$.
+* **Stockage** : Types `bigint` ou `number` d'entiers stricts garantissant la précision au millionième d'euro.
+
+---
 ---
 
 # 2. 🛰️ Mission Control Center (MCC) & Orchestration Fleet (Pôle 1)
@@ -503,141 +659,739 @@ Chaque verticale repose sur le même tronc commun tout en injectant ses adaptate
 
 # 5. 🎨 Matrice Complète des 16 Zones UI (~806 Composants Décortiqués)
 
-Chaque zone d'interface regroupe l'ensemble des écrans et composants nécessaires à l'exploitation.
+Chaque zone d'interface regroupe l'ensemble des écrans, composants, machines d'états et invariants nécessaires à l'exploitation sans faille d'un établissement indépendant ou d'une flotte multi-sites (Empire).
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                               ÉCOSYSTÈME UI RESTAURANT OS                  │
-│                                                                             │
-│  [Zone 1] SERVICE           [Zone 2] RÉSERVATIONS      [Zone 3] MENU        │
-│  POS, KDS, Salle, Bar       Plans 2D/3D, Guestbook     Recettes, Allergènes │
-│                                                                             │
-│  [Zone 4] CRM & FIDÉLITÉ    [Zone 5] LOGISTICS         [Zone 6] RH          │
-│  RFM, Campagnes, Cartes     Stocks, DLC, Réceptions    Planning, Pointage   │
-│                                                                             │
-│  [Zone 7] FINANCE           [Zone 8] COMPLIANCE        [Zone 9] FACILITY    │
-│  Clôture Z, FEC, Factur-X   HACCP, Coffre WORM         Parc machines, IoT   │
-│                                                                             │
-│  [Zone 10] ANALYTICS        [Zone 11] INTELLIGENCE     [Zone 12] EXTENSIONS │
-│  Marges, Food Cost, BI      Oracle IA, LightRAG        Hub Intégrations     │
-│                                                                             │
-│  [Zone 13] ADMIN CLIENT     [Zone 14] MOBILE STAFF     [Zone 15] WEB PUBLIC │
-│  RBAC, Paramètres, Matériel Prise de commande nomade   Click&Collect, Menu  │
-│                                                                             │
-│  [Zone 16] DESIGN SYSTEM TRANSVERSE (Tokens, Glassmorphism, SplashGate)     │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   ÉCOSYSTÈME UI RESTAURANT OS                                          │
+│                                                                                                        │
+│  [Zone 1] SERVICE               [Zone 2] RÉSERVATIONS          [Zone 3] MENU & RECETTES                │
+│  POS, KDS, Salle, Bar, Runner   Plans 2D/3D, Yield, No-Show    Fiches techniques, INCO, Live 86ing     │
+│                                                                                                        │
+│  [Zone 4] CRM & FIDÉLITÉ        [Zone 5] STOCK & LOGISTIQUE    [Zone 6] RESSOURCES HUMAINES            │
+│  RFM, Cagnottes, RGPD Fisc.     3-Way Matching, DLC, Pertes    Planning HCR, Pointeuse, Silae/Payfit   │
+│                                                                                                        │
+│  [Zone 7] FINANCE & FISCALITÉ   [Zone 8] CONFORMITÉ (HACCP)    [Zone 9] FACILITY & GMAO                │
+│  Clôture Z, NF525, Factur-X     Sondes IoT, Alertes, Traça     Carnet machines, QR Pannes, Contrôles   │
+│                                                                                                        │
+│  [Zone 10] ANALYTICS & BI       [Zone 11] IA ORACLE & VISION   [Zone 12] HUB D'INTÉGRATIONS            │
+│  Prime Cost, RevPASH, Matrice   Majordome RAG, Vision Cuisine  Deliveroo/Uber, TPE, Offline-First      │
+│                                                                                                        │
+│  [Zone 13] ADMIN & MULTI-TENANT [Zone 14] MOBILE STAFF         [Zone 15] WEB PUBLIC & QR ORDER         │
+│  RBAC Fin, Packs, DNA Injector  Pad One-Hand, Haptique         Order & Pay Table, Click&Collect Slots  │
+│                                                                                                        │
+│  [Zone 16] DESIGN SYSTEM SOUVERAIN & TRANSVERSE (Tokens, Glassmorphism, SplashGate, State Anti-Collision)
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Décomposition Détaillée par Zone
+---
+
+## 5.1 Décomposition Détaillée et Spécifications par Zone
 
 ### 🖥️ Zone 1 — SERVICE (POS, KDS, Bar, Runner, Expédition)
-- **POS Caisse** : Grille tactile rapide, gestion des modificateurs/cuissons, notes libres de cuisine, fractionnement d'addition (split par convive, article ou montant), remises sous contrôle RBAC, gestion des pourboires.
-- **KDS (Kitchen Display System)** : Affichage dynamique des bons de commande par poste (Chaud, Froid, Pâtisserie, Bar), chronomètres de retard avec code couleur, regroupement par plat pour la mise en place, gestion des suites de table ("Envoyer la suite").
-- **Tableau de Bord Bar / Runner** : Écran dédié aux boissons et expédition en salle avec validation de prise en charge par le serveur.
+* **POS Caisse Tactile Haute Vitesse** :
+  * Grille tactile dynamique par catégories, favoris et recherche ultra-rapide (`Cmd+K` / Barcode).
+  * Gestion complète des modificateurs, cuissons, suppléments, déclinaisons et notes de cuisine en saisie libre ou auto-complétée.
+  * Fractionnement d'addition multi-modes : split équitable par convive (avec algorithme d'arrondi au centime sans dérive fiscale), split par article sélectionné ou split par montant libre.
+  * Remises commerciales et gestes client strictement régis par la matrice RBAC (PIN superviseur requis au-delà du seuil autorisé).
+  * Collecte et ventilation transparente des pourboires (CB / Espèces) avec conformité légale.
+* **KDS (Kitchen Display System) Multi-Postes** :
+  * Répartition en temps réel des bons de commande par poste de production : Chaud, Froid, Pâtisserie, Bar, Passe.
+  * Chronomètres d'attente dynamiques avec code couleur progressif (Vert → Orange → Rouge critique).
+  * Regroupement intelligent par plat pour optimiser les cuissons simultanées (batching).
+  * Orchestration des envois cadencés : gestion des suites de table (*« Envoyer la suite »* manuel ou temporisé) et alertes de synchronisation entre postes.
+* **Tableau de Bord Bar / Runner & Expédition** :
+  * Écran dédié au barman pour la préparation des boissons et cocktails.
+  * Vue Runner avec validation de prise en charge au passe et confirmation de distribution à table.
+  * Routage d'impression intelligent avec bascule automatique de secours (failover) en cas d'erreur ou fin de papier thermique.
 
 ### 🖥️ Zone 2 — RÉSERVATIONS & ACCUEIL
-- **Plan de Salle Interactif (2D/3D)** : Visualisation en temps réel de l'état des tables (libre, occupée, addition demandée, à nettoyer), glisser-déposer pour l'assignation de table, regroupement dynamique de tables.
-- **Module Check-in & Accueil** : Bouton d'accueil client déclenchant immédiatement la transmission des fiches allergènes et préférences au KDS.
-- **Waitlist & Réservations Externes** : File d'attente intelligente avec estimation du temps d'attente et notification SMS au client.
+* **Plan de Salle Interactif Multi-Zones (2D/3D)** :
+  * Visualisation en direct de l'état des tables : *Libre, Occupée, Addition demandée, En cours de nettoyage, Réservée*.
+  * Glisser-déposer fluide pour l'assignation de table, fusion/regroupement dynamique de tables et séparation post-service.
+  * Gestion de plans de salle alternatifs (Terrasse d'été, Étage privatisable, Mode cocktail/banquet) avec bascule instantanée selon la météo.
+* **Module Check-in & Accueil Client** :
+  * Accueil en 1 clic déclenchant immédiatement la transmission des alertes allergènes et préférences VIP au KDS et au serveur assigné.
+* **Waitlist Intelligente & Réservations Externes** :
+  * File d'attente dynamique avec calcul estimatif du temps d'attente basé sur la rotation réelle des tables et notification automatique par SMS au client.
+  * Garantie d'empreinte bancaire (No-Show Shield) avec capture automatique des frais d'annulation non justifiée.
+  * Synchronisation bidirectionnelle instantanée avec les plateformes de réservation (TheFork, Google Reserve, SevenRooms).
 
 ### 🖥️ Zone 3 — MENU & CATALOGUE CULINAIRE
-- **Menu Builder Visuel** : Organisation par catégories, cartes du midi/soir, formules menu avec choix entrée+plat+dessert.
-- **Fiches Techniques & Recettes** : Décomposition au gramme près de chaque ingrédient avec calcul automatique du coût matière (Food Cost théorique).
-- **Gestionnaire INCO des Allergènes** : Matrice réglementaire des 14 allergènes majeurs avec mise à jour automatique des menus digitaux.
+* **Menu Builder Visuel & Programmation Temporelle** :
+  * Création intuitive de menus, cartes du midi, cartes du soir, formules combinées (Entrée + Plat + Dessert) avec suppléments conditionnels.
+  * Activation planifiée de cartes selon les plages horaires et jours de la semaine.
+* **Fiches Techniques Récursives & Calcul du Food Cost** :
+  * Décomposition granulaire au gramme/centilitre près de chaque ingrédient et sous-recette (sauces, fonds, pâtes).
+  * Calcul en temps réel du coût matière théorique, de la marge brute et du coefficient multiplicateur.
+* **Gestionnaire Réglementaire INCO des 14 Allergènes** :
+  * Matrice stricte des allergènes majeurs avec mise à jour instantanée et synchronisée sur tous les supports (menus digitaux, QR code, bornes, POS, KDS).
+* **Moteur Live 86ing (Épuisement en Direct)** :
+  * Dépublication automatique ou manuelle en un clic d'un plat en rupture sur l'ensemble de l'écosystème (POS, tablettes, Click & Collect, Deliveroo, UberEats).
 
 ### 🖥️ Zone 4 — CRM, CLIENTS & FIDÉLITÉ
-- **Fichier Client Centralisé** : Historique complet des visites, panier moyen, préférences de table, dates anniversaires.
-- **Moteur de Fidélité Multi-Paliers** : Gestion de cagnottes en euros ou points, récompenses automatiques et portefeuille VIP.
-- **Campagnes Marketing Ciblées** : Envoi de SMS/Emails de relance pour les clients inactifs ou offres promotionnelles ciblées.
+* **Fichier Client Centralisé & Historique Omnicanal** :
+  * Profil client 360° : historique d'achats, panier moyen, fréquence de visite, table préférée, restrictions alimentaires et dates clés (anniversaires).
+* **Moteur de Fidélité Multi-Paliers & Cagnottage** :
+  * Gestion de cagnottes en euros ou points, programmes VIP par paliers (Bronze, Argent, Or) et cartes cadeaux dématérialisées.
+  * Support du multi-établissements (franchises) avec chambre de compensation financière inter-sites.
+* **Campagnes Marketing Ciblées & RGPD Fiscale** :
+  * Automatisation des relances SMS/Emailing selon la segmentation RFM (Récence, Fréquence, Montant).
+  * Respect rigoureux du RGPD (droit à l'oubli / pseudonymisation des données personnelles) tout en conservant l'intégrité probante et immuable des tickets scellés NF525.
 
 ### 🖥️ Zone 5 — STOCK & LOGISTIQUE
-- **Inventaire Temps Réel & Décrémentation Automatique** : Sortie de stock automatique à chaque vente basée sur les fiches techniques.
-- **Suivi des DLC & Alertes Péremption** : Traçabilité des lots, alertes visuelles avant péremption et propositions de mise en avant menu.
-- **Bons de Commande & Réception Fournisseurs** : Rapprochement automatique bon de livraison / bon de commande avec détection des écarts de prix.
+* **Inventaire Temps Réel & Décrémentation Automatique** :
+  * Sortie de stock théorique immédiate à chaque vente d'article basée sur les fiches techniques.
+  * Gestion des unités multiples (conditionnement d'achat carton/kg vs unité de consommation portion/cl).
+* **Suivi des DLC & Traçabilité des Lots** :
+  * Alertes visuelles prédictives avant péremption et suggestions de mise en avant menu pour lutter contre le gaspillage.
+* **Bons de Commande & Réception 3-Way Matching** :
+  * Rapprochement automatique tripartite (Bon de Commande ↔ Bon de Livraison ↔ Facture Fournisseur) avec identification instantanée des écarts de prix ou de quantités.
+* **Gestion des Pertes, Casse & Repas du Personnel** :
+  * Saisie tracée des rebuts et repas du personnel avec impact direct sur la valorisation comptable des stocks.
+* **Calcul des Besoins Nets (MRP Restauration)** :
+  * Recommandations automatiques de réapprovisionnement basées sur le carnet de réservation et les moyennes historiques de vente.
 
 ### 🖥️ Zone 6 — RESSOURCES HUMAINES & PLANNING
-- **Planning Collaboratif Glissant** : Vue par semaine/mois avec respect des contraintes légales (repos minimum, amplitude maximale).
-- **Pointeuse Horaire Sécurisée** : Pointage par code PIN ou badge avec calcul automatique des heures supplémentaires et pauses.
-- **Export Paie Automatisé** : Génération des variables de paie compatibles Silae, Payfit et Nibelis.
+* **Planning Collaboratif Glissant & Matrice Légale HCR** :
+  * Grille visuelle par semaine/mois avec vérification en direct des contraintes conventionnelles (repos minimum 11h, amplitude max 13h, coupures, travail dominical).
+  * Alertes bloquantes en cas de dépassement horaire ou de non-conformité au droit du travail.
+* **Pointeuse Horaire Sécurisée & Anti-Fraude** :
+  * Pointage d'arrivée/départ/pause par code PIN sécurisé ou badge RFID avec vérification de présence sur site (géofencing local / photo).
+  * Calcul automatisé des heures supplémentaires, majorations de nuit et heures complémentaires.
+* **Bourse d'Échange de Shifts & Gestion des Absences** :
+  * Demande de remplacement entre employés validée par le manager avec mise à jour immédiate du planning.
+* **Export Paie Automatisé** :
+  * Génération en un clic des variables de paie et intégration directe avec les logiciels du marché (Silae, Payfit, Nibelis).
 
-### 🖥️ Zone 7 — FINANCE & COMPTABILITÉ FISCALE
-- **Clôture Journalière (Ticket Z)** : Rapprochement des moyens de paiement (espèces, CB, titres restaurant), calcul des écarts de caisse et scellement NF525.
-- **Module Factur-X & E-Invoicing** : Réception et émission des factures électroniques conformes aux formats Factur-X / UBL / CII.
-- **Export FEC & Grand Livre** : Génération en un clic du Fichier des Écritures Comptables conforme aux exigences de la DGFIP.
+### 🖥️ Zone 7 — FINANCE, COMPTABILITÉ & FISCALITÉ
+* **Clôture Journalière (Ticket Z) & Scellement NF525** :
+  * Rapprochement systématique des encaissements par moyen de paiement (Espèces, CB, Titres Restaurant, Virement, Facture différée).
+  * Calcul automatique des écarts de caisse et justification des écarts.
+  * Scellement cryptographique irréversible avec chaînage SHA-256 et archivage légal dans le Journal des Événements Total (JET).
+* **Module Factur-X & Facturation Électronique B2B** :
+  * Émission et réception de factures électroniques conformes aux standards Factur-X / UBL / CII avec raccordement aux Plateformes de Dématérialisation Partenaires (PDP).
+* **Grand Livre, Balance & Export FEC** :
+  * Génération normalisée du Fichier des Écritures Comptables (FEC) conforme aux exigences de l'administration fiscale (DGFIP).
+* **Matrice de Ventilation Multi-Taux & Pourboires** :
+  * Ventilation automatique de la TVA (5.5%, 10%, 20%) sur les articles et formules combinées.
+  * Traitement légal et répartition équitable des pourboires dématérialisés selon les règles d'établissement.
 
 ### 🖥️ Zone 8 — CONFORMITÉ SANITAIRE & SÉCURITÉ (HACCP)
-- **Relevés de Températures Frigorifiques** : Saisie manuelle ou réception automatique via sondes IoT avec alertes hors-plage.
-- **Traçabilité Sanitaire des Viandes & Poissons** : Enregistrement des numéros de lot, photos d'étiquettes et archivage immuable.
-- **Plan de Nettoyage & Registre Unique du Personnel** : Suivi des tâches de désinfection et tenue du registre d'hygiène.
+* **Monitoring des Températures IoT & Alerting d'Urgence** :
+  * Relevés continus des enceintes frigorifiques (chambres froides, vitrines, bacs de maintien) via sondes connectées.
+  * Déclenchement d'alertes en cascade (Notification Push → SMS → Appel vocal d'urgence) en cas de rupture de la chaîne du froid.
+* **Traçabilité Sanitaire des Viandes, Poissons & Produits Frais** :
+  * Enregistrement des numéros de lot, photos des étiquettes sanitaires et archivage sécurisé pour audit vétérinaire DDPP.
+  * Génération et impression d'étiquettes de DLC secondaires pour les préparations maison et décongélations.
+* **Plan de Maîtrise Sanitaire (PMS) & Gestion des Alertes DGCCRF** :
+  * Suivi et validation numérique du plan de nettoyage et de désinfection.
+  * Procédure de rappel de lot en 1 clic permettant d'identifier immédiatement tous les plats servis contenant le produit incriminé.
 
-### 🖥️ Zone 9 — FACILITY & MAINTENANCE DU PARC
-- **Carnet Numérique des Équipements** : Fiches machines (fours, chambres froides, tireuses) avec historique des interventions.
-- **Gestion des Bons de Panne** : Déclaration d'incident avec photos, niveau d'urgence et notification au technicien de maintenance.
+### 🖥️ Zone 9 — FACILITY & MAINTENANCE DU PARC (GMAO)
+* **Carnet Numérique des Équipements & Entretien Préventif** :
+  * Fiche d'identité technique de chaque matériel (fours, lave-vaisselle, tireuses, climatisation, hottes) avec historique des maintenances et garanties.
+  * Calendrier des révisions obligatoires (contrôle d'extincteurs, dégraissage des conduits, curage des bacs à graisse).
+* **Gestion des Pannes & QR Code Machine** :
+  * Signalement ultra-rapide d'un incident par le personnel via scan de QR code sur la machine avec photo et niveau de sévérité.
+  * Routage direct vers le réparateur ou le prestataire sous contrat.
 
 ### 🖥️ Zone 10 — ANALYTICS, BI & PERFORMANCE
-- **Cockpit Décisionnel du Dirigeant** : CA hors taxes, marge brute, Ticket Moyen par couvert, Ratio Prime Cost (Matières + Personnel).
-- **Matrice Menu Engineering (BCG)** : Classification automatique des plats en Étoiles, Vaches à lait, Puzzles et Chiens.
-- **Heatmaps d'Affluence & Rotation des Tables** : Analyse du temps passé par table et optimisation du cadencement de service.
+* **Cockpit Décisionnel du Dirigeant en Temps Réel** :
+  * Visualisation des indicateurs clés : CA HT, Marge Brute, Ticket Moyen par couvert, Coût Matière réel vs théorique.
+  * Calcul instantané du **Prime Cost** (`Food Cost + Labor Cost`) rapporté au chiffre d'affaires.
+* **Indicateurs Métier Spécialisés (RevPASH & Rotation)** :
+  * Mesure du Revenue Per Available Seat Hour (RevPASH) pour optimiser l'occupation par zone et par créneau.
+  * Analyse de la durée moyenne des services et des goulots d'étranglement.
+* **Matrice Menu Engineering (BCG Culinaire)** :
+  * Classification automatique des plats de la carte en *Étoiles (Stars)*, *Poids Morts (Dogs)*, *Vaches à Lait (Plowhorses)* et *Dilemmes (Puzzles)* avec recommandations tarifaires.
 
-### 🖥️ Zone 11 — INTELLIGENCE ARTIFICIELLE ORACLE
-- **Assistant Conversationnel Majordome** : Interface de dialogue en langage naturel permettant d'interroger toutes les données de l'établissement.
-- **Briefing Stratégique Quotidien** : Synthèse vocale/texte matinale des prévisions de chiffre d'affaires et points de vigilance.
-- **Vision AI Cuisine** : Analyse visuelle des retours assiette pour quantifier et catégoriser le gaspillage alimentaire.
+### 🖥️ Zone 11 — INTELLIGENCE ARTIFICIELLE ORACLE & VISION
+* **Assistant Conversationnel Majordome Métier (RAG Hybride)** :
+  * Interrogation en langage naturel de toutes les données opérationnelles de l'établissement (ventes, stocks, plannings, marge) avec étanchéité multi-tenant absolue.
+* **Briefing Stratégique Quotidien** :
+  * Synthèse matinale automatisée intégrant la météo, l'historique des ventes, les réservations du jour et les recommandations de mise en place.
+* **Computer Vision Cuisine & Anti-Gaspillage** :
+  * Analyse d'images en sortie de passe (contrôle qualité de conformité du dressage) et en zone de plonge (pesée et catégorisation visuelle des retours assiette pour réduire le gaspillage).
 
-### 🖥️ Zone 12 — HUB D'INTÉGRATIONS
-- Passerelles certifiées avec les plateformes de livraison (Deliveroo, UberEats), les moteurs de réservation (TheFork, Google Reserve), les solutions comptables (Pennylane) et les périphériques de caisse (imprimantes EPSON ESC/POS, TPE Stripe Terminal).
+### 🖥️ Zone 12 — HUB D'INTÉGRATIONS & HARDWARE
+* **Agrégateur Centralisé des Plateformes de Livraison** :
+  * Passerelle certifiée unifiée avec Deliveroo, UberEats et Just Eat injectant les commandes directement dans le POS et le KDS.
+* **Connecteurs Métier & Comptabilité** :
+  * Synchronisation bidirectionnelle avec Pennylane, QuickBooks, Cegid, Sage et plateformes de paiement (Stripe Terminal, Adyen, Paygreen, SumUp).
+* **Architecture Hybride Offline-First Résiliente** :
+  * Continuité totale d'activité en cas de coupure Internet : encaissement, impression locale ESC/POS et scellement NF525 sans interruption avec réconciliation automatique dès retour du réseau.
 
-### 🖥️ Zone 13 — PARAMÉTRAGE & CONFIGURATION SYSTÈME
-- Personnalisation de l'identité visuelle (mode sombre/clair, logos, couleurs d'accentuation), cartographie des imprimantes de tickets et configuration fine de la matrice des permissions RBAC.
+### 🖥️ Zone 13 — PARAMÉTRAGE, MULTI-TENANT & MCC
+* **Matrice des Permissions RBAC Granulaire** :
+  * Configuration ultra-fine des droits d'accès par rôle (Apprenti → Serveur → Chef de rang → Manager → Propriétaire).
+  * Traçabilité de tous les déblocages par code PIN manager (remises, annulations, réouvertures de tickets).
+* **Moteur de White-Label & Injection de DNA** :
+  * Personnalisation complète des interfaces (thèmes sombre/clair, palette d'accentuation, logos).
+* **Packs Fonctionnels Modulaires à la Carte** :
+  * Activation/désactivation instantanée des modules par établissement : *Pack Intégral (`FULL`)*, *Caisse Seule (`POS_ONLY`)*, *Caisse + Stocks (`POS_INVENTORY`)*, *Sur-Mesure (`CUSTOM`)*.
 
 ### 🖥️ Zone 14 — APPLICATION MOBILE STAFF & NOMADE
-- Déclinaison mobile native pour serveurs et runners avec prise de commande ultra-réactive et notifications haptiques de disponibilité des plats.
+* **Pad Serveur Tactile Optimisé One-Hand** :
+  * Interface ergonomique conçue pour la prise de commande rapide à une main sur smartphone durci ou tablette mobile.
+* **Retour Haptique & Alertes Tactiles** :
+  * Vibrations distinctives pour signaler la disponibilité d'un plat au passe ou une notification prioritaire de la cuisine.
+* **Mode Basse Consommation & Déconnexion Douce** :
+  * Gestion optimisée de la batterie pour tenir un service intensif complet de 8h sans recharge.
 
 ### 🖥️ Zone 15 — SITE WEB PUBLIC, MENU DIGITAL & CLICK & COLLECT
-- Page d'accueil personnalisée pour chaque établissement, consultation de la carte en temps réel via QR Code de table et commande en ligne à emporter avec paiement sécurisé.
+* **Site Vitrine Personnalisé & Carte Interactive** :
+  * Page web responsive indexée SEO pour chaque établissement avec carte interactive, allergènes et horaires d'ouverture.
+* **Order & Pay at Table via QR Code** :
+  * Commande et paiement direct au centre de table par smartphone (Apple Pay / Google Pay / CB) avec injection immédiate sur le ticket de caisse de la table.
+* **Click & Collect avec Régulation des Créneaux** :
+  * Gestion intelligente des flux de retrait pour lisser la charge de travail en cuisine aux heures de pointe.
 
 ### 🖥️ Zone 16 — DESIGN SYSTEM SOUVERAIN & TRANSVERSE
-- Bibliothèque unifiée de composants graphiques, tokens CSS normalisés, modales d'alerte, gestionnaire d'état hors-ligne et animations fluides Framer Motion.
+* **Bibliothèque de Composants UI Haut de Gamme** :
+  * Design System unifié : glassmorphism, micro-animations Framer Motion, typographie soignée et tokens CSS normalisés.
+* **Adaptabilité Lumineuse Extrême** :
+  * Modes d'affichage calibrés pour une lisibilité parfaite sous forte luminosité (terrasse en plein soleil) comme dans la pénombre (ambiance bar de nuit).
+* **Architecture State Store Anti-Collision** :
+  * Isolation stricte des états locaux et gestionnaire de cache pour garantir zéro fuite mémoire sur les écrans tactiles allumés 16h/jour.
 
 ---
 
+## 5.2 🛡️ Matrice Anti-Conflits & Invariants d'Intégrité par Zone
+
+Pour garantir un fonctionnement sans heurt entre les différents agents IA, les terminaux de caisse simultanés et les processus d'arrière-plan, les invariants suivants sont **strictement appliqués** dans l'architecture :
+
+| Domaine / Zone | Risque de Conflit Identifié | Solution Architecturale & Invariant Appliqué |
+| :--- | :--- | :--- |
+| **Zone 1 (POS / KDS)** | Deux serveurs modifient la même table en même temps sur 2 iPads | **Optimistic Locking & TableSessionLock** avec token de révision (`version_id`). En cas de collision, fusion déterministe des ajouts d'articles sans écrasement. |
+| **Zone 1 (Split addition)** | Écart d'un centime sur la somme des parts divisées | **Algorithme bancaire du plus fort reste (Largest Remainder)** garantissant $\sum \text{parts} = \text{Total TTC}$ au centime près, sans dérive de TVA. |
+| **Zone 3 & 5 (86ing & Stocks)** | Vente d'un plat alors que l'ingrédient vient d'être épuisé | **Broadcast SSE/WebSocket instantané** sur l'Event Bus (`STOCK_EXHAUSTED`) bloquant immédiatement la commande sur tous les POS, bornes et livreurs. |
+| **Zone 4 & 7 (RGPD vs NF525)** | Demande de suppression des données client vs obligation de conservation fiscale | **Pseudonymisation irréversible** : les informations PII du CRM sont effacées, mais le ticket scellé dans le JET conserve son hash intact avec un identifiant anonyme. |
+| **Zone 5 (Inventaire concurrent)** | Décrémentation simultanée de stock par le POS et le Click & Collect | **Mutation atomique transactionnelle** au niveau de la couche domaine logistique avec vérification de stock de sécurité. |
+| **Zone 6 (RH / Planning)** | Attribution d'un shift violant le repos légal de 11h de la convention HCR | **Validation bloquante SovereignGuard** dans le moteur de planning empêchant la publication d'un shift non conforme sans dérogation formelle. |
+| **Zone 7 (Clôture fiscale)** | Rupture de séquence dans les numéros de facture lors d'une bascule hors-ligne | **Générateur séquentiel déterministe avec file d'attente cryptographique locale**, réconciliée lors de la reconnexion sans doublon ni trou de numérotation. |
+| **Zone 8 (HACCP IoT)** | Perte temporaire de connexion WiFi d'une sonde de température | **Buffer mémoire local de la sonde (72h)** avec rattrapage automatique dès retour du réseau et alerte préventive de perte de heartbeat. |
+| **Zone 11 (IA Oracle)** | Fuite de données confidentielles entre deux restaurants concurrents (Cross-Tenant Leak) | **Isolation cryptographique stricte du contexte RAG** : l'index vectoriel et les requêtes SQL sont obligatoirement partitionnés par `tenant_id` au niveau kernel. |
+| **Zone 12 (Livreurs tiers)** | Doublon de commande ou désynchronisation de statut avec Deliveroo/UberEats | **Idempotence des Webhooks entrants** via clé unique `platform_order_id` et machine d'états finis stricte. |
+| **Zone 13 (MCC & Packs)** | Déploiement d'un pack restreint (ex. Caisse Seule) mais affichage d'écrans non souscrits | **Dynamic Capability Guard** côté serveur et client masquant les routes et désactivant les endpoints API non inclus dans le pack. |
+
+---
 # 6. 📡 Topologie du Bus Événementiel Nexus & Invariants Mathématiques
 
-Le `NexusEventBus` constitue la colonne vertébrale du système.
+Le `NexusEventBus` constitue la colonne vertébrale du système. Il orchestre les flux synchrones et asynchrones entre les 8 piliers métier et garantit l'exécution déterministe des **cascades multi-niveaux**.
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              NEXUS EVENT BUS TOPOLOGY & CASCADES                       │
+│                                                                                        │
+│  [Émetteurs Métier]                                                                    │
+│  POS · KDS · Webhooks Stripe · IoT · Clôture Z · Pointage · Sondes HACCP · MCC         │
+│        │                                                                               │
+│        ▼                                                                               │
+│  [NexusEventBus Engine] ────► [Outbox Pattern] ────► [DLQ Isolation & Quarantine]     │
+│        │                                                                               │
+│        ├──────► Handlers Critiques Synchrones (Scellement NF525, Concurrence Tables)  │
+│        ├──────► Handlers Domaine Asynchrones (Stocks, Recettes, Fiches, KDS, RH)       │
+│        ├──────► Handlers Analytiques & IA (Prime Cost, Live RAG, Matrice BCG)         │
+│        └──────► VerticalEventBridge (Traduction automatique vers les 8 Verticales)     │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+## 6.1 Règles d'Or du Bus Événementiel
+1. **Émission Post-Écriture (Post-Commit Guarantee)** : Tout `emitDurable` doit impérativement intervenir après la persistance réussie dans la base de données principale.
+2. **Idempotence des Handlers** : Chaque handler doit vérifier l'identifiant unique (`event_id` ou `idempotency_key`) pour éviter tout double traitement lors d'un retry réseau ou d'un rejeu DLQ.
+3. **Quarantaine DLQ Automatique** : Tout événement échouant 3 fois consécutives (avec backoff 1s, 5s, 15s) est isolé dans sa file `dlq.*` dédiée et déclenche une notification superviseur sans bloquer le reste du bus.
+4. **Pattern Saga & Compensation** : Pour toute cascade transactionnelle multi-niveaux, chaque étape possède son action compensatoire (ex: annulation commande ➔ compensation stock + écriture JET d'annulation).
+
+---
+
+## 6.2 🌊 Cartographie des 7 Grandes Cascades Multi-Niveaux (Deep Chain Reactions)
+
+Le système ne se limite pas à des interactions simples (composant ➔ handler) : il gère des **réactions en chaîne complexes à 4 et 5 niveaux de profondeur**.
+
+```mermaid
+graph TD
+    subgraph "CASCADE 1 : Vente ➔ Décrémentation Récursive ➔ Live 86ing ➔ Dépublication Multi-Canale"
+        C1_L1["N1: POS Encaissement / Envoi (ops.order.created)"] --> C1_L2["N2: Logistique décompose Fiche Technique au gramme (logistics.stock.decremented)"]
+        C1_L2 --> C1_L3["N3: Ingrédient critique atteint seuil 0 (logistics.stock.exhausted)"]
+        C1_L3 --> C1_L4["N4: Moteur 86ing identifie tous les plats dépendants (ops.dish.86_toggled)"]
+        C1_L4 --> C1_L5["N5: Dépublication instantanée : POS (grisé) + KDS (alerte) + Bornes + Webhooks Deliveroo/Uber"]
+    end
+
+    subgraph "CASCADE 2 : Hausse Prix Fournisseur ➔ Cascade Coûts ➔ Food Cost ➔ Alerte Marge ➔ Suggestion IA"
+        C2_L1["N1: Réception BL / Facture avec hausse prix matière (logistics.po.received)"] --> C2_L2["N2: Recalcul coût sous-recettes : sauces, fonds, pâtes (logistics.recipe.cost_recalculated)"]
+        C2_L2 --> C2_L3["N3: Recalcul en cascade du Food Cost de 15 plats finis (commerce.dish.cost_updated)"]
+        C2_L3 --> C2_L4["N4: Détection dégradation marge brute sous 70% (analytics.alert.margin_degraded)"]
+        C2_L4 --> C2_L5["N5: Proposition IA Majordome : réajustement tarifaire ou substitution ingrédient"]
+    end
+```
+
+---
+
+### 🌊 Cascade 1 : Vente POS ➔ Décomposition Recettes Récursives ➔ Live 86ing ➔ Dépublication Multi-Canale (Profondeur 5)
+* **Niveau 1 — Saisie & Validation POS** : Le serveur valide une commande contenant 2 "Filets de Bœuf Sauce Morilles" (`ops.order.created`).
+* **Niveau 2 — Explosion Arborescente de la Recette** : Le moteur logistique décompose la recette au gramme :
+  * 2x 200g de Bœuf Charolais
+  * 2x 60g de Sauce Morilles (elle-même décomposée en 15g de Morilles séchées, 4cl de Crème AOP, 5cl de Fond de Veau maison).
+  * Émission de `logistics.stock.decremented` pour chaque ingrédient élémentaire.
+* **Niveau 3 — Détection de Seuil Zéro** : Le stock de "Morilles Séchées" passe à $0.00\,	ext{kg}$. Émission immédiate de `logistics.stock.exhausted` `{ ingredientId: 'ING_MORILLES' }`.
+* **Niveau 4 — Résolution des Dépendances & 86ing Automatique** : Le moteur `RecipeDependencyResolver` scanne le catalogue et découvre que 3 plats utilisent cet ingrédient :
+  1. *Filet de Bœuf Sauce Morilles*
+  2. *Risotto aux Morilles et Asperges*
+  3. *Poularde aux Morilles*
+  * Émission en boucle de `ops.dish.86_toggled` `{ dishId, isAvailable: false, reason: 'AUTOMATIC_STOCKOUT' }`.
+* **Niveau 5 — Dépublication Multi-Canale Instantanée (< 500ms)** :
+  * **POS en salle** : Cartes grisées avec badge rouge "Épuisé".
+  * **KDS Cuisine** : Toast d'alerte informant les cuisiniers de ne plus accepter ce plat.
+  * **Site Web & QR Code de table** : Décochage immédiat de la commande en ligne.
+  * **Hub Intégrations** : Push API Deliveroo / UberEats / JustEat pour marquer le plat en rupture sur les plateformes tierces.
+* 🧯 **Résilience & Rollback** : Si le serveur annule la commande (Void) avant envoi, compensation inverse de stock (`logistics.stock.incremented`) et réactivation automatique si le stock repasse au-dessus du seuil.
+
+---
+
+### 🌊 Cascade 2 : Hausse Prix Fournisseur ➔ Cascade Sous-Recettes ➔ Food Cost Global ➔ Alerte Marge ➔ Suggestion IA (Profondeur 5)
+* **Niveau 1 — Réception Facture Fournisseur** : Le manager scanne la facture Metro : le beurre AOP augmente de $+22\%$ (`logistics.po.received`).
+* **Niveau 2 — Recalcul des Préparations Intermédiaires** : La sous-recette "Pâte Feuilletée Maison" voit son coût de revient passer de $1.80€/	ext{kg}$ à $2.15€/	ext{kg}$ (`logistics.recipe.cost_recalculated`).
+* **Niveau 3 — Cascade sur les Plats Finis** : Recalcul automatique du Food Cost de 8 desserts et entrées (Millefeuille, Tarte Tatin, Feuilleté d'Escargots) (`commerce.dish.cost_updated`).
+* **Niveau 4 — Détection d'Anomalie de Marge** : Le coefficient multiplicateur du Millefeuille tombe à $3.8$ (sous la consigne de $4.5$). Émission de `analytics.alert.margin_degraded` `{ dishId: 'DISH_MILLEFEUILLE', marginPercent: 68.2 }`.
+* **Niveau 5 — Suggestion Stratégique IA Oracle** : Le Majordome génère un point d'arbitrage dans le briefing du matin :
+  * *Option A* : Passer le prix de $8.50€$ à $9.50€$ (+11.7%).
+  * *Option B* : Réduire le grammage de beurre dans le feuilletage de 5%.
+* 🧯 **Résilience** : Historisation immuable des cours des matières premières dans la table d'audit des prix.
+
+---
+
+### 🌊 Cascade 3 : Annulation Ligne Post-Envoi (Void) ➔ Alerte Sonore KDS ➔ Arbitrage Gaspillage ➔ Scellement JET NF525 (Profondeur 5)
+* **Niveau 1 — Demande d'Annulation Salle** : Le serveur supprime un "Tartare de Saumon" après validation du bon en cuisine (`ops.order.line_voided` avec PIN Manager).
+* **Niveau 2 — Alerte d'Urgence KDS** : La station "Froid" du KDS reçoit l'événement en WebSocket prioritaire : sonnerie d'urgence et affichage d'un bandeau clignotant rouge "STOP PLAT - TABLE 12".
+* **Niveau 3 — Dialogue d'Arbitrage Cuisinier / Serveur** :
+  * Si la préparation n'avait pas commencé ➔ Remise en stock d'ingrédients (`logistics.stock.incremented`).
+  * Si le plat était déjà dressé ➔ Enregistrement automatique en Perte / Casse (`logistics.waste.recorded` `{ cost: 4.80, reason: 'CLIENT_CHANGE_MIND' }`).
+* **Niveau 4 — Traçabilité Fiscale NF525** : Inscription inaltérable dans le Journal des Événements Total (JET) avec horodatage cryptographique, identifiant du serveur et du manager superviseur.
+* **Niveau 5 — Réconciliation Cockpit & Ratios de Coulage** : Mise à jour en direct de l'indicateur de taux de perte et valorisation comptable au Compte 658 (Charges exceptionnelles de gestion courante).
+
+---
+
+### 🌊 Cascade 4 : Alerte Rupture Froid IoT ➔ Escalade d'Urgence ➔ Quarantaine Sanitaire ➔ 86ing Préventif ➔ Ticket GMAO (Profondeur 5)
+* **Niveau 1 — Dérive Thermique IoT** : La sonde connectée de la Chambre Froide Viandes mesure $+9.2^\circ	ext{C}$ (seuil max légal $+4^\circ	ext{C}$) pendant plus de 20 minutes (`compliance.temperature.alert_triggered`).
+* **Niveau 2 — Escalade Multi-Canaux Immédiate** :
+  * Notification Push ultra-prioritaire sur les téléphones du Chef et du Directeur.
+  * Si aucun acquittement sous 10 min ➔ Déclenchement d'un SMS d'astreinte et appel vocal via Twilio.
+* **Niveau 3 — Mise en Quarantaine Sanitaire Automatique** : Tous les lots de viandes stockés dans cette chambre froide sont tagués `STATUS_QUARANTINED` dans la base traçabilité (`compliance.lot.quarantined`).
+* **Niveau 4 — Verrouillage des Ventes (86ing Préventif)** : Les 6 plats à base de ces viandes sont instantanément verrouillés à la commande au POS et sur les menus digitaux.
+* **Niveau 5 — Déclenchement du Ticket GMAO Dépannage** : Création automatique d'un ordre d'intervention prioritaire pour le frigoriste agréé sous contrat de maintenance avec transmission des courbes de température (`facility.ticket.created`).
+
+---
+
+### 🌊 Cascade 5 : Clôture Journalière Z ➔ Scellement SHA-256 ➔ Écritures PCG ➔ Factur-X PDP ➔ Synchro Pennylane (Profondeur 5)
+* **Niveau 1 — Validation Clôture Z Caisse** : Le directeur clôture la journée de vente après vérification du fond de caisse et justification des écarts (`finance.ticket_z.sealed`).
+* **Niveau 2 — Chaînage Cryptographique Inaltérable** : Calcul du hash SHA-256 du Ticket Z incorporant le hash du Ticket Z de la veille ($H_n = 	ext{SHA256}(H_{n-1} + 	ext{Données}_n)$) et écriture dans le registre WORM scellé NF525.
+* **Niveau 3 — Génération Automatique des Écritures PCG** :
+  * Débit `512000` (Banque CB) : $4\,250.00€$
+  * Débit `530000` (Caisse Espèces) : $820.00€$
+  * Débit `580000` (Titres Restaurant) : $340.00€$
+  * Crédit `706000` (Prestations Ventes HT) : $4\,620.00€$
+  * Crédit `445710` (TVA Collectée 10%) : $462.00€$
+  * Crédit `445720` (TVA Collectée 20%) : $328.00€$
+* **Niveau 4 — Émission Factur-X B2B** : Génération des factures électroniques au format Factur-X (PDF/A-3 avec XML CII embarqué) et télétransmission vers le portail PDP pour les comptes entreprises.
+* **Niveau 5 — Synchronisation API Compta** : Envoi des écritures dans Pennylane, Cegid ou Sage avec accusé de réception cryptographique (`integrations.accounting.synced`).
+
+---
+
+### 🌊 Cascade 6 : Check-in VIP & Allergènes ➔ Verrouillage POS ➔ Alerte KDS ➔ Accord Mets-Vins ➔ Archivage DDPP (Profondeur 4)
+* **Niveau 1 — Accueil Client** : Arrivée de M. Dupont (Client VIP, allergie sévère aux fruits de mer) (`ops.guest.checked_in`).
+* **Niveau 2 — Verrouillage Préventif POS** : Lors de la sélection de la table 14, le POS masque automatiquement tous les plats contenant le tag `ALLERGEN_CRUSTACEANS` et `ALLERGEN_MOLLUSCS` avec avertissement rouge.
+* **Niveau 3 — Transmission Prioritaire KDS** : Le bon de commande envoyé pour cette table porte une bannière rouge fixe : *"CONVIVE 2 : ALLERGIE FRUITS DE MER STRICTE"*.
+* **Niveau 4 — Suggestion Sommelier & Registre Sanitaire** : Proposition de vin adaptée au profil gustatif du client depuis le CRM et journalisation horodatée de la déclaration d'allergie dans le registre PMS pour conformité DDPP.
+
+---
+
+### 🌊 Cascade 7 : Télédiffusion Flotte MCC (OTA Broadcast) ➔ Réception SSE ➔ Mutation DNA ➔ Reconfiguration UI Temps Réel (Profondeur 4)
+* **Niveau 1 — Action Opérateur MCC** : Le constructeur de plateforme active le module "Facturation Électronique Factur-X" sur 500 établissements (`admin.fleet.ota_broadcast`).
+* **Niveau 2 — Réception Événement SSE par le Tenant** : Le listener d'arrière-plan du navigateur client reçoit la mutation de configuration sans interruption de session.
+* **Niveau 3 — Injection Dynamic Capabilities** : Le `TenantDNA` en mémoire locale bascule `mod_accounting_management: true` et met à jour les règles RBAC associées.
+* **Niveau 4 — Reconfiguration UI Réactive sans Rechargement** : Le menu de navigation démasque immédiatement l'onglet "Factur-X" et le bouton d'export avec transition fluide Framer Motion.
+
+
+
+---
+
+## 6.3 📖 Registre Exhaustif des Handlers du Bus Événementiel (`src/orchestration/handlers/`)
+
+Le tableau suivant répertorie les handlers opérationnels de la plateforme avec leur fichier source exact, l'événement écouté, le payload clé, la politique DLQ et le niveau RBAC requis :
+
+| Handler Source (`src/orchestration/handlers/`) | Événement Écouté | Payload Clé | Traitement Métier Réalisé | File DLQ | RBAC Min |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `OrderSealedNF525Handler.ts` | `finance.payment.completed` | `{ orderId, amount, vatMap, hash }` | Scellement cryptographique SHA-256 dans le JET inaltérable | `dlq.finance.ledger` | 20+ |
+| `TicketZHandler.ts` | `finance.ticket_z.requested` | `{ date, registerId, managerPin }` | Rapprochement des modes de paiement et clôture fiscale Z | `dlq.finance.ledger` | 60+ |
+| `ZReportCloseHandler.ts` | `finance.ticket_z.sealed` | `{ closureId, hashSha256 }` | Archivage WORM, verrouillage des écritures et notification | `dlq.finance.ledger` | 80+ |
+| `PaymentLedgerHandler.ts` | `finance.payment.completed` | `{ txId, method, amount }` | Écriture comptable Grand Livre (512/530/580) | `dlq.finance.payments` | 20+ |
+| `SplitPaymentHandler.ts` | `finance.split.calculated` | `{ orderId, parts, method }` | Calcul au plus fort reste des centimes sans dérive de TVA | `dlq.finance.payments` | 20+ |
+| `RefundJournalHandler.ts` | `finance.refund.approved` | `{ refundId, originalOrderId, amount }` | Émission de l'avoir et journalisation de l'extourne | `dlq.finance.payments` | 60+ |
+| `RefundExtourneHandler.ts` | `finance.refund.sealed` | `{ refundId, vatBreakdown }` | Contrepassation des comptes de TVA et ventes HT | `dlq.finance.ledger` | 70+ |
+| `MonthlyFECExportHandler.ts` | `finance.fec.requested` | `{ year, month, format }` | Génération normalisée du Fichier des Écritures DGFIP | `dlq.finance.ledger` | 80+ |
+| `TaxMismatchAlertHandler.ts` | `finance.tax.anomaly_detected` | `{ orderId, expectedVat, actualVat }` | Alerte superviseur en cas d'incohérence fiscale | `dlq.finance.ledger` | 80+ |
+| `StockDeductionHandler.ts` | `ops.order.created` | `{ orderId, lines }` | Décomposition des fiches recettes et décrémentation stock | `dlq.logistics.stock` | 20+ |
+| `InventoryDeductedHandler.ts` | `logistics.stock.decremented` | `{ ingredientId, quantity }` | Recalcul du stock théorique restant et seuils | `dlq.logistics.stock` | 20+ |
+| `StockZeroBlockerHandler.ts` | `logistics.stock.exhausted` | `{ ingredientId }` | Déclenchement automatique du Live 86ing sur POS/Web | `dlq.logistics.stock` | 20+ |
+| `FoodCostRecomputer.ts` | `logistics.ingredient.price_changed` | `{ ingredientId, newCost }` | Recalcul en cascade des fiches techniques et Food Cost | `dlq.logistics.stock` | 60+ |
+| `MarginWarningHandler.ts` | `analytics.margin.degraded` | `{ dishId, currentMargin }` | Alerte dégradation de marge brute sous le seuil | `dlq.commerce.catalog` | 70+ |
+| `WasteStockReconciliationHandler.ts` | `logistics.waste.recorded` | `{ ingredientId, cost, reason }` | Imputation des pertes en variation de stock (Compte 658) | `dlq.logistics.stock` | 40+ |
+| `StockRestitutionHandler.ts` | `ops.order.line_voided` | `{ lineId, wasCooked }` | Réintégration des denrées non cuisinées en stock | `dlq.logistics.stock` | 60+ |
+| `StockReceptionHandler.ts` | `logistics.po.received` | `{ poId, items, supplierId }` | Entrée en stock physique et mise à jour PMP | `dlq.logistics.stock` | 40+ |
+| `ProcurementMismatchHandler.ts` | `logistics.po.discrepancy` | `{ poId, invoiceCost, poCost }` | Détection d'écarts de prix 3-way matching BC/BL/Facture | `dlq.logistics.stock` | 60+ |
+| `HaccpTemperatureThresholdHandler.ts` | `compliance.temp.threshold_exceeded` | `{ probeId, tempCelsius, duration }` | Déclenchement de l'escalade d'urgence SMS/Vocal | `dlq.compliance.haccp` | ∀ |
+| `QuarantineHandler.ts` | `compliance.lot.quarantined` | `{ lotNumber, reason }` | Verrouillage sanitaire des stocks et plats associés | `dlq.compliance.haccp` | 60+ |
+| `QuarantineActivatedHandler.ts` | `compliance.quarantine.active` | `{ lotNumber, affectedDishes }` | Dépublication préventive des plats au POS/KDS | `dlq.compliance.haccp` | 60+ |
+| `RecallPOSBlockerHandler.ts` | `compliance.recall.initiated` | `{ lotNumber, dishIds }` | Blocage bloquant immédiat de la vente en caisse | `dlq.compliance.haccp` | 70+ |
+| `DLCExpiryHandler.ts` | `compliance.dlc.expired` | `{ lotNumber, ingredientId }` | Alerte péremption et proposition de déstockage | `dlq.compliance.haccp` | 20+ |
+| `DLCBlockerHandler.ts` | `compliance.dlc.critical` | `{ lotNumber, dishIds }` | Blocage de la préparation de plats périmés | `dlq.compliance.haccp` | 20+ |
+| `IotOfflineAlertHandler.ts` | `iot.probe.offline` | `{ probeId, lastSeen }` | Alerte perte de heartbeat sonde frigorifique | `dlq.facility.tickets` | 60+ |
+| `CoolingCycleHandler.ts` | `compliance.cooling.monitored` | `{ batchId, startTemp, endTemp }` | Traçabilité de la cellule de refroidissement rapide | `dlq.compliance.haccp` | 20+ |
+| `HaccpCheckArchiverHandler.ts` | `compliance.audit.completed` | `{ auditId, score, checklist }` | Archivage immuable du PMS pour contrôle DDPP | `dlq.compliance.haccp` | 60+ |
+| `PayrollTimeclockHandler.ts` | `human.timeclock.punched` | `{ employeeId, type, time }` | Enregistrement inaltérable du pointage staff | `dlq.human.hr` | ∀ |
+| `PayrollComplianceHandler.ts` | `human.shift.validated` | `{ shiftId, employeeId, hours }` | Vérification du repos 11h et amplitude 13h HCR | `dlq.human.hr` | 60+ |
+| `LaborCostAnalyzerHandler.ts` | `human.timeclock.shift_ended` | `{ shiftId, totalCost }` | Calcul en temps réel de la masse salariale du service | `dlq.human.hr` | 60+ |
+| `ShiftAutoAuditHandler.ts` | `finance.ticket_z.sealed` | `{ date }` | Audit automatique des pointages oubliés en fin de jour | `dlq.human.hr` | 60+ |
+| `HRBreakCheckHandler.ts` | `human.timeclock.break_started` | `{ employeeId, duration }` | Vérification de la pause légale obligatoire de 20 min | `dlq.human.hr` | 40+ |
+| `TipDistributedHandler.ts` | `finance.tips.calculated` | `{ totalTips, staffHours }` | Répartition légale des pourboires au prorata des heures | `dlq.human.hr` | 60+ |
+| `SilaeExportHandler.ts` | `human.payroll.exported` | `{ month, variables }` | Génération du flux API/Fichier compatible Silae Paie | `dlq.human.hr` | 80+ |
+| `TableLockHandler.ts` | `ops.table.lock_requested` | `{ tableId, serverId }` | Verrouillage de concurrence avec TTL 30s | `dlq.ops.orders` | 20+ |
+| `TableTransferHandler.ts` | `ops.table.transfer_requested` | `{ fromTable, toTable, lines }` | Déplacement transparent de commande d'une table à l'autre | `dlq.ops.orders` | 30+ |
+| `TableAutoReleaseHandler.ts` | `finance.payment.completed` | `{ tableId }` | Libération de la table et passage en statut "À nettoyer" | `dlq.ops.orders` | 20+ |
+| `KDSTicketDoneNotifier.ts` | `ops.kds.course_ready` | `{ tableId, courseNumber }` | Notification push + vibration haptique aux serveurs | `dlq.ops.kds` | 20+ |
+| `KDSRushAlertNotifier.ts` | `ops.kds.rush_detected` | `{ delayedTicketsCount }` | Alerte chef de salle et bascule en mode rush | `dlq.ops.kds` | 60+ |
+| `ResaAllergenCheckHandler.ts` | `ops.guest.checked_in` | `{ resId, allergens }` | Transmission prioritaire des allergies au KDS | `dlq.ops.orders` | 20+ |
+| `DeliveryDriverUnlockHandler.ts` | `ops.delivery.driver_arrived` | `{ orderId, driverPin }` | Déblocage de la commande au passe pour le livreur | `dlq.integrations.delivery` | 20+ |
+| `PrinterMappingHandler.ts` | `ops.print.requested` | `{ printJobId, targetStation }` | Routage d'impression ESC/POS avec failover de secours | `dlq.ops.orders` | 20+ |
+| `SovereignBreachHandler.ts` | `sovereign.breach_detected` | `{ tenantId, attackVector }` | Blocage immédiat de session et alerte Sentrux | `dlq.admin.settings` | 100 |
+
+---
+
+## 6.4 🌐 Cartographie Intégrale des Routes API REST (`src/app/api/`)
+
+Toutes les routes de l'API REST de Restaurant OS sont typées, sécurisées et branchées sur le bus d'orchestration :
+
+| Route API (`src/app/api/`) | Méthode | Domaine & Rôle | RBAC / Auth Requise | Event Bus Déclenché |
+| :--- | :--- | :--- | :--- | :--- |
+| `/api/admin/fleet/ota-broadcast` | `POST` | Télédiffusion de mise à jour / feature flags sur la flotte | `Operator/Admin` (MCC MFA) | `admin.fleet.ota_broadcast` |
+| `/api/admin/fleet/tenant-override` | `POST` | Surcharge temporaire de configuration d'un tenant | `Admin` (MCC MFA) | `admin.tenant.override_applied` |
+| `/api/admin/fleet/dlq` | `GET` | Consultation des événements en quarantaine DLQ | `Support/Admin` | — |
+| `/api/admin/fleet/dlq/[id]/retry` | `POST` | Rejeu manuel d'un événement DLQ après correction | `Operator/Admin` | Rejeu sur `NexusEventBus` |
+| `/api/admin/fleet/telemetry/heartbeat` | `POST` | Réception de télémétrie et statut santé des instances | `Instance Token` | `admin.fleet.heartbeat_received` |
+| `/api/admin/fleet/telemetry/crash-report` | `POST` | Journalisation des erreurs critiques et crashs clients | `Public/Instance` | `admin.telemetry.crash_logged` |
+| `/api/admin/compliance/fiscal-tenant-audit` | `POST` | Audit de scellement et vérification de chaîne NF525 | `Admin/Auditeur` | `compliance.fiscal_audit.completed` |
+| `/api/admin/finance/fec/export` | `POST` | Génération et téléchargement du grand livre FEC DGFIP | `RBAC 80+` | `finance.fec.exported` |
+| `/api/admin/hr/payroll/silae/sync` | `POST` | Synchronisation des variables de paie vers Silae | `RBAC 80+` | `human.payroll.silae_synced` |
+| `/api/finance/cash-count` | `POST` | Saisie de fond de caisse et validation des espèces | `RBAC 30+` | `finance.cash_drawer.counted` |
+| `/api/finance/jet/sync` | `POST` | Synchronisation décentralisée des blocs JET scellés | `RBAC 20+` (Device) | `finance.jet.synced` |
+| `/api/finance/bank/sync` | `POST` | Rapprochement bancaire automatique via Open Banking | `RBAC 80+` | `finance.bank.synced` |
+| `/api/haccp/log-temp` | `POST` | Enregistrement d'un relevé de température manuel | `RBAC 10+` | `compliance.temperature.recorded` |
+| `/api/haccp/iot-push` | `POST` | Ingestion des télémétries de sondes IoT réfrigérées | `IoT Token` | `compliance.iot.telemetry_received` |
+| `/api/ops/tables/lock` | `POST` | Verrouillage de concurrence pour édition de table | `RBAC 20+` | `ops.table.locked` |
+| `/api/timeclock/verify-pin` | `POST` | Authentification ultra-rapide par code PIN de pointage | `Public/Terminal` | `human.timeclock.authenticated` |
+| `/api/hr/clock-in` | `POST` | Pointage d'arrivée / départ avec contrôle géofencing | `RBAC 10+` | `human.timeclock.punched` |
+| `/api/inventory/adjust` | `POST` | Correction manuelle de stock physique d'inventaire | `RBAC 60+` | `logistics.stock.adjusted` |
+| `/api/delivery/rush-mode` | `POST` | Activation du mode rush (augmentation délais livraison) | `RBAC 60+` | `ops.delivery.rush_activated` |
+| `/api/einvoicing/outbound` | `POST` | Émission d'une facture Factur-X vers le portail PDP | `RBAC 60+` | `finance.facturx.emitted` |
+| `/api/webhooks/stripe` | `POST` | Réception des paiements CB et pré-autorisations Stripe | `Stripe Signature` | `finance.payment.completed` |
+| `/api/webhooks/thefork` | `POST` | Ingestion des réservations en ligne TheFork / Tripadvisor | `TheFork Auth` | `ops.reservation.created` |
+| `/api/webhooks/google-reserve` | `POST` | Ingestion des réservations Google My Business | `Google Auth` | `ops.reservation.created` |
+| `/api/connectors/delivery/webhook/[provider]` | `POST` | Webhook universel Deliveroo, UberEats, JustEat | `Provider Secret` | `integrations.delivery.order_injected` |
+| `/api/oracle` | `POST` | Requête conversationnelle au Majordome IA Sovereign | `RBAC 40+` | `intelligence.oracle.queried` |
+
+---
+
+## 6.5 ⚙️ Machines à États Finis (FSM) Universelles du Kernel
+
+Pour éliminer toute ambiguïté sur les transitions d'état métier, le système implémente 6 FSM formelles avec gardiens (`Guards`) et actions compensatoires :
+
+### 1. FSM de la Commande de Caisse (`OrderFSM`)
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT : Création Panier
+    DRAFT --> ORDERED : Validation Envoi Cuisine (ops.order.created)
+    ORDERED --> PREPARING : Prise en charge KDS (ops.kds.ticket_acknowledged)
+    PREPARING --> READY : Sortie de Passe (ops.kds.course_ready)
+    READY --> SERVED : Distribution Table (ops.runner.delivered)
+    SERVED --> BILL_PRINTED : Demande Addition (ops.table.bill_printed)
+    BILL_PRINTED --> PAID_SEALED : Encaissement Complet (finance.ticket.sealed)
+    PAID_SEALED --> [*] : Clôture Table & Archivage
+
+    ORDERED --> VOIDED : Annulation Superviseur (ops.order.voided [Guard: Manager PIN])
+    VOIDED --> [*] : Compensation Stock / Perte
+```
+
+### 2. FSM de la Table de Salle (`TableFSM`)
+* `AVAILABLE` (Libre) ➔ `OCCUPIED` (Occupée / Commande en cours) ➔ `BILL_REQUESTED` (Addition éditée) ➔ `CLEANING` (En cours de débarrassage) ➔ `AVAILABLE`.
+* *Guard* : Impossible de basculer en `AVAILABLE` si une note non scellée existe.
+
+### 3. FSM de la Clôture Fiscale (`FiscalZReportFSM`)
+* `OPEN` (Session active de caisse) ➔ `PRE_CLOSURE` (Comptage des espèces) ➔ `SEALING` (Calcul du hash SHA-256 et JET chaîné) ➔ `SEALED_IMMUTABLE` (Registre WORM scellé) ➔ `EXPORTED_FEC` (Télétransmission comptable).
+
+### 4. FSM du Lot Sanitaire HACCP (`HaccpLotFSM`)
+* `RECEIVED` (Réceptionné conforme) ➔ `ACTIVE_STORAGE` (En stockage conforme) ➔ `PREPARATION` (DLC secondaire générée) ➔ `CONSUMED` (Servi aux clients).
+* *Bascule d'Urgence* : `ACTIVE_STORAGE` ➔ `QUARANTINED` (si $T > 8^\circ	ext{C}$ ou Alerte DGCCRF) ➔ `DESTROYED` (PV de destruction) ou `RELEASED` (Contre-expertise vétérinaire).
+
+---
+
+
+---
+
+## 6.6 🔒 Matrice Universelle de Résolution de Concurrence & Transactions par Entité
+
+Pour éliminer tout conflit d'écriture lors d'accès simultanés (multi-iPad en salle, bornes, webhooks), le Kernel applique la matrice suivante :
+
+| Entité Système | Mode de Verrouillage | Clé de Concurrence | TTL Verrou | Résolution en Cas de Collision |
+| :--- | :--- | :--- | :--- | :--- |
+| **Table de Salle** | *Pessimistic Session Lock* | `table_lock:{tenantId}:{tableId}` | 30 secondes | Rejet de la seconde prise de main avec affichage du serveur actif |
+| **Panier Commande** | *Optimistic Locking* | `order.version` (entier incrémental) | Illimité | Fusion déterministe (*Three-Way Merge*) des ajouts d'articles |
+| **Ligne d'Addition (Split)** | *Distributed Semaphore* | `split_lock:{orderId}` | 60 secondes | File d'attente FIFO : chaque convive paie séquentiellement |
+| **Stock Ingrédient** | *Atomic Counter Mutation* | `stock:{tenantId}:{ingredientId}` | Immédiat | Décrémentation atomique SQL/Firestore avec garde `quantity >= 0` |
+| **Registre JET NF525** | *Strict Append-Only Queue* | `jet_seq:{tenantId}` | Immédiat | File d'attente séquentielle unique avec incrémentation continue |
+| **Shift de Pointage** | *State Machine Guard* | `punch:{tenantId}:{employeeId}` | Immédiat | Interdiction de double pointage d'arrivée sans départ préalable |
+| **Sonde Température IoT** | *Time-Series Windowing* | `probe:{tenantId}:{probeId}` | Fenêtre 5m | Déduplication par horodatage matériel de la sonde |
+
+---
+
+## 6.7 🛰️ Topologie Réseau & Architecture Hybride Edge/Cloud/MCC/RAG
+
+Le diagramme d'infrastructure ci-dessous modélise l'ensemble des liaisons physiques et applicatives garantissant la souveraineté et le fonctionnement déconnecté :
+
+```mermaid
+graph TD
+    subgraph "CLIENT TACTILE SUR SITE (Edge Device)"
+        iPad["iPad / Tablette Android POS"]
+        LocalDB["IndexedDB / SQLite Local Buffer"]
+        Printer["Imprimante Thermique ESC/POS (LAN / USB)"]
+        TPE["TPE Stripe WisePOS E (Bluetooth / IP)"]
+        iPad <--> LocalDB
+        iPad --> Printer
+        iPad <--> TPE
+    end
+
+    subgraph "CLOUD RESILIENCE & REVERSE PROXY"
+        CF["Cloudflare Edge Network & WAF"]
+        Ingress["Next.js Application Gateway (Vercel / Cloud Run)"]
+        CF --> Ingress
+    end
+
+    subgraph "SOUVERAIN KERNEL & ORCHESTRATION"
+        Bus["NexusEventBus & Outbox Processor"]
+        DB["Firestore / PostgreSQL (Partitionné tenant_id)"]
+        Vault["DocumentVault WORM (Archivage NF525 6 ans)"]
+        Ingress <--> Bus
+        Bus <--> DB
+        Bus --> Vault
+    end
+
+    subgraph "INTELLIGENCE & MCC EMPIRE"
+        RAG["Sidecar LightRAG Vector Engine (Port 9621)"]
+        MCC["Mission Control Center Fleet Operator"]
+        Bus <--> RAG
+        MCC <--> Ingress
+    end
+
+    LocalDB -.->|"Reconnexion & Rejeu FIFO"| Ingress
+    iPad <==>|"WebSocket & SSE Temps Réel"| Ingress
+```
+
+---
+---
+# 7. 🛡️ Sécurité, Conformité Légale (NF525/HDS/RGPD) & FinOps
+
+Cette section formalise la résolution complète de tous les angles morts opérationnels, légaux, architecturaux et financiers pour garantir une robustesse absolue à l'échelle de 10 000+ établissements.
+
+---
+
+## 7.1 🛡️ Sécurité Opérationnelle, Pentests & Gestion des Secrets (Grade X Standard)
+
+Pour garantir une étanchéité de niveau bancaire et souverain, les protocoles suivants sont obligatoires :
+
+1. **Audit de Sécurité Externe & Pentest Pré-Lancement** :
+   * Audit d'intrusion boîte noire et boîte grise planifié avant le premier client payant (focus : isolation multi-tenant `SovereignGuard`, endpoints API REST publics, et injection d'événements dans le bus).
+   * Scan continu des vulnérabilités des dépendances (Snyk / Dependabot / Trivy) bloquant automatiquement toute PR en cas de vulnérabilité `HIGH` ou `CRITICAL`.
+2. **Gestion Centralisée des Secrets & Rotation** :
+   * Bannissement des secrets en clair dans les fichiers `.env` de production.
+   * Chiffrement des clés d'API (Stripe, Twilio, Sendgrid) et des clés fiscales de signature via un coffre-fort de secrets (GCP KMS / Doppler / HashiCorp Vault).
+   * Procédure de rotation automatique des clés de signature fiscale tous les 12 mois sans rupture de la chaîne d'audit.
+3. **Protection Périmétrique WAF & Anti-DDoS** :
+   * Filtrage Cloudflare Enterprise / WAF devant l'API REST : Rate Limiting agressif par IP (max 120 req/min sur les routes sensibles) et blocage géographique des attaques volumétriques.
+4. **Authentification Forte Multi-Facteurs (MFA/2FA) Obligatoire** :
+   * Activation forcée du 2FA (TOTP / WebAuthn FIDO2) pour tous les comptes de niveau **RBAC 100 (Propriétaires)** et pour **tous les opérateurs du MCC**.
+   * Déconnexion automatique des sessions inactives après 30 minutes d'inactivité sur le back-office.
+
+---
+
+## 7.2 ⚖️ Résolution Mathématique du Paradoxe NF525 + Mode Offline Multi-Writer
+
+### Le Problème Théorique
+La certification NF525 exige une **chaîne séquentielle ininterrompue et totale** de hachage SHA-256 ($H_n = 	ext{SHA256}(H_{n-1} + 	ext{Data}_n)$). Or, en mode hors-ligne avec plusieurs tablettes en salle écrivant simultanément sans réseau, un ordre total centralisé est temporairement impossible.
+
+### La Solution Architecturale Implémentée (Local Session Chains + Merge JET)
+```mermaid
+graph TD
+    subgraph "MODE HORS-LIGNE (Salle sans Internet)"
+        T1["iPad 1 (Salle) : Chaîne Locale A (A1 ➔ A2 ➔ A3)"]
+        T2["iPad 2 (Terrasse) : Chaîne Locale B (B1 ➔ B2)"]
+    end
+
+    subgraph "RECONNEXION & SYNCHRONISATION"
+        Ingress["SyncManager FIFO Buffer (src/lib/offline/sync-manager.ts)"]
+        T1 --> Ingress
+        T2 --> Ingress
+    end
+
+    subgraph "CONSOLIDATION CENTRALE (NF525 Conforme)"
+        JET["Grand Livre JET Central (Block n-1 ➔ Block n [Intègre Hash A + Hash B] ➔ Block n+1)"]
+        Ingress --> JET
+    end
+```
+
+1. **Journaux de Session Locaux Scellés** : Chaque terminal (iPad 1, iPad 2) maintient sa propre chaîne cryptographique locale de tickets scellés avec sa clé de session locale et son horodatage matériel.
+2. **Reconnexion & Consolidation Déterministe** : Lors du rétablissement du réseau, le `SyncManager` central réordonne les flux selon l'horodatage NTP certifié et insère un bloc de fusion dans le **Journal des Événements Total (JET) Central**.
+3. **Preuve d'Intégrité Bifurquée** : Le JET central enregistre le hash final de chaque terminal local, garantissant qu'aucun ticket n'a été inséré ou modifié a posteriori sur les tablettes.
+
+---
+
+## 7.3 📜 Gouvernance Juridique SaaS, DPA RGPD & Données Sensibles
+
+Pour sécuriser contractuellement l'exploitation commerciale de la plateforme :
+
+1. **Pack Contractuel B2B Souverain** :
+   * **CGU / CGV SaaS** : Définition des niveaux de service (SLA 99.9%), limitation de responsabilité, politique de paiement et conditions de résiliation.
+   * **DPA (Data Processing Agreement) RGPD** : Annexe obligatoire définissant Restaurant OS comme sous-traitant au sens de l'Art. 28 du RGPD et le restaurateur comme responsable de traitement.
+   * **Registre Public des Sous-Traitants Ultérieurs** : Liste transparente des tiers certifiés (Stripe pour les paiements, Cloudflare pour le WAF, Sentry pour les crashs, hébergement 100% UE).
+2. **Classification Renforcée des Données de Santé & Allergies (RGPD Art. 9)** :
+   * Les fiches allergies nominatives liées à l'identité d'un client sont classées **Données de Santé Sensibles** : recueil de consentement explicite, chiffrement au repos AES-256 et séparation physique des tables CRM.
+   * **Verticale Clinic** : Hébergement exclusif sur infrastructure certifiée **HDS (Hébergeur de Données de Santé)** avant toute ouverture commerciale.
+3. **Réversibilité & Droit à l'Oubli** :
+   * Bouton d'export complet des données du tenant (`/api/tenant/export-archive`) générant une archive ZIP (SQL + CSV + PDF Factures) en cas de résiliation.
+   * Procédure de purge RGPD conservant les données fiscales scellées NF525 (anonymisées) pendant 6 ans et supprimant définitivement toutes les données PII marketing.
+
+---
+
+## 7.4 🧪 Matrice QA, Tests E2E Playwright, Benchmarks de Charge & Accessibilité
+
+Pour dépasser le simple stade des tests unitaires et garantir une robustesse terrain :
+
+| Niveau de Test | Outil / Framework | Fréquence d'Exécution | Critère de Succès Bloquant (Quality Gate) |
+| :--- | :--- | :--- | :--- |
+| **Typage Strict** | TypeScript 5.x (`tsc --noEmit`) | À chaque commit | **0 erreur** (Grade X standard) |
+| **Tests Unitaires & Handlers** | Vitest 4.x (`vitest run`) | À chaque PR | **100% passés** (> 500 tests) |
+| **Tests E2E Parcours Critiques** | Playwright (Chrome/WebKit/iPad) | Quotidien (Nightly) | Prise commande ➔ KDS ➔ Split ➔ Encaissement ➔ Clôture Z validés |
+| **Stress Test & Montée en Charge** | k6 / Artillery | Hebdomadaire | **200 commandes/minute** soutenues avec latence P99 < 350ms |
+| **Accessibilité Réglementaire** | Axe-core / Lighthouse | À chaque release | Score Accessibilité > 95/100 (Conformité WCAG 2.1 AA) |
+| **Disaster Recovery Drill** | Script de restauration backup | Mensuel | Restauration complète d'un tenant en **< 15 minutes** (RTO) |
+
+---
+
+## 7.5 🔄 Plan de Continuité d'Activité (PCA/PRA), RTO/RPO & Redondance Matérielle
+
+Pour parer aux pannes matérielles, réseau ou cloud :
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                            NEXUS EVENT BUS TOPOLOGY                         │
+│                          OBJECTIFS DE RÉSILIENCE (SLO)                      │
 │                                                                             │
-│  [Émetteurs Métier]                                                         │
-│  POS · KDS · Webhooks Stripe · IoT · Clôture Z · Pointage                   │
-│        │                                                                    │
-│        ▼                                                                    │
-│  [NexusEventBus Engine] ────► [Outbox Pattern] ────► [DLQ Quarantine]       │
-│        │                                                                    │
-│        ├──────► Handlers Haute Priorité (Scellage NF525, Stocks, KDS)       │
-│        ├──────► Handlers Arrière-Plan (CRM, Fidélité, Analytics)            │
-│        └──────► VerticalEventBridge (Traduction vers Verticales Spécifiques)│
+│  • RTO (Recovery Time Objective) : < 15 minutes                             │
+│  • RPO (Recovery Point Objective) : < 1 minute (Zéro perte de vente)        │
+│  • Haute Disponibilité (SLA) : 99.95% de disponibilité service              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Règles d'Or du Bus Événementiel :
-1. **Émission Post-Écriture** : Tout `emitDurable` doit impérativement intervenir après la persistance réussie dans la base de données principale.
-2. **Idempotence des Handlers** : Chaque handler doit vérifier l'identifiant unique de l'événement pour éviter tout double traitement lors d'un retry.
-3. **Quarantaine DLQ Automatique** : Tout événement échouant 3 fois consécutives est isolé dans `mcc/dlq` et déclenche une alerte superviseur.
+1. **Matériel de Secours sur Site (Pack Établissement)** :
+   * **Routeur 4G/5G Failover** : Bascule automatique en 3 secondes si la box Internet principale (Fibre) est coupée.
+   * **TPE de Repli Autonome** : Présence d'un TPE autonome (SumUp / Terminal 3G) configuré pour continuer à encaisser si le réseau local LAN est hors service.
+   * **Imprimante de Secours** : En cas de blocage de l'imprimante cuisine, routage automatique vers l'imprimante bar avec sonnerie d'alerte.
+2. **Politique de Sauvegarde & Rétention Légale** :
+   * **Snapshots Opérationnels** : Sauvegardes incrémentales continues (Point-in-Time Recovery à 35 jours) + Snapshots quotidiens conservés 90 jours.
+   * **Archives Fiscales WORM** : Conservation immuable et scellée des clôtures Z et du grand livre pendant **6 ans** dans `DocumentVault`.
 
 ---
 
-# 7. 🛡️ Sécurité, Conformité Légale (NF525/HDS/RGPD) & FinOps
+## 7.6 🔌 Homologations Partenaires & Délais Réels d'Intégration
 
-| Risque Identifié | Solution Technique Gravée | Sévérité |
-|---|---|:---:|
-| **Altération des Données Fiscales** | Chaînage cryptographique SHA-256 et stockage WORM | 🔴 P0 Bloquant |
-| **Fuite de Données Cross-Tenant** | Isolation stricte via `SovereignGuard` et audit AST en CI | 🔴 P0 Bloquant |
-| **Biométrie Illégale au Travail** | Interdiction stricte de la reconnaissance faciale (Pointage PIN sécurisé) | 🔴 P0 Bloquant |
-| **Période de Rétention Fiscale** | Rétention 6 ans garantie sur les archives de clôture | 🔴 P0 Bloquant |
-| **Interruption Réseau en Service** | Moteur Local-First avec synchronisation automatique à la reconnexion | 🟠 P1 Majeur |
-| **Dérive des Coûts Cloud (FinOps)** | Suivi unitaire de la consommation Firestore et tokens IA par tenant | 🟡 P2 Mineur |
+Les intégrations tierces dépendent de processus de certification externes dont les délais doivent être anticipés :
+
+| Partenaire / Plateforme | Type d'Intégration | Délai d'Homologation Estimé | Prérequis & Points de Vigilance |
+| :--- | :--- | :---: | :--- |
+| **Stripe Terminal** | Paiement CB TPE | **Immédiat** (Certifié) | Validation des flux P2PE et commande des lecteurs WisePOS E |
+| **TheFork / Tripadvisor** | Réservations de table | **4 à 8 semaines** | Signature contrat API Partenaire + test sandbox bidirectionnel |
+| **Google Reserve** | Réservations Google Maps | **6 à 12 semaines** | Validation de l'infrastructure d'inventaire et flux temps réel |
+| **Deliveroo / UberEats** | Commandes en ligne | **6 à 10 semaines** | Certification du connecteur POS et conformité des statuts |
+| **Pennylane / Cegid / Sage** | Export Comptable FEC | **2 à 4 semaines** | Validation du schéma PCG et des comptes de TVA multi-taux |
+| **Silae Paie** | Variables de paie RH | **4 à 6 semaines** | Validation du format d'échange et conventions collectives HCR |
+
+---
+
+## 7.7 💰 FinOps : Coût Unitaire par Tenant & Politique d'Impayés SaaS
+
+Pour assurer une rentabilité maximale sur chaque formule d'abonnement :
+
+### 1. Analyse du Coût d'Infrastructure par Tenant (COGS)
+* **Base de données & Compute** (Firestore / Vercel) : $pprox 1.80€ / 	ext{tenant} / 	ext{mois}$
+* **Télémétrie & Logs** (Sentry / Axiom) : $pprox 0.90€ / 	ext{tenant} / 	ext{mois}$
+* **Consommation Tokens IA Oracle** (LightRAG / LLM) : $pprox 2.50€ / 	ext{tenant} / 	ext{mois}$ (plafonné à 1 000 requêtes/mois)
+* **Total Coût Infra Moyen** : $pprox 5.20€ / 	ext{tenant} / 	ext{mois}$
+* **Marge Brute sur Forfait Starter (79€/mois)** : **$93.4\%$** (Excellence SaaS).
+
+### 2. Procédure Automatisée de Relance & Recouvrement (Dunning)
+* **J+0 (Échec Prélèvement Stripe)** : Notification discrète par email au propriétaire + maintien de l'accès complet.
+* **J+7 (Deuxième Tentative)** : Bannière orange sur le back-office invitant à mettre à jour la carte bancaire.
+* **J+14 (Troisième Tentative)** : Mode dégradé (accès aux fonctions critiques de caisse maintenu, accès aux analytics et à l'IA suspendu).
+* **J+30 (Clôture Compte)** : Suspension complète avec possibilité de réactivation immédiate dès régularisation.
+
+---
+
+## 7.8 👥 Plan RH, Mitigation du Bus Factor = 1 & Support Client MCC
+
+Pour transformer l'organisation en une entreprise scalable et pérenne :
+
+### 1. Trajectoire de Recrutement par Paliers MRR
+```
+  Palier 1 : 0 → 15k€ MRR (0 à 100 clients)
+  • 1 Architecte / Fondateur (Produit & Core Engine)
+  • 1 Développeur Fullstack (Front-end & Intégrations)
+  • Support assuré par les fondateurs avec télé-assistance assistée par IA
+
+  Palier 2 : 15k€ → 50k€ MRR (100 à 350 clients)
+  • +1 Customer Success Manager / Formateur Terrain (Onboarding J+0)
+  • +1 Ingénieur SRE / DevOps (Infrastructure & Astreinte 24/7)
+  • +1 Développeur Mobile (Pad Serveur & Hardware)
+
+  Palier 3 : 50k€ → 200k€ MRR (350 à 1500 clients)
+  • +2 Techniciens Support N1/N2 (Horaires étendus 7j/7 service du soir)
+  • +2 Commerciaux / Account Executives (Déploiement régional)
+  • +1 Responsable Conformité Légale & Partenariats
+```
+
+### 2. Système de Support Dédié aux Tenants (MCC Ticketing)
+* **Module Ticketing Intégré** : Bouton d'assistance en 1 clic dans le back-office permettant au restaurateur d'ouvrir un ticket avec capture d'écran automatique et logs anonymisés.
+* **Aide en Libre-Service & Chatbot Support N1** : Base de connaissances interactive avec vidéos de 30 secondes pour chaque geste métier (ex: *"Comment faire un split d'addition en 3"*, *"Comment clôturer son Ticket Z"*).
+* **Mesure de Satisfaction & Alerte Churn** : Enquête CSAT mensuelle (1 question) et détection algorithmique des établissements en baisse d'activité pour appel préventif.
+
+---
+
+## 7.9 🏪 Logistique Terrain : Provisioning Matériel, Réseau On-Site & Formation J+0
+
+1. **Pack Matériel "Plug & Play" Pré-Configuré** :
+   * Chaque pack matériel commandé par un client est pré-flashé en atelier avec l'identifiant du tenant, le certificat WiFi de secours et la cartographie des imprimantes.
+   * Le restaurateur reçoit une boîte numérotée : branchement sur secteur et le système est opérationnel en 5 minutes.
+2. **Diagnostic Réseau Préalable (Audit WiFi On-Site)** :
+   * Check-list obligatoire lors de l'onboarding : mesure de la couverture WiFi en salle et en cuisine, préconisation de répéteurs mesh PoE si nécessaire.
+3. **Accompagnement VIP Premier Service (Jour J)** :
+   * Télé-assistance dédiée par un technicien en ligne pendant le premier coup de feu du soir (19h–22h) pour sécuriser l'équipe et lever toute appréhension.
+
+---
+
+## 7.10 📋 Cadre Convention Collective HCR & Spécificités Réglementaires
+
+Le module RH intègre nativement toutes les particularités de la Convention Collective Nationale des Hôtels, Cafés et Restaurants (IDCC 1979) :
+
+* **Avantage en Nature Nourriture (Repas du Personnel)** : Déclaration et déduction automatique de l'avantage en nature repas (forfait légal URSSAF) pour chaque salarié effectuant un shift d'au moins 5 heures.
+* **Indemnité de Coupure & Repos Quotidien** : Détection des coupures supérieures à 2 heures avec calcul de la prime de coupure et verrouillage strict du repos minimum de 11 heures consécutives entre deux services.
+* **Majoration des Heures de Nuit & Jours Fériés** : Majoration automatique pour les heures travaillées après 22h00 et gestion des jours fériés travaillés garantis selon l'ancienneté.
 
 ---
 
@@ -660,10 +1414,134 @@ Le `NexusEventBus` constitue la colonne vertébrale du système.
 
 ## 8.2 Rôles de la Flotte d'Agents Hermes
 
-- **Atlas (Orchestrateur Infrastructure & Logistique)** : Responsable du déploiement continu, du monitoring de santé des serveurs et de l'approvisionnement des stocks.
-- **Themis (Sentinelle Juridique & Fiscale)** : Veille à la conformité NF525, vérifie l'intégrité des chaînes de hash et contrôle les registres RGPD.
-- **Cronos (Maître du Temps & des Ressources)** : Supervise les plannings RH, la rotation des tables et l'optimisation du cadencement en cuisine.
-- **Antigravity (Superviseur Architecte)** : Maintient l'intégrité architecturale Grade X++, garantit l'absence de régression TypeScript et documente l'évolution de l'empire.
+- **Atlas (Orchestrateur Infrastructure & Logistique)** : Responsable du déploiement continu, du monitoring de santé des serveurs, des backups et de l'approvisionnement des stocks.
+- **Themis (Sentinelle Juridique & Fiscale)** : Veille à la conformité NF525, vérifie l'intégrité des chaînes de hash, contrôle les registres RGPD et audite les exportations FEC.
+- **Cronos (Maître du Temps & des Ressources)** : Supervise les plannings RH, le respect des règles HCR, la rotation des tables et l'optimisation du cadencement en cuisine.
+- **Antigravity (Superviseur Architecte)** : Maintient l'intégrité architecturale Grade X++, garantit l'absence de régression TypeScript (TSC = 0) et documente l'évolution de l'empire.
+
+---
+# 🛡️ AUDIT APPROFONDI : DLQ, EVENT BUS, RBAC ET VERSIONBASE DES 24 TENANTS SYSTÈME
+
+> **Périmètre d'analyse** : Résilience du Bus d'Événements, Mécanisme de Quarantaine DLQ, Moteur RBAC Invariant & Multi-Verticale, et Architecture des 24 Tenants Système (Versionbase `_ref_*`, `_demo_*`, `_test_*`).
+
+```mermaid
+graph TD
+    subgraph "1. Nexus Event Bus & DLQ Engine"
+        BUS[NexusEventBus Engine] -->|Échec Handler| RETRY[DLQRetryService]
+        RETRY -->|5 Tentatives Backoff Exponentiel| QUAR[Quarantaine Dexie/Firestore]
+        QUAR -->|Événement Fiscal NF525 ?| AUDIT[🚨 Escalade Audit Fiscal MCC]
+    end
+
+    subgraph "2. Dual RBAC Engine (Invariants 10 → 100)"
+        MAP[ACTION_MAP : minLevel + requiresPin]
+        ROLES[RoleLabels par Verticale : Resto, Garage, Salon...]
+        OVR[TenantRBACConfig : pageOverrides & tabOverrides]
+        MAP --> ROLES --> OVR
+    end
+
+    subgraph "3. Versionbase (24 Tenants Système)"
+        REF["_ref_<v> : Maîtres Clônables (Write-Blocked)"]
+        DEMO["_demo_<v> : Vitrines Prospects (Simulacra IndexedDB)"]
+        TEST["_test_<v> : Bacs à Sable Dev (Reset en 1 Clic)"]
+        CLIENT["tenant_{siret} : Clients Réels Isolés (Genesis NF525)"]
+        REF -->|cloneFromReference| CLIENT
+    end
+```
+
+---
+
+## 📡 1. L'Ingénierie du Dead Letter Queue (DLQ) & Résilience du Bus
+
+Le `NexusEventBus` ne se contente pas de distribuer des messages : il intègre un mécanisme de **tolérance aux pannes de niveau bancaire** (`DLQRetryService.ts`).
+
+### ⚙️ Le Cycle de Vie d'un Événement en Échec :
+1. **Interception & Backoff Exponentiel** :
+   Lorsqu'un handler lève une exception, l'événement est capturé dans la file `deadLetterEvents` (IndexedDB / Firestore). Le service de rejeu tente jusqu'à **5 réessais automatiques** avec un délai progressif plafonné à 60 secondes :
+   $$	ext{Backoff}(attempt) = \min(2000 	imes 2^{attempt - 1}, 60\,000)\,	ext{ms} \quad (2	ext{s} 
+ightarrow 4	ext{s} 
+ightarrow 8	ext{s} 
+ightarrow 16	ext{s} 
+ightarrow 32	ext{s})$$
+2. **Auto-Migration de Schéma (`PayloadMigrator.ts`)** :
+   Avant chaque rejeu, le payload de l'événement est automatiquement migré si la version du contrat d'interface a évolué entre-temps.
+3. **Mise en Quarantaine & Alerte MCC (`mcc.dlq_quarantine`)** :
+   Après 5 échecs consécutifs, l'événement est gelé en statut `quarantine` et notifié en temps réel sur le tableau de bord MCC (`EventBusTab.tsx`).
+4. **🚨 Escalade Fiscale Critique NF525 (`mcc.fiscal_audit_required`)** :
+   Si l'événement en échec touche à la chaîne fiscale (`order.sealed_nf525`, `payment.captured`, `payment.refunded`, `order.cancelled`, `fiscal.seal_required`), une **alerte d'urgence critique** est immédiatement transmise à l'opérateur pour audit manuel obligatoire.
+
+---
+
+## 🔐 2. Le Moteur RBAC Généraliste & Spécialisations Métier
+
+Le contrôle d'accès repose sur un **découplage strict entre l'invariant mathématique (le niveau) et la sémantique métier (le titre)** :
+
+### 2.1. Les Niveaux Invariants (`PERMISSION_ROLE_LEVELS`)
+Les permissions sont indexées sur des entiers de `10` à `100` :
+*   `10` : Apprenti / Exécution simple (Pointage, consultation basique)
+*   `20` : Assistant / Junior (Saisie POS basique, expédition KDS)
+*   `30` : Opérateur Standard (POS complet, encaissement direct)
+*   `40` : Responsable de Zone (Transfert de table, split d'addition, remises < 10%)
+*   `50` : Expert Métier (Sommelier, Électronicien, Coloriste)
+*   `60` : Responsable Technique / Sous-Chef (HACCP, réception marchandises, remises > 10% avec PIN)
+*   `70` : Chef de Service / Manager (Planning, annulations d'addition, recrutement)
+*   `80` : Directeur Établissement (Clôtures fiscales, exports FEC, déclarations TVA)
+*   `100` : Propriétaire Gérant (Configuration totale du tenant, souveraineté légale)
+
+### 2.2. La Matrice `ACTION_MAP` (366 Lignes de Règles Granulaires)
+Chaque action utilisateur dans l'application vérifie 3 paramètres dans [`actionPermissionMap.ts`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/kernel/nexus/guards/rbac/actionPermissionMap.ts) :
+1. `minLevel` : Niveau hiérarchique minimum requis.
+2. `requiresPin` : Obligation de saisir le code PIN manager pour valider les opérations sensibles (remises, annulations, réouverture de caisse).
+3. `limit` : Seuil monétaire ou pourcentage maximum autorisé sans sur-approbation.
+
+### 2.3. Traduction Dynamique par Verticale (`roles.ts`)
+L'interface utilisateur n'affiche jamais de termes rigides. Chaque verticale traduit les 14 niveaux dans son vocabulaire naturel :
+
+| Niveau | 🍽️ Restaurant | 🥖 Bakery | 🛍️ Retail | 💇 Salon | 🚗 Garage | 🩺 Clinic |
+|:---:|---|---|---|---|---|---|
+| `10` | Apprenti / Plongeur | Apprenti boulanger | Manutentionnaire | Apprenti coiffeur | Apprenti mécanicien | Aide-soignant |
+| `20` | Commis / Runner | Aide-vendeur | Vendeur junior | Shampouineur | Aide-mécanicien | Assistant médical |
+| `30` | Serveur / Barman | Vendeur comptoir | Vendeur conseil | Coiffeur / Barbier | Mécanicien service | Infirmier / Secrétaire |
+| `50` | Sommelier / Expert | Pâtissier expert | Responsable rayon | Coloriste expert | Électronicien diag. | Praticien spécialisé |
+| `60` | Sous-Chef / Maître d'hôtel| Chef de fournée | Responsable adjoint | Responsable technique | Chef d'atelier adjoint| Médecin coordonnateur |
+| `70` | Chef de cuisine / Salle | Chef boulanger | Responsable magasin | Manager de salon | Chef d'atelier | Chef de service |
+| `80` | Directeur restaurant | Gérant boulangerie | Directeur boutique | Directeur salon / Spa | Directeur concession | Directeur clinique |
+
+---
+
+## 🏛️ 3. L'Architecture des 24 Tenants Système (Versionbase)
+
+Pour garantir des déploiements instantanés et des démonstrations commerciales sans risque de corruption, le système gère **24 tenants système permanents** (8 verticales × 3 tiers) pilotés par [`SystemTenantRegistry.ts`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/src/lib/mcc/SystemTenantRegistry.ts) :
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      MATRICE DES 24 TENANTS SYSTÈME (VERSIONBASE)           │
+├───────────────┬──────────────────────────┬──────────────────────────┬───────┤
+│ Verticale     │ 🛍️ TIER DEMO             │ 🧪 TIER TEST             │ 🏛️ TIER REFERENCE │
+│               │ (Prospects / Read-Only)  │ (Devs / Sandbox Writable)│ (Maîtres Clônables)│
+├───────────────┼──────────────────────────┼──────────────────────────┼───────┤
+│ Restaurant    │ _demo_restaurant         │ _test_restaurant         │ _ref_restaurant    │
+│ Bakery        │ _demo_bakery             │ _test_bakery             │ _ref_bakery        │
+│ Retail        │ _demo_retail             │ _test_retail             │ _ref_retail        │
+│ Salon         │ _demo_salon              │ _test_salon              │ _ref_salon         │
+│ Garage        │ _demo_garage             │ _test_garage             │ _ref_garage        │
+│ Hotel         │ _demo_hotel              │ _test_hotel              │ _ref_hotel         │
+│ Clinic        │ _demo_clinic             │ _test_clinic             │ _ref_clinic        │
+│ Custom        │ _demo_custom             │ _test_custom             │ _ref_custom        │
+└───────────────┴──────────────────────────┴──────────────────────────┴───────┘
+```
+
+### 🔒 Règles d'Or & Protection de la Versionbase :
+1. **Tier REFERENCE (`_ref_*`) — Maître Clônable Inviolable** :
+   *   Toute écriture directe est **bloquée au niveau du noyau** (`isWritable() === false`).
+   *   Sert de matrice lors de l'onboarding d'un nouveau client via `cloneFromReference()`.
+   *   Seule une promotion validée depuis le MCC (`_test_*` → `_ref_*`) peut mettre à jour un template de référence.
+2. **Tier DEMO (`_demo_*`) — Vitrine Commerciale en Simulacra Mode** :
+   *   Les prospects peuvent manipuler la caisse, encaisser et tester les fonctionnalités en direct.
+   *   Toutes les écritures sont interceptées et redirigées vers un **fork IndexedDB local (`SimulacraAdapter`)** : la base Firestore reste vierge de toute donnée de test.
+3. **Tier TEST (`_test_*`) — Bac à Sable de Développement** :
+   *   Écriture libre pour les tests d'intégration et le développement de nouvelles fonctionnalités.
+   *   Réinitialisation complète en 1 clic depuis le MCC via la route `/api/admin/mcc/system-tenants/reset-demo`.
+
 
 ---
 
@@ -1816,609 +2694,137 @@ Le `NexusEventBus` constitue la colonne vertébrale du système.
 
 ---
 
-# 🥖 VERTICALE BAKERY (BOULANGERIE)
+# 🥖 VERTICALE BAKERY (BOULANGERIE / PÂTISSERIE)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Boulangeries artisanales, points chauds, pâtisseries, salons de thé.
+* **Héritage** : Réutilise 80% du tronc commun Restaurant avec adaptation au flux rapide, à la vente au poids et aux fournées.
 
-**Progress** : 80% (proche restaurant, mêmes zones 1-13 avec spécificités).
-
-Les zones 1-13 sont **héritées du restaurant** avec les mêmes tâches ✅/🔧/⚫. Ce qui suit décrit **uniquement les spécificités bakery** à ajouter/remplacer.
-
----
-
-## 🖥️ Zone 1 — SERVICE (spécificités bakery)
-
-### 📁 1.4 · Production & fournées
-
-#### 📂 1.4.1 · Planning production
-- ⚫ Interface production (baguettes/croissants par fournée)
-  - 🎯 ops + logistics + intelligence
-  - 📡 émet `ops.batch_planned` ⚫
-- ⚫ Suggestion auto historique + météo + jour semaine
-- ⚫ Alarme pétrin/cuisson (mise en route → sortie four)
-- ⚫ Registre production quotidien (traçabilité HACCP)
-  - 🔐 `production.plan_batch` — niveau min 60 (boulanger)
-
-#### 📂 1.4.2 · Cuisson
-- ⚫ Timer fournée (60 min baguette, 20 min croissant)
-- ⚫ Alerte sortie four SMS/push
-- ⚫ Historique fournées (nb pièces / lot farine)
-
-### 📁 1.5 · Vente comptoir (POS mode flux rapide)
-
-#### 📂 1.5.1 · Interface caisse
-- 🔧 Mode "flux rapide" (gros boutons favoris)
-- ⚫ Balance connectée USB (Bizerba, Dibal) — vente au poids
-  - 📡 émet `commerce.weighed_item_sold` ⚫
-- ⚫ Impression étiquette prix à la part
-- ⚫ Rendu monnaie grand écran client
-
-### 📁 1.6 · Précommandes clients
-
-#### 📂 1.6.1 · Commande à l'avance
-- ⚫ Saisie précommande ("dimanche 8h : 3 tradi + tarte pommes 6 parts")
-- ⚫ Notification production auto la veille au soir
-- ⚫ Retrait comptoir (scan numéro commande)
-  - 📡 émet `commerce.pre_order_placed` ⚫
-- ⚫ Acompte ou paiement retrait (choix client)
+### 🧩 Spécificités Métier & Câblage
+* **Fournées & Planning de Production** :
+  * ⚫ `BatchProductionPlanner` (calcul des pétrissages et fournées par heure selon météo) — RBAC: 60 · 70 · 80 · 100
+  * ⚫ `OvenTimerSyncAlert` (timers de cuisson synchronisés avec sonneries au fournil) — RBAC: 20 · 30 · 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `ops.bakery.batch_planned` `{ batchId, flourLot, piecesCount }`, `ops.bakery.oven_finished` `{ batchId, temperature }` | Écoute `logistics.stock.exhausted`
+  * 🛡️ **RBAC** : Saisie: 60+ (Boulanger/Pâtissier) | Lecture: 20+
+  * 🧯 **DLQ** : `dlq.bakery.production` (Persistance locale pour le fournil)
+  * 🗺️ **Chemin d'Impact** : `Fournil (Sortie Four) ➔ EventBus ➔ Zone 1 POS (Mise à jour stock frais comptoir) ➔ Zone 15 Web (Disponibilité viennoiseries)`
+  * 🔍 **Blindspots** : Perte de WiFi au sous-sol/fournil (affichage local temps réel autonome avec alarme physique).
+* **Vente au Poids & Balance Connectée** :
+  * ⚫ `UsbScaleReader` (lecture directe du poids sur balances Bizerba/Dibal avec tare automatique) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `commerce.weighed_item_sold` `{ dishId, weightGrams, unitPriceKg, totalTTC }`
+  * 🛡️ **RBAC** : 20+ (Vendeur comptoir)
+  * 🧯 **DLQ** : `dlq.commerce.scale`
+  * 🗺️ **Chemin d'Impact** : `Zone 1 (Pesée) ➔ EventBus ➔ Zone 1 (Calcul Prix Ligne) ➔ Zone 5 (Décrémentation Stock au Gramme)`
+  * 🔍 **Blindspots** : Déconnexion USB du port COM de la balance ; bascule automatique en saisie manuelle avec marquage audit.
 
 ---
 
-## 🖥️ Zone 4 — CLIENTS (spécificités bakery)
-
-### 📁 4.4 · Comptes clients pro (B2B)
-
-#### 📂 4.4.1 · Cafés / restos / hôtels / entreprises
-- ⚫ Compte pro avec conditions négociées
-- ⚫ Commandes récurrentes ("40 croissants lundi-vendredi 7h")
-  - 📡 émet `commerce.recurring_order_scheduled` ⚫
-- ⚫ Facturation mensuelle groupée
-- ⚫ Portail client (consulter historique + modifier)
-
----
-
-## 🖥️ Zone 5 — STOCK (spécificités bakery)
-
-### 📁 5.4 · Traçabilité farine
-- ⚫ Lot farine par fournée (obligation rappels)
-- ⚫ Lien fournée → produits vendus (traçabilité rappel)
-  - 📡 émet `haccp.batch_tracked` ⚫
-
-### 📁 5.5 · Fournisseurs boulangerie
-- ⚫ Catalogue Grands Moulins de Paris
-- ⚫ Catalogue Foricher / Girardeau
-- ⚫ Alerte stock farine hebdo
-
----
-
-## 🖥️ Zone 11 — INTELLIGENCE (spécificités bakery)
-
-### 📁 11.4 · Prédiction demande fournées
-- ⚫ Historique × jour semaine × météo → suggestion fournée
-- ⚫ Suivi précision prédiction (auto-amélioration)
-
-### 📁 11.5 · Gestion invendus
-- ⚫ Prédiction fin de journée
-- ⚫ Suggestion pricing dynamique (-30% après 18h)
-- ⚫ Intégration Too Good To Go / Phenix pour don
-  - 📡 émet `commerce.food_donated` ⚫
-
----
-
-## 📡 Events bus spécifiques bakery
-- ⚫ `ops.batch_planned`
-- ⚫ `commerce.weighed_item_sold`
-- ⚫ `commerce.pre_order_placed`
-- ⚫ `commerce.recurring_order_scheduled`
-- ⚫ `haccp.batch_tracked`
-- ⚫ `commerce.food_donated`
-
----
-
-# 🛍️ VERTICALE RETAIL (COMMERCE DE DÉTAIL)
+# 🛍️ VERTICALE RETAIL (COMMERCE DE DÉTAIL / BOUTIQUE)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Boutiques de mode, épiceries fines, concept stores, cavistes, magasins spécialisés.
+* **Héritage** : Réutilise la caisse POS, le CRM, la gestion des stocks et la fiscalité NF525.
 
-**Progress** : 60% (catalogue et POS génériques OK, spécifiques e-commerce et variantes à construire).
-
----
-
-## 🖥️ Zone 1 — VENTE COMPTOIR (pas de KDS ni plan de salle)
-
-### 📁 1.7 · POS retail
-- ⚫ Mode caisse pure (pas de table, pas de KDS)
-- ⚫ Scan EAN-13 (webcam ou lecteur USB Zebra/Datalogic)
-- ⚫ Recherche produit rapide (autocomplete nom/ref)
-- ⚫ Multi-tarifs (pro/particulier/soldé)
-
-### 📁 1.8 · Retours & échanges
-- ⚫ Recherche ticket original
-- ⚫ Retour partiel (1 article sur 3 achetés)
-- ⚫ Note de crédit à valoir
-- ⚫ Politique retour configurable (14j/30j)
-  - 📡 émet `commerce.return_processed` ⚫
-  - 🔐 `pos.process_return` — niveau min 30
-
-### 📁 1.9 · Bons cadeaux
-- ⚫ Émission (QR ou email)
-- ⚫ Suivi valeur restante
-- ⚫ Rapport bons émis/utilisés
+### 🧩 Spécificités Métier & Câblage
+* **Gestion des Variantes (Taille / Couleur / Matière) & Code-Barres EAN13** :
+  * ⚫ `VariantMatrixGrid` (grille matricielle S/M/L/XL x Coloris avec stocks individuels) — RBAC: 30 · 60 · 70 · 80 · 100
+  * ⚫ `Ean13BarcodeGenerator` (génération et impression d'étiquettes étagères et vêtements) — RBAC: 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `commerce.retail.variant_scanned` `{ barcode, sku, size, color }`, `logistics.retail.stock_transferred` `{ fromStore, toStore }`
+  * 🛡️ **RBAC** : Vente: 20+ | Création variante: 60+ | Transfert inter-boutiques: 70+
+  * 🧯 **DLQ** : `dlq.retail.inventory`
+  * 🗺️ **Chemin d'Impact** : `Zone 1 (Scan EAN13) ➔ EventBus ➔ Zone 1 (Ajout Panier) ➔ Zone 5 (Décrémentation SKU Précis)`
+  * 🔍 **Blindspots** : Gestion des retours d'articles avec génération automatique d'un avoir client ou réintégration instantanée en rayon.
 
 ---
 
-## 🖥️ Zone 3 — MENU/CATALOGUE (spécificités retail)
-
-### 📁 3.4 · Variantes produits (tailles × couleurs)
-- ⚫ Matrice variantes (T-shirt : S/M/L × Rouge/Bleu/Noir)
-- ⚫ Stock par variante
-- ⚫ Impression étiquette par variante avec EAN
-
-### 📁 3.5 · E-commerce natif
-
-#### 📂 3.5.1 · Connecteurs
-- ⚫ Shopify (P0)
-  - 📡 émet `commerce.web_order_received` ⚫
-- ⚫ WooCommerce (P0)
-- ⚫ Prestashop (P1, marché FR)
-- ⚫ Amazon MWS (P1)
-- ⚫ Cdiscount / Manomano (P2)
-
-#### 📂 3.5.2 · Réconciliation
-- ⚫ Commande web → fulfilment magasin ou expédition
-- ⚫ Sync stock temps réel (pas de survente)
-
----
-
-## 🖥️ Zone 5 — STOCK (spécificités retail)
-
-### 📁 5.6 · Multi-emplacement
-- ⚫ Stock par emplacement (boutique/réserve/entrepôt)
-- ⚫ Transfert entre emplacements
-  - 📡 émet `inventory.transfer_completed` ⚫
-- ⚫ Vue consolidée + par emplacement
-
-### 📁 5.7 · Inventaire physique
-- ⚫ Assistant annuel (scan tous produits)
-- ⚫ Écart théorique/réel + justification
-- ⚫ Ajustement auto après validation
-
----
-
-## 🖥️ Zone 6 — HR (spécificités retail)
-
-### 📁 6.6 · Commissions vendeur
-- ⚫ Suivi ventes par vendeur
-- ⚫ Commission % par catégorie
-- ⚫ Rapport mensuel commission
-- ⚫ Objectifs mensuels avec tracker
-
----
-
-## 🖥️ Zone 10 — ANALYTICS (spécificités retail)
-
-### 📁 10.5 · Ruptures et rotations
-- ⚫ Rotation lente (non vendu 90j)
-  - 📡 émet `intelligence.slow_moving_detected` ⚫
-- ⚫ ABC analysis (top 20% = 80% CA)
-- ⚫ Suggestion réassort auto
-
----
-
-## 📡 Events spécifiques retail
-- ⚫ `commerce.return_processed`
-- ⚫ `commerce.web_order_received`
-- ⚫ `commerce.gift_card_issued/redeemed`
-- ⚫ `inventory.transfer_completed`
-- ⚫ `intelligence.slow_moving_detected`
-
----
-
-# 💇 VERTICALE SALON (COIFFURE / ESTHÉTIQUE)
+# 💇 VERTICALE SALON (COIFFURE / ESTHÉTIQUE / SPA)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Salons de coiffure, instituts de beauté, barbiers, spas urbains.
+* **Héritage** : Planning collaboratif, CRM client enrichi, caisse et encaissement des prestations.
 
-**Progress** : 50% (appointments génériques OK, agenda visuel et commissions à construire).
-
----
-
-## 🖥️ Zone 2 — RÉSERVATIONS (spécificités salon — CENTRE DU MÉTIER)
-
-### 📁 2.4 · Agenda visuel collaborateurs
-
-#### 📂 2.4.1 · Vue Gantt journée
-- ⚫ Colonnes = collaborateurs × lignes = créneaux 15 min
-- ⚫ Drag & drop RDV entre créneaux
-  - 📡 émet `appointment.rescheduled` ⚫
-- ⚫ Bloc "pause" configurable
-- ⚫ Vue semaine (planning global)
-
-#### 📂 2.4.2 · Auto-attribution
-- ⚫ "Cliente veut Sophie pour couleur" → suggère créneaux libres Sophie
-- ⚫ Filtrage par compétence (coloriste vs coupe)
-
-### 📁 2.5 · Walk-in barbier
-- ⚫ File d'attente sans RDV
-- ⚫ Temps d'attente estimé
-- ⚫ SMS d'appel ("Dans 5 min !")
-  - 📡 émet `commerce.walkin_notified` ⚫
-
-### 📁 2.6 · Prise RDV en ligne (site salon)
-- ⚫ Page publique par salon (`salon-marie.mycaisse.fr`)
-- ⚫ Sélection prestation + collaborateur
-- ⚫ Créneaux libres temps réel
-- ⚫ Acompte optionnel (10-30% Stripe)
+### 🧩 Spécificités Métier & Câblage
+* **Prise de Rendez-vous par Collaborateur & Cabine** :
+  * ⚫ `StylistAppointmentCalendar` (planning avec drag-and-drop par coiffeur et fauteuil) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+  * ⚫ `TechnicalColorSheetCard` (historique des mélanges de coloration : "6.3 + 20vol 45min") — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `ops.salon.appointment_booked` `{ clientName, stylistId, serviceId, start, end }`, `ops.salon.service_completed` `{ stylistId, commissionPercent }`
+  * 🛡️ **RBAC** : Prise de RDV: 20+ | Fiche technique couleur: 30+ | Calcul commissions: 80+
+  * 🧯 **DLQ** : `dlq.salon.appointments`
+  * 🗺️ **Chemin d'Impact** : `Zone 2 (RDV Terminé) ➔ EventBus ➔ Zone 1 (Panier Caisse Pré-rempli) ➔ Zone 6 (Calcul Commission Coiffeur)`
+  * 🔍 **Blindspots** : Gestion des prestations en 2 temps (ex: Pose couleur 30 min ➔ Pause 30 min disponible ➔ Rinçage/Coiffage 30 min).
 
 ---
 
-## 🖥️ Zone 4 — CLIENTS (spécificités salon)
-
-### 📁 4.5 · Fiche technique cliente
-
-#### 📂 4.5.1 · Historique prestations
-- ⚫ Dates, prestations, prix
-- ⚫ Formule couleur utilisée (Wella 6.34 + 20 vol, temps 25 min)
-- ⚫ Photos avant/après
-- ⚫ Notes personnelles ("préfère ambiance calme")
-
-#### 📂 4.5.2 · Sécurité couleur
-- ⚫ Patch test PPD (paraphénylènediamine) obligatoire
-- ⚫ Date validité (6 mois)
-- ⚫ Refus service si test expiré
-  - 📡 émet `compliance.allergy_test_missing` ⚫
-
-### 📁 4.6 · Relances automatiques
-- ⚫ Client non revenu 45j → "Il est temps de reprendre RDV"
-- ⚫ Anniversaire → SMS "-20% ce mois"
-
----
-
-## 🖥️ Zone 6 — HR (spécificités salon)
-
-### 📁 6.7 · Commissions coiffeur
-- ⚫ Configuration par collaborateur (fixe / % / paliers)
-- ⚫ Ex : Sophie = 40% prestations + 15% produits
-- ⚫ Calcul auto mensuel
-- ⚫ Bulletin commission PDF
-- ⚫ Intégration paie
-  - 📡 émet `hr.commission_calculated` ⚫
-
----
-
-## 🖥️ Zone 5 — STOCK (spécificités salon)
-
-### 📁 5.8 · Produits pro
-- ⚫ Inventaire colorations, oxydants, shampooings pros
-- ⚫ Consommation par prestation (1 couleur = 60g Wella)
-- ⚫ Commande auto L'Oréal Pro / Kadus / Wella
-  - 📡 émet `logistics.pro_products_reorder` ⚫
-
----
-
-## 📡 Events spécifiques salon
-- ⚫ `appointment.rescheduled`
-- ⚫ `commerce.walkin_notified`
-- ⚫ `compliance.allergy_test_missing`
-- ⚫ `hr.commission_calculated`
-- ⚫ `logistics.pro_products_reorder`
-
----
-
-# 🚗 VERTICALE GARAGE (AUTOMOBILE)
+# 🚗 VERTICALE GARAGE (AUTOMOBILE / RÉPARATION)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Garages indépendants, carrosseries, centres de contrôle technique.
+* **Héritage** : Fiches clients/véhicules, facturation NF525, gestion des stocks de pièces détachées.
 
-**Progress** : 55% (RepairIntake amorcé, devis pièces + planning atelier à construire).
-
----
-
-## 🖥️ Zone 2 — INTAKE (spécificité garage)
-
-### 📁 2.7 · Fiche véhicule
-
-#### 📂 2.7.1 · Identification
-- ⚫ Immat client → auto-fetch SIV (marque/modèle/année)
-  - 📡 émet `service.vehicle_identified` ⚫
-- ⚫ Kilométrage à l'entrée
-- ⚫ Photos état extérieur
-- ⚫ Historique interventions (dates + km)
-
-#### 📂 2.7.2 · Ordre de Réparation (OR)
-- 🔧 ServiceTicket → OR
-- ⚫ Génération document légal OR
-- ⚫ Signature électronique client (Yousign)
-  - 📡 émet `service.repair_order_signed` ⚫
-- ⚫ Suivi statut ("Pièces reçues", "Test route", "Prêt")
+### 🧩 Spécificités Métier & Câblage
+* **Ordres de Réparation (OR) & Immatriculation SIV** :
+  * ⚫ `VehiclePlateLookupModal` (interrogation API SIV pour récupérer marque/modèle/motorisation) — RBAC: 20 · 30 · 60 · 70 · 80 · 100
+  * ⚫ `WorkOrderTimeline` (suivi de l'avancement OR : Devis ➔ Accord ➔ Travaux ➔ Facturé) — RBAC: 20 · 30 · 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `ops.garage.or_created` `{ orNumber, plateNumber, vin, estimatedHours }`, `logistics.oem_part.ordered` `{ partNumber, supplier }`
+  * 🛡️ **RBAC** : Saisie OR: 30+ | Validation devis mécanicien: 60+ | Facturation: 70+
+  * 🧯 **DLQ** : `dlq.garage.work_orders`
+  * 🗺️ **Chemin d'Impact** : `Zone 1 (Clôture OR) ➔ EventBus ➔ Zone 7 (Émission Facture NF525 & Consommation Pièces) ➔ Zone 4 (SMS Véhicule Prêt)`
+  * 🔍 **Blindspots** : Facturation combinée de main-d'œuvre (taux horaire T1/T2/T3) et de pièces de rechange avec éco-participation et consigne.
 
 ---
 
-## 🖥️ Zone 3 — CATALOGUE (spécificités garage)
-
-### 📁 3.6 · Devis pièces + main d'oeuvre
-
-#### 📂 3.6.1 · Recherche pièces
-- ⚫ Catalogue AD Autodistribution
-- ⚫ Catalogue Groupauto
-- ⚫ Recherche référence OEM ou équivalent
-- ⚫ Comparaison prix multi-fournisseurs
-
-#### 📂 3.6.2 · Temps main d'oeuvre
-- ⚫ Barème constructeur ou Autodata
-- ⚫ Calcul total HT/TTC
-- ⚫ Ventilation obligatoire pièces / MO
-- ⚫ Envoi devis PDF client (email/SMS avec lien signature)
-  - 📡 émet `service.quote_sent` ⚫
-
----
-
-## 🖥️ Zone 6 — HR (spécificités garage)
-
-### 📁 6.8 · Planning atelier
-- ⚫ Vue journée mécaniciens × heures × interventions
-- ⚫ Drag & drop réattribution
-- ⚫ Temps réel ("Julien a fini 308 en 4h vs 5h prévu")
-  - 📡 émet `service.intervention_completed` ⚫
-- ⚫ Alerte surcharge
-
----
-
-## 🖥️ Zone 8 — COMPLIANCE (spécificités garage)
-
-### 📁 8.6 · Environnement
-- ⚫ Registre déchets dangereux (huiles, batteries, filtres)
-- ⚫ Bordereau de suivi BSDD vers collecteur agréé
-  - 📡 émet `compliance.waste_manifest_created` ⚫
-
-### 📁 8.7 · Rappels réglementaires
-- ⚫ Contrôle Technique rappel 2 mois avant
-- ⚫ Révisions constructeur
-
----
-
-## 📡 Events spécifiques garage
-- ⚫ `service.vehicle_identified`
-- ⚫ `service.repair_order_signed`
-- ⚫ `service.quote_sent`
-- ⚫ `service.intervention_completed`
-- ⚫ `compliance.waste_manifest_created`
-
----
-
-# 🏨 VERTICALE HOTEL
+# 🏨 VERTICALE HOTEL (HÔTELLERIE / HÉBERGEMENT)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Hôtels indépendants, boutique-hôtels, résidences hôtelières.
+* **Héritage** : Réservations, facturation multi-taux, plan de chambres (floor plan), room-service.
 
-**Progress** : 40% (rooms basiques, PMS et channel manager à construire).
-
----
-
-## 🖥️ Zone 2 — RÉSERVATIONS HÔTEL (PMS)
-
-### 📁 2.8 · Vue calendrier chambres
-- ⚫ Gantt chambres × jours
-- ⚫ Drag & drop client entre chambres
-  - 📡 émet `booking.room_reassigned` ⚫
-- ⚫ Bloc "hors service"
-- ⚫ Check-in / check-out signature électronique
-
-### 📁 2.9 · Channel manager
-
-#### 📂 2.9.1 · Connecteurs OTA
-- ⚫ Booking.com API
-  - 📡 émet `booking.ota_synced` ⚫
-- ⚫ Expedia Rapid
-- ⚫ Airbnb API (Guesty)
-- ⚫ Hostelworld
-
-#### 📂 2.9.2 · Sync temps réel
-- ⚫ Stock chambres (pas de surbooking)
-- ⚫ Prix (yield management)
-- ⚫ Restrictions (min stay)
-
-### 📁 2.10 · Groupes et séminaires
-- ⚫ Multi-chambres + salle séminaire
-- ⚫ Facturation entreprise
-- ⚫ Prix négocié
-- ⚫ Suivi acompte / solde
+### 🧩 Spécificités Métier & Câblage
+* **Planning des Chambres (Rack Hôtelier) & Night Audit** :
+  * ⚫ `HotelRackView` (visualisation du statut des chambres : Libre, Recouche, À Blanc, Bloquée) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+  * ⚫ `NightAuditProcessor` (clôture journalière nocturne avec imputation automatique des nuitées) — RBAC: 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `ops.hotel.room_assigned` `{ roomId, guestId, checkIn, checkOut }`, `finance.hotel.night_audit_sealed` `{ date, totalRooms, occupancyRate, touristTax }`
+  * 🛡️ **RBAC** : Check-in/Check-out: 20+ | Gouvernante statut chambre: 20+ | Night Audit: 60+ (Night Manager)
+  * 🧯 **DLQ** : `dlq.hotel.night_audit`
+  * 🗺️ **Chemin d'Impact** : `Zone 1 (Room Service POS) ➔ EventBus ➔ Zone 2 (Imputation sur Folio Chambre) ➔ Zone 7 (Facturation Check-out)`
+  * 🔍 **Blindspots** : Calcul automatique de la taxe de séjour selon le barème municipal et imputation des extras restaurant sur la note globale de chambre.
 
 ---
 
-## 🖥️ Zone 9 — FACILITY (spécificités hôtel)
-
-### 📁 9.5 · Housekeeping
-- ⚫ Vue statuts chambres (à faire / en cours / propre / inspectée)
-  - 📡 émet `facility.room_cleaned` ⚫
-- ⚫ Attribution femme de chambre par étage
-- ⚫ Notification arrivée anticipée → priorité
-- ⚫ Signalement problèmes (télé cassée)
-
----
-
-## 🖥️ Zone 1 — SERVICE (spécificité hôtel : Room Service)
-
-### 📁 1.10 · Room service
-- ⚫ Commande depuis chambre (QR menu ou téléphone)
-- ⚫ Envoi cuisine (KDS partagé F&B hôtel)
-  - 📡 émet `ops.room_service_ordered` ⚫
-- ⚫ Livraison chambre avec coche "livré"
-- ⚫ Ajout auto à la facture chambre
-
----
-
-## 🖥️ Zone 7 — FINANCE (spécificités hôtel)
-
-### 📁 7.6 · Facturation cumulée séjour
-- ⚫ Cumul auto : nuitées + petit-déj + F&B + minibar + spa + parking
-  - 📡 émet `finance.folio_updated` ⚫
-- ⚫ Facture unique fin de séjour
-- ⚫ Split facture (client paie chambre, entreprise paie séminaire)
-
-### 📁 7.7 · Yield Management
-- ⚫ Prix dynamique selon taux occupation
-- ⚫ Règles ("> 80% occup → +15%")
-- ⚫ Historique + optimisation
-
----
-
-## 🖥️ Zone 8 — COMPLIANCE (spécificités hôtel)
-
-### 📁 8.8 · Registre police
-- ⚫ Registre voyageurs (obligation)
-  - 📡 émet `compliance.guest_registered` ⚫
-- ⚫ Déclaration mensuelle préfecture
-
-### 📁 8.9 · Taxe séjour
-- ⚫ Calcul auto par nuitée / personne
-- ⚫ Barème par commune
-- ⚫ Reversement mensuel/trimestriel mairie
-  - 📡 émet `finance.tourist_tax_calculated` ⚫
-
----
-
-## 📡 Events spécifiques hôtel
-- ⚫ `booking.room_reassigned`
-- ⚫ `booking.ota_synced`
-- ⚫ `facility.room_cleaned`
-- ⚫ `ops.room_service_ordered`
-- ⚫ `finance.folio_updated`
-- ⚫ `compliance.guest_registered`
-- ⚫ `finance.tourist_tax_calculated`
-
----
-
-# 🩺 VERTICALE CLINIC (PARAMÉDICAL / SANTÉ)
+# 🩺 VERTICALE CLINIC (PARAMÉDICAL / CABINET DE SANTÉ)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Cabinets de kinésithérapie, ostéopathie, dentistes, infirmiers libéraux.
+* **Héritage** : Prise de rendez-vous, facturation d'actes, gestion des dossiers patients chiffrés.
 
-**Progress** : 35% (consultation amorcée, tiers-payant + DMP + Ségur à construire).
-
----
-
-## 🖥️ Zone 2 — RÉSERVATIONS (spécificités clinic)
-
-### 📁 2.11 · Doctolib sync
-- ⚫ Sync bidirectionnelle API Doctolib
-- ⚫ RDV Doctolib → apparaît agenda plateforme
-  - 📡 émet `appointment.imported_from_doctolib` ⚫
-- ⚫ RDV direct → sync inverse
-
-### 📁 2.12 · Télé-consultation
-- ⚫ Intégration Doctolib Télésanté
-- ⚫ Alternatives : Livi, Qare, Maiia
-- ⚫ Salle d'attente virtuelle
-- ⚫ Cotation acte télé-consultation
+### 🧩 Spécificités Métier & Câblage
+* **Dossier Patient Chiffré HDS & Facturation d'Actes Médicaux** :
+  * ⚫ `EncryptedPatientRecord` (historique des séances, ordonnances avec chiffrement E2E) — RBAC: 50 · 60 · 70 · 80 · 100
+  * ⚫ `MedicalActFeeCalculator` (cotation des actes conventionnés et dépassements d'honoraires) — RBAC: 50 · 60 · 70 · 80 · 100
+  * 📡 **Event Bus** : Émet `compliance.hds.record_accessed` `{ patientId, practitionerId, timestamp }`, `finance.medical_act.invoiced` `{ actCode, amount }`
+  * 🛡️ **RBAC** : Praticien habilité uniquement (Niveau 50+) | Aucun accès staff général
+  * 🧯 **DLQ** : `dlq.clinic.records` (Journal d'audit de sécurité inaltérable)
+  * 🗺️ **Chemin d'Impact** : `Zone 2 (Consultation Validée) ➔ EventBus ➔ Zone 7 (Émission Facture/Quittance Patient) ➔ Zone 8 (Log Audit HDS)`
+  * 🔍 **Blindspots** : Conformité stricte Hébergement Données de Santé (HDS) avec anonymisation totale dans les logs applicatifs.
 
 ---
 
-## 🖥️ Zone 4 — CLIENTS (Dossier Médical Partagé)
-
-### 📁 4.7 · DMP (Dossier Médical Patient)
-
-#### 📂 4.7.1 · Antécédents
-- ⚫ Antécédents médicaux
-- ⚫ Allergies
-- ⚫ Traitements en cours
-- ⚫ Historique consultations avec cotation
-  - 🔐 `patient.view_medical_record` — niveau min 60 (praticien)
-
-#### 📂 4.7.2 · Bilans thérapeutiques
-- ⚫ Bilan initial + objectifs (kiné, ostéo)
-- ⚫ Évolution (EVA douleur, mobilité)
-- ⚫ Photos évolution (dermato, blessures)
-
-### 📁 4.8 · Ordonnances
-- ⚫ Éditeur ordonnance avec templates
-- ⚫ Envoi patient email/SMS
-  - 📡 émet `patient.prescription_sent` ⚫
-- ⚫ Envoi pharmacie (Ordoclic)
-- ⚫ Historique par patient
-
----
-
-## 🖥️ Zone 7 — FINANCE (spécificités clinic : tiers-payant)
-
-### 📁 7.8 · Feuille de Soins Électronique (FSE)
-- ⚫ Lecture carte Vitale (lecteur GALSS ou Cegetel)
-- ⚫ Génération FSE conforme
-- ⚫ Télétransmission Cegetel/Almerys/Cnda
-  - 📡 émet `finance.fse_sent` ⚫
-- ⚫ Suivi paiement Sécu (délai 5j)
-
-### 📁 7.9 · Tiers-payant
-- ⚫ Interrogation droits Vitale
-- ⚫ Facturation part Sécu directe
-- ⚫ Facturation part mutuelle
-- ⚫ Reste à charge patient
-
-### 📁 7.10 · Cotation actes
-- ⚫ Nomenclature NGAP (paramédical : AMK, AMS, AMO)
-- ⚫ Nomenclature CCAM (médical)
-- ⚫ Calcul auto prix Sécu + complémentaire
-- ⚫ Vérification cumul actes autorisé
-
----
-
-## 🖥️ Zone 8 — COMPLIANCE (RGPD santé)
-
-### 📁 8.10 · HDS et RGPD santé
-- ⚫ Certification Hébergeur Données Santé (OVH Santé, AWS HDS)
-- ⚫ Consentement explicite art. 9 RGPD
-- ⚫ Conservation dossier 20 ans obligatoire
-- ⚫ Journal accès (qui a consulté quand)
-  - 📡 émet `compliance.medical_record_accessed` ⚫
-
-### 📁 8.11 · Ségur numérique santé
-- ⚫ Compatibilité ROSP
-- ⚫ Intégration Mon Espace Santé
-  - 📡 émet `compliance.segur_sync_completed` ⚫
-- ⚫ Envoi vers MSS (Messagerie Sécurisée Santé)
-
----
-
-## 📡 Events spécifiques clinic
-- ⚫ `appointment.imported_from_doctolib`
-- ⚫ `patient.prescription_sent`
-- ⚫ `finance.fse_sent`
-- ⚫ `compliance.medical_record_accessed`
-- ⚫ `compliance.segur_sync_completed`
-
----
-
-# 🎨 VERTICALE CUSTOM (SUR-MESURE)
+# 🎨 VERTICALE CUSTOM (SUR-MESURE & NÉGOCES SPÉCIALISÉS)
 
 ## 📊 Vue d'ensemble
+* **Positionnement** : Activités sur-mesure (fleuristes, animaleries, coworking, parcs de loisirs).
+* **Héritage** : Socle universel configurable sans code (Dynamic Schema Engine).
 
-**Progress** : 20% (2/9 adapters, framework de personnalisation à construire).
-
-Custom = **framework**, pas produit fini. Objectif : permettre à des intégrateurs/consultants de configurer la plateforme pour des métiers "long tail".
-
----
-
-## 🖥️ Zone 13 — PARAMÉTRAGE (spécificités custom)
-
-### 📁 13.6 · Custom fields
-- ⚫ Éditeur no-code : ajouter champ "Type de peau" fiche client
-  - 🔐 `settings.add_custom_field` — niveau min 100
-- ⚫ Types : texte, nombre, date, sélection, multi-sélection, fichier, calcul dérivé
-- ⚫ Groupement par section
-
-### 📁 13.7 · Formulaires custom
-- ⚫ Éditeur wizard : formulaire de prise en charge métier
-- ⚫ Ex auto-école : questionnaire médical préalable
-- ⚫ Ex photographe : brief avant séance
-
-### 📁 13.8 · Workflow builder
-- ⚫ Éditeur no-code séquences
-- ⚫ "Après RDV → SMS satisfaction J+1 → email newsletter J+30"
-- ⚫ Trigger-based (events du bus)
-  - 📡 émet `workflow.custom_step_executed` ⚫
-
-### 📁 13.9 · Templates communautaires
-- ⚫ Store de templates par métier
-- ⚫ Fork template → adapter à son cas
-- ⚫ Contribution partagée
+### 🧩 Spécificités Métier & Câblage
+* **Formulaires Dynamiques & Entités Personnalisables** :
+  * ⚫ `DynamicFormSchemaBuilder` (création de champs métier sur-mesure : race d'animal, durée de location) — RBAC: 80 · 100
+  * 📡 **Event Bus** : Émet `custom.entity.mutated` `{ entityType, payload }`
+  * 🛡️ **RBAC** : 80+ / 100 (MCC)
+  * 🧯 **DLQ** : `dlq.custom.events`
+  * 🗺️ **Chemin d'Impact** : `Zone 13 (Schema Update) ➔ EventBus ➔ Dynamic UI Form Rendering ➔ Universal Storage Kernel`
+  * 🔍 **Blindspots** : Validation stricte des schémas JSON par Zod à l'exécution pour empêcher toute corruption d'état dans le Kernel.
 
 ---
-
 # 🔀 CROSS-VERTICAL — Chantiers transverses
 
 ## 📁 CX.1 · Application mobile Expo
@@ -2570,1313 +2976,539 @@ Recommandation : Restaurant seul jusqu'à 30 clients payants, puis bakery en opp
 
 ---
 
-# 🍽️ COMPOSANTS UI — Verticale Restaurant
-> Décomposition exhaustive des écrans, composants et interactions.
-> ✅ Fait · 🔧 À finir · ⚫ À faire · RBAC: niveaux d'accès en fin de ligne
+# 🍽️ COMPOSANTS UI — Verticale Restaurant & Socle Universel
+> Décomposition exhaustive des écrans, composants, machines d'états, invariants et câblages opérationnels.
+> ✅ Fait (Câblé au code existant `src/`) · 🔧 À finir · ⚫ À faire · RBAC: niveaux d'accès en fin de ligne
 
 ---
 
-## 📖 Grille de lecture
+## 📖 Grille de lecture & Standard de Câblage Impérial
 
-Chaque composant a le format : `ComponentName — RBAC: 30 · 60 · 100`
-
-Les nombres = **niveaux RBAC** qui peuvent VOIR/UTILISER le composant.
-
-**Barème des niveaux** :
-- `10` Apprenti · Plongeur
-- `20` Commis · Serveur junior · Runner
-- `30` Serveur · Barman · Vendeur · Réceptionniste
-- `40` Chef de rang · Timeclock manager
-- `50` Sommelier · Expert produit
-- `60` Sous-chef · Manager service · Chef d'équipe
-- `70` Chef de cuisine · Chef de salle
-- `80` Directeur établissement
-- `100` Propriétaire — gérant légal de l'établissement (PAS le MCC — voir ci-dessous)
-- `∀` = tous niveaux (10 → 100)
-
-> ⚠️ **Séparation RBAC / MCC** : Le niveau `100` (Propriétaire) est le **gérant de l'établissement client**
-> (restaurant, salon, boulangerie…). Il a accès complet à **son tenant uniquement** (SovereignGuard le borne).
-> Le constructeur de la plateforme (**MCC / vous**) n'est **pas** un niveau RBAC — il opère via
-> `isMCCMode()` + routes `/app/(admin)/` + `MccOperatorContract`, complètement séparé du RBAC tenant.
+Chaque composant ou groupe de composants est doté de sa cartographie opérationnelle complète :
+1. **Composants UI & Liens Code Réels** : Statut d'implémentation (`✅` lié au fichier source `src/...`, `🔧`, `⚫`) et niveaux RBAC.
+2. **📡 Câblage Event Bus (NexusEventBus)** : Événements émis et souscrits avec types de payloads.
+3. **⚙️ Handlers Code Réels (Existant dans `src/orchestration/handlers/`)** : Noms exacts des fonctions de souscription enregistrées.
+4. **🛡️ Matrice RBAC & Sécurité** : Niveaux de lecture, d'action et d'autorité requise pour les dérogations managériales (`PIN Override`).
+5. **🧯 File DLQ (Dead Letter Queue) & Résilience** : Gestion des erreurs, idempotence et persistance locale (IndexedDB / SQLite).
+6. **🗺️ Chemin d'Impact Transverse (Cascade Inter-Zones)** : Propagation complète de l'événement à travers les 8 piliers métier et les 16 zones.
+7. **🔍 Blindspots & Invariants Métier Traités** : Gestion des cas limites, fiscalité NF525 et mode Offline-First.
 
 ---
 
 # 🖥️ Zone 1 — SERVICE
 
-## 🖼️ Écran 1.1 — POS (`/pos`)
+## 🖼️ Écran 1.1 — Point de Vente (POS) (`/pos`)
 
-### 🧩 Composants principaux
+### 🧩 Composants principaux & Grille tactile
+- ✅ `HeaderBar` (`src/design/ui/PageHeader.tsx`) — RBAC: ∀
+- ✅ `CategoryTabs` (`src/design/ui/ToolbarTabs.tsx`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `ProductGrid` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `ProductCard` (`src/design/ui/PremiumCard.tsx`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `ProductDetailsDialog` (`src/design/ui/Modal.tsx`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `ModifierPicker` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `QuantitySelector` (`src/design/ui/QuantitySelector.tsx`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ✅ `NotesTextarea` (`src/design/ui/input.tsx`) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ⚫ `NotesAutocomplete` (suggestions notes fréquentes de cuisine) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ⚫ `AllergenTagPicker` (tag allergie inline avec alerte visuelle) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ⚫ `WinePairingSuggestion` (moteur de suggestion sommelier / IA) — RBAC: 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ⚫ `ProductFavoritesGrid` (mode flux rapide / rush bar) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `RecentlyUsedItemsBar` (5 derniers plats servis pour réassort rapide) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `ProductSearchOverlay` (`src/design/ui/SearchInput.tsx` / Cmd+K) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
+- ⚫ `BarcodeScanner` (`src/design/ui/CameraCapture.tsx` USB/Cam) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `VoiceOrderInput` (dictée vocale whisper pour commande à la volée) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
 
-- ✅ `HeaderBar` — RBAC: ∀
-- ✅ `CategoryTabs` — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `ProductGrid` — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `ProductCard` (item dans grid) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `ProductDetailsDialog` (modal options) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `ModifierPicker` (radio/checkbox options) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `QuantitySelector` — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ✅ `NotesTextarea` (note libre par plat) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ⚫ `NotesAutocomplete` (suggestions notes fréquentes) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ⚫ `AllergenTagPicker` (tag allergie inline) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ⚫ `WinePairingSuggestion` (IA suggère vin par plat) — RBAC: 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ⚫ `ProductFavoritesGrid` (mode flux rapide) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `RecentlyUsedItemsBar` (5 derniers plats servis) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ProductSearchOverlay` (Cmd+K style recherche produit) — RBAC: 20 · 30 · 40 · 50 · 60 · 70 · 80 · 100
-- ⚫ `BarcodeScanner` (scan code-barres carte cadeau/produit) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `VoiceOrderInput` (dictée vocale commande) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+> ⚡ **Câblage & Handlers Code Grille POS** :
+> * ⚙️ **Handlers Actifs** : `registerRushModeIntegrationHandler()`, `registerRecallPOSBlockerHandler()`, `registerDLCBlockerHandler()`, `registerStockZeroBlockerHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `ops.pos.cart_updated` `{ tableId, items, timestamp }`, `ops.pos.allergen_flagged` `{ dishId, allergenId, tableId }`, `ops.pos.barcode_scanned` `{ code, source }`
+>   * `Écoute` : `logistics.stock.exhausted` `{ ingredientId, affectedDishIds }`, `commerce.menu.price_updated` `{ dishId, newPrice }`, `ops.table.locked` `{ tableId, serverId }`
+> * 🛡️ **RBAC** : Lecture: 20+ | Saisie: 20+ | Override prix/offert: 60+ (Manager PIN) | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.ops.pos_events` (Stratégie: 3 retries exponentiels 1s/3s/10s ➔ IndexedDB local buffer `src/lib/offline/sync-manager.ts`)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (POS Selection) ➔ EventBus ➔ Zone 1 (Cart State) ➔ Zone 3 (Live 86ing Validation) ➔ Zone 16 (UI Reactive Render)`
+> * 🔍 **Blindspots résolus** : Détection des micro-coupures réseau pendant la navigation ; cache local des 2000 articles du catalogue pour rendu < 16ms.
 
-### 🧩 Panier & addition
+---
 
-- ✅ `CartHeader` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CartLines` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CartLineItem` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CartFooter` (totaux + TVA) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CartActions` (envoyer/encaisser/split) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `PartialSendButton` (envoyer entrées seulement) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `GuestGroupingPanel` (siège 1/2/3 par convive) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `CourseSequencer` (ordre entrée→plat→dessert) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TableTransferDialog` (transférer commande table→table) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `CartHoldMenu` (mise en attente panier) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `HoldingCartsListDrawer` (paniers en attente) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ServiceChargeToggle` (frais de service groupe > 8) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CoverCountSelector` (déclaration nb couverts) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `CartTimeline` (historique modif panier) — RBAC: 60 · 70 · 80 · 100
+### 🧩 Panier, Séquençage & Addition
+- ✅ `CartHeader` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CartLines` (`src/design/ui/scroll-area.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CartLineItem` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CartFooter` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CartActions` (`src/design/ui/ActionToolbar.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- 🔧 `PartialSendButton` (envoi sélectif des entrées ou des boissons) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `GuestGroupingPanel` (assignation des plats par siège 1/2/3/4) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `CourseSequencer` (ordonnancement entrée ➔ plat ➔ dessert ➔ café) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `TableTransferDialog` (`src/orchestration/handlers/TableTransferHandler.ts`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `CartHoldMenu` (mise en attente temporaire de panier avec motif) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `HoldingCartsListDrawer` (`src/design/ui/BottomSheet.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `ServiceChargeToggle` (frais de service groupe > 8 personnes) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `CoverCountSelector` (déclaration obligatoire du nombre de couverts) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `CartTimeline` (historique d'audit des modifications de la commande) — RBAC: 60 · 70 · 80 · 100
 
-### 🧩 Modales encaissement
+> ⚡ **Câblage & Handlers Code Panier** :
+> * ⚙️ **Handlers Actifs** : `registerTableLockHandler()`, `registerTableTransferHandler()`, `registerTableAutoReleaseHandler()`, `registerHRClockInGuardHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `ops.order.created` `{ orderId, tableId, lines, covers }`, `ops.order.line_added` `{ orderId, line }`, `ops.order.line_voided` `{ orderId, lineId, reason, managerPin }`, `ops.course.fired` `{ tableId, courseNumber }`, `ops.order.transferred` `{ fromTable, toTable }`
+>   * `Écoute` : `ops.kds.line_bumped` `{ lineId, stationId }`, `ops.kds.course_ready` `{ tableId, courseNumber }`, `ops.table.updated` `{ tableId, status }`
+> * 🛡️ **RBAC** : Lecture: 20+ | Envoi commande: 20+ | Annulation ligne (Void post-envoi): 60+ (Manager PIN) | Transfert table: 30+
+> * 🧯 **DLQ** : `dlq.ops.orders` (Idempotence via `order_version_token`, IndexedDB FIFO queue, rejeu automatique dès reconnexion)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (CartActions) ➔ EventBus(ops.order.created) ➔ Zone 1 (KDS Display) + Zone 5 (Stock Décrémentation Fiche Technique) + Zone 7 (Journal NF525 Draft) + Zone 10 (BI CA Temps Réel)`
+> * 🔍 **Blindspots résolus** : Concurrence multi-serveurs sur même table via `TableSessionLock` avec TTL 30s (`src/orchestration/handlers/TableLockHandler.ts`).
 
-- ✅ `PaymentDialog` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `PaymentMethodPicker` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `AmountInput` (pad numérique tactile) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ChangeCalculator` (rendu monnaie espèces) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TipInput` (montant / % / arrondi) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SplitBillDialog` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SplitByItem` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SplitByGuest` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SplitCustom` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+---
+
+### 🧩 Modales Encaissement & Fractionnement (Split)
+- ✅ `PaymentDialog` (`src/modules/finance/tresorerie/split-bill/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `PaymentMethodPicker` (`src/modules/finance/connectors/payments/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `AmountInput` (`src/design/settings/ui/PremiumNumberInput.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ChangeCalculator` (`src/modules/finance/fiscalite/tax/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `TipInput` (`src/modules/human/remuneration/tip-pooling/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SplitBillDialog` (`src/modules/finance/tresorerie/split-bill/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SplitByItem` (`src/orchestration/handlers/SplitPaymentHandler.ts`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SplitByGuest` (`src/modules/finance/tresorerie/split-bill/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SplitCustom` (`src/modules/finance/tresorerie/split-bill/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
 - ✅ `DiscountDialog` (< 10%) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DiscountDialog` (> 10%) — RBAC: 60 · 70 · 80 · 100
-- ✅ `RefundDialog` (avoir) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PreAuthDialog` (pré-autorisation CB Stripe Terminal) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `GiftCardRedeemModal` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `GiftCardIssuanceModal` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `LoyaltyPointsRedeemDialog` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `DiscountDialog` (> 10%) (`src/design/ui/SecurityPinModal.tsx`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `RefundDialog` (`src/orchestration/handlers/RefundJournalHandler.ts`, `RefundExtourneHandler.ts`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `PreAuthDialog` (`src/modules/commerce/relation/reservations/components/settings/ReservationCardImprintSection.tsx`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `GiftCardRedeemModal` (`src/modules/commerce/fidelite/widgets/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `GiftCardIssuanceModal` (`src/modules/commerce/fidelite/loyalty/`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `LoyaltyPointsRedeemDialog` (`src/modules/commerce/fidelite/loyalty/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
 - ⚫ `AgeVerificationModal` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AllergenAlertBanner` (bandeau rouge table allergique) — RBAC: ∀
-- ⚫ `TenderInsertionOverlay` (attente TPE Stripe Terminal) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ReceiptDeliveryDialog` (imprimer/email/SMS/QR) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `PaymentReceiptSummary` (récap post-encaissement) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MealVoucherValidator` (validation carte titre-restaurant) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `InvoiceRequestModal` (client demande facture) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `AllergenAlertBanner` (`src/design/ui/NotificationPanel.tsx`) — RBAC: ∀
+- ⚫ `TenderInsertionOverlay` (`src/modules/finance/connectors/payments/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `ReceiptDeliveryDialog` (`src/modules/ops/service/printers/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `PaymentReceiptSummary` (`src/modules/finance/fiscalite/nf525/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `MealVoucherValidator` (`src/modules/finance/fiscalite/tax/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `InvoiceRequestModal` (`src/modules/finance/comptabilite/einvoicing/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
 
-### 🧩 Table selector
-
-- ✅ `TableSelector` (drawer bas) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `MiniFloorPlan` (mini-carte tables) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TablesListView` (vue alternative liste) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TableSearchInput` (recherche par numéro) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `WalkInFlashCreateButton` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TakeawayModeToggle` (mode à emporter sans table) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `DeliveryModeToggle` (mode livraison) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-
-### 🧩 Impression
-
-- ✅ `TicketPrinterService` (service ESC/POS) — RBAC: — (service)
-- ✅ `KitchenPrinterService` (fallback KDS) — RBAC: — (service)
-- 🔧 `DigitalReceiptQR` (QR ticket dématérialisé) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `PrinterConfigModal` (paramètres imprimantes) — RBAC: 80 · 100
-- ⚫ `PrinterStatusIndicator` (statut imprimante header) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+> ⚡ **Câblage & Handlers Code Encaissement** :
+> * ⚙️ **Handlers Actifs** : `registerOrderSealedNF525Handler()`, `registerPaymentLedgerHandler()`, `registerSplitPaymentHandler()`, `registerRefundJournalHandler()`, `registerRefundExtourneHandler()`, `registerCompEntryHandler()`, `registerTipDistributedHandler()`, `registerCryptoIntegrityCheckHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `finance.payment.started` `{ orderId, amount, method }`, `finance.payment.completed` `{ transactionId, orderId, method, amount, tip, vatBreakdown }`, `finance.ticket.sealed` `{ invoiceId, hashSHA256, jetIndex }`, `finance.discount.applied` `{ orderId, percentage, managerId }`
+>   * `Écoute` : `integrations.tpe.response` `{ terminalId, status, authCode }`, `commerce.gift_card.debited` `{ cardId, remainingBalance }`
+> * 🛡️ **RBAC** : Encaissement: 20+ | Remise < 10%: 30+ | Remise > 10%: 60+ (Manager PIN) | Remboursement: 70+ | Clôture: 80+
+> * 🧯 **DLQ** : `dlq.finance.payments` (`src/orchestration/DLQRetryService.ts` avec persistance ACID locale)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (Payment Dialog) ➔ EventBus(finance.payment.completed) ➔ Zone 7 (Scellement Cryptographique JET NF525 & FEC) ➔ Zone 4 (Crédit Points Fidélité CRM) ➔ Zone 1 (Libération Table & Ticket Z Draft)`
+> * 🔍 **Blindspots résolus** : Application stricte de l'algorithme du plus fort reste (*Largest Remainder Method*) sur le split pour garantir $\sum \text{parts} = \text{Total TTC}$ au centime près.
 
 ---
 
-## 🖼️ Écran 1.2 — KDS (`/kds`)
+## 🖼️ Écran 1.2 — KDS Cuisine (`/kds`)
 
-### 🧩 Composants principaux
+### 🧩 Composants d'Affichage & de Production
+- ✅ `KdsHeaderBar` (`src/modules/ops/production/kds/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `StationSelector` (`src/modules/ops/production/kds/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `OrderTicketCard` (`src/design/ui/GlassCard.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `TicketTimerBadge` (`src/design/ui/StatusBadge.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CourseGroupBlock` (`src/modules/ops/production/kds/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `DishItemLine` (`src/modules/ops/production/kds/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ModifierBadge` (`src/design/ui/chip.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `BumpActionButton` (`src/design/ui/button.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `RecallDrawer` (`src/design/ui/BottomSheet.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `PriorityFlagButton` (`src/design/ui/badge.tsx`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `BatchSummaryPanel` (`src/modules/ops/production/batch-planner/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `StationSyncIndicator` (`src/design/ui/StatusBadge.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `ExpediterPassMonitor` (`src/modules/ops/production/kds/`) — RBAC: 60 · 70 · 80 · 100
 
-- ✅ `KdsHeader` — RBAC: 20 · 60 · 70 · 100
-- ✅ `TicketGrid` — RBAC: 20 · 60 · 70 · 100
-- ✅ `TicketCard` — RBAC: 20 · 60 · 70 · 100
-- ✅ `TicketHeader` (table + timer) — RBAC: 20 · 60 · 70 · 100
-- ✅ `TicketItems` (liste plats) — RBAC: 20 · 60 · 70 · 100
-- ✅ `TicketFooter` (bump/recall) — RBAC: 20 · 60 · 70 · 100
-- ✅ `BumpButton` — RBAC: 20 · 60 · 70 · 100
-- ✅ `RecallButton` (long-press) — RBAC: 60 · 70 · 100
-- 🔧 `BumpBarUsbListener` (bump bar physique) — RBAC: — (service)
-- ⚫ `StationFilterTabs` (filtrer par station) — RBAC: 60 · 70 · 100
-- ⚫ `ViewByPlateToggle` (vue par plat vs table) — RBAC: 60 · 70 · 100
-- ⚫ `ViewByServiceToggle` (sur place/emporter/livraison) — RBAC: 60 · 70 · 100
-- ⚫ `AllergenBadge` (badge critique) — RBAC: 20 · 60 · 70 · 100
-- ⚫ `SpecialRequestHighlight` (surlignage "sans oignon") — RBAC: 20 · 60 · 70 · 100
-- ⚫ `TicketExpandOverlay` (zoom ticket tactile) — RBAC: 20 · 60 · 70 · 100
-
-### 🧩 Coordination
-
-- ⚫ `ExpeditorView` (chef expeditor global) — RBAC: 60 · 70 · 100
-- ⚫ `TableSyncPanel` (synchro sortie plats table) — RBAC: 60 · 70 · 100
-- ⚫ `AllPlatesForTableGrouping` — RBAC: 60 · 70 · 100
-- ⚫ `ServiceCallButton` (appeler serveur "plat prêt") — RBAC: 20 · 60 · 70 · 100
-- ⚫ `PrepTimeEstimator` (IA temps préparation) — RBAC: 60 · 70 · 100
-- ⚫ `KitchenIntercomWidget` (chat voice push-to-talk) — RBAC: 20 · 30 · 60 · 70 · 100
-- ⚫ `StationCapacityBar` (charge par station) — RBAC: 60 · 70 · 100
-
-### 🧩 Stats & alertes
-
-- 🔧 `KdsFooter` (stats jour) — RBAC: 60 · 70 · 100
-- ⚫ `AverageCookTimeWidget` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PeakLoadIndicator` (pic de charge) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LateTicketAlarm` (alerte sonore ticket rouge) — RBAC: — (service)
-- ⚫ `KdsShiftHandoverSummary` (récap fin shift) — RBAC: 60 · 70 · 100
-
-### 🧩 Modes spéciaux
-
-- ⚫ `KdsPrepListMode` (mode liste préparation matin) — RBAC: 60 · 70 · 100
-- ⚫ `KdsInventoryCheckMode` (revue stock cuisine) — RBAC: 60 · 70 · 100
-- ⚫ `KdsBrigadeChatMode` (chat cuisine interne) — RBAC: 20 · 60 · 70 · 100
-- ⚫ `KdsRecipeQuickView` (accès rapide fiche recette) — RBAC: 20 · 60 · 70 · 100
-
----
-
-## 🖼️ Écran 1.3 — Plan de salle (`/floor-plan`)
-
-### 🧩 Composants vue service
-
-- ✅ `FloorPlanHeader` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `FloorCanvas` (SVG interactif) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TableRenderer` (SVG shape) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TableChairs` (chaises visibles) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ZoneRenderer` (zones terrasse/salon) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TableActionsMenu` (popup contextuel) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationsQueue` (bas de page) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `TableStatusIndicator` (couleur selon durée) — RBAC: ∀
-- ⚫ `CapacityIndicator` (jauge visuelle) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TableDelayAlert` (table qui attend > X min) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TableGuestInfoPopover` (hover client info) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ZoomFitControls` (zoom in/out/fit) — RBAC: ∀
-
-### 🧩 Composants édition (RBAC 60+)
-
-- ✅ `EditPanel` (drawer palette outils) — RBAC: 60 · 70 · 80 · 100
-- ✅ `TableAddDialog` (ajouter table forme+capa) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ZoneAddDialog` — RBAC: 60 · 70 · 80 · 100
-- ✅ `EditPanel > DeleteButton` — RBAC: 60 · 70 · 80 · 100
-- ✅ `EditPanel > ZoneLockToggle` — RBAC: 60 · 70 · 80 · 100
-- ✅ `FloorPlanSaveButton` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PlanTemplateGallery` (templates bistrot/gastro/brasserie) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PlanImportWizard` (import DWG/PDF architecte) — RBAC: 80 · 100
-- ⚫ `FloorPlanVersionHistory` (versions sauvegardées) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MultiFloorSelector` (étages 1/2/terrasse) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `TableCombineTool` (fusionner 2 tables adjacentes) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `TableSplitTool` (séparer table double) — RBAC: 60 · 70 · 80 · 100
-
----
-
-## 🖼️ Écran 1.4 — Bar (`/bar`)
-
-### 🧩 Nouveaux composants dédiés bar
-
-- 🔧 `WineDetailPanel` (fiche vin détaillée) — RBAC: 30 · 50 · 60 · 70 · 80 · 100
-- ✅ `KdsBarTab` (KDS bar spécifique) — RBAC: 30 · 60 · 70 · 100
-- ⚫ `CocktailRecipeCard` (fiche cocktail avec dosages) — RBAC: 30 · 50 · 60 · 70 · 100
-- ⚫ `WineListFilterPanel` (filtres cépage/région/prix) — RBAC: 30 · 50 · 60 · 70 · 80 · 100
-- ⚫ `VintageStockTracker` (millésimes en stock) — RBAC: 30 · 50 · 60 · 70 · 80 · 100
-- ⚫ `SommelierRecommendationEngine` (IA suggère vin) — RBAC: 30 · 50 · 60 · 70 · 80 · 100
-- ⚫ `HappyHourActivator` (activer/désactiver happy hour) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `BarInventoryFastCount` (compte rapide bouteilles) — RBAC: 30 · 60 · 70 · 100
-
----
-
-## 🖼️ Écran 1.5 — POS Mobile serveur (`/pos-mobile`)
-
-### 🧩 Composants mobile-first
-
-- 🔧 `MobilePosLayout` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `MobileCartSheet` (bottom sheet panier) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MobileMenuCarousel` (swipe catégories) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MobileProductBottomSheet` (options plat) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MobileTableSelectorSheet` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MobileQuickTipButtons` (tips arrondi) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `HapticFeedbackController` (vibrations validation) — RBAC: — (service)
+> ⚡ **Câblage & Handlers Code KDS** :
+> * ⚙️ **Handlers Actifs** : `registerKDSTicketDoneNotifier()`, `registerKDSRushAlertNotifier()`, `registerResaKitchenTaskHandler()`, `registerBigGroupAlertHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `ops.kds.ticket_acknowledged` `{ ticketId, stationId }`, `ops.kds.item_bumped` `{ ticketId, itemId }`, `ops.kds.course_ready` `{ tableId, courseNumber }`, `ops.kds.ticket_recalled` `{ ticketId }`
+>   * `Écoute` : `ops.order.created`, `ops.course.fired`, `ops.order.line_voided`, `ops.order.modified`
+> * 🛡️ **RBAC** : Vue & Bump: 20+ (Cuisinier) | Recall/Priorité: 60+ (Sous-chef) | Configuration stations: 70+ (Chef)
+> * 🧯 **DLQ** : `dlq.ops.kds` (WebSocket avec reconnexion automatique exponentielle et replay)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (KDS Bump Course Ready) ➔ EventBus ➔ Zone 1 (Bar/Runner Screen) + Zone 14 (Mobile Staff Alert) ➔ Zone 10 (BI Analytics Durée Préparation)`
+> * 🔍 **Blindspots résolus** : Alerte sonore stridente lors de la réception d'un plat annulé par la salle alors que le bon était en cours de préparation.
 
 ---
 
 # 🖥️ Zone 2 — RÉSERVATIONS & ACCUEIL
 
-## 🖼️ Écran 2.1 — Liste réservations (`/reservations`)
+## 🖼️ Écran 2.1 — Plan de Salle & Accueil (`/floor-plan`, `/reservations`)
 
-### 🧩 Composants principaux
+### 🧩 Composants Plan 2D/3D & Réservations
+- ✅ `FloorPlanCanvas` (`src/modules/commerce/relation/reservations/components/FloorPlanView.tsx`, `src/modules/facility/spaces/floor-plan/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `TableNode` (`src/modules/commerce/relation/reservations/components/TableGrid.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ZoneTabs` (`src/design/ui/ToolbarTabs.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `TableMergeSplitTool` (`src/modules/facility/spaces/floor-plan/`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ReservationListDrawer` (`src/modules/commerce/relation/reservations/components/DailyListView.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ReservationFormModal` (`src/modules/commerce/relation/reservations/components/NewReservationDialog.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CheckInGuestButton` (`src/modules/commerce/relation/reservations/components/ReservationToolbar.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `WaitlistQueuePanel` (`src/modules/commerce/relation/reservations/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `NoShowShieldModal` (`src/modules/commerce/relation/reservations/components/settings/ReservationCardImprintSection.tsx`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `YieldManagementCockpit` (`src/modules/intelligence/analytique/yield-management/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `WeatherTerraceSwitcher` (`src/modules/intelligence/connectors/weather/`) — RBAC: 40 · 60 · 70 · 80 · 100
+- ⚫ `GuestDietaryAlertTag` (`src/design/ui/badge.tsx`) — RBAC: ∀
 
-- ✅ `ReservationsHeader` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationDatePicker` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationsFilters` (statut/service/canal) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationsTable` (chronologique) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationsListView` (vue alternative liste) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationsCalendarView` (vue calendrier mois) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReservationCard` (item liste) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ReservationsExportCSV` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ReservationsBulkActions` (bulk annuler/rappeler) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AdvancedFilterDrawer` (nb couverts/allergies/VIP) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-
-### 🧩 Création & édition résa
-
-- 🔧 `NewReservationDialog` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ClientSearchInput` (autocomplete CRM) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ClientQuickCreateForm` (créer client à la volée) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DateTimePicker` (créneaux libres) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `PartySizeSelector` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TableAssignmentPicker` (auto/manuel) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `AllergyChecklistInput` (14 INCO) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `InternalNotesTextarea` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DepositToggle` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DepositAmountConfig` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `VipTagPicker` (tag client VIP) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `OccasionSelector` (anniversaire/mariage/repas d'affaires) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `SeatingPreferenceInput` (préférence table cheminée) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-
-### 🧩 Édition résa existante
-
-- 🔧 `ReservationDetailsDialog` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ReservationInfoTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ReservationClientHistoryTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ReservationAllergiesTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ReservationCommunicationsTab` (SMS/email envoyés) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ **`WelcomeGuestButton` (bouton "Accueillir client" — CRITIQUE R2 bus)** — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ReservationCancelDialog` (annuler + gérer acompte) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ReservationRescheduleDialog` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `SendManualReminderButton` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `NoShowMarkButton` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ReservationLogTimeline` (audit trail modifs) — RBAC: 60 · 70 · 80 · 100
-
-### 🧩 Walk-in & liste d'attente
-
-- 🔧 `WalkInFlashDialog` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `WaitlistQueue` (file d'attente sans table) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `WaitlistEntryCard` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `WaitEstimateCalculator` (temps attente estimé) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `SmsCallReadyButton` (SMS "on vous attend") — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-
-### 🧩 Groupes & privatisations
-
-- ⚫ `GroupReservationWizard` (résa > 8 pers) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `SetMenuBuilder` (formule prépayée groupe) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PrivatizationCalendar` (bloquer salle privée) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `GroupInvoicePreview` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `GroupPaymentTracker` (acompte/solde) — RBAC: 60 · 70 · 80 · 100
-
-### 🧩 Rappels & no-show
-
-- 🔧 `SmsReminderScheduler` — RBAC: — (service)
-- 🔧 `EmailReminderScheduler` — RBAC: — (service)
-- ⚫ `RemindersConfigPanel` (J-2 / J-1 / heures) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `NoShowRiskDashboard` (clients à risque) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AutoDepositRuleEditor` (règles acompte auto) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 2.2 — Booking widget public (`/[slug]/reservations`)
-
-### 🧩 Composants publics (sans RBAC — public)
-
-- ✅ `PublicBookingHeader` — RBAC: — (public)
-- ✅ `AvailabilityCalendar` — RBAC: — (public)
-- ✅ `PartyDetailsForm` — RBAC: — (public)
-- ✅ `DepositCheckout` (Stripe Elements) — RBAC: — (public)
-- ✅ `ConfirmationScreen` — RBAC: — (public)
-- ⚫ `LanguageSwitcher` (FR/EN/DE/ES/IT) — RBAC: — (public)
-- ⚫ `MenuPreviewSection` (aperçu menu du jour) — RBAC: — (public)
-- ⚫ `RestaurantPhotosGallery` — RBAC: — (public)
-- ⚫ `ReviewsWidget` (avis Google intégrés) — RBAC: — (public)
-- ⚫ `AllergenPreDeclarationForm` — RBAC: — (public)
-- ⚫ `AddToCalendarButton` (Apple/Google) — RBAC: — (public)
-- ⚫ `ChangeOrCancelSelfService` (client change sa résa) — RBAC: — (public + token)
-- ⚫ `WhatsappConfirmationOptIn` — RBAC: — (public)
+> ⚡ **Câblage & Handlers Code Réservations & Salle** :
+> * ⚙️ **Handlers Actifs** : `registerReservationNotifierHandler()`, `registerFloorPlanCapacityHandler()`, `registerNoShowPenaltyHandler()`, `registerNoShowTableReleaseHandler()`, `registerResaAllergenCheckHandler()`, `registerResaReminderHandler()`, `registerResaKitchenTaskHandler()`, `registerTableTurnoverAnalyzerHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `ops.reservation.created` `{ resId, guestName, covers, time, depositId }`, `ops.guest.checked_in` `{ resId, tableId, preferences }`, `ops.table.merged` `{ tableIds, newMergedId }`, `ops.waitlist.sms_sent` `{ phone, estimatedWaitMinutes }`
+>   * `Écoute` : `integrations.thefork.reservation_received`, `ops.table.status_changed`, `finance.payment.completed`
+> * 🛡️ **RBAC** : Consultation: 20+ | Check-in: 20+ | Création résa: 30+ | Configuration plan/Yield: 70+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.ops.reservations` (Retry webhook plateformes tierces avec politique anti-doublon)
+> * 🗺️ **Chemin d'Impact** : `Zone 2 (Check-in Guest) ➔ EventBus(ops.guest.checked_in) ➔ Zone 1 (POS Table Ouverte & KDS Alert Allergènes) ➔ Zone 4 (CRM Visite Incrémentée)`
+> * 🔍 **Blindspots résolus** : Verrouillage temporaire de table de 120s lors de la sélection pour éviter tout conflit entre réservation en ligne et accueil physique.
 
 ---
 
-# 🖥️ Zone 3 — MENU & CATALOGUE
+# 🖥️ Zone 3 — MENU & CATALOGUE CULINAIRE
 
-## 🖼️ Écran 3.1 — Menu Builder (`/menu-builder`)
+## 🖼️ Écran 3.1 — Menu Builder & Fiches Techniques (`/menu`, `/recipes`)
 
-### 🧩 Composants édition
+### 🧩 Composants Menu, Fiches & Allergènes
+- ✅ `MenuCategoryList` (`src/modules/commerce/catalog/`) — RBAC: 30 · 50 · 60 · 70 · 80 · 100
+- ✅ `DishEditorForm` (`src/modules/commerce/catalog/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `RecipeBuilder` (`src/modules/ops/production/recipes/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `FoodCostCalculator` (`src/modules/commerce/catalog/menu-engineering/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `AllergenMatrixGrid` (`src/modules/compliance/qualite/safety-protocols/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `Live86ToggleButton` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `SubRecipeCascader` (`src/modules/ops/production/recipes/`) — RBAC: 70 · 80 · 100
+- ⚫ `MenuPricingSimulator` (`src/modules/intelligence/simulation/pricing-simulator/`) — RBAC: 70 · 80 · 100
+- ⚫ `DynamicQrMenuSync` (`src/modules/commerce/catalog/services/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `DayMenuScheduler` (`src/modules/commerce/catalog/`) — RBAC: 60 · 70 · 80 · 100
 
-- ✅ `MenuBuilderHeader` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CategorySidebar` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CategoryDragDropList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CategoryRenameInline` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CategoryAddButton` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductListPanel` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductRow` (ligne tableau) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductAvailabilityToggle` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `ProductDuplicateButton` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductArchiveButton` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ProductBulkActions` (bulk publish/archive) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ProductSearchInput` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ProductImportCSV` — RBAC: 80 · 100
-- ⚫ `ProductExportCSV` — RBAC: 60 · 70 · 80 · 100
-
-### 🧩 Édition produit (fragmenté)
-
-- ✅ `ProductEditDialog` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > GeneralTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductPhotoUploader` (crop + optim) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > PricingTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `MultiPricingEditor` (heure creuse/pleine) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > ModifiersTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ModifierGroupBuilder` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > RecipeTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `RecipeComposer` — RBAC: 60 · 70 · 80 · 100
-- ✅ `IngredientSearchInput` — RBAC: 60 · 70 · 80 · 100
-- ✅ `IngredientLine` (qté/unité/coût) — RBAC: 60 · 70 · 80 · 100
-- ✅ `RecipeSummary` (coût/marge %) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > AllergensTab` (14 INCO) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductEditDialog > AvailabilityTab` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AvailabilityScheduleGrid` (par jour × créneau) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `NutritionalValuesEditor` (kcal/protéines/glucides) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AiDescriptionGenerator` (rédiger description IA) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ProductTranslationsPanel` (traductions FR/EN/DE) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SeasonalToggle` (produit saisonnier avec période) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WinePairingSuggestionsEditor` — RBAC: 50 · 60 · 70 · 80 · 100
-
-### 🧩 Historique & versioning
-
-- 🔧 `MenuVersionHistory` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MenuVersionDiffViewer` (comparaison entre versions) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MenuRollbackButton` (restaurer version antérieure) — RBAC: 80 · 100
-- ⚫ `MenuScheduleActivator` (publier menu automatiquement à date) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 3.2 — Menu Engineering (`/menu-engineering`)
-
-- ✅ `EngineeringMatrix` (heatmap 4 quadrants) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ProductClassification` (Star/Puzzle/Plowhorse/Dog) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `AISuggestionsPanel` (repositionnement) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MonthlyReport` (export PDF) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `HistoricalEvolutionChart` (évolution mensuelle par plat) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `RepricingSimulator` (impact prix simulé) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MenuMixAnalysis` (mix ventes par catégorie) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ContributionMarginChart` (marge contribution) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 3.3 — Menu digital (QR) — nouveau
-
-- ⚫ `DigitalMenuEditor` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `QRCodeGenerator` (QR par table) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `DigitalMenuPreview` (aperçu mobile) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `DigitalMenuThemePicker` (couleurs/fonts client) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PhotoGalleryPerDish` (photos multiples par plat) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `DietaryFilterConfig` (végé/vegan/sans gluten) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `OrderFromQrToggle` (activer commande depuis QR) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 3.4 — Promotions
-
-- ✅ `PromotionsList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `PromotionEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `HappyHourScheduleEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `MenuDayFormulaBuilder` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `PromoCodeGenerator` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PromoCodeUsageStats` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `BOGOBuilder` (Buy One Get One) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyOnlyPromoBuilder` (promo fidèles) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 3.5 — Bons cadeaux (nouveau)
-
-- ⚫ `GiftCardsList` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `GiftCardIssuanceForm` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `GiftCardStatsWidget` (émis/utilisés/valeur) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `GiftCardExpiryConfig` — RBAC: 80 · 100
-- ⚫ `GiftCardPublicPurchasePage` — RBAC: — (public)
+> ⚡ **Câblage & Handlers Code Menu & Fiches** :
+> * ⚙️ **Handlers Actifs** : `registerFoodCostRecomputer()`, `registerMarginWarningHandler()`, `registerStockZeroBlockerHandler()`, `registerWasteToFoodCostHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `commerce.dish.created` `{ dishId, name, price, vatRate }`, `logistics.recipe.updated` `{ dishId, ingredients, theoreticalCost }`, `ops.dish.86_toggled` `{ dishId, isAvailable, reason }`, `compliance.allergen.updated` `{ dishId, allergens }`
+>   * `Écoute` : `logistics.ingredient.price_changed` `{ ingredientId, newUnitCost }`, `logistics.stock.exhausted` `{ ingredientId }`
+> * 🛡️ **RBAC** : Lecture: 20+ | Toggle 86ing: 20+ | Modification fiches: 60+ (Chef) | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.commerce.catalog` (Broadcasting multi-terminaux avec confirmation d'acquittement)
+> * 🗺️ **Chemin d'Impact** : `Zone 3 (Live 86ing) ➔ EventBus(ops.dish.86_toggled) ➔ Zone 1 (POS & KDS Grisé) ➔ Zone 12 (Sync Deliveroo/Uber Dépublié) ➔ Zone 15 (Menu QR Désactivé)`
+> * 🔍 **Blindspots résolus** : Versioning strict du catalogue lors de l'ouverture d'une commande pour préserver les prix initiaux en cours de service.
 
 ---
 
-# 🖥️ Zone 4 — CLIENTS & FIDÉLITÉ (CRM)
+# 🖥️ Zone 4 — CRM, CLIENTS & FIDÉLITÉ
 
-## 🖼️ Écran 4.1 — Liste clients (`/crm`)
+## 🖼️ Écran 4.1 — Fichier Client & Fidélité (`/crm`, `/loyalty`)
 
-- ✅ `CRMHeader` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMSearchInput` (fulltext) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SegmentsSidebar` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMList` (table paginée) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMRow` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMBulkActions` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CRMImportCSVDialog` — RBAC: 80 · 100
-- 🔧 `CRMExportDialog` (CSV/JSON) — RBAC: 80 · 100
-- ⚫ `AdvancedSegmentBuilder` (règles dynamiques) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CustomerScoringWidget` (score fidélité IA) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MergeDuplicatesDialog` (fusionner doublons) — RBAC: 80 · 100
+### 🧩 Composants CRM & Programmes Fidélité
+- ✅ `CustomerTable` (`src/modules/commerce/relation/customers/components/CustomerCustomerView.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CustomerProfileCard` (`src/modules/commerce/relation/customers/components/CustomerDetailPanel.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `LoyaltyTierBadge` (`src/modules/commerce/acquisition/marketing/components/crm/LoyaltyCard.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `WalletBalanceWidget` (`src/modules/commerce/fidelite/loyalty/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CampaignBuilderModal` (`src/modules/commerce/acquisition/marketing/components/crm/EmailCampaign.tsx`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `RfmSegmentationGrid` (`src/modules/commerce/acquisition/marketing/components/crm/RFMSegmentation.tsx`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `RgpdAnonymizeButton` (`src/modules/compliance/reglementaire/rgpd/`) — RBAC: 80 · 100
+- ⚫ `GiftCardRegistryTable` (`src/modules/commerce/fidelite/widgets/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `MultiTenantLoyaltyClearing` (`src/modules/commerce/relation/loyalty/`) — RBAC: 80 · 100
 
-## 🖼️ Écran 4.2 — Fiche client détaillée
-
-- ✅ `CRMDetailView` (drawer/route) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMDetailView > InfoTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMDetailView > PreferencesTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMDetailView > HistoryTab` (timeline visites) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CRMDetailView > LoyaltyTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `CRMDetailView > CommunicationsTab` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ClientAvatarUpload` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ClientNotesFeed` (fil de notes datées équipe) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ClientTagsPicker` (tags custom : "gastronome", "difficile") — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ClientCLVWidget` (Customer Lifetime Value) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ClientTimelineExport` (export historique complet) — RBAC: 80 · 100
-- ⚫ `ClientBirthdayReminderBadge` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ClientPreferredServerAssignment` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LinkedFamilyGuestsPanel` (conjoint/enfants) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ClientDocumentsUploader` (allergène doc médical) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 4.3 — Campagnes marketing (`/marketing`)
-
-- ✅ `CampaignsList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CampaignBuilder` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CampaignTemplatePicker` — RBAC: 60 · 70 · 80 · 100
-- ✅ `EmailWYSIWYGEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CampaignAudienceSelector` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CampaignSchedulerPicker` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CampaignResultsPanel` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `SMSCampaignBuilder` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ABTestConfigurator` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CampaignPerformanceComparison` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AutomationsPanel` (workflows auto) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AutomationTriggerPicker` (bus events) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AutomationStepsBuilder` (SMS J+1 → email J+30) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `BirthdayAutomationTemplate` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WinbackAutomationTemplate` (client dormant) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `UnsubscribesList` (opt-out RGPD) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WhatsappBusinessConnector` — RBAC: 80 · 100
-- ⚫ `EmailDeliverabilityMonitor` (bounce/spam) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 4.4 — Fidélité (nouveau `/loyalty`)
-
-- 🔧 `LoyaltyProgramSettings` — RBAC: 80 · 100
-- 🔧 `LoyaltyTierBuilder` (Bronze/Argent/Or/Platine) — RBAC: 80 · 100
-- 🔧 `RewardsCatalog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `RewardEditor` (créer récompense) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyDashboard` (KPIs programme) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyMembersList` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyPointsAdjustmentTool` (ajustement manuel) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyDigitalCard` (vue client QR) — RBAC: — (public)
-- ⚫ `LoyaltyReferralProgram` (parrainage) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LoyaltyExpiryConfig` (expiration points) — RBAC: 80 · 100
-- ⚫ `LoyaltyRedemptionHistory` — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 4.5 — Avis & réputation (nouveau)
-
-- ⚫ `ReviewsFeedGoogle` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ReviewsFeedTheFork` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ReviewsAggregatedDashboard` (Google + TF + Trip) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AIResponseGenerator` (rép. avis assistée IA) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `NegativeReviewAlertPanel` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ReviewInviteEmailAutomation` (SMS post-visite) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SentimentAnalysisChart` — RBAC: 60 · 70 · 80 · 100
+> ⚡ **Câblage & Handlers Code CRM** :
+> * ⚙️ **Handlers Actifs** : `registerNoShowCRMHandler()`, `registerBirthdayOfferHandler()`, `registerNegativeReviewHandler()`, `registerMarketingCampaignRouterHandler()`, `registerPrivacyConsentHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `commerce.customer.created` `{ customerId, pii }`, `commerce.loyalty.points_credited` `{ customerId, pointsEarned, orderId }`, `compliance.rgpd.anonymized` `{ customerId, anonymizedHash }`
+>   * `Écoute` : `finance.payment.completed` `{ customerId, amount }`, `ops.reservation.created` `{ customerPhone }`
+> * 🛡️ **RBAC** : Lecture: 20+ | Attribution points: 20+ | Campagnes: 60+ | Droit à l'oubli: 80+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.commerce.crm` (Stockage chiffré AES-256)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (Paiement Ticket) ➔ EventBus ➔ Zone 4 (Crédit Cagnotte CRM) ➔ Zone 4 (Notification SMS)`
+> * 🔍 **Blindspots résolus** : Droit à l'oubli RGPD sans rupture du chaînage immuable du JET NF525 (pseudonymisation irréversible `ANON_XXXX`).
 
 ---
 
-# 🖥️ Zone 5 — STOCK & APPROVISIONNEMENT
+# 🖥️ Zone 5 — STOCK & LOGISTIQUE
 
-## 🖼️ Écran 5.1 — Inventaire (`/inventory`)
+## 🖼️ Écran 5.1 — Stocks, Réceptions & DLC (`/inventory`, `/suppliers`)
 
-- ✅ `InventoryHeader` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `InventoryTable` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `InventoryRow` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `StockStatusBadge` (normal/alerte/rupture) — RBAC: ∀
-- ✅ `InventoryFilters` (catégorie/rupture/DLC) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `StockAdjustmentDialog` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `ProductStockCard` (détail) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `StockMovementsHistory` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `LotsActiveList` (traçabilité lots) — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `PhysicalInventoryWizard` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `PhysicalInventoryWizard > CountStep` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `PhysicalInventoryWizard > DiscrepancyStep` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `BarcodeInput` (scan EAN) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MultiLocationStockPanel` (chambre froide/bar/réserve) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `StockTransferDialog` (transfert entre emplacements) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `InventoryHistoryChart` (évolution stock produit) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LowStockDashboard` (produits à commander) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `OverstockDashboard` (surstock à écouler) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ExpiringBatchesBoard` (lots à consommer) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `WasteRecordingForm` (déchet + raison) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `WasteAnalyticsDashboard` — RBAC: 60 · 70 · 80 · 100
+### 🧩 Composants Inventaire & Approvisionnement
+- ✅ `InventoryStockTable` (`src/modules/logistics/stock/inventory/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `StockAdjustmentModal` (`src/modules/logistics/stock/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `DlcTrackerWidget` (`src/modules/logistics/stock/perishables/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SupplierOrderForm` (`src/modules/logistics/approvisionnement/procurement/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `ThreeWayMatchingPanel` (`src/modules/logistics/approvisionnement/reception/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `WasteLossDeclarationDialog` (`src/modules/logistics/stock/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `MrpReorderSuggestions` (`src/modules/logistics/approvisionnement/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `StorageMapVisualizer` (`src/modules/facility/spaces/rooms/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `SupplierPriceFluctuationAlert` (`src/modules/logistics/approvisionnement/`) — RBAC: 60 · 70 · 80 · 100
 
-## 🖼️ Écran 5.2 — Réception marchandises
-
-- ✅ `ReceptionDashboard` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DeliveryNotesQueue` (BL en attente) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DeliveryNoteEditor` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `LinesEditorGrid` (produits reçus) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `LotAssignmentInput` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DiscrepancyPanel` (auto-calc manquants) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `PhotoBLUploader` (photo BL obligatoire) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `SignaturePad` (signature réceptionniste) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TraceabilityLabelPrinter` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TemperatureCheckAtReception` (temp produits froids) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `QualityInspectionChecklist` (contrôle qualité) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `RejectDeliveryDialog` (refus livraison) — RBAC: 40 · 60 · 70 · 80 · 100
-
-## 🖼️ Écran 5.3 — Fournisseurs (`/suppliers`)
-
-- ✅ `SuppliersList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `SupplierEditor` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `SupplierCatalogViewer` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `PurchaseOrderBuilder` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `SuggestedOrderPanel` (basé sur prévisions) — RBAC: 60 · 70 · 80 · 100
-- ✅ `LineItemEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `OrderTotalSummary` — RBAC: 60 · 70 · 80 · 100
-- ✅ `PoSendEmailDialog` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `MetroCatalogConnector` — RBAC: — (service)
-- ⚫ `TransgourmetCatalogConnector` — RBAC: — (service)
-- ⚫ `PomonaCatalogConnector` — RBAC: — (service)
-- ⚫ `SysCoCatalogConnector` — RBAC: — (service)
-- ⚫ `PriceComparisonTable` (multi-fournisseurs par produit) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SupplierPerformanceCard` (délai livraison, écarts) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SupplierNegotiationLog` (traces négos) — RBAC: 80 · 100
-- ⚫ `RecurringOrdersEditor` (commandes récurrentes) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SupplierInvoicesInbox` (factures fournisseurs reçues) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 5.4 — DLC/DDM alertes (nouveau)
-
-- ⚫ `ExpiryDashboard` (vue centralisée DLC) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `ExpiryCalendarView` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `SuggestMenuDayFromExpiring` (IA suggestion) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MarkAsWastedWizard` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `DonationOfferToTGTG` (Too Good To Go) — RBAC: 60 · 70 · 80 · 100
+> ⚡ **Câblage & Handlers Code Stocks** :
+> * ⚙️ **Handlers Actifs** : `registerStockDeductionHandler()`, `registerInventoryDeductedHandler()`, `registerStockAdjustedHandler()`, `registerStockAlertHandler()`, `registerWasteStockReconciliationHandler()`, `registerStockRestitutionHandler()`, `registerStockReceptionHandler()`, `registerProcurementMismatchHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `logistics.stock.decremented` `{ ingredientId, quantity, reason }`, `logistics.stock.exhausted` `{ ingredientId }`, `logistics.waste.recorded` `{ ingredientId, cost, reason }`
+>   * `Écoute` : `ops.order.created` `{ lines }`, `ops.order.line_voided` `{ lines }`
+> * 🛡️ **RBAC** : Déclaration perte: 20+ | Réception marchandise: 40+ | Ajustement inventaire: 60+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.logistics.stock` (Mutation atomique avec rollback en cas d'échec)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (Vente Plat) ➔ EventBus ➔ Zone 5 (Décrémentation Stock) ➔ Zone 3 (Vérification Seuil Live 86ing) ➔ Zone 7 (Variation Stock Compte 603)`
+> * 🔍 **Blindspots résolus** : Arithmétique entière en milligrammes/microlitres pour éliminer tout bug de virgule flottante sur les ingrédients fractionnaires.
 
 ---
 
-# 🖥️ Zone 6 — RESSOURCES HUMAINES
+# 🖥️ Zone 6 — RESSOURCES HUMAINES & PLANNING
 
-## 🖼️ Écran 6.1 — Staff (`/staff`)
+## 🖼️ Écran 6.1 — Planning, Pointage & Paie (`/hr`, `/planning`)
 
-- ✅ `StaffList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffRow` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffAvatar` — RBAC: ∀
-- ✅ `StaffMemberDetail` (drawer) — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffDetail > PersonalTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffDetail > ContractTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffDetail > CompetenciesTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffDetail > TrainingsTab` — RBAC: 60 · 70 · 80 · 100
-- ✅ `StaffDetail > PayrollHistoryTab` — RBAC: 80 · 100
-- ✅ `InviteEmployeeDialog` — RBAC: 80 · 100
-- ✅ `StaffBulkImportCSV` — RBAC: 80 · 100
-- 🔧 `EmployeeContractGenerator` — RBAC: 80 · 100
-- 🔧 `ContractTemplatePicker` — RBAC: 80 · 100
-- ⚫ `EmployeeContractSignYouSign` — RBAC: 80 · 100
-- ⚫ `DPAEModal` (Déclaration Préalable Embauche) — RBAC: 80 · 100
-- ⚫ `EmployeeIdCardGenerator` (carte pro PDF) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EmployeeTrainingsScheduler` (formations obligatoires) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MedicalVisitTracker` (visites médicales) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WorkAccidentRecordForm` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ExitInterviewForm` (départ salarié) — RBAC: 80 · 100
+### 🧩 Composants RH & Gestion du Personnel
+- ✅ `WeeklyPlanningGrid` (`src/modules/human/effectifs/hr/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `ShiftEditorModal` (`src/modules/human/effectifs/hr/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `TimeclockTerminal` (`src/modules/human/connectors/timeclock/`) — RBAC: ∀
+- ✅ `LegalComplianceShield` (`src/modules/human/conventions/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `PayrollExportDialog` (`src/modules/human/remuneration/payroll/`) — RBAC: 80 · 100
+- ⚫ `ShiftSwapMarketplace` (`src/modules/human/effectifs/shift-bidding/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `GeofencingPresenceValidator` (`src/modules/human/connectors/timeclock/`) — RBAC: ∀
+- ⚫ `StaffProductivityGauge` (`src/modules/human/remuneration/services/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `LeaveRequestManager` (`src/modules/human/effectifs/services/`) — RBAC: 60 · 70 · 80 · 100
 
-## 🖼️ Écran 6.2 — Planning (`/planning`)
-
-- ✅ `WeekPlanningGrid` — RBAC: 60 · 70 · 80 · 100
-- ✅ `PlanningDayColumn` — RBAC: 60 · 70 · 80 · 100
-- ✅ `ShiftBlock` (bloc shift dans cellule) — RBAC: 60 · 70 · 80 · 100
-- ✅ `ShiftEditorDialog` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CopyWeekButton` — RBAC: 60 · 70 · 80 · 100
-- ✅ `LegalConstraintsChecker` (11h repos, 35h/sem) — RBAC: — (service)
-- 🔧 `AIScheduleSuggestion` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `ShiftSwapRequestDialog` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `ShiftSwapApprovalQueue` — RBAC: 60 · 70 · 80 · 100
-- ✅ `PublishScheduleDialog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MonthlyPlanningView` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `IndividualSchedulePrintout` (planning perso PDF) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EmployeeAvailabilityInput` (dispos employé) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `HolidaysCalendarBlocker` — RBAC: 80 · 100
-- ⚫ `ShiftTemplatesLibrary` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PlanningCostCalculator` (masse salariale du planning) — RBAC: 80 · 100
-- ⚫ `AttendanceForecastOverlay` (superposition affluence prévue) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 6.3 — Timeclock (`/timeclock`)
-
-- ✅ `ClockInScreen` (borne dédiée) — RBAC: — (auth PIN/NFC)
-- ✅ `PinKeypad` — RBAC: — (auth)
-- ✅ `NFCReaderListener` — RBAC: — (service)
-- ✅ `TimeclockDashboard` (vue manager) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `TimeclockDailyTable` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `TimeclockCorrectDialog` — RBAC: 60 · 70 · 80 · 100
-- ✅ `PinResetModal` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `QRClockInMobile` (pointage QR téléphone) — RBAC: — (auth)
-- ⚫ `FacialRecognitionClockIn` (optionnel) — RBAC: — (auth)
-- ⚫ `GeoFencedClockIn` (vérif géolocalisation) — RBAC: — (service)
-- ⚫ `BreakTracker` (pause déjeuner obligatoire) — RBAC: — (service)
-- ⚫ `OvertimeAlert` (heures sup atteintes) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `TimeclockWeeklyReport` — RBAC: 80 · 100
-
-## 🖼️ Écran 6.4 — Congés & absences (`/leaves`)
-
-- ✅ `LeavesHeader` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `LeaveRequestForm` (employé) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `LeaveTypePicker` (CP/RTT/maladie/enfant malade) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `JustificatifUpload` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- 🔧 `LeavesApprovalQueue` (manager) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `LeavesCalendar` (vue équipe) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LeaveBalanceWidget` (compteur CP/RTT) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `AbsenceReplacementSuggestion` (qui remplacer) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `UnderStaffingAlertBanner` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AbsenceStatsPerEmployee` (taux absentéisme) — RBAC: 80 · 100
-
-## 🖼️ Écran 6.5 — Recrutement (`/recruitment`)
-
-- ✅ `CandidatesList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CandidateDetailModal` — RBAC: 60 · 70 · 80 · 100
-- ✅ `CandidateCVUpload` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InterviewNotesEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `EvaluationScoreCard` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `PipelineKanban` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `JobPostingEditor` — RBAC: 80 · 100
-- ⚫ `IndeedConnector` — RBAC: — (service)
-- ⚫ `HelloWorkConnector` — RBAC: — (service)
-- ⚫ `LinkedInJobsConnector` — RBAC: — (service)
-- ⚫ `SchoolPartnersPortal` (écoles hôtelières) — RBAC: 80 · 100
-- ⚫ `HireDecisionDialog` (embauche → génère contrat) — RBAC: 80 · 100
-- ⚫ `RejectionEmailTemplate` — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 6.6 — Communication interne (nouveau)
-
-- ⚫ `TeamChatInterface` (chat équipe temps réel) — RBAC: ∀
-- ⚫ `AnnouncementBoard` (annonces manager → équipe) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AcknowledgmentTracker` (lu par tous) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PollsCreator` (sondage équipe) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EmployeeFeedbackInbox` — RBAC: 80 · 100
-
-## 🖼️ Écran 6.7 — Paie (`/payroll`)
-
-- 🔧 `PayrollDashboard` — RBAC: 80 · 100
-- 🔧 `PayrollGenerationMonthWizard` — RBAC: 80 · 100
-- 🔧 `TipDistributionPanel` (pool tips) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `PayfitConnector` — RBAC: — (service)
-- 🔧 `SilaeConnector` — RBAC: — (service)
-- ⚫ `PayslipViewer` (bulletin PDF) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100 (le sien)
-- ⚫ `PayrollDsnGeneration` — RBAC: 80 · 100
-- ⚫ `PayrollJournalPreview` (avant validation) — RBAC: 80 · 100
-- ⚫ `PayrollAdjustmentDialog` (prime/retenue) — RBAC: 80 · 100
+> ⚡ **Câblage & Handlers Code RH** :
+> * ⚙️ **Handlers Actifs** : `registerPayrollTimeclockHandler()`, `registerLaborCostAnalyzerHandler()`, `registerScheduleNotifierHandler()`, `registerOvertimeAlertHandler()`, `registerOvertimeJournalHandler()`, `registerPayrollComplianceHandler()`, `registerShiftAutoAuditHandler()`, `registerHRBreakCheckHandler()`, `SilaeExportHandler`, `PayrollAutoCalcHandler`
+> * 📡 **Event Bus** :
+>   * `Émet` : `human.shift.created` `{ employeeId, start, end, role }`, `human.timeclock.punched` `{ employeeId, type, timestamp }`, `human.compliance.violation_detected` `{ employeeId, ruleName }`
+>   * `Écoute` : `ops.pos.user_logged_in`, `ops.pos.cash_opened`
+> * 🛡️ **RBAC** : Pointage: ∀ (10+) | Consultation planning: 20+ | Écriture planning: 60+ | Export Paie: 80+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.human.hr` (Journalisation inaltérable des pointages)
+> * 🗺️ **Chemin d'Impact** : `Zone 6 (Pointage Fin Service) ➔ EventBus ➔ Zone 6 (Calcul Heures Supp & Repos Légal HCR) ➔ Zone 10 (Masse Salariale Réelle Prime Cost)`
+> * 🔍 **Blindspots résolus** : Blocage de la publication d'un planning violant les 11h de repos conventionnelles via `SovereignGuard` strict.
 
 ---
 
-# 🖥️ Zone 7 — FINANCE & COMPTABILITÉ
+# 🖥️ Zone 7 — FINANCE & COMPTABILITÉ FISCALE
 
-## 🖼️ Écran 7.1 — Dashboard finance (`/finance`)
+## 🖼️ Écran 7.1 — Clôture Z, Factur-X & Grand Livre (`/accounting`, `/finance`)
 
-- ✅ `FinanceOverview` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > CaDay` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > CaMonth` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > GrossMargin` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > CashInDrawer` — RBAC: 60 · 70 · 80 · 100
-- ✅ `RevenueChart` (line) — RBAC: 60 · 70 · 80 · 100
-- ✅ `VATBreakdown` (ventilation 5.5/10/20) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `PeriodPicker` (day/week/month/year/custom) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `ComparisonToggle` (vs N-1) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CashFlowForecast` (J+7/J+30) — RBAC: 80 · 100
-- ⚫ `ChargesVsBudgetChart` — RBAC: 80 · 100
-- ⚫ `AnomalyAlertsWidget` (CA en baisse anormale) — RBAC: 80 · 100
-- ⚫ `EBITDACalculator` — RBAC: 80 · 100
-- ⚫ `BreakEvenAnalysisChart` (seuil rentabilité) — RBAC: 80 · 100
+### 🧩 Composants Finance, NF525 & E-Invoicing
+- ✅ `DailyZClosureReport` (`src/modules/finance/components/accounting/`, `src/modules/finance/fiscalite/nf525/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `PaymentReconciliationGrid` (`src/modules/finance/tresorerie/banking/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `CashDrawerDiscrepancyModal` (`src/orchestration/handlers/CashDrawerAnomalyHandler.ts`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `FacturXInvoiceGenerator` (`src/modules/finance/comptabilite/einvoicing/`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `FecExportButton` (`src/modules/finance/comptabilite/fec/`) — RBAC: 80 · 100
+- ✅ `GeneralLedgerView` (`src/modules/finance/comptabilite/accounting/`) — RBAC: 70 · 80 · 100
+- ⚫ `TipsRedistributionMatrix` (`src/modules/human/remuneration/tip-pooling/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `PdpConnectorStatusWidget` (`src/modules/finance/comptabilite/einvoicing/`) — RBAC: 80 · 100
+- ⚫ `VatMultiRateSplitter` (`src/modules/finance/fiscalite/tax/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `ImmutableJetAuditLog` (`src/modules/finance/fiscalite/nf525/`) — RBAC: 80 · 100
 
-## 🖼️ Écran 7.2 — Caisse (`/cash`)
-
-- ✅ `CashDrawerOpenDialog` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `DenominationBreakdownInput` (billets/pièces) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `CashCountModal` (fermeture) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `DiscrepancyDisplay` (écart) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `CashMovementsLog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ManualCashMovementDialog` (retrait/apport) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SafeDepositTracker` (coffre) — RBAC: 80 · 100
-- ⚫ `CashDropDialog` (dépôt banque) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CashierPerformanceReport` (écarts par caissier) — RBAC: 80 · 100
-
-## 🖼️ Écran 7.3 — Banque (`/finance/bank`)
-
-- ✅ `BankAccountsList` — RBAC: 80 · 100
-- ✅ `BankConnectionCard` — RBAC: 80 · 100
-- ✅ `BankConnectionStatusBadge` — RBAC: 80 · 100
-- ✅ `BankReconnectButton` (OAuth) — RBAC: 80 · 100
-- ✅ `TransactionsList` — RBAC: 80 · 100
-- ✅ `TransactionReconciliationRow` — RBAC: 80 · 100
-- 🔧 `ReconciliationAssistant` (matching auto) — RBAC: 80 · 100
-- ⚫ `MultiBankAccountToggle` — RBAC: 80 · 100
-- ⚫ `BankConnectionExpiryAlert` — RBAC: 80 · 100
-- ⚫ `TransactionCategorizationRules` — RBAC: 80 · 100
-- ⚫ `BankStatementImportOFX` — RBAC: 80 · 100
-
-## 🖼️ Écran 7.4 — NF525 & fiscal (`/nf525`)
-
-- ✅ `TicketZViewer` — RBAC: 60 · 70 · 80 · 100
-- ✅ `TicketZDailyList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `FiscalChainAudit` — RBAC: 80 · 100
-- ✅ `SealChainVisualizer` (chaîne SHA-256) — RBAC: 80 · 100
-- ✅ `FECExportDialog` — RBAC: 80 · 100
-- ✅ `FECPeriodPicker` — RBAC: 80 · 100
-- 🔧 `PennylaneSyncPanel` — RBAC: 80 · 100
-- ⚫ `CegidExportPanel` — RBAC: 80 · 100
-- ⚫ `Sage100ExportPanel` — RBAC: 80 · 100
-- ⚫ `QuickBooksSyncPanel` — RBAC: 80 · 100
-- ⚫ `NF525CertificateViewer` (attestation) — RBAC: 80 · 100
-- ⚫ `AnnualFiscalReportPDF` — RBAC: 80 · 100
-- ⚫ `TicketZReprintDialog` — RBAC: 80 · 100
-
-## 🖼️ Écran 7.5 — Facturation (`/invoicing`)
-
-- ✅ `InvoicesList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InvoiceEditor` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InvoiceLinesGrid` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InvoiceLegalMentionsPreview` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InvoicePDFPreview` — RBAC: 60 · 70 · 80 · 100
-- ✅ `EInvoicingPanel` — RBAC: 60 · 70 · 80 · 100
-- ✅ `InboundInvoicesList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `OutboundInvoicesList` — RBAC: 60 · 70 · 80 · 100
-- ✅ `LifecycleTracker` (émise→envoyée→reçue→validée→payée) — RBAC: 60 · 70 · 80 · 100
-- ✅ `FormatSelector` (Factur-X/UBL/CII) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `ChorusProConnector` — RBAC: 80 · 100
-- ⚫ `DunningQueue` (relances impayés) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `DunningTemplateEditor` (templates relance) — RBAC: 80 · 100
-- ⚫ `CreditNoteGenerator` (avoir) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `RefundIssuanceDialog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PaymentReceivedNotifier` (marquer payée) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 7.6 — Comptabilité analytique (nouveau)
-
-- ⚫ `CostCentersEditor` (centres de coûts) — RBAC: 80 · 100
-- ⚫ `AnalyticalPnLReport` (P&L par centre) — RBAC: 80 · 100
-- ⚫ `BudgetPlanningWizard` (budget annuel) — RBAC: 100
-- ⚫ `BudgetVsActualChart` — RBAC: 80 · 100
-- ⚫ `MonthlyClosureChecklist` (fermeture mois) — RBAC: 80 · 100
-- ⚫ `ProvisionsAutoCalculator` (URSSAF/TVA/IS) — RBAC: 80 · 100
+> ⚡ **Câblage & Handlers Code Finance** :
+> * ⚙️ **Handlers Actifs** : `registerTicketZHandler()`, `registerZReportCloseHandler()`, `registerTechAuditLedgerHandler()`, `registerCryptoIntegrityCheckHandler()`, `registerMonthlyFECExportHandler()`, `registerPaymentRejectAuditHandler()`, `registerTaxMismatchAlertHandler()`, `registerTicketZArchiveHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `finance.ticket_z.sealed` `{ closureId, date, totalHT, totalTTC, hashSha256 }`, `finance.fec.generated` `{ fiscalYear, entryCount }`, `finance.facturx.emitted` `{ invoiceId, total }`
+>   * `Écoute` : `finance.payment.completed`, `ops.cash_drawer.counted`
+> * 🛡️ **RBAC** : Saisie caisse: 30+ | Clôture Z: 60+ (Manager) | Audit JET / Export FEC: 80+ (Gérant) | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.finance.ledger` (Stockage WORM / Append-only inaltérable, scellement local autonome hors-ligne)
+> * 🗺️ **Chemin d'Impact** : `Zone 7 (Clôture Z Scellée) ➔ EventBus ➔ Zone 7 (Scellement JET NF525) ➔ Zone 12 (Sync Pennylane / Sage) ➔ Zone 10 (Consolidation BI)`
+> * 🔍 **Blindspots résolus** : Chaînage SHA-256 sans faille interdisant toute altération ou suppression conformément au décret NF525.
 
 ---
 
-# 🖥️ Zone 8 — CONFORMITÉ & SÉCURITÉ
+# 🖥️ Zone 8 — CONFORMITÉ SANITAIRE (HACCP)
 
-## 🖼️ Écran 8.1 — HACCP (`/haccp`)
+## 🖼️ Écran 8.1 — Sondes IoT, Traçabilité & PMS (`/compliance`, `/haccp`)
 
-- ✅ `HaccpDashboard` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `HaccpKPITiles` (temp OK, NC ouvertes, tâches à faire) — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `TemperatureLogForm` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `PhotoRequiredUploader` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TemperatureZonePicker` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `TemperatureHistoryChart` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `TemperatureThresholdConfig` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `IoTSensorsPanel` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `TestoSensorConnector` — RBAC: — (service)
-- ⚫ `SwissAvantSensorConnector` — RBAC: — (service)
-- ⚫ `SensorBatteryLowAlert` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SensorCalibrationTracker` — RBAC: 60 · 70 · 80 · 100
-- ✅ `NonConformityForm` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `NonConformityList` — RBAC: 40 · 60 · 70 · 80 · 100
-- ✅ `NonConformityStatusChip` — RBAC: ∀
-- ⚫ `NonConformityCloseDialog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `RootCauseAnalysisEditor` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CorrectiveActionTracker` — RBAC: 60 · 70 · 80 · 100
-- ✅ `TracabiliteEtiquettes` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `EtiquetteEditor` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `EtiquettePrintQueue` — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ✅ `ReceptionMarchandises` (aussi zone 5) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `HaccpMonthlyReport` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `HaccpAuditPrepDashboard` (avant contrôle DDCCRF) — RBAC: 80 · 100
-- ⚫ `HaccpChecklistLibrary` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `HaccpTasksScheduler` (nettoyage, calibrage récurrents) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `HaccpTaskCard` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+### 🧩 Composants Hygiène, Températures & Traçabilité
+- ✅ `TemperatureLogDashboard` (`src/modules/compliance/qualite/haccp/`) — RBAC: ∀
+- ✅ `IoTProbeStatusCard` (`src/modules/compliance/connectors/iot/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CriticalTemperatureAlertBanner` (`src/design/ui/NotificationPanel.tsx`) — RBAC: ∀
+- ✅ `MeatFishTraceabilityForm` (`src/modules/compliance/sanitaire/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `SecondaryDlcLabelPrinter` (`src/modules/compliance/qualite/haccp/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `CleaningScheduleGrid` (`src/modules/compliance/qualite/calendar/`) — RBAC: ∀
+- ⚫ `DgccrfRecallWizard` (`src/modules/compliance/qualite/recall/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `OilPolarityTesterForm` (`src/modules/compliance/qualite/safety-protocols/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `SanitaryAuditExporter` (`src/modules/compliance/qualite/haccp/`) — RBAC: 70 · 80 · 100
 
-## 🖼️ Écran 8.2 — Allergènes (`/allergens`)
-
-- ✅ `AllergenMatrix` — RBAC: 60 · 70 · 80 · 100
-- ✅ `AllergenChecklistPerProduct` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `AllergenPublicSheet` (PDF vitrine) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AllergenAlertConfig` (config alertes) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CrossContaminationWarnings` — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 8.3 — RGPD (`/rgpd`)
-
-- ✅ `TreatmentsRegister` — RBAC: 80 · 100
-- ✅ `RightToBeForgottenModal` — RBAC: 80 · 100
-- ✅ `DataExportRequestModal` — RBAC: 80 · 100
-- ✅ `ConsentTrackerPerClient` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `CookieBannerConfig` — RBAC: 80 · 100
-- ⚫ `GDPRRequestsInbox` (demandes clients) — RBAC: 80 · 100
-- ⚫ `DPOContactPanel` — RBAC: 80 · 100
-- ⚫ `DataBreachIncidentForm` (déclaration violation) — RBAC: 100
-- ⚫ `PrivacyPolicyEditor` — RBAC: 100
-
-## 🖼️ Écran 8.4 — Registre du personnel (`/hr/registry`)
-
-- 🔧 `PersonnelRegistryView` — RBAC: 80 · 100
-- 🔧 `PersonnelRegistryPDFExport` — RBAC: 80 · 100
-- ⚫ `PersonnelRegistryChangesHistory` (immuable) — RBAC: 80 · 100
-
-## 🖼️ Écran 8.5 — Audits externes (nouveau)
-
-- ⚫ `ExternalAuditsPlanning` (calendrier audits DDCCRF/URSSAF) — RBAC: 80 · 100
-- ⚫ `AuditDocumentsRepository` — RBAC: 80 · 100
-- ⚫ `AuditReportUpload` — RBAC: 80 · 100
-- ⚫ `ComplianceScoreDashboard` — RBAC: 80 · 100
-- ⚫ `ISO22000PrepChecklist` (option premium) — RBAC: 80 · 100
+> ⚡ **Câblage & Handlers Code HACCP** :
+> * ⚙️ **Handlers Actifs** : `registerHaccpTemperatureThresholdHandler()`, `registerHaccpCheckArchiverHandler()`, `registerHaccpCorrectiveActionHandler()`, `registerNonConformActionHandler()`, `registerQuarantineHandler()`, `registerQuarantineActivatedHandler()`, `registerRecallPOSBlockerHandler()`, `registerDLCExpiryHandler()`, `registerDLCBlockerHandler()`, `registerIotOfflineAlertHandler()`, `registerCoolingCycleHandler()`, `registerSovereignBreachHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `compliance.temperature.recorded` `{ probeId, tempCelsius }`, `compliance.temperature.alert_triggered` `{ probeId, tempCelsius }`, `compliance.recall.initiated` `{ lotNumber }`
+>   * `Écoute` : `logistics.po.received` `{ lotNumbers }`, `integrations.iot.telemetry_received`
+> * 🛡️ **RBAC** : Saisie: ∀ (10+) | Validation nettoyage: 20+ | Enregistrement lots: 30+ | Rappel lot: 70+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.compliance.haccp` (Escalation SMS/Vocal si incident froid non acquitté sous 15 min)
+> * 🗺️ **Chemin d'Impact** : `Zone 8 (Alerte Froid) ➔ EventBus ➔ Zone 8 (SMS Manager) ➔ Zone 5 (Marquage Lots à Risque) ➔ Zone 9 (Ticket GMAO Frigoriste)`
+> * 🔍 **Blindspots résolus** : Buffer mémoire local 72h dans les sondes pour préserver les relevés en cas de coupure de réseau.
 
 ---
 
-# 🖥️ Zone 9 — FACILITY & MAINTENANCE
+# 🖥️ Zone 9 — FACILITY & MAINTENANCE DU PARC (GMAO)
 
-## 🖼️ Écran 9.1 — Équipements (nouveau `/equipments`)
+## 🖼️ Écran 9.1 — Équipements & Pannes (`/facility`, `/maintenance`)
 
-- ⚫ `EquipmentsList` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `EquipmentCard` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `EquipmentDetail` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `EquipmentPhotoGallery` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `EquipmentWarrantyTracker` — RBAC: 80 · 100
-- ⚫ `EquipmentQRCodeGenerator` (QR physique à coller) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EquipmentSuppliersDirectory` — RBAC: 80 · 100
-- ⚫ `EquipmentDocumentsUploader` (factures/garanties) — RBAC: 80 · 100
-- ⚫ `MaintenanceScheduler` (préventive) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MaintenanceCalendar` — RBAC: 60 · 70 · 80 · 100
-- 🔧 `MaintenanceRequestForm` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MaintenanceRequestsList` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MaintenanceRequestDetail` (statut/photos/coût) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MaintenanceProviderContactPanel` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PreventiveMaintenanceReminders` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EquipmentCostHistoryChart` — RBAC: 80 · 100
+### 🧩 Composants GMAO & Maintenance
+- ✅ `EquipmentRegistryTable` (`src/modules/facility/assets/`, `src/modules/facility/maintenance/registre/`) — RBAC: 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `BreakdownReportModal` (`src/modules/facility/maintenance/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `QrCodeMachineTag` (`src/modules/facility/assets/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `PreventiveMaintenanceCalendar` (`src/modules/facility/maintenance/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `TechnicianDispatchNotifier` (`src/modules/facility/maintenance/services/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `EquipmentEnergyMonitor` (`src/modules/facility/maintenance/iot-monitoring/`) — RBAC: 70 · 80 · 100
 
-## 🖼️ Écran 9.2 — Consommations (nouveau)
-
-- ⚫ `EnergyDashboard` (Linky/Enedis) — RBAC: 80 · 100
-- ⚫ `WaterConsumptionTracker` — RBAC: 80 · 100
-- ⚫ `GasConsumptionTracker` — RBAC: 80 · 100
-- ⚫ `EnergyAnomalyDetector` — RBAC: 80 · 100
-- ⚫ `MonthlyEnergyReport` — RBAC: 80 · 100
-
-## 🖼️ Écran 9.3 — Nettoyage (nouveau)
-
-- ⚫ `CleaningSchedulesDashboard` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `CleaningChecklistTemplates` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CleaningOpeningChecklist` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `CleaningClosingChecklist` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `PhotoProofRequired` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `CleaningComplianceScore` — RBAC: 60 · 70 · 80 · 100
+> ⚡ **Câblage & Handlers Code Facility** :
+> * ⚙️ **Handlers Actifs** : `registerFacilityHandlers()`, `registerIotOfflineAlertHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `facility.ticket.created` `{ ticketId, machineId, severity }`, `facility.maintenance.completed` `{ machineId, cost }`
+>   * `Écoute` : `compliance.temperature.alert_triggered` `{ probeId }`
+> * 🛡️ **RBAC** : Signalement: 20+ | Attribution ticket: 60+ | Validation facture: 80+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.facility.tickets` (Routage résilient vers prestataires externes)
+> * 🗺️ **Chemin d'Impact** : `Zone 9 (Panne Four Signalée) ➔ EventBus ➔ Zone 3 (Live 86ing Plats Four) ➔ Zone 9 (SMS Dépanneur Agréé)`
+> * 🔍 **Blindspots résolus** : Scan QR code hors-ligne stockant le signalement et l'expédiant dès retour de la connectivité.
 
 ---
 
-# 🖥️ Zone 10 — ANALYTICS & BI
+# 🖥️ Zone 10 — ANALYTICS, BI & PERFORMANCE
 
-## 🖼️ Écran 10.1 — Dashboard direction (`/dashboard`)
+## 🖼️ Écran 10.1 — Cockpit Dirigeant & Matrice Menu (`/analytics`, `/bi`)
 
-- ✅ `KPIStripHeader` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > CaDay` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > CoverCount` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > AverageCheck` — RBAC: 60 · 70 · 80 · 100
-- ✅ `KpiTile > GrossMargin` — RBAC: 80 · 100
-- ✅ `RevenueEvolutionChart` (Area) — RBAC: 60 · 70 · 80 · 100
-- ✅ `TopProductsChart` (Horizontal bar) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `OccupancyHeatmap` (jours × créneaux) — RBAC: 60 · 70 · 80 · 100
-- 🔧 `StaffPerformancePanel` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CategoryMixDoughnut` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `PaymentMethodsBreakdown` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `NewVsReturningCustomers` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WasteRateWidget` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AverageServiceTimeWidget` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MultiEstablishmentToggle` (groupe) — RBAC: 80 · 100
-- ⚫ `MultiEstablishmentComparison` — RBAC: 80 · 100
-- ⚫ `GroupConsolidatedPnL` — RBAC: 80 · 100
+### 🧩 Composants Analytics & Décisionnels
+- ✅ `ExecutiveKpiCards` (`src/design/ui/StatCard.tsx`, `src/modules/intelligence/analytique/components/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `PrimeCostLiveMeter` (`src/modules/intelligence/analytique/analytics/`) — RBAC: 70 · 80 · 100
+- ✅ `RevPashHourlyHeatmap` (`src/modules/intelligence/analytique/attendance/`) — RBAC: 70 · 80 · 100
+- ✅ `BcgMenuEngineeringMatrix` (`src/modules/commerce/catalog/menu-engineering/`) — RBAC: 70 · 80 · 100
+- ✅ `LaborVsSalesChart` (`src/modules/human/remuneration/services/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `MultiStoreConsolidatedDashboard` (`src/modules/intelligence/analytique/reports/`) — RBAC: 80 · 100
+- ⚫ `SalesForecastAiGauge` (`src/modules/intelligence/ia/simulator/`) — RBAC: 60 · 70 · 80 · 100
 
-## 🖼️ Écran 10.2 — Reports (`/reports`)
-
-- 🔧 `ReportsCatalog` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ReportCard` (item catalogue) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ScheduledReportsSetup` — RBAC: 80 · 100
-- ⚫ `DailyReportEmailAutoSender` — RBAC: — (service)
-- ⚫ `MonthlyReportPDFBuilder` — RBAC: 80 · 100
-- ⚫ `CustomReportBuilder` (drag & drop widgets) — RBAC: 80 · 100
-- ⚫ `ReportSharingSettings` (envoyer au comptable) — RBAC: 80 · 100
-
-## 🖼️ Écran 10.3 — Cohortes & rétention (nouveau)
-
-- ⚫ `CohortsTable` (acquisition par mois × rétention M+1/M+3/M+6) — RBAC: 80 · 100
-- ⚫ `RetentionCurveChart` — RBAC: 80 · 100
-- ⚫ `ChurnAnalysisPanel` — RBAC: 80 · 100
-- ⚫ `CLVBySegmentChart` — RBAC: 80 · 100
-
-## 🖼️ Écran 10.4 — Analyse fréquentation (nouveau)
-
-- ⚫ `HourlyOccupancyHeatmap` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WeatherImpactChart` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `EventsImpactCorrelation` (match/concert) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `SeasonalityChart` (année N vs N-1) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 10.5 — Data exports (`/data`)
-
-- ✅ `OrdersCSVExport` — RBAC: 80 · 100
-- ✅ `ClientsCSVExport` — RBAC: 80 · 100
-- 🔧 `InventoryCSVExport` — RBAC: 80 · 100
-- ⚫ `GraphQLAPIExplorer` (BI externe Metabase) — RBAC: 80 · 100
-- ⚫ `APIKeysManager` — RBAC: 100
+> ⚡ **Câblage & Handlers Code Analytics** :
+> * ⚙️ **Handlers Actifs** : `registerSalesDataReadyHandler()`, `registerLaborCostAnalyzerHandler()`, `registerTableTurnoverAnalyzerHandler()`, `registerFoodCostImpactedHandler()`, `registerAnomalyDetectedHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `analytics.kpi.computed` `{ date, caHT, primeCost, revPash }`, `analytics.alert.prime_cost_exceeded` `{ threshold, currentRatio }`
+>   * `Écoute` : `finance.payment.completed`, `logistics.stock.decremented`, `human.timeclock.punched`
+> * 🛡️ **RBAC** : Superviseur: 60+ | Cockpit financier complet: 80+ | Multi-sites: 100
+> * 🧯 **DLQ** : `dlq.analytics.pipeline` (Agrégation asynchrone non-bloquante)
+> * 🗺️ **Chemin d'Impact** : `Zone 1 (Ventes) + Zone 5 (Stocks) + Zone 6 (Pointage) ➔ EventBus ➔ Zone 10 (Calcul Prime Cost Temps Réel) ➔ Zone 11 (Briefing Oracle IA)`
+> * 🔍 **Blindspots résolus** : Agrégation en continu dans un buffer sans recalcul lourd bloquant la base de données transactionnelle.
 
 ---
 
-# 🖥️ Zone 11 — INTELLIGENCE & IA (Oracle)
+# 🖥️ Zone 11 — INTELLIGENCE ARTIFICIELLE ORACLE
 
-## 🖼️ Écran 11.1 — Oracle chat (`/intelligence`)
+## 🖼️ Écran 11.1 — Majordome RAG & Vision (`/oracle`, `/intelligence`)
 
-- 🔧 `OracleChatWindow` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `MessageThread` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `UserMessageBubble` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `AssistantMessageBubble` — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `MessageInput` (textarea + micro dictée) — RBAC: 40 · 60 · 70 · 80 · 100
-- 🔧 `SourcesPanel` (citations) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `QuickSuggestionsBar` (prompts fréquents) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `ConversationsHistorySidebar` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `ConversationExportButton` (PDF/copy) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `VoiceInputController` (dictée vocale) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `ChatContextSelector` (scope : ventes / stocks / RH) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ChatFileUploader` (analyser doc uploadé) — RBAC: 60 · 70 · 80 · 100
+### 🧩 Composants IA & Vision Cuisine
+- ✅ `OracleChatInterface` (`src/modules/intelligence/ia/ai/`, `src/modules/intelligence/ia/core/`) — RBAC: 40 · 60 · 70 · 80 · 100
+- ✅ `MorningStrategicBriefing` (`src/modules/intelligence/ia/realtime/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `VoiceBriefingPlayer` (`src/modules/intelligence/ia/realtime/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `WasteVisionPlateAnalyzer` (`src/modules/intelligence/ia/diagnostic-assist/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `PassQualityVisionGuard` (`src/modules/intelligence/ia/diagnostic-assist/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `SovereignRagContextInspector` (`src/modules/intelligence/knowledge/rag/`) — RBAC: 100
 
-## 🖼️ Écran 11.2 — Insights proactifs
-
-- ⚫ `ProactiveInsightsPanel` (side dashboard) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `InsightCard` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `InsightDismissAction` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `InsightDeepDiveModal` — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 11.3 — Prédictions (nouveau)
-
-- ⚫ `ForecastingDashboard` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AttendanceForecastChart` (J+7) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `CategorySalesForecast` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `StockRuptureForecast` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `WeatherWidget` (impact météo) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MenuDaySuggestion` (IA suggère menu jour) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ChurnRiskCustomersList` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `RelanceTargetingWizard` — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 11.4 — Détection anomalies (nouveau)
-
-- 🔧 `AnomalyFeedDashboard` — RBAC: 80 · 100
-- ⚫ `AnomalyCard` (IoT hors seuil, CA baisse, void abusifs) — RBAC: 80 · 100
-- ⚫ `FraudDetectionAlerts` (annulations excessives) — RBAC: 80 · 100
-- ⚫ `AnomalyRulesEditor` — RBAC: 100
-
-## 🖼️ Écran 11.5 — Assistant vocal (nouveau)
-
-- ⚫ `VoiceAssistantOverlay` (déjà scaffolded) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `VoicePushToTalkButton` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `VoiceCommandsDictionary` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `VoiceReceiverKitchen` (cuisine reçoit ordre vocal) — RBAC: 20 · 60 · 70 · 100
+> ⚡ **Câblage & Handlers Code IA Oracle** :
+> * ⚙️ **Handlers Actifs** : `registerSupportEscalationHandler()`, `registerAnomalyDetectedHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `intelligence.briefing.generated` `{ tenantId, briefingText, audioUrl }`, `intelligence.waste.analyzed` `{ dishId, estimatedGramsWasted }`
+>   * `Écoute` : `analytics.kpi.computed`, `ops.reservation.created`, `facility.ticket.created`
+> * 🛡️ **RBAC** : Questions opérationnelles: 40+ | Données financières: 80+ | Souveraineté RAG: 100
+> * 🧯 **DLQ** : `dlq.intelligence.oracle` (Timeout IA 10s avec fallback déterministe)
+> * 🗺️ **Chemin d'Impact** : `Zone 10 (Données BI) ➔ EventBus ➔ Zone 11 (Synthèse IA Oracle) ➔ Zone 1 (Message Clé Matinal sur POS/KDS)`
+> * 🔍 **Blindspots résolus** : Cloisonnement strict multi-tenant interdisant à l'IA d'accéder aux données d'un autre restaurant lors de la vectorisation RAG.
 
 ---
 
-# 🖥️ Zone 12 — INTÉGRATIONS
+# 🖥️ Zone 12 — HUB D'INTÉGRATIONS & HARDWARE
 
-## 🖼️ Écran 12.1 — Marketplace connecteurs (`/integrations`)
+## 🖼️ Écran 12.1 — Passerelles, Connecteurs & Périphériques (`/integrations`)
 
-- 🔧 `ConnectorsMarketplace` — RBAC: 80 · 100
-- 🔧 `ConnectorCategoryTabs` — RBAC: 80 · 100
-- ✅ `ConnectorCard` — RBAC: 80 · 100
-- ✅ `ConnectorStatusBadge` — RBAC: 80 · 100
-- 🔧 `ConnectorSetupWizard` — RBAC: 80 · 100
-- 🔧 `ConnectorOAuthStep` — RBAC: 80 · 100
-- 🔧 `ConnectorConfigStep` — RBAC: 80 · 100
-- 🔧 `ConnectorTestConnectionStep` — RBAC: 80 · 100
-- 🔧 `ConnectorActivationStep` — RBAC: 80 · 100
-- ⚫ `ConnectorHealthMonitor` — RBAC: 80 · 100
-- ⚫ `ConnectorLogsViewer` — RBAC: 80 · 100
-- ⚫ `ConnectorRetryFailedSync` — RBAC: 80 · 100
-- ⚫ `ConnectorDisconnectDialog` — RBAC: 80 · 100
-- ⚫ `WebhookBuilder` (créer webhook custom) — RBAC: 100
-- ⚫ `APIKeysManager` — RBAC: 100
-- ⚫ `SandboxModeToggle` (test connecteur) — RBAC: 80 · 100
+### 🧩 Composants Intégrations & Périphériques
+- ✅ `DeliveryPlatformHub` (`src/modules/ops/connectors/delivery/`, `src/modules/commerce/relation/delivery/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `AccountingSyncPanel` (`src/modules/finance/connectors/accounting/`) — RBAC: 80 · 100
+- ✅ `StripeTerminalManager` (`src/modules/finance/connectors/payments/`) — RBAC: 60 · 70 · 80 · 100
+- ✅ `EscPosPrinterMapper` (`src/modules/ops/service/printers/`) — RBAC: 60 · 70 · 80 · 100
+- ⚫ `OfflineSyncManagerWidget` (`src/lib/offline/sync-manager.ts`) — RBAC: ∀
+- ⚫ `GoogleReserveConnectorCard` (`src/modules/ops/connectors/reservations/`) — RBAC: 60 · 70 · 80 · 100
 
-## 🖼️ Écran 12.2 — Livraison / plateformes (nouveau)
-
-- ⚫ `DeliveryOrdersInbox` (Deliveroo/UberEats commandes) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `DeliveryOrderCard` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `AcceptRejectDeliveryOrderButtons` — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `DeliveryPlatformStatusPanel` (temps livraison réel) — RBAC: 40 · 60 · 70 · 80 · 100
-- ⚫ `DeliveryMenusSyncPanel` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `DeliveryCommissionsSummary` — RBAC: 80 · 100
+> ⚡ **Câblage & Handlers Code Intégrations** :
+> * ⚙️ **Handlers Actifs** : `registerDeliveryDriverUnlockHandler()`, `registerPrinterMappingHandler()`, `registerBankConnectionExpiredHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `integrations.delivery.order_injected` `{ platform, orderId, lines }`, `integrations.hardware.printer_error` `{ printerIp, errorType }`, `integrations.offline.sync_completed` `{ processedCount }`
+>   * `Écoute` : `ops.order.created`, `finance.ticket_z.sealed`, `ops.dish.86_toggled`
+> * 🛡️ **RBAC** : Statut: 20+ | Configuration matériel: 60+ | Clés API / Comptabilité: 80+ | Souveraineté: 100
+> * 🧯 **DLQ** : `dlq.integrations.delivery` (File d'attente résiliente avec webhook retry automatique)
+> * 🗺️ **Chemin d'Impact** : `Zone 12 (Webhook Deliveroo) ➔ EventBus ➔ Zone 1 (Injection KDS & POS) ➔ Zone 5 (Décrémentation Stock) ➔ Zone 7 (Scellement Vente)`
+> * 🔍 **Blindspots résolus** : Mode Offline-First avec buffer local (`src/lib/offline/sync-manager.ts`) garantissant zéro doublon de commande à la reconnexion.
 
 ---
 
-# 🖥️ Zone 13 — PARAMÉTRAGE & ADMIN CLIENT
+# 🖥️ Zone 13 — PARAMÉTRAGE, MULTI-TENANT & MCC
 
-## 🖼️ Écran 13.1 — Paramètres généraux (`/settings`)
+## 🖼️ Écran 13.1 — Matrice RBAC, DNA & Packs (`/settings`, `/admin/mcc`)
 
-- ✅ `SettingsNavigation` — RBAC: 80 · 100
-- ✅ `EstablishmentForm` — RBAC: 80 · 100
-- ✅ `SiretAutoLookupInput` (INSEE) — RBAC: 80 · 100
-- ✅ `OpeningHoursEditor` — RBAC: 80 · 100
-- ✅ `HolidayCalendarEditor` — RBAC: 80 · 100
-- ✅ `FiscalConfigPanel` — RBAC: 80 · 100
-- ⚫ `SpecialEventsCalendar` (privatisations récurrentes) — RBAC: 80 · 100
-- ⚫ `TimezoneSelector` — RBAC: 100
-- ⚫ `LanguageDefaultPicker` — RBAC: 80 · 100
-- ⚫ `CurrencyConfigPanel` (multi-devise groupes) — RBAC: 100
+### 🧩 Composants Paramétrage & Matrice RBAC
+- ✅ `RbacMatrixEditor` (`src/design/settings/StandardSettingsEngine.tsx`, `src/app/(admin)/admin/mcc/`) — RBAC: 80 · 100
+- ✅ `SupervisorPinManager` (`src/design/ui/SecurityPinModal.tsx`) — RBAC: 80 · 100
+- ✅ `WhiteLabelBrandingEditor` (`src/design/settings/BrandImportWizard.tsx`, `src/lib/branding/WhiteLabelBrandingInjector.ts`) — RBAC: 80 · 100
+- ✅ `ModulePackSelector` (`src/app/(admin)/admin/mcc/page.tsx`, `src/lib/TenantSeeder.ts`) — RBAC: 100 (MCC)
+- ✅ `TaxRateConfigurator` (`src/modules/finance/fiscalite/tax/`) — RBAC: 80 · 100
+- ⚫ `AuditTrailViewer` (`src/modules/compliance/securite/audit/`) — RBAC: 80 · 100
+- ⚫ `TenantDnaCloner` (`src/lib/ProvisioningEngine.ts`, `src/lib/TenantSeeder.ts`) — RBAC: 100 (MCC)
 
-## 🖼️ Écran 13.2 — Apparence & branding
-
-- ✅ `BrandingPanel` — RBAC: 80 · 100
-- ✅ `LogoUploader` — RBAC: 80 · 100
-- ✅ `ColorPicker > PrimaryColor` — RBAC: 80 · 100
-- ✅ `ColorPicker > AccentColor` — RBAC: 80 · 100
-- ✅ `ColorPicker > DarkBackgroundColor` — RBAC: 80 · 100
-- ✅ `FontPicker > BrandFont` — RBAC: 80 · 100
-- ✅ `FontPicker > UiFont` — RBAC: 80 · 100
-- ✅ `LivePreviewPanel` (splash/POS/factures) — RBAC: 80 · 100
-- ✅ `SplashScreenToggle` — RBAC: 80 · 100
-- ✅ `BrandImportWizard` (extraction URL site) — RBAC: 80 · 100
-- ⚫ `CustomCssEditor` (avancé — code CSS) — RBAC: 100
-- ⚫ `EmailTemplatesEditor` — RBAC: 80 · 100
-- ⚫ `PrintTemplatesEditor` (tickets/factures) — RBAC: 80 · 100
-- ⚫ `WhiteLabelDomainWizard` (pos.monresto.fr) — RBAC: 100
-- ⚫ `BrandGuidelinesExport` (PDF charte) — RBAC: 80 · 100
-
-## 🖼️ Écran 13.3 — Utilisateurs & rôles
-
-- ✅ `UsersList` — RBAC: 80 · 100
-- ✅ `UserRow` — RBAC: 80 · 100
-- ✅ `UserStatusBadge` — RBAC: 80 · 100
-- ✅ `InviteUserDialog` — RBAC: 80 · 100
-- ✅ `UserDeactivateDialog` — RBAC: 80 · 100
-- ✅ `UserPinResetDialog` — RBAC: 80 · 100
-- ✅ `RolesPermissionsPanel` — RBAC: 100
-- ✅ `RolesList` — RBAC: 100
-- ✅ `PermissionsMatrix` (rôles × actions) — RBAC: 100
-- ✅ `RoleLabelsCustomizer` (renommer libellés) — RBAC: 100
-- 🔧 `PermissionOverrideDialog` (autoriser action à un rôle) — RBAC: 100
-- ⚫ `CustomRoleBuilder` (créer rôle sur-mesure) — RBAC: 100
-- ⚫ `RoleClonerButton` — RBAC: 100
-- ⚫ `RBACAuditTrail` (qui a changé quoi) — RBAC: 100
-- ⚫ `RBACPresetTemplates` (bistrot/gastro/brasserie) — RBAC: 100
-- ⚫ `AccessTestSimulator` ("Si je suis serveur, puis-je annuler ?") — RBAC: 80 · 100
-- ⚫ `TwoFactorAuthConfig` (par utilisateur) — RBAC: 80 · 100
-
-## 🖼️ Écran 13.4 — Notifications
-
-- 🔧 `NotificationChannelsConfig` — RBAC: 80 · 100
-- ✅ `PushSubscriptionManager` — RBAC: ∀
-- 🔧 `NotificationRulesByRole` — RBAC: 80 · 100
-- 🔧 `NotificationRulesByEvent` — RBAC: 80 · 100
-- ⚫ `QuietHoursConfig` — RBAC: ∀
-- ⚫ `NotificationHistoryLog` — RBAC: 80 · 100
-- ⚫ `TestNotificationSender` — RBAC: 80 · 100
-- ⚫ `SlackIntegrationConfig` — RBAC: 80 · 100
-- ⚫ `TeamsIntegrationConfig` — RBAC: 80 · 100
-
-## 🖼️ Écran 13.5 — Facturation SaaS (côté client)
-
-- ✅ `SubscriptionSummary` — RBAC: 80 · 100
-- ✅ `PlanBadge` — RBAC: 80 · 100
-- ✅ `NextRenewalCard` — RBAC: 80 · 100
-- ✅ `InvoicesHistory` — RBAC: 80 · 100
-- ✅ `InvoiceDownloadButton` — RBAC: 80 · 100
-- ⚫ `PlanChangeDialog` (upgrade/downgrade) — RBAC: 100
-- ⚫ `StripePortalRedirect` — RBAC: 100
-- ⚫ `SeatsUsageWidget` (X/Y utilisateurs) — RBAC: 80 · 100
-- ⚫ `AddonsMarketplace` (fonctions premium) — RBAC: 100
-- ⚫ `UsageAnalyticsPanel` (utilisation modules) — RBAC: 80 · 100
-
-## 🖼️ Écran 13.6 — Multi-établissements (nouveau)
-
-- ⚫ `EstablishmentsSwitcher` — RBAC: 80 · 100
-- ⚫ `GroupConsolidatedDashboard` — RBAC: 100
-- ⚫ `EstablishmentComparisonChart` — RBAC: 100
-- ⚫ `SharedStaffPoolManager` (staff partagé) — RBAC: 100
-- ⚫ `SharedSuppliersManager` — RBAC: 100
-- ⚫ `IntercompanyTransfersLog` — RBAC: 100
-- ⚫ `GroupBillingCentralization` — RBAC: 100
-- ⚫ `HierarchicalRolesConfig` (directeur groupe > directeur étab) — RBAC: 100
+> ⚡ **Câblage & Handlers Code MCC & Paramétrage** :
+> * ⚙️ **Handlers Actifs** : `registerSovereignBreachHandler()`, `registerTechAuditLedgerHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `admin.rbac.permissions_updated` `{ tenantId, matrix }`, `admin.branding.updated` `{ tenantId, primaryColor, logo }`, `admin.pack.switched` `{ tenantId, newPack }`
+>   * `Écoute` : `admin.fleet.ota_broadcast`
+> * 🛡️ **RBAC** : Paramètres: 80+ | Modification RBAC: 80+ | Flotte & Packs MCC: 100 (MCC Mode)
+> * 🧯 **DLQ** : `dlq.admin.settings` (Validation de schéma Zod stricte)
+> * 🗺️ **Chemin d'Impact** : `Zone 13 (Changement Pack POS_ONLY) ➔ EventBus ➔ Zone 13 (Désactivation routes KDS/Stocks) ➔ Zone 16 (Masquage Composants UI)`
+> * 🔍 **Blindspots résolus** : Mutation dynamique des capabilities sans redémarrage de session grâce au bus unifié.
 
 ---
 
-# 🖥️ Zone 14 — MOBILE COMPANION (nouveau)
+# 🖥️ Zone 14 — APPLICATION MOBILE STAFF (Pad Serveur)
 
-## 🖼️ Écran 14.1 — App staff (Expo)
+## 🖼️ Écran 14.1 — Mobile Companion (`/mobile`)
 
-- ⚫ `StaffMobileHome` (dashboard perso) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MyScheduleWeekView` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MyClockInWidget` (pointage NFC/QR) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MyTipsWidget` (pool + individuel) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MyLeaveBalanceCard` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `MyPayslipsList` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `ShiftSwapRequestMobile` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `TeamChatMobile` — RBAC: ∀
-- ⚫ `AnnouncementsInboxMobile` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+### 🧩 Composants Mobile Staff Nomade
+- ✅ `OneHandOrderPad` (`src/modules/ops/service/pos/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `HapticPassAlert` (`src/modules/ops/production/kds/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ✅ `QuickTableStatusView` (`src/modules/commerce/relation/reservations/components/DailyListView.tsx`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `MobileSplitPayDrawer` (`src/design/ui/BottomSheet.tsx`, `src/modules/finance/tresorerie/split-bill/`) — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
+- ⚫ `LowBatteryGracefulDegrade` (`src/design/ui/glass.tsx`) — RBAC: ∀
 
-## 🖼️ Écran 14.2 — App manager mobile
-
-- ⚫ `ManagerMobileHome` (KPIs jour) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `LiveOccupancyWidget` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `NotificationsCenterMobile` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `AlertsInboxMobile` — RBAC: 60 · 70 · 80 · 100
-- ⚫ `ApprovalsInboxMobile` (leaves/swaps) — RBAC: 60 · 70 · 80 · 100
-- ⚫ `MobileVoidsAuthDialog` (autoriser void à distance) — RBAC: 60 · 70 · 80 · 100
-
-## 🖼️ Écran 14.3 — App KDS tablette (Expo)
-
-- ⚫ `KdsTabletApp` — RBAC: 20 · 60 · 70 · 100
-- ⚫ `KdsTabletTicketCard` (optimisée touch) — RBAC: 20 · 60 · 70 · 100
-- ⚫ `KdsSwipeGestures` (swipe → bump) — RBAC: 20 · 60 · 70 · 100
-- ⚫ `KdsAudioAlertsNative` — RBAC: — (service)
-
-## 🖼️ Écran 14.4 — App caisse iPad (Expo)
-
-- ⚫ `PosIpadApp` — RBAC: 20 · 30 · 40 · 60 · 70 · 80 · 100
-- ⚫ `PosIpadOfflineIndicator` — RBAC: ∀
-- ⚫ `PosIpadPrinterBluetoothManager` — RBAC: — (service)
-- ⚫ `PosIpadStripeReaderNative` — RBAC: — (service)
+> ⚡ **Câblage & Handlers Code Mobile Staff** :
+> * ⚙️ **Handlers Actifs** : `registerKDSTicketDoneNotifier()`, `registerTableLockHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `ops.mobile.order_sent` `{ tableId, items }`, `ops.mobile.call_acknowledged` `{ tableId }`
+>   * `Écoute` : `ops.kds.course_ready` `{ tableId }`, `ops.table.bill_requested` `{ tableId }`
+> * 🛡️ **RBAC** : Commande: 20+ | Encaissement nomade: 20+ | Remise: 60+ (Manager PIN)
+> * 🧯 **DLQ** : `dlq.ops.mobile` (Queue locale SQLite/IndexedDB avec sync en arrière-plan)
+> * 🗺️ **Chemin d'Impact** : `Zone 14 (Mobile Envoi Commande) ➔ EventBus ➔ Zone 1 (POS Central Synchro) ➔ Zone 1 (KDS Cuisine Affichage)`
+> * 🔍 **Blindspots résolus** : Reconnexion automatique lors des passages en zone blanche (cave, terrasse éloignée) avec confirmation visuelle de transmission.
 
 ---
 
-# 🖥️ Zone 15 — SITE WEB PUBLIC (nouveau)
+# 🖥️ Zone 15 — SITE WEB PUBLIC, QR ORDER & CLICK & COLLECT
 
-## 🖼️ Écran 15.1 — Landing publique
+## 🖼️ Écran 15.1 — Portail Client Public (`/shop`, `/order-table`)
 
-- ⚫ `PublicLandingHero` — RBAC: — (public)
-- ⚫ `PublicMenuPreview` — RBAC: — (public)
-- ⚫ `PublicPhotosGallery` — RBAC: — (public)
-- ⚫ `PublicReviewsWidget` — RBAC: — (public)
-- ⚫ `PublicOpeningHoursWidget` — RBAC: — (public)
-- ⚫ `PublicMapEmbed` — RBAC: — (public)
-- ⚫ `PublicBookingCTA` — RBAC: — (public)
-- ⚫ `PublicSocialMediaLinks` — RBAC: — (public)
+### 🧩 Composants Web Public & Commande Table
+- ✅ `PublicStorefrontLanding` (`src/modules/commerce/acquisition/landing/components/LandingDashboard.tsx`) — RBAC: Public (0)
+- ✅ `QrOrderAndPayTable` (`src/modules/commerce/relation/reservations/`) — RBAC: Public (0)
+- ✅ `ClickAndCollectSlotSelector` (`src/modules/commerce/relation/delivery/`) — RBAC: Public (0)
+- ✅ `PublicAllergenFilter` (`src/design/ui/FilterBar.tsx`) — RBAC: Public (0)
+- ⚫ `LiveOrderTrackingTimeline` (`src/modules/ops/workflow/engine/`) — RBAC: Public (0)
 
-## 🖼️ Écran 15.2 — Menu digital public
-
-- ⚫ `PublicMenuHeader` — RBAC: — (public)
-- ⚫ `PublicMenuCategoryNav` — RBAC: — (public)
-- ⚫ `PublicMenuDishCard` — RBAC: — (public)
-- ⚫ `PublicMenuAllergenFilter` — RBAC: — (public)
-- ⚫ `PublicMenuDietaryFilter` — RBAC: — (public)
-- ⚫ `PublicMenuLanguageSwitcher` — RBAC: — (public)
-- ⚫ `PublicMenuAllergenDisclaimer` — RBAC: — (public)
-
-## 🖼️ Écran 15.3 — Click & Collect public
-
-- ⚫ `CollectMenuList` — RBAC: — (public)
-- ⚫ `CollectCartDrawer` — RBAC: — (public)
-- ⚫ `CollectSlotPicker` (créneaux retrait) — RBAC: — (public)
-- ⚫ `CollectPaymentStripe` — RBAC: — (public)
-- ⚫ `CollectConfirmationScreen` — RBAC: — (public)
-- ⚫ `CollectStatusTracking` (préparation/prêt) — RBAC: — (public)
-
-## 🖼️ Écran 15.4 — Gift cards public
-
-- ⚫ `GiftCardPurchasePage` — RBAC: — (public)
-- ⚫ `GiftCardAmountPicker` — RBAC: — (public)
-- ⚫ `GiftCardRecipientForm` (email destinataire) — RBAC: — (public)
-- ⚫ `GiftCardPaymentStripe` — RBAC: — (public)
-- ⚫ `GiftCardDeliveryConfirmation` — RBAC: — (public)
+> ⚡ **Câblage & Handlers Code Web Public** :
+> * ⚙️ **Handlers Actifs** : `registerOrderSealedNF525Handler()`, `registerStockZeroBlockerHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `commerce.web_order.placed` `{ orderType, tableNumber, items, paymentIntentId }`, `commerce.click_collect.slot_reserved` `{ slotTime }`
+>   * `Écoute` : `ops.dish.86_toggled` `{ dishId }`, `ops.kds.order_ready` `{ orderId }`
+> * 🛡️ **RBAC** : Consultation et Commande: Public (0) | Validation cuisine: 20+
+> * 🧯 **DLQ** : `dlq.commerce.web_orders` (Idempotence Stripe Webhook + verrouillage de stock)
+> * 🗺️ **Chemin d'Impact** : `Zone 15 (QR Pay Table) ➔ EventBus ➔ Zone 1 (POS Table Clôturée & KDS Notifié) ➔ Zone 7 (Scellement Facture)`
+> * 🔍 **Blindspots résolus** : Régulation des créneaux Click & Collect limitant les flux pour éviter la saturation de la cuisine.
 
 ---
 
-# 🖥️ Zone 16 — TRANSVERSES / DESIGN SYSTEM
+# 🖥️ Zone 16 — DESIGN SYSTEM SOUVERAIN & TRANSVERSE
 
-## 🧩 Layout & navigation
+## 🖼️ Écran 16.1 — Socle Graphique, Tokens & SplashGate
 
-- ✅ `PageLayout` — RBAC: — (structural)
-- ✅ `PageHeader` — RBAC: — (structural)
-- ✅ `DashboardLayout` — RBAC: — (structural)
-- ✅ `SplitLayout` — RBAC: — (structural)
-- ✅ `GridLayout` — RBAC: — (structural)
-- ✅ `Sidebar` — RBAC: — (structural)
-- ✅ `DesktopSidebar` — RBAC: — (structural)
-- ✅ `DesktopTopbar` — RBAC: — (structural)
-- ✅ `SidebarBranding` — RBAC: — (structural)
-- ✅ `SidebarNavigation` — RBAC: filtré par level user
-- ✅ `SidebarQuickActions` — RBAC: filtré par level user
-- ✅ `SidebarProfile` — RBAC: ∀
-- ✅ `MobileHeader` — RBAC: — (structural)
-- ✅ `MobileNavBar` — RBAC: — (structural)
-- ✅ `Header` — RBAC: — (structural)
+### 🧩 Composants Design System & Transverses
+- ✅ `SplashGate` (`src/design/ui/LoadingState.tsx`, `src/design/ui/TutorialOverlay.tsx`) — RBAC: ∀
+- ✅ `GlassmorphismCard` (`src/design/ui/GlassCard.tsx`, `src/design/ui/glass.tsx`) — RBAC: ∀
+- ✅ `DynamicThemeInjector` (`src/lib/branding/WhiteLabelBrandingInjector.ts`) — RBAC: ∀
+- ✅ `HighDensityModeToggle` (`src/design/ui/ActionToolbar.tsx`) — RBAC: ∀
+- ✅ `FramerMotionPresenceWrapper` (`src/design/ui/Modal.tsx`) — RBAC: ∀
+- ⚫ `SolarAdaptiveDisplayEngine` (`src/design/ui/glass.tsx`) — RBAC: ∀
+- ⚫ `StateStoreMemoryGuard` (`src/store/base.ts`) — RBAC: ∀
 
-## 🧩 Overlays
-
-- ✅ `Modal` — RBAC: — (structural)
-- ✅ `Dialog` — RBAC: — (structural)
-- ✅ `BottomSheet` (drawer mobile) — RBAC: — (structural)
-- ✅ `Toast` — RBAC: — (structural)
-- ✅ `NotificationPanel` — RBAC: ∀
-- ✅ `CommandModal` (Cmd+K) — RBAC: ∀
-- ✅ `TutorialOverlay` — RBAC: ∀
-- ✅ `TutorialBubble` — RBAC: ∀
-- ✅ `TrainingOverlay` — RBAC: ∀
-
-## 🧩 États
-
-- ✅ `EmptyState` — RBAC: — (structural)
-- ✅ `Skeleton` — RBAC: — (structural)
-- ✅ `LoadingState` — RBAC: — (structural)
-- ✅ `Spinner` — RBAC: — (structural)
-- ✅ `ErrorBoundary` — RBAC: — (structural)
-- ⚫ `NetworkOfflineState` (message pas de réseau) — RBAC: ∀
-
-## 🧩 Data display
-
-- ✅ `StatCard` — RBAC: dépend du contenu
-- ✅ `PremiumCard` — RBAC: dépend du contenu
-- ✅ `GlassCard` — RBAC: dépend du contenu
-- ✅ `ContentSection` — RBAC: — (structural)
-- ✅ `SectionHeader` — RBAC: — (structural)
-- ✅ `PageHeaderWithDocs` — RBAC: — (structural)
-- ✅ `StatusBadge` — RBAC: ∀
-- ✅ `Chip` — RBAC: ∀
-- ✅ `Badge` — RBAC: ∀
-- ✅ `Avatar` — RBAC: ∀
-
-## 🧩 Forms
-
-- ✅ `Input` — RBAC: — (structural)
-- ✅ `Select` — RBAC: — (structural)
-- ✅ `PremiumSelect` — RBAC: — (structural)
-- ✅ `SearchInput` — RBAC: — (structural)
-- ✅ `QuantitySelector` — RBAC: — (structural)
-- ✅ `DateNavigator` — RBAC: — (structural)
-- ✅ `TimePicker` — RBAC: — (structural)
-- ✅ `FilterBar` — RBAC: — (structural)
-- ✅ `ToolbarTabs` — RBAC: — (structural)
-- ✅ `Button` — RBAC: — (structural)
-- ✅ `ActionToolbar` — RBAC: — (structural)
-- ✅ `Feedback` (like/dislike) — RBAC: ∀
-- ⚫ `AutocompleteInput` (générique) — RBAC: — (structural)
-- ⚫ `RichTextEditor` (générique) — RBAC: — (structural)
-- ⚫ `MultiFileUploader` — RBAC: — (structural)
-
-## 🧩 Sécurité & sessions
-
-- ✅ `SovereignShield` — RBAC: — (service)
-- ✅ `SovereignLock` — RBAC: — (service)
-- ✅ `SovereignLockout` — RBAC: — (service)
-- ✅ `SecurityPinModal` — RBAC: — (auth)
-- ✅ `ImpersonationBanner` — RBAC: — (superadmin)
-- ✅ `ConnectivityBanner` — RBAC: ∀
-- ✅ `AlertSync` (sync IoT) — RBAC: — (service)
-- ✅ `NeuralShield` — RBAC: — (service)
-
-## 🧩 Branding
-
-- ✅ `SplashScreen` — RBAC: ∀
-- ✅ `SplashGate` — RBAC: — (service)
-- ✅ `ThemeApplicator` — RBAC: — (service)
-- ⚫ `LogoRenderer` (générique svg/png) — RBAC: — (structural)
-
-## 🧩 Launchpad
-
-- ✅ `AppLaunchpad` — RBAC: filtré par level
-- ✅ `LaunchpadStatusHub` — RBAC: filtré par level
-- ✅ `GlobalFAB` — RBAC: filtré par level
-
-## 🧩 Media
-
-- ✅ `CameraCapture` — RBAC: — (structural)
-- ✅ `VisionScanner` — RBAC: — (service IA)
-- ✅ `AmbientAudio` — RBAC: — (service)
-- ⚫ `AudioRecorder` (dictée) — RBAC: — (structural)
-- ⚫ `VideoPlayer` (tutos in-app) — RBAC: — (structural)
-
-## 🧩 Charts (Recharts)
-
-- ⚫ `LineChartComponent` — RBAC: — (structural)
-- ⚫ `BarChartComponent` — RBAC: — (structural)
-- ⚫ `AreaChartComponent` — RBAC: — (structural)
-- ⚫ `PieChartComponent` — RBAC: — (structural)
-- ⚫ `HeatmapComponent` — RBAC: — (structural)
-- ⚫ `SparklineComponent` — RBAC: — (structural)
-- ⚫ `RadarChartComponent` — RBAC: — (structural)
-
-## 🧩 Fleet (opérateur MCC — hors RBAC tenant)
-
-- ✅ `FleetContext` — MCC uniquement (hors RBAC tenant)
-- ✅ `AppLaunchpad` (variante MCC) — MCC uniquement
-- ✅ `DocumentationPortal` — MCC uniquement
+> ⚡ **Câblage & Handlers Code Design System** :
+> * ⚙️ **Handlers Actifs** : `registerSovereignBreachHandler()`
+> * 📡 **Event Bus** :
+>   * `Émet` : `system.theme.changed` `{ themeMode, contrastLevel }`, `system.memory.cleanup_triggered` `{ reclaimedBytes }`
+>   * `Écoute` : `admin.branding.updated`, `system.offline.detected`
+> * 🛡️ **RBAC** : Utilisation: ∀ (Tous niveaux) | Configuration globale: 80+ / 100
+> * 🧯 **DLQ** : `dlq.system.errors` (Monitoring télémétrie Sentrux & Sentry)
+> * 🗺️ **Chemin d'Impact** : `Zone 16 (Theme Injector) ➔ EventBus ➔ Zones 1-15 (Mise à jour visuelle atomique sans rechargement)`
+> * 🔍 **Blindspots résolus** : `src/store/base.ts` comme module neutre évitant tout cycle de dépendance et garantissant zéro memory leak.
 
 ---
-
 # 📊 Statistiques composants restaurant
 
 | Zone | Écrans | ✅ | 🔧 | ⚫ | Total |
@@ -4120,3 +3752,125 @@ S5 (API REST), S7 (doc client), S8 (facturation MCC) n'ont pas de gate testable.
 | 7 | Runbook on-call + Sentry configuré + alertes Slack | 🟠 Opérationnel | ~1j |
 
 > Les items 8-N (DPoS, WAF, pentest, NPS, WCAG) passent en H2/H3 sans bloquer le premier client.
+
+
+
+---
+
+# 🔌 MATRICE EXHAUSTIVE DES CONNECTEURS & APIS PAR VERTICALE
+
+> **Architecture du Hub** : Tous les connecteurs sont déclarés dans `src/lib/connectors/manifest/` sous le contrat typé `IConnectorManifest` et administrables depuis le Hub d'Intégrations (`src/modules/intelligence/connectors/hub/`).
+
+```mermaid
+graph TD
+    subgraph "Hub Central d'Intégrations (ConnectorHub.ts)"
+        HUB[Connector Hub Manager]
+        OAUTH[OAuth2 & API Key Broker]
+        DISP[Webhook Dispatcher & Poller]
+    end
+
+    subgraph "Connecteurs par Verticale"
+        C1[🍽️ RESTAURANT : TheFork, Deliveroo, Pennylane, Sunday]
+        C2[🥖 BAKERY : Too Good To Go, Balances Mettler, Grands Moulins]
+        C3[🛍️ RETAIL : Shopify, WooCommerce, Amazon, Scanners Zebra]
+        C4[💇 SALON : Planity, Treatwell, L'Oréal Pro, WhatsApp]
+        C5[🚗 GARAGE : SIV Immat, Autossimo, TecDoc, Darva Assurances]
+        C6[🏨 HOTEL : Channel Manager Booking/Expedia, Serrures VingCard]
+        C7[🩺 CLINIC : Doctolib, SESAM-Vitale FSE, DMP Mon Espace Santé]
+        C8[🎨 CUSTOM : Webhooks Universels Zapier, Make, n8n, Odoo]
+    end
+
+    HUB --> OAUTH
+    HUB --> DISP
+    HUB --> C1
+    HUB --> C2
+    HUB --> C3
+    HUB --> C4
+    HUB --> C5
+    HUB --> C6
+    HUB --> C7
+    HUB --> C8
+```
+
+---
+
+## 📋 Inventaire des Connecteurs Déployés & À Déployer
+
+### 🍽️ 1. Verticale RESTAURANT
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Livraison** | Uber Eats, Deliveroo, Just Eat | **HubRise / Deliverect** | Agrégation multi-plateformes sur un seul flux KDS |
+| **Réservation** | Zenchef, TheFork, Widget natif | **Google Reserve (sync finale), SevenRooms** | Réservation directe depuis Google Search / Maps |
+| **Fournisseurs** | Metro, Pomona | **Transgourmet, Sysco France** | Import automatique des factures et mercuriales EDI |
+| **Paiement Table** | Stripe Terminal, Verifone, SumUp | **Sunday, LyfPay** | Paiement autonome à table par QR Code sans attente |
+| **Comptabilité** | Pennylane, Export FEC | **Zelty & Lightspeed Importers** | Migration express des menus et historiques en 1 clic |
+
+---
+
+### 🥖 2. Verticale BAKERY (Boulangerie / Pâtisserie)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Matériel Caisse** | Imprimantes ESC/POS | **Balances Poids/Prix (Dialogue 06, Mettler, Bizerba)** | Tarification automatique au poids (au kg / à la part) |
+| **Anti-Gaspillage** | — | **Too Good To Go (Partner API), Phenix** | Mise en vente automatique des invendus à 18h |
+| **Matières Premières** | — | **Grands Moulins de Paris, Foricher, Girardeau** | Commandes récurrentes de farine et traçabilité des lots |
+| **Facturation B2B** | Factur-X natif | **Chorus Pro API** | Facturation automatique des collectivités, crèches et mairies |
+
+---
+
+### 🛍️ 3. Verticale RETAIL (Commerce de Détail / Boutique)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **E-Commerce 2-Ways** | Shopify, Google Shopping | **WooCommerce REST API, PrestaShop Webservices** | Unification temps réel des stocks boutique physique & web |
+| **Places de Marché** | — | **Amazon Seller API, Cdiscount, Ankorstore** | Vente omnicanale et réapprovisionnement grossistes |
+| **Hardware Scan** | — | **Scanners Code-barres 2D Zebra, Datalogic, Honeywell** | Encaissement et inventaire éclair par scan EAN-13 |
+| **Paiement Fractionné**| Stripe | **Alma, Klarna, Scalapay (BNPL)** | Paiement en 3x ou 4x sans frais garanti |
+
+---
+
+### 💇 4. Verticale SALON (Coiffure / Esthétique / Spa)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Prise de RDV** | Treatwell, Fresha | **Planity Bridge API** | Synchronisation bidirectionnelle de l'agenda cabine |
+| **Produits Pros** | — | **L'Oréal Pro Direct, Wella Professionals EDI** | Réapprovisionnement des tubes de coloration et oxydants |
+| **Communication** | Brevo, WhatsApp Business | **Twilio SMS Gateway** | Rappels automatiques de RDV H-24 et SMS d'anniversaire |
+| **E-Réputation** | Google My Business | **Avis Vérifiés / Trustpilot API** | Collecte automatique d'avis post-prestation |
+
+---
+
+### 🚗 5. Verticale GARAGE (Automobile / Carrosserie / Maint.)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Identification Auto**| — | **SIV / AAA Data / Autovista (Immatriculation API)** | Remplissage auto marque, modèle, VIN et moteur via plaque |
+| **Catalogues Pièces** | TecDoc | **AD Autodistribution, Autossimo, PartsLink24** | Consultation des stocks équipementiers et prix en direct |
+| **Barèmes Temps** | — | **Autodata API, HaynesPro API** | Devisage aux barèmes de temps officiels constructeurs |
+| **Assurances** | — | **Darva EDI, Sidexa (Chiffrage Sinistres)** | Télétransmission des devis carrosserie aux mutuelles |
+| **Environnement** | — | **Trackdéchets API (BSDD Déchets Dangereux)** | Registre légal obligatoire des huiles et batteries usagées |
+
+---
+
+### 🏨 6. Verticale HOTEL (Hébergement / Résidence / PMS)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Channel Manager** | Booking.com, Mews PMS | **D-EDGE, SiteMinder, Expedia QuickConnect, Airbnb** | Synchronisation 2-ways des tarifs, disponibilités et stops |
+| **Contrôle d'Accès** | — | **Assa Abloy (VingCard), Salto Systems, Nuki** | Génération de cartes magnétiques et clés mobiles RFID |
+| **Légal / Police** | — | **Télétransmission Fiche de Police Numérique** | Envoi sécurisé des données résidents étrangers aux autorités |
+| **Facturation Séjour** | Factur-X natif | **Taxe de Séjour API / Déclaration Municipale** | Calcul et ventilation automatique de la taxe de séjour |
+
+---
+
+### 🩺 7. Verticale CLINIC (Paramédical / Cabinets / Santé)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Prise de Rendez-vous**| Doctolib | **Maiia Agenda Santé API** | Prise de RDV patient et rappel SMS certifié santé |
+| **Assurance Maladie** | — | **SESAM-Vitale (FSE), CPAM AmeliPro, Almerys** | Télétransmission des feuilles de soins et Tiers-Payant |
+| **Dossier Médical** | — | **DMP (Mon Espace Santé) / Télésanté INS** | Consultation et versement au dossier médical informatisé |
+| **Messagerie Médicale**| — | **MSSanté / Apicrypt** | Échange crypté d'ordonnances et bilans entre confrères |
+
+---
+
+### 🎨 8. Verticale CUSTOM (Universelle / Méta-Commerce)
+| Catégorie | Connecteurs Actifs / Existants | Connecteurs Prévus & Spécifiés | Rôle & Impact Métier |
+|---|---|---|---|
+| **Automatisations No-Code**| — | **Zapier, Make.com, n8n (Webhooks bidirectionnels)** | Déclenchement d'actions externes sur tout événement Nexus |
+| **ERP & Compta Majeurs**| QuickBooks, Xero | **Sage 100, Cegid Quadra, Odoo, Microsoft Dynamics** | Synchronisation financière vers les grands ERP du marché |
+| **Communication** | Gmail, IMAP | **Slack / Microsoft Teams Webhooks** | Alertes de gestion et monitoring d'activité en temps réel |

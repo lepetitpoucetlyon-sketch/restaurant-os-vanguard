@@ -25,18 +25,14 @@ export function useActionPermission(page: string, action: string): PermissionChe
         const config = ACTION_MAP[page]?.[action];
 
         if (!config) {
-            // Échec OUVERT — conservé temporairement pour ne pas bloquer un écran
-            // s'appuyant sur une action non déclarée.
-            //
-            // ⚠️ PHASE 2 (chantier 16) : basculer sur un refus une fois les actions
-            // manquantes relevées en production et ajoutées à ACTION_MAP.
-            // `usePageAccess` et `useTabAccess` échouent déjà FERMÉ — cette
-            // incohérence doit disparaître.
+            // Phase 2 — échec FERMÉ. Toute action absente de ACTION_MAP est refusée.
+            // `usePageAccess` et `useTabAccess` échouaient déjà fermé — cohérence rétablie.
+            // Si un écran est cassé par ce changement, ajouter l'action dans actionPermissionMap.ts.
             logger.warn(
                 `[RBAC] Action non déclarée dans ACTION_MAP : "${page}.${action}" — ` +
-                `autorisée par défaut (sans PIN). À déclarer dans actionPermissionMap.ts.`
+                `refusée par défaut. À déclarer dans actionPermissionMap.ts.`
             );
-            return { allowed: true, requiresPin: false };
+            return { allowed: false, requiresPin: false, reason: 'Action non déclarée' };
         }
 
         const role = currentUser.role as PermissionRole;

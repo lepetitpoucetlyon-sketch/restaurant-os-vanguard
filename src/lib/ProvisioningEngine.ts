@@ -115,6 +115,8 @@ export const ProvisioningEngine = {
                     variant: dna.variant ?? 'restaurant',
                     primaryColor: dna.initialPrimaryColor,
                     trialDays: dna.trialDays,
+                    modulePack: dna.modulePack,
+                    capabilitiesOverride: dna.customCapabilities,
                 });
                 if (!seedResult.success) {
                     logger.warn('ProvisioningEngine: TenantSeeder partial failure', { error: seedResult.error });

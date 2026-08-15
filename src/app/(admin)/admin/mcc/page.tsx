@@ -52,6 +52,7 @@ function MCCDashboardInner() {
         newCloneEmail, setNewCloneEmail,
         newCloneTier, setNewCloneTier,
         newCloneVariant, setNewCloneVariant,
+        newClonePack, setNewClonePack,
         newTrialDays, setNewTrialDays,
         newCloneBrandingMode, setNewCloneBrandingMode,
         newCloneAccentColor, setNewCloneAccentColor,
@@ -237,6 +238,26 @@ function MCCDashboardInner() {
                                                         <span className={`text-[9px] font-black uppercase tracking-widest ${newCloneVariant === v ? 'text-brand' : 'text-secondary'}`}>{VERTICAL_META[v].label}</span>
                                                     </button>
                                                 ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Pack Fonctionnel & Modules</label>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {[
+                                                    { id: 'FULL', label: 'Pack Intégral', icon: '📦', desc: 'Caisse + KDS + Stocks + RH' },
+                                                    { id: 'POS_ONLY', label: 'Caisse Seule', icon: '⚡', desc: 'POS + NF525 + Factures (Comptoir)' },
+                                                    { id: 'POS_INVENTORY', label: 'Caisse + Stocks', icon: '🛒', desc: 'POS + Gestion des stocks & fiches' },
+                                                ].map(p => {
+                                                    const active = newClonePack === p.id;
+                                                    return (
+                                                        <button key={p.id} type="button" onClick={() => setNewClonePack(p.id as typeof newClonePack)}
+                                                            className={`flex flex-col items-start p-3 rounded-2xl text-left transition-all border ${active ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
+                                                            <span className="text-lg mb-1">{p.icon}</span>
+                                                            <span className={`text-[10px] font-black uppercase tracking-widest leading-tight ${active ? 'text-brand' : 'text-text-primary'}`}>{p.label}</span>
+                                                            <span className="text-[8px] text-muted leading-tight mt-1">{p.desc}</span>
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                         <div>

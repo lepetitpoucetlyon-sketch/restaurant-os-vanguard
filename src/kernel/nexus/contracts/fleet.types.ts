@@ -172,6 +172,10 @@ export interface ProvisioningDNA {
     copyBaseTemplates?: boolean;
     /** Nombre de jours d'essai. 0 ou absent = compte ACTIVE immédiatement. */
     trialDays?: number;
+    /** Profil de modules / Pack fonctionnel à la carte */
+    modulePack?: 'FULL' | 'POS_ONLY' | 'POS_INVENTORY' | 'CUSTOM';
+    /** Surcharges manuelles de capabilities si modulePack === 'CUSTOM' */
+    customCapabilities?: Record<string, boolean>;
     /** Charte graphique personnalisée du tenant */
     branding?: {
         /** 'default' = branding Restaurant OS (gold/dark). 'custom' = charte propre. */
