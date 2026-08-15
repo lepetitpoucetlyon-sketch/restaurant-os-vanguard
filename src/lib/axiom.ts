@@ -17,17 +17,14 @@ interface AppLogger {
     flush: () => Promise<void>;
 }
 
+import { redactPII, redactStringPII } from '@/lib/security/redactPII';
+
 const _isProd = process.env.NODE_ENV === "production";
 
 function writeLog(level: LogLevel, message: string, meta?: LogMetadata) {
     const timestamp = new Date().toISOString();
-    const _structuredLog = {
-        timestamp,
-        level,
-        message,
-        ...meta,
-        env: process.env.NODE_ENV
-    };
+    const safeMessage = redactStringPII(message);
+    const safeMeta = meta ? redactPII(meta) : undefined;
 
     // AXIOM INDUSTRIAL LOGGING (v4.0)
     const _AXIOM_DATASET = 'restaurant-os-audit';
@@ -39,15 +36,15 @@ function writeLog(level: LogLevel, message: string, meta?: LogMetadata) {
     const reset = '\x1b[0m';
 
     const auditPayload = {
-        ...meta,
-        message,
+        ...safeMeta,
+        message: safeMessage,
         timestamp,
         level,
         audit_id: `AUD-${Math.random().toString(36).substring(7).toUpperCase()}`,
         node: 'COCKPIT_MCC_PRIMARY'
     };
 
-    console.log(`${color}${logPrefix}${reset} ${message}`, auditPayload);
+    console.log(`${color}${logPrefix}${reset} ${safeMessage}`, auditPayload);
 }
 
 export const logger: AppLogger = {

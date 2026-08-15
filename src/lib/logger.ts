@@ -13,6 +13,8 @@
  * logger.error('Error message', error);
  */
 
+import { redactPII, redactStringPII } from '@/lib/security/redactPII';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface _LoggerOptions {
@@ -31,19 +33,18 @@ const formatMessage = (level: LogLevel, message: string, prefix?: string): strin
         error: '❌'
     }[level];
 
-    return `${levelEmoji} [${prefix || 'Restaurant OS'}] ${message}`;
+    const safeMessage = redactStringPII(message);
+    return `${levelEmoji} [${prefix || 'Restaurant OS'}] ${safeMessage}`;
 };
 
 export const logger = {
     /**
      * Debug log - Only in development, completely silent in production
      */
-    // L7 Pattern B: `...args: unknown[]` — console.log accepte unknown, SovereignValue[]
-    // forçait des `as unknown as JsonObject` dans tout le codebase sans bénéfice runtime.
     debug: (message: string, ...args: unknown[]): void => {
-
         if (isDevelopment) {
-            console.log(formatMessage('debug', message), ...args);
+            const safeArgs = args.map(a => redactPII(a));
+            console.log(formatMessage('debug', message), ...safeArgs);
         }
     },
 
@@ -51,23 +52,25 @@ export const logger = {
      * Info log - Important operational info, visible in all environments
      */
     info: (message: string, ...args: unknown[]): void => {
-
-        console.log(formatMessage('info', message), ...args);
+        const safeArgs = args.map(a => redactPII(a));
+        console.log(formatMessage('info', message), ...safeArgs);
     },
 
     /**
      * Warning log - Potential issues, visible in all environments
      */
     warn: (message: string, ...args: unknown[]): void => {
-
-        console.warn(formatMessage('warn', message), ...args);
+        const safeArgs = args.map(a => redactPII(a));
+        console.warn(formatMessage('warn', message), ...safeArgs);
     },
 
     /**
      * Error log - Errors and exceptions, visible in all environments
      */
-    error: (message: string, error?: unknown, ...args: import("@/shared/nexus-contract").SovereignValue[]): void => {
-        console.error(formatMessage('error', message), error, ...args);
+    error: (message: string, error?: unknown, ...args: unknown[]): void => {
+        const safeError = redactPII(error);
+        const safeArgs = args.map(a => redactPII(a));
+        console.error(formatMessage('error', message), safeError, ...safeArgs);
     },
 
 
