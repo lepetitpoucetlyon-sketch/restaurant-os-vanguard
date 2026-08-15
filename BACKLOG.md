@@ -139,11 +139,11 @@
 | P2 | ⬜ | H3 | M | Audit fournisseur (Bio, MSC, Label Rouge, local) | `src/modules/logistics/approvisionnement/` | — |
 | P2 | ✅ | H1 | — | RGPD — droit à l'oubli client (ErasureService crypto-shredding) | `src/modules/compliance/registre/ErasureService.ts` | — |
 | P1 | ⬜ | H1 | M | **RGPD Art. 9 — Consentement & chiffrement données santé allergies** | `src/modules/commerce/relation/crm/` | **Bloquant P0 §DEBT 2.3** |
-| P2 | 🔧 | H1 | M | Détection fraude POS (anomalies caisse, voids suspects) | `src/orchestration/handlers/CryptoIntegrityCheckHandler.ts` | — |
 | P3 | ⬜ | H3 | S | Score Nutri-Score calculé automatiquement par plat | `src/modules/commerce/catalog/` | Dépend fiches techniques complètes |
 | P3 | ✅ | H1 | — | Conformité accessibilité PMR (ERP catégorie 3-4-5) | `src/modules/compliance/securite/` | — |
 | P3 | ⬜ | H2 | S | Licence IV (gestion renouvellement, transfert) | `src/modules/compliance/registre/` | — |
 | P3 | 🔧 | H2 | M | Audit tiers externe (consultants, cabinets — AuditService) | `src/modules/compliance/securite/AuditService.ts` | — |
+| P1 | ✅ | H1 | — | Export d'Archive Fiscale Scellée NF525 en 1 Clic (Grand Livre + Hash SHA-256) | `src/app/api/admin/compliance/fiscal-archive-export/route.ts` | — |
 
 ---
 
@@ -248,6 +248,7 @@
 | P2 | ✅ | H1 | — | Registre interventions maintenance (InterventionLogSection) | `src/modules/facility/interventions/` | — |
 | P2 | ✅ | H1 | — | CERFA 13984 (vérifications réglementaires périodiques) | `src/modules/compliance/securite/` | — |
 | P2 | ✅ | H1 | — | Gestion prestataires maintenance (contrats, interventions) | `src/modules/facility/interventions/` | — |
+| P1 | ✅ | H1 | — | Télémétrie Hardware & Détection Pannes Temps Réel (imprimantes/TPE/4G) | `src/lib/hardware/HardwareTelemetryService.ts` | Émet `facility.hardware_fault` (Invariant #6) |
 | P3 | ⬜ | H4 | L | Monitoring énergie bâtiment (électricité Linky, gaz, eau) | `src/modules/facility/iot/` | Prérequis IoT hardware Linky/MQTT |
 | P3 | ⬜ | H5 | XL | Réalité augmentée plan de salle (tablette AR) | `src/app/(client)/(ops)/floor-plan/` | — |
 | P3 | ⬜ | H4 | L | Domotique salle (éclairage, température, musique par zone) | `src/modules/facility/iot/` | Prérequis IoT hardware |

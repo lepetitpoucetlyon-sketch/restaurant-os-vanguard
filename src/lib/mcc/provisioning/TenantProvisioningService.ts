@@ -10,6 +10,8 @@ import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
+import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
+import { getAuth } from 'firebase-admin/auth';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
 
 export interface ProvisioningRequest {
@@ -61,10 +63,12 @@ export class TenantProvisioningService {
         const variant  = request.variant ?? 'restaurant';
         const ragWorkspaceId = `rag_workspace_${tenantId}`;
 
+        // ── 🛡️ Pile de Compensation Saga ──────────────────────────────────────
+        const compensations: Array<() => Promise<void>> = [];
+
         try {
             // ── 1. Seeding complet ────────────────────────────────────────────────
             // TenantSeeder écrit tenantConfig + PCG + fiscal genesis + tables/zones.
-            // Il a un guard idempotent sur tenantConfig — ne rien écrire avant.
             const seedResult = await TenantSeeder.seed({
                 tenantId,
                 name:        request.companyName,
@@ -76,9 +80,16 @@ export class TenantProvisioningService {
             if (!seedResult.success) {
                 logger.warn('[MCC/prov] TenantSeeder partial failure', { error: seedResult.error });
             }
+            // Enregistrement compensation Seeder
+            compensations.push(async () => {
+                logger.info(`[MCC/prov/rollback] Invalidation du tenantConfig pour ${tenantId}`);
+                await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
+                    status: { licenceStatus: 'LOCKED', killSwitch: true, reason: 'PROVISIONING_FAILED_ROLLED_BACK' },
+                    b2bProvisionedAt: null,
+                }, { merge: true }).catch(() => {});
+            });
 
             // ── 2. Patch B2B-specific fields ──────────────────────────────────────
-            // Merge sur le tenantConfig déjà seedé (ne pas remplacer le DNA complet).
             await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
                 siret:              request.siret,
                 subscriptionPlan:   request.planId,
@@ -87,8 +98,6 @@ export class TenantProvisioningService {
             }, { merge: true });
 
             // ── 3. RBAC defaults ──────────────────────────────────────────────────
-            // On convertit DEFAULT_PAGE_ACCESS (roles[]) → pageOverrides { allowed[] }
-            // et DEFAULT_TAB_ACCESS (number) → tabOverrides { minLevel } pour coller au schéma Zod.
             try {
                 const pageOverrides = Object.fromEntries(
                     Object.entries(DEFAULT_PAGE_ACCESS).map(([page, roles]) => [page, { allowed: roles }])
@@ -131,17 +140,56 @@ export class TenantProvisioningService {
                 splashEnabled: false,
             }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', toError(err).message));
 
+            // ── 6. Stripe customer & compensation ────────────────────────────────
             const stripeCustomerId = await setupStripeCustomer(tenantId, request);
-            await setupFleetTelemetry(tenantId, request);
-            await setupRAGWorkspace(tenantId, ragWorkspaceId, request.companyName);
-            await setupOwnerAccount(tenantId, ownerId, request);
+            compensations.push(async () => {
+                const stripeKey = process.env.STRIPE_SECRET_KEY;
+                if (stripeKey && !stripeCustomerId.startsWith('cus_mock_')) {
+                    logger.info(`[MCC/prov/rollback] Suppression du customer Stripe ${stripeCustomerId}`);
+                    const StripeLib = (await import('stripe')).default;
+                    const stripe = new StripeLib(stripeKey, { apiVersion: '2026-06-24.dahlia' as never });
+                    await stripe.customers.del(stripeCustomerId).catch((err: unknown) => {
+                        logger.warn('[MCC/prov/rollback] Erreur suppression Stripe customer', toError(err).message);
+                    });
+                }
+            });
 
-            logger.info(`[MCC/prov] ✅ Provisioning B2B terminé: ${tenantId}`);
+            // ── 7. Télémétrie Flotte ─────────────────────────────────────────────
+            await setupFleetTelemetry(tenantId, request);
+
+            // ── 8. RAG Workspace ────────────────────────────────────────────────
+            await setupRAGWorkspace(tenantId, ragWorkspaceId, request.companyName);
+
+            // ── 9. Owner Account Firebase & compensation ────────────────────────
+            await setupOwnerAccount(tenantId, ownerId, request);
+            compensations.push(async () => {
+                try {
+                    logger.info(`[MCC/prov/rollback] Suppression compte Firebase Owner ${ownerId}`);
+                    initFirebaseAdmin();
+                    await getAuth().deleteUser(ownerId).catch(() => {});
+                    await Nexus.adapter.delete(`tenants/${tenantId}/users/${ownerId}`).catch(() => {});
+                } catch (authRollbackErr) {
+                    logger.warn('[MCC/prov/rollback] Erreur rollback Auth Owner', toError(authRollbackErr).message);
+                }
+            });
+
+            logger.info(`[MCC/prov] ✅ Provisioning B2B terminé avec succès: ${tenantId}`);
 
             return { tenantId, ownerId, stripeCustomerId, ragWorkspaceId, status: 'SUCCESS' };
 
         } catch (error) {
-            logger.error(`[MCC/prov] ❌ Échec critique pour ${request.companyName}`, error);
+            logger.error(`[MCC/prov] ❌ Échec critique pour ${request.companyName} — Déclenchement de la compensation Saga (${compensations.length} étapes)`, error);
+            
+            // Exécution des compensations en ordre inverse (LIFO)
+            for (const compensate of compensations.reverse()) {
+                try {
+                    await compensate();
+                } catch (compensationError) {
+                    logger.error('[MCC/prov/rollback] Échec lors de la compensation partielle', compensationError);
+                }
+            }
+            logger.info(`[MCC/prov/rollback] 🧹 Compensation Saga terminée pour ${tenantId}`);
+
             throw error;
         }
     }

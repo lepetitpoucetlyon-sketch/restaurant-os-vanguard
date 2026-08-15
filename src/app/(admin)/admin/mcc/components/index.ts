@@ -39,3 +39,5 @@ export * from './TenantOverridePanel';
 export * from './TenantUsersPanel';
 export * from './TrustedDevicePanel';
 export * from './VerticalActivePanel';
+export * from './HardwareHealthGrid';
+export * from './FiscalArchiveExportPanel';

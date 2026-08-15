@@ -40,11 +40,11 @@ export const VerticalRegistry = {
 };
 
 // Auto-registration — lazy imports avoid circular deps at module init
-import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant', () => new m.RestaurantVertical()));
-import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical()));
-import('@/verticals/garage').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical()));
-import('@/verticals/clinic').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical()));
-import('@/verticals/bakery').then(m => VerticalRegistry.register('bakery', () => new m.BakeryVertical()));
-import('@/verticals/salon').then(m => VerticalRegistry.register('salon', () => new m.SalonVertical()));
-import('@/verticals/retail').then(m => VerticalRegistry.register('retail', () => new m.RetailVertical()));
-import('@/verticals/custom').then(m => VerticalRegistry.register('custom', () => new m.CustomVertical()));
+import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant', () => new m.RestaurantVertical())).catch(() => {});
+import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical())).catch(() => {});
+import('@/verticals/garage').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical())).catch(() => {});
+import('@/verticals/clinic').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical())).catch(() => {});
+import('@/verticals/bakery').then(m => VerticalRegistry.register('bakery', () => new m.BakeryVertical())).catch(() => {});
+import('@/verticals/salon').then(m => VerticalRegistry.register('salon', () => new m.SalonVertical())).catch(() => {});
+import('@/verticals/retail').then(m => VerticalRegistry.register('retail', () => new m.RetailVertical())).catch(() => {});
+import('@/verticals/custom').then(m => VerticalRegistry.register('custom', () => new m.CustomVertical())).catch(() => {});

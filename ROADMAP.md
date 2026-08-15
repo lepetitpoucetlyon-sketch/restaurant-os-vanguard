@@ -1,247 +1,295 @@
-# Restaurant OS — Roadmap Fonctionnelle (Archive & Lecture)
+# 🗺️ Restaurant OS — Feuille de Route Visuelle & Product Backlog Exécutif
 
-> ⚠️ **ARCHIVE DE CONSULTATION HISTORIQUE**  
-> **Source unique de vérité active** : [`BACKLOG.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/BACKLOG.md) (avec pointeurs de code et horizons H1-H5).  
-> **Modules d'architecture & exécution** : [`docs/plans/`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/).
-
----
-
-
-## ⚙ Ops — Service & Production
-
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | 🔧 | Terminal de paiement (Stripe Terminal / SumUp / Ingenico) |
-| P1 | ⬜ | Mode hors-ligne POS avec sync auto au retour réseau |
-| P1 | 🔧 | Impression tickets thermiques ESC/POS (Epson, Star) |
-| P1 | ⬜ | Scanner code-barres / QR articles en caisse |
-| P1 | ✅ | Gestion du pourboire (pool, individuel, déclaration DSN) |
-| P1 | ⬜ | Alerte allergènes sur commandes (colorcode par plat) |
-| P1 | ⬜ | Vérification âge alcool (blocage POS + confirmation) |
-| P1 | 🔧 | Séquençage des plats (entrée → plat → dessert par table) |
-| P1 | ✅ | Routage KDS multi-station (chaud / froid / pâtisserie) |
-| P1 | ⬜ | Split addition (partage par convive ou par article) |
-| P1 | ⬜ | Pré-autorisation CB sur table ouverte |
-| P2 | ⬜ | Self-ordering QR code (commande depuis table) |
-| P2 | ⬜ | Application serveur mobile-first (iOS/Android) |
-| P2 | 🔧 | Estimation temps de préparation IA par station KDS |
-| P2 | 🔧 | Liste de préparation journalière auto (depuis réservations) |
-| P2 | ⬜ | Cave à vin (millésimes, casiers, PRMP bouteille) |
-| P2 | 🔧 | Cocktails à la une dynamiques (bar suggestions) |
-| P2 | ⬜ | Articles au poids (balance connectée — fromage, viande) |
-| P2 | ⬜ | Multi-terminal multi-caissier simultané (quarts concurrent) |
-| P3 | ⬜ | Room service (variante hôtel — liaison PMS) |
-| P3 | ⬜ | Kiosque libre-service tablette (variante fast-casual) |
-| P3 | ⬜ | Menus du jour / saisonniers (activation / désactivation rapide) |
-| P3 | ⬜ | Impression ticket personnalisé (logo, fidélité, QR prochain avis) |
+> 🎨 **DOCUMENT DE VISUALISATION & CADRAGE EXÉCUTIF**  
+> **Source unique de vérité active pour l'implémentation** : [`BACKLOG.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/BACKLOG.md)  
+> **Architecture & Invariants** : [`docs/plans/ARCHITECTURE_METAPLATFORM.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/ARCHITECTURE_METAPLATFORM.md)  
+> **Horizons Stratégiques (H1-H5)** : [`docs/plans/ROADMAP_STRATEGY.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/ROADMAP_STRATEGY.md)  
+> **Registre de Dette & Bloquants P0** : [`docs/DEBT.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/DEBT.md)  
+> **Spécifications des 8 Verticales** : [`docs/plans/VERTICALS_SPECIFICATION.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/VERTICALS_SPECIFICATION.md)  
+> **Matrice des 16 Zones UI** : [`docs/plans/UI_MATRIX_16_ZONES.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/UI_MATRIX_16_ZONES.md)  
+> **Étude Maîtresse du MCC** : [`docs/plans/MCC_MASTER_STUDY.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/MCC_MASTER_STUDY.md)
 
 ---
 
-## 🛍 Commerce — Acquisition & Fidélité
+## 📖 Grille de Lecture Rapide
 
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | 🔧 | Click & collect (commande en ligne, retrait sur place) |
-| P1 | ✅ | Intégration Uber Eats (connecteur OAuth + webhook) |
-| P1 | ⬜ | Intégration Deliveroo / Just Eat (agrégateur) |
-| P1 | ✅ | Intégration TheFork / Zenchef (réservation) |
-| P1 | ⬜ | Intégration Google Reserve (réservation via Google Maps) |
-| P1 | ⬜ | Arrhes / acompte obligatoire grands groupes avec Stripe |
-| P1 | ✅ | Confirmation SMS / email + rappels J-1 et J-7 |
-| P1 | 🔧 | Politique d'annulation paramétrable + pénalité no-show |
-| P1 | 🔧 | Préférences clients (régime alimentaire, placement, occasion) |
-| P1 | 🔧 | Liste d'attente temps réel avec SMS estimé |
-| P2 | ⬜ | Réservation via WhatsApp Business |
-| P2 | ✅ | Bons cadeaux / e-chèques (génération + validation POS) |
-| P2 | ⬜ | Programme parrainage (referral code + tracking) |
-| P2 | 🔧 | Comptes entreprise / facturation B2B mensuelle |
-| P2 | 🔧 | Packages événements (anniversaire, EVJF, team building) |
-| P2 | ⬜ | Demande d'avis automatique post-visite (Google, Tripadvisor) |
-| P2 | 🔧 | Gestion multi-établissements (réseau, franchises — EmpireCockpit) |
-| P2 | 🔧 | Tracking parcours client (RFM, CLV, churn prediction) |
-| P2 | ⬜ | Abonnements repas (formule mensuelle, entreprises) |
-| P3 | ⬜ | Menu multilingue QR code (EN/ES/ZH/AR) |
-| P3 | ✅ | Widget réservation embeddable (iframe tiers) |
-| P3 | ⬜ | Réseau partenaires fidélité inter-enseignes |
-| P3 | 🔧 | Automatisation posts Google Business / réseaux sociaux |
-| P3 | ⬜ | Pre-orders événements futurs (commandes à date) |
+| Symbole | Signification | Règle d'Ingénierie |
+|:---:|---|---|
+| ✅ | **Opérationnel / Complet** | Logique métier câblée, typée et testée en production (`TSC = 0`). |
+| 🔧 | **Partiel / En Chantier** | Logique ou UI existante mais handler/émetteur ou sous-module manquant (voir colonne Bloquants). |
+| ⬜ | **À Développer** | Spécifié mais non entamé. |
+| 🚧 | **Bloqué / Dépendance** | En attente d'un composant amont (ex: API REST pour le Mobile, homologation tierce). |
+| 🚫 | **Bloqué Légal** | Interdit ou strictement conditionné par la loi (ex: biométrie CNIL, données de santé HDS). |
+
+**Horizons** : `H1` (Août-Sept 2026 · Prod-Ready) · `H2` (Sept-Nov 2026 · Scale 30 Pilotes) · `H3` (Déc 2026-Mai 2027 · Boulangerie/Retail/Salon) · `H4` (Juin 2027-Fév 2028 · Garage/Hôtel) · `H5` (2028-2029 · Santé HDS/Swarm IA).  
+**Effort** : `S` (1-3 jours) · `M` (1 semaine) · `L` (2-4 semaines) · `XL` (1-3 mois).
 
 ---
 
-## 💰 Finance & Comptabilité
+## ⚙️ 1. Ops — Service & Production
 
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | ✅ | Rapprochement bancaire automatique (Open Banking — 5 providers) |
-| P1 | 🔧 | Déclarations TVA CA3 auto-générées (DGFiP + EDI) |
-| P1 | ✅ | Gestion de la caisse menue monnaie (fond de caisse + comptage) |
-| P1 | ✅ | Comptabilité des pourboires (déclaration DSN mensuelle) |
-| P1 | 🔧 | Prévision de trésorerie 30 / 60 / 90 jours |
-| P1 | 🔧 | Facturation inter-sociétés (groupe multi-restaurants) |
-| P1 | ✅ | Clôture journalière Z de caisse NF525 (scellement cryptographique) |
-| P2 | ✅ | SEPA direct débit fournisseurs récurrents (XML pain.001) |
-| P2 | 🔧 | Analyse du seuil de rentabilité par service / jour |
-| P2 | ✅ | Budget vs réel en temps réel (dashboard CFO) |
-| P2 | 🔧 | RevPASH (Revenue per Available Seat Hour) |
-| P2 | 🔧 | Rentabilité par article de menu (contribution margin) |
-| P2 | ✅ | Food cost tracking avec alertes sur dérive vs objectif |
-| P2 | ✅ | Matching 3 voies commande / réception / facture |
-| P2 | ✅ | Export FacturX (PDF/A-3 + XML — norme UE) |
-| P2 | ✅ | Recouvrement créances avec escalade automatique (FRIENDLY→FORMAL→LEGAL) |
-| P2 | ✅ | Export Pennylane (comptabilité en ligne) |
-| P3 | ⬜ | Affacturage factures clients (financement court terme) |
-| P3 | ⬜ | Multi-devise (tourisme — USD, GBP, CHF) |
-| P3 | 🔧 | Consolidation financière groupe (reporting agrégé MacroBrain) |
-| P3 | ⬜ | DAS2 (déclaration honoraires artistes / prestataires) |
-
----
-
-## 🛡 Compliance & Sécurité alimentaire
-
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | ✅ | Registres HACCP numériques complets (temp, huiles, nettoyage) |
-| P1 | 🔧 | Étiquetage allergènes EU 1169/2011 (14 allergènes, menu + étiquettes) |
-| P1 | 🔧 | Traçabilité farm-to-fork (lot → plat → table) |
-| P1 | 🔧 | Contrôle qualité de l'eau (pH, chlore, relevés) |
-| P1 | 🔧 | Journal des nuisibles (dératisation, désinsectisation) |
-| P1 | ✅ | Signalement incidents DGCCRF / RASFF (rappel produit) |
-| P1 | ✅ | Formation HACCP 14h obligatoire (suivi attestations, blocage pointeuse) |
-| P1 | ⬜ | Permis d'exploitation (suivi renouvellement 10 ans) |
-| P2 | ⬜ | Bilan carbone GES (scope 1 + 2 + 3 restauration) |
-| P2 | 🔧 | Reporting réduction déchets (loi Agec, dons associations) |
-| P2 | ✅ | Conformité incendie (extincteurs, exercices, ERP) |
-| P2 | ⬜ | Audit fournisseur (Bio, MSC, Label Rouge, local) |
-| P2 | ✅ | RGPD — droit à l'oubli client (ErasureService) |
-| P2 | 🔧 | Détection fraude POS (anomalies caisse, voids suspects) |
-| P3 | ⬜ | Score Nutri-Score calculé automatiquement par plat |
-| P3 | ✅ | Conformité accessibilité PMR (ERP catégorie 3-4-5) |
-| P3 | ⬜ | Licence IV (gestion renouvellement, transfert) |
-| P3 | 🔧 | Audit tiers externe (consultants, cabinets — AuditService) |
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | 🔧 | H1 | M | **Terminal de paiement CB** (Stripe Terminal / SumUp / Ingenico) | `src/lib/adapters/StripeTerminalAdapter.ts` | Stripe sandbox opérationnel — SumUp/Ingenico à brancher pour redondance TPE |
+| **P1** | ⬜ | H1 | XL | **Mode hors-ligne POS & Résolution Conflits** | `src/lib/sync/offlineQueue.ts` | **Chantier lourd** : Dexie.js + sync queue + scellage NF525 multi-caisses (voir §3 ARCHITECTURE) |
+| **P1** | 🔧 | H1 | S | **Impression tickets thermiques ESC/POS** (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Moteur d'impression prêt ; auto-discovery réseau mDNS/USB à finaliser |
+| **P1** | ⬜ | H2 | S | **Scanner code-barres / QR articles en caisse** | `src/modules/ops/service/pos/` | Support douchette Zebra / Bluetooth pour mode flux rapide et Retail |
+| **P1** | ✅ | H1 | — | **Gestion du pourboire** (pool, individuel, DSN) | `src/modules/human/paie/tips.ts` | Ventilation automatique et export DSN URSSAF opérationnels |
+| **P1** | ⬜ | H1 | S | **Alerte allergènes sur commandes** (colorcode plat) | `src/modules/commerce/catalog/` | 🔴 **Risque Corporel & Légal** : dépend émetteur R2 `reservation.matched` (voir §DEBT P0) |
+| **P1** | ⬜ | H1 | S | **Vérification âge alcool** (blocage POS + validation) | `src/modules/ops/service/pos/hooks/usePos.ts` | Émet `compliance.age_verification_requested` (obligation L3342-1 Code Santé) |
+| **P1** | 🔧 | H1 | M | **Séquençage des plats** (entrée → plat → dessert) | `src/modules/ops/production/kds/` | Handler prêt, émetteur `ops.course.fired` partiel (nécessite `ops.course.next_requested`) |
+| **P1** | ✅ | H1 | — | **Routage KDS multi-stations** (chaud, froid, bar, pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | Filtrage par station et chronomètres de retardement opérationnels |
+| **P1** | ⬜ | H1 | M | **Split d'addition & Règle du Reliquat** | `src/modules/ops/service/pos/hooks/usePosSplit.ts` | Calcul microunits + reliquat au dernier payeur (Invariant Concurrence #3) |
+| **P1** | ⬜ | H1 | M | **Verrouillage CAS des tables & Concurrence** | `src/shared/eventBus/handlers/TableLockHandler.ts` | Empêche la prise de commande concurrente sur une même table |
+| **P1** | ⬜ | H1 | M | **Session de service & Calculs Shift UTC (Anti-DST)** | `src/modules/ops/workflow/engine/` | Rattachement à la `serviceSessionId` (Invariant Concurrence #4) |
+| **P1** | ⬜ | H1 | L | **Architecture NF525 multi-caisses offline** | `src/modules/finance/fiscalite/FiscalSealer.ts` | Sous-chaîne par `registerId` + `MasterFiscalSeal` consolidé |
+| **P1** | ⬜ | H1 | M | **Idempotence Bus via `events_processed_log`** | `src/shared/eventBus/NexusEventBus.ts` | 🔴 **Bloquant P0 §DEBT** : déduplication stricte des `eventId` |
+| **P1** | ⬜ | H2 | M | **Pré-autorisation CB sur table ouverte** | `src/lib/adapters/StripeAdapter.ts` | Dépend du hardware Stripe Terminal en production |
+| **P2** | ⬜ | H2 | S | **Bouton SOS Caisse & Diagnostic d'urgence POS** | `src/modules/ops/service/pos/` | Déclenche alerte prioritaire PagerDuty/Slack vers l'opérateur MCC |
+| **P2** | ⬜ | H2 | M | **Self-ordering QR code table** | `src/app/(client)/(public)/order/` | Dépend de l'API REST publique OpenAPI H2.2 |
+| **P2** | ⬜ | H2 | XL | **Application serveur mobile compagnon** (iOS/Android) | `src/app/(client)/(ops)/mobile-pos/` | 🚧 **Bloquée par l'API REST H2.2** |
+| **P2** | 🔧 | H2 | M | **Estimation temps préparation IA par station KDS** | `src/modules/ops/production/kds/` | Émet `intelligence.prep_time_estimated` |
+| **P2** | 🔧 | H1 | S | **Liste de préparation journalière automatique** | `src/orchestration/handlers/ResaKitchenTaskHandler.ts` | Câblée sur les réservations confirmées du jour |
+| **P2** | ⬜ | H2 | M | **Gestion cave à vin** (millésimes, casiers, PRMP) | `src/modules/commerce/catalog/` | Suivi des stocks nobles et fiches dégustation sommelier |
+| **P2** | 🔧 | H2 | S | **Cocktails à la une dynamiques** (suggestions bar) | `src/modules/commerce/catalog/` | — |
+| **P2** | ⬜ | H3 | M | **Vente au poids** (balance connectée Dialogue 06) | `src/lib/hardware/scaleConnector.ts` | Protocole Mettler Toledo / Bizerba (prérequis Boulangerie H3) |
+| **P2** | ⬜ | H2 | L | **Multi-terminaux multi-caissiers simultanés** | `src/modules/ops/service/pos/` | Gestion des tiroirs-caisses distincts par caissier |
+| **P3** | ⬜ | H4 | L | **Room service & liaison PMS** (variante hôtel) | `src/verticals/hotel/` | Transfert sur le folio de chambre (prérequis Hôtel H4) |
+| **P3** | ⬜ | H3 | L | **Kiosque borne tactile libre-service** (fast-casual) | `src/app/(client)/(ops)/kiosk/` | Mode borne sécurisé (MDM kiosk lock) |
+| **P3** | ⬜ | H2 | S | **Menus du jour & suggestions saisonnières** | `src/modules/commerce/catalog/` | Activation rapide en 1 clic sur KDS et POS |
+| **P3** | ⬜ | H2 | S | **Personnalisation ticket de caisse** (logo, QR avis) | `src/lib/printers/` | — |
 
 ---
 
-## 👥 Human — RH & Paie
+## 🛍️ 2. Commerce — Acquisition & Fidélité
 
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | ✅ | Planning des équipes (roster hebdomadaire, conformité HCR) |
-| P1 | ✅ | Gestion congés / absences / RTT avec soldes |
-| P1 | ✅ | Pointeuse badge / QR code / géolocalisation |
-| P1 | ✅ | Calcul automatique heures supp (25% / 50%) |
-| P1 | ✅ | Répartition automatique des pourboires (pool / individuel / rank) |
-| P1 | ✅ | DSN mensuelle (builder XML URSSAF — télétransmissible net-entreprises) |
-| P2 | ✅ | Module recrutement ATS simplifié (offre → entretien → contrat) |
-| P2 | ⬜ | Onboarding digital (livret, contrat e-sign, accès) |
-| P2 | ⬜ | Entretiens professionnels (bilan 2 ans, objectifs) |
-| P2 | 🔧 | Rotation multi-sites (staff partagé entre établissements) |
-| P2 | ⬜ | Avances sur salaire avec remboursement automatique |
-| P2 | ✅ | Accidents du travail / DUER (Document Unique) |
-| P2 | ✅ | Registre Unique du Personnel (RUP) |
-| P2 | ✅ | Prépaie export Silae (expert-comptable) |
-| P2 | ⬜ | CET (Compte Épargne Temps, règles branche HCR) |
-| P3 | ⬜ | Formation e-learning interne (HACCP, service, hygiène) |
-| P3 | ⬜ | Gestion contrats saisonniers / extras (CDDU) |
-| P3 | 🔧 | Conformité syndicale / accord de branche HCR (amplitude, repos) |
-| P3 | ⬜ | Gestion apprentis / alternants (CFA, tuteurs, suivi) |
-
----
-
-## 📦 Logistics — Stock & Approvisionnement
-
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | 🔧 | Comparateur prix multi-fournisseurs (appel d'offres auto) |
-| P1 | 🔧 | Bons de commande automatiques (réapprovisionnement seuil) |
-| P1 | 🔧 | Suivi livraisons temps réel (portail fournisseur) |
-| P1 | 🔧 | Traçabilité lot / batch (DLC + DLO + numéro de lot) |
-| P1 | ✅ | Valorisation stock FIFO / PRMP (déduction par batch) |
-| P1 | ✅ | Contrôle qualité réception (conformité BL vs commande) |
-| P1 | ✅ | Service 86 automatique (blocage commande si stock zéro) |
-| P1 | ✅ | Déduction stock automatique sur commande validée |
-| P2 | ⬜ | Stock en consignation (tracking bouteilles, fûts bière, gaz) |
-| P2 | ⬜ | Retours fournisseurs avec avoir automatique |
-| P2 | 🔧 | Par level management adaptatif (seuils dynamiques) |
-| P2 | 🔧 | Reporting gaspillage avec causes (DLC, sur-production, erreur) |
-| P2 | ⬜ | Inventaire tournant par zone (sans fermeture établissement) |
-| P2 | ✅ | Extraction OCR / IA factures fournisseurs (InvoiceExtractionService) |
-| P2 | ✅ | Matching 3 voies logistique (commande / BL / facture) |
-| P3 | 🔧 | Prédiction péremption IA (alerte avant DLC) |
-| P3 | 🔧 | Tracking énergie chambres froides (IoT capteurs) |
-| P3 | ⬜ | Label anti-gaspillage (Too Good To Go, Phenix) |
-| P3 | ✅ | Migration historique depuis Zelty (ZeltyImporter) |
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | 🔧 | H2 | M | **Click & Collect natif** (commande & retrait) | `src/app/(client)/(public)/click-collect/` | 🚧 **Bloqué par l'API REST H2.2** pour consommation web/mobile |
+| **P1** | ✅ | H2 | — | **Intégration Uber Eats** (commandes & webhook) | `src/lib/connectors/hub/UberEatsConnector.ts` | Connecteur bidirectionnel et injection KDS opérationnels |
+| **P1** | ⬜ | H2 | M | **Intégration Deliveroo / Just Eat** (agrégateur HubRise) | `src/lib/connectors/hub/DeliverooConnector.ts` | Buffer homologation partenaire (3-6 mois) |
+| **P1** | ✅ | H1 | — | **Intégration TheFork / Zenchef** (réservations) | `src/lib/connectors/hub/TheForkConnector.ts` | Réception webhooks et synchronisation plan de salle ✅ |
+| **P1** | ⬜ | H2 | M | **Intégration Google Reserve** (Google Maps) | `src/lib/connectors/hub/` | Buffer homologation Google (3-6 mois) |
+| **P1** | ⬜ | H1 | S | **Acomptes / arrhes obligatoires Stripe** | `src/app/api/webhooks/stripe/route.ts` | 🔴 **Bloquant P0 §DEBT** : émetteur R10 `commerce.reservation_deposit_paid` |
+| **P1** | ✅ | H1 | — | **Confirmation SMS / Email + Rappels J-1/J-7** | `src/orchestration/handlers/ReservationNotifier.ts` | Brevo / Twilio câblés avec templates dynamiques |
+| **P1** | 🔧 | H1 | S | **Politique d'annulation & pénalités no-show** | `src/modules/commerce/relation/` | Moteur de pénalités prêt, capture d'empreinte CB en cours |
+| **P1** | 🔧 | H1 | M | **Fiches préférences clients & Allergies (RGPD Art. 9)** | `src/modules/commerce/relation/crm/` | 🔴 **Risque Légal Sanction CNIL** : consentement explicite + chiffrement AES-256 |
+| **P1** | 🔧 | H1 | M | **Liste d'attente dynamique temps réel** | `src/modules/commerce/relation/` | Émet `commerce.waitlist_ready` lors de la libération d'une table |
+| **P2** | ⬜ | H3 | M | **Réservation via WhatsApp Business API** | `src/lib/connectors/hub/WhatsAppConnector.ts` | Bot conversationnel de confirmation |
+| **P2** | ✅ | H2 | — | **Bons cadeaux & E-chèques** (génération + POS) | `src/modules/commerce/pricing/` | Émission, rechargement et scellement fiscal NF525 ✅ |
+| **P2** | ⬜ | H2 | S | **Programme de parrainage & code promo** | `src/modules/commerce/relation/loyalty/` | Tracking code parrain et attribution automatique de points |
+| **P2** | 🔧 | H2 | M | **Comptes entreprise & Facturation B2B groupée** | `src/modules/finance/billing/` | Facturation périodique fin de mois + relevé d'engagements |
+| **P2** | 🔧 | H2 | M | **Packages événements & privatisations** | `src/modules/commerce/catalog/` | Gestion des arrhes, menus sur mesure et devis signés |
+| **P2** | ⬜ | H2 | S | **Collecte d'avis automatique post-visite** (Google) | `src/orchestration/handlers/PostVisitReviewHandler.ts` | Émet `commerce.review_request_sent` 2h après clôture de table |
+| **P2** | 🔧 | H1 | XL | **Gestion multi-établissements (EmpireCockpit)** | `src/app/(admin)/mcc/` | 🚧 **Prérequis SovereignGuard cross-tenant** (H4) |
+| **P2** | 🔧 | H2 | L | **Scoring CRM (RFM, CLV, Churn)** | `src/modules/commerce/relation/crm/` | Modèle paramétrable selon le profil restaurant (Gastro vs Brasserie) |
+| **P2** | ⬜ | H3 | L | **Abonnements repas & formules corporate** | `src/modules/commerce/pricing/` | Prélèvements récurrents SEPA / CB Stripe Subscriptions |
+| **P3** | ⬜ | H2 | M | **Menu multilingue QR code** (EN/ES/ZH/AR) | `src/i18n/` | 🚧 Infrastructure dormante — activation sur décision produit |
+| **P3** | ✅ | H1 | — | **Widget réservation embeddable iframe** | `src/app/api/widgets/reservation/` | Intégrable sur le site WordPress/Wix du restaurateur |
+| **P3** | ⬜ | H3 | XL | **Fidélité inter-enseignes & réseau partenaires** | `src/modules/commerce/relation/loyalty/` | Partage de points inter-établissements |
+| **P3** | 🔧 | H3 | M | **Publication automatique Google Business** | `src/modules/intelligence/` | Push des menus du jour et photos de plats |
+| **P3** | ⬜ | H2 | M | **Précommandes traiteur & banquets** | `src/modules/commerce/catalog/` | — |
 
 ---
 
-## 🧠 Intelligence — IA & Analytics
+## 💰 3. Finance & Comptabilité
 
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | 🔧 | Prévision des ventes ML (J+7, semaine, mois) |
-| P1 | ⬜ | Menu engineering (étoile / vache à lait / poids mort / énigme) |
-| P1 | 🔧 | Recommandations upselling serveur en temps réel |
-| P1 | ✅ | Rapports flash quotidiens automatisés (DailyFlashReport) |
-| P1 | ✅ | Rapports hebdomadaires consolidés |
-| P1 | ✅ | Détection anomalies cross-domain (revenus, stock, compliance) |
-| P2 | ✅ | Pricing dynamique basé sur la demande (heures creuses / pleines) |
-| P2 | ⬜ | Analyse sentiment clients multi-sources (Google, TripAdvisor, Yelp) |
-| P2 | 🔧 | Optimisation planning RH selon prévisions d'affluence |
-| P2 | 🔧 | Prédiction du gaspillage (sur-commande vs historique) |
-| P2 | ⬜ | Score de performance fournisseur (délai, qualité, prix) |
-| P2 | ✅ | Veille concurrentielle (pricing, avis, positionnement — MarketOracle) |
-| P2 | 🔧 | Détection d'anomalie sur recettes (coût vs historique) |
-| P2 | ⬜ | Prédiction no-show ML (historique × météo × événement local) |
-| P2 | ✅ | Benchmarking inter-établissements (FleetBenchmark) |
-| P2 | ✅ | Ajustement staffing selon météo (RainStaffingHandler) |
-| P3 | ⬜ | Optimisation coût recettes IA (substitution ingrédients) |
-| P3 | 🔧 | Intelligence marché (tendances cuisine, saisonnalité) |
-| P3 | 🔧 | Computer vision plateau / stock (photo → analyse gaspillage) |
-| P3 | 🔧 | RevPAC — Revenue per Available Cover (siège × service) |
-| P3 | ⬜ | Recommandation accords mets-vins (cave + menu engineering) |
-
----
-
-## 🏛 Facility — Espaces & Maintenance
-
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | ✅ | Plan de salle 2D interactif Konva.js (drag & drop, zones, étages) |
-| P1 | ✅ | Calcul géométrique plan (centrage auto, zoom, coordonnées world/screen) |
-| P1 | ⬜ | Heatmap d'occupation des tables (par service / semaine) |
-| P1 | ✅ | Réservation salle privatisée (contrat + acompte — PrivatisationContract) |
-| P1 | ✅ | Gestion multi-espaces (terrasse, intérieur, bar, cave — ZoneService) |
-| P2 | ⬜ | Planning maintenance préventive (fours, chambre froide, etc.) |
-| P2 | ⬜ | Cycle de vie matériel (garantie, amortissement, remplacement) |
-| P2 | ⬜ | Planning ménage / nettoyage des espaces (check-list) |
-| P2 | 🔧 | Gestion multi-étages avec ascenseur / monte-plat |
-| P2 | ✅ | Registre interventions maintenance (InterventionLogSection) |
-| P2 | ✅ | CERFA 13984 (vérifications réglementaires périodiques) |
-| P2 | ✅ | Gestion prestataires maintenance (contrats, interventions) |
-| P3 | ⬜ | Monitoring énergie bâtiment (électricité, gaz, eau) |
-| P3 | ⬜ | Réalité augmentée plan de salle (tablette AR) |
-| P3 | ⬜ | Domotique salle (éclairage, température, musique par zone) |
-| P3 | ⬜ | Surveillance CCTV avec détection intrusion |
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | ✅ | H1 | — | **Rapprochement bancaire Open Banking** (5 banques) | `src/modules/finance/comptabilite/BankSync.ts` | Synchronisation des flux bancaires et lettrage automatique |
+| **P1** | 🔧 | H1 | L | **Déclarations TVA CA3 auto-générées (DGFiP/EDI)** | `src/modules/finance/fiscalite/tax/vatResolver.ts` | Calcul TVA 5.5/10/20% OK — Export EDI TDFC/EFI à compléter |
+| **P1** | ✅ | H1 | — | **Gestion fond de caisse & tiroir-caisse** | `src/modules/finance/comptabilite/CashDrawer.ts` | Comptage d'ouverture, contrôle écarts et scellement d'accès |
+| **P1** | ✅ | H1 | — | **Comptabilité des pourboires & DSN** | `src/modules/human/paie/tips.ts` | Écritures de compte 421 / 641 et ventilation légale |
+| **P1** | 🔧 | H1 | L | **Prévision de trésorerie 30/60/90 jours** | `src/modules/finance/comptabilite/CashflowForecast.ts` | Nécessite historique transactionnel + règles heuristiques de cold-start |
+| **P1** | ⬜ | H1 | S | **Clés déterministes Grand Livre / Remboursements** | `src/shared/eventBus/handlers/RefundJournalHandler.ts` | **Invariant Concurrence #1** : clé d'idempotence `JE-REFUND-${paymentId}` |
+| **P1** | 🔧 | H2 | L | **Facturation inter-sociétés groupe** | `src/modules/finance/billing/` | Prérequis multi-établissements H4 |
+| **P1** | ✅ | H1 | — | **Clôture journalière Z NF525 scellée** | `src/modules/finance/fiscalite/FiscalSeal.ts` | Chaînage SHA-256, compteurs perpétuels et Grand Total inaltérable |
+| **P2** | ✅ | H2 | — | **Prélèvements SEPA fournisseurs (XML pain.001)** | `src/orchestration/handlers/SepaExportHandler.ts` | Génération de fichiers de virement SEPA interbancaires |
+| **P2** | 🔧 | H2 | M | **Seuil de rentabilité par service & point mort** | `src/modules/finance/comptabilite/` | Calcul marge sur coûts variables par shift |
+| **P2** | ✅ | H1 | — | **Dashboard CFO — Budget vs Réel en temps réel** | `src/modules/finance/comptabilite/BudgetTracker.ts` | Suivi CA, masse salariale (ratio 30%) et Food Cost (ratio 28%) |
+| **P2** | 🔧 | H2 | M | **RevPASH (Revenue per Available Seat Hour)** | `src/modules/intelligence/forecasting/` | Indicateur de performance horaire du plan de salle |
+| **P2** | 🔧 | H1 | M | **Marge contributive par plat du menu** | `src/modules/finance/comptabilite/` | Croisement fiches techniques réelles et ventes POS |
+| **P2** | ✅ | H1 | — | **Food Cost tracking & alertes dérive** | `src/orchestration/handlers/BCGActionSuggestionHandler.ts` | Alerte instantanée si dérive matière brute > 2% |
+| **P2** | ✅ | H1 | — | **Matching 3 voies (Commande / BL / Facture)** | `src/modules/logistics/approvisionnement/` | Rapprochement automatique des quantités et prix unitaires |
+| **P2** | ✅ | H1 | — | **Facturation électronique Factur-X / UBL 2.1** | `src/modules/finance/einvoicing/FacturXGenerator.ts` | Conforme réforme 2026 (directive UE 2014/55 + PDF/A-3) |
+| **P2** | ✅ | H2 | — | **Recouvrement créances B2B (3 paliers)** | `src/modules/finance/billing/RecoveryEngine.ts` | Escalade automatique : FRIENDLY → FORMAL → LEGAL |
+| **P2** | ✅ | H1 | — | **Export comptable Pennylane / FEC** | `src/modules/finance/comptabilite/PennylaneAdapter.ts` | Export conforme Art. L.47 A-1 LPF avec hash SHA-256 |
+| **P3** | ⬜ | H4 | M | **Affacturage factures B2B** | `src/modules/finance/billing/` | Passerelle avec solution de financement court terme |
+| **P3** | ⬜ | H3 | M | **Multi-devises (EUR / CHF / USD / GBP)** | `src/kernel/nexus/contracts/settings/defaults.ts` | Dépend d'une refonte du `vatResolver` pour fiscalité suisse/UK |
+| **P3** | 🔧 | H2 | L | **Consolidation financière groupe (MacroBrain)** | `src/app/(admin)/mcc/` | Agrégation cross-tenants avec élimination des flux réciproques |
+| **P3** | ⬜ | H3 | S | **Déclaration DAS2 honoraires prestataires** | `src/modules/finance/fiscalite/` | — |
 
 ---
 
-## 🔌 Intégrations Transversales
+## 🛡️ 4. Compliance & Sécurité Alimentaire
 
-| P | Statut | Feature |
-|---|--------|---------|
-| P1 | 🔧 | Apple Pay / Google Pay / NFC (intégration native POS) |
-| P1 | ✅ | Google Business Profile sync (horaires, menu, photos) |
-| P1 | ⬜ | Application mobile client-facing iOS / Android |
-| P1 | ✅ | Webhooks réservations (Zenchef, UberEats — providers complets) |
-| P1 | ✅ | Email marketing (Brevo — campagnes, transactionnel) |
-| P2 | ⬜ | Mailchimp / Klaviyo (automation marketing avancée) |
-| P2 | ✅ | Export Pennylane (comptabilité cloud) |
-| P2 | ⬜ | Export Cegid / Sage / QuickBooks natif |
-| P2 | ⬜ | API publique REST + webhooks (intégrations partenaires) |
-| P2 | ⬜ | PMS hôtel (Opera, Mews, Cloudbeds) — variante hôtel |
-| P2 | ✅ | Silae paie (export DSN + fiche de paie) |
-| P2 | ✅ | Météo temps réel (MeteoFrance + OpenWeatherMap) |
-| P2 | ✅ | Événements locaux (Ticketmaster — prévision affluence) |
-| P3 | ⬜ | Affichage dynamique digital signage (menu boards) |
-| P3 | ⬜ | SDK tiers — marketplace d'extensions partenaires |
-| P3 | ✅ | MQTT IoT (capteurs température / humidité — MqttProvider) |
-| P3 | ⬜ | GS1 code-barres EAN (traçabilité supply chain) |
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | ✅ | H1 | — | **Registres HACCP numériques** (température, huiles) | `src/modules/compliance/qualite/haccp/` | Relevés IoT, seuils critiques et fiches de non-conformité |
+| **P1** | 🔧 | H1 | M | **Étiquetage 14 allergènes (INCO EU 1169/2011)** | `src/modules/compliance/sanitaire/` | 🔴 **Risque Corporel / Choc Anaphylactique** : dépend R2 `reservation.matched` |
+| **P1** | 🔧 | H1 | L | **Traçabilité amont/aval (EU 178/2002)** | `src/modules/compliance/sanitaire/TraceabilityEngine.ts` | Chaînage complet : `lot fournisseur → fiche technique → commande → table` |
+| **P1** | 🔧 | H1 | S | **Contrôle qualité eau & glaces** (analyses labo) | `src/modules/compliance/qualite/` | Enregistrement des certificats et alertes de prélèvement |
+| **P1** | 🔧 | H2 | S | **Journal de dératisation / désinsectisation** | `src/modules/compliance/qualite/` | Plan de passage des prestataires 3D et bons d'intervention |
+| **P1** | ✅ | H1 | — | **Signalement alertes sanitaires DGCCRF / RASFF** | `src/orchestration/handlers/NonConformActionHandler.ts` | Blocage instantané d'un lot en caisse et rappel produit |
+| **P1** | ✅ | H1 | — | **Suivi formation hygiène HACCP 14h obligatoire** | `src/orchestration/handlers/TrainingComplianceAlertHandler.ts` | Suivi des attestations et alerte renouvellement |
+| **P1** | ⬜ | H2 | S | **Permis d'exploitation & Licence débit de boissons** | `src/modules/compliance/registre/` | Rappel de renouvellement décennal |
+| **P2** | ⬜ | H4 | L | **Bilan carbone GES Scope 1-2-3** | `src/modules/compliance/` | Calcul empreinte carbone des matières premières |
+| **P2** | 🔧 | H3 | M | **Registre gaspillage & Dons alimentaires (Loi Garot)** | `src/modules/compliance/qualite/` | Suivi des conventions de don et déductions fiscales |
+| **P2** | ✅ | H1 | — | **Sécurité incendie & Registre ERP** | `src/modules/compliance/securite/` | Dates de visite commission de sécurité et vérification extincteurs |
+| **P2** | ⬜ | H3 | M | **Audit éco-responsable fournisseurs** (Bio, Label Rouge) | `src/modules/logistics/approvisionnement/` | — |
+| **P2** | ✅ | H1 | — | **Droit à l'oubli RGPD (Crypto-shredding)** | `src/modules/compliance/registre/ErasureService.ts` | Destruction irréversible des données PII à la demande du client |
+| **P1** | ⬜ | H1 | M | **RGPD Art. 9 — Données de santé & Allergies client** | `src/modules/commerce/relation/crm/` | 🔴 **Bloquant P0 §DEBT 2.3** : consentement explicite + chiffrement AES-256 |
+| **P2** | 🔧 | H1 | M | **Détection fraude caisse & Voids suspects** | `src/orchestration/handlers/CryptoIntegrityCheckHandler.ts` | Surveillance des annulations post-addition et écarts tiroir |
+| **P3** | ⬜ | H3 | S | **Calcul Nutri-Score automatique par recette** | `src/modules/commerce/catalog/` | Dépend des données nutritionnelles CIQUAL |
+| **P3** | ✅ | H1 | — | **Conformité accessibilité PMR ERP** | `src/modules/compliance/securite/` | Registre public d'accessibilité dématérialisé |
+| **P3** | ⬜ | H2 | S | **Licence IV (transfert et périmètre de protection)** | `src/modules/compliance/registre/` | — |
+| **P3** | 🔧 | H2 | M | **Audit sanitaire par cabinet tiers (AuditService)** | `src/modules/compliance/securite/AuditService.ts` | Grille d'évaluation externe et plan d'actions correctives |
+
+---
+
+## 👥 5. Human — RH & Paie
+
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | ✅ | H1 | — | **Planning staff & Contraintes HCR (Convention 3292)** | `src/modules/human/planning/RosterEngine.ts` | Contrôle repos 11h, coupures, amplitude max et durées hebdomadaires |
+| **P1** | ✅ | H1 | — | **Gestion congés payés, RTT & arrêts maladie** | `src/app/(client)/(ops)/leaves/page.tsx` | Circuit de validation manager et compteurs de solde |
+| **P1** | ✅ | H1 | — | **Pointeuse badge PIN PBKDF2 / QR / NFC** | `src/modules/human/timeclock/TimeclockEngine.ts` | Pointage sécurisé avec géofencing |
+| **P1** | ⬜ | H1 | S | **Debounce anti-rebond pointeuse (60s)** | `src/modules/human/timeclock/` | **Invariant Concurrence #4** : empêche les doubles pointages accidentels |
+| **P1** | ✅ | H1 | — | **Calcul automatique heures supplémentaires (25%/50%)**| `src/orchestration/handlers/HRClockInGuardHandler.ts`| Déclenchement automatique selon contingent légal |
+| **P1** | ✅ | H1 | — | **Répartition des pourboires (Pool / Rang / Heures)** | `src/design/settings/TipsDistributionSettingsSection.tsx`| Moteur de calcul équitable et transparent |
+| **P1** | ✅ | H1 | — | **Génération DSN mensuelle XML (URSSAF)** | `src/orchestration/handlers/PayrollExportHandler.ts` | **⚠️ À valider par expert-comptable sur dossier pilote** |
+| **P2** | ✅ | H2 | — | **Module recrutement ATS & Pipeline candidats** | `src/modules/human/effectifs/hr/` | Suivi des candidatures et modèles d'entretiens |
+| **P2** | ⬜ | H2 | M | **Onboarding digital & Signature contrat eIDAS** | `src/modules/human/effectifs/hr/` | Dépend d'un tiers de confiance eIDAS (Yousign/Universign) |
+| **P2** | ⬜ | H3 | S | **Entretiens professionnels bisannuels** | `src/modules/human/effectifs/hr/` | Trame légale et archivage des comptes-rendus |
+| **P2** | 🔧 | H2 | L | **Staff partagé & Rotation multi-sites** | `src/modules/human/planning/` | Nécessite la gestion des contrats supra-tenant H4 |
+| **P2** | ⬜ | H3 | M | **Acomptes sur salaire automatiques** | `src/modules/human/paie/` | Plafonnement légal à 50% du salaire mensuel |
+| **P2** | ✅ | H1 | — | **DUERP (Document Unique d'Évaluation des Risques)** | `src/modules/human/effectifs/hr/` | Cartographie des risques professionnels et plan de prévention |
+| **P2** | ✅ | H1 | — | **Registre Unique du Personnel (RUP)** | `src/modules/human/effectifs/hr/components/staff/StaffMemberForm.tsx`| Registre inaltérable avec historique des entrées/sorties |
+| **P2** | ✅ | H1 | — | **Export pré-paie Silae / PayFit / Combo** | `src/orchestration/handlers/PayrollExportHandler.ts` | Variables de paie au format normalisé |
+| **P2** | ⬜ | H3 | M | **Compte Épargne Temps (CET HCR)** | `src/modules/human/paie/` | — |
+| **P3** | ⬜ | H3 | L | **Plateforme e-learning & micro-formations** | `src/modules/human/effectifs/hr/` | Modules HACCP, service et sécurité |
+| **P3** | ⬜ | H2 | M | **Contrats extras CDDU en 1 clic** | `src/modules/human/effectifs/hr/` | Génération DPAE URSSAF automatique |
+| **P3** | 🔧 | H1 | L | **Moteur complet Convention Collective HCR** | `src/orchestration/handlers/HRBreakCheckHandler.ts` | Intégration des 200+ règles d'accords de branche |
+| **P3** | ⬜ | H3 | M | **Livret d'apprentissage & suivi alternants** | `src/modules/human/effectifs/hr/` | — |
+| — | 🚫 | — | — | ~~**Reconnaissance faciale pointeuse**~~ | `FacialRecognitionClockIn` | **🚫 BLOQUÉ CNIL** : biométrie illégale sans délibération formelle et AIPD |
+
+---
+
+## 📦 6. Logistics — Stock & Approvisionnement
+
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | 🔧 | H1 | L | **Comparateur mercuriales multi-fournisseurs** | `src/modules/logistics/approvisionnement/` | Connecteurs EDI Metro, Pomona, Transgourmet |
+| **P1** | 🔧 | H1 | M | **Commandes fournisseurs automatiques au seuil** | `src/modules/logistics/approvisionnement/` | Déclenchement automatique selon stock mini |
+| **P1** | 🔧 | H2 | L | **Portail extranet fournisseurs** | `src/modules/logistics/approvisionnement/` | Surface d'accès externe nécessitant RBAC dédié |
+| **P1** | 🔧 | H1 | L | **Traçabilité numéro de lot, DLC & DLO** | `src/modules/logistics/dlc/` | **Chaîne réglementaire EU 178/2002 à sceller** |
+| **P1** | ✅ | H1 | — | **Valorisation stock FIFO / PRMP** | `src/__tests__/helpers/saga.stock.test.ts` | Décrémentation par couche d'achat et valorisation comptable |
+| **P1** | ✅ | H1 | — | **Contrôle réception marchandises (BL vs BDC)** | `src/modules/logistics/inventaire/` | Pointage des litiges et alertes écarts prix |
+| **P1** | ✅ | H1 | — | **Service 86 automatique (rupture de stock)** | `src/modules/ops/service/pos/` | Consomme `stock.zero` et grise l'article en caisse |
+| **P1** | ✅ | H1 | — | **Décrémentation stock sur commande encaissée** | `src/modules/logistics/stocks/` | Explosion des ingrédients selon fiche technique |
+| **P1** | ⬜ | H1 | M | **Décrémentation atomique des stocks (Anti-RMW)** | `src/shared/eventBus/handlers/StockDeductionHandler.ts` | **Invariant Concurrence #2** : opération transactionnelle pure |
+| **P2** | ⬜ | H3 | M | **Gestion des emballages consignés (fûts, bouteilles)**| `src/modules/logistics/stocks/` | Suivi de la caution financière |
+| **P2** | ⬜ | H2 | S | **Gestion des retours fournisseurs & Avoirs** | `src/modules/logistics/approvisionnement/` | — |
+| **P2** | 🔧 | H2 | M | **Seuils de stock dynamiques (Par Level IA)** | `src/modules/logistics/stocks/` | Ajustement selon prévisions de vente ML |
+| **P2** | 🔧 | H1 | S | **Registre des pertes & Gaspillage matières** | `src/modules/logistics/inventaire/` | Qualification des causes (DLC, casse, brûlé, sur-production) |
+| **P2** | ⬜ | H2 | M | **Inventaire tournant en plein service** | `src/app/(client)/(ops)/inventory/loading.tsx` | Saisie zone par zone sans arrêt de la caisse |
+| **P2** | ✅ | H1 | — | **OCR intelligent factures fournisseurs (IA)** | `src/__tests__/onboarding/ocrParsers.test.ts` | Extraction automatique des lignes, TVA et quantités |
+| **P2** | ✅ | H1 | — | **Matching 3 voies logistique (BDC / BL / Facture)** | `src/modules/logistics/approvisionnement/` | Détection immédiate des surfacturations |
+| **P3** | 🔧 | H3 | M | **Prédiction des péremptions DLC par IA** | `src/modules/intelligence/` | Alerte antigaspi à J-3 |
+| **P3** | 🔧 | H2 | M | **Télémétrie IoT chambres froides (Sondes Testo)** | `src/orchestration/handlers/FridgeTempAlertHandler.ts` | Relevés MQTT continus et alerte dépassement de seuil |
+| **P3** | ⬜ | H3 | S | **Passerelle Too Good To Go / Phenix** | `src/modules/logistics/` | Revente automatique des invendus du jour |
+| **P3** | ✅ | H1 | — | **Migration de données depuis Zelty / Lightspeed** | `src/modules/acquisition/onboarding/migration/types.ts` | Import des catalogues, clients et historiques |
+
+---
+
+## 🧠 7. Intelligence — IA & Analytics
+
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | 🔧 | H2 | L | **Prévision des ventes ML (J+7, J+30)** | `src/modules/intelligence/forecasting/` | **Cold-start heuristique 30j requis pour nouveaux comptes** |
+| **P1** | ⬜ | H2 | M | **Menu Engineering BCG (Étoiles / Poids Morts)** | `src/orchestration/handlers/BCGActionSuggestionHandler.ts` | Matrice Rentabilité × Popularité (calcul et affichage simples) |
+| **P1** | 🔧 | H1 | M | **Suggestions d'upselling serveur en temps réel** | `src/modules/intelligence/ia/ai/HermesEngine.ts` | Validation ergonomique requise (ne pas surcharger le serveur en rush) |
+| **P1** | ✅ | H1 | — | **Rapports flash quotidiens (DailyFlashReport)** | `src/orchestration/handlers/DailyDigestHandler.ts` | Synthèse CA, météo, ratios et alertes envoyée par email/SMS |
+| **P1** | ✅ | H1 | — | **Rapports hebdomadaires consolidés** | `src/modules/intelligence/` | Comparatif N-1 et objectifs |
+| **P1** | ✅ | H1 | — | **Détection d'anomalies cross-domain (Zeus)** | `src/modules/intelligence/domain/agency/Zeus.ts` | Corrélations automatiques CA / Météo / Stocks / Ratios |
+| **P2** | ✅ | H2 | — | **Tarification dynamique (Happy Hours, Rush)** | `src/modules/commerce/pricing/` | Grilles tarifaires horaires automatiques |
+| **P2** | ⬜ | H3 | L | **Analyse de sentiment avis clients multi-plateformes**| `src/modules/intelligence/` | Scraping et analyse NLP Google / TripAdvisor |
+| **P2** | 🔧 | H2 | M | **Optimisation planning RH selon affluence prévue** | `src/modules/human/planning/` | Proposition de planning calé sur le CA estimé |
+| **P2** | 🔧 | H2 | M | **Prévision du gaspillage matière première** | `src/modules/logistics/inventaire/` | Dépend du ML de ventes |
+| **P2** | ⬜ | H3 | M | **Scoring de fiabilité des fournisseurs** | `src/modules/logistics/approvisionnement/` | Ponctualité, conformité BL, dérive tarifaire |
+| **P2** | ✅ | H1 | — | **Veille tarifaire concurrentielle (MarketOracle)** | `src/app/api/oracle/route.ts` | Analyse des prix du quartier et positionnement |
+| **P2** | 🔧 | H1 | M | **Détection de dérive du coût des recettes** | `src/modules/intelligence/` | Alerte sur hausse du coût d'un ingrédient clé |
+| **P2** | ⬜ | H3 | M | **Modèle prédictif de No-Show clients** | `src/modules/intelligence/forecasting/` | Scoring de risque lors de la réservation |
+| **P2** | ✅ | H1 | — | **Benchmarking inter-restaurants anonymisé** | `src/lib/mcc/auth/MccOperatorContract.ts` | Comparaison des performances avec le reste de la flotte |
+| **P2** | ✅ | H1 | — | **Staffing météo (RushMode / Pluie)** | `src/orchestration/handlers/RushModeIntegrationHandler.ts` | Alerte renfort staff si prévision météo défavorable |
+| **P3** | ⬜ | H4 | XL | **Optimisation recettes IA (ingrédients alternatifs)** | `src/modules/intelligence/` | Suggestions de substitution pour préserver la marge |
+| **P3** | 🔧 | H3 | M | **Analyse des tendances culinaires & saisonnalité** | `src/modules/intelligence/` | — |
+| **P3** | 🔧 | H4 | XL | **Vision IA retour assiette (analyse gaspillage)** | `src/modules/intelligence/domain/agency/types.ts` | Photo du plateau plonge → détection des restes |
+| **P3** | 🔧 | H3 | M | **Calcul RevPAC (Revenue Per Available Cover)** | `src/modules/intelligence/forecasting/` | — |
+| **P3** | ⬜ | H3 | S | **Accords mets et vins automatisés en caisse** | `src/modules/commerce/catalog/` | — |
+
+---
+
+## 🏛️ 8. Facility — Espaces & Maintenance
+
+⚠️ **ALERTE DETTE** : La maintenance et la gestion IoT (Zone 9) représentent **27 composants à construire** (voir [`docs/plans/UI_MATRIX_16_ZONES.md §10`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/plans/UI_MATRIX_16_ZONES.md#10-️-zone-9--facility--maintenance-⚠️-27-composants--0-livrés)).
+
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | ✅ | H1 | — | **Plan de salle interactif Konva.js 2D** | `src/app/(client)/(ops)/floor-plan/page.tsx` | Drag & drop, orientation, regroupement de tables |
+| **P1** | ✅ | H1 | — | **Moteur géométrique & Coordonnées plan** | `src/app/(client)/(ops)/floor-plan/` | Centrage automatique, zoom et gestion responsive |
+| **P1** | ⬜ | H2 | M | **Heatmap d'occupation des tables** | `src/app/(client)/(ops)/floor-plan/` | Taux de rotation par zone et rentabilité au m² |
+| **P1** | ✅ | H1 | — | **Gestion des salons privés & privatisations** | `src/modules/commerce/relation/` | Contrats de réservation et arrhes |
+| **P1** | ✅ | H1 | — | **Multi-espaces (Salle, Terrasse, Bar, Étage)** | `src/app/(client)/(ops)/floor-plan/` | Configuration et tarification différenciée |
+| **P2** | ⬜ | H2 | L | **Carnet d'entretien préventif des équipements** | `src/modules/facility/maintenance/` | 🚧 **Zone 9 UI entièrement à construire** |
+| **P2** | ⬜ | H3 | M | **Gestion du cycle de vie du matériel (Amortissement)**| `src/modules/facility/` | Suivi des garanties et dates de renouvellement |
+| **P2** | ⬜ | H2 | M | **Planning ménage & protocoles de désinfection** | `src/modules/facility/` | Checklists de nettoyage avec signatures |
+| **P2** | 🔧 | H2 | M | **Gestion multi-étages & monte-plats** | `src/app/(client)/(ops)/floor-plan/` | Suivi des statuts entre niveaux |
+| **P2** | ✅ | H1 | — | **Registre des interventions de dépannage** | `src/modules/facility/interventions/` | Historique des pannes et bons de passage |
+| **P2** | ✅ | H1 | — | **Contrôles réglementaires périodiques (CERFA 13984)**| `src/modules/compliance/securite/` | Registre de sécurité incendie et gaz |
+| **P2** | ✅ | H1 | — | **Annuaire prestataires de maintenance** | `src/modules/facility/interventions/` | Frigoristes, électriciens, plombiers référencés |
+| **P3** | ⬜ | H3 | M | **Suivi énergétique IoT (Compteurs Linky, Gaz, Eau)** | `src/modules/facility/` | Détection des fuites et surconsommations |
+| **P3** | ⬜ | H3 | M | **Plan de salle en Réalité Augmentée (AR)** | `src/modules/facility/` | Visualisation 3D sur iPad Pro |
+| **P3** | ⬜ | H3 | M | **Domotique de salle (Lumières, Climatisation, Musique)**| `src/modules/facility/` | Scénarios de service (Journée / Tamisé / Fin de service) |
+| **P3** | ⬜ | H3 | S | **Intégration vidéosurveillance CCTV** | `src/modules/facility/` | — |
+
+---
+
+## 🔌 9. Intégrations Transversales
+
+| P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances / Risques |
+|:---:|:---:|:---:|:---:|---|---|---|
+| **P1** | 🔧 | H1 | M | **Apple Pay / Google Pay / Paiement sans contact** | `src/lib/adapters/StripeTerminalAdapter.ts` | Support matériel TPE Stripe Terminal |
+| **P1** | ✅ | H1 | — | **Synchronisation Google Business Profile** | `src/lib/connectors/hub/` | Horaires, menus, photos et avis clients |
+| **P1** | ⬜ | H2 | XL | **Application mobile client-facing (App Store/Play)** | `src/app/(client)/(public)/` | 🚧 **Bloquée par l'API REST H2.2** |
+| **P1** | ✅ | H1 | — | **Webhooks entrants / sortants réservations** | `src/shared/eventBus/` | Zenchef, TheFork, SevenRooms |
+| **P1** | ✅ | H1 | — | **Emailing transactionnel & marketing (Brevo)** | `src/modules/commerce/relation/` | Notifications commandes et campagnes marketing |
+| **P2** | ⬜ | H2 | M | **Connecteurs Mailchimp / Klaviyo** | `src/lib/connectors/hub/` | Synchronisation des listes de diffusion |
+| **P2** | ✅ | H1 | — | **Export comptable Pennylane** | `src/modules/finance/comptabilite/PennylaneAdapter.ts` | Flux de vente et rapprochement journalier |
+| **P2** | ⬜ | H2 | M | **Exports comptables Cegid, Sage, QuickBooks** | `src/modules/finance/comptabilite/` | Formats d'import standards |
+| **P2** | ⬜ | H2 | L | **API REST publique OpenAPI 3.1 & Webhooks** | `src/app/api/v1/` | **Chantier pivot Horizon H2.2 (Framework Hono)** |
+| **P2** | ⬜ | H4 | L | **Passerelles PMS Hôtellerie (Opera, Mews, Cloudbeds)**| `src/verticals/hotel/` | Dépendance pour la verticale Hôtel |
+| **P2** | ✅ | H1 | — | **Export paie Silae / PayFit** | `src/orchestration/handlers/PayrollExportHandler.ts` | Export mensuel des données de présence |
+| **P2** | ✅ | H1 | — | **Météo en direct (Météo-France / OpenWeather)** | `src/lib/connectors/hub/WeatherConnector.ts` | Alimentation du staffing dynamique |
+| **P2** | ✅ | H1 | — | **Affluence événements locaux (Ticketmaster API)** | `src/lib/connectors/hub/` | Détection des concerts/matchs à proximité |
+| **P3** | ⬜ | H3 | M | **Affichage dynamique Menu Boards (Digital Signage)** | `src/modules/ops/` | Écrans d'affichage prix au comptoir |
+| **P3** | ⬜ | H3 | XL | **SDK Développeurs & Marketplace de connecteurs** | `src/lib/sdk/` | Permet aux éditeurs tiers de publier des modules |
+| **P3** | ✅ | H1 | — | **Passerelle MQTT IoT (Capteurs et sondes)** | `src/lib/connectors/hub/MqttProvider.ts` | Collecte temps réel des températures |
+| **P3** | ⬜ | H3 | S | **Standard GS1 EAN-128 (Traçabilité logistique)** | `src/modules/logistics/` | — |
+
+---
+
+## 🎯 Récapitulatif Statutaire Global (~170 Features)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       ÉTAT D'AVANCEMENT DE LA FLOTTE                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ✅  IMPLÉMENTÉ & OPÉRATIONNEL :  ~78 features  (46%)                       │
+│  🔧  PARTIEL / EN CHANTIER      :  ~42 features  (25%)                       │
+│  ⬜  À DÉVELOPPER               :  ~48 features  (28%)                       │
+│  🚫  BLOQUÉ LÉGAL (CNIL)        :   1 feature   (1%)                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+> **Consulter le plan d'action immédiat** : [`docs/DEBT.md`](file:///Users/mohammed-aliboudjaadar/RESTAURANT-OS-CORE/docs/DEBT.md) (Les 5 Bloquants P0 et les 7 Actions Pré-Lancement).

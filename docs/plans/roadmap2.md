@@ -63,121 +63,121 @@ graph TD
 ---
 
 ### 🔹 PILIER 1 : OPS (Opérations, Caisse POS, KDS & Workflow Service)
-*   **Volume & Fichiers** : **218 fichiers** (`src/modules/ops/`)
+*   **Volume & Fichiers** : **367 fichiers** (`src/modules/ops/`)
 *   **Rôle & Mission** : Orchestrer le flux opérationnel temps réel de l'établissement (de la prise de commande jusqu'à l'expédition en passant par la gestion spatiale des tables/postes).
 *   **Sous-Modules Principaux** :
     *   `service/pos/` : Moteur de caisse tactile ultra-réactif, gestion du panier, application des remises, split d'addition multi-modes, pourboires.
     *   `production/kds/` : Kitchen Display System multi-postes (Chaud, Froid, Pâtisserie, Bar), chronomètres d'alerte, groupage d'articles pour la mise en place.
     *   `spaces/floor-plan/` : Éditeur et visualiseur de plan de salle 2D/3D temps réel, rotation des tables, zones (terrasse, salle, bar).
-    *   `workflow/engine/` : Machine à états finis des commandes (`placed` → `preparing` → `ready` → `delivered` → `paid` → `cleared`).
+    *   `workflow/engine/` : Machine à états finis des commandes (11 états : `draft` → `new` → `pending` → `preparing` → `cooking` → `ready` → `delivered` → `served` → `paid` + `cancelled` + `pending_modification`).
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `order.placed`, `ops.course.fired`, `order.cancelled`, `table.locked`, `table.released`.
-    *   *Consomme* : `reservation.matched` (accueil client), `haccp.alert` (blocage plat non-conforme).
-*   **Rôle dans la Généralisation** : S'abstrait via `ServiceTicket` et `spatialContext` (Table en restaurant, Poste de coiffure en salon, Baie/Pont en garage, Chambre en hôtel).
+    *   *Émet* : `order.placed`, `ops.course.fired`, `order.cancelled`, `table.locked`, `table.released`, `ops.table_closed`, `ops.service_alert`.
+    *   *Consomme* : `reservation.matched` (accueil client & allergènes), `haccp.alert` (blocage plat non-conforme), `stock.zero` (service 86 auto).
+*   **Rôle dans la Généralisation** : S'abstrait via `ServiceTicket` et `spatialContext` (Table en restaurant, Étal en boulangerie, Rayon en retail, Poste en salon, Baie/Pont en garage, Chambre en hôtel, Cabinet en clinique).
 
 ---
 
 ### 🔹 PILIER 2 : COMMERCE (Catalogue, Tarifs, CRM, Fidélité & Delivery)
-*   **Volume & Fichiers** : **254 fichiers** (`src/modules/commerce/`)
+*   **Volume & Fichiers** : **394 fichiers** (`src/modules/commerce/`)
 *   **Rôle & Mission** : Maximiser le revenu de l'établissement, fidéliser la clientèle et unifier les canaux de vente (sur place, click & collect, livraison).
 *   **Sous-Modules Principaux** :
-    *   `catalog/` : Menu Builder, déclinaisons, options/modificateurs, fiches allergènes INCO, formules midi/soir.
+    *   `catalog/` : Menu Builder, déclinaisons, options/modificateurs, fiches allergènes INCO (14 allergènes majeurs), formules midi/soir.
     *   `relation/crm/` : Fichier client souverain, segmentation RFM (Récence, Fréquence, Montant), historique de consommation.
     *   `relation/loyalty/` : Moteur de fidélité multi-paliers (points, cash-back cagnotte, récompenses VIP).
     *   `relation/delivery/` : Hub agrégateur de livraison (Deliveroo, UberEats, Click & Collect natif).
     *   `pricing/` : Moteur de tarification dynamique (Happy Hours, tarifs pro, remises promotionnelles).
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `commerce.promotion_activated`, `commerce.loyalty_points_earned`, `crm.customer_created`, `crm.customer_updated`.
+    *   *Émet* : `commerce.promotion_activated`, `commerce.loyalty_points_earned`, `crm.customer_created`, `crm.customer_updated`, `commerce.reservation_deposit_paid`, `commerce.receipt_sent`, `commerce.waitlist_ready`.
     *   *Consomme* : `order.paid` (crédit fidélité auto), `reservation.no_show` (flag risque client).
-*   **Rôle dans la Généralisation** : S'abstrait via `recipeLabel` (Plat en resto, Article en retail, Prestation en salon, Forfait en garage).
+*   **Rôle dans la Généralisation** : S'abstrait via `recipeLabel` (Plat en resto, Recette en boulangerie, Article en retail, Prestation en salon, Forfait en garage, Forfait séjour en hôtel, Acte médical en clinique).
 
 ---
 
 ### 🔹 PILIER 3 : FINANCE (Caisse, Grand Livre, NF525, Factur-X & FEC)
-*   **Volume & Fichiers** : **186 fichiers** (`src/modules/finance/`)
+*   **Volume & Fichiers** : **290 fichiers** (`src/modules/finance/`)
 *   **Rôle & Mission** : Assurer l'intégrité fiscale absolue (Article 286 du CGI / NF525), automatiser la comptabilité et piloter la trésorerie.
 *   **Sous-Modules Principaux** :
     *   `comptabilite/` : Grand Livre général et auxiliaire, Plan Comptable Général (PCG) automatisé, journal des ventes et des achats.
     *   `fiscalite/tax/` : Moteur `vatResolver` pour la ventilation automatique de la TVA (5.5%, 10%, 20%), gestion des encaissements.
-    *   `einvoicing/` : Réception et émission des factures électroniques conformes Factur-X (PDF/A-3 + XML), UBL 2.1 et CII.
-    *   `billing/` : Génération des factures B2B, gestion des avoirs, acomptes Stripe et relances d'impayés.
+    *   `einvoicing/` : Réception et émission des factures électroniques conformes Factur-X (PDF/A-3 + XML), UBL 2.1 et CII (Directive 2014/55/UE).
+    *   `billing/` : Génération des factures B2B, gestion des avoirs, acomptes Stripe et relances d'impayés avec escalade (FRIENDLY → FORMAL → LEGAL).
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `order.paid`, `finance.ticket_z_closed`, `finance.invoice_generated`, `finance.bank_synced`.
+    *   *Émet* : `order.paid`, `finance.ticket_z_closed`, `finance.invoice_generated`, `finance.bank_synced`, `payment.captured`, `payment.refunded`.
     *   *Consomme* : `order.placed` (pré-comptabilisation), `supplier.delivery_received` (écriture achat marchandise).
 *   **Rôle dans la Généralisation** : 100% universel pour toute entreprise commerciale assujettie à la TVA en France et en Europe.
 
 ---
 
 ### 🔹 PILIER 4 : COMPLIANCE (Hygiène HACCP, Traçabilité, Coffre WORM & RGPD)
-*   **Volume & Fichiers** : **123 fichiers** (`src/modules/compliance/`)
+*   **Volume & Fichiers** : **213 fichiers** (`src/modules/compliance/`)
 *   **Rôle & Mission** : Garantir la conformité réglementaire stricte, la sécurité sanitaire, la protection des données et l'archivage légal inaltérable.
 *   **Sous-Modules Principaux** :
     *   `qualite/haccp/` : Relevés de températures (chambres froides, cuissons, liaisons chaudes), gestion des non-conformités, plan de maîtrise sanitaire.
-    *   `securite/` : Coffre-fort numérique `DocumentVault` basé sur la technologie WORM (Write Once Read Many) pour l'archivage 6 ans.
-    *   `sanitaire/` : Traçabilité des lots de denrées (viandes, poissons, farines), photos des étiquettes sanitaires.
-    *   `registre/` : Registre des traitements RGPD (Art. 30), gestion du consentement et politique de crypto-shredding.
+    *   `securite/` : Coffre-fort numérique `DocumentVault` basé sur la technologie WORM (Write Once Read Many) pour l'archivage légal 6 ans (Art. L102 B LPF).
+    *   `sanitaire/` : Traçabilité des lots de denrées (viandes, poissons, farines - Règlement CE 178/2002), photos des étiquettes sanitaires.
+    *   `registre/` : Registre des traitements RGPD (Art. 30), gestion du consentement et politique de crypto-shredding (`ErasureService`).
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `haccp.temperature_logged`, `haccp.alert`, `haccp.non_conformity_created`, `compliance.certificate_expiring`.
-    *   *Consomme* : `sovereign.breach` (alerte intrusion/tentative d'altération).
-*   **Rôle dans la Généralisation** : Conditionné par `usesCulinaryStock(variant)`. Actif pour Food (Resto/Bakery/Hotel/Retail Food), converti en registre sécurité/déchets pour Garage (BSDD) et Salon.
+    *   *Émet* : `haccp.temperature_logged`, `haccp.alert`, `haccp.non_conformity_created`, `compliance.certificate_expiring`, `compliance.age_verification_requested`.
+    *   *Consomme* : `sovereign.breach` (alerte intrusion/tentative d'altération), `iot.temperature_threshold`.
+*   **Rôle dans la Généralisation** : Conditionné par `usesCulinaryStock(variant)`. Actif pour Food (Resto/Bakery/Hotel/Retail Food), converti en registre sécurité/déchets pour Garage (Trackdéchets BSDD) et Salon.
 
 ---
 
 ### 🔹 PILIER 5 : HUMAN (Effectifs, Planning Glissant, Pointeuse & Paie)
-*   **Volume & Fichiers** : **105 fichiers** (`src/modules/human/`)
+*   **Volume & Fichiers** : **181 fichiers** (`src/modules/human/`)
 *   **Rôle & Mission** : Gérer les ressources humaines, orchestrer les plannings sous contraintes légales et simplifier la paie.
 *   **Sous-Modules Principaux** :
-    *   `effectifs/hr/` : Dossiers collaborateurs, contrats de travail (CDI/CDD), compétences, médecine du travail.
-    *   `planning/` : Moteur de planning collaboratif glissant hebdomadaire/mensuel, détection des conflits légaux (repos 11h, amplitude max).
-    *   `timeclock/` : Borne de pointage PIN sécurisée PBKDF2 / NFC avec calcul automatique des heures réelles, coupures et heures sup.
-    *   `paie/` : Pré-paie automatisée, calcul des variables, intégration directe avec Silae, Payfit et Combo.
+    *   `effectifs/hr/` : Dossiers collaborateurs, contrats de travail (CDI/CDD), compétences, médecine du travail, DUERP.
+    *   `planning/` : Moteur de planning collaboratif glissant hebdomadaire/mensuel, détection des conflits légaux (repos 11h, amplitude max HCR).
+    *   `timeclock/` : Borne de pointage PIN sécurisée PBKDF2 / NFC avec calcul automatique des heures réelles, coupures et heures sup (avec debounce anti-rebond 60s).
+    *   `paie/` : Pré-paie automatisée, calcul des variables, génération DSN XML URSSAF et intégration directe avec Silae, Payfit et Combo.
 *   **Contrats & Événements Clés** :
     *   *Émet* : `hr.shift_started`, `hr.shift_ended`, `hr.absence_declared`, `hr.tip_declared`, `hr.employee_created`.
     *   *Consomme* : `finance.ticket_z_closed` (calcul des ratios de masse salariale du jour).
-*   **Rôle dans la Généralisation** : S'adapte via `RoleLabels` (du Plongeur au Chef de Cuisine, du Mécanicien au Chef d'Atelier, du Shampouineur au Coloriste).
+*   **Rôle dans la Généralisation** : S'adapte via `RoleLabels` (du Plongeur au Chef de Cuisine, du Vendeur au Gérant de Boutique, du Mécanicien au Chef d'Atelier, de l'Infirmier au Praticien).
 
 ---
 
 ### 🔹 PILIER 6 : LOGISTICS (Approvisionnement, Stocks, Fiches Techniques & DLC)
-*   **Volume & Fichiers** : **78 fichiers** (`src/modules/logistics/`)
+*   **Volume & Fichiers** : **180 fichiers** (`src/modules/logistics/`)
 *   **Rôle & Mission** : Assurer la disponibilité des stocks, automatiser les réapprovisionnements et éradiquer le gaspillage.
 *   **Sous-Modules Principaux** :
-    *   `stocks/` : Moteur de stock multi-emplacements (réserve, cuisine, bar, vitrine), valorisation au PMP (Prix Moyen Pondéré).
-    *   `approvisionnement/` : Gestion des fournisseurs, catalogues connectés (Metro, Sysco, Pomona), bons de commande automatisés.
+    *   `stocks/` : Moteur de stock multi-emplacements (réserve, cuisine, bar, vitrine), valorisation au PRMP / FIFO avec décrémentation atomique anti-RMW.
+    *   `approvisionnement/` : Gestion des fournisseurs, catalogues connectés (Metro, Sysco, Pomona), bons de commande automatisés et matching 3 voies.
     *   `inventaire/` : Assistant d'inventaire physique mensuel, calcul des écarts théorique/réel, réajustement comptable.
     *   `dlc/` : Suivi des dates limites de consommation (DLC/DLUO) avec alertes préventives 48h.
 *   **Contrats & Événements Clés** :
     *   *Émet* : `inventory.stock_adjusted`, `stock.low`, `stock.zero`, `logistics.delivery_received`, `logistics.waste_recorded`.
     *   *Consomme* : `order.paid` (décrémentation stock instantanée basée sur les fiches techniques).
-*   **Rôle dans la Généralisation** : S'abstrait via `itemLabel` (Ingrédient en cuisine, Pièce détachée en mécanique, Flacon cosmétique en salon, Article en boutique).
+*   **Rôle dans la Généralisation** : S'abstrait via `itemLabel` (Ingrédient en cuisine, Matière première en boulangerie, Article en boutique, Pièce détachée en mécanique, Flacon en salon).
 
 ---
 
 ### 🔹 PILIER 7 : FACILITY (Parc Machines, Maintenance IoT & Énergie)
-*   **Volume & Fichiers** : **41 fichiers** (`src/modules/facility/`)
+*   **Volume & Fichiers** : **119 fichiers** (`src/modules/facility/`)
 *   **Rôle & Mission** : Maximiser la disponibilité des équipements critiques, prévenir les pannes et optimiser la consommation énergétique.
 *   **Sous-Modules Principaux** :
     *   `maintenance/` : Carnet d'entretien numérique des machines (fours, chambres froides, tireuses, ponts élévateurs, bacs à shampoing).
     *   `interventions/` : Système de tickets d'incident pour les pannes avec photos, niveau d'urgence et assignation aux réparateurs.
-    *   `iot/` : Passerelle capteurs connectés (sondes de température Bluetooth Testo, compteurs Linky Enedis).
+    *   `iot/` : Passerelle capteurs connectés (sondes de température Bluetooth Testo, compteurs Linky Enedis, passerelle MQTT).
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `facility.maintenance_requested`, `facility.maintenance_due`, `iot.offline_alert`.
+    *   *Émet* : `facility.maintenance_requested`, `facility.maintenance_due`, `iot.offline_alert`, `facility.hardware_fault`.
     *   *Consomme* : `haccp.threshold_exceeded` (déclenchement automatique d'un bon d'intervention frigoriste).
 *   **Rôle dans la Généralisation** : Universel pour tout établissement exploitant des équipements techniques soumis à entretien.
 
 ---
 
 ### 🔹 PILIER 8 : INTELLIGENCE (Oracle Majordome, LightRAG & Vision AI)
-*   **Volume & Fichiers** : **149 fichiers** (`src/modules/intelligence/`)
+*   **Volume & Fichiers** : **227 fichiers** (`src/modules/intelligence/`)
 *   **Rôle & Mission** : Transformer les données brutes du commerce en décisions stratégiques et exécuter des tâches autonomes.
 *   **Sous-Modules Principaux** :
     *   `oracle/` : Majordome IA conversationnel en langage naturel connecté à toutes les bases de données du tenant.
     *   `rag/` : Moteur LightRAG vectoriel et graphe de connaissances souverain isolé par tenant (sidecar port 9621).
     *   `agents/` : Swarm d'agents spécialisés (Atlas pour la logistique, Themis pour la conformité fiscale, Cronos pour le temps).
-    *   `forecasting/` : Algorithmes prédictifs d'affluence et de ventes croisant météo, historiques et événements locaux.
+    *   `forecasting/` : Algorithmes prédictifs d'affluence et de ventes croisant météo, historiques et événements locaux (avec règles de cold-start 30 jours pour nouveaux tenants).
     *   `vision/` : Reconnaissance visuelle pour l'audit des retours assiette et l'analyse du gaspillage.
 *   **Contrats & Événements Clés** :
-    *   *Émet* : `intelligence.menu_engineering_requested`, `intelligence.anomaly_detected`, `intelligence.churn_risk_detected`.
+    *   *Émet* : `intelligence.menu_engineering_requested`, `intelligence.anomaly_detected`, `intelligence.churn_risk_detected`, `intelligence.prep_time_estimated`.
     *   *Consomme* : Tous les événements business pour enrichir en continu le graphe de connaissances du tenant.
 *   **Rôle dans la Généralisation** : Les prompts et agents adaptent automatiquement leurs analyses selon le `merchantKind` (Food Cost pour resto, Taux d'occupation atelier pour garage, Taux de remplissage fauteuil pour salon).
 
@@ -219,14 +219,10 @@ La plateforme impose une séparation étanche entre **le locataire (Tenant)** et
 ## 1.3 Moteur Cryptographique & Fiscal NF525 Grade X++
 
 La conformité fiscale (Article 286 du CGI / NF525) est gravée dans le marbre algorithmique :
-1. **Intégrité Cryptographique** : Chaque vente, modification ou annulation génère un `FiscalSeal` scellé en SHA-256 chaîné au sceau précédent (`previousHash`).
-2. **Archivage WORM (Write Once Read Many)** : Implémenté via `DocumentVault.ts` et la collection `fiscal_archives/` avec interdiction stricte de modification/suppression.
-3. **Clôtures Périodiques Automatisées** : Ticket Z quotidien, récapitulatif mensuel FEC (Fichier des Écritures Comptables) et journal des événements d'audit.
+1. **Intégrité Cryptographique par Caisse (`registerId`)** : Chaque terminal de vente gère sa propre séquence ininterrompue `sequenceNumber` et son sous-chaînage SHA-256 (`previousHash`). **Aucune collision de hash n'est possible entre terminaux concurrents en mode offline.**
+2. **Archivage WORM (Write Once Read Many)** : Implémenté via `DocumentVault.ts` et la collection `fiscal_archives/` avec interdiction stricte de modification/suppression (rétention 6 ans - Art. L102 B LPF).
+3. **Clôtures Périodiques Automatisées & MasterFiscalSeal** : Ticket Z quotidien, consolidation des sous-chaînes de tous les terminaux actifs (`MasterFiscalSeal`), récapitulatif mensuel FEC (Fichier des Écritures Comptables) et journal des événements d'audit.
 4. **Calculs en Microunités Entières** : Tout montant monétaire est stocké sous forme entière `amountInMicrounits` (1€ = 1 000 000 µunits) pour éliminer tout risque d'arrondi flottant IEEE-754.
-
----
-
-
 
 ---
 
@@ -237,21 +233,24 @@ La plupart des logiciels SaaS du marché sont des "monolithes verticaux" : une c
 
 **Restaurant OS a adopté une architecture de Méta-Plateforme Commerciale (Universal Commerce OS)** :
 1. **Un Tronc Invariant** (Fiscalité NF525, Grand Livre, Multi-Tenant SovereignGuard, Bus Asynchrone, Auth RBAC, Mode Offline, Provisioning MCC).
-2. **Une Couche d'Adaptation Découplée** (`VerticalRegistry`, `VerticalEventBridge`, `MetricLabels`, `RoleLabels`, `usesCulinaryStock`).
+2. **Une Couche d'Adaptation Découplée** (`VerticalRegistry`, `vertical.events.ts`, `MetricLabels`, `RoleLabels`, `usesCulinaryStock`).
 3. **8 Verticales Déployables Immédiatement** sans modification du noyau central.
 
 ---
 
-### 1.4.2 Le Pont Événementiel (`VerticalEventBridge` · 42 Règles)
-Le `VerticalEventBridge` normalise les événements métier spécifiques vers les événements pivots universels :
-*   `auto.invoice_issued` (Garage) ──► `order.paid` (Générique)
-*   `hotel.guest_checked_out` (Hôtel) ──► `order.paid` (Générique)
-*   `retail.sale_completed` (Boutique) ──► `order.paid` (Générique)
-*   `salon.appointment_completed` (Salon) ──► `order.paid` (Générique)
-*   `bakery.sale_completed` (Boulangerie) ──► `order.paid` (Générique)
-*   `health.act_billed` (Clinique) ──► `order.paid` (Générique)
+### 1.4.2 Les 66 Événements Verticaux (`vertical.events.ts`) & Traduction Pivot
+Le fichier `src/shared/eventBus/events/vertical.events.ts` déclare **66 événements verticaux distincts** normalisés vers les événements pivots universels :
 
-Grâce à ce pont, **les 176 handlers du bus (déduction de stock, scellage fiscal, attribution fidélité, comptabilité) fonctionnent instantanément pour toutes les verticales.**
+| Verticale | # Événements | Événements Clés | Pivot Universel |
+|---|:---:|---|---|
+| 🚗 **Auto (Garage)** | 14 | `auto.vehicle_checked_in`, `auto.diagnostic_completed`, `auto.repair_started`, `auto.invoice_issued` | `order.paid` |
+| 🩺 **Health (Clinic)** | 14 | `health.patient_admitted`, `health.act_billed`, `health.hds_audit_log`, `health.appointment_booked` | `order.paid` |
+| 🏨 **Hotel** | 13 | `hotel.guest_checked_in`, `hotel.guest_checked_out`, `hotel.room_status_changed`, `hotel.folio_charged` | `order.paid` |
+| 🥖 **Bakery** | 9 | `bakery.batch_started`, `bakery.batch_completed`, `bakery.oven_temp_alert`, `bakery.preorder_received` | `order.paid` |
+| 🛍️ **Retail** | 8 | `retail.sale_completed`, `retail.return_processed`, `retail.stock_alert`, `retail.pos_session_closed` | `order.paid` |
+| 💇 **Salon** | 8 | `salon.appointment_booked`, `salon.appointment_completed`, `salon.product_consumed`, `salon.no_show` | `order.paid` |
+
+Grâce à ce pont, **les 165 handlers du bus (déduction de stock, scellage fiscal, attribution fidélité, comptabilité) fonctionnent instantanément pour toutes les 8 verticales.**
 
 ---
 
@@ -359,46 +358,50 @@ gantt
 
 ---
 
-## 3.1 Horizon 1 — Prod-Ready & Sécurisation Fiscale `[~7 Jours · Août 2026]`
+## 3.1 Horizon 1 — Prod-Ready & Sécurisation Fiscale `[Août-Sept 2026 · 3-4 Semaines]`
 
-> **Objectif** : Zéro angle mort. La plateforme est prête à encaisser le premier euro en production.
+> **Objectif** : Zéro angle mort. La plateforme est prête à encaisser le premier euro en production dans des conditions de conformité légale, d'idempotence et de stabilité irréprochables.
 
-### Sprint 1.1 · Clôture des 2 Émetteurs Bus Manquants & Alerting
+### Sprint 1.1 · Clôture des Émetteurs Bus, Idempotence & Alerting (Semaine 1)
 - **R10 : Webhook Stripe Acomptes** (`src/app/api/webhooks/stripe/route.ts`) :
   - Émission de `commerce.reservation_deposit_paid` lors de la validation d'un acompte en ligne.
-  - Consommateur : `PaymentLedgerHandler` et `ResaKitchenTaskHandler`.
+  - Consommateurs : `PaymentLedgerHandler` et `ResaKitchenTaskHandler`.
 - **R11 : Émission Explicite `ops.table_closed`** :
   - Câbler l'émission lors du solde de l'addition dans le POS pour déclencher la mise à jour immédiate du plan de salle et du chronomètre de rotation.
-- **Sentry DSN Production** :
-  - Injecter `SENTRY_DSN` et configurer les alertes critiques (erreur fiscale = notification SMS/Slack immédiate).
+- **Idempotence Serveur Bus** :
+  - Table `events_processed_log/{eventId}` pour empêcher tout doublement d'écriture lors d'un retry réseau ou d'une reconnexion.
+- **Sentry DSN Production & Alertes P0** :
+  - Injecter `SENTRY_DSN` et configurer les alertes critiques (erreur fiscale ou incident sanitaire = notification SMS/Slack immédiate).
 
-### Sprint 1.2 · Protection CI/CD & 3 Parcours E2E Playwright UI
-- **Garde-Fou GitHub/GitLab** : Verrouillage de la branche `main` avec obligation de passage des tests AST, TSC et Vitest.
-- **Suite Playwright Maître** :
+### Sprint 1.2 · Juridique DPA RGPD, Données Santé & WORM Firestore (Semaine 2)
+- **DPA RGPD Article 28 & CGU/CGV SaaS** : Finalisation du contrat de sous-traitance de données et des CGU/CGV avec avocat spécialisé (**buffer 4-6 semaines** engagé en parallèle).
+- **Fiches Allergies = Données de Santé (RGPD Art. 9)** : Consentement explicite traçable et chiffrement de repos AES-256 sur `Customer.allergens`.
+- **Règles Firestore Long-Term (WORM)** : Interdiction absolue de suppression sur la collection `fiscal_archives/` avec rétention légale de 6 ans (Art. L102 B LPF).
+- **Runbook d'Astreinte** : Publication de `docs/guides/ON_CALL_RUNBOOK.md` pour la gestion des incidents 24/7.
+
+### Sprint 1.3 · Protection CI/CD & 4 Parcours E2E Playwright UI (Semaines 3-4)
+- **Garde-Fou GitHub Actions** : Verrouillage de la branche `main` avec obligation de passage des tests AST, TSC et Vitest + auto-rollback sur health-check failed.
+- **Suite Playwright Maître (4 parcours critiques)** :
   1. *Parcours Encaissement* : Prise de commande → Split addition → Paiement CB → Génération facturette NF525.
   2. *Parcours Clôture Z* : Fin de service → Rapprochement caisse tiroir → Clôture Z scellée → Export FEC.
-  3. *Parcours Réservation & Allergènes* : Réservation Web → Check-in hôtesse → Transmission des alertes allergènes au KDS cuisine.
-
-### Sprint 1.3 · Juridique DPA & WORM Firestore
-- **DPA RGPD Article 28** : Valider l'intégration formelle des clauses de sous-traitance dans les CGV.
-- **Règles Firestore Long-Term** : Interdiction absolue de suppression sur la collection `fiscal_archives/` avec rétention 6 ans.
-- **Runbook d'Astreinte** : Publication de `docs/guides/ON_CALL_RUNBOOK.md` pour la gestion des incidents 24/7.
+  3. *Parcours Réservation & Allergènes* : Réservation Web → Check-in hôtesse → Transmission des alertes allergènes au KDS cuisine (`reservation.matched`).
+  4. *Parcours Mode Offline & Reconnexion* : Encaissement hors-ligne sur 2 tablettes simultanées → Reconnexion réseau → Consolidation `MasterFiscalSeal` sans divergence.
 
 ---
 
-## 3.2 Horizon 2 — Déploiement Commercial & Densification `[M+1 → M+3 · Sept-Nov 2026]`
+## 3.2 Horizon 2 — Déploiement Commercial, Hardware J-0 & Mobile App `[Sept-Nov 2026]`
 
-> **Objectif** : Onboarding de 30 restaurants pilotes, automatisation de la facturation plateforme et application mobile compagnon.
+> **Objectif** : Onboarding de 30 restaurants pilotes, maîtrise du déploiement physique terrain, facturation automatisée et application mobile compagnon.
 
-### Sprint 2.1 · Facturation Automatisée MCC & Portail Client
-- Moteur de facturation récurrente Stripe Invoicing : génération automatique des factures d'abonnement SaaS à chaque date anniversaire.
-- Portail Client Facturation : visualisation et téléchargement des factures plateforme depuis l'espace client.
-- Gestion des impayés avec relance automatique et activation progressive de la période de grâce (7 jours).
+### Sprint 2.1 · Kit Matériel J-0, Facturation Automatisée MCC & SOS Caisse
+- **Kit Valise d'Onboarding J-0** : Routeur 4G failover multi-opérateurs préconfiguré en cas de coupure de la box du restaurateur + checklist matérielle en 12 points.
+- **Bouton SOS Caisse sur POS** : Alerte prioritaire PagerDuty/Slack avec diagnostic local d'urgence pour l'opérateur MCC.
+- **Moteur de Facturation Récurrente Stripe Invoicing** : Génération automatique des factures d'abonnement SaaS à date anniversaire avec gestion de la période de grâce (7 jours).
 
-### Sprint 2.2 · API REST Publique & OpenAPI 3.1
-- Exposition formelle des routes API Next.js sous une spécification standard OpenAPI / Swagger.
+### Sprint 2.2 · API REST Publique & OpenAPI 3.1 (Framework Hono)
+- Exposition formelle des routes API Next.js sous une spécification standard OpenAPI 3.1 via framework **Hono** (léger, Edge-compatible, TypeScript natif).
 - Rate limiting par jeton API avec quotas stricts par formule d'abonnement.
-- Webhooks sortants pour permettre aux clients d'interconnecter leur propre écosystème (Zapier, Make, ERP externe).
+- Webhooks sortants pour permettre aux clients d'interconnecter leur écosystème (Zapier, Make, n8n, ERP externe).
 
 ### Sprint 2.3 · Application Mobile Compagnon (Expo / React Native)
 - **App Serveur (Mobile POS)** : Prise de commande ultra-rapide sur smartphone (iOS/Android) avec transmission directe KDS.
@@ -407,71 +410,80 @@ gantt
 
 ---
 
-## 3.3 Horizon 3 — Expansion Multi-Verticales & IA Locale `[M+3 → M+9 · Déc 2026 – Mai 2027]`
+## 3.3 Horizon 3 — Expansion Multi-Verticales, IA Locale & Amorce HDS `[Déc 2026 – Mai 2027]`
 
-> **Objectif** : Déploiement des verticales Boulangerie, Retail et Salon. Activation complète de l'IA Oracle.
+> **Objectif** : Déploiement des verticales Boulangerie, Retail et Salon. Anticipation des délais d'homologation partenaires (3-6 mois). **Démarrage des démarches d'agrément HDS ANSSI (délai 12-18 mois)**.
 
 ### Sprint 3.1 · 🥖 Verticale Boulangerie (Bakery)
 - **Gestion des Fournées** : Planning de cuisson dynamique, cadencement des fournées de baguettes/viennoiseries.
 - **Vente au Poids** : Connecteur balance homologuée (protocole Dialogue 06 / Mettler Toledo).
 - **Gestion des Précommandes & Traiteur** : Enregistrement des commandes gâteaux/pièces montées avec acomptes et fiches de retrait.
-- **Invendus & Valorisation** : Interface de don alimentaire (Too Good To Go / associations) et transformation (chapelure).
+- **Anti-gaspillage** : Intégration Too Good To Go (Partner API), dons associations et déduction fiscale loi Garot 2016.
 
 ### Sprint 3.2 · 🛍️ Verticale Commerce de Détail (Retail)
 - **Scan & Code-Barres** : Douchette USB/Bluetooth, gestion des codes EAN-13, balances poids-prix.
 - **Matrice Variantes** : Gestion Tailles / Couleurs / Matières avec déclinaison automatique de SKU.
 - **Synchronisation Omnicanale** : Connecteurs bidirectionnels Shopify / WooCommerce (stocks et commandes unifiés).
+- **Droit de Rétractation** : Documenté dans les CGV + workflow de retour pour ventes à distance uniquement (Art. L221-18 Code Conso).
 
 ### Sprint 3.3 · 💇 Verticale Coiffure & Esthétique (Salon)
 - **Agenda Visuel Collaboratif** : Prise de RDV en ligne, vue par collaborateur et par cabine de soin.
-- **Fiches Techniques Coloration** : Historique des formules de coloration client, photos avant/après sécurisées.
+- **Fiches Techniques Coloration** : Historique des formules de coloration client, photos avant/après sécurisées avec **RGPD Art. 9** (consentement + chiffrement) et contrat de droit à l'image.
 - **Moteur de Commissions** : Calcul automatique des pourcentages sur prestations et ventes de produits pour chaque coiffeur.
 
-### Sprint 3.4 · 🧠 IA Opérationnelle LightRAG & Oracle
+### Sprint 3.4 · 🧠 IA Opérationnelle LightRAG & Oracle + Cold-Start
 - Activation du sidecar vectoriel LightRAG (port 9621) sur l'ensemble de la flotte.
 - Suggestions prédictives de réassort basées sur la météo, l'historique et les événements locaux.
 - Générateur automatique de cartes et menus optimisés selon la marge brute (Menu Engineering BCG).
+- **Stratégie Cold-Start** : Nouveaux tenants sans historique → règles heuristiques 30 jours, bascule ML dès `sales_history > 500 tickets`.
+
+### Sprint 3.5 · 🩺 Démarches HDS ANSSI (démarrage — cible H5)
+- Dépôt du dossier de certification auprès d'un organisme accrédité COFRAC (LSTI, Bureau Veritas).
+- Audit initial ISO 27001 et provisionnement de l'infrastructure HDS-ready (budget 30-50k€).
 
 ---
 
-## 3.4 Horizon 4 — Franchises, Groupes & Verticales Lourdes `[M+9 → M+18 · Juin 2027 – Fév 2028]`
+## 3.4 Horizon 4 — Franchises, Groupes & Verticales Lourdes `[Juin 2027 – Fév 2028]`
 
 > **Objectif** : Conquête des réseaux de franchise et ouverture des verticales Garage et Hôtel.
 
 ### Sprint 4.1 · 🚗 Verticale Garage Automobile
-- **Ordres de Réparation (OR)** : Réception véhicule, relevé kilométrique, photos de carrosserie et signature client sur tablette.
-- **Chiffrage Pièces & Main d'Œuvre** : Catalogue pièces détachées et barème de temps constructeur.
+- **Ordres de Réparation (OR)** : Réception véhicule, relevé kilométrique, photos de carrosserie et **signature client sur tablette via tiers eIDAS certifié** (DocuSign/Universign) pour valeur probante.
+- **Chiffrage Pièces & Main d'Œuvre** : Catalogue pièces détachées (TecDoc, AD, Autossimo) et barème de temps constructeur (HaynesPro, Autodata).
 - **Facturation Normée Véhicule** : Mention obligatoire d'immatriculation, numéro VIN et contrôle technique.
+- **Trackdéchets BSDD obligatoire** : Intégration API Trackdéchets pour huiles/batteries/pneus usagés (Art. R541-45 Code Env.).
 
 ### Sprint 4.2 · 🏨 Verticale Hôtel & Hébergement (PMS Lite)
 - **Gestion des Chambres & Planning** : Grille des disponibilités, statuts de ménage (propre, sale, inspection).
-- **Channel Manager Intégré** : Passerelle 2-ways avec Booking.com, Expedia et Airbnb.
-- **Facturation Folio** : Transfert des consommations bar/restaurant sur la note de chambre.
+- **Channel Manager Intégré** : Passerelle 2-ways avec Booking.com, Expedia et Airbnb (après homologation OTA).
+- **Facturation Folio** : Transfert des consommations bar/restaurant sur la note de chambre avec ventilation TVA (10% nuitée / 20% bar).
+- **Fiche de Police Numérique VISABIO** : Télétransmission Art. L.611-1 CESEDA (avec agrément préfectoral).
 
 ### Sprint 4.3 · 🏢 Multi-Établissements & Consolidation Franchise
-- **Vue Groupe Consolidée** : Dashboard unique pour les directeurs de chaîne avec benchmark inter-sites.
-- **Mutualisation des Stocks & Personnel** : Transfert de marchandises entre établissements et pool d'employés partagés.
+- **Vue Groupe Consolidée (MacroBrain)** : Dashboard unique pour les directeurs de chaîne avec benchmark inter-sites.
+- **Mutualisation des Stocks & Personnel** : Transfert de marchandises entre établissements et pool d'employés partagés (gestion supra-tenant).
 - **Harmonisation Centrale des Tarifs** : Déploiement de cartes et promotions globales en 1 clic.
 
 ---
 
-## 3.5 Horizon 5 — Souveraineté IA & Santé Réglementée `[M+18 → M+36 · 2028-2029]`
+## 3.5 Horizon 5 — Souveraineté IA & Santé Réglementée `[2028-2029]`
 
 > **Objectif** : Agrément Santé HDS pour la verticale Clinique, Swarm d'agents IA totalement autonomes et internationalisation.
 
 ### Sprint 5.1 · 🩺 Verticale Clinique & Paramédical (HDS / Santé)
-- **Agrément Hébergement Données de Santé (HDS)** : Déploiement sur infrastructure certifiée ANSSI/HDS.
+- **Agrément Hébergement Données de Santé (HDS) obtenu** : Déploiement sur infrastructure certifiée ANSSI/HDS avant traitement de données réelles.
 - **Facturation FSE & SESAM-Vitale** : Télétransmission CPAM, gestion du tiers-payant et mutuelles.
 - **Dossier Patient Informatisé (DPI)** : Historique médical, ordonnances sécurisées et synchronisation Mon Espace Santé.
+- **SAS de Sécurité HDS** : Accès technique MCC restreint avec journal d'audit infalsifiable (`mcc/hds_access_audit`) et respect du secret médical (Art. L.1110-4 CSP).
 
 ### Sprint 5.2 · 🎨 Custom Long-Tail Framework & SDK
 - Moteur no-code de création de formulaires, champs personnalisés et statuts métier pour tout type d'activité.
 - SDK Partenaires pour permettre aux intégrateurs de développer des verticales spécialisées.
 
-### Sprint 5.3 · 🛰️ Swarm d'Agents Autonomes Impériaux
-- **Agent Atlas** : Passation de commandes fournisseurs 100% autonome selon les prévisions de stock et négociation des tarifs.
-- **Agent Themis** : Contrôle fiscal continu en tâche de fond avec auto-réparation des anomalies mineures.
-- **Agent Cronos** : Ajustement dynamique du planning staff en temps réel selon les fluctuations de réservation.
+### Sprint 5.3 · 🛰️ Swarm d'Agents Autonomes avec Gates Humaines
+- **Agent Atlas** : Passation de commandes fournisseurs autonome (avec gate d'approbation humaine >500€).
+- **Agent Themis** : Contrôle fiscal continu en tâche de fond avec auto-réparation des anomalies mineures (escalade humaine sur ambiguïté).
+- **Agent Cronos** : Ajustement dynamique du planning staff en temps réel selon fluctuations de réservation.
 
 ---
 
@@ -607,67 +619,87 @@ Chaque zone d'interface regroupe l'ensemble des écrans et composants nécessair
 
 # 6. 📡 Topologie du Bus Événementiel Nexus & Invariants Mathématiques
 
-Le `NexusEventBus` constitue la colonne vertébrale du système.
+Le `NexusEventBus` (`src/shared/eventBus/NexusEventBus.ts`) constitue la colonne vertébrale du système avec un moteur asynchrone sécurisé, tolérant aux pannes et scellé fiscalement.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            NEXUS EVENT BUS TOPOLOGY                         │
 │                                                                             │
 │  [Émetteurs Métier]                                                         │
-│  POS · KDS · Webhooks Stripe · IoT · Clôture Z · Pointage                   │
+│  POS · KDS · Webhooks Stripe · IoT · Clôture Z · Pointage · Connecteurs     │
 │        │                                                                    │
 │        ▼                                                                    │
-│  [NexusEventBus Engine] ────► [Outbox Pattern] ────► [DLQ Quarantine]       │
+│  [NexusEventBus Engine] ────► [Outbox Pattern Dexie] ──► [DLQ Quarantaine]  │
 │        │                                                                    │
-│        ├──────► Handlers Haute Priorité (Scellage NF525, Stocks, KDS)       │
-│        ├──────► Handlers Arrière-Plan (CRM, Fidélité, Analytics)            │
-│        └──────► VerticalEventBridge (Traduction vers Verticales Spécifiques)│
+│        ├──────► CRITICAL (Séquentiel bloquant : NF525, Stocks, Fidélité)    │
+│        ├──────► HIGH (Parallèle Promise.allSettled : KDS, Plan de Salle)    │
+│        ├──────► BACKGROUND (Fire-and-forget : CRM, Analytics, LightRAG)     │
+│        └──────► vertical.events.ts (66 Événements Normalisés vers Pivots)   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Règles d'Or du Bus Événementiel :
-1. **Émission Post-Écriture** : Tout `emitDurable` doit impérativement intervenir après la persistance réussie dans la base de données principale.
-2. **Idempotence des Handlers** : Chaque handler doit vérifier l'identifiant unique de l'événement pour éviter tout double traitement lors d'un retry.
-3. **Quarantaine DLQ Automatique** : Tout événement échouant 3 fois consécutives est isolé dans `mcc/dlq` et déclenche une alerte superviseur.
+## 6.1 Les 3 Niveaux de Priorité des Handlers :
+- **`CRITICAL`** : Exécution `await` en **séquence stricte** (ordre d'inscription). Bloquant pour le flux d'encaissement. Si un handler échoue, l'exception remonte immédiatement, l'événement est écrit dans la DLQ et le scellage n'est pas validé.
+- **`HIGH`** : Exécution `Promise.allSettled` en **parallèle**. Bloquant sur le batch complet pour garantir que les affichages opérationnels (KDS, Salle) sont synchronisés.
+- **`BACKGROUND`** : Exécution **fire-and-forget** (microtask `Promise.resolve().then(...)`). Non-bloquant pour l'utilisateur, erreurs loggées et capturées en DLQ sans faire échouer l'action.
+
+## 6.2 Résilience DLQ & Escalade Fiscale (`DLQRetryService.ts`) :
+1. **Émission Post-Écriture (Outbox Pattern)** : Tout `emitDurable` enregistre l'intention dans `db.busOutbox` avant émission en mémoire.
+2. **Idempotence des Handlers** : Déduplication stricte via `events_processed_log/{eventId}`.
+3. **Backoff Exponentiel Plafonné à 60s** : $\text{Backoff}(attempt) = \min(2000 \times 2^{attempt-1}, 60\,000)\,\text{ms}$.
+4. **Quarantaine à `MAX_ATTEMPTS = 5`** : Après 5 échecs consécutifs, l'événement est gelé en statut `quarantine` et notifié au MCC (`mcc.dlq_quarantine`).
+5. **🚨 Escalade Fiscale Immédiate (`FISCAL_CRITICAL_EVENTS`)** : Si un des 6 événements fiscaux (`order.sealed_nf525`, `order.completed`, `order.cancelled`, `payment.captured`, `payment.refunded`, `fiscal.seal_required`) entre en quarantaine, une alerte d'urgence `mcc.fiscal_audit_required` est déclenchée pour audit immédiat.
 
 ---
 
-# 7. 🛡️ Sécurité, Conformité Légale (NF525/HDS/RGPD) & FinOps
+# 7. 🛡️ Sécurité, Conformité Légale (NF525/HDS/RGPD) & Résilience
 
 | Risque Identifié | Solution Technique Gravée | Sévérité |
 |---|---|:---:|
-| **Altération des Données Fiscales** | Chaînage cryptographique SHA-256 et stockage WORM | 🔴 P0 Bloquant |
-| **Fuite de Données Cross-Tenant** | Isolation stricte via `SovereignGuard` et audit AST en CI | 🔴 P0 Bloquant |
-| **Biométrie Illégale au Travail** | Interdiction stricte de la reconnaissance faciale (Pointage PIN sécurisé) | 🔴 P0 Bloquant |
-| **Période de Rétention Fiscale** | Rétention 6 ans garantie sur les archives de clôture | 🔴 P0 Bloquant |
-| **Interruption Réseau en Service** | Moteur Local-First avec synchronisation automatique à la reconnexion | 🟠 P1 Majeur |
-| **Dérive des Coûts Cloud (FinOps)** | Suivi unitaire de la consommation Firestore et tokens IA par tenant | 🟡 P2 Mineur |
+| **Altération des Données Fiscales NF525** | Chaînage cryptographique SHA-256 par caisse (`registerId`) et archivage WORM 6 ans (`DocumentVault`) | 🔴 P0 Bloquant |
+| **Divergence Multi-Caisses Offline** | Sous-chaînes parallèles indépendantes scellées quotidiennement par `MasterFiscalSeal` consolidé | 🔴 P0 Bloquant |
+| **Données de Santé & Fiches Allergies (RGPD Art. 9)** | Consentement explicite traçable + chiffrement au repos AES-256 (`Customer.allergens`) | 🔴 P0 Bloquant |
+| **Fuite de Données Cross-Tenant** | Isolation stricte via `SovereignGuard` (enforce `tenantId` strict sur chaque collection) | 🔴 P0 Bloquant |
+| **Biométrie Illégale au Travail** | Interdiction formelle de la reconnaissance faciale (Pointeuse PIN PBKDF2 / NFC géofencée) | 🔴 P0 Bloquant |
+| **Agrément Santé HDS (Clinique)** | Déploiement sur infrastructure certifiée ANSSI/HDS + SAS de logs certifiés (`mcc/hds_access_audit`) | 🔴 P0 Bloquant |
+| **Traçabilité Déchets Dangereux (Garage)** | Intégration obligatoire de l'API Trackdéchets pour émission des BSDD huiles/pneus | 🟠 P1 Majeur |
+| **Fiche de Police Numérique (Hôtel)** | Télétransmission Art. L.611-1 CESEDA via connecteur VISABIO avec agrément préfectoral | 🟠 P1 Majeur |
+| **Interruption Réseau en Plein Service** | Moteur Local-First Dexie.js + sync queue transactionnelle à la reconnexion | 🟠 P1 Majeur |
+| **Dérive des Coûts Cloud (FinOps)** | Suivi unitaire de la consommation Firestore et tokens IA par `tenantId` (marge brute >80%) | 🟡 P2 Mineur |
 
 ---
 
-# 8. 📈 Modèle Économique, KPIs & Gouvernance Multi-Agent
+# 8. 📈 Modèle Économique, FinOps & Gouvernance Multi-Agent
 
-## 8.1 Objectifs de Croissance Consolidés
+## 8.1 Projections MRR & Hypothèses SaaS Assumées
 
 ```
   MRR (€)
   ▲
-600k │                                                     ● T+36 (2500 clients)
-     │                                           ● T+24 (1200 clients)
-250k │                                 ● T+18 (600 clients)
-120k │                       ● T+12 (250 clients)
- 50k │             ● T+6 (50 clients)
- 10k │   ● T+3 (30 clients)
+600k │                                                     ● T+36 (2500 clients · ARPU 240€)
+     │                                           ● T+24 (1200 clients · ARPU 208€)
+250k │                                 ● T+18 (600 clients · ARPU 200€)
+120k │                       ● T+12 (250 clients · ARPU 200€)
+ 50k │             ● T+6 (50 clients · ARPU 300€)
+ 10k │   ● T+3 (30 clients · ARPU 333€)
   0  └───────────────────────────────────────────────────────────────────► Temps
          2026 Q3    2026 Q4    2027 Q2    2027 Q4    2028 Q2    2029 Q2
 ```
 
-## 8.2 Rôles de la Flotte d'Agents Hermes
+### Hypothèses Unit Economics & FinOps :
+- **Grille Tarifaire** : Starter 49€/mois · Standard 79€/mois · Enterprise 149€/mois · Add-ons 19-49€/mois.
+- **Taux de Churn Mensuel Cible** : `< 5%` (standard B2B commerce physique).
+- **Coût d'Acquisition Client (CAC)** : `< 1 500€` (onboarding semi-automatisé puis 100% libre-service).
+- **Ratio LTV / CAC** : `> 3.0` (santé unitaire démontrée dès T+6).
+- **FinOps par Tenant** : Suivi du coût d'infrastructure Firestore, stockage WORM et requêtes LLM Gemini attribué à chaque `tenantId` pour garantir une rentabilité unitaire stricte.
 
-- **Atlas (Orchestrateur Infrastructure & Logistique)** : Responsable du déploiement continu, du monitoring de santé des serveurs et de l'approvisionnement des stocks.
-- **Themis (Sentinelle Juridique & Fiscale)** : Veille à la conformité NF525, vérifie l'intégrité des chaînes de hash et contrôle les registres RGPD.
-- **Cronos (Maître du Temps & des Ressources)** : Supervise les plannings RH, la rotation des tables et l'optimisation du cadencement en cuisine.
-- **Antigravity (Superviseur Architecte)** : Maintient l'intégrité architecturale Grade X++, garantit l'absence de régression TypeScript et documente l'évolution de l'empire.
+## 8.2 Gouvernance Multi-Agent Hermes & Gates d'Approbation Humaine
+
+Pour éviter toute dérive autonome incontrôlée, chaque agent opère sous des **garde-fous stricts** :
+- **Atlas (Orchestrateur Infrastructure & Logistique)** : Surveillance des serveurs et passation des réapprovisionnements fournisseurs avec **gate d'approbation humaine obligatoire pour toute commande > 500€**.
+- **Themis (Sentinelle Juridique & Fiscale)** : Contrôle continu de la chaîne de hash NF525 et des registres RGPD avec **escalade immédiate vers l'opérateur MCC en cas de divergence ou d'anomalie fiscale**.
+- **Cronos (Maître du Temps & des Ressources)** : Optimisation dynamique des plannings RH et du cadencement cuisine dans le respect absolu de la Convention Collective HCR.
+- **Antigravity (Superviseur Architecte)** : Maintient l'intégrité architecturale Grade X++, garantit l'absence de régression TypeScript (`TSC = 0`) et documente l'évolution de la plateforme.
 
 ---
 

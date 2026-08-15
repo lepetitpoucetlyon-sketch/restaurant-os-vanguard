@@ -118,4 +118,26 @@ export interface SYSTEMEvents {
 
   // ── Tenant lifecycle ───────────────────────────────────────────────────────
   'tenant.ready': { tenantId: string };
+
+  // ── Hardware & Facility Telemetry (Invariant #6) ───────────────────────────
+  'facility.hardware_fault': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    deviceType: 'printer' | 'payment_terminal' | 'iot_sensor' | 'backup_router' | 'display';
+    deviceId: string;
+    faultCode: 'OUT_OF_PAPER' | 'COVER_OPEN' | 'CONNECTION_LOST' | 'BATTERY_CRITICAL' | 'PAPER_JAM' | 'POWER_OFF';
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    message: string;
+    timestamp: string;
+  };
+
+  'facility.hardware_restored': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    deviceType: 'printer' | 'payment_terminal' | 'iot_sensor' | 'backup_router' | 'display';
+    deviceId: string;
+    timestamp: string;
+  };
 }
