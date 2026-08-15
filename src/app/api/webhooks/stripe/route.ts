@@ -379,6 +379,29 @@ export async function POST(req: NextRequest) {
         break;
       }
 
+      case 'payment_intent.succeeded': {
+        const obj = event.data.object as unknown as Record<string, unknown>;
+        const meta = (obj.metadata as Record<string, unknown>) || {};
+        const tenantId = (meta.tenantId as string) || 'tenant_default';
+        const amount = (obj.amount_received ?? obj.amount ?? 0) as number * 10000;
+
+        if (meta.type === 'deposit' || meta.type === 'reservation_deposit' || meta.reservationId) {
+          const depositPayload = {
+            v: 1 as const,
+            tenantId,
+            depositId: (obj.id as string) || `dep_${Date.now()}`,
+            amountInMicrounits: amount,
+            reservationId: meta.reservationId as string | undefined,
+            customerId: (obj.customer as string) || undefined,
+            paidAt: Date.now(),
+          };
+
+          await dispatchServerEvent('stripe.deposit_received' as never, depositPayload as never);
+          logger.info(`[Stripe Webhook] stripe.deposit_received émis pour tenant ${tenantId} acompte=${depositPayload.depositId}`);
+        }
+        break;
+      }
+
       default:
         logger.info(`[Stripe Webhook] Event non géré: ${event.type}`);
     }

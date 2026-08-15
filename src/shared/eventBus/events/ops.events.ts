@@ -286,6 +286,16 @@ export interface OPSEvents {
     transferredAt: number;
   };
 
+  'ops.table_closed': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    orderId?: string;
+    closedBy: string;
+    closedAt: number;
+  };
+
   // ── Hardware — imprimante mappée ──────────────────────────────────────────
   'hardware.printer_mapped': {
     v: 1;
