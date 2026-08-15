@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
 const LOCK_TTL_MS = 5 * 60 * 1000;
 
 export function registerTableLockHandler(): () => void {
-  return NexusEventBus.on(
+  const unbindLocked = NexusEventBus.on(
     'table.locked',
     async (payload) => {
       const { tenantId, tableId, lockedBy, reason, lockedAt } = payload;
@@ -47,4 +47,37 @@ export function registerTableLockHandler(): () => void {
     },
     { id: 'table-lock', priority: 'HIGH' }
   );
+
+  const unbindUnlocked = NexusEventBus.on(
+    'table.unlocked',
+    async (payload) => {
+      const { tenantId, tableId, unlockedBy, reason, unlockedAt } = payload;
+
+      try {
+        const lockPath = `tenants/${tenantId}/tableLocks/${tableId}`;
+        await Nexus.adapter.delete(lockPath);
+
+        logger.info(
+          `[TableLock] Table ${tableId} déverrouillée par ${unlockedBy} (${reason ?? 'normal'})`
+        );
+
+        empireAudit.log({
+          module: 'ops',
+          action: 'TABLE_UNLOCKED',
+          details: { tableId, unlockedBy, reason },
+          severity: 'low',
+          timestamp: new Date(unlockedAt),
+        });
+      } catch (err) {
+        logger.error('[TableLock] Erreur déverrouillage table', err);
+        throw err;
+      }
+    },
+    { id: 'table-unlock', priority: 'HIGH' }
+  );
+
+  return () => {
+    unbindLocked();
+    unbindUnlocked();
+  };
 }

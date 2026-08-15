@@ -275,6 +275,16 @@ export interface OPSEvents {
     lockedAt: number;
   };
 
+  'table.unlocked': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    unlockedBy: string;
+    reason?: string;
+    unlockedAt: number;
+  };
+
   'table.transferred': {
     v: 1;
     isSimulation?: boolean;
