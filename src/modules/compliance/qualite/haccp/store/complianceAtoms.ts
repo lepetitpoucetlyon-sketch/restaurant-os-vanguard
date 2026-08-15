@@ -45,6 +45,11 @@ const _hygieneLogs = createProxyDomain<HygieneLog>('hygieneLogs');
 export const hygieneLogsNodeAtom = _hygieneLogs.node;
 export const hygieneLogsAtom = _hygieneLogs.data;
 
+// 🏛️ Universal Regulatory Logs Alias
+export const regulatoryLogsNodeAtom = hygieneLogsNodeAtom;
+export const regulatoryLogsAtom = hygieneLogsAtom;
+
+
 const _receptionLogs = createProxyDomain<ReceptionLog>('receptionLogs');
 export const receptionLogsNodeAtom = _receptionLogs.node;
 export const receptionLogsAtom = _receptionLogs.data;

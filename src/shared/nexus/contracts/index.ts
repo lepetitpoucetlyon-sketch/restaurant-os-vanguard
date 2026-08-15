@@ -60,6 +60,8 @@ export * from './recruitment';
 export * from './registre.types';
 export * from './compliance.types';
 export * from './commerce.types';
+export * from './permissions.types';
+
 
 // 4. Operations Bridge (POS & Groups)
 export type { CartItem } from '@/modules/ops/workflow/engine/types';

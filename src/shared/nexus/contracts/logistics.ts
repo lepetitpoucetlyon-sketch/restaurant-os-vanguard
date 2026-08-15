@@ -5,7 +5,9 @@ import { SovereignField, SovereignNode, SovereignMap } from '@/shared/nexus-cont
  * Moved to shared to prevent circular dependencies between Commerce and Logistics.
  */
 
-export type StorageType = 'fridge' | 'freezer' | 'dry_storage' | 'cellar' | 'counter' | 'other';
+export type StorageType = 
+    | 'fridge' | 'freezer' | 'dry_storage' | 'cellar' | 'counter' 
+    | 'workshop_bay' | 'medical_cabinet' | 'vault_safe' | 'retail_shelf' | 'warehouse_rack' | 'other';
 
 export interface StorageLocation {
     id: string;
@@ -22,7 +24,11 @@ export interface StorageLocation {
 export type IngredientCategory =
     | 'produce' | 'dairy' | 'meat' | 'poultry' | 'seafood' | 'charcuterie'
     | 'bakery' | 'dry' | 'condiment' | 'spice' | 'oil' | 'beverage'
-    | 'wine' | 'spirits' | 'frozen' | 'other';
+    | 'wine' | 'spirits' | 'frozen'
+    | 'spare_part' | 'consumable' | 'medical_supply' | 'cosmetic' | 'luxury_goods' | 'raw_material' | 'tool'
+    | 'other';
+
+export type ItemCategory = IngredientCategory;
 
 export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'piece' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
 
@@ -265,3 +271,10 @@ export interface Recipe extends SovereignNode {
     /** Glass type used (e.g. "Coupe", "Highball", "Old Fashioned"). */
     glassType?: string;
 }
+
+// 🏛️ Universal Aliases for Bill of Materials (BOM) & Manufacturing
+export type BOM = Recipe;
+export type BOMComponent = RecipeIngredient;
+export type Assembly = Recipe;
+export type AssemblyComponent = RecipeIngredient;
+

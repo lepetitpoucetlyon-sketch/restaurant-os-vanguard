@@ -16,7 +16,10 @@ export {
     deliveriesAtom,           // COMPLIANCE
     hygieneLogsNodeAtom,      // COMPLIANCE
     hygieneLogsAtom,          // COMPLIANCE
+    regulatoryLogsNodeAtom,   // COMPLIANCE (Universal Regulatory Log Alias)
+    regulatoryLogsAtom,       // COMPLIANCE (Universal Regulatory Log Alias)
     receptionLogsNodeAtom,    // COMPLIANCE
+
     receptionLogsAtom,        // COMPLIANCE
     oilLogsNodeAtom,          // COMPLIANCE
     oilLogsAtom,              // COMPLIANCE

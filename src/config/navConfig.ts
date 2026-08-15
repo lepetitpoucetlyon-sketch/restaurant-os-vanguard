@@ -266,3 +266,91 @@ export function filterByCapabilities(
         }))
         .filter(section => section.items.length > 0);
 }
+
+/** Adapts and filters nav sections according to the active tenant vertical variant. */
+export function filterByVertical(sections: NavSection[], rawVariant?: string): NavSection[] {
+    const variant = (rawVariant || 'restaurant').toLowerCase();
+    const isFood = ['restaurant', 'bakery', 'hotel'].includes(variant);
+
+    return sections
+        .map(section => {
+            const sec = { ...section, items: [...section.items] };
+
+            // 1. Filtrer les modules culinaires purs si non-alimentaire
+            if (!isFood) {
+                sec.items = sec.items.filter(item => !['bar', 'kitchen_management', 'kds', 'menu_builder', 'haccp', 'quality_control'].includes(item.key));
+            }
+
+            // 2. Adapter les intitulés selon la verticale
+            if (variant === 'garage') {
+                if (sec.id === 'operations') {
+                    sec.title = 'Atelier & Caisse';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'floor_plan') return { ...item, label: 'Plan Atelier & Baies' };
+                        if (item.key === 'operations') return { ...item, label: 'Ordres de Réparation (OR)' };
+                        return item;
+                    });
+                }
+                if (sec.id === 'production') {
+                    sec.title = 'Pièces & Déchets';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'inventory') return { ...item, label: 'Pièces & Consommables' };
+                        if (item.key === 'storage_map') return { ...item, label: 'Rayonnages & Casiers' };
+                        return item;
+                    });
+                }
+            } else if (variant === 'clinic') {
+                if (sec.id === 'operations') {
+                    sec.title = 'Consultations & Caisse';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'pos') return { ...item, label: 'Encaissement Actes CCAM' };
+                        if (item.key === 'floor_plan') return { ...item, label: 'Plan des Cabinets' };
+                        return item;
+                    });
+                }
+                if (sec.id === 'production') {
+                    sec.title = 'Pharmacie & Matériel';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'inventory') return { ...item, label: 'Dispositifs & Matériel' };
+                        return item;
+                    });
+                }
+            } else if (variant === 'salon') {
+                if (sec.id === 'operations') {
+                    sec.title = 'Salon & Prestations';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'pos') return { ...item, label: 'Caisse Prestations' };
+                        if (item.key === 'floor_plan') return { ...item, label: 'Plan Fauteuils & Bacs' };
+                        return item;
+                    });
+                }
+                if (sec.id === 'production') {
+                    sec.title = 'Produits & Stocks';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'inventory') return { ...item, label: 'Stock Cabine & Revente' };
+                        return item;
+                    });
+                }
+            } else if (variant === 'luxury_vault') {
+                if (sec.id === 'operations') {
+                    sec.title = 'Chambre Forte & Caisse';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'pos') return { ...item, label: 'Caisse & Souscriptions' };
+                        if (item.key === 'floor_plan') return { ...item, label: 'Plan Chambre Forte' };
+                        return item;
+                    });
+                }
+                if (sec.id === 'production') {
+                    sec.title = 'Expertise & Scellés';
+                    sec.items = sec.items.map(item => {
+                        if (item.key === 'inventory') return { ...item, label: 'Inventaire Sacs & Actifs' };
+                        return item;
+                    });
+                }
+            }
+
+            return sec;
+        })
+        .filter(section => section.items.length > 0);
+}
+

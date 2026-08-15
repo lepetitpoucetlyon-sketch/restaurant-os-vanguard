@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence';
-import { AI_MODELS } from '@/modules/intelligence';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -9,6 +8,9 @@ import { sovereignQuery } from '@/modules/intelligence';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
 import { toError } from "@/lib/toError";
+import { UniversalSystemPromptBuilder } from '@/modules/intelligence/services/UniversalSystemPromptBuilder';
+import { AssistantActionDispatcher, ActionProposal } from '@/modules/intelligence/services/AssistantActionDispatcher';
+import { redactPII } from '@/lib/security/redactPII';
 
 // Statuts bloquant l'accès RAG — JWT valide ne suffit pas.
 const BLOCKED_STATUSES: UserStatus[] = ['suspended', 'inactive', 'on_leave', 'RESTRICTED'];
@@ -26,23 +28,24 @@ async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean>
     }
 }
 
-const VALID_ROLES: PermissionRole[] = [
-    'super_admin', 'directeur', 'manager', 'comptable', 'chef_rang',
-    'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur',
-];
-
-function normalizeRole(raw: string | undefined): PermissionRole {
-    if (raw && (VALID_ROLES as string[]).includes(raw)) return raw as PermissionRole;
-    return 'serveur'; // fallback safe : accès minimum
+async function resolveTenantVariant(tenantId: string, headerVariant?: string | null): Promise<string> {
+    if (headerVariant) return headerVariant.toLowerCase();
+    try {
+        ensureServerNexus();
+        const config = await Nexus.adapter.get<{ variant?: string }>(`tenants/${tenantId}/config`);
+        return config?.variant || 'restaurant';
+    } catch {
+        return 'restaurant';
+    }
 }
 
 export async function POST(req: NextRequest) {
     // Tous les employés authentifiés peuvent poser des questions.
-    // Le RBAC granulaire est délégué au Sovereign RAG (veto membrane par rôle).
+    // Le RBAC granulaire est délégué au Sovereign RAG + niveau numérique universel.
     const caller = await requireTenantUser(req);
     if (isDenied(caller)) return caller;
 
-    // Cas 1 — Employé suspendu/inactif : JWT valide mais accès révoqué dans Nexus.
+    // Employé suspendu/inactif : JWT valide mais accès révoqué dans Nexus.
     const active = await isEmployeeActive(caller.tenantId, caller.uid);
     if (!active) {
         logger.warn(`[Oracle] Accès RAG bloqué — employé non-actif`, { uid: caller.uid, tenantId: caller.tenantId });
@@ -51,43 +54,94 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { prompt, context, history } = body as {
+        const { prompt, context, history, executeAction } = body as {
             prompt?: string;
             context?: Record<string, unknown>;
             history?: Array<{ role: string; content: string }>;
+            executeAction?: { toolId: string; params: Record<string, unknown> };
         };
+
+        const roleLevel = UniversalSystemPromptBuilder.resolveRoleLevel(caller.role);
+        const variant = await resolveTenantVariant(caller.tenantId, req.headers.get('x-nexus-variant'));
+
+        // ── CAS A : Exécution d'une action applicative approuvée par l'utilisateur
+        if (executeAction) {
+            const dispatchResult = AssistantActionDispatcher.createActionProposal(
+                executeAction.toolId,
+                executeAction.params,
+                roleLevel
+            );
+
+            if (!dispatchResult.success) {
+                return NextResponse.json({ error: dispatchResult.error }, { status: 403 });
+            }
+
+            logger.info(`[Oracle] Action exécutée par ${caller.uid} (Niveau ${roleLevel}) : ${executeAction.toolId}`, executeAction.params);
+            return NextResponse.json({
+                success: true,
+                executedProposal: { ...dispatchResult.proposal, status: 'executed' },
+                message: `Action ${dispatchResult.proposal?.title} validée et exécutée avec succès.`
+            });
+        }
 
         if (!prompt) {
             return NextResponse.json({ error: 'Missing prompt' }, { status: 400 });
         }
 
-        const role = normalizeRole(caller.role);
+        // Nettoyage PII en entrée
+        const sanitizedPrompt = String(redactPII(prompt));
 
         // 1. Chercher le contexte dans Sovereign RAG (filtré par rôle)
         let ragContext = '';
         try {
-            const ragResult = await sovereignQuery(prompt, {
+            const ragResult = await sovereignQuery(sanitizedPrompt, {
                 workspaceId: caller.tenantId,
-                role,
+                role: (caller.role || 'serveur') as PermissionRole,
                 userId: caller.uid,
             });
             if (!ragResult.vetoed && ragResult.answer) {
                 ragContext = ragResult.answer;
             }
         } catch (ragErr) {
-            // RAG indisponible → on continue sans contexte
             logger.warn('[Oracle] Sovereign RAG unavailable, continuing without context', String(ragErr));
         }
 
-        // 2. Générer la réponse avec Gemini + contexte RAG
-        const systemPrompt = buildSystemPrompt(role, ragContext);
+        // 2. Générer le prompt système universel multi-verticale & RBAC
+        const systemPrompt = UniversalSystemPromptBuilder.build({
+            variant,
+            role: caller.role,
+            roleLevel,
+            ragContext,
+            userContext: context,
+        });
 
+        // 3. Détecter des intentions d'actions potentielles
+        const suggestedActions: ActionProposal[] = [];
+        const lowerPrompt = sanitizedPrompt.toLowerCase();
+
+        if ((lowerPrompt.includes('bloque') || lowerPrompt.includes('verrouille')) && (lowerPrompt.includes('table') || lowerPrompt.includes('baie') || lowerPrompt.includes('espace'))) {
+            const match = sanitizedPrompt.match(/\b(?:table|baie|espace|box)\s*([0-9a-zA-Z_-]+)/i);
+            const spaceId = match ? match[1] : '1';
+            const action = AssistantActionDispatcher.createActionProposal('lock_space_or_table', { spaceId, reason: 'Demande Copilote' }, roleLevel);
+            if (action.success && action.proposal) suggestedActions.push(action.proposal);
+        } else if ((lowerPrompt.includes('commande') || lowerPrompt.includes('fournisseur') || lowerPrompt.includes('réapprovisionner')) && roleLevel >= 50) {
+            const action = AssistantActionDispatcher.createActionProposal('trigger_stock_reorder', { itemId: 'ITEM_DETECTED', quantity: 10 }, roleLevel);
+            if (action.success && action.proposal) suggestedActions.push(action.proposal);
+        } else if ((lowerPrompt.includes('panne') || lowerPrompt.includes('cassé') || lowerPrompt.includes('incident')) && roleLevel >= 30) {
+            const action = AssistantActionDispatcher.createActionProposal('create_maintenance_ticket', { equipmentName: 'Équipement', severity: 'medium', description: sanitizedPrompt }, roleLevel);
+            if (action.success && action.proposal) suggestedActions.push(action.proposal);
+        } else if (variant === 'luxury_vault' && (lowerPrompt.includes('sac') || lowerPrompt.includes('scellé') || lowerPrompt.includes('cote')) && roleLevel >= 40) {
+            const action = AssistantActionDispatcher.createActionProposal('verify_luxury_asset_seal', { assetId: 'BIRKIN-GENESIS', verificationType: 'market_quote' }, roleLevel);
+            if (action.success && action.proposal) suggestedActions.push(action.proposal);
+        }
+
+        // 4. Appel LLM via Gemini Flash / Sovereign Provider
         const response = await LLMManager.provider.generateText({
             model: AI_MODELS.fast,
             systemPrompt,
             userPrompt: context
-                ? `Context applicatif: ${JSON.stringify(context)}\n\nQuestion: ${prompt}`
-                : prompt,
+                ? `Context applicatif: ${JSON.stringify(context)}\n\nQuestion: ${sanitizedPrompt}`
+                : sanitizedPrompt,
             history,
         });
 
@@ -95,38 +149,13 @@ export async function POST(req: NextRequest) {
             content: response.text,
             usage: response.usage,
             ragUsed: !!ragContext,
+            variant,
+            roleLevel,
+            suggestedActions: suggestedActions.length > 0 ? suggestedActions : undefined,
         });
     } catch (error) {
         logger.error('[Oracle API] Error', error);
         const msg = error instanceof Error ? error.message : 'Internal error';
         return NextResponse.json({ error: msg }, { status: 500 });
     }
-}
-
-function buildSystemPrompt(role: PermissionRole, ragContext: string): string {
-    const roleInstructions: Record<PermissionRole, string> = {
-        super_admin:    'Tu as accès à toutes les informations du système.',
-        directeur:      'Tu as accès à toutes les informations du restaurant.',
-        manager:        'Tu as accès aux données opérationnelles, RH et financières.',
-        comptable:      'Tu peux répondre sur la finance, les factures et les fournisseurs.',
-        chef_rang:      'Tu peux répondre sur le service, les réservations et l\'équipe de salle.',
-        chef_cuisinier: 'Tu peux répondre sur les recettes, les coûts matières et la cuisine.',
-        serveur:        'Tu peux répondre sur le menu, les allergènes et les promotions.',
-        cuisinier:      'Tu peux répondre sur les recettes, les allergènes et les fiches techniques.',
-        barman:         'Tu peux répondre sur la carte bar, les cocktails et le stock bar.',
-        hotesse:        'Tu peux répondre sur le menu et le plan de salle.',
-        plongeur:       'Tu peux répondre sur les tâches de nettoyage et le planning.',
-    };
-
-    const lines = [
-        'Tu es NEXUS, l\'assistant IA du Restaurant OS. Réponds toujours dans la langue de l\'utilisateur.',
-        `Rôle de l'utilisateur : ${role}. ${roleInstructions[role]}`,
-        'Ne révèle jamais d\'informations qui dépassent les droits de l\'utilisateur.',
-    ];
-
-    if (ragContext) {
-        lines.push('', 'Contexte issu de la base de connaissances du restaurant :', ragContext);
-    }
-
-    return lines.join('\n');
 }

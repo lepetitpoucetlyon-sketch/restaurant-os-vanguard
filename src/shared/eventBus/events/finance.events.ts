@@ -27,6 +27,25 @@ export interface FINANCEEvents {
     impactDate: string;
   };
 
+  'finance.material_cost_impacted': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reason: string;
+    affectedItems?: string[];
+    impactDate: string;
+  };
+
+  'finance.cogs_impacted': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reason: string;
+    affectedItems?: string[];
+    impactDate: string;
+  };
+
+
   'supplier.invoice_processed': {
     v: 1;
     isSimulation?: boolean;

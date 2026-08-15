@@ -2,10 +2,11 @@ import { z } from 'zod';
 import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized } from '@/shared/schemas/primitives';
 
 // ── Taux TVA légaux France ─────────────────────────────────────────────────
-export const TaxRateSchema = z.enum(['0.055', '0.10', '0.20'])
-  .describe('Taux TVA légaux France : 5.5% / 10% / 20%');
+export const TaxRateSchema = z.enum(['0.00', '0.021', '0.055', '0.10', '0.20'])
+  .describe('Taux TVA légaux France : 0% (médical/exonéré) / 2.1% (presse) / 5.5% / 10% / 20%');
 
 export type TaxRate = z.infer<typeof TaxRateSchema>;
+
 
 // ── Journal Entry NF525 ────────────────────────────────────────────────────
 /**

@@ -1,10 +1,10 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus, type NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import { makeIntelligenceAdapter } from '@/verticals/_shared/adapters';
 
+/** Intelligence salon = socle universel (anomalies) + delta métriques fauteuils. */
 export const SalonIntelligenceAdapter = {
-  emitChairMetricsSnapshot(payload: { tenantId: string; date: string; totalAppointments: number; utilization: number; revenueInMicrounits: number }) {
-    NexusEventBus.emit('salon.chair_metrics_snapshot', payload);
-  },
-  emitAnomalyDetected(payload: { tenantId: string; metric: string; value: number; threshold: number; detectedAt: string }) {
-    NexusEventBus.emitDurable('analytics.anomaly_detected', payload);
+  ...makeIntelligenceAdapter(),
+  emitChairMetricsSnapshot(p: NexusEventPayload<'salon.chair_metrics_snapshot'>) {
+    NexusEventBus.emit('salon.chair_metrics_snapshot', p);
   },
 };

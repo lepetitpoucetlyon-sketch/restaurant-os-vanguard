@@ -15,6 +15,9 @@ export {
     recipesNodeAtom,          // LOGISTICS
     recipesAtom,              // LOGISTICS
     recipesLoadingAtom,       // LOGISTICS
+    bomNodeAtom,              // LOGISTICS (Universal BOM Alias)
+    bomAtom,                  // LOGISTICS (Universal BOM Alias)
+    bomLoadingAtom,           // LOGISTICS (Universal BOM Alias)
     ingredientsNodeAtom,      // LOGISTICS
     ingredientsAtom,          // LOGISTICS
     preparationsNodeAtom,     // LOGISTICS
@@ -28,4 +31,6 @@ export {
     prepLoadingAtom,          // LOGISTICS
     miseEnPlaceTargetSelector, // LOGISTICS
     calculateRecipeCostSelector, // LOGISTICS
+    calculateAssemblyCostSelector, // LOGISTICS (Universal Assembly Cost)
 } from '@/modules/logistics/stock/inventory/store/inventoryAtoms';
+

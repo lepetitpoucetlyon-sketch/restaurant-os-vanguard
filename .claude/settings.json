@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sentrux check:*)",
+      "Bash(rtk:*)",
+      "Bash(ast-grep:*)",
+      "Bash(sqlite3:*)"
+    ],
+    "ask": [
+      "Bash(./scripts/deploy-prod.sh:*)",
+      "Bash(npm run nexus:deploy:*)"
+    ]
+  }
+}

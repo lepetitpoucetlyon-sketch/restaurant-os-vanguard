@@ -11,8 +11,12 @@ export {
     tablesNodeAtom,           // OPS
     tablesAtom,               // OPS
     tablesLoadingAtom,        // OPS
+    spacesNodeAtom,           // OPS (Universal Space Alias)
+    spacesAtom,               // OPS (Universal Space Alias)
+    spacesLoadingAtom,        // OPS (Universal Space Alias)
     activeCartAtom,           // OPS
     availableTablesAtom,      // OPS
+    availableSpacesAtom,      // OPS (Universal Space Alias)
     pendingOrdersAtom,        // OPS
     pendingModificationsAtom, // OPS
 } from '@/modules/ops/service/pos/store/orderAtoms';

@@ -36,6 +36,12 @@ export const recipesNodeAtom = _recipes.node;
 export const recipesAtom = _recipes.data;
 export const recipesLoadingAtom = _recipes.loading;
 
+// 🏛️ Universal BOM (Bill of Materials / Assembly) Aliases
+export const bomNodeAtom = recipesNodeAtom;
+export const bomAtom = recipesAtom;
+export const bomLoadingAtom = recipesLoadingAtom;
+
+
 const _ingredients = createProxyDomain<Ingredient>('ingredients');
 export const ingredientsNodeAtom = _ingredients.node;
 export const ingredientsAtom = _ingredients.data;
@@ -86,6 +92,8 @@ export const calculateRecipeCostSelector = atom(null, (get, _set, recipeIngredie
         return total + (cost * ri.quantity);
     }, 0);
 });
+export const calculateAssemblyCostSelector = calculateRecipeCostSelector;
+
 
 // --- ⚡ PHASE 3: REAL-TIME OPTIMISTIC RECONCILIATION ---
 export const decrementStockAtom = atom(

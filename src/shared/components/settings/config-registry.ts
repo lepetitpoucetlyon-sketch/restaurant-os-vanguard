@@ -255,8 +255,27 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "auto_export", label: "Export automatique", group: "logic", type: "toggle", roles: ["super_admin", "directeur"] },
         ],
     },
+    workshop: {
+        title: "Paramètres Atelier & Baies",
+        settings: [
+            { key: "auto_schedule_technician", label: "Assignation automatique technicien", group: "logic", type: "toggle", roles: ["super_admin", "directeur", "manager"] },
+        ],
+    },
+    consultations: {
+        title: "Paramètres Consultations & Actes",
+        settings: [
+            { key: "ccam_teletransmission", label: "Télétransmission SESAM-Vitale", group: "logic", type: "toggle", roles: ["super_admin", "directeur"] },
+        ],
+    },
+    vault: {
+        title: "Paramètres Chambre Forte & Scellés",
+        settings: [
+            { key: "nfc_double_custody", label: "Double authentification scellé NFC", group: "logic", type: "toggle", roles: ["super_admin", "directeur"] },
+        ],
+    },
     settings: {
         title: "Paramètres Système",
         settings: [], // Settings page has its own interface
     },
 };
+

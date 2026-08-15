@@ -31,6 +31,12 @@ export type TableShape = 'rect' | 'circle' | string;
 export type OrderStatus = Order['status'];
 export type GroupEventStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
+// 🏛️ Universal Aliases (Spaces, Resources & Workload Units)
+export type Space = Table;
+export type SpaceStatus = TableStatus;
+export type SpaceShape = TableShape;
+export type WorkloadUnit = 'cover' | 'vehicle' | 'patient' | 'client' | 'asset_lot' | 'unit';
+
 // Keep essential legacy structures if not yet migrated to Zod
 // OrderItemModification is now inferred from Zod
 
@@ -49,3 +55,4 @@ export interface GroupEvent {
     isDepositPaid: boolean;
     notes?: string;
 }
+

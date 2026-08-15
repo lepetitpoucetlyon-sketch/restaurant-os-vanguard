@@ -1,10 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const SalonMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; chairsActive: number; appointmentsToday: number }) {
-    NexusEventBus.emit('mcc.health_ping', { ...payload });
-  },
-  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
-    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
-  },
-};
+/** MCC salon = socle universel + métriques santé propres (fauteuils, RDV du jour). */
+export const SalonMccAdapter = makeMccAdapter<{ chairsActive: number; appointmentsToday: number }>();

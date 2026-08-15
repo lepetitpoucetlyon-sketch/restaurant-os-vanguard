@@ -6,7 +6,7 @@ import { cn } from "@/lib/ui.foundations";
 import { ChevronRight } from "lucide-react";
 import { useAuth, useUI } from "@/shared/hooks";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities, filterByVertical } from "@/config/navConfig";
 import { APP_MODE } from "@/config/instance";
 
 // Modular Sub-components
@@ -58,15 +58,17 @@ export function Sidebar() {
     const longPressTimer = useRef<NodeJS.Timeout | null>(null);
     const isLongPress = useRef(false);
 
-    // Filtered navigation based on APP_MODE, tenant capabilities, and RBAC
+    // Filtered navigation based on APP_MODE, tenant capabilities, vertical variant, and RBAC
     const accessibleSections = useMemo(() => {
         const capabilities = (tenantConfig as { capabilities?: Record<string, boolean> })?.capabilities;
+        const variant = (tenantConfig as { variant?: string })?.variant || 'restaurant';
         const pmsEnabled = !!(settings as { pmsEnabled?: boolean })?.pmsEnabled;
 
         const modeFiltered = filterNavSections(NAV_SECTIONS || [], APP_MODE);
         const capFiltered = filterByCapabilities(modeFiltered, capabilities);
+        const verticalFiltered = filterByVertical(capFiltered, variant);
 
-        return capFiltered.map(section => ({
+        return verticalFiltered.map(section => ({
             ...section,
             items: (section.items || []).filter(item => {
                 if (item.href === '/pms' && !pmsEnabled) return false;
@@ -74,6 +76,7 @@ export function Sidebar() {
             })
         })).filter(section => (section.items?.length || 0) > 0);
     }, [settings, tenantConfig]);
+
 
     // Cleanup and effects
     useEffect(() => {

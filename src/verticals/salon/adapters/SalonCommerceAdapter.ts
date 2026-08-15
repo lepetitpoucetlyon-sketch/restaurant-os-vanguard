@@ -1,16 +1,16 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { NexusEventBus, type NexusEventPayload } from '@/shared/eventBus/NexusEventBus';
+import { makeCommerceAdapter } from '@/verticals/_shared/adapters';
 
+/** Commerce salon = socle universel (RFM CRM) + deltas RDV/fidélité propres au salon. */
 export const SalonCommerceAdapter = {
-  emitAppointmentBooked(payload: { tenantId: string; appointmentId: string; customerId: string; stylistId: string; service: string; slot: string }) {
-    NexusEventBus.emitDurable('salon.appointment_booked', payload);
+  ...makeCommerceAdapter(),
+  emitAppointmentBooked(p: NexusEventPayload<'salon.appointment_booked'>) {
+    NexusEventBus.emitDurable('salon.appointment_booked', p);
   },
-  emitAppointmentCancelled(payload: { tenantId: string; appointmentId: string; reason: string; customerId: string }) {
-    NexusEventBus.emitDurable('salon.appointment_cancelled', payload);
+  emitAppointmentCancelled(p: NexusEventPayload<'salon.appointment_cancelled'>) {
+    NexusEventBus.emitDurable('salon.appointment_cancelled', p);
   },
-  emitLoyaltyEarned(payload: { tenantId: string; customerId: string; points: number; sourceAppointmentId: string }) {
-    NexusEventBus.emit('salon.loyalty_earned', payload);
-  },
-  emitRFMTrigger(payload: { tenantId: string; customerId: string }) {
-    NexusEventBus.emitDurable('crm.rfm_trigger', payload);
+  emitLoyaltyEarned(p: NexusEventPayload<'salon.loyalty_earned'>) {
+    NexusEventBus.emit('salon.loyalty_earned', p);
   },
 };

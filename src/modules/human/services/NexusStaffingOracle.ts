@@ -44,13 +44,14 @@ export class NexusStaffingOracle {
             const proposal: StaffingProposal = {
                 id: SharedKernel.generateId('PRP-STAFF'),
                 targetDate: date,
-                reason: `Saturation probable : ${predictedOrders} couverts prédits vs ${currentScheduledStaff} brigadiers prévus.`,
+                reason: `Saturation prévisionnelle : charge estimée à ${predictedOrders} unités vs ${currentScheduledStaff} collaborateurs en service.`,
                 currentStaffCount: currentScheduledStaff,
                 suggestedStaffCount: neededStaff,
                 predictedVelocity: predictedOrders,
                 status: 'pending',
                 createdAt: new Date().toISOString()
             };
+
 
             logger.warn(`[StaffingOracle] Staffing Gap Detected: ${proposal.reason}`);
             

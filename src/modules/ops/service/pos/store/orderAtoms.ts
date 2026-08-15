@@ -15,6 +15,11 @@ export const tablesNodeAtom = _tables.node;
 export const tablesAtom = _tables.data;
 export const tablesLoadingAtom = _tables.loading;
 
+// 🏛️ Universal Aliases (Spaces / Stations / Bays)
+export const spacesNodeAtom = tablesNodeAtom;
+export const spacesAtom = tablesAtom;
+export const spacesLoadingAtom = tablesLoadingAtom;
+
 // --- 🛒 UI STATE (Cart, Modifications) ---
 export const activeCartAtom = atom<{ items: OrderItem[]; customerId?: string } | null>(null);
 export const pendingModificationsAtom = atom<OrderItemModification[]>([]);
@@ -35,8 +40,10 @@ export const orderStatsAtom = atom((get) => {
 export const availableTablesAtom = atom((get) => {
     return get(tablesAtom).filter((t: Table) => t.status === 'free');
 });
+export const availableSpacesAtom = availableTablesAtom;
 
 /** 🕒 Pending Orders Selector (for KDS) */
 export const pendingOrdersAtom = atom((get) => {
     return get(ordersAtom).filter((o: Order) => o.status === 'new' || o.status === 'preparing');
 });
+

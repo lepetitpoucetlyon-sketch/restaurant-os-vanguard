@@ -1,29 +1,16 @@
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import { type PermissionRole, PERMISSION_ROLE_LEVELS } from '@/shared/nexus/contracts/permissions.types';
 
 const BASE_URL = process.env.SOVEREIGN_RAG_URL ?? 'http://localhost:9621';
 const ADMIN_KEY = process.env.SOVEREIGN_RAG_ADMIN_KEY ?? '';
 
 // ── RBAC : niveau numérique → catégories de documents autorisées ──────────────
 
-const ROLE_LEVEL: Record<PermissionRole, number> = {
-  super_admin: 100,
-  directeur:    90,
-  manager:      70,
-  comptable:    60,
-  chef_rang:    50,
-  chef_cuisinier: 45,
-  serveur:      40,
-  cuisinier:    35,
-  barman:       35,
-  hotesse:      30,
-  plongeur:     10,
-};
-
 // Le veto dans Sovereign RAG utilise workspace_id + role pour filtrer les docs.
 // Rôles niveau ≥ 70 → accès "*" (manager/directeur/super_admin)
 export function getRoleLevel(role: PermissionRole): number {
-  return ROLE_LEVEL[role] ?? 10;
+  return PERMISSION_ROLE_LEVELS[role] ?? 10;
 }
+
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

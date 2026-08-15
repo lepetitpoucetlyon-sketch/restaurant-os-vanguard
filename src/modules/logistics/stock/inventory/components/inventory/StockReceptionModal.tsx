@@ -39,8 +39,16 @@ const CATEGORY_LABELS: Record<IngredientCategory, string> = {
     wine: 'Vins',
     spirits: 'Spiritueux',
     frozen: 'Surgelés',
+    spare_part: 'Pièces détachées',
+    consumable: 'Consommables',
+    medical_supply: 'Dispositifs médicaux',
+    cosmetic: 'Produits cosmétiques',
+    luxury_goods: 'Articles de luxe',
+    raw_material: 'Matières premières',
+    tool: 'Outillage & Matériel',
     other: 'Autre'
 };
+
 
 const UNIT_OPTIONS: IngredientUnit[] = ['kg', 'g', 'l', 'ml', 'cl', 'unit', 'piece', 'bunch', 'crate', 'box', 'bottle', 'can'];
 

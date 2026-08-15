@@ -1,6 +1,21 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
-## [2.0.3] - 2026-08-08 - EVENTBUS AUDIT REMEDIATION & RESTAURANT VERTICAL PARITY 🛡️
+## [2.1.0] - 2026-08-16 - GENERALISATION SOUVERAINE DES 8 PILIERS & COPILOTE UNIVERSEL (GRADE X) 🏛️
+
+### 🏛️ GÉNÉRALISATION MULTI-VERTICALES DES 8 PILIERS DDD
+- **Sémantique & Contrats Universels (`@nexus/contracts`)** : Définition des alias `Space` (postes/baies/tables), `BOM` (Bill of Materials / nomenclature de fabrication), `WorkloadUnit`, et extension des rôles cross-verticaux (`mecanicien`, `chef_atelier`, `praticien`, `coiffeur`, `estheticienne`, `vendeur`, `curator`, `expert`).
+- **Piliers d'État Découplés (`src/store/pillars/`)** : Exposition des atomes souverains `spacesNodeAtom`, `bomNodeAtom`, `regulatoryLogsNodeAtom`, `calculateAssemblyCostSelector`.
+- **Bus d'Événements Neutre** : Ajout des événements `finance.material_cost_impacted` et `finance.cogs_impacted` et synchronisation avec `FoodCostImpactedHandler`.
+- **Moteur Fiscal Multi-Activités (`vatResolver.ts`)** : Support de l'exonération médicale (0% CGI 261-4-1°), des prestations (20%), pièces détachées (20%), boissons et restauration.
+- **Matrice de Navigation Dynamique (`navConfig.ts` & `Sidebar.tsx`)** : Filtrage et adaptation automatique des sections et libellés selon la verticale active du tenant (Garage, Clinique, Salon, Luxury Vault, Restaurant).
+
+### 🤖 COPILOTE UNIVERSEL & MEMBRANE RBAC SOVEREIGN
+- **Prompt Builder Multi-Secteurs (`UniversalSystemPromptBuilder`)** : Adaptation temps réel du vocabulaire pour 9 verticales.
+- **Action Dispatcher Sécurisé (`AssistantActionDispatcher`)** : Function calling avec validation des niveaux RBAC (10 à 100) et masquage PII automatique.
+- **Frame Flottant & Cartes d'Actions (`UniversalAssistantFrame`, `ActionProposalCard`)** : Widget dockable et modal contextuel.
+- **Certification Grade X** : 100% de passage sur 709 tests Vitest, `TSC = 0`.
+
+
 
 ### 🛡️ ÉCOSYSTÈME EVENTBUS & SÉCURITÉ DE DONNÉES
 - **DLQ pour Handlers BACKGROUND (R1)** : Persistance automatique en Dead Letter Queue (`db.deadLetterEvents`) pour les 50+ handlers à priorité `BACKGROUND` en cas d'échec.
