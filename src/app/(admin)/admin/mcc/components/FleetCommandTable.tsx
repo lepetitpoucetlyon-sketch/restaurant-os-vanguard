@@ -1,405 +1,129 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { whiteLabelInstanceConfig } from '@/config/instance';
+"use client";
 
-const INSTANCE_BASE_DOMAIN = process.env.NEXT_PUBLIC_INSTANCE_BASE_DOMAIN
-    ?? whiteLabelInstanceConfig.defaultDomain
-    ?? 'restaurant-os.app';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useNexusFleet } from '@/modules/intelligence';
-import { EmpireInstance } from '@nexus/contracts';
 import { authedFetch } from '@/lib/client/authedFetch';
-import {
-  Activity,
-  AlertCircle,
-  ExternalLink,
-  ShieldCheck,
-  Search,
-  Filter,
-  Brain,
-  RotateCcw,
-  Terminal,
-  Lock,
-  Wrench,
-  RefreshCw,
-  ChevronDown,
-  Check
-} from 'lucide-react';
-
-type StatusFilter = 'ALL' | 'ONLINE' | 'OFFLINE' | 'CRITICAL' | 'MAINTENANCE';
-
-const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
-    { value: 'ALL', label: 'Tous les sites' },
-    { value: 'ONLINE', label: 'En ligne' },
-    { value: 'OFFLINE', label: 'Hors ligne' },
-    { value: 'CRITICAL', label: 'Critique' },
-    { value: 'MAINTENANCE', label: 'Maintenance' },
-];
-
-const COMMANDER_ACTIONS = [
-    { key: 'RESTART',    label: 'Redémarrer',    icon: RefreshCw, danger: false },
-    { key: 'SOFT_LOCK',  label: 'Soft Lock',     icon: Wrench,    danger: false },
-    { key: 'HARD_LOCK',  label: 'Hard Lock',     icon: Lock,      danger: true  },
-];
+import { Activity, Brain } from 'lucide-react';
+import type { StatusFilter } from './fleet-command/fleetCommandTypes';
+import { FleetCommandHeader } from './fleet-command/FleetCommandHeader';
+import { FleetCommandTableRow } from './fleet-command/FleetCommandTableRow';
 
 export function FleetCommandTable() {
-    const { instances, isLoading } = useNexusFleet();
-    const [reindexing, setReindexing] = useState<Record<string, boolean>>({});
-    const [commanding, setCommanding] = useState<Record<string, boolean>>({});
-    const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
-    const [filterOpen, setFilterOpen] = useState(false);
-    const [commandMenuId, setCommandMenuId] = useState<string | null>(null);
-    const filterRef = useRef<HTMLDivElement>(null);
+  const { instances, isLoading } = useNexusFleet();
+  const [reindexing, setReindexing] = useState<Record<string, boolean>>({});
+  const [commanding, setCommanding] = useState<Record<string, boolean>>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [commandMenuId, setCommandMenuId] = useState<string | null>(null);
 
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-                setFilterOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
+  const filteredInstances = useMemo(() => instances.filter(inst => {
+    const matchesSearch = !searchQuery.trim() ||
+      inst.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      inst.key?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      inst.id?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'ALL' || inst.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  }), [instances, searchQuery, statusFilter]);
 
-    const filteredInstances = useMemo(() => instances.filter(inst => {
-        const matchesSearch = !searchQuery.trim() ||
-            inst.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            inst.key?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            inst.id?.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesStatus = statusFilter === 'ALL' || inst.status === statusFilter;
-        return matchesSearch && matchesStatus;
-    }), [instances, searchQuery, statusFilter]);
-
-    const handleReindex = useCallback(async (instanceId: string) => {
-        setReindexing(prev => ({ ...prev, [instanceId]: true }));
-        try {
-            await authedFetch('/api/admin/fleet/rag', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'reindex', instanceId }),
-            });
-        } finally {
-            setReindexing(prev => ({ ...prev, [instanceId]: false }));
-        }
-    }, []);
-
-    const handleCommand = useCallback(async (instanceId: string, action: string) => {
-        setCommandMenuId(null);
-        setCommanding(prev => ({ ...prev, [instanceId]: true }));
-        try {
-            await authedFetch('/api/admin/fleet/command', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action, instanceId }),
-            });
-        } finally {
-            setCommanding(prev => ({ ...prev, [instanceId]: false }));
-        }
-    }, []);
-
-    const handleToggleCommandMenu = useCallback((id: string) => {
-        setCommandMenuId(prev => prev === id ? null : id);
-    }, []);
-
-    if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center p-20 space-y-4">
-                <div className="relative w-16 h-16">
-                    <div className="absolute inset-0 border-4 border-focus/20 rounded-full" />
-                    <div className="absolute inset-0 border-4 border-focus rounded-full border-t-transparent animate-spin" />
-                </div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary">Synchronisation Télémétrie...</p>
-            </div>
-        );
+  const handleReindex = useCallback(async (instanceId: string) => {
+    setReindexing(prev => ({ ...prev, [instanceId]: true }));
+    try {
+      await authedFetch('/api/admin/fleet/rag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reindex', instanceId }),
+      });
+    } finally {
+      setReindexing(prev => ({ ...prev, [instanceId]: false }));
     }
+  }, []);
 
+  const handleCommand = useCallback(async (instanceId: string, action: string) => {
+    setCommandMenuId(null);
+    setCommanding(prev => ({ ...prev, [instanceId]: true }));
+    try {
+      await authedFetch('/api/admin/fleet/command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, instanceId }),
+      });
+    } finally {
+      setCommanding(prev => ({ ...prev, [instanceId]: false }));
+    }
+  }, []);
+
+  const handleToggleCommandMenu = useCallback((id: string) => {
+    setCommandMenuId(prev => (prev === id ? null : id));
+  }, []);
+
+  if (isLoading) {
     return (
-        <div className="bg-surface-card border border-border-subtle rounded-[2rem] overflow-hidden shadow-2xl">
-            <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
-                <div>
-                    <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Centre de Commandement</h2>
-                    <p className="text-[10px] text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="px-4 py-2 bg-surface-card rounded-xl border border-border-subtle flex items-center gap-2">
-                        <Search className="w-3.5 h-3.5 text-secondary" />
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="RECHERCHER UN SITE..."
-                            className="bg-transparent border-none outline-none text-[10px] font-bold text-text-primary placeholder:text-secondary w-32"
-                        />
-                    </div>
-                    <div className="relative" ref={filterRef}>
-                        <button
-                            onClick={() => setFilterOpen(o => !o)}
-                            className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl transition-all text-[9px] font-black uppercase tracking-widest ${
-                                statusFilter !== 'ALL'
-                                    ? 'bg-action-primary text-text-primary border-focus/40'
-                                    : 'bg-action-primary/10 text-brand border-focus/20 hover:bg-action-primary/20'
-                            }`}
-                        >
-                            <Filter className="w-3.5 h-3.5" />
-                            {statusFilter !== 'ALL' ? statusFilter : ''}
-                            <ChevronDown className={`w-3 h-3 transition-transform ${filterOpen ? 'rotate-180' : ''}`} />
-                        </button>
-                        <AnimatePresence>
-                            {filterOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -6, scale: 0.97 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: -6, scale: 0.97 }}
-                                    transition={{ duration: 0.12 }}
-                                    className="absolute right-0 top-full mt-2 w-44 bg-surface-card border border-border-subtle rounded-xl shadow-2xl z-50 overflow-hidden"
-                                >
-                                    {STATUS_FILTERS.map(f => (
-                                        <button
-                                            key={f.value}
-                                            onClick={() => { setStatusFilter(f.value); setFilterOpen(false); }}
-                                            className="flex items-center justify-between w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors text-left"
-                                        >
-                                            <span className={statusFilter === f.value ? 'text-brand' : 'text-muted'}>{f.label}</span>
-                                            {statusFilter === f.value && <Check className="w-3 h-3 text-brand" />}
-                                        </button>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
-            </div>
-
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="bg-surface-card">
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Instance ID</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Statut / Santé</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">CA (24h)</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Risque HACCP</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Utilisateurs</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Conformité Globale</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">
-                                <div className="flex items-center gap-1.5"><Brain className="w-3 h-3" />RAG</div>
-                            </th>
-                            <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                        {filteredInstances.map((instance, idx) => (
-                            <FleetCommandTableRow
-                                key={instance.id}
-                                instance={instance}
-                                idx={idx}
-                                reindexing={reindexing[instance.id] || false}
-                                commanding={commanding[instance.id] || false}
-                                commandMenuOpen={commandMenuId === instance.id}
-                                onReindex={handleReindex}
-                                onCommand={handleCommand}
-                                onToggleCommandMenu={handleToggleCommandMenu}
-                            />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            
-            <div className="p-6 bg-surface-card border-t border-border-subtle flex items-center justify-between">
-                <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">{filteredInstances.length} site{filteredInstances.length !== 1 ? 's' : ''} affiché{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total</p>
-                <div className="flex items-center gap-2">
-                    <Activity className="w-3 h-3 text-brand" />
-                    <span className="text-[9px] font-black text-muted uppercase">Flotte en direct</span>
-                </div>
-            </div>
+      <div className="flex flex-col items-center justify-center p-20 space-y-4">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-4 border-focus/20 rounded-full" />
+          <div className="absolute inset-0 border-4 border-focus rounded-full border-t-transparent animate-spin" />
         </div>
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary">Synchronisation Télémétrie...</p>
+      </div>
     );
+  }
+
+  return (
+    <div className="bg-surface-card border border-border-subtle rounded-[2rem] overflow-hidden shadow-2xl">
+      <FleetCommandHeader
+        searchQuery={searchQuery}
+        statusFilter={statusFilter}
+        filterOpen={filterOpen}
+        onSearchChange={setSearchQuery}
+        onToggleFilter={() => setFilterOpen(o => !o)}
+        onSelectFilter={f => { setStatusFilter(f); setFilterOpen(false); }}
+        onCloseFilter={() => setFilterOpen(false)}
+      />
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-surface-card">
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Instance ID</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Statut / Santé</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">CA (24h)</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Risque HACCP</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Utilisateurs</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Conformité Globale</th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">
+                <div className="flex items-center gap-1.5"><Brain className="w-3 h-3" />RAG</div>
+              </th>
+              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {filteredInstances.map((instance, idx) => (
+              <FleetCommandTableRow
+                key={instance.id}
+                instance={instance}
+                idx={idx}
+                reindexing={reindexing[instance.id] || false}
+                commanding={commanding[instance.id] || false}
+                commandMenuOpen={commandMenuId === instance.id}
+                onReindex={handleReindex}
+                onCommand={handleCommand}
+                onToggleCommandMenu={handleToggleCommandMenu}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="p-6 bg-surface-card border-t border-border-subtle flex items-center justify-between">
+        <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">
+          {filteredInstances.length} site{filteredInstances.length !== 1 ? 's' : ''} affiché{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total
+        </p>
+        <div className="flex items-center gap-2">
+          <Activity className="w-3 h-3 text-brand" />
+          <span className="text-[9px] font-black text-muted uppercase">Flotte en direct</span>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-// 🚀 Performance Optimization: Memoize the row component
-interface FleetCommandTableRowProps {
-    instance: EmpireInstance;
-    idx: number;
-    reindexing: boolean;
-    commanding: boolean;
-    commandMenuOpen: boolean;
-    onReindex: (id: string) => void;
-    onCommand: (id: string, action: string) => void;
-    onToggleCommandMenu: (id: string) => void;
-}
-
-const FleetCommandTableRow = React.memo(({
-    instance,
-    idx,
-    reindexing,
-    commanding,
-    commandMenuOpen,
-    onReindex,
-    onCommand,
-    onToggleCommandMenu,
-}: FleetCommandTableRowProps) => {
-    return (
-        <motion.tr 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.05 }}
-            className="hover:bg-surface-card transition-colors group"
-        >
-            <td className="px-6 py-5">
-                <div className="flex flex-col">
-                    <span className="text-sm font-bold text-text-primary tracking-tight">{instance.name}</span>
-                    <span className="text-[10px] text-secondary font-mono">ID: {instance.id} • {instance.key}</span>
-                </div>
-            </td>
-            <td className="px-6 py-5">
-                <div className="flex items-center gap-3">
-                    <div className={`w-2.5 h-2.5 rounded-full ${
-                        instance.status === 'ONLINE' ? 'bg-status-success shadow-[0_0_12px_rgba(16,185,129,0.4)]' : 
-                        instance.status === 'CRITICAL' ? 'bg-error shadow-[0_0_12px_rgba(239,68,68,0.4)] animate-pulse' : 
-                        'bg-status-warning shadow-[0_0_12px_rgba(245,158,11,0.4)]'
-                    }`} />
-                    <div className="flex flex-col">
-                        <span className="text-[10px] font-black uppercase text-muted">{instance.status}</span>
-                        <div className="w-16 h-1 bg-surface-card rounded-full mt-1 overflow-hidden">
-                            <div 
-                                className={`h-full rounded-full ${instance.metrics.healthScore < 70 ? 'bg-error' : 'bg-status-success'}`}
-                                style={{ width: `${instance.metrics.healthScore}%` }}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td className="px-6 py-5 text-right">
-                <div className="flex flex-col items-end">
-                    {instance.security?.supportAccessGranted ? (
-                        <>
-                            <span className="text-sm font-black text-text-primary">{(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
-                        </>
-                    ) : (
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card rounded-md border border-border-subtle opacity-40">
-                            <span className="text-[9px] font-black text-muted uppercase tracking-widest">PROTÉGÉ</span>
-                        </div>
-                    )}
-                </div>
-            </td>
-            <td className="px-6 py-5">
-                <div className="flex items-center gap-3">
-                    {/* 📡 HACCP LIVE BRIDGE */}
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className={`w-1.5 h-1.5 rounded-full ${instance.metrics.healthScore >= 90 ? 'bg-status-success' : 'bg-status-warning'}`} />
-                            <span className="text-[9px] font-black text-muted uppercase">Sensors {instance.metrics.healthScore}%</span>
-                        </div>
-                        {instance.metrics.healthScore < 95 && (
-                            <div className="flex items-center gap-1.5 text-error">
-                                <AlertCircle className="w-3 h-3" />
-                                <span className="text-[8px] font-black uppercase tracking-tighter">Hygiene Drift Detected</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </td>
-            <td className="px-6 py-5 text-right">
-                <div className="flex flex-col items-end">
-                    <span className="text-sm font-bold text-text-primary">{instance.metrics.activeUsers}</span>
-                    <span className="text-[9px] font-bold text-secondary uppercase tracking-tighter">Sessions</span>
-                </div>
-            </td>
-            <td className="px-6 py-5">
-                <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-card border border-border-subtle rounded-lg w-fit">
-                        <ShieldCheck className={`w-3.5 h-3.5 ${instance.security.nf525Certified ? 'text-status-success' : 'text-secondary'}`} />
-                        <span className="text-[9px] font-black uppercase tracking-wider text-muted">NF525 SEALED</span>
-                    </div>
-                </div>
-            </td>
-
-            {/* RAG status */}
-            <td className="px-6 py-5">
-                {instance.rag ? (
-                    <div className="flex flex-col gap-1">
-                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase border w-fit ${
-                            instance.rag.status === 'online'   ? 'bg-status-success/10 text-status-success border-emerald-500/20' :
-                            instance.rag.status === 'indexing' ? 'bg-action-primary/10 text-action-primary border-action-primary/20 animate-pulse' :
-                            instance.rag.status === 'offline'  ? 'bg-status-danger/10 text-status-danger border-red-500/20' :
-                            'bg-surface-card text-secondary border-border-subtle'
-                        }`}>
-                            <Brain className="w-2.5 h-2.5" />
-                            {instance.rag.status}
-                        </div>
-                        {instance.rag.documentCount !== undefined && (
-                            <span className="text-[8px] text-secondary font-mono">{instance.rag.documentCount} docs</span>
-                        )}
-                    </div>
-                ) : (
-                    <span className="text-[9px] text-secondary font-mono">—</span>
-                )}
-            </td>
-
-            <td className="px-6 py-5">
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => onReindex(instance.id)}
-                        disabled={reindexing}
-                        title="Réindexer RAG"
-                        className="p-2.5 rounded-xl bg-surface-card border border-subtle text-muted hover:text-brand hover:border-brand transition-all opacity-0 group-hover:opacity-100 disabled:opacity-30"
-                    >
-                        <RotateCcw className={`w-3.5 h-3.5 ${reindexing ? 'animate-spin' : ''}`} />
-                    </button>
-                    <button
-                        onClick={() => window.open(`https://${instance.key}.${INSTANCE_BASE_DOMAIN}`, '_blank', 'noopener,noreferrer')}
-                        title="Ouvrir l'instance"
-                        className="p-2.5 rounded-xl bg-surface-card border border-subtle text-muted hover:text-text-primary hover:border-default transition-all opacity-0 group-hover:opacity-100"
-                    >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                    </button>
-                    <div className="relative">
-                        <button
-                            onClick={() => onToggleCommandMenu(instance.id)}
-                            disabled={commanding}
-                            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-text-primary transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
-                        >
-                            {commanding
-                                ? <><RefreshCw className="w-3 h-3 animate-spin" /> EN COURS</>
-                                : <><Terminal className="w-3 h-3" /> COMMANDER</>
-                            }
-                        </button>
-                        <AnimatePresence>
-                            {commandMenuOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -6, scale: 0.97 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: -6, scale: 0.97 }}
-                                    transition={{ duration: 0.12 }}
-                                    className="absolute right-0 bottom-full mb-2 w-44 bg-surface-card border border-border-subtle rounded-xl shadow-2xl z-50 overflow-hidden"
-                                >
-                                    <div className="px-3 py-2 border-b border-border-subtle">
-                                        <p className="text-[8px] font-black uppercase tracking-widest text-secondary">Action sur {instance.name}</p>
-                                    </div>
-                                    {COMMANDER_ACTIONS.map(({ key, label, icon: Icon, danger }) => (
-                                        <button
-                                            key={key}
-                                            onClick={() => onCommand(instance.id, key)}
-                                            className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors ${danger ? 'text-error hover:bg-status-danger/10' : 'text-muted hover:text-text-primary'}`}
-                                        >
-                                            <Icon className="w-3 h-3" />
-                                            {label}
-                                        </button>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </div>
-            </td>
-        </motion.tr>
-    );
-}, (prevProps, nextProps) => {
-    return (
-        prevProps.instance === nextProps.instance &&
-        prevProps.idx === nextProps.idx &&
-        prevProps.reindexing === nextProps.reindexing &&
-        prevProps.commanding === nextProps.commanding &&
-        prevProps.commandMenuOpen === nextProps.commandMenuOpen
-    );
-});
-FleetCommandTableRow.displayName = 'FleetCommandTableRow';

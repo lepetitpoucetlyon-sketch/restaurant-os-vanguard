@@ -1,16 +1,19 @@
 # Plan dette technique — Restaurant OS Core
 
 > **Statut global** : ✅ **100% COMPLÉTÉ & VALIDÉ (Grade X Sovereignty)** (2026-08-16).
-> Tous les 4 chantiers ont été exécutés, validés sans régression et vérifiés par `npx tsc --noEmit` (0 erreur).
+> - **Phase 1** : 11 God Files primaires, 286 Barrel Violations, BusinessIdentity universel, Standardisation Microunits ($1€ = 1\,000\,000\,\mu\text{units}$).
+> - **Phase 2** : 12 Composants UI secondaires (> 400L) + Route Webhook Stripe (423L) entièrement modularisés.
+> Tous les chantiers ont été exécutés, validés sans régression et vérifiés par `npx tsc --noEmit` (0 erreur) et `npm test` (1032/1032 passants).
 
 ---
 
 ## Table des matières
 
-1. [God Files — 11 composants > 400L](#1-god-files) — ✅ **11/11 résolus (<200L)**
-2. [Barrel Violations — 286 imports cross-module](#2-barrel-violations) — ✅ **100% résolus (9 piliers)**
-3. [BusinessIdentity — généralisation headChef/owner/category](#3-businessidentity) — ✅ **100% résolu**
-4. [InCents — usages résiduels dans les composants UI](#4-incentss-residuels) — ✅ **100% résolu**
+1. [God Files Primaires — 11 composants > 400L](#1-god-files) — ✅ **11/11 résolus (<200L)**
+2. [God Files Secondaires & Webhook Stripe — 13 modules > 400L](#2-god-files-secondaires) — ✅ **13/13 résolus (<180L)**
+3. [Barrel Violations — 286 imports cross-module](#2-barrel-violations) — ✅ **100% résolus (9 piliers)**
+4. [BusinessIdentity — généralisation headChef/owner/category](#3-businessidentity) — ✅ **100% résolu**
+5. [InCents — usages résiduels dans les composants UI](#4-incentss-residuels) — ✅ **100% résolu**
 
 ---
 

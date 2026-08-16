@@ -2,27 +2,15 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sliders, Bug, CheckCircle2, AlertCircle, ChevronDown, RotateCcw, Sparkles, Palette } from 'lucide-react';
+import { Sliders, CheckCircle2, AlertCircle, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/modules/intelligence';
 import type { TenantOverrides } from '@/modules/system';
-import { whiteLabelInstanceConfig } from '@/config/instance';
-
-const BUTTON_RADIUS_PRESETS = [
-  { label: 'Carré',    value: '0px'     },
-  { label: 'Doux',     value: '8px'     },
-  { label: 'Arrondi',  value: '16px'    },
-  { label: 'Pill',     value: '9999px'  },
-];
-
-const LAYOUT_OPTIONS = [
-  { value: 'default', label: 'Default'  },
-  { value: 'kiosk',   label: 'Kiosk'   },
-  { value: 'hud',     label: 'HUD'     },
-  { value: 'sidebar', label: 'Sidebar' },
-  { value: 'topbar',  label: 'Topbar'  },
-];
+import { TenantSelectorDropdown } from './tenant-override/TenantSelectorDropdown';
+import { UiOverridesSection } from './tenant-override/UiOverridesSection';
+import { BrandingAccessSection } from './tenant-override/BrandingAccessSection';
+import { DebugModeSection } from './tenant-override/DebugModeSection';
 
 export function TenantOverridePanel() {
   const { instances } = useNexusFleet();
@@ -34,8 +22,6 @@ export function TenantOverridePanel() {
   const [description, setDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [result, setResult]    = useState<{ success: boolean; msg: string } | null>(null);
-
-  const selectedInstance = instances.find(i => i.id === selectedId);
 
   const loadOverrides = useCallback(async (tid: string) => {
     try {
@@ -122,252 +108,34 @@ export function TenantOverridePanel() {
         </div>
       </div>
 
-      {/* Tenant selector */}
-      <div className="relative">
-        <button
-          onClick={() => setDropdownOpen(o => !o)}
-          className="w-full flex items-center justify-between p-3 bg-bg-primary/50 border border-border-subtle rounded-xl text-sm font-medium text-muted hover:border-border-default transition-all"
-        >
-          <span className="truncate">
-            {selectedInstance ? `${selectedInstance.name ?? selectedInstance.id}` : 'Sélectionner un tenant...'}
-          </span>
-          <ChevronDown className={cn('w-4 h-4 text-secondary transition-transform', dropdownOpen && 'rotate-180')} />
-        </button>
-        <AnimatePresence>
-          {dropdownOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="absolute z-20 top-full mt-1 w-full bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl"
-            >
-              {instances.map(inst => (
-                <button
-                  key={inst.id}
-                  onClick={() => { setSelectedId(inst.id); setDropdownOpen(false); }}
-                  className={cn(
-                    'w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-surface-card transition-colors',
-                    inst.id === selectedId ? 'text-violet-400 bg-violet-500/10' : 'text-muted'
-                  )}
-                >
-                  {inst.name ?? inst.id}
-                  <span className="ml-2 text-secondary text-[10px]">{inst.id}</span>
-                </button>
-              ))}
-              {instances.length === 0 && (
-                <p className="px-4 py-3 text-xs text-secondary">Aucun tenant dans la flotte</p>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <TenantSelectorDropdown
+        instances={instances}
+        selectedId={selectedId}
+        dropdownOpen={dropdownOpen}
+        onToggleDropdown={() => setDropdownOpen(o => !o)}
+        onSelectTenant={id => { setSelectedId(id); setDropdownOpen(false); }}
+      />
 
       {selectedId && (
         <div className="space-y-6">
-          {/* UI Overrides */}
-          <section className="space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-secondary flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5" /> Interface
-            </p>
+          <UiOverridesSection form={form} onUpdateUI={updateUI} />
 
-            {/* Button radius */}
-            <div>
-              <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
-                Rayon des boutons
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {BUTTON_RADIUS_PRESETS.map(p => (
-                  <button
-                    key={p.value}
-                    onClick={() => updateUI('buttonRadius', p.value)}
-                    className={cn(
-                      'py-2 text-[9px] font-black uppercase tracking-wider border transition-all',
-                      form.ui?.buttonRadius === p.value
-                        ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
-                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
-                    )}
-                    style={{ borderRadius: p.value === '9999px' ? '999px' : '8px' }}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <BrandingAccessSection
+            form={form}
+            current={current}
+            onUpdateBrandCap={updateBrandCap}
+          />
 
-            {/* Layout type */}
-            <div>
-              <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
-                Layout
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {LAYOUT_OPTIONS.map(o => (
-                  <button
-                    key={o.value}
-                    onClick={() => updateUI('layoutType', o.value)}
-                    className={cn(
-                      'px-3 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
-                      form.ui?.layoutType === o.value
-                        ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
-                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
-                    )}
-                  >
-                    {o.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Primary color */}
-            <div>
-              <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
-                Couleur primaire
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={form.ui?.primaryColor ?? whiteLabelInstanceConfig.primaryColor}
-                  onChange={e => updateUI('primaryColor', e.target.value)}
-                  className="w-10 h-8 rounded-lg border border-border-subtle bg-transparent cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={form.ui?.primaryColor ?? ''}
-                  placeholder="#6366f1"
-                  onChange={e => updateUI('primaryColor', e.target.value)}
-                  className="flex-1 bg-bg-primary/50 border border-border-subtle rounded-lg px-3 py-1.5 text-xs font-mono text-muted focus:outline-none focus:border-border-default"
-                />
-              </div>
-            </div>
-
-            {/* Font scale */}
-            <div>
-              <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
-                Échelle de police — {form.ui?.fontScale ?? 1}×
-              </label>
-              <input
-                type="range" min={0.75} max={1.5} step={0.05}
-                value={form.ui?.fontScale ?? 1}
-                onChange={e => updateUI('fontScale', parseFloat(e.target.value))}
-                className="w-full accent-violet-500"
-              />
-            </div>
-          </section>
-
-          {/* ── Accès Branding ── */}
-          <section className="p-4 bg-violet-500/5 border border-violet-500/20 rounded-2xl space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-violet-400 flex items-center gap-2">
-              <Palette className="w-3.5 h-3.5" /> Accès Branding
-            </p>
-
-            {/* mod_brand_basic */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-muted">mod_brand_basic</p>
-                <p className="text-[9px] text-secondary mt-0.5">Logo · couleurs · favicon · splash</p>
-              </div>
-              <button
-                onClick={() => updateBrandCap('mod_brand_basic', !(form.capabilities?.['mod_brand_basic'] !== false))}
-                className={cn(
-                  'w-10 h-5 rounded-full border transition-all relative shrink-0',
-                  form.capabilities?.['mod_brand_basic'] !== false
-                    ? 'bg-violet-500 border-violet-400'
-                    : 'bg-bg-primary/50 border-border-subtle'
-                )}
-                title={form.capabilities?.['mod_brand_basic'] !== false ? 'Désactiver' : 'Activer'}
-              >
-                <span className={cn(
-                  'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
-                  form.capabilities?.['mod_brand_basic'] !== false ? 'left-5' : 'left-0.5'
-                )} />
-              </button>
-            </div>
-
-            {/* mod_brand_plus */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-muted">mod_brand_plus</p>
-                <p className="text-[9px] text-secondary mt-0.5">Configurateur avancé · AI · presets · polices</p>
-              </div>
-              <button
-                onClick={() => updateBrandCap('mod_brand_plus', !(form.capabilities?.['mod_brand_plus'] === true))}
-                className={cn(
-                  'w-10 h-5 rounded-full border transition-all relative shrink-0',
-                  form.capabilities?.['mod_brand_plus'] === true
-                    ? 'bg-violet-500 border-violet-400'
-                    : 'bg-bg-primary/50 border-border-subtle'
-                )}
-                title={form.capabilities?.['mod_brand_plus'] === true ? 'Désactiver' : 'Activer'}
-              >
-                <span className={cn(
-                  'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
-                  form.capabilities?.['mod_brand_plus'] === true ? 'left-5' : 'left-0.5'
-                )} />
-              </button>
-            </div>
-
-            {/* Indicateur d'état actuel (Firestore) */}
-            {(current.capabilities?.['mod_brand_basic'] !== undefined || current.capabilities?.['mod_brand_plus'] !== undefined) && (
-              <p className="text-[9px] text-secondary/60 border-t border-violet-500/10 pt-2">
-                État actuel Firestore —{' '}
-                basic: <span className="font-mono">{String(current.capabilities?.['mod_brand_basic'] !== false)}</span>
-                {' · '}
-                plus: <span className="font-mono">{String(current.capabilities?.['mod_brand_plus'] === true)}</span>
-              </p>
-            )}
-          </section>
-
-          {/* Debug mode */}
-          <section className="p-4 bg-action-primary/5 border border-action-primary/20 rounded-2xl space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Bug className="w-4 h-4 text-action-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-action-primary">Debug Mode</span>
-              </div>
-              <button
-                onClick={() => {
-                  const enabled = !form.debug?.enabled;
-                  setForm(f => ({ ...f, debug: { enabled, level: f.debug?.level ?? 'info' } }));
-                }}
-                className={cn(
-                  'w-10 h-5 rounded-full border transition-all relative',
-                  form.debug?.enabled
-                    ? 'bg-action-primary border-amber-400'
-                    : 'bg-bg-primary/50 border-border-subtle'
-                )}
-              >
-                <span className={cn(
-                  'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
-                  form.debug?.enabled ? 'left-5' : 'left-0.5'
-                )} />
-              </button>
-            </div>
-            {form.debug?.enabled && (
-              <div className="flex gap-2">
-                {(['info', 'verbose', 'trace'] as const).map(l => (
-                  <button
-                    key={l}
-                    onClick={() => setForm(f => ({ ...f, debug: { enabled: true, level: l } }))}
-                    className={cn(
-                      'flex-1 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
-                      form.debug?.level === l
-                        ? 'bg-action-primary/20 border-action-primary/50 text-amber-300'
-                        : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
-                    )}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
-            )}
-            {current.debug?.enabled && (
-              <button
-                onClick={handleRemoveDebug}
-                className="text-[9px] font-black uppercase tracking-wider text-action-primary/60 hover:text-action-primary transition-colors"
-              >
-                Retirer le mode debug
-              </button>
-            )}
-          </section>
+          <DebugModeSection
+            form={form}
+            current={current}
+            onToggleDebug={() => {
+              const enabled = !form.debug?.enabled;
+              setForm(f => ({ ...f, debug: { enabled, level: f.debug?.level ?? 'info' } }));
+            }}
+            onSetDebugLevel={level => setForm(f => ({ ...f, debug: { enabled: true, level } }))}
+            onRemoveDebug={handleRemoveDebug}
+          />
 
           {/* Description */}
           <input

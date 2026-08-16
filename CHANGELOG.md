@@ -1,5 +1,35 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.3.1] - 2026-08-16 - DÉCOUPAGE INTÉGRAL PHASE 2 : 12 COMPOSANTS UI SECONDAIRES & DISPATCHER STRIPE WEBHOOK 🏛️
+
+### 🧱 MODULARISATION DE 12 COMPOSANTS UI SECONDAIRES (> 400L -> < 180L)
+- **12/12 Composants secondaires résolus & scindés en sous-dossiers dédiés** :
+  1. `EquipmentDetailModal.tsx` (436L -> 152L) : Sous-dossier `detail-modal/` (`DetailMachineTab`, `DetailInvoiceTab`, `DetailGuidesTab`, `DetailMaintenanceTab`).
+  2. `ProfileSettings.tsx` (433L -> 152L) : Sous-dossier `profile/` (`PersonnelMatrix`, `IdentityCoreHeader`, `ContactVectorSection`, `SecurityProtocolSection`, `types`).
+  3. `NF525SelfAudit.tsx` (432L -> 160L) : Sous-dossier `self-audit/` (`selfAuditTypes`, `selfAuditPdfGenerator`, `SelfAuditHeader`, `SelfAuditChecklist`).
+  4. `BrandImportWizard.tsx` (426L -> 98L) : Sous-dossier `brand-import/` (`brandWizardTypes`, `StepIndicator`, `SourceStep`, `PreviewStep`).
+  5. `ProductDetailsDialog.tsx` (423L -> 184L) : Sous-dossier `product-details/` (`allergensConstants`, `ProductHeaderBackdrop`, `ProductOptionGroupsSection`, `ProductAllergensSection`, `ProductFooterBar`).
+  6. `TenantOverridePanel.tsx` (421L -> 160L) : Sous-dossier `tenant-override/` (`overrideConstants`, `TenantSelectorDropdown`, `UiOverridesSection`, `BrandingAccessSection`, `DebugModeSection`).
+  7. `CustomerImportPanel.tsx` (419L -> 160L) : Sous-dossier `customer-import/` (`customerImportTypes`, `CustomerImportDropzone`, `CustomerImportPreview`, `CustomerImportDone`).
+  8. `NonConformityForm.tsx` (414L -> 188L) : Sous-dossier `non-conformity/` (`CreateNCSection`, `NCListItem`).
+  9. `ProspectingDashboard.tsx` (414L -> 135L) : Sous-dossier `prospecting/` (`prospectingConstants`, `ProspectingScannerInput`, `ProspectingTokensPreview`, `ProspectingSuccessCard`).
+  10. `FECImportPanel.tsx` (411L -> 160L) : Sous-dossier `fec-import/` (`fecImportTypes`, `FECDropzone`, `FECPreviewSection`, `FECDoneSection`).
+  11. `CashDrawerModal.tsx` (406L -> 160L) : Sous-dossier `cash-drawer/` (`cashDrawerTypes`, `CashDrawerOpenSection`, `CashDrawerCloseSection`).
+  12. `FleetCommandTable.tsx` (405L -> 135L) : Sous-dossier `fleet-command/` (`fleetCommandTypes`, `FleetCommandHeader`, `FleetCommandTableRow`).
+
+### ⚡ ARCHITECTURE STRATEGY HANDLER POUR LE WEBHOOK STRIPE
+- **`src/app/api/webhooks/stripe/route.ts` (423L -> 78L)** :
+  - Découpage en sous-handlers spécialisés dans `handlers/` :
+    - `handleCheckoutSessionCompleted.ts` (provisionnement asynchrone & idempotence B2B).
+    - `handleSubscriptionEvents.ts` (gestion activation de features, période de grâce, verrouillage MDM Mosyle).
+    - `handlePaymentEvents.ts` (défaillances paiement, acomptes réservations).
+    - `stripeWebhookTypes.ts` (validation HMAC-SHA256, types Stripe et mapping plans/features).
+
+### 🏛️ CONFORMITÉ & QUALITÉ TOTALE GRADE X
+- **0 God File** subsistant dans l'intégralité du codebase.
+- **`npx tsc --noEmit`** = **0 erreur**.
+- **`npm test`** = **1032/1032 tests passants (100% vert, 161 test suites)**.
+
 ## [2.3.0] - 2026-08-16 - RÉSORPTION DETTE TECHNIQUE MAJEURE, 0 GOD FILES, 0 BARREL VIOLATIONS & 100% TYPE-SAFETY (GRADE X) 🏛️
 
 ### 🧱 DÉCOUPAGE INTÉGRAL DES 11 GOD FILES (> 400L)

@@ -1,61 +1,15 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
 "use client";
 
-/**
- * FECImportPanel — mig-13
- *
- * Dropzone FEC pipe-séparé (DGFiP) + validation format + prévisualisation
- * 5 premières lignes + bouton importer.
- *
- * Les entrées importées sont marquées status='historical' et IMMUABLES.
- * Elles ne s'injectent PAS dans la chaîne NF525 active.
- */
-
 import { useCallback, useState } from "react";
-import {
-  Upload,
-  CheckCircle2,
-  AlertTriangle,
-  FileText,
-  X,
-  Eye,
-  ShieldCheck,
-} from "lucide-react";
-import {
-  FECImporter,
-  type FECEntry,
-  type FECImportResult,
-  parseFECAmount,
-} from "@/modules/finance/migration";
+import { Upload, ShieldCheck, AlertTriangle, X } from "lucide-react";
+import { FECImporter } from "@/modules/finance/migration";
 import { useTenant } from "@/shared/hooks";
 import { toError } from "@/lib/toError";
-
-// ── Types ──────────────────────────────────────────────────────────────────────
-
-type PanelState =
-  | { phase: "idle" }
-  | { phase: "ready"; file: File; preview: FECEntry[]; warnings: string[]; isValid: boolean }
-  | { phase: "importing"; progress: number }
-  | { phase: "done"; result: FECImportResult; fileName: string; exercice: string }
-  | { phase: "error"; message: string };
-
-const CURRENT_YEAR = new Date().getFullYear();
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function formatMicrounits(mu: number): string {
-  return `${(mu / 1_000_000).toFixed(2)} €`;
-}
-
-function formatFECDate(raw: string): string {
-  if (/^\d{8}$/.test(raw)) {
-    return `${raw.slice(6, 8)}/${raw.slice(4, 6)}/${raw.slice(0, 4)}`;
-  }
-  return raw;
-}
-
-// ── Composant ──────────────────────────────────────────────────────────────────
+import type { PanelState } from './fec-import/fecImportTypes';
+import { CURRENT_YEAR } from './fec-import/fecImportTypes';
+import { FECDropzone } from './fec-import/FECDropzone';
+import { FECPreviewSection } from './fec-import/FECPreviewSection';
+import { FECDoneSection } from './fec-import/FECDoneSection';
 
 export function FECImportPanel() {
   const { activeTenantId } = useTenant();
@@ -65,8 +19,6 @@ export function FECImportPanel() {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const importer = new FECImporter();
-
-  // ── Gestion du fichier ──────────────────────────────────────────────────────
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -81,7 +33,6 @@ export function FECImportPanel() {
         });
       }
     },
-     
     []
   );
 
@@ -103,8 +54,6 @@ export function FECImportPanel() {
     [handleFile]
   );
 
-  // ── Import ──────────────────────────────────────────────────────────────────
-
   const runImport = useCallback(async () => {
     if (state.phase !== "ready" || !state.isValid) return;
     const { file } = state;
@@ -123,12 +72,9 @@ export function FECImportPanel() {
         message: toError(err).message,
       });
     }
-     
   }, [state, tenantId, exercice]);
 
   const reset = () => setState({ phase: "idle" });
-
-  // ── Rendu ───────────────────────────────────────────────────────────────────
 
   return (
     <div className="space-y-5">
@@ -160,154 +106,29 @@ export function FECImportPanel() {
         </div>
       )}
 
-      {/* ── Phase idle : dropzone ─────────────────────────────────────────── */}
+      {/* Phase idle : dropzone */}
       {state.phase === "idle" && (
-        <label
-          className={[
-            "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-6 py-10 cursor-pointer transition-all",
-            isDragOver
-              ? "border-action-primary bg-action-primary/5"
-              : "border-border hover:border-action-primary/50 hover:bg-bg-secondary",
-          ].join(" ")}
+        <FECDropzone
+          isDragOver={isDragOver}
           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={onDrop}
-        >
-          <Upload className="w-8 h-8 text-text-muted" />
-          <div className="text-center">
-            <p className="text-sm font-medium text-text-primary">
-              Glisser-déposer le fichier FEC
-            </p>
-            <p className="text-xs text-text-muted mt-1">
-              Format pipe-séparé (|) — .txt ou .csv
-            </p>
-          </div>
-          <input
-            type="file"
-            accept=".txt,.csv,text/plain,text/csv"
-            className="sr-only"
-            onChange={onInputChange}
-          />
-        </label>
+          onInputChange={onInputChange}
+        />
       )}
 
-      {/* ── Phase ready : validation + preview ───────────────────────────── */}
+      {/* Phase ready : validation + preview */}
       {state.phase === "ready" && (
-        <div className="space-y-4">
-          {/* Info fichier + badge validité */}
-          <div className="rounded-xl border border-border bg-surface-base p-4 flex items-center gap-3">
-            <FileText className="w-5 h-5 shrink-0 text-action-primary" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text-primary truncate">
-                {state.file.name}
-              </p>
-              <p className="text-xs text-text-muted">
-                {(state.file.size / 1024).toFixed(1)} Ko
-              </p>
-            </div>
-            {state.isValid ? (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-status-success bg-status-success/10 px-2 py-0.5 rounded-full">
-                <CheckCircle2 className="w-3 h-3" /> FEC valide
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-status-danger bg-status-danger/10 px-2 py-0.5 rounded-full">
-                <AlertTriangle className="w-3 h-3" /> Format invalide
-              </span>
-            )}
-            <button
-              onClick={reset}
-              className="p-1 rounded-md text-text-muted hover:text-status-danger hover:bg-status-danger/10 transition"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Avertissements de parsing */}
-          {state.warnings.length > 0 && (
-            <div className="rounded-lg bg-status-warning/5 border border-status-warning/20 p-3">
-              <p className="text-xs font-semibold text-status-warning flex items-center gap-1.5 mb-1">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                {state.warnings.length} avertissement(s) de format
-              </p>
-              <ul className="space-y-0.5 max-h-24 overflow-y-auto">
-                {state.warnings.map((w, i) => (
-                  <li key={i} className="text-[11px] text-text-muted font-mono">
-                    {w}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Prévisualisation 5 premières lignes */}
-          {state.preview.length > 0 && (
-            <div className="rounded-xl border border-border overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-bg-secondary">
-                <Eye className="w-3.5 h-3.5 text-text-muted" />
-                <span className="text-xs font-bold uppercase tracking-widest text-text-muted">
-                  Prévisualisation — 5 premières écritures
-                </span>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="border-b border-border bg-bg-secondary/50">
-                      {["Journal", "Date", "N° écriture", "Compte", "Libellé", "Débit", "Crédit"].map(
-                        (h) => (
-                          <th
-                            key={h}
-                            className="px-3 py-2 text-left font-semibold text-text-muted whitespace-nowrap"
-                          >
-                            {h}
-                          </th>
-                        )
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {state.preview.map((entry, i) => (
-                      <tr key={i} className="hover:bg-bg-secondary/40 transition">
-                        <td className="px-3 py-2 font-mono text-text-primary whitespace-nowrap">
-                          {entry.JournalCode}
-                        </td>
-                        <td className="px-3 py-2 text-text-muted whitespace-nowrap">
-                          {formatFECDate(entry.EcritureDate)}
-                        </td>
-                        <td className="px-3 py-2 font-mono text-text-muted whitespace-nowrap">
-                          {entry.EcritureNum}
-                        </td>
-                        <td className="px-3 py-2 font-mono whitespace-nowrap">
-                          <span className="text-action-primary">{entry.CompteNum}</span>{" "}
-                          <span className="text-text-muted">{entry.CompteLib}</span>
-                        </td>
-                        <td className="px-3 py-2 text-text-primary max-w-[160px] truncate">
-                          {entry.EcritureLib}
-                        </td>
-                        <td className="px-3 py-2 text-right font-mono text-text-primary whitespace-nowrap">
-                          {entry.Debit ? formatMicrounits(parseFECAmount(entry.Debit)) : "—"}
-                        </td>
-                        <td className="px-3 py-2 text-right font-mono text-text-primary whitespace-nowrap">
-                          {entry.Credit ? formatMicrounits(parseFECAmount(entry.Credit)) : "—"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* Rappel immuabilité */}
-          <p className="text-[11px] text-text-muted bg-bg-secondary rounded-lg px-3 py-2 flex items-start gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-action-primary shrink-0 mt-0.5" />
-            Ces écritures seront marquées{" "}
-            <strong className="text-text-primary">historical</strong> et immuables.
-            Elles n'alimentent PAS la chaîne de scellage NF525 active.
-          </p>
-        </div>
+        <FECPreviewSection
+          file={state.file}
+          preview={state.preview}
+          warnings={state.warnings}
+          isValid={state.isValid}
+          onReset={reset}
+        />
       )}
 
-      {/* ── Phase importing ───────────────────────────────────────────────── */}
+      {/* Phase importing */}
       {state.phase === "importing" && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs text-text-muted">
@@ -323,54 +144,16 @@ export function FECImportPanel() {
         </div>
       )}
 
-      {/* ── Phase done ────────────────────────────────────────────────────── */}
+      {/* Phase done */}
       {state.phase === "done" && (
-        <div className="rounded-xl border border-status-success/30 bg-status-success/5 p-4 space-y-3">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-status-success shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-semibold text-text-primary">
-                FEC importé — exercice {state.exercice}
-              </p>
-              <div className="flex gap-4 mt-1 text-xs text-text-muted">
-                <span>
-                  <strong className="text-status-success">{state.result.imported}</strong> écriture(s) importée(s)
-                </span>
-                {state.result.skipped > 0 && (
-                  <span>
-                    <strong className="text-status-warning">{state.result.skipped}</strong> ignorée(s)
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {state.result.errors.length > 0 && (
-            <details className="group">
-              <summary className="flex items-center gap-1.5 text-xs font-medium text-status-warning cursor-pointer list-none">
-                <AlertTriangle className="w-3.5 h-3.5" />
-                {state.result.errors.length} avertissement(s) — cliquer pour voir
-              </summary>
-              <ul className="mt-2 space-y-1 max-h-40 overflow-y-auto">
-                {state.result.errors.map((err, i) => (
-                  <li
-                    key={i}
-                    className="text-[11px] text-text-muted font-mono bg-bg-secondary rounded px-2 py-1"
-                  >
-                    {err}
-                  </li>
-                ))}
-              </ul>
-            </details>
-          )}
-
-          <button onClick={reset} className="text-xs text-action-primary hover:underline">
-            Importer un autre FEC
-          </button>
-        </div>
+        <FECDoneSection
+          exercice={state.exercice}
+          result={state.result}
+          onReset={reset}
+        />
       )}
 
-      {/* ── Phase error ───────────────────────────────────────────────────── */}
+      {/* Phase error */}
       {state.phase === "error" && (
         <div className="rounded-xl border border-status-danger/30 bg-status-danger/5 p-4 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-status-danger shrink-0 mt-0.5" />
