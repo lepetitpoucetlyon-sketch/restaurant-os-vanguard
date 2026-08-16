@@ -7,6 +7,7 @@ export const TableSchema = z.object({
   id:                UUIDSchema,
   type:              z.literal('table').default('table'),
   number:            z.string(),
+  name:              SanitizedStringSchema.optional(),
   seats:             z.number().int().min(1),
   status:            z.enum(['free', 'available', 'occupied', 'reserved', 'cleaning', 'locked']).or(z.string()),
   x:                 z.number(),

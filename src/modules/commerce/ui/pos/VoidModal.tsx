@@ -31,13 +31,9 @@ interface VoidModalProps {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function parseEuros(raw: string): number {
+function parseEurosToMicrounits(raw: string): number {
     const val = parseFloat(raw.replace(",", ".").trim());
-    return isNaN(val) ? 0 : Math.max(0, val);
-}
-
-function eurosToCents(euros: number): number {
-    return Math.round(euros * 100);
+    return isNaN(val) ? 0 : Math.round(Math.max(0, val) * 1_000_000);
 }
 
 // ─── VoidModal ────────────────────────────────────────────────────────────────
@@ -61,16 +57,16 @@ export function VoidModal({
 
     // ── Validation ────────────────────────────────────────────────────────────
 
-    const originalCents = eurosToCents(parseEuros(originalAmountInput));
-    const refundCents   = mode === "void"
-        ? originalCents
-        : eurosToCents(parseEuros(refundAmountInput));
+    const originalMicrounits = parseEurosToMicrounits(originalAmountInput);
+    const refundMicrounits   = mode === "void"
+        ? originalMicrounits
+        : parseEurosToMicrounits(refundAmountInput);
 
     const canSubmit =
         pieceNumber.trim().length > 0 &&
-        originalCents > 0 &&
-        refundCents > 0 &&
-        refundCents <= originalCents &&
+        originalMicrounits > 0 &&
+        refundMicrounits > 0 &&
+        refundMicrounits <= originalMicrounits &&
         !isSubmitting;
 
     // ── Submit ────────────────────────────────────────────────────────────────
@@ -81,8 +77,7 @@ export function VoidModal({
         try {
             const entryId       = IdGenerator.generateWithPrefix("JE");
             const now           = new Date().toISOString();
-            const negativeAmount = -refundCents; // NEGATIVE for extourne NF525
-            const negativeAmountInMicrounits = negativeAmount * 10_000;
+            const negativeAmountInMicrounits = -refundMicrounits; // NEGATIVE for extourne NF525
 
             // Canonical snapshot for hash chain
             const dataSnapshot = CryptoService.canonicalStringify({
@@ -137,7 +132,7 @@ export function VoidModal({
         } finally {
             setIsSubmitting(false);
         }
-    }, [canSubmit, mode, pieceNumber, originalCents, refundCents, reason, tenantId, operatorId]);
+    }, [canSubmit, mode, pieceNumber, originalMicrounits, refundMicrounits, reason, tenantId, operatorId]);
 
     const handleReset = useCallback(() => {
         setDone(false);
@@ -292,56 +287,56 @@ export function VoidModal({
                                     animate={{ opacity: 1, height: "auto" }}
                                 >
                                     <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
-                                        Montant à rembourser (€, ≤ {(originalCents / 100).toFixed(2)} €)
+                                        Montant à rembourser (€, ≤ {(originalMicrounits / 1_000_000).toFixed(2)} €)
                                     </label>
                                     <div className="flex items-center gap-3 border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-status-error/50 transition-colors">
                                         <span className="text-sm text-text-muted font-mono shrink-0">€</span>
                                         <input
-                                            type="text"
-                                            inputMode="decimal"
-                                            value={refundAmountInput}
-                                            onChange={(e) => setRefundAmountInput(e.target.value)}
-                                            placeholder="0,00"
-                                            className="flex-1 bg-transparent text-[13px] font-mono text-text-primary placeholder:text-text-muted/50 focus:outline-none"
-                                        />
-                                    </div>
-                                    {refundCents > originalCents && originalCents > 0 && (
-                                        <p className="mt-1.5 text-[10px] text-status-error font-bold">
-                                            Le remboursement ne peut pas dépasser le montant original
-                                        </p>
-                                    )}
-                                </motion.div>
-                            )}
+                                             type="text"
+                                             inputMode="decimal"
+                                             value={refundAmountInput}
+                                             onChange={(e) => setRefundAmountInput(e.target.value)}
+                                             placeholder="0,00"
+                                             className="flex-1 bg-transparent text-[13px] font-mono text-text-primary placeholder:text-text-muted/50 focus:outline-none"
+                                         />
+                                     </div>
+                                     {refundMicrounits > originalMicrounits && originalMicrounits > 0 && (
+                                         <p className="mt-1.5 text-[10px] text-status-error font-bold">
+                                             Le remboursement ne peut pas dépasser le montant original
+                                         </p>
+                                     )}
+                                 </motion.div>
+                             )}
 
-                            {/* Optional reason */}
-                            <div>
-                                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
-                                    Motif (optionnel)
-                                </label>
-                                <input
-                                    type="text"
-                                    value={reason}
-                                    onChange={(e) => setReason(e.target.value)}
-                                    placeholder="Erreur de commande, insatisfaction client…"
-                                    className="w-full border border-border rounded-2xl px-4 h-12 bg-bg-primary text-[13px] text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-accent-gold/50 transition-colors"
-                                />
-                            </div>
+                             {/* Optional reason */}
+                             <div>
+                                 <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                                     Motif (optionnel)
+                                 </label>
+                                 <input
+                                     type="text"
+                                     value={reason}
+                                     onChange={(e) => setReason(e.target.value)}
+                                     placeholder="Erreur de commande, insatisfaction client…"
+                                     className="w-full border border-border rounded-2xl px-4 h-12 bg-bg-primary text-[13px] text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-accent-gold/50 transition-colors"
+                                 />
+                             </div>
 
-                            {/* Summary */}
-                            {canSubmit && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="p-3 rounded-2xl bg-status-error/5 border border-status-error/20 text-[11px] flex items-center justify-between"
-                                >
-                                    <span className="text-text-muted uppercase tracking-wider font-bold">
-                                        Écriture négative
-                                    </span>
-                                    <span className="font-mono text-status-error font-black text-sm">
-                                        −{(refundCents / 100).toFixed(2)} €
-                                    </span>
-                                </motion.div>
-                            )}
+                             {/* Summary */}
+                             {canSubmit && (
+                                 <motion.div
+                                     initial={{ opacity: 0 }}
+                                     animate={{ opacity: 1 }}
+                                     className="p-3 rounded-2xl bg-status-error/5 border border-status-error/20 text-[11px] flex items-center justify-between"
+                                 >
+                                     <span className="text-text-muted uppercase tracking-wider font-bold">
+                                         Écriture négative
+                                     </span>
+                                     <span className="font-mono text-status-error font-black text-sm">
+                                         −{(refundMicrounits / 1_000_000).toFixed(2)} €
+                                     </span>
+                                 </motion.div>
+                             )}
 
                             {/* Submit */}
                             <button

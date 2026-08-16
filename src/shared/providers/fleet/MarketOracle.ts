@@ -17,16 +17,13 @@
 
 import { logger } from '@/lib/logger';
 
-// eslint-disable-next-line no-restricted-imports
-import type {
-    SanitizedPulse,
-    PulseCategory,
-    MarketInsight,
-    MonetizationTier,
- 
-} from '@/modules/intelligence/knowledge/rag/types';
-
-import { K_ANONYMITY_THRESHOLD } from '@/modules/intelligence';
+import {
+    type SanitizedPulse,
+    type PulseCategory,
+    type MarketInsight,
+    type MonetizationTier,
+    K_ANONYMITY_THRESHOLD,
+} from '@/modules/intelligence';
 
 // ============================================
 // MARKET ORACLE

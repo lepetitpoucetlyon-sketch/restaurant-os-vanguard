@@ -20,7 +20,6 @@ export * from './providers';
 // Resolve TS2308 conflicts: providers and workflow/engine both export these
 export { useGroups } from './providers/hooks/commerceHooks';
 export { useNexusOps, NexusOpsProvider } from './providers/NexusOpsProvider';
-export type { Table } from './workflow/engine/tables.types';
 
 // Kitchen components (production/recipes)
 export { RecipeCostBadge } from './production/recipes';
@@ -29,16 +28,16 @@ export { BarRecipeCard } from './production/recipes';
 // Bar types (BarTab, Wine, Cocktail, WineRegion)
 export type { BarTab, Wine, Cocktail, WineRegion } from './types/bar';
 
-
 export { winesAtom } from './service/bar/store/barAtoms';
 export { cocktailsAtom } from './service/bar/store/barAtoms';
 export { wineRegionsAtom } from './service/bar/store/barAtoms';
 export { useTables } from './providers';
 // DeliveryProviderFactory et ReservationProviderFactory sont server-only :
 // les importer directement dans les routes API, jamais via ce barrel.
-export type { Floor } from './workflow/engine/tables.types';
-export type { Zone } from './workflow/engine/tables.types';
-export type { CartItem } from './workflow/engine/types';
+export type { CartItem, SovereignProduct } from './workflow/engine/types';
+export type { GroupEvent } from './workflow/engine/groups.types';
+export { KDSCourseSequencingEngine } from './production/kds/services/KDSCourseSequencingEngine';
+export { registerCashDrawerAnomalyHandler } from './service/pos/handlers/CashDrawerAnomalyHandler';
 export { OpsSyncService } from './workflow/engine/ops.sync';
 export { useOrders } from './providers';
 export { useInventory } from './providers';
@@ -65,6 +64,6 @@ export * from './domain/schemas/ops';
 export * from './domain/schemas/inventory';
 export * from './domain/schemas/cash';
 // Résolution TS2308 : types dupliqués entre domain/schemas et sous-barrels
-export type { TableShape, TableStatus, Reservation } from './domain/schemas/ops';
+export type { Table, Floor, Zone, TableShape, TableStatus, Reservation, FloorTable } from './domain/schemas/ops';
 export type { ConsumptionMode } from './domain/schemas/orders';
 export type { CourseType, SplitMode, PaymentMethod, ConvivePayment } from './domain/schemas/pos';

@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { SovereignSignatureEngine } from '@/modules/legal/services/SovereignSignatureEngine';
+import { SovereignSignatureEngine } from '@/modules/legal';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,5 +1,5 @@
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ConnectorId } from '../migration/connectors/types';
+import type { ImportCategory } from '../migration/types';
 
 export interface ExportStep {
   step: number;

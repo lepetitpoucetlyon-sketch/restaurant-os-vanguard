@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Megaphone, X, Send, Mail, MessageSquare, Calendar, Clock, Users } from "lucide-react";
 import { Button } from "@ui/button";
 
-import { useMarketing } from '@/modules/ops/providers/hooks/commerceHooks';
+import { useMarketing } from '@/modules/ops';
 
 interface NewCampaignModalProps {
     isOpen: boolean;

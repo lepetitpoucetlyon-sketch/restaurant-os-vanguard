@@ -24,7 +24,8 @@
     "benchmark": "ts-node tests/benchmarks/live_performance_test.ts",
     "gitpush": "node .nexus/scripts/antigravity-push.js",
     "nexus:seal": "node .nexus/scripts/smart-seal.js",
-    "nexus:deploy": "node .nexus/scripts/quick-deploy.js"
+    "nexus:deploy": "node .nexus/scripts/quick-deploy.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1101.0",

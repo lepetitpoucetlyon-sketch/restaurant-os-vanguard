@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { MigrationPlaceholder } from '@/modules/commerce/acquisition/onboarding';
+import { MigrationPlaceholder } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function MigrationContent() {

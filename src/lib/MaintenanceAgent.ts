@@ -1,6 +1,5 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { logger } from '@/lib/axiom';
  
 import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";

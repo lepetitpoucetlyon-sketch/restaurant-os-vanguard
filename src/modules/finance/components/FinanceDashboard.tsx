@@ -18,7 +18,7 @@ import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ExpenseClaimDialog } from './accounting';
 import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
-import { useOrders } from '@/modules/ops/providers/hooks/kitchenHooks';
+import { useOrders } from '@/modules/ops';
 import type { Order, JournalEntry } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 

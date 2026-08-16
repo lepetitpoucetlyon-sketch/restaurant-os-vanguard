@@ -1,2 +1,2 @@
 // Pass-through — source of truth: modules/compliance/domain/schemas/rbac.ts
-export * from '@/modules/compliance/domain/schemas/rbac';
+export * from '@/modules/compliance';

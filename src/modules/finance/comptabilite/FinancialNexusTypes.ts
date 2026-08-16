@@ -4,8 +4,7 @@
  * Types partagés pour le pont financier et le journal comptable.
  */
 
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
-import type { ConsumptionMode } from '@/modules/ops/workflow/engine/types';
+import type { CartItem, ConsumptionMode } from '@/modules/ops';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
 

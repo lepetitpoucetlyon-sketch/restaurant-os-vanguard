@@ -8,7 +8,7 @@
  * - Optimisation d'atteinte du Franco de port & suggestions de comblement non-périssable.
  */
 
-import type { StockItem } from '@/modules/logistics/domain/schemas/inventory';
+import type { StockItem } from '../../domain/schemas/inventory';
 import type { MercurialeItem } from '../mercuriales/MercurialeTypes';
 import type { SupplierEntity } from '../core/domain/supplier.types';
 import type { PurchaseOrderEntity, PurchaseOrderItem } from '../orders/SupplierOrderTypes';

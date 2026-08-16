@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { HardwareProvisioningService } from '@/modules/facility/services/HardwareProvisioningService';
+import { HardwareProvisioningService } from '@/modules/facility';
 
 export const dynamic = 'force-dynamic';
 

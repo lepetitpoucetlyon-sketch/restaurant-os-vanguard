@@ -30,7 +30,7 @@ export type IngredientCategory =
 
 export type ItemCategory = IngredientCategory;
 
-export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'piece' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
+export type IngredientUnit = 'kg' | 'g' | 'l' | 'ml' | 'cl' | 'unit' | 'piece' | 'portion' | 'bunch' | 'crate' | 'box' | 'bottle' | 'can';
 
 // Predefined storage locations
 export const DEFAULT_STORAGE_LOCATIONS: StorageLocation[] = [

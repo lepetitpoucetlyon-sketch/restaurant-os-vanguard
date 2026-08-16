@@ -1,7 +1,6 @@
 import { logger } from '@/lib/logger';
 import { FiscalHACCPMapper } from '@modules/finance';
-import { StockItem } from '@modules/logistics';
-import { SensorReading } from '@nexus/contracts';
+import { StockItem, SensorReading } from '@nexus/contracts';
 
 /**
  * 🌀 SinfoniaGradeXProof - The 120x Efficiency Proof

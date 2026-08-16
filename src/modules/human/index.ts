@@ -6,6 +6,7 @@ export { useStaffAudit } from './effectifs/hr/hooks/useStaffAudit';
 export { RecruitmentDashboard } from './effectifs/hr/components/RecruitmentDashboard';
 export { TimeclockDashboard } from './effectifs/hr/components/TimeclockDashboard';
 export { PlanningDashboard } from './effectifs/hr/components/PlanningDashboard';
+export { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from './effectifs/hr/components/leaves';
 
 // Domaine : remuneration (payroll, DSN, paie)
 export * from './remuneration/payroll';
@@ -15,7 +16,7 @@ export { NexusStaffingOracle } from './services/NexusStaffingOracle';
 export { TipDistributionService } from './effectifs/hr/services/tipDistribution';
 export { LaborCostAnalyzer } from './effectifs/hr/services/LaborCostAnalyzer';
 export { LaborCostService } from './effectifs/hr/services/laborCost';
-
+export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
 
 export { useStaffPage } from './effectifs/hr/hooks';
 export { RecruitmentBoard } from './effectifs/hr/components/RecruitmentBoard';
@@ -31,6 +32,9 @@ export { DSNBuilder } from './remuneration/payroll/DSNBuilder';
 
 // 🏛️ Handlers (enregistrement bus événementiel)
 export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffingHandler';
+
+// 🏛️ Staff Atoms & Store
+export * from './effectifs/hr/store/staffAtoms';
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/hr';

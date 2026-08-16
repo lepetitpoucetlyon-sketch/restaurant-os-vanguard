@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import type { CartItem, CourseType } from '@/modules/ops/workflow/engine/types';
+import type { CartItem, CourseType } from '../../../workflow/engine/types';
 
 export type CourseStatus = 'HOLD' | 'FIRED' | 'COOKING' | 'READY' | 'SERVED';
 

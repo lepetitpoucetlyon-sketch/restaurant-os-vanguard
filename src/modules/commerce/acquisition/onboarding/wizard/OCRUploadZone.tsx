@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useRef, useState } from 'react';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ImportCategory } from '../migration/types';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 

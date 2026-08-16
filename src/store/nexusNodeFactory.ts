@@ -2,19 +2,9 @@ import { atom } from 'jotai';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import type { ModuleId } from '@shared/genome.types';
 
-// --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---
-export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
-
-/**
- * Interface NexusNode - Grade VI Standard
- * Le contrat atomique universel pour tous les domaines.
- */
-import { NexusNode } from './base';
+import { NexusNode, updateNexusNode, orphanNodesRegistry } from './base';
 export type { NexusNode };
-// updateNexusNode vit dans ./base (module neutre) : ré-export pour préserver la
-// surface, et GlobalRegistryService l'importe directement depuis base (cassage
-// du cycle nexusNodeFactory <-> GlobalRegistryService).
-export { updateNexusNode } from './base';
+export { updateNexusNode, orphanNodesRegistry };
 
 /**
  * createNexusNode

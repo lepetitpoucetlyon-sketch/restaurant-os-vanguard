@@ -5,40 +5,38 @@
  */
 
 import { z } from 'zod';
-import { 
-  TableSchema, 
-  ReservationSchema, 
-  FloorSchema, 
-  ZoneSchema
-} from '@/modules/ops/domain/schemas/ops';
-import { 
-  OrderSchema, 
+export {
+  TableSchema,
+  ReservationSchema,
+  FloorSchema,
+  ZoneSchema,
+  TableShapeSchema,
+  type Table,
+  type Reservation,
+  type Floor,
+  type Zone,
+  type TableStatus,
+  type TableShape,
+  type FloorTable,
+  OrderSchema,
   OrderLineSchema,
-  OrderItemModificationSchema
-} from '@/modules/ops/domain/schemas/orders';
+  OrderItemModificationSchema,
+  type Order,
+  type OrderItem,
+} from '@/modules/ops';
 
-export type Table = z.infer<typeof TableSchema>;
-export type Reservation = z.infer<typeof ReservationSchema>;
-export type Floor = z.infer<typeof FloorSchema>;
-export type Zone = z.infer<typeof ZoneSchema>;
+import { OrderItemModificationSchema } from '@/modules/ops';
 
-export type Order = z.infer<typeof OrderSchema>;
-export type OrderItem = z.infer<typeof OrderLineSchema>;
 export type OrderItemModification = z.infer<typeof OrderItemModificationSchema>;
 
-export type TableStatus = Table['status'];
-export type TableShape = 'rect' | 'circle' | string;
-export type OrderStatus = Order['status'];
+export type OrderStatus = import('@/modules/ops').Order['status'];
 export type GroupEventStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 // 🏛️ Universal Aliases (Spaces, Resources & Workload Units)
-export type Space = Table;
-export type SpaceStatus = TableStatus;
-export type SpaceShape = TableShape;
+export type Space = import('@/modules/ops').Table;
+export type SpaceStatus = import('@/modules/ops').TableStatus;
+export type SpaceShape = import('@/modules/ops').TableShape;
 export type WorkloadUnit = 'cover' | 'vehicle' | 'patient' | 'client' | 'asset_lot' | 'unit';
-
-// Keep essential legacy structures if not yet migrated to Zod
-// OrderItemModification is now inferred from Zod
 
 export interface GroupEvent {
     id: string;
@@ -55,4 +53,3 @@ export interface GroupEvent {
     isDepositPaid: boolean;
     notes?: string;
 }
-

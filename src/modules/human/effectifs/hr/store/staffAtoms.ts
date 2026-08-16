@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@nexus/contracts';
-import { ShiftEntry } from '@/modules/human/domain/schemas/hr';
+import { ShiftEntry } from '../../../domain/schemas/hr';
 
 // --- 👥 STAFF & HR DOMAIN (Personnel, Shifts, Congés) ---
 

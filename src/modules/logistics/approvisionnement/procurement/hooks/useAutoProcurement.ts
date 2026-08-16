@@ -3,7 +3,7 @@
 import { useMemo, useState, useCallback } from 'react';
 import { AutoProcurementEngine, type SupplierBasketDraft } from '../AutoProcurementEngine';
 import { MultiChannelOrderDispatcherService } from '../../orders/MultiChannelOrderDispatcherService';
-import type { StockItem } from '@/modules/logistics/domain/schemas/inventory';
+import type { StockItem } from '../../../domain/schemas/inventory';
 import type { MercurialeItem } from '../../mercuriales/MercurialeTypes';
 import type { SupplierEntity, SupplierContact } from '../../core/domain/supplier.types';
 import type { PurchaseOrderEntity } from '../../orders/SupplierOrderTypes';

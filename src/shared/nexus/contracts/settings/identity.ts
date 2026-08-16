@@ -4,11 +4,18 @@ export interface BusinessIdentity {
     logo?: string;
     slogan?: string;
     activityCategory: string;
-    category: 'bistrot' | 'gastronomique' | 'brasserie' | 'fast_casual' | 'cafe' | 'bar' | 'other';
+    /** Catégorie métier libre (ex: bistrot, garage, salon, clinique...) */
+    category?: string;
     shortDescription?: string;
     longDescription?: string;
     foundedYear?: number;
+    /** Première personne clé (ex: chef cuisinier, gérant technique, médecin référent) */
+    keyContact1?: string;
+    /** Deuxième personne clé ou propriétaire/responsable légal */
+    keyContact2?: string;
+    /** @deprecated use keyContact1 */
     headChef?: string;
+    /** @deprecated use keyContact2 */
     owner?: string;
 }
 

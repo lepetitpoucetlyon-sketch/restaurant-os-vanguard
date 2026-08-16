@@ -15,7 +15,7 @@ import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { predictAttendance } from '@/modules/intelligence/analytique/attendance/AttendancePrediction';
+import { predictAttendance } from '@/modules/intelligence';
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
 const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];

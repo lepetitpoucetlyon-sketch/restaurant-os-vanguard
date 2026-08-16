@@ -17,6 +17,8 @@ export const OrderItemModificationSchema = z.object({
   responseNote: z.string().optional(),
 }).catchall(z.any());
 
+export type OrderItemModification = z.infer<typeof OrderItemModificationSchema>;
+
 export const ConsumptionModeSchema = z.enum(['dine_in', 'takeaway']);
 export type ConsumptionMode = z.infer<typeof ConsumptionModeSchema>;
 

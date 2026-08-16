@@ -62,7 +62,7 @@ export const CampaignAttributionService = {
             if (resa.orderId) {
                 const order = orderMap.get(resa.orderId);
                 if (order) {
-                    totalRevenue += order.totalInMicrounits ?? (order.totalAmountInCents ?? 0) * 10_000;
+                    totalRevenue += order.totalInMicrounits ?? (order.totalAmountInCents ? toMicrounits(order.totalAmountInCents) : 0);
                 }
             }
         }

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import type { FiscalSeal } from '@/modules/finance/domain/schemas/finance';
+import type { FiscalSeal } from '@/modules/finance';
 import {
     JournalEntry,
     HygieneLabel,

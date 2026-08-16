@@ -64,8 +64,7 @@ export * from './permissions.types';
 
 
 // 4. Operations Bridge (POS & Groups)
-export type { CartItem } from '@/modules/ops/workflow/engine/types';
-export type { GroupEvent } from '@/modules/ops/workflow/engine/groups.types';
+export type { CartItem, GroupEvent } from '@/modules/ops';
 
 // --- 🛠️ UTILITIES & UI (Selective Export) ---
 export type { 
@@ -96,7 +95,22 @@ export type {
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
 export * from './settings/haccp';
-export * from '@/modules/compliance/qualite/haccp/types';
+export type {
+    CleaningTask,
+    ZoneConfig,
+    EquipmentConfig,
+    HygieneLog,
+    HygieneLabel,
+    ReceptionLog,
+    MaintenanceLog,
+    OilLog,
+    RegulatoryWasteLog,
+    EquipmentAuditLog,
+    TemperatureLog,
+    SensorReading,
+    HACCPChecklistItem,
+    HACCPContextType,
+} from '@/modules/compliance';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';

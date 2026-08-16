@@ -6,8 +6,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
-import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors/ConnectorRegistry';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import {
+  ConnectorRegistry,
+  type ConnectorId,
+  type ConnectorCredentials,
+} from '@/modules/commerce';
 import { toError } from "@/lib/toError";
 
 export async function POST(req: NextRequest) {

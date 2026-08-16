@@ -1,8 +1,8 @@
 // src/domain/schemas/pos.ts
 import { z } from 'zod';
 import { MicrounitsSchema, TimestampSchema, UUIDSchema, sanitized, toMicrounits } from '@/shared/schemas/primitives';
-import { TaxRateSchema } from '@/modules/finance/domain/schemas/finance';
-import { ConsumptionModeSchema } from '@/modules/ops/domain/schemas/orders';
+import { TaxRateSchema } from '@/modules/finance';
+import { ConsumptionModeSchema } from './orders';
 
 export const CartLineSchema = z.object({
   id:                    UUIDSchema,

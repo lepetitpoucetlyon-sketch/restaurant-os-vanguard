@@ -14,6 +14,9 @@ export interface Floor {
     description?: string;
     isActive: boolean;
     icon?: string; // Optional icon name for visual identification
+    type?: string;
+    schemaVersion?: number;
+    updatedAt?: number;
 }
 
 export interface Zone {
@@ -26,11 +29,15 @@ export interface Zone {
     y?: number;
     width?: number;
     height?: number;
+    type?: string;
+    schemaVersion?: number;
+    updatedAt?: number;
 }
 
 export interface Table {
     id: string;
     number: string;
+    name?: string;
     seats: number;
     status: TableStatus;
     shape: TableShape;
@@ -44,6 +51,9 @@ export interface Table {
     lastService?: string;
     revenueTodayInCents?: number;
     revenueTodayInMicrounits?: number; // µ = cents × 10 000
+    type?: string;
+    schemaVersion?: number;
+    updatedAt?: number;
 }
 
 /**

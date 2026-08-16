@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import { MaintenanceAlertConfigService } from '@/modules/facility/services/MaintenanceAlertConfigService';
+import { MaintenanceAlertConfigService, type RestaurantZone, type MaintenanceAlertType } from '@/modules/facility';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
-import { RestaurantZone, MaintenanceAlertType } from '@/modules/facility/assets/domain/schemas/maintenanceAlerts';
 
 export const dynamic = 'force-dynamic';
 

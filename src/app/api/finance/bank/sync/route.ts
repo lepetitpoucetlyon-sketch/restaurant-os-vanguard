@@ -6,7 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OpenBankingProviderFactory } from '@/modules/finance';
 import { BankConnectionStore } from '@/modules/finance';
 import { inferPCGAccount } from '@/modules/finance';
-import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance';
 import { CryptoService } from '@/lib/CryptoService';
 import type { FiscalSeal } from '@nexus/contracts';
 
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 const dataSnapshot = CryptoService.canonicalStringify(
                     journalEntry
                 );
-                const seal = await FiscalEngine.sealEntry(jeId, journalEntry as Record<string, string | number | boolean | null | undefined | object>, { lastSeal });
+                const seal = await FiscalEngine.sealEntry(jeId, journalEntry as unknown as Record<string, import('@/shared/nexus-contract').SovereignValue>, { lastSeal });
                 batch.set(`tenants/${tenantId}/fiscalSeals/${seal.id}`, {
                     ...seal, dataSnapshot,
                 });

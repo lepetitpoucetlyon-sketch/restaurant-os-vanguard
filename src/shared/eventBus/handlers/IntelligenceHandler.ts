@@ -4,7 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { HermesKnowledgeManager } from '@/modules/intelligence';
 
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem } from '@/modules/ops';
 import { toError } from "@/lib/toError";
 
 /**

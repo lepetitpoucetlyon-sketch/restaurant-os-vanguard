@@ -1,11 +1,20 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
-// Domaine : acquisition (marketing, SEO, landing)
+// Domaine : acquisition (marketing, SEO, landing, onboarding)
 export * from './acquisition/marketing';
 export { LandingDashboard } from './acquisition/landing/components/LandingDashboard';
 export { MenuJsonLd } from './acquisition/seo';
 export { PromoCodeManager } from './acquisition/marketing/components/crm/PromoCodeManager';
 export type { PromoCodeRecord } from './acquisition/marketing/components/crm/PromoCodeManager';
+export * from './acquisition/onboarding';
+export { OnboardingWizard } from './acquisition/onboarding/wizard';
+export { RestaurantOnboardingMasterService } from './acquisition/onboarding/services/RestaurantOnboardingMasterService';
+export type { OnboardingAuditSummary, OnboardingPillarStep } from './acquisition/onboarding/services/RestaurantOnboardingMasterService';
+export { ImportSnapshotService } from './acquisition/onboarding/migration/ImportSnapshotService';
+export { ConnectorRegistry } from './acquisition/onboarding/migration/connectors';
+export { runImporter } from './acquisition/onboarding/migration/importers';
+export { parseImageWithOCR } from './acquisition/onboarding/migration/parsers/imageParser';
+export { parsePDFWithOCR } from './acquisition/onboarding/migration/parsers/pdfParser';
+export type { ConnectorId, ConnectorCredentials } from './acquisition/onboarding/migration/connectors/types';
+export type { ImportCategory } from './acquisition/onboarding/migration/types';
 
 // Domaine : relation (reservations, CRM, customers, delivery)
 export * from './relation/reservations';
@@ -14,18 +23,19 @@ export { ProspectingDashboard } from './relation/crm/components/ProspectingDashb
 export { AggregatorMappingService } from './relation/delivery/services/AggregatorMappingService';
 export { GroupFormModal } from './relation/reservations/components/GroupFormModal';
 export type { GroupFormData } from './relation/reservations/components/GroupFormModal';
-// Ré-export depuis la source (commerceHooks) et non le barrel NexusOpsProvider :
-// passer par le Provider crée un cycle SSR commerce → Provider → NexusSyncService → commerce
- 
-export { useReservations, useCRM } from '@/modules/ops/providers/hooks/commerceHooks';
+export { ProcessGoogleBookingUseCase } from './relation/reservations/application/use-cases/ProcessGoogleBooking';
+export { InMemoryReservationRepository } from './relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
+export * from './relation/reservations/domain/types/GoogleReserveTypes';
+
+export { useReservations, useCRM } from '@/modules/ops';
 
 // Domaine : fidélité (loyalty, quotes, widgets)
 export { ReservationWidget } from './fidelite/widgets';
 
 // Infrastructure pilier (connectors, ui)
 export { ReviewProviderFactory } from './connectors/reviews';
-// eslint-disable-next-line no-restricted-imports
-export { CustomerImportPanel } from '@/modules/commerce/acquisition/onboarding/migration';
+export { DeliveryWebhookBridge, type DeliveryProvider, type ExternalDeliveryPayload } from './connectors/delivery/DeliveryWebhookBridge';
+export { CustomerImportPanel } from './acquisition/onboarding/migration';
 
 export { menuEngineeringService } from './catalog/menu-engineering';
 export type { MenuItemCategory, IMenuEngineeringItem, IMenuEngineeringReport } from './catalog/menu-engineering';
@@ -54,3 +64,5 @@ export { registerCRMVipHandler } from './acquisition/marketing/handlers/CRMVipHa
 export * from './domain/schemas/commerce';
 export * from './domain/types/brands';
 export * from './domain/schemas/giftcard';
+export * from './domain/schemas/customerAccount';
+export * from './domain/schemas/loyalty';

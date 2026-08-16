@@ -11,15 +11,21 @@ export { RecallService } from './qualite/recall/RecallService';
 export { FoodDonationService } from './qualite/donation/FoodDonationService';
 export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
 export { IoTSensorService } from './qualite/haccp/iot';
+export { HACCPTelemetryBridge } from './qualite/haccp/services/HACCPTelemetryBridge';
 
-// Domaine : securite (audit)
+// Domaine : securite (audit, vault, immunity)
 export { AuditService, auditService } from './securite/audit/AuditService';
+export { ElevationPrompt } from './securite/audit/ElevationPrompt';
+export { OverrideLogView } from './securite/audit/OverrideLogView';
+export { DocumentVault } from './securite/DocumentVault';
+export { AuditLogger } from './securite/AuditLogger';
+export { ImmunityAuditLogger } from './securite/ImmunityAuditLogger';
 
 // Domaine : reglementaire (RGPD)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
 
 // Infrastructure pilier (connectors, services, types)
-export type { PiiRecord } from '@/modules/compliance/domain/schemas/pii';
+export type { PiiRecord, PiiFields } from './domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
 export * from './services';
 
@@ -38,9 +44,6 @@ export { policyEngine } from './services';
 export { useRegistre, RegistreProvider } from './qualite/haccp/contexts/RegistreContext';
 
 // 🏛️ Domaine Schemas
-// haccp: ReceptionSchema, OilCheckSchema, SensorReadingSchema (Zod — version autoritaire)
-// SensorReading collision : qualite/haccp/types/domain.ts a son propre SensorReading interface
-// → on prend la version Zod de domain/schemas/haccp
 export * from './domain/schemas/haccp';
 export * from './domain/schemas/compliance.schemas';
 export * from './domain/schemas/foodDonation';
@@ -48,5 +51,7 @@ export * from './domain/schemas/audit';
 export * from './domain/schemas/pii';
 export * from './domain/schemas/policy';
 export * from './domain/schemas/quality';
-// Disambiguation SensorReading : version Zod (domain/schemas/haccp) prend la précédence
-export type { SensorReading, IoTSensor, SensorTransport } from './domain/schemas/haccp';
+export * from './domain/schemas/rbac';
+export * from './domain/schemas/license';
+export type { SensorReading } from './qualite/haccp/types';
+export type { IoTSensor, SensorTransport, IoTSensorReading } from './domain/schemas/haccp';

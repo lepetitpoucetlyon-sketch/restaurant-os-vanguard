@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { SovereignProduct } from '@/modules/ops/workflow/engine/types';
+import type { SovereignProduct } from '@/modules/ops';
 
 export const dynamic = 'force-dynamic';
 

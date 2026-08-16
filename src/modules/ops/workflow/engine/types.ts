@@ -1,14 +1,11 @@
-import { Microunits, TaxRate } from '@/shared/schemas/primitives';
-import type { Order, OrderItem, OrderStatus, Product } from '@nexus/contracts/nexus-internal-mapper';
-export type { Order, OrderItem, OrderStatus };
+import type { Microunits, TaxRate } from '@/shared/schemas/primitives';
+import type { Order, OrderLine as OrderItem, OrderItemModification } from '../../domain/schemas/orders';
+import type { Product } from '@/modules/commerce';
 
+export type { Order, OrderItem, OrderItemModification };
+export type OrderStatus = Order['status'];
 export type OrderItemStatus = 'pending' | 'cooking' | 'ready' | 'served';
 export type ModificationStatus = 'pending' | 'approved' | 'rejected';
-
-// Import depuis le fichier source (ops.types) et non le barrel '@nexus/contracts'
-// pour casser le cycle ops/engine/types <-> contracts/index.
-import type { OrderItemModification } from '@nexus/contracts/ops.types';
-export type { OrderItemModification };
 
 export interface SovereignProduct extends Product {
     priceInMicrounits: Microunits;
@@ -16,7 +13,7 @@ export interface SovereignProduct extends Product {
     taxRate: TaxRate;
 }
 
-import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '@/modules/ops/domain/schemas/pos';
+import { CartLineSchema, CartLine, PosTicket, PosTicketSchema } from '../../domain/schemas/pos';
 export { CartLineSchema, PosTicketSchema };
 export type { CartLine, PosTicket };
 

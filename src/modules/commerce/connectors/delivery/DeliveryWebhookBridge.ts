@@ -1,9 +1,8 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { KDSCourseSequencingEngine } from '@/modules/ops/production/kds/services/KDSCourseSequencingEngine';
+import { KDSCourseSequencingEngine, type CartItem } from '@/modules/ops';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import { toMicrounits } from '@/shared/schemas/primitives';
 
 export type DeliveryProvider = 'ubereats' | 'deliveroo' | 'justeat';

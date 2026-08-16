@@ -8,8 +8,11 @@ import { sovereignQuery } from '@/modules/intelligence';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import type { UserStatus } from '@/shared/nexus/contracts/auth.types';
 import { toError } from "@/lib/toError";
-import { UniversalSystemPromptBuilder } from '@/modules/intelligence/services/UniversalSystemPromptBuilder';
-import { AssistantActionDispatcher, ActionProposal } from '@/modules/intelligence/services/AssistantActionDispatcher';
+import {
+  UniversalSystemPromptBuilder,
+  AssistantActionDispatcher,
+  type ActionProposal,
+} from '@/modules/intelligence';
 import { redactPII } from '@/lib/security/redactPII';
 
 // Statuts bloquant l'accès RAG — JWT valide ne suffit pas.

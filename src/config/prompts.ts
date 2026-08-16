@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports -- config: needs specific domain types */
-import { AgentDomain, AgentRole } from '@/modules/intelligence/domain/agency/types';
+import type { AgentDomain, AgentRole } from '@/modules/intelligence';
 
 export const MASTER_DNA = `
 Tu es un Agent du "Neural Shield" pour Restaurant OS. 

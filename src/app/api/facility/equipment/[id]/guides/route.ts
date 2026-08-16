@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireTenantRole, requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { EquipmentKnowledgeService } from '@/modules/facility/services/EquipmentKnowledgeService';
+import { EquipmentKnowledgeService } from '@/modules/facility';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 

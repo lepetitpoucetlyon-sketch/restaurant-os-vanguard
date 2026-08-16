@@ -1,14 +1,13 @@
 import 'server-only';
 import { NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
+import { ConnectorHub } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
-import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors';
+import { ConnectorRegistry, type ConnectorId } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 import type { ConnectorState } from '@/shared/connector-manifest';
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 import { toError } from "@/lib/toError";
 
 /**

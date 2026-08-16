@@ -16,7 +16,7 @@ export interface FiscalSeal extends SovereignMap {
     timestamp?: string;
     dataSnapshot?: string;
     transactionId?: string;
-    updatedAt: string;
+    updatedAt: string | number;
 }
 
 export interface JournalLine extends SovereignMap {

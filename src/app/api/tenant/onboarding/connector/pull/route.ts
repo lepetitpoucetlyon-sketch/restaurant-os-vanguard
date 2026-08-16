@@ -9,10 +9,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
-import { ConnectorRegistry } from '@/modules/commerce/acquisition/onboarding/migration/connectors/ConnectorRegistry';
-import { runImporter } from '@/modules/commerce/acquisition/onboarding/migration/importers';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import {
+  ConnectorRegistry,
+  runImporter,
+  type ConnectorId,
+  type ConnectorCredentials,
+  type ImportCategory,
+} from '@/modules/commerce';
 import { toError } from "@/lib/toError";
 
 export async function POST(req: NextRequest) {

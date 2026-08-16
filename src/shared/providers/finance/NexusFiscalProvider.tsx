@@ -15,19 +15,19 @@ import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { BlockchainLedgerService } from '@/modules/finance/comptabilite/accounting/domain/BlockchainLedgerService';
-import { computeTreasury } from '@/modules/finance';
-import { 
-    JournalEntry,
-    Account,
-    BankTransaction,
-    ExpenseClaim,
-    TreasurySnapshot,
-    FiscalSeal
-} from '@modules/finance/types';
-import type { TreasuryMetrics } from '@/modules/finance';
-import { useBilling } from '@/modules/finance/comptabilite/billing/hooks/useBilling';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
+import {
+    BlockchainLedgerService,
+    useBilling,
+    computeTreasury,
+    type JournalEntry,
+    type Account,
+    type BankTransaction,
+    type ExpenseClaim,
+    type FiscalSeal,
+    type TreasuryMetrics,
+    type TreasurySnapshot,
+} from '@/modules/finance';
 
 import { Sentry } from '@/lib/sentry';
 import { toMicrounits } from '@/shared/schemas/primitives';

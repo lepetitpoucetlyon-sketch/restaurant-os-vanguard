@@ -1,1 +1,1 @@
-export * from '@/modules/commerce/domain/schemas/customerAccount';
+export * from '@/modules/commerce';

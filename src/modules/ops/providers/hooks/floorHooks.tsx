@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
-import { Table, toTable, toFloor, toZone, toReservation } from '@nexus/contracts/nexus-internal-mapper';
+import { toTable, toFloor, toZone, toReservation } from '@/shared/nexus/contracts/nexus-internal-mapper';
+import type { Table } from '../../domain/schemas/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';

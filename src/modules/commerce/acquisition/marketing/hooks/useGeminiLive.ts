@@ -2,8 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/shared/hooks';
-import { RealtimeVoiceFactory } from '@/modules/intelligence/ia/realtime/RealtimeVoiceFactory';
-import type { IRealtimeVoiceService } from '@/modules/intelligence/ia/realtime/IRealtimeVoiceService';
+import { RealtimeVoiceFactory, type IRealtimeVoiceService } from '@/modules/intelligence';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
 

@@ -74,7 +74,7 @@ export const IoTSensorSchema = z.object({
   active: z.boolean(),
 });
 
-export const SensorReadingSchema = z.object({
+export const IoTSensorReadingSchema = z.object({
   sensorId: z.string(),
   tenantId: z.string(),
   temperature: z.number(),
@@ -84,6 +84,9 @@ export const SensorReadingSchema = z.object({
   source: SensorTransportSchema,
 });
 
+export const SensorReadingSchema = IoTSensorReadingSchema;
+
 export type SensorTransport = z.infer<typeof SensorTransportSchema>;
 export type IoTSensor = z.infer<typeof IoTSensorSchema>;
-export type SensorReading = z.infer<typeof SensorReadingSchema>;
+export type IoTSensorReading = z.infer<typeof IoTSensorReadingSchema>;
+export type { IoTSensorReading as SensorReading };

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DeliveryWebhookBridge, type DeliveryProvider, type ExternalDeliveryPayload } from '@/modules/commerce/connectors/delivery/DeliveryWebhookBridge';
+import { DeliveryWebhookBridge, type DeliveryProvider, type ExternalDeliveryPayload } from '@/modules/commerce';
 
 export const dynamic = 'force-dynamic';
 

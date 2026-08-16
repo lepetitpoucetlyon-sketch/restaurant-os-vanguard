@@ -5,6 +5,9 @@
 
 import { atom } from 'jotai';
 
+// --- 🧹 MEMORY PROTECTION (PHASE 4 - ZERO LEAK) ---
+export const orphanNodesRegistry = new Map<string, WeakRef<object>>();
+
 export interface NexusNode<T> {
     data: T[];
     loading: boolean;

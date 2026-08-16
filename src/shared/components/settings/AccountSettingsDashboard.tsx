@@ -3,31 +3,23 @@
 import { useState } from "react";
 import { useAuth } from "@/shared/hooks";
 import {
-    ALL_CATEGORIES,
-    CATEGORY_LABELS,
-    CATEGORY_FEATURES,
     ROLE_LABELS,
     type CategoryKey,
 } from "@/lib/AccessPolicyManager";
 import type { UserRole } from "@nexus/contracts";
 import {
     Shield,
-    Check,
     X,
     Users,
-    Lock,
-    Unlock,
-    Save,
     AlertTriangle,
-    ChevronDown,
-    ChevronUp,
     Plus,
-    Trash,
 } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { ROLE_TEMPLATES, type RoleTemplate } from "@/lib/RoleTemplates";
+import { type RoleTemplate } from "@/lib/RoleTemplates";
+
+import { AccountAccessDenied } from "./account/AccountAccessDenied";
+import { RoleCard } from "./account/RoleCard";
 
 export function AccountSettingsDashboard() {
     const { currentUser: _currentUser, users, rolePermissions, customRoles, updateRolePermissions, createCustomRole, deleteCustomRole, assignRoleToUser, hasAccess } = useAuth();
@@ -40,17 +32,7 @@ export function AccountSettingsDashboard() {
 
     // Only admins can access this page
     if (!hasAccess('account-settings')) {
-        return (
-            <div className="min-h-[80vh] flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-20 h-20 bg-status-danger dark:bg-status-danger rounded-3xl flex items-center justify-center mx-auto mb-6">
-                        <Lock className="w-10 h-10 text-status-danger" />
-                    </div>
-                    <h1 className="text-2xl font-black text-text-primary mb-2">Accès Refusé</h1>
-                    <p className="text-text-muted">Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
-                </div>
-            </div>
-        );
+        return <AccountAccessDenied />;
     }
 
     // Merge hardcoded roles and dynamic custom roles
@@ -58,13 +40,13 @@ export function AccountSettingsDashboard() {
     const allRoles = [...baseRoles, ...(customRoles || []).map((r: Record<string, unknown>) => r.id as string)];
 
     const getRoleLabel = (roleId: string) => {
-        if (ROLE_LABELS[roleId]) return ROLE_LABELS[roleId];
+        if (ROLE_LABELS[roleId as UserRole]) return ROLE_LABELS[roleId as UserRole];
         const custom = customRoles?.find((r: Record<string, unknown>) => r.id === roleId);
         return custom ? (custom.label as string) : roleId;
     };
 
     const toggleCategory = (role: UserRole | string, category: CategoryKey) => {
-        const currentCategories = pendingChanges[role] || rolePermissions[role] || [];
+        const currentCategories = pendingChanges[role] || rolePermissions[role as UserRole] || [];
         let newCategories: CategoryKey[];
 
         if (currentCategories.includes(category)) {
@@ -94,12 +76,12 @@ export function AccountSettingsDashboard() {
         }
     };
 
-    const hasChanges = (role: UserRole) => {
+    const hasChanges = (role: UserRole | string) => {
         return !!pendingChanges[role];
     };
 
-    const getCategories = (role: UserRole): CategoryKey[] => {
-        return pendingChanges[role] || rolePermissions[role] || [];
+    const getCategories = (role: UserRole | string): CategoryKey[] => {
+        return pendingChanges[role] || rolePermissions[role as UserRole] || [];
     };
 
     const applyTemplate = (role: UserRole, template: RoleTemplate) => {
@@ -208,219 +190,27 @@ export function AccountSettingsDashboard() {
 
             {/* Roles List */}
             <div className="space-y-4">
-                {allRoles.map(role => {
-                                    const isExpanded = expandedRole === role;
-                                    const userCount = getUserCountByRole(role);
-                                    const categories = getCategories(role);
-                                    const isAdmin = role === 'admin';
-
-                                    return (
-                                        <div
-                                            key={role}
-                                            className={cn(
-                                                "bg-surface-card dark:bg-bg-secondary rounded-3xl border transition-all duration-300 overflow-hidden",
-                                                isExpanded ? "border-action-primary shadow-xl shadow-[var(--action-primary)]/5" : "border-border-default dark:border-border hover:border-border-default dark:hover:border-text-muted"
-                                            )}
-                                        >
-                                            {/* Role Header */}
-                                            <button
-                                                onClick={() => setExpandedRole(isExpanded ? null : role)}
-                                                className="w-full flex items-center justify-between p-6 text-left"
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={cn(
-                                                        "w-12 h-12 rounded-2xl flex items-center justify-center text-text-primary dark:text-bg-primary font-black text-lg",
-                                                        isAdmin ? "bg-gradient-to-br from-status-warning to-status-warning" : "bg-text-primary"
-                                                    )}>
-                                                        {(ROLE_LABELS[role] || '').charAt(0)}
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="font-bold text-lg text-text-primary">{getRoleLabel(role)}</h3>
-                                                        <p className="text-sm text-text-muted">
-                                                            {userCount} utilisateur{userCount > 1 ? 's' : ''} • {categories.length} catégories accessibles
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3">
-                                                    {hasChanges(role) && (
-                                                        <span className="px-3 py-1 bg-status-warning dark:bg-status-warning text-status-warning dark:text-status-warning text-xs font-bold rounded-full">
-                                                            Non sauvegardé
-                                                        </span>
-                                                    )}
-                                                    {isExpanded ? (
-                                                        <ChevronUp className="w-5 h-5 text-text-muted" />
-                                                    ) : (
-                                                        <ChevronDown className="w-5 h-5 text-text-muted" />
-                                                    )}
-                                                </div>
-                                            </button>
-
-                                            {/* Expanded Content */}
-                                            {isExpanded && (
-                                                <div className="px-6 pb-6 pt-2 border-t border-border-default dark:border-border">
-                                                    {isAdmin ? (
-                                                        <div className="flex items-center gap-3 bg-surface-bg dark:bg-bg-tertiary rounded-2xl p-4">
-                                                            <Unlock className="w-5 h-5 text-action-primary" />
-                                                            <p className="text-sm text-text-muted">
-                                                                <strong>Accès total :</strong> Les administrateurs ont accès à toutes les catégories par défaut.
-                                                            </p>
-                                                        </div>
-                                                    ) : (
-                                                        <>
-                                                            {/* Users with this role */}
-                                                            <div className="mb-6">
-                                                                <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">
-                                                                    Utilisateurs avec ce rôle
-                                                                </h4>
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {users.filter(u => u.role === role).map((user: import('@nexus/contracts').User) => (
-                                                                        <div
-                                                                            key={user.id}
-                                                                            className="flex items-center gap-2 bg-surface-bg dark:bg-bg-tertiary px-3 py-2 rounded-xl"
-                                                                        >
-                                                                            <div className="w-6 h-6 rounded-full bg-text-primary dark:bg-action-primary text-text-primary dark:text-bg-primary text-[10px] font-bold flex items-center justify-center">
-                                                                                {(user.name || '').charAt(0)}
-                                                                            </div>
-                                                                            <span className="text-sm font-medium text-text-muted">{user.name}</span>
-                                                                            {/* Sélecteur de rôle inline — câble /api/admin/users/assign-role */}
-                                                                            <select
-                                                                                disabled={reassigningUserId === user.id}
-                                                                                defaultValue={user.role}
-                                                                                onChange={e => handleAssignRole(user.id, e.target.value)}
-                                                                                className="ml-1 text-[11px] bg-transparent border border-action-primary/20 rounded-lg px-2 py-1 text-text-muted cursor-pointer hover:border-action-primary/60 disabled:opacity-50 transition-colors"
-                                                                                title="Changer le rôle"
-                                                                            >
-                                                                                {allRoles.map(r => (
-                                                                                    <option key={r} value={r}>{getRoleLabel(r)}</option>
-                                                                                ))}
-                                                                            </select>
-                                                                        </div>
-                                                                    ))}
-                                                                    {userCount === 0 && (
-                                                                        <span className="text-sm text-text-muted italic">Aucun utilisateur</span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Role Templates */}
-                                                            <div className="mb-6">
-                                                                <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">
-                                                                    Appliquer un template
-                                                                </h4>
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {ROLE_TEMPLATES.map((tpl: RoleTemplate) => (
-                                                                        <button
-                                                                            key={tpl.id}
-                                                                            onClick={() => applyTemplate(role, tpl)}
-                                                                            className="px-4 py-2 rounded-xl border border-action-primary/30 bg-action-primary/5 text-action-primary text-sm font-semibold hover:bg-action-primary/10 transition-colors"
-                                                                            title={tpl.description}
-                                                                        >
-                                                                            {tpl.name}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Categories Grid */}
-                                                            <div className="mb-6">
-                                                                <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">
-                                                                    Catégories accessibles
-                                                                </h4>
-                                                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                                                                    {ALL_CATEGORIES.filter((c: CategoryKey) => c !== 'account-settings').map((category: CategoryKey) => {
-                                                                        const isEnabled = categories.includes(category);
-                                                                        const features = CATEGORY_FEATURES[category] || [];
-                                                                        
-                                                                        return (
-                                                                            <div key={category} className="flex flex-col gap-2">
-                                                                                <button
-                                                                                    onClick={() => toggleCategory(role, category)}
-                                                                                    className={cn(
-                                                                                        "flex items-center gap-3 p-4 rounded-2xl border transition-all duration-300 w-full",
-                                                                                        isEnabled
-                                                                                            ? "bg-success/10 border-success text-success"
-                                                                                            : "bg-surface-bg dark:bg-bg-tertiary border-border-default dark:border-border text-text-muted hover:border-border-default dark:hover:border-text-muted"
-                                                                                    )}
-                                                                                >
-                                                                                    <div className={cn(
-                                                                                        "w-6 h-6 rounded-lg flex items-center justify-center shrink-0",
-                                                                                        isEnabled ? "bg-success text-text-primary dark:text-bg-primary" : "bg-surface-bg dark:bg-bg-primary text-text-primary dark:text-text-muted"
-                                                                                    )}>
-                                                                                        {isEnabled ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-                                                                                    </div>
-                                                                                    <span className="text-sm font-semibold truncate text-left">{CATEGORY_LABELS[category]}</span>
-                                                                                </button>
-                                                                                
-                                                                                {/* Sous-permissions (Features) */}
-                                                                                {isEnabled && features.length > 0 && (
-                                                                                    <div className="pl-4 border-l-2 border-border-default dark:border-border ml-3 mt-1 flex flex-col gap-2">
-                                                                                        {features.map(feature => {
-                                                                                            const isFeatureEnabled = categories.includes(feature.id);
-                                                                                            return (
-                                                                                                <label key={feature.id} className="flex items-start gap-2 cursor-pointer group">
-                                                                                                    <div 
-                                                                                                        onClick={() => toggleCategory(role, feature.id)}
-                                                                                                        className={cn(
-                                                                                                            "w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-colors border",
-                                                                                                            isFeatureEnabled 
-                                                                                                                ? "bg-action-primary border-action-primary text-text-primary" 
-                                                                                                                : "bg-transparent border-border-default dark:border-text-muted group-hover:border-action-primary"
-                                                                                                        )}
-                                                                                                    >
-                                                                                                        {isFeatureEnabled && <Check className="w-3 h-3" />}
-                                                                                                    </div>
-                                                                                                    <div className="flex flex-col flex-1 min-w-0" onClick={() => toggleCategory(role, feature.id)}>
-                                                                                                        <span className={cn(
-                                                                                                            "text-xs font-semibold truncate",
-                                                                                                            isFeatureEnabled ? "text-text-primary" : "text-text-muted"
-                                                                                                        )}>
-                                                                                                            {feature.label}
-                                                                                                        </span>
-                                                                                                        {feature.description && (
-                                                                                                            <span className="text-[10px] text-text-muted/70 leading-tight mt-0.5 whitespace-normal">
-                                                                                                                {feature.description}
-                                                                                                            </span>
-                                                                                                        )}
-                                                                                                    </div>
-                                                                                                </label>
-                                                                                            );
-                                                                                        })}
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Save & Delete Buttons */}
-                                                            <div className="flex items-center gap-4">
-                                                                {hasChanges(role) && (
-                                                                    <button
-                                                                        onClick={() => saveRolePermissions(role as UserRole)}
-                                                                        className="flex items-center gap-2 bg-success text-text-primary px-6 py-3 rounded-xl font-bold hover:bg-success/90 transition-colors shadow-lg shadow-success/20"
-                                                                    >
-                                                                        <Save className="w-5 h-5" />
-                                                                        Sauvegarder les modifications
-                                                                    </button>
-                                                                )}
-                                                                {!baseRoles.includes(role) && (
-                                                                    <button
-                                                                        onClick={() => handleDeleteRole(role)}
-                                                                        className="flex items-center gap-2 bg-status-danger/10 text-status-danger px-6 py-3 rounded-xl font-bold hover:bg-status-danger/20 transition-colors"
-                                                                    >
-                                                                        <Trash className="w-5 h-5" />
-                                                                        Supprimer ce rôle
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                {allRoles.map(role => (
+                    <RoleCard
+                        key={role}
+                        role={role}
+                        isExpanded={expandedRole === role}
+                        userCount={getUserCountByRole(role)}
+                        categories={getCategories(role)}
+                        hasChanges={hasChanges(role)}
+                        allRoles={allRoles}
+                        users={users}
+                        baseRoles={baseRoles}
+                        reassigningUserId={reassigningUserId}
+                        getRoleLabel={getRoleLabel}
+                        onToggleExpand={() => setExpandedRole(expandedRole === role ? null : role)}
+                        onToggleCategory={toggleCategory}
+                        onApplyTemplate={applyTemplate}
+                        onSaveRolePermissions={saveRolePermissions}
+                        onDeleteRole={handleDeleteRole}
+                        onAssignRole={handleAssignRole}
+                    />
+                ))}
             </div>
 
             {/* Info Footer */}

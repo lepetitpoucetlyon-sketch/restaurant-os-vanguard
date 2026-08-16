@@ -40,8 +40,8 @@ export const MarketingEngine = {
             shortDescription: 15,
             longDescription: 20,
             activityCategory: 10,
-            headChef: 10,
-            owner: 5,
+            keyContact1: 10,
+            keyContact2: 5,
             logo: 5,
             category: 10
         };
@@ -52,8 +52,10 @@ export const MarketingEngine = {
         score += fieldScore(identityDefaults.shortDescription, 20, weights.shortDescription);
         score += fieldScore(identityDefaults.longDescription, 50, weights.longDescription);
         if (identityDefaults.activityCategory) score += weights.activityCategory;
-        if (identityDefaults.headChef) score += weights.headChef;
-        if (identityDefaults.owner) score += weights.owner;
+        const contact1 = identityDefaults.keyContact1 ?? identityDefaults.headChef;
+        const contact2 = identityDefaults.keyContact2 ?? identityDefaults.owner;
+        if (contact1) score += weights.keyContact1;
+        if (contact2) score += weights.keyContact2;
         if (identityDefaults.logo) score += weights.logo;
         if (identityDefaults.category) score += weights.category;
 

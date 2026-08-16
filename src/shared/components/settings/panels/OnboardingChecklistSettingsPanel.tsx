@@ -27,10 +27,10 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 import {
-  OnboardingAuditSummary,
-  OnboardingPillarStep,
+  type OnboardingAuditSummary,
+  type OnboardingPillarStep,
   RestaurantOnboardingMasterService,
-} from '@/modules/commerce/acquisition/onboarding/services/RestaurantOnboardingMasterService';
+} from '@/modules/commerce';
 
 const PILLAR_ICONS: Record<string, React.ReactNode> = {
   LEGAL_IDENTITY: <Building className="w-5 h-5 text-blue-400" />,

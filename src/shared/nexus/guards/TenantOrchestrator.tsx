@@ -17,7 +17,7 @@ import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useToast } from '@components/ui/Toast';
 
-import { FleetCommander } from '@/modules/intelligence/ia/fleet/FleetCommander';
+import { FleetCommander } from '@/modules/intelligence';
 
 /**
  * 🛰️ TenantOrchestrator - Restaurant OS

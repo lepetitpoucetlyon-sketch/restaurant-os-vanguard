@@ -1,1 +1,1 @@
-export * from '@/modules/finance/comptabilite/fec';
+export * from '@/modules/finance';

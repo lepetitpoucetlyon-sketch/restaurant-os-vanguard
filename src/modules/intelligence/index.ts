@@ -2,6 +2,8 @@
 export * from './analytique/analytics';
 export { buildWeeklyReportHTML } from './analytique/reports/weeklyReport';
 export { AnomalyDetector } from './analytique/anomaly/AnomalyDetector';
+export { TelemetryStream, type TelemetryEvent } from './analytique/TelemetryStream';
+export { TelemetryHook } from './analytique/TelemetryHook';
 
 // Domaine : ia (AI, agency, fleet, simulator, resilience, tools)
 export * from './ia/ai';
@@ -10,16 +12,22 @@ export { ShieldedContext, SovereignSecurityViolation } from './ia/ai/ShieldedCon
 export * from './ia/agency';
 export * from './ia/fleet';
 export { CircuitBreaker } from './ia/resilience/CircuitBreaker';
+export { ChaosMonkey } from './ia/resilience/ChaosMonkey';
+export { ResilienceSlayer } from './ia/resilience/ResilienceSlayer';
 export { AGENT_TOOLS, TOOL_SCHEMAS } from './domain/agent/tools';
+export { FleetOutboxDrainService } from './ia/fleet/FleetOutboxDrainService';
+export { GeminiProvider } from './ia/GeminiProvider';
+export { RealtimeVoiceFactory } from './ia/realtime/RealtimeVoiceFactory';
+export type { IRealtimeVoiceService } from './ia/realtime/IRealtimeVoiceService';
 
 export * from './ia/simulator';
-
 
 // Domaine : knowledge (RAG)
 export * from './knowledge/rag';
 
 export { LLMManager } from './ia/ai';
 export { AI_MODELS } from './ia/ai';
+export { createLLMProvider } from './ia/ai/LLMProviderFactory';
 export { sovereignCreateWorkspace } from './knowledge/rag';
 export type { ToolDefinition } from './domain/agent/tools/types';
 export type { ILLMProvider } from './ia/ai/types';
@@ -43,7 +51,7 @@ export { OraclePredictor } from './analytique/analytics/components';
 export { LightRAGClient } from './knowledge/rag/LightRAGClient';
 export { HermesKnowledgeManager } from './knowledge/rag/HermesKnowledgeManager';
 export { ConnectorHub } from './connectors/hub';
-
+export { IntegrationsPage } from './connectors/hub/components/IntegrationsPage';
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/supportTicket';

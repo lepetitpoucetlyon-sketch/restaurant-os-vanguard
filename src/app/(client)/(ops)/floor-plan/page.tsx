@@ -93,7 +93,7 @@ function FloorPlanPage() {
     const FloorIcon = currentFloor?.icon ? FLOOR_ICONS[String(currentFloor.icon)] || Layers : Layers;
     const totalSeatsOnFloor = (tablesOnCurrentFloor as Table[]).reduce((acc, t) => acc + Number(t.seats || 0), 0);
     const occupiedSeats = (tablesOnCurrentFloor as Table[])
-        .filter(t => t.status === 'occupied')
+        .filter(t => t.status === 'seated' || t.status === 'ordered' || t.status === 'eating' || t.status === 'paying' || (t.status as string) === 'occupied')
         .reduce((acc, t) => acc + Number(t.seats || 0), 0);
     const occupancyPercent = totalSeatsOnFloor > 0 ? Math.round((occupiedSeats / totalSeatsOnFloor) * 100) : 0;
 

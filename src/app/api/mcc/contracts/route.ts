@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SovereignSignatureEngine } from '@/modules/legal/services/SovereignSignatureEngine';
-import type { ContractDraftInput } from '@/modules/legal/services/LegalContractGenerator';
+import { SovereignSignatureEngine, type ContractDraftInput } from '@/modules/legal';
 
 export const dynamic = 'force-dynamic';
 

@@ -2,8 +2,8 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { authedFetch } from '@/lib/client/authedFetch';
-import type { ConnectorId, ConnectorCredentials } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ConnectorId, ConnectorCredentials } from '../migration/connectors/types';
+import type { ImportCategory } from '../migration/types';
 import type { OnboardingMode } from '@/shared/nexus/contracts/onboarding.types';
 import { ProgressStepper, type WizardStep } from './ProgressStepper';
 import { SourceSystemSelector } from './SourceSystemSelector';

@@ -1,7 +1,7 @@
 import { QuoteLine } from '../../../types';
 import { Quote } from '@nexus/contracts';
 
-export type QuoteProduct = { name?: string; priceInMicrounits?: number; priceInCents?: number; unitCostInCents?: number };
+export type QuoteProduct = { id?: string; name?: string; priceInMicrounits?: number; priceInCents?: number; unitCostInCents?: number };
 
 export function recalculateLineTotals(line: Partial<QuoteLine>): Partial<QuoteLine> {
     const q = line.quantity || 0;

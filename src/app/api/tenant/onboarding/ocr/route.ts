@@ -6,11 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
-import { parseImageWithOCR } from '@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser';
-import { parsePDFWithOCR } from '@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser';
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { createLLMProvider } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import {
+  parseImageWithOCR,
+  parsePDFWithOCR,
+  type ImportCategory,
+} from '@/modules/commerce';
+import { LLMManager, createLLMProvider } from '@/modules/intelligence';
 import { toError } from "@/lib/toError";
 
 // Bootstrap du provider si pas encore fait

@@ -5,5 +5,6 @@ export { FleetTelemetryService, fleetTelemetry } from './FleetTelemetryService';
 export * from './FleetTelemetryExecutor';
 export { QuantumOrchestrator } from './QuantumOrchestrator';
 export { MarketOracle } from './MarketOracle';
+export { fleetEngine } from './FleetAdapter';
 export * from './fleetMappers';
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
-import { RestaurantOnboardingMasterService } from '@/modules/commerce/acquisition/onboarding/services/RestaurantOnboardingMasterService';
+import { RestaurantOnboardingMasterService } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 

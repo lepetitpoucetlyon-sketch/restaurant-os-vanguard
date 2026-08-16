@@ -21,7 +21,7 @@ import {
   HARDWARE_CHECKLIST_SPECS,
   type HardwareCommissioningReport,
   type HardwareCheckItemResult,
-} from '@/modules/facility/services/HardwareProvisioningService';
+} from '../services/HardwareProvisioningService';
 
 interface HardwareOnboardingWizardProps {
   tenantId: string;

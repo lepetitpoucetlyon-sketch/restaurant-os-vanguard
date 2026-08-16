@@ -1,5 +1,22 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.3.0] - 2026-08-16 - RÉSORPTION DETTE TECHNIQUE MAJEURE, 0 GOD FILES, 0 BARREL VIOLATIONS & 100% TYPE-SAFETY (GRADE X) 🏛️
+
+### 🧱 DÉCOUPAGE INTÉGRAL DES 11 GOD FILES (> 400L)
+- **11/11 God Files résolus** : Découpage chirurgical en sous-composants modulaires (<200L) avec pattern Root Aggregator & lazy loading.
+- **Composants découpés** : `SupplierHubDashboard`, `OnboardingWizard`, `ReservationCreateModal`, `CreatePreparationModal`, `SplitBillDialog`, `MCCContractManager`, `TenantContractSignModal`, `AccountSettingsDashboard`, `MaintenanceSettingsPanel`, `NewQuoteDialog`, `ContractPDFDocument`.
+
+### 🛡️ ÉLIMINATION DES 286 BARREL VIOLATIONS (ISOLATION DDD STRICTE)
+- **Sanctuarisation des 9 piliers DDD** (`system`, `legal`, `human`, `facility`, `finance`, `compliance`, `logistics`, `ops`, `intelligence`, `commerce`).
+- **Éradication des imports profonds cross-modules** (`@/modules/X/sub/path` remplacés par `@/modules/X` publics canoniques).
+- **Imports internes en relatifs stricts** (`../`, `../../`) pour éliminer tout risque de cycle SSR.
+
+### 🌐 GÉNÉRALISATION UNIVERSELLE DE BUSINESS IDENTITY & CLEANUP INCENTS
+- **Généralisation `BusinessIdentity`** : Remplacement des champs hardcodés par des abstractions multi-verticales (`headChef/owner/category`).
+- **Standardisation Microunits ($1€ = 1\,000\,000\,\mu\text{units}$)** : Élimination des résidus `InCents` dans les composants UI au profit des types souverains.
+- **Protection Mémoire WeakRef & Anti-Cycle** : Isolation de `orphanNodesRegistry` dans `src/store/base.ts` pour éliminer toute TDZ au démarrage.
+- **Souveraineté TypeScript Grade X** : Validation stricte à **0 erreur TypeScript** (`npx tsc --noEmit` = 0).
+
 ## [2.2.0] - 2026-08-16 - SRM SOUVERAIN 360°, AUTO-RÉASSORT FRANCO, KDS MULTI-POSTES & CHASSE AU SPAGHETTI (GRADE X) 🏛️
 
 ### 🚚 SRM FOURNISSEURS 360° & AUTO-APPROVISIONNEMENT INTELLIGENT

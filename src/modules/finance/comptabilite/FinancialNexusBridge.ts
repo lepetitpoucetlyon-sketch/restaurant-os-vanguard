@@ -2,14 +2,12 @@ import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, JournalLine, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/workflow/engine/types';
+import type { CartItem, ConsumptionMode } from '@/modules/ops';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
-import { resolveVatRate } from '../fiscalite/tax/vatResolver';
-import { inferCategory } from '../fiscalite/tax/vatResolver';
+import { resolveVatRate, inferCategory } from '../fiscalite/tax/vatResolver';
 import type { BridgePayload, PaymentMode } from './FinancialNexusTypes';
-import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
 export type { BridgePayload, PaymentMode };
 
 export interface BridgeResult {

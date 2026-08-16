@@ -1,1 +1,1 @@
-export * from '@/modules/commerce/domain/schemas/loyalty';
+export * from '@/modules/commerce';

@@ -4,7 +4,7 @@ import { SovereignLedger } from '@/modules/finance';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { DocumentVault } from '@/modules/compliance/securite/DocumentVault';
+import { DocumentVault } from '@/modules/compliance';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**

@@ -14,16 +14,24 @@ export * from './ui';
 
 // ── Intelligence (support tickets) — utilisé par handlers + API routes MCC ───
 export {
-    SupportTicketSchema, type SupportTicket,
-    SupportDraftSchema,  type SupportDraft,
-    SupportTicketStatusSchema, type SupportTicketStatus,
-    SupportTicketSourceSchema, type SupportTicketSource,
-} from '@/modules/intelligence/domain/schemas/supportTicket';
+  SupportTicketSchema,
+  SupportDraftSchema,
+  SupportTicketStatusSchema,
+  SupportTicketSourceSchema,
+  type SupportTicket,
+  type SupportDraft,
+  type SupportTicketStatus,
+  type SupportTicketSource,
+} from '@/modules/intelligence';
 
 // ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
 export {
-    AuditEventSchema, AUDITED_COLLECTIONS,
-    type AuditAction, type AuditEvent, type AuditedCollection,
-    AuditActionSchema,
-} from '@/modules/compliance/domain/schemas/audit';
-export type { PiiFields, PiiRecord } from '@/modules/compliance/domain/schemas/pii';
+  AuditEventSchema,
+  AUDITED_COLLECTIONS,
+  AuditActionSchema,
+  type AuditAction,
+  type AuditEvent,
+  type AuditedCollection,
+  type PiiFields,
+  type PiiRecord,
+} from '@/modules/compliance';

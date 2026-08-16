@@ -16,6 +16,13 @@ export * from './components';
 export { EquipmentAssetService } from './services/EquipmentAssetService';
 export { EquipmentKnowledgeService, DEFAULT_EQUIPMENT_GUIDE_TEMPLATES } from './services/EquipmentKnowledgeService';
 export { EquipmentDiagnosticService, FAULT_DIAGNOSTIC_DATABASE } from './services/EquipmentDiagnosticService';
-export { HardwareProvisioningService } from './services/HardwareProvisioningService';
+export {
+  HardwareProvisioningService,
+  HARDWARE_CHECKLIST_SPECS,
+  type HardwareCommissioningReport,
+  type HardwareCheckItemResult,
+} from './services/HardwareProvisioningService';
+export { MaintenanceAlertConfigService } from './services/MaintenanceAlertConfigService';
+export { AmbianceService, type RestaurantAmbiance } from './spaces/AmbianceService';
 
 export type { FloorPlanEditorRef } from './spaces/floor-plan/FloorPlanEditor';

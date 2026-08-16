@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
 import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 
@@ -15,7 +15,7 @@ import {
     ReceptionSchema, 
     CleaningSchema, 
     WasteSchema 
-} from '@/modules/compliance/domain/schemas/haccp';
+} from '../domain/schemas/haccp';
 
 /**
  * 🏺 QualityEngine - Restaurant OS Guard

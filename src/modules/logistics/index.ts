@@ -17,12 +17,16 @@ export { useCategories } from './stock/inventory/hooks/useCategories';
 export { InvoiceExtractionService } from './services/InvoiceExtractionService';
 export { InventorySyncService } from './stock/inventory/inventory.sync';
 export type { SupplierInvoice } from './approvisionnement/procurement/ThreeWayMatchEngine';
-// Note: DeliveryNote/PurchaseOrder sont déjà exportés via `export * from './approvisionnement/procurement'` (ci-dessus)
 export { StockEngine } from './services/StockEngine';
 export { useStockPrediction } from './hooks/useStockPrediction';
 export { stockItemsAtom } from './stock/inventory/store/inventoryAtoms';
 export { ProductAvailabilityService } from './stock/services/ProductAvailabilityService';
 
-// ── Domaine Types ─────────────────────────────────────────────────────────────
-// Delivery/DeliveryItem = types Livraison fournisseur (réception)
-export type { Delivery, DeliveryItem } from './domain/types/delivery';
+// ── Domaine Types & Schemas ───────────────────────────────────────────────────
+export * from './domain/schemas/inventory';
+export * from './domain/schemas/supplier-invoice.schemas';
+export * from './domain/types/delivery';
+
+// Disambiguation TS2308
+export type { StockItem } from './domain/schemas/inventory';
+export type { DeliveryNote, PurchaseOrder } from './approvisionnement/procurement';
