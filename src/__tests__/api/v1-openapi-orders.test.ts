@@ -6,6 +6,11 @@ import { NextRequest } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
+vi.mock('@/lib/server/adminAuthGuard', () => ({
+  requireTenantUser: vi.fn().mockResolvedValue({ tenantId: 'bistro-api-test', uid: 'op-test-01', role: 'manager' }),
+  isDenied: vi.fn().mockReturnValue(false),
+}));
+
 describe('Socle API REST v1 OpenAPI & Orders / Menu (H2.2)', () => {
   const tenantId = 'bistro-api-test';
 
