@@ -54,9 +54,13 @@ vi.mock('@/lib/audit', () => ({
   empireAudit: { log: vi.fn() },
 }));
 
-vi.mock('@/modules/commerce/catalog/menu-engineering/application/services/MenuEngineeringService', () => ({
-  menuEngineeringService: { computeReport: mocks.computeReport },
-}));
+vi.mock('@/modules/commerce', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return {
+    ...actual,
+    menuEngineeringService: { computeReport: mocks.computeReport },
+  };
+});
 
 vi.mock('@/verticals/restaurant/adapters', () => ({
   RestaurantFinanceAdapter:     { emitOrderFiscalSeal:     mocks.emitOrderFiscalSeal },

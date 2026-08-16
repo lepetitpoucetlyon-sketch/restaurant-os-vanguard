@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusPayrollEngine } from './NexusPayrollEngine';
 import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
-import { FiscalEngine } from '@/modules/finance/fiscalite/FiscalAdapter';
+import { FiscalEngine } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 describe('🎖️ NexusPayrollEngine — Pointage Salarié & Scellement RH', () => {
