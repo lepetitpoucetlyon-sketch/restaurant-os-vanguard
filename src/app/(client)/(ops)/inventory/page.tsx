@@ -15,6 +15,7 @@ import {
     SlidersHorizontal,
     RotateCcw,
     Sparkles,
+    Wrench,
 } from "lucide-react";
 
 import {
@@ -63,7 +64,10 @@ function InventoryPage() {
                         Les déductions s&apos;effectuent automatiquement à la clôture des commandes.
                     </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
+                    <a href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover transition-colors">
+                        <Wrench className="w-4 h-4 text-indigo-400" /> GMAO &amp; Matériel
+                    </a>
                     <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90">
                         <PlusCircle className="w-4 h-4" /> Réception
                     </button>

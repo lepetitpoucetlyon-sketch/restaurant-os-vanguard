@@ -37,6 +37,7 @@ import {
     Smartphone,
     Activity,
     Plug,
+    Wrench,
 } from "lucide-react";
 
 export type NavMode = 'tenant' | 'mcc' | 'both';
@@ -160,6 +161,7 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory", requiredCapability: "mod_inventory" },
             { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp", requiredCapability: "mod_haccp" },
             { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: ShieldCheck, category: "haccp", requiredCapability: "mod_quality_control" },
+            { label: "Parc Matériel & GMAO", key: "facility", href: "/facility", icon: Wrench, category: "kitchen" },
         ]
     },
     {
@@ -236,6 +238,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'both',
         items: [
             { label: "Paramètres", key: "settings", href: "/settings", icon: Settings, category: "settings" },
+            { label: "Checklist Mise en Service", key: "onboarding_checklist", href: "/settings?tab=onboarding-checklist", icon: ClipboardCheck, category: "settings" },
             { label: "Intégrations", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings" },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: UserCog, category: "account-settings" },
         ]

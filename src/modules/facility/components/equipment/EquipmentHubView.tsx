@@ -112,7 +112,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={fetchAssets}
             className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 transition-colors"
@@ -120,6 +120,22 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
+
+          <a
+            href="/settings?tab=maintenance"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-colors"
+          >
+            <Wrench className="w-4 h-4 text-amber-400" />
+            <span>Alertes & Zones</span>
+          </a>
+
+          <a
+            href="/settings?tab=onboarding-checklist"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-colors"
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Audit J-0</span>
+          </a>
 
           <button
             onClick={() => setShowAddModal(true)}

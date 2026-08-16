@@ -292,18 +292,24 @@ export function OnboardingWizard() {
                 {importedCategories.length} catégorie{importedCategories.length > 1 ? 's' : ''} importée{importedCategories.length > 1 ? 's' : ''}.
                 Vous pouvez compléter le reste depuis les paramètres à tout moment.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 flex-wrap">
+                <button
+                  onClick={() => router.push('/settings?tab=onboarding-checklist')}
+                  className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20"
+                >
+                  📋 Audit J-0 (10 Piliers)
+                </button>
                 <button
                   onClick={() => router.push('/pos')}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-600/20"
                 >
                   Ouvrir la caisse
                 </button>
                 <button
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/operations')}
                   className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Aller au tableau de bord
+                  Tableau de bord Opérations
                 </button>
               </div>
             </div>
