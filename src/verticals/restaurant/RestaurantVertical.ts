@@ -50,6 +50,14 @@ export class RestaurantVertical implements IVerticalPlugin {
       componentLoader: () =>
         import('@/modules/finance/comptabilite/fec').then(m => ({ default: m.FECExportPage as unknown as React.ComponentType })),
     },
+    {
+      path: '/suppliers',
+      label: 'Fournisseurs 360°',
+      icon: 'Building2',
+      roles: ['super_admin', 'directeur', 'manager', 'chef_cuisine'],
+      componentLoader: () =>
+        import('@/modules/logistics/approvisionnement/ui/SupplierHubDashboard').then(m => ({ default: m.SupplierHubDashboard as unknown as React.ComponentType })),
+    },
   ];
 
   public async initialize(context: ICoreContext): Promise<void> {

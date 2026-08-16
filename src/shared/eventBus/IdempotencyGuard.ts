@@ -1,5 +1,4 @@
 import { db } from '@/lib/offline/offline-store';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export interface ProcessedEventLog {
@@ -9,6 +8,11 @@ export interface ProcessedEventLog {
     eventName: string;
     tenantId?: string;
     processedAt: number;
+}
+
+async function getNexus() {
+    const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+    return Nexus;
 }
 
 /**
@@ -49,6 +53,7 @@ export class IdempotencyGuard {
         // 3. Check Nexus / Firestore côté serveur si tenantId fourni
         if (tenantId) {
             try {
+                const Nexus = await getNexus();
                 const doc = await Nexus.adapter.get<ProcessedEventLog>(`tenants/${tenantId}/events_processed_log/${key}`);
                 if (doc) {
                     this.memoryCache.add(key);
@@ -94,6 +99,7 @@ export class IdempotencyGuard {
 
         if (tenantId) {
             try {
+                const Nexus = await getNexus();
                 await Nexus.adapter.set(`tenants/${tenantId}/events_processed_log/${key}`, record);
             } catch (err) {
                 logger.warn(`[IdempotencyGuard] Failed to write processed event to Nexus`, err);

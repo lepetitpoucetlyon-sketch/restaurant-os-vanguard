@@ -10,7 +10,8 @@ import { PERMISSION_ROLE_LEVELS, type PermissionRole } from "@nexus/contracts/pe
 import { useHumanResources } from "./useHumanResources";
 import { useStaffAudit } from "./useStaffAudit";
 import { staffMembersAtom, shiftLogsAtom } from "../store/staffAtoms";
-import { useAuth, useTenant } from "@/shared/hooks";
+import { useAuth } from "@/shared/providers/NexusCoreContext";
+import { useTenant } from "@/shared/hooks/useTenant";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
 import { computePayroll, type StaffTab, type StaffDocument } from "@/app/(client)/(ops)/staff/staffUtils";

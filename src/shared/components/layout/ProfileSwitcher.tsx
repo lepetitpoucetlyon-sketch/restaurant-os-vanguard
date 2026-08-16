@@ -45,9 +45,9 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
                     <div className="grid grid-cols-3 gap-6">
                         {users.map((user) => {
                             const isActive = currentUser?.id === user.id;
-                            const initials = user.name
+                            const initials = (user.name || "")
                                 .split(" ")
-                                .map((n) => n[0])
+                                .map((n: string) => n[0])
                                 .join("")
                                 .slice(0, 2);
 

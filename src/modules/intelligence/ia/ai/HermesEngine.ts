@@ -7,9 +7,7 @@ import {
 } from '../../domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalHACCPMapper } from '@/modules/finance';
+import { FiscalHACCPMapper } from '@/modules/finance/services/FiscalHACCPMapper';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator

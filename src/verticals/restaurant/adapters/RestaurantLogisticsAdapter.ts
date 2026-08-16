@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeLogisticsAdapter } from '@/verticals/_shared/adapters';
 
+/** Logistique restaurant = socle universel (stock alert) + deltas déduction, DLC & pertes. */
 export const RestaurantLogisticsAdapter = {
+  ...makeLogisticsAdapter(),
   emitStockDeducted(payload: { tenantId: string; orderId: string; lines: { stockItemId: string; quantity: number }[] }) {
     NexusEventBus.emit('inventory.deducted', payload);
   },

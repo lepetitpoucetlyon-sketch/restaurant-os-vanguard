@@ -113,10 +113,10 @@ export const useKitchen = () => {
             printerService.printKitchen({
               orderId: String(order.id ?? 'new'),
               tableLabel: order.tableNumber ?? 'Table ?',
-              items: (order.items ?? []).map(item => ({
+              items: (order.items ?? []).map((item: any) => ({
                 name: item.name,
                 qty: item.quantity,
-                modifiers: (item.modifiers ?? []).map((m) => typeof m === 'string' ? m : m.name),
+                modifiers: (item.modifiers ?? []).map((m: any) => typeof m === 'string' ? m : m.name),
                 course: (item as unknown as { course?: string }).course,
               })),
               serverName: order.serverName,
@@ -150,7 +150,7 @@ export const useKitchen = () => {
     getPendingModifications: useCallback(() => {
       const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string; orderItemId: string }> = [];
       orders.forEach((order: Order) => {
-        (order.items || []).forEach((item) => {
+        (order.items || []).forEach((item: any) => {
           if (item.modification && !item.modification.respondedAt) {
             mods.push({ ...item.modification, orderId: String(order.id), orderItemId: String(item.id) });
           }

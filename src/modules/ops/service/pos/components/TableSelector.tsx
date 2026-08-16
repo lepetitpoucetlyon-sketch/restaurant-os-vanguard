@@ -5,7 +5,7 @@ import { useTables } from '../../../providers/hooks/floorHooks';
 import { cn } from "@/lib/ui.foundations";
 import { Users, LayoutGrid, Layers, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import { Table } from "@/modules/ops";
+import type { Table } from "@nexus/contracts";
 
 interface TableSelectorProps {
     onSelectTable: (tableId: string) => void;

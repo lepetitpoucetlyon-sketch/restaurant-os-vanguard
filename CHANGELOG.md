@@ -1,5 +1,37 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
+## [2.2.0] - 2026-08-16 - SRM SOUVERAIN 360°, AUTO-RÉASSORT FRANCO, KDS MULTI-POSTES & CHASSE AU SPAGHETTI (GRADE X) 🏛️
+
+### 🚚 SRM FOURNISSEURS 360° & AUTO-APPROVISIONNEMENT INTELLIGENT
+- **Mercuriales & Comparateur Multi-Grossistes** : Comparateur de prix multi-fournisseurs (Metro, Transgourmet, Pomona), calcul au conditionnement supérieur et détection de la meilleure offre.
+- **Dispatch Multi-Canal (WhatsApp & Contraintes)** : Vérification des cut-offs horaires et plannings de livraison (`SupplierDeliverySchedule`), puis génération automatisée du message WhatsApp structuré.
+- **Gestion des Litiges & Avoirs Financiers** : Détection des manquants/casses à la réception (`DeliveryDisputeService`), génération du formal claim d'avoir HT/TTC et réconciliation automatique.
+- **Contrats RFA & Paliers Cumulatifs** : Calcul en temps réel des rétrocessions annuelles acquises (`RfaContractService`) et projection du volume manquant pour le palier suivant.
+- **Détection de Dérive Tarifaire (Price Drift)** : Surveillance continue des hausses fournisseurs (>5%) avec répercussion instantanée sur le Food Cost (%) des fiches techniques liées.
+- **Wizard d'Auto-Approvisionnement & Optimisation Franco** : Moteur souverain (`AutoProcurementEngine`), hook réactif (`useAutoProcurement`) et composant modal glassmorphic (`AutoProcurementWizard`) avec suggestions de comblement non-périssables.
+
+### 🍳 KDS MULTI-POSTES & EXPÉRIENCE CUISINE MATÉRIELLE
+- **Routage Culinaire par Poste** : Dispatch automatique des lignes de commande vers les stations `hot` (chaud), `cold` (froid), `pastry` (pâtisserie) et `bar`.
+- **Tiroir de Contexte Table 360°** : Groupement par siège pour la vision globale du Chef et accords mets/vins.
+- **Hardware & Web Audio API** : Carillons différenciés par poste et mapping des pédales USB / touches clavier (`Space` = Bump, `KeyF` = Fire Next Course).
+- **Séquençage des Services (Coursing)** : Envoi et suivi indépendant de l'état des suites (Entrée -> Plat -> Dessert).
+
+### ⚖️ SCELLEMENT CRYPTOGRAPHIQUE NF525 & SÛRETÉ FISCALE
+- **Chaînage Inaltérable SHA-256** : Scellement de chaque opération (`FiscalEngine.sealEntry`), traçabilité des corrections/annulations partielles de lignes et scellement perpétuel du Ticket Z.
+- **Anti-Fraude Immédiate** : Vérification de chaîne (`verifyChain`) avec détection instantanée de toute altération de payload.
+
+### ❄️ TRAÇABILITÉ SANITAIRE HACCP & SURVEILLANCE IOT FROID
+- **Ingestion Temps Réel des Sondes BLE/IoT** : Enregistrement append-only immuable des relevés d'enceintes frigorifiques et cellules de refroidissement rapide.
+- **Non-Conformités Sanitaires Automatiques** : Détection de rupture de chaîne du froid (> +4°C) et génération immédiate de fiches d'actions correctives.
+
+### 🥖 VERTICALE BOULANGERIE & PÂTISSERIE ARTISANALE (VERTICAL-FORGE)
+- **Batch Baking & Pétrins** : Gestion des événements `bakery.batch_started` et `bakery.batch_completed`, déduction automatique des ingrédients, calcul du rendement et affichage des allergènes INCO.
+
+### 🧹 AUDIT ARCHITECTURAL & CHASSE AU SPAGHETTI
+- **Scanner Spaghetti Hunter (`scripts/spaghetti-hunter.ts`)** : Audit complet sur 2 672 fichiers avec **0 cycle, 0 violation critique** et **0 erreur TypeScript** (`tsc --noEmit`).
+- **Découplage des Barrels & Hooks Feuilles** : Élimination de tous les cycles transversaux (`@/shared/hooks` -> `@/shared/providers/NexusCoreContext`).
+- **22/22 Tests d'Intégration au Vert** : Couverture complète et exécution en 98ms.
+
 ## [2.1.0] - 2026-08-16 - GENERALISATION SOUVERAINE DES 8 PILIERS & COPILOTE UNIVERSEL (GRADE X) 🏛️
 
 ### 🏛️ GÉNÉRALISATION MULTI-VERTICALES DES 8 PILIERS DDD

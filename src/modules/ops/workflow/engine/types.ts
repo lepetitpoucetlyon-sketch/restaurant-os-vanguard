@@ -81,3 +81,5 @@ export interface OrdersContextType {
         modelId: string;
     };
 }
+
+export type ConsumptionMode = 'dine_in' | 'takeaway';

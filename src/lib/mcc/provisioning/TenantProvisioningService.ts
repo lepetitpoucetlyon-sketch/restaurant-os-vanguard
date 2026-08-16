@@ -13,27 +13,9 @@ import { toError } from "@/lib/toError";
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { getAuth } from 'firebase-admin/auth';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
+import type { ProvisioningRequest, ProvisioningResult } from './types';
 
-export interface ProvisioningRequest {
-    ownerEmail: string;
-    ownerName: string;
-    companyName: string;
-    siret: string;
-    planId: 'STANDARD' | 'PREMIUM';
-    variant?: PlatformVariant;
-    branding: {
-        primaryColor: string;
-        logoUrl?: string;
-    };
-}
-
-export interface ProvisioningResult {
-    tenantId: string;
-    ownerId: string;
-    stripeCustomerId: string;
-    ragWorkspaceId: string;
-    status: 'SUCCESS' | 'FAILED';
-}
+export type { ProvisioningRequest, ProvisioningResult };
 
 /**
  * 🏭 Tenant Provisioning Service (MCC Pôle 1)

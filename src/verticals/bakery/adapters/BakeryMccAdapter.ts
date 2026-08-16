@@ -1,10 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const BakeryMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; ovensOnline: number; activeBatches: number }) {
-    NexusEventBus.emit('mcc.health_ping', { ...payload });
-  },
-  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
-    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
-  },
-};
+/** MCC boulangerie = socle universel + métriques santé (fours en ligne, fournées actives). */
+export const BakeryMccAdapter = makeMccAdapter<{ ovensOnline: number; activeBatches: number }>();

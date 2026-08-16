@@ -7,8 +7,7 @@ import { FinancialNexusBridge } from "@/modules/finance/comptabilite/FinancialNe
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Table, OrderItem } from "@nexus/contracts";
-import { CartItem, CourseType } from "../../../workflow/engine/types";
-import type { ConsumptionMode } from "@/modules/ops";
+import { CartItem, CourseType, ConsumptionMode } from "../../../workflow/engine/types";
 import {
     COURSE_LABELS,
     getUnsentCourseItems,

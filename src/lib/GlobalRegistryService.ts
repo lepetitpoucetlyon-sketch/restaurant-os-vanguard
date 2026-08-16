@@ -39,7 +39,9 @@ export const GlobalRegistryService = {
                 lastAccessed: Date.now(),
                 usageCount: 0
             });
-            logger.debug(`[Registry] Atom '${id}' registered.`);
+            if (typeof logger?.debug === 'function') {
+                logger.debug(`[Registry] Atom '${id}' registered.`);
+            }
         }
     },
 

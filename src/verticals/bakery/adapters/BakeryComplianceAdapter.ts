@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeComplianceAdapter } from '@/verticals/_shared/adapters';
 
+/** Conformité boulangerie = socle universel (HACCP/RGPD) + deltas allergènes & four. */
 export const BakeryComplianceAdapter = {
+  ...makeComplianceAdapter(),
   emitAllergenDeclared(payload: { tenantId: string; productId: string; allergens: string[]; updatedAt: string }) {
     NexusEventBus.emitDurable('bakery.allergen_declared', payload);
   },

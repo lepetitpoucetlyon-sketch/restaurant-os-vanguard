@@ -22,7 +22,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
     };
   });
 
-vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
+vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
 vi.mock('@/modules/intelligence', () => ({
   HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
 }));
@@ -541,7 +541,7 @@ describe('DeliveryRushModeHandler', () => {
     mockEmitDurable.mockClear(); registerDeliveryRushModeHandler(); });
 
   it('suspend les plateformes de livraison en mode rush', async () => {
-    const { AggregatorMappingService } = await import('@/modules/commerce');
+    const { AggregatorMappingService } = await import('@/modules/commerce/relation/delivery/services/AggregatorMappingService');
     const mockAdapter = { suspendStore: vi.fn(async () => true) };
     vi.spyOn(AggregatorMappingService, 'getActiveAdapters').mockResolvedValue([{ adapter: mockAdapter } as never]);
 

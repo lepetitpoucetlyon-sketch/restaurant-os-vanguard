@@ -1,7 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeFacilityAdapter } from '@/verticals/_shared/adapters';
 
-export const RetailFacilityAdapter = {
-  emitMaintenanceRequired(payload: { tenantId: string; assetId: string; assetType: string; description: string }) {
-    NexusEventBus.emitDurable('facility.maintenance_required', payload);
-  },
-};
+/** Facility retail = 100 % socle universel (emitMaintenanceRequired). */
+export const RetailFacilityAdapter = makeFacilityAdapter();

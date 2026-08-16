@@ -1,7 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const HealthMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; hdsCompliant: boolean; bedsAvailable: number }) {
-    NexusEventBus.emit('mcc.health_ping', payload);
-  },
-};
+/** MCC clinique = socle universel + métriques santé (conformité HDS, lits dispos). */
+export const HealthMccAdapter = makeMccAdapter<{ hdsCompliant: boolean; bedsAvailable: number }>();

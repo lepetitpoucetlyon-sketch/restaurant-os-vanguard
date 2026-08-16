@@ -12,7 +12,7 @@ import { Table, OrderItem } from "@nexus/contracts";
 import { toMicrounits } from "@/shared/schemas/primitives";
 import { CartItem, CourseType, SovereignProduct } from "../../../workflow/engine/types";
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
-import type { ConsumptionMode } from "@/modules/ops";
+import type { ConsumptionMode } from "../../../workflow/engine/types";
 import { POSService } from "../domain";
 
 // Pure helpers (zéro effets de bord)

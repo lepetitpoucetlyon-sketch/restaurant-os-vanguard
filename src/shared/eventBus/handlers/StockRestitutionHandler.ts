@@ -94,7 +94,7 @@ export function registerStockRestitutionHandler(): () => void {
       try {
         // L7 Pattern D: cartId synthétique + champs brandés → cast supprimé.
         // quantity négative = avoir comptable (CartLine.quantity.min(1) est une contrainte Zod runtime, pas TypeScript).
-        const cartItemsForRefund: CartItem[] = order.items.map(i => ({
+        const cartItemsForRefund: CartItem[] = (order.items || []).map((i: any) => ({
           cartId: `refund-${orderId}-${i.productId}`,
           productId: i.productId,
           name: i.name,
@@ -104,7 +104,7 @@ export function registerStockRestitutionHandler(): () => void {
           taxRate: i.taxRate,
           discountInMicrounits: i.discountInMicrounits ?? toMicrounits(0),
           modifiers: (i.modifiers ?? []).filter(
-            (m): m is Extract<typeof m, { id: string }> => typeof m === 'object' && m !== null
+            (m: any): m is Extract<typeof m, { id: string }> => typeof m === 'object' && m !== null
           ),
         }));
 
@@ -113,7 +113,7 @@ export function registerStockRestitutionHandler(): () => void {
           operatorId,
           tableId: order.tableId ?? null,
           tenantId,
-          paymentMode: ((order as OrderWithPayment).paymentMode ?? 'card') as import('@/modules/finance/comptabilite/FinancialNexusBridge').PaymentMode, // Mode de paiement original
+          paymentMode: ((order as OrderWithPayment).paymentMode ?? 'card') as import('@/modules/finance/comptabilite/FinancialNexusTypes').PaymentMode, // Mode de paiement original
         });
         
         // Avoir document for traceability

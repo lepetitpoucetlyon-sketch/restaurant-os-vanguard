@@ -9,13 +9,13 @@ import {
   TableSchema, 
   ReservationSchema, 
   FloorSchema, 
-  ZoneSchema 
-} from '@/modules/ops';
+  ZoneSchema
+} from '@/modules/ops/domain/schemas/ops';
 import { 
   OrderSchema, 
   OrderLineSchema,
   OrderItemModificationSchema
-} from '@/modules/ops';
+} from '@/modules/ops/domain/schemas/orders';
 
 export type Table = z.infer<typeof TableSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;

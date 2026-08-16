@@ -1,10 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const RestaurantMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; posOnline: boolean; kdsOnline: boolean; printerOnline: boolean }) {
-    NexusEventBus.emit('mcc.health_ping', payload);
-  },
-  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
-    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
-  },
-};
+/** MCC restaurant = socle universel + métriques santé (POS/KDS/imprimante en ligne). */
+export const RestaurantMccAdapter = makeMccAdapter<{ posOnline: boolean; kdsOnline: boolean; printerOnline: boolean }>();

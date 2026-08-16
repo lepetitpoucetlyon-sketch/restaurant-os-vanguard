@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeCommerceAdapter } from '@/verticals/_shared/adapters';
 
+/** Commerce hôtel = socle universel (RFM) + deltas réservation chambre & yield. */
 export const HotelCommerceAdapter = {
+  ...makeCommerceAdapter(),
   emitRoomBooked(payload: { tenantId: string; reservationId: string; guestId: string; roomType: string; channel: string; arrivalDate: string; departureDate: string; rateInMicrounits: number }) {
     NexusEventBus.emitDurable('hotel.room_booked', payload);
   },

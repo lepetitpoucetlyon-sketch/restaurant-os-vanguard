@@ -1,5 +1,5 @@
 import type { TaxRate } from '@/modules/finance/domain/schemas/finance';
-import type { ConsumptionMode } from '@/modules/ops';
+import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
 
 type ProductCategory = 
     | 'food' 
@@ -79,7 +79,7 @@ export function inferCategory(categoryId: string, productName?: string): Product
     if (/piece|filtre|huile|pneu|plaquette|batterie|accessoire|fourniture|consommable/.test(lower)) return 'spare_parts';
 
     // 6. Alimentation & Restauration (10% sur place / 5.5% emporté)
-    if (/entrée|plat|dessert|salade|soupe|pizza|burger|pâtes|viande|poisson|fromage|pain|snack|sandwich|wrap|taco|tapas|menu|boulangerie|croissant|gateau|entrecôte|entrecote|steak|grill|boeuf|poulet|veau|agneau|nourriture|repas/.test(lower)) return 'food';
+    if (/entrée|plat|dessert|salade|soupe|pizza|burger|pâtes|viande|poisson|fromage|pain|snack|sandwich|wrap|taco|tapas|menu|boulangerie|croissant|gateau|entrecôte|entrecote|steak|grill|boeuf|poulet|veau|agneau|nourriture|repas|chef/.test(lower)) return 'food';
 
     return 'merchandise';
 }

@@ -8,21 +8,9 @@ import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate } from '../fiscalite/tax/vatResolver';
 import { inferCategory } from '../fiscalite/tax/vatResolver';
-import type { ConsumptionMode } from '@/modules/ops';
-
-export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
-
-export interface BridgePayload {
-  cartItems: CartItem[];
-  operatorId: string;
-  tableId: string | null;
-  tenantId: string;
-  consumptionMode?: ConsumptionMode;
-  paymentMode?: PaymentMode;
-  covers?: number;
-  isTrainingMode?: boolean;
-  partialPayments?: { amount: number; guest: number; method?: string }[];
-}
+import type { BridgePayload, PaymentMode } from './FinancialNexusTypes';
+import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
+export type { BridgePayload, PaymentMode };
 
 export interface BridgeResult {
   journalEntry: JournalEntry;

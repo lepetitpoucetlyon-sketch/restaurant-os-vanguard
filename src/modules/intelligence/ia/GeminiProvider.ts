@@ -1,4 +1,4 @@
-import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from '@/modules/intelligence';
+import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from './ai/types';
 import { logger } from '@/lib/logger';
 
 const API_KEY = process.env.GEMINI_API_KEY || '';

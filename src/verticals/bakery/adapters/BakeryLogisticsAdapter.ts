@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeLogisticsAdapter } from '@/verticals/_shared/adapters';
 
+/** Logistique boulangerie = socle universel (stock alert) + deltas ingrédients & invendus. */
 export const BakeryLogisticsAdapter = {
+  ...makeLogisticsAdapter(),
   emitIngredientConsumed(payload: { tenantId: string; batchId: string; lines: { ingredientId: string; quantity: number }[] }) {
     NexusEventBus.emit('bakery.ingredient_consumed', payload);
   },

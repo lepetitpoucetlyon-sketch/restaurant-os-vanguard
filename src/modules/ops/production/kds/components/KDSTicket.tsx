@@ -101,7 +101,7 @@ export function KDSTicket({
 
     // ── kds-4: Drag-to-reorder ────────────────────────────────────────────────
     const buildFlatItems = useCallback((): FlatItem[] =>
-        ticket.items.flatMap((item, ti) => {
+        (ticket.items || []).flatMap((item: any, ti: number) => {
             if (((item.modifiers?.length ?? 0) > 0 || item.notes) && item.quantity > 1) {
                 return Array.from({ length: item.quantity }, (_, idx) => ({
                     ...item,
@@ -139,18 +139,18 @@ export function KDSTicket({
     // ── kds-7: Compute full order grouped by seat ─────────────────────────
     const fullOrderGroupedBySeat = useMemo(() => {
         if (!fullOrder) return {};
-        const grouped: Record<string, import('@/modules/ops').CartItem[]> = {};
-        for (const item of fullOrder.items) {
+        const grouped: Record<string, import('@/modules/ops/workflow/engine/types').CartItem[]> = {};
+        for (const item of (fullOrder.items || [])) {
             const seat = (item as { seatNumber?: string }).seatNumber || 'Partagé';
             if (!grouped[seat]) grouped[seat] = [];
-            grouped[seat].push(item as unknown as import('@/modules/ops').CartItem);
+            grouped[seat].push(item as unknown as import('@/modules/ops/workflow/engine/types').CartItem);
         }
         return grouped;
     }, [fullOrder]);
 
     // ── kds-2 + not-2: Mark ticket ready + push notification to server ────────
     const handleMarkReady = useCallback(async () => {
-        const itemWithStandard = ticket.items.find((item) => {
+        const itemWithStandard = (ticket.items || []).find((item: any) => {
             const r = recipes.find(rec => rec.name === item.name);
             return r?.standardImage;
         });
@@ -166,7 +166,7 @@ export function KDSTicket({
             const serverId = (ticket as unknown as { serverId?: string }).serverId;
             const pushPayload = {
                 title: 'Plat prêt !',
-                body: ticket.items.slice(0, 3).map(i => i.name).join(', '),
+                body: (ticket.items || []).slice(0, 3).map((i: any) => i.name).join(', '),
                 url: '/pos',
             };
             if (process.env.NODE_ENV !== 'production') {

@@ -1,7 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const CustomMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded' }) {
-    NexusEventBus.emit('mcc.health_ping', { ...payload });
-  },
-};
+/** MCC custom = socle universel (health ping + audit fiscal), sans métriques spécifiques. */
+export const CustomMccAdapter = makeMccAdapter();

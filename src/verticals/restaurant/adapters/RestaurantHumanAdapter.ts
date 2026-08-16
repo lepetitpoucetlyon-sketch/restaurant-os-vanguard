@@ -1,12 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeHumanAdapter } from '@/verticals/_shared/adapters';
 
+/** RH restaurant = socle universel (shift/heures sup) + delta répartition pourboires. */
 export const RestaurantHumanAdapter = {
-  emitShiftStarted(payload: { tenantId: string; shiftId: string; employeeId: string; role: string; startedAt: number }) {
-    NexusEventBus.emit('hr.shift_started', { v: 1 as const, ...payload });
-  },
-  emitOvertimeAlert(payload: { tenantId: string; employeeId: string; extraMinutes: number }) {
-    NexusEventBus.emitDurable('hr.overtime_alert', payload);
-  },
+  ...makeHumanAdapter(),
   emitTipDistributed(payload: { tenantId: string; orderId: string; tipInMicrounits: number; staffIds: string[] }) {
     NexusEventBus.emit('hr.tip_distributed', payload);
   },

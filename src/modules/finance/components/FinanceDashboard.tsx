@@ -18,11 +18,8 @@ import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ExpenseClaimDialog } from './accounting';
 import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useOrders } from '@/modules/ops';
-import type { Order } from "@/modules/ops";
-import type { JournalEntry } from "@nexus/contracts";
+import { useOrders } from '@/modules/ops/providers/hooks/kitchenHooks';
+import type { Order, JournalEntry } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 
 // dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)

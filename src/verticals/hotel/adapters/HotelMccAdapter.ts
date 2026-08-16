@@ -1,10 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const HotelMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; pmsOnline: boolean; occupancy: number }) {
-    NexusEventBus.emit('mcc.health_ping', payload);
-  },
-  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
-    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
-  },
-};
+/** MCC hôtel = socle universel + métriques santé (PMS en ligne, taux d'occupation). */
+export const HotelMccAdapter = makeMccAdapter<{ pmsOnline: boolean; occupancy: number }>();

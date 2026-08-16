@@ -39,7 +39,7 @@ export function makeFinanceAdapter() {
  *                (ex. `{ chairsActive: number; appointmentsToday: number }`).
  *                `mcc.health_ping` accepte `[key: string]: unknown` → extensible.
  */
-export function makeMccAdapter<M extends Record<string, unknown> = Record<string, never>>() {
+export function makeMccAdapter<M extends Record<string, unknown> = Record<never, never>>() {
     return {
         emitHealthPing(p: { tenantId: string; status: 'healthy' | 'degraded' } & M) {
             NexusEventBus.emit('mcc.health_ping', p);

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useAuth } from '@/shared/hooks';
+import { useAuth } from '@/shared/providers/NexusCoreContext';
 import { useAtomValue } from 'jotai';
 import { activeShiftsAtom } from '../../store/staffAtoms';
 import { hrLoadingAtom } from '../../store/hrAtoms';

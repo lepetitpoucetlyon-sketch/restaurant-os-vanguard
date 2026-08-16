@@ -22,10 +22,10 @@ function filterOrdersByStationAndSearch(orders: Order[], station: KitchenStation
 
     if (station !== 'all') {
         result = result
-            .filter(order => order.items.some(item => resolveStation(item.name) === station))
+            .filter(order => (order.items || []).some((item: any) => resolveStation(item.name) === station))
             .map(order => ({
                 ...order,
-                items: order.items.filter(item => resolveStation(item.name) === station),
+                items: (order.items || []).filter((item: any) => resolveStation(item.name) === station),
             }));
     }
 

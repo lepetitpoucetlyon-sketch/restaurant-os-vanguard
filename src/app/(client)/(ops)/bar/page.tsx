@@ -39,10 +39,10 @@ function BarPage() {
 
     const orders = useMemo(() => {
       return kitchenOrders
-        .filter(o => o.status !== 'delivered' && o.status !== 'paid' && o.items.some(item => {
+        .filter(o => o.status !== 'delivered' && o.status !== 'paid' && (o.items || []).some((item: any) => {
           const extra = item as unknown as { station?: string; category?: string };
           if (extra.station === 'bar' || extra.category === 'boissons') return true;
-          const lower = item.name.toLowerCase();
+          const lower = (item.name || '').toLowerCase();
           return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
         }))
         .map(o => ({
@@ -52,18 +52,18 @@ function BarPage() {
           status: (['new','preparing','ready','delivered'].includes(o.status) ? o.status : 'new') as 'new' | 'preparing' | 'ready' | 'delivered',
           priority: 'normal',
           elapsed: o.createdAt ? Math.floor((Date.now() - new Date(o.createdAt as string | number).getTime()) / 1000) : 0,
-          items: o.items
-            .filter(item => {
+          items: (o.items || [])
+            .filter((item: any) => {
               const extra = item as unknown as { station?: string; category?: string };
               if (extra.station === 'bar' || extra.category === 'boissons') return true;
-              const lower = item.name.toLowerCase();
+              const lower = (item.name || '').toLowerCase();
               return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
             })
-            .map(item => ({
+            .map((item: any) => ({
               name: item.name,
               qty: item.quantity,
               station: 'bar' as const,
-              modifiers: (item.modifiers ?? []).map(m => typeof m === 'string' ? m : m.name),
+              modifiers: (item.modifiers ?? []).map((m: any) => typeof m === 'string' ? m : m.name),
               notes: item.notes,
             })),
         }))

@@ -66,4 +66,5 @@ export * from './domain/schemas/inventory';
 export * from './domain/schemas/cash';
 // Résolution TS2308 : types dupliqués entre domain/schemas et sous-barrels
 export type { TableShape, TableStatus, Reservation } from './domain/schemas/ops';
+export type { ConsumptionMode } from './domain/schemas/orders';
 export type { CourseType, SplitMode, PaymentMethod, ConvivePayment } from './domain/schemas/pos';

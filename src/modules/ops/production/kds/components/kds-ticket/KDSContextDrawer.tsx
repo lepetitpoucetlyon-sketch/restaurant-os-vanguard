@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem } from "@nexus/contracts";
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '../../../../workflow/engine/types';
 import { resolveStation } from '../..';
 
 interface KDSContextDrawerProps {

@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeCommerceAdapter } from '@/verticals/_shared/adapters';
 
+/** Commerce restaurant = socle universel (RFM) + deltas réservation, no-show & fidélité. */
 export const RestaurantCommerceAdapter = {
+  ...makeCommerceAdapter(),
   emitReservationConfirmed(payload: { tenantId: string; reservationId: string; customerName: string; covers: number; date: string; time: string }) {
     NexusEventBus.emitDurable('reservation.confirmed', { v: 1 as const, ...payload });
   },

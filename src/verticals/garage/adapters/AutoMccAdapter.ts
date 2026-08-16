@@ -1,10 +1,4 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeMccAdapter } from '@/verticals/_shared/adapters';
 
-export const AutoMccAdapter = {
-  emitHealthPing(payload: { tenantId: string; status: 'healthy' | 'degraded'; liftsOperational: number; activeWorkOrders: number }) {
-    NexusEventBus.emit('mcc.health_ping', payload);
-  },
-  emitFiscalAuditRequired(payload: { tenantId: string; reason: string; urgency: 'low' | 'high' | 'critical' }) {
-    NexusEventBus.emitDurable('mcc.fiscal_audit_required', payload);
-  },
-};
+/** MCC garage = socle universel + métriques santé (ponts opérationnels, OR actifs). */
+export const AutoMccAdapter = makeMccAdapter<{ liftsOperational: number; activeWorkOrders: number }>();

@@ -193,3 +193,73 @@ Le Copilote IA (`UniversalAssistantFrame`) ne se contente plus de répondre à d
   - [ ] Scanner réseau local pour imprimantes ESC/POS et TPE.
   - [ ] Module de sauvegarde chiffrée sur support USB amovible.
 
+---
+
+## 🥊 6. Les 12 Pépites Métier & Verrous Concurrentiels (Gap Analysis)
+
+Ce volet compile les 12 fonctionnalités pointues identifiées lors de l'audit comparatif face aux leaders spécialisés du marché (Lightspeed, Zenchef, Skello, Octopus HACCP, Inpulse, Deliverect, Hey Pongo, Pennylane).
+
+---
+
+### 💳 OPS & POS (Face à Lightspeed, Zelty, Tactill)
+- [ ] **1. Flux CONECS & Titres-Restaurant Dématérialisés** :
+  - Détection automatique des cartes éligibles CONECS (Edenred, Swile, Pluxee, Bimpli, Up).
+  - Plafond légal journalier bloquant (25,00 € max / jour) et ventilation automatique du solde restant sur CB/Espèces.
+  - Verrou d'éligibilité : Exclusion stricte des articles alcoolisés de l'assiette de calcul CONECS.
+- [ ] **2. Clôture de Caisse à l'Aveugle (Blind Cash Close)** :
+  - Le serveur / caissier compte les espèces physiques sans connaître le montant théorique calculé par le système.
+  - Génération d'un rapport d'écart instantané scellé pour le gérant (Anti-vol de pourboire / coulage de monnaie).
+
+---
+
+### 📅 COMMERCE & RELATION (Face à Zenchef, TheFork, Hey Pongo)
+- [ ] **3. Pacing de Réservation & Algorithme de Tetris de Salle** :
+  - Quota dynamique par tranche de 15 minutes (ex: max 12 couverts / quart d'heure) pour lisser l'afflux en cuisine.
+  - Optimisation automatique de l'assignation des tables pour maximiser le taux de rotation (2nd service à 21h30).
+- [ ] **4. Couplage Téléphonie CTI (ZenCall / Ringover / Aircall)** :
+  - Détection de l'appel entrant sur la tablette/POS avec affichage instantané de la fiche client (Nom, statut VIP, allergies, historique des no-shows).
+- [ ] **5. Moteur de Protection d'E-Réputation (Smart Review Filter)** :
+  - Envoi d'un SMS de feedback post-repas :
+    - Note 4-5 étoiles ➔ Redirection automatique vers la fiche Google My Business.
+    - Note 1-3 étoiles ➔ Alerte privée immédiate au directeur avec coupon d'excuse pour désamorcer l'avis négatif public.
+
+---
+
+### ⏱️ HUMAN & RH (Face à Skello, Combo / Snapshift)
+- [ ] **6. Verrous Légaux Convention Collective HCR** :
+  - Contrôle en temps réel lors de l'édition du planning : Alerte bloquante si repos journalier < 11h, si temps de travail hebdomadaire > 48h, ou sur le travail de nuit post-22h.
+
+---
+
+### 🧪 COMPLIANCE & QUALITÉ (Face à Octopus HACCP, Traqfood)
+- [ ] **8. Chrono & Courbe de Refroidissement Rapide** :
+  - Minuteur réglementaire avec alertes sonores : Passage obligatoire de +63°C à +10°C en moins de 120 minutes.
+  - Export PDF certifié scellé conforme aux exigences des inspecteurs DDPP / DGAL.
+- [ ] **9. Suivi des Huiles de Friture (Testeur TPM)** :
+  - Saisie du taux de composés polaires (norme < 25%). Blocage et alerte vidange automatique avec traçabilité du fût d'huile usagée et filière de collecte.
+
+---
+
+### 📦 LOGISTICS & FOOD COST (Face à Inpulse, Koust, MarketMan)
+- [ ] **10. Matrice de Menu Engineering Dynamique (Boston Consulting Group)** :
+  - Classification automatique des plats du menu en 4 quadrants selon Volume des Ventes vs Marge Brute :
+    - ⭐ **Stars** (Haute marge, Fort volume) ➔ Mettre en valeur en haut de carte.
+    - 🐎 **Plowhorses** (Basse marge, Fort volume) ➔ Réduire le grammage ou augmenter le prix de 0.50€.
+    - 🧩 **Puzzles** (Haute marge, Faible volume) ➔ Repositionner visuellement / Former le service.
+    - 🐕 **Dogs** (Basse marge, Faible volume) ➔ Supprimer de la carte.
+- [ ] **11. Détecteur de Dérive Tarifaire Mercuriale Fournisseur** :
+  - Comparaison automatique lors du scan OCR de chaque facture contre le dernier prix d'achat enregistré.
+  - Alerte rouge instantanée si un ingrédient clé augmente de plus de 5% (ex: Saumon +12%, Beurre +8%) avec recalcul de la marge du plat impacté.
+
+---
+
+### 🧾 FINANCE & COMPTABILITÉ (Face à Pennylane, Dext, Tiime)
+- [ ] **12. Ventilation Ligne par Ligne Multi-TVA sur Factures d'Achat** :
+  - Découpage comptable automatique d'une facture complexe (ex: Metro) en comptes de charges distincts :
+    - 601000 (Alimentation - TVA 5.5% / 10%)
+    - 607000 (Boissons alcoolisées - TVA 20%)
+    - 606300 (Produits d'entretien - TVA 20%)
+    - 606800 (Emballages vente à emporter - TVA 20%)
+  - Rapprochement automatique de la télécollecte TPE du soir avec le virement bancaire brut et déduction des commissions acquéreur CB.
+
+

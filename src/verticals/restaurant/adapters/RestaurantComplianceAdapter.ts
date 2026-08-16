@@ -1,6 +1,9 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { makeComplianceAdapter } from '@/verticals/_shared/adapters';
 
+/** Conformité restaurant = socle universel + deltas HACCP, sonde température & rappel. */
 export const RestaurantComplianceAdapter = {
+  ...makeComplianceAdapter(),
   emitHaccpCheckSaved(payload: { tenantId: string; checkId: string; operatorId: string; timestamp: number }) {
     NexusEventBus.emitDurable('haccp.check.saved', { v: 1 as const, ...payload });
   },

@@ -40,7 +40,7 @@ function padDigit(n: number): string {
 }
 
 function formatTime(date: Date): string {
-    return `${padDigit(date.getHours())}:${padDigit(date.getMinutes())}:${padDigit(date.getSeconds())}`;
+    return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 function formatDate(date: Date): string {

@@ -260,7 +260,7 @@ export function KDSDashboard() {
 
                                             {/* Item list summary */}
                                             <div className="flex-1 px-4 py-3 flex flex-col gap-1">
-                                                {ticket.items.slice(0, 4).map((item, i) => (
+                                                {(ticket.items || []).slice(0, 4).map((item: any, i: number) => (
                                                     <div key={i} className="flex items-center gap-2 text-[11px] text-secondary">
                                                         <span className="w-5 h-5 rounded-full bg-surface-card border border-subtle flex items-center justify-center text-[9px] font-black text-muted shrink-0">
                                                             {item.quantity}
@@ -369,7 +369,7 @@ export function KDSDashboard() {
                                     const serverId = (fullTicket as unknown as { serverId?: string }).serverId;
                                     const pushPayload = {
                                         title: 'Plat prêt !',
-                                        body: fullTicket.items.slice(0, 3).map(i => i.name).join(', '),
+                                        body: (fullTicket.items || []).slice(0, 3).map((i: any) => i.name).join(', '),
                                         url: '/pos',
                                     };
                                     if (serverId) {

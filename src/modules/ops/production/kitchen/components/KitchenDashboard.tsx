@@ -19,19 +19,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { useHACCP } from "@modules/compliance";
+import { useHACCP } from "@/modules/compliance/qualite/haccp/hooks/useHACCP";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
   () => import("@/modules/ops/service/pos/components/ProductFormModal").then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
+const ExpertHub = dynamic(
+  () => import('@/modules/commerce/acquisition/marketing/components/agency/ExpertHub').then(m => m.ExpertHub),
+  { ssr: false, loading: () => null }
+);
 import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
 import { RecipeDetailDialog } from "./RecipeDetailDialog";
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { ExpertHub } from '@/modules/commerce';
 
 import { MiseEnPlaceTab, RecipesTab, WasteTab, MarginsTab, SuppliersTab, AllergensTab, CookingTimesTab, IngredientsTab } from "./tabs";
 import { DailyPrepList } from '../../recipes/DailyPrepList';

@@ -21,7 +21,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmit, mockEmitDurable, mock
     };
   });
 
-vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } }));
+vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
