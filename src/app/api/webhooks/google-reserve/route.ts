@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-imports -- internal use-cases, not in public barrel */
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 import { ProcessGoogleBookingUseCase } from '@/modules/commerce/relation/reservations/application/use-cases/ProcessGoogleBooking';
 import { InMemoryReservationRepository } from '@/modules/commerce/relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
 import { RwGCreateBookingRequest } from '@/modules/commerce/relation/reservations/domain/types/GoogleReserveTypes';
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: result.message }, { status: 422 });
     }
   } catch (error) {
-    console.error('[GoogleReserveWebhook] Fatal Error:', error);
+    logger.error('[GoogleReserveWebhook] Fatal Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

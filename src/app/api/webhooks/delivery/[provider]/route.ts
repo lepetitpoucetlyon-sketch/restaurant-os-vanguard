@@ -8,7 +8,10 @@ export async function POST(
   context: { params: Promise<{ provider: string }> }
 ) {
   const { provider } = await context.params;
-  const tenantId = req.headers.get('x-tenant-id') || 'tenant_default';
+  const tenantId = req.headers.get('x-tenant-id');
+  if (!tenantId) {
+    return NextResponse.json({ error: 'x-tenant-id header manquant' }, { status: 400 });
+  }
 
   if (!['ubereats', 'deliveroo', 'justeat'].includes(provider)) {
     return NextResponse.json({ error: `Provider non supporté: ${provider}` }, { status: 400 });

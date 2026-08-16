@@ -1,4 +1,6 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { KDSCourseSequencingEngine } from '@/modules/ops/production/kds/services/KDSCourseSequencingEngine';
@@ -8,13 +10,18 @@ import { toMicrounits } from '@/shared/schemas/primitives';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+  const caller = await requireTenantUser(req);
+  if (isDenied(caller)) return caller;
+
   try {
     const body = await req.json();
-    const { tenantId, tableId, channel = 'MOBILE_SERVER', operatorId = 'api-client', items } = body;
+    const { tableId, channel = 'MOBILE_SERVER', items } = body;
+    const tenantId = caller.tenantId;
+    const operatorId = caller.uid;
 
-    if (!tenantId || !items || !Array.isArray(items) || items.length === 0) {
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
-        { error: 'Champs obligatoires manquants: tenantId, items (tableau non vide)' },
+        { error: 'Champ obligatoire manquant: items (tableau non vide)' },
         { status: 400 }
       );
     }

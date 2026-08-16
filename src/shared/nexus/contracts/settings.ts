@@ -3,7 +3,7 @@
 // ===========================================
 
 import {
-    RestaurantIdentity, RestaurantContact, SocialMedia,
+    BusinessIdentity, BusinessContact, RestaurantIdentity, SocialMedia,
     DaySchedule, ServiceSettings, ReservationSlotSettings, ClosedPeriod,
     MenuCategory, ProductSettings, Supplement, MenuFormule,
     RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient,
@@ -45,8 +45,8 @@ export interface CustomerConfig {
 
 export interface GlobalSettings {
     // 1. Identity & Contact
-    identity: RestaurantIdentity;
-    contact: RestaurantContact;
+    identity: BusinessIdentity;
+    contact: BusinessContact;
     social: SocialMedia;
 
     // 2. Hours & Availability

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import DOMPurify from "dompurify";
 import { Mail, Send, Users, Eye, Loader2, CheckCircle2, ChevronDown } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
@@ -224,7 +225,7 @@ export function EmailCampaign() {
           {preview && (
             <div
               className="mt-3 p-4 rounded-xl border border-border bg-white text-black text-sm max-h-64 overflow-y-auto"
-              dangerouslySetInnerHTML={{ __html: body.replace(/{{prenom}}/g, "Jean") }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(body.replace(/{{prenom}}/g, "Jean")) }}
             />
           )}
         </div>

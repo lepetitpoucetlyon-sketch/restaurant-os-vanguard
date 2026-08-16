@@ -8,9 +8,11 @@ import { useTenant } from "@/shared/hooks";
 function FacilityPage() {
   const { activeTenantId } = useTenant();
 
+  if (!activeTenantId) return null;
+
   return (
     <div className="min-h-screen bg-surface-base text-text-primary">
-      <EquipmentHubView tenantId={activeTenantId || "default"} />
+      <EquipmentHubView tenantId={activeTenantId} />
     </div>
   );
 }

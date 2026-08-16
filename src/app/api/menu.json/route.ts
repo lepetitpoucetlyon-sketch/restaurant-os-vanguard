@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 interface CategoryRecord {
   id: string;
@@ -73,7 +74,7 @@ export async function GET(req: NextRequest) {
       }
     );
   } catch (err) {
-    console.error('[api/menu.json]', err);
+    logger.error('[api/menu.json]', err);
     return NextResponse.json(
       { categories: [], products: [], error: 'Failed to load menu' },
       { status: 500 }

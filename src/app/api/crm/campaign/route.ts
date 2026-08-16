@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
 import { requireTenantAdmin, isDenied } from "@/lib/server/adminAuthGuard";
+import { logger } from "@/lib/logger";
 
 // NOTE: Set RESEND_API_KEY and RESEND_FROM_EMAIL in .env.local to enable real sends.
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -97,7 +98,7 @@ export async function POST(request: NextRequest) {
 
       const { error } = await resend.batch.send(emails);
       if (error) {
-        console.error("[CRM Campaign] Resend batch error:", error);
+        logger.error("[CRM Campaign] Resend batch error:", error);
         // Continue — partial send is better than full abort
       } else {
         sent += chunk.length;
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, sent });
   } catch (err) {
-    console.error("[CRM Campaign] Unexpected error:", err);
+    logger.error("[CRM Campaign] Unexpected error:", err);
     return NextResponse.json({ success: false, message: "Erreur serveur interne" }, { status: 500 });
   }
 }

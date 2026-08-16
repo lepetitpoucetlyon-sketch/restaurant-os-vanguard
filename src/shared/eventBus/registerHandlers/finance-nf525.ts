@@ -12,11 +12,13 @@ import { registerMonthlyFECExportHandler } from '../handlers/MonthlyFECExportHan
 import { registerPaymentRejectAuditHandler } from '../handlers/PaymentRejectAuditHandler';
 import { registerTaxMismatchAlertHandler } from '../handlers/TaxMismatchAlertHandler';
 import { registerTicketZArchiveHandler } from '../handlers/TicketZArchiveHandler';
+import { registerZReportRequestedHandler } from '../handlers/ZReportRequestedHandler';
 
 export function registerFinanceNf525Handlers(): Array<() => void> {
   return [
     registerOrderSealedNF525Handler(),
     registerTicketZHandler(),
+    registerZReportRequestedHandler(),
     registerPaymentLedgerHandler(),
     registerSplitPaymentHandler(),
     registerCompEntryHandler(),

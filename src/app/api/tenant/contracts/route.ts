@@ -1,15 +1,15 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { SovereignSignatureEngine } from '@/modules/legal/services/SovereignSignatureEngine';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const tenantId = searchParams.get('tenantId');
+  const caller = await requireTenantUser(req);
+  if (isDenied(caller)) return caller;
 
-  if (!tenantId) {
-    return NextResponse.json({ error: 'tenantId requis' }, { status: 400 });
-  }
+  const tenantId = caller.tenantId;
 
   try {
     const contracts = await SovereignSignatureEngine.getTenantContracts(tenantId);

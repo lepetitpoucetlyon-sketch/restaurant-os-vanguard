@@ -354,7 +354,11 @@ export async function POST(req: NextRequest) {
       case 'payment_intent.payment_failed':
       case 'invoice.payment_failed': {
         const obj = event.data.object as unknown as Record<string, unknown>;
-        const tenantId = (obj.metadata as Record<string, unknown>)?.tenantId as string || 'tenant_default';
+        const tenantId = (obj.metadata as Record<string, unknown>)?.tenantId as string | undefined;
+        if (!tenantId) {
+          logger.warn('[Stripe Webhook] payment_failed sans tenantId dans metadata — ignoré');
+          break;
+        }
         const amount = (obj.amount_due ?? obj.amount ?? 0) as number * 10000;
 
         const payload = {
@@ -382,7 +386,11 @@ export async function POST(req: NextRequest) {
       case 'payment_intent.succeeded': {
         const obj = event.data.object as unknown as Record<string, unknown>;
         const meta = (obj.metadata as Record<string, unknown>) || {};
-        const tenantId = (meta.tenantId as string) || 'tenant_default';
+        const tenantId = meta.tenantId as string | undefined;
+        if (!tenantId) {
+          logger.warn('[Stripe Webhook] payment_intent.succeeded sans tenantId dans metadata — ignoré');
+          break;
+        }
         const amount = (obj.amount_received ?? obj.amount ?? 0) as number * 10000;
 
         if (meta.type === 'deposit' || meta.type === 'reservation_deposit' || meta.reservationId) {

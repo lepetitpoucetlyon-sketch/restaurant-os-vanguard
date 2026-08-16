@@ -169,7 +169,7 @@ export interface PulseContext {
     region: string; // e.g. "FR-69" (Rhône), never "Lyon 2ème"
 
     /** Generic cuisine type */
-    cuisineType: string; // e.g. "french_traditional", "asian_fusion"
+    activityCategory: string; // e.g. "french_traditional", "asian_fusion"
 
     /** Establishment size band */
     sizeBand: 'micro' | 'small' | 'medium' | 'large';
@@ -244,8 +244,8 @@ export interface MarketInsight {
     confidence: number;
     /** Affected regions */
     regions: string[];
-    /** Affected cuisine types */
-    cuisineTypes: string[];
+    /** Affected activity categories */
+    activityCategories: string[];
     /** Monetization tier this insight is available to */
     availableTier: 'TIER_2' | 'TIER_3' | 'INTERNAL_ONLY';
     /** Timestamp of generation */
