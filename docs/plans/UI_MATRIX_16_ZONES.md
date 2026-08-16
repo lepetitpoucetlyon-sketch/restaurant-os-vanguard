@@ -144,7 +144,6 @@
 - ⬜ `GiftCardRedeemModal` — RBAC: 20+
 - ⬜ `GiftCardIssuanceModal` — RBAC: 30+
 - ⬜ `LoyaltyPointsRedeemDialog` — RBAC: 20+
-- ⬜ `AgeVerificationModal` (blocage catégorie alcool) — RBAC: 60+ · émet `compliance.age_verification_requested`
 - ⬜ `AllergenAlertBanner` (bandeau rouge table allergique) — RBAC: ∀ · consomme `reservation.matched`
 - ⬜ `TenderInsertionOverlay` (attente TPE Stripe Terminal) — RBAC: 20+
 - ⬜ `ReceiptDeliveryDialog` (imprimer/email/SMS/QR) — RBAC: 20+ · émet `commerce.receipt_sent`

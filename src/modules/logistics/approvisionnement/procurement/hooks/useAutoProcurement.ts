@@ -14,7 +14,7 @@ export interface UseAutoProcurementProps {
   mercurialeItems: MercurialeItem[];
   suppliers: SupplierEntity[];
   currentUserId: string;
-  restaurantName?: string;
+  businessName?: string;
 }
 
 export function useAutoProcurement({
@@ -23,7 +23,7 @@ export function useAutoProcurement({
   mercurialeItems,
   suppliers,
   currentUserId,
-  restaurantName = 'Restaurant OS',
+  businessName = 'Restaurant OS',
 }: UseAutoProcurementProps) {
   const [safetyFactor, setSafetyFactor] = useState<number>(1.2);
   const [targetDeliveryDate, setTargetDeliveryDate] = useState<string>(() => {
@@ -66,12 +66,12 @@ export function useAutoProcurement({
       if (order.dispatchChannel === 'WHATSAPP') {
         const supplier = suppliers.find((s) => s.id === basket.supplierId);
         const contact = supplier?.contacts.find((c: SupplierContact) => c.phone)?.phone || '+33600000000';
-        MultiChannelOrderDispatcherService.generateWhatsAppPayload(order, restaurantName, contact);
+        MultiChannelOrderDispatcherService.generateWhatsAppPayload(order, businessName, contact);
       }
 
       return order;
     },
-    [tenantId, currentUserId, targetDeliveryDate, suppliers, restaurantName]
+    [tenantId, currentUserId, targetDeliveryDate, suppliers, businessName]
   );
 
   // Engagement de tous les paniers en un clic

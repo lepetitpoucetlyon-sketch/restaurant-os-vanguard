@@ -14,9 +14,9 @@ import {
 export interface DepreciationYear {
   yearIndex: number;
   year: number;
-  annualDepreciationInCents: number;
-  accumulatedDepreciationInCents: number;
-  bookValueInCents: number;
+  annualDepreciationInMicrounits: number;
+  accumulatedDepreciationInMicrounits: number;
+  bookValueInMicrounits: number;
 }
 
 /**
@@ -71,7 +71,7 @@ export class EquipmentAssetService {
         brand: asset.brand,
         model: asset.model,
         hasInvoice: !!asset.purchase?.invoiceUrl,
-        purchasePrice: asset.purchase?.purchasePriceInCents,
+        purchasePrice: asset.purchase?.purchasePriceInMicrounits,
       },
       severity: 'low',
       timestamp: new Date(),
@@ -286,25 +286,25 @@ export class EquipmentAssetService {
    */
   static calculateDepreciationSchedule(purchase: EquipmentPurchaseInfo): DepreciationYear[] {
     const purchaseYear = new Date(purchase.purchaseDate).getFullYear();
-    const totalCents = purchase.purchasePriceInCents;
+    const totalMicrounits = purchase.purchasePriceInMicrounits;
     const years = Math.max(1, purchase.depreciationPeriodYears);
-    const annualDepreciation = Math.floor(totalCents / years);
+    const annualDepreciation = Math.floor(totalMicrounits / years);
     const schedule: DepreciationYear[] = [];
 
     let accumulated = 0;
 
     for (let i = 1; i <= years; i++) {
       const isLast = i === years;
-      const annual = isLast ? totalCents - accumulated : annualDepreciation;
+      const annual = isLast ? totalMicrounits - accumulated : annualDepreciation;
       accumulated += annual;
-      const bookValue = totalCents - accumulated;
+      const bookValue = totalMicrounits - accumulated;
 
       schedule.push({
         yearIndex: i,
         year: purchaseYear + i - 1,
-        annualDepreciationInCents: annual,
-        accumulatedDepreciationInCents: accumulated,
-        bookValueInCents: Math.max(0, bookValue),
+        annualDepreciationInMicrounits: annual,
+        accumulatedDepreciationInMicrounits: accumulated,
+        bookValueInMicrounits: Math.max(0, bookValue),
       });
     }
 

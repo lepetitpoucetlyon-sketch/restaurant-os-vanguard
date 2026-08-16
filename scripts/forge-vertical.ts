@@ -72,37 +72,46 @@ async function fileExists(p: string): Promise<boolean> {
     try { await fs.access(p); return true; } catch { return false; }
 }
 
+async function writeStudyFile(bp: VerticalBlueprint, args: Args): Promise<void> {
+    const rel = `src/verticals/${bp.slug}/${bp.slug}.sector-study.json`;
+    const p = path.resolve(process.cwd(), rel);
+    if (args.dryRun) { console.log(`   📝 would write     ${rel}`); return; }
+    if (await fileExists(p) && !args.force) { console.log(`   ⏭️  skip (existe)   ${rel}`); return; }
+    await fs.mkdir(path.dirname(p), { recursive: true });
+    await fs.writeFile(p, JSON.stringify(bp.substance, null, 2), 'utf8');
+    console.log(`   ✅ étude sauvée    ${rel}`);
+}
+
+async function writeGeneratedFiles(out: ForgeOutput, args: Args): Promise<{ written: number; skipped: number }> {
+    let written = 0, skipped = 0;
+    for (const f of out.files) {
+        const target = path.resolve(process.cwd(), f.path);
+        const exists = await fileExists(target);
+        if (f.skipIfExists && exists && !args.force) { console.log(`  ⏭️  skip (existe)   ${f.path}`); skipped++; continue; }
+        if (args.dryRun) { console.log(`  📝 would write     ${f.path}`); continue; }
+        await fs.mkdir(path.dirname(target), { recursive: true });
+        await fs.writeFile(target, f.content, 'utf8');
+        console.log(`  ✅ ${exists ? 'overwrite' : 'create'}     ${f.path}`);
+        written++;
+    }
+    return { written, skipped };
+}
+
 async function main(): Promise<void> {
     const args = parseArgs(process.argv.slice(2));
-    if (!args.blueprint) {
-        console.error('❌ --blueprint <path> requis.');
-        process.exit(1);
-    }
+    if (!args.blueprint) { console.error('❌ --blueprint <path> requis.'); process.exit(1); }
 
     const abs = path.resolve(process.cwd(), args.blueprint);
     const mod = (await import(pathToFileURL(abs).href)) as Record<string, unknown>;
     const bp = pickBlueprint(mod, args.export);
 
-    // 🔬 Agent d'étude de secteur AUTO-ACTIVÉ à la création (désactivable via --no-study).
     if (!args.noStudy) {
         const llm = await resolveLLM(args.llm);
         console.log(`\n🔬 Agent d'étude AUTO-activé${llm ? ' (LLM)' : ' (baseline déterministe)'}…`);
         bp.substance = await runSectorStudy({ slug: bp.slug, profileId: bp.profile }, llm);
         const s = bp.substance;
         console.log(`   substance : ${s.workflows.length} process · ${s.regulations.length} réglementation(s) · ${s.hardware.length} matériel(s) · ${s.businessRules.length} règle(s) · confiance ${s.confidence}`);
-
-        // Persiste l'étude dans l'arborescence de la verticale.
-        const studyRel = `src/verticals/${bp.slug}/${bp.slug}.sector-study.json`;
-        const studyPath = path.resolve(process.cwd(), studyRel);
-        if (args.dryRun) {
-            console.log(`   📝 would write     ${studyRel}`);
-        } else if (await fileExists(studyPath) && !args.force) {
-            console.log(`   ⏭️  skip (existe)   ${studyRel}`);
-        } else {
-            await fs.mkdir(path.dirname(studyPath), { recursive: true });
-            await fs.writeFile(studyPath, JSON.stringify(bp.substance, null, 2), 'utf8');
-            console.log(`   ✅ étude sauvée    ${studyRel}`);
-        }
+        await writeStudyFile(bp, args);
     }
 
     const problems = validateBlueprint(bp);
@@ -114,35 +123,14 @@ async function main(): Promise<void> {
     const out: ForgeOutput = generateVertical(bp);
     console.log(`\n🏭 Forge de la verticale « ${bp.slug} » (profil ${bp.profile}, précision ${bp.precision})\n`);
 
-    let written = 0, skipped = 0;
-    for (const f of out.files) {
-        const target = path.resolve(process.cwd(), f.path);
-        const exists = await fileExists(target);
-        if (f.skipIfExists && exists && !args.force) {
-            console.log(`  ⏭️  skip (existe)   ${f.path}`);
-            skipped++;
-            continue;
-        }
-        if (args.dryRun) {
-            console.log(`  📝 would write     ${f.path}`);
-            continue;
-        }
-        await fs.mkdir(path.dirname(target), { recursive: true });
-        await fs.writeFile(target, f.content, 'utf8');
-        console.log(`  ✅ ${exists ? 'overwrite' : 'create'}     ${f.path}`);
-        written++;
-    }
+    const { written, skipped } = await writeGeneratedFiles(out, args);
 
-    if (out.issues.length) {
-        console.log(`\n⚠️  Cohérence :\n  - ${out.issues.join('\n  - ')}`);
-    }
-
+    if (out.issues.length) console.log(`\n⚠️  Cohérence :\n  - ${out.issues.join('\n  - ')}`);
     console.log(`\n🔌 Câblage à appliquer (checklist — non automatique) :`);
     for (const w of out.wiring) {
         console.log(`  • [${w.file}] ${w.description}`);
         console.log(`      ↳ après « ${w.anchor} » : ${w.snippet}`);
     }
-
     console.log(`\n${args.dryRun ? '(dry-run) ' : ''}Terminé — ${written} écrit(s), ${skipped} ignoré(s), ${out.wiring.length} point(s) de câblage.\n`);
 }
 

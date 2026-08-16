@@ -29,10 +29,10 @@ interface ConfirmPayload {
     date: string;
     time: string;
     covers: number;
-    restaurantName: string;
+    businessName: string;
 }
 
-function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload): string {
+function buildHtml({ name, date, time, covers, businessName }: ConfirmPayload): string {
     const formattedDate = (() => {
         try {
             return new Date(date).toLocaleDateString('fr-FR', {
@@ -51,7 +51,7 @@ function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload)
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirmation de réservation — ${restaurantName}</title>
+  <title>Confirmation de réservation — ${businessName}</title>
 </head>
 <body style="margin:0;padding:0;background:#0d0d0d;font-family:'Georgia',serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:48px 16px;">
@@ -65,7 +65,7 @@ function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload)
             <td style="background:#1a1a1a;padding:48px 48px 32px;text-align:center;border-bottom:1px solid #2a2a2a;">
               <div style="display:inline-block;background:#c5a059;border-radius:16px;padding:12px 24px;margin-bottom:24px;">
                 <span style="color:#0d0d0d;font-size:11px;font-weight:900;letter-spacing:0.3em;text-transform:uppercase;">
-                  ${restaurantName}
+                  ${businessName}
                 </span>
               </div>
               <h1 style="color:#fff;font-size:28px;font-weight:400;margin:0;font-style:italic;letter-spacing:-0.02em;">
@@ -85,7 +85,7 @@ function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload)
               </p>
               <p style="color:#999;font-size:14px;margin:0 0 40px;line-height:1.7;">
                 Nous avons le plaisir de confirmer votre réservation au
-                <strong style="color:#c5a059;">${restaurantName}</strong>.
+                <strong style="color:#c5a059;">${businessName}</strong>.
                 Nous nous réjouissons de vous accueillir.
               </p>
 
@@ -141,7 +141,7 @@ function buildHtml({ name, date, time, covers, restaurantName }: ConfirmPayload)
           <tr>
             <td style="background:#111;padding:24px 48px;border-top:1px solid #2a2a2a;text-align:center;">
               <p style="color:#444;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin:0;">
-                &copy; ${new Date().getFullYear()} ${restaurantName} — Restaurant OS
+                &copy; ${new Date().getFullYear()} ${businessName} — Restaurant OS
               </p>
             </td>
           </tr>
@@ -165,18 +165,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
         const body = (await request.json()) as Partial<ConfirmPayload>;
 
-        const { to, name, date, time, covers, restaurantName } = body;
+        const { to, name, date, time, covers, businessName } = body;
 
-        if (!to || !name || !date || !time || !covers || !restaurantName) {
+        if (!to || !name || !date || !time || !covers || !businessName) {
             return NextResponse.json({ error: 'Champs manquants' }, { status: 400 });
         }
 
-        const payload: ConfirmPayload = { to, name, date, time, covers, restaurantName };
+        const payload: ConfirmPayload = { to, name, date, time, covers, businessName };
 
         const { error } = await getResend().emails.send({
             from: FROM_EMAIL,
             to,
-            subject: `Confirmation — ${restaurantName} — ${date} à ${time}`,
+            subject: `Confirmation — ${businessName} — ${date} à ${time}`,
             html: buildHtml(payload),
         });
 

@@ -208,7 +208,7 @@ export function SupplierHubDashboard() {
         mercurialeItems={sampleMercuriales}
         suppliers={sampleSuppliers}
         currentUserId="emp_chef_demo"
-        restaurantName="Le Petit Poucet Lyon"
+        businessName="Le Petit Poucet Lyon"
       />
 
       {/* Header Hub */}

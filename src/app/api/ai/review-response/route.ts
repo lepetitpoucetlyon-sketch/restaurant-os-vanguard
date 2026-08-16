@@ -6,7 +6,7 @@ import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 const BodySchema = z.object({
   reviewText: z.string().min(1).max(5000),
   rating: z.number().int().min(1).max(5),
-  restaurantName: z.string().min(1).max(200),
+  businessName: z.string().min(1).max(200),
 });
 
 const GEMINI_BASE_URL =
@@ -16,7 +16,7 @@ const GEMINI_MODEL = 'gemini-1.5-flash';
 /**
  * POST /api/ai/review-response
  * Génère une réponse professionnelle à un avis Google via Gemini.
- * Body: { reviewText: string; rating: number; restaurantName: string }
+ * Body: { reviewText: string; rating: number; businessName: string }
  * Retourne: { response: string }
  */
 export async function POST(req: NextRequest) {
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { reviewText, rating, restaurantName } = parsed.data;
+    const { reviewText, rating, businessName } = parsed.data;
 
     const apiKey = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY;
     if (!apiKey) {
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const prompt = `Génère une réponse professionnelle et chaleureuse en français à cet avis de restaurant : "${reviewText}". Le restaurant est ${restaurantName}. Note : ${rating}/5. Sois spécifique au contenu de l'avis.`;
+    const prompt = `Génère une réponse professionnelle et chaleureuse en français à cet avis de restaurant : "${reviewText}". Le restaurant est ${businessName}. Note : ${rating}/5. Sois spécifique au contenu de l'avis.`;
 
     const geminiRes = await fetch(
       `${GEMINI_BASE_URL}/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,

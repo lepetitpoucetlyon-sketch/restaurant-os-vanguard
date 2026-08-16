@@ -35,7 +35,7 @@ export function AutoProcurementWizard({
   mercurialeItems,
   suppliers,
   currentUserId,
-  restaurantName,
+  businessName,
 }: AutoProcurementWizardProps) {
   const {
     analysis,
@@ -53,7 +53,7 @@ export function AutoProcurementWizard({
     mercurialeItems,
     suppliers,
     currentUserId,
-    restaurantName,
+    businessName,
   });
 
   const [isSuccessStep, setIsSuccessStep] = useState(false);

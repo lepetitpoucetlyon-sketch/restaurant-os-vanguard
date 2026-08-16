@@ -2,8 +2,8 @@
 import { getDefaultRestaurantEmail, getInstanceDisplayName, whiteLabelInstanceConfig } from '@/config/instance';
 import {
     GlobalSettings,
-    RestaurantIdentity,
-    RestaurantContact,
+    BusinessIdentity,
+    BusinessContact,
     SocialMedia,
     DaySchedule,
     ServiceSettings,
@@ -28,11 +28,11 @@ import {
     CustomerConfig
 } from '@nexus/contracts';
 
-export const defaultIdentity: RestaurantIdentity = {
+export const defaultIdentity: BusinessIdentity = {
     ...whiteLabelInstanceConfig.identityDefaults,
 };
 
-export const defaultContact: RestaurantContact = {
+export const defaultContact: BusinessContact = {
     address: '',
     postalCode: '',
     city: '',
@@ -117,7 +117,7 @@ export const defaultPOS: POSSettings = {
 };
 
 export const defaultReceipt: ReceiptTemplate = {
-    restaurantName: getInstanceDisplayName(),
+    businessName: getInstanceDisplayName(),
     address: '',
     siret: '',
     vatNumber: '',

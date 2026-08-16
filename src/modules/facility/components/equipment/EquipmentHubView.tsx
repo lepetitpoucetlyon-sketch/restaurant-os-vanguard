@@ -84,7 +84,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
   const breakdownCount = assets.filter((a) => a.status === 'OUT_OF_ORDER' || a.status === 'DEGRADED').length;
   
   const totalValueEuros = assets.reduce((sum, a) => {
-    return sum + (a.purchase?.purchasePriceInCents ? a.purchase.purchasePriceInCents / 100 : 0);
+    return sum + (a.purchase?.purchasePriceInMicrounits ? a.purchase.purchasePriceInMicrounits / 1_000_000 : 0);
   }, 0);
 
   const expiringWarrantiesCount = assets.filter((a) => {

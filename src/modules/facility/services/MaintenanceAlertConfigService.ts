@@ -251,6 +251,39 @@ export class MaintenanceAlertConfigService {
     return validated;
   }
 
+  private static readonly SEVERITY_ORDER: Record<string, number> = { minor: 1, degraded: 2, critical: 3 };
+
+  private static async notifyRecipient(
+    params: DispatchAlertParams,
+    recipient: MaintenanceAlertRule['recipients'][number],
+    channelsUsed: Set<string>
+  ): Promise<number> {
+    const { tenantId, alertType, severity, zone, equipmentId, equipmentName, message } = params;
+    let count = 0;
+    if (recipient.channels.includes('IN_APP')) {
+      await NexusEventBus.emit('notification.created', {
+        v: 1, tenantId,
+        id: `alert-${alertType}-${equipmentId || 'generic'}-${Date.now()}`,
+        type: severity === 'critical' ? 'alert' : 'warning',
+        title: `🛠️ [${zone}] Alerte Maintenance : ${equipmentName}`,
+        message,
+        priority: severity === 'critical' ? 'critical' : 'high',
+        read: false, timestamp: new Date().toISOString(),
+      });
+      channelsUsed.add('IN_APP');
+      count++;
+    }
+    if (recipient.channels.includes('EMAIL') && recipient.email) {
+      channelsUsed.add('EMAIL');
+      logger.info(`[Maintenance Alert] 📧 Email envoyé à ${recipient.email} : ${message}`);
+    }
+    if (recipient.channels.includes('SMS') && recipient.phone) {
+      channelsUsed.add('SMS');
+      logger.info(`[Maintenance Alert] 📱 SMS envoyé à ${recipient.phone} : ${message}`);
+    }
+    return count;
+  }
+
   /**
    * Distribue une alerte de maintenance aux destinataires appropriés en fonction des règles et de la zone.
    */
@@ -259,69 +292,31 @@ export class MaintenanceAlertConfigService {
     recipientsNotified: number;
     channelsUsed: string[];
   }> {
-    const { tenantId, alertType, severity, zone, equipmentId, equipmentName, message } = params;
+    const { tenantId, alertType, severity, zone } = params;
     const config = await this.getConfig(tenantId);
 
-    // Trouver la règle correspondante
     const rule = config.rules.find((r) => r.alertType === alertType && r.enabled);
     if (!rule) {
       logger.warn(`[Facility Alert] Aucune règle active pour ${alertType} (Zone: ${zone})`);
       return { dispatched: false, recipientsNotified: 0, channelsUsed: [] };
     }
 
-    // Vérifier si la règle s'applique à cette zone
-    const isZoneApplicable = rule.applicableZones.includes('ALL') || rule.applicableZones.includes(zone);
-    if (!isZoneApplicable) {
+    if (!rule.applicableZones.includes('ALL') && !rule.applicableZones.includes(zone)) {
       logger.info(`[Facility Alert] Règle ${rule.id} ignorée pour la zone non ciblée ${zone}`);
       return { dispatched: false, recipientsNotified: 0, channelsUsed: [] };
     }
 
-    const severityOrder = { minor: 1, degraded: 2, critical: 3 };
-    const alertSevLevel = severityOrder[severity] || 1;
-
+    const alertSevLevel = this.SEVERITY_ORDER[severity] || 1;
     let recipientsNotified = 0;
     const channelsUsedSet = new Set<string>();
 
     for (const recipient of rule.recipients) {
       if (!recipient.active) continue;
-
-      const recSevLevel = severityOrder[recipient.minSeverity] || 1;
-      if (alertSevLevel < recSevLevel) {
-        // La sévérité de l'événement est inférieure au seuil de ce destinataire
-        continue;
-      }
-
+      if (alertSevLevel < (this.SEVERITY_ORDER[recipient.minSeverity] || 1)) continue;
       try {
-        // 1. Canal In-App via EventBus
-        if (recipient.channels.includes('IN_APP')) {
-          await NexusEventBus.emit('notification.created', {
-            v: 1,
-            tenantId,
-            id: `alert-${alertType}-${equipmentId || 'generic'}-${Date.now()}`,
-            type: severity === 'critical' ? 'alert' : 'warning',
-            title: `🛠️ [${zone}] Alerte Maintenance : ${equipmentName}`,
-            message,
-            priority: severity === 'critical' ? 'critical' : 'high',
-            read: false,
-            timestamp: new Date().toISOString(),
-          });
-          channelsUsedSet.add('IN_APP');
-          recipientsNotified++;
-        }
-
-        // 2. Canaux Externes (Email / SMS)
-        if (recipient.channels.includes('EMAIL') && recipient.email) {
-          channelsUsedSet.add('EMAIL');
-          logger.info(`[Maintenance Alert] 📧 Email envoyé à ${recipient.email} : ${message}`);
-        }
-
-        if (recipient.channels.includes('SMS') && recipient.phone) {
-          channelsUsedSet.add('SMS');
-          logger.info(`[Maintenance Alert] 📱 SMS envoyé à ${recipient.phone} : ${message}`);
-        }
+        recipientsNotified += await this.notifyRecipient(params, recipient, channelsUsedSet);
       } catch (err) {
         logger.error(`[Maintenance Alert] Échec de notification pour destinataire ${recipient.id}`, err);
-        // Sauvegarde DLQ en cas de panne de distribution
         await Nexus.adapter.set(
           `tenants/${tenantId}/dlq/maintenanceAlerts/failed_${Date.now()}`,
           { recipient, params, error: String(err), timestamp: Date.now() }
@@ -329,10 +324,6 @@ export class MaintenanceAlertConfigService {
       }
     }
 
-    return {
-      dispatched: recipientsNotified > 0,
-      recipientsNotified,
-      channelsUsed: Array.from(channelsUsedSet),
-    };
+    return { dispatched: recipientsNotified > 0, recipientsNotified, channelsUsed: Array.from(channelsUsedSet) };
   }
 }

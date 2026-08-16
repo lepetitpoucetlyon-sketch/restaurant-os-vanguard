@@ -31,7 +31,7 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
   if (!parsed.success) notFound();
 
   const tenantData = parsed.data;
-  const restaurantName =
+  const businessName =
     tenantData.name ??
     tenantData.metadata?.name ??
     'Restaurant';
@@ -57,23 +57,23 @@ export default async function ReservationWidgetPage({ params }: PageProps) {
         {logoUrl ? (
           <img
             src={logoUrl}
-            alt={restaurantName}
+            alt={businessName}
             className="h-16 w-auto object-contain rounded-xl"
           />
         ) : (
           <div className="w-16 h-16 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 font-serif text-2xl font-bold select-none">
-            {restaurantName.charAt(0).toUpperCase()}
+            {businessName.charAt(0).toUpperCase()}
           </div>
         )}
         <h1 className="text-2xl font-serif font-semibold text-gray-900 text-center tracking-tight">
-          {restaurantName}
+          {businessName}
         </h1>
         <p className="text-sm text-text-muted">Réserver une table</p>
       </div>
 
       <ReservationWidget
         tenantId={slug}
-        restaurantName={restaurantName}
+        businessName={businessName}
         cardImprintConfig={cardImprintConfig}
       />
     </div>

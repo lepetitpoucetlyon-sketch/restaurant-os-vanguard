@@ -164,76 +164,35 @@ export interface DiagnosticEvaluationResult {
  * 🚨 EquipmentDiagnosticService — Moteur Intelligent de Diagnostic de Pannes
  */
 export class EquipmentDiagnosticService {
-  /**
-   * Analyse une panne d'après un code erreur constructeur ou une description de symptôme.
-   */
+  private static matchByCode(rules: FaultDiagnosticRule[], errorCode: string): DiagnosticEvaluationResult | null {
+    const code = errorCode.trim().toUpperCase();
+    const match = rules.find((r) => r.errorCode?.toUpperCase() === code);
+    if (!match) return null;
+    return { matchedRule: match, confidence: 'EXACT_ERROR_CODE', recommendedActions: match.quickFixSteps, severity: match.severity, technicianRequired: match.technicianRequired, message: `Code erreur ${match.errorCode} identifié : ${match.symptom}.` };
+  }
+
+  private static matchBySymptom(rules: FaultDiagnosticRule[], symptomQuery: string): DiagnosticEvaluationResult | null {
+    const words = symptomQuery.toLowerCase().split(/[\s,./;:!?]+/).filter((w) => w.length >= 3);
+    let bestMatch: FaultDiagnosticRule | undefined;
+    let highestScore = 0;
+    for (const r of rules) {
+      const text = [r.symptom.toLowerCase(), r.errorCode?.toLowerCase() || '', ...r.possibleCauses.map((c) => c.toLowerCase())].join(' ');
+      const score = words.filter((w) => text.includes(w)).length;
+      if (score > highestScore) { highestScore = score; bestMatch = r; }
+    }
+    if (!bestMatch || highestScore < 1) return null;
+    return { matchedRule: bestMatch, confidence: 'SYMPTOM_MATCH', recommendedActions: bestMatch.quickFixSteps, severity: bestMatch.severity, technicianRequired: bestMatch.technicianRequired, message: `Diagnostic potentiel trouvé : ${bestMatch.symptom}.` };
+  }
+
+  /** Analyse une panne d'après un code erreur constructeur ou une description de symptôme. */
   static diagnoseFault(
     category: EquipmentCategory,
     errorCode?: string,
     symptomQuery?: string
   ): DiagnosticEvaluationResult {
     const rules = FAULT_DIAGNOSTIC_DATABASE.filter((r) => r.equipmentCategory === category);
-
-    // 1. Recherche par Code Erreur Exact
-    if (errorCode && errorCode.trim()) {
-      const cleanCode = errorCode.trim().toUpperCase();
-      const match = rules.find((r) => r.errorCode?.toUpperCase() === cleanCode);
-      if (match) {
-        return {
-          matchedRule: match,
-          confidence: 'EXACT_ERROR_CODE',
-          recommendedActions: match.quickFixSteps,
-          severity: match.severity,
-          technicianRequired: match.technicianRequired,
-          message: `Code erreur ${match.errorCode} identifié : ${match.symptom}.`,
-        };
-      }
-    }
-
-    // 2. Recherche intelligente par Mots-Clés dans les Symptômes & Causes
-    if (symptomQuery && symptomQuery.trim()) {
-      const q = symptomQuery.toLowerCase();
-      const queryWords = q
-        .split(/[\s,./;:!?]+/)
-        .filter((w) => w.length >= 3);
-
-      // Score de pertinence basé sur le nombre de mots-clés correspondants
-      let bestMatch: FaultDiagnosticRule | undefined;
-      let highestScore = 0;
-
-      for (const r of rules) {
-        const textToSearch = [
-          r.symptom.toLowerCase(),
-          r.errorCode?.toLowerCase() || '',
-          ...r.possibleCauses.map((c) => c.toLowerCase()),
-        ].join(' ');
-
-        let matchCount = 0;
-        for (const word of queryWords) {
-          if (textToSearch.includes(word)) {
-            matchCount++;
-          }
-        }
-
-        if (matchCount > highestScore && matchCount >= 1) {
-          highestScore = matchCount;
-          bestMatch = r;
-        }
-      }
-
-      if (bestMatch && highestScore >= 1) {
-        return {
-          matchedRule: bestMatch,
-          confidence: 'SYMPTOM_MATCH',
-          recommendedActions: bestMatch.quickFixSteps,
-          severity: bestMatch.severity,
-          technicianRequired: bestMatch.technicianRequired,
-          message: `Diagnostic potentiel trouvé : ${bestMatch.symptom}.`,
-        };
-      }
-    }
-
-    // 3. Conseils généraux de sécurité
+    if (errorCode?.trim()) { const r = this.matchByCode(rules, errorCode); if (r) return r; }
+    if (symptomQuery?.trim()) { const r = this.matchBySymptom(rules, symptomQuery); if (r) return r; }
     return {
       confidence: 'GENERAL_ADVICE',
       recommendedActions: [
@@ -242,8 +201,7 @@ export class EquipmentDiagnosticService {
         '3. Vérifier les arrivées d eau, de gaz ou de réseau selon la nature de l équipement.',
         '4. Si le problème persiste, déclarer l incident sur Restaurant OS pour alerter le manager et le technicien.',
       ],
-      severity: 'degraded',
-      technicianRequired: true,
+      severity: 'degraded', technicianRequired: true,
       message: 'Aucun code spécifique répertorié. Suivez les consignes de sécurité standard.',
     };
   }

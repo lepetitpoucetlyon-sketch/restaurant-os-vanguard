@@ -8,7 +8,7 @@ import {
 } from '@/store/settingsAtoms';
 import { SettingsManager } from '@/lib/SettingsManager';
 import { GlobalSettings } from '@nexus/contracts';
-import { RestaurantIdentity } from '@nexus/contracts/settings/identity';
+import { BusinessIdentity } from '@nexus/contracts/settings/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge
@@ -81,7 +81,7 @@ export const useSettings = () => {
         return updateConfig('closedPeriods', newPeriods);
     }, [settings, updateConfig]);
 
-    const updateIdentity = useCallback(async (data: RestaurantIdentity) => {
+    const updateIdentity = useCallback(async (data: BusinessIdentity) => {
         return updateConfig('identity', data);
     }, [updateConfig]);
 

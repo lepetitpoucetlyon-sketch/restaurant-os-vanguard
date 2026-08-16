@@ -252,7 +252,7 @@ export function useReservationsPage() {
                 authedFetch("/api/email/reservation-confirm", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ to: customer.email, name: `${customer.firstName} ${customer.lastName}`, date: resData.date, time: resData.time, covers: resData.covers, restaurantName: "Restaurant OS" }),
+                    body: JSON.stringify({ to: customer.email, name: `${customer.firstName} ${customer.lastName}`, date: resData.date, time: resData.time, covers: resData.covers, businessName: "Restaurant OS" }),
                 }).catch(() => { /* email failure is non-blocking */ });
             }
         } catch { toast.error("Erreur lors de la création de la réservation"); }

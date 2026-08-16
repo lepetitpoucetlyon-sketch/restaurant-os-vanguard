@@ -38,7 +38,7 @@ export const IDENTITY_SCHEMA: ModuleSchema = {
     fields: [
         { id: 'name', key: 'name', type: 'string', label: 'Nom du Restaurant', required: true, validation: z.string().min(2) },
         { id: 'slogan', key: 'slogan', type: 'string', label: 'Slogan', required: false },
-        { id: 'cuisineType', key: 'cuisineType', type: 'string', label: 'Type de Cuisine' },
+        { id: 'activityCategory', key: 'activityCategory', type: 'string', label: 'Type d\'Activité' },
         { 
             id: 'category',
             key: 'category', 

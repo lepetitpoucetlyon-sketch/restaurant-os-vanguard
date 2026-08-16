@@ -78,7 +78,7 @@ async function analyzeStockTrend(tenantId: string, items: import("@/modules/ops/
     const names = highVelocityItems.map((i) => i.name).join(', ');
     const hermes = new HermesKnowledgeManager(tenantId, {
       region: 'FR',
-      cuisineType: 'unknown',
+      activityCategory: 'unknown',
       sizeBand: 'small',
       priceBand: 'mid_range',
     });

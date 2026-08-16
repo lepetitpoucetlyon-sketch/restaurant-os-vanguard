@@ -74,7 +74,7 @@ export interface ReceiptTicket {
   totalInMicrounits: number
   tvaRatePercent: number
   ticketNumber: string
-  restaurantName: string
+  businessName: string
   paymentMethod?: string
   cashGiven?: number      // microunits
   changeGiven?: number    // microunits

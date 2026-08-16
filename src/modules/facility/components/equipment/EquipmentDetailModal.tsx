@@ -233,7 +233,7 @@ export function EquipmentDetailModal({
                     <div>
                       <span className="text-slate-500 text-xs block font-semibold">Prix d Achat HT</span>
                       <span className="text-emerald-400 font-bold text-sm">
-                        {(asset.purchase.purchasePriceInCents / 100).toLocaleString('fr-FR', {
+                        {(asset.purchase.purchasePriceInMicrounits / 1_000_000).toLocaleString('fr-FR', {
                           style: 'currency',
                           currency: 'EUR',
                         })}
@@ -292,10 +292,10 @@ export function EquipmentDetailModal({
                         {depreciationSchedule.map((row) => (
                           <tr key={row.yearIndex} className="text-slate-300">
                             <td className="py-2 font-medium">{row.year} (An {row.yearIndex})</td>
-                            <td className="py-2">{(row.annualDepreciationInCents / 100).toFixed(2)} €</td>
-                            <td className="py-2">{(row.accumulatedDepreciationInCents / 100).toFixed(2)} €</td>
+                            <td className="py-2">{(row.annualDepreciationInMicrounits / 1_000_000).toFixed(2)} €</td>
+                            <td className="py-2">{(row.accumulatedDepreciationInMicrounits / 1_000_000).toFixed(2)} €</td>
                             <td className="py-2 text-right font-bold text-white">
-                              {(row.bookValueInCents / 100).toFixed(2)} €
+                              {(row.bookValueInMicrounits / 1_000_000).toFixed(2)} €
                             </td>
                           </tr>
                         ))}

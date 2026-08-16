@@ -29,11 +29,11 @@ const STEPS = [
 
 interface Props {
   tenantId: string;
-  restaurantName: string;
+  businessName: string;
   cardImprintConfig?: CardImprintConfig;
 }
 
-export default function ReservationWidget({ tenantId, restaurantName, cardImprintConfig }: Props) {
+export default function ReservationWidget({ tenantId, businessName, cardImprintConfig }: Props) {
   const [step, setStep]         = useState<Step>(1);
   const [direction, setDirection] = useState(1);
   const [form, setForm]         = useState<FormData>({ date: '', covers: 2, time: '', firstName: '', lastName: '', email: '', phone: '', notes: '' });
@@ -149,7 +149,7 @@ export default function ReservationWidget({ tenantId, restaurantName, cardImprin
                   step={step as 4 | 5 | 6 | 7}
                   form={form}
                   bookingRef={bookingRef}
-                  restaurantName={restaurantName}
+                  businessName={businessName}
                   submitting={submitting}
                   cardImprintConfig={cardImprintConfig}
                   inputClass={inputClass}

@@ -20,6 +20,39 @@ interface AddEquipmentModalProps {
   onEquipmentCreated: () => void;
 }
 
+interface EquipmentFormFields {
+  name: string; category: EquipmentCategory; brand: string; model: string;
+  serialNumber: string; location: string; supplierName: string; invoiceNumber: string;
+  invoiceUrl: string; purchasePriceEuros: string; purchaseDate: string;
+  warrantyMonths: number; depreciationYears: number; supportPhone: string; supportCompany: string;
+}
+
+function buildEquipmentPayload(f: EquipmentFormFields) {
+  const pDate = new Date(f.purchaseDate);
+  const warrantyExpDate = new Date(pDate);
+  warrantyExpDate.setMonth(warrantyExpDate.getMonth() + f.warrantyMonths);
+  const nextMaint = new Date();
+  nextMaint.setDate(nextMaint.getDate() + 90);
+  return {
+    name: f.name.trim(), category: f.category, brand: f.brand.trim(), model: f.model.trim(),
+    serialNumber: f.serialNumber.trim(), location: f.location.trim(), status: 'OPERATIONAL',
+    purchase: {
+      supplierName: f.supplierName.trim() || f.brand.trim(),
+      invoiceNumber: f.invoiceNumber.trim() || undefined,
+      invoiceUrl: f.invoiceUrl.trim() || undefined,
+      purchaseDate: pDate.toISOString(),
+      purchasePriceInMicrounits: Math.round(parseFloat(f.purchasePriceEuros || '0') * 1_000_000),
+      taxRatePercent: 20, warrantyDurationMonths: f.warrantyMonths,
+      warrantyExpiresAt: warrantyExpDate.toISOString(), depreciationPeriodYears: f.depreciationYears, pcgAccount: '2183',
+    },
+    maintenanceFrequencyDays: 90, nextMaintenanceDueAt: nextMaint.toISOString(),
+    supportContact: {
+      companyName: f.supportCompany.trim() || f.supplierName.trim() || f.brand.trim(),
+      phone: f.supportPhone.trim() || undefined,
+    },
+  };
+}
+
 export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentModalProps) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState<EquipmentCategory>('COOKING');
@@ -47,68 +80,22 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentM
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
     if (!name.trim() || !brand.trim() || !model.trim() || !serialNumber.trim()) {
       setError('Veuillez remplir tous les champs obligatoires');
       return;
     }
-
     try {
       setIsSubmitting(true);
-      const priceCents = Math.round(parseFloat(purchasePriceEuros || '0') * 100);
-
-      // Calcul date fin de garantie
-      const pDate = new Date(purchaseDate);
-      const warrantyExpDate = new Date(pDate);
-      warrantyExpDate.setMonth(warrantyExpDate.getMonth() + warrantyMonths);
-
-      // Prochaine maintenance à J+90
-      const nextMaint = new Date();
-      nextMaint.setDate(nextMaint.getDate() + 90);
-
-      const payload = {
-        name: name.trim(),
-        category,
-        brand: brand.trim(),
-        model: model.trim(),
-        serialNumber: serialNumber.trim(),
-        location: location.trim(),
-        status: 'OPERATIONAL',
-        purchase: {
-          supplierName: supplierName.trim() || brand.trim(),
-          invoiceNumber: invoiceNumber.trim() || undefined,
-          invoiceUrl: invoiceUrl.trim() || undefined,
-          purchaseDate: new Date(purchaseDate).toISOString(),
-          purchasePriceInCents: priceCents,
-          taxRatePercent: 20,
-          warrantyDurationMonths: warrantyMonths,
-          warrantyExpiresAt: warrantyExpDate.toISOString(),
-          depreciationPeriodYears: depreciationYears,
-          pcgAccount: '2183',
-        },
-        maintenanceFrequencyDays: 90,
-        nextMaintenanceDueAt: nextMaint.toISOString(),
-        supportContact: {
-          companyName: supportCompany.trim() || supplierName.trim() || brand.trim(),
-          phone: supportPhone.trim() || undefined,
-        },
-      };
-
-      const res = await fetch('/api/facility/equipment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
+      const payload = buildEquipmentPayload({ name, category, brand, model, serialNumber, location, supplierName, invoiceNumber, invoiceUrl, purchasePriceEuros, purchaseDate, warrantyMonths, depreciationYears, supportPhone, supportCompany });
+      const res = await fetch('/api/facility/equipment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Erreur lors de la création');
+        const data = await res.json() as { error?: string };
+        throw new Error(data.error ?? 'Erreur lors de la création');
       }
-
       onEquipmentCreated();
       onClose();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setIsSubmitting(false);
     }

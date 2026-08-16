@@ -35,7 +35,6 @@
 | P1 | 🔧 | H1 | S | Impression tickets thermiques ESC/POS (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Fonctionne ; auto-discovery imprimantes ⬜ |
 | P1 | ⬜ | H2 | S | Scanner code-barres / QR articles en caisse | `src/modules/ops/service/pos/` | — |
 | P1 | ✅ | H1 | S | Alerte allergènes sur commandes & Check-In client KDS | `src/modules/facility/spaces/floor-plan/TableInsightPanel.tsx`, `ResaAllergenCheckHandler.ts` | Émission `reservation.matched` & notification urgente cuisine validées |
-| P1 | ⬜ | H1 | S | Vérification âge alcool (blocage POS + confirmation) | `src/modules/ops/service/pos/hooks/usePos.ts` | Émet `compliance.age_verification_requested` |
 | P1 | ✅ | H1 | — | Séquençage des plats (entrée → plat → dessert par table) | `src/modules/ops/production/kds/services/KDSCourseSequencingEngine.ts` | Validé : initialisation FIRED/HOLD, demande suite & tir en cuisine |
 | P1 | ✅ | H1 | — | Routage KDS multi-station (chaud / froid / pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | — |
 | P1 | ✅ | H1 | — | Split addition (partage par convive ou par article) | `src/modules/ops/service/pos/hooks/usePosSplit.ts`, `SplitBillDialog.tsx` | Reliquat au dernier payeur validé (Invariant #5 SovereignMath) |

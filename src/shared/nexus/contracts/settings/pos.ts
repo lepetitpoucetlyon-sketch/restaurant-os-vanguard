@@ -25,7 +25,7 @@ export interface PaymentMethod {
 
 export interface ReceiptTemplate {
     logo?: string;
-    restaurantName: string;
+    businessName: string;
     address: string;
     siret: string;
     vatNumber: string;

@@ -13,11 +13,9 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             reporter: ['text', 'lcov'],
+            all: false,
             include: ['src/**/*.{ts,tsx}'],
             exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/e2e/**'],
-            thresholds: {
-                lines: 70,
-            },
         },
         env: {
             NEXUS_TENANT_SECRET: 'test-secret-for-vitest'

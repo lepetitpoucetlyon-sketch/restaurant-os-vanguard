@@ -89,7 +89,7 @@ export default async function MenuJsonLd() {
     return section;
   });
 
-  const restaurantName =
+  const businessName =
     process.env.NEXT_PUBLIC_RESTAURANT_NAME ??
     process.env.NEXT_PUBLIC_APP_NAME ??
     'Restaurant';
@@ -97,7 +97,7 @@ export default async function MenuJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
-    name: restaurantName,
+    name: businessName,
     menu: {
       '@type': 'Menu',
       hasMenuSection,

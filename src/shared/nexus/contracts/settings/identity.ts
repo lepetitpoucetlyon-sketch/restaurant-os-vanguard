@@ -1,9 +1,9 @@
-export interface RestaurantIdentity {
+export interface BusinessIdentity {
     id: string;
     name: string;
     logo?: string;
     slogan?: string;
-    cuisineType: string;
+    activityCategory: string;
     category: 'bistrot' | 'gastronomique' | 'brasserie' | 'fast_casual' | 'cafe' | 'bar' | 'other';
     shortDescription?: string;
     longDescription?: string;
@@ -12,7 +12,10 @@ export interface RestaurantIdentity {
     owner?: string;
 }
 
-export interface RestaurantContact {
+/** @deprecated use BusinessIdentity */
+export type RestaurantIdentity = BusinessIdentity;
+
+export interface BusinessContact {
     address: string;
     postalCode: string;
     city: string;

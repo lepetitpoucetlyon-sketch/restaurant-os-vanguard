@@ -85,7 +85,7 @@ export const EquipmentPurchaseInfoSchema = z.object({
   invoiceNumber: z.string().optional(),
   invoiceUrl: z.string().url().optional(),
   purchaseDate: z.string(), // ISO Date
-  purchasePriceInCents: z.number().int().nonnegative(),
+  purchasePriceInMicrounits: z.number().int().nonnegative(),
   taxRatePercent: z.number().default(20),
   warrantyDurationMonths: z.number().int().nonnegative().default(24),
   warrantyExpiresAt: z.string(), // ISO Date

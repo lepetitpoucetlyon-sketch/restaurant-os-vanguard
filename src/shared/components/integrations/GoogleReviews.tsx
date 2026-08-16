@@ -69,10 +69,10 @@ function StarRating({ rating }: { rating: number }) {
 
 interface ReviewCardProps {
   review: Review;
-  restaurantName: string;
+  businessName: string;
 }
 
-function ReviewCard({ review, restaurantName }: ReviewCardProps) {
+function ReviewCard({ review, businessName }: ReviewCardProps) {
   const [generatedResponse, setGeneratedResponse] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -86,7 +86,7 @@ function ReviewCard({ review, restaurantName }: ReviewCardProps) {
         body: JSON.stringify({
           reviewText: review.text,
           rating: review.rating,
-          restaurantName,
+          businessName,
         }),
       });
 
@@ -196,10 +196,10 @@ function ReviewCard({ review, restaurantName }: ReviewCardProps) {
 }
 
 interface GoogleReviewsProps {
-  restaurantName?: string;
+  businessName?: string;
 }
 
-export default function GoogleReviews({ restaurantName = 'Mon Restaurant' }: GoogleReviewsProps) {
+export default function GoogleReviews({ businessName = 'Mon Restaurant' }: GoogleReviewsProps) {
   const reviews = MOCK_REVIEWS;
   const pendingCount = reviews.filter(r => !r.hasResponse).length;
 
@@ -226,7 +226,7 @@ export default function GoogleReviews({ restaurantName = 'Mon Restaurant' }: Goo
           <ReviewCard
             key={review.id}
             review={review}
-            restaurantName={restaurantName}
+            businessName={businessName}
           />
         ))}
       </div>

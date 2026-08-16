@@ -45,11 +45,11 @@ export class MultiChannelOrderDispatcherService {
    */
   public static generateWhatsAppPayload(
     order: PurchaseOrderEntity,
-    restaurantName: string,
+    businessName: string,
     recipientPhone: string
   ): OrderDispatchPayload {
     const lines = [
-      `*COMMANDE FOURNISSEUR — ${restaurantName.toUpperCase()}*`,
+      `*COMMANDE FOURNISSEUR — ${businessName.toUpperCase()}*`,
       `📄 *Réf:* ${order.orderNumber}`,
       `📅 *Livraison souhaitée:* ${order.expectedDeliveryDate}`,
       `---------------------------------`,
@@ -80,11 +80,11 @@ export class MultiChannelOrderDispatcherService {
    */
   public static generateSmsPayload(
     order: PurchaseOrderEntity,
-    restaurantName: string,
+    businessName: string,
     recipientPhone: string
   ): OrderDispatchPayload {
     const itemsSummary = order.items.map((i) => `${i.packagesCount}x ${i.name}`).join(', ');
-    const body = `CMD ${order.orderNumber} ${restaurantName}: Livr ${order.expectedDeliveryDate}. Art: ${itemsSummary}. Total: ${(order.totalHtCts / 100).toFixed(2)}E HT. Merci de confirmer.`;
+    const body = `CMD ${order.orderNumber} ${businessName}: Livr ${order.expectedDeliveryDate}. Art: ${itemsSummary}. Total: ${(order.totalHtCts / 100).toFixed(2)}E HT. Merci de confirmer.`;
 
     return {
       orderId: order.id,
@@ -100,13 +100,13 @@ export class MultiChannelOrderDispatcherService {
    */
   public static generateEmailPayload(
     order: PurchaseOrderEntity,
-    restaurantName: string,
+    businessName: string,
     recipientEmail: string
   ): OrderDispatchPayload {
     const htmlLines = [
       `Bonjour,`,
       `<br/><br/>`,
-      `Veuillez trouver ci-joint notre bon de commande <strong>#${order.orderNumber}</strong> pour le restaurant <strong>${restaurantName}</strong>.`,
+      `Veuillez trouver ci-joint notre bon de commande <strong>#${order.orderNumber}</strong> pour le restaurant <strong>${businessName}</strong>.`,
       `<br/><br/>`,
       `<strong>Date de livraison souhaitée :</strong> ${order.expectedDeliveryDate}<br/>`,
       order.deliveryInstructions ? `<strong>Instructions :</strong> ${order.deliveryInstructions}<br/>` : '',
@@ -123,7 +123,7 @@ export class MultiChannelOrderDispatcherService {
       `<br/>`,
       `<strong>Total Commande : ${(order.totalHtCts / 100).toFixed(2)} € HT</strong>`,
       `<br/><br/>`,
-      `Cordialement,<br/>L'équipe ${restaurantName}`,
+      `Cordialement,<br/>L'équipe ${businessName}`,
     ];
 
     return {

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 interface SignupForm {
   email: string;
   password: string;
-  restaurantName: string;
+  businessName: string;
   siret: string;
   websiteUrl: string;
 }
@@ -18,7 +18,7 @@ export default function SignupPage() {
   const [form, setForm] = useState<SignupForm>({
     email: '',
     password: '',
-    restaurantName: '',
+    businessName: '',
     siret: '',
     websiteUrl: '',
   });
@@ -69,13 +69,13 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <label htmlFor="restaurantName">Nom du restaurant</label>
+            <label htmlFor="businessName">Nom du restaurant</label>
             <input
-              id="restaurantName"
-              name="restaurantName"
+              id="businessName"
+              name="businessName"
               placeholder="Le Petit Poucet"
               required
-              value={form.restaurantName}
+              value={form.businessName}
               onChange={handleChange}
             />
           </div>

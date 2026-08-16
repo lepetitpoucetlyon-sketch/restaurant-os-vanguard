@@ -104,7 +104,7 @@ export function ProspectingDashboard() {
                     name: tokens.brandName,
                     id: 'identity_suture',
                     updatedAt: new Date().toISOString(),
-                } as unknown as import('@nexus/contracts').RestaurantIdentity);
+                } as unknown as import('@nexus/contracts').BusinessIdentity);
             }
             setPhase('done');
             showToast('Charte appliquée — interface mise à jour', 'success');

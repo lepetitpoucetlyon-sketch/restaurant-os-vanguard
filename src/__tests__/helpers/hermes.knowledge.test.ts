@@ -27,7 +27,7 @@ describe('HermesKnowledgeManager', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    hermes = new HermesKnowledgeManager('tenant-test', { restaurantName: 'Le Voltaire', country: 'FR' } as never);
+    hermes = new HermesKnowledgeManager('tenant-test', { businessName: 'Le Voltaire', country: 'FR' } as never);
   });
 
   // ── isReady / getHealth ──────────────────────────────────────────────────────

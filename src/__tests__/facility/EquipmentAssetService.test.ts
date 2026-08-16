@@ -33,7 +33,7 @@ describe('Pilier 8 Facility : EquipmentAssetService & Factures / Garanties / Tut
           invoiceNumber: 'FACT-2024-089',
           invoiceUrl: 'https://storage.empire.fr/invoices/rational-four.pdf',
           purchaseDate: now.toISOString(),
-          purchasePriceInCents: 1250000, // 12 500 € HT
+          purchasePriceInMicrounits: 12_500_000_000, // 12 500 € HT
           taxRatePercent: 20,
           warrantyDurationMonths: 24,
           warrantyExpiresAt: warrantyExpiry.toISOString(),
@@ -52,7 +52,7 @@ describe('Pilier 8 Facility : EquipmentAssetService & Factures / Garanties / Tut
 
     expect(asset.id).toBeDefined();
     expect(asset.name).toBe('Four Mixte Professionnel Rational');
-    expect(asset.purchase?.purchasePriceInCents).toBe(1250000);
+    expect(asset.purchase?.purchasePriceInMicrounits).toBe(12_500_000_000);
     expect(asset.purchase?.invoiceUrl).toBe('https://storage.empire.fr/invoices/rational-four.pdf');
     expect(eventSpy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -68,7 +68,7 @@ describe('Pilier 8 Facility : EquipmentAssetService & Factures / Garanties / Tut
     const purchase = {
       supplierName: 'Fournisseur Test',
       purchaseDate: '2024-01-15T00:00:00.000Z',
-      purchasePriceInCents: 1000000, // 10 000 €
+      purchasePriceInMicrounits: 10_000_000_000, // 10 000 €
       taxRatePercent: 20,
       warrantyDurationMonths: 24,
       warrantyExpiresAt: '2026-01-15T00:00:00.000Z',
@@ -79,10 +79,10 @@ describe('Pilier 8 Facility : EquipmentAssetService & Factures / Garanties / Tut
     const schedule = EquipmentAssetService.calculateDepreciationSchedule(purchase);
 
     expect(schedule).toHaveLength(5);
-    expect(schedule[0].annualDepreciationInCents).toBe(200000); // 2 000 €
-    expect(schedule[0].bookValueInCents).toBe(800000); // 8 000 €
-    expect(schedule[4].bookValueInCents).toBe(0); // 0 € à l'issue
-    expect(schedule[4].accumulatedDepreciationInCents).toBe(1000000);
+    expect(schedule[0].annualDepreciationInMicrounits).toBe(2_000_000_000); // 2 000 €
+    expect(schedule[0].bookValueInMicrounits).toBe(8_000_000_000); // 8 000 €
+    expect(schedule[4].bookValueInMicrounits).toBe(0); // 0 € à l'issue
+    expect(schedule[4].accumulatedDepreciationInMicrounits).toBe(10_000_000_000);
   });
 
   it('devrait déclarer une panne critique, dégrader le statut de la machine et émettre facility.equipment_breakdown', async () => {

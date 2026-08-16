@@ -10,7 +10,7 @@ export interface SEOInstance extends EmpireInstance {
   address?: string;
   city?: string;
   zip?: string;
-  cuisineType?: string;
+  activityCategory?: string;
 }
 
 /**
@@ -91,7 +91,7 @@ export const SEOManager = {
         "postalCode": instance.zip,
         "addressCountry": "FR"
       },
-      "servesCuisine": instance.cuisineType || "Gastronomique"
+      "servesCuisine": instance.activityCategory || "Gastronomique"
     };
   }
 };

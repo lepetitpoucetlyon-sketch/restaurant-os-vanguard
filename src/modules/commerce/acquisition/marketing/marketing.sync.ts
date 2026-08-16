@@ -74,7 +74,7 @@ export const MarketingSyncService = {
                 socialProfiles: {}
             },
             restaurant: {
-                cuisineTypes: [],
+                activityCategories: [],
                 priceRange: '€€',
                 acceptsReservations: true,
                 openingHours: [],

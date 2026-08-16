@@ -76,7 +76,7 @@ export class DeliveryDisputeService {
    */
   public static generateClaimEmailBody(
     dispute: DeliveryDisputeEntity,
-    restaurantName: string
+    businessName: string
   ): string {
     const reasonLabels: Record<string, string> = {
       MISSING_ITEM: 'Article manquant au déchargement',
@@ -101,7 +101,7 @@ export class DeliveryDisputeService {
     }).join('\n');
 
     return `Bonjour,<br/><br/>
-Nous vous signalons une non-conformité lors de la réception de la livraison pour <strong>${restaurantName}</strong>.<br/><br/>
+Nous vous signalons une non-conformité lors de la réception de la livraison pour <strong>${businessName}</strong>.<br/><br/>
 <strong>N° Bon de Livraison (BL) :</strong> ${dispute.deliveryNoteNumber}<br/>
 ${dispute.purchaseOrderId ? `<strong>Réf. Commande :</strong> ${dispute.purchaseOrderId}<br/>` : ''}
 <strong>Réf. Réclamation interne :</strong> ${dispute.disputeNumber}<br/><br/>
@@ -127,7 +127,7 @@ ${dispute.purchaseOrderId ? `<strong>Réf. Commande :</strong> ${dispute.purchas
 <br/><br/>
 Merci de bien vouloir nous émettre l'avoir correspondant dans les meilleurs délais.<br/><br/>
 Cordialement,<br/>
-L'équipe ${restaurantName}`;
+L'équipe ${businessName}`;
   }
 
   /**

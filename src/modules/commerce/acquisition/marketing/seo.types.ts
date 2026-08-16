@@ -184,7 +184,7 @@ export interface SEOConfig {
     };
 
     restaurant: {
-        cuisineTypes: string[];
+        activityCategories: string[];
         priceRange: '€' | '€€' | '€€€' | '€€€€';
         acceptsReservations: boolean;
         reservationUrl?: string;

@@ -186,7 +186,7 @@ export class MarketOracle {
                 isPublishable: sourceCount >= K_ANONYMITY_THRESHOLD,
                 confidence: Math.min(0.95, 0.5 + (sourceCount * 0.05)),
                 regions: [region],
-                cuisineTypes: [...new Set(regionPulses.map(p => p.context.cuisineType))],
+                activityCategories: [...new Set(regionPulses.map(p => p.context.activityCategory))],
                 availableTier: sourceCount >= 10 ? 'TIER_3' : 'TIER_2',
                 generatedAt: new Date().toISOString(),
             });
@@ -230,7 +230,7 @@ export class MarketOracle {
                 isPublishable: sourceCount >= K_ANONYMITY_THRESHOLD,
                 confidence: Math.min(0.90, 0.4 + (sourceCount * 0.05)),
                 regions: [...new Set(cuisinePulses.map(p => p.context.region))],
-                cuisineTypes: [cuisine],
+                activityCategories: [cuisine],
                 availableTier: 'TIER_2',
                 generatedAt: new Date().toISOString(),
             });
@@ -257,7 +257,7 @@ export class MarketOracle {
                 isPublishable: sourceCount >= K_ANONYMITY_THRESHOLD,
                 confidence: Math.min(0.85, 0.3 + (sourceCount * 0.05)),
                 regions: [region],
-                cuisineTypes: [...new Set(regionPulses.map(p => p.context.cuisineType))],
+                activityCategories: [...new Set(regionPulses.map(p => p.context.activityCategory))],
                 availableTier: 'TIER_2',
                 generatedAt: new Date().toISOString(),
             });
@@ -295,7 +295,7 @@ export class MarketOracle {
             isPublishable: sourceCount >= K_ANONYMITY_THRESHOLD,
             confidence: Math.min(0.80, 0.3 + (sourceCount * 0.04)),
             regions: [...new Set(pulses.map(p => p.context.region))],
-            cuisineTypes: [...new Set(pulses.map(p => p.context.cuisineType))],
+            activityCategories: [...new Set(pulses.map(p => p.context.activityCategory))],
             availableTier: 'TIER_3',
             generatedAt: new Date().toISOString(),
         });
@@ -326,7 +326,7 @@ export class MarketOracle {
                 isPublishable: sourceCount >= K_ANONYMITY_THRESHOLD,
                 confidence: Math.min(0.85, 0.4 + (sourceCount * 0.05)),
                 regions: [...new Set(bandPulses.map(p => p.context.region))],
-                cuisineTypes: [...new Set(bandPulses.map(p => p.context.cuisineType))],
+                activityCategories: [...new Set(bandPulses.map(p => p.context.activityCategory))],
                 availableTier: 'TIER_2',
                 generatedAt: new Date().toISOString(),
             });
@@ -349,7 +349,7 @@ export class MarketOracle {
     private groupByCuisine(pulses: SanitizedPulse[]): Map<string, SanitizedPulse[]> {
         const map = new Map<string, SanitizedPulse[]>();
         for (const p of pulses) {
-            const cuisine = p.context.cuisineType;
+            const cuisine = p.context.activityCategory;
             map.set(cuisine, [...(map.get(cuisine) ?? []), p]);
         }
         return map;
