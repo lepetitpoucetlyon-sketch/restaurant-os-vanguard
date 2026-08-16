@@ -1,23 +1,63 @@
-# Exclure les dossiers de build et de dépendances
+# ==============================================================================
+# .graphifyignore — Exclusions pour l'analyse AST & Graphe de Dépendances
+# ==============================================================================
+
+# Dossiers de build et dépendances
 node_modules/
 .next/
+.next-mcc/
 out/
 dist/
 build/
+.venv/
+venv/
+__pycache__/
+*.pyc
 
-# Exclure les dossiers techniques non-code
+# Dossiers d'agents, caches mémoires et outils externes
+.antigravity/
+.nexus/
+.serena/
+.codegraph/
+.obsidian/
+.icm/
+.understand-anything/
+.kilocode/
+.sentrux/
+.mempalace/
+.gemini/
+.claude/
+.github/
+.vscode/
+.agent/
+.agents/skills/
+
+# Données brutes, benchmarks et archives
+04_ki_tree/
+05_vectors/
+99_quarantine/
+results/
+scratch/
+test-results/
+coverage/
+tests/audit-reports/
 graphify-out/
 graphify_tool/
 public/blueprint/
+public/blueprint-landing/
 artifacts/
 
-# Exclure les fichiers de config Firebase/Stitch
+# Configurations Cloud / Firebase
 functions/
 .firebase/
 firebase.json
 .firebaserc
 
-# Exclure les fichiers de log et de cache
+# Fichiers de dump, logs et caches d'état
 *.log
+*.jsonl
+*.tsbuildinfo
+*.sqlite
+*.sqlite-journal
 .DS_Store
 .env*
