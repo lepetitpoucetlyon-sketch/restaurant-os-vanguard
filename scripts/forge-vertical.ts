@@ -6,14 +6,18 @@
  *
  * Usage :
  *   npx tsx scripts/forge-vertical.ts --blueprint src/verticals/salon/salon.blueprint.ts [--dry-run] [--force]
- *   npx tsx scripts/forge-vertical.ts --blueprint <path> --study [--llm]
- *   npx tsx scripts/forge-vertical.ts --blueprint <path> --export MY_BLUEPRINT
+ *   npx tsx scripts/forge-vertical.ts --blueprint <path> [--llm]        # étude AUTO-activée
+ *   npx tsx scripts/forge-vertical.ts --blueprint <path> --no-study     # créer sans étude
+ *
+ * L'AGENT D'ÉTUDE DE SECTEUR S'ACTIVE AUTOMATIQUEMENT à chaque création de verticale :
+ * il produit un SectorStudy (substance) injecté dans le blueprint et sauvé en
+ * src/verticals/<slug>/<slug>.sector-study.json. Désactivable via --no-study.
  *
  * Options :
  *   --dry-run   n'écrit rien, liste ce qui serait généré.
- *   --force     écrase même les fichiers marqués skipIfExists (composants, DNA).
- *   --study     AUTO-LANCE l'agent d'étude de secteur et injecte la substance dans le blueprint.
- *   --llm       (avec --study) enrichit l'étude via le provider LLM du projet.
+ *   --force     écrase même les fichiers marqués skipIfExists (composants, DNA, étude).
+ *   --no-study  désactive l'agent d'étude de secteur (activé par défaut).
+ *   --llm       enrichit l'étude via le provider LLM du projet (sinon baseline déterministe).
  *   --export N  nom de l'export blueprint (défaut : *_BLUEPRINT ou default).
  *
  * Le câblage (PLATFORM_VARIANTS, Records de tokens, SystemTenantRegistry…) est
@@ -27,15 +31,16 @@ import { generateVertical, type ForgeOutput } from '@/verticals/_shared/forge';
 import { validateBlueprint, type VerticalBlueprint } from '@/verticals/_shared/blueprint';
 import { runSectorStudy, type StudyLLM } from '@/verticals/_shared/sector-study';
 
-interface Args { blueprint?: string; export?: string; dryRun: boolean; force: boolean; study: boolean; llm: boolean; }
+interface Args { blueprint?: string; export?: string; dryRun: boolean; force: boolean; noStudy: boolean; llm: boolean; }
 
 function parseArgs(argv: string[]): Args {
-    const args: Args = { dryRun: false, force: false, study: false, llm: false };
+    const args: Args = { dryRun: false, force: false, noStudy: false, llm: false };
     for (let i = 0; i < argv.length; i++) {
         const a = argv[i];
         if (a === '--dry-run') args.dryRun = true;
         else if (a === '--force') args.force = true;
-        else if (a === '--study') args.study = true;
+        else if (a === '--no-study') args.noStudy = true;
+        else if (a === '--study') { /* étude active par défaut — no-op de compatibilité */ }
         else if (a === '--llm') args.llm = true;
         else if (a === '--blueprint') args.blueprint = argv[++i];
         else if (a === '--export') args.export = argv[++i];
@@ -78,13 +83,26 @@ async function main(): Promise<void> {
     const mod = (await import(pathToFileURL(abs).href)) as Record<string, unknown>;
     const bp = pickBlueprint(mod, args.export);
 
-    // Auto-lancement de l'agent d'étude de secteur → substance injectée dans le blueprint.
-    if (args.study) {
+    // 🔬 Agent d'étude de secteur AUTO-ACTIVÉ à la création (désactivable via --no-study).
+    if (!args.noStudy) {
         const llm = await resolveLLM(args.llm);
-        console.log(`\n🔬 Auto-lancement de l'agent d'étude${llm ? ' (LLM)' : ' (baseline déterministe)'}…`);
+        console.log(`\n🔬 Agent d'étude AUTO-activé${llm ? ' (LLM)' : ' (baseline déterministe)'}…`);
         bp.substance = await runSectorStudy({ slug: bp.slug, profileId: bp.profile }, llm);
         const s = bp.substance;
         console.log(`   substance : ${s.workflows.length} process · ${s.regulations.length} réglementation(s) · ${s.hardware.length} matériel(s) · ${s.businessRules.length} règle(s) · confiance ${s.confidence}`);
+
+        // Persiste l'étude dans l'arborescence de la verticale.
+        const studyRel = `src/verticals/${bp.slug}/${bp.slug}.sector-study.json`;
+        const studyPath = path.resolve(process.cwd(), studyRel);
+        if (args.dryRun) {
+            console.log(`   📝 would write     ${studyRel}`);
+        } else if (await fileExists(studyPath) && !args.force) {
+            console.log(`   ⏭️  skip (existe)   ${studyRel}`);
+        } else {
+            await fs.mkdir(path.dirname(studyPath), { recursive: true });
+            await fs.writeFile(studyPath, JSON.stringify(bp.substance, null, 2), 'utf8');
+            console.log(`   ✅ étude sauvée    ${studyRel}`);
+        }
     }
 
     const problems = validateBlueprint(bp);

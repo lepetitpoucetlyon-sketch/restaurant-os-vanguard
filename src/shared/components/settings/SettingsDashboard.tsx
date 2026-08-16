@@ -17,7 +17,7 @@ import {
 } from "./panelsCore";
 import {
     IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
-    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel, ApiKeysPanel, CustomDomainPanel,
+    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel, ApiKeysPanel, CustomDomainPanel, OnboardingChecklistPanel, MaintenanceSettingsPanel,
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
@@ -43,11 +43,13 @@ import {
 
 
 import {
-    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot, Wallet
+    Building2, Clock, UtensilsCrossed, Users, Bell, CreditCard, Scale, Truck, Database, FileText, UserCircle, Package, ChevronRight, LayoutGrid, Star, Palette, Shield, Target, Plug, RotateCcw, Download, BookOpen, Receipt, Heart, ChefHat, CalendarDays, Upload, Bot, Wallet, ClipboardCheck, Wrench
 } from "lucide-react";
 
 // Settings categories
 const SETTINGS_CATEGORIES = [
+    { id: 'onboarding-checklist', label: 'Checklist Mise en Service', icon: ClipboardCheck, color: '#10B981', description: 'Audit J-0 & Progression des 8 Piliers' },
+    { id: 'maintenance', label: 'Maintenance & Alertes', icon: Wrench, color: '#F59E0B', description: 'GMAO, Alertes & Zones Restaurant' },
     { id: 'profile', label: 'Mon Profil', icon: UserCircle, color: '#C5A059' },
     { id: 'governance', label: 'Gouvernance & Experts', icon: Scale, description: 'Pilotage de l\'intelligence logicielle' },
     { id: 'nexus', label: 'Nexus AI (Mère)', icon: Bot, color: '#C5A059' },
@@ -159,6 +161,8 @@ export function SettingsDashboard() {
 
     const settingsContent = useMemo(() => {
         switch (activeCategory) {
+            case 'onboarding-checklist': return <OnboardingChecklistPanel />;
+            case 'maintenance': return <MaintenanceSettingsPanel />;
             case 'profile': return <ProfileSettings />;
             case 'governance': return <ExpertGovernanceHub />;
             case 'identity': return (

@@ -23,3 +23,10 @@ export const PayrollIntegrationPanel = lazyPanel(() =>
 );
 export const ApiKeysPanel = lazyPanel(() => import("@/shared/components/settings/ApiKeysPanel"));
 export const CustomDomainPanel = lazyPanel(() => import("@/shared/components/settings/CustomDomainPanel"));
+export const OnboardingChecklistPanel = lazyPanel(() =>
+    import("@/shared/components/settings/panels/OnboardingChecklistSettingsPanel").then(m => ({ default: m.OnboardingChecklistSettingsPanel })),
+);
+export const MaintenanceSettingsPanel = lazyPanel(() =>
+    import("@/shared/components/settings/panels/MaintenanceSettingsPanel").then(m => ({ default: m.MaintenanceSettingsPanel })),
+);
+
