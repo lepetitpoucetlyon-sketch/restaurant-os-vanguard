@@ -121,6 +121,7 @@ export function MCCTreasury() {
                         <div>
                             <h3 className="text-lg font-bold tracking-tight uppercase">Achats Groupés Flotte</h3>
                             <p className="text-xs text-secondary font-medium tracking-widest mt-1">Statut des négociations groupées industrielles</p>
+                            <p className="text-[9px] text-status-warning font-bold uppercase tracking-widest mt-0.5">Estimations contractuelles — négociations en cours</p>
                         </div>
                         <div className="p-3 bg-surface-card rounded-2xl">
                             <ShoppingBag className="w-5 h-5 text-brand" />
