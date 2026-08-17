@@ -2,8 +2,8 @@
   "protocol": "NEXUS-SINGULARITY-v6.0",
   "status_grade": "GRADE-X-SEALED",
   "project": "RESTAURANT-OS-CORE",
-  "version": "2.3.1-gradeX",
-  "last_global_sync": "2026-08-16T22:15:00Z",
+  "version": "2.4.0-gradeX",
+  "last_global_sync": "2026-08-17T07:35:00Z",
   "active_extensions": [
     "stripe",
     "paypal",

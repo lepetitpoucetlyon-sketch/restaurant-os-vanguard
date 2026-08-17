@@ -111,25 +111,29 @@ async function _deductStock(
   label: string,
 ): Promise<void> {
   const path = `tenants/${tenantId}/stockItems/${stockItemId}`;
-  const stockItem = await Nexus.adapter.get<StockItem>(path);
-  if (!stockItem) return;
 
-  const newQty = Math.max(0, (stockItem.quantity ?? 0) - qty);
-  await Nexus.adapter.update(path, {
-    quantity: newQty,
-    updatedAt: new Date().toISOString(),
-  });
+  // Vérifier l'existence avant le décrémentation atomique
+  const existing = await Nexus.adapter.get<StockItem>(path);
+  if (!existing) return;
+
+  // Décrémentation atomique — Invariant #2 concurrence (FieldValue.increment sur Firestore)
+  await Nexus.adapter.increment(path, 'quantity', -qty);
+  await Nexus.adapter.update(path, { updatedAt: new Date().toISOString() });
+
+  // Re-lecture pour les alertes seuil (best-effort post-decrement)
+  const updated = await Nexus.adapter.get<StockItem>(path);
+  const newQty = Math.max(0, updated?.quantity ?? 0);
 
   logger.info(`[StockDeduction] ${label} −${qty} → stock ${newQty}`);
 
-  if (stockItem.reorderThreshold !== undefined && newQty <= stockItem.reorderThreshold) {
+  if (existing.reorderThreshold !== undefined && newQty <= existing.reorderThreshold) {
     await NexusEventBus.emitDurable('stock.low', {
       v: 1,
       tenantId,
       itemId: stockItemId,
       itemName: label,
       currentQuantity: newQty,
-      threshold: stockItem.reorderThreshold,
+      threshold: existing.reorderThreshold,
     });
   }
 

@@ -247,6 +247,24 @@ export function useReservationsPage() {
             });
 
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
+
+            // Gate acompte grands groupes — vérifie si empreinte requise (non-bloquant)
+            const covers = resData.covers ?? 0;
+            if (covers >= 1) {
+                authedFetch('/api/reservations/card-imprint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'setup', reservationId: newResId, tenantId, covers }),
+                }).then(r => r.json()).then((result: { required?: boolean }) => {
+                    if (result.required) {
+                        toast.info(`Empreinte bancaire requise pour ce groupe (${covers} couverts) — à collecter dans la fiche de réservation`);
+                        Nexus.adapter.update(`tenants/${tenantId}/reservations/${newResId}`, {
+                            requiresCardImprint: true,
+                        }).catch(() => { /* non-critique */ });
+                    }
+                }).catch(() => { /* non-bloquant */ });
+            }
+
             const customer = customers.find((c: Customer) => c.id === resData.customerId);
             if (customer?.email) {
                 authedFetch("/api/email/reservation-confirm", {

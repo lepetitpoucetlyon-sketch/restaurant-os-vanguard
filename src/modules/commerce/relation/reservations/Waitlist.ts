@@ -1,4 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 interface WaitlistEntry {
     id: string;
@@ -54,10 +55,23 @@ export const WaitlistService = {
     },
 
     async notify(tenantId: string, entryId: string): Promise<void> {
+        const entry = await Nexus.adapter.get<WaitlistEntry>(`tenants/${tenantId}/waitlist/${entryId}`);
         await Nexus.adapter.update(
             `tenants/${tenantId}/waitlist/${entryId}`,
             { status: 'notified' }
         );
+
+        if (entry) {
+            await NexusEventBus.emitDurable('commerce.waitlist_ready', {
+                v: 1,
+                tenantId,
+                waitlistEntryId: entryId,
+                guestName: entry.guestName,
+                guestPhone: entry.guestPhone,
+                partySize: entry.partySize,
+                estimatedWaitMinutes: entry.estimatedWaitMinutes,
+            });
+        }
     },
 
     async remove(tenantId: string, entryId: string): Promise<void> {

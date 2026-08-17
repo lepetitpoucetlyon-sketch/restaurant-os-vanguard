@@ -10,6 +10,7 @@ import { registerNegativeReviewHandler } from '../handlers/NegativeReviewHandler
 import { BirthdayOfferHandler } from '../handlers/BirthdayOfferHandler';
 import { PromotionPriceHandler } from '../handlers/PromotionPriceHandler';
 import { PromotionExpiryHandler } from '../handlers/PromotionExpiryHandler';
+import { registerWaitlistReadyHandler } from '../handlers/WaitlistReadyHandler';
 
 export function registerCommerceHandlers(): Array<() => void> {
   return [
@@ -24,5 +25,6 @@ export function registerCommerceHandlers(): Array<() => void> {
     BirthdayOfferHandler.register(),
     PromotionPriceHandler.register(),
     PromotionExpiryHandler.register(),
+    registerWaitlistReadyHandler(),
   ];
 }

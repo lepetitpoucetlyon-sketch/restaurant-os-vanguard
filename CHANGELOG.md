@@ -1,6 +1,33 @@
 # 📜 CHANGELOG : RESTAURANT-OS [GRADE X]
 
-## [2.3.1] - 2026-08-16 - DÉCOUPAGE INTÉGRAL PHASE 2 : 12 COMPOSANTS UI SECONDAIRES & DISPATCHER STRIPE WEBHOOK 🏛️
+## [2.4.0] - 2026-08-17 - SOCLE UNIVERSEL MULTI-VERTICALES, REGISTRE DE BLUEPRINTS & ITEMS DU BACKLOG (GRADE X) 🏛️
+
+### 🏭 USINE À VERTICALES & BLUEPRINTS DÉCLARATIFS UNIVERSELS
+- **Registre Centralisé `VerticalBlueprintRegistry`** (`src/verticals/_shared/catalog/VerticalBlueprintRegistry.ts`) : Source unique de vérité regroupant les 12 blueprints métiers (8 actuels + 4 futurs).
+- **Homologation des 8 Blueprints Métiers Actuels** :
+  - `restaurant.blueprint.ts` (Profil A — Food & Périssable : Plan de salle, KDS, HACCP).
+  - `bakery.blueprint.ts` (Profil A — Fournées, précommandes, vitrine, allergènes INCO).
+  - `hotel.blueprint.ts` (Profil E — Hébergement PMS : Planning chambres, check-in/out, taxe de séjour).
+  - `garage.blueprint.ts` (Profil C — Atelier & Technique : Ordres de réparation, SIV, pièces TecDoc).
+  - `clinic.blueprint.ts` (Profil F — Santé & Soins : Dossier chiffré AES-256, SESAM-Vitale, CCAM).
+  - `retail.blueprint.ts` (Profil D — Retail & Variantes : Matrice taille/couleur, scan douchette 2D).
+  - `salon.blueprint.ts` (Profil B — Rendez-vous & Espace : Agenda stylistes, cabine, sous-variantes spa/barbier).
+  - `custom.blueprint.ts` (Profil H — Concept Store Hybride / Modulaire).
+- **Spécification des 4 Futures Verticales Cibles** :
+  - `gym.blueprint.ts` (Profil G — Accès & Abonnements : SEPA récurrent, tourniquets RFID, cours).
+  - `coworking.blueprint.ts` (Profil G — Bureaux flexibles, salles de réunion, forfaits heures).
+  - `veterinary.blueprint.ts` (Profil F — Dossiers animaux ICAD, vaccins, bloc chirurgie).
+  - `florist.blueprint.ts` (Profil D — Compositions florales, arrivages périssables, abonnements).
+
+### ⚡ ITEMS CLÉS DU BACKLOG OPÉRATIONNEL
+- **Acomptes & Arrhes Stripe (R10)** : Déclaration de `commerce.reservation_deposit_paid` dans `common.events.ts` et émission double (`commerce.reservation_deposit_paid` & `stripe.deposit_received`) dans `handlePaymentEvents.ts`.
+- **File d'Attente Temps Réel** : Câblage de `WaitlistReadyHandler.ts` sur `commerce.waitlist_ready` avec dispatch SMS et notification interne.
+- **Pointeuse Staff Anti-Rebond** : Protection 60s et persistance standardisée dans `/api/hr/clock-in`.
+
+### 🛡️ AUDIT ET VALIDATION INDUSTRIELLE
+- **`next build`** = **100% vert** (232/232 pages statiques compilées).
+- **`npx tsc --noEmit`** = **0 erreur** sur l'ensemble du projet.
+- **`npm test`** = **1032/1032 tests passants**.
 
 ### 🧱 MODULARISATION DE 12 COMPOSANTS UI SECONDAIRES (> 400L -> < 180L)
 - **12/12 Composants secondaires résolus & scindés en sous-dossiers dédiés** :

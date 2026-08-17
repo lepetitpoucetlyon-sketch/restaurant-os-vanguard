@@ -51,6 +51,7 @@ export async function handlePaymentIntentSucceeded(obj: Record<string, unknown>)
     };
 
     await dispatchServerEvent('stripe.deposit_received' as never, depositPayload as never);
-    logger.info(`[Stripe Webhook] stripe.deposit_received émis pour tenant ${tenantId} acompte=${depositPayload.depositId}`);
+    await dispatchServerEvent('commerce.reservation_deposit_paid', depositPayload);
+    logger.info(`[Stripe Webhook] commerce.reservation_deposit_paid & stripe.deposit_received émis pour tenant ${tenantId} acompte=${depositPayload.depositId}`);
   }
 }

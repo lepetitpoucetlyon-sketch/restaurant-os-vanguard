@@ -68,11 +68,11 @@
 | P1 | ⬜ | H2 | M | Intégration Deliveroo / Just Eat (agrégateur) | `src/lib/connectors/hub/DeliverooConnector.ts` | Homologation partenaire (buffer 3-6 mois) |
 | P1 | ✅ | H1 | — | Intégration TheFork / Zenchef (réservation) | `src/lib/connectors/hub/TheForkConnector.ts` | — |
 | P1 | ⬜ | H2 | M | Intégration Google Reserve (réservation via Google Maps) | `src/lib/connectors/hub/` | Homologation Google (buffer 3-6 mois) |
-| P1 | ⬜ | H1 | S | Arrhes / acompte obligatoire grands groupes avec Stripe | `src/app/api/webhooks/stripe/route.ts` | **Émet R10 `commerce.reservation_deposit_paid`** — bloquant P0 §DEBT |
+| P1 | ✅ | H1 | — | Arrhes / acompte obligatoire grands groupes avec Stripe | `src/app/api/webhooks/stripe/handlers/handlePaymentEvents.ts` | Émet R10 `commerce.reservation_deposit_paid` et `stripe.deposit_received` |
 | P1 | ✅ | H1 | — | Confirmation SMS / email + rappels J-1 et J-7 | `src/orchestration/handlers/ReservationNotifier.ts` | — |
 | P1 | 🔧 | H1 | S | Politique d'annulation paramétrable + pénalité no-show | `src/modules/commerce/relation/` | — |
-| P1 | 🔧 | H1 | M | Préférences clients (régime alimentaire, placement, occasion) | `src/modules/commerce/relation/crm/` | **RGPD Art. 9 pour allergènes** (dépend §DEBT 2.3) |
-| P1 | 🔧 | H1 | M | Liste d'attente temps réel avec SMS estimé | `src/modules/commerce/relation/` | Émet `commerce.waitlist_ready` |
+| P1 | ✅ | H1 | — | Préférences clients (régime alimentaire, placement, occasion) | `src/modules/commerce/relation/customers/components/NewCustomerDialog.tsx` | Chips structurés dietary/seating/occasion |
+| P1 | ✅ | H1 | — | Liste d'attente temps réel avec SMS estimé | `src/modules/commerce/relation/reservations/Waitlist.ts`, `WaitlistReadyHandler.ts` | Émet `commerce.waitlist_ready` → SMS + notif interne |
 | P2 | ⬜ | H3 | M | Réservation via WhatsApp Business | `src/lib/connectors/hub/WhatsAppConnector.ts` | — |
 | P2 | ✅ | H2 | — | Bons cadeaux / e-chèques (génération + validation POS) | `src/modules/commerce/pricing/` | — |
 | P2 | ⬜ | H2 | S | Programme parrainage (referral code + tracking) | `src/modules/commerce/relation/loyalty/` | — |
@@ -154,7 +154,7 @@
 | P1 | ✅ | H1 | — | Planning des équipes (roster hebdomadaire, conformité HCR) | `src/modules/human/planning/RosterEngine.ts` | — |
 | P1 | ✅ | H1 | — | Gestion congés / absences / RTT avec soldes | `src/app/(client)/(ops)/leaves/page.tsx` | — |
 | P1 | ✅ | H1 | — | Pointeuse badge / QR code / géolocalisation | `src/modules/human/timeclock/TimeclockEngine.ts` | Prérequis Kit J-0 H2 pour NFC hardware |
-| P1 | ⬜ | H1 | S | Debounce anti-rebond pointeuse staff (60s) | `src/modules/human/timeclock/` | Invariant #4 concurrence |
+| P1 | ✅ | H1 | — | Debounce anti-rebond pointeuse staff (60s) | `src/app/api/hr/clock-in/route.ts` | Anti-rebond 60s + 429 retryAfterMs |
 | P1 | ✅ | H1 | — | Calcul automatique heures supp (25% / 50%) | `src/orchestration/handlers/HRClockInGuardHandler.ts` | — |
 | P1 | ✅ | H1 | — | Répartition automatique des pourboires (pool / individuel / rank) | `src/design/settings/TipsDistributionSettingsSection.tsx` | — |
 | P1 | ✅ | H1 | — | DSN mensuelle (builder XML URSSAF net-entreprises) | `src/orchestration/handlers/PayrollExportHandler.ts` | **⚠️ à valider par expert-comptable sur dossier réel** avant 1er client |

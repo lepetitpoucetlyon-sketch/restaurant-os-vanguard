@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { X, User, Phone, Mail, Plus, Save, Tag as TagIcon, Star, Sparkles, Gem, ShieldCheck } from "lucide-react";
+import { X, User, Phone, Mail, Plus, Save, Tag as TagIcon, Star, Sparkles, Gem, ShieldCheck, Heart } from "lucide-react";
+
+const DIETARY_OPTIONS = ['Végétarien', 'Vegan', 'Sans gluten', 'Halal', 'Casher', 'Sans lactose'];
+const SEATING_OPTIONS = ['Fenêtre', 'Terrasse', 'Salle calme', 'Bar', 'Isolé', 'Grande tablée'];
+const OCCASION_OPTIONS = ['Anniversaire', 'EVJF', 'Business', 'Romantique', 'Famille', 'Amis'];
 import { Button } from "@ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
@@ -189,6 +193,44 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     </div>
                                 </div>
                             </div>
+                        </motion.div>
+
+                        {/* Préférences structurées */}
+                        <motion.div variants={itemVariants} className="space-y-8">
+                            <div className="flex items-center gap-4 border-b border-border pb-6">
+                                <Heart className="w-5 h-5 text-accent" />
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-primary">Préférences & Régimes</h3>
+                            </div>
+
+                            {[
+                                { label: 'Régime alimentaire', options: DIETARY_OPTIONS },
+                                { label: 'Placement préféré', options: SEATING_OPTIONS },
+                                { label: 'Occasion habituelle', options: OCCASION_OPTIONS },
+                            ].map(({ label, options }) => (
+                                <div key={label} className="space-y-3">
+                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">{label}</label>
+                                    <div className="flex flex-wrap gap-3">
+                                        {options.map(opt => {
+                                            const active = formData.preferences.includes(opt);
+                                            return (
+                                                <button
+                                                    key={opt}
+                                                    type="button"
+                                                    onClick={() => setFormData(prev => ({
+                                                        ...prev,
+                                                        preferences: active
+                                                            ? prev.preferences.filter(p => p !== opt)
+                                                            : [...prev.preferences, opt],
+                                                    }))}
+                                                    className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${active ? 'bg-accent text-bg-primary border-accent shadow-lg shadow-amber-500/20' : 'bg-bg-secondary border-border text-text-muted hover:border-accent/40'}`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
                         </motion.div>
 
                         {/* Segmentation */}
