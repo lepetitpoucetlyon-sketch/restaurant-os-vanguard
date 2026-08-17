@@ -21,8 +21,9 @@ export { DocumentVault } from './securite/DocumentVault';
 export { AuditLogger } from './securite/AuditLogger';
 export { ImmunityAuditLogger } from './securite/ImmunityAuditLogger';
 
-// Domaine : reglementaire (RGPD)
+// Domaine : reglementaire (RGPD, Contrats Légaux & Signatures)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
+export * from './legal';
 
 // Infrastructure pilier (connectors, services, types)
 export type { PiiRecord, PiiFields } from './domain/schemas/pii';

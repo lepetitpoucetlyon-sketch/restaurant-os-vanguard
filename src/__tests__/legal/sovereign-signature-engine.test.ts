@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { LegalContractGenerator, type ContractDraftInput } from '@/modules/legal/services/LegalContractGenerator';
-import { SovereignSignatureEngine, type SignatureSubmissionInput } from '@/modules/legal/services/SovereignSignatureEngine';
+import { LegalContractGenerator, type ContractDraftInput } from '@/modules/compliance/legal/services/LegalContractGenerator';
+import { SovereignSignatureEngine, type SignatureSubmissionInput } from '@/modules/compliance/legal/services/SovereignSignatureEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 describe('Système Contractuel B2B & Moteur d E-Signature Souverain (DocuSign Equiv)', () => {

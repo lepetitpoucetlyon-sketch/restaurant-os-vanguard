@@ -25,7 +25,6 @@ import { SovereignLockout } from "@components/layout/SovereignLockout";
 import { BrandingProvider } from "@/lib/BrandingProvider";
 import { SplashGate } from "@/shared/providers/SplashGate";
 import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
-import { PerformanceEngine } from "@/theme/PerformanceEngine";
 import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
 
 export function NexusProviderStack({ children }: { children: React.ReactNode }) {
@@ -34,7 +33,6 @@ export function NexusProviderStack({ children }: { children: React.ReactNode }) 
             <InstanceGuardGate>
             <ToastProvider>
                 <BrandingProvider />
-                <PerformanceEngine />
                 <NexusPulseOrchestrator />
                 <SovereignLockout />
                 <ContextualSettingsProvider>

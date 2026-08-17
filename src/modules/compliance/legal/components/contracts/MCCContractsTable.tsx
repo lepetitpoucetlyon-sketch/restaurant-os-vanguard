@@ -1,7 +1,8 @@
 'use client';
 
+import React from 'react';
 import { Search, FileText, CheckCircle2, Clock, Send } from 'lucide-react';
-import type { ContractRecord } from '@/modules/legal';
+import type { ContractRecord } from '@/modules/compliance';
 
 interface MCCContractsTableProps {
   filteredContracts: ContractRecord[];

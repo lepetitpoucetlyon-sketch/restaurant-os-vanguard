@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { ContractRecord, VerticalType } from '@/modules/legal';
+import type { ContractRecord, VerticalType } from '@/modules/compliance';
 
 import { MCCStatsCards } from './contracts/MCCStatsCards';
 import { MCCContractsTable } from './contracts/MCCContractsTable';

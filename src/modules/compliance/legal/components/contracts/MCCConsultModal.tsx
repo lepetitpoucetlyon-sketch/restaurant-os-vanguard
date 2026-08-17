@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, ShieldCheck, X } from 'lucide-react';
-import type { ContractRecord } from '@/modules/legal';
+import type { ContractRecord } from '@/modules/compliance';
 
 interface MCCConsultModalProps {
   selectedContract: ContractRecord | null;

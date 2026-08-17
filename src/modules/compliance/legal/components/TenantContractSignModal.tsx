@@ -11,7 +11,7 @@ import {
   RotateCcw,
   Lock,
 } from 'lucide-react';
-import type { ContractRecord } from '@/modules/legal';
+import type { ContractRecord } from '@/modules/compliance';
 
 interface TenantContractSignModalProps {
   contract: ContractRecord;

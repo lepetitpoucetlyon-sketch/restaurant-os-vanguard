@@ -1,7 +1,7 @@
 'use client';
 
 import { FileText, CheckCircle2, Clock, Plus } from 'lucide-react';
-import type { ContractRecord } from '@/modules/legal';
+import type { ContractRecord } from '@/modules/compliance';
 
 interface MCCStatsCardsProps {
   contracts: ContractRecord[];
