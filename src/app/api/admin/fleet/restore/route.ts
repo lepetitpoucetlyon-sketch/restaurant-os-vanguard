@@ -18,6 +18,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusInfra } from '@/lib/nexus/NexusInfra';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
@@ -52,37 +53,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Restauration limitée à J-30 (PITR Firestore)' }, { status: 400 });
   }
 
-  const jobId     = crypto.randomUUID();
   const initiatedAt = new Date().toISOString();
 
-  // PITR réel si FIRESTORE_PROJECT_ID configuré et API disponible
-  let status = 'simulated';
-  let pitrOperationId: string | null = null;
-
-  if (process.env.FIRESTORE_PROJECT_ID && process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    try {
-      // Firestore-only — PITR non-portable vers d'autres providers Nexus
-      const projectId = process.env.FIRESTORE_PROJECT_ID;
-      const res = await fetch(
-        `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default):restore`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            backup: `projects/${projectId}/locations/europe-west1/backups/${tenantId}_backup`,
-            databaseId: `restore-${tenantId}-${jobId.slice(0, 8)}`,
-          }),
-        }
-      );
-      if (res.ok) {
-        const op = await res.json() as { name?: string };
-        pitrOperationId = op.name ?? null;
-        status = 'initiated';
-      }
-    } catch {
-      logger.warn(`[Restore] PITR API non disponible — job ${jobId} simulé`);
-    }
-  }
+  // PITR délégué au provider NexusInfra (agnostique : Firestore / Postgres / Mongo / …)
+  const pitrResult = await NexusInfra.pitrRestore(tenantId, targetTimestamp);
+  const { jobId, pitrOperationId = null, status } = pitrResult;
 
   const job = {
     jobId,

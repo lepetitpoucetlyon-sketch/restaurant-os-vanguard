@@ -261,6 +261,7 @@ details>summary+*{margin-top:8px}
     <a href="#audit-2026-07" style="color:var(--warn)">24 — Audit Complet 2026-07-20</a>
     <a href="#audit-360-remediation" style="color:var(--success)">25 — Audit 360 & Remédiations 2026-07-26</a>
     <a href="#nexus-event-bus" style="color:var(--info)">26 — Bus Événementiel Neuro-Réactif</a>
+    <a href="#provider-migration" style="color:var(--success)">27 — Migration Provider DB &amp; Auth</a>
     <a href="#checklist">19 — Checklist Complète</a>
   </div>
 </nav>
@@ -5894,5 +5895,629 @@ sections.forEach(s => obs.observe(s));
 // Boot checklist
 buildChecklist();
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     §27 — MIGRATION PROVIDER DB & AUTH
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="chapter" id="provider-migration">
+  <div class="chapter-header">
+    <span class="chapter-num">27</span>
+    <div>
+      <div class="chapter-title">Migration Provider DB &amp; Auth</div>
+      <div class="chapter-sub">Changer de Firestore, Postgres, Mongo, Keycloak — 1 variable d'env + 1 fichier</div>
+    </div>
+  </div>
+
+  <!-- ── Philosophie ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--info)">🏗 Architecture plug-and-play</span></div>
+    <p style="padding:0 16px 12px;line-height:1.7;color:var(--text-mid)">
+      L'OS n'est <strong>jamais</strong> couplé à un provider spécifique dans sa logique métier (NF525, HACCP, POS, SAGA, RBAC).
+      Deux interfaces définissent les seuls points de contact légitimes :
+    </p>
+    <div class="tbl-wrap"><table>
+      <tr><th>Interface</th><th>Fichier</th><th>Résolution</th><th>Méthodes</th></tr>
+      <tr><td><code>INexusAdapter</code></td><td><code>src/lib/nexus/types.ts</code></td><td><code>NEXUS_PROVIDER</code> env var</td><td>get / set / query / delete / batch / onSnapshot / increment / runTransaction</td></tr>
+      <tr><td><code>IServerAuthProvider</code></td><td><code>src/lib/auth/ServerAuthProvider.ts</code></td><td><code>AUTH_PROVIDER</code> env var</td><td>verifyIdToken / createUser / getUserByEmail / getUser / setCustomClaims / deleteUser</td></tr>
+      <tr><td><code>INexusInfraProvider</code></td><td><code>src/lib/nexus/NexusInfra.ts</code></td><td><code>NEXUS_PROVIDER</code> env var</td><td>pitrRestore</td></tr>
+    </table></div>
+    <p style="padding:0 16px 12px;line-height:1.7;color:var(--text-mid)">
+      <strong>Règle d'or :</strong> toute la logique métier appelle <code>Nexus.adapter.*</code> et <code>getServerAuthProvider().*</code>.
+      Aucune route, handler ou service ne connaît Firestore, Supabase ou Keycloak directement.
+      Côté navigateur : <code>AuthSession.tsx</code> reste sur le SDK client Firebase — c'est une couche séparée
+      (elle serait remplacée par Keycloak.js si tu migres l'auth, mais indépendamment du reste).
+    </p>
+  </div>
+
+  <!-- ── Matrice de décision ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><span class="card-title">Matrice de décision provider</span></div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Provider</th><th>NEXUS_PROVIDER</th><th>Cas d'usage</th><th>PITR</th><th>Realtime</th><th>État impl.</th></tr>
+      <tr>
+        <td><strong>Firestore</strong></td><td><code>firestore</code> (défaut)</td>
+        <td>SaaS rapide, pas de gestion infra, mondial</td>
+        <td><span class="chip chip-green">REST API</span></td>
+        <td><span class="chip chip-green">onSnapshot natif</span></td>
+        <td><span class="chip chip-green">Complet ✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>Supabase/Postgres</strong></td><td><code>postgres</code></td>
+        <td>OVH, souveraineté données UE, SQL, HDS</td>
+        <td><span class="chip chip-yellow">Management API</span></td>
+        <td><span class="chip chip-yellow">Supabase Realtime</span></td>
+        <td><span class="chip chip-red">Stub — à implémenter</span></td>
+      </tr>
+      <tr>
+        <td><strong>MongoDB Atlas</strong></td><td><code>mongo</code></td>
+        <td>Flex schéma, Atlas Search, géo-distribué</td>
+        <td><span class="chip chip-yellow">Atlas Admin API</span></td>
+        <td><span class="chip chip-yellow">Change Streams</span></td>
+        <td><span class="chip chip-red">Stub — à implémenter</span></td>
+      </tr>
+      <tr>
+        <td><strong>SQLite (Turso)</strong></td><td><code>sqlite</code></td>
+        <td>Edge, serverless, dev local offline</td>
+        <td><span class="chip chip-gray">Non supporté</span></td>
+        <td><span class="chip chip-gray">Polling</span></td>
+        <td><span class="chip chip-red">Stub — à implémenter</span></td>
+      </tr>
+      <tr>
+        <td><strong>Mock (tests)</strong></td><td><code>mock</code></td>
+        <td>Vitest, CI, démo locale sans Firebase</td>
+        <td><span class="chip chip-gray">Simulé</span></td>
+        <td><span class="chip chip-green">In-memory</span></td>
+        <td><span class="chip chip-green">Complet ✓</span></td>
+      </tr>
+    </table></div>
+    <div class="tbl-wrap" style="margin-top:12px"><table>
+      <tr><th>Auth Provider</th><th>AUTH_PROVIDER</th><th>Cas d'usage</th><th>État impl.</th></tr>
+      <tr>
+        <td><strong>Firebase Auth</strong></td><td><code>firebase</code> (défaut)</td>
+        <td>Démarrage rapide, SDK mobile, Google SSO</td>
+        <td><span class="chip chip-green">Complet ✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>Keycloak / OIDC</strong></td><td><code>keycloak</code></td>
+        <td>OVH, SAML2, SSO entreprise, on-premise</td>
+        <td><span class="chip chip-red">verifyIdToken ✓ — createUser/claims stubs</span></td>
+      </tr>
+    </table></div>
+  </div>
+
+  <!-- ═══ TUTORIEL 1 — FIRESTORE ═══ -->
+  <details style="margin-bottom:10px">
+    <summary>🔥 Tutoriel 1 — Firestore (provider actuel, déjà opérationnel)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-blue" style="margin-top:0">
+        Aucune action requise — c'est le provider par défaut. Ce tutoriel documente comment il fonctionne pour référence et pour faciliter la comparaison avec les autres providers.
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Variables d'env</div>
+      <div class="code-block">
+<span class="c-muted"># .env.production</span>
+NEXUS_PROVIDER=<span class="c-green">firestore</span>         <span class="c-muted"># ou absent (défaut)</span>
+AUTH_PROVIDER=<span class="c-green">firebase</span>          <span class="c-muted"># ou absent (défaut)</span>
+FIREBASE_SERVICE_ACCOUNT_JSON=<span class="c-accent">'{"type":"service_account",...}'</span>
+FIRESTORE_PROJECT_ID=<span class="c-accent">mon-projet-firebase</span>  <span class="c-muted"># pour PITR uniquement</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Fichiers impliqués</div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Fichier</th><th>Rôle</th></tr>
+        <tr><td><code>src/lib/adapters/FirestoreAdapter.ts</code></td><td>Adapter client (IndexedDB cache + Firestore)</td></tr>
+        <tr><td><code>src/lib/adapters/FirestoreServerAdapter.ts</code></td><td>Adapter server-only (firebase-admin SDK)</td></tr>
+        <tr><td><code>src/lib/auth/ServerAuthProvider.ts</code> → <code>FirebaseAuthProvider</code></td><td>Auth serveur (createUser, claims, deleteUser)</td></tr>
+        <tr><td><code>src/lib/nexus/NexusInfra.ts</code> → <code>FirestoreInfraProvider</code></td><td>PITR via REST API Firestore Admin</td></tr>
+        <tr><td><code>src/shared/providers/hooks/auth/AuthSession.tsx</code></td><td>Auth navigateur (onAuthStateChanged, signInWithCustomToken)</td></tr>
+      </table></div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Points de vigilance Firestore</div>
+      <div class="alert alert-yellow">
+        <strong>PITR Firestore :</strong> J-30 max. La restauration crée une <em>copie</em> de la base dans un nouveau database ID, pas une restauration in-place. Les <code>journalEntries</code> et <code>fiscalSeals</code> sont explicitement exclus de toute restauration (règle NF525).
+      </div>
+      <div class="alert alert-yellow">
+        <strong>SovereignGuard :</strong> les règles Firestore (<code>firestore.rules</code>) lisent <code>request.auth.token.tenantId</code> et <code>request.auth.token.role</code>. Si tu changes d'auth provider, les custom claims doivent utiliser exactement les mêmes clés.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ TUTORIEL 2 — SUPABASE/POSTGRES ═══ -->
+  <details style="margin-bottom:10px">
+    <summary>🐘 Tutoriel 2 — Supabase / PostgreSQL (OVH, HDS, souveraineté UE)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-yellow" style="margin-top:0">
+        <strong>État :</strong> L'interface est en place, le stub existe. Il faut écrire <code>SupabaseAdapter</code> et compléter <code>PostgresInfraProvider.pitrRestore()</code>. Effort estimé : 2-3 jours.
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 1 — Variables d'env</div>
+      <div class="code-block">
+<span class="c-muted"># .env.production</span>
+NEXUS_PROVIDER=<span class="c-green">postgres</span>
+AUTH_PROVIDER=<span class="c-green">firebase</span>              <span class="c-muted"># Auth Firebase peut rester pendant la migration data</span>
+
+SUPABASE_URL=<span class="c-accent">https://xxxx.supabase.co</span>
+SUPABASE_SERVICE_ROLE_KEY=<span class="c-accent">eyJhbGci...</span>    <span class="c-muted"># Clé secrète — jamais dans le client</span>
+SUPABASE_PROJECT_REF=<span class="c-accent">xxxx</span>               <span class="c-muted"># Pour PITR via Management API</span>
+SUPABASE_ACCESS_TOKEN=<span class="c-accent">sbp_...</span>             <span class="c-muted"># Token personnel Supabase</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 2 — Créer la table nexus_documents (migration SQL)</div>
+      <div class="code-block">
+<span class="c-muted">-- supabase/migrations/001_nexus_documents.sql</span>
+<span class="c-green">CREATE TABLE</span> nexus_documents (
+  tenant_id   TEXT        <span class="c-green">NOT NULL</span>,
+  collection  TEXT        <span class="c-green">NOT NULL</span>,
+  doc_id      TEXT        <span class="c-green">NOT NULL</span>,
+  data        JSONB       <span class="c-green">NOT NULL DEFAULT</span> <span class="c-accent">'{}'</span>,
+  created_at  TIMESTAMPTZ <span class="c-green">NOT NULL DEFAULT</span> now(),
+  updated_at  TIMESTAMPTZ <span class="c-green">NOT NULL DEFAULT</span> now(),
+  <span class="c-green">PRIMARY KEY</span> (tenant_id, collection, doc_id)
+);
+
+<span class="c-muted">-- Index pour les queries par collection</span>
+<span class="c-green">CREATE INDEX</span> idx_nexus_tenant_col <span class="c-green">ON</span> nexus_documents (tenant_id, collection);
+
+<span class="c-muted">-- Row-Level Security — équivalent du SovereignGuard Firestore</span>
+<span class="c-green">ALTER TABLE</span> nexus_documents <span class="c-green">ENABLE ROW LEVEL SECURITY</span>;
+<span class="c-green">CREATE POLICY</span> tenant_isolation <span class="c-green">ON</span> nexus_documents
+  <span class="c-green">USING</span> (tenant_id = current_setting(<span class="c-accent">'app.tenant_id'</span>, true));
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 3 — Implémenter SupabaseAdapter</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/adapters/SupabaseAdapter.ts</span>
+<span class="c-green">import</span> { createClient } <span class="c-green">from</span> <span class="c-accent">'@supabase/supabase-js'</span>;
+<span class="c-green">import type</span> { INexusAdapter } <span class="c-green">from</span> <span class="c-accent">'@/lib/nexus/types'</span>;
+
+<span class="c-muted">// path Nexus "tenants/abc/orders/xyz" → { tenantId, collection, docId }</span>
+<span class="c-green">function</span> parsePath(path: string) {
+  <span class="c-green">const</span> parts = path.split(<span class="c-accent">'/'</span>);
+  <span class="c-green">if</span> (parts[0] === <span class="c-accent">'tenants'</span>) {
+    <span class="c-green">return</span> { tenantId: parts[1], collection: parts.slice(2, -1).join(<span class="c-accent">'/'</span>), docId: parts.at(-1)! };
+  }
+  <span class="c-muted">// Collections MCC (mcc/restoreJobs/xyz)</span>
+  <span class="c-green">return</span> { tenantId: <span class="c-accent">'__mcc__'</span>, collection: parts.slice(0, -1).join(<span class="c-accent">'/'</span>), docId: parts.at(-1)! };
+}
+
+<span class="c-green">export class</span> SupabaseAdapter <span class="c-green">implements</span> INexusAdapter {
+  <span class="c-green">private</span> sb = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false } }
+  );
+
+  <span class="c-green">async</span> get(path: string) {
+    <span class="c-green">const</span> { tenantId, collection, docId } = parsePath(path);
+    <span class="c-green">const</span> { data } = <span class="c-green">await</span> this.sb.from(<span class="c-accent">'nexus_documents'</span>)
+      .select(<span class="c-accent">'data'</span>).eq(<span class="c-accent">'tenant_id'</span>, tenantId)
+      .eq(<span class="c-accent">'collection'</span>, collection).eq(<span class="c-accent">'doc_id'</span>, docId).maybeSingle();
+    <span class="c-green">return</span> data?.data ?? null;
+  }
+
+  <span class="c-green">async</span> set(path: string, value: unknown, opts?: { merge?: boolean }) {
+    <span class="c-green">const</span> { tenantId, collection, docId } = parsePath(path);
+    <span class="c-green">const</span> row = { tenant_id: tenantId, collection, doc_id: docId,
+      data: opts?.merge ? { ...((<span class="c-green">await</span> this.get(path)) ?? {}), ...(value as object) } : value,
+      updated_at: new Date().toISOString() };
+    <span class="c-green">await</span> this.sb.from(<span class="c-accent">'nexus_documents'</span>).upsert(row, { onConflict: <span class="c-accent">'tenant_id,collection,doc_id'</span> });
+  }
+
+  <span class="c-green">async</span> query(path: string, opts?: { where?: Record&lt;string, unknown&gt; }) {
+    <span class="c-green">const</span> { tenantId, collection } = parsePath(path + <span class="c-accent">'/dummy'</span>);
+    let q = this.sb.from(<span class="c-accent">'nexus_documents'</span>).select(<span class="c-accent">'data'</span>)
+      .eq(<span class="c-accent">'tenant_id'</span>, tenantId).eq(<span class="c-accent">'collection'</span>, collection);
+    <span class="c-green">if</span> (opts?.where) {
+      <span class="c-green">for</span> (<span class="c-green">const</span> [k, v] <span class="c-green">of</span> Object.entries(opts.where))
+        q = q.eq(<span class="c-accent">`data->>'${k}'`</span>, String(v));
+    }
+    <span class="c-green">const</span> { data } = <span class="c-green">await</span> q;
+    <span class="c-green">return</span> (data ?? []).map(r => r.data);
+  }
+
+  <span class="c-green">async</span> delete(path: string) {
+    <span class="c-green">const</span> { tenantId, collection, docId } = parsePath(path);
+    <span class="c-green">await</span> this.sb.from(<span class="c-accent">'nexus_documents'</span>).delete()
+      .eq(<span class="c-accent">'tenant_id'</span>, tenantId).eq(<span class="c-accent">'collection'</span>, collection).eq(<span class="c-accent">'doc_id'</span>, docId);
+  }
+
+  <span class="c-muted">// onSnapshot → Supabase Realtime (postgres_changes)</span>
+  onSnapshot(path: string, cb: (d: unknown) => void) {
+    <span class="c-green">const</span> { tenantId, collection, docId } = parsePath(path);
+    <span class="c-green">const</span> channel = this.sb.channel(<span class="c-accent">`doc:${path}`</span>)
+      .on(<span class="c-accent">'postgres_changes'</span>, { event: <span class="c-accent">'*'</span>, schema: <span class="c-accent">'public'</span>, table: <span class="c-accent">'nexus_documents'</span>,
+          filter: <span class="c-accent">`tenant_id=eq.${tenantId}&amp;collection=eq.${collection}&amp;doc_id=eq.${docId}`</span> },
+        payload => cb(payload.new))
+      .subscribe();
+    <span class="c-green">return</span> () => this.sb.removeChannel(channel);
+  }
+
+  generateId() { <span class="c-green">return</span> crypto.randomUUID(); }
+  serverTimestamp() { <span class="c-green">return</span> new Date().toISOString(); }
+  <span class="c-muted">// batch, increment, runTransaction — à compléter selon besoins</span>
+}
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 4 — Enregistrer l'adapter dans serverNexus.ts</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/nexus/serverNexus.ts — ajouter dans ensureServerNexus()</span>
+<span class="c-green">if</span> (provider === <span class="c-accent">'postgres'</span>) {
+  <span class="c-green">const</span> { SupabaseAdapter } = <span class="c-green">await</span> <span class="c-accent">import</span>(<span class="c-accent">'@/lib/adapters/SupabaseAdapter'</span>);
+  Nexus.registerServerAdapter(<span class="c-green">new</span> SupabaseAdapter());
+  <span class="c-green">return</span>;
+}
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 5 — Compléter PostgresInfraProvider (PITR)</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/nexus/NexusInfra.ts — PostgresInfraProvider.pitrRestore()</span>
+<span class="c-green">async</span> pitrRestore(tenantId: string, targetTimestamp: string) {
+  <span class="c-green">const</span> projectRef = process.env.SUPABASE_PROJECT_REF!;
+  <span class="c-green">const</span> token = process.env.SUPABASE_ACCESS_TOKEN!;
+  <span class="c-green">const</span> jobId = crypto.randomUUID();
+
+  <span class="c-muted">// POST https://api.supabase.com/v1/projects/{ref}/database/backups/restore</span>
+  <span class="c-green">const</span> res = <span class="c-green">await</span> fetch(
+    <span class="c-accent">`https://api.supabase.com/v1/projects/${projectRef}/database/backups/restore`</span>,
+    { method: <span class="c-accent">'POST'</span>,
+      headers: { Authorization: <span class="c-accent">`Bearer ${token}`</span>, <span class="c-accent">'Content-Type'</span>: <span class="c-accent">'application/json'</span> },
+      body: JSON.stringify({ recovery_time_target: targetTimestamp }) }
+  );
+  <span class="c-green">if</span> (res.ok) <span class="c-green">return</span> { jobId, status: <span class="c-accent">'initiated'</span> <span class="c-green">as const</span>, pitrOperationId: null };
+  <span class="c-green">return</span> { jobId, status: <span class="c-accent">'simulated'</span> <span class="c-green">as const</span> };
+}
+      </div>
+
+      <div class="alert alert-yellow">
+        <strong>SovereignGuard avec Postgres :</strong> les règles Firestore (<code>firestore.rules</code>) ne s'appliquent plus. La sécurité multi-tenant passe par la <strong>Row-Level Security</strong> Postgres (<code>app.tenant_id</code> en setting de session) et l'intercepteur Nexus côté application. Le <code>NexusInterceptor</code> continue d'injecter le <code>tenantId</code> — c'est lui qui fait le <code>SET LOCAL app.tenant_id = ...</code> avant chaque requête.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ TUTORIEL 3 — MONGODB ATLAS ═══ -->
+  <details style="margin-bottom:10px">
+    <summary>🍃 Tutoriel 3 — MongoDB Atlas (flex schéma, Atlas Search, géo-distribué)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-yellow" style="margin-top:0">
+        <strong>État :</strong> Stub <code>MongoInfraProvider</code> en place. Il faut écrire <code>MongoAdapter</code>. Effort estimé : 2 jours.
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Variables d'env</div>
+      <div class="code-block">
+NEXUS_PROVIDER=<span class="c-green">mongo</span>
+MONGO_URI=<span class="c-accent">mongodb+srv://user:pass@cluster.mongodb.net/restaurantos</span>
+MONGO_ATLAS_PROJECT_ID=<span class="c-accent">xxxxxxxx</span>    <span class="c-muted"># Pour PITR via Atlas Admin API</span>
+MONGO_ATLAS_API_KEY=<span class="c-accent">xxxx:yyyy</span>         <span class="c-muted"># publicKey:privateKey</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Modèle de document MongoDB</div>
+      <div class="code-block">
+<span class="c-muted">// Chaque document Nexus → 1 document MongoDB</span>
+<span class="c-muted">// Collection : nexus_documents</span>
+{
+  _id: <span class="c-accent">"tenants/abc/orders/xyz"</span>,   <span class="c-muted">// path Nexus complet = _id unique</span>
+  tenantId: <span class="c-accent">"abc"</span>,
+  collection: <span class="c-accent">"orders"</span>,
+  data: { <span class="c-muted">/* contenu BSON */</span> },
+  updatedAt: ISODate(<span class="c-accent">"2026-08-17"</span>)
+}
+
+<span class="c-muted">// Index MongoDB</span>
+db.nexus_documents.createIndex({ tenantId: 1, collection: 1 });
+db.nexus_documents.createIndex({ <span class="c-accent">"data.status"</span>: 1 });    <span class="c-muted">// pour les queries filtrées</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Squelette MongoAdapter</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/adapters/MongoAdapter.ts</span>
+<span class="c-green">import</span> { MongoClient } <span class="c-green">from</span> <span class="c-accent">'mongodb'</span>;
+<span class="c-green">import type</span> { INexusAdapter } <span class="c-green">from</span> <span class="c-accent">'@/lib/nexus/types'</span>;
+
+<span class="c-green">export class</span> MongoAdapter <span class="c-green">implements</span> INexusAdapter {
+  <span class="c-green">private</span> client = <span class="c-green">new</span> MongoClient(process.env.MONGO_URI!);
+  <span class="c-green">private</span> col = () => this.client.db().collection(<span class="c-accent">'nexus_documents'</span>);
+
+  <span class="c-green">async</span> get(path: string) {
+    <span class="c-green">const</span> doc = <span class="c-green">await</span> this.col().findOne({ _id: path <span class="c-green">as</span> unknown <span class="c-green">as</span> never });
+    <span class="c-green">return</span> doc?.data ?? null;
+  }
+
+  <span class="c-green">async</span> set(path: string, value: unknown, opts?: { merge?: boolean }) {
+    <span class="c-green">const</span> parts = path.split(<span class="c-accent">'/'</span>);
+    <span class="c-green">const</span> data = opts?.merge
+      ? { ...((<span class="c-green">await</span> this.get(path)) ?? {}), ...(value as object) }
+      : value;
+    <span class="c-green">await</span> this.col().replaceOne(
+      { _id: path <span class="c-green">as</span> unknown <span class="c-green">as</span> never },
+      { _id: path, tenantId: parts[1] ?? <span class="c-accent">'__mcc__'</span>, collection: parts.slice(2,-1).join(<span class="c-accent">'/'</span>), data, updatedAt: <span class="c-green">new</span> Date() },
+      { upsert: true }
+    );
+  }
+
+  <span class="c-muted">// query, delete, onSnapshot (Change Streams), increment ($inc), runTransaction</span>
+  <span class="c-muted">// → à compléter sur le même modèle</span>
+  generateId() { <span class="c-green">return</span> crypto.randomUUID(); }
+  serverTimestamp() { <span class="c-green">return</span> <span class="c-green">new</span> Date().toISOString(); }
+}
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">PITR — Atlas Admin API</div>
+      <div class="code-block">
+<span class="c-muted">// MongoInfraProvider.pitrRestore() — à compléter dans NexusInfra.ts</span>
+<span class="c-green">const</span> res = <span class="c-green">await</span> fetch(
+  <span class="c-accent">`https://cloud.mongodb.com/api/atlas/v2/groups/${projectId}/clusters/${clusterName}/backup/restoreJobs`</span>,
+  { method: <span class="c-accent">'POST'</span>,
+    headers: { <span class="c-accent">'Content-Type'</span>: <span class="c-accent">'application/vnd.atlas.2023-01-01+json'</span>,
+               Authorization: <span class="c-accent">`Digest ${digestAuth}`</span> },
+    body: JSON.stringify({
+      deliveryType: <span class="c-accent">'pointInTime'</span>,
+      pointInTimeUTCSeconds: Math.floor(<span class="c-green">new</span> Date(targetTimestamp).getTime() / 1000),
+      targetClusterName: <span class="c-accent">`restore-${tenantId}`</span>
+    }) }
+);
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ TUTORIEL 4 — KEYCLOAK ═══ -->
+  <details style="margin-bottom:10px">
+    <summary>🔐 Tutoriel 4 — Keycloak (OVH, SSO entreprise, on-premise, SAML2/OIDC)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-yellow" style="margin-top:0">
+        <strong>État :</strong> <code>verifyIdToken</code> (via jose JWKS) est opérationnel. <code>createUser</code>, <code>setCustomClaims</code>, <code>deleteUser</code> sont des stubs qui throw. Effort estimé : 1 jour pour compléter l'API Admin Keycloak.
+      </div>
+      <div class="alert alert-blue">
+        <strong>Indépendant de NEXUS_PROVIDER.</strong> Tu peux migrer l'auth vers Keycloak tout en gardant Firestore comme base de données, ou l'inverse. Les deux variables d'env sont orthogonales.
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 1 — Déployer Keycloak (OVH)</div>
+      <div class="code-block">
+<span class="c-muted"># Option A — OVH Managed Kubernetes (recommandé prod)</span>
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install keycloak bitnami/keycloak \
+  --set auth.adminUser=admin \
+  --set auth.adminPassword=<span class="c-accent">$KC_ADMIN_PASSWORD</span> \
+  --set postgresql.enabled=true \
+  --set ingress.enabled=true \
+  --set ingress.hostname=auth.ton-domaine.fr
+
+<span class="c-muted"># Option B — Docker OVH VPS (dev/staging)</span>
+docker run -p 8080:8080 \
+  -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=<span class="c-accent">secret</span> \
+  quay.io/keycloak/keycloak:25.0 start-dev
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 2 — Configurer le realm et les mappers de claims</div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <div class="flow-title">Créer le realm <code>restaurantos</code></div>
+            <div class="flow-desc">Admin Console → Create Realm → name: <code>restaurantos</code></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <div class="flow-title">Créer un client OpenID Connect</div>
+            <div class="flow-desc">Clients → Create → Client ID: <code>restaurant-os-nextjs</code> → Client Authentication: <strong>Off</strong> (public) → Valid redirect URIs: <code>https://app.ton-domaine.fr/*</code></div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <div class="flow-title">Mapper <code>tenantId</code> et <code>role</code> dans le JWT</div>
+            <div class="flow-desc">Client Scopes → roles → Mappers → Add Mapper → User Attribute → Name: <code>tenantId</code> → User Attribute: <code>tenantId</code> → Token Claim Name: <code>tenantId</code> → Add to ID token: On → Add to access token: On. Répéter pour <code>role</code>.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <div class="flow-title">Créer un Service Account pour l'Admin API</div>
+            <div class="flow-desc">Clients → Create → Client ID: <code>restaurant-os-admin</code> → Client Authentication: <strong>On</strong> → Service accounts roles: <code>realm-admin</code> → Copier le <code>Client Secret</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 3 — Variables d'env</div>
+      <div class="code-block">
+AUTH_PROVIDER=<span class="c-green">keycloak</span>
+KEYCLOAK_ISSUER=<span class="c-accent">https://auth.ton-domaine.fr/realms/restaurantos</span>
+KEYCLOAK_ADMIN_URL=<span class="c-accent">https://auth.ton-domaine.fr/admin/realms/restaurantos</span>
+KEYCLOAK_ADMIN_CLIENT_ID=<span class="c-accent">restaurant-os-admin</span>
+KEYCLOAK_ADMIN_SECRET=<span class="c-accent">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 4 — Compléter KeycloakAuthProvider</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/auth/ServerAuthProvider.ts — KeycloakAuthProvider</span>
+
+<span class="c-muted">// Helper : obtenir un token Admin via client_credentials</span>
+<span class="c-green">private async</span> adminToken(): Promise&lt;string&gt; {
+  <span class="c-green">const</span> res = <span class="c-green">await</span> fetch(<span class="c-accent">`${this.issuer}/protocol/openid-connect/token`</span>, {
+    method: <span class="c-accent">'POST'</span>,
+    headers: { <span class="c-accent">'Content-Type'</span>: <span class="c-accent">'application/x-www-form-urlencoded'</span> },
+    body: new URLSearchParams({
+      grant_type: <span class="c-accent">'client_credentials'</span>,
+      client_id: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
+      client_secret: process.env.KEYCLOAK_ADMIN_SECRET!,
+    }),
+  });
+  <span class="c-green">const</span> { access_token } = <span class="c-green">await</span> res.json() <span class="c-green">as</span> { access_token: string };
+  <span class="c-green">return</span> access_token;
+}
+
+<span class="c-green">async</span> createUser(params: { email: string; password?: string; displayName?: string; uid?: string; emailVerified?: boolean }) {
+  <span class="c-green">const</span> token = <span class="c-green">await</span> this.adminToken();
+  <span class="c-green">const</span> adminBase = process.env.KEYCLOAK_ADMIN_URL!;
+
+  <span class="c-muted">// POST /admin/realms/restaurantos/users</span>
+  <span class="c-green">const</span> res = <span class="c-green">await</span> fetch(<span class="c-accent">`${adminBase}/users`</span>, {
+    method: <span class="c-accent">'POST'</span>,
+    headers: { Authorization: <span class="c-accent">`Bearer ${token}`</span>, <span class="c-accent">'Content-Type'</span>: <span class="c-accent">'application/json'</span> },
+    body: JSON.stringify({
+      username: params.email, email: params.email,
+      firstName: params.displayName?.split(<span class="c-accent">' '</span>)[0],
+      enabled: true, emailVerified: params.emailVerified ?? false,
+      ...(params.uid ? { id: params.uid } : {}),
+      ...(params.password ? { credentials: [{ type: <span class="c-accent">'password'</span>, value: params.password, temporary: false }] } : {}),
+    }),
+  });
+  <span class="c-green">const</span> location = res.headers.get(<span class="c-accent">'Location'</span>)!;  <span class="c-muted">// .../users/{uuid}</span>
+  <span class="c-green">const</span> uid = location.split(<span class="c-accent">'/'</span>).pop()!;
+  <span class="c-green">return</span> { uid };
+}
+
+<span class="c-green">async</span> setCustomClaims(uid: string, claims: Record&lt;string, unknown&gt;) {
+  <span class="c-green">const</span> token = <span class="c-green">await</span> this.adminToken();
+  <span class="c-muted">// PUT /admin/realms/restaurantos/users/{uid} → attributes</span>
+  <span class="c-muted">// Les attributes Keycloak sont mappés en claims JWT via le Protocol Mapper (étape 3)</span>
+  <span class="c-green">await</span> fetch(<span class="c-accent">`${process.env.KEYCLOAK_ADMIN_URL}/users/${uid}`</span>, {
+    method: <span class="c-accent">'PUT'</span>,
+    headers: { Authorization: <span class="c-accent">`Bearer ${token}`</span>, <span class="c-accent">'Content-Type'</span>: <span class="c-accent">'application/json'</span> },
+    body: JSON.stringify({
+      attributes: Object.fromEntries(
+        Object.entries(claims).map(([k, v]) => [k, [String(v)]])
+      ),
+    }),
+  });
+}
+
+<span class="c-green">async</span> deleteUser(uid: string) {
+  <span class="c-green">const</span> token = <span class="c-green">await</span> this.adminToken();
+  <span class="c-green">await</span> fetch(<span class="c-accent">`${process.env.KEYCLOAK_ADMIN_URL}/users/${uid}`</span>,
+    { method: <span class="c-accent">'DELETE'</span>, headers: { Authorization: <span class="c-accent">`Bearer ${token}`</span> } });
+}
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Étape 5 — Migration côté navigateur (AuthSession.tsx)</div>
+      <div class="code-block">
+<span class="c-muted">// src/shared/providers/hooks/auth/AuthSession.tsx
+// Remplacer les imports Firebase Auth client par @react-keycloak/web</span>
+<span class="c-green">import</span> Keycloak <span class="c-green">from</span> <span class="c-accent">'keycloak-js'</span>;
+
+<span class="c-green">const</span> kc = <span class="c-green">new</span> Keycloak({
+  url: process.env.NEXT_PUBLIC_KEYCLOAK_URL!,   <span class="c-muted">// https://auth.ton-domaine.fr</span>
+  realm: <span class="c-accent">'restaurantos'</span>,
+  clientId: <span class="c-accent">'restaurant-os-nextjs'</span>,
+});
+
+<span class="c-muted">// kc.init({ onLoad: 'check-sso' }) → token JWT Keycloak
+// À passer à useTenant() via le même pattern qu'aujourd'hui (setSession(token))</span>
+      </div>
+      <div class="alert alert-yellow">
+        <strong>Règles Firestore :</strong> si tu gardes Firestore comme DB mais switches l'auth vers Keycloak, les <code>firestore.rules</code> vérifient <code>request.auth.token.tenantId</code>. Le token Keycloak doit contenir exactement ce claim (mappage Protocol Mapper étape 3). C'est le seul point de friction.
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ TUTORIEL 5 — SQLITE / TURSO (Edge) ═══ -->
+  <details style="margin-bottom:10px">
+    <summary>🪶 Tutoriel 5 — SQLite / Turso (Edge, serverless, dev local sans réseau)</summary>
+    <div class="card" style="border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0">
+      <div class="alert alert-blue" style="margin-top:0">
+        Utile pour : CI offline, démos sans connexion, Edge Functions Cloudflare. Le PITR n'est pas supporté (retourne <code>status: 'unsupported'</code>). L'<code>onSnapshot</code> se fait par polling.
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Variables d'env</div>
+      <div class="code-block">
+NEXUS_PROVIDER=<span class="c-green">sqlite</span>
+<span class="c-muted"># Local : pas d'URL (fichier en mémoire)</span>
+<span class="c-muted"># Turso (Edge) :</span>
+TURSO_DATABASE_URL=<span class="c-accent">libsql://xxx.turso.io</span>
+TURSO_AUTH_TOKEN=<span class="c-accent">eyJhbGci...</span>
+      </div>
+
+      <div class="chapter-sub" style="margin:16px 0 8px;font-size:.85rem;font-weight:700;color:var(--text-hi)">Squelette SqliteAdapter (Turso)</div>
+      <div class="code-block">
+<span class="c-muted">// src/lib/adapters/TursoAdapter.ts (déjà un SqliteMemoryAdapter pour tests)</span>
+<span class="c-green">import</span> { createClient } <span class="c-green">from</span> <span class="c-accent">'@libsql/client'</span>;
+
+<span class="c-green">export class</span> TursoAdapter <span class="c-green">implements</span> INexusAdapter {
+  <span class="c-green">private</span> db = createClient({
+    url: process.env.TURSO_DATABASE_URL ?? <span class="c-accent">':memory:'</span>,
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  });
+
+  <span class="c-green">async</span> get(path: string) {
+    <span class="c-green">const</span> rs = <span class="c-green">await</span> this.db.execute({
+      sql: <span class="c-accent">'SELECT data FROM nexus_documents WHERE path = ?'</span>,
+      args: [path]
+    });
+    <span class="c-green">const</span> row = rs.rows[0];
+    <span class="c-green">return</span> row ? JSON.parse(String(row.data)) : null;
+  }
+  <span class="c-muted">// set, query, delete → même pattern INSERT OR REPLACE / SELECT WHERE path LIKE ?/%</span>
+}
+      </div>
+    </div>
+  </details>
+
+  <!-- ═══ CHECKLIST MIGRATION ═══ -->
+  <div class="card" style="margin-top:20px">
+    <div class="card-header"><span class="card-title" style="color:var(--success)">✅ Checklist migration provider — dans l'ordre</span></div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-content">
+          <div class="flow-title">Écrire l'adapter <code>implements INexusAdapter</code> (ou <code>IServerAuthProvider</code>)</div>
+          <div class="flow-desc">Implémenter les 8-12 méthodes. S'inspirer de <code>MockAdapter.ts</code> ou <code>SqliteMemoryAdapter.ts</code> pour les patterns.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-content">
+          <div class="flow-title">L'enregistrer dans <code>serverNexus.ts</code> (pour les adapters DB)</div>
+          <div class="flow-desc">Ajouter le <code>case 'postgres':</code> (ou mongo/sqlite) dans <code>ensureServerNexus()</code>. L'adapter est instancié une seule fois au démarrage.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-content">
+          <div class="flow-title">Compléter le stub <code>InfraProvider</code> si nécessaire (PITR)</div>
+          <div class="flow-desc"><code>src/lib/nexus/NexusInfra.ts</code> → <code>PostgresInfraProvider</code> ou <code>MongoInfraProvider</code> — l'appel REST spécifique au provider.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-content">
+          <div class="flow-title">Poser les variables d'env et redémarrer</div>
+          <div class="flow-desc"><code>NEXUS_PROVIDER=postgres</code> (ou mongo/sqlite) et/ou <code>AUTH_PROVIDER=keycloak</code> dans <code>.env.production</code>.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-content">
+          <div class="flow-title">Vérifier TSC + tests</div>
+          <div class="flow-desc"><code>npx tsc --noEmit</code> → 0 erreur. <code>npx vitest run</code> → les tests qui passaient avant passent encore (les tests utilisent <code>MockAdapter</code>, pas le nouveau provider).</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-content">
+          <div class="flow-title">(Auth Keycloak) Migrer AuthSession.tsx côté navigateur</div>
+          <div class="flow-desc">Remplacer Firebase Auth client SDK par Keycloak.js. C'est le seul fichier côté navigateur à toucher.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">7</div>
+        <div class="flow-content">
+          <div class="flow-title">Tester le golden path end-to-end</div>
+          <div class="flow-desc">Signup → claim tenantId + role → accès POS → scellement NF525 → vérification SovereignGuard. Si tout passe : migration terminée.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-red" style="margin-top:16px">
+    <strong>Invariants jamais contournés quel que soit le provider :</strong>
+    <ul style="margin:8px 0 0 16px;line-height:1.8">
+      <li><code>journalEntries</code>, <code>fiscalSeals</code>, <code>fiscalLedger</code> : jamais delete, jamais update — NF525</li>
+      <li><code>SovereignGuard</code> s'exécute dans <code>NexusInterceptor</code>, avant tout appel adapter — il ne dépend pas du provider</li>
+      <li>Le <code>tenantId</code> vient toujours de <code>useTenant()</code> côté client ou du token JWT côté serveur — jamais hardcodé</li>
+      <li>Les prix restent en <code>*InMicrounits</code> — aucun adapter n'a à se soucier des unités</li>
+    </ul>
+  </div>
+</section>
 
 </body></html>

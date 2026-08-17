@@ -17,7 +17,7 @@ const CrashReportSchema = z.object({
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireFleetAdmin(req);
+  const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller;
 
   let body: z.infer<typeof CrashReportSchema>;

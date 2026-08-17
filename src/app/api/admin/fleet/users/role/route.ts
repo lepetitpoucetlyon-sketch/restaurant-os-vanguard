@@ -13,8 +13,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { getAuth } from 'firebase-admin/auth';
+import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
 import { toError } from "@/lib/toError";
 
@@ -71,21 +70,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         roleUpdatedByMcc: true,
     }, { merge: true });
 
-    // 2. Mise à jour des Custom Claims Firebase Auth si firebaseUid est connu
+    // 2. Mise à jour des Custom Claims (auth-provider agnostique)
     if (existing.firebaseUid) {
         try {
-            initFirebaseAdmin();
-            const firebaseAuth = getAuth();
-            const currentClaims = await firebaseAuth.getUser(existing.firebaseUid)
-                .then(u => u.customClaims ?? {});
-            await firebaseAuth.setCustomUserClaims(existing.firebaseUid, {
-                ...currentClaims,
-                role: newRole,
-            });
-            logger.info(`[MCC/role] Claims Firebase mis à jour pour uid=${existing.firebaseUid}`);
+            const authProvider = getServerAuthProvider();
+            const existingUser = await authProvider.getUser(existing.firebaseUid);
+            const currentClaims = existingUser?.customClaims ?? {};
+            await authProvider.setCustomClaims(existing.firebaseUid, { ...currentClaims, role: newRole });
+            logger.info(`[MCC/role] Claims auth mis à jour pour uid=${existing.firebaseUid}`);
         } catch (err) {
-            // Non-bloquant : les claims Firebase sont best-effort
-            logger.warn(`[MCC/role] Mise à jour claims Firebase échouée (uid=${existing.firebaseUid}) — ${toError(err).message}`);
+            // Non-bloquant : les claims auth sont best-effort
+            logger.warn(`[MCC/role] Mise à jour claims auth échouée (uid=${existing.firebaseUid}) — ${toError(err).message}`);
         }
     }
 

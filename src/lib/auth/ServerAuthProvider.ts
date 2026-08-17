@@ -24,10 +24,22 @@ export interface DecodedAuthToken {
     clientId?: string;
 }
 
+export interface AuthUser {
+    uid: string;
+    email?: string;
+    displayName?: string;
+    customClaims?: Record<string, unknown>;
+}
+
 export interface IServerAuthProvider {
     readonly name: string;
     verifyIdToken(token: string): Promise<DecodedAuthToken>;
-    createUser(params: { email: string; password: string; displayName?: string }): Promise<{ uid: string }>;
+    /** Crée un utilisateur. uid optionnel (auto-généré si absent). password optionnel (ex: login par PIN). */
+    createUser(params: { email: string; password?: string; displayName?: string; uid?: string; emailVerified?: boolean }): Promise<{ uid: string }>;
+    /** Retourne null si l'utilisateur n'existe pas (ne throw jamais). */
+    getUserByEmail(email: string): Promise<AuthUser | null>;
+    /** Retourne null si l'uid est inconnu (ne throw jamais). */
+    getUser(uid: string): Promise<AuthUser | null>;
     setCustomClaims(uid: string, claims: Record<string, unknown>): Promise<void>;
     deleteUser(uid: string): Promise<void>;
 }
@@ -51,12 +63,53 @@ export class FirebaseAuthProvider implements IServerAuthProvider {
         };
     }
 
-    async createUser(params: { email: string; password: string; displayName?: string }) {
+    async createUser(params: { email: string; password?: string; displayName?: string; uid?: string; emailVerified?: boolean }) {
         const { getAuth } = await import('firebase-admin/auth');
         const { initFirebaseAdmin } = await import('@/lib/firebase-admin-init');
         initFirebaseAdmin();
-        const user = await getAuth().createUser(params);
+        const { email, password, displayName, uid, emailVerified } = params;
+        const user = await getAuth().createUser({
+            ...(uid         ? { uid }         : {}),
+            ...(password    ? { password }    : {}),
+            ...(displayName ? { displayName } : {}),
+            email,
+            emailVerified: emailVerified ?? false,
+        });
         return { uid: user.uid };
+    }
+
+    async getUserByEmail(email: string): Promise<AuthUser | null> {
+        try {
+            const { getAuth } = await import('firebase-admin/auth');
+            const { initFirebaseAdmin } = await import('@/lib/firebase-admin-init');
+            initFirebaseAdmin();
+            const user = await getAuth().getUserByEmail(email);
+            return {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                customClaims: user.customClaims as Record<string, unknown> | undefined,
+            };
+        } catch {
+            return null;
+        }
+    }
+
+    async getUser(uid: string): Promise<AuthUser | null> {
+        try {
+            const { getAuth } = await import('firebase-admin/auth');
+            const { initFirebaseAdmin } = await import('@/lib/firebase-admin-init');
+            initFirebaseAdmin();
+            const user = await getAuth().getUser(uid);
+            return {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                customClaims: user.customClaims as Record<string, unknown> | undefined,
+            };
+        } catch {
+            return null;
+        }
     }
 
     async setCustomClaims(uid: string, claims: Record<string, unknown>) {
@@ -101,9 +154,17 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
         };
     }
 
-    async createUser(_params: { email: string; password: string; displayName?: string }): Promise<{ uid: string }> {
+    async createUser(_params: { email: string; password?: string; displayName?: string; uid?: string; emailVerified?: boolean }): Promise<{ uid: string }> {
         // Appel API REST Keycloak Admin — à implémenter avec KEYCLOAK_ADMIN_SECRET
         throw new Error('KeycloakAuthProvider.createUser — not yet implemented. Use Keycloak Admin REST API.');
+    }
+
+    async getUserByEmail(_email: string): Promise<AuthUser | null> {
+        return null;
+    }
+
+    async getUser(_uid: string): Promise<AuthUser | null> {
+        return null;
     }
 
     async setCustomClaims(_uid: string, _claims: Record<string, unknown>): Promise<void> {

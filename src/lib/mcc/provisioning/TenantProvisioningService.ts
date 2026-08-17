@@ -10,8 +10,7 @@ import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { getAuth } from 'firebase-admin/auth';
+import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
 import type { ProvisioningRequest, ProvisioningResult } from './types';
 
@@ -146,9 +145,8 @@ export class TenantProvisioningService {
             await setupOwnerAccount(tenantId, ownerId, request);
             compensations.push(async () => {
                 try {
-                    logger.info(`[MCC/prov/rollback] Suppression compte Firebase Owner ${ownerId}`);
-                    initFirebaseAdmin();
-                    await getAuth().deleteUser(ownerId).catch(() => {});
+                    logger.info(`[MCC/prov/rollback] Suppression compte auth Owner ${ownerId}`);
+                    await getServerAuthProvider().deleteUser(ownerId).catch(() => {});
                     await Nexus.adapter.delete(`tenants/${tenantId}/users/${ownerId}`).catch(() => {});
                 } catch (authRollbackErr) {
                     logger.warn('[MCC/prov/rollback] Erreur rollback Auth Owner', toError(authRollbackErr).message);

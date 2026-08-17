@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuth } from 'firebase-admin/auth';
 import { z } from 'zod';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
+import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { BrandingService } from '@/lib/BrandingService';
 // eslint-disable-next-line no-restricted-imports
@@ -87,7 +86,7 @@ export async function POST(req: NextRequest) {
   }
   const { email, password, businessName, variant, siret: _siret, websiteUrl } = parsed.data;
 
-  initFirebaseAdmin();
+  const authProvider = getServerAuthProvider();
 
   // Tenant résolu AVANT toute création — garantit qu'on ne s'accroche jamais
   // aux claims d'un tenant existant.
@@ -102,7 +101,7 @@ export async function POST(req: NextRequest) {
   // 1. Firebase Auth — create user
   let uid: string;
   try {
-    const userRecord = await getAuth().createUser({ email, password, displayName: businessName });
+    const userRecord = await authProvider.createUser({ email, password, displayName: businessName });
     uid = userRecord.uid;
   } catch (err) {
     const message = toError(err).message;
@@ -114,7 +113,7 @@ export async function POST(req: NextRequest) {
     // 2. Custom claims — TOUTE la sécurité serveur en dépend :
     //    firestore.rules lit request.auth.token.tenantId/role,
     //    adminAuthGuard lit role/tenantId. `clientId` = alias historique.
-    await getAuth().setCustomUserClaims(uid, {
+    await authProvider.setCustomClaims(uid, {
       tenantId,
       clientId: tenantId,
       role: 'admin',
@@ -175,7 +174,7 @@ export async function POST(req: NextRequest) {
     const message = toError(err).message;
     logger.error('[signup] Provisioning failed — rolling back auth user', message);
     try {
-      await getAuth().deleteUser(uid);
+      await authProvider.deleteUser(uid);
     } catch (rollbackErr) {
       logger.error('[signup] Rollback deleteUser failed — orphan user', String(rollbackErr));
     }

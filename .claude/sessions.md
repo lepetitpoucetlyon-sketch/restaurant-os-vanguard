@@ -119,4 +119,5 @@
 | backlog-h1-fixes | Corrections BACKLOG H1 P1 : debounce pointeuse, acompte grands groupes, waitlist_ready+SMS, no-show enforcement, atomicité stock, préférences clients structurées | 2026-08-17 | terminée |
 | rbac-rename | Renommage canonique rôles : Plan A (fleet_admin/SUPER_ADMIN → super_admin MCC, ~100 occ.) + Plan B (super_admin tenant → admin, ~200 occ.) — TSC 0, tests OK | 2026-08-17 | terminée |
 | mcc-audit-2 | Audit MCC (lecture seule) : app/(admin)/admin/mcc/, lib/mcc/, shared/nexus/guards/admin/mcc/, api/admin/* | 2026-08-17 | terminée |
-| mcc-fixes | Corrections audit MCC P0→P3 : provision route, health live, slug validation, modal extract, RBAC fleet, pagination, restore polling, MCCInsights, version env | 2026-08-17 | active |
+| mcc-fixes | Corrections audit MCC P0→P3 : provision route, health live, slug validation, modal extract, RBAC fleet, pagination, restore polling, MCCInsights, version env | 2026-08-17 | terminée |
+| db-agnostic-plugplay | Plug-and-play DB/auth : NexusInfra (PITR agnostique Firestore/Postgres/Mongo/SQLite), IServerAuthProvider étendu (getUserByEmail/getUser/createUser uid+emailVerified), refacto 5 fichiers (signup, assign-role, fleet/role, provisioningSteps, restore) — TSC 0 | 2026-08-17 | terminée |

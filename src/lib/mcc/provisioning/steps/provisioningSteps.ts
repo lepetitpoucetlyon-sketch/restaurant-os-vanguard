@@ -1,6 +1,5 @@
 import { logger } from '@/lib/logger';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { getAuth } from 'firebase-admin/auth';
+import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
@@ -67,30 +66,31 @@ export async function setupRAGWorkspace(tenantId: string, ragWorkspaceId: string
 export async function setupOwnerAccount(tenantId: string, ownerId: string, request: ProvisioningRequest): Promise<void> {
     let pinPlain = '1234';
     try {
-        initFirebaseAdmin();
-        const auth = getAuth();
-        let user;
-        try {
-            user = await auth.getUserByEmail(request.ownerEmail);
-            logger.info(`[MCC/prov] Firebase User existant réutilisé: ${user.uid}`);
-        } catch {
-            user = await auth.createUser({
+        const authProvider = getServerAuthProvider();
+
+        const existingUser = await authProvider.getUserByEmail(request.ownerEmail);
+        let userUid: string;
+        if (existingUser) {
+            userUid = existingUser.uid;
+            logger.info(`[MCC/prov] Auth user existant réutilisé: ${userUid}`);
+        } else {
+            const newUser = await authProvider.createUser({
                 uid: ownerId,
                 email: request.ownerEmail,
                 displayName: request.ownerName,
                 emailVerified: true,
             });
-            logger.info(`[MCC/prov] Firebase User créé: ${user.uid}`);
+            userUid = newUser.uid;
+            logger.info(`[MCC/prov] Auth user créé: ${userUid}`);
         }
 
-        const customClaims = { tenantId, role: 'owner', permissions: ['*'] };
-        await auth.setCustomUserClaims(user.uid, customClaims);
+        await authProvider.setCustomClaims(userUid, { tenantId, role: 'owner', permissions: ['*'] });
 
         pinPlain = String(Math.floor(1000 + Math.random() * 9000));
         const hashedPin = await hashPin(pinPlain, tenantId);
 
-        await Nexus.adapter.set(`tenants/${tenantId}/users/${user.uid}`, {
-            id: user.uid,
+        await Nexus.adapter.set(`tenants/${tenantId}/users/${userUid}`, {
+            id: userUid,
             email: request.ownerEmail,
             name: request.ownerName,
             role: 'owner',
@@ -119,7 +119,7 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
             });
         }
     } catch (authErr) {
-        logger.error('[MCC/prov] Échec création Firebase Auth Owner', authErr);
+        logger.error('[MCC/prov] Échec création compte propriétaire (auth provider)', authErr);
         throw authErr;
     }
 }

@@ -96,21 +96,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // présent, on loggue et on continue sinon (Simulacra / adapters non-Firebase).
     if (existing.firebaseUid) {
         try {
-            const { initFirebaseAdmin } = await import('@/lib/firebase-admin-init');
-            const { getAuth } = await import('firebase-admin/auth');
-            initFirebaseAdmin();
-            const firebaseAuth = getAuth();
-            const currentClaims = await firebaseAuth
-                .getUser(existing.firebaseUid)
-                .then(u => u.customClaims ?? {});
-            await firebaseAuth.setCustomUserClaims(existing.firebaseUid, {
-                ...currentClaims,
-                role,
-                tenantId,
-            });
-            logger.info(`[assign-role] Claims Firebase mis à jour uid=${existing.firebaseUid} role=${role}`);
+            const { getServerAuthProvider } = await import('@/lib/auth/ServerAuthProvider');
+            const authProvider = getServerAuthProvider();
+            const existingUser = await authProvider.getUser(existing.firebaseUid);
+            const currentClaims = existingUser?.customClaims ?? {};
+            await authProvider.setCustomClaims(existing.firebaseUid, { ...currentClaims, role, tenantId });
+            logger.info(`[assign-role] Claims auth mis à jour uid=${existing.firebaseUid} role=${role}`);
         } catch (err) {
-            logger.warn(`[assign-role] Claims Firebase échouées (uid=${existing.firebaseUid}) — ${toError(err).message}`);
+            logger.warn(`[assign-role] Claims auth échouées (uid=${existing.firebaseUid}) — ${toError(err).message}`);
         }
     }
 
