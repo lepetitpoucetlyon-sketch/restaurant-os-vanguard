@@ -10,7 +10,7 @@ import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/bra
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
 import { themeModeAtom } from '@/shared/nexus/tokens/themeAtoms';
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@nexus/contracts';
 
 function getContrastTextColor(hexColor: string): string {
   const clean = hexColor.replace('#', '');
@@ -124,15 +124,15 @@ export function BrandingProvider() {
     if (tenantId && typeof window !== 'undefined') {
       const scopedKey = `nexus_theme_mode:${tenantId}`;
       const hasUserPref = localStorage.getItem(scopedKey) !== null;
-      const verticalAppearance = VERTICAL_APPEARANCE[variant] ?? 'dark';
+      const verticalAppearance = (VERTICAL_APPEARANCE as Record<string, string | undefined>)[variant] ?? 'dark';
       if (!hasUserPref && verticalAppearance !== 'auto') {
-        setThemeMode(verticalAppearance);
+        setThemeMode(verticalAppearance as 'light' | 'dark');
       }
     }
 
     // 1. Tokens du variant (base de chaque vertical)
-    const verticalDefaults = VERTICAL_DEFAULT_TOKENS[variant] ?? VERTICAL_DEFAULT_TOKENS.restaurant;
-    const extraTokens      = VERTICAL_EXTRA_TOKENS[variant]   ?? {};
+    const verticalDefaults = (VERTICAL_DEFAULT_TOKENS as Record<string, typeof VERTICAL_DEFAULT_TOKENS.restaurant>)[variant] ?? VERTICAL_DEFAULT_TOKENS.restaurant;
+    const extraTokens      = (VERTICAL_EXTRA_TOKENS as Record<string, Record<string, string>>)[variant]   ?? {};
 
     // 2. Parse les tokens Firestore du tenant
     const result      = BrandTokensSchema.safeParse(rawBrandTokens || defaultBrandTokens);

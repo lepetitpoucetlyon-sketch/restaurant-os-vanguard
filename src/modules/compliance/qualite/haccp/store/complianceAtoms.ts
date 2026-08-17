@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
-import type { FiscalSeal } from '@/modules/finance';
 import {
     JournalEntry,
+    FiscalSeal,
     HygieneLabel,
     HygieneLog,
     ReceptionLog,

@@ -6,12 +6,13 @@ import { toError } from '@/lib/toError';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const caller = await requireTenantUser(req);
   if (isDenied(caller)) return caller;
 
   try {
-    const asset = await EquipmentAssetService.getAssetById(caller.tenantId, params.id);
+    const { id } = await params;
+    const asset = await EquipmentAssetService.getAssetById(caller.tenantId, id);
     if (!asset) {
       return NextResponse.json({ success: false, error: 'Équipement introuvable' }, { status: 404 });
     }
@@ -19,7 +20,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     const body = await req.json();
     const { errorCode, symptom, createBreakdownTicket } = body;
 
-    const result = await EquipmentDiagnosticService.diagnoseAndReport(caller.tenantId, params.id, {
+    const result = await EquipmentDiagnosticService.diagnoseAndReport(caller.tenantId, id, {
       category: asset.category,
       errorCode,
       symptom: symptom || 'Anomalie signalée',
