@@ -12,7 +12,6 @@ import { MCCWidgetSkeleton } from './components/MCCWidgetSkeleton';
 import { MFAGate } from './components/MFAGate';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
-import { VoiceAssistantOverlay } from '@components/layout/VoiceAssistantOverlay';
 import { MCCLocaleProvider, useMCCLocale, LocaleToggle } from './_i18n';
 import { PLATFORM_VARIANTS, VERTICAL_META } from '@/modules/system';
 
@@ -79,8 +78,6 @@ function MCCDashboardInner() {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none" />
                 <div className="relative z-10 p-8">
-                    <VoiceAssistantOverlay />
-
                     <header className="flex flex-wrap gap-4 justify-between items-center mb-10">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-gradient-to-tr from-action-primary to-action-primary rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">

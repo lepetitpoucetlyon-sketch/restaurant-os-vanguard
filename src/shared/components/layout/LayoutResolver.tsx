@@ -5,7 +5,6 @@ import { useAtomValue } from 'jotai';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { MobileHeader } from "@components/layout/MobileHeader";
 import { MobileNavBar } from "@components/layout/MobileNavBar";
-import { GlobalFAB } from "@components/layout/GlobalFAB";
 import { DesktopSidebar } from "@components/layout/DesktopSidebar";
 import { DesktopTopbar } from "@components/layout/DesktopTopbar";
 import { Header } from "@components/layout/Header";
@@ -59,7 +58,6 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                             <ConnectivityBanner />
                             <main className={cn("flex-1 overflow-auto relative scroll-smooth", "pb-24 lg:pb-0")}>
                                 {children}
-                                <GlobalFAB />
                             </main>
                             <MobileNavBar />
                         </div>
@@ -78,7 +76,6 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                     <ConnectivityBanner />
                     <main className={cn("relative", "pb-24 lg:pb-0 lg:pt-20")}>
                         {children}
-                        <GlobalFAB />
                     </main>
                     <MobileNavBar />
                 </div>
@@ -123,8 +120,6 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
 
                             {/* Mobile NavBar (Hidden on Desktop via lg:hidden internally) */}
                             <MobileNavBar />
-
-                            <GlobalFAB />
                         </div>
                     </div>
                     {launchpad}
