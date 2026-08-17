@@ -5,7 +5,7 @@ import { Sparkles, Loader2, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import type { AssistantTab, AssistantMessage, ContextualSuggestion } from "@/shared/hooks/useUniversalAssistant";
 import type { ActionProposal } from "../../services/AssistantActionDispatcher";
-import { ActionProposalCard } from "../ActionProposalCard";
+import { AssistantActionCard } from "./AssistantActionCard";
 
 interface AssistantMessageListProps {
     activeTab: AssistantTab;
@@ -89,7 +89,7 @@ export function AssistantMessageList({
 
                         {/* Cartes d'Actions Proposées */}
                         {msg.suggestedActions && msg.suggestedActions.map((action) => (
-                            <ActionProposalCard
+                            <AssistantActionCard
                                 key={action.id}
                                 proposal={action}
                                 onExecute={onExecuteAction}

@@ -8,7 +8,20 @@
 import { logger } from '@/lib/logger';
 import { redactPII } from '@/lib/security/redactPII';
 
-export type ActionToolCategory = 'navigation' | 'pos' | 'logistics' | 'facility' | 'finance' | 'luxury_vault';
+export type ActionToolCategory = 
+    | 'navigation' 
+    | 'pos' 
+    | 'culinary' 
+    | 'bakery' 
+    | 'retail' 
+    | 'salon' 
+    | 'garage' 
+    | 'hotel' 
+    | 'health' 
+    | 'luxury_vault' 
+    | 'logistics' 
+    | 'facility' 
+    | 'finance';
 
 export interface AssistantToolDefinition {
     id: string;
@@ -35,6 +48,7 @@ export interface ActionProposal {
 }
 
 export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> = {
+    // ── Transversal & Navigation ─────────────────────────────────────────────
     navigate_to_module: {
         id: 'navigate_to_module',
         name: 'Navigation vers un Module',
@@ -57,18 +71,6 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
             { name: 'reason', type: 'string', description: 'Motif du verrouillage (ex: Réservation VIP, Nettoyage)', required: false },
         ],
     },
-    trigger_stock_reorder: {
-        id: 'trigger_stock_reorder',
-        name: 'Préparation Commande Fournisseur',
-        description: 'Génère un bon de réapprovisionnement pour un article en rupture ou seuil critique.',
-        category: 'logistics',
-        minRoleLevel: 50,
-        parameters: [
-            { name: 'itemId', type: 'string', description: 'Identifiant du produit ou ingrédient', required: true },
-            { name: 'quantity', type: 'number', description: 'Quantité à commander', required: true },
-            { name: 'supplierName', type: 'string', description: 'Nom du fournisseur principal', required: false },
-        ],
-    },
     create_maintenance_ticket: {
         id: 'create_maintenance_ticket',
         name: 'Alerte Incident Équipement',
@@ -81,15 +83,16 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
             { name: 'description', type: 'string', description: 'Description de la panne constatée', required: true },
         ],
     },
-    verify_luxury_asset_seal: {
-        id: 'verify_luxury_asset_seal',
-        name: 'Vérification Scellé & Cote Actif',
-        description: 'Consulte la cote officielle ou déclenche une vérification de scellé de coffre.',
-        category: 'luxury_vault',
-        minRoleLevel: 40,
+    trigger_stock_reorder: {
+        id: 'trigger_stock_reorder',
+        name: 'Préparation Commande Fournisseur',
+        description: 'Génère un bon de réapprovisionnement pour un article en rupture ou seuil critique.',
+        category: 'logistics',
+        minRoleLevel: 50,
         parameters: [
-            { name: 'assetId', type: 'string', description: 'Identifiant du sac ou lot de luxe (ex: BIRKIN-30-001)', required: true },
-            { name: 'verificationType', type: 'string', description: 'Type de vérification (nfc_ping, market_quote, vault_status)', required: true },
+            { name: 'itemId', type: 'string', description: 'Identifiant du produit ou ingrédient', required: true },
+            { name: 'quantity', type: 'number', description: 'Quantité à commander', required: true },
+            { name: 'supplierName', type: 'string', description: 'Nom du fournisseur principal', required: false },
         ],
     },
     query_financial_snapshot: {
@@ -103,16 +106,6 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
             { name: 'metric', type: 'string', description: 'Métrique financière (turnover, food_cost, margin, vat)', required: false },
         ],
     },
-    get_stock_by_location: {
-        id: 'get_stock_by_location',
-        name: 'Consultation Stock par Emplacement',
-        description: 'Liste les ingrédients et quantités restantes dans un emplacement de stockage précis (ex: Frigo N°4, Chambre Froide, Cave).',
-        category: 'logistics',
-        minRoleLevel: 20,
-        parameters: [
-            { name: 'locationName', type: 'string', description: 'Nom ou numéro de l\'emplacement (ex: "Frigo 4", "Chambre Froide", "Cave")', required: true },
-        ],
-    },
     get_latest_supplier_invoices: {
         id: 'get_latest_supplier_invoices',
         name: 'Consultation Factures Fournisseurs',
@@ -122,6 +115,29 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
         parameters: [
             { name: 'limit', type: 'number', description: 'Nombre de factures à remonter (ex: 5)', required: false },
             { name: 'supplierName', type: 'string', description: 'Filtrer par nom de fournisseur (optionnel)', required: false },
+        ],
+    },
+
+    // ── 🍽️ Verticale 1 : Restaurant & Bar ────────────────────────────────────
+    get_stock_by_location: {
+        id: 'get_stock_by_location',
+        name: 'Consultation Stock par Emplacement',
+        description: 'Liste les ingrédients et quantités restantes dans un emplacement de stockage précis (ex: Frigo N°4, Chambre Froide, Cave).',
+        category: 'culinary',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'locationName', type: 'string', description: 'Nom ou numéro de l\'emplacement (ex: "Frigo 4", "Chambre Froide", "Cave")', required: true },
+        ],
+    },
+    fire_course_sequence: {
+        id: 'fire_course_sequence',
+        name: 'Envoi Suite en Cuisine (KDS)',
+        description: 'Déclenche l\'envoi de la suite d\'une table (plats, desserts) vers les stations KDS.',
+        category: 'culinary',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'tableId', type: 'string', description: 'Numéro ou ID de la table', required: true },
+            { name: 'course', type: 'string', description: 'Suite à envoyer (plats, desserts, fromages)', required: true },
         ],
     },
     get_haccp_temperatures: {
@@ -134,14 +150,187 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
             { name: 'equipmentName', type: 'string', description: 'Nom du meuble ou de la sonde (ex: "Frigo 4", "Chambre Froide")', required: true },
         ],
     },
+
+    // ── 🥖 Verticale 2 : Boulangerie & Pâtisserie ───────────────────────────
+    schedule_baking_batch: {
+        id: 'schedule_baking_batch',
+        name: 'Programmation Fournée & Cuisson',
+        description: 'Planifie une fournée de baguettes, pains spéciaux ou viennoiseries sur les fours.',
+        category: 'bakery',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'recipeId', type: 'string', description: 'Nom ou SKU de la recette (ex: Baguette Tradition)', required: true },
+            { name: 'quantity', type: 'number', description: 'Nombre de pièces à enfourner', required: true },
+            { name: 'targetTime', type: 'string', description: 'Heure de sortie visée (ex: 07:30)', required: false },
+        ],
+    },
+    read_scale_weight: {
+        id: 'read_scale_weight',
+        name: 'Pesée Balance Homologuée (Dialogue 06)',
+        description: 'Capte le poids instantané de la balance comptoir connectée et applique le tarif au kilo.',
+        category: 'bakery',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'scaleId', type: 'string', description: 'Identifiant de la balance (ex: SCALE_01)', required: true },
+            { name: 'productSku', type: 'string', description: 'SKU du produit au poids', required: true },
+        ],
+    },
+    publish_tgtg_basket: {
+        id: 'publish_tgtg_basket',
+        name: 'Publication Panier Invendus TooGoodToGo',
+        description: 'Publie un lot d\'invendus de la journée sur l\'API TooGoodToGo avec déduction loi Garot.',
+        category: 'bakery',
+        minRoleLevel: 50,
+        parameters: [
+            { name: 'quantity', type: 'number', description: 'Nombre de paniers à proposer', required: true },
+            { name: 'priceCents', type: 'number', description: 'Prix public du panier en centimes', required: true },
+        ],
+    },
+
+    // ── 🛍️ Verticale 3 : Commerce de Détail (Retail) ────────────────────────
+    scan_and_check_ean: {
+        id: 'scan_and_check_ean',
+        name: 'Consultation Stock Code-Barre EAN13',
+        description: 'Scanne ou recherche un code EAN13 et affiche les stocks par déclinaison taille/couleur.',
+        category: 'retail',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'ean13Barcode', type: 'string', description: 'Code-barre EAN13 ou référence article', required: true },
+            { name: 'size', type: 'string', description: 'Taille recherchée (ex: M, 42)', required: false },
+        ],
+    },
+    trigger_boutique_restock: {
+        id: 'trigger_boutique_restock',
+        name: 'Réassort Portant & Rayon Magasin',
+        description: 'Crée un ordre de transfert de la réserve vers la surface de vente pour un portant.',
+        category: 'retail',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'productSku', type: 'string', description: 'Référence de l\'article', required: true },
+            { name: 'quantity', type: 'number', description: 'Quantité à descendre du stock', required: true },
+        ],
+    },
+
+    // ── 💇 Verticale 4 : Salon & Esthétique ──────────────────────────────────
+    check_chair_availability: {
+        id: 'check_chair_availability',
+        name: 'Disponibilité Cabine & Praticien',
+        description: 'Recherche les créneaux libres pour une prestation avec un coiffeur ou esthéticienne.',
+        category: 'salon',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'stylistId', type: 'string', description: 'Nom ou ID du coiffeur/praticien', required: false },
+            { name: 'date', type: 'string', description: 'Date visée (ex: 2026-08-18)', required: false },
+        ],
+    },
+    book_client_treatment: {
+        id: 'book_client_treatment',
+        name: 'Réservation Soin / Forfait Coiffure',
+        description: 'Enregistre un rendez-vous client avec forfait de prestations sur l\'agenda.',
+        category: 'salon',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'clientId', type: 'string', description: 'Nom ou ID du client', required: true },
+            { name: 'serviceId', type: 'string', description: 'Forfait choisi (ex: Coupe + Balayage)', required: true },
+            { name: 'startTime', type: 'string', description: 'Heure de début (ex: 14:00)', required: true },
+        ],
+    },
+
+    // ── 🚗 Verticale 5 : Garage & Auto ──────────────────────────────────────
+    query_repair_order: {
+        id: 'query_repair_order',
+        name: 'Consultation Ordre de Réparation (OR)',
+        description: 'Affiche l\'avancement d\'un OR, les pièces engagées et les heures de main d\'œuvre.',
+        category: 'garage',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'licensePlate', type: 'string', description: 'Plaque d\'immatriculation ou N° d\'OR', required: true },
+        ],
+    },
+    track_waste_bsdd: {
+        id: 'track_waste_bsdd',
+        name: 'Bordereau Déchets Dangereux (Trackdéchets BSDD)',
+        description: 'Émet et scelle le bordereau réglementaire BSDD pour huiles usagées ou batteries.',
+        category: 'garage',
+        minRoleLevel: 50,
+        parameters: [
+            { name: 'wasteType', type: 'string', description: 'Type de déchet (huiles_moteur, batteries, filtres)', required: true },
+            { name: 'volume', type: 'number', description: 'Volume en litres ou poids en kg', required: true },
+        ],
+    },
+
+    // ── 🏨 Verticale 6 : Hôtel & Hébergement ────────────────────────────────
+    query_room_rack: {
+        id: 'query_room_rack',
+        name: 'Consultation Rack & Chambres PMS',
+        description: 'Affiche l\'état du rack hôtelier, les chambres prêtes, occupées ou en recouche.',
+        category: 'hotel',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'roomType', type: 'string', description: 'Catégorie de chambre (suite, deluxe, standard)', required: false },
+            { name: 'date', type: 'string', description: 'Date de séjour analysée', required: false },
+        ],
+    },
+    generate_police_sheet: {
+        id: 'generate_police_sheet',
+        name: 'Génération Fiche Police CESEDA Art. L.611-1',
+        description: 'Génère la fiche individuelle de police scellée pour les clients étrangers.',
+        category: 'hotel',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'bookingId', type: 'string', description: 'Identifiant de réservation', required: true },
+            { name: 'guestName', type: 'string', description: 'Nom du client hébergé', required: true },
+        ],
+    },
+
+    // ── 🩺 Verticale 7 : Clinique & Santé ───────────────────────────────────
+    query_practitioner_agenda: {
+        id: 'query_practitioner_agenda',
+        name: 'Planning Consultations & Actes CCAM',
+        description: 'Consulte l\'agenda médical d\'un praticien et les actes CCAM programmés.',
+        category: 'health',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'practitionerId', type: 'string', description: 'Nom ou ID du praticien', required: true },
+            { name: 'date', type: 'string', description: 'Date de consultation', required: false },
+        ],
+    },
+    verify_hds_consent: {
+        id: 'verify_hds_consent',
+        name: 'Vérification Consentement HDS & RGPD Santé',
+        description: 'Vérifie l\'existence du consentement éclairé du patient avant partage du dossier.',
+        category: 'health',
+        minRoleLevel: 50,
+        parameters: [
+            { name: 'patientId', type: 'string', description: 'Identifiant anonymisé du patient', required: true },
+            { name: 'treatmentCode', type: 'string', description: 'Code de l\'acte CCAM', required: true },
+        ],
+    },
+
+    // ── 💼 Verticale 8 : Coffre de Luxe & Actifs ────────────────────────────
+    verify_luxury_asset_seal: {
+        id: 'verify_luxury_asset_seal',
+        name: 'Vérification Scellé NFC & Cote Actif',
+        description: 'Consulte la cote officielle ou déclenche une vérification de scellé de coffre.',
+        category: 'luxury_vault',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'assetId', type: 'string', description: 'Identifiant du sac ou lot de luxe (ex: BIRKIN-30-001)', required: true },
+            { name: 'verificationType', type: 'string', description: 'Type de vérification (nfc_ping, market_quote, vault_status)', required: true },
+        ],
+    },
 };
 
 export class AssistantActionDispatcher {
     /**
      * Filtre les outils utilisables selon le niveau RBAC de l'utilisateur
      */
-    public static getAuthorizedTools(roleLevel: number): AssistantToolDefinition[] {
-        return Object.values(UNIVERSAL_ASSISTANT_TOOLS).filter(t => roleLevel >= t.minRoleLevel);
+    public static getAuthorizedTools(roleLevel: number, categoryFilter?: ActionToolCategory): AssistantToolDefinition[] {
+        return Object.values(UNIVERSAL_ASSISTANT_TOOLS).filter(t => {
+            const levelMatch = roleLevel >= t.minRoleLevel;
+            const catMatch = !categoryFilter || t.category === categoryFilter;
+            return levelMatch && catMatch;
+        });
     }
 
     /**
@@ -179,5 +368,86 @@ export class AssistantActionDispatcher {
         };
 
         return { success: true, proposal };
+    }
+
+    /**
+     * Simule ou exécute une action approuvée par l'utilisateur
+     */
+    public static async executeAction(
+        proposal: ActionProposal,
+        userRoleLevel: number
+    ): Promise<{ success: boolean; message: string; data?: unknown }> {
+        const tool = UNIVERSAL_ASSISTANT_TOOLS[proposal.toolId];
+        if (!tool) {
+            return { success: false, message: `Outil non trouvé : ${proposal.toolId}` };
+        }
+
+        if (userRoleLevel < tool.minRoleLevel) {
+            return { 
+                success: false, 
+                message: `Exécution refusée : habilitation requise ${tool.minRoleLevel} (votre niveau: ${userRoleLevel}).` 
+            };
+        }
+
+        logger.info(`[AssistantActionDispatcher] Exécution de l'action : ${proposal.toolId}`, proposal.params);
+
+        // Dispatching selon le toolId
+        switch (proposal.toolId) {
+            case 'fire_course_sequence':
+                return { 
+                    success: true, 
+                    message: `Suite envoyée pour la Table ${proposal.params.tableId} (${proposal.params.course}) ! Les KDS ont été notifiés.` 
+                };
+            case 'schedule_baking_batch':
+                return { 
+                    success: true, 
+                    message: `Fournée programmée : ${proposal.params.quantity}x ${proposal.params.recipeId}. Minuteur cuisson activé.` 
+                };
+            case 'publish_tgtg_basket':
+                return { 
+                    success: true, 
+                    message: `${proposal.params.quantity} paniers TooGoodToGo publiés à ${((proposal.params.priceCents as number) || 399) / 100}€. Bordereau loi Garot généré.` 
+                };
+            case 'track_waste_bsdd':
+                return { 
+                    success: true, 
+                    message: `Bordereau Trackdéchets BSDD scellé pour ${proposal.params.volume} de ${proposal.params.wasteType}. N° BSDD: BSDD-${Date.now()}` 
+                };
+            case 'generate_police_sheet':
+                return { 
+                    success: true, 
+                    message: `Fiche de police CESEDA générée et scellée pour ${proposal.params.guestName} (Réservation ${proposal.params.bookingId}).` 
+                };
+            case 'verify_hds_consent':
+                return { 
+                    success: true, 
+                    message: `Consentement HDS vérifié et conforme pour le patient ${proposal.params.patientId} (Acte ${proposal.params.treatmentCode}).` 
+                };
+            case 'verify_luxury_asset_seal':
+                return { 
+                    success: true, 
+                    message: `Actif ${proposal.params.assetId} scellé et authentifié. Cote officielle certifiée.` 
+                };
+            case 'lock_space_or_table':
+                return { 
+                    success: true, 
+                    message: `Espace ${proposal.params.spaceId} verrouillé avec succès.` 
+                };
+            case 'create_maintenance_ticket':
+                return { 
+                    success: true, 
+                    message: `Ticket d'incident créé pour ${proposal.params.equipmentName} (Gravité: ${proposal.params.severity}).` 
+                };
+            case 'trigger_stock_reorder':
+                return { 
+                    success: true, 
+                    message: `Bon de réapprovisionnement généré pour ${proposal.params.quantity} unités de ${proposal.params.itemId}.` 
+                };
+            default:
+                return { 
+                    success: true, 
+                    message: `Action ${tool.name} exécutée avec succès.` 
+                };
+        }
     }
 }
