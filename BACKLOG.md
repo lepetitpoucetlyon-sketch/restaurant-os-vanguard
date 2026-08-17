@@ -187,7 +187,7 @@
 | P1 | ✅ | H1 | — | Contrôle qualité réception (conformité BL vs commande) | `src/modules/logistics/inventaire/` | — |
 | P1 | ✅ | H1 | — | Service 86 automatique (blocage commande si stock zéro) | `src/modules/ops/service/pos/` | Consomme `stock.zero` |
 | P1 | ✅ | H1 | — | Déduction stock automatique sur commande validée | `src/modules/logistics/stocks/` | — |
-| P1 | ⬜ | H1 | M | **Décrémentation atomique des stocks (Anti-Race-Condition)** | `src/shared/eventBus/handlers/StockDeductionHandler.ts` | **Invariant #2 concurrence** |
+| P1 | ✅ | H1 | — | **Décrémentation atomique des stocks (Anti-Race-Condition)** | `src/shared/eventBus/handlers/StockDeductionHandler.ts` | `Nexus.adapter.increment()` — Invariant #2 tenu |
 | P2 | ⬜ | H3 | M | Stock en consignation (tracking bouteilles, fûts bière, gaz) | `src/modules/logistics/stocks/` | — |
 | P2 | ⬜ | H2 | S | Retours fournisseurs avec avoir automatique | `src/modules/logistics/approvisionnement/` | — |
 | P2 | 🔧 | H2 | M | Par level management adaptatif (seuils dynamiques) | `src/modules/logistics/stocks/` | Dépend prédiction ventes ML |

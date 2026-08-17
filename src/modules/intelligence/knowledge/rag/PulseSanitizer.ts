@@ -7,8 +7,6 @@
  *
  * Pipeline: Raw Data → PII Scan → Strip → Generalize → Tag → Sealed Pulse
  *
- * GDPR Article 9 data (health, allergies) is HARD-BLOCKED, never configurable.
- *
  * Copyright © 2026 Mohammed-ali Boudjaadar. Tous droits réservés.
  */
 
@@ -23,84 +21,11 @@ import {
     PULSE_SCHEDULE,
 } from './types';
 import { JsonObject } from "@/shared/types/json";
-
-// ============================================
-// PII DETECTION PATTERNS
-// ============================================
-
-const PII_PATTERNS: Record<PIICategory, RegExp> = {
-    EMAIL:       /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
-    PHONE:       /(?:\+33|0)\s*[1-9](?:[\s.-]*\d{2}){4}/g,
-    IBAN:        /[A-Z]{2}\d{2}\s?(?:\d{4}\s?){4,7}\d{1,4}/g,
-    CARD_NUMBER: /\b(?:\d{4}[\s-]?){3}\d{4}\b/g,
-    SSN:        /\b[12]\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{3}\s?\d{3}\s?\d{2}\b/g,
-    IP_ADDRESS:  /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g,
-    NAME:        /\b[A-ZÀ-Ü][a-zà-ÿ]+\s[A-ZÀ-Ü][a-zà-ÿ]+\b/g, // Simplified name pattern
-    ADDRESS:     /\d+\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin)\s+[A-Za-zÀ-ÿ\s]+/gi,
-    HEALTH_DATA: /\b(?:allerg(?:ie|y|ique)|gluten|lactose|arachide|peanut|celiac|diabèt|intolér)/gi,
-};
-
-/** Fields that are ALWAYS blocked, regardless of context */
-const HARD_BLOCKED_FIELDS = new Set([
-    'customerName', 'customerEmail', 'customerPhone', 'customerAddress',
-    'userName', 'userEmail', 'userPhone',
-    'employeeName', 'employeeEmail', 'employeeSsn',
-    'supplierContact', 'supplierEmail', 'supplierPhone',
-    'iban', 'bankAccount', 'cardNumber',
-    'allergens', 'allergies', 'medicalNotes', 'dietaryRestrictions',
-    'password', 'token', 'secret', 'apiKey',
-]);
-
-/** Fields that should be generalized (banded) instead of stripped */
-const GENERALIZABLE_FIELDS: Record<string, (value: number) => string> = {
-    dailyRevenue: (v) => bandRevenue(v),
-    amountInCents: (v) => bandAmount(v),
-    totalInCents: (v) => bandAmount(v),
-    priceInCents: (v) => bandPrice(v),
-    salary: (v) => bandSalary(v),
-};
-
-// ============================================
-// BANDING FUNCTIONS (Generalization)
-// ============================================
-
-function bandRevenue(cents: number): string {
-    const euros = cents / 100;
-    if (euros < 1000) return 'revenue_band_0_1000';
-    if (euros < 2500) return 'revenue_band_1000_2500';
-    if (euros < 5000) return 'revenue_band_2500_5000';
-    if (euros < 10000) return 'revenue_band_5000_10000';
-    if (euros < 25000) return 'revenue_band_10000_25000';
-    return 'revenue_band_25000_plus';
-}
-
-function bandAmount(cents: number): string {
-    const euros = cents / 100;
-    if (euros < 50) return 'amount_band_0_50';
-    if (euros < 200) return 'amount_band_50_200';
-    if (euros < 500) return 'amount_band_200_500';
-    if (euros < 1000) return 'amount_band_500_1000';
-    return 'amount_band_1000_plus';
-}
-
-function bandPrice(cents: number): string {
-    const euros = cents / 100;
-    if (euros < 5) return 'price_band_0_5';
-    if (euros < 10) return 'price_band_5_10';
-    if (euros < 15) return 'price_band_10_15';
-    if (euros < 20) return 'price_band_15_20';
-    if (euros < 30) return 'price_band_20_30';
-    return 'price_band_30_plus';
-}
-
-function bandSalary(cents: number): string {
-    const euros = cents / 100;
-    if (euros < 1500) return 'salary_band_smic';
-    if (euros < 2000) return 'salary_band_1500_2000';
-    if (euros < 2500) return 'salary_band_2000_2500';
-    if (euros < 3500) return 'salary_band_2500_3500';
-    return 'salary_band_3500_plus';
-}
+import {
+    PII_PATTERNS,
+    HARD_BLOCKED_FIELDS,
+    GENERALIZABLE_FIELDS,
+} from './pulse-sanitizer/sanitizerRules';
 
 // ============================================
 // CORE SANITIZER
@@ -111,7 +36,6 @@ export class PulseSanitizer {
 
     /**
      * 🔍 Scans a raw data object for PII.
-     * Returns all detections without modifying the data.
      */
     scanForPII(data: Record<string, unknown>): PIIDetection[] {
         this.detections = [];
@@ -121,9 +45,6 @@ export class PulseSanitizer {
 
     /**
      * ✂️ Strips all PII from the data and returns a sanitized payload.
-     * Hard-blocked fields are removed entirely.
-     * Generalizable fields are banded.
-     * PII patterns in string values are redacted.
      */
     sanitizePayload(
         rawData: Record<string, unknown>,
@@ -134,7 +55,6 @@ export class PulseSanitizer {
         const trends: Record<string, PulseTrend> = {};
 
         for (const [key, value] of Object.entries(rawData)) {
-            // 1. Hard-block check
             if (HARD_BLOCKED_FIELDS.has(key)) {
                 this.detections.push({
                     field: key,
@@ -145,25 +65,22 @@ export class PulseSanitizer {
                 continue;
             }
 
-            // 2. Generalization for numeric fields
             if (typeof value === 'number' && key in GENERALIZABLE_FIELDS) {
                 tags[key] = GENERALIZABLE_FIELDS[key](value);
                 this.detections.push({
                     field: key,
-                    category: 'NAME', // Placeholder — it's a value generalization
+                    category: 'NAME',
                     value: String(value),
                     action: 'GENERALIZED',
                 });
                 continue;
             }
 
-            // 3. Numeric pass-through (non-sensitive metrics)
             if (typeof value === 'number') {
-                metrics[key] = Math.round(value * 100) / 100; // Round to 2 decimals
+                metrics[key] = Math.round(value * 100) / 100;
                 continue;
             }
 
-            // 4. String PII scan
             if (typeof value === 'string') {
                 const cleanValue = this.stripPIIFromString(value, key);
                 if (cleanValue !== null) {
@@ -172,7 +89,6 @@ export class PulseSanitizer {
                 continue;
             }
 
-            // 5. Trend objects pass through if valid
             if (this.isTrend(value)) {
                 trends[key] = value as PulseTrend;
                 continue;
@@ -191,12 +107,9 @@ export class PulseSanitizer {
         tenantHash: string,
         context: PulseContext
     ): SanitizedPulse {
-        // Scan first, then sanitize
         this.scanForPII(rawData);
-
         const payload = this.sanitizePayload(rawData, category);
 
-        // Round timestamp to the hour
         const now = new Date();
         now.setMinutes(0, 0, 0);
 
@@ -207,22 +120,18 @@ export class PulseSanitizer {
             category,
             payload,
             context,
-            integrityHash: '', // Will be computed below
+            integrityHash: '',
         };
 
         pulse.integrityHash = this.computeIntegrityHash(pulse);
-
         return pulse;
     }
 
     /**
      * ✅ Validates that a pulse contains zero PII before transmission.
-     * Final gate — if this fails, the pulse is BLOCKED.
      */
     validatePulse(pulse: SanitizedPulse): { valid: boolean; violations: string[] } {
         const violations: string[] = [];
-
-        // Deep scan the serialized pulse for PII patterns
         const serialized = JSON.stringify(pulse.payload);
 
         for (const [category, pattern] of Object.entries(PII_PATTERNS)) {
@@ -232,7 +141,6 @@ export class PulseSanitizer {
             }
         }
 
-        // Verify integrity hash
         const expectedHash = this.computeIntegrityHash({
             ...pulse,
             integrityHash: '',
@@ -244,26 +152,17 @@ export class PulseSanitizer {
         return { valid: violations.length === 0, violations };
     }
 
-    /**
-     * Returns all PII detections from the last scan/sanitize operation.
-     */
     getDetections(): PIIDetection[] {
         return [...this.detections];
     }
 
-    /**
-     * Checks if the given category is allowed to emit at this time,
-     * based on the PULSE_SCHEDULE.
-     */
     canEmit(category: PulseCategory, lastEmittedAt?: number): boolean {
         const schedule = PULSE_SCHEDULE.find(s => s.category === category);
         if (!schedule) return false;
-
         if (!lastEmittedAt) return true;
 
         const elapsed = Date.now() - lastEmittedAt;
         const minInterval = this.getMinIntervalMs(schedule.frequency);
-
         return elapsed >= minInterval;
     }
 
@@ -287,7 +186,6 @@ export class PulseSanitizer {
 
             if (typeof value === 'string') {
                 for (const [cat, pattern] of Object.entries(PII_PATTERNS)) {
-                    // Reset regex lastIndex for global patterns
                     pattern.lastIndex = 0;
                     if (pattern.test(value)) {
                         this.detections.push({
@@ -310,7 +208,6 @@ export class PulseSanitizer {
         let cleaned = value;
 
         for (const [cat, pattern] of Object.entries(PII_PATTERNS)) {
-            // GDPR Article 9: Health data = full block
             if (cat === 'HEALTH_DATA') {
                 pattern.lastIndex = 0;
                 if (pattern.test(cleaned)) {
@@ -320,7 +217,7 @@ export class PulseSanitizer {
                         value: cleaned.substring(0, 50),
                         action: 'BLOCKED',
                     });
-                    return null; // Entire field blocked
+                    return null;
                 }
             }
 
@@ -328,7 +225,6 @@ export class PulseSanitizer {
             cleaned = cleaned.replace(pattern, `[${cat}_REDACTED]`);
         }
 
-        // If the string is mostly redacted, drop it entirely
         const redactedCount = (cleaned.match(/\[.*?_REDACTED\]/g) || []).length;
         if (redactedCount > 2) return null;
 
@@ -357,11 +253,9 @@ export class PulseSanitizer {
     }
 
     private generatePulseId(): string {
-        // Crypto-safe UUID generation
         if (typeof crypto !== 'undefined' && crypto.randomUUID) {
             return crypto.randomUUID();
         }
-        // Fallback
         return `pulse_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
 
@@ -375,20 +269,19 @@ export class PulseSanitizer {
             context: pulse.context,
         });
 
-        // Simple hash for now — will be replaced with crypto.subtle.digest in production
         let hash = 0;
         for (let i = 0; i < content.length; i++) {
             const char = content.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32-bit integer
+            hash = hash & hash;
         }
         return `pulse_hash_${Math.abs(hash).toString(16)}`;
     }
 
     private getMinIntervalMs(frequency: string): number {
         switch (frequency) {
-            case 'realtime_throttled': return 60 * 60 * 1000;     // 1 hour
-            case 'daily':             return 24 * 60 * 60 * 1000; // 24 hours
+            case 'realtime_throttled': return 60 * 60 * 1000;
+            case 'daily':             return 24 * 60 * 60 * 1000;
             case 'weekly':            return 7 * 24 * 60 * 60 * 1000;
             case 'monthly':           return 30 * 24 * 60 * 60 * 1000;
             default:                  return 24 * 60 * 60 * 1000;

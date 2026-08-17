@@ -1,23 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    Clock,
-    ChefHat,
-    Book,
-    AlertTriangle,
-    MessageSquare,
-    CheckCircle2,
-    Flame,
-    GripVertical,
-    ChevronDown,
-    ChevronUp,
-} from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
-import { pushToUser, pushToRole } from '@/lib/push/pushClient';
-import { resolveStation } from '..';
 import {
     DndContext,
     closestCenter,
@@ -28,15 +14,15 @@ import {
 } from "@dnd-kit/core";
 import {
     SortableContext,
-    useSortable,
     verticalListSortingStrategy,
     arrayMove,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
-import { isTicketWarning, hasAllergens, formatElapsed, timerColorClass } from './kds-ticket/kdsTicketHelpers';
+import { isTicketWarning, hasAllergens } from './kds-ticket/kdsTicketHelpers';
 import { KDSItemCard } from './kds-ticket/KDSItemCard';
 import { KDSContextDrawer } from './kds-ticket/KDSContextDrawer';
+import { KDSTicketHeader } from './kds-ticket/KDSTicketHeader';
+import { KDSTicketFooter } from './kds-ticket/KDSTicketFooter';
 export { hasAllergens };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -68,7 +54,6 @@ type FlatItem = OrderItem & { _key: string };
 export function KDSTicket({
     ticket,
     fullOrder,
-    tenantId,
     gridColumns,
     rushMode,
     updateOrderStatus,
@@ -131,7 +116,7 @@ export function KDSTicket({
         });
     }, []);
 
-    // ── Derived urgency flags (unchanged logic) ───────────────────────────────
+    // ── Derived urgency flags ─────────────────────────────────────────────────
     const isReady   = ticket.status === 'ready';
     const isUrgent  = !isReady && elapsedMinutes >= 15;
     const isWarning = isTicketWarning(ticket.status, elapsedMinutes);
@@ -148,7 +133,7 @@ export function KDSTicket({
         return grouped;
     }, [fullOrder]);
 
-    // ── kds-2 + not-2: Mark ticket ready + push notification to server ────────
+    // ── kds-2 + not-2: Mark ticket ready ──────────────────────────────────────
     const handleMarkReady = useCallback(async () => {
         const itemWithStandard = (ticket.items || []).find((item: any) => {
             const r = recipes.find(rec => rec.name === item.name);
@@ -163,12 +148,6 @@ export function KDSTicket({
             setIsAuditOpen(true);
         } else {
             await updateOrderStatus(ticket.id, 'ready');
-            const serverId = (ticket as unknown as { serverId?: string }).serverId;
-            const pushPayload = {
-                title: 'Plat prêt !',
-                body: (ticket.items || []).slice(0, 3).map((i: any) => i.name).join(', '),
-                url: '/pos',
-            };
             if (process.env.NODE_ENV !== 'production') {
                 console.info('[KDS] Push envoyé pour ticket', ticket.id);
             }
@@ -201,78 +180,16 @@ export function KDSTicket({
                             : "border border-white/10 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] hover:border-accent-gold/50"
             )}
         >
-            {/* ── Card Header ─────────────────────────────────────────────── */}
-            <div className={cn(
-                "flex flex-col gap-3 p-5 md:p-6 border-b transition-all duration-700 relative overflow-hidden",
-                "bg-surface-bg border-border/50"
-            )}>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
-
-                {/* kds-3: Allergen banner */}
-                {allergens.length > 0 && (
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-status-danger/10 border border-red-500/40 text-status-danger text-[10px] font-black uppercase tracking-wider animate-pulse">
-                        <AlertTriangle className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-                        <span>ALLERGIE: {allergens.join(', ')}</span>
-                    </div>
-                )}
-
-                <div className="relative z-10 flex flex-col gap-3">
-                    {/* Row 1: Table number + kds-1 timer badge (top-right) */}
-                    <div className="flex items-center justify-between w-full min-h-[40px]">
-                        <div className="flex items-center gap-2 min-w-0">
-                            <h3 className={cn(
-                                "font-serif font-medium tracking-tight italic text-primary leading-none truncate drop-shadow-sm translate-y-0.5",
-                                gridColumns >= 5 ? "text-2xl" : "text-3xl lg:text-4xl"
-                            )}>
-                                Table <span className="text-accent-gold not-italic font-bold">{ticket.tableNumber}.</span>
-                            </h3>
-                            {(isUrgent || rushMode) && (
-                                <div className="flex gap-1 shrink-0 self-center mt-1">
-                                    <span className="relative flex h-2.5 w-2.5">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75" />
-                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-error" />
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* kds-1: Live timer badge — top-right of card */}
-                        <div className={cn(
-                            "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-mono text-[11px] font-black border border-current/20 bg-surface-card/70 backdrop-blur-sm shadow-sm shrink-0 transition-colors duration-300",
-                            timerColorClass(elapsedSeconds)
-                        )}>
-                            <Clock className="w-3 h-3" strokeWidth={2.5} />
-                            <span>{formatElapsed(elapsedSeconds)}</span>
-                        </div>
-                    </div>
-
-                    {/* Row 2: Old urgency clock + server info (kept for urgency context) */}
-                    <div className="flex items-center justify-between w-full gap-2 h-8">
-                        <div className={cn(
-                            "h-full px-3 rounded-lg font-mono border transition-all duration-500 flex items-center gap-2 shadow-sm shrink-0 whitespace-nowrap",
-                            isUrgent || (rushMode && elapsedMinutes > 5)
-                                ? "bg-error text-text-primary border-error shadow-error/20"
-                                : isWarning
-                                    ? "bg-warning text-text-primary border-warning shadow-warning/20"
-                                    : "bg-surface-card text-primary border-subtle"
-                        )}>
-                            <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} strokeWidth={2.5} />
-                            <span className="text-xs font-black pt-0.5">
-                                {elapsedMinutes}<span className="text-[9px] opacity-70 ml-0.5 font-normal">MIN</span>
-                            </span>
-                        </div>
-
-                        <div className="flex items-center gap-3 min-w-0 justify-end h-full">
-                            <span className="text-[10px] font-black uppercase tracking-[0.15em] text-secondary truncate text-right leading-none pt-0.5">
-                                {ticket.serverName}
-                            </span>
-                            <div className="w-8 h-8 rounded-full bg-surface-card flex items-center justify-center border border-subtle shrink-0 shadow-sm">
-                                <ChefHat className="w-4 h-4 text-primary" strokeWidth={2} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <KDSTicketHeader
+                ticket={ticket}
+                gridColumns={gridColumns}
+                rushMode={rushMode}
+                allergens={allergens}
+                isUrgent={isUrgent}
+                isWarning={isWarning}
+                elapsedSeconds={elapsedSeconds}
+                elapsedMinutes={elapsedMinutes}
+            />
 
             {/* ── Item List with DnD (kds-4) ─────────────────────────────── */}
             <div className={cn(
@@ -309,44 +226,11 @@ export function KDSTicket({
             />
 
             {/* ── Action Footer ───────────────────────────────────────────── */}
-            <div className="p-6 pt-0 mt-auto">
-                <div className="h-px w-full bg-surface-bg mb-6" />
-                <AnimatePresence mode="wait">
-                    {ticket.status === "ready" ? (
-                        <motion.button
-                            key="delivered"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all border border-subtle bg-surface-bg text-secondary hover:bg-surface-bg hover:border-default flex items-center justify-center gap-4 active:scale-[0.98] shadow-sm group"
-                            onClick={() => updateOrderStatus(ticket.id, 'delivered')}
-                        >
-                            <CheckCircle2 className="w-5 h-5 group-hover:text-status-success transition-colors" strokeWidth={2.5} />
-                            TERMINER
-                        </motion.button>
-                    ) : (
-                        <motion.div key="progress" className="flex gap-4">
-                            {ticket.status === "new" ? (
-                                <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-surface-bg text-primary hover:bg-surface-bg active:scale-[0.98] shadow-premium flex items-center justify-center gap-3"
-                                    onClick={() => updateOrderStatus(ticket.id, 'preparing')}
-                                >
-                                    <Flame className="w-5 h-5 text-status-warning" strokeWidth={2.5} />
-                                    LANCER
-                                </button>
-                            ) : (
-                                <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[11px] transition-all bg-status-success text-text-primary hover:bg-status-success active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
-                                    onClick={() => { void handleMarkReady(); }}
-                                >
-                                    <span className="flex items-center gap-3">
-                                        PRÊT <CheckCircle2 className="w-5 h-5" strokeWidth={2.5} />
-                                    </span>
-                                </button>
-                            )}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+            <KDSTicketFooter
+                ticket={ticket}
+                updateOrderStatus={updateOrderStatus}
+                handleMarkReady={handleMarkReady}
+            />
         </motion.div>
     );
 }

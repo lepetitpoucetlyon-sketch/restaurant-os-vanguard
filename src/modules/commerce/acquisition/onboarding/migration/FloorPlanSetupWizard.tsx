@@ -7,87 +7,17 @@
  */
 
 import { useState, useCallback } from 'react';
-import { Plus, Trash2, ChevronRight, ChevronLeft, Save, Loader2, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
-import { BatchTableForm, nextKey, SHAPE_LABELS, type TableShape, type WizardTable } from './floor-plan/BatchTableForm';
-
-// ── Types ─────────────────────────────────────────────────────────────────────
+import { BatchTableForm, type WizardTable } from './floor-plan/BatchTableForm';
+import { SingleTableForm } from './floor-plan/SingleTableForm';
+import { FloorPlanZonesStep, type ZoneName } from './floor-plan/FloorPlanZonesStep';
+import { FloorPlanPreviewStep } from './floor-plan/FloorPlanPreviewStep';
+import { FloorPlanDoneView } from './floor-plan/FloorPlanDoneView';
 
 type WizardStep = 'zones' | 'tables' | 'preview';
-
-// ── Constants ────────────────────────────────────────────────────────────────
-
-const AVAILABLE_ZONES = ['Salle', 'Terrasse', 'Bar', 'Salon privé'] as const;
-type ZoneName = (typeof AVAILABLE_ZONES)[number];
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-interface SingleTableFormProps {
-  zone: string;
-  onAdd: (table: WizardTable) => void;
-}
-
-function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
-  const [number, setNumber] = useState('');
-  const [seats, setSeats] = useState(4);
-  const [shape, setShape] = useState<TableShape>('rect');
-
-  function handleAdd() {
-    if (!number.trim()) { toast.error('Numéro de table requis.'); return; }
-    onAdd({ _key: nextKey(), zone, number: number.trim(), seats, shape });
-    setNumber('');
-    toast.success(`Table ${number} ajoutée.`);
-  }
-
-  return (
-    <div className="flex flex-wrap items-end gap-2 rounded-lg border border-border bg-bg-tertiary p-3">
-      <p className="w-full text-xs font-semibold uppercase tracking-widest text-text-muted mb-0">Ajout manuel — {zone}</p>
-      <label className="space-y-1 flex-1 min-w-[80px]">
-        <span className="text-xs text-text-muted">Numéro</span>
-        <input
-          type="text"
-          placeholder="ex: 12A"
-          value={number}
-          onChange={e => setNumber(e.target.value)}
-          className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-        />
-      </label>
-      <label className="space-y-1 flex-1 min-w-[80px]">
-        <span className="text-xs text-text-muted">Capacité</span>
-        <input
-          type="number"
-          min={1}
-          max={50}
-          value={seats}
-          onChange={e => setSeats(Math.max(1, parseInt(e.target.value) || 1))}
-          className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-        />
-      </label>
-      <label className="space-y-1 flex-1 min-w-[100px]">
-        <span className="text-xs text-text-muted">Forme</span>
-        <select
-          value={shape}
-          onChange={e => setShape(e.target.value as TableShape)}
-          className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-        >
-          <option value="rect">Rectangulaire</option>
-          <option value="circle">Ronde</option>
-        </select>
-      </label>
-      <button
-        onClick={handleAdd}
-        className="flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 transition-colors px-3 py-2 text-sm font-medium"
-      >
-        <Plus className="w-4 h-4" />
-        Ajouter
-      </button>
-    </div>
-  );
-}
-
-// ── Main Wizard ────────────────────────────────────────────────────────────────
 
 export default function FloorPlanSetupWizard() {
   const [step, setStep] = useState<WizardStep>('zones');
@@ -96,15 +26,11 @@ export default function FloorPlanSetupWizard() {
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
 
-  // ── Step 1 : zones ──────────────────────────────────────────────────────────
-
   function toggleZone(zone: ZoneName) {
     setSelectedZones(prev =>
       prev.includes(zone) ? prev.filter(z => z !== zone) : [...prev, zone]
     );
   }
-
-  // ── Step 2 : tables ─────────────────────────────────────────────────────────
 
   const addTables = useCallback((toAdd: WizardTable[]) => {
     setTables(prev => [...prev, ...toAdd]);
@@ -123,8 +49,6 @@ export default function FloorPlanSetupWizard() {
       prev.map(t => (t._key === key ? { ...t, [field]: value } : t))
     );
   }
-
-  // ── Step 3 : save ───────────────────────────────────────────────────────────
 
   async function handleSave() {
     if (tables.length === 0) { toast.error('Aucune table à sauvegarder.'); return; }
@@ -158,26 +82,13 @@ export default function FloorPlanSetupWizard() {
     }
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────
-
   if (done) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-status-success/15 flex items-center justify-center">
-          <Check className="w-8 h-8 text-status-success" />
-        </div>
-        <h2 className="text-xl font-semibold text-text-primary">Plan de salle enregistré</h2>
-        <p className="text-sm text-text-muted max-w-sm">
-          {tables.length} table(s) créées dans {selectedZones.length} zone(s).
-          Elles sont maintenant disponibles dans le module Réservations et le POS.
-        </p>
-        <button
-          onClick={() => { setDone(false); setStep('zones'); setTables([]); setSelectedZones(['Salle']); }}
-          className="mt-2 rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:text-text-primary hover:border-accent/40 transition-colors"
-        >
-          Recommencer
-        </button>
-      </div>
+      <FloorPlanDoneView
+        tablesCount={tables.length}
+        zonesCount={selectedZones.length}
+        onReset={() => { setDone(false); setStep('zones'); setTables([]); setSelectedZones(['Salle']); }}
+      />
     );
   }
 
@@ -213,45 +124,16 @@ export default function FloorPlanSetupWizard() {
         })}
       </div>
 
-      {/* ── STEP 1 : Zones ── */}
+      {/* STEP 1 */}
       {step === 'zones' && (
-        <div className="space-y-4">
-          <p className="text-sm text-text-muted">Sélectionnez les zones que possède votre établissement :</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {AVAILABLE_ZONES.map(zone => {
-              const selected = selectedZones.includes(zone);
-              return (
-                <button
-                  key={zone}
-                  onClick={() => toggleZone(zone)}
-                  className={[
-                    'rounded-xl border-2 p-4 text-sm font-medium transition-all',
-                    selected
-                      ? 'border-accent bg-accent/10 text-accent'
-                      : 'border-border bg-bg-secondary text-text-muted hover:border-accent/40 hover:text-text-primary',
-                  ].join(' ')}
-                >
-                  {zone}
-                </button>
-              );
-            })}
-          </div>
-          {selectedZones.length === 0 && (
-            <p className="text-sm text-yellow-600 dark:text-yellow-400">Sélectionnez au moins une zone.</p>
-          )}
-          <div className="flex justify-end pt-2">
-            <button
-              onClick={() => selectedZones.length > 0 && setStep('tables')}
-              disabled={selectedZones.length === 0}
-              className="flex items-center gap-2 rounded-lg bg-text-primary text-bg-primary px-5 py-2 text-sm font-semibold disabled:opacity-40 hover:opacity-90 transition-opacity"
-            >
-              Suivant <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <FloorPlanZonesStep
+          selectedZones={selectedZones}
+          toggleZone={toggleZone}
+          onNext={() => selectedZones.length > 0 && setStep('tables')}
+        />
       )}
 
-      {/* ── STEP 2 : Tables ── */}
+      {/* STEP 2 */}
       {step === 'tables' && (
         <div className="space-y-6">
           {selectedZones.map(zone => (
@@ -283,92 +165,16 @@ export default function FloorPlanSetupWizard() {
         </div>
       )}
 
-      {/* ── STEP 3 : Preview & Save ── */}
+      {/* STEP 3 */}
       {step === 'preview' && (
-        <div className="space-y-4">
-          <p className="text-sm text-text-muted">
-            Vérifiez et modifiez les tables avant de sauvegarder. Toutes les tables seront créées en une seule opération.
-          </p>
-
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
-              <thead className="bg-bg-secondary text-text-muted text-xs uppercase tracking-wide">
-                <tr>
-                  <th className="px-4 py-3 text-left">Zone</th>
-                  <th className="px-4 py-3 text-left">Numéro</th>
-                  <th className="px-4 py-3 text-left">Capacité</th>
-                  <th className="px-4 py-3 text-left">Forme</th>
-                  <th className="px-4 py-3 text-left">ID Nexus</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {tables.map(t => (
-                  <tr key={t._key} className="hover:bg-bg-secondary/50 transition-colors">
-                    <td className="px-4 py-2 text-text-muted">{t.zone}</td>
-                    <td className="px-4 py-2">
-                      <input
-                        type="text"
-                        value={t.number}
-                        onChange={e => updateTable(t._key, 'number', e.target.value)}
-                        className="w-20 rounded border border-border bg-transparent px-2 py-0.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <input
-                        type="number"
-                        min={1}
-                        max={50}
-                        value={t.seats}
-                        onChange={e => updateTable(t._key, 'seats', Math.max(1, parseInt(e.target.value) || 1))}
-                        className="w-16 rounded border border-border bg-transparent px-2 py-0.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <select
-                        value={t.shape}
-                        onChange={e => updateTable(t._key, 'shape', e.target.value)}
-                        className="rounded border border-border bg-bg-secondary px-2 py-0.5 text-sm text-text-primary focus:outline-none focus:border-accent"
-                      >
-                        <option value="rect">{SHAPE_LABELS.rect}</option>
-                        <option value="circle">{SHAPE_LABELS.circle}</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-2 font-mono text-[11px] text-text-muted">
-                      table-{t.zone.toLowerCase().replace(/\s+/g, '-')}-{t.number}
-                    </td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() => removeTable(t._key)}
-                        className="text-status-danger hover:text-red-600 transition-colors"
-                        title="Supprimer cette table"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
-            <button
-              onClick={() => setStep('tables')}
-              className="flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:text-text-primary transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" /> Retour
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving || tables.length === 0}
-              className="flex items-center gap-2 rounded-lg bg-accent px-6 py-2 text-sm font-semibold text-text-primary disabled:opacity-50 hover:opacity-90 transition-opacity"
-            >
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {saving ? 'Sauvegarde…' : `Sauvegarder ${tables.length} table(s)`}
-            </button>
-          </div>
-        </div>
+        <FloorPlanPreviewStep
+          tables={tables}
+          updateTable={updateTable}
+          removeTable={removeTable}
+          onBack={() => setStep('tables')}
+          onSave={handleSave}
+          saving={saving}
+        />
       )}
     </div>
   );

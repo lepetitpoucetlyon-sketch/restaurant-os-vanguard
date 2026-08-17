@@ -2,16 +2,8 @@
 
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-    BookOpen,
-    Receipt,
-    ShieldCheck,
-    PlusCircle,
-    Landmark,
-    Wallet,
-    X,
-} from "lucide-react";
 import { toast } from "sonner";
+import dynamic from "next/dynamic";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
@@ -20,14 +12,7 @@ import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
 import { useOrders } from '@/modules/ops';
 import type { Order, JournalEntry } from "@nexus/contracts";
-import dynamic from "next/dynamic";
 
-// dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)
-const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
-const BillingTab    = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
-const AuditTab      = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
-const TreasuryTab   = dynamic(() => import("./_tabs/TreasuryTab").then(m => m.TreasuryTab));
-const BankTab       = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTab));
 import {
     type FinanceTab,
     type BankAccount,
@@ -35,70 +20,22 @@ import {
     computeTVABreakdown,
 } from "./financeUtils";
 
+import { BankModal } from "./dashboard/BankModal";
+import { FinanceHeaderNav } from "./dashboard/FinanceHeaderNav";
+import { filterPaidOrders, applyBankSyncResult, performConnectBank } from "./dashboard/bankConnectionHelpers";
+
+// dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)
+const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
+const BillingTab = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
+const AuditTab = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
+const TreasuryTab = dynamic(() => import("./_tabs/TreasuryTab").then(m => m.TreasuryTab));
+const BankTab = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTab));
+
 const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "treasury", "audit"];
 
 function computeInitialTab(tabParam: string | null): FinanceTab {
     return tabParam && VALID_FINANCE_TABS.includes(tabParam as FinanceTab) ? (tabParam as FinanceTab) : "accounting";
 }
-
-function filterPaidOrders(orders: Order[]): Order[] {
-    return orders.filter(o => o.status === "paid" || (o as { status?: string }).status === "served");
-}
-
-async function applyBankSyncResult(
-    data: { success?: boolean; isDemoMode?: boolean; error?: string },
-    setBankAccounts: (accounts: BankAccount[]) => void,
-): Promise<void> {
-    if (data.success) {
-        toast.success(data.isDemoMode ? "Synchronisation simulée (mode démo)." : "Synchronisation bancaire lancée.");
-        const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-        setBankAccounts(await Nexus.adapter.query<BankAccount>("bankAccounts"));
-    } else {
-        toast.error(data.error ?? "Erreur lors de la synchronisation.");
-    }
-}
-
-async function performConnectBank(
-    setBankWebviewUrl: (url: string) => void,
-    setBankModalOpen: (open: boolean) => void,
-    setConnectingBank: (b: boolean) => void,
-): Promise<void> {
-    setConnectingBank(true);
-    try {
-        const origin = typeof window !== "undefined" ? window.location.origin : "";
-        const res = await fetch(`/api/finance/bank/webview?origin=${encodeURIComponent(origin)}`);
-        if (!res.ok) throw new Error("Erreur serveur");
-        const { url } = (await res.json()) as { url: string; isDemoMode?: boolean };
-        setBankWebviewUrl(url);
-        setBankModalOpen(true);
-    } catch {
-        toast.error("Impossible d'ouvrir la connexion bancaire.");
-    } finally {
-        setConnectingBank(false);
-    }
-}
-
-function BankModal({ open, url, onClose }: { open: boolean; url: string | null; onClose: () => void }) {
-    if (!open || !url) return null;
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="relative w-full max-w-2xl h-[600px] bg-surface-base rounded-xl shadow-2xl overflow-hidden flex flex-col">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface-sidebar shrink-0">
-                    <div className="flex items-center gap-2">
-                        <Landmark className="w-4 h-4 text-action-primary" />
-                        <span className="text-sm font-medium">Connexion bancaire sécurisée (PSD2)</span>
-                    </div>
-                    <button onClick={onClose} className="p-1.5 rounded-md hover:bg-surface-base transition-colors" aria-label="Fermer">
-                        <X className="w-4 h-4" />
-                    </button>
-                </div>
-                <iframe src={url} className="flex-1 w-full border-0" title="Connexion bancaire sécurisée Powens" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" />
-            </div>
-        </div>
-    );
-}
-
-// ── Page component ────────────────────────────────────────────────────────────
 
 export function FinanceDashboard() {
     const searchParams = useSearchParams();
@@ -164,8 +101,6 @@ export function FinanceDashboard() {
         [journalEntries]
     );
 
-    // ── Handlers ───────────────────────────────────────────────────────────────
-
     const handleClotureZ = useCallback(async () => {
         if (!activeTenantId) return;
         setClosingZ(true);
@@ -180,12 +115,10 @@ export function FinanceDashboard() {
         }
     }, [activeTenantId]);
 
-    // fin-8: open Powens webview in modal iframe
     const handleConnectBank = useCallback(async () => {
         await performConnectBank(setBankWebviewUrl, setBankModalOpen, setConnectingBank);
     }, []);
 
-    // fin-8: trigger sync
     const handleBankSync = useCallback(async () => {
         setSyncingBank(true);
         try {
@@ -199,7 +132,6 @@ export function FinanceDashboard() {
         }
     }, []);
 
-    // fin-12: P&L PDF export
     const handleExportPnL = useCallback(async () => {
         setPnlExporting(true);
         try {
@@ -216,7 +148,6 @@ export function FinanceDashboard() {
         }
     }, [payrollMonth]);
 
-    // fin-12: Balance sheet PDF export
     const handleExportBilan = useCallback(async () => {
         setBilanExporting(true);
         try {
@@ -231,7 +162,6 @@ export function FinanceDashboard() {
         }
     }, []);
 
-    // fin-13: Payroll CSV export
     const handleExportPayroll = useCallback(async () => {
         setPayrollExporting(true);
         try {
@@ -245,62 +175,19 @@ export function FinanceDashboard() {
         }
     }, [payrollMonth]);
 
-    // ── Render ─────────────────────────────────────────────────────────────────
-
     return (
         <div className="min-h-screen bg-surface-base text-text-primary p-6">
-
-            {/* fin-8: Bank connection modal iframe */}
             <BankModal open={bankModalOpen} url={bankWebviewUrl} onClose={() => setBankModalOpen(false)} />
 
-            <header className="mb-6 flex items-start justify-between">
-                <div>
-                    <h1 className="text-2xl font-serif font-bold">Finance &amp; Comptabilité</h1>
-                    <p className="text-sm text-text-muted mt-1">
-                        Pilotage financier, facturation et audit fiscal NF525.
-                    </p>
-                </div>
-                <button
-                    onClick={() => setClaimOpen(true)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
-                >
-                    <PlusCircle className="w-4 h-4" /> Note de frais
-                </button>
-            </header>
-
-            <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
-                {([
-                    { id: "accounting", label: "Comptabilité", icon: BookOpen },
-                    { id: "billing", label: "Facturation", icon: Receipt },
-                    { id: "bank", label: "Connexion Bancaire", icon: Landmark },
-                    { id: "treasury", label: "Trésorerie", icon: Wallet },
-                    { id: "audit", label: "Audit fiscal", icon: ShieldCheck },
-                ] as const).filter(tab => {
-                    if (tab.id === "treasury") return canSeeTreasury;
-                    if (tab.id === "audit") return canSeeAudit;
-                    return true;
-                }).map((tab) => {
-                    const Icon = tab.icon;
-                    const active = activeTab === tab.id;
-                    return (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                                active
-                                    ? "border-action-primary text-action-primary"
-                                    : "border-transparent text-text-muted hover:text-text-primary"
-                            }`}
-                        >
-                            <Icon className="w-4 h-4" />
-                            {tab.label}
-                        </button>
-                    );
-                })}
-            </nav>
+            <FinanceHeaderNav
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                setClaimOpen={setClaimOpen}
+                canSeeTreasury={canSeeTreasury}
+                canSeeAudit={canSeeAudit}
+            />
 
             <main>
-                {/* ── Comptabilité ───────────────────────────────────────────── */}
                 {activeTab === "accounting" && (
                     <AccountingTab
                         journalEntries={journalEntries}
@@ -322,7 +209,6 @@ export function FinanceDashboard() {
                     />
                 )}
 
-                {/* ── Facturation ────────────────────────────────────────────── */}
                 {activeTab === "billing" && (
                     <BillingTab
                         paidOrders={paidOrders}
@@ -330,7 +216,6 @@ export function FinanceDashboard() {
                     />
                 )}
 
-                {/* ── Connexion Bancaire (fin-8) ─────────────────────────────── */}
                 {activeTab === "bank" && (
                     <BankTab
                         connectingBank={connectingBank}
@@ -343,14 +228,12 @@ export function FinanceDashboard() {
                     />
                 )}
 
-                {/* ── Trésorerie & SEPA ──────────────────────────────────────── */}
                 {activeTab === "treasury" && (
                     <TabGuard pageKey="finance" tabKey="treasury">
                         <TreasuryTab />
                     </TabGuard>
                 )}
 
-                {/* ── Audit fiscal ───────────────────────────────────────────── */}
                 {activeTab === "audit" && (
                     <TabGuard pageKey="finance" tabKey="audit">
                         <AuditTab entriesCount={journalEntries.length} journalEntries={journalEntries} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Tag, PlusCircle, Power, AlertCircle, Loader2, Gift, Percent, Euro } from "lucide-react";
+import { Tag, PlusCircle, Loader2 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { toast } from "sonner";
@@ -9,53 +9,11 @@ import { toMicrounits } from "@/shared/schemas/primitives";
 import { useTenant } from "@/shared/hooks/useTenant";
 
 import type { PromoCodeRecord } from './types';
+import { SEED_CODES, DEFAULT_FORM } from "./promo-code/promoConstants";
+import { PromoCodeForm } from "./promo-code/PromoCodeForm";
+import { PromoCodeListItem } from "./promo-code/PromoCodeListItem";
+
 export type { PromoCodeRecord };
-
-const SEED_CODES: Omit<PromoCodeRecord, "id" | "createdAt" | "updatedAt">[] = [
-  {
-    code: "BIENVENUE10",
-    discountType: "percent",
-    value: 10,
-    label: "Bienvenue",
-    minOrderInMicrounits: toMicrounits(0),
-    maxUses: 1000,
-    currentUses: 0,
-    expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-  },
-  {
-    code: "NEXUS20",
-    discountType: "percent",
-    value: 20,
-    label: "Offre Nexus",
-    minOrderInMicrounits: toMicrounits(20),
-    maxUses: 500,
-    currentUses: 0,
-    expiresAt: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-  },
-  {
-    code: "FREE3",
-    discountType: "fixed",
-    value: 3,
-    label: "Remise 3€",
-    minOrderInMicrounits: toMicrounits(15),
-    maxUses: 200,
-    currentUses: 0,
-    expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-    isActive: true,
-  },
-];
-
-const DEFAULT_FORM = {
-  code: "",
-  discountType: "percent" as "percent" | "fixed",
-  value: 10,
-  label: "",
-  minOrder: 0,
-  maxUses: 100,
-  expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-};
 
 export function PromoCodeManager() {
   const { tenantId } = useTenant();
@@ -76,7 +34,6 @@ export function PromoCodeManager() {
       const collPath = getPath();
       const data = await Nexus.adapter.query<PromoCodeRecord>(collPath);
       if (data.length === 0) {
-        // Seed default codes if none exist
         const now = new Date().toISOString();
         for (const seed of SEED_CODES) {
           const id = Nexus.adapter.generateId(collPath);
@@ -125,7 +82,6 @@ export function PromoCodeManager() {
       };
       await Nexus.adapter.set(getPath(id), record);
 
-      // Émission EventBus (R4 - commerce.promotion_activated)
       await NexusEventBus.emitDurable('commerce.promotion_activated', {
         v: 1,
         tenantId: tenantId ?? 'restaurant-os',
@@ -167,8 +123,6 @@ export function PromoCodeManager() {
     }
   };
 
-  const isExpired = (expiresAt: string) => new Date(expiresAt) < new Date();
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -191,98 +145,13 @@ export function PromoCodeManager() {
       </div>
 
       {showForm && (
-        <div className="bg-surface-card border border-border rounded-2xl p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-text-primary mb-4">Créer un code promo</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Code</label>
-              <input
-                value={form.code}
-                onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
-                placeholder="EX: SUMMER25"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary font-mono"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Label</label>
-              <input
-                value={form.label}
-                onChange={(e) => setForm((f) => ({ ...f, label: e.target.value }))}
-                placeholder="Description courte"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Type de remise</label>
-              <select
-                value={form.discountType}
-                onChange={(e) => setForm((f) => ({ ...f, discountType: e.target.value as "percent" | "fixed" }))}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              >
-                <option value="percent">Pourcentage (%)</option>
-                <option value="fixed">Montant fixe (€)</option>
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">
-                Valeur ({form.discountType === "percent" ? "%" : "€"})
-              </label>
-              <input
-                type="number"
-                min={1}
-                max={form.discountType === "percent" ? 100 : 500}
-                value={form.value}
-                onChange={(e) => setForm((f) => ({ ...f, value: Number(e.target.value) }))}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Commande min. (€)</label>
-              <input
-                type="number"
-                min={0}
-                value={form.minOrder}
-                onChange={(e) => setForm((f) => ({ ...f, minOrder: Number(e.target.value) }))}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Utilisations max.</label>
-              <input
-                type="number"
-                min={1}
-                value={form.maxUses}
-                onChange={(e) => setForm((f) => ({ ...f, maxUses: Number(e.target.value) }))}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              />
-            </div>
-            <div className="space-y-1.5 col-span-2">
-              <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Date d'expiration</label>
-              <input
-                type="date"
-                value={form.expiresAt}
-                onChange={(e) => setForm((f) => ({ ...f, expiresAt: e.target.value }))}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-surface-base text-sm text-text-primary focus:outline-none focus:border-action-primary"
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={() => setShowForm(false)}
-              className="flex-1 h-10 rounded-lg border border-border text-sm text-text-muted hover:text-text-primary transition-colors"
-            >
-              Annuler
-            </button>
-            <button
-              onClick={handleCreate}
-              disabled={saving}
-              className="flex-1 h-10 rounded-lg bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Gift className="w-4 h-4" />}
-              Créer le code
-            </button>
-          </div>
-        </div>
+        <PromoCodeForm
+          form={form}
+          setForm={setForm}
+          saving={saving}
+          onCancel={() => setShowForm(false)}
+          onSubmit={handleCreate}
+        />
       )}
 
       {loading ? (
@@ -296,84 +165,13 @@ export function PromoCodeManager() {
         </div>
       ) : (
         <div className="space-y-3">
-          {codes.map((promo) => {
-            const expired = isExpired(promo.expiresAt);
-            const usageRatio = promo.maxUses > 0 ? promo.currentUses / promo.maxUses : 0;
-            return (
-              <div
-                key={promo.id}
-                className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
-                  !promo.isActive || expired
-                    ? "border-border/50 bg-surface-card/30 opacity-60"
-                    : "border-border bg-surface-card hover:border-action-primary/30"
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  promo.discountType === "percent" ? "bg-status-info/10" : "bg-status-success/10"
-                }`}>
-                  {promo.discountType === "percent" ? (
-                    <Percent className="w-5 h-5 text-blue-500" />
-                  ) : (
-                    <Euro className="w-5 h-5 text-status-success" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-sm text-text-primary">{promo.code}</span>
-                    {expired && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-status-danger/10 text-status-danger font-medium">
-                        Expiré
-                      </span>
-                    )}
-                    {!promo.isActive && !expired && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-500/10 text-text-muted font-medium">
-                        Inactif
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-text-muted mt-0.5">
-                    {promo.label || promo.code} —{" "}
-                    <strong>
-                      {promo.discountType === "percent" ? `${promo.value}%` : `${promo.value}€`}
-                    </strong>
-                    {promo.minOrderInMicrounits > 0 && (
-                      <> · min. {(promo.minOrderInMicrounits / 1_000_000).toFixed(0)}€</>
-                    )}
-                  </p>
-                  <div className="flex items-center gap-3 mt-2">
-                    <div className="flex-1 h-1 bg-border rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-action-primary rounded-full transition-all"
-                        style={{ width: `${Math.min(usageRatio * 100, 100)}%` }}
-                      />
-                    </div>
-                    <span className="text-[10px] text-text-muted whitespace-nowrap font-mono">
-                      {promo.currentUses}/{promo.maxUses}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  {expired && (
-                    <AlertCircle className="w-4 h-4 text-status-danger" />
-                  )}
-                  <button
-                    onClick={() => toggleActive(promo)}
-                    disabled={expired}
-                    title={promo.isActive ? "Désactiver" : "Réactiver"}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all disabled:cursor-not-allowed ${
-                      promo.isActive
-                        ? "bg-action-primary/10 text-action-primary hover:bg-action-primary/20"
-                        : "bg-border/50 text-text-muted hover:bg-border"
-                    }`}
-                  >
-                    <Power className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          {codes.map((promo) => (
+            <PromoCodeListItem
+              key={promo.id}
+              promo={promo}
+              toggleActive={toggleActive}
+            />
+          ))}
         </div>
       )}
     </div>

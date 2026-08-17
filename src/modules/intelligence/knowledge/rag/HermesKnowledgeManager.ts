@@ -3,19 +3,7 @@
  * Grade X Intelligence Layer
  *
  * This is the brain of each Vassal instance. It delegates all heavy RAG
- * operations to the Sovereign RAG sidecar via REST API, and handles:
- *
- * 1. Proxying queries to Sovereign RAG (with RBAC role filtering)
- * 2. Indexing tenant data (products, recipes, suppliers, etc.)
- * 3. Emitting Sanitized Pulses to the MCC via PulseSanitizer
- * 4. Ingesting legacy data through the Air-lock pipeline
- *
- * ISOLATION: All operations are scoped to the tenant via workspace_id.
- * RBAC: role is passed on every query — Sovereign RAG veto membrane
- *       restricts document access to the caller's permission level.
- *
- * Architecture:
- *   HermesKnowledgeManager → SovereignRAGClient → HTTP → Sovereign RAG (Python)
+ * operations to the Sovereign RAG sidecar via REST API.
  *
  * Copyright © 2026 Mohammed-ali Boudjaadar. Tous droits réservés.
  */
@@ -23,14 +11,13 @@
 import { logger } from '@/lib/logger';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
-import { PulseSanitizer } from './PulseSanitizer';
-import { sovereignQuery, sovereignIngest, sovereignHealth } from './SovereignRAGClient';
+import { sovereignQuery, sovereignHealth } from './SovereignRAGClient';
 import type { RAGHealthResult } from './SovereignRAGClient';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
+import type { LightRAGConfig } from './LightRAGConfig';
+import { KnowledgeIndexer } from './knowledge-manager/KnowledgeIndexer';
+import { PulseEmitter } from './knowledge-manager/PulseEmitter';
 
-import type { LightRAGQueryMode, LightRAGConfig } from './LightRAGConfig';
-
-import { documentToText, resolveQueryMode, hashTenantId } from './subservices/documentHelpers';
 import type {
     KnowledgeQuery,
     KnowledgeAnswer,
@@ -45,23 +32,21 @@ import type {
 // ============================================
 
 export class HermesKnowledgeManager {
-    private sanitizer: PulseSanitizer;
-    private pulseConsentEnabled: boolean;
-    private lastPulseTimestamps: Map<PulseCategory, number>;
+    private indexer: KnowledgeIndexer;
+    private pulseEmitter: PulseEmitter;
 
     constructor(
         private readonly tenantId: string,
-        private readonly pulseContext: PulseContext,
+        pulseContext: PulseContext,
         _lightragConfig?: Partial<LightRAGConfig>
     ) {
-        this.sanitizer = new PulseSanitizer();
-        this.pulseConsentEnabled = false;
-        this.lastPulseTimestamps = new Map();
+        this.indexer = new KnowledgeIndexer(tenantId);
+        this.pulseEmitter = new PulseEmitter(tenantId, pulseContext);
         logger.info(`[HermesKnowledge] Initialized for tenant: ${tenantId}`);
     }
 
     // ============================================
-    // HEALTH — Check Sovereign RAG availability
+    // HEALTH
     // ============================================
 
     async isReady(): Promise<boolean> {
@@ -74,146 +59,31 @@ export class HermesKnowledgeManager {
     }
 
     // ============================================
-    // INDEXING — Feed data to LightRAG Server
+    // INDEXING
     // ============================================
 
-    /**
-     * 📥 Indexes a collection of documents into the Knowledge Graph.
-     * LightRAG Server handles chunking, entity extraction, and KG construction.
-     *
-     * @param collectionType Type of entity being indexed (for labeling)
-     * @param documents Raw documents to index
-     */
     async indexCollection(
         collectionType: KnowledgeEntityType,
         documents: Array<Record<string, unknown>>
     ): Promise<{ indexed: number; failed: number }> {
-        const startTime = Date.now();
-        let indexed = 0;
-        let failed = 0;
-
-        for (const doc of documents) {
-            try {
-                const text = this.documentToText(collectionType, doc);
-                if (!text) { failed++; continue; }
-
-                const fileName = `${collectionType}_${doc.id ?? Date.now()}.txt`;
-                    await sovereignIngest({
-                    workspaceId: this.tenantId,
-                    fileName,
-                    fileContent: new Blob([text], { type: 'text/plain' }),
-                    mimeType: 'text/plain',
-                });
-                indexed++;
-
-            } catch (error) {
-                logger.error(`[HermesKnowledge] Failed to index ${collectionType} document: ${error}`);
-                failed++;
-            }
-        }
-
-        // Telemetry
-        await NexusTelemetryService.emit({
-            pulse: AuditPulseType.KNOWLEDGE_QUERY,
-            vassalId: this.tenantId,
-            actorId: 'hermes',
-            payload: {
-                action: 'index_collection',
-                collectionType,
-                indexed,
-                failed,
-                durationMs: Date.now() - startTime,
-            },
-            severity: failed > 0 ? 'WARNING' : 'INFO',
-            timestamp: new Date().toISOString(),
-        });
-
-        logger.info(
-            `[HermesKnowledge] Indexed ${indexed}/${documents.length} ${collectionType} documents ` +
-            `(${failed} failed, ${Date.now() - startTime}ms)`
-        );
-
-        return { indexed, failed };
+        return this.indexer.indexCollection(collectionType, documents);
     }
 
     async indexText(text: string, id?: string): Promise<boolean> {
-        try {
-            await sovereignIngest({
-                workspaceId: this.tenantId,
-                fileName: `text_${id ?? Date.now()}.txt`,
-                fileContent: new Blob([text], { type: 'text/plain' }),
-                mimeType: 'text/plain',
-            });
-            return true;
-        } catch (error) {
-            logger.error(`[HermesKnowledge] Failed to index text: ${error}`);
-            return false;
-        }
+        return this.indexer.indexText(text, id);
     }
 
     async indexMedia(
         fileBlob: Blob,
         metadata: { fileName: string; type: 'pdf' | 'image'; category: KnowledgeEntityType; id?: string }
     ): Promise<boolean> {
-        const startTime = Date.now();
-
-        try {
-            logger.info(`[HermesKnowledge] Starting media ingestion for ${metadata.fileName} [${metadata.type}]`);
-            await sovereignIngest({
-                workspaceId: this.tenantId,
-                fileName: metadata.fileName,
-                fileContent: fileBlob,
-                mimeType: metadata.type === 'pdf' ? 'application/pdf' : 'image/jpeg',
-            });
-
-            // Emit telemetry for successful extraction
-            await NexusTelemetryService.emit({
-                pulse: AuditPulseType.KNOWLEDGE_QUERY,
-                vassalId: this.tenantId,
-                actorId: 'hermes',
-                payload: {
-                    action: 'index_media',
-                    mediaType: metadata.type,
-                    category: metadata.category,
-                    durationMs: Date.now() - startTime,
-                },
-                severity: 'INFO',
-                timestamp: new Date().toISOString(),
-            });
-
-            logger.info(`[HermesKnowledge] Successfully indexed media ${metadata.fileName} in ${Date.now() - startTime}ms`);
-            return true;
-        } catch (error) {
-            logger.error(`[HermesKnowledge] Failed to index media ${metadata.fileName}: ${error}`);
-
-            // Emit telemetry for failure
-            await NexusTelemetryService.emit({
-                pulse: AuditPulseType.KNOWLEDGE_QUERY,
-                vassalId: this.tenantId,
-                actorId: 'hermes',
-                payload: {
-                    action: 'index_media',
-                    mediaType: metadata.type,
-                    category: metadata.category,
-                    failed: true,
-                    durationMs: Date.now() - startTime,
-                },
-                severity: 'WARNING',
-                timestamp: new Date().toISOString(),
-            });
-
-            return false;
-        }
+        return this.indexer.indexMedia(fileBlob, metadata);
     }
 
     // ============================================
-    // QUERYING — Ask questions via LightRAG Server
+    // QUERYING
     // ============================================
 
-    /**
-     * 🔍 Answers a question via Sovereign RAG with RBAC filtering.
-     * The role parameter restricts which documents the veto membrane allows.
-     */
     async query(query: KnowledgeQuery, role: PermissionRole = 'serveur'): Promise<KnowledgeAnswer> {
         const startTime = Date.now();
 
@@ -258,7 +128,6 @@ export class HermesKnowledgeManager {
         }
     }
 
-    /** Retrieves raw context (no LLM) for prompt injection. */
     async getContext(question: string, role: PermissionRole = 'serveur'): Promise<string> {
         const result = await sovereignQuery(question, {
             workspaceId: this.tenantId,
@@ -269,114 +138,17 @@ export class HermesKnowledgeManager {
     }
 
     // ============================================
-    // PULSE EMISSION — Sanitized Data to MCC
+    // PULSE EMISSION
     // ============================================
 
-    /**
-     * 📡 Emits a sanitized pulse to the MCC.
-     * Only works if the tenant has opted-in to pulse sharing.
-     */
     async emitPulse(
         rawData: Record<string, unknown>,
         category: PulseCategory
     ): Promise<SanitizedPulse | null> {
-        // 1. Consent gate
-        if (!this.pulseConsentEnabled) {
-            logger.info(`[HermesKnowledge] Pulse emission blocked: consent not granted for ${this.tenantId}`);
-            return null;
-        }
-
-        // 2. Schedule gate
-        const lastEmitted = this.lastPulseTimestamps.get(category);
-        if (!this.sanitizer.canEmit(category, lastEmitted)) {
-            logger.info(`[HermesKnowledge] Pulse throttled: ${category} — too soon since last emission`);
-            return null;
-        }
-
-        // 3. Build the sanitized pulse
-        const tenantHash = await this.hashTenantId(this.tenantId);
-        const pulse = this.sanitizer.buildPulse(rawData, category, tenantHash, this.pulseContext);
-
-        // 4. Final validation — HARD GATE
-        const validation = this.sanitizer.validatePulse(pulse);
-        if (!validation.valid) {
-            logger.error(
-                `[HermesKnowledge] PULSE BLOCKED — PII detected in final validation:\n` +
-                validation.violations.join('\n')
-            );
-
-            await NexusTelemetryService.emit({
-                pulse: AuditPulseType.PULSE_BLOCKED,
-                vassalId: this.tenantId,
-                actorId: 'hermes',
-                payload: { category, violations: validation.violations },
-                severity: 'CRITICAL',
-                timestamp: new Date().toISOString(),
-            });
-
-            return null;
-        }
-
-        // 5. Log PII detections
-        const detections = this.sanitizer.getDetections();
-        if (detections.length > 0) {
-            await NexusTelemetryService.emit({
-                pulse: AuditPulseType.PII_DETECTED,
-                vassalId: this.tenantId,
-                actorId: 'hermes',
-                payload: {
-                    category,
-                    detectionCount: detections.length,
-                    categories: [...new Set(detections.map(d => d.category))],
-                },
-                severity: 'WARNING',
-                timestamp: new Date().toISOString(),
-            });
-        }
-
-        // 6. Record emission
-        this.lastPulseTimestamps.set(category, Date.now());
-
-        await NexusTelemetryService.emit({
-            pulse: AuditPulseType.PULSE_EMITTED,
-            vassalId: this.tenantId,
-            actorId: 'hermes',
-            payload: {
-                pulseId: pulse.pulseId,
-                category,
-                metricsCount: Object.keys(pulse.payload.metrics).length,
-                tagsCount: Object.keys(pulse.payload.tags).length,
-                trendsCount: Object.keys(pulse.payload.trends).length,
-            },
-            severity: 'INFO',
-            timestamp: new Date().toISOString(),
-        });
-
-        logger.info(`[HermesKnowledge] Pulse emitted: ${pulse.pulseId} [${category}]`);
-        return pulse;
+        return this.pulseEmitter.emitPulse(rawData, category);
     }
 
-    /**
-     * Enables or disables pulse consent for this tenant.
-     */
     setPulseConsent(enabled: boolean): void {
-        this.pulseConsentEnabled = enabled;
-        logger.info(`[HermesKnowledge] Pulse consent ${enabled ? 'GRANTED' : 'REVOKED'} for ${this.tenantId}`);
-    }
-
-    // ============================================
-    // PRIVATE HELPERS
-    // ============================================
-
-    private documentToText(type: KnowledgeEntityType, doc: Record<string, unknown>): string | null {
-        return documentToText(type, doc);
-    }
-
-    private resolveQueryMode(query: KnowledgeQuery): LightRAGQueryMode {
-        return resolveQueryMode(query);
-    }
-
-    private async hashTenantId(tenantId: string): Promise<string> {
-        return hashTenantId(tenantId);
+        this.pulseEmitter.setPulseConsent(enabled);
     }
 }

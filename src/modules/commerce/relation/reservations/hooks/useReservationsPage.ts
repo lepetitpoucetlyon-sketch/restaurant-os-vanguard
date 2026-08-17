@@ -2,145 +2,38 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAtomValue } from "jotai";
-import { startOfWeek, addDays, addWeeks, subWeeks, format } from "date-fns";
+import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
 
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useReservations, useGroups } from '../../../../ops/providers/hooks/commerceHooks';
+import { useReservations, useGroups, useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useTables } from '../../../../ops/providers/hooks/floorHooks';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-         
-import { useCRM } from '../../../../ops/providers/hooks/commerceHooks';
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { authedFetch } from "@/lib/client/authedFetch";
 
-import type { Table, Reservation } from "@nexus/contracts";
+import type { Reservation, Customer } from "@nexus/contracts";
 import type { Table as OpsTable } from "@/modules/ops";
-import type { Customer } from "@nexus/contracts";
 import type { GroupFormData } from "../components/GroupFormModal";
-import { JsonObject } from "@/shared/types/json";
 
-const TERRACE_ZONE_IDS = ["zone-terrasse", "terrace"];
-const TERRASSE_SETTINGS_PATH = "settings/terrasse";
+import {
+    type ZoneTable,
+    TERRASSE_SETTINGS_PATH,
+    computeWeekAnchor,
+    mapTableToZoneTable,
+    groupTablesByZone,
+    applyTerraceState,
+    getWeekDays,
+    computeTableStatus,
+    recordNoShow,
+    cancelReservationById,
+    syncFloorPlan,
+} from "./reservationsPageHelpers";
 
-export interface ZoneTable {
-    id: string;
-    seats: number;
-    type: "vip" | "terrace" | "standard";
-    status: "available" | "occupied" | "reserved";
-    number: string;
-}
-
-export function computeWeekAnchor(base: Date, weekOffset: number): Date {
-    if (weekOffset > 0) return addWeeks(base, weekOffset);
-    if (weekOffset < 0) return subWeeks(base, Math.abs(weekOffset));
-    return base;
-}
-
-export function groupTablesByZone(tables: Table[]): Record<string, ZoneTable[]> {
-    return tables.reduce((acc: Record<string, ZoneTable[]>, table: Table) => {
-        const zone = table.zoneId ?? "STANDARD";
-        if (!acc[zone]) acc[zone] = [];
-        acc[zone].push(mapTableToZoneTable(table));
-        return acc;
-    }, {});
-}
-
-function applyTerraceState(stored: { open?: boolean } | null, setTerraceClosed: (v: boolean) => void): void {
-    if (stored != null && typeof stored.open === "boolean") setTerraceClosed(!stored.open);
-}
-
-function getWeekDays(anchor: Date): Date[] {
-    const monday = startOfWeek(anchor, { weekStartsOn: 1 });
-    return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
-}
-
-export function mapTableToZoneTable(table: Table): ZoneTable {
-    const isTerrace = TERRACE_ZONE_IDS.some((z) => table.zoneId?.toLowerCase().includes(z));
-    return {
-        id: table.number,
-        seats: table.seats ?? 4,
-        type: table.zoneId === "VIP" ? "vip" : isTerrace ? "terrace" : "standard",
-        status: table.status === "free" ? "available" : table.status === "seated" ? "occupied" : "reserved",
-        number: table.number,
-    };
-}
-
-function computeTableStatus(res: Reservation, now: number, in15Min: number): string | null {
-    const resDateTime = (() => { try { return new Date(`${res.date}T${res.time}:00`).getTime(); } catch { return NaN; } })();
-    if (isNaN(resDateTime)) return null;
-    if (res.status === "seated") return "occupied";
-    if ((res.status as string) === "completed") return "free";
-    if (resDateTime <= in15Min && resDateTime >= now) return "reserved";
-    return null;
-}
-
-async function recordNoShow(
-    reservationId: string, reservations: Reservation[], customers: Customer[],
-    tenantId: string, updateReservation: (id: string, data: Partial<Reservation> & Record<string, unknown>) => Promise<void>
-) {
-    await updateReservation(reservationId, { status: "no_show", noShowAt: Date.now() } as Partial<Reservation> & { noShowAt: number });
-    const res = reservations.find((r: Reservation) => r.id === reservationId);
-
-    // Émission EventBus (P0-1.8 & 7.3)
-    await NexusEventBus.emitDurable('reservation.no_show', {
-        v: 1,
-        tenantId,
-        reservationId,
-        customerId: res?.customerId,
-    });
-
-    if (!res?.customerId) return;
-    const crmRecord = customers.find((c: Customer) => c.id === res.customerId);
-    if (!crmRecord) return;
-    const currentNoShows = (crmRecord as JsonObject)["noShows"] as number ?? 0;
-    await Nexus.adapter.update(`tenants/${tenantId}/ops_relations/${crmRecord.id}`, { noShows: currentNoShows + 1, updatedAt: new Date().toISOString() });
-}
-
-async function cancelReservationById(
-    id: string,
-    tenantId: string,
-    updateReservation: (id: string, data: Partial<Reservation> & Record<string, unknown>) => Promise<void>
-): Promise<void> {
-    try {
-        await updateReservation(id, { status: "cancelled", cancelledAt: new Date().toISOString() } as Partial<Reservation> & { cancelledAt: string });
-        
-        // Émission EventBus (P0-1.8)
-        await NexusEventBus.emitDurable('reservation.cancelled', {
-            v: 1,
-            tenantId,
-            reservationId: id,
-            reason: 'Annulation client',
-        });
-
-        toast.success("Réservation annulée");
-    } catch { toast.error("Erreur lors de l'annulation"); }
-}
-
-async function syncFloorPlan(reservations: Reservation[], tenantId: string) {
-    const now = Date.now();
-    const in15Min = now + 15 * 60 * 1000;
-    const ts = new Date().toISOString();
-    const updates: Array<Promise<void>> = [];
-    for (const res of reservations) {
-        if (!res.tableId || res.status === "cancelled" || res.status === "no_show") continue;
-        const resTime = new Date(`${res.date}T${res.time || "12:00"}`).getTime();
-        const path = `tenants/${tenantId}/ops_tables/${res.tableId}`;
-        if (isNaN(resTime)) continue;
-
-        if (res.status === "seated") {
-            updates.push(Nexus.adapter.update(path, { isOccupied: true, activeReservationId: res.id, status: "occupied", updatedAt: ts }));
-        } else if (resTime >= now && resTime <= in15Min) {
-            updates.push(Nexus.adapter.update(path, { status: "reserved", activeReservationId: res.id, updatedAt: ts }));
-        }
-    }
-    await Promise.allSettled(updates);
-}
+export type { ZoneTable };
+export { computeWeekAnchor, mapTableToZoneTable, groupTablesByZone, getWeekDays, computeTableStatus };
 
 export function useReservationsPage() {
     const [activeSection, setActiveSection] = useState<"reservations" | "customers" | "groups">("reservations");
@@ -235,7 +128,6 @@ export function useReservationsPage() {
             const newResId = Nexus.adapter.generateId(`tenants/${tenantId}/ops_relations`);
             await addReservation({ ...resData, id: newResId, type: "reservation", updatedAt: new Date().toISOString() } as Parameters<typeof addReservation>[0]);
 
-            // Émission EventBus (P0-1.8)
             await NexusEventBus.emitDurable('reservation.created', {
                 v: 1,
                 tenantId,
@@ -248,7 +140,6 @@ export function useReservationsPage() {
 
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
 
-            // Gate acompte grands groupes — vérifie si empreinte requise (non-bloquant)
             const covers = resData.covers ?? 0;
             if (covers >= 1) {
                 authedFetch('/api/reservations/card-imprint', {
@@ -327,7 +218,6 @@ export function useReservationsPage() {
     }, [pinModal]);
 
     return {
-        // state
         activeSection, setActiveSection,
         view, setView,
         selectedDate, setSelectedDate,
@@ -340,12 +230,9 @@ export function useReservationsPage() {
         terraceClosed,
         pinModal, setPinModal,
         pinError, setPinError,
-        // data
         reservations, customers, tables, groups, opsTables,
         isLoading, markArrived: handleMarkArrived,
-        // computed
         weekDays, todayReservations, tablesByZone, weekLabel, displayDate,
-        // handlers
         handleTerraceToggle,
         handleMarkNoShow,
         handleCancelReservation,
@@ -353,7 +240,6 @@ export function useReservationsPage() {
         handleUpdateReservation,
         handleCreateGroup,
         handlePinConfirm,
-        // permissions
         overrideCapacityPerm,
     };
 }

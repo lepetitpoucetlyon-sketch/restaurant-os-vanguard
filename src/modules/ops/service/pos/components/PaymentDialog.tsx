@@ -1,29 +1,27 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { CreditCard, Banknote, Smartphone, CheckCircle, Loader2, Sparkles, Receipt, X, ArrowRight, AlertCircle, Terminal, UtensilsCrossed } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { Loader2, Sparkles, X, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks";
-import { formatCurrency } from "@/lib/formatters";;
+import { formatCurrency } from "@/lib/formatters";
 import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
 import type { PaymentResult } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
 import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
 
+import { PaymentSuccessView } from "./payment-dialog/PaymentSuccessView";
+import { TerminalStatePanel, type TerminalState } from "./payment-dialog/TerminalStatePanel";
+import { PaymentMethodSelector, type PaymentMethod } from "./payment-dialog/PaymentMethodSelector";
+
 interface PaymentDialogProps {
     isOpen: boolean;
-    /** Amount in cents */
     total: number;
-    /** TVA réelle du panier en cents (calculée par usePOSController) */
     tvaInCents?: number;
     orderId?: string;
     onClose: () => void;
     onPaymentComplete: () => Promise<string | void>;
 }
-
-type PaymentMethod = "card" | "cash" | "mobile" | "conecs";
-
-type TerminalState = "idle" | "pending" | "manual_wait" | "error";
 
 function applyHashIfPresent(hash: string | void, setCertifiedHash: (h: string) => void): void {
     if (hash) setCertifiedHash(hash);
@@ -38,7 +36,6 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
     const [terminalError, setTerminalError] = useState<string | null>(null);
     const { t } = useLanguage();
 
-    // Used to let the ManualAdapter know the operator confirmed
     const manualAdapterRef = useRef<ReturnType<typeof terminalService.getManualAdapter>>(null);
     const defaultDeviceRef = useRef<string | null>(null);
 
@@ -65,7 +62,6 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
         try {
             if (defaultDevice?.adapter === "manual") {
                 setTerminalState("manual_wait");
-                // Ensure connected
                 if (terminalService.getStatus(defaultDevice.id) === "disconnected") {
                     await terminalService.connect(defaultDevice.id);
                 }
@@ -153,37 +149,11 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
             noPadding
         >
             <div className="bg-bg-secondary w-full overflow-hidden relative border border-border/50 h-auto min-h-[600px] flex flex-col rounded-[3rem]">
-
                 <div className="absolute top-0 right-0 w-48 h-48 bg-accent-gold/5 rounded-full blur-[100px] -mr-24 -mt-24 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-gold/5 rounded-full blur-[100px] -ml-24 -mb-24 pointer-events-none" />
 
                 {isSuccess ? (
-                    <div className="flex flex-col items-center justify-center p-16 md:p-24 space-y-10 animate-in fade-in slide-in-from-bottom-12 duration-1000 flex-1">
-                        <div className="relative">
-                            <div className="w-32 h-32 bg-accent-gold/10 rounded-full flex items-center justify-center text-accent-gold shadow-premium border border-accent-gold/20">
-                                <CheckCircle className="w-16 h-16" strokeWidth={1} />
-                            </div>
-                            <div className="absolute -top-2 -right-2 w-10 h-10 bg-accent-gold rounded-2xl flex items-center justify-center text-text-primary shadow-premium animate-bounce">
-                                <Sparkles className="w-5 h-5" />
-                            </div>
-                        </div>
-                        <div className="text-center space-y-4">
-                            <h2 className="text-4xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.transaction_success')}</h2>
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{t('pos.payment.archive_updated')}</p>
-                            <div className="mt-6 p-4 bg-surface-sidebar/40 rounded-2xl border border-accent-gold/20 backdrop-blur-md">
-                                <p className="text-[8px] font-black text-accent-gold/60 uppercase tracking-widest mb-1">NF525 Certified Seal</p>
-                                <p className="text-[10px] font-mono text-accent-gold break-all font-bold">
-                                    SHA256: {certifiedHash?.substring(0, 32) || 'NOT_AVAILABLE'}...CERTIFIED
-                                </p>
-                            </div>
-                        </div>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-                        <div className="flex items-center gap-4 text-[10px] font-black uppercase text-accent-gold tracking-[0.3em] bg-accent-gold/5 px-6 py-3 rounded-full border border-accent-gold/10">
-                            <Receipt className="w-4 h-4 ml-[-4px]" />
-                            {t('pos.payment.generating_receipt')}
-                        </div>
-                    </div>
-
+                    <PaymentSuccessView certifiedHash={certifiedHash} />
                 ) : (
                     <>
                         {/* Header */}
@@ -220,108 +190,23 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                         </div>
 
                         <div className="p-10 md:p-14 space-y-8 flex-1 overflow-auto elegant-scrollbar">
+                            {/* Terminal states */}
+                            <TerminalStatePanel
+                                terminalState={terminalState}
+                                terminalError={terminalError}
+                                onTerminalCancel={handleTerminalCancel}
+                                onManualConfirm={handleManualConfirm}
+                                onManualCancel={handleManualCancel}
+                                onErrorDismiss={() => { setTerminalState("idle"); setTerminalError(null); setMethod(null); }}
+                            />
 
-                            {/* Terminal pending states */}
-                            {terminalState === "pending" && (
-                                <div className="flex flex-col items-center gap-4 py-8 rounded-[2rem] border border-accent-gold/20 bg-accent-gold/5">
-                                    <Terminal className="w-10 h-10 text-accent-gold animate-pulse" strokeWidth={1.5} />
-                                    <p className="text-sm font-black uppercase tracking-widest text-text-primary">En attente du terminal…</p>
-                                    <p className="text-[10px] text-text-muted">Le client peut présenter sa carte</p>
-                                    <button
-                                        onClick={handleTerminalCancel}
-                                        className="mt-2 px-6 h-10 rounded-full border border-border/50 text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-status-error hover:border-status-error/30 transition-colors"
-                                    >
-                                        Annuler
-                                    </button>
-                                </div>
-                            )}
-
-                            {terminalState === "manual_wait" && (
-                                <div className="flex flex-col items-center gap-4 py-8 rounded-[2rem] border border-border bg-bg-tertiary/40">
-                                    <Loader2 className="w-10 h-10 text-text-muted animate-spin" strokeWidth={1.5} />
-                                    <p className="text-sm font-black uppercase tracking-widest text-text-primary">En attente de confirmation</p>
-                                    <p className="text-[10px] text-text-muted">Collectez le paiement sur votre terminal externe</p>
-                                    <div className="flex gap-3 mt-2">
-                                        <button
-                                            onClick={handleManualCancel}
-                                            className="px-6 h-10 rounded-full border border-border/50 text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-status-error transition-colors"
-                                        >
-                                            Annuler
-                                        </button>
-                                        <button
-                                            onClick={handleManualConfirm}
-                                            className="px-6 h-10 rounded-full bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
-                                        >
-                                            Paiement reçu
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {terminalState === "error" && (
-                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-status-error/10 border border-status-error/20">
-                                    <AlertCircle className="w-5 h-5 text-status-error shrink-0" />
-                                    <div>
-                                        <p className="text-[11px] font-black uppercase tracking-wider text-status-error">Paiement refusé</p>
-                                        <p className="text-[10px] text-text-muted mt-0.5">{terminalError ?? "Réessayez ou changez de mode"}</p>
-                                    </div>
-                                    <button
-                                        onClick={() => { setTerminalState("idle"); setTerminalError(null); setMethod(null); }}
-                                        className="ml-auto text-text-muted hover:text-text-primary"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            )}
-
-                            {/* Method selection (hidden while terminal busy) */}
+                            {/* Method selection */}
                             {!isTerminalBusy && (
-                                <>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
-                                        {[
-                                            { id: 'card', name: t('pos.payment.methods.card'), icon: CreditCard },
-                                            { id: 'cash', name: t('pos.payment.methods.cash'), icon: Banknote },
-                                            { id: 'mobile', name: t('pos.payment.methods.mobile'), icon: Smartphone },
-                                            { id: 'conecs', name: 'Titre-Resto (CONECS)', icon: UtensilsCrossed },
-                                        ].map((meth) => (
-                                            <button
-                                                key={meth.id}
-                                                onClick={() => { setTerminalState("idle"); setTerminalError(null); setMethod(meth.id as PaymentMethod); }}
-                                                className={cn(
-                                                    "flex flex-col items-center justify-center gap-3 p-4 md:p-5 rounded-[24px] border transition-all duration-500 group relative overflow-hidden",
-                                                    method === meth.id
-                                                        ? "border-accent-gold bg-surface-card dark:bg-surface-card/5 shadow-premium ring-2 ring-accent-gold/20 -translate-y-1"
-                                                        : "border-border/60 bg-bg-tertiary/40 hover:border-accent-gold/40 hover:bg-bg-tertiary/60"
-                                                )}
-                                            >
-                                                <div className={cn(
-                                                    "w-10 h-10 md:w-12 md:h-12 rounded-[18px] flex items-center justify-center transition-all duration-500 shadow-sm",
-                                                    method === meth.id
-                                                        ? "bg-accent-gold text-text-primary"
-                                                        : "bg-surface-card dark:bg-surface-sidebar text-text-muted group-hover:scale-105"
-                                                )}>
-                                                    <meth.icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
-                                                </div>
-                                                <span className={cn("font-bold text-[9px] md:text-[10px] uppercase tracking-wider text-center transition-colors", method === meth.id ? "text-text-primary" : "text-text-muted")}>
-                                                    {meth.name}
-                                                </span>
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {method === 'conecs' && (
-                                        <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs space-y-2">
-                                            <div className="flex items-center justify-between font-bold text-indigo-400">
-                                                <span>Réseau CONECS (Edenred / Swile / Pluxee / Up / Bimpli)</span>
-                                                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-[10px]">Plafond 25,00 € / j</span>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-2 text-slate-300">
-                                                <div>Part CONECS éligible : <strong className="text-white">{formatCurrency(Math.min(total, 2500))}</strong></div>
-                                                <div>Reste à charge : <strong className="text-amber-400">{total > 2500 ? formatCurrency(total - 2500) : "0,00 €"}</strong></div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </>
+                                <PaymentMethodSelector
+                                    method={method}
+                                    onSelectMethod={(m) => { setTerminalState("idle"); setTerminalError(null); setMethod(m); }}
+                                    total={total}
+                                />
                             )}
 
                             {/* Confirm button */}

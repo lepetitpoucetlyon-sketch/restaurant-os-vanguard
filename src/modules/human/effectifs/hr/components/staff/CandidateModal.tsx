@@ -1,49 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Modal, PremiumSelect } from "@ui";
+import { Modal } from "@ui";
 import { Button } from "@ui/button";
 import { useToast } from "@ui/Toast";
 import { useRecruitment } from "../../hooks/useRecruitment";
 import { Candidate, CandidateStatus, GDPRConsent } from "@nexus/contracts";
-import { 
-    User, 
-    Mail, 
-    Phone, 
-    ShieldCheck, 
-    Upload, 
-    Camera, 
-    X, 
-    FileText,
-    CheckCircle2,
-    Calendar,
-    AlertCircle
-} from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { X, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/ui.foundations";
 import { CameraCapture } from "@ui/CameraCapture";
+
+import { CandidateFormFields } from "./candidate-modal/CandidateFormFields";
+import { CandidateCvSection } from "./candidate-modal/CandidateCvSection";
+import { CandidateGdprSection } from "./candidate-modal/CandidateGdprSection";
 
 interface CandidateModalProps {
     isOpen: boolean;
     onClose: () => void;
     candidate?: Candidate | null;
 }
-
-const ROLES = [
-    { value: 'server', label: 'Serveur(se)' },
-    { value: 'bartender', label: 'Barman/Barmaid' },
-    { value: 'kitchen_chef', label: 'Chef de cuisine' },
-    { value: 'kitchen_line', label: 'Commis de cuisine' },
-    { value: 'manager', label: 'Directeur/Manager' },
-    { value: 'host', label: 'Hôte(sse) d\'accueil' },
-];
-
-const STATUS_OPTIONS = [
-    { value: 'new', label: 'Nouveau' },
-    { value: 'interview', label: 'Entretien' },
-    { value: 'trial', label: 'Essai' },
-    { value: 'hired', label: 'Embauché' },
-    { value: 'refused', label: 'Refusé' },
-];
 
 const DEFAULT_GDPR_CONSENT: GDPRConsent = {
     consented: false,
@@ -85,7 +60,6 @@ function getInitialCandidateForm(candidate?: Candidate | null): Partial<Candidat
             gdpr: DEFAULT_GDPR_CONSENT
         };
     }
-
     return candidate;
 }
 
@@ -143,7 +117,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                 showToast("Nouvelle candidature enregistrée", "success");
             }
             handleClose();
-        } catch (_error) {
+        } catch {
             showToast("Erreur lors de la sauvegarde", "error");
         }
     };
@@ -155,172 +129,24 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             title={candidate ? "Détails de la Candidature" : "Nouveau Candidat"}
         >
             <div className="space-y-8 elegant-scrollbar max-h-[75vh] overflow-y-auto px-1">
-                {/* Personal Info */}
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
-                            <User className="w-3 h-3 text-accent" /> Prénom
-                        </label>
-                        <input
-                            className="w-full h-12 px-5 bg-bg-tertiary rounded-xl border border-border focus:border-accent outline-none font-bold text-[14px]"
-                            value={formData.firstName}
-                            onChange={(e) => setFormDraft(p => ({ ...(p ?? initialFormData), firstName: e.target.value }))}
-                            placeholder="Jean"
-                        />
-                    </div>
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
-                            <User className="w-3 h-3 text-accent" /> Nom
-                        </label>
-                        <input
-                            className="w-full h-12 px-5 bg-bg-tertiary rounded-xl border border-border focus:border-accent outline-none font-bold text-[14px]"
-                            value={formData.lastName}
-                            onChange={(e) => setFormDraft(p => ({ ...(p ?? initialFormData), lastName: e.target.value }))}
-                            placeholder="Dupont"
-                        />
-                    </div>
-                </div>
+                <CandidateFormFields
+                    formData={formData}
+                    setFormDraft={setFormDraft}
+                    initialFormData={initialFormData}
+                />
 
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
-                            <Mail className="w-3 h-3 text-accent" /> Email
-                        </label>
-                        <input
-                            className="w-full h-12 px-5 bg-bg-tertiary rounded-xl border border-border focus:border-accent outline-none font-bold text-[14px]"
-                            value={formData.email}
-                            onChange={(e) => setFormDraft(p => ({ ...(p ?? initialFormData), email: e.target.value }))}
-                            placeholder="jean.dupont@email.com"
-                        />
-                    </div>
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
-                            <Phone className="w-3 h-3 text-accent" /> Téléphone
-                        </label>
-                        <input
-                            className="w-full h-12 px-5 bg-bg-tertiary rounded-xl border border-border focus:border-accent outline-none font-bold text-[14px]"
-                            value={formData.phone}
-                            onChange={(e) => setFormDraft(p => ({ ...(p ?? initialFormData), phone: e.target.value }))}
-                            placeholder="06 12 34 56 78"
-                        />
-                    </div>
-                </div>
+                <CandidateCvSection
+                    cvFile={cvFile}
+                    setCvFileDraft={setCvFileDraft}
+                    handleFileUpload={handleFileUpload}
+                    setIsCameraOpen={setIsCameraOpen}
+                />
 
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                        <PremiumSelect
-                            label="Poste"
-                            value={formData.appliedRole || 'server'}
-                            onChange={(val) => setFormDraft(p => ({ ...(p ?? initialFormData), appliedRole: val }))}
-                            options={ROLES}
-                        />
-                    </div>
-                    <div className="space-y-3">
-                        <PremiumSelect
-                            label="Statut"
-                            value={formData.status || 'new'}
-                            onChange={(val) => setFormDraft(p => ({ ...(p ?? initialFormData), status: val as CandidateStatus }))}
-                            options={STATUS_OPTIONS}
-                        />
-                    </div>
-                </div>
-
-                {/* CV Section */}
-                <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
-                        <FileText className="w-3 h-3 text-accent" /> Curriculum Vitae (CV)
-                    </label>
-                    
-                    {cvFile ? (
-                        <div className="relative group rounded-2xl overflow-hidden border border-border bg-bg-tertiary aspect-[4/3] flex items-center justify-center">
-                            {cvFile.startsWith('data:image') || cvFile.startsWith('data:application/pdf') === false ? (
-                                <img src={cvFile} alt="CV Preview" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-                            ) : (
-                                <div className="text-center p-10">
-                                    <FileText className="w-16 h-16 text-accent mx-auto mb-4" strokeWidth={1} />
-                                    <p className="text-[12px] font-bold text-text-primary uppercase tracking-widest">Document PDF</p>
-                                    <p className="text-[10px] text-text-muted mt-2">Le document a été chargé avec succès</p>
-                                </div>
-                            )}
-                            <div className="absolute inset-0 bg-surface-sidebar/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 transition-all scale-110 group-hover:scale-100">
-                                <Button 
-                                    variant="outline" 
-                                    size="sm" 
-                                    className="bg-[--color-surface-primary]/10 text-text-primary border-default hover:bg-[--color-surface-primary]/20"
-                                    onClick={() => setCvFileDraft(null)}
-                                >
-                                    Remplacer
-                                </Button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-4">
-                            <label className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-border rounded-2xl hover:border-accent hover:bg-bg-tertiary/20 cursor-pointer transition-all group">
-                                <Upload className="w-8 h-8 text-text-muted mb-3 group-hover:text-accent group-hover:scale-110 transition-all" />
-                                <span className="text-[11px] font-black uppercase tracking-widest text-text-muted group-hover:text-accent">Charger PDF</span>
-                                <input type="file" className="hidden" accept=".pdf,image/*" onChange={handleFileUpload} />
-                            </label>
-                            <button 
-                                onClick={() => setIsCameraOpen(true)}
-                                className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-border rounded-2xl hover:border-accent hover:bg-bg-tertiary/20 transition-all group"
-                            >
-                                <Camera className="w-8 h-8 text-text-muted mb-3 group-hover:text-accent group-hover:scale-110 transition-all" />
-                                <span className="text-[11px] font-black uppercase tracking-widest text-text-muted group-hover:text-accent">Prendre Photo</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* GDPR Section */}
-                <div className={cn(
-                    "p-6 rounded-2xl border transition-all duration-500",
-                    formData.gdpr?.consented ? "bg-success/5 border-success/20" : "bg-error/5 border-error/20"
-                )}>
-                    <div className="flex items-start gap-4">
-                        <div className={cn(
-                            "p-2.5 rounded-xl",
-                            formData.gdpr?.consented ? "bg-success/10 text-success" : "bg-error/10 text-error"
-                        )}>
-                            <ShieldCheck className="w-6 h-6" />
-                        </div>
-                        <div className="flex-1">
-                            <h4 className="text-[13px] font-bold text-text-primary uppercase tracking-widest">Conformité RGPD</h4>
-                            <p className="text-[11px] text-text-muted mt-2 leading-relaxed">
-                                Le candidat a été informé de la conservation de ses données par l'entreprise pour une durée maximale de 24 mois.
-                                L'entreprise s'engage à ne pas céder ces données et à respecter le droit à l'effacement.
-                            </p>
-                            <div className="flex items-center gap-4 mt-6">
-                                <button
-                                    onClick={() => setFormDraft(p => {
-                                        const next = p ?? initialFormData;
-                                        return {
-                                            ...next,
-                                        gdpr: {
-                                                ...next.gdpr!,
-                                            consented: !next.gdpr?.consented,
-                                            date: new Date().toISOString()
-                                            }
-                                        };
-                                    })}
-                                    className={cn(
-                                        "h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2",
-                                        formData.gdpr?.consented 
-                                            ? "bg-success text-text-primary shadow-lg shadow-success/20" 
-                                            : "bg-bg-tertiary text-text-muted border border-border hover:border-error"
-                                    )}
-                                >
-                                    {formData.gdpr?.consented ? <CheckCircle2 className="w-4 h-4" /> : null}
-                                    {formData.gdpr?.consented ? "Consentement Donné" : "Donner mon consentement"}
-                                </button>
-                                {formData.gdpr?.consented && (
-                                    <span className="text-[10px] font-bold text-success flex items-center gap-2 italic">
-                                        <Calendar className="w-3.5 h-3.5" /> Loggé le {new Date().toLocaleDateString('fr-FR')}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <CandidateGdprSection
+                    formData={formData}
+                    setFormDraft={setFormDraft}
+                    initialFormData={initialFormData}
+                />
 
                 {/* Notes */}
                 <div className="space-y-3">

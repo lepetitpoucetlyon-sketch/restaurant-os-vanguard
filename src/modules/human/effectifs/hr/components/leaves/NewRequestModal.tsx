@@ -1,26 +1,24 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X,
     Sparkles,
-    CheckCircle2,
     ChevronLeft,
     ChevronRight,
     Send
 } from 'lucide-react';
-import { cn } from "@/lib/ui.foundations";
-import { PremiumSelect } from '@ui/PremiumSelect';
-import {
+import type {
     LeaveBalance,
     LeaveType,
     DayPeriod,
-    LEAVE_TYPE_LABELS,
-    LEAVE_TYPE_ICONS,
     LeaveRequest
 } from '@nexus/contracts';
 
+import { LeaveTypeStep } from './new-request/LeaveTypeStep';
+import { LeaveDateStep } from './new-request/LeaveDateStep';
+import { LeaveSummaryStep } from './new-request/LeaveSummaryStep';
 
 interface NewRequestModalProps {
     isOpen: boolean;
@@ -61,7 +59,6 @@ export function NewRequestModal({
             current.setDate(current.getDate() + 1);
         }
 
-        // Adjust for half days
         if (startPeriod !== 'full_day') count -= 0.5;
         if (endPeriod !== 'full_day' && startDate !== endDate) count -= 0.5;
 
@@ -117,184 +114,37 @@ export function NewRequestModal({
                     {/* Content */}
                     <div className="p-8 overflow-y-auto flex-1 bg-bg-primary">
                         {step === 1 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="space-y-6"
-                            >
-                                <label className="block text-sm font-bold text-text-muted uppercase tracking-widest mb-4">
-                                    Type d'absence
-                                </label>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {Object.entries(LEAVE_TYPE_LABELS).map(([type, label]) => {
-                                        const balance = balances.find(b => b.type === type);
-                                        const icon = LEAVE_TYPE_ICONS[type as LeaveType];
-                                        const isSelected = selectedType === type;
-
-                                        return (
-                                            <button
-                                                key={type}
-                                                onClick={() => setSelectedType(type as LeaveType)}
-                                                className={cn(
-                                                    "p-5 rounded-[2rem] border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between",
-                                                    isSelected
-                                                        ? "border-accent bg-bg-secondary shadow-lg scale-[1.02]"
-                                                        : "border-border bg-[--color-surface-primary] hover:border-accent/30 hover:bg-bg-secondary/50"
-                                                )}
-                                            >
-                                                {/* Selected Indicator */}
-                                                {isSelected && (
-                                                    <div className="absolute top-4 right-4 z-20">
-                                                        <CheckCircle2 className="w-5 h-5 text-accent" />
-                                                    </div>
-                                                )}
-
-                                                <div className="relative z-10 space-y-4">
-                                                    <div className={cn(
-                                                        "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-500",
-                                                        isSelected ? "bg-[--color-surface-primary] text-accent shadow-premium scale-110" : "bg-bg-secondary text-text-muted group-hover:scale-105"
-                                                    )}>
-                                                        {icon}
-                                                    </div>
-                                                    <div>
-                                                        <span className={cn(
-                                                            "block text-xl font-serif italic transition-colors leading-tight",
-                                                            isSelected ? "text-text-primary" : "text-text-primary/70"
-                                                        )}>{label}</span>
-                                                        {balance && (
-                                                            <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em] mt-1 block">
-                                                                {balance.remaining}j dispos.
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </motion.div>
+                            <LeaveTypeStep
+                                selectedType={selectedType}
+                                setSelectedType={setSelectedType}
+                                balances={balances}
+                            />
                         )}
 
                         {step === 2 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="space-y-8"
-                            >
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-3">
-                                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
-                                            Début
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={startDate}
-                                            onChange={e => setStartDate(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border text-text-primary font-serif focus:scale-[1.02] focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all outline-none shadow-sm"
-                                        />
-                                        <PremiumSelect
-                                            value={startPeriod}
-                                            onChange={val => setStartPeriod(val as DayPeriod)}
-                                            options={[
-                                                { value: 'full_day', label: 'Journée entière' },
-                                                { value: 'morning', label: 'Matin' },
-                                                { value: 'afternoon', label: 'Après-midi' }
-                                            ]}
-                                        />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
-                                            Fin
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={endDate}
-                                            onChange={e => setEndDate(e.target.value)}
-                                            min={startDate}
-                                            className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border text-text-primary font-serif focus:scale-[1.02] focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all outline-none shadow-sm"
-                                        />
-                                        <PremiumSelect
-                                            value={endPeriod}
-                                            onChange={val => setEndPeriod(val as DayPeriod)}
-                                            options={[
-                                                { value: 'full_day', label: 'Journée entière' },
-                                                { value: 'morning', label: 'Matin' },
-                                                { value: 'afternoon', label: 'Après-midi' }
-                                            ]}
-                                        />
-                                    </div>
-                                </div>
-
-                                {startDate && endDate && (
-                                    <div className="p-6 rounded-2xl bg-bg-secondary border border-border relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-20 h-20 bg-accent/5 rounded-full blur-xl -mr-10 -mt-10" />
-                                        <div className="flex items-center justify-between relative z-10">
-                                            <span className="text-text-muted text-sm font-medium">Jours décomptés</span>
-                                            <span className="text-3xl font-serif italic text-text-primary">
-                                                {workingDays} <span className="text-sm font-sans not-italic text-text-muted font-bold uppercase tracking-wide">Jours</span>
-                                            </span>
-                                        </div>
-                                        {selectedBalance && (
-                                            <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-sm">
-                                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Solde prévisionnel</span>
-                                                <span className={cn(
-                                                    "font-bold font-mono px-2 py-0.5 rounded",
-                                                    selectedBalance.remaining - workingDays >= 0
-                                                        ? "bg-status-success text-status-success"
-                                                        : "bg-status-danger text-status-danger"
-                                                )}>
-                                                    {(selectedBalance.remaining - workingDays).toFixed(1)} j
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </motion.div>
+                            <LeaveDateStep
+                                startDate={startDate}
+                                setStartDate={setStartDate}
+                                endDate={endDate}
+                                setEndDate={setEndDate}
+                                startPeriod={startPeriod}
+                                setStartPeriod={setStartPeriod}
+                                endPeriod={endPeriod}
+                                setEndPeriod={setEndPeriod}
+                                workingDays={workingDays}
+                                selectedBalance={selectedBalance}
+                            />
                         )}
 
                         {step === 3 && (
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="space-y-6"
-                            >
-                                <div className="space-y-3">
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
-                                        Motif (Facultatif)
-                                    </label>
-                                    <textarea
-                                        value={reason}
-                                        onChange={e => setReason(e.target.value)}
-                                        placeholder="Précisez le contexte de votre demande..."
-                                        rows={4}
-                                        className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border text-text-primary font-serif placeholder:font-sans placeholder:text-text-muted/50 focus:bg-[--color-surface-primary] focus:border-accent focus:ring-4 focus:ring-accent/5 transition-all outline-none resize-none shadow-inner"
-                                    />
-                                </div>
-
-                                {/* Summary */}
-                                <div className="p-6 rounded-2xl bg-bg-secondary/50 border border-border space-y-4">
-                                    <h4 className="font-serif italic text-lg text-text-primary">Récapitulatif</h4>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-                                            <span className="text-text-muted">Type</span>
-                                            <span className="text-text-primary font-medium flex items-center gap-2">
-                                                <span>{LEAVE_TYPE_ICONS[selectedType]}</span>
-                                                {LEAVE_TYPE_LABELS[selectedType]}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center text-sm border-b border-border/50 pb-2">
-                                            <span className="text-text-muted">Période</span>
-                                            <span className="text-text-primary font-medium">
-                                                {new Date(startDate).toLocaleDateString('fr-FR')} — {new Date(endDate).toLocaleDateString('fr-FR')}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between items-center text-sm">
-                                            <span className="text-text-muted">Volume</span>
-                                            <span className="text-text-primary font-bold bg-[--color-surface-primary] px-2 py-0.5 rounded border border-border shadow-sm">{workingDays} jours</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            <LeaveSummaryStep
+                                reason={reason}
+                                setReason={setReason}
+                                selectedType={selectedType}
+                                startDate={startDate}
+                                endDate={endDate}
+                                workingDays={workingDays}
+                            />
                         )}
                     </div>
 
