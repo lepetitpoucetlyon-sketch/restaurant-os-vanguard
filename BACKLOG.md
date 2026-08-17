@@ -95,8 +95,9 @@
 | P | Statut | Horizon | Effort | Feature | Code / Ref | Bloquants / Dépendances |
 |---|--------|---------|--------|---------|------------|-------------------------|
 | P1 | ✅ | H1 | — | Rapprochement bancaire automatique (Open Banking — 5 providers) | `src/modules/finance/comptabilite/BankSync.ts` | — |
-| P1 | 🔧 | H1 | L | Déclarations TVA CA3 auto-générées (DGFiP + EDI TDFC/EFI) | `src/modules/finance/fiscalite/tax/vatResolver.ts` | Calcul TVA OK, export EDI ⬜ |
+| P1 | ✅ | H1 | — | Déclarations TVA CA3 auto-générées (DGFiP + EDI TDFC/EFI) | `src/modules/finance/fiscalite/tax/EDIMapper.ts` | Export XML TDFC Cerfa 3310-CA3 OK |
 | P1 | ✅ | H1 | — | Gestion de la caisse menue monnaie (fond de caisse + comptage) | `src/modules/finance/comptabilite/CashDrawer.ts` | — |
+| P1 | ✅ | H1 | — | Portail Fiduciaire & Espace Expert-Comptable (Pack 1-Clic, FEC, NF525, Silae, Sage, Cegid) | `src/app/(client)/(ops)/accounting-portal/page.tsx` | — |
 | P1 | ✅ | H1 | — | Comptabilité des pourboires (déclaration DSN mensuelle) | `src/modules/human/paie/tips.ts` | — |
 | P1 | 🔧 | H1 | L | Prévision de trésorerie 30 / 60 / 90 jours | `src/modules/finance/comptabilite/CashflowForecast.ts` | Prérequis historique data + cold-start heuristique |
 | P1 | ✅ | H1 | — | Clés déterministes & Idempotence EventBus (Invariant #1) | `src/shared/eventBus/IdempotencyGuard.ts` | Déduplication triple couche |

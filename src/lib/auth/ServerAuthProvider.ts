@@ -139,7 +139,8 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
 
     async verifyIdToken(token: string): Promise<DecodedAuthToken> {
         // Vérification JWT OIDC via jose (npm i jose)
-        const { createRemoteJWKSet, jwtVerify } = await import('jose' as string) as {
+        const josePkg = 'jose';
+        const { createRemoteJWKSet, jwtVerify } = await import(/* @vite-ignore */ josePkg) as {
             createRemoteJWKSet: (url: URL) => unknown;
             jwtVerify: (token: string, jwks: unknown) => Promise<{ payload: Record<string, unknown> }>;
         };
