@@ -72,8 +72,6 @@ function buildDemoInstance(): SiteTelemetry {
         lastHeartbeat: now,
         lastSeen:      now,
         activeUsers:   0,
-        dailyRevenue:  0,
-        activeOrders:  0,
         healthScore:   0,
         complianceScore: 0,
         lowStockAlerts:  0,

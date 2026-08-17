@@ -12,6 +12,7 @@ import { useFleet } from '@/shared/contexts/FleetContext';
 
 const FleetCommandTable    = dynamic(() => import('../components/FleetCommandTable').then(m => m.FleetCommandTable), { loading: () => <MCCWidgetSkeleton /> });
 const FleetDeviceInventory = dynamic(() => import('../components/FleetDeviceInventory').then(m => m.FleetDeviceInventory), { loading: () => <MCCWidgetSkeleton /> });
+const MCCInsights          = dynamic(() => import('../components/MCCInsights').then(m => m.MCCInsights), { loading: () => null });
 
 interface FleetTabProps {
     instances: EmpireInstance[];
@@ -73,6 +74,7 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
                     <Plus className="w-4 h-4" /> {f.newClone}
                 </button>
             </div>
+            <MCCInsights />
             <FleetCommandTable />
             {activeInstance && <TenantUsersPanel instance={activeInstance} />}
             {activeInstance && (

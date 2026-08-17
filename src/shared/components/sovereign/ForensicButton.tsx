@@ -24,7 +24,7 @@ export function ForensicButton() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Ciblage explicite pour un fleet_admin ; pour un admin tenant,
+          // Ciblage explicite pour un super_admin MCC ; pour un admin tenant,
           // le serveur impose le tenant du token.
           'x-nexus-tenant-id': activeTenantId,
         },

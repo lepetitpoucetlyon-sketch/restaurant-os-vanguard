@@ -72,22 +72,6 @@ export const FleetCommandTableRow = React.memo(({
           </div>
         </div>
       </td>
-      <td className="px-6 py-5 text-right">
-        <div className="flex flex-col items-end">
-          {instance.security?.supportAccessGranted ? (
-            <span className="text-sm font-black text-text-primary">
-              {(instance.metrics.dailyRevenue / 100).toLocaleString('fr-FR', {
-                style: 'currency',
-                currency: 'EUR',
-              })}
-            </span>
-          ) : (
-            <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-card rounded-md border border-border-subtle opacity-40">
-              <span className="text-[9px] font-black text-muted uppercase tracking-widest">PROTÉGÉ</span>
-            </div>
-          )}
-        </div>
-      </td>
       <td className="px-6 py-5">
         <div className="flex items-center gap-3">
           <div className="flex flex-col">

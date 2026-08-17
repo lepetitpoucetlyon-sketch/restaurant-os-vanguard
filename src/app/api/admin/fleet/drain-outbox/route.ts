@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { FleetOutboxDrainService } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -11,7 +11,7 @@ import { toError } from "@/lib/toError";
  */
 export async function POST(request: Request) {
   try {
-    const admin = await requireFleetAdmin(request);
+    const admin = await requireMccLevel(request, 'mcc_support');
     if (isDenied(admin)) return admin;
 
     // Récupérer la liste des tenants actifs

@@ -49,8 +49,6 @@ export async function POST(req: NextRequest) {
     lastSeen:      now,
 
     activeUsers:     4,
-    dailyRevenue:    1840,
-    activeOrders:    7,
     healthScore:     94,
     complianceScore: 98,
     lowStockAlerts:  2,

@@ -24,18 +24,11 @@ export const FleetCommander = {
   },
 
   /**
-   * Aggregates revenue across the entire fleet
-   */
-  calculateTotalRevenue(instances: EmpireInstance[]): number {
-    return instances.reduce((total, inst) => total + inst.metrics.dailyRevenue, 0);
-  },
-
-  /**
-   * Identifies the top performing instances
+   * Identifies instances with highest health score
    */
   getTopPerformers(instances: EmpireInstance[], limit: number = 3): EmpireInstance[] {
     return [...instances]
-      .sort((a, b) => b.metrics.dailyRevenue - a.metrics.dailyRevenue)
+      .sort((a, b) => (b.metrics.healthScore ?? 0) - (a.metrics.healthScore ?? 0))
       .slice(0, limit);
   },
 

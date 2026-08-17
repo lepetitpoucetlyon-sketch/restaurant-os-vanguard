@@ -30,8 +30,6 @@ function buildInstanceMetrics(f: SiteTelemetry): EmpireInstance['metrics'] {
   if (!f.healthScore) reportFallback('healthScore');
   return {
     activeUsers: Number(f.activeUsers) || 0,
-    dailyRevenue: Number(f.dailyRevenue) || 0,
-    revenue24h: Number(f.dailyRevenue) || 0,
     aiUsageCost: 0,
     healthScore: Number(f.healthScore) || 100,
     complianceScore: Number(f.complianceScore) || 100,

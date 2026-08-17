@@ -37,7 +37,7 @@ export function useTenantLifecycle(tenantId: string | null) {
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                     lastHeartbeat: new Date().toISOString(),
-                    metrics: { activeUsers: 0, dailyRevenue: 0, revenue24h: 0, aiUsageCost: 0, healthScore: 100, complianceScore: 100, lowStockAlerts: 0, expiringItemsCount: 0 },
+                    metrics: { activeUsers: 0, aiUsageCost: 0, healthScore: 100, complianceScore: 100, lowStockAlerts: 0, expiringItemsCount: 0 },
                     branding: { primaryColor: '#6366f1' },
                     featureFlags: {},
                     security: { twoFactorEnabled: true, nf525Certified: true, maintenanceAccessGranted: false, supportAccessGranted: false }

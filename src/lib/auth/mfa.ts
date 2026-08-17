@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Firebase TOTP MFA utilities — fleet_admin enforcement (mcc-core-3)
+ * Firebase TOTP MFA utilities — super_admin MCC enforcement (mcc-core-3)
  *
  * Requires Firebase Identity Platform (Blaze plan).
  * TOTP = RFC 6238 (Google Authenticator, Authy, etc.)

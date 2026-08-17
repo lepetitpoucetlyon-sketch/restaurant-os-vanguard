@@ -26,7 +26,6 @@ interface OwnerSiteSummary {
     name: string;
     status: SiteTelemetry['status'];
     healthScore: number;
-    dailyRevenue: number;
     activeUsers: number;
     lowStockAlerts: number;
     lastHeartbeat: string;
@@ -37,7 +36,6 @@ interface AggregatedMetrics {
     totalSites: number;
     onlineSites: number;
     avgHealthScore: number;
-    totalDailyRevenue: number;
     totalActiveUsers: number;
     totalAlerts: number;
 }
@@ -80,7 +78,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                         name: site.name,
                         status: site.status,
                         healthScore: site.healthScore ?? 0,
-                        dailyRevenue: site.dailyRevenue ?? 0,
                         activeUsers: site.activeUsers ?? 0,
                         lowStockAlerts: site.lowStockAlerts ?? 0,
                         lastHeartbeat: site.lastHeartbeat,
@@ -99,7 +96,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             avgHealthScore: ownerSites.length
                 ? Math.round(ownerSites.reduce((sum, s) => sum + s.healthScore, 0) / ownerSites.length)
                 : 0,
-            totalDailyRevenue: ownerSites.reduce((sum, s) => sum + s.dailyRevenue, 0),
             totalActiveUsers: ownerSites.reduce((sum, s) => sum + s.activeUsers, 0),
             totalAlerts: ownerSites.reduce((sum, s) => sum + s.lowStockAlerts, 0),
         };

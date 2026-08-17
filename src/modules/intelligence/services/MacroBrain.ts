@@ -21,23 +21,23 @@ export const MacroBrain = {
     analyzeFleet: (instances: EmpireInstance[]): FleetInsight[] => {
         const insights: FleetInsight[] = [];
 
-        // 1. REVENUE ANOMALY DETECTION (Advanced Drift Analysis)
-        const sorted = [...instances].sort((a, b) => b.metrics.dailyRevenue - a.metrics.dailyRevenue);
+        // 1. HEALTH & COMPLIANCE ANOMALY DETECTION (Advanced Drift Analysis)
+        const sorted = [...instances].sort((a, b) => b.metrics.healthScore - a.metrics.healthScore);
         const top = sorted[0];
         const bottom = sorted[sorted.length - 1];
 
-        if (top && bottom && (top.metrics.dailyRevenue > bottom.metrics.dailyRevenue * 2.5)) {
+        if (top && bottom && (top.metrics.healthScore > bottom.metrics.healthScore + 25)) {
             insights.push({
                 id: 'insight_dna_drift',
                 type: 'anomaly',
                 impact: 'CRITICAL',
                 priority: 'high',
                 title: 'Empire DNA Configuration Drift',
-                description: `Node '${bottom.name}' is underperforming by 250% compared to Cluster Lead '${top.name}'. Architectural alignment required.`,
+                description: `Node '${bottom.name}' has a health score of ${bottom.metrics.healthScore}% compared to Cluster Lead '${top.name}' (${top.metrics.healthScore}%). Architectural alignment required.`,
                 message: `Drift critique: ${bottom.name} vs ${top.name}`, // Bridge Alias
                 action: 'Sync Node DNA',
                 confidence: 94,
-                potentialRoI: (top.metrics.dailyRevenue - bottom.metrics.dailyRevenue) * 0.4, // Estimation
+                potentialRoI: 0,
                 affectedInstances: [bottom.id],
                 canAutoExecute: false
             });
@@ -48,9 +48,6 @@ export const MacroBrain = {
         const highHealth = instances.filter(i => i.metrics.lowStockAlerts === 0 && i.metrics.healthScore > 98);
 
         if (lowStock.length > 0 && highHealth.length > 0) {
-            // Estimate: 5% of the revenue delta between the best and worst-stocked site
-            const revenueDelta = Math.max(0, highHealth[0].metrics.dailyRevenue - lowStock[0].metrics.dailyRevenue);
-            const savings = Math.round(revenueDelta * 0.05);
             insights.push({
                 id: 'insight_auto_rebalance',
                 type: 'opportunity',
@@ -60,7 +57,7 @@ export const MacroBrain = {
                 description: `Surplus capacity at ${highHealth[0].name} can neutralize stock-out risk at ${lowStock[0].name}. Impact: Zero waste.`,
                 action: 'Authorize Rebalancing',
                 confidence: 75,
-                potentialRoI: savings,
+                potentialRoI: 0,
                 affectedInstances: [lowStock[0].id, highHealth[0].id],
                 canAutoExecute: true
             });
@@ -242,15 +239,15 @@ export const MacroBrain = {
      */
     getConsolidatedMetrics: (instances: EmpireInstance[]): ConsolidatedMetrics => {
         const count = instances.length || 1;
-        const revenues = instances.map(i => i.metrics.dailyRevenue);
-        const meanRevenue = revenues.reduce((a, b) => a + b, 0) / count;
-        const revenueVariance = revenues.reduce((sum, r) => sum + Math.pow(r - meanRevenue, 2), 0) / count;
-        const volatilityIndex = meanRevenue > 0 ? Math.min(1, Math.sqrt(revenueVariance) / meanRevenue) : 0;
+        const healthScores = instances.map(i => i.metrics.healthScore);
+        const meanHealth = healthScores.reduce((a, b) => a + b, 0) / count;
+        const healthVariance = healthScores.reduce((sum, h) => sum + Math.pow(h - meanHealth, 2), 0) / count;
+        const volatilityIndex = meanHealth > 0 ? Math.min(1, Math.sqrt(healthVariance) / meanHealth) : 0;
 
         return {
-            totalRevenue: instances.reduce((acc, i) => acc + i.metrics.dailyRevenue, 0),
+            totalRevenue: 0,
             activeUsers: instances.reduce((acc, i) => acc + i.metrics.activeUsers, 0),
-            averageHealth: instances.reduce((acc, i) => acc + i.metrics.healthScore, 0) / count,
+            averageHealth: meanHealth,
             totalAlerts: instances.reduce((acc, i) => acc + i.metrics.lowStockAlerts, 0),
             // No external cost data available — displayed as 0 until Firestore integration
             totalLaborCost: 0,

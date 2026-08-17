@@ -19,10 +19,11 @@ import { FleetInsight } from '@/modules/intelligence';
 export function StrategyOracle() {
     const { instances } = useFleet();
     const { insights, getExecutiveBriefing, executeAction, messages, isProcessing } = useStrategicOracle();
-    // Gain projeté = 0 tant qu'aucune vente réelle n'a été encaissée
-    const projectedGain = useMemo(() => {
-        const monthlyRevenue = instances.reduce((sum, inst) => sum + Number(inst.metrics?.dailyRevenue ?? 0) * 30, 0);
-        return monthlyRevenue > 0 ? Math.round(monthlyRevenue * 0.05) : 0;
+    // Efficacité globale de la flotte basée sur le score de santé technique
+    const fleetEfficiency = useMemo(() => {
+        if (instances.length === 0) return 100;
+        const totalHealth = instances.reduce((sum, inst) => sum + Number(inst.metrics?.healthScore ?? 100), 0);
+        return Math.round(totalHealth / instances.length);
     }, [instances]);
 
     return (
@@ -148,8 +149,8 @@ export function StrategyOracle() {
                             <div className="flex items-center gap-4">
                                 <TrendingUp className="w-4 h-4 text-status-success opacity-50" />
                                 <div>
-                                    <div className="text-[10px] font-black text-text-primary uppercase tracking-tight">Projected Collective Gain</div>
-                                    <div className="text-xl font-black text-status-success tracking-tighter">€{projectedGain.toLocaleString()} <span className="text-[10px] text-status-success/50">/ mo</span></div>
+                                    <div className="text-[10px] font-black text-text-primary uppercase tracking-tight">Fleet Health Efficiency</div>
+                                    <div className="text-xl font-black text-status-success tracking-tighter">{fleetEfficiency}% <span className="text-[10px] text-status-success/50">score moyen</span></div>
                                 </div>
                             </div>
                         </div>

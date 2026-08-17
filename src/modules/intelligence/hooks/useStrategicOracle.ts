@@ -23,7 +23,7 @@ export function useStrategicOracle() {
         return MacroBrain.analyzeFleet(instances);
     }, [instances]);
 
-    // 2. Notify fleet_admin via WebPush when new CRITICAL insights appear
+    // 2. Notify super_admin MCC via WebPush when new CRITICAL insights appear
     useEffect(() => {
         const fresh = insights.filter(
             i => i.impact === 'CRITICAL' && !notifiedInsightIds.current.has(i.id),

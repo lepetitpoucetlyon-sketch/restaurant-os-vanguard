@@ -30,10 +30,10 @@ export const TenantOrchestrator: React.FC = () => {
 
     // HYDRATION: Bridge mock data with FleetCommander logic for evaluation
     const displayFleet = fleet.length > 0 ? fleet : [
-        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { dailyRevenue: 4500, alerts: 0, errorRate: 0.01, uptime: 99.9 } },
-        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { dailyRevenue: 2800, alerts: 2, errorRate: 0.05, uptime: 99.1 } },
-        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { dailyRevenue: 1200, alerts: 8, errorRate: 0.15, uptime: 95.0 } },
-        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { dailyRevenue: 0, alerts: 0, errorRate: 0, uptime: 100 } },
+        { id: 'restaurant-os', name: 'Master Kitchen (HQ)', status: 'ONLINE', metrics: { alerts: 0, errorRate: 0.01, uptime: 99.9 } },
+        { id: 'bistro-lyon', name: 'Bistro Lyon 2', status: 'ONLINE', metrics: { alerts: 2, errorRate: 0.05, uptime: 99.1 } },
+        { id: 'trattoria-paris', name: 'Trattoria Marais', status: 'CRITICAL', metrics: { alerts: 8, errorRate: 0.15, uptime: 95.0 } },
+        { id: 'brasserie-lille', name: 'Le Nord Brasserie', status: 'MAINTENANCE', metrics: { alerts: 0, errorRate: 0, uptime: 100 } },
     ].map(inst => {
         const metrics = (inst as { metrics?: { alerts?: number; errorRate?: number; uptime?: number } }).metrics || { alerts: 0, errorRate: 0, uptime: 100 };
         const health = FleetCommander.evaluateHealth(metrics.alerts || 0, metrics.errorRate || 0, metrics.uptime || 0);

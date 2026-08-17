@@ -52,7 +52,7 @@ export async function verifyDevice(uid: string, currentFingerprint: string, isFi
       await Nexus.adapter.set(devicePath, {
         fingerprint: currentFingerprint,
         certifiedAt: new Date().toISOString(),
-        autoCertifiedAs: "SUPER_ADMIN",
+        autoCertifiedAs: "super_admin",
         userAgent: navigator.userAgent
       });
       return { status: "CERTIFIED" };

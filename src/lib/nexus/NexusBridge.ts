@@ -115,19 +115,12 @@ export class NexusBridge {
 
   private static async pushPulse(tenantId: string): Promise<void> {
     try {
- 
       const { fleetTelemetry } = await import('@/modules/intelligence/ia/fleet/FleetTelemetryService');
-      const { pendingOrdersAtom } = await import('@/store/pillars/ops');
-      let activeOrders = 0;
-      try {
-        activeOrders = (this.store.get(pendingOrdersAtom) as unknown[])?.length ?? 0;
-      } catch { /* atomes ops non chargés sur cette route (ICM) — pulse minimal */ }
 
       await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
         status: 'ONLINE',
         lastHeartbeat: new Date().toISOString(),
         healthScore: 100,
-        activeOrders,
         version: process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0',
       });
     } catch (err) {

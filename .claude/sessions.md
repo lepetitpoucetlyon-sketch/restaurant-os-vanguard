@@ -117,3 +117,6 @@
 | quality-audit | Audit qualité : tout ce qui a été implémenté récemment — TSC, tests, graphify, diff commits GMAO + vertical-forge | 2026-08-16 | terminée |
 | audit-global-all | Audit global multi-angles (docs/AUDIT_GLOBAL_2026-08-16.md) : TSC, tests, CC, cycles, barrels, event bus, NF525, microunits, RBAC, MCC, vertical forge, dead code, i18n. P0 corrigés (IDOR v1/orders, IDOR tenant/contracts, XSS EmailCampaign). 30 erreurs TSC corrigées dans 7 fichiers test. | 2026-08-16 | terminée |
 | backlog-h1-fixes | Corrections BACKLOG H1 P1 : debounce pointeuse, acompte grands groupes, waitlist_ready+SMS, no-show enforcement, atomicité stock, préférences clients structurées | 2026-08-17 | terminée |
+| rbac-rename | Renommage canonique rôles : Plan A (fleet_admin/SUPER_ADMIN → super_admin MCC, ~100 occ.) + Plan B (super_admin tenant → admin, ~200 occ.) — TSC 0, tests OK | 2026-08-17 | terminée |
+| mcc-audit-2 | Audit MCC (lecture seule) : app/(admin)/admin/mcc/, lib/mcc/, shared/nexus/guards/admin/mcc/, api/admin/* | 2026-08-17 | terminée |
+| mcc-fixes | Corrections audit MCC P0→P3 : provision route, health live, slug validation, modal extract, RBAC fleet, pagination, restore polling, MCCInsights, version env | 2026-08-17 | active |

@@ -17,8 +17,6 @@ export interface EmpireInstance extends SovereignNode {
     lastHeartbeat: string;
     metrics: {
         activeUsers: number;
-        dailyRevenue: number;
-        revenue24h: number;
         healthScore: number;
         complianceScore: number;
         lowStockAlerts: number;
@@ -148,8 +146,6 @@ export interface SiteTelemetry {
     tenantId?: string;
     engineVersion?: string;
     lastSeen?: string | number | { seconds: number; nanoseconds: number };
-    dailyRevenue?: number;
-    activeOrders?: number;
     featureFlags?: Record<string, boolean>;
     branding: SiteBranding;
     security: SiteSecurity;

@@ -45,15 +45,13 @@ export const ProvisioningEngine = {
                 name: dna.name.toUpperCase(),
                 status: 'ONLINE', // Ready for single-core bridge
                 tier: dna.tier || 'STANDARD',
-                version: '4.5.0-empire',
+                version: process.env.NEXT_PUBLIC_APP_VERSION ?? '4.5.0',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
                 lastHeartbeat: new Date().toISOString(),
                 
                 metrics: {
                     activeUsers: 0,
-                    dailyRevenue: 0,
-                    revenue24h: 0,
                     aiUsageCost: 0,
                     healthScore: 100,
                     errorRate: 0,
@@ -96,7 +94,6 @@ export const ProvisioningEngine = {
                 complianceScore: newInstance.metrics.complianceScore,
                 activeUsers: newInstance.metrics.activeUsers,
                 lowStockAlerts: newInstance.metrics.lowStockAlerts,
-                dailyRevenue: newInstance.metrics.dailyRevenue,
                 status: newInstance.status
             });
 

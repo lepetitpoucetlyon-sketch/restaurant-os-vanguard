@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { sovereignHealth, sovereignAdminReindex, sovereignAdminStats } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
@@ -29,7 +29,7 @@ const RagSchema = z.object({
 type RagRequest = z.infer<typeof RagSchema>;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireFleetAdmin(req);
+  const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: RagRequest;

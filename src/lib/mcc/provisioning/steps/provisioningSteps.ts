@@ -47,7 +47,6 @@ export async function setupFleetTelemetry(tenantId: string, request: Provisionin
             healthScore: 100,
             complianceScore: 100,
             lowStockAlerts: 0,
-            dailyRevenue: 0,
         });
         logger.info('[MCC/prov] Fleet telemetry enregistrée', { tenantId });
     } catch (fleetErr) {

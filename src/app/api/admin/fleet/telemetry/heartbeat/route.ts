@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 const HeartbeatSchema = z.object({
   tenantId: z.string().min(1),
@@ -15,7 +15,7 @@ const HeartbeatSchema = z.object({
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireFleetAdmin(req);
+  const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller;
 
   let body: z.infer<typeof HeartbeatSchema>;

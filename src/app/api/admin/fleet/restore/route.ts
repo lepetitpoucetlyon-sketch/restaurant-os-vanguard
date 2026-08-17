@@ -61,7 +61,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   if (process.env.FIRESTORE_PROJECT_ID && process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
     try {
-      // Cloud Firestore Admin REST API — PITR restore
+      // Firestore-only — PITR non-portable vers d'autres providers Nexus
       const projectId = process.env.FIRESTORE_PROJECT_ID;
       const res = await fetch(
         `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default):restore`,
@@ -114,7 +114,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller as NextResponse;
 
+  const jobId   = req.nextUrl.searchParams.get('jobId');
   const tenantId = req.nextUrl.searchParams.get('tenantId');
+
+  if (jobId) {
+    const job = await Nexus.adapter.get(`mcc/restoreJobs/${jobId}`);
+    return NextResponse.json({ jobs: job ? [job] : [], total: job ? 1 : 0 });
+  }
+
   const jobs = await Nexus.adapter.query('mcc/restoreJobs') as Array<{ tenantId?: string }>;
   const filtered = tenantId ? jobs.filter(j => j.tenantId === tenantId) : jobs;
 

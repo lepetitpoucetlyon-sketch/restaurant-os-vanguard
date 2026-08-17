@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { useNexusFleet } from '@/modules/intelligence';
 import type { PlatformVariant } from '@/modules/system';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
@@ -10,10 +9,10 @@ import { authedFetch } from '@/lib/client/authedFetch';
 import type { MCCHealthStatus } from '@/app/api/admin/mcc/health/route';
 
 export const PROV_STEPS = [
-    'Vérification DNS & slug…',
-    'Provisionnement Registry…',
-    'Seeding Config & Templates…',
-    'Activation RAG Sovereign…',
+    'Validation slug & collisions…',
+    'Provisionnement Registry & DNA…',
+    'Création compte propriétaire…',
+    'Stripe & RAG Workspace…',
 ] as const;
 
 export function useMccPage() {
@@ -80,22 +79,29 @@ export function useMccPage() {
         const timers = PROV_STEPS.map((_, i) => stepTimer(i));
 
         try {
-            await ProvisioningEngine.provisionNewInstance({
-                name: newCloneName,
-                key: newCloneKey,
-                ownerEmail: newCloneEmail,
-                initialPrimaryColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : '#C5A059',
-                tier: newCloneTier,
-                variant: newCloneVariant,
-                copyBaseTemplates: true,
-                trialDays: newTrialDays > 0 ? newTrialDays : undefined,
-                branding: {
-                    mode: newCloneBrandingMode,
-                    accentColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : undefined,
-                    logoUrl: newCloneBrandingMode === 'custom' && newCloneLogoUrl ? newCloneLogoUrl : null,
-                    splashEnabled: newCloneBrandingMode === 'custom' ? newCloneSplashEnabled : false,
-                },
+            const res = await authedFetch('/api/admin/fleet/provision', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: newCloneName,
+                    key: newCloneKey,
+                    ownerEmail: newCloneEmail,
+                    tier: newCloneTier,
+                    variant: newCloneVariant,
+                    trialDays: newTrialDays > 0 ? newTrialDays : undefined,
+                    branding: {
+                        mode: newCloneBrandingMode,
+                        accentColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : undefined,
+                        logoUrl: newCloneBrandingMode === 'custom' && newCloneLogoUrl ? newCloneLogoUrl : null,
+                        splashEnabled: newCloneBrandingMode === 'custom' ? newCloneSplashEnabled : false,
+                    },
+                }),
             });
+
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`);
+            }
 
             timers.forEach(clearTimeout);
             setProvisionStep(PROV_STEPS.length);
@@ -115,9 +121,10 @@ export function useMccPage() {
                 setNewCloneLogoUrl('');
                 setNewCloneSplashEnabled(false);
             }, 2500);
-        } catch {
+        } catch (err) {
             timers.forEach(clearTimeout);
-            setProvisioningStatus('Critical Error in Provisioning.');
+            const message = err instanceof Error ? err.message : 'Erreur interne';
+            setProvisioningStatus(`Erreur: ${message}`);
         }
     };
 
