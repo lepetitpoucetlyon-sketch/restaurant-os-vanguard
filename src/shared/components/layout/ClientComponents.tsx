@@ -9,10 +9,6 @@ import { OTABanner } from "@components/layout/OTABanner";
 import { SovereignLock } from "@components/layout/SovereignLock";
 
 // Lazy load system components
-const VoiceCommandListener = dynamic(
-    () => import("@/shared/components/voice/VoiceCommandListener").then(mod => ({ default: mod.VoiceCommandListener })),
-    { ssr: false }
-);
 const DocumentationPortal = dynamic(
     () => import("@/shared/components/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
     { ssr: false }
@@ -35,7 +31,6 @@ export function ClientComponents({ children }: { children: React.ReactNode }) {
 
     return (
         <LayoutResolver>
-            <VoiceCommandListener />
             <DocumentationPortal />
             <TutorialBubble />
             {children}
