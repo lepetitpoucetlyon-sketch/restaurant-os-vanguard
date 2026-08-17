@@ -45,7 +45,9 @@ const fr: SovereignData = {
         "admin": "Administration",
         "settings": "Paramètres",
         "access_management": "Gestion des Accès",
-        "registre": "Registres Obligatoires"
+        "registre": "Registres Obligatoires",
+        "franchise": "Réseau & Franchise",
+        "franchise_network": "Multi-Sites & Réseau"
     },
     "header": {
         "search_placeholder": "Rechercher ou taper une commande...",

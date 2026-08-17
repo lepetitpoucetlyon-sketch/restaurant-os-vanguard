@@ -106,7 +106,8 @@ export type PageKey =
     | 'mcc'
     | 'workshop'
     | 'consultations'
-    | 'vault';
+    | 'vault'
+    | 'franchise';
 
 
 // ============ ACTION DEFINITIONS PER PAGE ============
@@ -198,6 +199,13 @@ export type SettingsAction =
     | 'view_identity' | 'modify_identity' | 'view_schedule' | 'modify_schedule'
     | 'manage_roles' | 'manage_users' | 'manage_integrations' | 'manage_security'
     | 'manage_backups' | 'manage_multi_site' | 'manage_license';
+
+export type FranchiseAction =
+    | 'view'
+    | 'view_ca_group'
+    | 'manage_transfers'
+    | 'sync_catalogs'
+    | 'manage_groups';
 
 // ============ PAGE SETTINGS (⚙️ Gear Icon) ============
 

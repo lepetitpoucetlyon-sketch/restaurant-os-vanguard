@@ -23,6 +23,13 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         title: "Paramètres MCC",
         settings: []
     },
+    franchise: {
+        title: "Paramètres Réseau & Franchise",
+        settings: [
+            { key: "allow_transfers", label: "Autoriser les transferts de stock", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
+            { key: "auto_approve_transfers", label: "Validation automatique des transferts", group: "logic", type: "toggle", roles: ["admin"] },
+        ]
+    },
     floor_plan: {
         title: "Paramètres du Plan de Salle",
         settings: [

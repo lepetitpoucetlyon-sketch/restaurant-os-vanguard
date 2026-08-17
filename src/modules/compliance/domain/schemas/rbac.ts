@@ -58,6 +58,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     registre: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier'],
     operations: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
     settings: ['admin', 'directeur', 'manager'],
+    franchise: ['admin', 'directeur'],
     mon_espace: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
     welcome_staff: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
     migration: ['admin', 'directeur'],

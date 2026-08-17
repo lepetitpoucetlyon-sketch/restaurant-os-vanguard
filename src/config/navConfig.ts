@@ -227,6 +227,17 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Registres & Conformité", key: "registre", href: "/registre", icon: ScrollText, category: "registre", badge: "OBLIGATOIRE", requiredCapability: "mod_registre" },
         ]
     },
+    {
+        id: 'franchise',
+        key: 'franchise',
+        title: 'Réseau & Franchise',
+        icon: Building2,
+        color: '#6366F1',
+        mode: 'tenant',
+        items: [
+            { label: "Multi-Sites & Réseau", key: "franchise_network", href: "/franchise", icon: Building2, category: "franchise" },
+        ]
+    },
 
     // ── Admin — visible in both modes ─────────────────────────────────────────
     {

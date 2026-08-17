@@ -61,6 +61,7 @@ export * from './registre.types';
 export * from './compliance.types';
 export * from './commerce.types';
 export * from './permissions.types';
+export * from './franchise.types';
 
 
 // 4. Operations Bridge (POS & Groups)
