@@ -42,7 +42,7 @@ export type VerificationResult =
 
 export async function verifyDevice(uid: string, currentFingerprint: string, isFixedAsset: boolean = false): Promise<VerificationResult> {
   const userData = await Nexus.adapter.get<Record<string, unknown>>(`users/${uid}`);
-  const isSuperAdmin = userData?.role === "super_admin" || userData?.role === "fleet_admin" || userData?.role === "SUPER_ADMIN";
+  const isSuperAdmin = userData?.role === "super_admin";
 
   const devicePath = `users/${uid}/certifiedDevices/${currentFingerprint}`;
   const deviceData = await Nexus.adapter.get<Record<string, unknown>>(devicePath);

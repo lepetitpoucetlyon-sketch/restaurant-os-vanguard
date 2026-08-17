@@ -63,7 +63,7 @@ function MFAGateImpl({ role = 'super_admin', children }: MFAGateProps) {
     useEffect(() => {
         if (userRole === null) return;
         // Only gate super_admin (or the specified role)
-        if (userRole !== role && !['super_admin', 'fleet_admin', 'SUPER_ADMIN'].includes(userRole ?? '')) {
+        if (userRole !== role && userRole !== 'super_admin') {
             setStatus('enrolled');
             return;
         }

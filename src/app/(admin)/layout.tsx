@@ -7,7 +7,7 @@ import { isMCCMode } from "@/config/instance";
 
 // Tous les opérateurs MCC ont accès à l'admin layout.
 // Les restrictions par onglet sont appliquées dans chaque composant via currentUser.role.
-const MCC_ROLES = ["super_admin", "fleet_admin", "SUPER_ADMIN", "mcc_support", "mcc_junior_dev"];
+const MCC_ROLES = ["super_admin", "mcc_support", "mcc_junior_dev"];
 const TENANT_ADMIN_ROLES = ["admin", "manager"];
 const ADMIN_ROLES = isMCCMode() ? MCC_ROLES : [...TENANT_ADMIN_ROLES, ...MCC_ROLES];
 

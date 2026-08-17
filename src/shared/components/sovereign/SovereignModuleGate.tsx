@@ -19,7 +19,7 @@ function checkAuthorization(
     requiredRole?: string,
     requiredPlan?: string[],
 ): boolean {
-    if (requiredRole && role !== requiredRole && !['super_admin', 'fleet_admin', 'SUPER_ADMIN'].includes(role)) return false;
+    if (requiredRole && role !== requiredRole && role !== 'super_admin') return false;
     if (requiredPlan && requiredPlan.length > 0 && !requiredPlan.includes(plan)) return false;
     return true;
 }

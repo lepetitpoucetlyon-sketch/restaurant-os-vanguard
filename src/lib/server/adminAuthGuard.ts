@@ -33,26 +33,22 @@ export interface AdminCaller {
   tenantId?: string;
 }
 
-// 'SUPER_ADMIN' et 'fleet_admin' : conventions historiques MCC conservées en compatibilité totale avec super_admin.
-const FLEET_ROLES = ['super_admin', 'fleet_admin', 'SUPER_ADMIN'] as const;
-const TENANT_ADMIN_ROLES = ['super_admin', 'fleet_admin', 'SUPER_ADMIN', 'admin', 'manager'] as const;
+const FLEET_ROLES = ['super_admin'] as const;
+const TENANT_ADMIN_ROLES = ['super_admin', 'admin', 'manager'] as const;
 
 /**
- * RBAC MCC Interne — niveaux d'accès opérateurs plateforme.
+ * RBAC MCC Interne — trois niveaux d'accès opérateurs plateforme.
  *
  * mcc_junior_dev : lecture seule (telemetry, status). Aucune action destructive.
  * mcc_support    : +reset PIN, demande/status support access, réindexation RAG.
  * super_admin    : accès complet (y compris rôles, commandes, révocation). MFA obligatoire.
- * fleet_admin / SUPER_ADMIN : alias historiques de super_admin.
  */
-export type MccRole = 'mcc_junior_dev' | 'mcc_support' | 'super_admin' | 'fleet_admin' | 'SUPER_ADMIN';
+export type MccRole = 'mcc_junior_dev' | 'mcc_support' | 'super_admin';
 
 const MCC_ROLE_HIERARCHY: Record<MccRole, number> = {
     mcc_junior_dev: 1,
     mcc_support: 2,
     super_admin: 3,
-    fleet_admin: 3,
-    SUPER_ADMIN: 3,
 };
 
 /**

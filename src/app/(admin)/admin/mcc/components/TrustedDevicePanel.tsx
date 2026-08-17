@@ -30,11 +30,9 @@ async function generateDeviceFingerprint(): Promise<string> {
 const STORAGE_KEY = 'mcc_device_fp';
 
 const ROLE_LABELS: Record<MccRole, { label: string; color: string }> = {
-    super_admin:    { label: 'Super Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-    fleet_admin:    { label: 'Fleet Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-    SUPER_ADMIN:    { label: 'Super Admin',    color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-    mcc_support:    { label: 'MCC Support',    color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
-    mcc_junior_dev: { label: 'Junior Dev',     color: 'text-text-secondary bg-surface-card border-border-subtle' },
+    super_admin:    { label: 'Super Admin MCC', color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
+    mcc_support:    { label: 'MCC Support',     color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
+    mcc_junior_dev: { label: 'Junior Dev',      color: 'text-text-secondary bg-surface-card border-border-subtle' },
 };
 
 export function TrustedDevicePanel() {

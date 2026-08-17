@@ -72,7 +72,7 @@ export function OnboardingChecklistSettingsPanel() {
   }, []);
 
   const userRole = currentUser?.role || 'serveur';
-  const isManagerOrAbove = ['manager', 'directeur', 'admin', 'super_admin', 'fleet_admin', 'SUPER_ADMIN'].includes(userRole);
+  const isManagerOrAbove = ['manager', 'directeur', 'admin', 'super_admin'].includes(userRole);
 
   // Sécurité RBAC
   if (!isManagerOrAbove) {
