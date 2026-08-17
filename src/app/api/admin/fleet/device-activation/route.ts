@@ -13,7 +13,7 @@
  *
  * DELETE /api/admin/fleet/device-activation?tokenId=xxx — révoque un token
  *
- * Protégé : fleet_admin pour generate/delete, token auto-signé pour activate.
+ * Protégé : super_admin pour generate/delete, token auto-signé pour activate.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -26,7 +26,7 @@ type DeviceType = 'ipad_pos' | 'kds' | 'tablet';
 const TTL_MS = 30 * 60_000; // 30 minutes
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; deviceType: DeviceType };
@@ -72,8 +72,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const token = req.nextUrl.searchParams.get('token');
 
   if (!token) {
-    // Liste les tokens actifs (fleet_admin requis)
-    const caller = await requireMccLevel(req, 'fleet_admin');
+    // Liste les tokens actifs (super_admin requis)
+    const caller = await requireMccLevel(req, 'super_admin');
     if (isDenied(caller)) return caller as NextResponse;
     const tokens = await Nexus.adapter.query('mcc/deviceTokens');
     return NextResponse.json({ tokens });
@@ -107,7 +107,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const tokenId = req.nextUrl.searchParams.get('tokenId');

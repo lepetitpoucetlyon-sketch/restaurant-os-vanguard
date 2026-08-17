@@ -262,7 +262,7 @@ export class RestaurantOnboardingMasterService {
    * Vérifie si l'utilisateur a le rôle requis pour exécuter / voir une étape.
    */
   static isAuthorizedForStep(userRole: string, stepMinRole: PermissionRole): boolean {
-    const normalizedRole = ['admin', 'fleet_admin', 'SUPER_ADMIN'].includes(userRole) ? 'super_admin' : userRole;
+    const normalizedRole = ['super_admin', 'fleet_admin', 'SUPER_ADMIN', 'admin'].includes(userRole) ? 'admin' : userRole;
     const userLevel = PERMISSION_ROLE_LEVELS[normalizedRole as PermissionRole] ?? 0;
     const requiredLevel = PERMISSION_ROLE_LEVELS[stepMinRole] ?? 0;
     return userLevel >= requiredLevel;

@@ -16,7 +16,7 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: unknown;
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   let sent = 0;
   for (const insight of critical) {
     try {
-      await WebPushService.sendToRole(tenantId, 'fleet_admin', {
+      await WebPushService.sendToRole(tenantId, 'super_admin', {
         title: `⚠️ Alerte Fleet : ${insight.title}`,
         body:  `Impact CRITIQUE détecté par MacroBrain. Action requise.`,
         url:   '/admin/mcc?tab=intelligence',

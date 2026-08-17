@@ -1,7 +1,7 @@
 /**
  * POST /api/admin/fleet/billing/portal-session
  * Crée une Stripe Billing Portal Session pour un tenant.
- * Auth : fleet_admin (MCC) ou admin/manager du tenant.
+ * Auth : super_admin (MCC) ou admin/manager du tenant.
  *
  * Body : { tenantId: string, returnUrl: string }
  * Returns : { url: string }
@@ -15,7 +15,7 @@ import { logger } from '@/lib/logger';
 import { JsonObject } from "@/shared/types/json";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   if (!process.env.STRIPE_SECRET_KEY) {

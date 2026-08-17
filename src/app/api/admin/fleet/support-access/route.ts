@@ -2,16 +2,16 @@
  * POST /api/admin/fleet/support-access
  * Flow consentement support : demande MCC → approbation tenant → accès temporisé.
  *
- * Actions (MCC, fleet_admin) :
+ * Actions (MCC, super_admin) :
  *   { action: 'request', tenantId, durationHours? }  → crée une demande PENDING
  *   { action: 'revoke',  tenantId }                  → révocation immédiate
  *   { action: 'status',  tenantId }                  → état courant
  *
  * Action (tenant admin, via route publique séparée) :
  *   L'approbation est gérée côté tenant via PATCH /api/tenant/support-access/approve
- *   qui est hors scope MCC et ne requiert pas fleet_admin.
+ *   qui est hors scope MCC et ne requiert pas super_admin.
  *
- * Protégé : fleet_admin / SUPER_ADMIN pour request/revoke/status.
+ * Protégé : super_admin / super_admin pour request/revoke/status.
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -9,7 +9,7 @@ import { toError } from "@/lib/toError";
 /**
  * POST /api/billing/checkout
  * Crée une Stripe Checkout Session pour le tenant authentifié.
- * Auth : admin/manager du tenant (ou fleet_admin).
+ * Auth : admin/manager du tenant (ou super_admin).
  *
  * Body: { tier: 'STANDARD'|'PREMIUM'|'ENTERPRISE', annual?: boolean, successUrl: string, cancelUrl: string }
  * Returns: { url: string }

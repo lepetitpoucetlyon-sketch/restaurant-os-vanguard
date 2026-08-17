@@ -9,7 +9,7 @@
  *   HARD_LOCK    → verrouillage total, statut LOCKED
  *   LOCK         → alias de HARD_LOCK (legacy)
  *
- * Protégé : fleet_admin minimum.
+ * Protégé : super_admin minimum.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -35,7 +35,7 @@ const ACTION_STATUS_MAP: Record<FleetCommandAction, string> = {
 };
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-    const caller = await requireMccLevel(req, 'fleet_admin');
+    const caller = await requireMccLevel(req, 'super_admin');
     if (isDenied(caller)) return caller as NextResponse;
 
     let body: z.infer<typeof CommandSchema>;

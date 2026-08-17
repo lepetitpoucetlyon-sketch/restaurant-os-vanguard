@@ -1,7 +1,7 @@
 /**
  * POST /api/admin/mdm/lock
  * Verrouille un appareil via Mosyle MDM.
- * Auth : fleet_admin.
+ * Auth : super_admin.
  * Body : { serialNumber: string }
  */
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,7 +10,7 @@ import { MosyleClient } from '@/lib/MosyleClient';
 import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { serialNumber } = await req.json() as { serialNumber?: string };

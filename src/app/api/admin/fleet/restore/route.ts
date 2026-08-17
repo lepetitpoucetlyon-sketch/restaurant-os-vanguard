@@ -13,7 +13,7 @@
  *
  * GET /api/admin/fleet/restore?tenantId — liste les jobs de restauration
  *
- * Protégé : fleet_admin. NF525 : journalEntries et fiscalSeals ne sont PAS restaurés.
+ * Protégé : super_admin. NF525 : journalEntries et fiscalSeals ne sont PAS restaurés.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -30,7 +30,7 @@ const RestoreBodySchema = z.object({
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof RestoreBodySchema>;

@@ -113,8 +113,7 @@ export const ROLE_LABELS: Record<string, string> = {
     bartender: "Barman / Mixologue",
     host: "Hôte d'Accueil",
     cashier: "Caisse",
-    fleet_admin: "Opérateur Flotte",
-    SUPER_ADMIN: "Super Admin",
+    super_admin: "Super Admin MCC",
     mcc_junior_dev: "Développeur MCC",
     mcc_support: "Support MCC",
 };

@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const devices = await Nexus.adapter.query<TrustedDevice>(COLLECTION);
-        const isFleetAdmin = caller.role === 'fleet_admin' || caller.role === 'SUPER_ADMIN';
+        const isFleetAdmin = caller.role === 'super_admin' || caller.role === 'super_admin' || caller.role === 'super_admin';
 
         // mcc_support ne voit pas le fingerprint complet
         const sanitized = devices.map(d => ({
@@ -52,12 +52,12 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/admin/fleet/trusted-devices
  * Enregistre un nouvel appareil de confiance.
- * Auth: fleet_admin uniquement.
+ * Auth: super_admin uniquement.
  *
  * Body: { fingerprint, name, role, allowedRoutes?, ownerUid?, ownerEmail? }
  */
 export async function POST(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'fleet_admin');
+    const caller = await requireMccLevel(request, 'super_admin');
     if (isDenied(caller)) return caller;
 
     let body: Partial<TrustedDevice> & { ownerEmail?: string };
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'fingerprint, name et role sont requis.' }, { status: 400 });
     }
 
-    const VALID_ROLES: MccRole[] = ['mcc_junior_dev', 'mcc_support', 'fleet_admin'];
+    const VALID_ROLES: MccRole[] = ['mcc_junior_dev', 'mcc_support', 'super_admin', 'super_admin', 'super_admin'];
     if (!VALID_ROLES.includes(body.role as MccRole)) {
         return NextResponse.json({ error: `Rôle invalide : ${body.role}` }, { status: 400 });
     }
@@ -114,12 +114,12 @@ export async function POST(request: NextRequest) {
 /**
  * PATCH /api/admin/fleet/trusted-devices
  * Met à jour le rôle ou les routes autorisées d'un appareil.
- * Auth: fleet_admin uniquement.
+ * Auth: super_admin uniquement.
  *
  * Body: { deviceId, role?, allowedRoutes?, name? }
  */
 export async function PATCH(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'fleet_admin');
+    const caller = await requireMccLevel(request, 'super_admin');
     if (isDenied(caller)) return caller;
 
     let body: { deviceId: string; role?: MccRole; allowedRoutes?: string[]; name?: string };
@@ -154,10 +154,10 @@ export async function PATCH(request: NextRequest) {
 /**
  * DELETE /api/admin/fleet/trusted-devices?deviceId=xxx
  * Révoque un appareil (status: 'revoked').
- * Auth: fleet_admin uniquement.
+ * Auth: super_admin uniquement.
  */
 export async function DELETE(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'fleet_admin');
+    const caller = await requireMccLevel(request, 'super_admin');
     if (isDenied(caller)) return caller;
 
     const deviceId = request.nextUrl.searchParams.get('deviceId');

@@ -1,7 +1,7 @@
 /**
  * POST /api/admin/mdm/erase
  * Efface un appareil via Mosyle MDM (IRRÉVERSIBLE).
- * Auth : fleet_admin obligatoire.
+ * Auth : super_admin obligatoire.
  * Body : { serialNumber: string, confirmation: "ERASE CONFIRMED" }
  *
  * La confirmation textuelle côté serveur empêche les appels accidentels/automatisés.
@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
 const REQUIRED_CONFIRMATION = 'ERASE CONFIRMED';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { serialNumber, confirmation } = await req.json() as {
@@ -55,13 +55,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     timestamp: new Date(),
   });
 
-  // Notification for fleet_admin about the wipe
+  // Notification for super_admin about the wipe
   const notifId = `mdm_erase_${serialNumber}_${Date.now()}`;
   await Nexus.adapter.set(`mcc/notifications/${notifId}`, {
     type: 'device_erased',
     title: 'Appareil efface (MDM)',
     message: `L'appareil ${serialNumber} a ete efface par ${uid}. Action irreversible.`,
-    targetRole: 'fleet_admin',
+    targetRole: 'super_admin',
     serialNumber,
     read: false,
     createdAt: Date.now(),

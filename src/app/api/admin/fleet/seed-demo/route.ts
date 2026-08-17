@@ -14,10 +14,10 @@ const BodySchema = z.object({
  * POST /api/admin/fleet/seed-demo
  * Écrit un document SiteTelemetry réaliste dans fleet-telemetry/{tenantId}
  * pour rendre une instance démo visible dans le MCC immédiatement.
- * Auth: fleet_admin
+ * Auth: super_admin
  */
 export async function POST(req: NextRequest) {
-  const auth = await requireMccLevel(req, 'fleet_admin');
+  const auth = await requireMccLevel(req, 'super_admin');
   if (isDenied(auth)) return auth;
 
   const body = await req.json().catch(() => ({}));

@@ -13,7 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock_key', {
 const HARDWARE_RENTAL_PRICE_ID = process.env.STRIPE_HARDWARE_PRICE_ID || 'price_hardware_ipad_monthly';
 
 export async function POST(req: NextRequest) {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   try {

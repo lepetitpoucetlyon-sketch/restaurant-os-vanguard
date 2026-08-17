@@ -12,7 +12,7 @@
  * GET /api/admin/fleet/rgpd-purge?tenantId — récupère le certificat d'effacement
  *
  * IMPORTANT NF525 : journalEntries et fiscalSeals ne sont JAMAIS purgés.
- * Protégé : fleet_admin.
+ * Protégé : super_admin.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -44,7 +44,7 @@ async function sha256(text: string): Promise<string> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof RgpdPurgeSchema>;

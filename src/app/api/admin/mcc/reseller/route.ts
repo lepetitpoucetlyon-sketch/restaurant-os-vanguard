@@ -12,7 +12,7 @@
  *   mcc/resellers/{resellerId}        → profil revendeur
  *   mcc/resellerCommissions/{period}  → commissions calculées du mois
  *
- * Protégé : fleet_admin.
+ * Protégé : super_admin.
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
@@ -29,7 +29,7 @@ function generateAffiliateCode(): string {
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const resellers = await Nexus.adapter.query('mcc/resellers', { limit: 200 });
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const body = await req.json() as {
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const body = await req.json() as { resellerId?: string; status?: string; commissionRate?: number; notes?: string; name?: string; email?: string; phone?: string; };
@@ -101,7 +101,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const resellerId = req.nextUrl.searchParams.get('resellerId');

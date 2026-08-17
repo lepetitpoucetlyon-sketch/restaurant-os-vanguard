@@ -31,7 +31,7 @@ async function resolveTenantId(request: NextRequest): Promise<{ tenantId: string
 /**
  * POST /api/finance/bank/sync
  * Déclenche une synchronisation bancaire pour le tenant authentifié.
- * Auth : admin/manager du tenant (ou fleet_admin) — le tenant vient du token.
+ * Auth : admin/manager du tenant (ou super_admin) — le tenant vient du token.
  * Aucun secret global n'est utilisé pour rafraîchir un compte : uniquement
  * le jeton utilisateur propre à CE tenant, chargé depuis sa connexion persistée.
  */

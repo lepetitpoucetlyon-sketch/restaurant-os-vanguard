@@ -5,7 +5,7 @@
  * Body : { tenantId: string, userId: string }
  * Retourne : { tempPin: string } — à communiquer au responsable du site.
  *
- * Protégé : fleet_admin / SUPER_ADMIN uniquement.
+ * Protégé : super_admin / super_admin uniquement.
  * Le nouveau PIN temporaire (6 chiffres) est hashé avant écriture — jamais stocké en clair.
  */
 

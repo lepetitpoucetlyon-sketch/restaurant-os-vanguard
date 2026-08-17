@@ -18,7 +18,7 @@ interface GitPushResponse {
 
 export async function POST(request: NextRequest): Promise<NextResponse<GitPushResponse>> {
   try {
-    // Outillage dev : fleet_admin uniquement (et bloqué en prod par le middleware).
+    // Outillage dev : super_admin uniquement (et bloqué en prod par le middleware).
     const caller = await requireFleetAdmin(request);
     if (isDenied(caller)) return caller as NextResponse<GitPushResponse>;
 

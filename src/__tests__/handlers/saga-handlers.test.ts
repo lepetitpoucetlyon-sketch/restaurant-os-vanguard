@@ -67,6 +67,7 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'get').mockResolvedValue(null);
   vi.spyOn(Nexus.adapter, 'set').mockResolvedValue(undefined);
   vi.spyOn(Nexus.adapter, 'update').mockResolvedValue(undefined);
+  vi.spyOn(Nexus.adapter, 'increment').mockResolvedValue(undefined);
   vi.spyOn(Nexus.adapter, 'create').mockResolvedValue(undefined);
   vi.spyOn(Nexus.adapter, 'delete').mockResolvedValue(undefined);
   vi.spyOn(Nexus.adapter, 'query').mockResolvedValue([]);
@@ -163,9 +164,10 @@ describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () =>
       items: [{ productId: 'prod-1', name: 'Burger', quantity: 3 }],
     });
 
-    expect(Nexus.adapter.update).toHaveBeenCalledWith(
+    expect(Nexus.adapter.increment).toHaveBeenCalledWith(
       'tenants/ten1/stockItems/stock-001',
-      expect.objectContaining({ quantity: 7 }),
+      'quantity',
+      -3,
     );
   });
 
@@ -176,9 +178,14 @@ describe('C02 · StockDeductionHandler (order.paid → déduction stock)', () =>
     registerStockDeductionHandler();
     const handler = captureHandler();
 
+    let stockReadCount = 0;
     vi.mocked(Nexus.adapter.get).mockImplementation(async (path: string) => {
       if (path.includes('/products/')) return { linkedStockItemId: 'stock-002' };
-      if (path.includes('/stockItems/')) return { quantity: 2 };
+      if (path.includes('/stockItems/')) {
+        stockReadCount++;
+        // 1ère lecture (avant déduction) = 2, 2ème lecture (post-décrément) = 0
+        return stockReadCount === 1 ? { quantity: 2 } : { quantity: 0 };
+      }
       return null;
     });
 

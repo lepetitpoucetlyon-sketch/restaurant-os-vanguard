@@ -13,7 +13,7 @@
  *
  * GET /api/admin/fleet/support-gate?status=pending — liste les gates en attente
  *
- * Protégé : fleet_admin.
+ * Protégé : super_admin.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -40,7 +40,7 @@ const SupportGatePatchSchema = z.object({
 type GateStatus = 'pending_human_approval' | 'approved' | 'rejected' | 'executed';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof SupportGatePostSchema>;
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof SupportGatePatchSchema>;

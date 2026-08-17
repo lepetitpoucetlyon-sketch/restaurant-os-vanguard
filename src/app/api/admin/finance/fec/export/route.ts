@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
 /**
  * 🏛️ Route: Export FEC - Grade X+++
  * Endpoint d'export du Fichier des Écritures Comptables.
- * Auth : JWT vérifié (admin/manager du tenant, ou fleet_admin).
+ * Auth : JWT vérifié (admin/manager du tenant, ou super_admin).
  * Le tenant vient du token — jamais d'un header client.
  */
 export async function POST(request: NextRequest) {

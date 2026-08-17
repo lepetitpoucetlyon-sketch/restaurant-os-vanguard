@@ -8,7 +8,7 @@
  * Appelle LightRAGClient avec le workspace isolé par tenant.
  * Un document est "orphelin" si son ID de référence n'existe plus dans Nexus.
  *
- * Protégé : mcc_support pour GET, fleet_admin pour DELETE.
+ * Protégé : mcc_support pour GET, super_admin pour DELETE.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const tenantId = req.nextUrl.searchParams.get('tenantId');

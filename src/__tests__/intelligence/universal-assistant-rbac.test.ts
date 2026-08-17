@@ -5,7 +5,7 @@ import { AssistantActionDispatcher } from '@/modules/intelligence/services/Assis
 describe('🤖 Universal Assistant & RBAC Membrane Suite', () => {
     describe('1. Dynamic Role Level Resolution (10 to 100)', () => {
         it('maps executive and ownership roles to Level 100 and 90', () => {
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('super_admin')).toBe(100);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('admin')).toBe(100);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('owner')).toBe(100);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('proprietaire')).toBe(100);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('directeur')).toBe(90);

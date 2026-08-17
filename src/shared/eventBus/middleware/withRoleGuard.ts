@@ -8,8 +8,7 @@ interface UserRecord {
 }
 
 const ROLE_HIERARCHY: Record<string, number> = {
-  super_admin: 100,
-  admin: 90,
+  admin: 100,
   directeur: 80,
   comptable: 70,
   manager: 60,

@@ -5,7 +5,7 @@ import { signBankConnectState } from '@/modules/finance';
 /**
  * GET /api/finance/bank/webview
  * Retourne l'URL de connexion bancaire (webview de l'agrégateur configuré pour le tenant).
- * Auth : admin/manager du tenant (ou fleet_admin). Le tenant vient toujours du token.
+ * Auth : admin/manager du tenant (ou super_admin). Le tenant vient toujours du token.
  * Le redirect_uri est dérivé de l'origine réelle de la requête — jamais d'un paramètre client.
  */
 export async function GET(request: NextRequest) {

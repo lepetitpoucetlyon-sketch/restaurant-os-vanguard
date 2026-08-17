@@ -13,7 +13,7 @@ function generateMDMAuthToken() {
 }
 
 export async function POST(req: NextRequest) {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   try {

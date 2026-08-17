@@ -4,7 +4,7 @@ import { requireFleetAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 /**
  * GET /api/agent/report
  * Rapport Sentinel pour la page AgentIntelligence.
- * Guard : fleet_admin uniquement (page MCC).
+ * Guard : super_admin uniquement (page MCC).
  */
 export async function GET(req: NextRequest) {
     const caller = await requireFleetAdmin(req);

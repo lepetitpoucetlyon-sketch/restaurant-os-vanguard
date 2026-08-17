@@ -12,7 +12,7 @@
  *   rag_assistant         : assistant conversationnel RAG
  *
  * Les toggles sont stockés dans tenants/{tenantId}/tenantConfig.aiModules.{key} = boolean
- * Protégé : mcc_support pour GET, fleet_admin pour POST.
+ * Protégé : mcc_support pour GET, super_admin pour POST.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; module: AIModuleKey; enabled: boolean };

@@ -16,7 +16,7 @@
  * GET /api/admin/fleet/rollout             — tous les rollouts actifs
  *
  * Lecture des flags côté tenant : tenantConfig.featureFlags.{featureKey} = true | false
- * Protégé : fleet_admin.
+ * Protégé : super_admin.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -48,7 +48,7 @@ interface Rollout {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof RolloutPostSchema>;
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof RolloutPatchSchema>;

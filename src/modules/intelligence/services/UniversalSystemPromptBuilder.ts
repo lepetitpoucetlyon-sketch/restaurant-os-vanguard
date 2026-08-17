@@ -103,7 +103,7 @@ export class UniversalSystemPromptBuilder {
         if (!role) return 10;
         const normalized = role.toLowerCase();
 
-        if (['super_admin', 'owner', 'proprietaire', 'gerant'].includes(normalized)) return 100;
+        if (['admin', 'owner', 'proprietaire', 'gerant'].includes(normalized)) return 100;
         if (['directeur', 'director', 'gm'].includes(normalized)) return 90;
         if (['manager', 'responsable_site', 'adjoint'].includes(normalized)) return 70;
         if (['comptable', 'accountant', 'finance_lead'].includes(normalized)) return 60;

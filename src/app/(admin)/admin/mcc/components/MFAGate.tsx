@@ -3,7 +3,7 @@
 /**
  * MFAGate — mcc-core-3
  *
- * Enforces TOTP 2FA enrollment for fleet_admin accounts.
+ * Enforces TOTP 2FA enrollment for super_admin accounts.
  * Wraps MCC pages with an enrollment modal when the Firebase user has no MFA factor.
  *
  * Flow:
@@ -28,20 +28,20 @@ import {
 type GateStatus = 'checking' | 'enrolled' | 'needs_enrollment' | 'enrolling' | 'verifying' | 'error';
 
 interface MFAGateProps {
-    /** Role required to trigger the MFA check — defaults to fleet_admin */
+    /** Role required to trigger the MFA check — defaults to super_admin */
     role?: string;
     children: React.ReactNode;
 }
 
 /** Point d'entrée public — délègue à l'implémentation complète ou au bypass dev */
-export function MFAGate({ role = 'fleet_admin', children }: MFAGateProps) {
+export function MFAGate({ role = 'super_admin', children }: MFAGateProps) {
     if (MCC_DEV_MODE_CLIENT) {
         return <>{children}</>;
     }
     return <MFAGateImpl role={role}>{children}</MFAGateImpl>;
 }
 
-function MFAGateImpl({ role = 'fleet_admin', children }: MFAGateProps) {
+function MFAGateImpl({ role = 'super_admin', children }: MFAGateProps) {
     const [status, setStatus] = useState<GateStatus>('checking');
     const [session, setSession] = useState<MFAEnrollmentSession | null>(null);
     const [otp, setOtp] = useState('');
@@ -62,8 +62,8 @@ function MFAGateImpl({ role = 'fleet_admin', children }: MFAGateProps) {
 
     useEffect(() => {
         if (userRole === null) return;
-        // Only gate fleet_admin (or the specified role)
-        if (userRole !== role && role === 'fleet_admin' && userRole !== 'SUPER_ADMIN') {
+        // Only gate super_admin (or the specified role)
+        if (userRole !== role && !['super_admin', 'fleet_admin', 'SUPER_ADMIN'].includes(userRole ?? '')) {
             setStatus('enrolled');
             return;
         }
@@ -126,7 +126,7 @@ function MFAGateImpl({ role = 'fleet_admin', children }: MFAGateProps) {
                     </div>
                     <div>
                         <h2 className="text-text-primary font-semibold text-lg">Authentification 2 facteurs requise</h2>
-                        <p className="text-text-secondary text-sm">Accès MCC — fleet_admin</p>
+                        <p className="text-text-secondary text-sm">Accès MCC — super_admin</p>
                     </div>
                 </div>
 

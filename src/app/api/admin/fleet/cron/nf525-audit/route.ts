@@ -6,8 +6,8 @@ import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   // Cette route doit idéalement être appelée par Cloud Scheduler avec un jeton d'authentification serveur.
-  // Pour la démo, on la protège avec fleet_admin.
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  // Pour la démo, on la protège avec super_admin.
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   logger.info('[NF525-Cron] Démarrage de l\'audit périodique de la flotte...');

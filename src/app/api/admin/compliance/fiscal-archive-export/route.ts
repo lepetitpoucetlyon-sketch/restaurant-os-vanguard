@@ -19,11 +19,11 @@ export interface FiscalSealEntry {
  * 
  * Compile l'intégralité des écritures comptables, des clôtures Z et de la chaîne
  * de scellement cryptographique SHA-256 d'un établissement en une archive certifiée.
- * Protégée par requireMccLevel('fleet_admin').
+ * Protégée par requireMccLevel('super_admin').
  */
 export async function POST(request: NextRequest) {
     try {
-        const caller = await requireMccLevel(request, 'fleet_admin');
+        const caller = await requireMccLevel(request, 'super_admin');
         if (isDenied(caller)) return caller;
 
         const body = await request.json().catch(() => ({}));

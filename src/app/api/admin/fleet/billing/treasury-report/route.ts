@@ -7,7 +7,7 @@
  * POST /api/admin/fleet/billing/treasury-report
  * Génère un rapport consolidé cross-tenant (cron/weekly) et le persiste.
  *
- * Protégé : fleet_admin minimum.
+ * Protégé : super_admin minimum.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -17,7 +17,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const report = await BillingService.getFleetTreasuryReport();
@@ -37,7 +37,7 @@ interface TenantSummary {
  * across all tenants into a weekly fleet report.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   try {

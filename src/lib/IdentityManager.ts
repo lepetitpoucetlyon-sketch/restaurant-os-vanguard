@@ -39,8 +39,8 @@ export const ROOT_ADMIN: User = {
 export const FLEET_OPERATOR: User = {
     id: 'user_fleet_operator',
     type: 'user',
-    name: 'Opérateur Flotte',
-    role: 'fleet_admin',
+    name: 'Super Admin MCC',
+    role: 'super_admin',
     status: 'active',
     accessLevel: 100,
     schemaVersion: 2,

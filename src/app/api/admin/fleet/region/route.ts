@@ -15,7 +15,7 @@
  * Ce champ est utilisé par le provisioning pour choisir le bucket et par l'UI pour
  * afficher la localisation des données (conformité RGPD).
  *
- * Protégé : fleet_admin.
+ * Protégé : super_admin.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -34,7 +34,7 @@ const SUPPORTED_REGIONS = {
 type RegionKey = keyof typeof SUPPORTED_REGIONS;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; region: RegionKey };

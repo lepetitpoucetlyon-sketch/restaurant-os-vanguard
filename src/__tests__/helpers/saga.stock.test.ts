@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
-const { mockGet, mockSet, mockUpdate, mockQuery, mockEmitDurable, mockOn, capturedHandlers } =
+const { mockGet, mockSet, mockUpdate, mockIncrement, mockQuery, mockEmitDurable, mockOn, capturedHandlers } =
   vi.hoisted(() => {
     const capturedHandlers: Record<string, (payload: unknown) => Promise<void>> = {};
     const mockOn = vi.fn((event: string, cb: (p: unknown) => Promise<void>) => {
@@ -13,6 +13,7 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockEmitDurable, mockOn, captur
       mockGet: vi.fn(),
       mockSet: vi.fn(),
       mockUpdate: vi.fn(),
+      mockIncrement: vi.fn(),
       mockQuery: vi.fn(),
       mockEmitDurable: vi.fn(),
       mockOn,
@@ -67,6 +68,7 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'get').mockImplementation(mockGet as typeof Nexus.adapter.get);
   vi.spyOn(Nexus.adapter, 'set').mockImplementation(mockSet as typeof Nexus.adapter.set);
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
+  vi.spyOn(Nexus.adapter, 'increment').mockImplementation(mockIncrement as typeof Nexus.adapter.increment);
   vi.spyOn(Nexus.adapter, 'query').mockImplementation(mockQuery as typeof Nexus.adapter.query);
 });
 
@@ -85,12 +87,18 @@ describe('StockDeductionHandler', () => {
       .mockResolvedValueOnce({ linkedStockItemId: 'stock-1' })
       .mockResolvedValueOnce({ quantity: 50, reorderThreshold: 5 });
     mockUpdate.mockResolvedValue(undefined);
+    mockIncrement.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid'](baseOrderPaid);
 
+    expect(mockIncrement).toHaveBeenCalledWith(
+      'tenants/tenant-a/stockItems/stock-1',
+      'quantity',
+      -2,
+    );
     expect(mockUpdate).toHaveBeenCalledWith(
       'tenants/tenant-a/stockItems/stock-1',
-      expect.objectContaining({ quantity: 48 }),
+      expect.objectContaining({ updatedAt: expect.any(String) }),
     );
   });
 
@@ -106,19 +114,22 @@ describe('StockDeductionHandler', () => {
       .mockResolvedValueOnce({ quantity: 1000, reorderThreshold: 50 })
       .mockResolvedValueOnce({ quantity: 500, reorderThreshold: 20 });
     mockUpdate.mockResolvedValue(undefined);
+    mockIncrement.mockResolvedValue(undefined);
 
     await capturedHandlers['order.paid']({
       ...baseOrderPaid,
       items: [{ productId: 'prod-pizza', name: 'Pizza', quantity: 1, unitPriceInMicrounits: 1000000, priceInMicrounits: 1000000 }],
     });
 
-    expect(mockUpdate).toHaveBeenCalledWith(
+    expect(mockIncrement).toHaveBeenCalledWith(
       'tenants/tenant-a/stockItems/ing-1',
-      expect.objectContaining({ quantity: 800 }),
+      'quantity',
+      -200,
     );
-    expect(mockUpdate).toHaveBeenCalledWith(
+    expect(mockIncrement).toHaveBeenCalledWith(
       'tenants/tenant-a/stockItems/ing-2',
-      expect.objectContaining({ quantity: 400 }),
+      'quantity',
+      -100,
     );
   });
 

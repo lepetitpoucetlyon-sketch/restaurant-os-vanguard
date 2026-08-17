@@ -6,7 +6,7 @@
 // ============ ROLE DEFINITIONS ============
 
 export type PermissionRole =
-    | 'super_admin'
+    | 'admin'
     | 'directeur'
     | 'manager'
     | 'comptable'
@@ -30,7 +30,7 @@ export type PermissionRole =
     | 'collaborateur';
 
 export const PERMISSION_ROLE_LABELS: Record<PermissionRole, string> = {
-    super_admin: 'Super Administrateur',
+    admin: 'Administrateur',
     directeur: 'Directeur',
     manager: 'Manager',
     comptable: 'Comptable',
@@ -55,7 +55,7 @@ export const PERMISSION_ROLE_LABELS: Record<PermissionRole, string> = {
 };
 
 export const PERMISSION_ROLE_LEVELS: Record<PermissionRole, number> = {
-    super_admin: 100,
+    admin: 100,
     directeur: 90,
     manager: 70,
     comptable: 60,

@@ -1,7 +1,7 @@
 /**
  * GET /api/admin/mdm/devices
  * Liste les appareils MDM gérés via Mosyle Business API.
- * Auth : fleet_admin minimum.
+ * Auth : super_admin minimum.
  * Fallback : retourne des appareils mock si MOSYLE_API_KEY est absent.
  */
 import { NextRequest, NextResponse } from 'next/server';
@@ -52,7 +52,7 @@ const MOCK_DEVICES: MosyleDevice[] = [
 ];
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   if (!process.env.MOSYLE_API_KEY) {
@@ -73,10 +73,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
  * POST /api/admin/mdm/devices
  * Provisionne un nouvel appareil MDM pour un tenant.
  * Body: { serialNumber: string, tenantId: string, deviceName: string }
- * Auth : fleet_admin minimum.
+ * Auth : super_admin minimum.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { serialNumber, tenantId, deviceName } = await req.json() as {

@@ -50,11 +50,11 @@ export function useConnector(
     const isAvailable = true;
 
     // Mapper les alias génériques vers les rôles RBAC canoniques
-    const rawRole = currentUser?.role ?? 'super_admin';
+    const rawRole = currentUser?.role ?? 'admin';
     const roleAlias: Record<string, PermissionRole> = {
-      admin:      'super_admin',
-      superadmin: 'super_admin',
-      root:       'super_admin',
+      admin:      'admin',
+      superadmin: 'admin',
+      root:       'admin',
     };
     const userCtx: ConnectorUserContext = {
       role: (roleAlias[rawRole] ?? rawRole) as PermissionRole,

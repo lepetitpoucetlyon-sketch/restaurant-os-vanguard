@@ -249,7 +249,7 @@ export const CATEGORY_CONFIGS: Record<ImportCategory, CategoryConfig> = {
 };
 
 export const KNOWN_ROLES: PermissionRole[] = [
-  'super_admin', 'directeur', 'manager', 'comptable',
+  'admin', 'directeur', 'manager', 'comptable',
   'chef_rang', 'chef_cuisinier', 'serveur', 'cuisinier',
   'barman', 'hotesse', 'plongeur',
 ];

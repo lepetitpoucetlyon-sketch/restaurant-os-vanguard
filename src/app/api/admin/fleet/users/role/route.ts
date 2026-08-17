@@ -4,7 +4,7 @@
  *
  * Body : { tenantId: string, userId: string, newRole: UserRole }
  *
- * Protégé : fleet_admin / SUPER_ADMIN uniquement.
+ * Protégé : super_admin / super_admin uniquement.
  * Met à jour Firestore ET les Custom Claims Firebase Auth.
  */
 
@@ -27,8 +27,8 @@ interface RoleChangeRequest {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-    // Changement de rôle : fleet_admin uniquement (niveau max)
-    const caller = await requireMccLevel(req, 'fleet_admin');
+    // Changement de rôle : super_admin uniquement (niveau max)
+    const caller = await requireMccLevel(req, 'super_admin');
     if (isDenied(caller)) return caller as NextResponse;
 
     let body: RoleChangeRequest;

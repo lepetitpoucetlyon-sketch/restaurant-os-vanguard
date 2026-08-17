@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 
 /**
  * 🏛️ Route: System Health - Grade X+++
- * Auth : fleet_admin uniquement (endpoint de supervision MCC).
+ * Auth : super_admin uniquement (endpoint de supervision MCC).
  */
 export async function GET(request: Request) {
     try {

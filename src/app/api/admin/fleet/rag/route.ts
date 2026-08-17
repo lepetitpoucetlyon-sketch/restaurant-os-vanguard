@@ -8,7 +8,7 @@
  *   { action: 'push_version', version: string, otaUrl?: string }  → broadcast OTA nouvelle version
  *   { action: 'rollback_version', version: string, otaUrl?: string } → rollback OTA vers version antérieure
  *
- * Protégé : fleet_admin uniquement.
+ * Protégé : super_admin uniquement.
  */
 
 import { NextRequest, NextResponse } from 'next/server';

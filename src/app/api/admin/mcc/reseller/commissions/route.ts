@@ -20,7 +20,7 @@ interface Reseller { id: string; affiliateCode: string; commissionRate: number; 
 interface TenantConfig { referredBy?: string; billing?: { mrr?: number } }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const body = await req.json() as { period?: string };

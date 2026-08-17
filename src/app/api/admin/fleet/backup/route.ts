@@ -22,7 +22,7 @@ const BackupBodySchema = z.object({
  *                                         body: { tenantIds?: string[] } (vide = toute la flotte)
  * POST /api/admin/fleet/backup?action=purge — Purge les sauvegardes > 7 ans
  *
- * Auth: fleet_admin
+ * Auth: super_admin
  *
  * Conformité NF525 : journaux fiscaux conservés 6 ans. On utilise 7 ans par sécurité.
  * Le backup exporte : journalEntries, fiscalSeals, tenantConfig (pas de données perso raw).
@@ -33,7 +33,7 @@ const FULL_COLLECTIONS  = [...NF525_COLLECTIONS, 'tenantConfig', 'products', 'ba
 const RETAIN_YEARS = 7;
 
 export async function GET(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'fleet_admin');
+    const caller = await requireMccLevel(request, 'super_admin');
     if (isDenied(caller)) return caller;
 
     try {
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'fleet_admin');
+    const caller = await requireMccLevel(request, 'super_admin');
     if (isDenied(caller)) return caller;
 
     const action = request.nextUrl.searchParams.get('action');

@@ -9,7 +9,7 @@
  * Champs : version, signedAt, signedBy (userId), ipAddress, userAgent,
  *          contentHash (SHA-256 du texte CGV), status: 'signed' | 'revoked'
  *
- * Protégé : fleet_admin pour POST, mcc_support pour GET.
+ * Protégé : super_admin pour POST, mcc_support pour GET.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
@@ -25,7 +25,7 @@ async function sha256(text: string): Promise<string> {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'fleet_admin');
+  const caller = await requireMccLevel(req, 'super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; userId: string; cgvText: string; version?: string };
