@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { LayoutResolver } from "./LayoutResolver";
 import { OTABanner } from "@components/layout/OTABanner";
-import { NeuralShield } from "@components/layout/NeuralShield";
 import { SovereignLock } from "@components/layout/SovereignLock";
 
 // Lazy load system components
@@ -40,7 +39,6 @@ export function ClientComponents({ children }: { children: React.ReactNode }) {
             <DocumentationPortal />
             <TutorialBubble />
             {children}
-            <NeuralShield />
             <OTABanner />
             <SovereignLock />
             <UniversalAssistantFrame />
