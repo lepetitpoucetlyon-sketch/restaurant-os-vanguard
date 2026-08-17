@@ -61,12 +61,15 @@ export function DailyListView({
                         return (
                             <motion.div
                                 key={res.id}
-                                initial={{ opacity: 0, y: 8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -8 }}
-                                transition={{ delay: idx * 0.04 }}
+                                layout
+                                initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -12, scale: 0.96 }}
+                                whileHover={{ scale: 1.012, y: -2 }}
+                                whileTap={{ scale: 0.995 }}
+                                transition={{ type: "spring", stiffness: 260, damping: 24, delay: idx * 0.03 }}
                                 className={cn(
-                                    "bg-bg-secondary border border-border rounded-2xl p-4 transition-all",
+                                    "bg-bg-secondary/70 backdrop-blur-xl border border-white/10 rounded-2xl p-4 transition-all shadow-lg hover:shadow-accent/10 hover:border-accent/30",
                                     !isActive && "opacity-50"
                                 )}
                             >

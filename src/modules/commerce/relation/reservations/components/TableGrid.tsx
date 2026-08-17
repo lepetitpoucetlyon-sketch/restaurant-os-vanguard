@@ -62,18 +62,21 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                             {tableList.map((table) => (
                                 <motion.div
                                     key={table.id}
+                                    layout
                                     variants={cinematicItem}
                                     onClick={() => onTableClick(table)}
-                                    whileHover={{ scale: 1.02, y: -4 }}
+                                    whileHover={{ scale: 1.025, y: -4 }}
+                                    whileTap={{ scale: 0.985 }}
+                                    transition={{ type: "spring", stiffness: 280, damping: 22 }}
                                     className={cn(
-                                        "relative min-h-[180px] rounded-[24px] p-6 flex flex-col justify-between transition-all duration-700 cursor-pointer group shadow-lg border",
+                                        "relative min-h-[180px] rounded-[24px] p-6 flex flex-col justify-between transition-all duration-500 cursor-pointer group shadow-xl border backdrop-blur-xl",
                                         table.status === "web-reserved"
-                                            ? "bg-bg-tertiary border-focus/40 hover:border-focus hover:shadow-blue-500/10"
+                                            ? "bg-bg-tertiary/75 border-focus/40 hover:border-focus hover:shadow-blue-500/15"
                                             : table.type === "vip"
-                                                ? "bg-bg-tertiary border-accent/20 hover:border-accent hover:shadow-accent/10"
+                                                ? "bg-bg-tertiary/75 border-accent/25 hover:border-accent hover:shadow-accent/15"
                                                 : table.type === "terrace"
-                                                    ? "bg-bg-tertiary border-emerald-500/20 hover:border-emerald-500 hover:shadow-emerald-500/5"
-                                                    : "bg-bg-tertiary border-border hover:border-text-muted hover:shadow-black/10"
+                                                    ? "bg-bg-tertiary/75 border-emerald-500/25 hover:border-emerald-500 hover:shadow-emerald-500/10"
+                                                    : "bg-bg-tertiary/75 border-white/10 hover:border-text-muted hover:shadow-black/20"
                                     )}
                                 >
                                     {/* Card Header - Status Indicators */}

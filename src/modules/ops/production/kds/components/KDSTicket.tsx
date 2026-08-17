@@ -183,20 +183,22 @@ export function KDSTicket({
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.25 } }}
+            exit={{ opacity: 0, scale: 0.9, y: -20, transition: { duration: 0.2 } }}
+            whileHover={{ y: -3 }}
+            transition={{ type: "spring", stiffness: 280, damping: 24 }}
             className={cn(
-                "group flex flex-col rounded-[24px] md:rounded-[32px] overflow-hidden border transition-all duration-700 h-fit",
-                "bg-surface-card",
+                "group flex flex-col rounded-[24px] md:rounded-[32px] overflow-hidden border transition-all duration-500 h-fit backdrop-blur-2xl",
+                "bg-surface-card/90 shadow-2xl",
                 gridColumns >= 5 ? "scale-[0.98]" : "",
                 isReady
-                    ? "border-subtle bg-surface-bg/50 grayscale-[0.5]"
+                    ? "border-white/10 bg-surface-bg/50 grayscale-[0.5]"
                     : isUrgent
-                        ? "border-error/40 shadow-[0_20px_60px_-15px_rgba(239,68,68,0.25)] ring-1 ring-error/20"
+                        ? "border-error/50 shadow-[0_20px_60px_-15px_rgba(239,68,68,0.3)] ring-1 ring-error/30"
                         : isWarning
-                            ? "border-warning/30 shadow-[0_20px_60px_-15px_rgba(245,158,11,0.20)]"
-                            : "border border-black shadow-2xl shadow-neutral-200/50 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-accent-gold/40"
+                            ? "border-warning/40 shadow-[0_20px_60px_-15px_rgba(245,158,11,0.25)]"
+                            : "border border-white/10 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] hover:border-accent-gold/50"
             )}
         >
             {/* ── Card Header ─────────────────────────────────────────────── */}
