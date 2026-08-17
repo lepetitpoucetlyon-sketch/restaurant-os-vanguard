@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, MessageSquare, Zap } from "lucide-react";
+import { Send, MessageSquare, Zap, Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useUniversalAssistant } from "@/shared/hooks/useUniversalAssistant";
 import { AssistantTriggerButton } from "./assistant-frame/AssistantTriggerButton";
@@ -22,6 +22,11 @@ export function UniversalAssistantFrame() {
         messages,
         isProcessing,
         error,
+        voiceState,
+        toolState,
+        startVoiceListening,
+        stopVoiceListening,
+        stopSpeaking,
         sendMessage,
         executeAction,
         clearSession,
@@ -98,33 +103,55 @@ export function UniversalAssistantFrame() {
                             />
 
                             {/* Onglets de navigation interne */}
-                            <div className="flex items-center border-b border-border bg-bg-tertiary/40 px-3 py-1 text-xs">
-                                <button
-                                    onClick={() => setActiveTab('chat')}
-                                    className={cn(
-                                        "flex items-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-colors",
-                                        activeTab === 'chat'
-                                            ? "bg-bg-secondary text-accent shadow-sm"
-                                            : "text-text-muted hover:text-text-primary"
-                                    )}
-                                >
-                                    <MessageSquare className="w-3.5 h-3.5" />
-                                    <span>Chat</span>
-                                </button>
+                            <div className="flex items-center justify-between border-b border-border bg-bg-tertiary/40 px-3 py-1 text-xs">
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => setActiveTab('chat')}
+                                        className={cn(
+                                            "flex items-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-colors",
+                                            activeTab === 'chat'
+                                                ? "bg-bg-secondary text-accent shadow-sm"
+                                                : "text-text-muted hover:text-text-primary"
+                                        )}
+                                    >
+                                        <MessageSquare className="w-3.5 h-3.5" />
+                                        <span>Chat</span>
+                                    </button>
 
-                                <button
-                                    onClick={() => setActiveTab('context')}
-                                    className={cn(
-                                        "flex items-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-colors",
-                                        activeTab === 'context'
-                                            ? "bg-bg-secondary text-accent shadow-sm"
-                                            : "text-text-muted hover:text-text-primary"
-                                    )}
-                                >
-                                    <Zap className="w-3.5 h-3.5" />
-                                    <span>Raccourcis ({contextSuggestions.length})</span>
-                                </button>
+                                    <button
+                                        onClick={() => setActiveTab('context')}
+                                        className={cn(
+                                            "flex items-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-colors",
+                                            activeTab === 'context'
+                                                ? "bg-bg-secondary text-accent shadow-sm"
+                                                : "text-text-muted hover:text-text-primary"
+                                        )}
+                                    >
+                                        <Zap className="w-3.5 h-3.5" />
+                                        <span>Raccourcis ({contextSuggestions.length})</span>
+                                    </button>
+                                </div>
+
+                                {/* Statut Voix / Synthèse */}
+                                {voiceState.isSpeaking && (
+                                    <button
+                                        onClick={stopSpeaking}
+                                        className="flex items-center gap-1 px-2 py-1 rounded bg-accent/15 text-accent text-[11px] hover:bg-accent/25 transition-colors animate-pulse"
+                                        title="Arrêter la voix"
+                                    >
+                                        <Volume2 className="w-3.5 h-3.5" />
+                                        <span>En train de parler...</span>
+                                    </button>
+                                )}
                             </div>
+
+                            {/* Barre de statut d'outil en cours d'exécution */}
+                            {toolState.status === 'executing' && (
+                                <div className="px-3 py-1.5 bg-accent/10 border-b border-accent/20 flex items-center gap-2 text-xs text-accent">
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                    <span>{toolState.progressMessage || 'Interrogation des données en cours...'}</span>
+                                </div>
+                            )}
 
                             {/* Contenu principal */}
                             <AssistantMessageList
@@ -138,18 +165,53 @@ export function UniversalAssistantFrame() {
                                 onExecuteAction={executeAction}
                             />
 
-                            {/* Barre de saisie */}
+                            {/* Indicateur de transcription vocale en direct */}
+                            {voiceState.isListening && (
+                                <div className="px-4 py-2 bg-status-danger/10 border-t border-status-danger/30 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className="relative flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-danger opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-status-danger"></span>
+                                        </span>
+                                        <p className="text-xs text-text-primary italic">
+                                            {voiceState.speechTranscript || "Écoute en cours... Parlez maintenant"}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={stopVoiceListening}
+                                        className="text-[11px] text-status-danger font-semibold hover:underline"
+                                    >
+                                        Arrêter
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Barre de saisie & Contrôle Micro */}
                             <div className="p-3 border-t border-border bg-bg-secondary/80">
-                                <div className="relative flex items-center">
+                                <div className="relative flex items-center gap-1.5">
+                                    {/* Bouton Microphone Vocal */}
+                                    <button
+                                        onClick={voiceState.isListening ? stopVoiceListening : startVoiceListening}
+                                        className={cn(
+                                            "p-2 rounded-xl border transition-all flex items-center justify-center shrink-0",
+                                            voiceState.isListening
+                                                ? "bg-status-danger text-text-primary border-status-danger animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                                                : "bg-bg-tertiary text-text-muted hover:text-accent hover:border-accent/40 border-border"
+                                        )}
+                                        title={voiceState.isListening ? "Arrêter l'écoute vocale" : "Parler à la voix (Contrôle Vocal)"}
+                                    >
+                                        {voiceState.isListening ? <Mic className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                                    </button>
+
                                     <input
                                         ref={inputRef}
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyDown={handleKeyDown}
-                                        placeholder="Poser une question ou demander une action..."
-                                        disabled={isProcessing}
-                                        className="w-full pl-3.5 pr-12 py-2.5 rounded-xl bg-bg-tertiary border border-border focus:border-accent focus:outline-none text-xs text-text-primary placeholder:text-text-muted transition-colors disabled:opacity-50"
+                                        placeholder="Poser une question ou demander à la voix..."
+                                        disabled={isProcessing || voiceState.isListening}
+                                        className="w-full pl-3 pr-10 py-2.5 rounded-xl bg-bg-tertiary border border-border focus:border-accent focus:outline-none text-xs text-text-primary placeholder:text-text-muted transition-colors disabled:opacity-50"
                                     />
 
                                     <button

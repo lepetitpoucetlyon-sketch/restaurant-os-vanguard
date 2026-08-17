@@ -95,12 +95,43 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
     query_financial_snapshot: {
         id: 'query_financial_snapshot',
         name: 'Consultation Synthèse Financière',
-        description: 'Affiche la synthèse du chiffre d\'affaires, de la marge ou du FEC.',
+        description: 'Affiche la synthèse du chiffre d\'affaires, du CA d\'hier ou du mois, de la marge ou du FEC.',
         category: 'finance',
         minRoleLevel: 70,
         parameters: [
-            { name: 'period', type: 'string', description: 'Période analysée (today, this_week, this_month)', required: true },
-            { name: 'metric', type: 'string', description: 'Métrique financière (turnover, food_cost, margin)', required: true },
+            { name: 'period', type: 'string', description: 'Période analysée (yesterday, today, this_week, this_month, 2026-08)', required: true },
+            { name: 'metric', type: 'string', description: 'Métrique financière (turnover, food_cost, margin, vat)', required: false },
+        ],
+    },
+    get_stock_by_location: {
+        id: 'get_stock_by_location',
+        name: 'Consultation Stock par Emplacement',
+        description: 'Liste les ingrédients et quantités restantes dans un emplacement de stockage précis (ex: Frigo N°4, Chambre Froide, Cave).',
+        category: 'logistics',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'locationName', type: 'string', description: 'Nom ou numéro de l\'emplacement (ex: "Frigo 4", "Chambre Froide", "Cave")', required: true },
+        ],
+    },
+    get_latest_supplier_invoices: {
+        id: 'get_latest_supplier_invoices',
+        name: 'Consultation Factures Fournisseurs',
+        description: 'Liste les dernières factures d\'achats et bons de livraison reçus avec montants et statuts de paiement.',
+        category: 'finance',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'limit', type: 'number', description: 'Nombre de factures à remonter (ex: 5)', required: false },
+            { name: 'supplierName', type: 'string', description: 'Filtrer par nom de fournisseur (optionnel)', required: false },
+        ],
+    },
+    get_haccp_temperatures: {
+        id: 'get_haccp_temperatures',
+        name: 'Relevé Températures Sondes IoT',
+        description: 'Consulte les températures en direct et l\'historique des sondes connectées (frigos, chambres froides).',
+        category: 'facility',
+        minRoleLevel: 20,
+        parameters: [
+            { name: 'equipmentName', type: 'string', description: 'Nom du meuble ou de la sonde (ex: "Frigo 4", "Chambre Froide")', required: true },
         ],
     },
 };

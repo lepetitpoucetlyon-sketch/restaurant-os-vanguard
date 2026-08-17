@@ -79,17 +79,18 @@ export function NeuralShield() {
 
     return (
         <>
-            {/* SOS Trigger Button (Sticky Floating or Sidebar Item) */}
+            {/* SOS Trigger Button (Sticky Floating on Bottom-Left to prevent overlap with AI Copilot) */}
             <motion.button
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-status-danger text-text-primary rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] flex items-center justify-center border-2 border-default hover:bg-status-danger transition-colors group"
+                className="fixed bottom-6 left-6 z-[100] w-12 h-12 bg-status-danger text-text-primary rounded-full shadow-[0_0_20px_rgba(220,38,38,0.4)] flex items-center justify-center border-2 border-default hover:bg-status-danger/90 transition-colors group"
+                title="SOS Diagnostic Système & Audit (Incident)"
             >
-                <ShieldAlert className="w-7 h-7 group-hover:animate-pulse" />
-                <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-surface-card opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-surface-card"></span>
+                <ShieldAlert className="w-6 h-6 group-hover:animate-pulse" />
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-white"></span>
                 </span>
             </motion.button>
 
