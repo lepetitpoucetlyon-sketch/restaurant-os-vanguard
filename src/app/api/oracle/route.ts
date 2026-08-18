@@ -164,36 +164,53 @@ export async function POST(req: NextRequest) {
             } catch (e) {
                 logger.warn('[Oracle] Erreur fetch Frigo', e);
             }
-        } else if ((lowerPrompt.includes('envoie la suite') || lowerPrompt.includes('suite table') || lowerPrompt.includes('envoyer suite')) && roleLevel >= 40) {
-            const match = sanitizedPrompt.match(/\b(?:table|t)\s*([0-9a-zA-Z_-]+)/i);
-            const tableId = match ? match[1] : '12';
-            const action = AssistantActionDispatcher.createActionProposal('fire_course_sequence', { tableId, course: 'plats' }, roleLevel);
-            if (action.success && action.proposal) suggestedActions.push(action.proposal);
+        } else if ((lowerPrompt.includes('envoie la suite') || lowerPrompt.includes('suite table') || lowerPrompt.includes('envoyer suite') || lowerPrompt.includes('balance les')) && roleLevel >= 40) {
+            const match = sanitizedPrompt.match(/\b(?:table|t)\s*#?([0-9]{1,4}[a-zA-Z]?)\b/i);
+            if (match) {
+                const tableId = match[1];
+                const course = lowerPrompt.includes('dessert') ? 'desserts' : lowerPrompt.includes('café') ? 'cafes' : 'plats';
+                const action = AssistantActionDispatcher.createActionProposal('fire_course_sequence', { tableId, course }, roleLevel);
+                if (action.success && action.proposal) suggestedActions.push(action.proposal);
+            }
         }
 
         // 🥖 Verticale Boulangerie
-        if ((lowerPrompt.includes('fournée') || lowerPrompt.includes('cuisson') || lowerPrompt.includes('baguette')) && roleLevel >= 40) {
-            const action = AssistantActionDispatcher.createActionProposal('schedule_baking_batch', { recipeId: 'Baguette Tradition', quantity: 60, targetTime: '08:00' }, roleLevel);
+        if ((lowerPrompt.includes('fournée') || lowerPrompt.includes('cuisson') || lowerPrompt.includes('baguette') || lowerPrompt.includes('croissant')) && roleLevel >= 40) {
+            const qtyMatch = sanitizedPrompt.match(/(\d+)\s*(?:baguette|pain|croissant|tradition|piece)/i);
+            const quantity = qtyMatch ? parseInt(qtyMatch[1], 10) : 60;
+            const recipeId = lowerPrompt.includes('croissant') ? 'Croissant Pur Beurre' : 'Baguette Tradition';
+            const action = AssistantActionDispatcher.createActionProposal('schedule_baking_batch', { recipeId, quantity, targetTime: '08:00' }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         } else if (lowerPrompt.includes('toogoodtogo') || lowerPrompt.includes('tgtg') || lowerPrompt.includes('panier invendu')) {
-            const action = AssistantActionDispatcher.createActionProposal('publish_tgtg_basket', { quantity: 4, priceCents: 399 }, roleLevel);
+            const qtyMatch = sanitizedPrompt.match(/(\d+)\s*(?:panier|lot|invendu)/i);
+            const quantity = qtyMatch ? parseInt(qtyMatch[1], 10) : 4;
+            const priceMatch = sanitizedPrompt.match(/(\d+)(?:[.,](\d{1,2}))?\s*€/i);
+            const priceCents = priceMatch ? Math.round(parseFloat(priceMatch[0].replace('€', '').trim()) * 100) : 399;
+            const action = AssistantActionDispatcher.createActionProposal('publish_tgtg_basket', { quantity, priceCents }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         }
 
         // 🚗 Verticale Garage
         if (lowerPrompt.includes('ordre de réparation') || lowerPrompt.includes('or') || lowerPrompt.includes('immat') || lowerPrompt.includes('plaque')) {
-            const match = sanitizedPrompt.match(/([A-Z]{2}[- ]?[0-9]{3}[- ]?[A-Z]{2})/i);
-            const plate = match ? match[1] : 'AA-123-BB';
-            const action = AssistantActionDispatcher.createActionProposal('query_repair_order', { licensePlate: plate }, roleLevel);
-            if (action.success && action.proposal) suggestedActions.push(action.proposal);
-        } else if (lowerPrompt.includes('bsdd') || lowerPrompt.includes('déchets') || lowerPrompt.includes('huile usagée')) {
-            const action = AssistantActionDispatcher.createActionProposal('track_waste_bsdd', { wasteType: 'huiles_moteur', volume: 80 }, roleLevel);
+            const match = sanitizedPrompt.match(/([A-Z]{2}[- ]?[0-9]{3}[- ]?[A-Z]{2}|OR[- ]?[0-9]{3,8})/i);
+            if (match) {
+                const plate = match[1].replace(/\s+/g, '-').toUpperCase();
+                const action = AssistantActionDispatcher.createActionProposal('query_repair_order', { licensePlate: plate }, roleLevel);
+                if (action.success && action.proposal) suggestedActions.push(action.proposal);
+            }
+        } else if (lowerPrompt.includes('bsdd') || lowerPrompt.includes('déchets') || lowerPrompt.includes('huile usagée') || lowerPrompt.includes('liquide de frein')) {
+            const volMatch = sanitizedPrompt.match(/(\d+)\s*(?:l|litres?|kg)/i);
+            const volume = volMatch ? parseInt(volMatch[1], 10) : 80;
+            const wasteType = lowerPrompt.includes('frein') ? 'liquide_frein' : 'huiles_moteur';
+            const action = AssistantActionDispatcher.createActionProposal('track_waste_bsdd', { wasteType, volume }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         }
 
         // 🏨 Verticale Hôtel
         if (lowerPrompt.includes('chambre') || lowerPrompt.includes('rack') || lowerPrompt.includes('disponibilité hôtel')) {
-            const action = AssistantActionDispatcher.createActionProposal('query_room_rack', { roomType: 'deluxe' }, roleLevel);
+            const roomMatch = sanitizedPrompt.match(/(suite|deluxe|standard|\b\d{3}\b)/i);
+            const roomType = roomMatch ? roomMatch[1].toLowerCase() : 'deluxe';
+            const action = AssistantActionDispatcher.createActionProposal('query_room_rack', { roomType }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         } else if (lowerPrompt.includes('fiche de police') || lowerPrompt.includes('police')) {
             const action = AssistantActionDispatcher.createActionProposal('generate_police_sheet', { bookingId: 'BK-8902', guestName: 'Client Étranger' }, roleLevel);
@@ -222,19 +239,21 @@ export async function POST(req: NextRequest) {
         }
 
         // 💼 Verticale Luxury Vault
-        if (variant === 'luxury_vault' && (lowerPrompt.includes('sac') || lowerPrompt.includes('scellé') || lowerPrompt.includes('cote')) && roleLevel >= 40) {
+        if (variant === 'luxury_vault' && (lowerPrompt.includes('sac') || lowerPrompt.includes('scellé') || lowerPrompt.includes('cote') || lowerPrompt.includes('diamant')) && roleLevel >= 40) {
             const action = AssistantActionDispatcher.createActionProposal('verify_luxury_asset_seal', { assetId: 'BIRKIN-GENESIS', verificationType: 'market_quote' }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         }
 
         // 🔒 Verrouillage Espace & Maintenance Transversale
-        if ((lowerPrompt.includes('bloque') || lowerPrompt.includes('verrouille')) && (lowerPrompt.includes('table') || lowerPrompt.includes('baie') || lowerPrompt.includes('espace') || lowerPrompt.includes('box'))) {
-            const match = sanitizedPrompt.match(/\b(?:table|baie|espace|box)\s*([0-9a-zA-Z_-]+)/i);
-            const spaceId = match ? match[1] : '1';
-            const action = AssistantActionDispatcher.createActionProposal('lock_space_or_table', { spaceId, reason: 'Demande Copilote' }, roleLevel);
-            if (action.success && action.proposal) suggestedActions.push(action.proposal);
-        } else if ((lowerPrompt.includes('panne') || lowerPrompt.includes('cassé') || lowerPrompt.includes('incident')) && roleLevel >= 30) {
-            const action = AssistantActionDispatcher.createActionProposal('create_maintenance_ticket', { equipmentName: 'Équipement', severity: 'medium', description: sanitizedPrompt }, roleLevel);
+        if ((lowerPrompt.includes('bloque') || lowerPrompt.includes('verrouille')) && (lowerPrompt.includes('table') || lowerPrompt.includes('baie') || lowerPrompt.includes('espace') || lowerPrompt.includes('box') || lowerPrompt.includes('fauteuil') || lowerPrompt.includes('salon') || lowerPrompt.includes('vitrine') || lowerPrompt.includes('salle'))) {
+            const match = sanitizedPrompt.match(/\b(?:table|baie|espace|box|fauteuil|salon|vitrine|salle|cabine|chambre)\s*#?([0-9a-zA-Z_-]+)\b/i);
+            if (match) {
+                const spaceId = match[1];
+                const action = AssistantActionDispatcher.createActionProposal('lock_space_or_table', { spaceId, reason: 'Demande Copilote' }, roleLevel);
+                if (action.success && action.proposal) suggestedActions.push(action.proposal);
+            }
+        } else if ((lowerPrompt.includes('panne') || lowerPrompt.includes('cassé') || lowerPrompt.includes('incident') || lowerPrompt.includes('fume') || lowerPrompt.includes('chauffe plus') || lowerPrompt.includes('fuit') || lowerPrompt.includes('bloqué') || lowerPrompt.includes('sonne')) && roleLevel >= 30) {
+            const action = AssistantActionDispatcher.createActionProposal('create_maintenance_ticket', { equipmentName: 'Équipement', severity: 'high', description: sanitizedPrompt }, roleLevel);
             if (action.success && action.proposal) suggestedActions.push(action.proposal);
         }
 

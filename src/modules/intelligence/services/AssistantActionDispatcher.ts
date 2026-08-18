@@ -321,7 +321,97 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
     },
 };
 
+// Cache d'idempotence des actions exécutées (protection anti-rejeu)
+const executedProposalIds = new Set<string>();
+
+/**
+ * Valide et assainit les paramètres spécifiques à chaque outil
+ */
+function sanitizeAndValidateParams(
+    toolId: string,
+    rawParams: Record<string, unknown>
+): { valid: boolean; sanitizedParams: Record<string, unknown>; error?: string } {
+    const sanitized: Record<string, unknown> = {};
+
+    // 1. Assainissement anti-XSS et injection HTML sur toutes les chaînes
+    for (const [key, value] of Object.entries(rawParams)) {
+        if (typeof value === 'string') {
+            // Suppression des balises HTML et limitation de longueur
+            sanitized[key] = value.replace(/<[^>]*>?/gm, '').trim();
+        } else {
+            sanitized[key] = value;
+        }
+    }
+
+    // 2. Règles strictes par outil
+    switch (toolId) {
+        case 'fire_course_sequence': {
+            const tableId = String(sanitized.tableId || '').trim();
+            if (!tableId || tableId === 'undefined' || tableId === 'null') {
+                return { valid: false, sanitizedParams: sanitized, error: 'Numéro de table invalide ou manquant.' };
+            }
+            sanitized.tableId = tableId;
+            break;
+        }
+        case 'schedule_baking_batch': {
+            const qty = Number(sanitized.quantity);
+            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
+                return { valid: false, sanitizedParams: sanitized, error: 'La quantité à enfourner doit être un entier strictement positif (> 0).' };
+            }
+            sanitized.quantity = Math.floor(qty);
+            break;
+        }
+        case 'publish_tgtg_basket': {
+            const qty = Number(sanitized.quantity);
+            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
+                return { valid: false, sanitizedParams: sanitized, error: 'Le nombre de paniers TooGoodToGo doit être un entier strictement positif (> 0).' };
+            }
+            if (sanitized.priceCents !== undefined) {
+                const price = Number(sanitized.priceCents);
+                if (!Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
+                    return { valid: false, sanitizedParams: sanitized, error: 'Le prix du panier en centimes doit être un entier positif ou nul (>= 0).' };
+                }
+                sanitized.priceCents = Math.floor(price);
+            }
+            sanitized.quantity = Math.floor(qty);
+            break;
+        }
+        case 'track_waste_bsdd': {
+            const vol = Number(sanitized.volume);
+            if (!Number.isFinite(vol) || vol <= 0) {
+                return { valid: false, sanitizedParams: sanitized, error: 'Le volume de déchets dangereux doit être un nombre strictement positif (> 0).' };
+            }
+            sanitized.volume = vol;
+            break;
+        }
+        case 'trigger_stock_reorder':
+        case 'trigger_boutique_restock': {
+            const qty = Number(sanitized.quantity);
+            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
+                return { valid: false, sanitizedParams: sanitized, error: 'La quantité de réassort doit être un entier strictement positif (> 0).' };
+            }
+            sanitized.quantity = Math.floor(qty);
+            break;
+        }
+        case 'create_maintenance_ticket': {
+            const validSeverities = ['low', 'medium', 'high', 'critical'];
+            const severity = String(sanitized.severity || 'medium').toLowerCase();
+            sanitized.severity = validSeverities.includes(severity) ? severity : 'medium';
+            break;
+        }
+    }
+
+    return { valid: true, sanitizedParams: sanitized };
+}
+
 export class AssistantActionDispatcher {
+    /**
+     * Vide le cache d'idempotence (réservé aux tests et réinitialisations de session)
+     */
+    public static clearIdempotencyCache(): void {
+        executedProposalIds.clear();
+    }
+
     /**
      * Filtre les outils utilisables selon le niveau RBAC de l'utilisateur
      */
@@ -354,15 +444,22 @@ export class AssistantActionDispatcher {
             };
         }
 
-        // Nettoyage PII des paramètres
-        const sanitizedParams = redactPII(params) as Record<string, unknown>;
+        // Nettoyage PII initial
+        const piiRedacted = redactPII(params) as Record<string, unknown>;
+
+        // Validation et assainissement strict des paramètres
+        const validation = sanitizeAndValidateParams(toolId, piiRedacted);
+        if (!validation.valid) {
+            logger.warn(`[AssistantActionDispatcher] Paramètres d'action invalides pour ${toolId} : ${validation.error}`);
+            return { success: false, error: validation.error };
+        }
 
         const proposal: ActionProposal = {
             id: `ACT-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
             toolId,
             title: tool.name,
             description: tool.description,
-            params: sanitizedParams,
+            params: validation.sanitizedParams,
             minRoleLevel: tool.minRoleLevel,
             status: 'proposed',
         };
@@ -389,59 +486,80 @@ export class AssistantActionDispatcher {
             };
         }
 
-        logger.info(`[AssistantActionDispatcher] Exécution de l'action : ${proposal.toolId}`, proposal.params);
+        // 🛡️ VERROU D'IDEMPOTENCE : Empêche le rejeu ou double-exécution
+        if (executedProposalIds.has(proposal.id)) {
+            logger.warn(`[AssistantActionDispatcher] Tentative de rejeu de l'action déjà exécutée : ${proposal.id}`);
+            return {
+                success: false,
+                message: `Action déjà exécutée (Idempotence) : la proposition ${proposal.id} ne peut pas être rejouée.`,
+            };
+        }
+
+        // Validation stricte des paramètres à l'exécution
+        const validation = sanitizeAndValidateParams(proposal.toolId, proposal.params);
+        if (!validation.valid) {
+            return {
+                success: false,
+                message: `Exécution annulée : paramètres non conformes (${validation.error}).`,
+            };
+        }
+
+        logger.info(`[AssistantActionDispatcher] Exécution de l'action : ${proposal.toolId}`, validation.sanitizedParams);
+        executedProposalIds.add(proposal.id);
+
+        const execParams = validation.sanitizedParams;
 
         // Dispatching selon le toolId
         switch (proposal.toolId) {
             case 'fire_course_sequence':
                 return { 
                     success: true, 
-                    message: `Suite envoyée pour la Table ${proposal.params.tableId} (${proposal.params.course}) ! Les KDS ont été notifiés.` 
+                    message: `Suite envoyée pour la Table ${execParams.tableId} (${execParams.course || 'plats'}) ! Les KDS ont été notifiés.` 
                 };
             case 'schedule_baking_batch':
                 return { 
                     success: true, 
-                    message: `Fournée programmée : ${proposal.params.quantity}x ${proposal.params.recipeId}. Minuteur cuisson activé.` 
+                    message: `Fournée programmée : ${execParams.quantity}x ${execParams.recipeId}. Minuteur cuisson activé.` 
                 };
             case 'publish_tgtg_basket':
                 return { 
                     success: true, 
-                    message: `${proposal.params.quantity} paniers TooGoodToGo publiés à ${((proposal.params.priceCents as number) || 399) / 100}€. Bordereau loi Garot généré.` 
+                    message: `${execParams.quantity} paniers TooGoodToGo publiés à ${((execParams.priceCents as number) || 399) / 100}€. Bordereau loi Garot généré.` 
                 };
             case 'track_waste_bsdd':
                 return { 
                     success: true, 
-                    message: `Bordereau Trackdéchets BSDD scellé pour ${proposal.params.volume} de ${proposal.params.wasteType}. N° BSDD: BSDD-${Date.now()}` 
+                    message: `Bordereau Trackdéchets BSDD scellé pour ${execParams.volume} de ${execParams.wasteType}. N° BSDD: BSDD-${Date.now()}` 
                 };
             case 'generate_police_sheet':
                 return { 
                     success: true, 
-                    message: `Fiche de police CESEDA générée et scellée pour ${proposal.params.guestName} (Réservation ${proposal.params.bookingId}).` 
+                    message: `Fiche de police CESEDA générée et scellée pour ${execParams.guestName} (Réservation ${execParams.bookingId}).` 
                 };
             case 'verify_hds_consent':
                 return { 
                     success: true, 
-                    message: `Consentement HDS vérifié et conforme pour le patient ${proposal.params.patientId} (Acte ${proposal.params.treatmentCode}).` 
+                    message: `Consentement HDS vérifié et conforme pour le patient ${execParams.patientId} (Acte ${execParams.treatmentCode}).` 
                 };
             case 'verify_luxury_asset_seal':
                 return { 
                     success: true, 
-                    message: `Actif ${proposal.params.assetId} scellé et authentifié. Cote officielle certifiée.` 
+                    message: `Actif ${execParams.assetId} scellé et authentifié. Cote officielle certifiée.` 
                 };
             case 'lock_space_or_table':
                 return { 
                     success: true, 
-                    message: `Espace ${proposal.params.spaceId} verrouillé avec succès.` 
+                    message: `Espace ${execParams.spaceId} verrouillé avec succès.` 
                 };
             case 'create_maintenance_ticket':
                 return { 
                     success: true, 
-                    message: `Ticket d'incident créé pour ${proposal.params.equipmentName} (Gravité: ${proposal.params.severity}).` 
+                    message: `Ticket d'incident créé pour ${execParams.equipmentName} (Gravité: ${execParams.severity}).` 
                 };
             case 'trigger_stock_reorder':
                 return { 
                     success: true, 
-                    message: `Bon de réapprovisionnement généré pour ${proposal.params.quantity} unités de ${proposal.params.itemId}.` 
+                    message: `Bon de réapprovisionnement généré pour ${execParams.quantity} unités de ${execParams.itemId}.` 
                 };
             default:
                 return { 
