@@ -88,13 +88,13 @@ export const ThreeWayMatchService = {
 
         const discrepancies: LineDiscrepancy[] = [];
 
-        for (const poLine of po.items) {
-            const dnLine = dn.deliveredItems.find(d => d.productId === poLine.productId);
+        for (const poLine of (po.items || [])) {
+            const dnLine = dn.deliveredItems.find((d: { productId: string; quantityDelivered: number }) => d.productId === poLine.productId);
             const invLine = invoice.line_items.find(
                 l => (l.supplier_product_code ?? '') === poLine.productId
             );
 
-            const qtyOrdered = poLine.quantity;
+            const qtyOrdered = poLine.quantityOrdered ?? (poLine as { quantity?: number }).quantity ?? 0;
             const qtyDelivered = dnLine?.quantityDelivered ?? 0;
             const qtyInvoiced = invLine?.quantity ?? 0;
 
@@ -112,7 +112,7 @@ export const ThreeWayMatchService = {
                 }
             }
 
-            const priceOrdered = poLine.unitPriceInCents;
+            const priceOrdered = poLine.unitPriceInCents ?? 0;
             const priceInvoiced = invLine?.unit_price_cents ?? 0;
 
             if (priceOrdered > 0 && priceInvoiced > 0) {

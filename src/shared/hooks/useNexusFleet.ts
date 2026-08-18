@@ -1,13 +1,11 @@
 "use client";
 
-// FIXME (FIX-04): shared/hooks proxy — déplacer useNexusFleet vers shared/nexus/fleet ou NexusEventBus.
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { useNexusFleet as useNexusFleetContext } from "@/modules/intelligence";
+import { useNexusFleet as useNexusFleetFromProvider } from "@/shared/providers/fleet/NexusFleetProvider";
 
 /**
- * 🛰️ useNexusFleet - Grade VI Atomic Bridge (Proxy)
- * Redirection vers le contexte centralisé pour assurer la souveraineté des types.
+ * 🛰️ useNexusFleet - Shared Hook Proxy
+ * Redirige vers le contexte centralisé de la flotte.
  */
 export function useNexusFleet() {
-    return useNexusFleetContext() as unknown;
+    return useNexusFleetFromProvider();
 }

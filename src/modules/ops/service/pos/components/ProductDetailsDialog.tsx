@@ -5,7 +5,7 @@ import { Sparkles } from "lucide-react";
 import { Modal } from "@ui/Modal";
 import { Product, OptionGroup, Option } from "@nexus/contracts";
 import { useLanguage } from "@/shared/hooks";
-import { useNexusFleet } from "@/modules/intelligence";
+import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 import { COMMON_ALLERGENS } from "./product-details/allergensConstants";
 import { ProductHeaderBackdrop } from "./product-details/ProductHeaderBackdrop";
 import { ProductOptionGroupsSection } from "./product-details/ProductOptionGroupsSection";

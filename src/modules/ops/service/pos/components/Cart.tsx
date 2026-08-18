@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
-import { useNexusFleet } from "@/modules/intelligence/ia/fleet/NexusFleetProvider";
+import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { formatMu } from "@/modules/finance/components/financeUtils";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";

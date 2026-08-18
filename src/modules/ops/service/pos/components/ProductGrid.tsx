@@ -13,9 +13,7 @@ import { ProductDetailsDialog } from "./ProductDetailsDialog";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useLanguage } from "@/shared/hooks";
 import { useInventory } from '../../../providers/hooks/catalogHooks';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useNexusFleet } from "@/modules/intelligence";
+import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 
 // ==========================================
 // PERFORMANCE-OPTIMIZED SUB-COMPONENTS

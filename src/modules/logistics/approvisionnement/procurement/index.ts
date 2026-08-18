@@ -5,4 +5,6 @@
  */
 
 export * from './ProcurementBridge';
+export * from './AutoProcurementEngine';
+export * from './ThreeWayMatchEngine';
 export * from './types';

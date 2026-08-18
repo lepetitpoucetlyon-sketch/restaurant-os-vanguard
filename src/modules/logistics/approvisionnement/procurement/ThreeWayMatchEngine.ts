@@ -52,7 +52,7 @@ export class ThreeWayMatchEngine {
         }
 
         // 2. Contrôle du montant global (avec tolérance)
-        const expectedAmount = po.totalAmountInCents;
+        const expectedAmount = po.totalAmountInCents ?? 0;
         const billedAmount = invoice.totalAmountInCents;
         const diff = Math.abs(billedAmount - expectedAmount);
         const maxDiff = expectedAmount * (tolerancePercent / 100);
@@ -62,8 +62,8 @@ export class ThreeWayMatchEngine {
         }
 
         // 3. Contrôle des quantités (Ligne à Ligne)
-        const poItemsMap = new Map(po.items.map(item => [item.productId, item]));
-        const blItemsMap = new Map(deliveryNote.deliveredItems.map(item => [item.productId, item]));
+        const poItemsMap = new Map((po.items || []).map((item) => [item.productId, item]));
+        const blItemsMap = new Map((deliveryNote.deliveredItems || []).map((item) => [item.productId, item]));
 
         for (const line of invoice.lines) {
             const poItem = poItemsMap.get(line.productId);

@@ -1,7 +1,9 @@
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { SupplierInvoice } from '@/modules/logistics';
 import { logger } from '@/lib/logger';
+
+export interface PayableInvoiceRef {
+    dueDate: string;
+    [key: string]: unknown;
+}
 
 export interface SEPAConfig {
     companyName: string;
@@ -129,7 +131,7 @@ export class AccountsPayableEngine {
     /**
      * Calcule l'aging (ancienneté) d'une facture fournisseur.
      */
-    static calculateAgingDays(invoice: SupplierInvoice): number {
+    static calculateAgingDays(invoice: PayableInvoiceRef): number {
         const now = new Date();
         const dueDate = new Date(invoice.dueDate);
         

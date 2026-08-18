@@ -67,7 +67,7 @@ export class ProcurementBridge {
             v: 1,
             tenantId,
             deliveryId: deliveryNote.id,
-            items: deliveryNote.deliveredItems.map(item => ({
+            items: (deliveryNote.deliveredItems || []).map((item: { productId: string; quantityDelivered: number }) => ({
                 itemId: item.productId,
                 quantity: item.quantityDelivered,
             })),
