@@ -143,15 +143,15 @@ describe('🏛️ Universal 8 Pillars Generalization Certification', () => {
             expect(prodSection?.items.some(i => i.key === 'kitchen_management')).toBe(false);
         });
 
-        it('should adapt navigation for luxury_vault variant', () => {
-            const filtered = filterByVertical(NAV_SECTIONS, 'luxury_vault');
+        it('should adapt navigation for gym variant', () => {
+            const filtered = filterByVertical(NAV_SECTIONS, 'gym');
             const opSection = filtered.find(s => s.id === 'operations');
             const prodSection = filtered.find(s => s.id === 'production');
 
-            expect(opSection?.title).toBe('Chambre Forte & Caisse');
-            expect(opSection?.items.find(i => i.key === 'pos')?.label).toBe('Caisse & Souscriptions');
-            expect(prodSection?.title).toBe('Expertise & Scellés');
-            expect(prodSection?.items.find(i => i.key === 'inventory')?.label).toBe('Inventaire Sacs & Actifs');
+            expect(opSection?.title).toBe('Club & Membres');
+            expect(opSection?.items.find(i => i.key === 'pos')?.label).toBe('Caisse & Forfaits');
+            expect(prodSection?.title).toBe('Matériel & Nutrition');
+            expect(prodSection?.items.find(i => i.key === 'inventory')?.label).toBe('Stocks & Équipements');
         });
     });
 });

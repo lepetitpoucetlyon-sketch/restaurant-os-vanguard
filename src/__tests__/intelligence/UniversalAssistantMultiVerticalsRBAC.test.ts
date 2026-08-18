@@ -52,9 +52,24 @@ describe('🏛️ Universal Assistant — Matrice Multi-Verticales & Membrane RB
             expect(UNIVERSAL_ASSISTANT_TOOLS.verify_hds_consent.minRoleLevel).toBe(50);
         });
 
-        it('💼 Luxury Vault : dispose de la vérification de scellé et cote d\'actif', () => {
-            expect(UNIVERSAL_ASSISTANT_TOOLS.verify_luxury_asset_seal).toBeDefined();
-            expect(UNIVERSAL_ASSISTANT_TOOLS.verify_luxury_asset_seal.minRoleLevel).toBe(40);
+        it('🏋️ Gym : dispose de la réservation de cours collectif', () => {
+            expect(UNIVERSAL_ASSISTANT_TOOLS.book_gym_class).toBeDefined();
+            expect(UNIVERSAL_ASSISTANT_TOOLS.book_gym_class.minRoleLevel).toBe(40);
+        });
+
+        it('💼 Coworking : dispose de la réservation de salle de réunion', () => {
+            expect(UNIVERSAL_ASSISTANT_TOOLS.book_coworking_room).toBeDefined();
+            expect(UNIVERSAL_ASSISTANT_TOOLS.book_coworking_room.minRoleLevel).toBe(40);
+        });
+
+        it('🐾 Vétérinaire : dispose du rappel de vaccin animal', () => {
+            expect(UNIVERSAL_ASSISTANT_TOOLS.schedule_pet_vaccine).toBeDefined();
+            expect(UNIVERSAL_ASSISTANT_TOOLS.schedule_pet_vaccine.minRoleLevel).toBe(40);
+        });
+
+        it('🌸 Fleuriste : dispose de la commande de composition florale', () => {
+            expect(UNIVERSAL_ASSISTANT_TOOLS.create_custom_bouquet_order).toBeDefined();
+            expect(UNIVERSAL_ASSISTANT_TOOLS.create_custom_bouquet_order.minRoleLevel).toBe(40);
         });
     });
 

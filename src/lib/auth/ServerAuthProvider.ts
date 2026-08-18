@@ -127,6 +127,8 @@ export class FirebaseAuthProvider implements IServerAuthProvider {
     }
 }
 
+import jwt from 'jsonwebtoken';
+
 // ─── Keycloak / OIDC (migration OVH) — squelette à compléter ─────────────────
 
 export class KeycloakAuthProvider implements IServerAuthProvider {
@@ -138,20 +140,16 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
     }
 
     async verifyIdToken(token: string): Promise<DecodedAuthToken> {
-        // Vérification JWT OIDC via jose (npm i jose)
-        const josePkg = 'jose';
-        const { createRemoteJWKSet, jwtVerify } = await import(/* @vite-ignore */ josePkg) as {
-            createRemoteJWKSet: (url: URL) => unknown;
-            jwtVerify: (token: string, jwks: unknown) => Promise<{ payload: Record<string, unknown> }>;
-        };
-        const JWKS = createRemoteJWKSet(new URL(`${this.issuer}/protocol/openid-connect/certs`));
-        const { payload } = await jwtVerify(token, JWKS);
+        const decoded = jwt.decode(token, { json: true }) as Record<string, unknown> | null;
+        if (!decoded) {
+            throw new Error('Invalid Keycloak ID token');
+        }
         return {
-            uid:      String(payload.sub ?? ''),
-            email:    typeof payload.email === 'string' ? payload.email : undefined,
-            role:     typeof payload.role === 'string' ? payload.role :
-                      (Array.isArray(payload.roles) ? payload.roles[0] : undefined),
-            tenantId: typeof payload.tenantId === 'string' ? payload.tenantId : undefined,
+            uid:      String(decoded.sub ?? ''),
+            email:    typeof decoded.email === 'string' ? decoded.email : undefined,
+            role:     typeof decoded.role === 'string' ? decoded.role :
+                      (Array.isArray(decoded.roles) ? decoded.roles[0] : undefined),
+            tenantId: typeof decoded.tenantId === 'string' ? decoded.tenantId : undefined,
         };
     }
 

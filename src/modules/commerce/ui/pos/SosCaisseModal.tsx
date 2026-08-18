@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { toast } from 'sonner';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface SosCaisseModalProps {
     isOpen: boolean;
@@ -81,7 +82,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
         setAiResponse(null);
 
         try {
-            const res = await fetch('/api/tenant/support/tickets', {
+            const res = await authedFetch('/api/tenant/support/tickets', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

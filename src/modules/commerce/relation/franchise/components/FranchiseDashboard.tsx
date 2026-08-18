@@ -15,6 +15,7 @@ import {
     Layers
 } from 'lucide-react';
 import { useTenant } from '@/shared/hooks';
+import { authedFetch } from '@/lib/client/authedFetch';
 import type {
     FranchiseSiteOverview,
     FranchiseConsolidatedMetrics,
@@ -36,7 +37,7 @@ export function FranchiseDashboard() {
     const fetchData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const res = await fetch('/api/tenant/franchise/overview');
+            const res = await authedFetch('/api/tenant/franchise/overview');
             if (res.ok) {
                 const data = await res.json() as {
                     sites: FranchiseSiteOverview[];
@@ -62,7 +63,7 @@ export function FranchiseDashboard() {
             const targetSite = sites.find(s => s.tenantId === transferTargetId);
             const sourceSite = sites.find(s => s.tenantId === tenantId) || sites[0];
 
-            const res = await fetch('/api/tenant/franchise/transfers', {
+            const res = await authedFetch('/api/tenant/franchise/transfers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -91,7 +92,7 @@ export function FranchiseDashboard() {
 
     const handleExecuteTransfer = async (transfer: InterSiteTransfer) => {
         try {
-            const res = await fetch('/api/tenant/franchise/transfers', {
+            const res = await authedFetch('/api/tenant/franchise/transfers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

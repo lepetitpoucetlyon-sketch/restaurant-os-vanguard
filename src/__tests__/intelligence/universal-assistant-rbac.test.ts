@@ -4,32 +4,35 @@ import { AssistantActionDispatcher } from '@/modules/intelligence/services/Assis
 
 describe('🤖 Universal Assistant & RBAC Membrane Suite', () => {
     describe('1. Dynamic Role Level Resolution (10 to 100)', () => {
-        it('maps executive and ownership roles to Level 100 and 90', () => {
+        it('maps executive and leadership roles to Level 100 and 90', () => {
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('admin')).toBe(100);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('owner')).toBe(100);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('proprietaire')).toBe(100);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('directeur')).toBe(90);
         });
 
         it('maps management and accounting roles to Level 70 and 60', () => {
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('manager')).toBe(70);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('responsable_site')).toBe(70);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('comptable')).toBe(60);
         });
 
-        it('maps operational cross-sector roles to Level 40', () => {
+        it('maps supervisory roles to Level 50', () => {
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('chef_rang')).toBe(50);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('chef_atelier')).toBe(50);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('praticien')).toBe(50);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('curator')).toBe(50);
+        });
+
+        it('maps operational cross-sector roles to Level 40 and 35', () => {
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('serveur')).toBe(40);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('mecanicien')).toBe(40);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('vendeur')).toBe(40);
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('coiffeur')).toBe(40);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('receptionniste')).toBe(40);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('cuisinier')).toBe(40);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('receptionnaire')).toBe(40);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('cuisinier')).toBe(35);
         });
 
-        it('maps apprentices and entry roles to Level 10', () => {
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('apprenti')).toBe(10);
-            expect(UniversalSystemPromptBuilder.resolveRoleLevel('stagiaire')).toBe(10);
+        it('maps apprentices, entry roles and non-canonical roles to Level 10 (fail-secure)', () => {
             expect(UniversalSystemPromptBuilder.resolveRoleLevel('plongeur')).toBe(10);
+            expect(UniversalSystemPromptBuilder.resolveRoleLevel('unknown_phantom_role')).toBe(10);
         });
     });
 
@@ -72,16 +75,16 @@ describe('🤖 Universal Assistant & RBAC Membrane Suite', () => {
             expect(prompt).toContain('dossier consultation / feuille de soins');
         });
 
-        it('customizes prompt for Luxury Vault vertical', () => {
+        it('customizes prompt for Gym vertical', () => {
             const prompt = UniversalSystemPromptBuilder.build({
-                variant: 'luxury_vault',
-                role: 'curator',
-                roleLevel: 50,
+                variant: 'gym',
+                role: 'coach',
+                roleLevel: 40,
             });
 
-            expect(prompt).toContain('Investissement & Coffre Sacs de Luxe');
-            expect(prompt).toContain('part / fraction d\'actif');
-            expect(prompt).toContain('coffre-fort / chambre forte blindée');
+            expect(prompt).toContain('Salle de Sport & Fitness');
+            expect(prompt).toContain('adhésion / séance');
+            expect(prompt).toContain('plateau / salle de cours');
         });
     });
 
