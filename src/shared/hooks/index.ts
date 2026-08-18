@@ -13,6 +13,7 @@ export { useClickOutside, useEscapeKey } from "./useInteractions";
 export { useLocalStorage, useSessionStorage } from "./useStorage";
 export { useList } from "./useList";
 export { useHasMounted } from "./useHasMounted";
+export { useFocusTrap } from "./useFocusTrap";
 
 // Phase 6 - Performance hooks
 export { useIntersectionObserver, useLazyImage } from "./useIntersectionObserver";

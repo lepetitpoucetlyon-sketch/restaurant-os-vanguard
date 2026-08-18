@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useId } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
@@ -8,6 +8,7 @@ import { motion, AnimatePresence, PanInfo, useDragControls } from "framer-motion
 import { modalBackdrop, modalCinematic, easing, drawerVariants, mobileBackdrop } from "@/shared/utils/motion";
 import { useHasMounted } from "@/shared/hooks/useHasMounted";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
+import { useFocusTrap } from "@/shared/hooks/useFocusTrap";
 
 interface ModalProps {
     isOpen: boolean;
@@ -55,8 +56,13 @@ export function Modal({
     const mounted = useHasMounted();
     const isMobile = useIsMobile();
     const dragControls = useDragControls();
+    const modalRef = useRef<HTMLDivElement>(null);
+    const titleId = useId();
 
     const shouldRenderAsSheet = isMobile && !forceDesktop;
+
+    // Accessibility : Focus trap (WAI-ARIA Dialog pattern)
+    useFocusTrap(isOpen, modalRef);
 
     useEffect(() => {
         if (isOpen) {
@@ -81,7 +87,6 @@ export function Modal({
     }, [isOpen, onClose]);
 
     const handleDragEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
-
         if (info.offset.y > 100 && info.velocity.y > 0) {
             onClose();
         }
@@ -109,6 +114,11 @@ export function Modal({
 
                         {/* Sheet */}
                         <motion.div
+                            ref={modalRef}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby={title ? titleId : undefined}
+                            tabIndex={-1}
                             variants={drawerVariants}
                             initial="hidden"
                             animate="visible"
@@ -119,7 +129,7 @@ export function Modal({
                             dragElastic={{ top: 0, bottom: 0.5 }}
                             onDragEnd={handleDragEnd}
                             className={cn(
-                                "relative w-full bg-bg-primary rounded-t-[2rem] shadow-2xl overflow-hidden",
+                                "relative w-full bg-bg-primary rounded-t-[2rem] shadow-2xl overflow-hidden focus:outline-none",
                                 mobileSizeClasses[size],
                                 className
                             )}
@@ -135,12 +145,13 @@ export function Modal({
                             {/* Header */}
                             {title && (
                                 <div className="px-6 py-3 border-b border-border flex items-center justify-between">
-                                    <h3 className="text-xl font-serif font-semibold text-text-primary tracking-tight">
+                                    <h3 id={titleId} className="text-xl font-serif font-semibold text-text-primary tracking-tight">
                                         {title}
                                     </h3>
                                     {showClose && (
                                         <button
                                             onClick={onClose}
+                                            aria-label="Fermer la boîte de dialogue"
                                             className="w-10 h-10 flex items-center justify-center rounded-xl text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-all"
                                         >
                                             <X strokeWidth={2} className="w-5 h-5" />
@@ -180,12 +191,17 @@ export function Modal({
 
                     {/* Modal Content */}
                     <motion.div
+                        ref={modalRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={title ? titleId : undefined}
+                        tabIndex={-1}
                         variants={modalCinematic}
                         initial="hidden"
                         animate="visible"
                         exit="exit"
                         className={cn(
-                            "relative w-full rounded-[2.5rem] shadow-[0_32px_128px_rgba(0,0,0,0.3)] overflow-hidden",
+                            "relative w-full rounded-[2.5rem] shadow-[0_32px_128px_rgba(0,0,0,0.3)] overflow-hidden focus:outline-none",
                             "border border-border/10",
                             variant === "premium"
                                 ? "bg-bg-secondary/90 backdrop-blur-2xl"
@@ -194,7 +210,6 @@ export function Modal({
                             className
                         )}
                     >
-
                         {title && (
                             <div className="px-10 pt-10 pb-2 flex items-center justify-between">
                                 <motion.div
@@ -202,7 +217,7 @@ export function Modal({
                                     animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                                     transition={{ delay: 0.3, duration: 0.6, ease: easing.easeOutExpo }}
                                 >
-                                    <h3 className="text-3xl font-serif font-black text-text-primary tracking-tight">
+                                    <h3 id={titleId} className="text-3xl font-serif font-black text-text-primary tracking-tight">
                                         {title}
                                     </h3>
                                     <motion.div
@@ -220,6 +235,7 @@ export function Modal({
                                         whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.05)" }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={onClose}
+                                        aria-label="Fermer la boîte de dialogue"
                                         className="w-12 h-12 flex items-center justify-center rounded-2xl transition-all text-text-muted hover:text-text-primary hover:rotate-90 duration-300"
                                     >
                                         <X strokeWidth={2} className="w-6 h-6" />
