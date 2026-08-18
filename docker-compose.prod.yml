@@ -1,0 +1,79 @@
+# 🏛️ RESTAURANT OS — Production Compose Stack
+# Orchestration complète : Next.js App + DocuSeal Open-Source + Caddy Reverse Proxy (Auto-HTTPS)
+
+version: '3.8'
+
+services:
+  # 1. Moteur DocuSeal Auto-Hébergé (Zéro Tiers, Zéro Coût par Signature)
+  docuseal:
+    image: docuseal/docuseal:latest
+    container_name: restaurant-os-docuseal
+    restart: always
+    environment:
+      - FORCE_SSL=false
+      - STORAGE_DIR=/data
+      - SECRET_KEY_BASE=${DOCUSEAL_SECRET_KEY:-eidas_sovereign_secret_master_key_2026}
+    volumes:
+      - docuseal_data:/data
+    networks:
+      - restaurant-os-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # 2. Restaurant OS Core (App Next.js, API & Cockpit MCC)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: restaurant-os-app
+    restart: always
+    depends_on:
+      docuseal:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DOCUSEAL_API_URL=http://docuseal:3000
+      - DOCUSEAL_API_KEY=${DOCUSEAL_API_KEY:-auto_bootstrapped_key}
+      - NEXT_PUBLIC_APP_URL=${APP_URL:-https://app.webapp.fr}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - app_storage:/app/storage
+    networks:
+      - restaurant-os-net
+
+  # 3. Caddy Reverse Proxy (Certificats SSL Let's Encrypt automatiques pour *.webapp.fr)
+  caddy:
+    image: caddy:2-alpine
+    container_name: restaurant-os-caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+      - docuseal
+    networks:
+      - restaurant-os-net
+
+volumes:
+  docuseal_data:
+    driver: local
+  app_storage:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
+
+networks:
+  restaurant-os-net:
+    driver: bridge

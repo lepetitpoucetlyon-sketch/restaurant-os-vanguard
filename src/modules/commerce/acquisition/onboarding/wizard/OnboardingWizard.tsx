@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { ConnectorId, ConnectorCredentials } from '../migration/connectors/types';
 import type { ImportCategory } from '../migration/types';
@@ -52,10 +53,12 @@ export function OnboardingWizard() {
   const [credentials, setCredentials] = useState<ConnectorCredentials | null>(null);
   const [importedCategories, setImportedCategories] = useState<ImportCategory[]>([]);
   const [activeCategory, setActiveCategory] = useState<ImportCategory | null>(null);
+  const [signingUrl, setSigningUrl] = useState<string | null>(null);
+  const [contractDispatched, setContractDispatched] = useState<boolean>(false);
 
-  const complete = (step: WizardStepId, next: WizardStepId) => {
-    setCompletedSteps(s => [...s, step]);
-    setCurrentStep(next);
+  const complete = (stepId: WizardStepId, nextStepId: WizardStepId) => {
+    setCompletedSteps(prev => prev.includes(stepId) ? prev : [...prev, stepId]);
+    setCurrentStep(nextStepId);
   };
 
   const handleModeSelect = (m: OnboardingMode) => {
@@ -86,13 +89,58 @@ export function OnboardingWizard() {
     setImportedCategories(prev => prev.includes(cat) ? prev : [...prev, cat]);
   }, []);
 
-  const handleDone = () => {
+  const handleDone = async () => {
     complete('import', 'done');
     void authedFetch('/api/tenant/onboarding/status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completedAt: new Date().toISOString() }),
     });
+
+    // Déclenchement automatique de la génération et dispatch du contrat DocuSeal (Email + SMS)
+    try {
+      const res = await authedFetch('/api/tenant/contracts/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenantId: 'resto-demo',
+          sendEmail: true,
+          sendSms: true,
+          source: 'ONBOARDING_AUTO',
+        }),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as { dispatch?: { signingUrl?: string } };
+        if (data?.dispatch?.signingUrl) {
+          setSigningUrl(data.dispatch.signingUrl);
+          setContractDispatched(true);
+          toast.success('Contrat SaaS généré & envoyé par Email / SMS !');
+        }
+      }
+    } catch {
+      // Non-bloquant pour l'onboarding
+    }
+  };
+
+  const handleResendSms = async () => {
+    try {
+      const res = await authedFetch('/api/tenant/contracts/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenantId: 'resto-demo',
+          sendSms: true,
+          sendEmail: false,
+          source: 'RESEND_REMINDER',
+        }),
+      });
+      if (res.ok) {
+        toast.success('Lien de signature renvoyé par SMS au gérant !');
+      }
+    } catch {
+      toast.error('Erreur lors du renvoi du SMS');
+    }
   };
 
   const relevantEntries = IMPORT_ENTRIES.filter(e =>
@@ -166,27 +214,39 @@ export function OnboardingWizard() {
           {currentStep === 'source' && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-900">Quel logiciel utilisez-vous actuellement ?</h2>
-              <p className="text-sm text-gray-500">
-                Sélectionnez votre caisse, logiciel de réservation ou de comptabilité
-              </p>
-              <SourceSystemSelector selected={connectorId} onSelect={handleSourceSelect} />
+              <p className="text-sm text-gray-500">Nous pouvons importer vos données automatiquement</p>
+              <SourceSystemSelector
+                selected={connectorId}
+                onSelect={handleSourceSelect}
+              />
+              <div className="pt-2 text-right">
+                <button
+                  type="button"
+                  onClick={() => complete('source', 'import')}
+                  className="text-xs text-gray-500 hover:text-gray-700 underline"
+                >
+                  Passer cette étape →
+                </button>
+              </div>
             </div>
           )}
 
           {/* STEP: CONNECT */}
           {currentStep === 'connect' && connectorId && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900">Connectez votre compte</h2>
               <ConnectorOAuthPanel
                 connectorId={connectorId}
                 onConnected={handleConnected}
               />
-              <button
-                onClick={() => { setCurrentStep('import'); setCompletedSteps(s => [...s, 'connect']); }}
-                className="w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-2"
-              >
-                Je préfère importer des fichiers manuellement →
-              </button>
+              <div className="pt-2 text-right">
+                <button
+                  type="button"
+                  onClick={() => complete('connect', 'import')}
+                  className="text-xs text-gray-500 hover:text-gray-700 underline"
+                >
+                  Passer cette étape →
+                </button>
+              </div>
             </div>
           )}
 
@@ -194,9 +254,16 @@ export function OnboardingWizard() {
           {currentStep === 'import' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">Import des données</h2>
-                <span className="text-sm text-gray-500">
-                  {importedCategories.length}/{relevantEntries.length} catégories
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">Import des données</h2>
+                  <p className="text-sm text-gray-500">
+                    {mode === 'from_zero'
+                      ? 'Complétez les éléments requis avant d&apos;ouvrir'
+                      : 'Sélectionnez les catégories à importer'}
+                  </p>
+                </div>
+                <span className="text-xs text-gray-400">
+                  {importedCategories.length}/{relevantEntries.length} terminés
                 </span>
               </div>
 
@@ -285,13 +352,64 @@ export function OnboardingWizard() {
 
           {/* STEP: DONE */}
           {currentStep === 'done' && (
-            <div className="text-center py-8 space-y-4">
+            <div className="text-center py-8 space-y-6">
               <div className="text-5xl">🎉</div>
-              <h2 className="text-xl font-bold text-gray-900">Vous êtes prêt à ouvrir !</h2>
-              <p className="text-gray-500 text-sm max-w-sm mx-auto">
-                {importedCategories.length} catégorie{importedCategories.length > 1 ? 's' : ''} importée{importedCategories.length > 1 ? 's' : ''}.
-                Vous pouvez compléter le reste depuis les paramètres à tout moment.
-              </p>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Vous êtes prêt à ouvrir !</h2>
+                <p className="text-gray-500 text-sm max-w-sm mx-auto mt-1">
+                  {importedCategories.length} catégorie{importedCategories.length > 1 ? 's' : ''} configurée{importedCategories.length > 1 ? 's' : ''}.
+                </p>
+              </div>
+
+              {/* Contrat & Signature électronique DocuSeal */}
+              <div className="max-w-md mx-auto bg-slate-50 border border-slate-200 rounded-2xl p-5 text-left space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">✍️</span>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">Contrat SaaS & Licence NF525</h4>
+                      <p className="text-[11px] text-slate-500">Signature électronique certifiée eIDAS (DocuSeal)</p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700">
+                    {contractDispatched ? 'Envoyé par SMS & Email' : 'Prêt à signer'}
+                  </span>
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Le contrat d&apos;abonnement et l&apos;accord de traitement des données (DPA) ont été préparés pour votre établissement.
+                </p>
+
+                <div className="flex items-center gap-2 pt-1">
+                  {signingUrl ? (
+                    <a
+                      href={signingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 text-center py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
+                    >
+                      Signer en ligne →
+                    </a>
+                  ) : (
+                    <button
+                      onClick={handleDone}
+                      className="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors"
+                    >
+                      Générer le contrat
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleResendSms}
+                    className="py-2 px-3 border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-medium transition-colors"
+                    title="Renvoyer le lien de signature par SMS"
+                  >
+                    📱 Renvoyer par SMS
+                  </button>
+                </div>
+              </div>
+
+              {/* Actions de lancement */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 flex-wrap">
                 <button
                   onClick={() => router.push('/settings?tab=onboarding-checklist')}

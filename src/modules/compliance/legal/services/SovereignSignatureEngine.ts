@@ -4,6 +4,7 @@ import { LegalContractGenerator, type ContractDraftInput, type GeneratedContract
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import type { DocuSealWebhookPayload } from './DocuSealService';
 
 export type ContractSignatureState = 'DRAFT' | 'SENT' | 'VIEWED' | 'SIGNED' | 'REVOKED';
 
@@ -47,6 +48,12 @@ export interface ContractRecord {
   sentAt?: number;
   viewedAt?: number;
   proofCertificate?: ProofCertificate;
+  // Métadonnées DocuSeal
+  docusealSubmissionId?: number | string;
+  docusealSlug?: string;
+  docusealSignedPdfUrl?: string;
+  docusealAuditLogUrl?: string;
+  signedVia?: 'SOVEREIGN_CANVAS' | 'DOCUSEAL_WEBHOOK' | 'DIRECT_EIDAS';
 }
 
 /**
@@ -99,6 +106,35 @@ export class SovereignSignatureEngine {
 
     logger.info(`[Legal] Contrat ${document.contractId} émis pour ${input.client.companyName} (${input.tenantId})`);
     return record;
+  }
+
+  /**
+   * Associe un identifiant de soumission DocuSeal à un contrat existant.
+   */
+  static async attachDocuSealSubmission(
+    tenantId: string,
+    contractId: string,
+    submissionId: number | string,
+    slug: string
+  ): Promise<ContractRecord> {
+    const contractPath = `tenants/${tenantId}/contracts/${contractId}`;
+    const contract = await Nexus.adapter.get<ContractRecord>(contractPath);
+    if (!contract) {
+      throw new Error(`Contrat introuvable: ${contractId}`);
+    }
+
+    const updated: ContractRecord = {
+      ...contract,
+      docusealSubmissionId: submissionId,
+      docusealSlug: slug,
+    };
+
+    await Nexus.adapter.set(contractPath, updated);
+    const mccIndex = (await Nexus.adapter.get<Record<string, ContractRecord>>('mcc_contracts_index')) || {};
+    mccIndex[contractId] = updated;
+    await Nexus.adapter.set('mcc_contracts_index', mccIndex);
+
+    return updated;
   }
 
   /**
@@ -201,6 +237,7 @@ export class SovereignSignatureEngine {
       ...contract,
       status: 'SIGNED',
       proofCertificate,
+      signedVia: 'SOVEREIGN_CANVAS',
     };
 
     // 3. Sauvegarde scellée
@@ -235,6 +272,92 @@ export class SovereignSignatureEngine {
 
     logger.info(`[Legal] ✍️ Contrat ${contractId} signé avec succès par ${submission.signerName} (Certificat: ${certificateId})`);
     return updated;
+  }
+
+  /**
+   * Traite un webhook de signature DocuSeal (`submission.completed`) et scelle le contrat correspondant.
+   */
+  static async handleDocuSealWebhook(payload: DocuSealWebhookPayload): Promise<ContractRecord | null> {
+    const mccIndex = (await Nexus.adapter.get<Record<string, ContractRecord>>('mcc_contracts_index')) || {};
+    
+    // Recherche par docusealSubmissionId ou slug
+    const submissionId = String(payload.data.id);
+    const contract = Object.values(mccIndex).find(
+      (c) => String(c.docusealSubmissionId) === submissionId || c.docusealSlug === payload.data.slug
+    );
+
+    if (!contract) {
+      logger.warn(`[DocuSeal Webhook] Aucun contrat associé à la soumission DocuSeal ${submissionId}`);
+      return null;
+    }
+
+    if (payload.event_type === 'submission.opened') {
+      return this.markContractViewed(contract.tenantId, contract.id);
+    }
+
+    if (payload.event_type === 'submission.completed') {
+      const submitter = payload.data.submitters[0];
+      const now = Date.now();
+      const signedAtIso = submitter?.signed_at || new Date(now).toISOString();
+
+      const contractSha256 = await CryptoService.generateHash(contract.document.fullTextContent);
+      const signatureVectorSha256 = await CryptoService.generateHash(`DOCUSEAL_SUBMISSION_${submissionId}`);
+      const sealIp = 'DOCUSEAL_VERIFIED_IP';
+      const sealEmail = submitter?.email || contract.client.email;
+      const sealPayload = `${contractSha256}:${signatureVectorSha256}:${now}:${sealEmail}:${sealIp}`;
+      const masterSealSha256 = await CryptoService.generateHash(sealPayload);
+
+      const certificateId = `CERT-DOCUSEAL-${contract.id.replace('CTR-', '')}-${Math.random().toString(36).substring(4).toUpperCase()}`;
+
+      const proofCertificate: ProofCertificate = {
+        certificateId,
+        contractId: contract.id,
+        signerName: contract.client.representativeName,
+        signerRole: contract.client.representativeRole,
+        signerEmail: sealEmail,
+        signedAtIso,
+        signedAtUtc: now,
+        ipAddress: sealIp,
+        userAgent: 'DocuSeal Electronic Signature Agent',
+        contractSha256,
+        signatureVectorSha256,
+        masterSealSha256,
+        eidasStandard: 'ADVANCED_ELECTRONIC_SIGNATURE_AES',
+        verificationUrl: `https://app.restaurant-empire.fr/legal/verify/${certificateId}`,
+      };
+
+      const docUrl = payload.data.documents?.[0]?.url;
+      const updated: ContractRecord = {
+        ...contract,
+        status: 'SIGNED',
+        proofCertificate,
+        signedVia: 'DOCUSEAL_WEBHOOK',
+        docusealSignedPdfUrl: docUrl,
+        docusealAuditLogUrl: payload.data.audit_log_url,
+      };
+
+      await Nexus.adapter.set(`tenants/${contract.tenantId}/contracts/${contract.id}`, updated);
+      mccIndex[contract.id] = updated;
+      await Nexus.adapter.set('mcc_contracts_index', mccIndex);
+
+      empireAudit.log({
+        module: 'legal',
+        action: 'DOCUSEAL_CONTRACT_COMPLETED',
+        details: {
+          contractId: contract.id,
+          submissionId,
+          certificateId,
+          docUrl,
+        },
+        severity: 'high',
+        timestamp: new Date(),
+      });
+
+      logger.info(`[DocuSeal Webhook] ✍️ Contrat ${contract.id} complété et certifié via DocuSeal`);
+      return updated;
+    }
+
+    return contract;
   }
 
   /**

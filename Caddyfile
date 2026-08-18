@@ -1,0 +1,16 @@
+# 🔒 Caddyfile — Reverse Proxy avec SSL Automatique (Let's Encrypt)
+# Gère le domaine principal, les sous-domaines clients et le sous-domaine de signature
+
+{
+    email admin@webapp.fr
+}
+
+# 1. Sous-domaine dédié à la Signature Électronique DocuSeal
+sign.{$DOMAIN:webapp.fr} {
+    reverse_proxy docuseal:3000
+}
+
+# 2. Application Principale Restaurant OS & Sous-domaines clients (*.webapp.fr)
+*.{$DOMAIN:webapp.fr}, {$DOMAIN:webapp.fr} {
+    reverse_proxy app:3000
+}
