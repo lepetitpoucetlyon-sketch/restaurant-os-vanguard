@@ -13,7 +13,7 @@ describe('API /api/admin/compliance/fiscal-archive-export', () => {
     it('devrait retourner l archive fiscale scellée avec le master hash SHA-256', async () => {
         vi.spyOn(adminAuthGuard, 'requireMccLevel').mockResolvedValue({
             uid: 'admin_fleet_01',
-            role: 'super_admin',
+            role: 'mcc_super_admin',
         } as never);
 
         vi.spyOn(Nexus.adapter, 'query').mockImplementation(async (path: string) => {
@@ -54,7 +54,7 @@ describe('API /api/admin/compliance/fiscal-archive-export', () => {
     it('devrait rejeter si le tenantId est manquant', async () => {
         vi.spyOn(adminAuthGuard, 'requireMccLevel').mockResolvedValue({
             uid: 'admin_fleet_01',
-            role: 'super_admin',
+            role: 'mcc_super_admin',
         } as never);
 
         const req = new NextRequest('http://localhost:3000/api/admin/compliance/fiscal-archive-export', {

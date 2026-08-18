@@ -52,7 +52,7 @@ const MOCK_DEVICES: MosyleDevice[] = [
 ];
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   if (!process.env.MOSYLE_API_KEY) {
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
  * Auth : super_admin minimum.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { serialNumber, tenantId, deviceName } = await req.json() as {

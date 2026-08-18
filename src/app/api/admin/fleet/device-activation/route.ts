@@ -26,7 +26,7 @@ type DeviceType = 'ipad_pos' | 'kds' | 'tablet';
 const TTL_MS = 30 * 60_000; // 30 minutes
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; deviceType: DeviceType };
@@ -73,7 +73,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   if (!token) {
     // Liste les tokens actifs (super_admin requis)
-    const caller = await requireMccLevel(req, 'super_admin');
+    const caller = await requireMccLevel(req, 'mcc_super_admin');
     if (isDenied(caller)) return caller as NextResponse;
     const tokens = await Nexus.adapter.query('mcc/deviceTokens');
     return NextResponse.json({ tokens });
@@ -107,7 +107,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const tokenId = req.nextUrl.searchParams.get('tokenId');

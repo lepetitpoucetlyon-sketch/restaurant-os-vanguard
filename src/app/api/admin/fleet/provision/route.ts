@@ -37,7 +37,7 @@ const ProvisionBodySchema = z.object({
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof ProvisionBodySchema>;

@@ -20,7 +20,7 @@ vi.mock('@/domain/services/NexusTelemetryService', () => ({
 }));
 
 vi.mock('@/lib/server/adminAuthGuard', () => ({
-  requireFleetAdmin: vi.fn().mockResolvedValue({ uid: 'admin_1', role: 'super_admin' }),
+  requireFleetAdmin: vi.fn().mockResolvedValue({ uid: 'admin_1', role: 'mcc_super_admin' }),
   isDenied: vi.fn((caller) => caller && caller.status), // Rough mock
 }));
 

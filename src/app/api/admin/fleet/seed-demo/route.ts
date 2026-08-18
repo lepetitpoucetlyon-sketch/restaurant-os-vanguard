@@ -17,7 +17,7 @@ const BodySchema = z.object({
  * Auth: super_admin
  */
 export async function POST(req: NextRequest) {
-  const auth = await requireMccLevel(req, 'super_admin');
+  const auth = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(auth)) return auth;
 
   const body = await req.json().catch(() => ({}));

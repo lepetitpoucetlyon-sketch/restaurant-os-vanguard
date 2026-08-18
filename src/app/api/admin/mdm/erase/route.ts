@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
 const REQUIRED_CONFIRMATION = 'ERASE CONFIRMED';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { serialNumber, confirmation } = await req.json() as {
@@ -55,13 +55,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     timestamp: new Date(),
   });
 
-  // Notification for super_admin about the wipe
+  // Notification pour les opérateurs MCC mcc_super_admin (audit du wipe).
   const notifId = `mdm_erase_${serialNumber}_${Date.now()}`;
   await Nexus.adapter.set(`mcc/notifications/${notifId}`, {
     type: 'device_erased',
     title: 'Appareil efface (MDM)',
     message: `L'appareil ${serialNumber} a ete efface par ${uid}. Action irreversible.`,
-    targetRole: 'super_admin',
+    targetRole: 'mcc_super_admin',
     serialNumber,
     read: false,
     createdAt: Date.now(),

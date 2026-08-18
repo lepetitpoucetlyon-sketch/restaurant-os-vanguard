@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const devices = await Nexus.adapter.query<TrustedDevice>(COLLECTION);
-        const isFleetAdmin = caller.role === 'super_admin' || caller.role === 'super_admin' || caller.role === 'super_admin';
+        const isFleetAdmin = caller.role === 'mcc_super_admin';
 
         // mcc_support ne voit pas le fingerprint complet
         const sanitized = devices.map(d => ({
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
  * Body: { fingerprint, name, role, allowedRoutes?, ownerUid?, ownerEmail? }
  */
 export async function POST(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'super_admin');
+    const caller = await requireMccLevel(request, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
 
     let body: Partial<TrustedDevice> & { ownerEmail?: string };
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'fingerprint, name et role sont requis.' }, { status: 400 });
     }
 
-    const VALID_ROLES: MccRole[] = ['mcc_junior_dev', 'mcc_support', 'super_admin', 'super_admin', 'super_admin'];
+    const VALID_ROLES: MccRole[] = ['mcc_junior_dev', 'mcc_support', 'mcc_super_admin'];
     if (!VALID_ROLES.includes(body.role as MccRole)) {
         return NextResponse.json({ error: `Rôle invalide : ${body.role}` }, { status: 400 });
     }
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
  * Body: { deviceId, role?, allowedRoutes?, name? }
  */
 export async function PATCH(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'super_admin');
+    const caller = await requireMccLevel(request, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
 
     let body: { deviceId: string; role?: MccRole; allowedRoutes?: string[]; name?: string };
@@ -157,7 +157,7 @@ export async function PATCH(request: NextRequest) {
  * Auth: super_admin uniquement.
  */
 export async function DELETE(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'super_admin');
+    const caller = await requireMccLevel(request, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
 
     const deviceId = request.nextUrl.searchParams.get('deviceId');

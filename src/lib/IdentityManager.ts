@@ -40,7 +40,8 @@ export const FLEET_OPERATOR: User = {
     id: 'user_fleet_operator',
     type: 'user',
     name: 'Super Admin MCC',
-    role: 'super_admin',
+    // MCC scope — opérateur plateforme, distinct de admin tenant.
+    role: 'mcc_super_admin',
     status: 'active',
     accessLevel: 100,
     schemaVersion: 2,

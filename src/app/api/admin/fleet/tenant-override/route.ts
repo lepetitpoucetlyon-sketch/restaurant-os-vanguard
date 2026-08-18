@@ -56,7 +56,7 @@ function deleteNested(obj: Record<string, unknown>, dotPath: string): void {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof TenantOverridePostSchema>;
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: z.infer<typeof TenantOverrideDeleteSchema>;

@@ -7,7 +7,8 @@ import { isMCCMode } from "@/config/instance";
 
 // Tous les opérateurs MCC ont accès à l'admin layout.
 // Les restrictions par onglet sont appliquées dans chaque composant via currentUser.role.
-const MCC_ROLES = ["super_admin", "mcc_support", "mcc_junior_dev"];
+// Alias 'super_admin' conservé pour tokens Firebase legacy pendant la migration
+const MCC_ROLES = ["mcc_super_admin", "super_admin", "mcc_support", "mcc_junior_dev"];
 const TENANT_ADMIN_ROLES = ["admin", "manager"];
 const ADMIN_ROLES = isMCCMode() ? MCC_ROLES : [...TENANT_ADMIN_ROLES, ...MCC_ROLES];
 

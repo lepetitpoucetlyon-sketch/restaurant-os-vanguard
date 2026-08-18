@@ -8,7 +8,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ tenantId: string; keyId: string }> },
 ): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   const { tenantId, keyId } = await params;

@@ -9,7 +9,8 @@ export function usePageAccess(pageKey: PageKey | string): boolean {
   const config = useAtomValue(rbacConfigAtom);
 
   if (!currentUser) return false;
-  if (currentUser.role === 'admin' || currentUser.role === 'super_admin') return true;
+  // admin = plus haut niveau tenant · mcc_super_admin = opérateur MCC qui a accès à tout
+  if (currentUser.role === 'admin' || currentUser.role === 'mcc_super_admin') return true;
 
   const role = currentUser.role as PermissionRole;
 

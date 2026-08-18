@@ -72,7 +72,7 @@ describe('Audit & Checklist de Mise en Service Restaurant OS (10 Piliers)', () =
     expect(RestaurantOnboardingMasterService.isAuthorizedForStep('manager', 'directeur')).toBe(false);
     expect(RestaurantOnboardingMasterService.isAuthorizedForStep('directeur', 'directeur')).toBe(true);
     expect(RestaurantOnboardingMasterService.isAuthorizedForStep('admin', 'directeur')).toBe(true);
-    expect(RestaurantOnboardingMasterService.isAuthorizedForStep('super_admin', 'directeur')).toBe(true);
+    expect(RestaurantOnboardingMasterService.isAuthorizedForStep('mcc_super_admin', 'directeur')).toBe(true);
 
     // Étape Manager (Menu, Plan de salle, Équipe, Matériel)
     expect(RestaurantOnboardingMasterService.isAuthorizedForStep('serveur', 'manager')).toBe(false);

@@ -34,7 +34,7 @@ const SUPPORTED_REGIONS = {
 type RegionKey = keyof typeof SUPPORTED_REGIONS;
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   let body: { tenantId: string; region: RegionKey };

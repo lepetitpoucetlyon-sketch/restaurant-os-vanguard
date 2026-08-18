@@ -14,7 +14,7 @@
  */
 
 import type { ILLMProvider } from './types';
-import { GeminiProvider } from '../GeminiProvider';
+import { GeminiProvider } from './GeminiProvider';
 import { AnthropicProvider } from './AnthropicProvider';
 import { OpenAIProvider } from './OpenAIProvider';
 import { SovereignProvider } from './SovereignProvider';

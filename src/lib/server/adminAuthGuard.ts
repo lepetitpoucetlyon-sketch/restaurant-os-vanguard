@@ -29,27 +29,49 @@ interface StoredDevice {
 export interface AdminCaller {
   uid: string;
   role: string;
-  /** tenantId porté par les claims — absent pour un super_admin global. */
+  /** tenantId porté par les claims — absent pour un mcc_super_admin global. */
   tenantId?: string;
 }
 
-const FLEET_ROLES = ['super_admin'] as const;
-const TENANT_ADMIN_ROLES = ['super_admin', 'admin', 'manager'] as const;
+/**
+ * ⚠️ Distinction stricte MCC vs tenant — ces deux ensembles doivent être disjoints.
+ * Un même rôle ne doit JAMAIS appartenir aux deux (faille cross-scope escalation).
+ *
+ * - FLEET_ROLES : opérateurs plateforme (toi, l'éditeur). Accès /admin/mcc/*.
+ * - TENANT_ADMIN_ROLES : gérants/managers de restaurants. Accès /admin/* tenant.
+ *
+ * L'alias 'super_admin' est conservé dans FLEET_ROLES uniquement pour la transition
+ * des tokens Firebase legacy — à retirer une fois les custom claims migrés.
+ */
+const FLEET_ROLES = ['mcc_super_admin', 'super_admin' /* @deprecated legacy alias */] as const;
+const TENANT_ADMIN_ROLES = ['admin', 'manager'] as const;
 
 /**
  * RBAC MCC Interne — trois niveaux d'accès opérateurs plateforme.
  *
- * mcc_junior_dev : lecture seule (telemetry, status). Aucune action destructive.
- * mcc_support    : +reset PIN, demande/status support access, réindexation RAG.
- * super_admin    : accès complet (y compris rôles, commandes, révocation). MFA obligatoire.
+ * mcc_junior_dev  : lecture seule (telemetry, status). Aucune action destructive.
+ * mcc_support     : +reset PIN, demande/status support access, réindexation RAG.
+ * mcc_super_admin : accès complet (y compris rôles, commandes, révocation). MFA obligatoire.
  */
-export type MccRole = 'mcc_junior_dev' | 'mcc_support' | 'super_admin';
+export type MccRole = 'mcc_junior_dev' | 'mcc_support' | 'mcc_super_admin';
 
 const MCC_ROLE_HIERARCHY: Record<MccRole, number> = {
     mcc_junior_dev: 1,
     mcc_support: 2,
-    super_admin: 3,
+    mcc_super_admin: 3,
 };
+
+/**
+ * Normalise un rôle brut vers un MccRole canonique.
+ * Accepte l'alias legacy 'super_admin' pour ne pas casser les tokens Firebase existants.
+ * Retourne null si le rôle ne correspond à aucun rôle MCC.
+ */
+function normalizeMccRole(role: string): MccRole | null {
+    if (role === 'mcc_super_admin' || role === 'super_admin') return 'mcc_super_admin';
+    if (role === 'mcc_support') return 'mcc_support';
+    if (role === 'mcc_junior_dev') return 'mcc_junior_dev';
+    return null;
+}
 
 /**
  * Vérifie qu'un opérateur MCC a le niveau minimum requis.
@@ -69,48 +91,53 @@ export async function requireMccLevel(
         authHeader === 'Bearer mcc-dev-bypass'
     ) {
         logger.warn('[adminAuth] DEV BYPASS actif — ne pas utiliser en production');
-        return { uid: 'dev_admin', role: 'super_admin' };
+        return { uid: 'dev_admin', role: 'mcc_super_admin' };
     }
 
     try {
         initFirebaseAdmin();
         const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
-        const role = typeof decoded.role === 'string' ? decoded.role : '';
+        const rawRole = typeof decoded.role === 'string' ? decoded.role : '';
+        const normalizedRole = normalizeMccRole(rawRole);
         const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
             : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
 
-        const callerLevel = MCC_ROLE_HIERARCHY[role as MccRole] ?? 0;
+        if (rawRole === 'super_admin') {
+            logger.warn(`[adminAuth] Legacy MCC role 'super_admin' détecté pour uid=${decoded.uid} — migrer custom claim vers 'mcc_super_admin'`);
+        }
+
+        const callerLevel = normalizedRole ? MCC_ROLE_HIERARCHY[normalizedRole] : 0;
         const requiredLevel = MCC_ROLE_HIERARCHY[minLevel];
 
         if (callerLevel < requiredLevel) {
-            logger.warn(`[adminAuth] MCC RBAC denied: uid=${decoded.uid} role=${role} needed=${minLevel}`);
+            logger.warn(`[adminAuth] MCC RBAC denied: uid=${decoded.uid} role=${rawRole} needed=${minLevel}`);
             return hiddenDoor();
         }
 
-        // MFA obligatoire pour les super_admin (mcc-core-3).
-        const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['super_admin'];
+        // MFA obligatoire pour les mcc_super_admin (mcc-core-3).
+        const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['mcc_super_admin'];
         if (isFleetAdmin) {
             const mfaDenied = await checkFleetAdminMFA(decoded.uid, decoded);
             if (mfaDenied) return mfaDenied;
         }
 
-        // Vérification Trusted Device Registry pour les opérateurs non-super_admin.
-        // super_admin est exempté (il gère le registre).
-        if (!isFleetAdmin) {
+        // Vérification Trusted Device Registry pour les opérateurs non-mcc_super_admin.
+        // mcc_super_admin est exempté (il gère le registre).
+        if (!isFleetAdmin && normalizedRole) {
             const fp = request.headers.get('x-mcc-device-fp');
             if (fp) {
-                const denied = await checkDeviceFingerprintInternal(fp, role as MccRole);
+                const denied = await checkDeviceFingerprintInternal(fp, normalizedRole);
                 if (denied) {
                     logger.warn(`[adminAuth] Device fingerprint non reconnu ou révoqué: uid=${decoded.uid} fp=${fp.slice(0, 8)}…`);
                     return hiddenDoor();
                 }
             } else {
                 // Pas de fingerprint — on laisse passer avec un avertissement (migration progressive).
-                logger.warn(`[adminAuth] x-mcc-device-fp absent pour uid=${decoded.uid} role=${role} — Device Registry non encore appliqué`);
+                logger.warn(`[adminAuth] x-mcc-device-fp absent pour uid=${decoded.uid} role=${rawRole} — Device Registry non encore appliqué`);
             }
         }
 
-        return { uid: decoded.uid, role, tenantId };
+        return { uid: decoded.uid, role: normalizedRole ?? rawRole, tenantId };
     } catch (err) {
         logger.warn('[adminAuth] Token verification failed', toError(err).message);
         return hiddenDoor();
@@ -132,12 +159,13 @@ async function checkDeviceFingerprintInternal(fingerprint: string, callerRole: M
         const device = devices[0];
         if (!device) return true;
         // Le rôle enregistré doit être >= au rôle du caller (pas de dépassement)
-        const deviceLevel = MCC_ROLE_HIERARCHY[device.role as MccRole] ?? 0;
+        const deviceRoleNormalized = normalizeMccRole(device.role);
+        const deviceLevel = deviceRoleNormalized ? MCC_ROLE_HIERARCHY[deviceRoleNormalized] : 0;
         const callerLevel = MCC_ROLE_HIERARCHY[callerRole] ?? 0;
         return deviceLevel < callerLevel; // refus si appareil a moins de droits que demandé
     } catch {
         // Fail-closed : impossible de vérifier le device → refus. Un incident Firestore
-        // ne doit pas ouvrir l'accès MCC. super_admin est exempté de cette vérification.
+        // ne doit pas ouvrir l'accès MCC. mcc_super_admin est exempté de cette vérification.
         logger.error('[adminAuth] checkDeviceFingerprint: impossible de lire mcc/trustedDevices — FAIL-CLOSED');
         return true;
     }
@@ -155,7 +183,7 @@ function mfaError(code: 'MFA_ENROLLMENT_REQUIRED' | 'MFA_REAUTHENTICATION_REQUIR
 }
 
 /**
- * Vérifie que le super_admin a bien activé et utilisé le MFA lors de cette session.
+ * Vérifie que le mcc_super_admin a bien activé et utilisé le MFA lors de cette session.
  * Retourne une NextResponse 403 si le check échoue, null si tout est OK.
  *
  * Deux scénarios distincts :
@@ -171,7 +199,7 @@ async function checkFleetAdminMFA(
         const userRecord = await getAuth().getUser(uid);
         const enrolled = (userRecord.multiFactor?.enrolledFactors?.length ?? 0) > 0;
         if (!enrolled) {
-            logger.warn(`[adminAuth] MFA non enrollé pour super_admin uid=${uid}`);
+            logger.warn(`[adminAuth] MFA non enrollé pour mcc_super_admin uid=${uid}`);
             return mfaError('MFA_ENROLLMENT_REQUIRED');
         }
         const usedMFA = !!decoded.firebase?.sign_in_second_factor;
@@ -276,9 +304,9 @@ export async function requireFleetAdmin(request: Request): Promise<AdminCaller |
 }
 
 /**
- * Exige un admin/manager de tenant (ou un super_admin).
+ * Exige un admin/manager de tenant (ou un opérateur MCC fleet).
  * Le tenant effectif vient TOUJOURS du token — jamais d'un header client.
- * Un super_admin peut cibler un tenant explicite via `x-nexus-tenant-id`.
+ * Un opérateur MCC (mcc_super_admin) peut cibler un tenant explicite via `x-nexus-tenant-id`.
  */
 export async function requireTenantAdmin(request: Request): Promise<(AdminCaller & { tenantId: string }) | NextResponse> {
   const caller = await verifyCaller(request);

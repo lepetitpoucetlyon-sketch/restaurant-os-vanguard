@@ -34,14 +34,14 @@ interface MFAGateProps {
 }
 
 /** Point d'entrée public — délègue à l'implémentation complète ou au bypass dev */
-export function MFAGate({ role = 'super_admin', children }: MFAGateProps) {
+export function MFAGate({ role = 'mcc_super_admin', children }: MFAGateProps) {
     if (MCC_DEV_MODE_CLIENT) {
         return <>{children}</>;
     }
     return <MFAGateImpl role={role}>{children}</MFAGateImpl>;
 }
 
-function MFAGateImpl({ role = 'super_admin', children }: MFAGateProps) {
+function MFAGateImpl({ role = 'mcc_super_admin', children }: MFAGateProps) {
     const [status, setStatus] = useState<GateStatus>('checking');
     const [session, setSession] = useState<MFAEnrollmentSession | null>(null);
     const [otp, setOtp] = useState('');
@@ -62,8 +62,8 @@ function MFAGateImpl({ role = 'super_admin', children }: MFAGateProps) {
 
     useEffect(() => {
         if (userRole === null) return;
-        // Only gate super_admin (or the specified role)
-        if (userRole !== role && userRole !== 'super_admin') {
+        // Only gate mcc_super_admin (or the specified role) — accepte alias legacy 'super_admin'
+        if (userRole !== role && userRole !== 'mcc_super_admin' && userRole !== 'super_admin') {
             setStatus('enrolled');
             return;
         }

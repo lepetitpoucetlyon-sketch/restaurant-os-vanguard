@@ -30,9 +30,9 @@ async function generateDeviceFingerprint(): Promise<string> {
 const STORAGE_KEY = 'mcc_device_fp';
 
 const ROLE_LABELS: Record<MccRole, { label: string; color: string }> = {
-    super_admin:    { label: 'Super Admin MCC', color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-    mcc_support:    { label: 'MCC Support',     color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
-    mcc_junior_dev: { label: 'Junior Dev',      color: 'text-text-secondary bg-surface-card border-border-subtle' },
+    mcc_super_admin: { label: 'Super Admin MCC', color: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
+    mcc_support:     { label: 'MCC Support',     color: 'text-blue-400 bg-status-info/10 border-blue-500/20' },
+    mcc_junior_dev:  { label: 'Junior Dev',      color: 'text-text-secondary bg-surface-card border-border-subtle' },
 };
 
 export function TrustedDevicePanel() {
@@ -196,7 +196,7 @@ export function TrustedDevicePanel() {
                             onChange={e => setRegisterRole(e.target.value as MccRole)}
                             className="flex-1 bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-emerald-500/50"
                         >
-                            <option value="super_admin">Super Admin MCC (accès complet)</option>
+                            <option value="mcc_super_admin">Super Admin MCC (accès complet)</option>
                             <option value="mcc_support">Support MCC (+reset, RAG)</option>
                             <option value="mcc_junior_dev">Dev Junior (lecture seule)</option>
                         </select>
@@ -328,7 +328,7 @@ export function TrustedDevicePanel() {
                             onChange={e => setEditRole(e.target.value as MccRole)}
                             className="w-full bg-surface-card border border-border-subtle rounded-xl px-3 py-2.5 text-xs text-text-primary appearance-none focus:outline-none focus:border-violet-500/50"
                         >
-                            <option value="super_admin">Super Admin MCC (accès complet)</option>
+                            <option value="mcc_super_admin">Super Admin MCC (accès complet)</option>
                             <option value="mcc_support">Support MCC (+reset, RAG)</option>
                             <option value="mcc_junior_dev">Dev Junior (lecture seule)</option>
                         </select>

@@ -72,7 +72,8 @@ export function OnboardingChecklistSettingsPanel() {
   }, []);
 
   const userRole = currentUser?.role || 'serveur';
-  const isManagerOrAbove = ['manager', 'directeur', 'admin', 'super_admin'].includes(userRole);
+  // Autorise les rôles tenant hauts + les opérateurs MCC (accès plateforme).
+  const isManagerOrAbove = ['manager', 'directeur', 'admin', 'mcc_super_admin'].includes(userRole);
 
   // Sécurité RBAC
   if (!isManagerOrAbove) {

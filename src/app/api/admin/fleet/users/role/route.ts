@@ -27,7 +27,7 @@ interface RoleChangeRequest {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     // Changement de rôle : super_admin uniquement (niveau max)
-    const caller = await requireMccLevel(req, 'super_admin');
+    const caller = await requireMccLevel(req, 'mcc_super_admin');
     if (isDenied(caller)) return caller as NextResponse;
 
     let body: RoleChangeRequest;

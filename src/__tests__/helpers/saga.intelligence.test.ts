@@ -26,12 +26,17 @@ vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: 
 vi.mock('@/modules/intelligence', () => ({
   HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
 }));
-vi.mock('@/modules/intelligence/ia/GeminiProvider', () => ({
-  GeminiProvider: vi.fn().mockImplementation(() => ({
-    generateContent: vi.fn(async () => ({ text: '{"summary":"ok","priority":"low"}' })),
+vi.mock('@/modules/intelligence/ia/ai', () => ({
+  AI_MODELS: { GEMINI_FLASH: 'gemini-flash', reasoning: 'gemini-pro', fast: 'gemini-flash' },
+  LLMManager: {
+    provider: {
+      generateText: vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) })),
+    },
+  },
+  AIProviderRouter: vi.fn().mockImplementation(() => ({
+    generateText: vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) })),
   })),
 }));
-vi.mock('@/modules/intelligence/ia/ai', () => ({ AI_MODELS: { GEMINI_FLASH: 'gemini-flash' } }));
 vi.mock('@/lib/mcc/ChangelogService', () => ({
   ChangelogService: { getRecentChanges: vi.fn(async () => []) },
 }));

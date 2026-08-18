@@ -262,8 +262,9 @@ export class RestaurantOnboardingMasterService {
    * Vérifie si l'utilisateur a le rôle requis pour exécuter / voir une étape.
    */
   static isAuthorizedForStep(userRole: string, stepMinRole: PermissionRole): boolean {
-    const normalizedRole = ['super_admin', 'admin'].includes(userRole) ? 'admin' : userRole;
-    const userLevel = PERMISSION_ROLE_LEVELS[normalizedRole as PermissionRole] ?? 0;
+    // mcc_super_admin (opérateur MCC) a accès à toutes les étapes tenant.
+    if (userRole === 'mcc_super_admin') return true;
+    const userLevel = PERMISSION_ROLE_LEVELS[userRole as PermissionRole] ?? 0;
     const requiredLevel = PERMISSION_ROLE_LEVELS[stepMinRole] ?? 0;
     return userLevel >= requiredLevel;
   }

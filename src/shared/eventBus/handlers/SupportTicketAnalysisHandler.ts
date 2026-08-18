@@ -2,7 +2,7 @@
 import { NexusEventBus, NexusEventPayload } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { GeminiProvider, AI_MODELS } from '@/modules/intelligence/ia/GeminiProvider';
+import { LLMManager, AIProviderRouter, AI_MODELS } from '@/modules/intelligence/ia/ai';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { TenantConfigSchema } from '@/modules/system/domain/schemas/tenant';
 import { SupportDraftSchema } from '@/shared/schemas';
@@ -66,31 +66,33 @@ async function analyze(payload: NexusEventPayload<'support.ticket_submitted'>): 
 
   await Nexus.adapter.set(ticketPath, { status: 'analyzing' }, { merge: true });
 
-  const apiKey = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY;
-  if (!apiKey) {
-    await Nexus.adapter.set(ticketPath, {
-      status: 'analysis_failed',
-      analysisError: 'Configuration IA manquante (GEMINI_API_KEY)',
-    }, { merge: true });
-    logger.error(`[SupportTicketAnalysis] GEMINI_API_KEY absent — ticket ${ticketId} non analysé`);
-    return;
-  }
-
   try {
     const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
     const contextSnapshot = buildContextSnapshot(tenantId, rawConfig);
     const userPrompt = buildUserPrompt(description, screenshotUrl, contextSnapshot);
 
-    const response = await new GeminiProvider().generateText({
-      model: AI_MODELS.reasoning,
-      systemPrompt: SYSTEM_PROMPT,
-      userPrompt,
-      temperature: 0.2,
-      maxTokens: 1024,
-      responseMimeType: 'application/json',
-    });
+    let rawText = '';
+    try {
+      const response = await LLMManager.provider.generateText({
+        model: AI_MODELS.reasoning,
+        systemPrompt: SYSTEM_PROMPT,
+        userPrompt,
+        temperature: 0.2,
+        maxTokens: 1024,
+        responseMimeType: 'application/json',
+      });
+      rawText = response.text;
+    } catch {
+      const router = new AIProviderRouter();
+      const fallbackRes = await router.generateText(
+        `${SYSTEM_PROMPT}\n\n${userPrompt}`,
+        tenantId,
+        { temperature: 0.2, maxTokens: 1024 }
+      );
+      rawText = fallbackRes.text;
+    }
 
-    const clean = response.text.replace(/^```json\s*/i, '').replace(/\s*```$/, '').trim();
+    const clean = rawText.replace(/^```json\s*/i, '').replace(/\s*```$/, '').trim();
     let candidate: unknown;
     try {
       candidate = JSON.parse(clean);

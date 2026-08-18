@@ -15,7 +15,7 @@ import { logger } from '@/lib/logger';
 import type { JsonObject } from "@/shared/types/json";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'super_admin');
+  const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
   if (!process.env.STRIPE_SECRET_KEY) {

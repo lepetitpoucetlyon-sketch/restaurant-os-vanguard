@@ -42,17 +42,18 @@ export type VerificationResult =
 
 export async function verifyDevice(uid: string, currentFingerprint: string, isFixedAsset: boolean = false): Promise<VerificationResult> {
   const userData = await Nexus.adapter.get<Record<string, unknown>>(`users/${uid}`);
-  const isSuperAdmin = userData?.role === "super_admin";
+  // Opérateur MCC (mcc_super_admin) OU legacy 'super_admin' pendant transition tokens.
+  const isMccSuperAdmin = userData?.role === "mcc_super_admin" || userData?.role === "super_admin";
 
   const devicePath = `users/${uid}/certifiedDevices/${currentFingerprint}`;
   const deviceData = await Nexus.adapter.get<Record<string, unknown>>(devicePath);
 
   if (!deviceData) {
-    if (isSuperAdmin) {
+    if (isMccSuperAdmin) {
       await Nexus.adapter.set(devicePath, {
         fingerprint: currentFingerprint,
         certifiedAt: new Date().toISOString(),
-        autoCertifiedAs: "super_admin",
+        autoCertifiedAs: "mcc_super_admin",
         userAgent: navigator.userAgent
       });
       return { status: "CERTIFIED" };

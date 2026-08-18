@@ -33,7 +33,7 @@ const FULL_COLLECTIONS  = [...NF525_COLLECTIONS, 'tenantConfig', 'products', 'ba
 const RETAIN_YEARS = 7;
 
 export async function GET(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'super_admin');
+    const caller = await requireMccLevel(request, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
 
     try {
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const caller = await requireMccLevel(request, 'super_admin');
+    const caller = await requireMccLevel(request, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
 
     const action = request.nextUrl.searchParams.get('action');
