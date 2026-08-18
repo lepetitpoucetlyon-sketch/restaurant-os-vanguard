@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-08-18T15:07:54.761Z",
+  "totalCycles": 966,
+  "maxThreshold": 966,
+  "status": "PASS",
+  "metrics": {
+    "crossPillarCycles": 897,
+    "crossPillarPercentage": "92.9%",
+    "barrelCycles": 958,
+    "barrelPercentage": "99.2%",
+    "typeCandidateCycles": 938,
+    "typeCandidatePercentage": "97.1%",
+    "length": {
+      "min": 2,
+      "max": 43,
+      "avg": 26.9
+    }
+  },
+  "topHubs": [
+    {
+      "file": "modules/logistics/index.ts",
+      "count": 847,
+      "percentage": "87.7%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "shared/nexus/contracts/index.ts",
+      "count": 844,
+      "percentage": "87.4%",
+      "isBarrel": true,
+      "isTypeNode": true
+    },
+    {
+      "file": "modules/finance/index.ts",
+      "count": 814,
+      "percentage": "84.3%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/logistics/approvisionnement/procurement/index.ts",
+      "count": 812,
+      "percentage": "84.1%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/logistics/approvisionnement/procurement/ProcurementBridge.ts",
+      "count": 812,
+      "percentage": "84.1%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/human/index.ts",
+      "count": 766,
+      "percentage": "79.3%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/finance/components/FacturXDownloadButton.tsx",
+      "count": 763,
+      "percentage": "79.0%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/finance/services/AccountingReportService.ts",
+      "count": 763,
+      "percentage": "79.0%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/commerce/index.ts",
+      "count": 723,
+      "percentage": "74.8%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/human/effectifs/hr/components/PlanningDashboard.tsx",
+      "count": 722,
+      "percentage": "74.7%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/human/effectifs/hr/index.ts",
+      "count": 719,
+      "percentage": "74.4%",
+      "isBarrel": true,
+      "isTypeNode": false
+    },
+    {
+      "file": "shared/nexus/contracts/nexus.types.ts",
+      "count": 715,
+      "percentage": "74.0%",
+      "isBarrel": false,
+      "isTypeNode": true
+    },
+    {
+      "file": "shared/nexus/contracts/commerce.types.ts",
+      "count": 715,
+      "percentage": "74.0%",
+      "isBarrel": false,
+      "isTypeNode": true
+    },
+    {
+      "file": "shared/nexus/contracts/common.types.ts",
+      "count": 713,
+      "percentage": "73.8%",
+      "isBarrel": false,
+      "isTypeNode": true
+    },
+    {
+      "file": "shared/providers/NexusCoreContext.ts",
+      "count": 709,
+      "percentage": "73.4%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/human/effectifs/hr/hooks/useRecruitment.ts",
+      "count": 703,
+      "percentage": "72.8%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "shared/hooks/useTenant.ts",
+      "count": 703,
+      "percentage": "72.8%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "modules/commerce/acquisition/landing/components/LandingDashboard.tsx",
+      "count": 646,
+      "percentage": "66.9%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "lib/offline/offline-store.ts",
+      "count": 631,
+      "percentage": "65.3%",
+      "isBarrel": false,
+      "isTypeNode": false
+    },
+    {
+      "file": "shared/eventBus/NexusEventBus.ts",
+      "count": 623,
+      "percentage": "64.5%",
+      "isBarrel": false,
+      "isTypeNode": false
+    }
+  ]
+}
