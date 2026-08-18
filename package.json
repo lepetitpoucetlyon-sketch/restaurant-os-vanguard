@@ -25,7 +25,8 @@
     "gitpush": "node .nexus/scripts/antigravity-push.js",
     "nexus:seal": "node .nexus/scripts/smart-seal.js",
     "nexus:deploy": "node .nexus/scripts/quick-deploy.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "preflight": "./scripts/preflight.sh"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1101.0",

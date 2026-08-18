@@ -158,22 +158,32 @@ Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.t
 | `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
 | `src/modules/intelligence/knowledge/rag/LightRAGClient.ts` | Client REST LightRAG (retry intégré) |
 
+## Architecture Decision Records (ADRs)
+
+Les décisions fondamentales du socle sont documentées dans `docs/adrs/` :
+- `ADR-001` : Normalisation obligatoire de l'eventId & Idempotence par défaut
+- `ADR-002` : Isolation contextuelle multi-tenant & Membrane SovereignGuard
+- `ADR-003` : Scellement fiscal inaltérable NF525 & Archives WORM
+- `ADR-004` : Architecture multi-verticales universelle & Vertical Forge
+- `ADR-005` : Résilience déconnectée, Outbox atomique & Dead Letter Queue (DLQ)
+
 ## Commandes
 
 ```bash
 npx tsc --noEmit          # Vérification types
-npx vitest run             # Tests
+npx vitest run             # Tests (175 suites, 1120+ tests)
+npm run preflight          # Gate complète d'intégrité (TypeScript, tests, ESLint, sentrux, Next.js build)
 sentrux check .            # Gate architectural (cycles, god files, couches) — voir .sentrux/
-./scripts/preflight.sh     # Vérification complète avant PR (inclut sentrux)
 docker-compose up          # App + LightRAG sidecar
 ```
 
 ## Stack
 
-- Next.js 16 App Router + TypeScript strict
-- Firebase Firestore (local-first IndexedDB cache)
+- Next.js 16 App Router + TypeScript strict (12 verticales unifiées)
+- Firebase Firestore (local-first IndexedDB cache Dexie)
 - Jotai 2 (state management par pilier)
 - Zod 4 (validation + typage)
 - Vitest + Playwright (tests)
 - Google Gemini API (AI)
 - LightRAG Python sidecar (port 9621, Knowledge Graph RAG)
+

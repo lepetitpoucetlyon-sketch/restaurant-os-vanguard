@@ -3,6 +3,8 @@
 # Toutes les étapes sont bloquantes sauf mention explicite.
 set -e
 
+export PATH="$HOME/.local/bin:$PATH"
+
 BOLD='\033[1m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
