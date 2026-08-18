@@ -114,10 +114,13 @@ export async function POST(request: NextRequest) {
         const { ReservationTemplateFormatter, DEFAULT_RESERVATION_TEMPLATES } = await import('@/lib/templates/ReservationTemplateFormatter');
         const { ReservationTokenSigner } = await import('@/lib/security/ReservationTokenSigner');
         
-        const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
-        const resaConfig = (rawConfig as any)?.reservationConfig;
+        const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as {
+          reservationConfig?: { confirmationMessage?: string };
+          businessName?: string;
+        } | null;
+        const resaConfig = rawConfig?.reservationConfig;
         const customTemplate = (resaConfig?.confirmationMessage as string) || DEFAULT_RESERVATION_TEMPLATES.confirmationSms;
-        const businessName = (rawConfig as any)?.businessName || 'Restaurant';
+        const businessName = rawConfig?.businessName || 'Restaurant';
         const modifyLink = ReservationTokenSigner.buildSecureModifyUrl(request.nextUrl.origin, id, tenantId);
 
         const text = ReservationTemplateFormatter.interpolate(customTemplate, {

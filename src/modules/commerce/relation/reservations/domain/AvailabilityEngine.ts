@@ -93,8 +93,9 @@ export class AvailabilityEngine {
         .filter(r => r.date === format(date, 'yyyy-MM-dd') && r.time === timeStr && r.status !== 'cancelled')
         .reduce((sum, r) => sum + (r.covers ?? 0), 0);
 
-      const pacingLimit = (settings.reservationConfig as any)?.maxCoversPerPacingSlot ?? 8;
-      const pacingEnabled = (settings.reservationConfig as any)?.pacingEnabled ?? true;
+      const resCfg = settings.reservationConfig as { maxCoversPerPacingSlot?: number; pacingEnabled?: boolean } | undefined;
+      const pacingLimit = resCfg?.maxCoversPerPacingSlot ?? 8;
+      const pacingEnabled = resCfg?.pacingEnabled ?? true;
 
       const remainingCovers = totalCap - bookedCovers;
       const isPacingSaturated = pacingEnabled && arrivingCovers >= pacingLimit;
@@ -130,8 +131,9 @@ export class AvailabilityEngine {
     if (slot.remainingCovers < covers) return false;
 
     // Check Pacing arrival quota
-    const pacingEnabled = (settings.reservationConfig as any)?.pacingEnabled ?? true;
-    const pacingLimit = (settings.reservationConfig as any)?.maxCoversPerPacingSlot ?? 8;
+    const resCfg = settings.reservationConfig as { maxCoversPerPacingSlot?: number; pacingEnabled?: boolean } | undefined;
+    const pacingEnabled = resCfg?.pacingEnabled ?? true;
+    const pacingLimit = resCfg?.maxCoversPerPacingSlot ?? 8;
     if (pacingEnabled) {
       const dateStr = format(date, 'yyyy-MM-dd');
       const existingArrivals = existingReservations

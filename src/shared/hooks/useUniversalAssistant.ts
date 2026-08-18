@@ -168,7 +168,31 @@ export function useUniversalAssistant() {
 
     const startVoiceListening = useCallback(() => {
         if (typeof window === 'undefined') return;
-        const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const win = window as unknown as {
+            SpeechRecognition?: new () => {
+                lang: string;
+                continuous: boolean;
+                interimResults: boolean;
+                onstart: () => void;
+                onresult: (e: { results: Array<Array<{ transcript: string }>> }) => void;
+                onerror: (e: { error: string }) => void;
+                onend: () => void;
+                start: () => void;
+                abort: () => void;
+            };
+            webkitSpeechRecognition?: new () => {
+                lang: string;
+                continuous: boolean;
+                interimResults: boolean;
+                onstart: () => void;
+                onresult: (e: { results: Array<Array<{ transcript: string }>> }) => void;
+                onerror: (e: { error: string }) => void;
+                onend: () => void;
+                start: () => void;
+                abort: () => void;
+            };
+        };
+        const SpeechRecognitionClass = win.SpeechRecognition || win.webkitSpeechRecognition;
         if (!SpeechRecognitionClass) {
             setVoiceState(prev => ({ ...prev, lastError: 'Reconnaissance vocale non supportée sur ce navigateur.' }));
             return;

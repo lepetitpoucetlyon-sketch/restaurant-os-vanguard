@@ -155,7 +155,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               </label>
               <select
                 value={authorType}
-                onChange={(e) => setAuthorType(e.target.value as any)}
+                onChange={(e) => setAuthorType(e.target.value as 'VENDOR' | 'RESTAURATEUR' | 'COMMUNITY')}
                 className="w-full px-3 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500/50 text-sm"
               >
                 <option value="RESTAURATEUR">👨‍🍳 Équipe Restaurant (Interne)</option>
