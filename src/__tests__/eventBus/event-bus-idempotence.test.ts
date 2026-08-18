@@ -60,15 +60,15 @@ describe('V3-BUS-04/05/06: NexusEventBus Multi-Caisse & Idempotence Suite', () =
     let receivedEventId: string | undefined;
 
     const unsubscribe = NexusEventBus.on(
-      'stock.updated',
+      'stock.low',
       (payload: any) => {
         receivedEventId = payload.eventId;
       },
       { id: 'handler-event-id-check' }
     );
 
-    const payload: any = { itemId: 'item_123', quantity: 10 };
-    await NexusEventBus.emit('stock.updated', payload);
+    const payload: any = { itemId: 'item_123', quantity: 10, tenantId: 'resto_1' };
+    await NexusEventBus.emit('stock.low', payload);
 
     expect(receivedEventId).toBeDefined();
     expect(typeof receivedEventId).toBe('string');
@@ -81,7 +81,7 @@ describe('V3-BUS-04/05/06: NexusEventBus Multi-Caisse & Idempotence Suite', () =
     let executionCount = 0;
 
     const unsubscribe = NexusEventBus.on(
-      'payment.completed',
+      'order.paid',
       async () => {
         executionCount++;
       },
@@ -91,16 +91,16 @@ describe('V3-BUS-04/05/06: NexusEventBus Multi-Caisse & Idempotence Suite', () =
     const payload = {
       eventId: 'evt_payment_unique_99',
       orderId: 'ord_99',
-      amountInCents: 5000,
+      totalInMicrounits: 50000000,
       tenantId: 'resto_1',
     };
 
     // 1ère émission
-    await NexusEventBus.emit('payment.completed', payload as any);
+    await NexusEventBus.emit('order.paid', payload as any);
     expect(executionCount).toBe(1);
 
     // 2ème émission avec le même eventId (rejeu réseau / offline sync)
-    await NexusEventBus.emit('payment.completed', payload as any);
+    await NexusEventBus.emit('order.paid', payload as any);
     expect(executionCount).toBe(1); // Dédupliqué !
 
     unsubscribe();

@@ -358,3 +358,10 @@ export async function requireTenantRole(
 export function isDenied(result: AdminCaller | NextResponse): result is NextResponse {
   return result instanceof NextResponse;
 }
+
+/** Récupère et valide l'identité du caller sans bloquer automatiquement (pour routes publiques/semi-protégées). */
+export async function getCallerAuth(request: Request): Promise<AdminCaller | null> {
+  const caller = await verifyCaller(request);
+  if (!caller || isDenied(caller)) return null;
+  return caller;
+}

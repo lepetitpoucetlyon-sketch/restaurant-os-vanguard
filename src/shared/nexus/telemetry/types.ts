@@ -1,6 +1,7 @@
 export enum AuditPulseType {
     ACCESS_DENIED = 'ACCESS_DENIED',
     ILLEGAL_DELETE_ATTEMPT = 'ILLEGAL_DELETE_ATTEMPT',
+    ILLEGAL_WRITE_ATTEMPT = 'ILLEGAL_WRITE_ATTEMPT',
     STORAGE_WRITE = 'STORAGE_WRITE',
     STORAGE_DELETE = 'STORAGE_DELETE',
     // 🧠 Intelligence Layer — Sanitized Pulse Protocol
