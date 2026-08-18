@@ -107,6 +107,43 @@ export async function POST(request: NextRequest) {
       logger.warn('[widget/book] Email confirmation failed (non-blocking)', String(emailErr));
     }
 
+    // Fire-and-forget SMS confirmation if phone provided
+    if (phone) {
+      try {
+        const { NotificationGateway } = await import('@/lib/adapters/NotificationGateway');
+        const { ReservationTemplateFormatter, DEFAULT_RESERVATION_TEMPLATES } = await import('@/lib/templates/ReservationTemplateFormatter');
+        const { ReservationTokenSigner } = await import('@/lib/security/ReservationTokenSigner');
+        
+        const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
+        const resaConfig = (rawConfig as any)?.reservationConfig;
+        const customTemplate = (resaConfig?.confirmationMessage as string) || DEFAULT_RESERVATION_TEMPLATES.confirmationSms;
+        const businessName = (rawConfig as any)?.businessName || 'Restaurant';
+        const modifyLink = ReservationTokenSigner.buildSecureModifyUrl(request.nextUrl.origin, id, tenantId);
+
+        const text = ReservationTemplateFormatter.interpolate(customTemplate, {
+          firstName,
+          lastName,
+          customerName: `${firstName} ${lastName}`.trim(),
+          restaurantName: businessName,
+          date,
+          time,
+          covers,
+          modifyLink,
+        });
+
+        await NotificationGateway.send({
+          tenantId,
+          to: phone,
+          subject: `Confirmation Réservation — ${businessName}`,
+          text,
+          channel: 'sms',
+        });
+        logger.info(`[widget/book] Instant SMS confirmation dispatched to ${phone}`);
+      } catch (smsErr) {
+        logger.warn('[widget/book] SMS confirmation failed (non-blocking)', String(smsErr));
+      }
+    }
+
     return NextResponse.json({ success: true, bookingRef: id }, { status: 201 });
   } catch (err) {
     logger.error('[widget/book]', err);

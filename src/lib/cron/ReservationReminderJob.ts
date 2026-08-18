@@ -3,6 +3,8 @@ import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 import { logger } from '@/lib/logger';
 import { parse, differenceInHours, differenceInMinutes } from 'date-fns';
 import { JsonObject } from "@/shared/types/json";
+import { ReservationTemplateFormatter, DEFAULT_RESERVATION_TEMPLATES } from '@/lib/templates/ReservationTemplateFormatter';
+import { ReservationTokenSigner } from '@/lib/security/ReservationTokenSigner';
 
 interface ReservationRecord {
   id: string;
@@ -55,16 +57,32 @@ export class ReservationReminderJob {
           const diffHours = differenceInHours(resStart, now);
           const diffMinutes = differenceInMinutes(resStart, now);
 
+          const businessName = (rawTenantConfig as JsonObject | null)?.businessName as string || 'notre établissement';
+          const customReminderTemplate = (resaConfig?.reminderMessage as string) || DEFAULT_RESERVATION_TEMPLATES.reminderSms;
+          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+          const modifyLink = ReservationTokenSigner.buildSecureModifyUrl(baseUrl, res.id, tenantId);
+
           // 1. RAPPEL EMAIL (ex: J-1, window +/- 60min)
           if (!res.reminderEmailSentAt && Math.abs(diffHours - emailReminderHours) <= 1 && res.customerEmail) {
             logger.info(`[ReservationReminderJob] Envoi email rappel J-1 pour réservation ${res.id} à ${res.customerEmail}`);
 
-            const modifyLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/reservation/${res.id}`;
+            const emailBody = ReservationTemplateFormatter.interpolate(
+              customReminderTemplate || 'Bonjour {prenom},\n\nNous vous confirmons votre réservation pour {couverts} personne(s) chez {restaurant} le {date} à {heure}.\n\nPour modifier ou annuler : {lien_modification}\n\nÀ très vite !',
+              {
+                customerName: res.customerName,
+                restaurantName: businessName,
+                date: res.date,
+                time: res.time,
+                covers: res.covers,
+                modifyLink,
+              }
+            );
+
             await NotificationGateway.send({
               tenantId,
               to: res.customerEmail,
-              subject: `Rappel de votre réservation — ${res.date} à ${res.time}`,
-              text: `Bonjour ${res.customerName || ''},\n\nNous vous confirmons votre réservation pour ${res.covers || 2} personne(s) le ${res.date} à ${res.time}.\n\nPour modifier ou annuler : ${modifyLink}\n\nÀ très vite !`,
+              subject: `Rappel de votre réservation chez ${businessName} — ${res.date} à ${res.time}`,
+              text: emailBody,
               channel: 'email',
             });
 
@@ -77,11 +95,20 @@ export class ReservationReminderJob {
           if (!res.reminderSmsSentAt && Math.abs(diffMinutes - smsReminderHours * 60) <= 30 && res.customerPhone) {
             logger.info(`[ReservationReminderJob] Envoi SMS rappel H-2 pour réservation ${res.id} à ${res.customerPhone}`);
 
+            const smsBody = ReservationTemplateFormatter.interpolate(customReminderTemplate, {
+              customerName: res.customerName,
+              restaurantName: businessName,
+              date: res.date,
+              time: res.time,
+              covers: res.covers,
+              modifyLink,
+            });
+
             await NotificationGateway.send({
               tenantId,
               to: res.customerPhone,
-              subject: `Rappel Réservation`,
-              text: `Rappel : Votre table pour ${res.covers || 2}p est réservée aujourd'hui à ${res.time}. À tout de suite !`,
+              subject: `Rappel Réservation — ${businessName}`,
+              text: smsBody,
               channel: 'sms',
             });
 

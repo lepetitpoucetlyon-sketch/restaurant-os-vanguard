@@ -32,7 +32,7 @@ export class AvailabilityEngine {
       this.generateSlots(
         schedule.lunchOpen,
         schedule.lunchClose,
-        slotSettings,
+        settings,
         existingReservations,
         tables,
         date,
@@ -45,7 +45,7 @@ export class AvailabilityEngine {
       this.generateSlots(
         schedule.dinnerOpen,
         schedule.dinnerClose,
-        slotSettings,
+        settings,
         existingReservations,
         tables,
         date,
@@ -59,12 +59,13 @@ export class AvailabilityEngine {
   private static generateSlots(
     openTime: string,
     closeTime: string,
-    slotSettings: ReservationSlotSettings,
+    settings: GlobalSettings,
     existingReservations: Reservation[],
     tables: Table[],
     date: Date,
     results: AvailableSlot[]
   ) {
+    const slotSettings = settings.reservationSlots || { slotDuration: 15, intervalBetweenSlots: 15, maxCoversPerSlot: 20 };
     let current = parse(openTime, 'HH:mm', date);
     const end = parse(closeTime, 'HH:mm', date);
     const totalCap = tables.reduce((sum, t) => sum + t.seats, 0);
@@ -87,13 +88,22 @@ export class AvailabilityEngine {
         })
         .reduce((sum, r) => sum + (r.covers ?? 0), 0);
 
+      // Pacing calculation : arrival flow at this exact slot
+      const arrivingCovers = existingReservations
+        .filter(r => r.date === format(date, 'yyyy-MM-dd') && r.time === timeStr && r.status !== 'cancelled')
+        .reduce((sum, r) => sum + (r.covers ?? 0), 0);
+
+      const pacingLimit = (settings.reservationConfig as any)?.maxCoversPerPacingSlot ?? 8;
+      const pacingEnabled = (settings.reservationConfig as any)?.pacingEnabled ?? true;
+
       const remainingCovers = totalCap - bookedCovers;
+      const isPacingSaturated = pacingEnabled && arrivingCovers >= pacingLimit;
 
       results.push({
         time: timeStr,
-        remainingCovers,
+        remainingCovers: isPacingSaturated ? 0 : remainingCovers,
         totalCapacity: totalCap,
-        status: remainingCovers > (totalCap * 0.2) ? 'available' : remainingCovers > 0 ? 'limited' : 'full'
+        status: isPacingSaturated ? 'full' : remainingCovers > (totalCap * 0.2) ? 'available' : remainingCovers > 0 ? 'limited' : 'full'
       });
 
       current = addMinutes(current, slotSettings.intervalBetweenSlots || 15);
@@ -119,8 +129,21 @@ export class AvailabilityEngine {
     // Check total covers capacity
     if (slot.remainingCovers < covers) return false;
 
+    // Check Pacing arrival quota
+    const pacingEnabled = (settings.reservationConfig as any)?.pacingEnabled ?? true;
+    const pacingLimit = (settings.reservationConfig as any)?.maxCoversPerPacingSlot ?? 8;
+    if (pacingEnabled) {
+      const dateStr = format(date, 'yyyy-MM-dd');
+      const existingArrivals = existingReservations
+        .filter(r => r.date === dateStr && r.time === time && r.status !== 'cancelled')
+        .reduce((sum, r) => sum + (r.covers ?? 0), 0);
+      
+      if (existingArrivals + covers > pacingLimit) {
+        return false;
+      }
+    }
+
     // Check if there is AT LEAST one table that can take this group or a combo of tables
-    // (This calls the AutomaticAssigner in the next step)
     return true; 
   }
 }

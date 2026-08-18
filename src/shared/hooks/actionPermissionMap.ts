@@ -140,6 +140,11 @@ export const ACTION_MAP: Record<string, Record<string, ActionConfig>> = {
         apply_penalty:         { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: true },
         override_capacity:     { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: true },
         cancel_reservation:    { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+        manage_pacing:         { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: true },
+        force_split:           { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
+        edit_templates:        { minLevel: PERMISSION_ROLE_LEVELS.manager,   requiresPin: false },
+        reconfirm_guest:       { minLevel: PERMISSION_ROLE_LEVELS.hotesse,   requiresPin: false },
+        view_pii:              { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },
     },
     staff: {
         view:                  { minLevel: PERMISSION_ROLE_LEVELS.chef_rang, requiresPin: false },

@@ -45,7 +45,12 @@ export interface ReservationSettings {
     confirmationMessage: string;
     reminderMessage: string;
     cancellationMessage: string;
-    cancellationPolicy: string;
+    // ── Cadencement & Pacing des flux d'arrivées ───────────────────────────
+    pacingEnabled?: boolean;
+    maxCoversPerPacingSlot?: number; // max covers arriving per slot (ex: 8)
+    pacingSlotMinutes?: number;      // interval between slots (ex: 15 min)
+    // ── Re-confirmation interactive ─────────────────────────────────────────
+    interactiveSmsEnabled?: boolean; // Reply 1 to confirm / 2 to release
     terms: string;
     [key: string]: unknown;
 }
