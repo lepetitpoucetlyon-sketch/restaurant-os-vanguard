@@ -9,6 +9,17 @@ import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import { JsonObject } from "@/shared/types/json";
 
+export interface ReceiptPrintMeta {
+    ticketNumber?: string;
+    nf525Hash?: string;
+    certifiedAt?: string;
+    paymentMethod?: string;
+    cashGiven?: number;
+    changeGiven?: number;
+    siret?: string;
+    footerNote?: string;
+}
+
 function parsePrinterConfig(): { ip: string; port: number } {
     const defaults = { ip: "192.168.1.100", port: 8008 };
     try {
@@ -24,13 +35,21 @@ function parsePrinterConfig(): { ip: string; port: number } {
     }
 }
 
-export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
+/**
+ * 🖨️ usePrintReceipt — Ticket caisse avec mentions légales et fiscales NF525 (V3-NF525-02)
+ */
+export function usePrintReceipt(
+    cartItems: CartItem[],
+    cartTotal: number,
+    receiptMeta?: ReceiptPrintMeta
+) {
     const { activeTenantConfig } = useTenant();
 
-    return useCallback(async () => {
+    return useCallback(async (runtimeMeta?: ReceiptPrintMeta) => {
         if (cartItems.length === 0) return;
 
         const { ip: _ip, port: _port } = parsePrinterConfig();
+        const meta = runtimeMeta || receiptMeta;
 
         // Taux TVA effectif : moyenne pondérée multi-taux (10/5.5/20%)
         let tvaMu = 0, ttcTotal = 0;
@@ -43,9 +62,12 @@ export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
         const htTotal = ttcTotal - tvaMu;
         const effectiveTvaPercent = htTotal > 0 ? Math.round((tvaMu / htTotal) * 100 * 10) / 10 : 10;
 
+        const tenantCfg = activeTenantConfig as { name?: string; siret?: string; taxId?: string } | null;
+        const siret = meta?.siret || tenantCfg?.siret || tenantCfg?.taxId;
+
         const ticket: ReceiptTicket = {
-            businessName: (activeTenantConfig as { name?: string } | null)?.name ?? "Restaurant",
-            ticketNumber: `T-${Date.now()}`,
+            businessName: tenantCfg?.name ?? "Restaurant",
+            ticketNumber: meta?.ticketNumber ?? `T-${Date.now()}`,
             tvaRatePercent: effectiveTvaPercent,
             totalInMicrounits: Math.round(cartTotal),
             items: cartItems.map((item) => ({
@@ -53,6 +75,14 @@ export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
                 qty: item.quantity,
                 priceInMicrounits: item.unitPriceInMicrounits,
             })),
+            paymentMethod: meta?.paymentMethod,
+            cashGiven: meta?.cashGiven,
+            changeGiven: meta?.changeGiven,
+            footerNote: meta?.footerNote,
+            // Champs de conformité légale NF525
+            siret: siret || undefined,
+            nf525Hash: meta?.nf525Hash,
+            certifiedAt: meta?.certifiedAt ?? new Date().toISOString(),
         };
 
         try {
@@ -62,5 +92,5 @@ export function usePrintReceipt(cartItems: CartItem[], cartTotal: number) {
             const msg = err instanceof Error ? err.message : "Erreur impression";
             toast.error(`Impression échouée : ${msg}`);
         }
-    }, [cartItems, cartTotal, activeTenantConfig]);
+    }, [cartItems, cartTotal, receiptMeta, activeTenantConfig]);
 }

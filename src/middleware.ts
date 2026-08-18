@@ -26,10 +26,13 @@ function checkAdminApiGate(request: NextRequest, url: string): NextResponse | nu
   if (!url.startsWith('/api/admin/')) return null;
   if (url.startsWith('/api/admin/git/') && process.env.NODE_ENV === 'production') return new NextResponse(null, { status: 404 });
   const auth = request.headers.get('authorization');
-  // Vérifie la présence ET la valeur du token contre MCC_ADMIN_SECRET.
-  // Retourne 404 (pas 401) pour ne pas révéler l'existence de la route.
-  const secret = process.env.MCC_ADMIN_SECRET;
-  if (!secret || !auth || auth !== `Bearer ${secret}`) return new NextResponse(null, { status: 404 });
+  // V3-SEC-03: Vérifie la présence d'un Bearer token au niveau du middleware edge.
+  // La vérification cryptographique complète (JWT signature, expiration, rôles MCC, MFA)
+  // est déléguée à adminAuthGuard au niveau de chaque route handler.
+  // Retourne 404 (pas 401) pour ne pas révéler l'existence de la route si aucun token n'est fourni.
+  if (!auth || !auth.startsWith('Bearer ') || auth.length < 10) {
+    return new NextResponse(null, { status: 404 });
+  }
   return null;
 }
 
