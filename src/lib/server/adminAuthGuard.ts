@@ -62,8 +62,9 @@ export async function requireMccLevel(
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
 
-    // Dev bypass : activé par MCC_DEV_MODE=true dans .env.local (voir src/lib/mcc/devMode.ts).
+    // Dev bypass : activé par MCC_DEV_MODE=true dans .env.local uniquement hors production
     if (
+        process.env.NODE_ENV !== 'production' &&
         MCC_DEV_MODE_SERVER &&
         authHeader === 'Bearer mcc-dev-bypass'
     ) {
