@@ -16,6 +16,26 @@ interface ReservationDoc {
   covers?: number;
 }
 
+async function parseSmsPayload(request: NextRequest): Promise<{ fromNumber: string; bodyText: string }> {
+  try {
+    const contentType = request.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const json = await request.json();
+      return {
+        fromNumber: String(json.From || json.from || '').trim(),
+        bodyText: String(json.Body || json.body || '').trim().toUpperCase(),
+      };
+    }
+    const formData = await request.formData();
+    return {
+      fromNumber: String(formData.get('From') || '').trim(),
+      bodyText: String(formData.get('Body') || '').trim().toUpperCase(),
+    };
+  } catch {
+    return { fromNumber: '', bodyText: '' };
+  }
+}
+
 /**
  * 📲 Inbound SMS Webhook (Twilio / Webhook Bidirectionnel)
  * Gère les re-confirmations et annulations interactives par SMS.
@@ -24,29 +44,7 @@ interface ReservationDoc {
  */
 export async function POST(request: NextRequest) {
   try {
-    const contentType = request.headers.get('content-type') || '';
-    let fromNumber = '';
-    let bodyText = '';
-
-    try {
-      if (contentType.includes('application/json')) {
-        const json = await request.json();
-        fromNumber = (json.From || json.from || '').trim();
-        bodyText = (json.Body || json.body || '').trim().toUpperCase();
-      } else {
-        const formData = await request.formData();
-        fromNumber = (formData.get('From') as string || '').trim();
-        bodyText = (formData.get('Body') as string || '').trim().toUpperCase();
-      }
-    } catch {
-      try {
-        const json = await request.json();
-        fromNumber = (json.From || json.from || '').trim();
-        bodyText = (json.Body || json.body || '').trim().toUpperCase();
-      } catch {
-        // Ignored
-      }
-    }
+    const { fromNumber, bodyText } = await parseSmsPayload(request);
 
     if (!fromNumber) {
       return new NextResponse('<Response><Message>Numéro expéditeur manquant</Message></Response>', {

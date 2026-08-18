@@ -47,9 +47,8 @@ export class ImapInvoiceProvider implements IEmailInvoiceProvider {
         }
 
         try {
-            // @ts-expect-error — imap-simple optionnel, installer avec: npm i imap-simple @types/imap-simple
-             
-            const imapSimple = await import('imap-simple') as { connect: (opts: Record<string, unknown>) => Promise<Record<string, unknown> & { openBox: (boxName: string) => Promise<void>; search: (criteria: unknown[], fetchOptions: Record<string, unknown>) => Promise<ImapMessage[]> }>; getParts: (struct: unknown[]) => ImapPart[] };
+            const imapSimplePkg = 'imap-simple';
+            const imapSimple = await (import(imapSimplePkg) as Promise<{ connect: (opts: Record<string, unknown>) => Promise<Record<string, unknown> & { openBox: (boxName: string) => Promise<void>; search: (criteria: unknown[], fetchOptions: Record<string, unknown>) => Promise<ImapMessage[]> }>; getParts: (struct: unknown[]) => ImapPart[] }>);
             const connection = await imapSimple.connect({
                 imap: { host, port, user, password, tls: true, authTimeout: 5000 },
             });

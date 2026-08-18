@@ -59,6 +59,7 @@ export * from './domain/schemas/supportTicket';
 // 🤖 Universal Assistant & Action Dispatcher
 export { UniversalSystemPromptBuilder, VERTICAL_LABELS_MAP } from './services/UniversalSystemPromptBuilder';
 export { AssistantActionDispatcher, UNIVERSAL_ASSISTANT_TOOLS } from './services/AssistantActionDispatcher';
+export { OracleIntentAugmenter } from './services/OracleIntentAugmenter';
 export type { ActionProposal, AssistantToolDefinition } from './services/AssistantActionDispatcher';
 export { UniversalAssistantFrame } from './components/UniversalAssistantFrame';
 export { ActionProposalCard } from './components/ActionProposalCard';
