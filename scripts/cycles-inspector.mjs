@@ -17,7 +17,7 @@ const args = process.argv.slice(2);
 const jsonOutput = args.includes('--json');
 const exportArg = args.find(a => a.startsWith('--export='));
 const thresholdArg = args.find(a => a.startsWith('--threshold='));
-const MAX_THRESHOLD = thresholdArg ? parseInt(thresholdArg.split('=')[1], 10) : 966;
+const MAX_THRESHOLD = thresholdArg ? parseInt(thresholdArg.split('=')[1], 10) : 0;
 
 function runMadge() {
     const tmpFile = path.join(os.tmpdir(), `madge-cycles-${Date.now()}.json`);
