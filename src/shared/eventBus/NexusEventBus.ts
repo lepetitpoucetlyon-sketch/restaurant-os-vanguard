@@ -90,12 +90,13 @@ class NexusEventBusClass {
     event: E,
     payload: NexusEventPayload<E>
   ): Promise<void> {
-    // V3-BUS-05: Normalisation de l'eventId obligatoire (ADR-001)
+    // V3-BUS-05: Normalisation de l'eventId obligatoire (ADR-001) sans mutation destructive
     const rawPayload = (payload || {}) as Record<string, unknown>;
+    const hasExplicitEventId = Boolean(rawPayload.eventId);
     const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
-    if (payload && typeof payload === 'object' && !rawPayload.eventId) {
-      rawPayload.eventId = eventId;
-    }
+    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
+      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
+      : payload;
 
     const outboxId = `outbox_${eventId}_${event}`;
     
@@ -110,7 +111,7 @@ class NexusEventBusClass {
         await db.busOutbox.put({
           id: outboxId,
           eventName: event,
-          payload,
+          payload: effectivePayload,
           createdAt: Date.now(),
           attempts: (existing?.attempts ?? 0) + 1,
           status: 'pending'
@@ -121,7 +122,7 @@ class NexusEventBusClass {
     }
 
     // 2. Émettre en RAM
-    await this.emit(event, payload);
+    await this.emit(event, effectivePayload);
 
     // 3. Outbox : Marquer comme terminé
     if (typeof window !== 'undefined' && db?.busOutbox) {
@@ -153,10 +154,11 @@ class NexusEventBusClass {
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
     const rawPayload = (payload || {}) as Record<string, unknown>;
+    const hasExplicitEventId = Boolean(rawPayload.eventId);
     const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
-    if (payload && typeof payload === 'object' && !rawPayload.eventId) {
-      rawPayload.eventId = eventId;
-    }
+    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
+      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
+      : payload;
 
     // V3-BUS-04: inFlight qualifié par emissionId pour débloquer le parallélisme multi-caisse
     const emissionKey = `${event}:${eventId}`;
@@ -186,14 +188,14 @@ class NexusEventBusClass {
       // 1 — CRITICAL : séquentiel, bloquant
       for (const h of critical) {
         try {
-          await h.handler(payload);
+          await h.handler(effectivePayload);
         } catch (err) {
           logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
           if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
             await db.deadLetterEvents.put({
               id: crypto.randomUUID(),
               eventName: event,
-              payload,
+              payload: effectivePayload,
               handlerId: h.id,
               error: toError(err).message,
               failedAt: Date.now(),
@@ -209,7 +211,7 @@ class NexusEventBusClass {
       // 2 — HIGH : parallèle, on attend la résolution
       if (high.length > 0) {
         const results = await Promise.allSettled(
-          high.map(h => h.handler(payload))
+          high.map(h => h.handler(effectivePayload))
         );
         await Promise.all(results.map(async (r, i) => {
           if (r.status === 'rejected') {
@@ -219,7 +221,7 @@ class NexusEventBusClass {
               await db.deadLetterEvents.put({
                 id: crypto.randomUUID(),
                 eventName: event,
-                payload,
+                payload: effectivePayload,
                 handlerId: h.id,
                 error: toError(r.reason).message,
                 failedAt: Date.now(),
@@ -234,13 +236,13 @@ class NexusEventBusClass {
 
       // 3 — BACKGROUND : fire-and-forget AVEC écriture DLQ en cas d'échec
       background.forEach(h => {
-        Promise.resolve().then(() => h.handler(payload)).catch(async (err) => {
+        Promise.resolve().then(() => h.handler(effectivePayload)).catch(async (err) => {
           logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
           if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
             await db.deadLetterEvents.put({
               id: crypto.randomUUID(),
               eventName: event,
-              payload,
+              payload: effectivePayload,
               handlerId: h.id,
               error: toError(err).message,
               failedAt: Date.now(),

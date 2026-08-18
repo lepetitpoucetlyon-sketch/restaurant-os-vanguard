@@ -1,47 +1,47 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { WormArchiveStorageService } from '@/modules/finance/fiscalite/WormArchiveStorageService';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { FiscalSeal } from '@nexus/contracts';
 
 describe('Bloquant P0 #2 : Stockage Froid Immuable WORM NF525 (6 ans)', () => {
-  const tenantId = 'bistro-louvre';
+  let tenantId: string;
 
   // Les FiscalSeal de test portent des champs étendus (totalInMicrounits, timestamp ms)
   // non présents dans l'interface contrat ; le cast est intentionnel pour le test.
-  const mockSeals = [
-    {
-      id: 'seal-001',
-      tenantId,
-      sequenceNumber: 1,
-      receiptNumber: '2026-000001',
-      totalInMicrounits: 45000000, // 45€
-      taxInMicrounits: 4500000,
-      timestamp: new Date(1786800000000).toISOString(),
-      previousHash: 'GENESIS',
-      hash: 'hash-abc-001',
-      updatedAt: new Date(1786800000000).toISOString(),
-      signature: 'sig-001',
-      transactionId: 'tx-001',
-    },
-    {
-      id: 'seal-002',
-      tenantId,
-      sequenceNumber: 2,
-      receiptNumber: '2026-000002',
-      totalInMicrounits: 80000000, // 80€
-      taxInMicrounits: 8000000,
-      timestamp: new Date(1786803600000).toISOString(),
-      previousHash: 'hash-abc-001',
-      hash: 'hash-abc-002',
-      updatedAt: new Date(1786803600000).toISOString(),
-      signature: 'sig-002',
-      transactionId: 'tx-002',
-    },
-  ] as unknown as FiscalSeal[];
+  let mockSeals: FiscalSeal[];
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    await Nexus.adapter.delete(`tenants/${tenantId}/wormArchives/worm_${tenantId}_2026_ANNUAL`);
+    tenantId = `bistro-louvre-${Math.random().toString(36).substring(7)}`;
+    mockSeals = [
+      {
+        id: 'seal-001',
+        tenantId,
+        sequenceNumber: 1,
+        receiptNumber: '2026-000001',
+        totalInMicrounits: 45000000, // 45€
+        taxInMicrounits: 4500000,
+        timestamp: new Date(1786800000000).toISOString(),
+        previousHash: 'GENESIS',
+        hash: 'hash-abc-001',
+        updatedAt: new Date(1786800000000).toISOString(),
+        signature: 'sig-001',
+        transactionId: 'tx-001',
+      },
+      {
+        id: 'seal-002',
+        tenantId,
+        sequenceNumber: 2,
+        receiptNumber: '2026-000002',
+        totalInMicrounits: 80000000, // 80€
+        taxInMicrounits: 8000000,
+        timestamp: new Date(1786803600000).toISOString(),
+        previousHash: 'hash-abc-001',
+        hash: 'hash-abc-002',
+        updatedAt: new Date(1786803600000).toISOString(),
+        signature: 'sig-002',
+        transactionId: 'tx-002',
+      },
+    ] as unknown as FiscalSeal[];
   });
 
   it('devrait sceller une archive annuelle avec rétention WORM de 6 ans', async () => {

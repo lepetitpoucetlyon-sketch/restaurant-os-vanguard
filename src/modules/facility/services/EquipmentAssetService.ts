@@ -53,7 +53,7 @@ export class EquipmentAssetService {
     await Nexus.adapter.set(`${this.basePath(tenantId)}/${id}`, asset);
 
     // Événement EventBus
-    NexusEventBus.emitDurable('facility.equipment_registered', {
+    await NexusEventBus.emitDurable('facility.equipment_registered', {
       tenantId,
       equipmentId: id,
       name: asset.name,
@@ -173,7 +173,7 @@ export class EquipmentAssetService {
     await this.updateAsset(tenantId, equipmentId, { status: newStatus }, data.declaredBy);
 
     // Invariant #6 : Émission télémétrie EventBus
-    NexusEventBus.emitDurable('facility.equipment_breakdown', {
+    await NexusEventBus.emitDurable('facility.equipment_breakdown', {
       tenantId,
       equipmentId,
       equipmentName: equipment.name,
@@ -236,7 +236,7 @@ export class EquipmentAssetService {
       resolution.technicianName
     );
 
-    NexusEventBus.emitDurable('facility.equipment_repaired', {
+    await NexusEventBus.emitDurable('facility.equipment_repaired', {
       tenantId,
       equipmentId: breakdown.equipmentId,
       technicianName: resolution.technicianName,
