@@ -23,16 +23,14 @@ export default defineConfig({
     video: 'on-first-retry',
   },
 
-  /* Configuration du serveur local - Désactivée pour utiliser le serveur actif */
-  /*
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120000,
     stdout: 'ignore',
     stderr: 'pipe',
   },
-  */
 
   projects: [
     {
