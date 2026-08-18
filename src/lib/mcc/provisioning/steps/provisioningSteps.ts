@@ -84,7 +84,7 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
             logger.info(`[MCC/prov] Auth user créé: ${userUid}`);
         }
 
-        await authProvider.setCustomClaims(userUid, { tenantId, role: 'owner', permissions: ['*'] });
+        await authProvider.setCustomClaims(userUid, { tenantId, role: 'admin', permissions: ['*'] });
 
         pinPlain = String(Math.floor(1000 + Math.random() * 9000));
         const hashedPin = await hashPin(pinPlain, tenantId);
@@ -93,7 +93,7 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
             id: userUid,
             email: request.ownerEmail,
             name: request.ownerName,
-            role: 'owner',
+            role: 'admin',
             tenantId,
             pinHash: hashedPin,
             createdAt: new Date().toISOString(),
@@ -115,7 +115,7 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
                 from: 'Restaurant OS <onboarding@restaurant-os.com>',
                 to: request.ownerEmail,
                 subject: `Bienvenue sur Restaurant OS — Vos accès pour ${request.companyName}`,
-                html: `<h1>Bienvenue ${request.ownerName} !</h1><p>Votre espace a été configuré.</p>`,
+                html: `<h1>Bienvenue ${request.ownerName} !</h1><p>Votre espace a été configuré avec succès.</p><p>Votre code PIN temporaire est : <strong>${pinPlain}</strong></p><p><em>Pour des raisons de sécurité, veuillez modifier ce code PIN dès votre première connexion (rotation sous 7 jours obligatoire).</em></p>`,
             });
         }
     } catch (authErr) {

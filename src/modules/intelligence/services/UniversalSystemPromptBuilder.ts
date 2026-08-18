@@ -9,6 +9,7 @@
  */
 
 import { redactPII } from '@/lib/security/redactPII';
+import { PERMISSION_ROLE_LEVELS, PermissionRole } from '@nexus/contracts/permissions.types';
 import { AssistantActionDispatcher, AssistantToolDefinition } from './AssistantActionDispatcher';
 
 export interface VerticalShorthandLabels {
@@ -101,18 +102,11 @@ export class UniversalSystemPromptBuilder {
      */
     public static resolveRoleLevel(role?: string): number {
         if (!role) return 10;
-        const normalized = role.toLowerCase().trim();
-
-        if (['admin', 'owner', 'proprietaire', 'gerant', 'fondateur'].includes(normalized)) return 100;
-        if (['directeur', 'director', 'gm', 'general_manager'].includes(normalized)) return 90;
-        if (['manager', 'responsable_site', 'adjoint', 'maitre_hotel'].includes(normalized)) return 70;
-        if (['comptable', 'accountant', 'finance_lead', 'auditeur'].includes(normalized)) return 60;
-        if (['chef_rang', 'chef_atelier', 'specialiste', 'praticien', 'expert', 'medecin', 'pharmacien'].includes(normalized)) return 50;
-        if (['serveur', 'mecanicien', 'vendeur', 'coiffeur', 'receptionniste', 'cuisinier', 'barman', 'boulanger', 'patissier', 'technicien'].includes(normalized)) return 40;
-        if (['assistant', 'aide', 'hotesse', 'commis'].includes(normalized)) return 30;
-        if (['apprenti', 'stagiaire', 'plongeur'].includes(normalized)) return 10;
-
-        // FAIL-SECURE : Tout rôle non explicitement certifié est restreint au niveau minimal
+        const normalized = role.toLowerCase().trim() as PermissionRole;
+        if (PERMISSION_ROLE_LEVELS[normalized] !== undefined) {
+            return PERMISSION_ROLE_LEVELS[normalized];
+        }
+        // FAIL-SECURE : Tout rôle non certifié dans le canon officiel est restreint au niveau minimal
         return 10;
     }
 
