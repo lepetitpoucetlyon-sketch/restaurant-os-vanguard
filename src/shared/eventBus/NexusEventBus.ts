@@ -36,12 +36,14 @@ export interface EventHandlerOptions {
 
 class NexusEventBusClass {
   private handlers = new Map<NexusEventName, RegisteredHandler<NexusEventName>[]>();
-  /** Events currently being dispatched in the current call stack — circuit-breaker anti-loop */
+  /** Events currently being dispatched in the current call stack — circuit-breaker anti-loop par emissionId */
   private readonly inFlight = new Set<string>();
+  private callStackDepth = 0;
+  private readonly MAX_CALL_STACK_DEPTH = 15;
 
   /**
    * Souscrit à un événement.
-   * priority CRITICAL  → s'exécute en premier, bloquant si nécessaire
+   * priority CRITICAL  → s'exécute en premier, bloquant si nécessaire (idempotent par défaut)
    * priority HIGH      → parallèle avec les autres HIGH
    * priority BACKGROUND → lancé après les CRITICAL/HIGH, non-bloquant
    * idempotent: true   → Invariant #1 : déduplique automatiquement sur eventId
@@ -52,7 +54,11 @@ class NexusEventBusClass {
     options: EventHandlerOptions = { id: crypto.randomUUID() }
   ): () => void {
     const handlerId = options.id ?? crypto.randomUUID();
-    const effectiveHandler: Handler<E> = options.idempotent
+    const priority = options.priority ?? 'HIGH';
+    // V3-BUS-06: Les handlers CRITICAL sont idempotents par défaut pour éviter tout re-jeu corrompu
+    const isIdempotent = options.idempotent !== undefined ? options.idempotent : priority === 'CRITICAL';
+
+    const effectiveHandler: Handler<E> = isIdempotent
       ? (IdempotencyGuard.withIdempotencyGuard(handlerId, event, handler as never) as unknown as Handler<E>)
       : handler;
 
@@ -60,8 +66,8 @@ class NexusEventBusClass {
       id: handlerId,
       event,
       handler: effectiveHandler,
-      priority: options.priority ?? 'HIGH',
-      idempotent: options.idempotent,
+      priority,
+      idempotent: isIdempotent,
     };
 
     const existing = this.handlers.get(event) ?? [];
@@ -78,22 +84,35 @@ class NexusEventBusClass {
   /**
    * Émet un événement métier de manière durable via l'EventOutbox.
    * Protège contre les crashs entre le persist state (Nexus) et l'exécution des handlers.
+   * V3-BUS-06 : Replay dedup & atomic execution
    */
   async emitDurable<E extends NexusEventName>(
     event: E,
     payload: NexusEventPayload<E>
   ): Promise<void> {
-    const id = crypto.randomUUID();
+    // V3-BUS-05: Normalisation de l'eventId obligatoire (ADR-001)
+    const rawPayload = (payload || {}) as Record<string, unknown>;
+    const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
+    if (payload && typeof payload === 'object' && !rawPayload.eventId) {
+      rawPayload.eventId = eventId;
+    }
+
+    const outboxId = `outbox_${eventId}_${event}`;
     
-    // 1. Outbox : Persister l'intention d'émettre
-    if (typeof window !== 'undefined') {
+    // 1. Outbox : Vérifier si déjà traité (dedup replay) et persister l'intention d'émettre
+    if (typeof window !== 'undefined' && db?.busOutbox) {
       try {
+        const existing = await db.busOutbox.get(outboxId);
+        if (existing && existing.status === 'done') {
+          logger.info(`[EventBus] Replay dedup: outbox event ${outboxId} already completed — skipping`);
+          return;
+        }
         await db.busOutbox.put({
-          id,
+          id: outboxId,
           eventName: event,
           payload,
           createdAt: Date.now(),
-          attempts: 0,
+          attempts: (existing?.attempts ?? 0) + 1,
           status: 'pending'
         });
       } catch (err) {
@@ -105,9 +124,9 @@ class NexusEventBusClass {
     await this.emit(event, payload);
 
     // 3. Outbox : Marquer comme terminé
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && db?.busOutbox) {
       try {
-        await db.busOutbox.update(id, { status: 'done' });
+        await db.busOutbox.update(outboxId, { status: 'done' });
       } catch (err) {
         logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
       }
@@ -125,24 +144,37 @@ class NexusEventBusClass {
    * Retourne quand CRITICAL + HIGH sont résolus.
    * Les erreurs BACKGROUND sont loggées sans propager.
    *
-   * @param options.skipDLQWrite — true quand appelé par DLQRetryService ou
-   *   handleRetry : le service de retry gère lui-même l'état de l'entrée DLQ
-   *   pour éviter une double-écriture avec attempts=1.
+   * V3-BUS-04: inFlight par emissionId (débloque multi-caisse concurrent)
+   * V3-BUS-05: eventId normalisé systématiquement
    */
   async emit<E extends NexusEventName>(
     event: E,
     payload: NexusEventPayload<E>,
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
-    if (this.inFlight.has(event)) {
-      logger.warn(`[NexusEventBus] Boucle détectée sur "${event}" — émission bloquée`);
+    const rawPayload = (payload || {}) as Record<string, unknown>;
+    const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
+    if (payload && typeof payload === 'object' && !rawPayload.eventId) {
+      rawPayload.eventId = eventId;
+    }
+
+    // V3-BUS-04: inFlight qualifié par emissionId pour débloquer le parallélisme multi-caisse
+    const emissionKey = `${event}:${eventId}`;
+    if (this.inFlight.has(emissionKey) && this.callStackDepth > 0) {
+      logger.warn(`[NexusEventBus] Boucle récursive détectée sur "${emissionKey}" — émission bloquée`);
+      return;
+    }
+
+    if (this.callStackDepth >= this.MAX_CALL_STACK_DEPTH) {
+      logger.error(`[NexusEventBus] Profondeur de récursion maximale (${this.MAX_CALL_STACK_DEPTH}) atteinte sur "${event}" — cascade bloquée`);
       return;
     }
 
     const all = this.handlers.get(event) ?? [];
     if (all.length === 0) return;
 
-    this.inFlight.add(event);
+    this.inFlight.add(emissionKey);
+    this.callStackDepth++;
 
     const critical    = all.filter(h => h.priority === 'CRITICAL');
     const high        = all.filter(h => h.priority === 'HIGH');
@@ -223,7 +255,8 @@ class NexusEventBusClass {
       const ms = (performance.now() - start).toFixed(1);
       logger.info(`[EventBus] ${event} → ${all.length} handlers (${ms}ms sync)`);
     } finally {
-      this.inFlight.delete(event);
+      this.callStackDepth = Math.max(0, this.callStackDepth - 1);
+      this.inFlight.delete(emissionKey);
     }
   }
 }
