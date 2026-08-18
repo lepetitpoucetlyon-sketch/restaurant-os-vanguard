@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { FranchiseService } from '@/modules/commerce/franchise/services/FranchiseService';
+import { FranchiseService } from '@/modules/commerce/relation/franchise/services/FranchiseService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/lib/adapters/MockAdapter';
 import { DEFAULT_PAGE_ACCESS } from '@/modules/compliance/domain/schemas/rbac';

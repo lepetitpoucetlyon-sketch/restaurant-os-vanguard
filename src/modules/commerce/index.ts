@@ -26,6 +26,8 @@ export type { GroupFormData } from './relation/reservations/components/GroupForm
 export { ProcessGoogleBookingUseCase } from './relation/reservations/application/use-cases/ProcessGoogleBooking';
 export { InMemoryReservationRepository } from './relation/reservations/infrastructure/repositories/InMemoryReservationRepository';
 export * from './relation/reservations/domain/types/GoogleReserveTypes';
+export { FranchiseDashboard } from './relation/franchise/components/FranchiseDashboard';
+export { FranchiseService } from './relation/franchise/services/FranchiseService';
 
 export { useReservations, useCRM } from '@/modules/ops';
 
