@@ -1,6 +1,9 @@
 import { AgentDomain, AgentRole, AgentResponse, AgentReasoningStep } from '../../domain/agency/types';
 import { generateSystemPrompt } from '@/config/prompts';
 import { toError } from "@/lib/toError";
+import { LLMManager } from './LLMManager';
+import { resolveModelId } from './LLMProviderFactory';
+import { AIProviderRouter } from './AIProviderRouter';
 
 export interface AgentRequest {
     domain: AgentDomain;
@@ -11,85 +14,32 @@ export interface AgentRequest {
     // Grade X: DNA Injection
     dna?: {
         tenantId: string;
-        businessLaws: import('@/shared/nexus-contract').BusinessLaws;
+        businessLaws?: import('@/shared/nexus-contract').BusinessLaws;
     };
 
-    apiKey: string;
-    endpoint: string;
-    modelId: string;
-}
-
-
-function buildFetchUrl(endpoint: string, apiKey: string): string {
-    return endpoint.includes('key=') ? endpoint : `${endpoint}?key=${apiKey}`;
-}
-
-async function executeGeminiRequest(url: string, body: string, apiKey: string, timeoutMs: number = 30000): Promise<{text: string, fallbackUsed: boolean}> {
-    const maxAttempts = 3;
-    let rawText = '';
-    let fallbackUsed = false;
-
-    for (let attempts = 1; attempts <= maxAttempts; attempts++) {
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-            
-            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-            if (apiKey && !url.includes('key=')) headers['Authorization'] = `Bearer ${apiKey}`;
-
-            const res = await fetch(url, { method: 'POST', headers, body, signal: controller.signal });
-            clearTimeout(timeoutId);
-
-            if (res.status === 429 && attempts < maxAttempts) {
-                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
-                continue;
-            }
-            if (res.ok) {
-                const data = await res.json();
-                rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                break;
-            }
-            if (attempts >= maxAttempts) {
-                rawText = `[Erreur API ${res.status}] ${await res.text()}`;
-            }
-        } catch (err) {
-            const fetchErr = err as Error;
-            if (fetchErr.name === 'AbortError' && url.includes('gemini-pro')) {
-                // Timeout on pro -> fallback flash
-                url = url.replace('gemini-pro', 'gemini-flash');
-                fallbackUsed = true;
-                continue; // Retry next attempt with flash
-            }
-            if (attempts >= maxAttempts) {
-                rawText = `[Erreur Réseau] ${toError(fetchErr).message}`;
-            } else {
-                await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
-            }
-        }
-    }
-    return { text: rawText, fallbackUsed };
+    apiKey?: string;
+    endpoint?: string;
+    modelId?: string;
 }
 
 /**
- * AgentEngine - The "Brain" of the Software Factory
- * Orchestrates calls to Gemini 1.5 with dedicated system prompts and RBAC.
+ * AgentEngine - Le Moteur d'Agents IA 100% Agnostique
+ * Orchestre les appels multi-providers (Sovereign SLM, Gemini, Claude, OpenAI, Mistral)
+ * avec system prompts dédiés, RBAC et cascades de résilience.
  */
 export const AgentEngine = {
     async query(request: AgentRequest): Promise<AgentResponse> {
-        if (!request.apiKey || !request.endpoint) {
-            throw new Error('AgentEngine: Missing API Configuration (Check Settings)');
-        }
-
         const systemPrompt  = generateSystemPrompt(request.domain, request.userRole);
         const dataContext   = request.contextData ? `\nCONTEXTE DATA ACTUEL :\n${JSON.stringify(request.contextData, null, 2)}` : '';
         const tenantLabel   = request.dna?.tenantId || 'GLOBAL';
+        const modelId       = request.modelId || resolveModelId('reasoning');
 
         const reasoning: AgentReasoningStep[] = [
             {
                 id: 'r1',
                 timestamp: new Date().toISOString(),
                 action: 'Initialisation',
-                observation: `Audit: ${request.domain}, Modèle: ${request.modelId}`,
+                observation: `Audit: ${request.domain}, Modèle: ${modelId}`,
                 thought: 'Application du blindage système et vérification des autorisations métier par profil.',
             },
             {
@@ -97,24 +47,41 @@ export const AgentEngine = {
                 timestamp: new Date().toISOString(),
                 action: 'Analyse Profonde',
                 observation: request.userPrompt,
-                thought: `Utilisation du modèle ${request.modelId} pour croisement avec le contexte ${request.domain} fourni (${tenantLabel}).`,
+                thought: `Utilisation du modèle ${modelId} pour croisement avec le contexte ${request.domain} fourni (${tenantLabel}).`,
             },
         ];
 
         try {
-            const fetchUrl = buildFetchUrl(request.endpoint, request.apiKey);
-            const body = JSON.stringify({
-                contents: [{ parts: [{ text: `${systemPrompt}\n\n${dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}` }] }],
-            });
-            const { text: rawText, fallbackUsed } = await executeGeminiRequest(fetchUrl, body, request.apiKey);
+            let rawText = '';
+            let fallbackUsed = false;
+
+            try {
+                const response = await LLMManager.provider.generateText({
+                    model: modelId,
+                    systemPrompt: `${systemPrompt}${dataContext}`,
+                    userPrompt: request.userPrompt,
+                    temperature: 0.3,
+                });
+                rawText = response.text;
+            } catch {
+                // Fallback sur AIProviderRouter automatique si le provider actif échoue
+                const router = new AIProviderRouter();
+                const routerRes = await router.generateText(
+                    `${systemPrompt}${dataContext}\n\nREQUÊTE UTILISATEUR :\n${request.userPrompt}`,
+                    tenantLabel,
+                    { temperature: 0.3 }
+                );
+                rawText = routerRes.text;
+                fallbackUsed = routerRes.fallback;
+            }
 
             if (fallbackUsed) {
                 reasoning.push({
                     id: `r3_${Date.now()}`,
                     timestamp: new Date().toISOString(),
                     action: 'Fallback Modèle',
-                    observation: 'Timeout sur gemini-pro',
-                    thought: 'Bascule automatique sur gemini-flash pour garantir une réponse.',
+                    observation: 'Basculement sur provider de secours',
+                    thought: 'Garantie de continuité de service via le router multi-provider.',
                 });
             }
 
@@ -124,7 +91,7 @@ export const AgentEngine = {
                     domain: request.domain,
                     type: 'info',
                     title: `Diagnostic Expert : ${request.domain}`,
-                    description: rawText || `Analyse exécutée via le moteur ${request.modelId}.`,
+                    description: rawText || `Analyse exécutée via le moteur ${modelId}.`,
                     reasoning,
                 },
                 rawText: rawText || 'Analyse terminée.',

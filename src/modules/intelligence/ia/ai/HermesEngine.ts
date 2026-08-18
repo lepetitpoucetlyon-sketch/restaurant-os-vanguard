@@ -1,4 +1,5 @@
 import { AgentEngine } from './AgentEngine';
+import { resolveModelId } from './LLMProviderFactory';
 import { AgentDomain } from '../../domain/agency/types';
 import { 
     HermesPulseResult, 
@@ -150,9 +151,7 @@ export class HermesEngine {
             userRole: agent.role,
             userPrompt: prompt,
             contextData: context,
-            apiKey: process.env.GEMINI_API_KEY || process.env.LLM_API_KEY || 'NEXUS_INTERNAL',
-            endpoint: 'https://generativelanguage.googleapis.com', // Base URL
-            modelId: 'gemini-1.5-pro'
+            modelId: resolveModelId('reasoning'),
         });
     }
 }

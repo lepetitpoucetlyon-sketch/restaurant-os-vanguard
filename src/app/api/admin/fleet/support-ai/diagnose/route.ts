@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-
-const GEMINI_BASE_URL = process.env.LLM_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
-const GEMINI_MODEL = process.env.LLM_MODEL_REASONING || 'gemini-1.5-flash';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { AIProviderRouter } from '@/modules/intelligence/ia/ai/AIProviderRouter';
+import { resolveModelId } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
 
 interface DiagnoseBody {
   tenantId: string;
@@ -32,11 +32,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'tenantId et description requis' }, { status: 400 });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Configuration IA manquante (GEMINI_API_KEY)' }, { status: 503 });
-  }
-
   const userPrompt = `Analyse ce problème signalé par un opérateur restaurant.
 Tenant : ${body.tenantId.trim()}
 Description : ${body.description.trim()}
@@ -51,39 +46,38 @@ Retourne UNIQUEMENT un objet JSON valide avec ces champs :
   "escalate": boolean
 }`;
 
-  const geminiRes = await fetch(
-    `${GEMINI_BASE_URL}/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: `${SYSTEM_PROMPT}\n\n${userPrompt}` }] }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 512,
-          responseMimeType: 'application/json',
-        },
-      }),
-    },
-  );
-
-  if (!geminiRes.ok) {
-    const errText = await geminiRes.text();
-    logger.error('[support-ai] Gemini error', { status: geminiRes.status, body: errText });
-    return NextResponse.json({ error: `Erreur IA (${geminiRes.status})` }, { status: 502 });
+  let raw = '';
+  try {
+    const response = await LLMManager.provider.generateText({
+      model: resolveModelId('fast'),
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt,
+      temperature: 0.2,
+      maxTokens: 512,
+    });
+    raw = response.text;
+  } catch {
+    try {
+      const router = new AIProviderRouter();
+      const routerRes = await router.generateText(
+        `${SYSTEM_PROMPT}\n\n${userPrompt}`,
+        body.tenantId.trim(),
+        { temperature: 0.2, maxTokens: 512 }
+      );
+      raw = routerRes.text;
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erreur IA';
+      logger.error('[support-ai] LLM failure', { error: msg });
+      return NextResponse.json({ error: `Erreur IA: ${msg}` }, { status: 502 });
+    }
   }
 
-  const geminiData = await geminiRes.json() as {
-    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-  };
-
-  const raw = geminiData.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
   let diagnostic: DiagnosticResult;
   try {
     const clean = raw.replace(/^```json\s*/i, '').replace(/\s*```$/, '').trim();
     diagnostic = JSON.parse(clean) as DiagnosticResult;
   } catch {
-    logger.error('[support-ai] Failed to parse Gemini response', raw);
+    logger.error('[support-ai] Failed to parse LLM response', { raw });
     return NextResponse.json({ error: 'Réponse IA non parseable' }, { status: 502 });
   }
 
