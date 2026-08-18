@@ -1,16 +1,16 @@
 import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from './types';
 import { logger } from '@/lib/logger';
 
-const DEFAULT_BASE_URL = 'https://api.openai.com/v1';
+const DEFAULT_BASE_URL = 'https://api.mistral.ai/v1';
 
-export const OPENAI_MODELS = {
-    fast: 'gpt-4o-mini',
-    reasoning: 'gpt-4o',
-    visionFast: 'gpt-4o-mini',
-    visionPro: 'gpt-4o',
+export const MISTRAL_MODELS = {
+    fast: 'mistral-small-latest',
+    reasoning: 'mistral-large-latest',
+    visionFast: 'pixtral-12b-2409',
+    visionPro: 'pixtral-large-latest',
 } as const;
 
-export class OpenAIProvider implements ILLMProvider {
+export class MistralProvider implements ILLMProvider {
     private readonly customApiKey?: string;
     private readonly customBaseUrl?: string;
 
@@ -20,16 +20,16 @@ export class OpenAIProvider implements ILLMProvider {
     }
 
     private getApiKey(): string {
-        return this.customApiKey ?? process.env.OPENAI_API_KEY ?? '';
+        return this.customApiKey ?? process.env.MISTRAL_API_KEY ?? '';
     }
 
     private getBaseUrl(): string {
-        return this.customBaseUrl ?? process.env.OPENAI_BASE_URL ?? DEFAULT_BASE_URL;
+        return this.customBaseUrl ?? process.env.MISTRAL_BASE_URL ?? DEFAULT_BASE_URL;
     }
 
     async generateText(request: LLMTextRequest): Promise<LLMTextResponse> {
         const messages = this.buildMessages(request.systemPrompt, request.history, request.userPrompt);
-        return this.call(request.model || OPENAI_MODELS.fast, messages, request.maxTokens, request.temperature);
+        return this.call(request.model || MISTRAL_MODELS.fast, messages, request.maxTokens, request.temperature);
     }
 
     async generateFromImage(request: LLMVisionRequest): Promise<LLMTextResponse> {
@@ -47,7 +47,7 @@ export class OpenAIProvider implements ILLMProvider {
                 { type: 'text', text: request.userPrompt },
             ],
         });
-        return this.call(request.model || OPENAI_MODELS.visionFast, messages, request.maxTokens, request.temperature);
+        return this.call(request.model || MISTRAL_MODELS.visionFast, messages, request.maxTokens, request.temperature);
     }
 
     private buildMessages(
@@ -71,9 +71,9 @@ export class OpenAIProvider implements ILLMProvider {
         temperature?: number,
     ): Promise<LLMTextResponse> {
         const apiKey = this.getApiKey();
-        if (!apiKey) throw new Error('[OpenAIProvider] OPENAI_API_KEY not set');
+        if (!apiKey) throw new Error('[MistralProvider] MISTRAL_API_KEY not set');
 
-        logger.debug(`[OpenAIProvider] calling model=${model}`);
+        logger.debug(`[MistralProvider] calling model=${model}`);
 
         const res = await fetch(`${this.getBaseUrl()}/chat/completions`, {
             method: 'POST',
@@ -92,8 +92,8 @@ export class OpenAIProvider implements ILLMProvider {
 
         if (!res.ok) {
             const err = await res.text();
-            logger.error(`[OpenAIProvider] ${res.status}`, err);
-            throw new Error(`OpenAI API error ${res.status}: ${err}`);
+            logger.error(`[MistralProvider] ${res.status}`, err);
+            throw new Error(`Mistral API error ${res.status}: ${err}`);
         }
 
         const data = await res.json() as {

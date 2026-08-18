@@ -7,6 +7,11 @@ export { HermesEngine } from './HermesEngine';
 export * from './types';
 export { AnthropicProvider } from './AnthropicProvider';
 export { OpenAIProvider } from './OpenAIProvider';
-export { createLLMProvider, AI_MODELS, resolveModelId } from './LLMProviderFactory';
+export { MistralProvider } from './MistralProvider';
+export { SovereignProvider } from './SovereignProvider';
+export { SovereignSlmClient } from './SovereignSlmClient';
+export { GeminiProvider } from '../GeminiProvider';
+export { createLLMProvider, AI_MODELS, resolveModelId, detectProvider } from './LLMProviderFactory';
+export type { AIProviderName } from './LLMProviderFactory';
 // Compat backward — le code qui importe AI_MODELS depuis GeminiProvider reste fonctionnel
 export { GEMINI_MODELS } from '../GeminiProvider';

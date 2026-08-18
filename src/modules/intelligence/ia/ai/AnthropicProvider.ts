@@ -1,7 +1,6 @@
 import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from './types';
 import { logger } from '@/lib/logger';
 
-const API_KEY = process.env.ANTHROPIC_API_KEY ?? '';
 const BASE_URL = 'https://api.anthropic.com/v1';
 const API_VERSION = '2023-06-01';
 
@@ -13,6 +12,16 @@ export const ANTHROPIC_MODELS = {
 } as const;
 
 export class AnthropicProvider implements ILLMProvider {
+    private readonly customApiKey?: string;
+
+    constructor(apiKey?: string) {
+        this.customApiKey = apiKey;
+    }
+
+    private getApiKey(): string {
+        return this.customApiKey ?? process.env.ANTHROPIC_API_KEY ?? '';
+    }
+
     async generateText(request: LLMTextRequest): Promise<LLMTextResponse> {
         const messages = this.buildMessages(request.history, request.userPrompt);
         return this.call(request, messages);
@@ -80,7 +89,8 @@ export class AnthropicProvider implements ILLMProvider {
         maxTokens?: number,
         temperature?: number,
     ): Promise<LLMTextResponse> {
-        if (!API_KEY) throw new Error('[AnthropicProvider] ANTHROPIC_API_KEY not set');
+        const apiKey = this.getApiKey();
+        if (!apiKey) throw new Error('[AnthropicProvider] ANTHROPIC_API_KEY not set');
 
         logger.debug(`[AnthropicProvider] calling model=${model}`);
 
@@ -96,7 +106,7 @@ export class AnthropicProvider implements ILLMProvider {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': API_KEY,
+                'x-api-key': apiKey,
                 'anthropic-version': API_VERSION,
             },
             body: JSON.stringify(body),
