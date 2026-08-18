@@ -213,14 +213,21 @@ export class OracleIntentAugmenter {
     roleLevel: number,
     suggestedActions: ActionProposal[]
   ): void {
-    if ((lowerPrompt.includes('bloque') || lowerPrompt.includes('verrouille')) && (lowerPrompt.includes('table') || lowerPrompt.includes('baie') || lowerPrompt.includes('espace') || lowerPrompt.includes('box') || lowerPrompt.includes('fauteuil') || lowerPrompt.includes('salon') || lowerPrompt.includes('vitrine') || lowerPrompt.includes('salle'))) {
+    const isLockIntent = /(bloque|verrouille)/i.test(lowerPrompt);
+    const hasSpaceKeyword = /(table|baie|espace|box|fauteuil|salon|vitrine|salle|cabine|chambre)/i.test(lowerPrompt);
+
+    if (isLockIntent && hasSpaceKeyword) {
       const match = sanitizedPrompt.match(/\b(?:table|baie|espace|box|fauteuil|salon|vitrine|salle|cabine|chambre)\s*#?([0-9a-zA-Z_-]+)\b/i);
       if (match) {
         const spaceId = match[1];
         const action = AssistantActionDispatcher.createActionProposal('lock_space_or_table', { spaceId, reason: 'Demande Copilote' }, roleLevel);
         if (action.success && action.proposal) suggestedActions.push(action.proposal);
       }
-    } else if ((lowerPrompt.includes('panne') || lowerPrompt.includes('cassé') || lowerPrompt.includes('incident') || lowerPrompt.includes('fume') || lowerPrompt.includes('chauffe plus') || lowerPrompt.includes('fuit') || lowerPrompt.includes('bloqué') || lowerPrompt.includes('sonne')) && roleLevel >= 30) {
+      return;
+    }
+
+    const isMaintenanceIncident = /(panne|cassé|incident|fume|chauffe plus|fuit|bloqué|sonne)/i.test(lowerPrompt);
+    if (isMaintenanceIncident && roleLevel >= 30) {
       const action = AssistantActionDispatcher.createActionProposal('create_maintenance_ticket', { equipmentName: 'Équipement', severity: 'high', description: sanitizedPrompt }, roleLevel);
       if (action.success && action.proposal) suggestedActions.push(action.proposal);
     }

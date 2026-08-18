@@ -16,6 +16,7 @@ import { SplitCustomPanel } from "./split/SplitCustomPanel";
 import { SplitPayingView } from "./split/SplitPayingView";
 import { SplitConviveCard } from "./split/SplitConviveCard";
 import { SplitSummaryFooter } from "./split/SplitSummaryFooter";
+import { useSplitPaymentExecution } from "./split/useSplitPaymentExecution";
 import type { SplitBillDialogProps, SplitMode, PaymentMethod, ConvivePayment, SplitCartItem } from "./split/types";
 
 export type { SplitCartItem, SplitMode, PaymentMethod, ConvivePayment, SplitBillDialogProps };
@@ -41,10 +42,15 @@ export function SplitBillDialog({
     const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(total / (coverCount || 2)));
     const [payingConvive, setPayingConvive] = useState<number | null>(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [terminalState, setTerminalState] = useState<'idle' | 'pending' | 'manual_wait' | 'error'>('idle');
-    const [terminalError, setTerminalError] = useState<string | null>(null);
     const { t } = useLanguage();
+
+    const {
+        isProcessing,
+        terminalState,
+        terminalError,
+        setTerminalState,
+        executePayment,
+    } = useSplitPaymentExecution({ onPaySplit });
 
     const syncSplitState = (nextSplitCount: number) => {
         setSplitCount(nextSplitCount);
@@ -78,51 +84,13 @@ export function SplitBillDialog({
     };
 
     const handleConfirmPayment = async () => {
-        if (payingConvive !== null && selectedPaymentMethod) {
-            const amountInCents = getConviveTotal(payingConvive);
-
-            if (selectedPaymentMethod === 'card') {
-                setIsProcessing(true);
-                setTerminalState('pending');
-                setTerminalError(null);
-
-                const defaultDevice = terminalService.getDefault();
-                try {
-                    if (defaultDevice?.adapter === "manual") {
-                        setTerminalState("manual_wait");
-                        if (terminalService.getStatus(defaultDevice.id) === "disconnected") {
-                            await terminalService.connect(defaultDevice.id);
-                        }
-                    }
-
-                    const result = await terminalService.charge({
-                        amountInMicrounits: amountInCents * 10000,
-                        orderId: `SPLIT_${Date.now()}_C${payingConvive}`,
-                        description: `Split Table`,
-                    });
-
-                    if (result.status !== "approved") {
-                        setTerminalState(result.status === "cancelled" ? "idle" : "error");
-                        if (result.status === "error") setTerminalError(result.error ?? "Paiement refusé");
-                        setIsProcessing(false);
-                        return;
-                    }
-                } catch (err) {
-                    setTerminalState("error");
-                    setTerminalError(err instanceof Error ? err.message : "Erreur terminal");
-                    setIsProcessing(false);
-                    return;
-                }
-            } else if (selectedPaymentMethod === 'cash') {
-                printerService.openCashDrawer();
-            }
-
-            setIsProcessing(false);
-            setTerminalState('idle');
+        if (payingConvive === null || !selectedPaymentMethod) return;
+        const amountInCents = getConviveTotal(payingConvive);
+        const success = await executePayment(amountInCents, payingConvive, selectedPaymentMethod);
+        if (success) {
             setConvivePayments(prev => prev.map((g, i) =>
                 i === payingConvive ? { ...g, paid: true, method: selectedPaymentMethod } : g
             ));
-            onPaySplit(amountInCents, payingConvive);
             setPayingConvive(null);
             setSelectedPaymentMethod(null);
         }

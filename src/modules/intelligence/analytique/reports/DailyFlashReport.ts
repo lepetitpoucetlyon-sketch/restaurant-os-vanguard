@@ -1,7 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { LaborCostService } from '@/modules/human';
+import { LaborCostCalculator } from '@/shared/domain/analytics/LaborCostCalculator';
 
 interface FlashMetrics {
     date: string;
@@ -69,7 +67,7 @@ export const DailyFlashReport = {
                     ],
                 }
             ),
-            LaborCostService.computeRealtime(tenantId, date),
+            LaborCostCalculator.computeRealtime(tenantId, date),
         ]);
 
         const totalRevenueMu = orders.reduce((sum, o) => {

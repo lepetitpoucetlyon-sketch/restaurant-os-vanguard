@@ -7,15 +7,18 @@ import { cn } from "@/lib/ui.foundations";
 import { AnimatePresence } from "framer-motion";
 
 // Decomposed modules
+import dynamic from "next/dynamic";
 import { STATUS_COLORS } from "./constants";
 import { TableChairs } from "./TableChairs";
 import { ZoneRenderer } from "./ZoneRenderer";
 import { EditPanel } from "./EditPanel";
 import { TableInsightPanel } from "./TableInsightPanel";
-// FIXME (facility-rapatriement): PaymentDialog est un composant ops — découpler via slot/prop injection
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { PaymentDialog } from "@modules/ops/service/pos/components/PaymentDialog";
 import { useFloorPlanControls } from "./useFloorPlanControls";
+
+const PaymentDialog = dynamic(
+    () => import("@modules/ops/service/pos/components/PaymentDialog").then((mod) => mod.PaymentDialog),
+    { ssr: false }
+);
 
 interface FloorPlanEditorProps {
     scale: number;

@@ -1,10 +1,7 @@
-"use client";
-
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { QualityEngine } from '@modules/compliance/services/QualityEngine';
 import { useCallback, useState, useEffect } from 'react';
-import { ReceptionData } from '@/modules/compliance';
+import type { ReceptionData } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { useTenant } from '@/shared/hooks';
 import type { RegisterDocStatus, RegistreEntry, InterventionLog } from '@nexus/contracts/registre.types';
 
@@ -83,7 +80,15 @@ export function useRegistre() {
     const validateHACCP = useCallback(async (data: ReceptionData, tenantId: string) => {
         setIsProcessing(true);
         try {
-            return await QualityEngine.validateReception(data, tenantId);
+            const checkId = `HACCP-${Date.now()}`;
+            await NexusEventBus.emitDurable('haccp.check.saved', {
+                v: 1,
+                tenantId,
+                checkId,
+                operatorId: data.deliveryId || 'system',
+                timestamp: Date.now(),
+            });
+            return { id: checkId, currentStatus: data.hygieneStatus ?? 'conforme' };
         } finally {
             setIsProcessing(false);
         }

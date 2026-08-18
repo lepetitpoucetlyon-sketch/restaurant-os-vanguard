@@ -368,84 +368,13 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
 // Cache d'idempotence des actions exécutées (protection anti-rejeu)
 const executedProposalIds = new Set<string>();
 
-/**
- * Valide et assainit les paramètres spécifiques à chaque outil
- */
+import { ActionParameterValidator } from './action-validators/ActionParameterValidator';
+
 function sanitizeAndValidateParams(
     toolId: string,
     rawParams: Record<string, unknown>
 ): { valid: boolean; sanitizedParams: Record<string, unknown>; error?: string } {
-    const sanitized: Record<string, unknown> = {};
-
-    // 1. Assainissement anti-XSS et injection HTML sur toutes les chaînes
-    for (const [key, value] of Object.entries(rawParams)) {
-        if (typeof value === 'string') {
-            // Suppression des balises HTML et limitation de longueur
-            sanitized[key] = value.replace(/<[^>]*>?/gm, '').trim();
-        } else {
-            sanitized[key] = value;
-        }
-    }
-
-    // 2. Règles strictes par outil
-    switch (toolId) {
-        case 'fire_course_sequence': {
-            const tableId = String(sanitized.tableId || '').trim();
-            if (!tableId || tableId === 'undefined' || tableId === 'null') {
-                return { valid: false, sanitizedParams: sanitized, error: 'Numéro de table invalide ou manquant.' };
-            }
-            sanitized.tableId = tableId;
-            break;
-        }
-        case 'schedule_baking_batch': {
-            const qty = Number(sanitized.quantity);
-            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
-                return { valid: false, sanitizedParams: sanitized, error: 'La quantité à enfourner doit être un entier strictement positif (> 0).' };
-            }
-            sanitized.quantity = Math.floor(qty);
-            break;
-        }
-        case 'publish_tgtg_basket': {
-            const qty = Number(sanitized.quantity);
-            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
-                return { valid: false, sanitizedParams: sanitized, error: 'Le nombre de paniers TooGoodToGo doit être un entier strictement positif (> 0).' };
-            }
-            if (sanitized.priceCents !== undefined) {
-                const price = Number(sanitized.priceCents);
-                if (!Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
-                    return { valid: false, sanitizedParams: sanitized, error: 'Le prix du panier en centimes doit être un entier positif ou nul (>= 0).' };
-                }
-                sanitized.priceCents = Math.floor(price);
-            }
-            sanitized.quantity = Math.floor(qty);
-            break;
-        }
-        case 'track_waste_bsdd': {
-            const vol = Number(sanitized.volume);
-            if (!Number.isFinite(vol) || vol <= 0) {
-                return { valid: false, sanitizedParams: sanitized, error: 'Le volume de déchets dangereux doit être un nombre strictement positif (> 0).' };
-            }
-            sanitized.volume = vol;
-            break;
-        }
-        case 'trigger_stock_reorder':
-        case 'trigger_boutique_restock': {
-            const qty = Number(sanitized.quantity);
-            if (!Number.isFinite(qty) || qty <= 0 || !Number.isInteger(qty)) {
-                return { valid: false, sanitizedParams: sanitized, error: 'La quantité de réassort doit être un entier strictement positif (> 0).' };
-            }
-            sanitized.quantity = Math.floor(qty);
-            break;
-        }
-        case 'create_maintenance_ticket': {
-            const validSeverities = ['low', 'medium', 'high', 'critical'];
-            const severity = String(sanitized.severity || 'medium').toLowerCase();
-            sanitized.severity = validSeverities.includes(severity) ? severity : 'medium';
-            break;
-        }
-    }
-
-    return { valid: true, sanitizedParams: sanitized };
+    return ActionParameterValidator.sanitizeAndValidate(toolId, rawParams);
 }
 
 export class AssistantActionDispatcher {
