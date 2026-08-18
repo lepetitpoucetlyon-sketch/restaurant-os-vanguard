@@ -68,9 +68,11 @@
 | P1 | ⬜ | H2 | M | Intégration Deliveroo / Just Eat (agrégateur) | `src/lib/connectors/hub/DeliverooConnector.ts` | Homologation partenaire (buffer 3-6 mois) |
 | P1 | ✅ | H1 | — | Intégration TheFork / Zenchef (réservation) | `src/lib/connectors/hub/TheForkConnector.ts` | — |
 | P1 | ⬜ | H2 | M | Intégration Google Reserve (réservation via Google Maps) | `src/lib/connectors/hub/` | Homologation Google (buffer 3-6 mois) |
-| P1 | ✅ | H1 | — | Arrhes / acompte obligatoire grands groupes avec Stripe | `src/app/api/webhooks/stripe/handlers/handlePaymentEvents.ts` | Émet R10 `commerce.reservation_deposit_paid` et `stripe.deposit_received` |
-| P1 | ✅ | H1 | — | Confirmation SMS / email + rappels J-1 et J-7 | `src/orchestration/handlers/ReservationNotifier.ts` | — |
-| P1 | 🔧 | H1 | S | Politique d'annulation paramétrable + pénalité no-show | `src/modules/commerce/relation/` | — |
+| P1 | ✅ | H1 | — | Confirmation SMS & Webhook Inbound Bidirectionnel (Re-confirmation/Annulation) | `src/lib/adapters/NotificationGateway.ts`, `src/app/api/webhooks/sms/inbound/route.ts` | Validation E.164, templates GSM-7 & réponse SMS '1'/'2' branchée sur NexusEventBus |
+| P1 | ✅ | H1 | — | Cadencement & Pacing des flux d'arrivées (max couverts/15min) | `src/modules/commerce/relation/reservations/domain/AvailabilityEngine.ts` | Pacing 15 min configurable, évite l'engorgement cuisine/salle (Angle Mort #101) |
+| P1 | ✅ | H1 | — | Sécurité Cryptographique HMAC Anti-Bruteforce Modification | `src/lib/security/ReservationTokenSigner.ts`, `src/app/api/widget/book/route.ts` | Signature déterministe time-limited, timingSafeEqual (Angle Mort #106) |
+| P1 | ✅ | H1 | — | Scission 1-Clic d'Urgence Plan de Salle sur No-Show Partiel | `src/modules/facility/spaces/floor-plan/TableInsightPanel.tsx` | Libération instantanée d'une table fusionnée pour les walk-in (Angle Mort #102) |
+| P1 | ✅ | H1 | — | Options Widget Client & Simulateur Direct Gérant | `src/modules/commerce/relation/reservations/components/settings/` | Customisation SMS/Email, tags dynamiques & preview live Ombellule |
 | P1 | ✅ | H1 | — | Préférences clients (régime alimentaire, placement, occasion) | `src/modules/commerce/relation/customers/components/NewCustomerDialog.tsx` | Chips structurés dietary/seating/occasion |
 | P1 | ✅ | H1 | — | Liste d'attente temps réel avec SMS estimé | `src/modules/commerce/relation/reservations/Waitlist.ts`, `WaitlistReadyHandler.ts` | Émet `commerce.waitlist_ready` → SMS + notif interne |
 | P2 | ⬜ | H3 | M | Réservation via WhatsApp Business | `src/lib/connectors/hub/WhatsAppConnector.ts` | — |

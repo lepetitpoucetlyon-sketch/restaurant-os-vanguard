@@ -322,6 +322,17 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         </>
                                     )}
                                 </button>
+
+                                <button
+                                    onClick={() => {
+                                        updateTable(selectedTable.id, { status: 'available' as TableStatus });
+                                        toast.info(`Table ${selectedTable.label || selectedTable.id} libérée pour Walk-In (Scission d'urgence)`);
+                                    }}
+                                    className="w-full h-10 rounded-xl bg-status-danger/10 hover:bg-status-danger/20 text-status-danger font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all border border-status-danger/20"
+                                >
+                                    <AlertTriangle className="w-3.5 h-3.5" />
+                                    Scinder / Libérer Table (No-Show Partiel)
+                                </button>
                             </div>
                         )}
                     </div>

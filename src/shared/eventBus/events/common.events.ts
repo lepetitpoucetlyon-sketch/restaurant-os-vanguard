@@ -26,6 +26,27 @@ export interface COMMONEvents {
     promotionId: string;
   };
 
+  "commerce.reservation_reconfirmed": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reservationId: string;
+    customerPhone: string;
+    date: string;
+    time: string;
+  };
+
+  "commerce.reservation_cancelled": {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reservationId: string;
+    customerPhone: string;
+    date: string;
+    time: string;
+    covers?: number;
+  };
+
   "commerce.reservation_deposit_paid": {
     v: 1;
     isSimulation?: boolean;
