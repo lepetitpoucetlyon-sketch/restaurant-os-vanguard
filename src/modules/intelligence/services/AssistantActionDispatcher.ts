@@ -18,7 +18,10 @@ export type ActionToolCategory =
     | 'garage' 
     | 'hotel' 
     | 'health' 
-    | 'luxury_vault' 
+    | 'gym'
+    | 'coworking'
+    | 'veterinary'
+    | 'florist'
     | 'logistics' 
     | 'facility' 
     | 'finance';
@@ -307,16 +310,57 @@ export const UNIVERSAL_ASSISTANT_TOOLS: Record<string, AssistantToolDefinition> 
         ],
     },
 
-    // ── 💼 Verticale 8 : Coffre de Luxe & Actifs ────────────────────────────
-    verify_luxury_asset_seal: {
-        id: 'verify_luxury_asset_seal',
-        name: 'Vérification Scellé NFC & Cote Actif',
-        description: 'Consulte la cote officielle ou déclenche une vérification de scellé de coffre.',
-        category: 'luxury_vault',
+    // ── 🏋️ Verticale : Salle de Sport ────────────────────────────────────
+    book_gym_class: {
+        id: 'book_gym_class',
+        name: 'Réservation de Cours Collectif',
+        description: 'Inscrit un adhérent à une session de cours ou coaching privé.',
+        category: 'gym',
         minRoleLevel: 40,
         parameters: [
-            { name: 'assetId', type: 'string', description: 'Identifiant du sac ou lot de luxe (ex: BIRKIN-30-001)', required: true },
-            { name: 'verificationType', type: 'string', description: 'Type de vérification (nfc_ping, market_quote, vault_status)', required: true },
+            { name: 'classId', type: 'string', description: 'Identifiant du cours', required: true },
+            { name: 'memberId', type: 'string', description: 'Identifiant de l\'adhérent', required: true },
+            { name: 'slot', type: 'string', description: 'Créneau horaire', required: true },
+        ],
+    },
+
+    // ── 💼 Verticale : Coworking ──────────────────────────────────────────
+    book_coworking_room: {
+        id: 'book_coworking_room',
+        name: 'Réservation Salle de Réunion',
+        description: 'Réserve un espace ou une salle de réunion pour une entreprise ou un coworker.',
+        category: 'coworking',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'roomId', type: 'string', description: 'Identifiant de la salle', required: true },
+            { name: 'companyId', type: 'string', description: 'Identifiant de l\'entreprise', required: true },
+            { name: 'hours', type: 'number', description: 'Nombre d\'heures réservées', required: true },
+        ],
+    },
+
+    // ── 🐾 Verticale : Clinique Vétérinaire ────────────────────────────────
+    schedule_pet_vaccine: {
+        id: 'schedule_pet_vaccine',
+        name: 'Programmation Rappel Vaccin Animal',
+        description: 'Planifie ou envoie un rappel de vaccin pour un animal enregistré.',
+        category: 'veterinary',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'animalId', type: 'string', description: 'Identifiant de l\'animal (ICAD)', required: true },
+            { name: 'vaccineName', type: 'string', description: 'Nom du vaccin', required: true },
+        ],
+    },
+
+    // ── 🌸 Verticale : Fleuriste ──────────────────────────────────────────
+    create_custom_bouquet_order: {
+        id: 'create_custom_bouquet_order',
+        name: 'Commande Composition Florale',
+        description: 'Enregistre une commande de composition ou bouquet sur-mesure.',
+        category: 'florist',
+        minRoleLevel: 40,
+        parameters: [
+            { name: 'customerId', type: 'string', description: 'Identifiant du client', required: true },
+            { name: 'recipeId', type: 'string', description: 'Identifiant de la formule ou arrangement', required: true },
         ],
     },
 };

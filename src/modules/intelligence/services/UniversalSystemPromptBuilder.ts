@@ -78,14 +78,6 @@ export const VERTICAL_LABELS_MAP: Record<string, VerticalShorthandLabels> = {
         ticketLabel: 'ticket de caisse / scan EAN',
         focusAreas: 'variantes taille/couleur, scan codes-barres 2D, inventaire et réassort.',
     },
-    luxury_vault: {
-        merchantTitle: 'Investissement & Coffre Sacs de Luxe',
-        unitLabel: 'part / fraction d\'actif',
-        spaceLabel: 'coffre-fort / chambre forte blindée',
-        operatorLabel: 'expert authentificateur / curator',
-        ticketLabel: 'certificat de scellé / fiche d\'expertise',
-        focusAreas: 'cotation officielle, état du cuir/coutures, vérification NFC et distribution des dividendes locatifs.',
-    },
     custom: {
         merchantTitle: 'Universal Commerce OS',
         unitLabel: 'unité / lot',
@@ -93,6 +85,38 @@ export const VERTICAL_LABELS_MAP: Record<string, VerticalShorthandLabels> = {
         operatorLabel: 'opérateur / collaborateur',
         ticketLabel: 'ticket d\'opération',
         focusAreas: 'opérations de commerce, gestion d\'équipe et encaissement sécurisé.',
+    },
+    gym: {
+        merchantTitle: 'Salle de Sport & Fitness',
+        unitLabel: 'adhésion / séance',
+        spaceLabel: 'plateau / salle de cours',
+        operatorLabel: 'coach / hôte d\'accueil',
+        ticketLabel: 'abonnement / pass séance',
+        focusAreas: 'gestion des membres, tourniquets RFID, prélèvements SEPA et planning des cours.',
+    },
+    coworking: {
+        merchantTitle: 'Espace de Coworking & Bureaux',
+        unitLabel: 'poste / heure de réunion',
+        spaceLabel: 'bureau / salle de réunion',
+        operatorLabel: 'community manager / gestionnaire',
+        ticketLabel: 'facture pass / réservation salle',
+        focusAreas: 'occupation des postes, forfaits d\'heures, badges d\'accès et facturation récurrente.',
+    },
+    veterinary: {
+        merchantTitle: 'Clinique & Cabinet Vétérinaire',
+        unitLabel: 'consultation / acte de soin',
+        spaceLabel: 'salle de consultation / bloc chirurgical',
+        operatorLabel: 'vétérinaire / ASV',
+        ticketLabel: 'feuille de soins / ordonnance',
+        focusAreas: 'dossiers animaux ICAD, vaccins, délivrance pharmacie vétérinaire et chirurgies.',
+    },
+    florist: {
+        merchantTitle: 'Fleuriste & Atelier Végétal',
+        unitLabel: 'tige / bouquet / composition',
+        spaceLabel: 'atelier / chambre froide / vitrine',
+        operatorLabel: 'fleuriste / artisan',
+        ticketLabel: 'ticket de vente / bon de commande',
+        focusAreas: 'fraîcheur des arrivages, recettes florales, abonnements et tournées de livraison.',
     },
 };
 
