@@ -7,8 +7,9 @@ import { SALON_FULL_DNA } from './salon-full-dna';
 import { GARAGE_FULL_DNA } from './garage-full-dna';
 import { RETAIL_FULL_DNA } from './retail-full-dna';
 import { CLINIC_FULL_DNA } from './clinic-full-dna';
+import { CUSTOM_FULL_DNA } from './custom-full-dna';
 
-const DNA_REGISTRY: Record<string, TenantConfig> = {
+export const DNA_REGISTRY: Record<string, TenantConfig> = {
   restaurant: RESTAURANT_FULL_DNA,
   hotel: HOTEL_FULL_DNA,
   bakery: BAKERY_FULL_DNA,
@@ -16,6 +17,7 @@ const DNA_REGISTRY: Record<string, TenantConfig> = {
   garage: GARAGE_FULL_DNA,
   retail: RETAIL_FULL_DNA,
   clinic: CLINIC_FULL_DNA,
+  custom: CUSTOM_FULL_DNA,
 };
 
 export function resolveDNA(variant: PlatformVariant): TenantConfig {
@@ -33,3 +35,4 @@ export { SALON_FULL_DNA } from './salon-full-dna';
 export { GARAGE_FULL_DNA } from './garage-full-dna';
 export { RETAIL_FULL_DNA } from './retail-full-dna';
 export { CLINIC_FULL_DNA } from './clinic-full-dna';
+export { CUSTOM_FULL_DNA } from './custom-full-dna';
