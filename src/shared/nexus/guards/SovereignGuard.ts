@@ -33,6 +33,7 @@ export const SovereignGuard = {
         'vouchers',
         'coupons',
         'paymentMethods',
+        'wormArchives',
     ]),
 
     IMMUTABLE_COLLECTIONS: new Set<string>([
@@ -44,6 +45,7 @@ export const SovereignGuard = {
         'ledger', // Legacy mapping
         'fiscalSeals',
         'journalEntries',
+        'wormArchives',
     ]),
 
     /**
@@ -64,7 +66,33 @@ export const SovereignGuard = {
         if (
             path.includes('ledger/') ||
             path.includes('config/master') ||
-            path.includes('fiscal/')
+            path.includes('fiscal/') ||
+            path.includes('wormArchives/')
+        ) {
+            return false;
+        }
+
+        return true;
+    },
+
+    /**
+     * ⚖️ NF525: Check if a document can be updated / mutated.
+     * Grade X : Overwriting or updating sealed archives/seals is strictly forbidden.
+     */
+    canUpdate(path: string): boolean {
+        const collection = this.extractCollectionName(path);
+
+        const isImmutable = Array.from(this.IMMUTABLE_COLLECTIONS).some(
+            (col: string) => path.includes(col) || collection === col,
+        );
+
+        if (isImmutable) return false;
+
+        if (
+            path.includes('ledger/') ||
+            path.includes('config/master') ||
+            path.includes('fiscal/') ||
+            path.includes('wormArchives/')
         ) {
             return false;
         }
@@ -301,12 +329,20 @@ export const SovereignGuard = {
      * 🛡️ Grade X Validation Entry Point
      */
     async validateAccessGradeX(
-        operation: 'READ' | 'WRITE' | 'DELETE',
+        operation: 'READ' | 'WRITE' | 'DELETE' | 'UPDATE',
         path: string,
         context: { vassalId: string; actorId: string },
     ): Promise<{ granted: boolean; reason?: string }> {
         try {
             await this.validateAccess(path, context.vassalId);
+
+            if (operation === 'DELETE' && !this.canDelete(path)) {
+                return { granted: false, reason: 'NF525_DELETE_IMMUTABLE_FORBIDDEN' };
+            }
+
+            if (operation === 'UPDATE' && !this.canUpdate(path)) {
+                return { granted: false, reason: 'NF525_UPDATE_IMMUTABLE_FORBIDDEN' };
+            }
 
             return { granted: true };
         } catch (error) {

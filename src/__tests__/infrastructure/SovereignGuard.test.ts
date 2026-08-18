@@ -15,16 +15,52 @@ describe('SovereignGuard', () => {
       expect(SovereignGuard.canDelete('tenants/123/fiscalLedger/doc')).toBe(false);
       expect(SovereignGuard.canDelete('tenants/123/fiscalSeals/doc')).toBe(false);
       expect(SovereignGuard.canDelete('tenants/123/journalEntries/doc')).toBe(false);
+      expect(SovereignGuard.canDelete('tenants/123/wormArchives/doc')).toBe(false);
     });
 
     it('prevents deletion in sacred zones via deep path', () => {
       expect(SovereignGuard.canDelete('tenants/123/ledger/anything')).toBe(false);
       expect(SovereignGuard.canDelete('config/master/settings')).toBe(false);
+      expect(SovereignGuard.canDelete('tenants/123/wormArchives/file.pdf')).toBe(false);
     });
 
     it('allows deletion of normal collections', () => {
       expect(SovereignGuard.canDelete('tenants/123/orders/doc')).toBe(true);
       expect(SovereignGuard.canDelete('tenants/123/products/doc')).toBe(true);
+    });
+  });
+
+  describe('canUpdate', () => {
+    it('prevents update/mutation of immutable collections (NF525)', () => {
+      expect(SovereignGuard.canUpdate('tenants/123/fiscalLedger/doc')).toBe(false);
+      expect(SovereignGuard.canUpdate('tenants/123/fiscalSeals/doc')).toBe(false);
+      expect(SovereignGuard.canUpdate('tenants/123/journalEntries/doc')).toBe(false);
+      expect(SovereignGuard.canUpdate('tenants/123/wormArchives/doc')).toBe(false);
+    });
+
+    it('allows update of mutable business collections', () => {
+      expect(SovereignGuard.canUpdate('tenants/123/orders/doc')).toBe(true);
+      expect(SovereignGuard.canUpdate('tenants/123/products/doc')).toBe(true);
+      expect(SovereignGuard.canUpdate('tenants/123/stockItems/doc')).toBe(true);
+    });
+  });
+
+  describe('validateAccessGradeX', () => {
+    it('blocks DELETE on immutable collections with NF525 reason', async () => {
+      const res = await SovereignGuard.validateAccessGradeX('DELETE', 'tenants/123/fiscalSeals/seal_1', { vassalId: '123', actorId: 'usr_1' });
+      expect(res.granted).toBe(false);
+      expect(res.reason).toBe('NF525_DELETE_IMMUTABLE_FORBIDDEN');
+    });
+
+    it('blocks UPDATE on immutable collections with NF525 reason', async () => {
+      const res = await SovereignGuard.validateAccessGradeX('UPDATE', 'tenants/123/wormArchives/arc_1', { vassalId: '123', actorId: 'usr_1' });
+      expect(res.granted).toBe(false);
+      expect(res.reason).toBe('NF525_UPDATE_IMMUTABLE_FORBIDDEN');
+    });
+
+    it('grants UPDATE on normal collections', async () => {
+      const res = await SovereignGuard.validateAccessGradeX('UPDATE', 'tenants/123/products/prod_1', { vassalId: '123', actorId: 'usr_1' });
+      expect(res.granted).toBe(true);
     });
   });
 

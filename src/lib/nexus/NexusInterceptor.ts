@@ -112,6 +112,9 @@ export class NexusInterceptor implements INexusAdapter {
             },
             update: (path, data) => {
                 const scopedPath = this.scopePath(path, ctx.vassalId);
+                if (!this.guard.canUpdate(path)) {
+                    throw new NexusError(NexusErrorCode.NF525_VIOLATION, 'Cannot update a fiscally sealed document in batch');
+                }
                 pendingGuards.push(this.guard.validateAccess(scopedPath, ctx.vassalId));
                 pendingWrites.push(async () => {
                     const protectedData = await this.guard.protectWrite(scopedPath, data as SovereignData, ctx.vassalId);
@@ -166,7 +169,7 @@ export class NexusInterceptor implements INexusAdapter {
 
     async update<T = unknown>(path: string, data: Partial<T>, context?: NexusContext): Promise<void> {
         const ctx = this.ensureContext(context);
-        return this.intercept('WRITE', path, ctx, () =>
+        return this.intercept('UPDATE', path, ctx, () =>
             this.adapter.runTransaction(async (tx) => {
                 const scopedPath = this.scopePath(path, ctx.vassalId);
                 const existing = await tx.get<T>(scopedPath);
@@ -219,7 +222,7 @@ export class NexusInterceptor implements INexusAdapter {
     // --- Private Infrastructure ---
 
     private async intercept<R>(
-        operation: 'READ' | 'WRITE' | 'DELETE',
+        operation: 'READ' | 'WRITE' | 'DELETE' | 'UPDATE',
         path: string,
         context: NexusContext,
         action: () => Promise<R>
@@ -252,6 +255,21 @@ export class NexusInterceptor implements INexusAdapter {
                     timestamp: new Date().toISOString(),
                 });
                 throw new NexusError(NexusErrorCode.NF525_VIOLATION, 'Cannot delete a fiscally sealed document');
+            }
+        }
+
+        if (operation === 'UPDATE') {
+            const isSealed = await this.guard.isFiscallySealed(path, context);
+            if (isSealed || !this.guard.canUpdate(path)) {
+                await NexusTelemetryService.emit({
+                    pulse: AuditPulseType.ILLEGAL_WRITE_ATTEMPT,
+                    vassalId: context.vassalId,
+                    actorId: context.actorId,
+                    payload: { path: this.sanitizePath(path) },
+                    severity: 'CRITICAL',
+                    timestamp: new Date().toISOString(),
+                });
+                throw new NexusError(NexusErrorCode.NF525_VIOLATION, 'Cannot update a fiscally sealed document');
             }
         }
 

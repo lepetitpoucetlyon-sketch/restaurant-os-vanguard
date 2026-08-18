@@ -84,4 +84,20 @@ describe('NexusInterceptor', () => {
       expect(mockAdapter.delete).toHaveBeenCalledWith('tenants/tenant_1/orders/1');
     });
   });
+
+  describe('UPDATE operations', () => {
+    it('blocks update of fiscally sealed documents (V3-NF525-01)', async () => {
+      mockGuard.validateAccessGradeX.mockResolvedValue({ granted: true });
+      mockGuard.isFiscallySealed.mockResolvedValue(true);
+
+      await expect(interceptor.update('fiscalSeals/1', { status: 'tampered' }, ctx)).rejects.toThrow(/NF525/);
+    });
+
+    it('blocks batch update on immutable collections (V3-NF525-01)', () => {
+      const batch = interceptor.batch();
+      expect(() => {
+        batch.update('wormArchives/arc_1', { data: 'tampered' });
+      }).toThrow(/NF525/);
+    });
+  });
 });
