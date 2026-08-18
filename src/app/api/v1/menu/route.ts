@@ -1,15 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
+import { getCallerAuth } from '@/lib/server/adminAuthGuard';
 import type { SovereignProduct } from '@/modules/ops';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const { searchParams } = new URL(req.url);
   const tenantId = searchParams.get('tenantId');
 
   if (!tenantId) {
     return NextResponse.json({ error: 'Paramètre tenantId manquant' }, { status: 400 });
+  }
+
+  // Rate Limiting : 60 requêtes par minute par IP/tenant (V3-SEC-08)
+  const limiter = getRateLimiter();
+  const rl = await limiter.check(`menu:${ip}:${tenantId}`, 60, 60 * 1000);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: 'Trop de requêtes, veuillez réessayer plus tard' }, { status: 429 });
+  }
+
+  // Si un token d'authentification est fourni, vérifier la correspondance du tenant
+  const authHeader = req.headers.get('authorization');
+  if (authHeader) {
+    const caller = await getCallerAuth(req);
+    if (caller && caller.tenantId && caller.tenantId !== tenantId) {
+      return NextResponse.json({ error: 'Accès non autorisé pour ce tenant' }, { status: 403 });
+    }
   }
 
   try {

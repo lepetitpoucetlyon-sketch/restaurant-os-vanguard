@@ -75,4 +75,10 @@ describe('Socle API REST v1 OpenAPI & Orders / Menu (H2.2)', () => {
     expect(json.categories).toContain('Entrées');
     expect(json.categories).toContain('Plats');
   });
+
+  it('devrait rejeter GET /api/v1/menu sans tenantId avec un statut 400', async () => {
+    const req = new NextRequest('http://localhost:3000/api/v1/menu');
+    const res = await getMenuHandler(req);
+    expect(res.status).toBe(400);
+  });
 });
