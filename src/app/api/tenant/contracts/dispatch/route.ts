@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SovereignSignatureEngine, ContractDispatcherService, type ContractRecord, type ContractDraftInput } from '@/modules/compliance';
+import { requireTenantAdmin } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 
 interface DispatchRequestBody {
@@ -88,14 +89,15 @@ async function resolveOrCreateContract(tenantId: string, body: DispatchRequestBo
 }
 
 export async function POST(req: NextRequest) {
+  const caller = await requireTenantAdmin(req);
+  if (caller instanceof NextResponse) return caller;
+
   try {
     const body = (await req.json()) as DispatchRequestBody;
 
-    if (!body?.tenantId) {
-      return NextResponse.json({ error: 'Le champ tenantId est requis' }, { status: 400 });
-    }
+    const tenantId = caller.tenantId;
 
-    const contract = await resolveOrCreateContract(body.tenantId, body);
+    const contract = await resolveOrCreateContract(tenantId, body);
 
     const dispatchResult = await ContractDispatcherService.dispatchContract(contract, {
       sendEmail: body.sendEmail ?? true,

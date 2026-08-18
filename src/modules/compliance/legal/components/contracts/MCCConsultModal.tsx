@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, ShieldCheck, X, ExternalLink, Send, Download } from 'lucide-react';
 import type { ContractRecord } from '@/modules/compliance';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface MCCConsultModalProps {
   selectedContract: ContractRecord | null;
@@ -19,7 +20,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
     try {
       setIsSendingSms(true);
       setFeedbackMessage(null);
-      const res = await fetch('/api/tenant/contracts/dispatch', {
+      const res = await authedFetch('/api/tenant/contracts/dispatch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

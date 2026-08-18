@@ -1,10 +1,17 @@
 # 🏛️ RESTAURANT OS — Production Compose Stack
-# Orchestration complète : Next.js App + DocuSeal Open-Source + Caddy Reverse Proxy (Auto-HTTPS)
+# Orchestration : Next.js App + DocuSeal Open-Source + Caddy Reverse Proxy (Auto-HTTPS)
+# + DB conditionnelle (postgres / mongo) activée via COMPOSE_PROFILES.
+#
+# Le script bootstrap-production-stack.sh choisit le provider et positionne
+# COMPOSE_PROFILES dans .env.production. Les services "postgres" et "mongo"
+# ne démarrent que si leur profil est activé.
 
 version: '3.8'
 
 services:
-  # 1. Moteur DocuSeal Auto-Hébergé (Zéro Tiers, Zéro Coût par Signature)
+  # ─────────────────────────────────────────────────────────────
+  # 1. DocuSeal — moteur d'e-signature auto-hébergé (zéro tiers)
+  # ─────────────────────────────────────────────────────────────
   docuseal:
     image: docuseal/docuseal:latest
     container_name: restaurant-os-docuseal
@@ -13,6 +20,8 @@ services:
       - FORCE_SSL=false
       - STORAGE_DIR=/data
       - SECRET_KEY_BASE=${DOCUSEAL_SECRET_KEY:-eidas_sovereign_secret_master_key_2026}
+      # Signature sortante des webhooks (partagé avec l'app côté récepteur)
+      - WEBHOOK_SIGNING_SECRET=${DOCUSEAL_WEBHOOK_SECRET:-}
     volumes:
       - docuseal_data:/data
     networks:
@@ -23,7 +32,9 @@ services:
       timeout: 5s
       retries: 3
 
-  # 2. Restaurant OS Core (App Next.js, API & Cockpit MCC)
+  # ─────────────────────────────────────────────────────────────
+  # 2. Restaurant OS Core (Next.js App + API + Cockpit MCC)
+  # ─────────────────────────────────────────────────────────────
   app:
     build:
       context: .
@@ -36,17 +47,39 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DOCUSEAL_API_URL=http://docuseal:3000
-      - DOCUSEAL_API_KEY=${DOCUSEAL_API_KEY:-auto_bootstrapped_key}
       - NEXT_PUBLIC_APP_URL=${APP_URL:-https://app.webapp.fr}
-      - DATABASE_URL=${DATABASE_URL}
-      - JWT_SECRET=${JWT_SECRET}
+
+      # ── Nexus DB Provider (résolu par NexusInfra) ──
+      - NEXUS_PROVIDER=${NEXUS_PROVIDER:-firestore}
+      - DATABASE_URL=${DATABASE_URL:-}
+
+      # ── Firestore (si NEXUS_PROVIDER=firestore) ──
+      - FIRESTORE_PROJECT_ID=${FIRESTORE_PROJECT_ID:-}
+      - FIREBASE_SERVICE_ACCOUNT_JSON=${FIREBASE_SERVICE_ACCOUNT_JSON:-}
+
+      # ── Supabase Managed (si NEXUS_PROVIDER=postgres) ──
+      - SUPABASE_PROJECT_REF=${SUPABASE_PROJECT_REF:-}
+      - SUPABASE_ACCESS_TOKEN=${SUPABASE_ACCESS_TOKEN:-}
+
+      # ── MongoDB Atlas (si NEXUS_PROVIDER=mongo) ──
+      - MONGO_ATLAS_PROJECT_ID=${MONGO_ATLAS_PROJECT_ID:-}
+      - MONGO_ATLAS_API_KEY=${MONGO_ATLAS_API_KEY:-}
+
+      # ── DocuSeal (côté client + webhook receiver) ──
+      - DOCUSEAL_API_URL=${DOCUSEAL_API_URL:-http://docuseal:3000}
+      - DOCUSEAL_API_KEY=${DOCUSEAL_API_KEY:-}
+      - DOCUSEAL_WEBHOOK_SECRET=${DOCUSEAL_WEBHOOK_SECRET:-}
+
+      # ── Auth ──
+      - JWT_SECRET=${JWT_SECRET:-}
     volumes:
       - app_storage:/app/storage
     networks:
       - restaurant-os-net
 
-  # 3. Caddy Reverse Proxy (Certificats SSL Let's Encrypt automatiques pour *.webapp.fr)
+  # ─────────────────────────────────────────────────────────────
+  # 3. Caddy — Reverse Proxy + SSL Let's Encrypt automatique
+  # ─────────────────────────────────────────────────────────────
   caddy:
     image: caddy:2-alpine
     container_name: restaurant-os-caddy
@@ -64,6 +97,49 @@ services:
     networks:
       - restaurant-os-net
 
+  # ─────────────────────────────────────────────────────────────
+  # 4. Postgres — activé uniquement avec COMPOSE_PROFILES=postgres
+  # ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: restaurant-os-postgres
+    restart: always
+    profiles: ["postgres"]
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-restauros}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme_prod}
+      - POSTGRES_DB=${POSTGRES_DB:-restauros}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - restaurant-os-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-restauros} -d ${POSTGRES_DB:-restauros}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────────────────────
+  # 5. MongoDB — activé uniquement avec COMPOSE_PROFILES=mongo
+  # ─────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: restaurant-os-mongo
+    restart: always
+    profiles: ["mongo"]
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME:-restauros}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD:-changeme_prod}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - restaurant-os-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   docuseal_data:
     driver: local
@@ -72,6 +148,10 @@ volumes:
   caddy_data:
     driver: local
   caddy_config:
+    driver: local
+  postgres_data:
+    driver: local
+  mongo_data:
     driver: local
 
 networks:

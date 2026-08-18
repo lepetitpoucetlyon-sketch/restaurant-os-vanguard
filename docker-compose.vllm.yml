@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  vllm-slm:
+    image: vllm/vllm-openai:latest
+    container_name: restaurant_os_slm
+    restart: always
+    runtime: nvidia
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN:-}
+      - VLLM_LOGGING_LEVEL=INFO
+    volumes:
+      - ./models/restaurant-os-slm-v1:/model
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    ports:
+      - "127.0.0.1:8000:8000"
+    command: >
+      --model /model
+      --served-model-name restaurant-os-slm-v1
+      --trust-remote-code
+      --max-model-len 2048
+      --gpu-memory-utilization 0.85
+      --dtype bfloat16
+      --enforce-eager
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
