@@ -7,7 +7,7 @@ export type {
     NexusTimestamp,
 } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
-import { IQueryOptions, NexusTimestamp } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import type { IQueryOptions, NexusTimestamp } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
 
 export interface NexusContext {
     vassalId: string;

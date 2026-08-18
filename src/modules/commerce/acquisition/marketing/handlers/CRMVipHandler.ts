@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import type { Customer } from '@shared/nexus/contracts/nexus-internal-mapper';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 /**
  * P3-1: CRM VIP Handler

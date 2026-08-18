@@ -19,7 +19,7 @@ import {
   Shield,
   HelpCircle,
 } from 'lucide-react';
-import { EquipmentAsset, EquipmentCategory, EquipmentStatus } from '../../assets/domain/schemas/equipment';
+import type { EquipmentAsset, EquipmentCategory, EquipmentStatus } from '../../assets/domain/schemas/equipment';
 
 interface EquipmentAssetCardProps {
   asset: EquipmentAsset;

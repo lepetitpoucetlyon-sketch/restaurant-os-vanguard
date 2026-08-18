@@ -18,7 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 interface HotspotAlert {
   severity: 'warning' | 'critical';

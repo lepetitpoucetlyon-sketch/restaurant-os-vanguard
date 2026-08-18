@@ -25,11 +25,11 @@ export class GroupService {
      * Business validation for group events.
      */
     static validateGroup(data: Partial<GroupEvent>): { valid: boolean; error?: string } {
-        if (!data.name || data.name.length < 3) {
+        if (!data.title || data.title.length < 3) {
             return { valid: false, error: "Le nom de l'événement est requis." };
         }
         
-        if (!data.covers?.initial || data.covers.initial <= 0) {
+        if (!data.partySize || data.partySize <= 0) {
             return { valid: false, error: "Le nombre d'invités doit être positif." };
         }
 

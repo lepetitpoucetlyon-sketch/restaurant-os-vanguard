@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
 import { TenantConfigSchema } from '@/modules/system';
 import { ReservationWidget } from '@/modules/commerce';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

@@ -8,40 +8,8 @@ import { padZero, todayISO, generateRef } from './pdf/pdfLayoutHelpers';
 import { renderContractPage1 } from './pdf/contractPage1';
 import { renderContractPage2 } from './pdf/contractPage2';
 
-export type PrivatisationFormule = 'menu' | 'cocktail_dinatoire' | 'buffet';
-
-export interface PrivatisationData {
-  /** Informations client */
-  clientNom: string;
-  clientPrenom: string;
-  clientEmail: string;
-  clientTelephone: string;
-  clientAdresse?: string;
-
-  /** Informations événement */
-  evenementNom: string;
-  dateEvenement: string;          // Format ISO : "2026-09-20"
-  heureDebut: string;             // Format "HH:MM"
-  heureFin: string;               // Format "HH:MM"
-  nombreConvives: number;
-  formule: PrivatisationFormule;
-  descriptionFormule?: string;    // Précisions sur le menu / formule
-
-  /** Tarification (en euros) */
-  montantHT: number;              // Montant total hors taxes en euros
-  tauxTVA?: number;               // TVA en % — défaut 20
-
-  /** Informations restaurant (depuis tenantConfig / whiteLabelInstanceConfig) */
-  restaurantNom: string;
-  restaurantAdresse: string;
-  restaurantTelephone?: string;
-  restaurantEmail?: string;
-  restaurantSiret?: string;
-
-  /** Métadonnées */
-  numeroContrat?: string;         // Référence du contrat
-  dateSignature?: string;         // Format ISO — défaut : aujourd'hui
-}
+import type { PrivatisationFormule, PrivatisationData } from './pdf/privatisationTypes';
+export type { PrivatisationFormule, PrivatisationData };
 
 /**
  * Génère et déclenche le téléchargement d'un contrat de privatisation au format PDF.

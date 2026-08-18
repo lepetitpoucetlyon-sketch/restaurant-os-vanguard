@@ -3,14 +3,9 @@ import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal } from '@nexus/contracts';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
-import type { BridgeResult } from './FinancialNexusBridge';
+import type { BridgeResult, RefundPayload } from './FinancialNexusTypes';
+export type { RefundPayload };
 
-export interface RefundPayload {
-  original: JournalEntry;
-  operatorId: string;
-  tenantId: string;
-  reason: string;
-}
 
 export async function processRefundOperation(payload: RefundPayload): Promise<BridgeResult> {
   const { original, operatorId, tenantId, reason } = payload;

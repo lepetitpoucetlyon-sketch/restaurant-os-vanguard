@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export interface BudgetLine {
     analyticalAxis: string;

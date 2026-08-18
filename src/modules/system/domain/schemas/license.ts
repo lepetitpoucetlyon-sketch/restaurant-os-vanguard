@@ -3,4 +3,4 @@ export {
   LicenseTypeSchema,
   type License,
   type LicenseType,
-} from '@/modules/compliance';
+} from '@/modules/compliance/domain/schemas/license';

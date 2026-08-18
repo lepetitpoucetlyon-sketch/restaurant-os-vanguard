@@ -8,7 +8,7 @@ import { useLanguage } from '@/shared/hooks';
 import { Button } from '@ui/button';
 import { BottomSheet } from '@ui/BottomSheet';
 import { useIsMobile } from '@/shared/hooks';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export function CRMContactForm() {
     const { t } = useLanguage();

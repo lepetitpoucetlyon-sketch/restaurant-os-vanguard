@@ -3,7 +3,7 @@
 import { Book, AlertTriangle, MessageSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Recipe, OrderItem } from "@nexus/contracts";
-import { resolveStation } from '../..';
+import { resolveStation } from '../../contracts/kds-constants';
 import { SortableItemWrapper } from './KDSSortableItem';
 
 interface SeatBadgeProps { seat: number | string }

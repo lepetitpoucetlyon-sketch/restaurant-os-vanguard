@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Nexus } from '@/lib/nexus';
-import { useTenant } from '@/shared/hooks';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { useTenant } from '@/shared/hooks/useTenant';
 
 import {
     ZONES,

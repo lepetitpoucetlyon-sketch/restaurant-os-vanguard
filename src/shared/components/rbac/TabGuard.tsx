@@ -1,6 +1,6 @@
 import React from "react";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
-import { PageKey } from "@/shared/nexus/contracts/permissions.types";
+import type { PageKey } from "@/shared/nexus/contracts/permissions.types";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
 

@@ -1,8 +1,8 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { FiscalEngine, type FiscalSeal } from '../fiscalite/FiscalAdapter';
-import { StockEngine } from '@/modules/logistics';
-import { Order, StockItem, Recipe } from '@nexus/contracts';
+import { StockEngine } from '@/modules/logistics/services/StockEngine';
+import type { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { SovereignMath } from '@/shared/services/SovereignMath';

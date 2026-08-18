@@ -14,7 +14,7 @@ import {
   ArrowRight,
   ShieldAlert,
 } from 'lucide-react';
-import {
+import type {
   EquipmentAsset,
   FaultSeverity,
 } from '../../assets/domain/schemas/equipment';

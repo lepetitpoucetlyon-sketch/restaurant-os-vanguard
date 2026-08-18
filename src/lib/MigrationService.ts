@@ -4,7 +4,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { validatePin } from '@/lib/auth/validatePin';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 /**
  * Generates a cryptographically secure 4-digit PIN (1000–9999).

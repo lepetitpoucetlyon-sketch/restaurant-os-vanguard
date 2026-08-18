@@ -4,8 +4,8 @@
  * Moteur de validation et d'envoi multi-canaux des commandes fournisseurs (WhatsApp, SMS, Email PDF, EDI).
  */
 
-import { PurchaseOrderEntity, OrderDispatchPayload } from './SupplierOrderTypes';
-import { SupplierEntity } from '../core/domain/supplier.types';
+import type { PurchaseOrderEntity, OrderDispatchPayload } from './SupplierOrderTypes';
+import type { SupplierEntity } from '../core/domain/supplier.types';
 
 export class MultiChannelOrderDispatcherService {
   /**

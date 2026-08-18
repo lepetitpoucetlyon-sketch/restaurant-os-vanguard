@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import type { ContractRecord } from './SovereignSignatureEngine';
+import type { ContractRecord } from './legalContractsTypes';
 
 export interface DocuSealSubmitter {
   name: string;

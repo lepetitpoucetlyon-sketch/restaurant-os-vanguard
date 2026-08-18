@@ -1,4 +1,4 @@
-import type { Shift } from "../ShiftEditModal";
+import type { Shift } from "./shiftTypes";
 
 export interface LegalWarning {
     label: string;

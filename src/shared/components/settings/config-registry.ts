@@ -1,4 +1,4 @@
-import { PageKey, PageSettingConfig } from "@nexus/contracts/permissions.types";
+import type { PageKey, PageSettingConfig } from "@nexus/contracts/permissions.types";
 
 export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSettingConfig[] }> = {
     dashboard: {

@@ -1,5 +1,5 @@
 import { SovereignMath } from '@/shared/services/SovereignMath';
-import type { CartItem as SplitCartItem, ConvivePayment, SplitMode } from '@/modules/ops';
+import type { CartItem as SplitCartItem, ConvivePayment, SplitMode } from '@/modules/ops/domain/schemas/pos';
 
 export const SplitBillDomainService = {
     createEqualPayments(count: number, totalInCents: number): ConvivePayment[] {

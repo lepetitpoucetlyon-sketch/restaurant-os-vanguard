@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { browserSessionPersistence, onAuthStateChanged, setPersistence, signInWithCustomToken, signOut } from 'firebase/auth';
 import { httpsCallable, getFunctions } from 'firebase/functions';
 import { auth, firebaseApp } from '@/lib/firebase';
-import { type PersistedSession } from '@/lib/IdentityManager';
-import { User } from '@nexus/contracts';
+import type { PersistedSession } from '@/lib/IdentityManager';
+import type { User } from '@nexus/contracts';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';

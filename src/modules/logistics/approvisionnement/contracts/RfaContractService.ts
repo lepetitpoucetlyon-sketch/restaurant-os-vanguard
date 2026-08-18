@@ -7,7 +7,7 @@
  * - Paliers cumulatifs et barèmes de restitution annuelle.
  */
 
-import {
+import type {
   RfaContractEntity,
   RfaProjectionResult,
 } from './RfaContractTypes';

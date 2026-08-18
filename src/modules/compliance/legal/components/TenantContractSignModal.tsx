@@ -11,7 +11,7 @@ import {
   RotateCcw,
   Lock,
 } from 'lucide-react';
-import type { ContractRecord } from '@/modules/compliance';
+import type { ContractRecord } from '../services/SovereignSignatureEngine';
 
 interface TenantContractSignModalProps {
   contract: ContractRecord;

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
+import type { Candidate, CandidateStatus, RecruitmentLog, GDPRConsent } from '@nexus/contracts';
 import { useAuth } from '@/shared/providers/NexusCoreContext';
 import { useTenant } from '@/shared/hooks/useTenant';
 function buildGdprNote(gdpr: GDPRConsent | undefined): string {

@@ -5,9 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ShieldCheck, AlertTriangle, Loader2, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useHACCP } from '@nexus/guards/NexusGuardProvider';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { VisionService } from '@modules/intelligence/services/VisionService';
 import { cn } from '@/lib/ui.foundations';
+
+function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
 
 interface HACCPVisionScannerProps {
     taskId: string;
@@ -27,7 +34,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
 
         setIsProcessing(true);
         try {
-            const base64 = await VisionService.fileToBase64(file);
+            const base64 = await fileToBase64(file);
             const success = await validateTaskWithVision(taskId, base64);
             
             // Re-fetch or simulate the result for the UI

@@ -3,7 +3,7 @@
 import { Clock, MapPin, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { PremiumSelect } from "@ui/PremiumSelect";
-import type { ShiftType } from "../ShiftEditModal";
+import type { ShiftType } from "./shiftTypes";
 import { ZONES, type LegalWarning } from "./legalSchedulingHelpers";
 
 interface ShiftFormData {

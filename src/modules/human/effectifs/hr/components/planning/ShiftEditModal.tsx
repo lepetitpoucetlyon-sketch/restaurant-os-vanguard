@@ -12,18 +12,8 @@ import {
 import { ShiftEditHeader } from "./shift-edit/ShiftEditHeader";
 import { ShiftServiceForm } from "./shift-edit/ShiftServiceForm";
 
-export type ShiftType = "lunch" | "evening" | "double";
-
-export interface Shift {
-    id: string;
-    userId: string;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    zoneId?: string;
-    type: ShiftType;
-    status: "published" | "draft";
-}
+import type { ShiftType, Shift } from "./shift-edit/shiftTypes";
+export type { ShiftType, Shift };
 
 export { ZONES };
 

@@ -5,7 +5,7 @@ import { Modal } from "@ui";
 import { Button } from "@ui/button";
 import { useToast } from "@ui/Toast";
 import { useRecruitment } from "../../hooks/useRecruitment";
-import { Candidate, CandidateStatus, GDPRConsent } from "@nexus/contracts";
+import type { Candidate, CandidateStatus, GDPRConsent } from "@nexus/contracts";
 import { X, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { CameraCapture } from "@ui/CameraCapture";

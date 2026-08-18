@@ -18,24 +18,27 @@ export {
   type TableStatus,
   type TableShape,
   type FloorTable,
+} from '@/modules/ops/domain/schemas/ops';
+
+export {
   OrderSchema,
   OrderLineSchema,
   OrderItemModificationSchema,
   type Order,
   type OrderItem,
-} from '@/modules/ops';
+} from '@/modules/ops/domain/schemas/orders';
 
-import { OrderItemModificationSchema } from '@/modules/ops';
+import { OrderItemModificationSchema } from '@/modules/ops/domain/schemas/orders';
 
 export type OrderItemModification = z.infer<typeof OrderItemModificationSchema>;
 
-export type OrderStatus = import('@/modules/ops').Order['status'];
+export type OrderStatus = import('@/modules/ops/domain/schemas/orders').Order['status'];
 export type GroupEventStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 // 🏛️ Universal Aliases (Spaces, Resources & Workload Units)
-export type Space = import('@/modules/ops').Table;
-export type SpaceStatus = import('@/modules/ops').TableStatus;
-export type SpaceShape = import('@/modules/ops').TableShape;
+export type Space = import('@/modules/ops/domain/schemas/ops').Table;
+export type SpaceStatus = import('@/modules/ops/domain/schemas/ops').TableStatus;
+export type SpaceShape = import('@/modules/ops/domain/schemas/ops').TableShape;
 export type WorkloadUnit = 'cover' | 'vehicle' | 'patient' | 'client' | 'asset_lot' | 'unit';
 
 export interface GroupEvent {

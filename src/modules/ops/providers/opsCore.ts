@@ -6,7 +6,7 @@ import { NexusNode } from '@/store/base';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { genomeValidator } from '@/lib/GenomeValidator';
-import { ImmunityAuditLogger } from '@/modules/compliance';
+import { ImmunityAuditLogger } from '@/modules/compliance/securite/ImmunityAuditLogger';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { tenantIdAtom } from '@/store/pillars/sovereign';

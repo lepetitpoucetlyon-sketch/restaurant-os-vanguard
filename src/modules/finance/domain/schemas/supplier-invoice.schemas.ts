@@ -1,1 +1,1 @@
-export * from '@/modules/logistics';
+export * from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';

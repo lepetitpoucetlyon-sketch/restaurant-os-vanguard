@@ -1,5 +1,5 @@
 import { User } from '@nexus/contracts';
-import { RolePermissions } from '@/lib/AccessPolicyManager';
+import type { RolePermissions } from '@/lib/AccessPolicyManager';
 import type { IRealtimeVoiceService, RealtimeVoiceCallbacks } from './IRealtimeVoiceService';
 import { GeminiLiveService } from './GeminiLiveService';
 

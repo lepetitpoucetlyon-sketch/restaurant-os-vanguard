@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { CRM } from '@nexus/contracts';
+import type { CRM } from '@nexus/contracts';
 
 /**
  * ⚛️ CRM ATOMS - Grade VI Stability

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { notFound } from 'next/navigation';
 

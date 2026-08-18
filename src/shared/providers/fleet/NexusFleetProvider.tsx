@@ -9,7 +9,7 @@ import { FleetComplianceService } from './FleetComplianceService';
  
 import { HACCPTelemetryBridge } from '@/modules/compliance';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { TenantID } from '@/shared/types/brands';
+import type { TenantID } from '@/shared/types/brands';
 import { fleetEngine } from '@/modules/intelligence';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight } from '@modules/intelligence/services/MacroBrain';
@@ -18,7 +18,7 @@ import { whiteLabelInstanceConfig } from '@/config/instance';
 import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';
 import { logger } from '@/lib/logger';
 
-import { NexusFleetState } from '@nexus/contracts/nexus.types';
+import type { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 interface NexusFleetStateInternal extends Omit<NexusFleetState, 'tutorial'> {
     tutorial?: import('@nexus/contracts/nexus.types').NexusTutorialState;

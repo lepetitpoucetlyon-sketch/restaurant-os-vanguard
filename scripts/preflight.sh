@@ -96,9 +96,9 @@ step "🔄 [5/8] Cycles d'imports (madge ratchet — résout les alias @/)"
 # Ratchet : le nombre de cycles circulaires Madge ne peut JAMAIS dépasser le seuil gelé.
 # Baseline gelée au 2026-08-18 : 966 cycles (docs/CYCLES_BASELINE.md).
 # Ne jamais augmenter ce seuil — chaque vague d'assainissement doit le faire descendre.
-MADGE_CYCLES_MAX=966
+MADGE_CYCLES_MAX=0
 node scripts/cycles-inspector.mjs --threshold="$MADGE_CYCLES_MAX"
-ok "Cycles Madge vérifiés avec succès (<= $MADGE_CYCLES_MAX)"
+ok "Zéro cycle circulaire garanti (Seuil = 0)"
 
 # ────────────────────────────────────────────────────────────────
 step "🏗️  [6/8] Build de production (SORTIE BRUTE — jamais via rtk)"

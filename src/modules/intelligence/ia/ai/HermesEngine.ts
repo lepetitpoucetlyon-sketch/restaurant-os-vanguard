@@ -7,7 +7,7 @@ import {
 } from '../../domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalHACCPMapper } from '@/modules/finance';
+import { FiscalHACCPMapper } from '@/modules/finance/services/FiscalHACCPMapper';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator

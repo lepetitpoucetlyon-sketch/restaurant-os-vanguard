@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
 import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/modules/finance';
+import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 

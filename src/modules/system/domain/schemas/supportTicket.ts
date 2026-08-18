@@ -11,4 +11,4 @@ export {
   type SupportTicketSource,
   type SupportDraftKind,
   type SupportDiagnostic,
-} from '@/modules/intelligence';
+} from '@/modules/intelligence/domain/schemas/supportTicket';

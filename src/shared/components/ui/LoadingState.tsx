@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 
 type LoadingStateStatus = "idle" | "loading" | "success" | "error";

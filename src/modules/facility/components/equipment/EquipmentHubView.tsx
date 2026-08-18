@@ -16,7 +16,7 @@ import {
   Sparkles,
   RefreshCw,
 } from 'lucide-react';
-import {
+import type {
   EquipmentAsset,
   EquipmentCategory,
   EquipmentStatus,

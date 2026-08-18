@@ -22,7 +22,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { aiRouter } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 interface TenantSnapshot {
   tenantId:     string;

@@ -7,7 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 const QONTO_BASE = 'https://thirdparty.qonto.com/v2';
 

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@ui/Toast";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
-import { type RoleTemplate } from "@/lib/RoleTemplates";
+import type { RoleTemplate } from "@/lib/RoleTemplates";
 
 import { AccountAccessDenied } from "./account/AccountAccessDenied";
 import { RoleCard } from "./account/RoleCard";

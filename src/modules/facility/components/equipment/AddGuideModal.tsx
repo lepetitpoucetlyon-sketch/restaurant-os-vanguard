@@ -12,7 +12,7 @@ import {
   Plus,
   CheckCircle2,
 } from 'lucide-react';
-import {
+import type {
   EquipmentAsset,
   GuideType,
 } from '../../assets/domain/schemas/equipment';

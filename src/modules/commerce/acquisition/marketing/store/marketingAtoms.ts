@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { MarketingCampaign, SocialAccount } from '../types';
-import { Quote } from '../quotes.types';
+import type { Quote } from '../quotes.types';
 // MarketingSegment & ScheduledPost déplacés vers seo.types (cassage de cycle).
 // Réimportés ici (et ré-exportés pour préserver la surface publique).
 import { SEOProfile, MarketingSegment, ScheduledPost } from '../seo.types';

@@ -4,7 +4,7 @@ import {
     SocialAccount, 
     Quote 
 } from '@nexus/contracts';
-import { SEOProfile } from './seo.types';
+import type { SEOProfile } from './seo.types';
 import { updateNexusNode } from '@/store/nexusNodeFactory';
 import { 
     seoProfileAtom,

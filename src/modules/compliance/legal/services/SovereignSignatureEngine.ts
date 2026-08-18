@@ -4,57 +4,20 @@ import { LegalContractGenerator, type ContractDraftInput, type GeneratedContract
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import type { DocuSealWebhookPayload } from './DocuSealService';
+import type {
+  DocuSealWebhookPayload,
+  ContractSignatureState,
+  SignatureSubmissionInput,
+  ProofCertificate,
+  ContractRecord,
+} from './legalContractsTypes';
 
-export type ContractSignatureState = 'DRAFT' | 'SENT' | 'VIEWED' | 'SIGNED' | 'REVOKED';
-
-export interface SignatureSubmissionInput {
-  signerName: string;
-  signerRole: string;
-  signerEmail: string;
-  signatureCanvasBase64: string;
-  ipAddress: string;
-  userAgent: string;
-  consentConfirmed: boolean;
-}
-
-export interface ProofCertificate {
-  certificateId: string;
-  contractId: string;
-  signerName: string;
-  signerRole: string;
-  signerEmail: string;
-  signedAtIso: string;
-  signedAtUtc: number;
-  ipAddress: string;
-  userAgent: string;
-  contractSha256: string;
-  signatureVectorSha256: string;
-  masterSealSha256: string;
-  eidasStandard: 'ADVANCED_ELECTRONIC_SIGNATURE_AES';
-  verificationUrl: string;
-}
-
-export interface ContractRecord {
-  id: string;
-  tenantId: string;
-  vertical: VerticalType;
-  status: ContractSignatureState;
-  document: GeneratedContractDocument;
-  client: ContractPartyInfo;
-  pricing: ContractPricingPlan;
-  signingToken: string;
-  createdAt: number;
-  sentAt?: number;
-  viewedAt?: number;
-  proofCertificate?: ProofCertificate;
-  // Métadonnées DocuSeal
-  docusealSubmissionId?: number | string;
-  docusealSlug?: string;
-  docusealSignedPdfUrl?: string;
-  docusealAuditLogUrl?: string;
-  signedVia?: 'SOVEREIGN_CANVAS' | 'DOCUSEAL_WEBHOOK' | 'DIRECT_EIDAS';
-}
+export type {
+  ContractSignatureState,
+  SignatureSubmissionInput,
+  ProofCertificate,
+  ContractRecord,
+};
 
 /**
  * ✍️ SovereignSignatureEngine — Moteur d'E-Signature & Horodatage eIDAS

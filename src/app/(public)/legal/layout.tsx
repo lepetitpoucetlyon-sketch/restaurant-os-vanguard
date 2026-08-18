@@ -1,6 +1,6 @@
 // NO 'use client' — Server Component.
 // Layout minimaliste pour toutes les pages légales.
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 
 export default function LegalLayout({ children }: { children: ReactNode }) {

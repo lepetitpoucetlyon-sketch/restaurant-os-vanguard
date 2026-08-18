@@ -1,5 +1,5 @@
 import { SOVEREIGN_MODULE_IDS } from '../../ModuleRegistry';
-import { UserPermissions } from './auth.types';
+import type { UserPermissions } from './auth.types';
 
 /**
  * DNA Protocol for Module Access

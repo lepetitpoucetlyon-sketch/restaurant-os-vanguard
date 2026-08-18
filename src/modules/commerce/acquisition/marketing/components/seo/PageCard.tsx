@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Edit2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { PageSEO } from "@nexus/contracts";
+import type { PageSEO } from "@nexus/contracts";
 
 export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => void; id?: string }) {
     const getScoreColor = (score: number) => {

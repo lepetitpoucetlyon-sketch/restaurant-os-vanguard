@@ -14,7 +14,7 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/shared/hooks";
 import { useContextualSettings } from "@/shared/components/settings/ContextualSettings";
-import { PageKey } from "@nexus/contracts/permissions.types";
+import type { PageKey } from "@nexus/contracts/permissions.types";
 import { LANGUAGES } from "@/config/languages";
 import { cn } from "@/lib/ui.foundations";
 export function Header() {

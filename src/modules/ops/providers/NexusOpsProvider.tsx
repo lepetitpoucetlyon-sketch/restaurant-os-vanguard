@@ -4,7 +4,7 @@ import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCal
 import { SovereignNode } from '@/shared/nexus-contract';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
-import { TelemetryHook } from '@/modules/intelligence';
+import { TelemetryHook } from '@/modules/intelligence/analytique/TelemetryHook';
 import { logger } from '@/lib/logger';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { EmpireInstance } from '@/shared/types/empire';
@@ -13,7 +13,7 @@ import { TenantIdSchema } from '@/shared/schemas/ui';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
-import { useFloorOpsValue } from './hooks';
+import { useFloorOpsValue } from './hooks/floorHooks';
 import { isMCCMode } from '@/config/instance';
 
 /**

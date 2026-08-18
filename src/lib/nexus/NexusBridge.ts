@@ -3,13 +3,13 @@ import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalKeyService, type CommunicationPulse } from '@/modules/finance';
+import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
  
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import { toError } from "@/lib/toError";
 
 // nexus-core ne doit pas dépendre de la couche config (règle sentrux) : on lit

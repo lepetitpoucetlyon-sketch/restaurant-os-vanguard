@@ -20,7 +20,7 @@ import {
     PIIDetection,
     PULSE_SCHEDULE,
 } from './types';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import {
     PII_PATTERNS,
     HARD_BLOCKED_FIELDS,

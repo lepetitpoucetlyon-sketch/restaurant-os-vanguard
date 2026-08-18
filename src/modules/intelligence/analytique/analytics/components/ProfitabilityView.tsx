@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { TrendingUp, AreaChart } from 'lucide-react';
 import { Button } from '@ui/button';
 import { BottomSheet } from "@ui/BottomSheet";
-import { ProfitabilityAlert } from '../types';
+import type { ProfitabilityAlert } from '../types';
 
 // --- Profitability View ---
 

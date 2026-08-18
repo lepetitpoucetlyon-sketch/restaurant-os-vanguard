@@ -12,7 +12,7 @@ import { cn } from '@/lib/ui.foundations';
 import { useIsMobile } from '@/shared/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
 import { Button } from '@ui/button';
-import { CRM } from '@nexus/contracts';
+import type { CRM } from '@nexus/contracts';
 
 const getFirstName = (c: CRM): string => c?.firstName || '';
 const getLastName = (c: CRM): string => c?.lastName || '';

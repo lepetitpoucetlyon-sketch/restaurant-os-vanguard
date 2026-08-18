@@ -3,7 +3,9 @@ import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { PayrollConnectorFactory, PrepaieBuilder, type PayrollProviderConfig } from '@/modules/human';
+import { PayrollConnectorFactory } from '@/modules/human/connectors/payroll/PayrollConnectorFactory';
+import { PrepaieBuilder } from '@/modules/human/remuneration/payroll/PrepaieBuilder';
+import type { PayrollProviderConfig } from '@/modules/human/remuneration/payroll/types';
 import { toError } from "@/lib/toError";
 
 import { withRoleGuard } from '../middleware/withRoleGuard';

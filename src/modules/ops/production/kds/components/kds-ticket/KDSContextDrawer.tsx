@@ -3,9 +3,9 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { Order, OrderItem } from "@nexus/contracts";
+import type { Order, OrderItem } from "@nexus/contracts";
 import type { CartItem } from '../../../../workflow/engine/types';
-import { resolveStation } from '../..';
+import { resolveStation } from '../../contracts/kds-constants';
 
 interface KDSContextDrawerProps {
     ticket: Order;

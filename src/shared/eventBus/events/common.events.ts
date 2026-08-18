@@ -1,5 +1,3 @@
-import type { CartItem } from '@/modules/ops';
-
 export interface COMMONEvents {
   "crm.birthday_approaching": {
     v: 1;

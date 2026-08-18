@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, ShieldCheck, X, ExternalLink, Send, Download } from 'lucide-react';
-import type { ContractRecord } from '@/modules/compliance';
+import type { ContractRecord } from '../../services/SovereignSignatureEngine';
 import { authedFetch } from '@/lib/client/authedFetch';
 
 interface MCCConsultModalProps {

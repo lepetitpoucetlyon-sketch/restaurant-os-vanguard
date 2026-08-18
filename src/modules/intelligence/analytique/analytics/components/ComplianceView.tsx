@@ -6,7 +6,7 @@ import { AlertTriangle, Thermometer, Activity } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { Button } from '@ui/button';
 import { useRouter } from 'next/navigation';
-import { ComplianceAlert, IoTMetric } from '../types';
+import type { ComplianceAlert, IoTMetric } from '../types';
 
 // --- Compliance View ---
 

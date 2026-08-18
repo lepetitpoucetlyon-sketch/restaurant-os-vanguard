@@ -6,7 +6,7 @@ import { LANGUAGES } from '@/config/languages';
 import { useAtomValue } from 'jotai';
 import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
 import { unreadNotificationsCountAtom } from '@nexus/state/SovereignGenome';
-import {
+import type {
     NexusCoreState,
     NexusLangState,
 } from '@nexus/contracts/nexus.types';

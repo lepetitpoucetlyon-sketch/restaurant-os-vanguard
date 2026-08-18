@@ -1,7 +1,7 @@
 'use client';
 
 import { PremiumSelect } from "@ui/PremiumSelect";
-import { PreparationType } from "@nexus/contracts";
+import type { PreparationType } from "@nexus/contracts";
 import { PREPARATION_TYPES } from "./prepConstants";
 
 interface PrepIdentitySectionProps {

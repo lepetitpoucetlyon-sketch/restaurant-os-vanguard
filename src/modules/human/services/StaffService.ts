@@ -1,5 +1,5 @@
-import { Shift, LeaveRequest } from '@nexus/contracts';
-import { ShiftProvision } from '@nexus/contracts/domain.types';
+import type { Shift, LeaveRequest } from '@nexus/contracts';
+import type { ShiftProvision } from '@nexus/contracts/domain.types';
 import { logger } from '@/lib/logger';
 
 /**

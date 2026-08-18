@@ -2,25 +2,20 @@ import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
-import type { ConsumptionMode } from '@/modules/ops';
+import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate, inferCategory } from '../fiscalite/tax/vatResolver';
-import type { BridgePayload, PaymentMode } from './FinancialNexusTypes';
+import type { BridgePayload, PaymentMode, BridgeResult, RefundPayload } from './FinancialNexusTypes';
 import {
   microToCents,
   computeTtcByRateAndAxis,
   buildJournalLines,
 } from './FinancialJournalBuilder';
 import { emitPaymentEvents } from './FinancialNexusEvents';
-import { processRefundOperation, type RefundPayload } from './FinancialNexusRefund';
+import { processRefundOperation } from './FinancialNexusRefund';
 
-export type { BridgePayload, PaymentMode, RefundPayload };
-
-export interface BridgeResult {
-  journalEntry: JournalEntry;
-  seal: FiscalSeal;
-}
+export type { BridgePayload, PaymentMode, BridgeResult, RefundPayload };
 
 /**
  * FinancialNexusBridge — Grade X "NF525 Suture"
@@ -47,7 +42,7 @@ export const FinancialNexusBridge = {
       const taxRate = isTrainingMode ? '0.00' : resolveVatRate({ category, consumptionMode: lineMode }) as "0.055" | "0.10" | "0.20";
       const analyticalAxis = (category === 'beverage_soft' || category === 'alcohol') ? 'Beverage' : 'Food';
       return { ...item, taxRate, analyticalAxis };
-    }) as (import('@/modules/ops').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
+    }) as (import('@/modules/ops/domain/schemas/pos').CartItem & { taxRate: "0.055" | "0.10" | "0.20", analyticalAxis: string })[];
 
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
     const ttcByRateAndAxis = computeTtcByRateAndAxis(resolvedItems);

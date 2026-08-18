@@ -1,4 +1,4 @@
-import { IPrinterConnection } from '../core/IPrinterConnection';
+import type { IPrinterConnection } from '../core/IPrinterConnection';
 import { toError } from "@/lib/toError";
 
 interface BluetoothPrinterConfig {

@@ -1,4 +1,4 @@
-import { QuoteLine } from '../../../types';
+import type { QuoteLine } from '../../../types';
 import { Quote } from '@nexus/contracts';
 
 export type QuoteProduct = { id?: string; name?: string; priceInMicrounits?: number; priceInCents?: number; unitCostInCents?: number };

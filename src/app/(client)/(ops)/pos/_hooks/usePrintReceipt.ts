@@ -7,7 +7,7 @@ import type { ReceiptTicket, TicketStyle, BitmapImage, ReceiptConfig } from "@/m
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export interface ReceiptPrintMeta {
     ticketNumber?: string;

@@ -7,7 +7,7 @@
  * - Traçabilité stricte des non-conformités (photos, motifs, écarts de prix/quantité).
  */
 
-import {
+import type {
   DeliveryDisputeEntity,
   DisputeLineItem,
   DisputeStatus,

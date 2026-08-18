@@ -3,7 +3,7 @@ import { Download, ShieldCheck } from 'lucide-react';
 import { Button } from '@ui/button';
 import { useHACCP } from '../../hooks/useHACCP';
 import { toast } from 'sonner';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export const SanitaryReport: React.FC = () => {
     const { hygieneLabels, maintenanceLogs } = useHACCP();

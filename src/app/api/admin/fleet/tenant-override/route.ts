@@ -20,7 +20,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 const TenantOverridePostSchema = z.object({
   tenantIds: z.array(z.string()).min(1),

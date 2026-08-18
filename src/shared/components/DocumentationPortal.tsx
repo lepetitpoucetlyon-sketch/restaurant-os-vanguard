@@ -8,7 +8,7 @@ import { useUI } from '@/shared/hooks';
 import { useTutorial } from '@/shared/contexts/TutorialContext';
 import { cn } from "@/lib/ui.foundations";
 import { X, BookOpen, Zap } from 'lucide-react';
-import { NexusTutorialState } from '@nexus/contracts/nexus.types';
+import type { NexusTutorialState } from '@nexus/contracts/nexus.types';
 
 export function DocumentationPortal({ isPage = false, categoryOverride }: { isPage?: boolean; categoryOverride?: string }) {
     const { isDocumentationOpen, documentationCategory, closeDocumentation } = useUI();

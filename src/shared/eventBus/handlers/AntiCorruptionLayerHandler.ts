@@ -2,7 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 interface IntegrationConfig {
   autoAccept?: boolean;
@@ -58,7 +58,7 @@ export function registerAntiCorruptionLayerHandler() {
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) as unknown as import('@/modules/ops').CartItem[] ?? []
+          })) as unknown as import('@/modules/ops/domain/schemas/pos').CartItem[] ?? []
         });
         
         await NexusEventBus.emitDurable('order.paid', {
@@ -73,7 +73,7 @@ export function registerAntiCorruptionLayerHandler() {
             quantity: i.quantity,
             unitPriceInMicrounits: (i.price_cents ?? 0) * 10_000,
             notes: i.special_instructions ?? '',
-          })) as unknown as import('@/modules/ops').CartItem[] ?? [],
+          })) as unknown as import('@/modules/ops/domain/schemas/pos').CartItem[] ?? [],
           totalInMicrounits: amount,
           paymentMode: platform
         });

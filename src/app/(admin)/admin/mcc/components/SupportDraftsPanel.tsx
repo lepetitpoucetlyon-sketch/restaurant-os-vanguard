@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { SupportTicket, SupportDraft, SupportTicketStatus } from '@/shared/schemas';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import { toError } from "@/lib/toError";
 
 const STATUS_META: Record<SupportTicketStatus, { label: string; color: string }> = {

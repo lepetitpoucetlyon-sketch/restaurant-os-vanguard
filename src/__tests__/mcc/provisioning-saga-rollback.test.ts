@@ -47,5 +47,7 @@ describe('TenantProvisioningService — Saga Rollback & Compensation', () => {
             }),
             expect.any(Object)
         );
+
+        await new Promise(r => setTimeout(r, 50));
     });
 });

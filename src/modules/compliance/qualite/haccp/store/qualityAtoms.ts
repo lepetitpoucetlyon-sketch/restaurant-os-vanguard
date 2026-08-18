@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { createNexusNode } from '@/store/pillars/core';
 import { currentDateAtom } from '@/store/base';
-import {
+import type {
     QualityControl,
     ProductQualityConfig,
     SupplierQualityScore,

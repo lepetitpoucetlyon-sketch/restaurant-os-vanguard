@@ -1,14 +1,13 @@
 import { logger } from '@/lib/axiom';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { InvoiceExtractionService } from '@modules/logistics/services/InvoiceExtractionService';
+// Dynamic import for server execution to avoid inter-pillar cycle
 import { IdentityGuardService } from '@/lib/IdentityGuardService';
-import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/finance';
+import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
-export type { ExtractedInvoiceItem } from '@/modules/finance';
+export type { ExtractedInvoiceItem } from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
 
 export interface ExtractedInvoice {
     supplierName: string;
@@ -58,6 +57,7 @@ export const VisionService = {
             throw new Error(`Extraction failed: ${result.error?.reason || 'Unknown error'}`);
         }
 
+        const { InvoiceExtractionService } = await import('@modules/logistics/services/InvoiceExtractionService');
         const result = await InvoiceExtractionService.extractFromImage(base64Image);
         if (result.success) {
             return toLegacyInvoice(result.data);
@@ -74,6 +74,7 @@ export const VisionService = {
      * Use this for new code paths.
      */
     async analyzeInvoiceFull(base64Image: string, options?: { model?: 'flash' | 'pro'; tenantId?: string }) {
+        const { InvoiceExtractionService } = await import('@modules/logistics/services/InvoiceExtractionService');
         return InvoiceExtractionService.extractFromImage(base64Image, options);
     },
 

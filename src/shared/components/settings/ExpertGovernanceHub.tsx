@@ -20,7 +20,7 @@ import {
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useToast } from "@ui/Toast";
 import { cn } from "@/lib/utils";
-import { SLMExpert } from "@nexus/contracts";
+import type { SLMExpert } from "@nexus/contracts";
 import { AgentDomain } from "@/modules/intelligence";
 import { AI_MODELS } from "@/modules/intelligence";
 

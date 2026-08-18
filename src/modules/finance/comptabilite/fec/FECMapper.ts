@@ -1,7 +1,7 @@
 
 import { SovereignMath } from '@/shared/services/SovereignMath';
 import { JournalEntry, JournalLine } from '@/shared/nexus/contracts/finance.types';
-import { FECLine } from './types';
+import type { FECLine } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**

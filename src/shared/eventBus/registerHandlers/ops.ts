@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
-import { registerCashDrawerAnomalyHandler } from '@/modules/ops';
+import { registerCashDrawerAnomalyHandler } from '@/modules/ops/service/pos/handlers/CashDrawerAnomalyHandler';
 import { registerReservationNotifierHandler } from '../handlers/ReservationNotifierHandler';
 import { registerFloorPlanCapacityHandler } from '../handlers/FloorPlanCapacityHandler';
 import { registerNoShowPenaltyHandler } from '../handlers/NoShowPenaltyHandler';

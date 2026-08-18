@@ -1,6 +1,6 @@
 import { GoogleReserveAdapter } from '../../infrastructure/adapters/GoogleReserveAdapter';
 import { InMemoryReservationRepository } from '../../infrastructure/repositories/InMemoryReservationRepository';
-import { RwGBooking } from '../../domain/types/GoogleReserveTypes';
+import type { RwGBooking } from '../../domain/types/GoogleReserveTypes';
 import { toError } from "@/lib/toError";
 
 export class ProcessGoogleBookingUseCase {

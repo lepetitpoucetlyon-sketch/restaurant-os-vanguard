@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Cents, Quantity } from '@/lib/branding/brands';
+import type { Cents, Quantity } from '@/lib/branding/brands';
 import { toError } from "@/lib/toError";
 
 /**

@@ -9,7 +9,7 @@ import { useAuth } from "@/shared/hooks";
 import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 
-import { UsedIngredient } from "./prep-modal/prepConstants";
+import type { UsedIngredient } from "./prep-modal/prepConstants";
 import { PrepIdentitySection } from "./prep-modal/PrepIdentitySection";
 import { PrepMeasurementGrid } from "./prep-modal/PrepMeasurementGrid";
 import { PrepLogisticsGrid } from "./prep-modal/PrepLogisticsGrid";

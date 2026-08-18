@@ -3,7 +3,8 @@
  * Persisté dans tenantConfig (merge post-seeding).
  */
 
-import type { ImportCategory, ConnectorId } from '@/modules/commerce';
+import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
+import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
 
 export type OnboardingMode = 'from_zero' | 'migration' | 'skipped';
 

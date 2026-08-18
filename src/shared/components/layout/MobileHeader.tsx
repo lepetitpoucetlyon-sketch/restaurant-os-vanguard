@@ -7,7 +7,7 @@ import { UserCircle, Search } from "lucide-react";
 import { useAuth } from "@/shared/hooks";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { ProfileSwitcher } from "./ProfileSwitcher";
-import { PageKey } from "@nexus/contracts/permissions.types";
+import type { PageKey } from "@nexus/contracts/permissions.types";
 import { useState } from "react";
 
 export function MobileHeader() {

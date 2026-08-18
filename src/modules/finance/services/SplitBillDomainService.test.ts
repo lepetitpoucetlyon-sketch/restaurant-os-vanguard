@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { SplitBillDomainService } from './SplitBillDomainService';
-import type { CartItem as SplitCartItem } from '@/modules/ops';
+import type { CartItem as SplitCartItem } from '@/modules/ops/domain/schemas/pos';
 
 describe('💳 SplitBillDomainService — Fractionnement d\'Addition & Microunités', () => {
   it('devrait fractionner une somme égale en allouant les centimes résiduels sans perte (Règle du Reliquat)', () => {

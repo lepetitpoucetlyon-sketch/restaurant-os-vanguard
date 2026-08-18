@@ -4,7 +4,7 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { withVerticalOverride } from "@/shared/hooks/useVerticalComponent";
 
 // ── StatCard CVA ──────────────────────────────────────────────────────────────
@@ -84,7 +84,8 @@ const labelVariants = cva(
 );
 
 /** Nouveau prop sémantique — `brand` utilise --action-primary (couleur tenant) */
-export type StatCardIntent = "brand" | "success" | "warning" | "danger" | "info" | "neutral";
+import type { StatCardIntent } from './statCardTypes';
+export type { StatCardIntent };
 
 /** @deprecated Utiliser `intent` à la place */
 type LegacyAccentColor = "accent" | "success" | "warning" | "error" | "info";

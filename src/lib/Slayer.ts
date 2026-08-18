@@ -13,7 +13,7 @@ import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { toError } from "@/lib/toError";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export interface SlayerMappingConfig {
     source: string;

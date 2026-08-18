@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X } from 'lucide-react';
-import type { VerticalType } from '@/modules/compliance';
+import type { VerticalType } from '../../services/LegalContractGenerator';
 
 interface MCCCreateContractModalProps {
   isOpen: boolean;

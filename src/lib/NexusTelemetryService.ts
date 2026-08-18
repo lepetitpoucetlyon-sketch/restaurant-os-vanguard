@@ -4,14 +4,14 @@
  * Grade VI - Certified Reliability.
  */
 
-import { TelemetryPulse } from "@shared/nexus-contract";
+import type { TelemetryPulse } from "@shared/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { logger } from "@/lib/logger";
 import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetryService";
 import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 class TelemetryService {
   private intervalId: NodeJS.Timeout | null = null;

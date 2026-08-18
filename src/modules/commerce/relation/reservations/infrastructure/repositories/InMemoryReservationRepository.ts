@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { IReservation } from '../../domain/entities/Reservation';
+import type { IReservation } from '../../domain/entities/Reservation';
 
 export class InMemoryReservationRepository {
   private reservations: Map<string, IReservation> = new Map();

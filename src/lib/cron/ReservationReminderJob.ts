@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
 import { logger } from '@/lib/logger';
 import { parse, differenceInHours, differenceInMinutes } from 'date-fns';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import { ReservationTemplateFormatter, DEFAULT_RESERVATION_TEMPLATES } from '@/lib/templates/ReservationTemplateFormatter';
 import { ReservationTokenSigner } from '@/lib/security/ReservationTokenSigner';
 

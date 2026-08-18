@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { CheckCircle2, XCircle, AlertCircle, Info, X } from "lucide-react";
 
 type FeedbackType = "success" | "error" | "warning" | "info";

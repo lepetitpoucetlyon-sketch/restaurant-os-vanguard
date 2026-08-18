@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export type BadgeStatus = "success" | "warning" | "error" | "info" | "neutral" | "accent";
 

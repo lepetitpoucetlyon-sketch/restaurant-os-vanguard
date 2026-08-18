@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import type { PayrollProviderConfig } from '@/modules/human';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const caller = await requireTenantAdmin(req);

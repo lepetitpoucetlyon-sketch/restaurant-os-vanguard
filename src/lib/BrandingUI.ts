@@ -1,4 +1,4 @@
-import { ThemeSettings, BrandInput } from '@nexus/contracts';
+import type { ThemeSettings, BrandInput } from '@nexus/contracts';
 
 /**
  * BRANDING UI SERVICE (Grade X)

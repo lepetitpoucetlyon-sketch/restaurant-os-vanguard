@@ -1,4 +1,4 @@
-import { PageKey } from "./permissions.types";
+import type { PageKey } from "./permissions.types";
 import { SovereignData } from "@shared/nexus-contract";
 
 /**

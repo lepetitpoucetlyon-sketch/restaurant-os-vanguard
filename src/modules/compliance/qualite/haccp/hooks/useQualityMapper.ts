@@ -10,7 +10,7 @@ import { QualityEngine } from '../../../services/QualityEngine';
 import type { QualityControl } from '../../../types/quality';
 import type { ActiveQualityControl } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import { useTenant } from '@/shared/hooks';
+import { useTenant } from '@/shared/hooks/useTenant';
 
 /**
  * 🛰️ useQualityMapper - Grade VI
@@ -67,7 +67,7 @@ export const useQualityMapper = () => {
         try {
             // 👑 Transform UI state into Sovereign Domain Contract
             // 💍 LE SERTI MYSTÉRIEUX : Utilisation de l'Adapter Agnostique
-            const receptionData: import('@/modules/compliance').ReceptionData = {
+            const receptionData: import('@nexus/contracts').ReceptionData = {
                 deliveryId: activeControl.delivery?.id || 'manual',
                 supplierName: activeControl.supplier_name || 'UNKNOWN',
                 truckTemp: activeControl.delivery_conditions?.vehicle_temperature?.measured || 0,

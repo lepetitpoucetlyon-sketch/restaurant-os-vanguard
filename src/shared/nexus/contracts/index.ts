@@ -65,7 +65,8 @@ export * from './franchise.types';
 
 
 // 4. Operations Bridge (POS & Groups)
-export type { CartItem, GroupEvent } from '@/modules/ops';
+export type { CartItem } from '@/modules/ops/domain/schemas/pos';
+export type { GroupEvent } from './ops.types';
 
 // --- 🛠️ UTILITIES & UI (Selective Export) ---
 export type { 
@@ -111,7 +112,7 @@ export type {
     SensorReading,
     HACCPChecklistItem,
     HACCPContextType,
-} from '@/modules/compliance';
+} from '@/modules/compliance/qualite/haccp/types/domain';
 
 // --- ⚙️ SETTINGS REGISTRY ---
 export * from './settings/accounting';
@@ -138,7 +139,7 @@ export * from './nexus.types';
 export * from './errors.types';
 export type { GlobalSettings } from './settings';
 export type { SovereignData } from '@/shared/nexus-contract';
-export type { TenantConfig, OrchestratorSignal, TenantTheme, PlatformVariant } from '@/modules/system';
+export type { TenantConfig, OrchestratorSignal, TenantTheme, PlatformVariant } from '@/modules/system/domain/schemas/tenant';
 export type { InventoryMovement } from './logistics';
 export * from './marketing.types';
-export type { Delivery, DeliveryItem } from '@/modules/logistics';
+export type { Delivery, DeliveryItem } from '@/modules/logistics/domain/types/delivery';

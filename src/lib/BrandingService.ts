@@ -1,5 +1,5 @@
 import 'server-only';
-import { ThemeSettings } from '@nexus/contracts';
+import type { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
 import { LLMManager } from '@/modules/intelligence';

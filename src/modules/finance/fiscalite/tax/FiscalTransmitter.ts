@@ -1,4 +1,4 @@
-import { CA3Declaration, EDISubmissionResult, TaxBreakdown } from './types';
+import type { CA3Declaration, EDISubmissionResult, TaxBreakdown } from './types';
 import { EDIMapper } from './EDIMapper';
 import { DocumentVault } from '@/modules/compliance';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';

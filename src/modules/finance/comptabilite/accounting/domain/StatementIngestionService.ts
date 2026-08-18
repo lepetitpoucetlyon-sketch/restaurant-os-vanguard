@@ -1,4 +1,4 @@
-import { BankTransaction } from '@nexus/contracts';
+import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 
 /**

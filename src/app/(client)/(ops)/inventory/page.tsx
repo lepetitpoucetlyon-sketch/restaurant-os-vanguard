@@ -32,7 +32,7 @@ import {
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 function InventoryPage() {
     const {

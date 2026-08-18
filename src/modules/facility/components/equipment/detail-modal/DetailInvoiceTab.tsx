@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { ExternalLink, TrendingDown } from 'lucide-react';
-import { EquipmentAsset } from '../../../assets/domain/schemas/equipment';
-import { DepreciationYear } from '../../../services/EquipmentAssetService';
+import type { EquipmentAsset } from '../../../assets/domain/schemas/equipment';
+import type { DepreciationYear } from '../../../services/EquipmentAssetService';
 
 interface DetailInvoiceTabProps {
   asset: EquipmentAsset;

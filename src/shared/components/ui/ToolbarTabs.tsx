@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export interface TabItem {
     id: string;

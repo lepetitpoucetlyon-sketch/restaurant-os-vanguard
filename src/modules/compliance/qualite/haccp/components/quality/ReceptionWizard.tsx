@@ -25,7 +25,7 @@ import { cn } from "@/lib/ui.foundations";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuality } from '../../hooks/useQuality';
 import { useRouter } from 'next/navigation';
-import { QualityControl, CleanlinessStatus } from '@nexus/contracts';
+import type { QualityControl, CleanlinessStatus } from '@nexus/contracts';
 
 /**
  * 🛰️ ReceptionWizard - Orchestrator

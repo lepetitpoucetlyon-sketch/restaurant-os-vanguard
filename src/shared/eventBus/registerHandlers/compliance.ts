@@ -1,6 +1,6 @@
 import { registerSovereignBreachHandler } from '../handlers/SovereignBreachHandler';
 import { registerQuarantineHandler } from '../handlers/QuarantineHandler';
-import { registerWasteToFoodCostHandler } from '@/modules/compliance';
+import { registerWasteToFoodCostHandler } from '@/modules/compliance/qualite/haccp/handlers/WasteToFoodCostHandler';
 import { registerQuarantineActivatedHandler } from '../handlers/QuarantineActivatedHandler';
 import { registerRecallPOSBlockerHandler } from '../handlers/RecallPOSBlockerHandler';
 import { registerDLCExpiryHandler } from '../handlers/DLCExpiryHandler';

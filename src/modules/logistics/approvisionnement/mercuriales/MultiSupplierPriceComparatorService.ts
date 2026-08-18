@@ -7,7 +7,7 @@
  * - Prise en compte des conditionnements d'achat et des seuils de Franco de port.
  */
 
-import {
+import type {
   MercurialeItem,
   IngredientPriceComparisonRow,
   BasketOptimizationInput,

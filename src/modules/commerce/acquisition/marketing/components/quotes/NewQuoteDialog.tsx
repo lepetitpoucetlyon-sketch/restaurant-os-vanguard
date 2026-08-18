@@ -6,7 +6,7 @@ import { Modal } from '@ui/Modal';
 import { useQuotes } from '../../../../../ops/providers/hooks/commerceHooks';
 import { useInventory } from '../../../../../logistics/stock/inventory/hooks/useInventory';
 import { useCRM } from '../../../../../ops/providers/hooks/commerceHooks';
-import { QuoteLine } from '../../types';
+import type { QuoteLine } from '../../types';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 

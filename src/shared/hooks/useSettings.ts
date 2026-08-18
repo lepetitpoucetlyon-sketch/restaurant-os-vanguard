@@ -8,7 +8,7 @@ import {
 } from '@/store/settingsAtoms';
 import { SettingsManager } from '@/lib/SettingsManager';
 import { GlobalSettings } from '@nexus/contracts';
-import { BusinessIdentity } from '@nexus/contracts/settings/identity';
+import type { BusinessIdentity } from '@nexus/contracts/settings/identity';
 
 /**
  * 🛰️ useSettings - Grade VI Atomic Bridge

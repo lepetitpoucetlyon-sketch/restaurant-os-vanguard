@@ -1,4 +1,4 @@
-import { IAggregatorAdapter } from './IAggregatorAdapter';
+import type { IAggregatorAdapter } from './IAggregatorAdapter';
 import { logger } from '@/lib/logger';
 
 export class UberEatsAdapter implements IAggregatorAdapter {

@@ -6,7 +6,7 @@ import { motion, Variants } from 'framer-motion';
 import { Bell, Mail, Phone, Smartphone, MessageSquare, Sparkles, Clock, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { cn } from '@/lib/ui.foundations';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import { ReservationTemplateFormatter, DEFAULT_RESERVATION_TEMPLATES } from '@/lib/templates/ReservationTemplateFormatter';
 
 type Config = ReturnType<typeof useSettings>['settings']['reservationConfig'];

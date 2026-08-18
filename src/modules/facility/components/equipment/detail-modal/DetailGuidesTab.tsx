@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BookOpen, FileText, Video, Plus, ExternalLink } from 'lucide-react';
-import { EquipmentGuide } from '../../../assets/domain/schemas/equipment';
+import type { EquipmentGuide } from '../../../assets/domain/schemas/equipment';
 
 interface DetailGuidesTabProps {
   guides: EquipmentGuide[];

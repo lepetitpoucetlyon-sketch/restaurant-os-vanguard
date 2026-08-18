@@ -1,5 +1,5 @@
 import type jsPDF from 'jspdf';
-import type { PrivatisationData } from '../PrivatisationContract';
+import type { PrivatisationData } from './privatisationTypes';
 import { formatDate, formatEuros, drawBox } from './pdfLayoutHelpers';
 
 const FORMULE_LABELS: Record<string, string> = {

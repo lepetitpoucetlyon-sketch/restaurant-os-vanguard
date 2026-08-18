@@ -1,15 +1,17 @@
-/* eslint-disable no-restricted-imports -- infrastructure: deep path required */
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops/domain/schemas/pos';
 
 export class TaxCalculator {
+  static applyRate(ttc: number, rate: string | number): number {
+    const rateNum = typeof rate === 'string' ? parseFloat(rate) : rate;
+    return Math.round(ttc * rateNum / (1 + rateNum));
+  }
+
   static computeTvaBreakdown(items: CartItem[]): Record<string, number> {
     const breakdown: Record<string, number> = {};
     for (const item of items) {
       const rate = item.taxRate ?? '0.10';
-      const rateNum = parseFloat(rate);
-      // Prix stockés TTC (norme restauration FR) : TVA = TTC × r/(1+r)
       const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-      const tva = Math.round(lineTTC * rateNum / (1 + rateNum));
+      const tva = this.applyRate(lineTTC, rate);
       breakdown[rate] = (breakdown[rate] ?? 0) + tva;
     }
     return breakdown;

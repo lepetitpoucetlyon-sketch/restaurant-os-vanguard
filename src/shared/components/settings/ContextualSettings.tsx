@@ -13,7 +13,7 @@ import { useLanguage } from "@/shared/hooks";
 import { PAGE_SETTINGS } from "./config-registry";
 import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";
-import { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
+import type { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
 import { SovereignData, SovereignValue } from "@shared/nexus-contract";
 import { SovereignStorage } from "@/shared/services/SovereignStorage";

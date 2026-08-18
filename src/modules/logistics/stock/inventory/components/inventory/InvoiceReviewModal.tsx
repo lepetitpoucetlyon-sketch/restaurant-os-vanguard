@@ -6,7 +6,7 @@ import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-rea
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+import type { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
 import { InventoryVisionService, VisionMatchResult } from '../../../../services/InventoryVisionService';
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
         // eslint-disable-next-line vanguard/no-inter-module-imports

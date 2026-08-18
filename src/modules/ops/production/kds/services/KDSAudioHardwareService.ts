@@ -7,7 +7,7 @@
  * - Résilience SSR / tests (garde typeof window).
  */
 
-import { KitchenStation } from '../contracts/kds-constants';
+import type { KitchenStation } from '../contracts/kds-constants';
 
 export type KDSChimeType = KitchenStation | 'suite_fire' | 'urgent_rush' | 'bump_success';
 

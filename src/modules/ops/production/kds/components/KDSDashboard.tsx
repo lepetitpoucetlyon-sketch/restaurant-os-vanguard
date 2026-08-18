@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { useRecipes } from '../../../providers/hooks/kitchenHooks';
-import { useKDSController } from '..';
+import { useKDSController } from '../hooks/useKDSController';
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
@@ -14,7 +14,7 @@ import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 
 import { KDSHeader } from "./KDSHeader";
-import { hasAllergens } from "./KDSTicket";
+import { hasAllergens } from "./kds-ticket/kdsTicketHelpers";
 import { KDSRecallSection } from "./kds-dashboard/KDSRecallSection";
 import { KDSProductionGrid } from "./kds-dashboard/KDSProductionGrid";
 import { KDSModalsLayer, type AuditTicket } from "./kds-dashboard/KDSModalsLayer";

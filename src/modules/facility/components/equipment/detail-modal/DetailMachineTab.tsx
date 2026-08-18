@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PhoneCall } from 'lucide-react';
-import { EquipmentAsset } from '../../../assets/domain/schemas/equipment';
+import type { EquipmentAsset } from '../../../assets/domain/schemas/equipment';
 
 interface DetailMachineTabProps {
   asset: EquipmentAsset;

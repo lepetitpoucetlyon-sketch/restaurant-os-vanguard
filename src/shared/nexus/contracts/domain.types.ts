@@ -3,7 +3,7 @@
  * Specific business data structures for services.
  */
 
-import { TransactionCategory, AccountSide } from '@nexus/contracts';
+import type { TransactionCategory, AccountSide } from '@nexus/contracts';
 import { SovereignData } from '@/shared/nexus-contract';
 
 

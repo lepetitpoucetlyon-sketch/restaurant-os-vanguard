@@ -1,4 +1,4 @@
-import { PayoutInvoice, PayoutRequest } from './types';
+import type { PayoutInvoice, PayoutRequest } from './types';
 import { BankingNexusBridge } from '../banking/BankingNexusBridge';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';

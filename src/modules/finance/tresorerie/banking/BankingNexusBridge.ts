@@ -1,4 +1,4 @@
-import { IBankingProvider, KYBData, BankAccount, VirtualCard } from './types';
+import type { IBankingProvider, KYBData, BankAccount, VirtualCard } from './types';
 import { SwanProvider } from './providers/SwanProvider';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 

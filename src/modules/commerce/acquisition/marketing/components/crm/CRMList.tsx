@@ -9,7 +9,7 @@ import {
 } from '../../store/crmAtoms';
 import { crmsAtom, selectedCRMAtom } from '../../store/marketingAtoms';
 import { useLanguage } from '@/shared/hooks';
-import { CRM } from '@nexus/contracts';
+import type { CRM } from '@nexus/contracts';
 
 // Helper functions (extracted from page.tsx logic)
 const getFirstName = (c: CRM): string => c?.firstName || (c?.name ? c.name.split(' ')[0] : '') || '';

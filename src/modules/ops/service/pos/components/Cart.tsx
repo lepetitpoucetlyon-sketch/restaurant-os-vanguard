@@ -8,14 +8,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useNexusFleet } from "@/modules/intelligence";
-import { useLanguage } from "@/shared/hooks";
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { formatMu } from "@/modules/finance";
-import { useIsMobile } from "@/shared/hooks";
+import { useNexusFleet } from "@/modules/intelligence/ia/fleet/NexusFleetProvider";
+import { useLanguage } from "@/shared/hooks/useLanguage";
+import { formatMu } from "@/modules/finance/components/financeUtils";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
 import { SovereignMath } from "@/shared/services/SovereignMath";

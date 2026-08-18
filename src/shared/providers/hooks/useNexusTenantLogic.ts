@@ -7,15 +7,11 @@ import { getTenantConfig } from '@/instances';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
 import { logger } from '@/lib/axiom';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
-import { LLMManager } from '@/modules/intelligence';
-import { GeminiProvider } from '@/modules/intelligence';
-import { StorageManager } from '@/infrastructure/services/storage';
-import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
+import { bootstrapDefaultProviders } from '@/infrastructure/bootstrapProviders';
 import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine';
 import { tenantConfigAtom } from '@/store/pillars/sovereign';
 import { fetchRbacConfigAtom } from '@/store/pillars/rbac';
-import { DemoSeeder } from '@/infrastructure/services/demo/DemoSeeder';
+
 import type { TenantConfig } from '@/shared/nexus-contract';
 import type { NexusTenantState } from '@nexus/contracts/nexus.types';
 
@@ -34,11 +30,7 @@ export function useNexusTenantLogic(): NexusTenantState {
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
 
     useEffect(() => {
-        try {
-            Nexus.adapter = new FirestoreAdapter();
-            LLMManager.provider = new GeminiProvider();
-            StorageManager.provider = new FirebaseStorageProvider();
-        } catch { }
+        bootstrapDefaultProviders();
     }, []);
 
     useEffect(() => {
@@ -70,8 +62,10 @@ export function useNexusTenantLogic(): NexusTenantState {
                 (process.env.NODE_ENV !== 'production' && !process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
             if (isSimulacra) {
                 Nexus.activateSimulacraMode(tenantId).then(() => {
-                    DemoSeeder.provision(tenantId).catch(err => {
-                        logger.error('Failed to provision demo data', { error: err.message });
+                    import('@/infrastructure/services/demo/DemoSeeder').then(({ DemoSeeder }) => {
+                        DemoSeeder.provision(tenantId).catch(err => {
+                            logger.error('Failed to provision demo data', { error: err.message });
+                        });
                     });
                 }).catch(err => {
                     // Simulacra peut échouer si l'adapter Firestore n'est pas encore initialisé

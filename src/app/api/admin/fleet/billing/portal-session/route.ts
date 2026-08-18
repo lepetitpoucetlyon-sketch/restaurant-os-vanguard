@@ -12,7 +12,7 @@ import Stripe from 'stripe';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'super_admin');

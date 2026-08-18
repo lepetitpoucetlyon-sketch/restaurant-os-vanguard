@@ -1,5 +1,5 @@
 
-import { EscalationLevel } from './types';
+import type { EscalationLevel } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 
 /**

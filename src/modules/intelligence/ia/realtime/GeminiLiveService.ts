@@ -1,9 +1,9 @@
 import { AccessPolicyManager, CategoryKey, RolePermissions } from '@/lib/AccessPolicyManager';
-import { User } from '@nexus/contracts';
-import { AGENT_TOOLS } from '@/modules/intelligence';
-import { ToolDefinition } from '@/modules/intelligence';
+import type { User } from '@nexus/contracts';
+import { AGENT_TOOLS } from '../../domain/agent/tools';
+import type { ToolDefinition } from '../../domain/agent/tools/types';
 import { SovereignData, SovereignValue } from '@shared/nexus-contract';
-import { ShieldedContext } from '@/modules/intelligence';
+import { ShieldedContext } from '../ai/ShieldedContext';
 import { logger } from '@/lib/logger';
 import type { IRealtimeVoiceService, RealtimeVoiceCallbacks, RealtimeVoiceConfig } from './IRealtimeVoiceService';
 import { toError } from "@/lib/toError";
@@ -117,7 +117,7 @@ export class GeminiLiveService implements IRealtimeVoiceService {
         }
         const validation = tool.schema.safeParse(event.args);
         if (!validation.success) {
-            const errorMessages = validation.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ');
+            const errorMessages = validation.error.issues.map((i: { path: (string | number | symbol)[]; message: string }) => `${i.path.map(String).join('.')}: ${i.message}`).join(', ');
             logger.warn(`[RealtimeVoice] Validation error on ${tool.name}: ${errorMessages}`);
             this.sendToolResult(event.callId, {
                 error: `Arguments invalides pour ${tool.name}. Erreurs: ${errorMessages}. Veuillez corriger et réessayer.`,

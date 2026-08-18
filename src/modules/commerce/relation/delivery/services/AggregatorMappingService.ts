@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { IAggregatorAdapter } from '../adapters/IAggregatorAdapter';
+import type { IAggregatorAdapter } from '../adapters/IAggregatorAdapter';
 import { UberEatsAdapter } from '../adapters/UberEatsAdapter';
 import { DeliverooAdapter } from '../adapters/DeliverooAdapter';
 

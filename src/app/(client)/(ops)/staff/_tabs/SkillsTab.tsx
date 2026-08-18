@@ -4,7 +4,7 @@ import React from "react";
 import { FileText, Trash2 } from "lucide-react";
 import type { User } from "@nexus/contracts";
 import { type StaffDocument, KNOWN_SKILLS } from "../staffUtils";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 /**
  * Onglet « Compétences » de la page Staff — extrait de page.tsx (dette-5).

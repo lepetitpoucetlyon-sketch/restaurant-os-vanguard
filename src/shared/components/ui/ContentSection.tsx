@@ -1,5 +1,5 @@
 import { cn } from "@/lib/ui.foundations";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface ContentSectionProps {
     title?: string;

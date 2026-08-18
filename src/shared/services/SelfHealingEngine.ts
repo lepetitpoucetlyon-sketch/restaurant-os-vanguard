@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 type HealItem = { id?: string;[k: string]: unknown };
 

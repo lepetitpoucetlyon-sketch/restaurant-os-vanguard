@@ -13,7 +13,7 @@ import {
 import { deliveriesAtom } from '@/store/pillars/compliance';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { QualityEngine } from '../../../services/QualityEngine';
-import { ActiveQualityControl, ActiveQualityControlItem } from '@nexus/contracts';
+import type { ActiveQualityControl, ActiveQualityControlItem } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
 import { buildReceptionControl, buildReceptionData, buildEmptyControl } from './qualityBuilders';
 

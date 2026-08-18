@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface SectionHeaderProps {
     title: string;

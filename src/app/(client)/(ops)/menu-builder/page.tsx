@@ -7,7 +7,7 @@ import { useProducts, useCategories } from '@/modules/logistics';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Product } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 import { toMicrounits } from "@/shared/schemas/primitives";
 
 import type { MenuBuilderEditForm } from "@/modules/ops/menu-builder/menuBuilderConstants";

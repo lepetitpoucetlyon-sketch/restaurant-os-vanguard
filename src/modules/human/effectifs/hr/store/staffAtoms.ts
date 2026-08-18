@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { createProxyDomain } from '@/store/nexusNodeFactory';
 import { User, Shift, LeaveRequest, LeaveBalance, ShiftLog } from '@nexus/contracts';
-import { ShiftEntry } from '../../../domain/schemas/hr';
+import type { ShiftEntry } from '../../../domain/schemas/hr';
 
 // --- 👥 STAFF & HR DOMAIN (Personnel, Shifts, Congés) ---
 
@@ -56,7 +56,7 @@ export const myLeaveBalancesAtom = atom((get) => {
     return all.filter(r => r.userId === user?.id);
 });
 
-import { Candidate } from '@nexus/contracts';
+import type { Candidate } from '@nexus/contracts';
 export const staffSearchQueryAtom = atom('');
 export const staffStatusFilterAtom = atom<'all' | 'new' | 'interview' | 'trial' | 'offer' | 'hired' | 'refused'>('all');
 export const staffCandidateModalOpenAtom = atom(false);

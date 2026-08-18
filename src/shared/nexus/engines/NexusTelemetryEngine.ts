@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
-import { ChaosMonkey, ResilienceSlayer } from '@/modules/intelligence';
+import { ChaosMonkey } from '@/modules/intelligence/ia/resilience/ChaosMonkey';
+import { ResilienceSlayer } from '@/modules/intelligence/ia/resilience/ResilienceSlayer';
 import { Sentry } from '@/lib/sentry';
 
 /**

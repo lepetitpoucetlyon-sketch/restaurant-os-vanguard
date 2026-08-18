@@ -8,9 +8,11 @@ import dynamic from "next/dynamic";
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ExpenseClaimDialog } from './accounting';
-import { useTenant, useActionPermission, useTabAccess } from "@/shared/hooks";
+import { useTenant } from "@/shared/hooks/useTenant";
+import { useActionPermission } from "@/shared/hooks/useActionPermission";
+import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
-import { useOrders } from '@/modules/ops';
+import { useOrders } from '@/modules/ops/providers/hooks';
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {

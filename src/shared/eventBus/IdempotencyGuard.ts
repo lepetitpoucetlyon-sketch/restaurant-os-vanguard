@@ -10,9 +10,15 @@ export interface ProcessedEventLog {
     processedAt: number;
 }
 
-async function getNexus() {
-    const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-    return Nexus;
+type PersistenceAdapter = {
+    get: <T>(path: string) => Promise<T | null>;
+    set: <T>(path: string, data: T) => Promise<void>;
+};
+
+let _persistenceAdapter: PersistenceAdapter | null = null;
+
+export function setEventBusPersistenceAdapter(adapter: PersistenceAdapter | null): void {
+    _persistenceAdapter = adapter;
 }
 
 /**
@@ -51,10 +57,10 @@ export class IdempotencyGuard {
         }
 
         // 3. Check Nexus / Firestore côté serveur si tenantId fourni
-        if (tenantId) {
+        const adapter = _persistenceAdapter ?? (globalThis as unknown as { __nexusAdapter?: PersistenceAdapter }).__nexusAdapter;
+        if (tenantId && adapter) {
             try {
-                const Nexus = await getNexus();
-                const doc = await Nexus.adapter.get<ProcessedEventLog>(`tenants/${tenantId}/events_processed_log/${key}`);
+                const doc = await adapter.get<ProcessedEventLog>(`tenants/${tenantId}/events_processed_log/${key}`);
                 if (doc) {
                     this.memoryCache.add(key);
                     return true;
@@ -97,10 +103,10 @@ export class IdempotencyGuard {
             }
         }
 
-        if (tenantId) {
+        const adapter = _persistenceAdapter ?? (globalThis as unknown as { __nexusAdapter?: PersistenceAdapter }).__nexusAdapter;
+        if (tenantId && adapter) {
             try {
-                const Nexus = await getNexus();
-                await Nexus.adapter.set(`tenants/${tenantId}/events_processed_log/${key}`, record);
+                await adapter.set(`tenants/${tenantId}/events_processed_log/${key}`, record);
             } catch (err) {
                 logger.warn(`[IdempotencyGuard] Failed to write processed event to Nexus`, err);
             }

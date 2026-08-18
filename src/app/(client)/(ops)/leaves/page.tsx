@@ -15,7 +15,7 @@ import {
     FileText
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
-import {
+import type {
     LeaveRequest,
     LeaveRequestStatus,
     RejectionReason

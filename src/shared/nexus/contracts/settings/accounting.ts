@@ -1,4 +1,4 @@
-import { AccountingMode } from "@/lib/shared-kernel";
+import type { AccountingMode } from "@/lib/shared-kernel";
 
 export interface AccountingConfig {
     fiscalYearStart: string;

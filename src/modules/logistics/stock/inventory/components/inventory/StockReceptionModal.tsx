@@ -13,7 +13,7 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import type { ExtractedInvoice } from "@/modules/ops";
 
-import { type SupplierRecord } from "./stock-reception/receptionConstants";
+import type { SupplierRecord } from "./stock-reception/receptionConstants";
 import { StockSuccessView } from "./stock-reception/StockSuccessView";
 import { StockReceptionForm } from "./stock-reception/StockReceptionForm";
 

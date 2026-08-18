@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
-import { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
+import type { Order, OrderItem, OrderStatus, Recipe } from "@nexus/contracts";
 import {
     DndContext,
     closestCenter,

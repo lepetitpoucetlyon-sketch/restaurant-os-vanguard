@@ -4,7 +4,16 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Scan, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { VisionService, type ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+import type { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+
+function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
 
 
 interface VisionScannerProps {
@@ -22,7 +31,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const base64 = await VisionService.fileToBase64(file);
+        const base64 = await fileToBase64(file);
         setPreview(base64);
         processImage(base64);
     };
@@ -32,6 +41,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
         setIsProcessing(true);
 
         try {
+            const { VisionService } = await import('@modules/intelligence/services/VisionService');
             const data = await VisionService.analyzeInvoice(base64);
             onAnalysisComplete(data);
             setPreview(null);

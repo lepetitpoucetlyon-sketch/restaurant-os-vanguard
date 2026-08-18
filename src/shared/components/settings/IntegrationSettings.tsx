@@ -22,7 +22,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { useExtensions } from '@/shared/providers/hooks/useExtensions';
-import { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
+import type { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [
     { id: 'stripe', name: 'Stripe', category: 'Payment Gateway', icon: CreditCard, description: 'Neural Payment Processing', dashboardUrl: 'https://dashboard.stripe.com' },

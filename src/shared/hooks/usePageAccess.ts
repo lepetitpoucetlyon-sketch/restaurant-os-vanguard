@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { rbacConfigAtom } from "@/store/pillars/rbac";
 import { DEFAULT_PAGE_ACCESS } from "@/modules/human";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
-import { PageKey, PermissionRole } from "@/shared/nexus/contracts/permissions.types";
+import type { PageKey, PermissionRole } from "@/shared/nexus/contracts/permissions.types";
 
 export function usePageAccess(pageKey: PageKey | string): boolean {
   const { currentUser } = useAuth();

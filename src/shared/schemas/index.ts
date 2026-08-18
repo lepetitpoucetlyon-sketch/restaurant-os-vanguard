@@ -22,7 +22,7 @@ export {
   type SupportDraft,
   type SupportTicketStatus,
   type SupportTicketSource,
-} from '@/modules/intelligence';
+} from '@/modules/intelligence/domain/schemas/supportTicket';
 
 // ── Compliance (audit, PII) — utilisé par AuditService + PiiVault ────────────
 export {
@@ -32,6 +32,9 @@ export {
   type AuditAction,
   type AuditEvent,
   type AuditedCollection,
-  type PiiFields,
-  type PiiRecord,
-} from '@/modules/compliance';
+} from '@/modules/compliance/domain/schemas/audit';
+
+export type {
+  PiiFields,
+  PiiRecord,
+} from '@/modules/compliance/domain/schemas/pii';

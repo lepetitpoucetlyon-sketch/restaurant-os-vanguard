@@ -8,7 +8,7 @@ import { FleetComplianceService } from './FleetComplianceService';
 // eslint-disable-next-line vanguard/no-inter-module-imports
 import { HACCPTelemetryBridge } from '@modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { TenantID } from '@/shared/types/brands';
+import type { TenantID } from '@/shared/types/brands';
 import { fleetEngine } from './FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import { FleetInsight } from '../../services/MacroBrain';
@@ -17,7 +17,7 @@ import { whiteLabelInstanceConfig } from '@/config/instance';
 import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';
 import { logger } from '@/lib/logger';
 
-import { NexusFleetState } from '@nexus/contracts/nexus.types';
+import type { NexusFleetState } from '@nexus/contracts/nexus.types';
 
 interface NexusFleetStateInternal extends Omit<NexusFleetState, 'tutorial'> {
     tutorial?: import('@nexus/contracts/nexus.types').NexusTutorialState;

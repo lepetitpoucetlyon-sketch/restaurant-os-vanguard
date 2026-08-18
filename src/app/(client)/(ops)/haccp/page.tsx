@@ -14,7 +14,7 @@ import { CleaningPlan } from '@/modules/compliance';
 import { DLCTracker } from '@/modules/compliance';
 import { NonConformityForm } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { JsonObject } from "@/shared/types/json";
+import type { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
     temperatures: Thermometer,

@@ -1,4 +1,4 @@
-import { VatLine } from '../../domain/entities/VatDeclaration';
+import type { VatLine } from '../../domain/entities/VatDeclaration';
 
 export interface LedgerEntry {
   type: 'SALE' | 'PURCHASE';

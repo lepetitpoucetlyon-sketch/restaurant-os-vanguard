@@ -83,6 +83,7 @@ export const OrderSchema = OrderBaseSchema.refine(
 
 export type Order = z.infer<typeof OrderSchema>;
 export type OrderLine = z.infer<typeof OrderLineSchema>;
+export type OrderItem = OrderLine;
 
 export const OrderPatchSchema = OrderBaseSchema.partial().omit({ id: true, correlationId: true, createdAt: true });
 export type OrderPatch = z.infer<typeof OrderPatchSchema>;

@@ -5,7 +5,8 @@ import { EmpireInstance } from '@/shared/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine, type FiscalSeal } from '@/modules/finance';
+import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import type { FiscalSeal } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
 /**

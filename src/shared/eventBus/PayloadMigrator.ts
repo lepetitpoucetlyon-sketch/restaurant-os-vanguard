@@ -1,4 +1,4 @@
-import { NexusEventName, NexusEventPayload } from './NexusEventBus';
+import type { NexusEventName, NexusEventPayload } from './NexusEventBus';
 import { logger } from '@/lib/logger';
 
 /**

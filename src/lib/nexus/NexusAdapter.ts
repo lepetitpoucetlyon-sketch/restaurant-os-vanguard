@@ -27,6 +27,7 @@ class NexusManager {
     set adapter(adapter: INexusAdapter) {
         // 🛡️ SHIELD: Automatically wrap any adapter with the Sovereign Interceptor
         this._adapter = new NexusInterceptor(adapter, SovereignGuard, () => this.activeTenant);
+        (globalThis as unknown as { __nexusAdapter?: INexusAdapter }).__nexusAdapter = this._adapter;
         
         if (!this._isSimulacraActive) {
             this._realAdapter = adapter;

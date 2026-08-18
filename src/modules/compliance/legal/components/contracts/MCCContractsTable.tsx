@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Search, FileText, CheckCircle2, Clock, Send } from 'lucide-react';
-import type { ContractRecord } from '@/modules/compliance';
+import type { ContractRecord } from '../../services/SovereignSignatureEngine';
 
 interface MCCContractsTableProps {
   filteredContracts: ContractRecord[];

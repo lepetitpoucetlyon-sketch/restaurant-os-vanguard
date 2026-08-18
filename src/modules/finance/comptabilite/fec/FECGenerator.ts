@@ -1,7 +1,7 @@
 
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { FECMapper } from './FECMapper';
-import { FECExportResult, FECLine } from './types';
+import type { FECExportResult, FECLine } from './types';
 import { CryptoService } from '@/lib/CryptoService';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 

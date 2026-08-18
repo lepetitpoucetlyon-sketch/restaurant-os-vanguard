@@ -1,5 +1,5 @@
-import { IReservation, ReservationStatus } from '../../domain/entities/Reservation';
-import { RwGBooking } from '../../domain/types/GoogleReserveTypes';
+import type { IReservation, ReservationStatus } from '../../domain/entities/Reservation';
+import type { RwGBooking } from '../../domain/types/GoogleReserveTypes';
 
 export class GoogleReserveAdapter {
   /**

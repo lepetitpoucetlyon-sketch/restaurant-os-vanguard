@@ -9,7 +9,7 @@ import {
   Wrench,
   Building,
 } from 'lucide-react';
-import {
+import type {
   EquipmentAsset,
   EquipmentGuide,
 } from '../../assets/domain/schemas/equipment';

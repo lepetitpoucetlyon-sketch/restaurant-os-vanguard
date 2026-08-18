@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Loader2, Activity } from "lucide-react";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
-import { PositionSettings, StaffConfig } from "@nexus/contracts";
+import type { PositionSettings, StaffConfig } from "@nexus/contracts";
 import { TipsDistributionSettingsSection } from "./TipsDistributionSettingsSection";
 import { StaffLaborLegislationSection } from "./staff-settings/StaffLaborLegislationSection";
 import { StaffCompensationSection } from "./staff-settings/StaffCompensationSection";

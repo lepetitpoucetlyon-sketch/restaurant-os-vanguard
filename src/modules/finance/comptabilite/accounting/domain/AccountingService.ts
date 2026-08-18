@@ -1,5 +1,5 @@
 import { TransactionCategory, JournalEntry, FiscalSeal } from '@nexus/contracts';
-import { ExpenseData } from '@nexus/contracts/domain.types';
+import type { ExpenseData } from '@nexus/contracts/domain.types';
 import { FiscalEngine } from '../../../services/FiscalEngine';
 
 /**
