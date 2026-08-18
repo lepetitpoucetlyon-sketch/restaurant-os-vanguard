@@ -3,11 +3,16 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Printer, Plus, Trash2, Star, CheckCircle2, AlertCircle, Loader2,
+  Sparkles, QrCode, Sliders, Palette
 } from "lucide-react";
 import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
-import type { PrinterDevice, PrinterRole, PrinterConnection } from "@/modules/ops/service/printers/hardware/types";
+import type { PrinterDevice, PrinterRole, PrinterConnection, TicketStyle, ReceiptConfig } from "@/modules/ops/service/printers/hardware/types";
 import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/modules/ops/service/printers/hardware/types";
 import { CONN_ICON, AddPrinterWizard } from '@/modules/ops';
+import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
+import { useTenant } from "@/shared/providers/NexusCoreProvider";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { toast } from "sonner";
 
 const ROLE_COLORS: Record<PrinterRole, string> = {
   receipt: "text-status-success",
@@ -19,12 +24,71 @@ const ROLE_COLORS: Record<PrinterRole, string> = {
 type TestStatus = "idle" | "testing" | "ok" | "error";
 
 export default function PrinterSettings() {
+  const { activeTenantConfig } = useTenant();
   const [printers, setPrinters] = useState<PrinterDevice[]>([]);
   const [showWizard, setShowWizard] = useState(false);
   const [testStatus, setTestStatus] = useState<Record<string, TestStatus>>({});
 
+  // Receipt Design State
+  const [receiptStyle, setReceiptStyle] = useState<TicketStyle>("classic");
+  const [qrCodeType, setQrCodeType] = useState<"eticket" | "google_review" | "loyalty" | "custom">("eticket");
+  const [googleReviewUrl, setGoogleReviewUrl] = useState("");
+  const [customQrUrl, setCustomQrUrl] = useState("");
+  const [footerNote, setFooterNote] = useState("");
+  const [isSavingDesign, setIsSavingDesign] = useState(false);
+
   const refresh = useCallback(() => setPrinters(printerService.getAll()), []);
-  useEffect(() => { refresh(); }, [refresh]);
+  
+  useEffect(() => {
+    refresh();
+    // Charger la configuration de ticket existante
+    const existingConfig = (activeTenantConfig as { receiptConfig?: ReceiptConfig } | null)?.receiptConfig;
+    if (existingConfig) {
+      if (existingConfig.ticketStyle) setReceiptStyle(existingConfig.ticketStyle);
+      if (existingConfig.qrCodeType) setQrCodeType(existingConfig.qrCodeType);
+      if (existingConfig.googleReviewUrl) setGoogleReviewUrl(existingConfig.googleReviewUrl);
+      if (existingConfig.qrCodeCustomUrl) setCustomQrUrl(existingConfig.qrCodeCustomUrl);
+      if (existingConfig.customFooterNote) setFooterNote(existingConfig.customFooterNote);
+    } else {
+      try {
+        const local = localStorage.getItem(tenantScopedKey("receipt_config"));
+        if (local) {
+          const parsed = JSON.parse(local) as ReceiptConfig;
+          if (parsed.ticketStyle) setReceiptStyle(parsed.ticketStyle);
+          if (parsed.qrCodeType) setQrCodeType(parsed.qrCodeType);
+          if (parsed.googleReviewUrl) setGoogleReviewUrl(parsed.googleReviewUrl);
+          if (parsed.qrCodeCustomUrl) setCustomQrUrl(parsed.qrCodeCustomUrl);
+          if (parsed.customFooterNote) setFooterNote(parsed.customFooterNote);
+        }
+      } catch { /* ignore */ }
+    }
+  }, [refresh, activeTenantConfig]);
+
+  const handleSaveReceiptDesign = async () => {
+    setIsSavingDesign(true);
+    const newConfig: ReceiptConfig = {
+      ticketStyle: receiptStyle,
+      qrCodeType,
+      googleReviewUrl: googleReviewUrl.trim() || undefined,
+      qrCodeCustomUrl: customQrUrl.trim() || undefined,
+      customFooterNote: footerNote.trim() || undefined,
+      showLogo: true,
+    };
+
+    try {
+      localStorage.setItem(tenantScopedKey("receipt_config"), JSON.stringify(newConfig));
+      if (activeTenantConfig?.id) {
+        await Nexus.adapter.update(`tenants/${activeTenantConfig.id}/tenantConfig`, {
+          receiptConfig: newConfig,
+        });
+      }
+      toast.success("Design du ticket de caisse enregistré !");
+    } catch {
+      toast.error("Erreur lors de l'enregistrement du design");
+    } finally {
+      setIsSavingDesign(false);
+    }
+  };
 
   const handleTest = useCallback(async (printer: PrinterDevice) => {
     setTestStatus(s => ({ ...s, [printer.id]: "testing" }));
@@ -44,18 +108,19 @@ export default function PrinterSettings() {
   }, [refresh]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* 1. Header & Matériel */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-brand text-text-primary italic">Imprimantes</h2>
-          <p className="text-xs text-text-muted mt-0.5">WiFi · Bluetooth · USB · Série · Navigateur</p>
+          <h2 className="text-xl font-brand text-text-primary italic">Imprimantes & Tickets</h2>
+          <p className="text-xs text-text-muted mt-0.5">Matériel thermique · Styles de tickets · QR Codes</p>
         </div>
         <button
           onClick={() => setShowWizard(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-action-primary text-bg-primary text-xs font-black uppercase tracking-widest hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-action-primary text-bg-primary text-xs font-black uppercase tracking-widest hover:opacity-90 transition-opacity shadow-sm"
         >
           <Plus className="w-3.5 h-3.5" />
-          Ajouter
+          Ajouter Imprimante
         </button>
       </div>
 
@@ -76,6 +141,134 @@ export default function PrinterSettings() {
         </div>
       )}
 
+      {/* 2. Personnalisation Visuelle du Ticket (V3-PRINT-STYLE) */}
+      <div className="rounded-3xl border border-border bg-bg-secondary p-6 space-y-6 shadow-sm">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-accent-gold/10 text-accent-gold flex items-center justify-center">
+              <Palette className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-text-primary">Design & Style du Ticket de Caisse</h3>
+              <p className="text-xs text-text-muted">Choisissez l&apos;esthétique d&apos;impression et la destination du QR Code</p>
+            </div>
+          </div>
+          <span className="text-[10px] uppercase tracking-widest font-black text-status-success bg-status-success/10 px-2.5 py-1 rounded-full border border-status-success/20">
+            Conforme NF525
+          </span>
+        </div>
+
+        {/* Sélection des 3 Thèmes */}
+        <div className="space-y-3">
+          <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-2">
+            <Sliders className="w-3.5 h-3.5" /> Style Visuel
+          </label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <StyleOptionCard
+              title="Classique"
+              desc="Équilibré et net. Séparateurs francs, totaux en relief, très lisible."
+              tag="Standardisé"
+              selected={receiptStyle === "classic"}
+              onClick={() => setReceiptStyle("classic")}
+            />
+            <StyleOptionCard
+              title="Minimaliste"
+              desc="Design contemporain épuré. Points légers (·), typographie aérée."
+              tag="Moderne"
+              selected={receiptStyle === "minimalist"}
+              onClick={() => setReceiptStyle("minimalist")}
+            />
+            <StyleOptionCard
+              title="Gourmet"
+              desc="Prestige gastronomique. Ornements ✦ ✦ ✦, double cadre et mot du chef."
+              tag="Gastronomie"
+              selected={receiptStyle === "gourmet"}
+              onClick={() => setReceiptStyle("gourmet")}
+            />
+          </div>
+        </div>
+
+        {/* Configuration QR Code */}
+        <div className="space-y-3 pt-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-text-muted flex items-center gap-2">
+            <QrCode className="w-3.5 h-3.5" /> Destination du QR Code (Pied de Ticket)
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { id: "eticket", label: "📱 e-Ticket & Avis", desc: "Reçu digital + Avis 5★" },
+              { id: "google_review", label: "⭐ Avis Google Direct", desc: "Lien fiche Google Maps" },
+              { id: "loyalty", label: "🎁 Club Fidélité", desc: "Inscription fidélité" },
+              { id: "custom", label: "🔗 Lien Personnalisé", desc: "URL libre de votre choix" },
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setQrCodeType(opt.id as typeof qrCodeType)}
+                className={`p-3 rounded-2xl border text-left transition-all ${
+                  qrCodeType === opt.id
+                    ? "border-action-primary bg-action-primary/10 text-text-primary"
+                    : "border-border bg-bg-tertiary/50 text-text-muted hover:border-border-hover"
+                }`}
+              >
+                <p className="text-xs font-bold text-text-primary">{opt.label}</p>
+                <p className="text-[11px] text-text-muted mt-0.5">{opt.desc}</p>
+              </button>
+            ))}
+          </div>
+
+          {qrCodeType === "google_review" && (
+            <div className="pt-2">
+              <input
+                type="url"
+                value={googleReviewUrl}
+                onChange={(e) => setGoogleReviewUrl(e.target.value)}
+                placeholder="https://g.page/r/votre-restaurant/review"
+                className="w-full h-10 px-4 rounded-xl border border-border bg-bg-tertiary text-xs text-text-primary focus:outline-none focus:border-action-primary"
+              />
+            </div>
+          )}
+
+          {qrCodeType === "custom" && (
+            <div className="pt-2">
+              <input
+                type="url"
+                value={customQrUrl}
+                onChange={(e) => setCustomQrUrl(e.target.value)}
+                placeholder="https://monrestaurant.fr/menu"
+                className="w-full h-10 px-4 rounded-xl border border-border bg-bg-tertiary text-xs text-text-primary focus:outline-none focus:border-action-primary"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Note de pied de page personnalisée */}
+        <div className="space-y-2 pt-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-text-muted">
+            Message de pied de page (Ex: Code WiFi, Réseaux, Mot du Chef)
+          </label>
+          <input
+            type="text"
+            value={footerNote}
+            onChange={(e) => setFooterNote(e.target.value)}
+            placeholder="Ex : WiFi : BISTRO2026 · Suivez-nous sur Instagram @monresto"
+            className="w-full h-10 px-4 rounded-xl border border-border bg-bg-tertiary text-xs text-text-primary focus:outline-none focus:border-action-primary"
+          />
+        </div>
+
+        {/* Bouton de sauvegarde */}
+        <div className="flex justify-end pt-2">
+          <button
+            type="button"
+            onClick={handleSaveReceiptDesign}
+            disabled={isSavingDesign}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-bg-primary text-xs font-black uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
+            {isSavingDesign ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            Enregistrer le Design
+          </button>
+        </div>
+      </div>
+
       <div className="rounded-2xl border border-border bg-bg-secondary p-5">
         <p className="text-xs text-text-muted">
           <span className="text-text-primary font-semibold">Fallback navigateur</span> — si aucune
@@ -90,6 +283,39 @@ export default function PrinterSettings() {
           onAdded={() => { refresh(); setShowWizard(false); }}
         />
       )}
+    </div>
+  );
+}
+
+function StyleOptionCard({
+  title,
+  desc,
+  tag,
+  selected,
+  onClick,
+}: {
+  title: string;
+  desc: string;
+  tag: string;
+  selected: boolean;
+  onClick(): void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+        selected
+          ? "border-action-primary bg-action-primary/5 ring-2 ring-action-primary/20"
+          : "border-border bg-bg-tertiary/40 hover:border-border-hover"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-bold text-text-primary">{title}</span>
+        <span className="text-[9px] uppercase font-black tracking-widest text-text-muted bg-bg-secondary px-2 py-0.5 rounded-md border border-border">
+          {tag}
+        </span>
+      </div>
+      <p className="text-xs text-text-muted leading-relaxed">{desc}</p>
     </div>
   );
 }

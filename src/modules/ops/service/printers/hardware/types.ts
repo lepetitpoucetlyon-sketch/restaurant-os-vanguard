@@ -69,6 +69,24 @@ export interface PrinterDevice {
   isDefault: boolean
 }
 
+export type TicketStyle = 'classic' | 'minimalist' | 'gourmet';
+
+export interface BitmapImage {
+  width: number;       // Largeur en pixels (multiple de 8 recommandé)
+  height: number;      // Hauteur en pixels
+  data: Uint8Array | number[]; // Pixels monochromes 1-bit (0 = blanc, 1 = noir)
+}
+
+export interface ReceiptConfig {
+  ticketStyle?: TicketStyle;
+  showLogo?: boolean;
+  qrCodeType?: 'eticket' | 'google_review' | 'loyalty' | 'custom';
+  qrCodeCustomUrl?: string;
+  googleReviewUrl?: string;
+  loyaltyUrl?: string;
+  customFooterNote?: string;
+}
+
 export interface ReceiptTicket {
   items: Array<{ name: string; qty: number; priceInMicrounits: number }>
   totalInMicrounits: number
@@ -79,6 +97,11 @@ export interface ReceiptTicket {
   cashGiven?: number      // microunits
   changeGiven?: number    // microunits
   footerNote?: string
+  // Champs de style & branding
+  ticketStyle?: TicketStyle
+  logoBitmap?: BitmapImage
+  qrCodeUrl?: string
+  qrCodeLabel?: string
   // Champs NF525
   siret?: string
   nf525Hash?: string

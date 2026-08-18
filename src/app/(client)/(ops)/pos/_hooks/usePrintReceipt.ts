@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { toast } from "sonner";
 import { EpsonPrinter } from "@/modules/ops/service/printers/hardware/EpsonPrinter";
-import type { ReceiptTicket } from "@/modules/ops/service/printers/hardware/EpsonPrinter";
+import type { ReceiptTicket, TicketStyle, BitmapImage, ReceiptConfig } from "@/modules/ops/service/printers/hardware/types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { CartItem } from "@/modules/ops/workflow/engine/types";
@@ -18,6 +18,10 @@ export interface ReceiptPrintMeta {
     changeGiven?: number;
     siret?: string;
     footerNote?: string;
+    ticketStyle?: TicketStyle;
+    qrCodeUrl?: string;
+    qrCodeLabel?: string;
+    logoBitmap?: BitmapImage;
 }
 
 function parsePrinterConfig(): { ip: string; port: number } {
@@ -35,8 +39,80 @@ function parsePrinterConfig(): { ip: string; port: number } {
     }
 }
 
+function calculateEffectiveTva(cartItems: CartItem[]): number {
+    let tvaMu = 0, ttcTotal = 0;
+    for (const item of cartItems) {
+        const rate = parseFloat(String(item.taxRate ?? '0.10'));
+        const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
+        tvaMu += lineTTC - Math.round(lineTTC / (1 + rate));
+        ttcTotal += lineTTC;
+    }
+    const htTotal = ttcTotal - tvaMu;
+    return htTotal > 0 ? Math.round((tvaMu / htTotal) * 100 * 10) / 10 : 10;
+}
+
+function resolveQrCodeUrl(
+    meta: ReceiptPrintMeta | null,
+    config: ReceiptConfig | undefined,
+    tenantId: string,
+    ticketNumber: string
+): string {
+    if (meta?.qrCodeUrl) return meta.qrCodeUrl;
+
+    const qrType = config?.qrCodeType || 'eticket';
+    if (qrType === 'google_review' && config?.googleReviewUrl) return config.googleReviewUrl;
+    if (qrType === 'loyalty' && config?.loyaltyUrl) return config.loyaltyUrl;
+    if (qrType === 'custom' && config?.qrCodeCustomUrl) return config.qrCodeCustomUrl;
+
+    const appDomain = process.env.NEXT_PUBLIC_APP_URL || 'https://app.restaurantos.app';
+    return `${appDomain}/ticket/${tenantId}/${ticketNumber}`;
+}
+
+function extractMeta(runtimeMeta: unknown, fallback?: ReceiptPrintMeta): ReceiptPrintMeta | null {
+    if (runtimeMeta && typeof runtimeMeta === 'object' && !('nativeEvent' in (runtimeMeta as Record<string, unknown>))) {
+        return runtimeMeta as ReceiptPrintMeta;
+    }
+    return fallback ?? null;
+}
+
+function buildTicketData(
+    cartItems: CartItem[],
+    cartTotal: number,
+    meta: ReceiptPrintMeta | null,
+    tenantCfg: { id?: string; name?: string; siret?: string; taxId?: string; receiptConfig?: ReceiptConfig } | null
+): ReceiptTicket {
+    const ticketNumber = meta?.ticketNumber ?? `T-${Date.now()}`;
+    const tenantId = tenantCfg?.id || 'resto';
+    const siret = meta?.siret || tenantCfg?.siret || tenantCfg?.taxId;
+    const ticketStyle: TicketStyle = meta?.ticketStyle || tenantCfg?.receiptConfig?.ticketStyle || 'classic';
+    const qrCodeUrl = resolveQrCodeUrl(meta, tenantCfg?.receiptConfig, tenantId, ticketNumber);
+
+    return {
+        businessName: tenantCfg?.name ?? "Restaurant",
+        ticketNumber,
+        tvaRatePercent: calculateEffectiveTva(cartItems),
+        totalInMicrounits: Math.round(cartTotal),
+        items: cartItems.map((item) => ({
+            name: item.name,
+            qty: item.quantity,
+            priceInMicrounits: item.unitPriceInMicrounits,
+        })),
+        paymentMethod: meta?.paymentMethod,
+        cashGiven: meta?.cashGiven,
+        changeGiven: meta?.changeGiven,
+        footerNote: meta?.footerNote || tenantCfg?.receiptConfig?.customFooterNote,
+        ticketStyle,
+        logoBitmap: meta?.logoBitmap,
+        qrCodeUrl,
+        qrCodeLabel: meta?.qrCodeLabel,
+        siret: siret || undefined,
+        nf525Hash: meta?.nf525Hash,
+        certifiedAt: meta?.certifiedAt ?? new Date().toISOString(),
+    };
+}
+
 /**
- * 🖨️ usePrintReceipt — Ticket caisse avec mentions légales et fiscales NF525 (V3-NF525-02)
+ * 🖨️ usePrintReceipt — Ticket caisse avec mentions légales NF525, styles personnalisables et QR Code
  */
 export function usePrintReceipt(
     cartItems: CartItem[],
@@ -49,46 +125,20 @@ export function usePrintReceipt(
         if (cartItems.length === 0) return;
 
         const { ip: _ip, port: _port } = parsePrinterConfig();
-        const isMetaObj = runtimeMeta && typeof runtimeMeta === 'object' && !('nativeEvent' in (runtimeMeta as Record<string, unknown>));
-        const meta = (isMetaObj ? (runtimeMeta as ReceiptPrintMeta) : null) || receiptMeta;
+        const meta = extractMeta(runtimeMeta, receiptMeta);
+        const tenantCfg = activeTenantConfig as {
+            id?: string;
+            name?: string;
+            siret?: string;
+            taxId?: string;
+            receiptConfig?: ReceiptConfig;
+        } | null;
 
-        // Taux TVA effectif : moyenne pondérée multi-taux (10/5.5/20%)
-        let tvaMu = 0, ttcTotal = 0;
-        for (const item of cartItems) {
-            const rate = parseFloat(String(item.taxRate ?? '0.10'));
-            const lineTTC = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
-            tvaMu += lineTTC - Math.round(lineTTC / (1 + rate));
-            ttcTotal += lineTTC;
-        }
-        const htTotal = ttcTotal - tvaMu;
-        const effectiveTvaPercent = htTotal > 0 ? Math.round((tvaMu / htTotal) * 100 * 10) / 10 : 10;
-
-        const tenantCfg = activeTenantConfig as { name?: string; siret?: string; taxId?: string } | null;
-        const siret = meta?.siret || tenantCfg?.siret || tenantCfg?.taxId;
-
-        const ticket: ReceiptTicket = {
-            businessName: tenantCfg?.name ?? "Restaurant",
-            ticketNumber: meta?.ticketNumber ?? `T-${Date.now()}`,
-            tvaRatePercent: effectiveTvaPercent,
-            totalInMicrounits: Math.round(cartTotal),
-            items: cartItems.map((item) => ({
-                name: item.name,
-                qty: item.quantity,
-                priceInMicrounits: item.unitPriceInMicrounits,
-            })),
-            paymentMethod: meta?.paymentMethod,
-            cashGiven: meta?.cashGiven,
-            changeGiven: meta?.changeGiven,
-            footerNote: meta?.footerNote,
-            // Champs de conformité légale NF525
-            siret: siret || undefined,
-            nf525Hash: meta?.nf525Hash,
-            certifiedAt: meta?.certifiedAt ?? new Date().toISOString(),
-        };
+        const ticket = buildTicketData(cartItems, cartTotal, meta, tenantCfg);
 
         try {
             await EpsonPrinter.printReceipt(ticket);
-            toast.success(`Impression envoyée — ${_ip}:${_port}`);
+            toast.success(`Impression envoyée (${ticket.ticketStyle}) — ${_ip}:${_port}`);
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Erreur impression";
             toast.error(`Impression échouée : ${msg}`);
