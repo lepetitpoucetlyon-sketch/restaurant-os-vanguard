@@ -12,6 +12,7 @@ import { ConnectorOAuthPanel } from './ConnectorOAuthPanel';
 import { ImportCategoryPanel } from './ImportCategoryPanel';
 import { SimpleFloorPlanEditor, type SimpleTable, type SimpleZone } from './SimpleFloorPlanEditor';
 import { OnboardingHelpButton } from './OnboardingHelpButton';
+import { SubdomainSelectorStep } from './SubdomainSelectorStep';
 
 interface ImportEntry {
   category: ImportCategory;
@@ -34,12 +35,13 @@ const IMPORT_ENTRIES: ImportEntry[] = [
   { category: 'recipes',      label: 'Recettes',            icon: '📋',  requiredForZero: false, requiredForMigration: false },
 ];
 
-type WizardStepId = 'mode' | 'source' | 'connect' | 'import' | 'done';
+type WizardStepId = 'mode' | 'source' | 'connect' | 'domain' | 'import' | 'done';
 
 const WIZARD_STEPS: WizardStep[] = [
   { id: 'mode',    label: 'Profil',    icon: '🏪' },
   { id: 'source',  label: 'Source',   icon: '🔌' },
   { id: 'connect', label: 'Connexion', icon: '🔑' },
+  { id: 'domain',  label: 'Domaine',   icon: '🌐' },
   { id: 'import',  label: 'Import',   icon: '📥' },
   { id: 'done',    label: 'Prêt',     icon: '🚀' },
 ];
@@ -53,6 +55,7 @@ export function OnboardingWizard() {
   const [credentials, setCredentials] = useState<ConnectorCredentials | null>(null);
   const [importedCategories, setImportedCategories] = useState<ImportCategory[]>([]);
   const [activeCategory, setActiveCategory] = useState<ImportCategory | null>(null);
+  const [subdomain, setSubdomain] = useState<string>('');
   const [signingUrl, setSigningUrl] = useState<string | null>(null);
   const [contractDispatched, setContractDispatched] = useState<boolean>(false);
 
@@ -64,7 +67,7 @@ export function OnboardingWizard() {
   const handleModeSelect = (m: OnboardingMode) => {
     setMode(m);
     if (m === 'from_zero') {
-      complete('mode', 'import');
+      complete('mode', 'domain');
     } else {
       complete('mode', 'source');
     }
@@ -82,7 +85,18 @@ export function OnboardingWizard() {
 
   const handleConnected = (creds: ConnectorCredentials) => {
     setCredentials(creds);
-    complete('connect', 'import');
+    complete('connect', 'domain');
+  };
+
+  const handleDomainSelect = (selectedSlug: string) => {
+    setSubdomain(selectedSlug);
+    complete('domain', 'import');
+    toast.success(`Adresse ${selectedSlug}.webapp.fr réservée avec succès !`);
+    void authedFetch('/api/tenant/onboarding/status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subdomain: selectedSlug }),
+    });
   };
 
   const handleImported = useCallback((cat: ImportCategory) => {
@@ -104,6 +118,7 @@ export function OnboardingWizard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tenantId: 'resto-demo',
+          subdomain: subdomain || 'mon-resto',
           sendEmail: true,
           sendSms: true,
           source: 'ONBOARDING_AUTO',
@@ -222,7 +237,7 @@ export function OnboardingWizard() {
               <div className="pt-2 text-right">
                 <button
                   type="button"
-                  onClick={() => complete('source', 'import')}
+                  onClick={() => complete('source', 'domain')}
                   className="text-xs text-gray-500 hover:text-gray-700 underline"
                 >
                   Passer cette étape →
@@ -241,13 +256,22 @@ export function OnboardingWizard() {
               <div className="pt-2 text-right">
                 <button
                   type="button"
-                  onClick={() => complete('connect', 'import')}
+                  onClick={() => complete('connect', 'domain')}
                   className="text-xs text-gray-500 hover:text-gray-700 underline"
                 >
                   Passer cette étape →
                 </button>
               </div>
             </div>
+          )}
+
+          {/* STEP: DOMAIN */}
+          {currentStep === 'domain' && (
+            <SubdomainSelectorStep
+              initialSlug={subdomain}
+              onSelect={handleDomainSelect}
+              onSkip={() => complete('domain', 'import')}
+            />
           )}
 
           {/* STEP: IMPORT */}
@@ -358,6 +382,7 @@ export function OnboardingWizard() {
                 <h2 className="text-xl font-bold text-gray-900">Vous êtes prêt à ouvrir !</h2>
                 <p className="text-gray-500 text-sm max-w-sm mx-auto mt-1">
                   {importedCategories.length} catégorie{importedCategories.length > 1 ? 's' : ''} configurée{importedCategories.length > 1 ? 's' : ''}.
+                  {subdomain && <span className="block mt-1 font-mono text-xs text-indigo-600 font-semibold">https://{subdomain}.webapp.fr</span>}
                 </p>
               </div>
 
@@ -377,7 +402,7 @@ export function OnboardingWizard() {
                 </div>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Le contrat d&apos;abonnement et l&apos;accord de traitement des données (DPA) ont été préparés pour votre établissement.
+                  Le contrat d&apos;abonnement et l&apos;accord de traitement des données (DPA) incluant votre nom de domaine réservé ont été préparés.
                 </p>
 
                 <div className="flex items-center gap-2 pt-1">

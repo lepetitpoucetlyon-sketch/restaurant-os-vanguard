@@ -44,6 +44,9 @@ export const SovereignGuard = {
         'tenantConfig',
         'ledger', // Legacy mapping
         'fiscalSeals',
+        'seals',
+        'grandTotals',
+        'fiscalArchives',
         'journalEntries',
         'wormArchives',
     ]),
