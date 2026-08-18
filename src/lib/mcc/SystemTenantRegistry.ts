@@ -25,6 +25,10 @@ const SYSTEM_TENANTS: Record<PlatformVariant, SystemTenantMap> = {
     clinic:     { DEMO: '_demo_clinic',     TEST: '_test_clinic',     REFERENCE: '_ref_clinic'     },
     retail:     { DEMO: '_demo_retail',     TEST: '_test_retail',     REFERENCE: '_ref_retail'     },
     custom:     { DEMO: '_demo_custom',     TEST: '_test_custom',     REFERENCE: '_ref_custom'     },
+    gym:        { DEMO: '_demo_gym',        TEST: '_test_gym',        REFERENCE: '_ref_gym'        },
+    coworking:  { DEMO: '_demo_coworking',  TEST: '_test_coworking',  REFERENCE: '_ref_coworking'  },
+    veterinary: { DEMO: '_demo_veterinary', TEST: '_test_veterinary', REFERENCE: '_ref_veterinary' },
+    florist:    { DEMO: '_demo_florist',    TEST: '_test_florist',    REFERENCE: '_ref_florist'    },
 };
 
 // ── Lookup helpers ─────────────────────────────────────────────────────────────

@@ -296,9 +296,21 @@ const VERTICAL_NAV_OVERRIDES: Record<string, Record<string, SectionOverride>> = 
         operations: { title: 'Salon & Prestations', items: { pos: 'Caisse Prestations', floor_plan: 'Plan Fauteuils & Bacs' } },
         production: { title: 'Produits & Stocks', items: { inventory: 'Stock Cabine & Revente' } },
     },
-    luxury_vault: {
-        operations: { title: 'Chambre Forte & Caisse', items: { pos: 'Caisse & Souscriptions', floor_plan: 'Plan Chambre Forte' } },
-        production: { title: 'Expertise & Scellés', items: { inventory: 'Inventaire Sacs & Actifs' } },
+    gym: {
+        operations: { title: 'Club & Membres', items: { pos: 'Caisse & Forfaits', floor_plan: 'Plan Espaces & Plateaux' } },
+        production: { title: 'Matériel & Nutrition', items: { inventory: 'Stocks & Équipements' } },
+    },
+    coworking: {
+        operations: { title: 'Espaces & Réservations', items: { pos: 'Caisse & Pass', floor_plan: 'Plan Bureaux & Salles' } },
+        production: { title: 'Fournitures & Boissons', items: { inventory: 'Stocks & Fournitures' } },
+    },
+    veterinary: {
+        operations: { title: 'Clinique & Soins', items: { pos: 'Caisse Soins & Actes', floor_plan: 'Plan Salles Consultation' } },
+        production: { title: 'Pharmacie & Matériel', items: { inventory: 'Médicaments & Dispositifs' } },
+    },
+    florist: {
+        operations: { title: 'Boutique & Commandes', items: { pos: 'Caisse & Compositions', floor_plan: 'Plan Atelier & Serre' } },
+        production: { title: 'Fleurs & Végétaux', items: { inventory: 'Tiges & Accessoires' } },
     },
 };
 

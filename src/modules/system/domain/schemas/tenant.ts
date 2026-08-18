@@ -10,6 +10,10 @@ export const PLATFORM_VARIANTS = [
     'clinic',
     'retail',
     'custom',
+    'gym',
+    'coworking',
+    'veterinary',
+    'florist',
 ] as const;
 
 export const PlatformVariantSchema = z.enum(PLATFORM_VARIANTS);
@@ -24,6 +28,10 @@ export const VERTICAL_META: Record<PlatformVariant, { emoji: string; label: stri
     clinic: { emoji: '🏥', label: 'Clinique' },
     retail: { emoji: '🛍️', label: 'Retail' },
     custom: { emoji: '🏢', label: 'Custom' },
+    gym: { emoji: '🏋️', label: 'Salle de Sport' },
+    coworking: { emoji: '🏢', label: 'Coworking' },
+    veterinary: { emoji: '🐾', label: 'Vétérinaire' },
+    florist: { emoji: '🌸', label: 'Fleuriste' },
 };
 
 export const TenantThemeSchema = z.object({

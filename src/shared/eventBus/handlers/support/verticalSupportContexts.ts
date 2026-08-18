@@ -83,4 +83,40 @@ export const VERTICAL_SUPPORT_CONTEXTS: Record<PlatformVariant, VerticalSupportC
     keyTerms: ['module', 'configuration', 'caisse', 'stock', 'client', 'planning'],
     featuredModules: [],
   },
+  gym: {
+    productName: 'Gym OS',
+    businessDescription:
+      'Logiciel de gestion de salle de sport : abonnements membres, contrôle d\'accès, ' +
+      'planning cours collectifs, coaching, boutique nutrition et suivi assiduité.',
+    keyTerms: ['abonnement', 'membre', 'badge', 'cours', 'coach', 'planning', 'contrôle d\'accès',
+               'nutrition', 'assiduité', 'séance', 'salle', 'SEPA'],
+    featuredModules: ['pos', 'reservations', 'customer', 'hr', 'planning', 'inventory'],
+  },
+  coworking: {
+    productName: 'Coworking OS',
+    businessDescription:
+      'Logiciel de gestion d\'espace de coworking : réservation bureaux et salles de réunion, ' +
+      'pass journaliers, facturation récurrente, contrôle d\'accès et communauté.',
+    keyTerms: ['bureau', 'salle de réunion', 'pass', 'poste de travail', 'abonnement',
+               'facturation mensuelle', 'contrôle d\'accès', 'communauté', 'événement', 'wifi'],
+    featuredModules: ['reservations', 'pos', 'floor_plan', 'customer', 'billing'],
+  },
+  veterinary: {
+    productName: 'Veterinary OS',
+    businessDescription:
+      'Logiciel de gestion de clinique vétérinaire : dossiers animaux, rendez-vous, ' +
+      'vaccins, actes chirurgicaux, pharmacie vétérinaire et facturation.',
+    keyTerms: ['patient', 'animal', 'consultation', 'vaccin', 'ordonnance', 'acte',
+               'pharmacie vétérinaire', 'dossier médical', 'rappel vaccin', 'chirurgie', 'ASV'],
+    featuredModules: ['reservations', 'customer', 'pos', 'inventory', 'hr'],
+  },
+  florist: {
+    productName: 'Florist OS',
+    businessDescription:
+      'Logiciel de gestion de fleuristerie : caisse au comptoir, commandes évènement, ' +
+      'gestion périssables, chambre froide, livraisons et bouquets sur mesure.',
+    keyTerms: ['bouquet', 'composition', 'mariage', 'deuil', 'événement', 'livraison',
+               'chambre froide', 'fleur coupée', 'commande', 'périssable', 'saison'],
+    featuredModules: ['pos', 'reservations', 'inventory', 'customer', 'quotes'],
+  },
 };

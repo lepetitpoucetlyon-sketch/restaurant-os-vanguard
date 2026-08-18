@@ -61,4 +61,20 @@ export const VERTICAL_STYLE_PRESETS: Record<PlatformVariant, StylePreset[]> = {
     { id: 'rose',      label: 'Rose',      primaryColor: '#F43F5E', accentColor: '#E11D48', appearance: 'dark' },
     { id: 'slate',     label: 'Ardoise',   primaryColor: '#64748B', accentColor: '#475569', appearance: 'light' },
   ],
+  gym: [
+    { id: 'power',     label: 'Power',     primaryColor: '#EF4444', accentColor: '#F97316', appearance: 'dark' },
+    { id: 'neon',      label: 'Néon',      primaryColor: '#8B5CF6', accentColor: '#06B6D4', appearance: 'dark' },
+  ],
+  coworking: [
+    { id: 'hive',      label: 'Hive',      primaryColor: '#6366F1', accentColor: '#A855F7', appearance: 'dark' },
+    { id: 'zen',       label: 'Clarté',    primaryColor: '#0D9488', accentColor: '#14B8A6', appearance: 'light' },
+  ],
+  veterinary: [
+    { id: 'care',      label: 'Soin',      primaryColor: '#0284C7', accentColor: '#38BDF8', appearance: 'light' },
+    { id: 'nature',    label: 'Clinique',  primaryColor: '#059669', accentColor: '#34D399', appearance: 'light' },
+  ],
+  florist: [
+    { id: 'botanic',   label: 'Botanique', primaryColor: '#10B981', accentColor: '#F43F5E', appearance: 'light', fontBrand: 'Playfair Display' },
+    { id: 'pastel',    label: 'Fleuriste', primaryColor: '#F43F5E', accentColor: '#FB7185', appearance: 'light' },
+  ],
 };

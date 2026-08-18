@@ -90,4 +90,22 @@ export interface VERTICALEvents {
   'retail.pos_session_closed': { tenantId: string; sessionId: string; operatorId: string; closedAt: string; totalInMicrounits: number };
   'retail.loyalty_earned': { tenantId: string; customerId: string; points: number; sourceSaleId: string };
   'retail.metrics_snapshot': { tenantId: string; date: string; transactions: number; revenueInMicrounits: number; avgBasketInMicrounits: number };
+
+  // ── Vertical: Gym ────────────────────────────────────────────────────────
+  'gym.class_booked': { tenantId: string; classId: string; memberId: string; slot: string };
+  'gym.turnstile_scanned': { tenantId: string; memberId: string; accessGranted: boolean; turnstileId: string };
+
+  // ── Vertical: Coworking ──────────────────────────────────────────────────
+  'coworking.meeting_room_booked': { tenantId: string; roomId: string; companyId: string; hours: number };
+  'coworking.desk_checked_in': { tenantId: string; deskId: string; memberId: string; checkedInAt: string };
+
+  // ── Vertical: Veterinary ────────────────────────────────────────────────
+  'veterinary.vaccine_reminder_sent': { tenantId: string; animalId: string; ownerId: string; vaccineName: string };
+  'veterinary.pet_consultation_completed': { tenantId: string; consultationId: string; animalId: string; vetId: string };
+  'veterinary.icad_chip_scanned': { tenantId: string; icadNumber: string; animalId: string };
+
+  // ── Vertical: Florist ───────────────────────────────────────────────────
+  'florist.arrangement_created': { tenantId: string; arrangementId?: string; recipeId?: string; floristId?: string; orderId?: string; customerId?: string; flowers?: string[] };
+  'florist.perishable_stem_logged': { tenantId: string; stemType: string; quantity: number; expiryDate: string };
+  'florist.delivery_dispatched': { tenantId: string; deliveryId: string; recipientAddress: string };
 }
