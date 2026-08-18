@@ -45,11 +45,12 @@ export function usePrintReceipt(
 ) {
     const { activeTenantConfig } = useTenant();
 
-    return useCallback(async (runtimeMeta?: ReceiptPrintMeta) => {
+    return useCallback(async (runtimeMeta?: ReceiptPrintMeta | unknown) => {
         if (cartItems.length === 0) return;
 
         const { ip: _ip, port: _port } = parsePrinterConfig();
-        const meta = runtimeMeta || receiptMeta;
+        const isMetaObj = runtimeMeta && typeof runtimeMeta === 'object' && !('nativeEvent' in (runtimeMeta as Record<string, unknown>));
+        const meta = (isMetaObj ? (runtimeMeta as ReceiptPrintMeta) : null) || receiptMeta;
 
         // Taux TVA effectif : moyenne pondérée multi-taux (10/5.5/20%)
         let tvaMu = 0, ttcTotal = 0;
