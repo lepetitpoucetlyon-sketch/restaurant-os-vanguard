@@ -4,6 +4,32 @@ import type { NextConfig } from "next";
 
 const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Bundle analyzer activable à la demande — `ANALYZE=true npm run build`.
+ * Ouvre un rapport HTML avec la répartition des chunks.
+ * Gate 9 preflight lira `.next/static/chunks` pour ratchet bundle size (voir γ-7).
+ *
+ * Requiert `@next/bundle-analyzer` en devDep — installer via `npm i -D @next/bundle-analyzer`
+ * puis passer ANALYZE=true à npm run build.
+ */
+const withBundleAnalyzer =
+  process.env.ANALYZE === "true"
+    ? // Dynamic require silencieux : si la dep n'est pas installée, on skip proprement.
+      (() => {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          return require("@next/bundle-analyzer")({ enabled: true }) as (
+            c: NextConfig,
+          ) => NextConfig;
+        } catch {
+          console.warn(
+            "[next.config] ANALYZE=true mais @next/bundle-analyzer non installé. Installer via `npm i -D @next/bundle-analyzer`.",
+          );
+          return (config: NextConfig) => config;
+        }
+      })()
+    : (config: NextConfig) => config;
+
 const nextConfig: NextConfig = {
   // NOTE: pas de `output: 'export'` — le produit exige un serveur Node
   // (routes API : signup, webhook Stripe, export FEC, middleware d'auth).
@@ -86,4 +112,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

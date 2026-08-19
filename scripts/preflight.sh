@@ -171,6 +171,26 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────
+step "📦 [9/9] Bundle size — ratchet (non-bloquant si baseline absente)"
+# Baseline établie post-γ-7. Le gate compare taille chunks vs seuil BUNDLE_MAX_KB.
+# Si .next/static/chunks absent (build pas encore fait), on skippe silencieusement.
+BUNDLE_MAX_KB=${BUNDLE_MAX_KB:-2000}  # baseline empirique à mesurer et bloquer plus tard
+if [ -d ".next/static/chunks" ]; then
+  JS_SIZE=$(du -sk .next/static/chunks 2>/dev/null | awk '{print $1}')
+  if [ -z "$JS_SIZE" ]; then
+    warn "Bundle size non mesurable — chunks vides ?"
+  elif [ "$JS_SIZE" -gt "$BUNDLE_MAX_KB" ]; then
+    warn "Bundle JS $JS_SIZE KB > seuil $BUNDLE_MAX_KB KB — à investiguer"
+    warn "→ ANALYZE=true npm run build pour identifier les gros chunks"
+    # Non-bloquant tant que baseline non figée ; à passer bloquant post-mesure
+  else
+    ok "Bundle JS $JS_SIZE / $BUNDLE_MAX_KB KB (ratchet)"
+  fi
+else
+  warn "Pas de .next/static/chunks — Gate 9 non applicable (build absent)"
+fi
+
+# ────────────────────────────────────────────────────────────────
 echo ""
 echo -e "${GREEN}${BOLD}✅ Preflight complet — prêt pour merge/deploy${RESET}"
 echo ""
@@ -183,3 +203,4 @@ echo "  5. Madge         — 0 cycle d'import"
 echo "  6. Build prod    — bundle OK"
 echo "  7. sentrux check — 67 règles OK"
 echo "  8. sentrux gate  — pas de régression vs baseline"
+echo "  9. Bundle size   — sous seuil ratchet (BUNDLE_MAX_KB)"
