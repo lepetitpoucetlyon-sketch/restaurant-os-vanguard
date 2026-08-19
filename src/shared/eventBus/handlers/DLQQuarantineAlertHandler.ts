@@ -1,6 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 
 /**
  * DLQQuarantineAlertHandler
@@ -9,7 +10,7 @@ import { logger } from '@/lib/logger';
  *
  * Actions :
  * 1. Log audit CRITICAL
- * 2. Émet `notification.urgent` pour le tableau de bord MCC
+ * 2. Push alerte sortante (Slack/Discord/webhook générique) via OpsAlertGateway
  */
 export function registerDLQQuarantineAlertHandler() {
   return NexusEventBus.on(
@@ -28,6 +29,17 @@ export function registerDLQQuarantineAlertHandler() {
         details: { tenantId, eventName, handlerId, attempts, lastError, quarantinedAt },
         severity: 'critical',
         timestamp: new Date(quarantinedAt),
+      });
+
+      // Transport ops : ne throw jamais si le webhook est absent / down.
+      await OpsAlertGateway.send({
+        title: `DLQ quarantine — ${eventName}`,
+        severity: 'critical',
+        source: 'dlq-quarantine',
+        message:
+          `Event ${eventName}#${handlerId} mis en quarantaine après ${attempts} tentatives. ` +
+          `Intervenir via l'onglet MCC → DLQ.`,
+        context: { tenantId, eventName, handlerId, attempts, lastError, quarantinedAt },
       });
     },
     { id: 'dlq-quarantine-alert-handler', priority: 'HIGH' }

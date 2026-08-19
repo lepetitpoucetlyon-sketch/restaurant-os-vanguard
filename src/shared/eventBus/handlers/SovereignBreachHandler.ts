@@ -2,6 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { MasterBridge } from '@/lib/adapters/MasterBridge';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 
 /**
  * 🛡️ Réagit à une brèche d'isolation souveraine détectée par SovereignGuard.
@@ -52,6 +53,17 @@ export function registerSovereignBreachHandler(): () => void {
         });
         
         logger.error(`[SovereignBreach] Alerte envoyée sur la plateforme MCC et WebPush critique préparé.`);
+
+        // Transport ops sortant (Slack/Discord/webhook) — best-effort, ne throw jamais.
+        if (!payload.isSimulation) {
+            await OpsAlertGateway.send({
+                title: 'SOVEREIGN BREACH DETECTED',
+                severity: 'critical',
+                source: 'sovereign-breach',
+                message: `Drift ${anchoredTenantId} → ${targetTenantId}. Kill-switch global déclenché.`,
+                context: { targetTenantId, anchoredTenantId, path, message },
+            });
+        }
         
         // Notification WebPush critique via la route interne (client-safe, pas de web-push direct).
         if (!payload.isSimulation) {
