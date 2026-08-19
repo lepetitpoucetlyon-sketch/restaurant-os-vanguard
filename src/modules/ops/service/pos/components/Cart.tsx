@@ -10,7 +10,7 @@ import { usePageSetting } from "@/shared/components/settings/ContextualSettings"
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
 import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { formatMu } from "@/modules/finance";
+import { formatMu } from "@/modules/finance/components/financeUtils";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';

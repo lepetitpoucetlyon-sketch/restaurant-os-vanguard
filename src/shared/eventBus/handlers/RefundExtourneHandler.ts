@@ -1,6 +1,6 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FinancialNexusBridge } from '@/modules/finance';
+import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
 import type { JournalEntry } from '@nexus/contracts';
 
 export function registerRefundExtourneHandler() {

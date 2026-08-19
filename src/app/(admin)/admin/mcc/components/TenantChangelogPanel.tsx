@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { History, Filter, ChevronDown, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/modules/intelligence';
+import { useNexusFleet } from '@/shared/providers/fleet';
 import type { ChangeCategory, ChangelogEntry } from '@/lib/mcc/ChangelogService';
 
 const CHANGELOG_PAGE_SIZE = 80;

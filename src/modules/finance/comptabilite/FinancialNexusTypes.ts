@@ -4,7 +4,8 @@
  * Types partagés pour le pont financier et le journal comptable.
  */
 
-import type { CartItem, ConsumptionMode } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops/domain/schemas/pos';
+import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
 
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
 

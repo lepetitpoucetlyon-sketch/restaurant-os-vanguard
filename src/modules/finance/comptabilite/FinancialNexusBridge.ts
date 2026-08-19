@@ -2,7 +2,7 @@ import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
-import type { ConsumptionMode } from '@/modules/ops';
+import type { ConsumptionMode } from '@/modules/ops/domain/schemas/orders';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
 import { resolveVatRate, inferCategory } from '../fiscalite/tax/vatResolver';

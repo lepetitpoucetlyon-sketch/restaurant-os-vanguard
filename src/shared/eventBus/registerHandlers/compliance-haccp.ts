@@ -1,4 +1,4 @@
-import { registerWasteToFoodCostHandler } from '@/modules/compliance';
+import { registerWasteToFoodCostHandler } from '@/modules/compliance/qualite/haccp/handlers/WasteToFoodCostHandler';
 import { registerDLCExpiryHandler } from '../handlers/DLCExpiryHandler';
 import { registerDLCBlockerHandler } from '../handlers/DLCBlockerHandler';
 import { registerIotOfflineAlertHandler } from '../handlers/IotOfflineAlertHandler';

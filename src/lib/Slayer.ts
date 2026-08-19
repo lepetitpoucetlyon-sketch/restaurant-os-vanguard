@@ -5,10 +5,10 @@
  */
 
 import { logger } from "@/lib/logger";
-import { DataDigester } from "@/modules/intelligence";
+import { DataDigester } from "@/modules/intelligence/services/DataDigester";
 import { LegacyOrder, Order } from "@nexus/contracts";
 import { toMicrounits } from "@/shared/schemas/primitives";
-import { FinanceCore } from "@/modules/finance";
+import { FinanceCore } from "@/modules/finance/services/FinanceCore";
 import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';

@@ -6,7 +6,7 @@
  */
 
 import { atom } from 'jotai';
-import type { ActionProposal } from '@/modules/intelligence';
+import type { ActionProposal } from '@/modules/intelligence/services/AssistantActionDispatcher';
 
 export type AssistantViewMode = 'COLLAPSED' | 'DOCK_RIGHT' | 'EXPANDED';
 export type AssistantTab = 'chat' | 'context' | 'history';

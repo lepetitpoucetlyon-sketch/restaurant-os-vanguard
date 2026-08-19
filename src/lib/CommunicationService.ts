@@ -1,4 +1,4 @@
-import type { CommunicationPulse } from '@/modules/finance';
+import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
 import { toError } from "@/lib/toError";
 
 /**

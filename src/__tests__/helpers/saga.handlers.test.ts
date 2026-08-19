@@ -24,9 +24,13 @@ const { mockNexusGet, mockNexusUpdate, mockNexusSet, mockEmitDurable, mockOn, ca
 
 
 
-vi.mock('jotai', () => ({
-  getDefaultStore: vi.fn(() => ({ get: mockJotaiGet, set: mockJotaiSet })),
-}));
+vi.mock('jotai', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('jotai')>();
+  return {
+    ...actual,
+    getDefaultStore: vi.fn(() => ({ get: mockJotaiGet, set: mockJotaiSet })),
+  };
+});
 
 vi.mock('@/store/pillars/compliance', () => ({
   quarantinedProductsAtom: {},

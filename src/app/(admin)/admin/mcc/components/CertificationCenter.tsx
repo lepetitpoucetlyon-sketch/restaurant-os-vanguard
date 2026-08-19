@@ -7,7 +7,7 @@ import { LegalCertificateA4 } from './LegalCertificateA4';
 import { CertAuditPanel } from './CertAuditPanel';
 import { CertPreviewPanel } from './CertPreviewPanel';
 import { CertHistoryTab } from './CertHistoryTab';
-import { useNexusFleet, type SiteIntegrityReport, type GlobalComplianceCertificate } from '@/modules/intelligence';
+import { useNexusFleet, type SiteIntegrityReport, type GlobalComplianceCertificate } from '@/shared/providers/fleet';
 import { logger } from '@/lib/logger';
 import { useAuth } from '@/shared/hooks';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

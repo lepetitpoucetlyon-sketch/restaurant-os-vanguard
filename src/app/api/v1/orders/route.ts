@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { KDSCourseSequencingEngine, type CartItem } from '@/modules/ops';
+import { KDSCourseSequencingEngine } from '@/modules/ops/production/kds/services/KDSCourseSequencingEngine';
+import type { CartItem } from '@/modules/ops/domain/schemas/pos';
 import { toMicrounits } from '@/shared/schemas/primitives';
 
 export const dynamic = 'force-dynamic';

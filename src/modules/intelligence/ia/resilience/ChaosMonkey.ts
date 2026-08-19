@@ -8,7 +8,7 @@ import {
     journalEntriesNodeAtom,
     updateNexusNode 
 } from '@/store/pillars';
-import { qualityActiveControlAtom } from '@/modules/compliance';
+import { qualityActiveControlAtom } from '@/modules/compliance/qualite/haccp/store/qualityAtoms';
 import { logger } from '@/lib/logger';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

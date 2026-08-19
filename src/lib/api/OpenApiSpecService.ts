@@ -123,6 +123,40 @@ export class OpenApiSpecService {
             },
           },
         },
+        '/orders/{id}': {
+          get: {
+            summary: 'Consulter le statut d’une commande',
+            description: 'Retourne le statut de préparation KDS, la liste des articles et le total.',
+            parameters: [
+              {
+                name: 'id',
+                in: 'path',
+                required: true,
+                schema: { type: 'string' },
+                description: 'Identifiant unique de la commande',
+              },
+            ],
+            responses: {
+              '200': {
+                description: 'Détails de la commande',
+              },
+              '404': {
+                description: 'Commande introuvable',
+              },
+            },
+          },
+        },
+        '/tables': {
+          get: {
+            summary: 'Récupérer le plan de salle et l’état des tables',
+            description: 'Retourne la liste des tables avec leur statut d’occupation.',
+            responses: {
+              '200': {
+                description: 'Liste des tables',
+              },
+            },
+          },
+        },
       },
     };
   }

@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { Package, RefreshCw, Plus, X } from "lucide-react";
-import { useInventory } from "@/modules/ops";
+import { useInventory } from "../../hooks/useInventory";
 import { useAtomValue } from "jotai";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
-import type { ExtractedInvoice } from "@/modules/ops";
+import type { ExtractedInvoice } from "@/modules/intelligence/services/VisionService";
 
 import type { SupplierRecord } from "./stock-reception/receptionConstants";
 import { StockSuccessView } from "./stock-reception/StockSuccessView";

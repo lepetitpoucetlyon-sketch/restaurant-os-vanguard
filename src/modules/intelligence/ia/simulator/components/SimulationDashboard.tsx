@@ -20,7 +20,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from '../SimulationService';
-import { useInventory } from '@/modules/logistics';
+import { useInventory } from '@/modules/logistics/stock/inventory/hooks/useInventory';
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {

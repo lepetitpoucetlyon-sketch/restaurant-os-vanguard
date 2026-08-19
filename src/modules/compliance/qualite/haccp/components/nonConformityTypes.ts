@@ -53,7 +53,7 @@ export const TYPE_LABELS: Record<NonConformityType, string> = {
     'autre': 'Autre',
 };
 
-import { buildTenantPath } from '@/lib/nexus';
+import { buildTenantPath } from '@/lib/nexus/utils/tenantPath';
 
 // ── Path helpers ───────────────────────────────────────────────────────────────
 

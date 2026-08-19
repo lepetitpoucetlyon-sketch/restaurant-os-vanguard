@@ -5,7 +5,7 @@ import {
     ShowerHead,
     Wine,
 } from 'lucide-react';
-import { buildTenantPath } from '@/lib/nexus';
+import { buildTenantPath } from '@/lib/nexus/utils/tenantPath';
 
 export interface CleaningRecord {
     id: string;

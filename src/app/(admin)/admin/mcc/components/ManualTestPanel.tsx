@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Activity, ShieldAlert, CheckCircle, XCircle, Loader2, Play, Zap } from 'lucide-react';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { useNexusFleet } from '@/modules/intelligence';
+import { useNexusFleet } from '@/shared/providers/fleet';
 import type { EmpireInstance } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 

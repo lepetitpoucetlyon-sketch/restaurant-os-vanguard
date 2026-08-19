@@ -27,7 +27,6 @@ export * from './ia/simulator';
 export * from './knowledge/rag';
 
 export { LLMManager, AIProviderRouter, AI_MODELS } from './ia/ai';
-export { DNAInjector } from './ia/ai/DNAInjector';
 export { createLLMProvider, resolveModelId } from './ia/ai/LLMProviderFactory';
 export { sovereignCreateWorkspace } from './knowledge/rag';
 export type { ToolDefinition } from './domain/agent/tools/types';

@@ -1,4 +1,4 @@
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops/domain/schemas/pos';
 
 export class TaxCalculator {
   static applyRate(ttc: number, rate: string | number): number {

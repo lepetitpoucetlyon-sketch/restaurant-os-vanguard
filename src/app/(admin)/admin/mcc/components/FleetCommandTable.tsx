@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { useNexusFleet } from '@/modules/intelligence';
+import { useNexusFleet } from '@/shared/providers/fleet';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { Activity, Brain } from 'lucide-react';
 import type { StatusFilter } from './fleet-command/fleetCommandTypes';

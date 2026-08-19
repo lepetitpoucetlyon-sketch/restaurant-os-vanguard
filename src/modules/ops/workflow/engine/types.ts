@@ -1,6 +1,6 @@
 import type { Microunits, TaxRate } from '@/shared/schemas/primitives';
 import type { Order, OrderLine as OrderItem, OrderItemModification } from '../../domain/schemas/orders';
-import type { Product } from '@/modules/commerce';
+import type { Product } from '@/modules/commerce/domain/schemas/commerce';
 
 export type { Order, OrderItem, OrderItemModification };
 export type OrderStatus = Order['status'];

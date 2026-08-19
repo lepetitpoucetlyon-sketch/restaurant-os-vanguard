@@ -3,7 +3,7 @@ import React from 'react';
 
 import { NexusOpsProvider } from "@/modules/ops";
 import { NexusFiscalProvider } from "@/modules/finance";
-import { NexusFleetProvider } from "@/modules/intelligence";
+import { NexusFleetProvider } from "@/shared/providers/fleet";
 import { AuthGate, SaaSBillingGate, ComplianceGate } from "@nexus/guards";
 import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
 

@@ -1,7 +1,7 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import { AggregatorMappingService } from '@/modules/commerce';
+import { AggregatorMappingService } from '@/modules/commerce/relation/delivery/services/AggregatorMappingService';
 
 export function registerDeliveryRushModeHandler() {
   return NexusEventBus.on(

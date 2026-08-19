@@ -7,12 +7,12 @@ import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { fleetTelemetry } from './FleetTelemetryService';
 import { FleetComplianceService } from './FleetComplianceService';
  
-import { HACCPTelemetryBridge } from '@/modules/compliance';
+import { HACCPTelemetryBridge } from '@/modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import type { TenantID } from '@/shared/types/brands';
-import { fleetEngine } from '@/modules/intelligence';
+import { fleetEngine } from '@/modules/intelligence/ia/fleet/FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
-import type { FleetInsight } from '@/modules/intelligence';
+import type { FleetInsight } from '@nexus/contracts/fleet.types';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';

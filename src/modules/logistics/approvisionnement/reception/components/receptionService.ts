@@ -32,7 +32,7 @@ export interface BarcodeSearchResult {
 type ProductDoc = BarcodeSearchResult & { barcode?: string; sku?: string; supplier?: string; supplierId?: string };
 type IngredientDoc = ProductDoc & { supplierRef?: string };
 
-import { buildTenantPath } from '@/lib/nexus';
+import { buildTenantPath } from '@/lib/nexus/utils/tenantPath';
 
 // ── Recherche ingrédients (Action réelle via Nexus Adapter) ───────────────────
 async function searchIngredientsAction(tenantId: string, query: string): Promise<Ingredient[]> {

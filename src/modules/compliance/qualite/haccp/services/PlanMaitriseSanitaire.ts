@@ -4,7 +4,8 @@
  * Utilise jsPDF + jspdf-autotable (client-side only, lazy import).
  */
 
-import { Nexus, buildTenantPath } from '@/lib/nexus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { buildTenantPath } from '@/lib/nexus/utils/tenantPath';
 
 // ── Types internes ─────────────────────────────────────────────────────────────
 

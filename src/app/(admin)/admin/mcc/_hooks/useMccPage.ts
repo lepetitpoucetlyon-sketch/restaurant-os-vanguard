@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useNexusFleet } from '@/modules/intelligence';
+import { useNexusFleet } from '@/shared/providers/fleet';
 import type { PlatformVariant } from '@/modules/system';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 import { authedFetch } from '@/lib/client/authedFetch';

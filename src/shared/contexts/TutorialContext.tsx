@@ -1,4 +1,4 @@
 "use client";
-import { useNexusFleet } from '@/modules/intelligence';
+import { useNexusFleet } from '@/shared/providers/fleet';
 export const useTutorial = () => useNexusFleet()?.tutorial;
 export const TutorialProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

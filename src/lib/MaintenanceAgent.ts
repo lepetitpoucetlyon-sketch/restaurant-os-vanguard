@@ -1,5 +1,7 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager, AI_MODELS, DNAInjector } from '@/modules/intelligence';
+import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { DNAInjector } from '@/modules/intelligence/ia/ai/DNAInjector';
 import { logger } from "@/lib/logger";
 import type { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 import { toError } from "@/lib/toError";

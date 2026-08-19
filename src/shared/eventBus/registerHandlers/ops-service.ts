@@ -1,4 +1,4 @@
-import { registerCashDrawerAnomalyHandler } from '@/modules/ops';
+import { registerCashDrawerAnomalyHandler } from '@/modules/ops/service/pos/handlers/CashDrawerAnomalyHandler';
 import { registerRushModeIntegrationHandler } from '../handlers/RushModeIntegrationHandler';
 import { registerEndOfServiceActionHandler } from '../handlers/EndOfServiceActionHandler';
 import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverUnlockHandler';

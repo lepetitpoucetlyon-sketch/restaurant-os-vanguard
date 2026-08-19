@@ -1,13 +1,13 @@
 import { logger } from '@/lib/axiom';
 // Dynamic import for server execution to avoid inter-pillar cycle
 import { IdentityGuardService } from '@/lib/IdentityGuardService';
-import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/logistics';
+import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
-export type { ExtractedInvoiceItem } from '@/modules/logistics';
+export type { ExtractedInvoiceItem } from '@/modules/logistics/domain/schemas/supplier-invoice.schemas';
 
 export interface ExtractedInvoice {
     supplierName: string;
