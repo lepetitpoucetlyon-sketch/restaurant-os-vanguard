@@ -1,14 +1,12 @@
 import { logger } from '@/lib/logger';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { Nexus, ensureServerNexus } from '@/lib/nexus';
 import { TenantSeeder } from '@/lib/TenantSeeder';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
-import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
-import { CoreContext } from '@/shared/plugins/CoreContext';
+import { VerticalRegistry, CoreContext } from '@/shared/plugins';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import type { PlatformVariant } from '@/modules/system';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
-import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { toError } from "@/lib/toError";
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';

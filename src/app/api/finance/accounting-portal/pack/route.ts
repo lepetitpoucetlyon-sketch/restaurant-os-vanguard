@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MonthlyAccountingPackService } from '@/modules/finance/comptabilite/services/MonthlyAccountingPackService';
+import { MonthlyAccountingPackService } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 

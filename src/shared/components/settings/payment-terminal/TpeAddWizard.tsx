@@ -1,6 +1,6 @@
 "use client";
 
-import type { TerminalAdapterType, TerminalConnectionType } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import type { TerminalAdapterType, TerminalConnectionType } from "@/modules/ops";
 import {
     ADAPTER_LABELS, CONNECTION_LABELS, CONN_ICON,
     adapterNeedsAddress, adapterNeedsMerchantRef,

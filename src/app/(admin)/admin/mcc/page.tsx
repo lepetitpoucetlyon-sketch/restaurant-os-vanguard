@@ -6,26 +6,25 @@ import {
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
     Network, BookOpen, Database
 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 
-import { MCCWidgetSkeleton } from './components/MCCWidgetSkeleton';
 import { MFAGate } from './components/MFAGate';
 import { useMccPage, PROV_STEPS } from './_hooks/useMccPage';
 import { useSovereignSwitchboard } from '@/shared/hooks/useSovereignSwitchboard';
 import { MCCLocaleProvider, useMCCLocale, LocaleToggle } from './_i18n';
 import { PLATFORM_VARIANTS, VERTICAL_META } from '@/modules/system';
+import { MCC_TABS_REGISTRY } from './_tabs/registry';
 
-const FleetTab        = dynamic(() => import('./_tabs/FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> });
-const FleetSidebar    = dynamic(() => import('./_tabs/FleetSidebar').then(m => m.FleetSidebar));
-const ComplianceTab   = dynamic(() => import('./_tabs/ComplianceTab').then(m => m.ComplianceTab), { loading: () => <MCCWidgetSkeleton /> });
-const IntelligenceTab = dynamic(() => import('./_tabs/IntelligenceTab').then(m => m.IntelligenceTab), { loading: () => <MCCWidgetSkeleton /> });
-const TreasuryTab     = dynamic(() => import('./_tabs/TreasuryTab').then(m => m.TreasuryTab), { loading: () => <MCCWidgetSkeleton /> });
-const PatchCenterTab  = dynamic(() => import('./_tabs/PatchCenterTab').then(m => m.PatchCenterTab), { loading: () => <MCCWidgetSkeleton /> });
-const PluginsTab      = dynamic(() => import('./_tabs/PluginsTab').then(m => m.PluginsTab), { loading: () => <MCCWidgetSkeleton /> });
-const EventBusTab     = dynamic(() => import('./_tabs/EventBusTab').then(m => m.EventBusTab), { loading: () => <MCCWidgetSkeleton /> });
-const LifecycleTab    = dynamic(() => import('./_tabs/LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> });
-const TutorialTab       = dynamic(() => import('./_tabs/TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> });
-const SystemTenantsTab  = dynamic(() => import('./_tabs/SystemTenantsTab').then(m => m.SystemTenantsTab), { loading: () => <MCCWidgetSkeleton /> });
+const FleetTab        = MCC_TABS_REGISTRY.fleet;
+const FleetSidebar    = MCC_TABS_REGISTRY.fleetSidebar;
+const ComplianceTab   = MCC_TABS_REGISTRY.compliance;
+const IntelligenceTab = MCC_TABS_REGISTRY.intelligence;
+const TreasuryTab     = MCC_TABS_REGISTRY.treasury;
+const PatchCenterTab  = MCC_TABS_REGISTRY.patchcenter;
+const PluginsTab      = MCC_TABS_REGISTRY.plugins;
+const EventBusTab     = MCC_TABS_REGISTRY.eventbus;
+const LifecycleTab    = MCC_TABS_REGISTRY.lifecycle;
+const TutorialTab     = MCC_TABS_REGISTRY.tutorial;
+const SystemTenantsTab = MCC_TABS_REGISTRY.systemtenants;
 
 export default function MCCDashboard() {
     return (

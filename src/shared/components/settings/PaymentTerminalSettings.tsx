@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { CreditCard, Plus, Loader2, Zap } from "lucide-react";
-import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
+import { terminalService } from "@/modules/ops";
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
-import type { TerminalDevice, TerminalStatus } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import type { TerminalDevice, TerminalStatus } from "@/modules/ops";
 import { DEFAULT_FORM, type FormData, type WizardStep, type TestStatus } from "./payment-terminal/terminalConstants";
 import { TpeDeviceList } from "./payment-terminal/TpeDeviceList";
 import { TpeAddWizard } from "./payment-terminal/TpeAddWizard";

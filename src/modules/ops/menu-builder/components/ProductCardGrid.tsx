@@ -3,7 +3,10 @@
 import { motion } from "framer-motion";
 import { Plus, Settings2, ChefHat, Tag, Link2, AlertTriangle } from "lucide-react";
 import { SearchInput } from "@components/ui/SearchInput";
-import { formatMu } from "@/modules/finance";
+// Format inline pour éviter le cycle menu-builder → finance → ops (via BillingTab).
+// formatMu(mu) → euros formatés fr-FR. Duplication assumée : 1 fn = 1 ligne vs cycle bloquant.
+const formatMu = (mu: number): string =>
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(mu / 1_000_000);
 import type { Product } from "@nexus/contracts";
 import type { JsonObject } from "@/shared/types/json";
 

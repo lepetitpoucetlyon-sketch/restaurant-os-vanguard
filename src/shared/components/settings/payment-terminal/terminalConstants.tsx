@@ -1,4 +1,4 @@
-import type { TerminalAdapterType, TerminalConnectionType } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import type { TerminalAdapterType, TerminalConnectionType } from "@/modules/ops";
 import { Bluetooth, Wifi, Cloud, Usb, Zap } from "lucide-react";
 
 export const ADAPTER_LABELS: Record<TerminalAdapterType, string> = {

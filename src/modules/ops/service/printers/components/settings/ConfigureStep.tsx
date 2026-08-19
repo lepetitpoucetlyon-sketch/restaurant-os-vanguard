@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { CheckCircle2, Loader2, Bluetooth, Usb } from "lucide-react";
-import { scanBluetoothPrinters } from "@/modules/ops/service/printers/hardware/adapters/BluetoothAdapter";
-import { requestUSBPrinter } from "@/modules/ops/service/printers/hardware/adapters/USBAdapter";
+import { scanBluetoothPrinters } from "../../hardware/adapters/BluetoothAdapter";
+import { requestUSBPrinter } from "../../hardware/adapters/USBAdapter";
 import type {
   PrinterDevice, PrinterConnectionType, PaperWidth, PrinterConnection,
-} from "@/modules/ops/service/printers/hardware/types";
-import { ROLE_LABELS, BRAND_LABELS } from "@/modules/ops/service/printers/hardware/types";
+} from "../../hardware/types";
+import { ROLE_LABELS, BRAND_LABELS } from "../../hardware/types";
 import { useNotifications } from "@/shared/contexts/NotificationsContext";
 
 export const INPUT_CLS = "w-full px-4 py-2.5 rounded-xl bg-bg-tertiary border border-border text-text-primary text-sm font-mono placeholder:text-text-muted focus:outline-none focus:border-action-primary transition-colors";

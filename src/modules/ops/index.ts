@@ -13,6 +13,12 @@ export * from './production/kds';
 export { KDSDashboard } from './production/kds/components/KDSDashboard';
 export { KitchenDashboard } from './production/kitchen/components/KitchenDashboard';
 
+// Domaine : menu-builder (composition catalogue)
+export * from './menu-builder';
+
+// Domaine : printers (hardware d'impression, contrats et adapters)
+export * from './service/printers';
+
 // Infrastructure pilier (providers, connectors)
 export * from './providers';
 // Factories server-only : importées directement par les routes API, pas ici

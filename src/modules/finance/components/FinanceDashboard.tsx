@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import dynamic from "next/dynamic";
 
 import { useFinance } from "../hooks/useFinance";
@@ -11,22 +10,24 @@ import { ExpenseClaimDialog } from './accounting';
 import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
-import { closeTicketZForDay } from "@/shared/eventBus/handlers/TicketZHandler";
 import { useOrders } from '@/modules/ops/providers/hooks';
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {
     type FinanceTab,
-    type BankAccount,
     type BankTransaction,
     computeTVABreakdown,
 } from "./financeUtils";
 
-import { BankModal } from "./dashboard/BankModal";
-import { FinanceHeaderNav } from "./dashboard/FinanceHeaderNav";
-import { filterPaidOrders, applyBankSyncResult, performConnectBank } from "./dashboard/bankConnectionHelpers";
+import {
+    BankModal,
+    FinanceHeaderNav,
+    filterPaidOrders,
+    useBankConnection,
+    useFinancialExports,
+    useZClosure,
+} from "./dashboard";
 
-// dette-4 — onglets chargés dynamiquement (code-splitting & réduction fan-out)
 const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
 const BillingTab = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
 const AuditTab = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
@@ -39,28 +40,21 @@ function computeInitialTab(tabParam: string | null): FinanceTab {
     return tabParam && VALID_FINANCE_TABS.includes(tabParam as FinanceTab) ? (tabParam as FinanceTab) : "accounting";
 }
 
+/**
+ * FinanceDashboard — shell d'assemblage du tableau de bord financier.
+ * Fragmenté anti god-file : 3 hooks personnalisés extraient la logique domaine.
+ *
+ *   - useBankConnection    → cycle connexion bancaire (state + handlers + preload accounts)
+ *   - useFinancialExports  → 3 handlers export (P&L, Bilan, variables de paie)
+ *   - useZClosure          → clôture Z fiscale
+ *
+ * Le dashboard ne fait plus que : lire params URL, orchestrer tabs, câbler hooks aux enfants.
+ */
 export function FinanceDashboard() {
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab");
     const [activeTab, setActiveTab] = useState<FinanceTab>(computeInitialTab(tabParam));
     const [claimOpen, setClaimOpen] = useState(false);
-    const [closingZ, setClosingZ] = useState(false);
-
-    // fin-8: bank connection
-    const [bankModalOpen, setBankModalOpen] = useState(false);
-    const [bankWebviewUrl, setBankWebviewUrl] = useState<string | null>(null);
-    const [connectingBank, setConnectingBank] = useState(false);
-    const [syncingBank, setSyncingBank] = useState(false);
-    const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
-    const [loadingBankAccounts, setLoadingBankAccounts] = useState(false);
-
-    // fin-12 / fin-13: export controls
-    const [pnlExporting, setPnlExporting] = useState(false);
-    const [bilanExporting, setBilanExporting] = useState(false);
-    const [payrollExporting, setPayrollExporting] = useState(false);
-    const [payrollMonth, setPayrollMonth] = useState<string>(
-        new Date().toISOString().slice(0, 7)
-    );
 
     const canSeeTreasury = useTabAccess("finance", "treasury");
     const canSeeAudit = useTabAccess("finance", "audit");
@@ -78,108 +72,18 @@ export function FinanceDashboard() {
 
     const paidOrders = filterPaidOrders(orders as Order[]);
 
-    // Load bank accounts from Nexus on mount
-    useEffect(() => {
-        let cancelled = false;
-        async function loadAccounts() {
-            setLoadingBankAccounts(true);
-            try {
-                const { Nexus } = await import("@/lib/nexus/NexusAdapter");
-                const accounts = await Nexus.adapter.query<BankAccount>("bankAccounts");
-                if (!cancelled) setBankAccounts(accounts);
-            } catch {
-                // Collection may be empty — no-op
-            } finally {
-                if (!cancelled) setLoadingBankAccounts(false);
-            }
-        }
-        loadAccounts();
-        return () => { cancelled = true; };
-    }, []);
+    const bank = useBankConnection();
+    const exports = useFinancialExports();
+    const zClosure = useZClosure(activeTenantId);
 
-    // fin-10: TVA breakdown derived from live journal entries
     const tvaBreakdown = useMemo(
         () => computeTVABreakdown(journalEntries as unknown as JournalEntry[]),
         [journalEntries]
     );
 
-    const handleClotureZ = useCallback(async () => {
-        if (!activeTenantId) return;
-        setClosingZ(true);
-        try {
-            const today = new Date().toISOString().split("T")[0];
-            await closeTicketZForDay(activeTenantId, today);
-            toast.success("Clôture Z effectuée avec succès.");
-        } catch {
-            toast.error("Erreur lors de la clôture Z.");
-        } finally {
-            setClosingZ(false);
-        }
-    }, [activeTenantId]);
-
-    const handleConnectBank = useCallback(async () => {
-        await performConnectBank(setBankWebviewUrl, setBankModalOpen, setConnectingBank);
-    }, []);
-
-    const handleBankSync = useCallback(async () => {
-        setSyncingBank(true);
-        try {
-            const res = await fetch("/api/finance/bank/sync", { method: "POST" });
-            const data = (await res.json()) as { success?: boolean; isDemoMode?: boolean; error?: string };
-            await applyBankSyncResult(data, setBankAccounts);
-        } catch {
-            toast.error("Erreur réseau lors de la synchronisation.");
-        } finally {
-            setSyncingBank(false);
-        }
-    }, []);
-
-    const handleExportPnL = useCallback(async () => {
-        setPnlExporting(true);
-        try {
-            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
-            const start = new Date(`${payrollMonth}-01T00:00:00Z`).getTime();
-            const end = Date.now();
-            const data = await AccountingReportService.buildPnL(start, end);
-            await AccountingReportService.exportPnLPDF(data);
-            toast.success("P&L exporté en PDF.");
-        } catch {
-            toast.error("Erreur lors de l'export P&L.");
-        } finally {
-            setPnlExporting(false);
-        }
-    }, [payrollMonth]);
-
-    const handleExportBilan = useCallback(async () => {
-        setBilanExporting(true);
-        try {
-            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
-            const data = await AccountingReportService.buildBalanceSheet(Date.now());
-            await AccountingReportService.exportBalanceSheetPDF(data);
-            toast.success("Bilan exporté en PDF.");
-        } catch {
-            toast.error("Erreur lors de l'export Bilan.");
-        } finally {
-            setBilanExporting(false);
-        }
-    }, []);
-
-    const handleExportPayroll = useCallback(async () => {
-        setPayrollExporting(true);
-        try {
-            const { AccountingReportService } = await import("@/modules/finance/services/AccountingReportService");
-            await AccountingReportService.exportPayrollCSV(payrollMonth);
-            toast.success(`Variables de paie ${payrollMonth} exportées.`);
-        } catch {
-            toast.error("Erreur lors de l'export variables de paie.");
-        } finally {
-            setPayrollExporting(false);
-        }
-    }, [payrollMonth]);
-
     return (
         <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <BankModal open={bankModalOpen} url={bankWebviewUrl} onClose={() => setBankModalOpen(false)} />
+            <BankModal open={bank.bankModalOpen} url={bank.bankWebviewUrl} onClose={() => bank.setBankModalOpen(false)} />
 
             <FinanceHeaderNav
                 activeTab={activeTab}
@@ -196,18 +100,18 @@ export function FinanceDashboard() {
                         metrics={metrics}
                         accountingMetrics={accountingMetrics}
                         tvaBreakdown={tvaBreakdown}
-                        closingZ={closingZ}
-                        payrollMonth={payrollMonth}
-                        pnlExporting={pnlExporting}
-                        bilanExporting={bilanExporting}
-                        payrollExporting={payrollExporting}
+                        closingZ={zClosure.closingZ}
+                        payrollMonth={exports.payrollMonth}
+                        pnlExporting={exports.pnlExporting}
+                        bilanExporting={exports.bilanExporting}
+                        payrollExporting={exports.payrollExporting}
                         activeTenantId={activeTenantId}
                         closePeriodPermission={closePeriodPermission}
-                        onClotureZ={handleClotureZ}
-                        onPayrollMonthChange={setPayrollMonth}
-                        onExportPnL={handleExportPnL}
-                        onExportBilan={handleExportBilan}
-                        onExportPayroll={handleExportPayroll}
+                        onClotureZ={zClosure.handleClotureZ}
+                        onPayrollMonthChange={exports.setPayrollMonth}
+                        onExportPnL={exports.handleExportPnL}
+                        onExportBilan={exports.handleExportBilan}
+                        onExportPayroll={exports.handleExportPayroll}
                     />
                 )}
 
@@ -220,13 +124,13 @@ export function FinanceDashboard() {
 
                 {activeTab === "bank" && (
                     <BankTab
-                        connectingBank={connectingBank}
-                        syncingBank={syncingBank}
-                        loadingBankAccounts={loadingBankAccounts}
-                        bankAccounts={bankAccounts}
+                        connectingBank={bank.connectingBank}
+                        syncingBank={bank.syncingBank}
+                        loadingBankAccounts={bank.loadingBankAccounts}
+                        bankAccounts={bank.bankAccounts}
                         bankTransactions={bankTransactions as BankTransaction[]}
-                        onConnectBank={handleConnectBank}
-                        onSync={handleBankSync}
+                        onConnectBank={bank.handleConnectBank}
+                        onSync={bank.handleBankSync}
                     />
                 )}
 

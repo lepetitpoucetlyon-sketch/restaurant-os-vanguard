@@ -109,7 +109,7 @@ export const useKitchen = () => {
           updatedAt: new Date().toISOString()
         });
         if (typeof window !== 'undefined') {
-          import('@/modules/ops/service/printers/hardware/PrintingService').then(({ printerService }) => {
+          import('../../service/printers').then(({ printerService }) => {
             printerService.printKitchen({
               orderId: String(order.id ?? 'new'),
               tableLabel: order.tableNumber ?? 'Table ?',

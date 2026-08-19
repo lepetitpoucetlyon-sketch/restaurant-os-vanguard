@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import type { AccountingMonthlySummary } from '@/modules/finance/comptabilite/services/MonthlyAccountingPackService';
+import type { AccountingMonthlySummary } from '@/modules/finance';
 import {
   AccountingPortalHeader,
   MonthlyCloseHero,

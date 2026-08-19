@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { Printer, Wifi, Bluetooth, Usb, Cable, Monitor, ChevronRight, Settings2 } from "lucide-react";
-import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
-import { isBluetoothSupported } from "@/modules/ops/service/printers/hardware/adapters/BluetoothAdapter";
-import { isUSBSupported } from "@/modules/ops/service/printers/hardware/adapters/USBAdapter";
-import { isSerialSupported } from "@/modules/ops/service/printers/hardware/adapters/SerialAdapter";
+import { printerService } from "../../hardware/PrintingService";
+import { isBluetoothSupported } from "../../hardware/adapters/BluetoothAdapter";
+import { isUSBSupported } from "../../hardware/adapters/USBAdapter";
+import { isSerialSupported } from "../../hardware/adapters/SerialAdapter";
 import type {
   PrinterDevice, PrinterBrand, PrinterRole, PrinterConnectionType, PrinterConnection,
-} from "@/modules/ops/service/printers/hardware/types";
-import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/modules/ops/service/printers/hardware/types";
+} from "../../hardware/types";
+import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "../../hardware/types";
 import { ConfigureStep } from "./ConfigureStep";
 
 export const CONN_ICON: Record<PrinterConnectionType, React.ReactNode> = {

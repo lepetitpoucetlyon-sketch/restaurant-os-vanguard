@@ -6,9 +6,9 @@ import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks";
 import { formatCurrency } from "@/lib/formatters";
-import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
-import type { PaymentResult } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
-import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
+import { terminalService } from "../infrastructure/payment-terminal/PaymentTerminalService";
+import type { PaymentResult } from "../infrastructure/payment-terminal/types";
+import { printerService } from "../../printers";
 
 import { PaymentSuccessView } from "./payment-dialog/PaymentSuccessView";
 import { TerminalStatePanel, type TerminalState } from "./payment-dialog/TerminalStatePanel";

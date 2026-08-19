@@ -91,7 +91,7 @@ export class CashDrawerService {
   private async _kickViaPrinter(): Promise<{ ok: boolean; error?: string }> {
     try {
       // Dynamic import to avoid loading PrintingService in all contexts
-      const { printerService } = await import('@/modules/ops/service/printers/hardware/PrintingService');
+      const { printerService } = await import('../../../printers');
       printerService.openCashDrawer();
       return { ok: true };
     } catch (err) {

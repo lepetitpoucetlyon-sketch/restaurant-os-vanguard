@@ -3,7 +3,7 @@
 import {
     CreditCard, Star, CheckCircle2, AlertCircle, Loader2, Trash2,
 } from "lucide-react";
-import type { TerminalDevice, TerminalStatus } from "@/modules/ops/service/pos/infrastructure/payment-terminal/types";
+import type { TerminalDevice, TerminalStatus } from "@/modules/ops";
 import { ADAPTER_LABELS, CONNECTION_LABELS } from "./terminalConstants";
 
 interface TpeDeviceListProps {

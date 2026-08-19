@@ -5,6 +5,8 @@ export * from './comptabilite/fec';
 export { BlockchainLedgerService } from './comptabilite/accounting/domain/BlockchainLedgerService';
 export { PayrollAccountingMapper } from './comptabilite/accounting/domain/PayrollAccountingMapper';
 export { FECExporter } from './comptabilite/accounting/domain/FECExporter';
+export { MonthlyAccountingPackService } from './comptabilite/services/MonthlyAccountingPackService';
+export type { AccountingMonthlySummary } from './comptabilite/services/MonthlyAccountingPackService';
 
 // Domaine : tresorerie (banking, payout, collection, AP)
 export * from './tresorerie/banking/openBanking';

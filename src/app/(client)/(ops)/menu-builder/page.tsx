@@ -10,10 +10,8 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import type { JsonObject } from "@/shared/types/json";
 import { toMicrounits } from "@/shared/schemas/primitives";
 
-import type { MenuBuilderEditForm } from "@/modules/ops/menu-builder/menuBuilderConstants";
-import { CategorySidebar } from "@/modules/ops/menu-builder/components/CategorySidebar";
-import { ProductCardGrid } from "@/modules/ops/menu-builder/components/ProductCardGrid";
-import { ProductEditModal } from "@/modules/ops/menu-builder/components/ProductEditModal";
+import type { MenuBuilderEditForm } from "@/modules/ops";
+import { CategorySidebar, ProductCardGrid, ProductEditModal } from "@/modules/ops";
 
 function MenuBuilderPage() {
     const { data: products, isLoading: productsLoading } = useProducts();

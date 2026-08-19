@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { CashDrawerSession, microunitsToEuros, eurosToMicrounits, parseEuros } from './cashDrawerTypes';
-import { cashDrawerService } from "@/modules/ops/service/pos/infrastructure/cash-drawer/CashDrawerService";
+import { cashDrawerService } from "@/modules/ops";
 import { toast } from "sonner";
 
 interface CashDrawerCloseSectionProps {

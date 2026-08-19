@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, FileText } from 'lucide-react';
-import type { AccountingMonthlySummary } from '@/modules/finance/comptabilite/services/MonthlyAccountingPackService';
+import type { AccountingMonthlySummary } from '../../services/MonthlyAccountingPackService';
 
 interface SalesFiscalTabProps {
   summary: AccountingMonthlySummary;

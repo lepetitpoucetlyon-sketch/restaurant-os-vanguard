@@ -7,8 +7,8 @@ import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
-import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
-import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
+import { terminalService } from "../infrastructure/payment-terminal/PaymentTerminalService";
+import { printerService } from "../../printers";
 
 import { SplitEqualPanel } from "./split/SplitEqualPanel";
 import { SplitByItemPanel } from "./split/SplitByItemPanel";

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
-import type { AccountingMonthlySummary } from '@/modules/finance/comptabilite/services/MonthlyAccountingPackService';
+import type { AccountingMonthlySummary } from '../../services/MonthlyAccountingPackService';
 
 interface AiAuditThemisTabProps {
   summary: AccountingMonthlySummary;

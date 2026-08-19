@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { terminalService } from "@/modules/ops/service/pos/infrastructure/payment-terminal/PaymentTerminalService";
-import { printerService } from "@/modules/ops/service/printers/hardware/PrintingService";
+import { terminalService } from "../../infrastructure/payment-terminal/PaymentTerminalService";
+import { printerService } from "../../../printers";
 import type { PaymentMethod } from "./types";
 
 interface UseSplitPaymentExecutionProps {

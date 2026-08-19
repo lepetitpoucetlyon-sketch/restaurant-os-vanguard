@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { AccountingMonthlySummary } from '@/modules/finance/comptabilite/services/MonthlyAccountingPackService';
+import type { AccountingMonthlySummary } from '../../services/MonthlyAccountingPackService';
 
 interface VatDeclarationTabProps {
   summary: AccountingMonthlySummary;
