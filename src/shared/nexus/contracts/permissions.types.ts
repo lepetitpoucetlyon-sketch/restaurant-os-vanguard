@@ -1,83 +1,19 @@
 /**
  * PERMISSIONS TYPES - Granular Action-based Permissions
  * Defines all possible actions on each page and role-based access.
+ *
+ * ⚠️ Les 3 exports RBAC (PermissionRole, PERMISSION_ROLE_LABELS, PERMISSION_ROLE_LEVELS)
+ * sont maintenant DÉRIVÉS de la source unique `src/kernel/contracts/rbac.ts` (chantier γ-3).
+ * Ce fichier ne contient plus que les PageKey + Action types métier (surface UI).
  */
 
 // ============ ROLE DEFINITIONS ============
+// Source unique : src/kernel/contracts/rbac.ts (RBAC_ROLES table déclarative).
+// Ne PAS éditer les rôles ici — modifier RBAC_ROLES et les dérivés se propagent.
 
-export type PermissionRole =
-    | 'admin'
-    | 'directeur'
-    | 'manager'
-    | 'comptable'
-    | 'chef_rang'
-    | 'serveur'
-    | 'chef_cuisinier'
-    | 'cuisinier'
-    | 'barman'
-    | 'hotesse'
-    | 'plongeur'
-    | 'mecanicien'
-    | 'chef_atelier'
-    | 'praticien'
-    | 'coiffeur'
-    | 'estheticienne'
-    | 'vendeur'
-    | 'receptionnaire'
-    | 'curator'
-    | 'expert'
-    | 'operateur'
-    | 'collaborateur';
-
-export const PERMISSION_ROLE_LABELS: Record<PermissionRole, string> = {
-    admin: 'Administrateur',
-    directeur: 'Directeur',
-    manager: 'Manager',
-    comptable: 'Comptable',
-    chef_rang: 'Chef de Rang',
-    serveur: 'Serveur(se)',
-    chef_cuisinier: 'Chef Cuisinier',
-    cuisinier: 'Cuisinier',
-    barman: 'Barman',
-    hotesse: 'Hôtesse',
-    plongeur: 'Plongeur',
-    mecanicien: 'Mécanicien',
-    chef_atelier: 'Chef d\'Atelier',
-    praticien: 'Praticien / Médecin',
-    coiffeur: 'Coiffeur / Styliste',
-    estheticienne: 'Esthéticienne',
-    vendeur: 'Conseiller de Vente',
-    receptionnaire: 'Réceptionnaire',
-    curator: 'Curator / Gestionnaire Coffre',
-    expert: 'Expert Authentificateur',
-    operateur: 'Opérateur',
-    collaborateur: 'Collaborateur',
-};
-
-export const PERMISSION_ROLE_LEVELS: Record<PermissionRole, number> = {
-    admin: 100,
-    directeur: 90,
-    manager: 70,
-    comptable: 60,
-    chef_rang: 50,
-    chef_atelier: 50,
-    praticien: 50,
-    expert: 50,
-    curator: 50,
-    chef_cuisinier: 45,
-    serveur: 40,
-    mecanicien: 40,
-    coiffeur: 40,
-    estheticienne: 40,
-    vendeur: 40,
-    receptionnaire: 40,
-    collaborateur: 40,
-    operateur: 40,
-    cuisinier: 35,
-    barman: 35,
-    hotesse: 30,
-    plongeur: 10,
-};
+import type { PermissionRole } from '@/kernel/contracts/rbac';
+export type { PermissionRole };
+export { PERMISSION_ROLE_LABELS, PERMISSION_ROLE_LEVELS } from '@/kernel/contracts/rbac';
 
 // ============ PAGE KEYS ============
 

@@ -37,14 +37,17 @@ export interface AdminCaller {
  * ⚠️ Distinction stricte MCC vs tenant — ces deux ensembles doivent être disjoints.
  * Un même rôle ne doit JAMAIS appartenir aux deux (faille cross-scope escalation).
  *
- * - FLEET_ROLES : opérateurs plateforme (toi, l'éditeur). Accès /admin/mcc/*.
- * - TENANT_ADMIN_ROLES : gérants/managers de restaurants. Accès /admin/* tenant.
- *
- * L'alias 'super_admin' est conservé dans FLEET_ROLES uniquement pour la transition
- * des tokens Firebase legacy — à retirer une fois les custom claims migrés.
+ * Dérivés depuis la source unique `src/kernel/contracts/rbac.ts` (chantier γ-3).
+ * L'alias 'super_admin' est conservé pour la transition des tokens Firebase legacy
+ * — géré par `normalizeMccRole()` ci-dessous.
  */
-const FLEET_ROLES = ['mcc_super_admin', 'super_admin' /* @deprecated legacy alias */] as const;
-const TENANT_ADMIN_ROLES = ['admin', 'manager'] as const;
+import {
+  FLEET_ROLES as KERNEL_FLEET_ROLES,
+  TENANT_ADMIN_ROLES as KERNEL_TENANT_ADMIN_ROLES,
+} from '@/kernel/contracts/rbac';
+
+const FLEET_ROLES = [...KERNEL_FLEET_ROLES, 'super_admin' /* @deprecated legacy alias tokens Firebase */] as const;
+const TENANT_ADMIN_ROLES = KERNEL_TENANT_ADMIN_ROLES;
 
 /**
  * RBAC MCC Interne — trois niveaux d'accès opérateurs plateforme.
