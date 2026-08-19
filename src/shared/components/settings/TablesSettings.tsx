@@ -9,7 +9,7 @@ import {
     Box,
     Cpu,
 } from "lucide-react";
-import { TablesToolbar, FloorArchitecture, ZoneService, MobilierConfig } from "@/modules/facility/spaces/settings";
+import { TablesToolbar, FloorArchitecture, ZoneService, MobilierConfig } from "@/modules/facility";
 
 export default function TablesSettings() {
     const tablesHook = useTables();

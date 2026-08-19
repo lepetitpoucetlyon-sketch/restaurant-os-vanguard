@@ -2,8 +2,10 @@
 export * from './comptabilite/accounting';
 export * from './comptabilite/billing';
 export * from './comptabilite/fec';
+export * from './comptabilite/components/accountant';
 export { BlockchainLedgerService } from './comptabilite/accounting/domain/BlockchainLedgerService';
 export { PayrollAccountingMapper } from './comptabilite/accounting/domain/PayrollAccountingMapper';
+export { StatementIngestionService } from './comptabilite/accounting/domain/StatementIngestionService';
 export { FECExporter } from './comptabilite/accounting/domain/FECExporter';
 export { MonthlyAccountingPackService } from './comptabilite/services/MonthlyAccountingPackService';
 export type { AccountingMonthlySummary } from './comptabilite/services/MonthlyAccountingPackService';
@@ -13,6 +15,8 @@ export * from './tresorerie/banking/openBanking';
 export type { InvoiceTarget, CommunicationPulse } from './tresorerie/collection/types';
 
 // Domaine : fiscalite (tax)
+export { FiscalSealer } from './fiscalite/FiscalSealer';
+export { TaxCalculator } from './fiscalite/TaxCalculator';
 
 // Infrastructure pilier (components, hooks, services, store, providers, connectors, domain, migration)
 export * from './components';
@@ -25,8 +29,6 @@ export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { FinanceCore } from './services/FinanceCore';
 export { TransactionService } from './services/TransactionService';
 export { FinancialNexusBridge } from './comptabilite/FinancialNexusBridge';
-export { FiscalSealer } from './fiscalite/FiscalSealer';
-export { TaxCalculator } from './utils/TaxCalculator';
 export { PeriodClosureService } from './services/PeriodClosureService';
 export { FiscalEngine, FISCAL_CONSTANTS } from './services/FiscalEngine';
 export { SovereignLedger } from './services/SovereignLedger';
@@ -36,7 +38,6 @@ export type { TreasuryEntryInput } from './services/TreasuryCalculator';
 export { computeTreasury } from './services/TreasuryCalculator';
 export type { IFinanceRepository } from './comptabilite/repositories/IFinanceRepository';
 export { NexusFiscalProvider, useNexusFiscal, useCompliance } from './providers/NexusFiscalProvider';
-export { StatementIngestionService } from './comptabilite/accounting/domain/StatementIngestionService';
 
 // 🏛️ SUTURE NEXUS
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
@@ -74,6 +75,7 @@ export { OpenBankingProviderFactory } from './tresorerie/banking/openBanking/Ope
 export { BankConnectionStore } from './tresorerie/banking/openBanking/BankConnectionStore';
 export { signBankConnectState, verifyBankConnectState } from './tresorerie/banking/openBanking/tokenCipher';
 export { GoCardlessProvider } from './tresorerie/banking/openBanking/GoCardlessProvider';
+export * from './migration';
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/finance';

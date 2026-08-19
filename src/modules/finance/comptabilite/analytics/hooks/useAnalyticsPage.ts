@@ -9,10 +9,8 @@ import {
 } from "date-fns";
 import { fr } from "date-fns/locale";
 
-import { useQuality } from '../../../../compliance/qualite/haccp/hooks/useQuality';
-import type { ComplianceAlert } from "@/modules/compliance/domain/schemas/compliance.schemas";
-import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
-import { useTables } from '../../../../ops/providers/hooks/floorHooks';
+import { useQuality, type ComplianceAlert } from '@/modules/compliance';
+import { useOrders, useTables } from '@/modules/ops';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { predictAttendance } from '@/modules/intelligence';

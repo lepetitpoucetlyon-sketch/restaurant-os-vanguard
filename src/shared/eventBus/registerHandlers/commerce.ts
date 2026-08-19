@@ -1,4 +1,4 @@
-import { registerCRMVipHandler } from '@/modules/commerce/acquisition/marketing/handlers/CRMVipHandler';
+import { registerCRMVipHandler } from '@/modules/commerce';
 import { registerCustomerRFMAnalyzerHandler } from '../handlers/CustomerRFMAnalyzerHandler';
 import { registerLoyaltyEngineHandler } from '../handlers/LoyaltyEngineHandler';
 import { registerMarketingCampaignRouterHandler } from '../handlers/MarketingCampaignRouterHandler';

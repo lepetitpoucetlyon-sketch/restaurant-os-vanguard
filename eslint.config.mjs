@@ -68,6 +68,25 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": "off",
     },
   },
+  {
+    // Pure contract definitions & infrastructure bridges need deep schema imports
+    // to avoid pulling in entire module runtime trees and creating circular dependencies.
+    files: [
+      "src/shared/nexus/contracts/**",
+      "src/shared/schemas/**",
+      "src/shared/nexus-contract.ts",
+      "src/shared/nexus/engines/**",
+      "src/shared/nexus/state/**",
+      "src/shared/hooks/**",
+      "src/shared/eventBus/**",
+      "src/lib/NexusTelemetryService.ts",
+      "src/lib/MaintenanceAgent.ts",
+      "src/modules/*/domain/schemas/**",
+    ],
+    rules: {
+      "no-restricted-imports": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     ".next/**",

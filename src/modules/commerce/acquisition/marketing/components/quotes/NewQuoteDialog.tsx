@@ -3,9 +3,8 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Modal } from '@ui/Modal';
-import { useQuotes } from '../../../../../ops/providers/hooks/commerceHooks';
-import { useInventory } from '../../../../../logistics/stock/inventory/hooks/useInventory';
-import { useCRM } from '../../../../../ops/providers/hooks/commerceHooks';
+import { useQuotes, useCRM } from '@/modules/ops';
+import { useInventory } from '@/modules/logistics';
 import type { QuoteLine } from '../../types';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';

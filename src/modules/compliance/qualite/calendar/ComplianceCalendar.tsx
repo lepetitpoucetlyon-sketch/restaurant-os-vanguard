@@ -5,7 +5,7 @@ import { CalendarCheck, AlertTriangle, Clock, FileText, ShieldCheck } from 'luci
 import { cn } from '@/lib/ui.foundations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { useTenant } from '@/shared/hooks/useTenant';
-import type { EmployeeDocument } from '@/modules/human/domain/schemas/employeeDocument';
+import type { EmployeeDocument } from '@/modules/human';
 import type { License } from '../../domain/schemas/license';
 
 interface ComplianceItem {

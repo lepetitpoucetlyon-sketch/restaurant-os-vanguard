@@ -5,7 +5,7 @@
  */
 
 import { logger } from "@/lib/logger";
-import { DataDigester } from "@modules/intelligence/services/DataDigester";
+import { DataDigester } from "@/modules/intelligence";
 import { LegacyOrder, Order } from "@nexus/contracts";
 import { toMicrounits } from "@/shared/schemas/primitives";
 import { FinanceCore } from "@/modules/finance";

@@ -14,6 +14,7 @@ export { PayrollConnectorFactory } from './connectors/payroll/PayrollConnectorFa
 export type { ClockEventType, ClockEntry, ITimeclockProvider } from './connectors/timeclock/types';
 export { NexusStaffingOracle } from './services/NexusStaffingOracle';
 export { TipDistributionService } from './effectifs/hr/services/tipDistribution';
+export { TipsDistributionEngine, DEFAULT_TIPS_SETTINGS, type TipsDistributionSettings, type TipDistributionMethod } from './remuneration/services/TipsDistributionEngine';
 export { LaborCostAnalyzer } from './effectifs/hr/services/LaborCostAnalyzer';
 export { LaborCostService } from './effectifs/hr/services/laborCost';
 export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
@@ -36,8 +37,14 @@ export { registerRainStaffingHandler } from './effectifs/hr/handlers/RainStaffin
 // 🏛️ Staff Atoms & Store
 export * from './effectifs/hr/store/staffAtoms';
 
-// 🏛️ Domaine Schemas
+// 🏛️ Staff & Planning UI Components
+export * from './effectifs/hr/components/staff';
+export * from './effectifs/hr/components/planning';
+
+// 🏛️ Domaine Schemas & Types
 export * from './domain/schemas/hr';
 export * from './domain/schemas/users';
 export * from './domain/schemas/rbac';
 export * from './domain/schemas/employeeDocument';
+export type { LeaveBalance, ShiftLog, LeaveRequest, Shift, ShiftStats, PayrollCalculation } from './effectifs/hr/types';
+export type { ShiftEntry } from './domain/schemas/hr';

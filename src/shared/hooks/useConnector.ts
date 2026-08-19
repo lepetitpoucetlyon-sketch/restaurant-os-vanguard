@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 import { useTenant } from '@/shared/hooks/useTenant';
-import { ConnectorHub } from '@/modules/intelligence/connectors/hub/ConnectorHub';
+import { ConnectorHub } from '@/modules/intelligence/connectors/hub';
 import type { ConnectorPerm, ConnectorState, ConnectorUserContext } from '@/shared/connector-manifest/types';
 import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 

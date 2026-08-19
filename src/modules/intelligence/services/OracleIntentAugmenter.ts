@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 import {
   AssistantActionDispatcher,
   type ActionProposal,
-} from '@/modules/intelligence/services/AssistantActionDispatcher';
+} from './AssistantActionDispatcher';
 
 export interface OracleIntentAugmentationResult {
   operationalData: string;

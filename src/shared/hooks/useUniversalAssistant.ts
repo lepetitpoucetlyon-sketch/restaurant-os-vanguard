@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useAtom } from "jotai";
 import { logger } from "@/lib/logger";
-import { ActionProposal } from "@/modules/intelligence/services/AssistantActionDispatcher";
+import type { ActionProposal } from "@/modules/intelligence";
 import {
     assistantViewModeAtom,
     assistantActiveTabAtom,

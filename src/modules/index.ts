@@ -17,8 +17,7 @@ export * from './system';
 // Resolve cross-pilier TS2308 ambiguities (pilier canonique prend la précédence)
 export { useMarketing, useQuotes, useRegistre } from './ops';
 export { useProducts, useCategories } from './ops';
-export { useCRM } from './commerce';
-export { useReservations } from './commerce';
+export { useCRM, useReservations } from './ops';
 export { useInventory } from './logistics';
 // Types cross-piliers — version canonique explicite
 export type { StockItem } from './logistics';
@@ -29,4 +28,5 @@ export type { DocumentType } from './human';
 export type { ProductCategory } from './compliance';
 export type { Floor, Table, TableShape, TableStatus, Zone } from './facility';
 export type { OrchestratorSignal, TenantConfig, TenantTheme } from './system';
+export type { ExtractedInvoice } from './logistics';
 

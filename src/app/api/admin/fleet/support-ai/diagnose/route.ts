@@ -3,9 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence';
-import { AIProviderRouter } from '@/modules/intelligence/ia/ai/AIProviderRouter';
-import { resolveModelId } from '@/modules/intelligence';
+import { LLMManager, AIProviderRouter, resolveModelId } from '@/modules/intelligence';
 
 interface DiagnoseBody {
   tenantId: string;

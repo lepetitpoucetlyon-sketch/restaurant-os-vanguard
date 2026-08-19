@@ -12,7 +12,7 @@ import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import type { TenantID } from '@/shared/types/brands';
 import { fleetEngine } from '@/modules/intelligence';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
-import { FleetInsight } from '@modules/intelligence/services/MacroBrain';
+import type { FleetInsight } from '@/modules/intelligence';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { whiteLabelInstanceConfig } from '@/config/instance';
 import { mapSiteTelemetryToInstance, buildGlobalMetrics, buildConfigPatch } from './fleetMappers';

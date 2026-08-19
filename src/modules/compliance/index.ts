@@ -30,6 +30,9 @@ export type { PiiRecord, PiiFields } from './domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
 export * from './services';
 
+export * from './qualite/haccp/components';
+export * from './qualite/haccp/components/haccp';
+export * from './qualite/haccp/components/quality';
 export { useHaccpPage } from './qualite/haccp/hooks';
 export { HACCP_TOOLS } from './qualite/haccp/hooks';
 export { CleaningPlan } from './qualite/haccp/components/CleaningPlan';

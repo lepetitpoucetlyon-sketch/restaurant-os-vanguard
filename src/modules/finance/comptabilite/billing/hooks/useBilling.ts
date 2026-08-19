@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from 'react';
-import { useOrders } from '@/modules/ops/providers/hooks';
-import type { Order } from '@/modules/ops/domain/schemas/orders';
+import { useOrders, type Order } from '@/modules/ops';
 import type { JournalEntry } from '../../../types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';

@@ -1,4 +1,4 @@
-import type { PlatformVariant } from '@/modules/system/domain/schemas/tenant';
+import type { PlatformVariant } from '@/modules/system';
 
 export interface VerticalSupportContext {
   /** Nom du produit affiché dans le system prompt */

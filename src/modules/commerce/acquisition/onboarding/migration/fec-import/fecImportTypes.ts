@@ -1,4 +1,4 @@
-import type { FECEntry, FECImportResult } from "@/modules/finance/migration";
+import type { FECEntry, FECImportResult } from "@/modules/finance";
 
 export type PanelState =
   | { phase: "idle" }

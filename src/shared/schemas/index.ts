@@ -32,9 +32,9 @@ export {
   type AuditAction,
   type AuditEvent,
   type AuditedCollection,
-} from '@/modules/compliance/domain/schemas/audit';
+} from '@/modules/compliance';
 
 export type {
   PiiFields,
   PiiRecord,
-} from '@/modules/compliance/domain/schemas/pii';
+} from '@/modules/compliance';

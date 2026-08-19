@@ -2,9 +2,9 @@
 import { NexusEventBus, NexusEventPayload } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LLMManager, AIProviderRouter, AI_MODELS } from '@/modules/intelligence/ia/ai';
+import { LLMManager, AIProviderRouter, AI_MODELS } from '@/modules/intelligence';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
-import { TenantConfigSchema } from '@/modules/system/domain/schemas/tenant';
+import { TenantConfigSchema } from '@/modules/system';
 import { SupportDraftSchema } from '@/shared/schemas';
 import { toError } from "@/lib/toError";
 

@@ -5,8 +5,7 @@ import { EmpireInstance } from '@/shared/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle intelligence ↔ finance. Cible α-5.
-import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine } from '@/modules/finance';
 import type { FiscalSeal } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 

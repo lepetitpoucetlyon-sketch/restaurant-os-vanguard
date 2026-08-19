@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
-import type { FECImportResult } from "@/modules/finance/migration";
+import type { FECImportResult } from "@/modules/finance";
 
 interface FECDoneSectionProps {
   exercice: string;

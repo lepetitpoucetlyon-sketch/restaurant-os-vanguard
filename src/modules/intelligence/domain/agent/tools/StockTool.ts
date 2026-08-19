@@ -4,8 +4,7 @@ import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { StockEngine } from '@modules/logistics/services/StockEngine';
+import { StockEngine } from '@/modules/logistics';
 
 /**
  * 📦 STOCK TOOL - Grade X

@@ -8,7 +8,7 @@ import {
   TipsDistributionSettings,
   TipDistributionMethod,
   DEFAULT_TIPS_SETTINGS,
-} from "@/modules/human/remuneration/services/TipsDistributionEngine";
+} from "@/modules/human";
 
 interface Props {
   settings?: TipsDistributionSettings;

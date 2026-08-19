@@ -10,6 +10,8 @@
  */
 
 export * from './spaces';
+export * from './spaces/settings';
+export * from './spaces/settings/store/settingsAtoms';
 export * from './maintenance';
 export * from './assets';
 export * from './components';

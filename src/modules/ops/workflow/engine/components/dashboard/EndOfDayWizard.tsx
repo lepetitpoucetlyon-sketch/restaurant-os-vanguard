@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { FinanceCore } from '@modules/finance/services/FinanceCore';
+import { FinanceCore } from '@/modules/finance';
 import { useTenant } from '@/shared/hooks';
 import { useToast } from '@ui/Toast';
 import { 

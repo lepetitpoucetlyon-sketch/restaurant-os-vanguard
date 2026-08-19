@@ -6,7 +6,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { FranchiseService } from '@/modules/commerce/relation/franchise/services/FranchiseService';
+import { FranchiseService } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

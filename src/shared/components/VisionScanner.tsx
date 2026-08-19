@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Scan, Zap } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import type { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+import type { ExtractedInvoice } from '@/modules/intelligence';
 
 function fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -41,7 +41,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
         setIsProcessing(true);
 
         try {
-            const { VisionService } = await import('@modules/intelligence/services/VisionService');
+            const { VisionService } = await import('@/modules/intelligence');
             const data = await VisionService.analyzeInvoice(base64);
             onAnalysisComplete(data);
             setPreview(null);

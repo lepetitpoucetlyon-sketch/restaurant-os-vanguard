@@ -1,8 +1,7 @@
 "use client";
 
 import type { User } from "@nexus/contracts";
-import type { ShiftLog } from "@/modules/human/effectifs/hr/types";
-import { BadgeControl } from "@/modules/human/effectifs/hr/components/staff/BadgeControl";
+import { BadgeControl, type ShiftLog } from "@/modules/human";
 
 interface TimesheetTabProps {
     visibleShiftLogs: ShiftLog[];

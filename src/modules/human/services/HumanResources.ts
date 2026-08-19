@@ -1,6 +1,24 @@
-import { ShiftEntry, PayrollPeriodSchema, PayrollCalculation, ShiftStats } from "@/modules/human";
+import { ShiftEntry, PayrollPeriodSchema } from "../domain/schemas/hr";
 import { format, addDays, isSameDay } from 'date-fns';
 import { SovereignData } from "@shared/nexus-contract";
+
+export interface HumanPayrollCalculation {
+    totalHours: number;
+    hourlyRate: number;
+    grossAmount: number;
+    netAmount: number;
+    chargesSociales: number;
+    employerCost: number;
+    period: string;
+}
+
+export interface HumanShiftStats {
+    totalHours: number;
+    overtime: number;
+    breakTime: number;
+    punctualityScore: number;
+    period: string;
+}
 
 /** Scheduled shift reference used for punctuality scoring */
 interface ScheduledShiftRef {
@@ -14,7 +32,7 @@ export class HumanResourcesService {
      * Grade VI - Precision Engine
      * @see taux indicatifs 2024 — utiliser DSN réelle
      */
-    static calculatePayroll(weeklyHours: number, hourlyRate: number): PayrollCalculation {
+    static calculatePayroll(weeklyHours: number, hourlyRate: number): HumanPayrollCalculation {
         // Standard formula: weekly hours * 4.33 weeks/month
         const monthlyHours = weeklyHours * 4.33;
         const grossAmount = monthlyHours * hourlyRate;
@@ -43,7 +61,7 @@ export class HumanResourcesService {
         shifts: ShiftEntry[],
         weekStart: Date,
         scheduledShifts?: ScheduledShiftRef[]
-    ): ShiftStats {
+    ): HumanShiftStats {
         let totalHours = 0;
 
         for (let i = 0; i < 7; i++) {

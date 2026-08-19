@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Upload, ShieldCheck, AlertTriangle, X } from "lucide-react";
-import { FECImporter } from "@/modules/finance/migration";
+import { FECImporter } from "@/modules/finance";
 import { useTenant } from "@/shared/hooks";
 import { toError } from "@/lib/toError";
 import type { PanelState } from './fec-import/fecImportTypes';

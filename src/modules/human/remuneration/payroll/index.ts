@@ -3,3 +3,4 @@ export * from './MergePayrollClient';
 export * from './PrepaieBuilder';
 export * from './SilaeClient';
 export * from './types';
+export * from './payrollHelpers';

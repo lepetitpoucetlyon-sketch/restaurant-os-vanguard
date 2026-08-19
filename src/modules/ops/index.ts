@@ -69,6 +69,8 @@ export * from './domain/schemas/orders';
 export * from './domain/schemas/ops';
 export * from './domain/schemas/inventory';
 export * from './domain/schemas/cash';
+export * from './domain/schemas/pos';
+export { SmsGatewayService } from './service/notifications/SmsGatewayService';
 // Résolution TS2308 : types dupliqués entre domain/schemas et sous-barrels
 export type { Table, Floor, Zone, TableShape, TableStatus, Reservation, FloorTable } from './domain/schemas/ops';
 export type { ConsumptionMode } from './domain/schemas/orders';

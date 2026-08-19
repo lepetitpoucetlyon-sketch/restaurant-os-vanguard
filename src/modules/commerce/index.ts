@@ -1,5 +1,8 @@
 // Domaine : acquisition (marketing, SEO, landing, onboarding)
 export * from './acquisition/marketing';
+export * from './acquisition/marketing/components/crm';
+export * from './acquisition/marketing/components/seo/tabs';
+export { MarketingService } from './acquisition/marketing/services/MarketingService';
 export { LandingDashboard } from './acquisition/landing/components/LandingDashboard';
 export { MenuJsonLd } from './acquisition/seo';
 export { PromoCodeManager } from './acquisition/marketing/components/crm/PromoCodeManager';
@@ -28,8 +31,6 @@ export { InMemoryReservationRepository } from './relation/reservations/infrastru
 export * from './relation/reservations/domain/types/GoogleReserveTypes';
 export { FranchiseDashboard } from './relation/franchise/components/FranchiseDashboard';
 export { FranchiseService } from './relation/franchise/services/FranchiseService';
-
-export { useReservations, useCRM } from '@/modules/ops';
 
 // Domaine : fidélité (loyalty, quotes, widgets)
 export { ReservationWidget } from './fidelite/widgets';

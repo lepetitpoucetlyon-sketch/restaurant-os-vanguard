@@ -5,14 +5,19 @@ import {
     Download, PackageSearch, BellRing, Search, Package,
 } from "lucide-react";
 
-import { useHaccpPage, HACCP_TOOLS } from '@/modules/compliance';
 import {
-    ReleveTemperatures, GestionHuiles, PlanNettoyage, GestionAnomalies,
-    ProductControlList, SanitaryReport,
-} from "@/modules/compliance/qualite/haccp/components";
-import { CleaningPlan } from '@/modules/compliance';
-import { DLCTracker } from '@/modules/compliance';
-import { NonConformityForm } from '@/modules/compliance';
+    useHaccpPage,
+    HACCP_TOOLS,
+    ReleveTemperatures,
+    GestionHuiles,
+    PlanNettoyage,
+    GestionAnomalies,
+    ProductControlList,
+    SanitaryReport,
+    CleaningPlan,
+    DLCTracker,
+    NonConformityForm,
+} from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import type { JsonObject } from "@/shared/types/json";
 

@@ -5,7 +5,7 @@ import { PageHeader } from "@ui/PageHeader";
 import { GlassCard } from "@ui/GlassCard";
 import { StatCard, StatsGrid } from "@ui/StatCard";
 import { Button } from "@ui/button";
-import { SimulationService, MonteCarloResult, SimulationProfile } from "@/modules/intelligence/ia/simulator/SimulationService";
+import { SimulationService, type MonteCarloResult, type SimulationProfile } from "@/modules/intelligence";
 import { SimulatorConsole } from '@/shared/nexus/guards/admin/simulator/SimulatorConsole';
 import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

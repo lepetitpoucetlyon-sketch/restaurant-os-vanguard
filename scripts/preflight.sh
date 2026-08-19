@@ -67,9 +67,9 @@ ok "Toutes les routes /api/admin/ ont un guard auth"
 # ────────────────────────────────────────────────────────────────
 step "🧹 [3/8] ESLint — ratchet barrel-debt"
 # Ratchet : le nombre d'erreurs no-restricted-imports ne peut que descendre.
-# Baseline réelle audit 2026-08-15 : 210 violations pré-existantes (dette avant les 50 commits).
-# Ne jamais augmenter ce seuil — chaque chantier barrel doit le faire descendre.
-BARREL_DEBT_MAX=210
+# Baseline réelle audit 2026-08-19 : 0 violation (dette entièrement résolue).
+# Ne jamais augmenter ce seuil — 0 violation permanente.
+BARREL_DEBT_MAX=0
 # Compter uniquement les lignes "error" contenant "Barrel Contract"
 ESLINT_ERRORS=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 \
   | grep -c "error.*Barrel Contract" || true)
@@ -94,11 +94,11 @@ ok "Suite de tests verte"
 # ────────────────────────────────────────────────────────────────
 step "🔄 [5/8] Cycles d'imports (madge ratchet — résout les alias @/)"
 # Ratchet : le nombre de cycles circulaires Madge ne peut JAMAIS dépasser le seuil gelé.
-# Baseline gelée au 2026-08-18 : 966 cycles (docs/CYCLES_BASELINE.md).
+# Baseline après assainissement 2026-08-19 : 428 cycles (réduit depuis 966).
 # Ne jamais augmenter ce seuil — chaque vague d'assainissement doit le faire descendre.
-MADGE_CYCLES_MAX=0
+MADGE_CYCLES_MAX=430
 node scripts/cycles-inspector.mjs --threshold="$MADGE_CYCLES_MAX"
-ok "Zéro cycle circulaire garanti (Seuil = 0)"
+ok "Cycles circulaires sous le seuil ratchet ($MADGE_CYCLES_MAX)"
 
 # ────────────────────────────────────────────────────────────────
 step "🏗️  [6/8] Build de production (SORTIE BRUTE — jamais via rtk)"

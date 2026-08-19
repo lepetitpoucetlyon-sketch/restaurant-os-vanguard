@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import type { AccountingMonthlySummary } from '@/modules/finance';
 import {
   AccountingPortalHeader,
   MonthlyCloseHero,
   AccountingPortalTabs,
   type AccountingTabKey,
+  type AccountingMonthlySummary,
   SalesFiscalTab,
   VatDeclarationTab,
   PayrollSocialTab,
   ReconciliationPurchasesTab,
   AiAuditThemisTab,
-} from '@/modules/finance/comptabilite/components/accountant';
+} from '@/modules/finance';
 
 export default function AccountingPortalPage() {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('2026-08');

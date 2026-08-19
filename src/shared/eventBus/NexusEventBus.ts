@@ -260,6 +260,15 @@ class NexusEventBusClass {
       this.inFlight.delete(emissionKey);
     }
   }
+
+  /**
+   * Réinitialise l'état interne pour isolation stricte entre tests unitaires.
+   */
+  public resetForTesting(): void {
+    this.handlers.clear();
+    this.inFlight.clear();
+    this.callStackDepth = 0;
+  }
 }
 
 export const NexusEventBus = new NexusEventBusClass();

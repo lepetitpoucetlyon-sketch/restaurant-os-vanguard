@@ -1,11 +1,6 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle intelligence barrel → fleet/haccp/finance. Cible α-5 : migrer LLMManager/AI_MODELS vers kernel/ai.
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-// eslint-disable-next-line no-restricted-imports -- même raison
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
-import { logger } from '@/lib/axiom';
- 
-import { DNAInjector } from "@/modules/intelligence/ia/ai/DNAInjector";
+import { LLMManager, AI_MODELS, DNAInjector } from '@/modules/intelligence';
+import { logger } from "@/lib/logger";
 import type { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 import { toError } from "@/lib/toError";
 

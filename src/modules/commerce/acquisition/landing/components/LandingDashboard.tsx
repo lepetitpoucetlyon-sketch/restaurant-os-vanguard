@@ -10,9 +10,8 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useTables } from '../../../../ops/providers/hooks/floorHooks';
-import { useOrders } from '../../../../ops/providers/hooks/kitchenHooks';
-import { useInventory } from '../../../../logistics/stock/inventory/hooks/useInventory';
+import { useTables, useOrders } from '@/modules/ops';
+import { useInventory } from '@/modules/logistics';
 import { useAuth } from "@/shared/hooks";
 import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
 import { useIsMobile } from "@/shared/hooks";

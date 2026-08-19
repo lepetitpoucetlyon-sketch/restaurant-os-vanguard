@@ -2,14 +2,18 @@
 
 import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap } from "lucide-react";
 
-import { useStaffPage } from '@/modules/human';
-import { BadgeControl } from "@/modules/human/effectifs/hr/components/staff/BadgeControl";
 import {
-    StaffList, StaffMemberForm, StaffRecentActivity,
-    TeamCalendar, NewRequestModal, PlanningWeekView,
-} from "@/modules/human/effectifs/hr/components";
-import { RecruitmentBoard } from '@/modules/human';
-import { QuickAddStaffModal } from '@/modules/human';
+    useStaffPage,
+    BadgeControl,
+    StaffList,
+    StaffMemberForm,
+    StaffRecentActivity,
+    TeamCalendar,
+    NewRequestModal,
+    PlanningWeekView,
+    RecruitmentBoard,
+    QuickAddStaffModal,
+} from '@/modules/human';
 import { SkillsTab } from "./_tabs/SkillsTab";
 import { TimesheetTab } from "./_tabs/TimesheetTab";
 import { PayrollTab } from "./_tabs/PayrollTab";

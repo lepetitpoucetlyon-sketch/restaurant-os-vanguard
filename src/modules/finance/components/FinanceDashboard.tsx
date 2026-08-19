@@ -10,7 +10,7 @@ import { ExpenseClaimDialog } from './accounting';
 import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
-import { useOrders } from '@/modules/ops/providers/hooks';
+import { useOrders } from '@/modules/ops';
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {

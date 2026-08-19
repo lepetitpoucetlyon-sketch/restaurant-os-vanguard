@@ -6,7 +6,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
-import { FranchiseService } from '@/modules/commerce/relation/franchise/services/FranchiseService';
+import { FranchiseService } from '@/modules/commerce';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import type { InterSiteTransfer } from '@/shared/nexus/contracts/franchise.types';

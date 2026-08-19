@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, RotateCcw } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { FiscalSealer } from "@/modules/finance/fiscalite/FiscalSealer";
+import { FiscalSealer } from "@/modules/finance";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";

@@ -1,8 +1,6 @@
 import type { YieldState } from '@/lib/shared-kernel';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { MarketingService } from '@modules/commerce/acquisition/marketing/services/MarketingService';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { ProcurementService } from '@modules/logistics/services/ProcurementService';
+import { MarketingService } from '@/modules/commerce';
+import { ProcurementService } from '@/modules/logistics';
 import { logger } from '@/lib/logger';
 
 /**

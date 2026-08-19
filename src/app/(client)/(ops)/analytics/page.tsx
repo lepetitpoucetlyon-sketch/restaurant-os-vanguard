@@ -12,7 +12,7 @@ import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
-} from "@modules/intelligence/analytique/analytics/components";
+} from "@/modules/intelligence";
 
 // ── Local sub-components (presentation only) ──────────────────────────────────
 

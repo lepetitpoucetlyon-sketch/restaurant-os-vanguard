@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFiscal } from '@/modules/ops/providers/hooks';
+import { useFiscal } from '@/modules/ops';
 import { BlockchainLedgerService } from '../../comptabilite/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

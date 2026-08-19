@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { DocuSealService } from './DocuSealService';
-import { SmsGatewayService } from '@/modules/ops/service/notifications/SmsGatewayService';
+import { SmsGatewayService } from '@/modules/ops';
 import type { ContractRecord } from './SovereignSignatureEngine';
 
 export interface ContractDispatchOptions {

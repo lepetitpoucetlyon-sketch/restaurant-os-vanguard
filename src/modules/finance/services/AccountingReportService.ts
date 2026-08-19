@@ -5,7 +5,7 @@
  */
 
 import type { User } from '@nexus/contracts';
-import type { ShiftEntry } from '@/modules/human/remuneration/payroll/payrollHelpers';
+import type { ShiftEntry } from '@/modules/human';
 import type { PnLResult, BalanceSheetResult, PayrollRow } from './accounting-types';
 import { MU_TO_EUR, LEGAL_MONTHLY_HOURS } from './accounting-types';
 import { buildPnL, exportPnLPDF } from './pnl-report';

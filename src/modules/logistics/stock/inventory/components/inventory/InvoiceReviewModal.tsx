@@ -5,12 +5,9 @@ import { motion } from 'framer-motion';
 import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import type { ExtractedInvoice } from '@modules/intelligence/services/VisionService';
+import type { ExtractedInvoice } from '@/modules/intelligence';
 import { InventoryVisionService, VisionMatchResult } from '../../../../services/InventoryVisionService';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from '@/modules/ops';
+import { useInventory } from '@/modules/logistics';
 
 interface InvoiceReviewModalProps {
     data: ExtractedInvoice;

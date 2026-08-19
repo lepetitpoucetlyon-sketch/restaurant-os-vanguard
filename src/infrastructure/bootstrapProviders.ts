@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
-import { LLMManager, createLLMProvider } from '@/modules/intelligence/ia/ai';
+import { LLMManager, createLLMProvider } from '@/modules/intelligence';
 import { StorageManager } from '@/infrastructure/services/storage';
 import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
 
