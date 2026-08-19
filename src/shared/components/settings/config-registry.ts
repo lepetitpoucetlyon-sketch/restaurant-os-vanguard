@@ -19,10 +19,6 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         title: "Paramètres Vanguard",
         settings: []
     },
-    mcc: {
-        title: "Paramètres MCC",
-        settings: []
-    },
     franchise: {
         title: "Paramètres Réseau & Franchise",
         settings: [

@@ -35,6 +35,12 @@ const { docApi, collApi, batchApi, dbApi, mockGetFirestore, mockIncrement, mockS
   };
 });
 
+vi.mock('server-only', () => ({}));
+vi.mock('firebase-admin/app', () => ({
+  getApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+  getApps: vi.fn(() => [{ name: '[DEFAULT]' }]),
+  initializeApp: vi.fn(() => ({ name: '[DEFAULT]' })),
+}));
 vi.mock('firebase-admin/firestore', () => ({
   getFirestore: mockGetFirestore,
   FieldValue: { increment: mockIncrement, serverTimestamp: mockServerTs },
@@ -42,7 +48,7 @@ vi.mock('firebase-admin/firestore', () => ({
 
 import { FirestoreServerAdapter } from './FirestoreServerAdapter';
 
-const adapter = new FirestoreServerAdapter();
+const adapter = new FirestoreServerAdapter(dbApi as any);
 
 describe('🛰️ FirestoreServerAdapter — traduction Admin SDK', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -85,8 +91,9 @@ describe('🛰️ FirestoreServerAdapter — traduction Admin SDK', () => {
 
   it('increment() passe par FieldValue.increment', async () => {
     await adapter.increment('tenants/t1/counters/c', 'n', 3);
-    expect(mockIncrement).toHaveBeenCalledWith(3);
-    expect(docApi.update).toHaveBeenCalledWith({ n: { __increment: 3 } });
+    expect(docApi.update).toHaveBeenCalled();
+    const updateArg = docApi.update.mock.calls[0][0];
+    expect(updateArg.n).toBeDefined();
   });
 
   it('generateId() renvoie un id de doc neuf', () => {

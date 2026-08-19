@@ -9,14 +9,22 @@ import {
     Store, ShoppingBag, LifeBuoy,
 } from "lucide-react";
 
-import { ProductGrid, Cart, TableSelector, PaymentDialog, SplitBillDialog } from "@modules/ops";
+import dynamic from "next/dynamic";
+import { ProductGrid, Cart, TableSelector } from "@modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";
-// eslint-disable-next-line no-restricted-imports
-import { CashDrawerModal, PinModal, TipPanel, VoidModal, CourseManager, SosCaisseModal } from "@/modules/commerce/ui/pos";
+
+const PaymentDialog = dynamic(() => import('@modules/ops').then(m => m.PaymentDialog), { ssr: false });
+const SplitBillDialog = dynamic(() => import('@modules/ops').then(m => m.SplitBillDialog), { ssr: false });
+const CashDrawerModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.CashDrawerModal), { ssr: false });
+const PinModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.PinModal), { ssr: false });
+const TipPanel = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.TipPanel), { ssr: false });
+const VoidModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.VoidModal), { ssr: false });
+const CourseManager = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.CourseManager), { ssr: false });
+const SosCaisseModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.SosCaisseModal), { ssr: false });
 import type { CourseType } from "@/modules/ops";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";

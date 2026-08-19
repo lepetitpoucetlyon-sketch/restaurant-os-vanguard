@@ -32,8 +32,10 @@ import type {
  * au démarrage du serveur via `src/instrumentation.ts`.
  */
 export class FirestoreServerAdapter implements INexusAdapter {
+  constructor(private customDb?: Firestore) {}
+
   private get db(): Firestore {
-    return getFirestore();
+    return this.customDb ?? getFirestore();
   }
 
   async get<T = DocumentData>(path: string): Promise<T | null> {

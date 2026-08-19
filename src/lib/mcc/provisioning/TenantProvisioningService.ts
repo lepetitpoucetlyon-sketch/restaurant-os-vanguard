@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
-import { Nexus, ensureServerNexus } from '@/lib/nexus';
+import { Nexus } from '@/lib/nexus';
+import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { TenantSeeder } from '@/lib/TenantSeeder';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
 import { VerticalRegistry, CoreContext } from '@/shared/plugins';

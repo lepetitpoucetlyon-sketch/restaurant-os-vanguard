@@ -18,6 +18,7 @@ import {
 import {
     IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
     PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel, ApiKeysPanel, CustomDomainPanel, OnboardingChecklistPanel, MaintenanceSettingsPanel,
+    DLQDiagnosticPanel, RBACTenantMatrix,
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
@@ -69,7 +70,8 @@ const SETTINGS_CATEGORIES = [
     { id: 'reviews', label: 'Avis & Réputation', icon: Star, color: '#FBBF24' },
     { id: 'appearance', label: 'Apparence & Thème', icon: Palette, color: '#A855F7' },
     { id: 'notifications', label: 'Notifications & Alertes', icon: Bell, color: '#F43F5E' },
-    { id: 'security', label: 'Sécurité & Permissions', icon: Shield, color: '#64748B' },
+    { id: 'security', label: 'Permissions & Droits Équipe', icon: Shield, color: '#64748B', description: 'Matrice RBAC & sécurité' },
+    { id: 'dlq-diagnostics', label: 'Tour de Contrôle & DLQ', icon: RotateCcw, color: '#10B981', description: 'Résilience réseau & transactions' },
     { id: 'goals', label: 'Objectifs & KPIs', icon: Target, color: '#22C55E' },
     { id: 'integrations', label: 'Intégrations & API', icon: Plug, color: '#0EA5E9' },
     { id: 'legal', label: 'Documents & Légal', icon: FileText, color: '#78716C' },
@@ -212,8 +214,13 @@ export function SettingsDashboard() {
             );
             case 'notifications': return <StandardSettingsEngine schema={NOTIFICATIONS_SCHEMA} />;
             case 'goals': return <GoalsSettings />; // Goals has complex UI, keeping it for now
-            case 'delivery': return <StandardSettingsEngine schema={DELIVERY_SCHEMA} />;
-            case 'security': return <StandardSettingsEngine schema={SECURITY_SCHEMA} />;
+            case 'security': return (
+                <div className="space-y-8">
+                    <RBACTenantMatrix />
+                    <StandardSettingsEngine schema={SECURITY_SCHEMA} />
+                </div>
+            );
+            case 'dlq-diagnostics': return <DLQDiagnosticPanel />;
             case 'staff': return (
                 <div className="space-y-12">
                     <StaffSettings />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Users, Contact, PlusCircle, Tag, Mail, BarChart2, History, Upload, TrendingUp, Zap } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 
+import dynamic from "next/dynamic";
 import { useCRM } from '@/modules/ops';
 import {
     CRMSidebar,
@@ -11,16 +12,17 @@ import {
     CRMDetailView,
     CustomerCustomerView,
     CustomerDetailPanel,
-    NewCustomerDialog,
-    PromoCodeManager,
-    EmailCampaign,
-    BasketAnalysis,
-    VisitHistory,
-    CustomerImportPanel,
-    RFMSegmentation,
-    EmailAutomations,
 } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+
+const NewCustomerDialog = dynamic(() => import('@/modules/commerce').then(m => m.NewCustomerDialog), { ssr: false });
+const PromoCodeManager = dynamic(() => import('@/modules/commerce').then(m => m.PromoCodeManager), { ssr: false });
+const EmailCampaign = dynamic(() => import('@/modules/commerce').then(m => m.EmailCampaign), { ssr: false });
+const BasketAnalysis = dynamic(() => import('@/modules/commerce').then(m => m.BasketAnalysis), { ssr: false });
+const VisitHistory = dynamic(() => import('@/modules/commerce').then(m => m.VisitHistory), { ssr: false });
+const CustomerImportPanel = dynamic(() => import('@/modules/commerce').then(m => m.CustomerImportPanel), { ssr: false });
+const RFMSegmentation = dynamic(() => import('@/modules/commerce').then(m => m.RFMSegmentation), { ssr: false });
+const EmailAutomations = dynamic(() => import('@/modules/commerce').then(m => m.EmailAutomations), { ssr: false });
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 

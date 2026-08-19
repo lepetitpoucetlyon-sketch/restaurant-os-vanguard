@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useState, useEffect } from 'react';
 import type { ReceptionData } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

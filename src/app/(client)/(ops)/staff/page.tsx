@@ -2,26 +2,29 @@
 
 import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import {
     useStaffPage,
-    BadgeControl,
     StaffList,
-    StaffMemberForm,
     StaffRecentActivity,
-    TeamCalendar,
-    NewRequestModal,
-    PlanningWeekView,
-    RecruitmentBoard,
-    QuickAddStaffModal,
 } from '@/modules/human';
-import { SkillsTab } from "./_tabs/SkillsTab";
-import { TimesheetTab } from "./_tabs/TimesheetTab";
-import { PayrollTab } from "./_tabs/PayrollTab";
-import { LeavesTab } from "./_tabs/LeavesTab";
 import type { StaffTab } from "./staffUtils";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
+
+const BadgeControl = dynamic(() => import('@/modules/human').then(m => m.BadgeControl), { ssr: false });
+const StaffMemberForm = dynamic(() => import('@/modules/human').then(m => m.StaffMemberForm), { ssr: false });
+const TeamCalendar = dynamic(() => import('@/modules/human').then(m => m.TeamCalendar), { ssr: false });
+const NewRequestModal = dynamic(() => import('@/modules/human').then(m => m.NewRequestModal), { ssr: false });
+const PlanningWeekView = dynamic(() => import('@/modules/human').then(m => m.PlanningWeekView), { ssr: false });
+const RecruitmentBoard = dynamic(() => import('@/modules/human').then(m => m.RecruitmentBoard), { ssr: false });
+const QuickAddStaffModal = dynamic(() => import('@/modules/human').then(m => m.QuickAddStaffModal), { ssr: false });
+
+const SkillsTab = dynamic(() => import("./_tabs/SkillsTab").then(m => m.SkillsTab), { ssr: false });
+const TimesheetTab = dynamic(() => import("./_tabs/TimesheetTab").then(m => m.TimesheetTab), { ssr: false });
+const PayrollTab = dynamic(() => import("./_tabs/PayrollTab").then(m => m.PayrollTab), { ssr: false });
+const LeavesTab = dynamic(() => import("./_tabs/LeavesTab").then(m => m.LeavesTab), { ssr: false });
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "team",        label: "Équipe",              icon: Users },

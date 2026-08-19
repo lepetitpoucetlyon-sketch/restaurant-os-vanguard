@@ -22,9 +22,11 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
     };
   });
 
-vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() } }));
 vi.mock('@/modules/intelligence', () => ({
   HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
+  AIProviderRouter: class {
+    generateText = vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) }));
+  },
 }));
 vi.mock('@/modules/intelligence/ia/ai', () => ({
   AI_MODELS: { GEMINI_FLASH: 'gemini-flash', reasoning: 'gemini-pro', fast: 'gemini-flash' },
@@ -33,9 +35,9 @@ vi.mock('@/modules/intelligence/ia/ai', () => ({
       generateText: vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) })),
     },
   },
-  AIProviderRouter: vi.fn().mockImplementation(() => ({
-    generateText: vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) })),
-  })),
+  AIProviderRouter: class {
+    generateText = vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) }));
+  },
 }));
 vi.mock('@/lib/mcc/ChangelogService', () => ({
   ChangelogService: { getRecentChanges: vi.fn(async () => []) },

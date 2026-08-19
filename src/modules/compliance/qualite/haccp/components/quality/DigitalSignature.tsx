@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState, useEffect } from 'react';
 import { RotateCcw, PenTool, CheckCircle2, User } from 'lucide-react';
 import { Button } from '@ui/button';

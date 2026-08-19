@@ -39,7 +39,6 @@ export type PageKey =
     | 'registre'
     | 'settings'
     | 'vanguard'
-    | 'mcc'
     | 'workshop'
     | 'consultations'
     | 'vault'

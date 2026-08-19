@@ -29,4 +29,11 @@ export const OnboardingChecklistPanel = lazyPanel(() =>
 export const MaintenanceSettingsPanel = lazyPanel(() =>
     import("@/shared/components/settings/panels/MaintenanceSettingsPanel").then(m => ({ default: m.MaintenanceSettingsPanel })),
 );
+export const DLQDiagnosticPanel = lazyPanel(() =>
+    import("@/shared/components/settings/DLQDiagnosticPanel").then(m => ({ default: m.DLQDiagnosticPanel })),
+);
+export const RBACTenantMatrix = lazyPanel(() =>
+    import("@/shared/components/settings/RBACTenantMatrix").then(m => ({ default: m.RBACTenantMatrix })),
+);
+
 

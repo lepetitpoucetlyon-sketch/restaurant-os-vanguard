@@ -5,20 +5,22 @@ import {
     Download, PackageSearch, BellRing, Search, Package,
 } from "lucide-react";
 
+import dynamic from "next/dynamic";
 import {
     useHaccpPage,
     HACCP_TOOLS,
-    ReleveTemperatures,
-    GestionHuiles,
-    PlanNettoyage,
-    GestionAnomalies,
-    ProductControlList,
-    SanitaryReport,
-    CleaningPlan,
-    DLCTracker,
-    NonConformityForm,
 } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+
+const ReleveTemperatures = dynamic(() => import('@/modules/compliance').then(m => m.ReleveTemperatures), { ssr: false });
+const GestionHuiles = dynamic(() => import('@/modules/compliance').then(m => m.GestionHuiles), { ssr: false });
+const PlanNettoyage = dynamic(() => import('@/modules/compliance').then(m => m.PlanNettoyage), { ssr: false });
+const GestionAnomalies = dynamic(() => import('@/modules/compliance').then(m => m.GestionAnomalies), { ssr: false });
+const ProductControlList = dynamic(() => import('@/modules/compliance').then(m => m.ProductControlList), { ssr: false });
+const SanitaryReport = dynamic(() => import('@/modules/compliance').then(m => m.SanitaryReport), { ssr: false });
+const CleaningPlan = dynamic(() => import('@/modules/compliance').then(m => m.CleaningPlan), { ssr: false });
+const DLCTracker = dynamic(() => import('@/modules/compliance').then(m => m.DLCTracker), { ssr: false });
+const NonConformityForm = dynamic(() => import('@/modules/compliance').then(m => m.NonConformityForm), { ssr: false });
 import type { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
