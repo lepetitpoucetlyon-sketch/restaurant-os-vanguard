@@ -1,5 +1,11 @@
 # 🚀 PLAN SCALING SOLO 2026-08-18 → 2027 Q2
 
+> ⚠️ **NOTE FUSION 2026-08-19** : Ce plan reste la **référence détaillée** pour les 8 chantiers S/T/U/V/W/X/Y/Z (contenu complet inchangé).
+> Depuis la fusion du 2026-08-19, leur **orchestration temporelle** (quand exécuter chaque chantier, dépendances, roadmap trimestrielle) est pilotée depuis **`PLAN_CONSOLIDATION_2026-08-18.md`** (Vagues β/γ/δ).
+>
+> Pour savoir QUAND faire un chantier : voir Roadmap dans PLAN_CONSOLIDATION.
+> Pour savoir COMMENT faire un chantier (actions détaillées) : rester dans ce plan.
+>
 > **Date de rédaction** : 2026-08-18
 > **Auteur** : session `plan-scaling-solo`
 > **Objectif** : atteindre 80-100 tenants confortablement en solo, sans embaucher

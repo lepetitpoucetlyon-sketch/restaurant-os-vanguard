@@ -1,17 +1,25 @@
-# 🏗️ PLAN CONSOLIDATION 2026-08-18 → 2027 Q1
+# 🏗️ PLAN CONSOLIDATION MASTER 2026-08-18 → 2027 Q3
 
-> **Date de rédaction** : 2026-08-18
-> **Auteur** : session `plan-consolidation-post-cycles`
-> **Portée** : chantiers structurels post-plan-cycles (Vagues F→R)
+> **Date de rédaction initiale** : 2026-08-18
+> **Fusion MASTER** : 2026-08-19 (intégration finition qualité + roadmap unifiée)
+> **Auteur** : sessions `plan-consolidation-post-cycles` + `plan-master-restant`
+> **Portée** : plan unique consolidant TOUS les chantiers structurels + ops + scaling restants
 > **Non-objectif** : ré-analyser les cycles (couverts par `PLAN_CYCLES_MADGE.md`) ni les régressions livrées 15-17 août (couvertes par `PLAN_CORRECTION_2026-08-18.md`)
-> **Précondition** : plan cycles au moins en Vague A (ratchet actif) — sans quoi les chantiers J/K/L vont recréer des cycles silencieusement
+> **Précondition** : plan cycles au moins en Vague A (ratchet actif)
 
 ---
 
 ## Table des matières
 
 - [0. Préambule opérationnel](#0-préambule-opérationnel)
+- [0-bis. Où on en est (état 2026-08-19)](#0-bis-où-on-en-est-état-2026-08-19)
 - [1. Prérequis](#1-prérequis)
+- [**Vague α — Finition qualité (nouvelle, 2026-08-19)**](#vague-α--finition-qualité-nouvelle-2026-08-19)
+  - [α-1 · Barrel debt 150 → < 50](#α-1--barrel-debt-150--50)
+  - [α-2 · God files 13 → 5](#α-2--god-files-13--5)
+  - [α-3 · Consolidation NexusFleetProvider doublons](#α-3--consolidation-nexusfleetprovider-doublons)
+  - [α-4 · Test teardown final purge](#α-4--test-teardown-final-purge)
+  - [α-5 · Kernel/contracts finalisation (préalable γ-1)](#α-5--kernelcontracts-finalisation-préalable-γ-1)
 - [Chantier F — Restructuration finale shared/](#chantier-f--restructuration-finale-shared)
 - [Chantier G — Test coverage flows critiques (P0)](#chantier-g--test-coverage-flows-critiques-p0)
 - [Chantier H — DB-agnostic pour de vrai (P0)](#chantier-h--db-agnostic-pour-de-vrai-p0)
@@ -34,18 +42,15 @@
 
 ## 0. Préambule opérationnel
 
-### 0.1 Contexte
+### 0.1 Contexte (mis à jour 2026-08-19)
 
-Après le plan cycles (966 → 0), il reste **~30% de dette architecturale** qui va freiner la montée en charge :
-- 20% = **cosmétique restant de `shared/`** (Chantier F)
-- 80% = **11 autres chantiers** (G→R) qui touchent tests, DB, DLQ, god files, RBAC, i18n, verticales, bundle, legacy
+Après le plan cycles (966 → 0), la session `rbac-desambiguation-final` (RBAC MCC désambigué), la session `barrel-godfiles-purge` (5 god files fragmentés + 43 violations Barrel Contract éliminées), il reste :
 
-Ce plan est **complémentaire** du plan cycles, pas un remplacement. L'ordre est important :
-```
-Cycles (Vague A → E) obligatoire d'abord
-  └── Puis chantiers G/H/I/J/K/L/M/N/O/P/Q/R en parallèle possible
-       └── Chantier F peut se faire n'importe quand après C (cycles)
-```
+- **Vague α (NOUVEAU)** — finition qualité : barrel debt 150 → <50, god files 13 → 5, doublons fleet, teardown final, création de la couche `kernel/`
+- **Vagues F→R** — 13 chantiers structure + ops + scaling détaillés (contenu original de ce plan)
+- **Chantiers β/γ/δ (fusionnés depuis PLAN_MASTER_RESTANT + PLAN_SCALING_SOLO)** — orchestration temporelle unifiée (voir Roadmap trimestrielle)
+
+Ce plan est désormais **LA source unique** de la trajectoire restante (fusion effectuée le 2026-08-19).
 
 ### 0.2 Convention effort
 
@@ -108,6 +113,213 @@ npx next build 2>&1 | grep -E "First Load JS|Page" > .bundle-baseline.txt
 ```
 
 Nécessaire pour tracker Chantier O.
+
+---
+
+## 0-bis. Où on en est (état 2026-08-19)
+
+### Ce qui EST déjà fait (vérifié runtime)
+
+| Chantier | Statut | Preuve |
+|---|:-:|---|
+| **PLAN_CORRECTION** (10 régressions semaine 15-17 août) | ✅ | commits `48ba55a41`, `2397f908e`, `d92aad565` |
+| **PLAN_CYCLES_MADGE** (966 → 0) | ✅ | commit `baf493fbd`, 317 fichiers, +3959/-643 |
+| **RBAC MCC désambiguation** (`super_admin` → `mcc_super_admin`) | ✅ | commit `d92aad565` + session `rbac-desambiguation-final` |
+| **LLM-agnostic** (4 fuites Gemini éradiquées) | ✅ | commit `2397f908e`, AgentEngine −109 LOC |
+| **Cycles ratchet à 0 verrouillé** | ✅ | commit `9be53dd3e`, preflight bloquant |
+| **`as any` production purgé** | ✅ | commit `883864846` (3 restants tous en `src/e2e/`) |
+| **Oracle route CC=123 réduit** | ✅ | commit `0aa197bc4`, `OracleIntentAugmenter` extrait |
+| **AutoProcurementEngine CC=37→1** | ✅ | commit `314f65f66`, 3 sub-services |
+| **God files 18 → 13** | ✅ | session `barrel-godfiles-purge` (5 fragmentés) |
+| **Barrel debt 193 → 150** | ✅ | session `barrel-godfiles-purge` (−43) |
+| **Chantier P — Teardown warnings vitest** | ✅ | commit `9be53dd3e` |
+
+### État runtime confirmé aujourd'hui
+
+- TSC : **0 erreur**
+- Cycles Madge : **0**
+- Vitest : **1165 passed** / 1 skipped (188 files)
+- Sentrux gate : **No degradation** (quality 3346 → 4587, +37%)
+- Barrel Contract : **150 / 210** (ratchet vert)
+- Fuites LLM hardcoded : **0**
+
+### Ce qui reste dans ce plan
+
+- **Vague α** (nouvelle, ci-dessous) — finition qualité, 5 chantiers, 2-3 semaines
+- **Chantiers F, K, L** (partiellement fait pour L, reste table unique)
+- **Chantiers G, H, I, J, M, N, O, Q, R** — inchangés
+- **Vague β** (chantiers G/I + β nouveaux depuis PLAN_SCALING_SOLO) — voir Roadmap
+- **Vague γ** (chantiers F/K/L complétés + S/V/N/O) — voir Roadmap
+- **Vague δ** (H/T/W/Z/Q/R) — voir Roadmap
+
+---
+
+## Vague α — Finition qualité (nouvelle, 2026-08-19)
+
+**Objectif** : finir le nettoyage structurel entamé par session `barrel-godfiles-purge`. Vague indépendante, démarrable immédiatement.
+**Précondition** : Aucune. Working tree actuel est le point de départ.
+**Durée** : 2-3 semaines.
+
+---
+
+### α-1 · Barrel debt 150 → < 50
+
+**Priorité** : 🟠 P1
+**Effort total** : L (5 jours)
+**Session** : `barrel-debt-finition`
+**Périmètre exclusif** : `src/modules/**` (imports profonds intra-pilier) + barrels racines
+
+#### Objectif
+
+Passer de 150 violations Barrel Contract à moins de 50, en attaquant les 5 patterns dominants restants (mesure fraîche 2026-08-19).
+
+#### Distribution actuelle mesurée
+
+| Pattern d'import interdit | Occurrences | Solution |
+|---|:-:|---|
+| `service/printers/hardware/*` | 8 | Compléter barrel `@/modules/ops/service/printers/index.ts` (déjà créé — restants ailleurs) |
+| `service/pos/infrastructure/*` | 8 | Barrel `@/modules/ops` (fait pour cash-drawer + terminal, ajouter adapters/repositories) |
+| `comptabilite/services/*` | 8 | Barrel `@/modules/finance` (partiellement fait, compléter) |
+| `workflow/engine/types` | 6 | Créer barrel `@/modules/ops/workflow/engine/index.ts` avec exports types |
+| `domain/schemas/pos, orders, commerce, rbac, supplier-invoice` | 24 | Migration vers `kernel/contracts/` (voir α-5) OU barrel `@/shared/schemas` |
+| `services/FiscalEngine` | 5 | Barrel `@/modules/finance` |
+| `ia/ai/LLMManager, LLMProviderFactory` | 6 | Barrel `@/modules/intelligence` |
+| `effectifs/hr/components/*` | 4 | Barrel `@/modules/human` |
+| `migration/*` | 5 | Barrel `@/modules/commerce/acquisition/onboarding` |
+| Autres (long-tail) | 76 | Fix au cas par cas |
+
+#### Actions détaillées
+
+- **[α-1-01]** (S) Créer barrel `@/modules/ops/workflow/engine/index.ts` + fix 6 imports
+- **[α-1-02]** (S) Étendre `@/modules/finance` avec `FiscalEngine` + fix 5 imports
+- **[α-1-03]** (S) Étendre `@/modules/intelligence` avec `LLMManager` + `LLMProviderFactory` + fix 6 imports
+- **[α-1-04]** (S) Étendre `@/modules/human` avec exports `hr/components/*` + fix 4 imports
+- **[α-1-05]** (S) Créer barrel `@/modules/commerce/acquisition/onboarding/index.ts` + fix 5 imports migration
+- **[α-1-06]** (S) Nettoyer les 8 imports `pos/infrastructure/*` restants (adapters, repositories, api)
+- **[α-1-07]** (S) Nettoyer les 8 imports `printers/hardware/*` restants (hors printers/components déjà fait)
+- **[α-1-08]** (S) Nettoyer les 8 imports `comptabilite/services/*` restants
+- **[α-1-09]** (M) Long-tail — 76 violations dispersées, batch par sed + rewrite
+- **[α-1-10]** (XS) Baisser `BARREL_DEBT_MAX` du preflight à 50 (ratchet)
+
+**Sortie** : 150 → < 50 violations. Ratchet à 50.
+
+**Régression possible** : nouveaux cycles créés par barrels étendus (comme cas `menu-builder → finance` de session `barrel-godfiles-purge`). **Mitigation** : après chaque action, `npx madge --circular` + fix cycle si créé (souvent `import type` ou inline).
+
+---
+
+### α-2 · God files 13 → 5
+
+**Priorité** : 🟡 P2 (dette technique, pas bloquant business)
+**Effort total** : L (5 jours)
+**Session** : `god-files-terminal-purge`
+**Périmètre exclusif** : `src/shared/eventBus/registerHandlers/*.ts`
+**Note** : anticipe le Chantier K (fragmentation eventBus).
+
+#### Objectif
+
+Passer de 13 god files à ≤ 5. Cible : les 5 `registerHandlers/*.ts`.
+
+Les **6 tests helpers** (`saga.*.test.ts`) sont **intentionnellement god files** — tests d'intégration cross-pilier. À accepter et documenter dans `.sentruxignore` avec commentaire (déjà fait).
+
+Les **2 `NexusFleetProvider`** sont traités séparément par `[α-3]`.
+
+#### Actions détaillées
+
+Fragmentation par event domain :
+
+- **[α-2-01]** (M) `registerHandlers/ops.ts` (fan-out 25) → fragmenter par event :
+  - `handlers/order/register.ts` (order.paid, order.refunded, order.cancelled)
+  - `handlers/kds/register.ts` (kds.item.ready, kds.course.completed)
+  - `handlers/inventory/register.ts` (stock.deducted, stock.restored)
+  - `handlers/tables/register.ts` (table.locked, table.transferred)
+  - `registerHandlers/ops.ts` → assembly (fan-out ≤ 4)
+- **[α-2-02]** (S) `registerHandlers/human.ts` (fan-out 18) → `contract/`, `planning/`, `payroll/`
+- **[α-2-03]** (S) `registerHandlers/finance.ts` (fan-out 17) → `billing/`, `journal/`, `payout/`
+- **[α-2-04]** (S) `registerHandlers/intelligence.ts` (fan-out 17) → `analytics/`, `ai/`, `rag/`
+- **[α-2-05]** (S) `registerHandlers/compliance.ts` (fan-out 16) → `haccp/`, `rgpd/`, `audit/`
+- **[α-2-06]** (XS) `registerHandlers.ts` racine appelle chaque `registerXxxHandlers()` extrait
+- **[α-2-07]** (XS) Sentrux règle `eventbus_domain_isolation` : les handlers ne peuvent être importés que par leur `register.ts`
+
+**Sortie** : 13 → 5-6 (les 6 tests helpers légitimes restent). Chantier J du plan initial (fragmenté ici différemment) devient obsolète — voir Note ci-dessous.
+
+**Note** : Le Chantier J original (god files 18 → 0) est remplacé par cette Vague α-2 qui traite la même cible avec approche plus focalisée (les registerHandlers uniquement, les autres god files code métier ayant été traités par session `barrel-godfiles-purge`).
+
+---
+
+### α-3 · Consolidation NexusFleetProvider doublons
+
+**Priorité** : 🟡 P2 (2 doublons quasi-identiques, dette cognitive)
+**Effort total** : M (2 jours)
+**Session** : `fleet-provider-consolidation`
+**Périmètre exclusif** : `src/shared/providers/fleet/NexusFleetProvider.tsx`, `src/modules/intelligence/ia/fleet/NexusFleetProvider.tsx`
+
+#### Objectif
+
+Fusionner les 2 `NexusFleetProvider.tsx` en 1 seul (293 LOC chacun, ~99% identique — imports slightly différents mais logique métier identique).
+
+#### Actions détaillées
+
+- **[α-3-01]** (M) Fusion : garder version `src/modules/intelligence/ia/fleet/NexusFleetProvider.tsx` (source canon, cluster intelligence 392 confirmé par graphify)
+- **[α-3-02]** (S) `src/shared/providers/fleet/NexusFleetProvider.tsx` devient un re-export : `export { NexusFleetProvider } from '@/modules/intelligence'`
+- **[α-3-03]** (S) Grep + fix des imports amont pour tous pointer vers `@/modules/intelligence` (barrel)
+- **[α-3-04]** (XS) Après période transition, supprimer `src/shared/providers/fleet/NexusFleetProvider.tsx` (Q4)
+
+**Sortie** : -1 god file, -1 doublon, cluster intelligence renforcé.
+
+**Régression possible** : les 2 fichiers ont peut-être des customisations subtiles. **Mitigation** : diff détaillé + tests visuels sur `/admin/mcc` avant fusion.
+
+---
+
+### α-4 · Test teardown final purge
+
+**Priorité** : 🟡 P2 (bruit CI résiduel)
+**Effort total** : S (1 jour)
+**Session** : `test-teardown-final`
+**Périmètre exclusif** : `src/__tests__/**` avec `afterAll`/`beforeAll` async
+
+#### Objectif
+
+Purger tous les `EnvironmentTeardownError` restants pour permettre `npm run preflight` de passer 8/8 gates propres.
+
+Le Chantier P a fait `provisioning-saga-rollback.test.ts`. Reste à purger les autres warnings similaires.
+
+#### Actions détaillées
+
+- **[α-4-01]** (S) Grep tests avec `afterAll` async + `Promise` non-await
+- **[α-4-02]** (S) Fix par test (proprement await + close mocks)
+- **[α-4-03]** (XS) Activer `--reporter=verbose --bail` dans vitest config CI (catch warnings comme erreurs)
+
+**Sortie** : `npm run preflight` termine les 8 gates sans exit 1 sur teardown warning.
+
+---
+
+### α-5 · Kernel/contracts finalisation (préalable γ-1)
+
+**Priorité** : 🟡 P2 (préalable à Chantier F restructuration shared/)
+**Effort total** : M (5-7 j)
+**Session** : `kernel-contracts-finalisation`
+**Périmètre exclusif** : `src/kernel/contracts/**` + migration schemas domain
+
+#### Objectif
+
+Créer proprement la couche `src/kernel/` (aujourd'hui inexistante — 0 fichiers) qui deviendra le socle "vocabulaire pur" évoqué dans Chantier F + Chantier L.
+
+Cette couche est **la brique manquante** pour :
+- Casser les cycles émergents (menu-builder → finance signalé en α-1)
+- Migrer les 24 imports `domain/schemas/*` violés
+- Extraire les types Nexus contracts hors de `shared/`
+- Fournir la source pour le RBAC table unique (γ-3 / Chantier L compléter)
+
+#### Actions détaillées
+
+- **[α-5-01]** (S) Créer arborescence `src/kernel/contracts/` avec règle sentrux `kernel_purity` (zéro import sortant)
+- **[α-5-02]** (M) Migrer `shared/nexus/contracts/nexus.types.ts` + `common.types.ts` → `kernel/contracts/core.ts` (~715 imports impactés — pattern déjà validé par PLAN_CYCLES_MADGE Vague C)
+- **[α-5-03]** (M) Migrer `domain/schemas/pos, orders, commerce, rbac, supplier-invoice` → `kernel/schemas/`
+- **[α-5-04]** (S) Migrer `shared/eventBus/events/*.ts` → `kernel/events/` (fait ce que γ-1 F-01 aurait fait — désormais préalable)
+- **[α-5-05]** (S) Sentrux règles : `kernel_purity` + `shared_no_modules` + deprecation `domain/schemas/*`
+- **[α-5-06]** (S) ADR-006 : Kernel Contracts Layer
+
+**Impact** : débloque Chantier F (restructuration finale shared/) + résout les 24 violations barrel `domain/schemas/*` (α-1) + fournit socle pour Chantier L (RBAC table unique).
 
 ---
 
@@ -1272,44 +1484,96 @@ Chantiers **indépendants** (peuvent démarrer maintenant si PREREQ OK) :
 Cycles A → G (tests) → visibilité + safety net pour tout le reste
 ```
 
-## Roadmap trimestrielle
+## Roadmap trimestrielle (mise à jour 2026-08-19 — 4 vagues)
 
-### Q3 2026 (Août-Octobre)
-- ✅ Plan cycles Vagues A-E (chantier existant)
-- 🔴 Chantier G (test coverage) — parallèle
-- 🔴 Chantier I (DLQ dashboard) — 1-2 j quick win
-- 🟠 Chantier M (décision i18n) — quick decision
-- 🟡 Chantier P (teardown warnings) — quick fix
+### Q3 2026 (Août - Octobre) — Vague α + β
 
-### Q4 2026 (Novembre-Janvier)
-- 🟡 Chantier F (restructure shared/) — post cycles
-- 🟠 Chantier K (eventBus regroupé) — post F
-- 🟠 Chantier L (RBAC unifié) — post F
-- 🟠 Chantier J (god files) — fil rouge
-- 🟡 Chantier N (statut verticales)
-- 🟡 Chantier O (bundle size)
+**Priorité absolue** : ne pas se laisser dépasser techniquement + débloquer scaling ops.
 
-### Q1 2027 (Février-Avril)
-- 🔴 Chantier H (DB-agnostic real) — 2 semaines dédiées
+**Vague α — Finition qualité (2-3 sem.)**
+- 🟠 α-1 (barrel debt 150 → <50) — L
+- 🟡 α-2 (god files 13 → 5, registerHandlers fragmentés) — L
+- 🟡 α-3 (NexusFleetProvider doublons consolidation) — M
+- 🟡 α-4 (test teardown final purge) — S
+- 🟡 α-5 (kernel/ contracts finalisation) — M
+
+**Vague β — Ops immédiate (4-6 sem., en parallèle si équipe)**
+- 🔴 Chantier G (test coverage flows critiques) — L, CRITIQUE risque #1
+- 🔴 Chantier I (DLQ dashboard MCC) — S, quick win 1-2 j
+- 🔴 **Chantier X** (Stripe billing, depuis PLAN_SCALING_SOLO) — M, débloque acquisition
+- 🔴 **Chantier U** (ops self-healing, depuis PLAN_SCALING_SOLO) — L, post-I
+- 🟠 **Chantier Y** (monitoring intelligent, depuis PLAN_SCALING_SOLO) — M
+- 🟠 Chantier M (décision i18n) — XS + variable
+
+**Résultat visé Q3** : capacité solo passe de ~10 à **~25-30 tenants**.
+
+### Q4 2026 (Novembre - Janvier) — Vague γ
+
+**Priorité** : self-service acquisition + structure définitive.
+
+- 🟡 Chantier F (restructure shared/) — post α-5 (kernel/ existe)
+- 🟠 Chantier K (eventBus regroupé par event domain) — post α-2
+- 🟠 Chantier L (RBAC finalisation table unique) — post α-5
+- 🔴 **Chantier S** (onboarding self-service complet, depuis PLAN_SCALING_SOLO) — XL, post-X
+- 🟠 **Chantier V** (sales reseller portal, depuis PLAN_SCALING_SOLO) — L, post-S
+- 🟡 Chantier N (verticales asymétriques statut)
+- 🟡 Chantier O (bundle size monitoring)
+
+**Résultat visé Q4** : capacité solo passe à **~50 tenants** + acquisition scalable.
+
+### Q1 2027 (Février - Avril) — Vague δ partie 1
+
+**Priorité** : DB agnostic réel + fondations support IA.
+
+- 🔴 Chantier H (DB-agnostic Postgres/Mongo réel) — XL 2 semaines
+- 🟠 **Chantier W** (docs client vivante, depuis PLAN_SCALING_SOLO) — M, préalable T
+- 🔴 **Chantier T** (support IA embedded LLM-agnostic, depuis PLAN_SCALING_SOLO) — L, post-W
+
+**Résultat visé Q1 2027** : différenciateur commercial (data residency + IA souverain).
+
+### Q2 2027 (Mai - Juillet) — Vague δ partie 2
+
+**Priorité** : formation + polish final.
+
+- 🟠 **Chantier Z** (formation gérant auto, depuis PLAN_SCALING_SOLO) — M
 - 🔵 Chantier Q (legacy purge)
-- 🔵 Chantier R (doublons audit)
+- 🔵 Chantier R (doublons verticals/modules audit)
 
-## Métriques de sortie
+**Résultat visé Q2 2027** : capacité solo à **~80-100 tenants** confortablement.
 
-| Métrique | T+0 | Post Q3 | Post Q4 | Post Q1-2027 |
-|---|:--:|:--:|:--:|:--:|
-| **Cycles madge** | 966 | ~30 | 0 | 0 stable |
-| **Test coverage global** | 4.4% | 15% | 25% | 40% |
-| **God files** | 18 | 18 | 6 | 0 |
-| **RBAC sources** | 5 | 5 | 1 | 1 |
-| **DB providers fonctionnels** | 1 (Firestore) | 1 | 1 | 4 (F+P+M+S) |
-| **DLQ dashboard** | ❌ | ✅ | ✅ | ✅ |
-| **i18n statut** | dormant | décidé | actif ou purgé | actif ou purgé |
-| **Verticales fonctionnelles** | 2/12 | 2/12 | statut clair | 8/12 |
-| **Bundle size gate** | ❌ | ❌ | ✅ | ✅ |
-| **shared/ structuré** | 15 dossiers mixtes | 15 | 3 catégories | 3 stable |
-| **Kernel/** | 0 fichiers | ~200 | ~250 | ~300 |
-| **Legacy re-exports** | ~10 | ~10 | ~5 | 0 |
+### Q3 2027 — Réserve / itération
+
+Chantiers repoussés + itération sur retours terrain.
+
+**Charge totale estimée** : ~25-30 semaines de dev focus. Étalable sur 12-18 mois en fil rouge.
+
+---
+
+## Métriques de sortie (4 vagues)
+
+| Métrique | T+0 (2026-08-19) | Post α (Q3) | Post β (Q3) | Post γ (Q4) | Post δ (Q1-Q2 2027) |
+|---|:--:|:--:|:--:|:--:|:--:|
+| **Cycles madge** | 0 | 0 | 0 | 0 | 0 stable |
+| **God files** | 13 | ≤ 6 | ≤ 6 | ≤ 3 | 0 |
+| **Barrel Contract** | 150 | < 50 | < 30 | 0 | 0 stable |
+| **Test coverage global** | 4.4% | 4.4% | 15% | 20% | 40% |
+| **Tenants supportables solo** | ~10 | ~10 | **~25-30** | **~50** | **~80-100** |
+| **Support automatisé** | 0% | 0% | ~30% (self-healing) | ~50% (docs) | **~80% (IA)** |
+| **Onboarding tenant (temps toi)** | 4h | 4h | 4h | **0h** | 0h |
+| **DB providers réellement fonctionnels** | 1 | 1 | 1 | 1 | **4** |
+| **Ventes via revendeurs** | 0% | 0% | 0% | ~30% (portail) | ~50% |
+| **RBAC sources** | 1 MCC + fragmenté tenant | idem | idem | **1 unique** | 1 unique |
+| **DLQ dashboard opérationnel** | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Stripe recurring billing** | ❌ | ❌ | ✅ | ✅ | ✅ |
+| **Support IA embedded** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **i18n statut** | dormant | dormant | décidé | résolu | résolu |
+| **12 verticales fonctionnelles** | 2/12 | 2/12 | 2/12 | statut clair | 6-8/12 |
+| **Bundle size gate** | ❌ | ❌ | ❌ | ✅ | ✅ |
+| **shared/ structuré** | 15 dossiers mixtes | 15 | 15 | 3 catégories | 3 stable |
+| **Kernel/** | 0 fichiers | ~200 (α-5) | ~200 | ~250 | ~300 |
+| **Legacy re-exports** | ~10 | ~10 | ~10 | ~5 | 0 |
+| **Sentrux quality** | 4587 | 5000 | 5200 | 5500 | 6000+ |
+| **Ratchet ESLint barrel-debt** | 210 | **50** | **30** | **10** | **10 stable** |
 
 ## Journal d'exécution — template
 
