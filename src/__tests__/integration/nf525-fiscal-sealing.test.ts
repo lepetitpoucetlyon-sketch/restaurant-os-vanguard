@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { FiscalEngine, FISCAL_CONSTANTS } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine, FISCAL_CONSTANTS } from '@/modules/finance';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import type { FiscalSeal } from '@nexus/contracts';
 

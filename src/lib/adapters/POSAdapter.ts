@@ -1,5 +1,6 @@
 import { OrderItem } from "@nexus/contracts";
-import { CartItem } from "@/modules/ops/workflow/engine/types";
+// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle ops → pos → POSAdapter. Cible α-5-03 : migrer vers kernel/schemas/pos.
+import type { CartItem } from "@/modules/ops/workflow/engine/types";
 import { toMicrounits, Microunits } from "@/shared/schemas/primitives";
 
 export class POSService {

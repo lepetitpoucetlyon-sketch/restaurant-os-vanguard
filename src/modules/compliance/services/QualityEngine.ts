@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
 import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle finance ↔ compliance. Cible α-5 : extraire FiscalEngine vers kernel/.
 import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 import { SharedKernel } from '@/lib/shared-kernel';
 

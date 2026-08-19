@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { LLMManager } from '@/modules/intelligence';
 import { AIProviderRouter } from '@/modules/intelligence/ia/ai/AIProviderRouter';
-import { resolveModelId } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
+import { resolveModelId } from '@/modules/intelligence';
 
 const BodySchema = z.object({
   reviewText: z.string().min(1).max(5000),

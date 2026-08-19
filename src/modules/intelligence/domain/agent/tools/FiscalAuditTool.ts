@@ -5,7 +5,8 @@ import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 // eslint-disable-next-line vanguard/no-inter-module-imports
-import { FiscalEngine } from '@modules/finance/services/FiscalEngine';
+// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle intelligence ↔ finance. Cible α-5.
+import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 
 /**
  * 🛡️ FISCAL AUDIT TOOL - Grade X

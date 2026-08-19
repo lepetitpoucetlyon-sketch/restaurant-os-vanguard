@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable vanguard/no-inter-module-imports */
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { LLMManager } from '@/modules/intelligence';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import {

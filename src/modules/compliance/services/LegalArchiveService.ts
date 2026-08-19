@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle finance ↔ compliance. Cible α-5 : extraire FiscalEngine vers kernel/.
 import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
 import type { FiscalSeal } from '@nexus/contracts';
 

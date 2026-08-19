@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { LLMManager } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // ─── Mock LLMManager ─────────────────────────────────────────────────────────
