@@ -61,7 +61,7 @@ export class ApiClient {
                 ),
         },
         orders: {
-            create: (tenantId: string, input: z.infer<typeof CreateOrderInputSchema>) => {
+            create: (tenantId: string, input: z.input<typeof CreateOrderInputSchema>) => {
                 const validated = CreateOrderInputSchema.parse(input);
                 return this.request<{ success: boolean; orderId: string; totalMu: number; status: string; estimatedMinutes: number }>(
                     `/api/v1/orders?tenantId=${encodeURIComponent(tenantId)}`,
