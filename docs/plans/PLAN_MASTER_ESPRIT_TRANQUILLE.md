@@ -30,13 +30,13 @@
 
 ## 🗺️ Vue d'ensemble — 5 vagues
 
-| Vague | Nom | Durée | Prio | Blocage business |
-|-------|-----|-------|------|------------------|
-| **V1** | Hygiène + confort dev | 1 sem | 🔴 P0 | Aucun blocage mais 0 excuse |
-| **V2** | Perf tablette + observabilité prod | 2 sem | 🔴 P0 | Sans ça, tout resto qui installe = ticket #1 |
-| **V3** | Type-safety end-to-end | 3 sem | 🟠 P1 | Divergence mobile/web = bugs runtime |
-| **V4** | Prérequis data layer unifié | 2 sem | 🟠 P1 | Sans ça, V5 = perte de données |
-| **V5** | `useSovereignCollection` | 6 sem | 🟡 P2 | Confort dev + UX offline |
+| Vague | Nom | Durée | Prio | Statut |
+|-------|-----|-------|------|--------|
+| **V1** | Hygiène + confort dev | 1 sem | 🔴 P0 | ✅ **100% Terminée & Commitée** |
+| **V2** | Perf tablette + observabilité prod | 2 sem | 🔴 P0 | ✅ **100% Terminée & Commitée** |
+| **V3** | Type-safety end-to-end | 3 sem | 🟠 P1 | ✅ **100% Terminée & Commitée** |
+| **V4** | Prérequis data layer unifié | 2 sem | 🟠 P1 | ✅ **100% Terminée & Commitée** |
+| **V5** | `useSovereignCollection` | 6 sem | 🟡 P2 | ✅ **100% Terminée & Commitée** |
 
 **Total estimé** : ~14 semaines. Réaliste : 16-18 avec imprévus.
 
