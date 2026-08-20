@@ -39,7 +39,7 @@ Le découpage n'a réintroduit **aucun** cycle sur 3054 fichiers. Grade X **tenu
 
 | Fichier | Lignes | Verdict | Motif |
 |---------|--------|---------|-------|
-| `src/app/(public)/preview/ombellule/page.tsx` | 889 | 🟡 À surveiller | Page démo statique — extractible en sections |
+| ~~`src/app/(public)/preview/ombellule/page.tsx`~~ | ~~889~~ | ✅ **Supprimé 2026-08-20** | Mockup obsolète — dossier `preview/` retiré |
 | `src/shared/eventBus/events/common.events.ts` | 815 | ✅ Légitime | Registre canonique des events (source unique) |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 730 | ✅ Légitime | Test suite globale (cohésion > découpe) |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 607 | ✅ Légitime | Saga integration test |

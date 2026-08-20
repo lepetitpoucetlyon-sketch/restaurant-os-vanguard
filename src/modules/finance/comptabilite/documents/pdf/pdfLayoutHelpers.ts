@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+import type jsPDF from 'jspdf';
 
 export function formatDate(iso: string): string {
   const d = new Date(iso);

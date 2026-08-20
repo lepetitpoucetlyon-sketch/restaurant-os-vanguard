@@ -3,7 +3,6 @@
  * Génère un contrat de privatisation / événement en PDF via jsPDF.
  * Client-side only — importer de façon lazy depuis un composant 'use client'.
  */
-import jsPDF from 'jspdf';
 import { padZero, todayISO, generateRef } from './pdf/pdfLayoutHelpers';
 import { renderContractPage1 } from './pdf/contractPage1';
 import { renderContractPage2 } from './pdf/contractPage2';
@@ -14,7 +13,8 @@ export type { PrivatisationFormule, PrivatisationData };
 /**
  * Génère et déclenche le téléchargement d'un contrat de privatisation au format PDF.
  */
-export function generatePrivatisationContract(data: PrivatisationData): void {
+export async function generatePrivatisationContract(data: PrivatisationData): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
   const tauxTVA = data.tauxTVA ?? 20;
