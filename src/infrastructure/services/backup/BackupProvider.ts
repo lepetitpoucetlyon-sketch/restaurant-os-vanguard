@@ -183,7 +183,7 @@ export class LocalFSBackupProvider implements IBackupProvider {
     private dir: string;
 
     constructor() {
-        this.dir = process.env.BACKUP_LOCAL_DIR ?? '/var/backups/restaurant-os';
+        this.dir = process.env.BACKUP_LOCAL_DIR ?? (process.env.NODE_ENV === 'production' ? '/var/backups/restaurant-os' : '/tmp/restaurant-os-backups');
     }
 
     async upload(fileName: string, data: Buffer): Promise<{ location: string }> {
