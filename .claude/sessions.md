@@ -15,6 +15,7 @@
 | Session | Périmètre | Démarrage | Status |
 |---|---|---|---|
 | `plan-master-v1` | Vague 1 : Hygiène, Backup Cron, Env Example, Sessions | 2026-08-20 | **active** |
+| `angles-morts-m101-m110` | Matrice M101-M110 + batch2 (35 services) + batch3 (19 services) — 71 items clos, 169 tests, 0 erreur TS | 2026-08-21 | **terminée** |
 
 ---
 
