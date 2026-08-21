@@ -216,3 +216,197 @@ Chaque item est classé par **criticité** :
 
 Réf. codebase : audit fait sur commit `81090dc53` (avant `79deee9d5`).
 Voir aussi : `docs/afaire.md` (bloqueurs infra externes) et `docs/archive/anglemort.md` (audit théorique 45 zones).
+
+---
+
+# 🧬 SECTION 3 — Enrichissement issu de `docs/archive/anglemort.md`
+
+Cross-check avec le doc théorique archivé (1392 lignes, 100+ angles morts).
+Chaque item ci-dessous ajoute une catégorie **non couverte** par la section 1 (verticale restaurant) ou 2 (MCC), avec statut du code actuel.
+
+Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
+
+## 3.1 — POS / salle (compléments)
+
+| # | Angle mort (source anglemort.md) | Statut code | Criticité |
+|---|---|---|---|
+| L1 | **Transfert de table en cours de repas** (T4 → T34 terrasse, KDS orphelin) | ⛔ Pas de `transferTable(fromId, toId)` atomique | 🟠 HAUT |
+| L2 | **Fusion de tables** (T4+T5 en cours de service) | ⛔ Absent | 🟠 HAUT |
+| L3 | **Add-on ticket après scellement NF525** (café après addition scellée) | ⛔ Pas de sous-session chaînée cryptographiquement | 🔴 CRITIQUE (Art. 286-I-3° bis CGI) |
+| L4 | **Geste commercial "offert directeur"** (4 génépis offerts sans ligne à 0 € + traçabilité alcool) | ⛔ Suppression brute possible = coulage invisible | 🟠 HAUT |
+| L5 | **Idempotence POS "double-tap 30 s"** (serveur qui mitraille "Envoyer cuisine") | ⛔ Pas de clé `IDEMP-POS-${tableId}-${window10s}` | 🔴 CRITIQUE (commande × 3 en cuisine) |
+| L6 | **Note provisoire → annulation frauduleuse** (impression addition → serveur encaisse cash → annule) | ⛔ Pas de scellé provisoire dans le JET dès impression | 🔴 CRITIQUE (vol interne indétectable) |
+| L7 | **Rendu de monnaie laissé en pourboire** (bouton explicite "gardez la monnaie" avec ventilation compte 426) | ⛔ Pas de bouton dédié | 🟠 HAUT (risque redressement fiscal pourboires CB) |
+| L8 | **Carafe d'eau AGEC** (article à 0 € auto-attaché au nb couverts) | ⛔ Absent | 🟡 MOYEN (amende DDPP 1 500 €) |
+
+## 3.2 — KDS / cuisine (compléments)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L9 | **86 brutal ingrédient cascade** (mise en 86 au niveau ingrédient → toutes recettes bloquées) | ⛔ Absent (chef doit désactiver 6 plats à la main) | 🟠 HAUT |
+| L10 | **Delta d'instruction partiel `KDS_ITEM_MODIFIED`** (surligne rouge la modif au lieu de réimprimer full ticket) | ⛔ Pas d'événement delta | 🟠 HAUT (double cuisson potentielle) |
+| L11 | **Matrice INCO par lot de réception matinal** (fiche allergène liée au fournisseur du jour) | ⛔ Fiche INCO statique | 🔴 CRITIQUE (choc anaphylactique) |
+| L12 | **Micro-séquençage 2 temps (soufflé + glace)** (dresser glace = `T0+7min30`) | ⛔ Absent | 🟡 MOYEN |
+| L13 | **Compteur "Minute 14" psycho-visuel** (clignotant orange 11 min, rouge 13 min + amuse-bouche auto) | ⛔ Absent | 🟠 HAUT (–50 % pourboire à la 15e min) |
+| L14 | **Nettoyage dynamique par rupture de séquence** (trancheuse jambon cru → rôti cuit sans désinfection = bloque KDS) | ⛔ Pas de PMS dynamique | 🔴 CRITIQUE (Listeria) |
+
+## 3.3 — Bar / sommellerie / freinte liquides
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L15 | **Inventaire flash quotidien alcool** (pesée bouteille au gramme près, variance vente) | ⛔ Absent (découverte uniquement à l'inventaire fin de mois) | 🟠 HAUT (coulage bar ~5-8 % marge) |
+| L16 | **Bouteille bouchonnée** (workflow `BOTTLE_DEFECT_DISPUTE` → stock litige caviste) | ⛔ Suppression brute = perte fiscale | 🟡 MOYEN |
+| L17 | **Freinte hydrostatique fût de bière** (coefficient 8-12 % configurable) | ⛔ Système compte 1 fût = 120 verres théoriques | 🟠 HAUT (fausse suspicion vol barman) |
+| L18 | **Bec verseur connecté** (télémétrie doses réelles vs vente caisse) | ⛔ Aucun connecteur | 🟢 BAS (hardware payant) |
+| L19 | **Bar moléculaire fermentation kombucha / sirop maison** (dégazage programmé + °Brix + pasteurisation) | ⛔ Absent | 🟡 MOYEN (risque explosion bouteille) |
+| L20 | **Clear ice / indice dilution hydro-thermique en fiche cocktail** | ⛔ Recette mixologie sans indice | 🟢 BAS |
+
+## 3.4 — Fiscal complémentaire (Section 1D complète)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L21 | **Réforme acomptes 2023 (Art. 268 ter CGI)** → facture d'acompte avec ventilation TVA dès encaissement | ⛔ Acompte encaissé sans TVA immédiate | 🔴 CRITIQUE (infraction fiscale) |
+| L22 | **Écriture d'écart de caisse au Z (compte 658)** (écart 35 € cash → écriture auto pertes exceptionnelles) | ⛔ Pas de génération auto | 🟠 HAUT |
+| L23 | **Facture complémentaire nominative J+3** (client demande facture entreprise après ticket anonyme) | ⛔ Régénérer = doublon CA / rupture NF525 | 🟠 HAUT |
+| L24 | **Ventilation TVA formule menu (5,5 / 10 / 20)** au prorata prix carte hors formule | 🚧 Existe côté `TaxCalculator` mais pas de test qui vérifie centime résiduel | 🟠 HAUT |
+| L25 | **Bouton "Contrôle Fiscal Inopiné (Mode DGFiP)"** — génère archive légale zippée + eIDAS en <10 s | ⛔ `FiscalArchiveExportPanel` MCC existe mais pas de bouton tenant "1 clic" | 🔴 CRITIQUE (amende 7 500 €/caisse pour obstruction Art. 1770 CGI) |
+| L26 | **Registre Personnel Instantané (RPI)** exportable smartphone en 1 s pour contrôle URSSAF surprise | ⛔ Absent | 🟠 HAUT |
+| L27 | **CONECS vs CB routing** (TR passe par CB standard = commission double) | ⛔ Pas de smart card routing | 🟡 MOYEN |
+
+## 3.5 — Réception / stocks / mercuriale (compléments)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L28 | **Denrées poids variable** (10 kg turbot → 9,42 kg livrés facturés au gramme) | ⛔ Stock compte 8 unités, pas 8,34 kg | 🟠 HAUT (rendement faux) |
+| L29 | **OCR BL dégradés double passe** (OpenCV débruitage + Gemini Vision + seuil confiance <90 %) | 🚧 InvoiceExtractionService fait 1 passe seule | 🟡 MOYEN |
+| L30 | **Substitution SKU sauvage** (beurre AOP → standard sans prévenir) → alerte variance scannette | ⛔ Absent | 🟠 HAUT (perte promesse "Fait maison AOP") |
+| L31 | **Séquestre paiement fournisseur (avoir fantôme)** — retenue SEPA tant qu'avoir non crédité | 🚧 `DeliveryDisputeService` existe mais pas branché sur pipeline paiement | 🟠 HAUT |
+| L32 | **Matrice compatibilité stockage volatile** (bananes → salades = éthylène → jaunissement) | ⛔ Absent | 🟡 MOYEN |
+| L33 | **Flambée matière première** (beurre +40 % en 3 sem → recalcul marge live + suggestion réajustement tarif) | ⛔ Prix carte figés | 🟠 HAUT |
+| L34 | **Sonde IoT température (Testo / Endress) + distinction panne radio vs vraie rupture froid** | ⛔ Pas de connecteur (déjà noté E2) | 🟠 HAUT |
+| L35 | **Sonde vivier crustacés (O₂ dissous, T° eau, densité saline)** — mortalité massive nocturne | ⛔ Absent | 🟡 MOYEN (perte 900 € par vivier) |
+
+## 3.6 — RH / conventions HCR (compléments)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L36 | **Blocage planning si repos 11 h bafoué** (Art. L. 3131-1 CT) | ⛔ Aucun garde | 🟠 HAUT (faute inexcusable employeur) |
+| L37 | **Redistribution pourboires CB défiscalisés** (compte 426, ventilation heures travaillées + émargement) | ⛔ Absent (déjà noté G) | 🟠 HAUT (redressement URSSAF sinon) |
+| L38 | **Clôture auto badgeage au Z de caisse** (barman part sans badger à 1h → régularisation matin) | ⛔ Heures fictives générées | 🟠 HAUT |
+| L39 | **DPAE express 60 s** (scan CNI + contrat eIDAS signé sur écran) | ⛔ Aucun module (voir G5) | 🔴 CRITIQUE (travail dissimulé) |
+| L40 | **Mode "Flux Vaisselle Dégradé" (abandon plongeur)** — bascule menu vers assiettes jetables + notif RH | ⛔ Absent | 🟢 BAS |
+
+## 3.7 — Hardware / résilience physique
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L41 | **Fallback routing imprimante** (rupture papier chaude → redirection auto vers passe-plat) | ⛔ Aucun mécanisme dans `printers/hardware/` | 🟠 HAUT |
+| L42 | **Réconciliation TPE avant re-débit** (interroger journal transactionnel TPE si "En attente TPE" bloqué) | ⛔ Aucun protocole (client re-débité) | 🔴 CRITIQUE (double débit) |
+| L43 | **UI tactile durcie zones 64x64 + swipe to action** (doigts mouillés en cuisine) | ⛔ Boutons standard | 🟡 MOYEN |
+| L44 | **Ethernet PoE forcé pour KDS + WiFi 5/6 GHz mobile** (interférence micro-ondes 2.4 GHz) | ⛔ Pas de doc config réseau | 🟠 HAUT |
+| L45 | **Redondance iPad terrasse surchauffe (>50 °C)** (bascule P2P sur téléphone collègue via QR) | ⛔ Absent | 🟡 MOYEN |
+| L46 | **Blackout total mode P2P mesh** (tablettes communiquent sans box, TPE stand-in) | 🚧 Sovereign collection = offline cache OUI, mais pas de mesh P2P entre tablettes | 🟠 HAUT |
+
+## 3.8 — Livraison / agrégateurs (compléments)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L47 | **Cadençage KDS asservi GPS coursier** (allumage ticket cuisson seulement quand coursier <4 min) | ⛔ KDS traite delivery = commande statique salle | 🟠 HAUT |
+| L48 | **Code PIN / QR unique pour libération sac** (protection vol par faux livreur) | ⛔ Sac posé en libre-service | 🟠 HAUT |
+| L49 | **Double tarification carte livraison** (majoration auto pour absorber commission 30 % Uber) | ⛔ Prix salle = prix delivery | 🟠 HAUT (vente à perte silencieuse) |
+| L50 | **Mode "Plan Pluie" 1 clic terrasse → to-go** (bascule 100 clients terrasse en emballages doggy bags) | ⛔ Absent | 🟡 MOYEN |
+
+## 3.9 — Fraudes / criminalistique / RBAC
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L51 | **DAG immuable des lignes de commande** (UUID + horodatage KDS, interdiction transfert entre tables sans audit) | 🚧 `NexusInterceptor` + `SovereignGuard` mais pas d'UUID par ligne + audit forensique | 🟠 HAUT |
+| L52 | **Pesée intelligente déchets à quai** (sac poubelle >1,2 kg/L densité anormale = alerte) | ⛔ Absent (vol par poubelle noble) | 🟠 HAUT |
+| L53 | **Détection sursaut avis Google (review bombing)** — export dossier signalement horodaté JET | ⛔ Aucune surveillance réputation | 🟠 HAUT |
+| L54 | **Verrouillage Oracle vocal par JWT** (pas par contenu texte : "je suis le patron") | ✅ ADR-008 R5 + RBAC = tokens JWT, pas de bypass vocal | ✅ OK |
+| L55 | **Détection anomalie hash chaîne fiscale** (rupture cryptographique → alerte auto) | ⛔ Absent (noté MCC-C4) | 🟠 HAUT |
+| L56 | **Alerte consultation en masse fiches clients** (démissionnaire exporte 5000 VIP) | ⛔ Aucun rate-limit ni signal faible | 🟠 HAUT (exfiltration RGPD) |
+
+## 3.10 — Sanitaire / HACCP (compléments)
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L57 | **Plat témoin banquet >30 couverts** (100 g/plat conservé +2°C, 5 j ouvrés, QR scellé) | ⛔ Absent (obligation légale) | 🟠 HAUT (poursuite pénale si TIAC) |
+| L58 | **Minuteur HACCP refroidissement rapide** (30 L blanquette >10 °C à H+1h45 = alerte critique) | ⛔ Absent (arrêté 21/12/2009) | 🔴 CRITIQUE (Clostridium perfringens) |
+| L59 | **Registre test huile friture (composés polaires <25 %)** — bloque 1re commande friteuse si test non fait | ⛔ Absent (Décret 2008-184) | 🟠 HAUT (amende + fermeture DDPP) |
+| L60 | **Veille sanitaire active RappelConso** (croisement auto lots huîtres en stock ↔ arrêtés préfectoraux) | ⛔ Absent | 🔴 CRITIQUE (40 TIAC vendredi soir = fermeture immédiate) |
+| L61 | **Bordereau numérique biodéchets (loi 2024)** — pesée journalière + attestation valorisation annuelle | ⛔ Absent | 🔴 CRITIQUE (jusqu'à 75 000 € amende + prison Art. L. 541-46 CE) |
+| L62 | **Bordereau BSDD huiles alimentaires usagées (ISCC-EU)** | ⛔ Absent | 🟠 HAUT (amende DREAL 15 000 €) |
+| L63 | **Sonde niveau bac à graisse (IoT)** — vidange auto à 80 % saturation | ⛔ Absent | 🟡 MOYEN |
+| L64 | **Registre sécurité incendie ERP connecté** (test mensuel BAES scan NFC + rapport annuel Commission Sécurité) | ⛔ Absent (Art. R. 123-51 CCH) | 🟠 HAUT (fermeture administrative) |
+| L65 | **Checklist ouverture avec déverrouillage optique issue de secours** (photo dégagement obligatoire avant 1re commande) | ⛔ Absent | 🟠 HAUT (drame si incendie) |
+| L66 | **Détecteur ΔT/Δt hotte + coupure préventive gaz avant Ansul** (évite déclenchement inondation poudre corrosive) | ⛔ Absent | 🟠 HAUT (15 000 € perte exploitation) |
+| L67 | **Protocole continuité coupure eau (bascule vaisselle jetable + eau minérale réserve)** | ⛔ Absent (Paquet Hygiène CE 852/2004) | 🟠 HAUT (fermeture sanitaire immédiate) |
+
+## 3.11 — Économie / marge / réputation
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L68 | **RevPASH pastille couleur temps réel** (table qui descend <8 €/siège/h = pastille violette) | ⛔ Absent | 🟠 HAUT (1 850 €/mois manque à gagner) |
+| L69 | **Durée prédictive par taille + menu** (table de 6 dégustation → interdit revente avant 22h15) | ⛔ Réservation rigide | 🟠 HAUT (double service chaotique) |
+| L70 | **Menu engineering matrice étoiles/vaches/puzzles** + scoring par serveur | ⛔ Aucun rapport | 🟡 MOYEN (sabotage interne indétectable) |
+| L71 | **Détection BIN bancaire smart card routing** (Amex Corporate US = 3,8 % au lieu de 0,4 % UE) | ⛔ Marge écrasée en silence | 🟡 MOYEN |
+| L72 | **Overhead factor consommables (film étirable, alu, sacs sv)** (majoration auto 2,5-4 % coût matière) | ⛔ Coûts en frais généraux non rattachés | 🟢 BAS |
+| L73 | **Recette self-healing BOM** (rupture ingrédient → Oracle propose substitution + recalcule coût portion) | ⛔ Absent | 🟡 MOYEN |
+| L74 | **TrustScore anti-DDoS résa** (5 SIM prépayées annulent 6 tables à 19h58 → détection clusters IP + empreinte CB variable) | ⛔ Réservation sur simple numéro mobile | 🟠 HAUT (sabotage concurrentiel) |
+
+## 3.12 — Événements B2B / palaces / audios
+
+| # | Angle mort | Statut code | Criticité |
+|---|---|---|---|
+| L75 | **Horloge occupation salle + additif horaire auto** (séminaire dépasse 2h → ligne heures sup B2B) | ⛔ Absent | 🟡 MOYEN |
+| L76 | **Smart token QR open bar forfaitaire** (chaque invité débite ses unités, journal opposable) | ⛔ Distribution plateau non traçable | 🟡 MOYEN |
+| L77 | **Coffre-fort numérique objets perdus** (photo + N° série + décharge signature restitution) | ⛔ Absent (Art. 1952 C. Civ) | 🟡 MOYEN |
+| L78 | **Vestiaire numérique QR + plafond responsabilité affiché** | ⛔ Absent | 🟡 MOYEN |
+| L79 | **Jauge spatiale terrasse AOT** (verrouillage m² max = permis voirie mairie) | ⛔ Absent | 🟠 HAUT (amende 1 500 € + retrait AOT) |
+| L80 | **Passerelle musique SACEM/SPRE certifiée** (interdit Spotify perso) | ⛔ Absent | 🟠 HAUT (redevance 1 200-3 500 €/an + PV) |
+| L81 | **TPE bilingue "Service inclus / Optional gratuity"** (touristes US tip confusion) | ⛔ Absent | 🟡 MOYEN |
+| L82 | **Facture apport d'affaires conciergerie palace + contrat B2B** (évite rétro-commission cash = corruption Art. 445-1 CP) | ⛔ Absent | 🟠 HAUT |
+| L83 | **VIP guest link 2h avant repas** (confirmation directe préférences + allergies au client final, pas au concierge) | ⛔ Absent | 🟠 HAUT (allergie mortelle transmise perdue) |
+| L84 | **Détecteur profil "Inspecteur Michelin"** (solo mardi 19h45 + eau minérale + questions provenance = alerte VIP) | ⛔ Absent | 🟢 BAS |
+| L85 | **Protocole "Code Ambre" client ivre** (1 clic → stop alcool + café offert + VTC facturé auto) | ⛔ Absent | 🟠 HAUT (responsabilité pénale patron Art. R. 3353-1 CSP) |
+
+---
+
+## 📊 Récapitulatif SECTION 3 (85 items enrichis)
+
+| Criticité | Compte |
+|---|---|
+| 🔴 CRITIQUE | 11 (L3, L5, L6, L11, L14, L21, L25, L42, L58, L60, L61) |
+| 🟠 HAUT | 45 |
+| 🟡 MOYEN | 22 |
+| 🟢 BAS | 6 |
+| ✅ Déjà OK | 1 (L54) |
+
+## 🎯 Top 15 consolidé (sections 1+2+3)
+
+Bloqueurs légaux / fiscaux / sanitaires (les plus dangereux) :
+
+1. **L61 — Biodéchets 2024** (jusqu'à 75 000 € + 2 ans prison)
+2. **L60 — Veille RappelConso lots huîtres/coquillages** (fermeture + TIAC)
+3. **L58 — Refroidissement rapide HACCP** (Clostridium mortel)
+4. **L25 — Bouton contrôle DGFiP 10 s** (obstruction = 7 500 €/caisse)
+5. **L21 — Facture d'acompte TVA immédiate 2023** (infraction fiscale continue)
+6. **D5 — Refus vente si taxRate manquant** (Section 1)
+7. **D1 — Test E2E FEC DGFiP conforme** (Section 1)
+8. **B4 / L11 — Blocage allergène par lot** (choc anaphylactique)
+9. **L42 — Réconciliation TPE avant re-débit** (client double débité)
+10. **L14 — Rupture séquence désinfection trancheuse** (Listeria)
+
+Bloqueurs opérationnels (perte cash récurrente) :
+
+11. **L15 — Inventaire flash alcool** (coulage 5-8 % marge bar)
+12. **L47/L49 — GPS coursier + double tarif delivery** (vente à perte cachée)
+13. **L46 — Mesh P2P blackout total** (survie coupure électrique/réseau)
+14. **L68 — RevPASH pastille table squatting** (1 850 €/mois × N tables)
+15. **MCC-E2 — MFA obligatoire super_admin MCC** (compromission flotte)
+
+---
+
+**Réf. sources** : `docs/archive/anglemort.md` (théorique, 1392 lignes, 100+ items),
+codebase snapshot `81090dc53` + `79deee9d5`.
