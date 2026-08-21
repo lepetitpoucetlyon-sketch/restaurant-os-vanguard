@@ -7,3 +7,4 @@
 export * from './useAccounting';
 export * from './useFinance';
 export * from './useFinanceReflex';
+export * from './useSovereignExpenseClaims';
