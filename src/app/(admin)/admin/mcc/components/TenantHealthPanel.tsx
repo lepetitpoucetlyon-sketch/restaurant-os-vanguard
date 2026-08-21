@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
+import { authedFetch } from '@/lib/client/authedFetch';
 
 interface TenantHealthItem {
     tenantId: string;
@@ -33,7 +34,7 @@ export function TenantHealthPanel() {
     const loadHealth = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch('/api/admin/fleet/health-score');
+            const res = await authedFetch('/api/admin/fleet/health-score');
             if (res.ok) {
                 const data = await res.json();
                 if (Array.isArray(data)) {
@@ -68,7 +69,7 @@ export function TenantHealthPanel() {
     const handleSendAlert = async (tenantId: string) => {
         try {
             setAlertSent(prev => ({ ...prev, [tenantId]: true }));
-            await fetch('/api/admin/fleet/notify-critical', {
+            await authedFetch('/api/admin/fleet/notify-critical', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
