@@ -7,8 +7,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Auth - Neural Shield Audit', () => {
     
     test.beforeEach(async ({ page }) => {
-        // Redirection vers l'URL de production ou locale
-        await page.goto('https://restaurant-os-web.web.app/');
+        // Redirection vers l'URL locale ou baseURL
+        await page.goto('/login');
     });
 
     test('Verification de la connexion Administrateur (PIN 0404)', async ({ page }) => {

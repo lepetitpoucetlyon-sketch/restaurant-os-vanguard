@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Propulsé par la Strate Zestry pour des audits "Indestructibles".
  */
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: './tests',
   timeout: 120000,
   expect: {
     timeout: 10000,
@@ -17,19 +17,10 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }], ['list']],
   
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3001',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
-  },
-
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-    stdout: 'ignore',
-    stderr: 'pipe',
   },
 
   projects: [

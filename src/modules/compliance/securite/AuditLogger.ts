@@ -94,7 +94,43 @@ export type AuditAction =
   | 'REST_PERIOD_VIOLATION'
   | 'WORK_ACCIDENT_DECLARED'
   // Logistics
-  | 'SUPPLIER_PRICE_DEVIATION';
+  | 'SUPPLIER_PRICE_DEVIATION'
+  // Batch 4 — POS, Hardware, Bar
+  | 'MEAL_VOUCHER_EXCEEDED'
+  | 'CASH_DRAWER_OPENED'
+  | 'CORKED_BOTTLE_RECORDED'
+  | 'FLASH_INVENTORY_VARIANCE'
+  | 'PRINTER_FAILOVER_TRIGGERED'
+  | 'BAR_SPOUT_DISCREPANCY'
+  | 'DEVICE_OVERHEAT_FAILOVER'
+  // Batch 5 — KDS, Cuisine, HACCP
+  | 'HACCP_FREQUENCY_MISSED'
+  | 'TIAC_INCIDENT_DECLARED'
+  | 'EMERGENCY_EXIT_CHECK_RECORDED'
+  | 'KITCHEN_HOOD_FIRE_CUTOFF'
+  | 'PEST_CONTROL_3D_RECORDED'
+  | 'THAWING_PROTOCOL_VIOLATION'
+  | 'FOOD_DONATION_REPORT_GENERATED'
+  | 'GREASE_TRAP_SATURATION_ALERT'
+  // Batch 6 — RH, Stocks, Achats, Livraison
+  | 'HCR_PAYROLL_CALCULATED'
+  | 'SHIFT_PLANNING_CONFLICT_OVERRIDDEN'
+  | 'TIME_CLOCK_PUNCH_RECORDED'
+  | 'LEAVE_REQUEST_APPROVED'
+  | 'DPAE_SUBMITTED'
+  | 'SUPPLIER_DISPUTE_SEQUESTRATED'
+  | 'PERPETUAL_INVENTORY_VARIANCE_POSTED'
+  | 'DELIVERY_STORE_PAUSED'
+  | 'RAIN_PLAN_SWITCH_ACTIVATED'
+  // Batch 7 — MCC Flotte, Trésorerie, Sécurité & CRM
+  | 'MERCHANT_PROVISIONED'
+  | 'SAAS_BILLING_INVOICED'
+  | 'REMOTE_KILL_SWITCH_ENGAGED'
+  | 'SECURITY_LOCKDOWN_ENFORCED'
+  | 'GDPR_ANONYMIZATION_EXECUTED'
+  | 'NO_SHOW_PENALTY_CHARGED'
+  | 'SPECIAL_EVENT_DEPOSIT_SEQUESTERED'
+  | 'VIP_PREFERENCE_UPDATED';
 
 export interface AuditLog {
   id: string;
@@ -160,17 +196,45 @@ async function loadHead(): Promise<ChainHead> {
   return { lastHash: GENESIS_HASH, lastId: null, count: 0, updatedAt: 0 };
 }
 
+export interface AuditLogOptions {
+  adminId: string;
+  action: AuditAction;
+  targetId: string;
+  metadata?: Record<string, unknown>;
+  ipAddress?: string;
+}
+
 /**
  * Journal d'audit inaltérable du MCC avec hash chain SHA-256.
  */
 export class AuditLogger {
   static async logAction(
-    adminId: string,
-    action: AuditAction,
-    targetId: string,
-    metadata?: Record<string, unknown>,
-    ipAddress: string = '0.0.0.0',
+    adminIdOrOptions: string | AuditLogOptions,
+    actionOrNone?: AuditAction,
+    targetIdOrNone?: string,
+    metadataOrNone?: Record<string, unknown>,
+    ipAddressOrNone: string = '0.0.0.0',
   ): Promise<AuditLog | null> {
+    let adminId: string;
+    let action: AuditAction;
+    let targetId: string;
+    let metadata: Record<string, unknown> | undefined;
+    let ipAddress: string;
+
+    if (typeof adminIdOrOptions === 'object' && adminIdOrOptions !== null) {
+      adminId = adminIdOrOptions.adminId;
+      action = adminIdOrOptions.action;
+      targetId = adminIdOrOptions.targetId;
+      metadata = adminIdOrOptions.metadata;
+      ipAddress = adminIdOrOptions.ipAddress || '0.0.0.0';
+    } else {
+      adminId = adminIdOrOptions;
+      action = actionOrNone!;
+      targetId = targetIdOrNone!;
+      metadata = metadataOrNone;
+      ipAddress = ipAddressOrNone;
+    }
+
     const head = await loadHead();
     const partial: Omit<AuditLog, 'hash'> = {
       id: crypto.randomUUID(),

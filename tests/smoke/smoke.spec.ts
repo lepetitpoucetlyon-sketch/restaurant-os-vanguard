@@ -27,9 +27,9 @@ test.describe('Production Smoke Tests', () => {
   test('4. Pricing page renders all 3 tiers', async ({ page }) => {
     const response = await page.goto('/pricing');
     expect(response?.status()).toBe(200);
-    await expect(page.getByText('Starter')).toBeVisible();
-    await expect(page.getByText('Pro')).toBeVisible();
-    await expect(page.getByText('Enterprise')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Starter' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Pro', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Enterprise' })).toBeVisible();
   });
 
   test('5. Competitor comparison vs Zelty loads', async ({ page }) => {
