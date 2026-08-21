@@ -17,6 +17,7 @@
 /.next/
 /.next-mcc/
 /out/
+/.firebase/
 
 # production
 /build
