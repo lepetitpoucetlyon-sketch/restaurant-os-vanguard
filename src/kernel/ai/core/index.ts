@@ -6,4 +6,4 @@ export { AIScopeGuard } from './AIScopeGuard';
 export { PromptComposer } from './PromptComposer';
 export type { ComposeMCCInput, ComposeTenantInput } from './PromptComposer';
 export { CrossScopeAuthority } from './CrossScopeAuthority';
-export type { CrossScopeGrant } from './CrossScopeAuthority';
+export type { CrossScopeGrant, StoredToken as CrossScopeStoredToken } from './CrossScopeAuthority';

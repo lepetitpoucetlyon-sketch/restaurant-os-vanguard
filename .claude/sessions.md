@@ -22,6 +22,7 @@
 
 | Session | Périmètre | Date | Status |
 |---|---|---|---|
+| `angles-morts-prereq` | ADR-014 : 4 fondations consolidées (CrossScope persist, Outbox P2/P3, AuditLogger hash chain, DLQ batch/export) — 26 tests | 2026-08-21 | terminée |
 | `sovereign-migration-phase-3-4-5` | ADR-011/012/013 : logistics (2) + commerce (3) + facility (2) migrés — 35 tests, migration progressive TERMINÉE | 2026-08-21 | terminée |
 | `public-access-toggle` | MCC kill-switch landing + signup public (schema + route + Gate + panel + 9 tests) | 2026-08-21 | terminée |
 | `ops-sovereign-migration` | ADR-010 Phase 2 : 3 adapters ops (orders + tables + reservations) + OrdersLiveBoard KDS + 22 tests | 2026-08-21 | terminée |

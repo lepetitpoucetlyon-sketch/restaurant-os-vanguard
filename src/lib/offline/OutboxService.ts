@@ -3,10 +3,16 @@
  *
  * Principes :
  * 1. Toute mutation locale est enfilée avec un `eventId` déterministe (idempotence).
- * 2. Tri par priorité (Priorité 1 : Fiscale / NF525 en premier, Priorité 0 : Standard).
+ * 2. Tri par priorité (voir OutboxPriority).
  * 3. Vidage automatique dès que `navigator.onLine === true` ou sur appel explicite.
  * 4. Backoff exponentiel (max 5 tentatives) puis bascule en Dead Letter Queue (DLQ).
  * 5. Alerte via `OpsAlertGateway` si des opérations critiques échouent.
+ *
+ * ADR-014 (Consolidation fondations) — tiers de priorité étendus :
+ *   3 = LEGAL     : contrôle DGFiP inopiné, archive fiscale, RPI URSSAF → top priorité
+ *   2 = SANITAIRE : alertes HACCP, refroidissement critique, RappelConso, incidents ARS
+ *   1 = FISCAL    : sceau NF525, journalEntry, ticket Z, FEC (protège la chaîne fiscale)
+ *   0 = NORMAL    : tout le reste (metrics, télémétrie, données métier standard)
  */
 
 import { db, type SyncOperation } from './offline-store';
@@ -15,13 +21,48 @@ import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 
+/** Tiers de priorité Outbox (plus élevé = drainé plus tôt). */
+export const OutboxPriority = {
+    NORMAL: 0,
+    FISCAL: 1,
+    SANITAIRE: 2,
+    LEGAL: 3,
+} as const;
+export type OutboxPriorityTier = typeof OutboxPriority[keyof typeof OutboxPriority];
+
+/**
+ * Mapping automatique collection → priorité si non fourni explicitement.
+ * Basé sur des tokens présents dans le path de collection.
+ */
+export function resolvePriority(collection: string): OutboxPriorityTier {
+    const c = collection.toLowerCase();
+    // LEGAL — inspection fiscale / RPI URSSAF / audit DGFiP
+    if (c.includes('legal') || c.includes('dgfip') || c.includes('urssaf') || c.includes('inspection')
+        || c.includes('/rpi') || c.includes('personnelinstant')) {
+        return OutboxPriority.LEGAL;
+    }
+    // SANITAIRE — HACCP, refroidissement, rappels, incidents ARS/DDPP
+    if (c.includes('haccp') || c.includes('chilling') || c.includes('refroidiss')
+        || c.includes('recall') || c.includes('rappelconso') || c.includes('tiac')
+        || c.includes('sanitaire') || c.includes('foodalert') || c.includes('biohazard')) {
+        return OutboxPriority.SANITAIRE;
+    }
+    // FISCAL — NF525, journalEntry, sceaux, TVA, ticket Z
+    if (c.includes('fiscal') || c.includes('journal') || c.includes('seal')
+        || c.includes('ticketz') || c.includes('grandtotal') || c.includes('fec')) {
+        return OutboxPriority.FISCAL;
+    }
+    return OutboxPriority.NORMAL;
+}
+
 export interface OutboxEnqueueParams {
     type?: SyncOperation['type'];
     action: SyncOperation['action'];
     collection: string;
     targetId: string;
     payload: Record<string, unknown>;
-    priority?: number; // 1 = Fiscal (urgent), 0 = Normal
+    /** Priorité manuelle. Si absent, `resolvePriority(collection)` détermine automatiquement. */
+    priority?: OutboxPriorityTier;
     eventId?: string;
 }
 
@@ -55,7 +96,7 @@ export class OutboxService {
             },
             timestamp,
             status: 'pending',
-            priority: params.priority ?? (params.collection.includes('fiscal') || params.collection.includes('journal') ? 1 : 0),
+            priority: params.priority ?? resolvePriority(params.collection),
             attempts: 0,
         };
 
@@ -110,17 +151,22 @@ export class OutboxService {
                         });
                     }
 
-                    // Émettre alerte ops critique si l'opération était prioritaire (fiscale)
+                    // Émettre alerte ops critique si l'opération était prioritaire
                     if (op.priority > 0) {
+                        const tierLabel = op.priority === OutboxPriority.LEGAL ? 'LEGAL' :
+                                          op.priority === OutboxPriority.SANITAIRE ? 'SANITAIRE' :
+                                          op.priority === OutboxPriority.FISCAL ? 'FISCAL' : 'PRIORITAIRE';
                         await OpsAlertGateway.send({
                             severity: 'critical',
-                            title: `DLQ Outbox : Opération Fiscale Échouée`,
+                            title: `DLQ Outbox : Opération ${tierLabel} Échouée`,
                             source: 'outbox-service',
-                            message: `L'opération fiscale #${op.id} (${op.collection}/${op.targetId}) a dépassé 5 tentatives de sync : ${err.message}`,
+                            message: `L'opération ${tierLabel} #${op.id} (${op.collection}/${op.targetId}) a dépassé 5 tentatives de sync : ${err.message}`,
                             context: {
                                 opId: op.id,
                                 collection: op.collection,
                                 targetId: op.targetId,
+                                priority: op.priority,
+                                tier: tierLabel,
                                 attempts: nextAttempts,
                                 error: err.message,
                             },
