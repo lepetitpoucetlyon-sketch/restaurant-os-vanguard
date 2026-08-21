@@ -42,6 +42,15 @@ vi.mock('@/modules/intelligence/ia/ai', () => ({
 vi.mock('@/lib/mcc/ChangelogService', () => ({
   ChangelogService: { getRecentChanges: vi.fn(async () => []) },
 }));
+vi.mock('@/kernel/ai/mcc/MCCAIRegistry', () => ({
+  MCCAIRegistry: {
+    activeModel: 'gemini-flash',
+    composePrompt: vi.fn(() => 'system prompt'),
+    provider: {
+      generateText: vi.fn(async () => ({ text: JSON.stringify({ category: 'technical', priority: 'P2', summary: 'Mock fix', resolutionDraft: 'Restart POS' }) })),
+    },
+  },
+}));
 vi.mock('@/domain/schemas/tenant', () => ({
   TenantConfigSchema: { safeParse: vi.fn(() => ({ success: false })) },
 }));
