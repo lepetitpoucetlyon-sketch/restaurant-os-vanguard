@@ -1,12 +1,15 @@
 /**
- * imageParser — OCR via LLMManager.generateFromImage (provider agnostique).
+ * imageParser — OCR via TenantAIRegistry.generateFromImage (ADR-008 Phase C).
  * Supporte JPEG, PNG, WebP, GIF.
  * Retourne le JSON structuré selon la catégorie d'import.
+ * Requiert tenantId (isolation IA par tenant — ADR-008).
  */
 
-import { LLMManager, AI_MODELS } from '@/modules/intelligence';
+import { TenantAIRegistry } from '@/kernel/ai/tenant';
 import { getOcrPrompt } from './ocrPrompts';
 import type { ImportCategory } from '../types';
+
+const CALLER = 'modules/commerce/acquisition/onboarding/migration/parsers/imageParser';
 
 export interface OcrResult {
     raw: string;
@@ -57,7 +60,11 @@ export async function parseImageWithOCR(
     file: File,
     category: ImportCategory,
     additionalContext?: string,
+    tenantId?: string,
 ): Promise<OcrResult> {
+    if (!tenantId) {
+        throw new Error('[parseImageWithOCR] tenantId requis (ADR-008 Phase C — isolation IA)');
+    }
     const [base64, mimeType] = await Promise.all([
         fileToBase64(file),
         Promise.resolve(detectMimeType(file)),
@@ -65,8 +72,9 @@ export async function parseImageWithOCR(
 
     const prompt = getOcrPrompt(category, additionalContext);
 
-    const response = await LLMManager.provider.generateFromImage({
-        model: AI_MODELS.visionFast,
+    const registry = await TenantAIRegistry.forTenant(tenantId, CALLER, 'vision');
+    const response = await registry.provider.generateFromImage({
+        model: '',
         userPrompt: prompt,
         image: { base64, mimeType },
         temperature: 0.1,

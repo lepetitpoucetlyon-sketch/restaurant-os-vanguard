@@ -1,16 +1,20 @@
 /**
- * pdfParser — extraction de texte PDF + OCR via LLM agnostique.
+ * pdfParser — extraction de texte PDF + OCR via TenantAIRegistry (ADR-008 Phase C).
  *
  * Stratégie :
  *  1. Essaie d'extraire le texte brut du PDF (PDFs natifs/textuels).
  *  2. Si le texte extrait est trop court (<50 chars), envoie la première page
- *     comme image via LLMManager.generateFromImage (PDF scanné).
+ *     comme image via registry.provider.generateFromImage (PDF scanné).
+ *
+ * Requiert tenantId (isolation IA par tenant — ADR-008).
  */
 
-import { LLMManager, AI_MODELS } from '@/modules/intelligence';
+import { TenantAIRegistry } from '@/kernel/ai/tenant';
 import { getOcrPrompt } from './ocrPrompts';
 import type { ImportCategory } from '../types';
 import type { OcrResult } from './imageParser';
+
+const CALLER = 'modules/commerce/acquisition/onboarding/migration/parsers/pdfParser';
 
 /**
  * Tente d'extraire le texte brut d'un PDF sans dépendance externe.
@@ -55,16 +59,21 @@ export async function parsePDFWithOCR(
     file: File,
     category: ImportCategory,
     additionalContext?: string,
+    tenantId?: string,
 ): Promise<OcrResult> {
+    if (!tenantId) {
+        throw new Error('[parsePDFWithOCR] tenantId requis (ADR-008 Phase C — isolation IA)');
+    }
     const prompt = getOcrPrompt(category, additionalContext);
 
     // Étape 1 : extraction texte natif
     const rawText = await extractRawTextFromPDF(file);
 
     if (rawText.length >= 50) {
-        // PDF textuel → on envoie le texte directement
-        const response = await LLMManager.provider.generateText({
-            model: AI_MODELS.fast,
+        // PDF textuel → on envoie le texte directement via le registre tenant (fast context)
+        const registry = await TenantAIRegistry.forTenant(tenantId, CALLER, 'fast');
+        const response = await registry.provider.generateText({
+            model: '',
             userPrompt: `${prompt}\n\nContenu du PDF:\n${rawText.slice(0, 15_000)}`,
             temperature: 0.1,
             maxTokens: 4096,
@@ -77,10 +86,11 @@ export async function parsePDFWithOCR(
         }
     }
 
-    // Étape 2 : PDF scanné → vision LLM
+    // Étape 2 : PDF scanné → vision LLM tenant-scoped
     const base64 = await pdfFirstPageAsBase64(file);
-    const response = await LLMManager.provider.generateFromImage({
-        model: AI_MODELS.visionFast,
+    const visionRegistry = await TenantAIRegistry.forTenant(tenantId, CALLER, 'vision');
+    const response = await visionRegistry.provider.generateFromImage({
+        model: '',
         userPrompt: prompt,
         image: { base64, mimeType: 'application/pdf' },
         temperature: 0.1,

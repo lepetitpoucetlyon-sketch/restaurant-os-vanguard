@@ -1,7 +1,7 @@
 /**
  * Prompts structurants OCR par catégorie d'import.
  * Chaque prompt demande UNIQUEMENT du JSON brut — pas de markdown, pas d'explication.
- * Le LLM utilisé est agnostique (Gemini, Claude, OpenAI via LLMManager).
+ * Le LLM utilisé est agnostique (Gemini, Claude, OpenAI via TenantAIRegistry).
  */
 
 import type { ImportCategory } from '../types';

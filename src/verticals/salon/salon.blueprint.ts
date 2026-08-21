@@ -82,6 +82,24 @@ export const SALON_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Salon Complete Matrix',
     businessLaws: { appointments_enabled: true, node_capacity: 50 },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en salon de coiffure et beauté. Tu aides les coiffeurs et esthéticiennes à gérer les rendez-vous, les forfaits, les praticiens et la caisse.",
+    vocabulary: {
+      "rendez-vous": "booking client, RDV praticien",
+      forfait: "prestation packagée, service coiffure",
+      praticien: "coiffeur, esthéticienne, styliste",
+      cabin: "espace de soin, box beauté",
+      colorisation: "technique couleur cheveux, mèches, balayage",
+      coupe: "coupe de cheveux, stylisme",
+      soin: "traitement capillaire, masque",
+      agenda: "planning praticien, calendrier RDV",
+    },
+    examples: [
+      { user: "Marie Dupont a un RDV demain à 14h", assistant: "Marie Dupont est bien programmée demain à 14h. Prestation prévue : coupe + couleur avec Sophie. Durée estimée : 2h. Voulez-vous confirmer par SMS ?" },
+    ],
+    forbiddenActions: ["Supprimer un RDV sans notifier le client", "Modifier le tarif d\'une prestation en cours sans accord manager"],
+    complianceContext: "RGPD : données clients coiffure soumises au droit d\'accès et suppression. Caisse NF525 obligatoire.",
+  },
   precision: 'L1',
   subVariants: [
     {

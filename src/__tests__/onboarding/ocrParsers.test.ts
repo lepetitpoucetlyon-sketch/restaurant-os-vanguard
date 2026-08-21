@@ -3,22 +3,27 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { LLMManager } from '@/modules/intelligence';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
-// ─── Mock LLMManager ─────────────────────────────────────────────────────────
+// ─── Mock TenantAIRegistry (ADR-008 Phase C) ─────────────────────────────────
 const mockGenerateFromImage = vi.fn();
-LLMManager.provider = {
-  generateFromImage: mockGenerateFromImage,
-  generateText: vi.fn(),
-} as never;
-
-vi.mock('@/modules/intelligence/ia/ai/LLMProviderFactory', () => ({
-  AI_MODELS: { visionFast: 'gemini-1.5-flash', fast: 'gemini-1.5-flash' },
+const mockGenerateText = vi.fn();
+vi.mock('@/kernel/ai/tenant', () => ({
+  TenantAIRegistry: {
+    forTenant: vi.fn(async () => ({
+      provider: {
+        generateFromImage: mockGenerateFromImage,
+        generateText: mockGenerateText,
+      },
+    })),
+  },
 }));
+
 vi.mock('@/lib/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
+
+const TEST_TENANT = 'tenant_test_ocr';
 
 // ─── ocrPrompts ──────────────────────────────────────────────────────────────
 describe('ocrPrompts', () => {
@@ -50,7 +55,7 @@ describe('imageParser', () => {
 
     const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['fake-image-bytes'], 'menu.jpg', { type: 'image/jpeg' });
-    const result = await parseImageWithOCR(file, 'menu');
+    const result = await parseImageWithOCR(file, 'menu', undefined, TEST_TENANT);
 
     expect(result.confidence).toBe('high');
     expect(result.parsed).toEqual(payload);
@@ -65,7 +70,7 @@ describe('imageParser', () => {
 
     const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'menu.png', { type: 'image/png' });
-    const result = await parseImageWithOCR(file, 'menu');
+    const result = await parseImageWithOCR(file, 'menu', undefined, TEST_TENANT);
     expect(result.confidence).toBe('high');
     expect(result.parsed).toEqual(payload);
   });
@@ -75,7 +80,7 @@ describe('imageParser', () => {
 
     const { parseImageWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/imageParser');
     const file = new File(['bytes'], 'brouillon.jpg', { type: 'image/jpeg' });
-    const result = await parseImageWithOCR(file, 'menu');
+    const result = await parseImageWithOCR(file, 'menu', undefined, TEST_TENANT);
     expect(result.confidence).toBe('low');
     expect(result.parsed).toBeNull();
   });
@@ -94,7 +99,7 @@ describe('pdfParser', () => {
     );
     const { parsePDFWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser');
     const file = new File([pdfWithText], 'menu.pdf', { type: 'application/pdf' });
-    const result = await parsePDFWithOCR(file, 'menu');
+    const result = await parsePDFWithOCR(file, 'menu', undefined, TEST_TENANT);
 
     // parsePDFWithOCR retourne OcrResult : { raw, parsed, confidence }
     expect(result).toHaveProperty('raw');
@@ -108,7 +113,7 @@ describe('pdfParser', () => {
     const pdfScan = new TextEncoder().encode('%PDF-1.4\n%%EOF');
     const { parsePDFWithOCR } = await import('@/modules/commerce/acquisition/onboarding/migration/parsers/pdfParser');
     const file = new File([pdfScan], 'scan.pdf', { type: 'application/pdf' });
-    const result = await parsePDFWithOCR(file, 'menu');
+    const result = await parsePDFWithOCR(file, 'menu', undefined, TEST_TENANT);
 
     // parsePDFWithOCR retourne OcrResult : { raw, parsed, confidence }
     expect(result).toHaveProperty('raw');

@@ -112,6 +112,36 @@ export const TenantOverridesSchema = z
 
 export type TenantOverrides = z.infer<typeof TenantOverridesSchema>;
 
+
+// ── AI Settings (enriched, Phase C — ADR-008) ─────────────────────────────────
+
+const AIProviderConfigSchema = z.object({
+    provider: z.enum(['gemini', 'anthropic', 'openai', 'mistral', 'sovereign', 'ollama']),
+    model: z.string(),
+    apiKey: z.string().optional(),
+    baseUrl: z.string().optional(),
+});
+
+/** Configuration IA enrichie d'un tenant (Layer 4 — ADR-008). */
+export const AISettingsSchema = z.object({
+    mode: z.enum(['cloud', 'souverain', 'mix']).default('cloud'),
+    providers: z.object({
+        reasoning: AIProviderConfigSchema,
+        fast: AIProviderConfigSchema,
+        vision: AIProviderConfigSchema,
+    }).optional(),
+    fallbackChain: z
+        .array(z.enum(['gemini', 'anthropic', 'openai', 'mistral', 'sovereign', 'ollama']))
+        .default(['gemini', 'anthropic']),
+    quotas: z.object({
+        monthlyTokens: z.number().optional(),
+        alertThreshold: z.number().optional(),
+    }).optional(),
+    overridePrompts: z.record(z.string(), z.string()).optional(),
+});
+
+export type AISettings = z.infer<typeof AISettingsSchema>;
+
 export const TenantConfigSchema = z
     .object({
         id: z.string(),
@@ -132,6 +162,7 @@ export const TenantConfigSchema = z
             })
             .catchall(z.any())
             .optional(),
+        /** @deprecated Utiliser aiSettings (ADR-008). Lu en backward-compat si aiSettings absent. */
         ai: z
             .object({
                 enabled: z.boolean(),
@@ -140,6 +171,8 @@ export const TenantConfigSchema = z
                 llmApiKey: z.string().optional(),
             })
             .optional(),
+        /** Configuration IA enrichie par tenant (ADR-008 — Layer 4). */
+        aiSettings: AISettingsSchema.optional(),
         branding: TenantThemeSchema.optional(),
         capabilities: z.record(z.string(), z.boolean()).optional(),
         features: z.record(z.string(), z.boolean()).optional(),

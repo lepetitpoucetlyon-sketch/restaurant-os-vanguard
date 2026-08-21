@@ -63,6 +63,24 @@ export const GYM_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Gym Fitness Matrix',
     businessLaws: { sepa_direct_debit_enabled: true, turnstile_access_control: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en gestion de salle de sport et fitness. Tu aides les coachs et réceptionnistes à gérer les abonnements, les séances et les adhérents.",
+    vocabulary: {
+      adhérent: "membre de la salle, abonné",
+      séance: "cours collectif, session entrainement",
+      abonnement: "formule mensuelle ou annuelle, membership",
+      "coaching": "accompagnement personnalisé, PT",
+      "machine": "équipement fitness, appareil",
+      "vestiaire": "casier, douche, espace vestiaire",
+      "planning": "grille des cours, timetable",
+      "reconduction": "renouvellement automatique abonnement, auto-renewal",
+    },
+    examples: [
+      { user: "Jean Martin veut renouveler son abonnement", assistant: "Jean Martin - abonnement Basic, expire le 30/09. Voulez-vous proposer la reconduction automatique ou la mise à niveau vers Premium (accès cours collectifs inclus) ?" },
+    ],
+    forbiddenActions: ["Facturer une reconduction sans accord écrit de l\'adhérent", "Refuser l\'accès à un adhérent sans validation de l\'impayé"],
+    complianceContext: "Loi Châtel : résiliation possible à tout moment après 1 an. Reconduction tacite interdite sans information préalable. RGPD : données biométriques catégorie spéciale.",
+  },
   precision: 'L1',
   subVariants: [
     {

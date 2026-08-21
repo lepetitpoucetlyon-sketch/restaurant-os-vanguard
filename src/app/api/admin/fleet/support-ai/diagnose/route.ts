@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LLMManager, AIProviderRouter, resolveModelId } from '@/modules/intelligence';
+import { MCCAIRegistry } from '@/kernel/ai/mcc';
+import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 
 interface DiagnoseBody {
   tenantId: string;
@@ -19,8 +20,6 @@ interface DiagnosticResult {
   escalate: boolean;
 }
 
-const SYSTEM_PROMPT = `Tu es un agent SAV L0 pour Restaurant OS, un logiciel tout-en-un de gestion de restaurant (POS, KDS, réservations, stocks, comptabilité NF525, HACCP, RH). Tu analyses les tickets support et retournes un diagnostic structuré.`;
-
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');
   if (isDenied(caller)) return caller as NextResponse;
@@ -30,7 +29,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'tenantId et description requis' }, { status: 400 });
   }
 
-  const userPrompt = `Analyse ce problème signalé par un opérateur restaurant.
+  const systemPrompt = MCCAIRegistry.composePrompt('diagnose', {
+    tenantId: body.tenantId.trim(),
+  });
+
+  const userPrompt = `Analyse ce problème signalé par un opérateur.
 Tenant : ${body.tenantId.trim()}
 Description : ${body.description.trim()}
 ${body.screenshotUrl ? `Screenshot : ${body.screenshotUrl}` : ''}
@@ -46,28 +49,28 @@ Retourne UNIQUEMENT un objet JSON valide avec ces champs :
 
   let raw = '';
   try {
-    const response = await LLMManager.provider.generateText({
-      model: resolveModelId('fast'),
-      systemPrompt: SYSTEM_PROMPT,
+    const response = await MCCAIRegistry.provider.generateText({
+      model: MCCAIRegistry.activeModel,
+      systemPrompt,
       userPrompt,
       temperature: 0.2,
       maxTokens: 512,
     });
     raw = response.text;
-  } catch {
-    try {
-      const router = new AIProviderRouter();
-      const routerRes = await router.generateText(
-        `${SYSTEM_PROMPT}\n\n${userPrompt}`,
-        body.tenantId.trim(),
-        { temperature: 0.2, maxTokens: 512 }
-      );
-      raw = routerRes.text;
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Erreur IA';
-      logger.error('[support-ai] LLM failure', { error: msg });
-      return NextResponse.json({ error: `Erreur IA: ${msg}` }, { status: 502 });
-    }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Erreur IA';
+    logger.error('[support-ai] MCC LLM failure', { error: msg });
+
+    // R8 — Alerte critique, jamais silencieux
+    await OpsAlertGateway.send({
+      title: 'Support AI Diagnose Failure',
+      message: `Échec du diagnostic IA pour tenant ${body.tenantId}: ${msg}`,
+      severity: 'critical',
+      source: 'support-ai-diagnose',
+      context: { tenantId: body.tenantId },
+    });
+
+    return NextResponse.json({ error: `Erreur IA: ${msg}` }, { status: 502 });
   }
 
   let diagnostic: DiagnosticResult;

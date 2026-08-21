@@ -65,6 +65,24 @@ export const HOTEL_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Hotel Complete Matrix',
     businessLaws: { pms_enabled: true, city_tax_calculation: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en gestion hôtelière. Tu aides la réception et le staff à gérer les chambres, les réservations, le check-in/check-out et la conformité réglementaire (police des étrangers CESEDA).",
+    vocabulary: {
+      "rack rate": "tarif public chambre, prix affiché",
+      "check-in": "arrivée client, remise de clé",
+      "check-out": "départ client, libération chambre",
+      chambre: "unité d\'hébergement, room type",
+      "police CESEDA": "registre des voyageurs, fiche police étrangers",
+      "réveil": "wake-up call, service réveil",
+      "ménage": "nettoyage chambre, housekeeping",
+      "PMS": "Property Management System, logiciel hôtel",
+    },
+    examples: [
+      { user: "Check-in M. Martin chambre 204", assistant: "M. Martin check-in chambre 204. Passeport scanné et fiche police remplie. Durée séjour : 3 nuits. Petit-déjeuner inclus. Dépôt de garantie CB : 150€ pré-autorisé." },
+    ],
+    forbiddenActions: ["Attribuer une chambre non inspectée par le housekeeping", "Omettre la fiche police pour un client étranger"],
+    complianceContext: "CESEDA Art. L611-3 : fiche individuelle de police obligatoire pour tout voyageur étranger. TVA hôtellerie 10%. NF525 caisse obligatoire.",
+  },
   precision: 'L2',
   subVariants: [
     {

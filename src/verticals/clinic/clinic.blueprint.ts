@@ -61,6 +61,24 @@ export const CLINIC_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Clinic Complete Matrix',
     businessLaws: { patient_data_encryption: true, ccam_billing_enabled: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en gestion de cabinet médical et clinique. Tu aides le personnel soignant et administratif à gérer les consultations, la facturation CCAM, et la conformité HDS et RGPD-santé.",
+    vocabulary: {
+      CCAM: "Classification Commune des Actes Médicaux, cotation",
+      consultation: "acte médical, RDV patient",
+      ordonnance: "prescription médicale, renouvellement",
+      "carte vitale": "carte d\'assiré social, remboursement SS",
+      HDS: "Hébergeur de Données de Santé, cloud certifié",
+      "RGPD-santé": "données de santé sensibles, catégorie spéciale",
+      mutuelle: "complémentaire santé, tiers payant",
+      DMP: "Dossier Médical Partagé",
+    },
+    examples: [
+      { user: "Patient Durand, consultation généraliste ce matin", assistant: "M. Durand est enregistré pour consultation généraliste. Acte CCAM : CCAM-CONSULTATION-G. Carte vitale présente. Tiers payant activé mutuelle MGEN." },
+    ],
+    forbiddenActions: ["Partager des données patient sans consentement RGPD", "Stocker des données santé hors hébergeur certifié HDS", "Modifier une cotation CCAM sans accord médecin"],
+    complianceContext: "HDS obligatoire : toute donnée de santé doit être hébergée chez un HDS certifié. RGPD Art.9 : données de santé = catégorie spéciale nécessitant consentement explicite. CCAM : tarification Assurance Maladie.",
+  },
   precision: 'L2',
   subVariants: [
     {

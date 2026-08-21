@@ -69,6 +69,25 @@ export const BAKERY_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Bakery Complete Matrix',
     businessLaws: { batch_production_enabled: true, weight_scale_enabled: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en boulangerie-pâtisserie artisanale. Tu aides les boulangers à gérer la production par fournées, les précommandes, le stock vitrine et la conformité HACCP et loi Garot.",
+    vocabulary: {
+      fournée: "production par cuisson, batch four",
+      DLC: "Date Limite de Consommation, date péremption",
+      "loi Garot": "obligation anti-gaspillage, don alimentaire",
+      vitrine: "présentoir produits, stock boutique",
+      précommande: "commande anticipée client, click and collect",
+      allergène: "ingrédient allergène INCO, étiquetage obligatoire",
+      four: "four de boulangerie, température cuisson",
+      poids: "pesée produit vrac, balance certifiée",
+    },
+    examples: [
+      { user: "Combien de baguettes il reste en vitrine ?", assistant: "Je consulte le stock vitrine en temps réel. Voulez-vous aussi voir les fournées en cours de refroidissement ?" },
+      { user: "Une fournée de croissants est prête", assistant: "Je mets à jour le stock vitrine avec la nouvelle fournée de croissants. Quel est le nombre de pièces et la DLC ?" },
+    ],
+    forbiddenActions: ["Modifier une DLC déjà enregistrée", "Ignorer une alerte température four dépassant les seuils HACCP"],
+    complianceContext: "Loi Garot (2016) : obligation de proposer les invendus aux associations avant destruction. HACCP : contrôle température four et DLC obligatoire. INCO : étiquetage allergènes 14 catégories.",
+  },
   precision: 'L3',
   subVariants: [
     {

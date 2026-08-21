@@ -66,6 +66,21 @@ export function SupportAIPanel() {
   const [incomingTickets, setIncomingTickets] = useState<LiveTicket[]>([]);
   const [loadingTickets, setLoadingTickets] = useState(false);
 
+  // Dynamic provider label from MCCAIRegistry
+  const [providerLabel, setProviderLabel] = useState("IA");
+
+  useEffect(() => {
+    authedFetch("/api/admin/fleet/support-ai/provider-info")
+      .then(res => res.ok ? res.json() : null)
+      .then((data: { activeProvider?: string; activeModel?: string } | null) => {
+        if (data?.activeProvider) {
+          const name = data.activeProvider.charAt(0).toUpperCase() + data.activeProvider.slice(1);
+          setProviderLabel(data.activeModel ? `${name} (${data.activeModel})` : name);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const fetchLiveTickets = useCallback(async () => {
     setLoadingTickets(true);
     try {
@@ -151,7 +166,7 @@ export function SupportAIPanel() {
           </div>
           <div>
             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-text-primary">SAV L0 — IA & SOS Caisse</h3>
-            <p className="text-xs text-secondary">Diagnostic automatique en service • Gemini Flash</p>
+            <p className="text-xs text-secondary">Diagnostic automatique en service • {providerLabel}</p>
           </div>
         </div>
 
@@ -243,7 +258,7 @@ export function SupportAIPanel() {
           {isLoading ? (
             <><Loader2 className="w-4 h-4 animate-spin" />Analyse en cours…</>
           ) : (
-            <><BotMessageSquare className="w-4 h-4" />Diagnostiquer avec Gemini</>
+            <><BotMessageSquare className="w-4 h-4" />Diagnostiquer avec IA</>
           )}
         </button>
       </div>

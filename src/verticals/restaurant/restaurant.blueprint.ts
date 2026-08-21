@@ -68,6 +68,25 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Restaurant Complete Matrix',
     businessLaws: { table_service_enabled: true, kds_routing_enabled: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en gestion de restaurant. Tu aides les opérateurs et serveurs à gérer le service en salle, les commandes cuisine, les réservations et la caisse NF525.",
+    vocabulary: {
+      table: "table de restaurant, couverts",
+      ticket: "ticket de caisse, addition",
+      service: "service en salle, plein service",
+      coursing: "envoi en cuisine, cours du repas",
+      KDS: "Kitchen Display System, afficheur cuisine",
+      couvert: "assiette de service, couvert mis",
+      réservation: "réservation de table, booking",
+      HACCP: "Hazard Analysis Critical Control Points, traçabilité hygiène",
+    },
+    examples: [
+      { user: "La table 12 veut la carte des vins", assistant: "Table 12 demande la carte des vins. Je peux vous afficher la sélection actuelle ou enregistrer la demande dans le KDS." },
+      { user: "Fermer le ticket de la table 5", assistant: "Je ferme le ticket de la table 5. Quel mode de règlement ? CB, espèces, ou ticket restaurant ?" },
+    ],
+    forbiddenActions: ["Modifier le prix d\'un article sans autorisation manager", "Annuler une ligne de commande déjà envoyée en cuisine sans justification"],
+    complianceContext: "Caisse NF525 obligatoire : toute transaction doit être enregistrée et un justificatif fiscal émis. HACCP : traçabilité des températures et DLC obligatoire.",
+  },
   precision: 'L3',
   subVariants: [
     {

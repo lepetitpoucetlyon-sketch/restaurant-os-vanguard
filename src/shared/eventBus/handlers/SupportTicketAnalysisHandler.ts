@@ -2,13 +2,12 @@
 import { NexusEventBus, NexusEventPayload } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
-import { LLMManager, AIProviderRouter, AI_MODELS } from '@/modules/intelligence';
+import { MCCAIRegistry } from '@/kernel/ai/mcc';
+import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { TenantConfigSchema } from '@/modules/system';
 import { SupportDraftSchema } from '@/shared/schemas';
 import { toError } from "@/lib/toError";
-
-const SYSTEM_PROMPT = `Tu es un agent SAV L0 pour Restaurant OS, un logiciel tout-en-un de gestion de restaurant (POS, KDS, réservations, stocks, comptabilité NF525, HACCP, RH). Un opérateur restaurant vient de soumettre une requête depuis sa propre plateforme. Tu analyses cette requête à la lumière du contexte réel de son instance (version, modules actifs, overrides) et tu prépares un BROUILLON structuré — jamais une action appliquée directement. Un opérateur MCC validera, corrigera ou refusera ce brouillon.`;
 
 /**
  * Contexte réduit injecté dans le prompt : uniquement ce qui aide au
@@ -69,27 +68,33 @@ async function analyze(payload: NexusEventPayload<'support.ticket_submitted'>): 
   try {
     const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
     const contextSnapshot = buildContextSnapshot(tenantId, rawConfig);
+
+    const systemPrompt = MCCAIRegistry.composePrompt('supportDraft', {
+      tenantId,
+    });
     const userPrompt = buildUserPrompt(description, screenshotUrl, contextSnapshot);
 
     let rawText = '';
     try {
-      const response = await LLMManager.provider.generateText({
-        model: AI_MODELS.reasoning,
-        systemPrompt: SYSTEM_PROMPT,
+      const response = await MCCAIRegistry.provider.generateText({
+        model: MCCAIRegistry.activeModel,
+        systemPrompt,
         userPrompt,
         temperature: 0.2,
         maxTokens: 1024,
         responseMimeType: 'application/json',
       });
       rawText = response.text;
-    } catch {
-      const router = new AIProviderRouter();
-      const fallbackRes = await router.generateText(
-        `${SYSTEM_PROMPT}\n\n${userPrompt}`,
-        tenantId,
-        { temperature: 0.2, maxTokens: 1024 }
-      );
-      rawText = fallbackRes.text;
+    } catch (llmErr) {
+      // R8 — Alerte critique, jamais silencieux
+      await OpsAlertGateway.send({
+        title: 'Support Ticket Analysis LLM Failure',
+        message: `Échec analyse ticket ${ticketId} pour tenant ${tenantId}: ${toError(llmErr).message}`,
+        severity: 'critical',
+        source: 'support-ticket-analysis',
+        context: { ticketId, tenantId },
+      });
+      throw llmErr;
     }
 
     const clean = rawText.replace(/^```json\s*/i, '').replace(/\s*```$/, '').trim();
@@ -124,7 +129,7 @@ async function analyze(payload: NexusEventPayload<'support.ticket_submitted'>): 
       key: `supportTickets.${ticketId}`,
       after: draft,
       description: draft.title,
-      appliedBy: 'ai-agent:gemini',
+      appliedBy: `ai-agent:${MCCAIRegistry.activeProviderName}`,
       scope: 'tenant',
       category: 'CUSTOM',
     });

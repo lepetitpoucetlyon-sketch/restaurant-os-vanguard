@@ -22,6 +22,7 @@
 
 | Session | Périmètre | Date | Status |
 |---|---|---|---|
+| `ai-scope-isolation-finish` | Phase C+E ADR-008 : 5 callers tenant migrés, TenantAIConfigPanel, tests multi-vertical + E2E (135 tests IA verts) | 2026-08-21 | terminée |
 | `h2-h3-certif` | Chantiers H2 & H3 : API v1, QR Ordering, Multi-Verticales | 2026-08-20 | terminée |
 | `zero-cycles-sovereignty` | Éradication totale des 427 cycles de dépendances (Madge = 0) | 2026-08-20 | terminée |
 | `code-splitting-dlq-rbac` | Chantiers γ-7, β-2, γ-3 (Code Splitting, DLQ, Matrice RBAC) | 2026-08-19 | terminée |

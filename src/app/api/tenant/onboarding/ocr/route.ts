@@ -11,13 +11,7 @@ import {
   parsePDFWithOCR,
   type ImportCategory,
 } from '@/modules/commerce';
-import { LLMManager, createLLMProvider } from '@/modules/intelligence';
 import { toError } from "@/lib/toError";
-
-// Bootstrap du provider si pas encore fait
-if (!LLMManager['_provider']) {
-    LLMManager.provider = createLLMProvider();
-}
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10 Mo
 
@@ -44,8 +38,8 @@ export async function POST(req: NextRequest) {
         const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
 
         const result = isPDF
-            ? await parsePDFWithOCR(file, category, context ?? undefined)
-            : await parseImageWithOCR(file, category, context ?? undefined);
+            ? await parsePDFWithOCR(file, category, context ?? undefined, caller.tenantId)
+            : await parseImageWithOCR(file, category, context ?? undefined, caller.tenantId);
 
         return NextResponse.json({
             ok: result.confidence !== 'low',

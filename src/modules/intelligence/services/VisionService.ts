@@ -97,9 +97,10 @@ export const VisionService = {
     },
 
     /**
-     * Compares a prepared plate photo with the recipe gold standard via Gemini Vision.
+     * Compares a prepared plate photo with the recipe gold standard.
+     * Serveur : requiert tenantId (isolation IA — ADR-008 Phase C).
      */
-    async comparePlateToStandard(plateBase64: string, _standardBase64: string, recipeName: string): Promise<PlateAuditResult> {
+    async comparePlateToStandard(plateBase64: string, _standardBase64: string, recipeName: string, tenantId?: string): Promise<PlateAuditResult> {
         logger.info(`VisionService: Auditing plate for ${recipeName}...`);
 
         if (typeof window !== 'undefined') {
@@ -113,12 +114,20 @@ export const VisionService = {
             throw new Error(`Plate audit failed: ${result.error ?? 'unknown error'}`);
         }
 
-        // Server-side: call LLMManager directly
+        // Server-side: TenantAIRegistry
+        if (!tenantId) {
+            throw new Error('[VisionService.comparePlateToStandard] tenantId requis côté serveur (ADR-008)');
+        }
         try {
-            const { LLMManager, AI_MODELS } = await import('@/modules/intelligence/ia/ai');
+            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
+            const registry = await TenantAIRegistry.forTenant(
+                tenantId,
+                'modules/intelligence/services/VisionService',
+                'vision',
+            );
             const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
-            const response = await LLMManager.provider.generateFromImage({
-                model: AI_MODELS.visionFast,
+            const response = await registry.provider.generateFromImage({
+                model: '',
                 systemPrompt: `Tu es un chef de cuisine expert en contrôle qualité. Analyse la photo d'un plat et réponds UNIQUEMENT en JSON valide.`,
                 userPrompt: `Évalue ce plat "${recipeName}". Réponds en JSON: {"score": number (1-10), "isCompliant": boolean, "feedback": string[], "detectedIssues": string[]}`,
                 image: { base64: imageData, mimeType: 'image/jpeg' },
@@ -135,16 +144,25 @@ export const VisionService = {
     },
 
     /**
-     * Verifies a HACCP task execution via photo
+     * Verifies a HACCP task execution via photo.
+     * Serveur uniquement : requiert tenantId (isolation IA — ADR-008 Phase C).
      */
-    async verifyHACCPTask(photoBase64: string, taskDescription: string): Promise<HACCPVerification> {
+    async verifyHACCPTask(photoBase64: string, taskDescription: string, tenantId: string): Promise<HACCPVerification> {
         logger.info(`VisionService: Verifying HACCP task: ${taskDescription}...`);
 
+        if (!tenantId) {
+            throw new Error('[VisionService.verifyHACCPTask] tenantId requis (ADR-008)');
+        }
         try {
-            const { LLMManager } = await import('@/modules/intelligence/ia/ai');
+            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
+            const registry = await TenantAIRegistry.forTenant(
+                tenantId,
+                'modules/intelligence/services/VisionService',
+                'vision',
+            );
             const imageData = photoBase64.replace(/^data:image\/\w+;base64,/, '');
-            const response = await LLMManager.provider.generateFromImage({
-                model: 'gemini-1.5-flash',
+            const response = await registry.provider.generateFromImage({
+                model: '',
                 userPrompt: `Vérifie si cette image atteste du respect de la tâche HACCP suivante : "${taskDescription}". Réponds au format JSON avec {"isCompliant": boolean, "confidence": number, "observation": string}.`,
                 image: { base64: imageData, mimeType: 'image/jpeg' },
                 temperature: 0.2,

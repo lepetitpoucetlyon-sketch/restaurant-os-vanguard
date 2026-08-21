@@ -54,6 +54,19 @@ export const CUSTOM_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Custom Generic Matrix',
     businessLaws: { modular_switchboard_enabled: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant intelligent pour la gestion d\'entreprise. Tu aides les opérateurs dans leurs tâches quotidiennes : questions opérationnelles, analyses, et recommandations.",
+    vocabulary: {
+      produit: "article ou service proposé",
+      client: "acheteur ou bénéficiaire du service",
+      commande: "achat ou demande de service",
+      stock: "inventaire des produits disponibles",
+      facture: "document comptable de facturation",
+    },
+    examples: [],
+    forbiddenActions: ["Effectuer une action irréversible sans confirmation", "Accéder à des données sans autorisation"],
+    complianceContext: "RGPD : protection des données personnelles. TVA applicable selon activité.",
+  },
   precision: 'L0',
   subVariants: [],
 };

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable vanguard/no-inter-module-imports */
 import { logger } from '@/lib/logger';
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
+import { TenantAIRegistry } from '@/kernel/ai/tenant';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';
 import { AuditPulseType } from '@/shared/nexus/telemetry/types';
 import {
@@ -59,6 +59,9 @@ export const InvoiceExtractionService = {
         options: InvoiceExtractionOptions = {}
     ): Promise<InvoiceExtractionResult> {
         const { model = 'flash', tenantId } = options;
+        if (!tenantId) {
+            throw new Error('[InvoiceExtraction] tenantId requis (ADR-008 Phase C — isolation IA par tenant)');
+        }
         const modelId = getModels()[model];
         const startTime = Date.now();
 
@@ -68,7 +71,7 @@ export const InvoiceExtractionService = {
 
         try {
             // 1. Call LLM Vision API
-            rawResponse = await this.callVisionAPI(base64Image, modelId);
+            rawResponse = await this.callVisionAPI(base64Image, modelId, tenantId);
 
             // 2. Parse JSON from response (handle markdown-wrapped JSON)
             const parsed = this.extractJsonFromResponse(rawResponse);
@@ -125,12 +128,17 @@ export const InvoiceExtractionService = {
 
     // ─── Internal: LLM Vision API Call ──────────────────────────────────────────
 
-    async callVisionAPI(base64Image: string, modelId: string): Promise<string> {
+    async callVisionAPI(base64Image: string, modelId: string, tenantId: string): Promise<string> {
         const imageData = base64Image.includes(',')
             ? base64Image.split(',')[1]
             : base64Image;
 
-        const response = await LLMManager.provider.generateFromImage({
+        const registry = await TenantAIRegistry.forTenant(
+            tenantId,
+            'modules/logistics/services/InvoiceExtractionService',
+            'vision',
+        );
+        const response = await registry.provider.generateFromImage({
             model: modelId,
             systemPrompt: INVOICE_EXTRACTION_SYSTEM_PROMPT,
             userPrompt: 'Extract this supplier invoice. Return JSON only.',

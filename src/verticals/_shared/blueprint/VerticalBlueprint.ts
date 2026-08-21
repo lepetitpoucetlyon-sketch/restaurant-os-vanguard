@@ -15,6 +15,7 @@
  */
 
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
+import type { VerticalAIPrompts } from '@/kernel/ai/core/types';
 import {
     type CapabilityKey,
     type CapabilitySet,
@@ -114,6 +115,12 @@ export interface VerticalBlueprint {
     subVariants?: readonly SubVariantBlueprint[];
     /** Substance sectorielle (Agent d'Étude) — requise pour L2/L3. */
     substance?: SectorStudy;
+    /**
+     * Bloc IA du blueprint — injecté automatiquement par PromptComposer (Layer 3).
+     * Facultatif mais requis pour L2/L3 si l'assistant IA est activé.
+     * R2 : Ce bloc est la SEULE manière d'injecter du vocabulaire vertical dans le kernel IA.
+     */
+    aiPrompts?: VerticalAIPrompts;
     /** Dépendances inter-piliers déclarées par le plugin (defaut : dérivées des capabilities). */
     dependencies?: readonly string[];
 }

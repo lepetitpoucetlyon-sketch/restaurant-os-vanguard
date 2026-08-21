@@ -66,23 +66,17 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'COMPARE_PLATE') {
-      const { LLMManager } = await import('@/modules/intelligence');
-      const { AI_MODELS } = await import('@/modules/intelligence');
-      const imageData = payload.base64Image.includes(',') ? payload.base64Image.split(',')[1] : payload.base64Image;
-      const response = await LLMManager.provider.generateFromImage({
-        model: AI_MODELS.visionFast,
-        systemPrompt: `Tu es un chef de cuisine expert en contrôle qualité. Analyse la photo d'un plat et réponds UNIQUEMENT en JSON valide.`,
-        userPrompt: `Évalue ce plat "${payload.recipeName}". Réponds en JSON: {"score": number (1-10), "isCompliant": boolean, "feedback": string[], "detectedIssues": string[]}`,
-        image: { base64: imageData, mimeType: 'image/jpeg' },
-        temperature: 0.2,
-        maxTokens: 512,
-        responseMimeType: 'application/json',
-      });
+      const { VisionService } = await import('@/modules/intelligence/services/VisionService');
       try {
-        const data = JSON.parse(response.text) as unknown;
+        const data = await VisionService.comparePlateToStandard(
+          payload.base64Image,
+          '',
+          payload.recipeName,
+          caller.tenantId,
+        );
         return NextResponse.json({ success: true, data });
-      } catch {
-        return NextResponse.json({ success: false, error: 'JSON parse error', raw: response.text }, { status: 500 });
+      } catch (err) {
+        return NextResponse.json({ success: false, error: err instanceof Error ? err.message : 'unknown error' }, { status: 500 });
       }
     }
 

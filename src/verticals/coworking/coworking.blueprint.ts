@@ -59,6 +59,24 @@ export const COWORKING_BLUEPRINT: VerticalBlueprint = {
     metadataName: 'Coworking Matrix',
     businessLaws: { desk_booking_workflow: true, access_control_enabled: true },
   },
+  aiPrompts: {
+    systemPersona: "Tu es un assistant expert en gestion d\'espace de coworking. Tu aides les community managers à gérer les espaces, les entreprises membres et les réservations de salles.",
+    vocabulary: {
+      "hot-desk": "poste non attitré, flex office",
+      "bureau privatif": "espace bureau dédié, private office",
+      "salle de réunion": "meeting room, espace conférence",
+      membre: "coworker, entreprise cliente",
+      "badge": "accès sécurisé, contrôle d\'accès",
+      "domiciliation": "adresse commerciale, siège social",
+      "coworker": "travailleur indépendant, remote worker",
+      "offre": "formule abonnement espace, plan tarifaire",
+    },
+    examples: [
+      { user: "Réserver la salle Einstein pour demain 14h", assistant: "Salle Einstein disponible demain de 14h à 18h (capacité 8p, écran TV, visio). Qui sera le responsable de la réservation et pour combien de participants ?" },
+    ],
+    forbiddenActions: ["Donner accès à un espace à une entreprise avec impayé", "Sous-louer un bureau sans autorisation du propriétaire"],
+    complianceContext: "RGPD : badges et accès traçables, conservation 1 an max. TVA 20% services coworking. Domiciliation : obligation légale KBis et convention de domiciliation.",
+  },
   precision: 'L1',
   subVariants: [],
 };

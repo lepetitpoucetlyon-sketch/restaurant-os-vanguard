@@ -282,14 +282,29 @@ export const MacroBrain = {
     /**
      * 🧠 ORACLE AUDIT BRIDGE (Industrial Grade)
      * Direct interface for Strategic AI Analysis.
+     * Requiert tenantId (isolation IA par tenant — ADR-008 Phase C).
      */
-    async getOracleAudit(prompt: string, context: Record<string, import("@/shared/nexus-contract").SovereignValue>): Promise<string> {
+    async getOracleAudit(
+        prompt: string,
+        context: Record<string, import("@/shared/nexus-contract").SovereignValue>,
+        tenantId: string,
+    ): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);
 
+        if (!tenantId) {
+            logger.error('[MacroBrain] Oracle Audit refusé : tenantId manquant (ADR-008)');
+            return "Analyse indisponible : tenantId requis.";
+        }
+
         try {
-            const { LLMManager } = await import('@/modules/intelligence/ia/ai');
-            const response = await LLMManager.provider.generateText({
-                model: 'gemini-1.5-pro',
+            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
+            const registry = await TenantAIRegistry.forTenant(
+                tenantId,
+                'modules/intelligence/services/MacroBrain',
+                'reasoning',
+            );
+            const response = await registry.provider.generateText({
+                model: '',
                 userPrompt: `${prompt}\n\nContext: ${JSON.stringify(context)}`,
                 temperature: 0.7,
                 maxTokens: 1024,
