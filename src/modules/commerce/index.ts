@@ -1,3 +1,6 @@
+// Hooks souverains (ADR-012 Phase 4)
+export * from './hooks';
+
 // Domaine : acquisition (marketing, SEO, landing, onboarding)
 export * from './acquisition/marketing';
 export * from './acquisition/marketing/components/crm';
