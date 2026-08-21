@@ -410,3 +410,206 @@ Bloqueurs opérationnels (perte cash récurrente) :
 
 **Réf. sources** : `docs/archive/anglemort.md` (théorique, 1392 lignes, 100+ items),
 codebase snapshot `81090dc53` + `79deee9d5`.
+
+---
+
+# 🏛️ SECTION 4 — Matrice Universelle 101-110 (Partie 12 anglemort.md)
+
+Ces 10 items sont déjà **pré-structurés** selon les 4 piliers d'ingénierie
+(EventBus + DLQ + RBAC + Settings). Grâce à ADR-014, on peut les implémenter
+directement avec `OutboxPriority`, `AuditLogger` et `CrossScopeAuthority`.
+
+| # | Domaine | Event | DLQ | RBAC | Settings | Statut code | Criticité |
+|---|---|---|---|---|---|---|---|
+| M101 | **Arrival Flow Pacing** — cadence arrivées par tranche 15 min | `commerce.reservation_pacing_saturated` | Outbox Backoff Retry | `reservations.manage_pacing` (Manager + PIN) | `maxCoversPerPacingSlot`, `pacingSlotMinutes`, `pacingAutoThrottleOnKDSDelay` | ⛔ Absent | 🟠 HAUT |
+| M102 | **Table Split No-Show partiel** — libérer demi-table 8→3 | `ops.table_split_released` | Local Outbox Fallback | `reservations.force_split` (Chef rang) | `autoPromptSplitOnPartialCheckIn`, `partialNoShowGracePeriodMinutes` | ⛔ Absent | 🟠 HAUT |
+| M103 | **SMS Silent Drop international** — E.164 + fallback email | `system.sms_delivery_failed` | Auto Fallback Email DLQ | `reservations.view_pii` (Chef rang) | `smsStrictE164Validation`, `smsFallbackToEmail`, `smsInternationalAllowed` | 🚧 Webhook Twilio inbound existe, pas de fallback outbound | 🟠 HAUT |
+| M104 | **CAS Google Reserve vs Widget Web** — collision 19h59m58s | `commerce.table_lock_acquired` | Auto-release lock 5 min | `reservations.resolve_conflict` (Manager) | `googleReserveHoldTimeoutMinutes`, `conflictResolutionStrategy` | ⛔ Pas de lock CAS atomique | 🔴 CRITIQUE (surbooking destructeur) |
+| M105 | **SMS GSM-7 vs UCS-2 trap** — emoji multiplie facture ×4 | `system.sms_segment_warning` | GSM-7 Sanitizer Filter | `reservations.edit_templates` (Manager) | `smsForceGSM7Sanitization`, `smsMaxSegmentsAllowed` | ⛔ Absent | 🟡 MOYEN (facture ×4 silencieuse) |
+| M106 | **Anti-bruteforce cancel link** — HMAC SHA-256 constant-time | `security.unauthorized_access_attempt` | IP Throttle + DLQ Audit | `reservations.regen_token` (Manager) | `selfServiceCancelWindowHours`, `requirePhoneLastDigitsOnCancel` | ⛔ Aucune signature HMAC | 🔴 CRITIQUE (annulation en masse concurrent) |
+| M107 | **Anti-DST timezone touriste** — NY 15h ≠ Lyon 20h | `commerce.reservation_timezone_normalized` | UTC Absolute Guard | `system.set_timezone` (Directeur) | `tenantTimezone: 'Europe/Paris'`, `displayBookingTimezoneBadge` | ⛔ Fuseau tenant non forcé | 🟠 HAUT |
+| M108 | **Turnover Collision 2e service** — table lente 21h25 vs 21h30 | `ops.turnover_delay_predicted` | KDS Stage Heuristic Ping | `reservations.reassign_tbl` (Chef rang) | `turnoverBufferMinutes`, `overstayAlertThresholdMinutes` | ⛔ Durée service = 120 min théorique fixe | 🟠 HAUT (double service chaotique) |
+| M109 | **Giftcard double-spend web vs caisse** — bon 100 € réutilisé | `finance.giftcard_locked` | NF525 Seal Hold Rollback | `marketing.issue_giftcard` (Manager + PIN) | `allowPartialGiftCardRedemption`, `giftCardValidityMonths` | ⛔ Pas de verrou déterministe temps réel | 🔴 CRITIQUE (perte cash directe) |
+| M110 | **Late allergen change post-envoi KDS** — allergie ajoutée 15 min avant arrivée | `kds.critical_allergen_interception` | Flash Buzzer DLQ Alarm | `kds.override_allergen` (Chef cuisine + PIN) | `allergenLateChangeThresholdHours`, `forceKDSAudioAlertOnAllergenUpdate` | ⛔ Absent (voir aussi L11, B4) | 🔴 CRITIQUE (choc anaphylactique) |
+
+---
+
+## Matrice RBAC granulaire réservations (Section 3 Partie 12)
+
+Extraite du doc archivé — définit qui peut faire quoi + code PIN obligatoire.
+À câbler via `useActionPermission(domain, action)` (composant à créer).
+
+| Action | Rôle min | PIN | Angle mort adressé |
+|---|---|---|---|
+| `reservations.view` | Hôtesse / Serveur | Non | Consultation liste |
+| `reservations.create` | Hôtesse / Serveur | Non | Nouvelle réservation |
+| `reservations.modify` | Hôtesse / Serveur | Non | Date/heure/couverts |
+| `reservations.cancel` | Chef de rang | Non | Annulation client |
+| `reservations.manage_pacing` | Manager | **Oui** | M101 |
+| `reservations.force_split` | Chef de rang | Non | M102 |
+| `reservations.edit_templates` | Manager | Non | M105 |
+| `reservations.reconfirm_guest` | Hôtesse | Non | Rappel manuel |
+| `reservations.view_pii` | Chef de rang | Non | M103 (RGPD scope) |
+| `reservations.override_capacity` | Manager | **Oui** | Forçage surbooking |
+| `reservations.apply_penalty` | Manager | **Oui** | Débit caution no-show |
+
+---
+
+# 🧩 SECTION 5 — Compléments tableau 100 (items non encore couverts)
+
+Items du tableau périodique (Partie 10 anglemort.md) qui ne sont pas déjà
+dans les sections 1-3.
+
+## 5.1 — Salle / encaissement
+
+| # tableau | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T08 | **Grivèlerie / Dine & Dash** — table de 6 part sans payer | ⛔ Aucun workflow "table walk-out" avec dépôt de plainte auto | 🟡 MOYEN |
+| T10 | **Note de frais antidatée** — client demande facture 15 j plus tard avec date décalée | ⛔ Aucun garde-fou (voir L23 : facture complémentaire nominative) | 🟠 HAUT |
+
+## 5.2 — Cuisine / production
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T16 | **Viande non reposée post-grill** — sortie four à cœur immédiat → jus perdus | ⛔ Fiche recette sans temps repos obligatoire | 🟢 BAS |
+| T17 | **Synchronisation Chaud / Froid** — entrées arrivent avant plats chauds | 🚧 Existe partiellement dans micro-séquençage KDS (voir L12) | 🟡 MOYEN |
+| T26 | **Décongélation à l'eau chaude** (interdit sanitaire) | ⛔ Aucun contrôle protocole décongélation | 🟠 HAUT |
+
+## 5.3 — Hygiène / HACCP
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T28 | **Nuisibles / raticide** — traces rongeurs, absence traitement mensuel | ⛔ Aucun registre 3D (Dératisation/Désinsectisation/Désinfection) | 🟠 HAUT |
+| T29 | **Produit d'entretien mal rincé** — résidu javel sur plan de travail | ⛔ Aucun contrôle "cycle rinçage validé" | 🟠 HAUT |
+| T30 | **Contrôle vétérinaire DDPP** — inspecteur DDPP arrive inopiné | ⛔ Pas de "mode contrôle sanitaire" 1-clic (equivalent L25 pour DGFiP) | 🔴 CRITIQUE (fermeture administrative) |
+
+## 5.4 — Fiscal / compta
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T36 | **Requalification "geste commercial"** en pratique commerciale trompeuse | ⛔ Voir L4 (offert directeur non tracé) | 🟠 HAUT |
+| T38 | **Facture cession inter-sociétés** — 2 restos même groupe, refacturation | ⛔ Aucun workflow B2B intra-groupe | 🟡 MOYEN |
+
+## 5.5 — Livraison / dark kitchen
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T44 | **Packaging ramollit frites** — barquettes non thermiques | ⛔ Aucun catalogue packaging + coût imputé | 🟢 BAS |
+| T45 | **Suspension compte algorithmique** Uber Eats (fake reasons) | ⛔ Aucun watchdog qui alerte si taux notes <4.5 | 🟠 HAUT (canal 30 % CA coupé sans préavis) |
+| T46 | **Annulation commande en route** par le client via Uber | ⛔ La cuisine continue à préparer, perte matière | 🟡 MOYEN |
+| T47 | **Erreur d'adresse client** — livreur perdu | ⛔ Aucun scoring adresse | 🟢 BAS |
+| T48 | **Alerte allergène delivery** — pas transmise dans la note delivery | ⛔ Voir L11 (INCO par lot) | 🔴 CRITIQUE |
+| T49 | **Mauvais taux TVA livraison** — TVA 5,5 % à emporter vs 10 % sur place | ⛔ Ambiguïté taxRate selon `consumptionMode` | 🟠 HAUT |
+| T50 | **Litige "repas froid"** — remboursement Uber prélevé sans preuve | ⛔ Aucune preuve photo horodatée à la sortie cuisine | 🟡 MOYEN |
+
+## 5.6 — Logistique / achats
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T55 | **Rupture cut-off dimanche 23h** — commande passée après horaire fournisseur | ⛔ Aucun calendrier cut-off par fournisseur | 🟡 MOYEN |
+| T56 | **Franco de port non optimisé** — commande 189 € au lieu de 200 € = 15 € frais | ⛔ Aucune suggestion "ajouter 11 €" pour franco | 🟢 BAS |
+| T57 | **DLC secondaire J+3 non étiquetée** — reste ouvert non daté | ⛔ Aucun label J+3 auto à l'ouverture emballage | 🟠 HAUT |
+| T59 | **Dérive prix fournisseur > 5 %** — hausse silencieuse d'un article | ⛔ Aucun watchdog "alerte si prix +5 % vs mercuriale précédente" | 🟠 HAUT |
+| T60 | **Transfert bar ➔ cuisine non tracé** — bouteille passée en cuisine pour flambage | ⛔ Aucune trace inter-postes | 🟡 MOYEN |
+
+## 5.7 — RH / droit du travail (compléments)
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T64 | **Amplitude shift > 13h** interdite HCR | ⛔ Voir L36 (bloc planning 11h repos) | 🟠 HAUT |
+| T67 | **Majoration heures de nuit** (22h-06h HCR : +30 %) | ⛔ NexusPayrollEngine squelette (voir G1) | 🟠 HAUT |
+| T68 | **Accident du travail brûlure huile** — déclaration CPAM 48h obligatoire | ⛔ Aucun workflow AT en 3 clics | 🟠 HAUT |
+| T69 | **Fausse déclaration repos hebdo** — manager coche sans preuve | ⛔ Aucune preuve horodatée | 🟡 MOYEN |
+
+## 5.8 — Matériel physique (compléments)
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T78 | **Saut de phase électrique** four triphasé | ⛔ Aucune détection ampérage | 🟡 MOYEN |
+| T79 | **Décrochage Bluetooth imprimante** en plein service | ⛔ Voir L41 (fallback routing absent) | 🟠 HAUT |
+
+## 5.9 — Cyber / réputation (compléments)
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T88 | **Chantage "1 étoile Google"** — client menace en salle si pas de geste co | ⛔ Aucun processus escalade + preuve JET | 🟡 MOYEN |
+| T89 | **Faux corps étranger dans plat** — arnaque professionnelle | ⛔ Aucune vidéo dressage horodatée | 🟠 HAUT |
+| T90 | **Fuite emails RGPD** — export CSV vers un ancien salarié | ⛔ Voir L56 (rate-limit consultation VIP absent) | 🟠 HAUT |
+
+## 5.10 — Environnement / flux (compléments)
+
+| # | Angle mort | Statut | Criticité |
+|---|---|---|---|
+| T94 | **Éthylotest de nuit absent** — obligation ERP bars > 22h | ⛔ Aucun registre contrôle | 🟠 HAUT (amende + fermeture) |
+| T95 | **Asphyxie CO₂ sous-sol** — soutireuse tirage bière fuit dans cave | ⛔ Aucun capteur CO₂ | 🔴 CRITIQUE (danger mortel personnel) |
+| T96 | **Maturation viande RH % déréglée** — chambre à 45 % → moisissure | ⛔ Aucune sonde RH% + alerte | 🟠 HAUT (perte stock premium) |
+| T98 | **Saturation CO₂ salle > 1800 ppm** — coup de pompe clients hiver | ⛔ Aucun capteur NDIR + régulation VMC | 🟡 MOYEN (baisse ventes desserts) |
+
+---
+
+# 📊 GRAND TOTAL CONSOLIDÉ (audit complet)
+
+| Origine | Items | Note |
+|---|---|---|
+| Section 1 — Restaurant (initial) | 45 | audit code direct |
+| Section 2 — MCC (initial) | 29 | audit code direct |
+| Section 3 — Enrichissement `anglemort.md` L1-L85 | 85 | cross-check théorique |
+| Section 4 — Matrice 101-110 (M101-M110) | 10 | déjà structuré EventBus/DLQ/RBAC/Settings |
+| Section 4 bis — RBAC granulaire réservations | 11 actions | matrice permissions |
+| Section 5 — Compléments tableau 100 (T-prefix) | 34 | items restants du tableau 100 |
+| **TOTAL** | **203 angles morts + 11 permissions** | |
+
+## 🎯 Top 20 consolidé après enrichissement complet
+
+**Bloqueurs légaux / fiscaux / sanitaires (11)** :
+1. **L61** biodéchets 2024 (75 k€ + 2 ans prison)
+2. **L60 + T30** RappelConso + contrôle DDPP inopiné
+3. **L58** refroidissement HACCP (Clostridium mortel)
+4. **L25** bouton contrôle DGFiP 10 s
+5. **L21** facture d'acompte TVA 2023 (Art. 268 ter CGI)
+6. **D5 + T49** refus vente si taxRate manquant + TVA livraison 5,5/10 %
+7. **D1** test E2E FEC DGFiP conforme
+8. **B4 + L11 + M110 + T48** allergène mortel bloqué (POS + KDS + delivery + late change)
+9. **L42** réconciliation TPE avant re-débit (client double débité)
+10. **L14** rupture séquence désinfection trancheuse (Listeria)
+11. **T95** capteur CO₂ sous-sol soutireuse (danger mortel)
+
+**Bloqueurs opérationnels majeurs (5)** :
+12. **M104** collision CAS Google Reserve vs Widget Web
+13. **M106** anti-bruteforce cancel link (HMAC)
+14. **M109** giftcard double-spend web vs caisse
+15. **L15** inventaire flash alcool (coulage 5-8 % marge bar)
+16. **T45** watchdog suspension Uber Eats (canal 30 % CA)
+
+**Protection compte critique (4)** :
+17. **MCC-E2** MFA obligatoire super_admin MCC
+18. **L46** mesh P2P blackout total
+19. **T88 + T89** chantage 1 étoile + faux corps étranger (preuve horodatée)
+20. **L68** RevPASH pastille table squatting (1 850 €/mois × N tables)
+
+## 🧭 Ce qui est débloqué par ADR-014 (fondations livrées 2026-08-21)
+
+Les items suivants peuvent maintenant être implémentés SANS shortcut :
+
+| Item | Fondation ADR-014 utilisée |
+|---|---|
+| L11 / B4 / M110 / T48 | `AuditLogger.logAction('ALLERGEN_ORDER_BLOCKED')` |
+| L25 / T30 | `AuditLogger.exportChain()` — bouton "génère archive 10 s" |
+| L51 | Hash chain SHA-256 `previousHash + hash` |
+| L52 / L46 | `POST /api/admin/dlq/replay-batch` (post fix root cause) |
+| L55 | `AuditLogger.verifyChain()` — détection anomalie |
+| L58 | `OutboxPriority.SANITAIRE` — drainé avant metrics |
+| L60 / T48 | `CrossScopeAuthority.revealScope()` — fanout tenants |
+| L61 | `OutboxPriority.LEGAL` + `AuditLogger` biodéchets |
+| L67 | `OutboxPriority.SANITAIRE` — coupure eau protocole |
+| L82 / L83 | `CrossScopeAuthority` audit trail conciergerie |
+| MCC-E2 | `AuditLogger.logAction('MFA_ENABLED')` |
+| MCC-E4 | `AuditLogger.exportChain()` forensique |
+| MCC-C4 | `AuditLogger.verifyChain()` chaîne fiscale |
+| M110 | Event `kds.critical_allergen_interception` + `OutboxPriority.SANITAIRE` |
+
+---
+
+**Réf. sources finales** : `docs/archive/anglemort.md` (1392 lignes, 100+ items théoriques),
+`docs/adrs/ADR-014-consolidation-fondations-anglemorts.md` (fondations débloquées),
+codebase snapshot `7fced2b9e`.
