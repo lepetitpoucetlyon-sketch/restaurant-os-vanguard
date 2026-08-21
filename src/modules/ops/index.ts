@@ -1,3 +1,6 @@
+// Hooks souverains (ADR-010 Phase 2) — orders, tables, reservations
+export * from './hooks';
+
 // Domaine : workflow (engine, operations dashboard)
 export * from './workflow/engine';
 export type { Order, OrderItem } from './workflow/engine';

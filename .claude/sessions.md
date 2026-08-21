@@ -22,6 +22,7 @@
 
 | Session | Périmètre | Date | Status |
 |---|---|---|---|
+| `ops-sovereign-migration` | ADR-010 Phase 2 : 3 adapters ops (orders + tables + reservations) + OrdersLiveBoard KDS + 22 tests | 2026-08-21 | terminée |
 | `finance-sovereign-migration` | ADR-009 Phase 1 : useSovereignExpenseClaims + ExpenseClaimsList + 8 tests (1er pilier migré) | 2026-08-21 | terminée |
 | `signup-tests-coverage` | Tests unitaires /api/signup (13) + /api/billing/signup (14) — Plan Master P1.3, 27 tests verts | 2026-08-21 | terminée |
 | `ai-scope-isolation-finish` | Phase C+E ADR-008 : 5 callers tenant migrés, TenantAIConfigPanel, tests multi-vertical + E2E (135 tests IA verts) | 2026-08-21 | terminée |
