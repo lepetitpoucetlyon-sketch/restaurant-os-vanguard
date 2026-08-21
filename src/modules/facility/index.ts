@@ -9,6 +9,9 @@
  * - components/ : Vues et widgets UI (EquipmentHubView, Onboarding, Modales)
  */
 
+// Hooks souverains (ADR-013 Phase 5)
+export * from './hooks';
+
 export * from './spaces';
 export * from './spaces/settings';
 export * from './spaces/settings/store/settingsAtoms';

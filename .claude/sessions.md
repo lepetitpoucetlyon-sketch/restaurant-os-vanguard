@@ -22,6 +22,7 @@
 
 | Session | Périmètre | Date | Status |
 |---|---|---|---|
+| `sovereign-migration-phase-3-4-5` | ADR-011/012/013 : logistics (2) + commerce (3) + facility (2) migrés — 35 tests, migration progressive TERMINÉE | 2026-08-21 | terminée |
 | `public-access-toggle` | MCC kill-switch landing + signup public (schema + route + Gate + panel + 9 tests) | 2026-08-21 | terminée |
 | `ops-sovereign-migration` | ADR-010 Phase 2 : 3 adapters ops (orders + tables + reservations) + OrdersLiveBoard KDS + 22 tests | 2026-08-21 | terminée |
 | `finance-sovereign-migration` | ADR-009 Phase 1 : useSovereignExpenseClaims + ExpenseClaimsList + 8 tests (1er pilier migré) | 2026-08-21 | terminée |
