@@ -16,7 +16,7 @@ interface AuthGateProps {
     children: React.ReactNode;
 }
 
-const PUBLIC_PATH_PREFIXES = ['/landing', '/showcase', '/reserve', '/auth', '/login'] as const;
+const PUBLIC_PATH_PREFIXES = ['/landing', '/showcase', '/reserve', '/auth', '/login', '/verticales', '/pricing', '/signup', '/legal', '/welcome', '/demo'] as const;
 
 function isPublicPath(pathname: string | null): boolean {
     return pathname === '/' || PUBLIC_PATH_PREFIXES.some(p => pathname?.startsWith(p));

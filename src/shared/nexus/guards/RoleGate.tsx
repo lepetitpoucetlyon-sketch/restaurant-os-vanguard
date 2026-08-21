@@ -83,7 +83,8 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
     const category = Object.keys(PATH_TO_CATEGORY).find(path => pathname.startsWith(path));
     const requiredCategory = category ? PATH_TO_CATEGORY[category] : null;
 
-    const isPublicPath = pathname === '/' || pathname === '/welcome' || pathname === '/onboarding/setup';
+    const PUBLIC_PATHS = ['/verticales', '/pricing', '/signup', '/legal', '/landing', '/showcase', '/reserve', '/auth', '/login', '/demo', '/welcome', '/onboarding/setup'];
+    const isPublicPath = pathname === '/' || PUBLIC_PATHS.some(p => pathname?.startsWith(p));
 
     // 🛡️ PRAETORIAN SUTURE: Check via NexusInternalMapper
     // Sincérité à la Racine : Plus de 'as unknown'. Utilisation du type User souverain.

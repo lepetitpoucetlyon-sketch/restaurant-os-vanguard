@@ -28,24 +28,26 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://eu.i.posthog.com';
 
     if (posthogKey && typeof window !== 'undefined') {
-      // posthog-js est un peer optionnel — chargé dynamiquement pour éviter
-      // d'imposer la dep si l'app tourne sans analytics.
-      import('posthog-js' as string)
-        .then((mod: { default: { __loaded: boolean; init: (key: string, cfg: object) => void } }) => {
-          const posthog = mod.default;
-          if (!posthog.__loaded) {
-            posthog.init(posthogKey, {
+      // Load PostHog script snippet if configured
+      if (!(window as unknown as { posthog?: unknown }).posthog) {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = `${posthogHost}/static/array.js`;
+        script.onload = () => {
+          const ph = (window as unknown as { posthog?: { init: (k: string, opt: unknown) => void } }).posthog;
+          if (ph) {
+            ph.init(posthogKey, {
               api_host: posthogHost,
-              capture_pageview: false, // Handled manually on route change
+              capture_pageview: false,
               capture_pageleave: true,
               autocapture: false,
               persistence: 'memory',
             });
           }
-        })
-        .catch(() => {
-          // Graceful fallback if posthog-js is not installed or blocked
-        });
+        };
+        document.head.appendChild(script);
+      }
     }
   }, []);
 

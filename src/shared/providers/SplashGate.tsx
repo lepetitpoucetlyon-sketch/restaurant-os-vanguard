@@ -27,8 +27,8 @@ const SPLASH_SESSION_KEY = 'nexus_splash_shown';
 // Clé pour la dernière page visitée (persist entre sessions)
 const LAST_PATH_KEY      = 'nexus_last_path';
 
-// Routes exclues du tracking lastPath (pages techniques, auth, publiques)
-const EXCLUDED_PATHS = ['/login', '/signup', '/welcome', '/logout', '/admin', '/api', '/_next'];
+// Routes exclues du tracking lastPath (pages techniques, auth, publiques, marketing)
+const EXCLUDED_PATHS = ['/login', '/signup', '/welcome', '/logout', '/admin', '/api', '/_next', '/verticales', '/pricing', '/legal', '/landing', '/showcase', '/reserve', '/demo'];
 
 // Schema partiel pour lecture safe des tokens branding depuis tenantConfig
 const BrandingConfigSchema = z.object({

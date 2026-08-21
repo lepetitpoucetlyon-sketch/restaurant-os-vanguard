@@ -89,6 +89,8 @@ test_output.txt
 build_errors_v*.txt
 build_errors_brut.txt
 test-results/
+playwright-report/
+playwright/.cache/
 .DS_Store
 .mempalace/
 .staging-mcc/

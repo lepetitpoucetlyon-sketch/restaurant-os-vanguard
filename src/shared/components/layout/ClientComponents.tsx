@@ -22,10 +22,14 @@ const UniversalAssistantFrame = dynamic(
     { ssr: false }
 );
 
+const PUBLIC_MARKETING_PATHS = ['/verticales', '/pricing', '/signup', '/legal', '/landing', '/welcome', '/auth', '/login', '/demo', '/showcase'];
+
 export function ClientComponents({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    if (pathname === '/welcome' || pathname.startsWith('/admin')) {
+    const isPublic = pathname === '/' || pathname === '/welcome' || pathname?.startsWith('/admin') || PUBLIC_MARKETING_PATHS.some(p => pathname?.startsWith(p));
+
+    if (isPublic) {
         return <>{children}</>;
     }
 
