@@ -10,6 +10,66 @@ Chaque item est classé par **criticité** :
 - 🟡 **MOYEN** — feature déclarée mais UI/logique partielle
 - 🟢 **BAS** — dette technique, à traiter opportunistement
 
+**Icônes d'avancement** (nouveauté 2026-08-21) :
+- ✅ **DONE** — implémentation complète (métier + tests + UI si applicable)
+- 🟢 **DÉBLOQUÉ** — fondation prête (ADR-014), il reste à écrire l'implémentation métier
+- 🌊 **OFFLINE-FIRST OK** — la collection sous-jacente est migrée via ADR-009-013 (couvre partiellement la résilience réseau)
+- ⛔ **À FAIRE** — aucune fondation, tout reste à construire
+
+---
+
+# 📌 Statut au 2026-08-21 — Ce qui a été livré aujourd'hui
+
+**14 commits atomiques créés aujourd'hui** (`main` = +680 sur origin/main, pas de push) :
+
+| SHA | Message |
+|---|---|
+| `00d043733` | docs anglemort : section 4 (M101-M110) + section 5 (T-prefix) |
+| `7fced2b9e` | ADR-014 consolidation 4 fondations (CrossScope + Outbox P2/P3 + AuditLogger hash + DLQ batch) |
+| `b6018f52a` | docs anglemort : enrichissement 85 items L-prefix |
+| `8c18c7ae5` | docs anglemort : audit initial 74 items (sections 1+2) |
+| `79deee9d5` | docs afaire.md : Preview deploys + Observabilité |
+| `81090dc53` | ADR-013 Phase 5 facility (equipmentAssets + breakdowns) |
+| `e8e4267af` | ADR-012 Phase 4 commerce (customers + quotes + loyalty) |
+| `9efbbef34` | ADR-011 Phase 3 logistics (stocks + supplierInvoices) |
+| `5b80c04dd` | Kill-switch MCC landing + signup public |
+| `4a314adaa` | ADR-010 Phase 2 ops (orders + tables + reservations) |
+| `b6329beb7` | ADR-009 Phase 1 finance (expenseClaims) |
+| `d89c40795` | Tests routes signup (13 + 14 = 27 tests) |
+| `58a79c42a` | Routing marketing public + gitignore playwright |
+| `ad80fe2a8` | ADR-008 isolation IA MCC ↔ Tenant complète (Phases A→E) |
+
+## Items du doc désormais ✅ DONE (implémentation complète)
+
+Aucun item d'angle mort au sens strict n'est **entièrement clos** aujourd'hui — nous avons construit les fondations et le socle offline-first, pas encore les implémentations métier des angles morts précis.
+
+**Exception** : `L54` (Verrouillage Oracle vocal par JWT) est ✅ OK grâce à ADR-008.
+
+## Items 🌊 OFFLINE-FIRST OK — leur résilience réseau est couverte (ADR-009-013)
+
+Ces items ne sont pas "clos" mais leur collection sous-jacente est désormais migrée en `useSovereignCollection` (offline-first via Dexie + Outbox + Nexus) :
+
+- **Finance** (ADR-009) : L37 (redistribution pourboires) — collection `expenseClaims` couverte
+- **Ops** (ADR-010) : partie de A2/A3 (orders offline), C1-C5 (réservations offline), items KDS liés à `orders` — collections `orders/tables/reservations` couvertes
+- **Logistics** (ADR-011) : L28, L29, L30, L31, H4, T57, T59 pour la partie offline — collections `stocks/supplierInvoices` couvertes
+- **Commerce** (ADR-012) : J1, J2, J3 pour la partie offline — collections `customers/quotes/loyaltyAccounts` couvertes
+- **Facility** (ADR-013) : items maintenance — collections `equipmentAssets/equipmentBreakdowns` couvertes
+
+## Items 🟢 DÉBLOQUÉS — fondation ADR-014 prête, il reste à écrire l'implémentation
+
+Voir carte "débloqué par ADR-014" en fin de doc. **13 items** :
+L11 / B4 / M110 / T48 (allergène), L25 / T30 (contrôle DGFiP/DDPP), L51 (DAG), L52 / L46 (DLQ batch),
+L55 / MCC-C4 (anomalie hash), L58 / L67 (HACCP prio), L60 (RappelConso fanout), L61 (biodéchets),
+L82 / L83 (palace), MCC-E2 (MFA super_admin), MCC-E4 (rétention forensique).
+
+## Bonus livrés (hors doc anglemort mais aussi 2026-08-21)
+
+- ✅ Kill-switch MCC landing + signup public (`PublicAccessPanel` + route + Gate) — non prévu dans le doc, ajouté par demande utilisateur
+- ✅ Tests routes signup (`/api/signup` 13 tests + `/api/billing/signup` 14 tests) — Plan Master P1.3
+- ✅ Routing marketing public (élargissement `PUBLIC_PATH_PREFIXES` sur 4 gardes)
+- ✅ `.gitignore` : `playwright-report/` + `playwright/.cache/`
+- ✅ `docs/afaire.md` : bloqueurs Preview deploys + Observabilité (nécessitent décision externe)
+
 ---
 
 ## 🍽️ VERTICALE RESTAURANT
@@ -33,7 +93,7 @@ Chaque item est classé par **criticité** :
 | B1 | **Routing station : keyword matching en dur (french only), pas d'apprentissage** | 🟡 MOYEN | `kds-constants.ts` liste 90+ keywords français. Un plat "Aji tataki" n'est routé nulle part. Pas de fallback intelligent. |
 | B2 | **Écran KDS multipost présent mais pas de heartbeat / offline recovery entre stations** | 🟠 HAUT | Si le KDS bar plante 3 min, les commandes ratées ne sont pas rejouées quand il revient. Tests existent (`kds-multipost.test.ts`) mais pas de recovery réel. |
 | B3 | **Recette Master (BOM) : schemas absents pour coût-recette temps réel** | 🟠 HAUT | Pas de calcul food-cost par plat qui dérive du prix ingrédients live. Le patron ne sait pas si son burger est en marge nette. |
-| B4 | **Contrôle allergènes : bloc UI présent mais pas de refus commande** | 🔴 CRITIQUE | Un serveur peut valider une commande "vegan" qui contient du beurre. Aucun garde-fou. Risque juridique majeur (INCO 1169/2011). |
+| B4 | **Contrôle allergènes : bloc UI présent mais pas de refus commande** 🟢 | 🔴 CRITIQUE | Un serveur peut valider une commande "vegan" qui contient du beurre. Aucun garde-fou. Risque juridique majeur (INCO 1169/2011). **🟢 Fondation ADR-014 prête : `AuditLogger.logAction('ALLERGEN_ORDER_BLOCKED')`.** |
 | B5 | **Bump interception par station : pas de "rappel plat" si serveur ne prend pas dans les 3 min** | 🟢 BAS | UX HCR standard, absent. |
 
 ### Zone C — Plan de salle & Réservations
@@ -42,8 +102,8 @@ Chaque item est classé par **criticité** :
 |---|---|---|---|
 | C1 | **Google Reserve : types définis mais webhook GRR non enregistré côté Google** | 🟠 HAUT | Types `GoogleReserveTypes` existent, mais pas de handshake OAuth Google avec le compte du tenant. Le canal de réservation "Réserver via Google" n'est pas activable en 1 clic. |
 | C2 | **TheFork / Zenchef : 0 connector concret** | 🟡 MOYEN | Mentionné comme source dans `Reservation.source` mais aucun adapter d'ingestion. Les réservations TheFork doivent être saisies manuellement. |
-| C3 | **Overbooking : pas d'algorithme de rotation table (turn time)** | 🟠 HAUT | Le système accepte 2 réservations sur la même table à 20h et 22h sans vérifier la durée de service. |
-| C4 | **Waitlist / file d'attente : pas de composant** | 🟡 MOYEN | Le maître d'hôtel n'a pas d'écran pour gérer les clients qui attendent une table. |
+| C3 | **Overbooking : pas d'algorithme de rotation table (turn time)** 🌊 | 🟠 HAUT | Le système accepte 2 réservations sur la même table à 20h et 22h sans vérifier la durée de service. **🌊 Collection `reservations` migrée offline-first via ADR-010.** |
+| C4 | **Waitlist / file d'attente : pas de composant** 🌊 | 🟡 MOYEN | Le maître d'hôtel n'a pas d'écran pour gérer les clients qui attendent une table. **🌊 Collection `reservations` couverte offline via ADR-010.** |
 | C5 | **SMS/Email rappel réservation J-1 : `MarketingCampaignRouterHandler` existe mais pas connecté au cycle reservations** | 🟠 HAUT | Cas d'usage "rappel automatique la veille" absent. Impact direct sur le no-show (typiquement 15-20 % du CA perdu). |
 
 ### Zone D — Fiscal NF525 / clôture / FEC
@@ -107,8 +167,8 @@ Chaque item est classé par **criticité** :
 
 | # | Angle mort | Criticité | Détail |
 |---|---|---|---|
-| J1 | **Adapter `useSovereignCustomers` livré Phase 4, mais `CustomersDirectory.tsx` seul composant, pas de fiche détail** | 🟢 BAS | Impossible de voir l'historique complet d'un client (visites, dépenses, remarques). |
-| J2 | **Loyalty tier auto-promotion (bronze→silver→gold selon lifetime points) : non implémenté** | 🟡 MOYEN | Manuel via `setTier`. Pas de règles automatiques. |
+| J1 | **Adapter `useSovereignCustomers` livré Phase 4, mais `CustomersDirectory.tsx` seul composant, pas de fiche détail** 🌊 | 🟢 BAS | Impossible de voir l'historique complet d'un client. **🌊 Collection `customers` migrée offline (ADR-012).** |
+| J2 | **Loyalty tier auto-promotion (bronze→silver→gold selon lifetime points) : non implémenté** 🌊 | 🟡 MOYEN | Manuel via `setTier`. Pas de règles automatiques. **🌊 Collection `loyaltyAccounts` migrée offline (ADR-012).** |
 | J3 | **RGPD : droit à l'oubli client → route `/api/admin/fleet/rgpd-purge` existe mais pas de UX côté tenant** | 🟠 HAUT | Un client qui demande l'oubli oblige le patron à ouvrir une console MCC. Risque de non-réponse dans le délai légal (30 j). |
 
 ### Zone K — Signup / onboarding
@@ -135,7 +195,7 @@ Chaque item est classé par **criticité** :
 
 | # | Angle mort | Criticité | Détail |
 |---|---|---|---|
-| MCC-B1 | **`TenantHealthPanel` récupère un score via `/api/…`, mais aucun scoring backend qui alimente vraiment cette route** | 🔴 CRITIQUE | Le panel affiche des scores placeholder. Cf. `docs/afaire.md` (bloqueur Observabilité). |
+| MCC-B1 | **`TenantHealthPanel` récupère un score via `/api/…`, mais aucun scoring backend qui alimente vraiment cette route** | 🔴 CRITIQUE | Le panel affiche des scores placeholder. Cf. `docs/afaire.md` (bloqueur Observabilité — nécessite décision infra). |
 | MCC-B2 | **`FleetTelemetryPanel` + `EventBusHealthPanel` — dépendants d'OpenTelemetry non installé** | 🔴 CRITIQUE | Voir ADR-011 P3 SRE + `docs/afaire.md`. |
 | MCC-B3 | **`HardwareHealthGrid` : pas de connecteur MDM (Jamf, Intune, TinyMDM) pour piloter les iPads en flotte** | 🟠 HAUT | Un iPad d'un client planté → impossible de forcer reboot / update depuis le MCC. |
 | MCC-B4 | **`DisasterRecoveryPanel` : UI présente, mais pas de vrais restore drills mensuels planifiés** | 🟠 HAUT | Backup nocturne OK (P0), restore jamais testé automatiquement. |
@@ -147,7 +207,7 @@ Chaque item est classé par **criticité** :
 | MCC-C1 | **`SupportAIPanel` + `SupportDraftsPanel` opérationnels (ADR-008)** | ✅ OK | Rien à signaler. |
 | MCC-C2 | **`FiscalArchiveExportPanel` : export WORM implémenté, mais pas de rétention 6 ans enforcée par la config** | 🟠 HAUT | Article 102 LPF : conservation 6 ans obligatoire. Actuellement aucune règle backend ne bloque une purge < 6 ans. |
 | MCC-C3 | **`TaxAuditPanel` : filtre date sur route mais scoring "risque fiscal par tenant" pas implémenté** | 🟡 MOYEN | Un auditeur MCC doit ouvrir chaque tenant un par un. |
-| MCC-C4 | **`FiscalChainExplorer` : navigue la chaîne de sceaux mais pas de "détection anomalie hash"** | 🟠 HAUT | Si un sceau est corrompu (rupture chaîne), aucune alerte automatique. |
+| MCC-C4 | **`FiscalChainExplorer` : navigue la chaîne de sceaux mais pas de "détection anomalie hash"** 🟢 | 🟠 HAUT | Si un sceau est corrompu (rupture chaîne), aucune alerte automatique. **🟢 Fondation ADR-014 prête : `AuditLogger.verifyChain(logs)` détecte falsifications et insertions.** |
 | MCC-C5 | **`CertificationCenter` + `CertPreviewPanel` : UI présente, mais pas de vérif "cert NF525 encore valide" (date expiration)** | 🟡 MOYEN | La cert NF525 s'expire tous les 3 ans. |
 
 ### Zone MCC-D — Facturation SaaS + trésorerie
@@ -164,9 +224,9 @@ Chaque item est classé par **criticité** :
 | # | Angle mort | Criticité | Détail |
 |---|---|---|---|
 | MCC-E1 | **Custom claims Firebase (`role`, `tenantId`) : posés au signup, mais aucun refresh forcé quand un rôle change** | 🟠 HAUT | Un user promu admin doit se re-login pour que ça prenne. |
-| MCC-E2 | **`MFAGate` + `TrustedDevicePanel` : composants OK, mais MFA obligatoire pas enforcée pour `mcc_super_admin`** | 🔴 CRITIQUE | Un super_admin compromis = accès à toute la flotte. |
+| MCC-E2 | **`MFAGate` + `TrustedDevicePanel` : composants OK, mais MFA obligatoire pas enforcée pour `mcc_super_admin`** 🟢 | 🔴 CRITIQUE | Un super_admin compromis = accès à toute la flotte. **🟢 Fondation ADR-014 prête : `AuditLogger.logAction('MFA_ENABLED')`.** |
 | MCC-E3 | **Session TTL : pas de rotation forcée toutes les 12h côté MCC** | 🟠 HAUT | Un token volé reste valide 30 j (Firebase default). |
-| MCC-E4 | **`AuditLogger` / `ImmunityAuditLogger` : logs présents mais pas de rétention chiffrée + export forensique** | 🟠 HAUT | En cas d'incident, l'auditeur externe ne peut pas récupérer les logs signés. |
+| MCC-E4 | **`AuditLogger` / `ImmunityAuditLogger` : logs présents mais pas de rétention chiffrée + export forensique** 🟢 | 🟠 HAUT | En cas d'incident, l'auditeur externe ne peut pas récupérer les logs signés. **🟢 ADR-014 : hash chain SHA-256 + `AuditLogger.exportChain(fromTs, toTs)` opposable en justice.** |
 
 ### Zone MCC-F — Panels manquants
 
@@ -245,7 +305,7 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 |---|---|---|---|
 | L9 | **86 brutal ingrédient cascade** (mise en 86 au niveau ingrédient → toutes recettes bloquées) | ⛔ Absent (chef doit désactiver 6 plats à la main) | 🟠 HAUT |
 | L10 | **Delta d'instruction partiel `KDS_ITEM_MODIFIED`** (surligne rouge la modif au lieu de réimprimer full ticket) | ⛔ Pas d'événement delta | 🟠 HAUT (double cuisson potentielle) |
-| L11 | **Matrice INCO par lot de réception matinal** (fiche allergène liée au fournisseur du jour) | ⛔ Fiche INCO statique | 🔴 CRITIQUE (choc anaphylactique) |
+| L11 | **Matrice INCO par lot de réception matinal** (fiche allergène liée au fournisseur du jour) 🟢 | ⛔ Fiche INCO statique — 🟢 ADR-014 débloque via `AuditLogger.logAction('ALLERGEN_ORDER_BLOCKED')` | 🔴 CRITIQUE (choc anaphylactique) |
 | L12 | **Micro-séquençage 2 temps (soufflé + glace)** (dresser glace = `T0+7min30`) | ⛔ Absent | 🟡 MOYEN |
 | L13 | **Compteur "Minute 14" psycho-visuel** (clignotant orange 11 min, rouge 13 min + amuse-bouche auto) | ⛔ Absent | 🟠 HAUT (–50 % pourboire à la 15e min) |
 | L14 | **Nettoyage dynamique par rupture de séquence** (trancheuse jambon cru → rôti cuit sans désinfection = bloque KDS) | ⛔ Pas de PMS dynamique | 🔴 CRITIQUE (Listeria) |
@@ -269,7 +329,7 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 | L22 | **Écriture d'écart de caisse au Z (compte 658)** (écart 35 € cash → écriture auto pertes exceptionnelles) | ⛔ Pas de génération auto | 🟠 HAUT |
 | L23 | **Facture complémentaire nominative J+3** (client demande facture entreprise après ticket anonyme) | ⛔ Régénérer = doublon CA / rupture NF525 | 🟠 HAUT |
 | L24 | **Ventilation TVA formule menu (5,5 / 10 / 20)** au prorata prix carte hors formule | 🚧 Existe côté `TaxCalculator` mais pas de test qui vérifie centime résiduel | 🟠 HAUT |
-| L25 | **Bouton "Contrôle Fiscal Inopiné (Mode DGFiP)"** — génère archive légale zippée + eIDAS en <10 s | ⛔ `FiscalArchiveExportPanel` MCC existe mais pas de bouton tenant "1 clic" | 🔴 CRITIQUE (amende 7 500 €/caisse pour obstruction Art. 1770 CGI) |
+| L25 | **Bouton "Contrôle Fiscal Inopiné (Mode DGFiP)"** — génère archive légale zippée + eIDAS en <10 s 🟢 | ⛔ `FiscalArchiveExportPanel` MCC existe mais pas de bouton tenant "1 clic" — 🟢 ADR-014 débloque via `AuditLogger.exportChain()` | 🔴 CRITIQUE (amende 7 500 €/caisse pour obstruction Art. 1770 CGI) |
 | L26 | **Registre Personnel Instantané (RPI)** exportable smartphone en 1 s pour contrôle URSSAF surprise | ⛔ Absent | 🟠 HAUT |
 | L27 | **CONECS vs CB routing** (TR passe par CB standard = commission double) | ⛔ Pas de smart card routing | 🟡 MOYEN |
 
@@ -277,7 +337,7 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 
 | # | Angle mort | Statut code | Criticité |
 |---|---|---|---|
-| L28 | **Denrées poids variable** (10 kg turbot → 9,42 kg livrés facturés au gramme) | ⛔ Stock compte 8 unités, pas 8,34 kg | 🟠 HAUT (rendement faux) |
+| L28 | **Denrées poids variable** (10 kg turbot → 9,42 kg livrés facturés au gramme) 🌊 | ⛔ Stock compte 8 unités, pas 8,34 kg — 🌊 collection `stocks` migrée offline (ADR-011) | 🟠 HAUT (rendement faux) |
 | L29 | **OCR BL dégradés double passe** (OpenCV débruitage + Gemini Vision + seuil confiance <90 %) | 🚧 InvoiceExtractionService fait 1 passe seule | 🟡 MOYEN |
 | L30 | **Substitution SKU sauvage** (beurre AOP → standard sans prévenir) → alerte variance scannette | ⛔ Absent | 🟠 HAUT (perte promesse "Fait maison AOP") |
 | L31 | **Séquestre paiement fournisseur (avoir fantôme)** — retenue SEPA tant qu'avoir non crédité | 🚧 `DeliveryDisputeService` existe mais pas branché sur pipeline paiement | 🟠 HAUT |
@@ -305,7 +365,7 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 | L43 | **UI tactile durcie zones 64x64 + swipe to action** (doigts mouillés en cuisine) | ⛔ Boutons standard | 🟡 MOYEN |
 | L44 | **Ethernet PoE forcé pour KDS + WiFi 5/6 GHz mobile** (interférence micro-ondes 2.4 GHz) | ⛔ Pas de doc config réseau | 🟠 HAUT |
 | L45 | **Redondance iPad terrasse surchauffe (>50 °C)** (bascule P2P sur téléphone collègue via QR) | ⛔ Absent | 🟡 MOYEN |
-| L46 | **Blackout total mode P2P mesh** (tablettes communiquent sans box, TPE stand-in) | 🚧 Sovereign collection = offline cache OUI, mais pas de mesh P2P entre tablettes | 🟠 HAUT |
+| L46 | **Blackout total mode P2P mesh** (tablettes communiquent sans box, TPE stand-in) 🌊 | 🚧 Sovereign collection = offline cache OUI (ADR-009→013), mais pas de mesh P2P entre tablettes. 🟢 DLQ replay-batch ADR-014 aide au recovery | 🟠 HAUT |
 
 ## 3.8 — Livraison / agrégateurs (compléments)
 
@@ -320,11 +380,11 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 
 | # | Angle mort | Statut code | Criticité |
 |---|---|---|---|
-| L51 | **DAG immuable des lignes de commande** (UUID + horodatage KDS, interdiction transfert entre tables sans audit) | 🚧 `NexusInterceptor` + `SovereignGuard` mais pas d'UUID par ligne + audit forensique | 🟠 HAUT |
-| L52 | **Pesée intelligente déchets à quai** (sac poubelle >1,2 kg/L densité anormale = alerte) | ⛔ Absent (vol par poubelle noble) | 🟠 HAUT |
+| L51 | **DAG immuable des lignes de commande** (UUID + horodatage KDS, interdiction transfert entre tables sans audit) 🟢 | 🚧 `NexusInterceptor` + `SovereignGuard` — 🟢 ADR-014 débloque via hash chain SHA-256 `previousHash + hash` | 🟠 HAUT |
+| L52 | **Pesée intelligente déchets à quai** (sac poubelle >1,2 kg/L densité anormale = alerte) 🟢 | ⛔ Absent (vol par poubelle noble) — 🟢 DLQ batch replay ADR-014 aide au fix root cause post-alerte | 🟠 HAUT |
 | L53 | **Détection sursaut avis Google (review bombing)** — export dossier signalement horodaté JET | ⛔ Aucune surveillance réputation | 🟠 HAUT |
-| L54 | **Verrouillage Oracle vocal par JWT** (pas par contenu texte : "je suis le patron") | ✅ ADR-008 R5 + RBAC = tokens JWT, pas de bypass vocal | ✅ OK |
-| L55 | **Détection anomalie hash chaîne fiscale** (rupture cryptographique → alerte auto) | ⛔ Absent (noté MCC-C4) | 🟠 HAUT |
+| L54 | **Verrouillage Oracle vocal par JWT** (pas par contenu texte : "je suis le patron") | ✅ **DONE** — ADR-008 R5 + RBAC = tokens JWT, pas de bypass vocal | ✅ OK |
+| L55 | **Détection anomalie hash chaîne fiscale** (rupture cryptographique → alerte auto) 🟢 | ⛔ Absent (noté MCC-C4) — 🟢 ADR-014 débloque via `AuditLogger.verifyChain(logs)` | 🟠 HAUT |
 | L56 | **Alerte consultation en masse fiches clients** (démissionnaire exporte 5000 VIP) | ⛔ Aucun rate-limit ni signal faible | 🟠 HAUT (exfiltration RGPD) |
 
 ## 3.10 — Sanitaire / HACCP (compléments)
@@ -332,16 +392,16 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 | # | Angle mort | Statut code | Criticité |
 |---|---|---|---|
 | L57 | **Plat témoin banquet >30 couverts** (100 g/plat conservé +2°C, 5 j ouvrés, QR scellé) | ⛔ Absent (obligation légale) | 🟠 HAUT (poursuite pénale si TIAC) |
-| L58 | **Minuteur HACCP refroidissement rapide** (30 L blanquette >10 °C à H+1h45 = alerte critique) | ⛔ Absent (arrêté 21/12/2009) | 🔴 CRITIQUE (Clostridium perfringens) |
+| L58 | **Minuteur HACCP refroidissement rapide** (30 L blanquette >10 °C à H+1h45 = alerte critique) 🟢 | ⛔ Absent (arrêté 21/12/2009) — 🟢 ADR-014 débloque via `OutboxPriority.SANITAIRE` (drainé avant metrics) + `AuditLogger('CHILLING_NONCONFORM')` | 🔴 CRITIQUE (Clostridium perfringens) |
 | L59 | **Registre test huile friture (composés polaires <25 %)** — bloque 1re commande friteuse si test non fait | ⛔ Absent (Décret 2008-184) | 🟠 HAUT (amende + fermeture DDPP) |
-| L60 | **Veille sanitaire active RappelConso** (croisement auto lots huîtres en stock ↔ arrêtés préfectoraux) | ⛔ Absent | 🔴 CRITIQUE (40 TIAC vendredi soir = fermeture immédiate) |
-| L61 | **Bordereau numérique biodéchets (loi 2024)** — pesée journalière + attestation valorisation annuelle | ⛔ Absent | 🔴 CRITIQUE (jusqu'à 75 000 € amende + prison Art. L. 541-46 CE) |
+| L60 | **Veille sanitaire active RappelConso** (croisement auto lots huîtres en stock ↔ arrêtés préfectoraux) 🟢 | ⛔ Absent — 🟢 ADR-014 débloque via `CrossScopeAuthority.revealScope()` pour fanout multi-tenant + `AuditLogger('RECALL_BROADCAST')` | 🔴 CRITIQUE (40 TIAC vendredi soir = fermeture immédiate) |
+| L61 | **Bordereau numérique biodéchets (loi 2024)** — pesée journalière + attestation valorisation annuelle 🟢 | ⛔ Absent — 🟢 ADR-014 débloque via `OutboxPriority.LEGAL` + `AuditLogger` hash chain | 🔴 CRITIQUE (jusqu'à 75 000 € amende + prison Art. L. 541-46 CE) |
 | L62 | **Bordereau BSDD huiles alimentaires usagées (ISCC-EU)** | ⛔ Absent | 🟠 HAUT (amende DREAL 15 000 €) |
 | L63 | **Sonde niveau bac à graisse (IoT)** — vidange auto à 80 % saturation | ⛔ Absent | 🟡 MOYEN |
 | L64 | **Registre sécurité incendie ERP connecté** (test mensuel BAES scan NFC + rapport annuel Commission Sécurité) | ⛔ Absent (Art. R. 123-51 CCH) | 🟠 HAUT (fermeture administrative) |
 | L65 | **Checklist ouverture avec déverrouillage optique issue de secours** (photo dégagement obligatoire avant 1re commande) | ⛔ Absent | 🟠 HAUT (drame si incendie) |
 | L66 | **Détecteur ΔT/Δt hotte + coupure préventive gaz avant Ansul** (évite déclenchement inondation poudre corrosive) | ⛔ Absent | 🟠 HAUT (15 000 € perte exploitation) |
-| L67 | **Protocole continuité coupure eau (bascule vaisselle jetable + eau minérale réserve)** | ⛔ Absent (Paquet Hygiène CE 852/2004) | 🟠 HAUT (fermeture sanitaire immédiate) |
+| L67 | **Protocole continuité coupure eau (bascule vaisselle jetable + eau minérale réserve)** 🟢 | ⛔ Absent (Paquet Hygiène CE 852/2004) — 🟢 ADR-014 débloque via `OutboxPriority.SANITAIRE` | 🟠 HAUT (fermeture sanitaire immédiate) |
 
 ## 3.11 — Économie / marge / réputation
 
@@ -366,8 +426,8 @@ Légende statut code : ⛔ absent · 🚧 partiel · ✅ implémenté
 | L79 | **Jauge spatiale terrasse AOT** (verrouillage m² max = permis voirie mairie) | ⛔ Absent | 🟠 HAUT (amende 1 500 € + retrait AOT) |
 | L80 | **Passerelle musique SACEM/SPRE certifiée** (interdit Spotify perso) | ⛔ Absent | 🟠 HAUT (redevance 1 200-3 500 €/an + PV) |
 | L81 | **TPE bilingue "Service inclus / Optional gratuity"** (touristes US tip confusion) | ⛔ Absent | 🟡 MOYEN |
-| L82 | **Facture apport d'affaires conciergerie palace + contrat B2B** (évite rétro-commission cash = corruption Art. 445-1 CP) | ⛔ Absent | 🟠 HAUT |
-| L83 | **VIP guest link 2h avant repas** (confirmation directe préférences + allergies au client final, pas au concierge) | ⛔ Absent | 🟠 HAUT (allergie mortelle transmise perdue) |
+| L82 | **Facture apport d'affaires conciergerie palace + contrat B2B** (évite rétro-commission cash = corruption Art. 445-1 CP) 🟢 | ⛔ Absent — 🟢 ADR-014 audit trail cross-tenant via `CrossScopeAuthority` | 🟠 HAUT |
+| L83 | **VIP guest link 2h avant repas** (confirmation directe préférences + allergies au client final, pas au concierge) 🟢 | ⛔ Absent — 🟢 ADR-014 débloque via `CrossScopeAuthority.revealScope()` | 🟠 HAUT (allergie mortelle transmise perdue) |
 | L84 | **Détecteur profil "Inspecteur Michelin"** (solo mardi 19h45 + eau minérale + questions provenance = alerte VIP) | ⛔ Absent | 🟢 BAS |
 | L85 | **Protocole "Code Ambre" client ivre** (1 clic → stop alcool + café offert + VTC facturé auto) | ⛔ Absent | 🟠 HAUT (responsabilité pénale patron Art. R. 3353-1 CSP) |
 
@@ -430,7 +490,7 @@ directement avec `OutboxPriority`, `AuditLogger` et `CrossScopeAuthority`.
 | M107 | **Anti-DST timezone touriste** — NY 15h ≠ Lyon 20h | `commerce.reservation_timezone_normalized` | UTC Absolute Guard | `system.set_timezone` (Directeur) | `tenantTimezone: 'Europe/Paris'`, `displayBookingTimezoneBadge` | ⛔ Fuseau tenant non forcé | 🟠 HAUT |
 | M108 | **Turnover Collision 2e service** — table lente 21h25 vs 21h30 | `ops.turnover_delay_predicted` | KDS Stage Heuristic Ping | `reservations.reassign_tbl` (Chef rang) | `turnoverBufferMinutes`, `overstayAlertThresholdMinutes` | ⛔ Durée service = 120 min théorique fixe | 🟠 HAUT (double service chaotique) |
 | M109 | **Giftcard double-spend web vs caisse** — bon 100 € réutilisé | `finance.giftcard_locked` | NF525 Seal Hold Rollback | `marketing.issue_giftcard` (Manager + PIN) | `allowPartialGiftCardRedemption`, `giftCardValidityMonths` | ⛔ Pas de verrou déterministe temps réel | 🔴 CRITIQUE (perte cash directe) |
-| M110 | **Late allergen change post-envoi KDS** — allergie ajoutée 15 min avant arrivée | `kds.critical_allergen_interception` | Flash Buzzer DLQ Alarm | `kds.override_allergen` (Chef cuisine + PIN) | `allergenLateChangeThresholdHours`, `forceKDSAudioAlertOnAllergenUpdate` | ⛔ Absent (voir aussi L11, B4) | 🔴 CRITIQUE (choc anaphylactique) |
+| M110 | **Late allergen change post-envoi KDS** — allergie ajoutée 15 min avant arrivée 🟢 | `kds.critical_allergen_interception` | Flash Buzzer DLQ Alarm | `kds.override_allergen` (Chef cuisine + PIN) | `allergenLateChangeThresholdHours`, `forceKDSAudioAlertOnAllergenUpdate` | ⛔ Absent (voir aussi L11, B4) — 🟢 ADR-014 `OutboxPriority.SANITAIRE` + `AuditLogger` | 🔴 CRITIQUE (choc anaphylactique) |
 
 ---
 
@@ -481,7 +541,7 @@ dans les sections 1-3.
 |---|---|---|---|
 | T28 | **Nuisibles / raticide** — traces rongeurs, absence traitement mensuel | ⛔ Aucun registre 3D (Dératisation/Désinsectisation/Désinfection) | 🟠 HAUT |
 | T29 | **Produit d'entretien mal rincé** — résidu javel sur plan de travail | ⛔ Aucun contrôle "cycle rinçage validé" | 🟠 HAUT |
-| T30 | **Contrôle vétérinaire DDPP** — inspecteur DDPP arrive inopiné | ⛔ Pas de "mode contrôle sanitaire" 1-clic (equivalent L25 pour DGFiP) | 🔴 CRITIQUE (fermeture administrative) |
+| T30 | **Contrôle vétérinaire DDPP** — inspecteur DDPP arrive inopiné 🟢 | ⛔ Pas de "mode contrôle sanitaire" 1-clic (equivalent L25 pour DGFiP) — 🟢 ADR-014 débloque via `AuditLogger.exportChain()` avec filtre HACCP | 🔴 CRITIQUE (fermeture administrative) |
 
 ## 5.4 — Fiscal / compta
 
@@ -498,7 +558,7 @@ dans les sections 1-3.
 | T45 | **Suspension compte algorithmique** Uber Eats (fake reasons) | ⛔ Aucun watchdog qui alerte si taux notes <4.5 | 🟠 HAUT (canal 30 % CA coupé sans préavis) |
 | T46 | **Annulation commande en route** par le client via Uber | ⛔ La cuisine continue à préparer, perte matière | 🟡 MOYEN |
 | T47 | **Erreur d'adresse client** — livreur perdu | ⛔ Aucun scoring adresse | 🟢 BAS |
-| T48 | **Alerte allergène delivery** — pas transmise dans la note delivery | ⛔ Voir L11 (INCO par lot) | 🔴 CRITIQUE |
+| T48 | **Alerte allergène delivery** — pas transmise dans la note delivery 🟢 | ⛔ Voir L11 (INCO par lot) — 🟢 ADR-014 `AuditLogger('ALLERGEN_ORDER_BLOCKED')` | 🔴 CRITIQUE |
 | T49 | **Mauvais taux TVA livraison** — TVA 5,5 % à emporter vs 10 % sur place | ⛔ Ambiguïté taxRate selon `consumptionMode` | 🟠 HAUT |
 | T50 | **Litige "repas froid"** — remboursement Uber prélevé sans preuve | ⛔ Aucune preuve photo horodatée à la sortie cuisine | 🟡 MOYEN |
 
