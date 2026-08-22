@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-imports */
 import { atom } from "jotai";
-import { TenantRBACConfig, TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from "@/modules/compliance";
+import { TenantRBACConfig, TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from "@/modules/compliance/domain/schemas/rbac";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 
 export const rbacConfigAtom = atom<TenantRBACConfig | null>(null);

@@ -3,7 +3,7 @@
 // ===========================================
 
 import {
-    BusinessIdentity, BusinessContact, RestaurantIdentity, SocialMedia,
+    BusinessIdentity, BusinessContact, SocialMedia,
     DaySchedule, ServiceSettings, ReservationSlotSettings, ClosedPeriod,
     MenuCategory, ProductSettings, Supplement, MenuFormule,
     RecipesConfig, RecipeSettings, RecipeStep, RecipeIngredient,

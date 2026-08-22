@@ -21,8 +21,12 @@ export function createNexusNode<T>(id: string, initialData: T[] = [], startLoadi
     });
     
     // Phase 4: Enregistrement WeakRef pour auto-nettoyage
-    if (typeof WeakRef !== 'undefined') {
-        orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
+    if (typeof WeakRef !== 'undefined' && typeof nodeAtom === 'object' && nodeAtom !== null) {
+        try {
+            orphanNodesRegistry.set(id, new WeakRef(nodeAtom));
+        } catch {
+            // Ignored in environments where nodeAtom is not a valid WeakRef target
+        }
     }
 
     GlobalRegistryService.register(id, nodeAtom);

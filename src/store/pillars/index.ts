@@ -9,5 +9,6 @@ export * from './logistics';
 export * from './human';
 export * from './commerce';
 export * from './compliance';
+export * from './quality';
 
 export * from './sovereign';

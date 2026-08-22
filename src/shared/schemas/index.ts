@@ -11,6 +11,9 @@
 // ── Primitives & UI transversaux ──────────────────────────────────────────────
 export * from './primitives';
 export * from './ui';
+export * from './orderPublicSchemas';
+export * from './rbac.schemas';
+export * from './policy.schemas';
 
 // ── Intelligence (support tickets) — utilisé par handlers + API routes MCC ───
 export {

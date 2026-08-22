@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */
+ 
 /**
  * 🏛️ NEXUS SHARED CONTRACTS - Universal SaaS Registry
  * Version Grade X - Sovereign Alignment
