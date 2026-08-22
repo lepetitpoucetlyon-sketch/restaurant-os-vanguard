@@ -55,6 +55,12 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: false,
+  // Optimisation d'imports (levier officiel Next, zéro changement de composant) :
+  // réécrit les imports barrel de ces libs lourdes en imports directs → meilleur tree-shaking.
+  // framer-motion (357 usages) n'est PAS dans la liste par défaut de Next → ajouté ici.
+  experimental: {
+    optimizePackageImports: ['framer-motion'],
+  },
   logging: {
     fetches: {
       fullUrl: true,

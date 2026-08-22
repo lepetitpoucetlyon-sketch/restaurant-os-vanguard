@@ -55,8 +55,11 @@ recâblage structurel — vérifier qu'aucun consommateur ne casse (grep des cal
   - `konva`/`react-konva` : quelques imports statiques (éditeur plan de salle) — candidat mineur.
   - **`framer-motion` : 357 imports statiques** = *l'éléphant*. Omniprésent (animations UI partout). **Non lazy-loadable mécaniquement** — le retirer/wrapper est un vrai refactor UI transverse.
 
+### Action appliquée + mesure (2026-08-22)
+`next.config.ts` : ajout de `experimental.optimizePackageImports: ['framer-motion']` (levier officiel Next, zéro changement de composant, zéro risque runtime). **Mesuré par build réel** : chunks `12288 → 12056 KB` = **−232 KB (−1,9 %)**, build vert. Gain **réel mais marginal** — ce qui **confirme** que le poids est structurel, pas un défaut de tree-shaking.
+
 ### Conclusion honnête
-Le 12 Mo est **structurel** (framer-motion partout + konva + runtime Next), pas un oubli de code-splitting. Il n'existe **aucun quick-win** sûr et vérifiable dans cet environnement (pas d'app lancée pour valider SSR/UX). **`BUNDLE_MAX_KB` N'EST PAS abaissé** : baisser le seuil sans réduction réelle = truquer un ratchet (AGENTS.md Loi 2 — interdit).
+Le 12 Mo est **structurel** (framer-motion partout + konva + runtime Next), pas un oubli de code-splitting. Le seul quick-win sûr (optimizePackageImports ci-dessus) ne rend que ~2 %. **`BUNDLE_MAX_KB` reste inchangé (2000)** : le baisser sans réduction réelle OU le monter à 12056 seraient tous deux des desserrements interdits (AGENTS.md Loi 2). Le vrai levier (LazyMotion sur 357 sites) exige une QA runtime des animations impossible ici → chantier dédié, non shippé à l'aveugle.
 
 ### Reste à faire (chantier perf dédié, non couvert ici)
 - [ ] Stratégie framer-motion : `LazyMotion` + `domAnimation` (features à la demande) OU wrapper maison, sur les 357 sites — mesurer l'impact réel.
