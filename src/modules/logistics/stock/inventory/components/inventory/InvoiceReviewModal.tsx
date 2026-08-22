@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import type { ExtractedInvoice } from '@/modules/intelligence';
+import type { ExtractedInvoice } from '../../../../domain/schemas/inventory';
 import { InventoryVisionService, VisionMatchResult } from '../../../../services/InventoryVisionService';
 import { useInventory } from '../../hooks/useInventory';
 
@@ -18,7 +18,7 @@ interface InvoiceReviewModalProps {
 export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceReviewModalProps) {
     const { ingredients, addStockItem } = useInventory();
     const [matches, _setMatches] = useState<VisionMatchResult[]>(() => 
-        data.items.map(item => InventoryVisionService.findBestMatch(item, ingredients as import("@nexus/contracts").Ingredient[]))
+        data.items.map((item: any) => InventoryVisionService.findBestMatch(item, ingredients as import("@nexus/contracts").Ingredient[]))
     );
 
     const handleSave = async () => {

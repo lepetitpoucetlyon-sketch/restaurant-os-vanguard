@@ -12,7 +12,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § L26.
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 
 export interface RpiEmployee {

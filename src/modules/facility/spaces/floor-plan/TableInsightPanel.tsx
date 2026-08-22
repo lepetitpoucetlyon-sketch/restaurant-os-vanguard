@@ -14,9 +14,7 @@ import {
     AlertTriangle,
     Loader2,
 } from "lucide-react";
-// eslint-disable-next-line vanguard/no-inter-module-imports, no-restricted-imports
-import { useOrders, useReservations } from "@/modules/ops/providers";
-import { useTables } from '@/modules/ops';
+import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
 import { useTenant } from "@/shared/hooks";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { toast } from "sonner";
@@ -34,10 +32,10 @@ interface TableInsightPanelProps {
 }
 
 export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableInsightPanelProps) {
-    const { data: orders, isLoading: ordersLoading } = useOrders();
-    const { data: reservations, isLoading: resLoading } = useReservations();
-    const { updateTable } = useTables();
     const { activeTenantId } = useTenant();
+    const { data: orders = [], isLoading: ordersLoading } = useSovereignCollection<Order>('orders', { tenantId: activeTenantId ?? undefined, autoSync: true });
+    const { data: reservations = [], isLoading: resLoading } = useSovereignCollection<Reservation>('reservations', { tenantId: activeTenantId ?? undefined, autoSync: true });
+    const { update: updateTable } = useSovereignCollection<Table>('tables', { tenantId: activeTenantId ?? undefined, autoSync: true });
     const [welcoming, setWelcoming] = useState(false);
 
     const data = useMemo(() => {

@@ -15,9 +15,7 @@ export * from './hooks';
 export * from './spaces';
 export * from './spaces/settings';
 export * from './spaces/settings/store/settingsAtoms';
-export * from './maintenance';
 export * from './assets';
-export * from './components';
 export { EquipmentAssetService } from './services/EquipmentAssetService';
 export { EquipmentKnowledgeService, DEFAULT_EQUIPMENT_GUIDE_TEMPLATES } from './services/EquipmentKnowledgeService';
 export { EquipmentDiagnosticService, FAULT_DIAGNOSTIC_DATABASE } from './services/EquipmentDiagnosticService';
@@ -30,4 +28,15 @@ export {
 export { MaintenanceAlertConfigService } from './services/MaintenanceAlertConfigService';
 export { AmbianceService, type RestaurantAmbiance } from './spaces/AmbianceService';
 
+export { EquipmentHubView } from './components/equipment/EquipmentHubView';
+export { FloorPlanEditor } from './spaces/floor-plan/FloorPlanEditor';
 export type { FloorPlanEditorRef } from './spaces/floor-plan/FloorPlanEditor';
+export {
+  DUERPSection,
+  IncendieSection,
+  Cerfa13984Section,
+  PrestatairesSection,
+  PMRSection,
+  SanitaryComplianceSection,
+  InterventionLogSection,
+} from './maintenance/registre';

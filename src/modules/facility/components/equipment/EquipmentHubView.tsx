@@ -1,25 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { AnimatePresence } from 'framer-motion';
 import {
   Wrench,
   Plus,
   Search,
-  SlidersHorizontal,
   FileText,
   ShieldCheck,
   AlertTriangle,
   CheckCircle2,
-  DollarSign,
-  Layers,
-  Sparkles,
   RefreshCw,
 } from 'lucide-react';
 import type {
   EquipmentAsset,
-  EquipmentCategory,
-  EquipmentStatus,
 } from '../../assets/domain/schemas/equipment';
 import { EquipmentAssetCard } from './EquipmentAssetCard';
 import { AddEquipmentModal } from './AddEquipmentModal';
@@ -121,21 +116,21 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
 
-          <a
+          <Link
             href="/settings?tab=maintenance"
             className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-colors"
           >
             <Wrench className="w-4 h-4 text-amber-400" />
             <span>Alertes & Zones</span>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/settings?tab=onboarding-checklist"
             className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-colors"
           >
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Audit J-0</span>
-          </a>
+          </Link>
 
           <button
             onClick={() => setShowAddModal(true)}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Modal } from "@ui";
+import { Modal } from "@ui/Modal";
 import { Button } from "@ui/button";
 import { useToast } from "@ui/Toast";
 import { useRecruitment } from "../../hooks/useRecruitment";

@@ -9,7 +9,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { EquipmentBreakdown } from '@/modules/facility';
+import type { EquipmentBreakdown } from '../assets/domain/schemas/equipment';
 
 export type BreakdownStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'WAITING_PARTS';
 

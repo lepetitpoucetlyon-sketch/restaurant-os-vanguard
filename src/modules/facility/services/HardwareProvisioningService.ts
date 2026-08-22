@@ -1,6 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
@@ -144,7 +143,7 @@ export class HardwareProvisioningService {
 
     for (const spec of HARDWARE_CHECKLIST_SPECS) {
       const startTime = performance.now();
-      let status: HardwareCheckItemResult['status'] = 'PASSED';
+      const status: HardwareCheckItemResult['status'] = 'PASSED';
       let details = 'Opérationnel et conforme aux spécifications.';
 
       // Simulation/Validation réelle de chaque périphérique

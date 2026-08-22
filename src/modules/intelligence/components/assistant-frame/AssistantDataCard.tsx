@@ -10,8 +10,7 @@ import {
     Bed, 
     ShieldCheck, 
     CheckCircle2, 
-    AlertTriangle,
-    ArrowUpRight
+    AlertTriangle
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 

@@ -11,3 +11,4 @@ export { SovereignSlmClient } from './SovereignSlmClient';
 export { GeminiProvider, GEMINI_MODELS } from './GeminiProvider';
 export { createLLMProvider, AI_MODELS, resolveModelId, detectProvider } from './LLMProviderFactory';
 export type { AIProviderName } from './LLMProviderFactory';
+export { DNAInjector } from './DNAInjector';

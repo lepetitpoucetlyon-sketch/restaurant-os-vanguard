@@ -1,5 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export interface KillSwitchRequest {
   tenantId: string;

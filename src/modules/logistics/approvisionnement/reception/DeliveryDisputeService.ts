@@ -10,7 +10,6 @@
 import type {
   DeliveryDisputeEntity,
   DisputeLineItem,
-  DisputeStatus,
 } from './DeliveryDisputeTypes';
 
 export class DeliveryDisputeService {

@@ -1,5 +1,5 @@
 import { EmpireInstance } from '@/shared/types/empire';
-import { MacroBrain, type FleetInsight } from '../../services/MacroBrain';
+import type { FleetInsight, ConsolidatedMetrics } from '@nexus/contracts/fleet.types';
 import { logger } from '@/lib/logger';
 import type { FiscalSeal } from '@nexus/contracts';
 
@@ -28,7 +28,7 @@ export class NexusFleetEngine {
      * Fetches real-time telemetry from Firestore and generates strategic insights.
      */
     public async updateFleetIntelligence(instances: EmpireInstance[]): Promise<{
-        metrics: import('@/modules/intelligence/services/MacroBrain').ConsolidatedMetrics | null;
+        metrics: ConsolidatedMetrics | null;
         insights: FleetInsight[];
     }> {
         if (this._isSyncing) return { metrics: null, insights: [] };
@@ -36,6 +36,8 @@ export class NexusFleetEngine {
 
         try {
             logger.info(`[NexusFleetEngine] Bridging ${instances.length} nodes to MacroBrain...`);
+
+            const { MacroBrain } = await import('../../services/MacroBrain');
 
             // 1. Generate Strategic Insights via MacroBrain
             const insights = MacroBrain.analyzeFleet(instances);
@@ -71,7 +73,7 @@ export class NexusFleetEngine {
         logger.info(`[NexusFleetEngine] Running cross-ledger verification for ${tenantIds.length} tenants...`);
 
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
-        const { FiscalEngine } = await import('@/modules/finance/fiscalite/FiscalAdapter');
+        const { FiscalEngine } = await import('@/lib/fiscal');
 
 
         const results = [];

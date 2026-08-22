@@ -8,7 +8,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { EquipmentAsset } from '@/modules/facility';
+import type { EquipmentAsset } from '../assets/domain/schemas/equipment';
 
 export type SovereignEquipmentStatus = 'OPERATIONAL' | 'MAINTENANCE' | 'BROKEN' | 'RETIRED';
 

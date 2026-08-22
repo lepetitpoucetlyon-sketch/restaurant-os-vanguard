@@ -6,7 +6,12 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
 import { pushToRole } from '@/lib/push/pushClient';
 import { useTenant } from "@/shared/hooks";
-import type { OrderLine } from "@/modules/ops";
+interface OrderLine {
+    productId?: string;
+    product_id?: string;
+    quantity: number;
+    name?: string;
+}
 
 interface RecipeIngredient {
     ingredientId: string;
@@ -71,10 +76,12 @@ export function useStockDeduction() {
         }
 
         for (const line of items) {
-            const recipe = recipeMap.get(line.productId);
+            const pId = line.productId ?? line.product_id;
+            if (!pId) continue;
+            const recipe = recipeMap.get(pId);
             if (!recipe?.ingredients?.length) {
                 logger.debug(
-                    `[useStockDeduction] No recipe found for productId ${line.productId} — skipping`
+                    `[useStockDeduction] No recipe found for productId ${pId} — skipping`
                 );
                 continue;
             }

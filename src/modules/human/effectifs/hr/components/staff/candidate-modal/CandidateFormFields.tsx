@@ -1,7 +1,7 @@
 "use client";
 
 import { User, Mail, Phone } from "lucide-react";
-import { PremiumSelect } from "@ui";
+import { PremiumSelect } from "@ui/PremiumSelect";
 import type { Candidate, CandidateStatus } from "@nexus/contracts";
 
 export const ROLES = [

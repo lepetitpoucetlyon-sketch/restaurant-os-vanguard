@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import type { Product } from '@/modules/commerce';
+import type { Product } from '@nexus/contracts';
 
 /**
  * Service centralisé garantissant qu'il n'y ait pas de race-conditions 

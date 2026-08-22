@@ -11,7 +11,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § L36 + T64 (HAUT).
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 const MIN_REST_MINUTES = 11 * 60;
 const MAX_AMPLITUDE_MINUTES = 13 * 60;

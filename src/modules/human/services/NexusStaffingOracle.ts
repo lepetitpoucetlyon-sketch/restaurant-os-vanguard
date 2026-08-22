@@ -1,7 +1,6 @@
 import { StaffingProposal, SharedKernel, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { SimulationService } from '@/modules/intelligence';
 
 /**
  * 🧑‍💼 NexusStaffingOracle - Restaurant OS
@@ -28,6 +27,7 @@ export class NexusStaffingOracle {
         }
 
         // 2. Get Predicted Velocity from Oracle
+        const { SimulationService } = await import('@/modules/intelligence');
         const prediction = await SimulationService.simulateDay(date, 'EMPIRE', 'PIZZERIA_RUSH', {
             ingredients: [],
             stockItems: []

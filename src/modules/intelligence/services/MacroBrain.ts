@@ -5,7 +5,6 @@ import { EmpireInstance } from '@/shared/types/empire';
 import { logger } from '@/lib/axiom';
 import { empireAudit } from '@/lib/audit';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/modules/finance';
 import type { FiscalSeal } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
@@ -180,6 +179,7 @@ export const MacroBrain = {
                     const lastSeal  = sorted[0];
 
                     // Créer le sceau de maintenance NF525
+                    const { FiscalEngine } = await import('@/lib/fiscal');
                     const seal = await FiscalEngine.sealEntry(
                         `macro_seal_${instanceId}_${Date.now()}`,
                         {
@@ -297,13 +297,9 @@ export const MacroBrain = {
         }
 
         try {
-            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
-            const registry = await TenantAIRegistry.forTenant(
-                tenantId,
-                'modules/intelligence/services/MacroBrain',
-                'reasoning',
-            );
-            const response = await registry.provider.generateText({
+            const { createLLMProvider } = await import('../ia/ai/LLMProviderFactory');
+            const provider = createLLMProvider();
+            const response = await provider.generateText({
                 model: '',
                 userPrompt: `${prompt}\n\nContext: ${JSON.stringify(context)}`,
                 temperature: 0.7,

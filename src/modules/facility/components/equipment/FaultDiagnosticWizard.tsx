@@ -1,15 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   X,
-  AlertTriangle,
-  HelpCircle,
   Wrench,
   CheckCircle2,
   PhoneCall,
-  Activity,
   Zap,
   ArrowRight,
   ShieldAlert,

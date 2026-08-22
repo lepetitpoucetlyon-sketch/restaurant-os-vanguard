@@ -117,23 +117,24 @@ export const OracleEngine = {
 };
 
 /**
- * 🤖 Agent AI : Suggest Chicken Procurement
- * Bridges Oracle forecasts with SovereignLedger entries.
+ * 🤖 Agent AI : Suggest Procurement
+ * Bridges Oracle forecasts with a finance.transfer_proposed event
+ * (consumed by finance module via NexusEventBus handler).
  */
 export async function suggestChickenProcurement(qty: number, tenantId: string): Promise<void> {
-  const cost = qty * 450; // 4.50€ per industrial chicken
-  logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} chickens (Cost: ${cost/100}€)`);
+  const cost = qty * 450; // 4.50€ per unit
+  logger.info(`🔮 Agent Oracle: Proposing procurement for ${qty} units (Cost: ${cost/100}€)`);
 
-  // Inject into SovereignLedger PROPOSALS account
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-  const { SovereignLedger } = await import('@/modules/finance/services/SovereignLedger');
-  await SovereignLedger.getInstance(tenantId).recordTransfer({
+  const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+  await NexusEventBus.emit('finance.transfer_proposed', {
+    v: 1,
+    tenantId,
     debitAccount: 'PURCHASES',
-    creditAccount: 'PROPOSALS', // Awaiting human signing
+    creditAccount: 'PROPOSALS',
     amountInCents: cost,
     referenceId: `AI-SUGG-${Date.now()}`,
-    description: `[AI-SUGGESTION] Ravitaillement Rôtisserie (${qty} unités)`
+    description: `[AI-SUGGESTION] Approvisionnement IA (${qty} unités)`,
+    source: 'OracleEngine',
   });
 }
 

@@ -1,8 +1,7 @@
-import { SovereignLedger } from '@/modules/finance';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import type { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { DocumentVault } from '@/modules/compliance';
+import { DocumentVault } from '@/lib/vault';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**
@@ -22,6 +21,7 @@ export class ProcurementBridge {
         }
 
         // Création de l'engagement hors-bilan
+        const { SovereignLedger } = await import('@/modules/finance');
         await SovereignLedger.getInstance(tenantId).recordTransfer({
             debitAccount: 'ENGAGEMENT_DEBIT_800',
             creditAccount: 'ENGAGEMENT_CREDIT_801',
@@ -60,6 +60,7 @@ export class ProcurementBridge {
         });
 
         // 3. Réaction Automatique : Contre-passation de l'engagement et création de la dette réelle
+        const { SovereignLedger } = await import('@/modules/finance');
         await SovereignLedger.getInstance(tenantId).convertEngagementToDebt(deliveryNote.id, deliveryNote.totalAmountInCents);
 
         // 4. Mise à jour du stock physique déléguée à l'événement stock.received (P1)

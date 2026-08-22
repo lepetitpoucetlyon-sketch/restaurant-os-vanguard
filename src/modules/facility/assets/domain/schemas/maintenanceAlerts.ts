@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 
 export const RestaurantZoneSchema = z.enum([
   'ALL',                  // L'entièreté de l'établissement

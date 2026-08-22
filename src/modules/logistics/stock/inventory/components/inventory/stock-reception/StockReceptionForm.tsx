@@ -3,7 +3,7 @@
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { MapPin, Calendar, AlertTriangle, Truck } from "lucide-react";
 import { VisionScanner } from "@/shared/components/VisionScanner";
-import type { ExtractedInvoice } from "@/modules/ops";
+import type { ExtractedInvoice } from "../../../../../domain/schemas/inventory";
 import type { IngredientCategory, IngredientUnit, StorageLocation } from "@nexus/contracts";
 import { CATEGORY_LABELS, UNIT_OPTIONS, type SupplierRecord } from "./receptionConstants";
 

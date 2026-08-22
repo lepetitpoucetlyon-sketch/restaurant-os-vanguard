@@ -3,9 +3,9 @@ import { logger } from '@/lib/logger';
 import { 
     ordersNodeAtom, 
     stockItemsNodeAtom, 
-    journalEntriesNodeAtom 
+    journalEntriesNodeAtom,
+    qualityActiveControlAtom
 } from '@/store/pillars';
-import { qualityActiveControlAtom } from '@/modules/compliance';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantScopedKey } from '@/lib/storage/tenantScopedKey';

@@ -1,6 +1,2 @@
-export * from './EditPanel';
-export * from './FloorPlanEditor';
-export * from './TableChairs';
-export * from './TableInsightPanel';
-export * from './ZoneRenderer';
-export { FloorPlanEditor as FloorPlanPage } from './FloorPlanEditor';
+// UI components removed from barrel: import directly from spaces/floor-plan/FloorPlanEditor
+export type { FloorPlanEditorRef } from './FloorPlanEditor';

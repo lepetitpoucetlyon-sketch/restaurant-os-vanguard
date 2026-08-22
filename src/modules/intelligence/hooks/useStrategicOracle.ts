@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useEffect, useRef } from 'react';
-import { useNexusFleet as useFleet } from '@/shared/hooks/useNexusFleet';
+import { useAtomValue } from 'jotai';
+import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
 import { useGeminiAgent } from '@/shared/hooks/useGeminiAgent';
 import { MacroBrain, FleetInsight } from '../services/MacroBrain';
 import { logger } from '@/lib/axiom';
@@ -13,8 +14,8 @@ import { toError } from "@/lib/toError";
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const fleet = useFleet() as import('@/shared/nexus/contracts/nexus.types').NexusFleetState;
-    const { instances, refreshFleet: _refreshFleet } = fleet;
+    const rawInstances = useAtomValue(fleetSnapshotAtom) as any;
+    const instances = Array.isArray(rawInstances) ? rawInstances : [];
     const agent = useGeminiAgent();
     const notifiedInsightIds = useRef<Set<string>>(new Set());
 

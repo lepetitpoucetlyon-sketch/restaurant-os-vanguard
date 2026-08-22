@@ -5,12 +5,7 @@ import { motion } from 'framer-motion';
 import {
   X,
   BookOpen,
-  Video,
-  FileText,
-  Wrench,
-  ExternalLink,
   Plus,
-  CheckCircle2,
 } from 'lucide-react';
 import type {
   EquipmentAsset,
@@ -71,8 +66,8 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
 
       onGuideAdded();
       onClose();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'enregistrement');
     } finally {
       setIsSubmitting(false);
     }

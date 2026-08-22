@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   CheckCircle2,
   AlertCircle,
@@ -15,12 +15,10 @@ import {
   Cpu,
   FileCheck,
   Activity,
-  Layers,
 } from 'lucide-react';
 import {
   HARDWARE_CHECKLIST_SPECS,
   type HardwareCommissioningReport,
-  type HardwareCheckItemResult,
 } from '../services/HardwareProvisioningService';
 
 interface HardwareOnboardingWizardProps {

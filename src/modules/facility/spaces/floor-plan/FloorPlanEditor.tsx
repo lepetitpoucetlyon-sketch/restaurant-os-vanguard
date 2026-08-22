@@ -16,7 +16,7 @@ import { TableInsightPanel } from "./TableInsightPanel";
 import { useFloorPlanControls } from "./useFloorPlanControls";
 
 const PaymentDialog = dynamic(
-    () => import("@modules/ops/service/pos/components/PaymentDialog").then((mod) => mod.PaymentDialog),
+    () => import("@/modules/ops").then((mod) => mod.PaymentDialog),
     { ssr: false }
 );
 

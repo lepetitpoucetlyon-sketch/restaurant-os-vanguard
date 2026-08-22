@@ -1,7 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
 import { ShiftEntrySchema, type ShiftEntry } from '../domain/schemas/hr';
-import { FiscalEngine } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 import type { FiscalSeal } from '@nexus/contracts';
 
@@ -58,6 +57,7 @@ export class NexusPayrollEngine {
         const newPath = `${tenantPath}/${newId}`;
 
         // 4. Generate Final Sealed Entry
+        const { FiscalEngine } = await import('@/modules/finance');
         const seal: FiscalSeal = await FiscalEngine.sealEntry(newId, rawData as Record<string, import("@/shared/nexus-contract").SovereignValue>, { lastSeal: lastSeal || undefined });
 
         const finalEntry = {

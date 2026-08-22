@@ -1,13 +1,57 @@
 import { logger } from '@/lib/axiom';
-// Dynamic import for server execution to avoid inter-pillar cycle
-import { IdentityGuardService } from '@/lib/IdentityGuardService';
-import { toLegacyInvoice, type ExtractedInvoiceItem } from '@/modules/logistics';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 
 // ─── Legacy Types (re-exported for backward compatibility) ──────────────────────
 
-export type { ExtractedInvoiceItem } from '@/modules/logistics';
+export interface ExtractedInvoiceItem {
+    name: string;
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    unitPriceHT: number;
+    totalPrice: number;
+    totalHT: number;
+    unit: string;
+    vatRate?: number;
+    taxRate?: number;
+    expirationDate?: string;
+    batchNumber?: string;
+}
+
+function mapInvoiceItem(item: any): ExtractedInvoiceItem {
+    const rawPrice = item.unitPrice ?? item.unitPriceHT ?? (item.unit_price_cents ? item.unit_price_cents / 100 : 0);
+    const rawTotal = item.totalPrice ?? item.totalHT ?? (item.line_total_excl_tax_cents ? item.line_total_excl_tax_cents / 100 : 0);
+    return {
+        name: item.name || item.canonical_name || item.raw_label || item.description || '',
+        description: item.description || item.raw_label || item.name || '',
+        quantity: Number(item.quantity) || 0,
+        unit: item.unit || 'UNIT',
+        unitPrice: Number(rawPrice) || 0,
+        unitPriceHT: Number(rawPrice) || 0,
+        totalPrice: Number(rawTotal) || 0,
+        totalHT: Number(rawTotal) || 0,
+        taxRate: item.taxRate ?? item.tax_rate_percent,
+        vatRate: item.vatRate ?? item.taxRate ?? item.tax_rate_percent,
+        expirationDate: item.expirationDate,
+        batchNumber: item.batchNumber,
+    };
+}
+
+export function toLegacyInvoice(data: any): ExtractedInvoice {
+    const rawItems: any[] = Array.isArray(data.items) ? data.items : (Array.isArray(data.line_items) ? data.line_items : []);
+    const meta = data.invoice_metadata;
+    const totals = data.totals;
+    return {
+        supplierName: data.supplierName || meta?.supplier?.name || '',
+        invoiceNumber: data.invoiceNumber || meta?.invoice_number || '',
+        date: data.date || meta?.date || '',
+        currency: data.currency || meta?.currency || 'EUR',
+        totalHT: Number(data.totalHT ?? (totals?.subtotal_excl_tax_cents ? totals.subtotal_excl_tax_cents / 100 : 0)) || 0,
+        totalTTC: Number(data.totalTTC ?? (totals?.total_incl_tax_cents ? totals.total_incl_tax_cents / 100 : 0)) || 0,
+        items: rawItems.map(mapInvoiceItem),
+    };
+}
 
 export interface ExtractedInvoice {
     supplierName: string;
@@ -57,16 +101,25 @@ export const VisionService = {
             throw new Error(`Extraction failed: ${result.error?.reason || 'Unknown error'}`);
         }
 
-        const { InvoiceExtractionService } = await import('@modules/logistics/services/InvoiceExtractionService');
-        const result = await InvoiceExtractionService.extractFromImage(base64Image);
-        if (result.success) {
-            return toLegacyInvoice(result.data);
+        try {
+            const { createLLMProvider } = await import('../ia/ai/LLMProviderFactory');
+            const provider = createLLMProvider();
+            const imageData = base64Image.includes(',') ? base64Image.split(',')[1] : base64Image;
+            const response = await provider.generateFromImage({
+                model: '',
+                systemPrompt: 'Tu es un système OCR expert en factures fournisseurs. Extrais les métadonnées et les lignes en JSON valide.',
+                userPrompt: 'Extrais tous les champs: supplierName, invoiceNumber, date, currency, totalHT, totalTTC, et items (name, description, quantity, unit, unitPriceHT, totalHT).',
+                image: { base64: imageData, mimeType: 'image/jpeg' },
+                temperature: 0.1,
+                responseMimeType: 'application/json',
+            });
+            const parsed = JSON.parse(response.text);
+            return toLegacyInvoice(parsed);
+        } catch (error) {
+            const reason = toError(error).message;
+            logger.error(`VisionService: Extraction failed — ${reason}`);
+            throw new Error(`Échec de la lecture visuelle de la facture: ${reason}`);
         }
-
-        // Extraction failed — log and throw
-        const reason = 'reason' in result.error ? result.error.reason : 'Unknown extraction error';
-        logger.error(`VisionService: Extraction failed — ${reason}`);
-        throw new Error(`Échec de la lecture visuelle de la facture: ${reason}`);
     },
 
     /**
@@ -74,8 +127,18 @@ export const VisionService = {
      * Use this for new code paths.
      */
     async analyzeInvoiceFull(base64Image: string, options?: { model?: 'flash' | 'pro'; tenantId?: string }) {
-        const { InvoiceExtractionService } = await import('@modules/logistics/services/InvoiceExtractionService');
-        return InvoiceExtractionService.extractFromImage(base64Image, options);
+        const { createLLMProvider } = await import('../ia/ai/LLMProviderFactory');
+        const provider = createLLMProvider();
+        const imageData = base64Image.includes(',') ? base64Image.split(',')[1] : base64Image;
+        const response = await provider.generateFromImage({
+            model: '',
+            systemPrompt: 'Extract structured supplier invoice data with line items in JSON.',
+            userPrompt: 'Extract full supplier invoice metadata and all line items.',
+            image: { base64: imageData, mimeType: 'image/jpeg' },
+            temperature: 0.1,
+            responseMimeType: 'application/json',
+        });
+        return { success: true, data: JSON.parse(response.text) };
     },
 
     /**
@@ -93,6 +156,7 @@ export const VisionService = {
             return response.json();
         }
 
+        const { IdentityGuardService } = await import('@/lib/IdentityGuardService');
         return IdentityGuardService.scanDocument(base64Image, options);
     },
 
@@ -119,14 +183,10 @@ export const VisionService = {
             throw new Error('[VisionService.comparePlateToStandard] tenantId requis côté serveur (ADR-008)');
         }
         try {
-            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
-            const registry = await TenantAIRegistry.forTenant(
-                tenantId,
-                'modules/intelligence/services/VisionService',
-                'vision',
-            );
+            const { createLLMProvider } = await import('../ia/ai/LLMProviderFactory');
+            const provider = createLLMProvider();
             const imageData = plateBase64.includes(',') ? plateBase64.split(',')[1] : plateBase64;
-            const response = await registry.provider.generateFromImage({
+            const response = await provider.generateFromImage({
                 model: '',
                 systemPrompt: `Tu es un chef de cuisine expert en contrôle qualité. Analyse la photo d'un plat et réponds UNIQUEMENT en JSON valide.`,
                 userPrompt: `Évalue ce plat "${recipeName}". Réponds en JSON: {"score": number (1-10), "isCompliant": boolean, "feedback": string[], "detectedIssues": string[]}`,
@@ -154,14 +214,10 @@ export const VisionService = {
             throw new Error('[VisionService.verifyHACCPTask] tenantId requis (ADR-008)');
         }
         try {
-            const { TenantAIRegistry } = await import('@/kernel/ai/tenant');
-            const registry = await TenantAIRegistry.forTenant(
-                tenantId,
-                'modules/intelligence/services/VisionService',
-                'vision',
-            );
+            const { createLLMProvider } = await import('../ia/ai/LLMProviderFactory');
+            const provider = createLLMProvider();
             const imageData = photoBase64.replace(/^data:image\/\w+;base64,/, '');
-            const response = await registry.provider.generateFromImage({
+            const response = await provider.generateFromImage({
                 model: '',
                 userPrompt: `Vérifie si cette image atteste du respect de la tâche HACCP suivante : "${taskDescription}". Réponds au format JSON avec {"isCompliant": boolean, "confidence": number, "observation": string}.`,
                 image: { base64: imageData, mimeType: 'image/jpeg' },

@@ -8,7 +8,6 @@ import {
 } from '../../domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalHACCPMapper } from '@/modules/finance';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator
@@ -82,6 +81,7 @@ export class HermesEngine {
                     });
 
                     // Auto-Trigger Bridge: Themis Agent Intervention
+                    const { FiscalHACCPMapper } = await import('@/modules/finance/services/FiscalHACCPMapper');
                     await FiscalHACCPMapper.processCriticalWaste(reading, [], tenantId);
                     actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`);
                     

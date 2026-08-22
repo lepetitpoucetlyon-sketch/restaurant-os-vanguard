@@ -4,7 +4,6 @@ import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { StockEngine } from '@/modules/logistics';
 
 /**
  * 📦 STOCK TOOL - Grade X
@@ -37,10 +36,14 @@ export const StockTool: ToolDefinition<LowStockArgs> = {
             Nexus.adapter.query<Ingredient>(resourcePath)
         ]);
 
-        // 📊 ANALYSIS (Powered by StockEngine)
-        const lowStockItems = StockEngine.calculateLowStock(allStock, ingredients);
+        // 📊 ANALYSIS — inline low-stock filter (avoids cross-pillar import)
+        const lowStockItems = allStock.filter((item: StockItem) => {
+            const ing = ingredients.find((i: Ingredient) => i.id === item.ingredientId);
+            const threshold = ing?.minQuantity || 0;
+            return item.quantity < threshold;
+        });
 
-        return lowStockItems.map(s => ({
+        return lowStockItems.map((s: StockItem) => ({
             id: s.id,
             item: s.ingredientName,
             current: s.quantity,

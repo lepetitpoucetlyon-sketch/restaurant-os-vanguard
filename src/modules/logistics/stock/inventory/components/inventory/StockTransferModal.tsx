@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import { X, ArrowRight, MapPin, Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { useInventory } from "@/modules/ops";
-import { StockItem, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
+import { useInventory } from "../../hooks/useInventory";
+import { StockItem, DEFAULT_STORAGE_LOCATIONS, type StorageLocation } from "@nexus/contracts";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { PremiumSelect } from "@ui/PremiumSelect";
@@ -32,7 +30,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
         }
     }, [stockItem]);
 
-    const currentItem = stockItems.find(s => s.id === selectedItem);
+    const currentItem = stockItems.find((s: StockItem) => s.id === selectedItem);
     const activeLocations = storageLocations.length > 0 ? storageLocations : DEFAULT_STORAGE_LOCATIONS;
 
     const handleSubmit = async () => {
@@ -50,9 +48,9 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
         setSuccess(false);
     };
 
-    const availableStock = stockItems.filter(s => s.status === 'available' && (Number(s.quantity) || 0) > 0);
+    const availableStock = stockItems.filter((s: StockItem) => s.status === 'available' && (Number(s.quantity) || 0) > 0);
     const currentLocation = currentItem
-        ? activeLocations.find(l => l.id === currentItem.storageLocationId)
+        ? activeLocations.find((l: StorageLocation) => l.id === currentItem.storageLocationId)
         : null;
 
     return (
@@ -110,7 +108,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 label="ARTEFACT A DEPLACER"
                                 value={selectedItem || ''}
                                 onChange={(val) => setSelectedItem(val || null)}
-                                options={availableStock.map(s => ({
+                                options={availableStock.map((s: StockItem) => ({
                                     value: String(s.id),
                                     label: String(s.ingredientName || ''),
                                     description: `${s.quantity} ${String(s.unit || '').toUpperCase()}`
@@ -161,8 +159,8 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 value={targetLocation}
                                 onChange={setTargetLocation}
                                 options={activeLocations
-                                    .filter(l => l.isActive && l.id !== currentItem?.storageLocationId)
-                                    .map(loc => ({
+                                    .filter((l: StorageLocation) => l.isActive && l.id !== currentItem?.storageLocationId)
+                                    .map((loc: StorageLocation) => ({
                                         value: String(loc.id),
                                         label: String(loc.name || ''),
                                         description: loc.temperature !== undefined ? `${loc.temperature}°C` : ''

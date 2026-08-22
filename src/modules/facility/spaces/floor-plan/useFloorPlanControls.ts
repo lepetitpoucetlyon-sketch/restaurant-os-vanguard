@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-// FIXME (facility-rapatriement): dépendance ops/providers — découpler via injection context
-// eslint-disable-next-line vanguard/no-inter-module-imports, no-restricted-imports
-import { useTables, useReservations } from "@/modules/ops/providers";
+import { useTables, useReservations } from "@/modules/ops";
 import { Table } from "@nexus/contracts";
 import Konva from 'konva';
 import { FloorPlanGeometry } from './FloorPlanGeometry';

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Modal } from "@ui/Modal";
 import { ChefHat, X, Check, RefreshCw } from "lucide-react";
-import { useInventory } from "@/modules/ops";
+import { useInventory } from "../../hooks/useInventory";
 import { useAuth } from "@/shared/hooks";
-import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
+import { IngredientUnit, PreparationType, DEFAULT_STORAGE_LOCATIONS, type StockItem } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 
 import type { UsedIngredient } from "./prep-modal/prepConstants";
@@ -26,11 +26,11 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
     const { currentUser } = useAuth();
 
     const [name, setName] = useState('');
-    const [type, setType] = useState<PreparationType>('mise_en_place');
+    const [type, setType] = useState<PreparationType>('sauce');
     const [quantity, setQuantity] = useState('');
     const [unit, setUnit] = useState<IngredientUnit>('kg');
     const [portions, setPortions] = useState('');
-    const [storageLocation, setStorageLocation] = useState('frigo_5');
+    const [storageLocation, setStorageLocation] = useState('');
     const [containerId, setContainerId] = useState('');
     const [dlcDays, setDlcDays] = useState('3');
     const [notes, setNotes] = useState('');
@@ -43,7 +43,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
     const [success, setSuccess] = useState(false);
 
     const addIngredient = () => {
-        const stock = stockItems.find(s => s.id === selectedStockItem);
+        const stock = stockItems.find((s: StockItem) => s.id === selectedStockItem);
         if (!stock || !ingredientQty) return;
 
         setUsedIngredients([...usedIngredients, {
@@ -75,7 +75,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
 
         // Calculate total cost in cents
         const totalCostInCents = usedIngredients.reduce((acc, used) => {
-            const stock = stockItems.find(s => s.id === used.stockItemId);
+            const stock = stockItems.find((s: StockItem) => s.id === used.stockItemId);
             if (stock && stock.unitCostInCents) {
                 return acc + Math.round(used.quantityUsed * (Number(stock.unitCostInCents) || 0));
             }
@@ -112,7 +112,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
     };
 
     const activeLocations = storageLocations.length > 0 ? storageLocations : DEFAULT_STORAGE_LOCATIONS;
-    const availableStock = stockItems.filter(s => s.status === 'available' && (Number(s.quantity) || 0) > 0);
+    const availableStock = stockItems.filter((s: StockItem) => s.status === 'available' && (Number(s.quantity) || 0) > 0);
 
     return (
         <Modal

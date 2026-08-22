@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, MessageSquare, Zap, Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { Send, MessageSquare, Zap, Mic, Volume2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useUniversalAssistant } from "@/shared/hooks/useUniversalAssistant";
 import { AssistantTriggerButton } from "./assistant-frame/AssistantTriggerButton";

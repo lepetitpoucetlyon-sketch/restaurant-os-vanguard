@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
 import { User, UserRole } from "@nexus/contracts";
 import { Button } from "@ui/button";
-import { Modal, PremiumSelect, SecurityPinModal } from "@ui";
+import { Modal } from "@ui/Modal";
+import { PremiumSelect } from "@ui/PremiumSelect";
+import { SecurityPinModal } from "@ui/SecurityPinModal";
 import { useToast } from "@ui/Toast";
 
 const ROLES = [

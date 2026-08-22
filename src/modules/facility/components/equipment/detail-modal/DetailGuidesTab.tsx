@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BookOpen, FileText, Video, Plus, ExternalLink } from 'lucide-react';
+import { FileText, Video, Plus, ExternalLink } from 'lucide-react';
 import type { EquipmentGuide } from '../../../assets/domain/schemas/equipment';
 
 interface DetailGuidesTabProps {

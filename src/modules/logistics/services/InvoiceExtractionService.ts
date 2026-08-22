@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports */
-/* eslint-disable vanguard/no-inter-module-imports */
+ 
+ 
 import { logger } from '@/lib/logger';
 import { TenantAIRegistry } from '@/kernel/ai/tenant';
 import { NexusTelemetryService } from '@/shared/nexus/telemetry/NexusTelemetryService';

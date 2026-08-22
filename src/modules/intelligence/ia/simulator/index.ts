@@ -1,5 +1,5 @@
 export * from './SimulationService';
 export * from './SimulatorDB';
 export * from './TemporalSimulator';
-export * from './components';
+// components removed from barrel: import directly from simulator/components/SimulationDashboard
 export * from './store';

@@ -11,7 +11,7 @@ import { IngredientUnit, DEFAULT_STORAGE_LOCATIONS } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { logger } from "@/lib/logger";
-import type { ExtractedInvoice } from "@/modules/intelligence";
+import type { ExtractedInvoice } from "../../../../domain/schemas/inventory";
 
 import type { SupplierRecord } from "./stock-reception/receptionConstants";
 import { StockSuccessView } from "./stock-reception/StockSuccessView";

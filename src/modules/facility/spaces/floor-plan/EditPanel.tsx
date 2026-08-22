@@ -1,8 +1,8 @@
 "use client";
 
 import { Table, TableStatus } from "@nexus/contracts";
-// eslint-disable-next-line vanguard/no-inter-module-imports, no-restricted-imports
-import { useTables } from "@/modules/ops/providers";
+import { useAtomValue } from "jotai";
+import { zonesAtom } from "@/store/pillars/ops";
 import {
     Trash2,
     Armchair,
@@ -33,7 +33,7 @@ export const EditPanel = ({
     onClose,
     isDarkMode
 }: EditPanelProps) => {
-    const { zones } = useTables();
+    const zones = useAtomValue(zonesAtom) ?? [];
 
     if (!selectedTable) return null;
 

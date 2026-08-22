@@ -6,9 +6,9 @@ import {
     ordersNodeAtom, 
     stockItemsNodeAtom, 
     journalEntriesNodeAtom,
-    updateNexusNode 
+    updateNexusNode,
+    qualityActiveControlAtom
 } from '@/store/pillars';
-import { qualityActiveControlAtom } from '@/modules/compliance';
 import { logger } from '@/lib/logger';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

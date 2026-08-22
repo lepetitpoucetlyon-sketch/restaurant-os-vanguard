@@ -20,7 +20,8 @@ import { cn } from "@/lib/ui.foundations";;
 import { Button } from "@ui/button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from '../SimulationService';
-import { useInventory } from '@/modules/logistics';
+import { useAtomValue } from "jotai";
+import { ingredientsNodeAtom, stockItemsNodeAtom } from "@/store/pillars/logistics";
 import { useToast } from "@ui/Toast";
 
 type SimulationDayResult = MonteCarloResult['metrics'] & {
@@ -30,7 +31,8 @@ type SimulationDayResult = MonteCarloResult['metrics'] & {
 };
 
 export function SimulationDashboard() {
-    const { ingredients, stockItems } = useInventory();
+    const ingredients = useAtomValue(ingredientsNodeAtom).data;
+    const stockItems = useAtomValue(stockItemsNodeAtom).data;
     const { showToast } = useToast();
     const [isSimulating, setIsSimulating] = useState(false);
     const [progress, setProgress] = useState(0);

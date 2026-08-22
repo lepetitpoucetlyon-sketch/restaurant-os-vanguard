@@ -13,9 +13,6 @@ export { ShieldedContext, SovereignSecurityViolation } from './ia/ai/ShieldedCon
 export * from './ia/agency';
 export * from './ia/fleet';
 export { CircuitBreaker } from './ia/resilience/CircuitBreaker';
-export { ChaosMonkey } from './ia/resilience/ChaosMonkey';
-export { ResilienceSlayer } from './ia/resilience/ResilienceSlayer';
-export { AGENT_TOOLS, TOOL_SCHEMAS } from './domain/agent/tools';
 export { FleetOutboxDrainService } from './ia/fleet/FleetOutboxDrainService';
 export { GeminiProvider } from './ia/GeminiProvider';
 export { RealtimeVoiceFactory } from './ia/realtime/RealtimeVoiceFactory';
@@ -27,7 +24,7 @@ export * from './ia/simulator';
 export * from './knowledge/rag';
 
 export { LLMManager, AIProviderRouter, AI_MODELS } from './ia/ai';
-export { createLLMProvider, resolveModelId } from './ia/ai/LLMProviderFactory';
+export { createLLMProvider, resolveModelId, type AIProviderName } from './ia/ai/LLMProviderFactory';
 export { sovereignCreateWorkspace } from './knowledge/rag';
 export type { ToolDefinition } from './domain/agent/tools/types';
 export type { ILLMProvider } from './ia/ai/types';
@@ -49,11 +46,20 @@ export { MacroBrain } from './services/MacroBrain';
 export { DataDigester } from './services/DataDigester';
 export { fleetTelemetry } from './ia/fleet/FleetTelemetryService';
 export type { FleetInsight } from './services/MacroBrain';
-export * from './analytique/analytics/components';
+export { useStrategicOracle } from './hooks/useStrategicOracle';
+// analytics/components removed from barrel: OraclePredictor → OracleEngine → MonkeyChaos → finance (cycle).
 export { LightRAGClient } from './knowledge/rag/LightRAGClient';
 export { HermesKnowledgeManager } from './knowledge/rag/HermesKnowledgeManager';
 export { ConnectorHub } from './connectors/hub';
+export { SimulationDashboard } from './ia/simulator/components/SimulationDashboard';
 export { IntegrationsPage } from './connectors/hub/components/IntegrationsPage';
+export { OraclePredictor } from './analytique/analytics/components/OraclePredictor';
+export {
+  ProfitabilityView,
+  ReputationView,
+  ComplianceView,
+  MenuEngineeringMatrix,
+} from './analytique/analytics/components';
 
 // 🏛️ Domaine Schemas
 export * from './domain/schemas/supportTicket';
@@ -62,7 +68,8 @@ export * from './domain/schemas/supportTicket';
 export { UniversalSystemPromptBuilder, VERTICAL_LABELS_MAP } from './services/UniversalSystemPromptBuilder';
 export { AssistantActionDispatcher, UNIVERSAL_ASSISTANT_TOOLS } from './services/AssistantActionDispatcher';
 export { OracleIntentAugmenter } from './services/OracleIntentAugmenter';
-export { UniversalAssistantFrame } from './components/UniversalAssistantFrame';
+// UniversalAssistantFrame removed from barrel: imports AssistantHeader → useUniversalAssistant (cycle).
+// Import directly: '@/modules/intelligence/components/UniversalAssistantFrame'
 export { ActionProposalCard } from './components/ActionProposalCard';
 export type { ActionProposal, AssistantToolDefinition } from './services/AssistantActionDispatcher';
 export { VisionService, type ExtractedInvoice, type PlateAuditResult } from './services/VisionService';
