@@ -31,7 +31,8 @@ export interface SaaSInvoiceBreakdown {
 export class MultiTenantBillingEngineService {
   static async generateMonthlySaaSInvoice(
     adminId: string,
-    input: SaaSUsageBillingInput
+    input: SaaSUsageBillingInput,
+    ipAddress: string = 'unknown'
   ): Promise<SaaSInvoiceBreakdown> {
     const terminalsFeeInMicrounits = input.activePosTerminalCount * input.terminalFeeInMicrounits;
     const variableVolumeFeeInMicrounits = Math.round((input.totalVolumeProcessedInMicrounits * input.variableCommissionBps) / 10_000);
@@ -56,7 +57,7 @@ export class MultiTenantBillingEngineService {
       adminId,
       action: 'SAAS_BILLING_INVOICED',
       targetId: invoiceId,
-      ipAddress: '127.0.0.1',
+      ipAddress,
       metadata: {
         totalTtcInMicrounits,
         activeTerminals: input.activePosTerminalCount,

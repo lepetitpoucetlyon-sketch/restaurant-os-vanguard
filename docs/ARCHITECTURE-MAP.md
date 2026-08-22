@@ -5,14 +5,14 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3396** · LOC : **306 531**
+- Fichiers `.ts/.tsx` : **3399** · LOC : **306 592**
 - Pages : **77** · Routes API : **208**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1582 |
-| `src/shared/` | 656 |
+| `src/shared/` | 659 |
 | `src/app/` | 419 |
 | `src/lib/` | 223 |
 | `src/verticals/` | 186 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 221 |
+| `shared/eventBus/` | 224 |
 | `shared/components/` | 163 |
 | `shared/nexus/` | 127 |
 | `shared/hooks/` | 44 |
@@ -68,7 +68,7 @@
 | `facility` | 71 | ✅ |
 | `stock` ⚠️ | 13 | ❌ MANQUANT |
 | `production` ⚠️ | 12 | ❌ MANQUANT |
-| `fleet` ⚠️ | 6 | ❌ MANQUANT |
+| `fleet` ⚠️ | 6 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
 > ⚠️ **Hors taxonomie des 8 piliers** : `fleet`, `production`, `stock`, `system` — à formaliser ou rapatrier.
@@ -90,7 +90,7 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 566 |
 | `src/i18n/locales/en.ts` | 566 |
 | `src/i18n/locales/fr.ts` | 545 |
-| `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 512 |
+| `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 493 |
 | `src/shared/eventBus/events/ops.events.ts` | 488 |
 | `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 477 |
 | `src/__tests__/commerce/anglemorts-m101-m110.test.ts` | 465 |

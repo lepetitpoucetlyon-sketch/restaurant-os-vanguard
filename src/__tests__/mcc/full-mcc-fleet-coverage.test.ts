@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { MerchantProvisioningService } from '@/modules/fleet/services/MerchantProvisioningService';
 import { SlaMonitoringFleetService } from '@/modules/fleet/services/SlaMonitoringFleetService';
 import { MultiTenantBillingEngineService } from '@/modules/fleet/services/MultiTenantBillingEngineService';
 import { RemoteConfigKillSwitchService } from '@/modules/fleet/services/RemoteConfigKillSwitchService';
@@ -12,38 +11,6 @@ describe('🏢 Cockpit MCC & Fleet Orchestration — Couverture 100%', () => {
   beforeEach(() => {
     vi.spyOn(NexusEventBus, 'emit').mockReturnValue(true as never);
     vi.spyOn(AuditLogger, 'logAction').mockResolvedValue(undefined as never);
-  });
-
-  describe('1. MerchantProvisioningService', () => {
-    it('doit provisionner une nouvelle instance marchande et journaliser laction', async () => {
-      const result = await MerchantProvisioningService.provisionMerchant('admin-super-1', {
-        merchantSiret: '12345678900014',
-        tradeName: 'Le Bistrot Parisien',
-        vertical: 'restaurant',
-        adminEmail: 'bistrot@example.com',
-        subscriptionPlan: 'enterprise',
-      });
-
-      expect(result.tenantId).toContain('tenant-le-bistrot-parisien');
-      expect(result.dbShardId).toContain('shard-eu-west-');
-      expect(result.fiscalHmacKeyId).toContain('HMAC-KEY-');
-      expect(result.isReady).toBe(true);
-
-      expect(NexusEventBus.emit).toHaveBeenCalledWith(
-        'fleet.merchant_provisioned',
-        expect.objectContaining({
-          tradeName: 'Le Bistrot Parisien',
-          initialPlan: 'enterprise',
-        })
-      );
-
-      expect(AuditLogger.logAction).toHaveBeenCalledWith(
-        expect.objectContaining({
-          adminId: 'admin-super-1',
-          action: 'MERCHANT_PROVISIONED',
-        })
-      );
-    });
   });
 
   describe('2. SlaMonitoringFleetService', () => {
@@ -71,7 +38,9 @@ describe('🏢 Cockpit MCC & Fleet Orchestration — Couverture 100%', () => {
       });
 
       expect(result.isBreach).toBe(true);
-      expect(result.uptimePct).toBe(99.85);
+      // Agrégation réelle sur fenêtre glissante : 2e sample pour ce tenant+endpoint
+      // (1 normal + 1 breach) → 50% d'uptime observé, plus un chiffre magique en dur.
+      expect(result.uptimePct).toBe(50.0);
       expect(NexusEventBus.emit).toHaveBeenCalledWith(
         'fleet.sla_breach_detected',
         expect.objectContaining({

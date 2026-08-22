@@ -30,7 +30,6 @@ vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { MerchantProvisioningService } from '@/modules/fleet/services/MerchantProvisioningService';
 import { MultiTenantBillingEngineService } from '@/modules/fleet/services/MultiTenantBillingEngineService';
 import { CrossTenantBenchmarkService } from '@/modules/fleet/services/CrossTenantBenchmarkService';
 import { GlobalComplianceAuditMatrixService } from '@/modules/compliance/securite/GlobalComplianceAuditMatrixService';
@@ -60,24 +59,6 @@ import { ValetParkingManagementService } from '@/modules/commerce/crm/ValetParki
 describe('Angles Morts — Batch 7 (MCC Flotte, Observabilité, Trésorerie, Sécurité & CRM)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  // ── MCC-A1: MerchantProvisioningService ──────────────────────────────────
-  describe('MCC-A1 — MerchantProvisioningService', () => {
-    it('provisions new merchant instance with DB shard and fiscal HMAC key', async () => {
-      const res = await MerchantProvisioningService.provisionMerchant('SUPER-ADMIN', {
-        merchantSiret: '12345678900044',
-        tradeName: 'Bistrot du Parc Lyon',
-        vertical: 'restaurant',
-        adminEmail: 'contact@bistrotduparc.fr',
-        subscriptionPlan: 'pro',
-      });
-
-      expect(res.tenantId).toContain('tenant-bistrot-du-parc');
-      expect(res.isReady).toBe(true);
-      expect(res.fiscalHmacKeyId).toContain('HMAC-KEY-tenant-');
-      expect(AuditLogger.logAction).toHaveBeenCalledWith(expect.objectContaining({ action: 'MERCHANT_PROVISIONED' }));
-    });
   });
 
   // ── MCC-A2: MultiTenantBillingEngineService ──────────────────────────────

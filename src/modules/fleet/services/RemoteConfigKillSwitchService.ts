@@ -7,6 +7,7 @@ export interface KillSwitchRequest {
   featureFlag: string; // ex: 'enable_ai_sommelier', 'enable_stripe_terminal', 'allow_offline_standin'
   enable: boolean;
   reason: string;
+  ipAddress?: string;
 }
 
 export interface RemoteConfigState {
@@ -36,7 +37,7 @@ export class RemoteConfigKillSwitchService {
       adminId: req.adminId,
       action: 'REMOTE_KILL_SWITCH_ENGAGED',
       targetId: `${req.tenantId}:${req.featureFlag}`,
-      ipAddress: '127.0.0.1',
+      ipAddress: req.ipAddress ?? 'unknown',
       metadata: {
         featureFlag: req.featureFlag,
         isEnabled: req.enable,
