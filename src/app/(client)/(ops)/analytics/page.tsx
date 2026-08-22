@@ -115,7 +115,7 @@ function AnalyticsPage() {
                             <h2 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted mb-4"><BarChart2 className="w-4 h-4" /> CA — 30 derniers jours</h2>
                             <div className="rounded-xl border border-border bg-surface-base p-4 overflow-x-auto">
                                 <div className="flex items-end gap-[3px] min-w-[520px]" style={{ height: "140px" }}>
-                                    {chartData.map((d, i) => (
+                                    {chartData.map((d: { label: string; fullLabel: string; revenue: number }, i: number) => (
                                         <div key={i} className="flex flex-col items-center flex-1 gap-1 group" title={`${d.fullLabel} : ${d.revenue.toLocaleString("fr-FR")} €`}>
                                             <div className="flex-1 w-full flex items-end">
                                                 <div className="w-full rounded-t-sm bg-action-primary/30 group-hover:bg-action-primary transition-colors duration-150" style={{ height: `${Math.max((d.revenue / maxChartRevenue) * 100, 2)}%` }} />
@@ -134,7 +134,7 @@ function AnalyticsPage() {
                                 <div className="rounded-xl border border-border bg-surface-base overflow-hidden">
                                     {top5Products.length === 0 ? (
                                         <p className="px-4 py-6 text-sm text-text-muted text-center">Aucune vente enregistrée.</p>
-                                    ) : top5Products.map((p, i) => (
+                                    ) : top5Products.map((p: { name: string; count: number }, i: number) => (
                                         <div key={p.name} className="flex items-center justify-between px-4 py-3 border-b border-border/50 last:border-b-0">
                                             <div className="flex items-center gap-3 min-w-0">
                                                 <span className="text-[10px] font-black text-text-muted w-4 shrink-0">{i + 1}</span>
@@ -197,7 +197,7 @@ function AnalyticsPage() {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="space-y-3">{macroAlerts.map((alert) => <AlertCard key={alert.id} alert={alert} />)}</div>
+                                <div className="space-y-3">{macroAlerts.map((alert: MacroBrainAlert) => <AlertCard key={alert.id} alert={alert} />)}</div>
                             )}
                         </section>
                     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Archive, Download, ShieldCheck, FileCheck, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Archive, Download, Loader2, CheckCircle2 } from 'lucide-react';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useFleet } from '@/shared/contexts/FleetContext';
 import { toast } from 'sonner';

@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import GlassCard from '@/shared/components/ui/GlassCard';
 import type { PlatformVariant } from '@/modules/system';
 import { cn } from '@/lib/ui.foundations';
-import { TrendingUp, Users, ShoppingCart, DollarSign, Star, Clock, Package, Heart } from 'lucide-react';
+import { Users, ShoppingCart, DollarSign, Star, Clock, Package, Heart } from 'lucide-react';
 
 // ── Vertical switcher ────────────────────────────────────────────────────────
 

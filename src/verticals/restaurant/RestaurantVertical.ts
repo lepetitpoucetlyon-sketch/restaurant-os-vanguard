@@ -7,11 +7,9 @@ import { menuEngineeringService } from '@/modules/commerce';
 import { TenantRBACConfigSchema, DEFAULT_PAGE_ACCESS, DEFAULT_TAB_ACCESS } from '@/modules/human';
 import { ordersAtom, tablesAtom } from '@/modules/ops';
 import {
-  RestaurantComplianceAdapter,
   RestaurantFinanceAdapter,
   RestaurantFacilityAdapter,
   RestaurantIntelligenceAdapter,
-  RestaurantLogisticsAdapter,
   RestaurantMccAdapter,
 } from './adapters';
 import { toError } from "@/lib/toError";
@@ -40,7 +38,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       icon: 'Layout',
       roles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
       componentLoader: () =>
-        import('@/modules/facility/spaces/floor-plan').then(m => ({ default: m.FloorPlanPage as unknown as React.ComponentType })),
+        import('@/modules/facility/spaces/floor-plan/FloorPlanEditor').then(m => ({ default: m.FloorPlanEditor as unknown as React.ComponentType })),
     },
     {
       path: '/nf525',

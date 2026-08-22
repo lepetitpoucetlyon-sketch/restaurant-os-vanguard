@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 import type { TenantConfig } from '@/shared/nexus-contract';
 
 // NOTE: on n'importe PAS AI_MODELS ici — les configs d'instances sont des données statiques.

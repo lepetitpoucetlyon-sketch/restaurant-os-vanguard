@@ -1,14 +1,6 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
-  FloristOpsAdapter,
-  FloristCommerceAdapter,
-  FloristFinanceAdapter,
-  FloristFacilityAdapter,
-  FloristHumanAdapter,
-  FloristIntelligenceAdapter,
-  FloristLogisticsAdapter,
-  FloristComplianceAdapter,
   FloristMccAdapter,
 } from './adapters';
 

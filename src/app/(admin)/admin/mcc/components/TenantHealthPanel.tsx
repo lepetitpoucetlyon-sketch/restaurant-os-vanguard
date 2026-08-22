@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
     Activity, ShieldAlert, CheckCircle2, AlertTriangle, RefreshCw, 
-    Send, Database, Clock, Zap, Search, ArrowUpDown 
+    Send, Search, ArrowUpDown 
 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';

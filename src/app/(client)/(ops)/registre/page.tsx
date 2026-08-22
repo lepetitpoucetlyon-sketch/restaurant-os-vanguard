@@ -18,15 +18,17 @@ import {
     Beef,
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { useRegistre } from "@modules/ops";
-import { DUERPSection } from "@modules/ops";
-import { IncendieSection } from "@modules/ops";
-import { Cerfa13984Section } from "@modules/ops";
-import { PrestatairesSection } from "@modules/ops";
-import { PMRSection } from "@modules/ops";
-import { SanitaryComplianceSection } from "@modules/ops";
+import { useRegistre } from "@/modules/ops";
+import {
+    DUERPSection,
+    IncendieSection,
+    Cerfa13984Section,
+    PrestatairesSection,
+    PMRSection,
+    SanitaryComplianceSection,
+    InterventionLogSection,
+} from "@/modules/facility";
 import { Modal } from "@ui/Modal";
-import { InterventionLogSection } from "@modules/ops";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";

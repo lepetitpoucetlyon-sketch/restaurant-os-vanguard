@@ -12,7 +12,6 @@ import {
   UniversalSystemPromptBuilder,
   AssistantActionDispatcher,
   OracleIntentAugmenter,
-  type ActionProposal,
 } from '@/modules/intelligence';
 import { redactPII } from '@/lib/security/redactPII';
 

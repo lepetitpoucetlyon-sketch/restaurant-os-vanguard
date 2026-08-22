@@ -1,14 +1,7 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
-  GymOpsAdapter,
   GymCommerceAdapter,
-  GymFinanceAdapter,
-  GymFacilityAdapter,
-  GymHumanAdapter,
-  GymIntelligenceAdapter,
-  GymLogisticsAdapter,
-  GymComplianceAdapter,
   GymMccAdapter,
 } from './adapters';
 

@@ -3,24 +3,27 @@
 import {
     Thermometer, Droplets, SprayCan, AlertOctagon,
     Download, PackageSearch, BellRing, Search, Package,
+    ClipboardCheck,
 } from "lucide-react";
 
 import dynamic from "next/dynamic";
 import {
     useHaccpPage,
     HACCP_TOOLS,
+    type TempAlert,
+    type LotFilter,
 } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-const ReleveTemperatures = dynamic(() => import('@/modules/compliance').then(m => m.ReleveTemperatures), { ssr: false });
-const GestionHuiles = dynamic(() => import('@/modules/compliance').then(m => m.GestionHuiles), { ssr: false });
-const PlanNettoyage = dynamic(() => import('@/modules/compliance').then(m => m.PlanNettoyage), { ssr: false });
-const GestionAnomalies = dynamic(() => import('@/modules/compliance').then(m => m.GestionAnomalies), { ssr: false });
-const ProductControlList = dynamic(() => import('@/modules/compliance').then(m => m.ProductControlList), { ssr: false });
-const SanitaryReport = dynamic(() => import('@/modules/compliance').then(m => m.SanitaryReport), { ssr: false });
-const CleaningPlan = dynamic(() => import('@/modules/compliance').then(m => m.CleaningPlan), { ssr: false });
-const DLCTracker = dynamic(() => import('@/modules/compliance').then(m => m.DLCTracker), { ssr: false });
-const NonConformityForm = dynamic(() => import('@/modules/compliance').then(m => m.NonConformityForm), { ssr: false });
+const ReleveTemperatures = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.ReleveTemperatures), { ssr: false });
+const GestionHuiles = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.GestionHuiles), { ssr: false });
+const PlanNettoyage = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.PlanNettoyage), { ssr: false });
+const GestionAnomalies = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.GestionAnomalies), { ssr: false });
+const ProductControlList = dynamic(() => import('@/modules/compliance/qualite/haccp/components/quality').then(m => m.ProductControlList), { ssr: false });
+const SanitaryReport = dynamic(() => import('@/modules/compliance/qualite/haccp/components/quality').then(m => m.SanitaryReport), { ssr: false });
+const CleaningPlan = dynamic(() => import('@/modules/compliance/qualite/haccp/components/CleaningPlan').then(m => m.CleaningPlan), { ssr: false });
+const DLCTracker = dynamic(() => import('@/modules/compliance/qualite/haccp/components/DLCTracker').then(m => m.DLCTracker), { ssr: false });
+const NonConformityForm = dynamic(() => import('@/modules/compliance/qualite/haccp/components/NonConformityForm').then(m => m.NonConformityForm), { ssr: false });
 import type { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
@@ -73,10 +76,10 @@ function HaccpPage() {
             )}
 
             <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
-                {tabs.map(tab => {
+                {tabs.map((tab: { id: string; label: string; icon: typeof ClipboardCheck; badge?: number }) => {
                     const Icon = tab.icon;
                     return (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap relative ${activeTab === tab.id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
+                        <button key={tab.id} onClick={() => setActiveTab(tab.id as Parameters<typeof setActiveTab>[0])} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap relative ${activeTab === tab.id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
                             <Icon className="w-4 h-4" /> {tab.label}
                             {tab.badge != null && tab.badge > 0 && <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-status-danger text-text-primary text-[10px] font-bold">{tab.badge > 9 ? "9+" : tab.badge}</span>}
                         </button>
@@ -88,10 +91,10 @@ function HaccpPage() {
                 {activeTab === "haccp" && (
                     <section>
                         <div className="flex flex-wrap gap-2 mb-5">
-                            {HACCP_TOOLS.map((tool) => {
+                            {HACCP_TOOLS.map((tool: { id: string; label: string }) => {
                                 const Icon = TOOL_ICONS[tool.id] ?? AlertOctagon;
                                 return (
-                                    <button key={tool.id} onClick={() => setActiveTool(tool.id)} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${activeTool === tool.id ? "bg-action-primary text-text-primary" : "bg-surface-sidebar text-text-muted hover:text-text-primary"}`}>
+                                    <button key={tool.id} onClick={() => setActiveTool(tool.id as Parameters<typeof setActiveTool>[0])} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${activeTool === tool.id ? "bg-action-primary text-text-primary" : "bg-surface-sidebar text-text-muted hover:text-text-primary"}`}>
                                         <Icon className="w-3.5 h-3.5" /> {tool.label}
                                     </button>
                                 );
@@ -125,11 +128,11 @@ function HaccpPage() {
                         <div className="bg-surface-base rounded-2xl border border-border p-5">
                             <div className="flex items-center gap-2 mb-4"><Search className="w-4 h-4 text-action-primary" /><span className="text-xs font-bold uppercase tracking-widest text-text-muted">Filtres lot</span></div>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                <input type="text" placeholder="Produit ou n° lot…" value={lotFilter.search} onChange={(e) => setLotFilter((f) => ({ ...f, search: e.target.value }))} className="col-span-2 px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
-                                <input type="text" placeholder="Fournisseur…" value={lotFilter.supplierId} onChange={(e) => setLotFilter((f) => ({ ...f, supplierId: e.target.value }))} className="px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
+                                <input type="text" placeholder="Produit ou n° lot…" value={lotFilter.search} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, search: e.target.value }))} className="col-span-2 px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
+                                <input type="text" placeholder="Fournisseur…" value={lotFilter.supplierId} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, supplierId: e.target.value }))} className="px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
                                 <div className="flex gap-2">
-                                    <input type="date" value={lotFilter.dateFrom} onChange={(e) => setLotFilter((f) => ({ ...f, dateFrom: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception depuis" />
-                                    <input type="date" value={lotFilter.dateTo} onChange={(e) => setLotFilter((f) => ({ ...f, dateTo: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception jusqu'au" />
+                                    <input type="date" value={lotFilter.dateFrom} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateFrom: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception depuis" />
+                                    <input type="date" value={lotFilter.dateTo} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateTo: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception jusqu'au" />
                                 </div>
                             </div>
                         </div>

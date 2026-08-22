@@ -4,7 +4,6 @@ import React from 'react';
 import { logger } from '@/lib/logger';
 import {
   HealthOpsAdapter,
-  HealthCommerceAdapter,
   HealthFinanceAdapter,
   HealthFacilityAdapter,
   HealthHumanAdapter,

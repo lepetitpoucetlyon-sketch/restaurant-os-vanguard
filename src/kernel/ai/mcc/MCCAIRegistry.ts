@@ -14,7 +14,7 @@
 
 import { logger } from '@/lib/logger';
 import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
-import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from '@/modules/intelligence/ia/ai/types';
+import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from '@/modules/intelligence';
 import { MCCProviderChain } from './MCCProviderChain';
 import { MCCLLMTelemetry } from './MCCLLMTelemetry';
 import { PromptComposer } from '../core/PromptComposer';

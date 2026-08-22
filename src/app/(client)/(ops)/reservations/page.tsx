@@ -14,26 +14,19 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useReservationsPage } from '@/modules/commerce';
- 
-// eslint-disable-next-line no-restricted-imports
-import { PinModal } from "@/modules/commerce/ui/pos/PinModal";
-import { DailyListView } from '@/modules/commerce';
-import { WeeklyView } from '@/modules/commerce';
-import { GroupFormModal } from '@/modules/commerce';
-import dynamic from "next/dynamic";
-const EventQuoteModal = dynamic(
-  () => import("@/modules/commerce/relation/reservations/components/EventQuoteModal").then(m => m.EventQuoteModal),
-  { ssr: false, loading: () => null }
-);
-const ReservationCreateDialog = dynamic(
-  () => import("@/modules/commerce/relation/reservations/components/ReservationCreateDialog").then(m => m.ReservationCreateDialog),
-  { ssr: false, loading: () => null }
-);
-import { ReservationSidebar } from '@/modules/commerce';
-import { TableGrid } from '@/modules/commerce';
-import { CustomerCustomerView } from '@/modules/commerce';
-import { CustomerDetailPanel } from '@/modules/commerce';
+import {
+    useReservationsPage,
+    DailyListView,
+    WeeklyView,
+    GroupFormModal,
+    EventQuoteModal,
+    ReservationCreateDialog,
+    ReservationSidebar,
+    TableGrid,
+    CustomerCustomerView,
+    CustomerDetailPanel,
+    PinModal,
+} from '@/modules/commerce';
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import type { JsonObject } from "@/shared/types/json";

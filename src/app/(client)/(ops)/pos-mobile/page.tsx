@@ -4,11 +4,10 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ProductGrid, Cart, TableSelector } from '@modules/ops';
+import { ProductGrid, Cart, TableSelector, usePOSController } from '@/modules/ops';
 import { useAuth, useTenant } from '@/shared/providers/NexusCoreProvider';
 import { ArrowLeft, ShoppingCart, Send, X } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { usePOSController } from '@modules/ops';
 import { formatCurrency } from '@/lib/formatters';
 import { useStockAlerts } from '../pos/useStockAlerts';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";

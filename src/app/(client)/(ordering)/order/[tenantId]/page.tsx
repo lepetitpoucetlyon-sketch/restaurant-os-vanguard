@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useMemo, use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Utensils, CheckCircle2, Clock, Sparkles, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Utensils, CheckCircle2, Clock } from 'lucide-react';
 import { OrderHeader } from './components/OrderHeader';
 import { OrderProductCard, type ProductItem } from './components/OrderProductCard';
 import { OrderCartDrawer, type CartItemEntry } from './components/OrderCartDrawer';

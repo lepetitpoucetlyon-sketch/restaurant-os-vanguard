@@ -18,9 +18,7 @@ import { PromptComposer } from '../core/PromptComposer';
 import { TenantProviderChain } from './TenantProviderChain';
 import { TenantLLMTelemetry } from './TenantLLMTelemetry';
 import { TENANT_SYSTEM_PROMPTS, type TenantPromptId } from './TENANT_SYSTEM_PROMPTS';
-import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from '@/modules/intelligence/ia/ai/types';
-import type { AIProviderName as FactoryProviderName } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
-import type { TenantAISettings, AIProviderName, VerticalAIPrompts } from '../core/types';
+import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest, TenantAISettings, AIProviderName, VerticalAIPrompts } from '../core/types';
 
 const REGISTRY_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -221,8 +219,7 @@ export class TenantAIRegistry {
         // Résolution du provider
         const chain = new TenantProviderChain(tenantId, aiSettings);
         const { provider, name: rawName, model } = chain.resolve(context);
-        // LLMProviderFactory.AIProviderName inclut 'auto' — on l'écarte
-        const name = (rawName === 'auto' ? 'gemini' : rawName) as AIProviderName;
+        const name = ((rawName as string) === 'auto' ? 'gemini' : rawName) as AIProviderName;
 
         const instance = new TenantAIRegistryInstance(
             tenantId,

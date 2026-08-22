@@ -4,10 +4,16 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Megaphone, Instagram, FileSpreadsheet, Sparkles, PlusCircle, Users, Globe } from "lucide-react";
 
-import { useMarketing, useQuotes, NewCampaignModal, ExpertHub, SEOManager } from "@/modules/commerce";
+import {
+    useMarketing,
+    useQuotes,
+    NewCampaignModal,
+    ExpertHub,
+    SEOManager,
+} from "@/modules/commerce";
 import dynamic from "next/dynamic";
 const NewQuoteDialog = dynamic(
-  () => import("@/modules/commerce").then(m => m.NewQuoteDialog),
+  () => import("@/modules/commerce/acquisition/marketing/components/quotes/NewQuoteDialog").then(m => m.NewQuoteDialog),
   { ssr: false, loading: () => null }
 );
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";

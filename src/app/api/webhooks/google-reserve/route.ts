@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- internal use-cases, not in public barrel */
+ 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import {

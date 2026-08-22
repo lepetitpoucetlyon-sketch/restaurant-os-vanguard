@@ -2,6 +2,7 @@
  
 "use client";
 
+import Link from "next/link";
 import {
     Package,
     Warehouse,
@@ -20,6 +21,7 @@ import {
 
 import {
     useInventoryPage,
+    RotatingCount,
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
@@ -28,7 +30,6 @@ import {
     PhysicalCountModal,
     AdjustStockModal,
     computeDLCStatus,
-    RotatingCount,
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
@@ -65,9 +66,9 @@ function InventoryPage() {
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                    <a href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover transition-colors">
+                    <Link href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover transition-colors">
                         <Wrench className="w-4 h-4 text-indigo-400" /> GMAO &amp; Matériel
-                    </a>
+                    </Link>
                     <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90">
                         <PlusCircle className="w-4 h-4" /> Réception
                     </button>

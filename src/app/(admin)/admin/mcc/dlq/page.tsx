@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { authedFetch } from '@/lib/client/authedFetch';
-import { AlertTriangle, RefreshCw, Play, Trash2 } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Play } from 'lucide-react';
 
 /**
  * MCC DLQ Dashboard — voir et rejouer les événements en Dead Letter Queue.

@@ -7,8 +7,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { createLLMProvider, type AIProviderName } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
-import type { ILLMProvider } from '@/modules/intelligence/ia/ai/types';
+import { createLLMProvider, type AIProviderName, type ILLMProvider } from '@/modules/intelligence';
 
 /** Providers MCC autorisés — jamais de provider tenant dans cette chaîne. */
 const VALID_MCC_PROVIDERS: AIProviderName[] = [

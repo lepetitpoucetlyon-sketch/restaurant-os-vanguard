@@ -29,4 +29,5 @@ export type { ProductCategory } from './compliance';
 export type { Floor, Table, TableShape, TableStatus, Zone } from './facility';
 export type { OrchestratorSignal, TenantConfig, TenantTheme } from './system';
 export type { ExtractedInvoice } from './logistics';
+export type { PrivatisationData, PrivatisationFormule } from './commerce';
 

@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronRight, X, Trash2, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
-import { cn } from '@/lib/ui.foundations';
+import { ShoppingBag, ChevronRight, X, ArrowRight, Loader2 } from 'lucide-react';
 import type { ProductItem } from './OrderProductCard';
 
 export interface CartItemEntry {

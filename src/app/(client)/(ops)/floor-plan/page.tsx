@@ -8,17 +8,17 @@ import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from '@/modules/ops';
 import { motion, AnimatePresence } from "framer-motion";
-import { useIsMobile, useTenant } from "@/shared/hooks";
+import { useIsMobile } from "@/shared/hooks";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
-import { Table, TableStatus } from "@nexus/contracts";
+import type { Table, TableStatus } from "@nexus/contracts";
 import type { FloorPlanEditorRef } from '@/modules/facility';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@/modules/facility/spaces/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
+    () => import("@/modules/facility").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,
         loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>

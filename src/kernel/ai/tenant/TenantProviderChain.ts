@@ -6,9 +6,8 @@
  */
 
 import { logger } from '@/lib/logger';
-import { createLLMProvider, type AIProviderName } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
-import type { ILLMProvider } from '@/modules/intelligence/ia/ai/types';
-import type { TenantAISettings, AIMode } from '../core/types';
+import { createLLMProvider } from '@/modules/intelligence';
+import type { TenantAISettings, AIMode, AIProviderName, ILLMProvider } from '../core/types';
 
 const CLOUD_PROVIDERS: AIProviderName[] = ['gemini', 'anthropic', 'openai', 'mistral'];
 const SOVEREIGN_PROVIDERS: AIProviderName[] = ['sovereign', 'ollama'];
@@ -64,37 +63,38 @@ export class TenantProviderChain {
             case 'souverain': return ['sovereign', 'ollama'];
             case 'cloud': return ['gemini', 'anthropic', 'openai', 'mistral'];
             case 'mix': return ['sovereign', 'gemini', 'anthropic'];
-            default: return ['gemini', 'anthropic'];
         }
     }
 
     private isAllowedForMode(provider: AIProviderName, mode: AIMode): boolean {
-        if (mode === 'mix') return true;
         if (mode === 'souverain') return SOVEREIGN_PROVIDERS.includes(provider);
         if (mode === 'cloud') return CLOUD_PROVIDERS.includes(provider);
-        return true;
+        return true; // mode 'mix' autorise tout
+    }
+
+    private isProviderConfigured(provider: AIProviderName): boolean {
+        if (process.env.NODE_ENV === 'test' || process.env.VITEST) return true;
+        switch (provider) {
+            case 'sovereign': return !!(process.env.SOVEREIGN_SLM_URL || process.env.VLLM_BASE_URL);
+            case 'ollama': return !!process.env.OLLAMA_BASE_URL;
+            case 'gemini':
+                return Boolean(process.env.GEMINI_API_KEY || process.env.GOOGLE_GEMINI_API_KEY);
+            case 'anthropic':
+                return Boolean(process.env.ANTHROPIC_API_KEY);
+            case 'openai':
+                return Boolean(process.env.OPENAI_API_KEY);
+            case 'mistral':
+                return Boolean(process.env.MISTRAL_API_KEY);
+            default:
+                return false;
+        }
     }
 
     private resolveModel(provider: AIProviderName, context: 'reasoning' | 'fast' | 'vision'): string {
-        // Utilise les overrides de tenantConfig si disponibles
-        const providerConfig = this.settings?.providers?.[context === 'vision' ? 'vision' : context];
-        if (providerConfig?.provider === provider && providerConfig?.model) {
-            return providerConfig.model;
+        const configured = this.settings?.providers?.[context];
+        if (configured?.provider === provider && configured.model) {
+            return configured.model;
         }
-        // Sinon on laisse le provider auto-résoudre
-        return '';
-    }
-
-    private isProviderConfigured(name: AIProviderName): boolean {
-        if (process.env.NODE_ENV === 'test') return true;
-        switch (name) {
-            case 'sovereign': return !!(process.env.SOVEREIGN_SLM_URL || process.env.VLLM_BASE_URL);
-            case 'ollama': return !!process.env.OLLAMA_BASE_URL;
-            case 'gemini': return !!(process.env.GEMINI_API_KEY || process.env.GOOGLE_GEMINI_API_KEY);
-            case 'anthropic': return !!process.env.ANTHROPIC_API_KEY;
-            case 'openai': return !!process.env.OPENAI_API_KEY;
-            case 'mistral': return !!process.env.MISTRAL_API_KEY;
-            default: return false;
-        }
+        return 'default';
     }
 }

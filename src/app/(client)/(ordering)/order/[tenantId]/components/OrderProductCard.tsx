@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Plus, Check, AlertTriangle } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 
 export interface ProductItem {

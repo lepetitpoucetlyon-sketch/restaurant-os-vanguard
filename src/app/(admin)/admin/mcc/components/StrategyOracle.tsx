@@ -12,7 +12,7 @@ import {
     AlertTriangle,
     CheckCircle2
 } from 'lucide-react';
-import { useStrategicOracle } from '@/shared/hooks/useStrategicOracle';
+import { useStrategicOracle } from '@/modules/intelligence';
 import { useFleet } from '@/shared/contexts/FleetContext';
 import { FleetInsight } from '@/modules/intelligence';
 
@@ -96,7 +96,7 @@ export function StrategyOracle() {
                     </div>
 
                     <div className="space-y-4">
-                        {insights.map((insight) => (
+                        {insights.map((insight: FleetInsight) => (
                             <InsightCard 
                                 key={insight.id} 
                                 insight={insight} 
@@ -135,7 +135,7 @@ export function StrategyOracle() {
                                     </p>
                                 </div>
                             ) : (
-                                messages.map((msg, idx) => (
+                                messages.map((msg: { role?: string; content?: string }, idx: number) => (
                                     <div key={idx} className={`p-4 rounded-2xl ${msg.role === 'user' ? 'bg-surface-card border border-border-subtle hidden' : 'bg-action-primary/5 border border-focus/10'}`}>
                                         <p className="text-[11px] text-muted leading-relaxed font-medium">
                                             {msg.content}

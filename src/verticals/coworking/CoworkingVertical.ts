@@ -1,14 +1,7 @@
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
-  CoworkingOpsAdapter,
   CoworkingCommerceAdapter,
-  CoworkingFinanceAdapter,
-  CoworkingFacilityAdapter,
-  CoworkingHumanAdapter,
-  CoworkingIntelligenceAdapter,
-  CoworkingLogisticsAdapter,
-  CoworkingComplianceAdapter,
   CoworkingMccAdapter,
 } from './adapters';
 

@@ -7,12 +7,12 @@ import {
   MonthlyCloseHero,
   AccountingPortalTabs,
   type AccountingTabKey,
-  type AccountingMonthlySummary,
   SalesFiscalTab,
   VatDeclarationTab,
   PayrollSocialTab,
   ReconciliationPurchasesTab,
   AiAuditThemisTab,
+  type AccountingMonthlySummary,
 } from '@/modules/finance';
 
 export default function AccountingPortalPage() {

@@ -3,25 +3,25 @@
 import React, { useState, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { useToast } from "@ui/Toast";
-import dynamic from "next/dynamic";
-const ProductFormModal = dynamic(
-  () => import("@/modules/ops/service/pos/components").then(m => m.ProductFormModal),
-  { ssr: false, loading: () => null }
-);
-import { RecipeDetailDialog } from "@modules/ops";
-
-import { BarTab, Wine, Cocktail } from "@/modules/ops";
-import { winesAtom, cocktailsAtom, wineRegionsAtom } from '@/modules/ops';
-import { Recipe } from "@nexus/contracts";
-import { useKitchen } from "@/modules/ops";
-
-import { BarSidebar } from "@modules/ops";
-import { KdsTab } from "@modules/ops";
-import { WineCellarTab } from "@modules/ops";
-import { SommelierTab } from "@modules/ops";
-import { CocktailTab } from "@modules/ops";
-import { StocksTab } from "@modules/ops";
-import { WineDetailPanel } from "@modules/ops";
+import {
+  RecipeDetailDialog,
+  winesAtom,
+  cocktailsAtom,
+  wineRegionsAtom,
+  useKitchen,
+  BarSidebar,
+  KdsTab,
+  WineCellarTab,
+  SommelierTab,
+  CocktailTab,
+  StocksTab,
+  WineDetailPanel,
+  ProductFormModal,
+  type BarTab,
+  type Wine,
+  type Cocktail,
+} from "@/modules/ops";
+import type { Recipe } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
 function BarPage() {
@@ -37,14 +37,24 @@ function BarPage() {
     const [searchQueryKDS, setSearchQueryKDS] = useState('');
     const [rushMode, setRushMode] = useState(false);
 
+    interface BarOrderItem {
+      name?: string;
+      quantity?: number;
+      station?: string;
+      category?: string;
+      modifiers?: Array<string | { name: string }>;
+      notes?: string;
+    }
+
+    const isBarItem = (item: BarOrderItem) => {
+      if (item.station === 'bar' || item.category === 'boissons') return true;
+      const lower = (item.name || '').toLowerCase();
+      return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
+    };
+
     const orders = useMemo(() => {
       return kitchenOrders
-        .filter(o => o.status !== 'delivered' && o.status !== 'paid' && (o.items || []).some((item: any) => {
-          const extra = item as unknown as { station?: string; category?: string };
-          if (extra.station === 'bar' || extra.category === 'boissons') return true;
-          const lower = (item.name || '').toLowerCase();
-          return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
-        }))
+        .filter(o => o.status !== 'delivered' && o.status !== 'paid' && (o.items || []).some((item: BarOrderItem) => isBarItem(item)))
         .map(o => ({
           id: o.id,
           table: o.tableNumber ?? 'T?',
@@ -52,18 +62,13 @@ function BarPage() {
           status: (['new','preparing','ready','delivered'].includes(o.status) ? o.status : 'new') as 'new' | 'preparing' | 'ready' | 'delivered',
           priority: 'normal',
           elapsed: o.createdAt ? Math.floor((Date.now() - new Date(o.createdAt as string | number).getTime()) / 1000) : 0,
-          items: (o.items || [])
-            .filter((item: any) => {
-              const extra = item as unknown as { station?: string; category?: string };
-              if (extra.station === 'bar' || extra.category === 'boissons') return true;
-              const lower = (item.name || '').toLowerCase();
-              return ['cocktail','wine','vin','beer','bière','coffee','café','espresso','soda','juice','jus','mojito','margarita','spritz','kir'].some(kw => lower.includes(kw));
-            })
-            .map((item: any) => ({
-              name: item.name,
-              qty: item.quantity,
+          items: ((o.items || []) as BarOrderItem[])
+            .filter(item => isBarItem(item))
+            .map(item => ({
+              name: item.name ?? 'Article',
+              qty: item.quantity ?? 1,
               station: 'bar' as const,
-              modifiers: (item.modifiers ?? []).map((m: any) => typeof m === 'string' ? m : m.name),
+              modifiers: (item.modifiers ?? []).map(m => typeof m === 'string' ? m : m.name),
               notes: item.notes,
             })),
         }))

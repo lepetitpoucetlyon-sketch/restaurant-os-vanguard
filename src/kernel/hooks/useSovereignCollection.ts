@@ -8,10 +8,10 @@ import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import { IDService } from '@/lib/id/IDService';
 
-export interface SovereignCollectionOptions {
+export interface SovereignCollectionOptions<T = unknown> {
     tenantId?: string;
     autoSync?: boolean;
-    filter?: (item: any) => boolean;
+    filter?: (item: T) => boolean;
 }
 
 export interface SovereignCollectionResult<T> {
@@ -35,7 +35,7 @@ export interface SovereignCollectionResult<T> {
  */
 export function useSovereignCollection<T extends { id: string }>(
     collectionName: string,
-    options: SovereignCollectionOptions = {}
+    options: SovereignCollectionOptions<T> = {}
 ): SovereignCollectionResult<T> {
     const [data, setData] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);

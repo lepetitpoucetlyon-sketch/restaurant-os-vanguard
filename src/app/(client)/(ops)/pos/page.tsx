@@ -10,15 +10,15 @@ import {
 } from "lucide-react";
 
 import dynamic from "next/dynamic";
-import { ProductGrid, Cart, TableSelector } from "@modules/ops";
+import { ProductGrid, Cart, TableSelector } from "@/modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { formatCurrency } from "@/lib/formatters";
 
-const PaymentDialog = dynamic(() => import('@modules/ops').then(m => m.PaymentDialog), { ssr: false });
-const SplitBillDialog = dynamic(() => import('@modules/ops').then(m => m.SplitBillDialog), { ssr: false });
+const PaymentDialog = dynamic(() => import('@/modules/ops/service/pos/components/PaymentDialog').then(m => m.PaymentDialog), { ssr: false });
+const SplitBillDialog = dynamic(() => import('@/modules/ops/service/pos/components/SplitBillDialog').then(m => m.SplitBillDialog), { ssr: false });
 const CashDrawerModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.CashDrawerModal), { ssr: false });
 const PinModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.PinModal), { ssr: false });
 const TipPanel = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.TipPanel), { ssr: false });
@@ -273,7 +273,7 @@ function POSPage() {
             />
 
             <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInCents={cartTvaInCents} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
-            <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents, guestIndex) => handlePaySplit(amountInCents, guestIndex)} onSplitComplete={handleSplitComplete} />
+            <SplitBillDialog isOpen={isSplitOpen} items={cartItems} total={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInCents: number, guestIndex: number) => handlePaySplit(amountInCents, guestIndex)} onSplitComplete={handleSplitComplete} />
             <PinModal isOpen={pendingAction !== null} title={pinModalTitle} onConfirm={handlePinConfirm} onClose={handlePinClose} error={pinError} />
             <CashDrawerModal isOpen={isCashDrawerOpen} onClose={() => setIsCashDrawerOpen(false)} tenantId={activeTenantId ?? ""} userId={posUser?.id ?? "unknown"} />
             <VoidModal isOpen={isVoidModalOpen} onClose={() => setIsVoidModalOpen(false)} tenantId={activeTenantId ?? ""} operatorId={posUser?.id ?? "unknown"} />

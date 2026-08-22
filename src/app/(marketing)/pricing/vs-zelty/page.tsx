@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Restaurant OS vs Zelty — Comparatif caisse enregistreuse NF525',
@@ -68,12 +69,12 @@ export default function VsZeltyPage() {
         </div>
 
         <div className="text-center mt-12">
-          <a
+          <Link
             href="/signup"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-semibold hover:from-amber-400 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25"
           >
             Essayer Restaurant OS gratuitement →
-          </a>
+          </Link>
         </div>
       </div>
     </section>

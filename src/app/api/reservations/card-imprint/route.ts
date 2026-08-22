@@ -4,7 +4,6 @@ import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import type { JsonObject } from "@/shared/types/json";
 
 const ActionSetupSchema = z.object({

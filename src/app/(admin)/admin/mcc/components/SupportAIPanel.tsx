@@ -11,7 +11,6 @@ import {
   AlertOctagon,
   RefreshCw,
   Clock,
-  Send,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { authedFetch } from '@/lib/client/authedFetch';
