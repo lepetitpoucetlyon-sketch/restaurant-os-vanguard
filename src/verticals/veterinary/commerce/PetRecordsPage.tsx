@@ -31,6 +31,11 @@ export function PetRecordsPage() {
   if (loading) return <div className="p-6 text-sm text-gray-500">Calcul en cours…</div>;
   if (!report) return null;
 
+  // Taux d'identification ICAD (puce) — KPI de conformité réglementaire vétérinaire
+  const chippedPct = patients.length
+    ? (patients.filter(p => p.chipId).length / patients.length) * 100
+    : 0;
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-semibold">Animaux & Propriétaires</h1>
@@ -40,6 +45,7 @@ export function PetRecordsPage() {
         <StatCard label="Consultations (mois)" value={report.totalConsultations} />
         <StatCard label="Moy. consult./patient" value={report.avgConsultationsPerPatient.toFixed(1)} />
         <StatCard label="Rappels vaccins dus" value={report.vaccinesDueCount} />
+        <StatCard label="% pucés (ICAD)" value={`${chippedPct.toFixed(0)}%`} />
       </div>
 
       <div className="overflow-x-auto">

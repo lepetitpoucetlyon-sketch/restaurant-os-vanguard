@@ -15,8 +15,9 @@
 
 | Session | Périmètre | Démarrage | Status |
 |---|---|---|---|
-| `antigravity-profondeur` | Plan reliquat profondeur (items 1-4) : `src/modules/`, `src/verticals/`, `src/lib/mcc/`, `src/kernel/contracts/`, `src/shared/`, `scripts/`, `docs/PLAN-RESTE-PROFONDEUR-2026-08-22.md`, `eslint.config.mjs`. Item 1 + item 4 annoncés faits. | 2026-08-22 | active |
-| `coordination-hooks` (Claude Code) | Synchro inter-agents uniquement : `.claude/` (hooks, settings, sessions), `AGENTS.md`. Aucune écriture de code métier applicatif. | 2026-08-22 | active |
+| `antigravity-profondeur` | Items 1 & 4 faits & committés. Aucune activité/commit observés depuis → mis en pause pour reprise des items 2/3 par Claude Code (accord utilisateur "go"). | 2026-08-22 | en pause |
+| `item2-3-perf-parite` (Claude Code) | Item 2 (bundle : `scripts/preflight.sh`, `.gate-baseline.json`, lazy-load modules lourds) + Item 3 (parité verticales : `src/verticals/gym|coworking|florist|veterinary/`, `docs/PLAN-RESTE-PROFONDEUR-2026-08-22.md`). | 2026-08-22 | active |
+| `coordination-hooks` (Claude Code) | Synchro inter-agents : hook bloquant `PreToolUse` branché+testé, `AGENTS.md` Loi 6, protocole `sessions.md`. Vérif Antigravity items 1&4 (tsc 0, inter-module 0, cycles 0, 1968 tests). | 2026-08-22 | terminée |
 | `profondeur-track1-track4` (relais Claude Code, Antigravity à l'arrêt) | Track 1.3 + Track 2 + Track 3 (4 verticales + démos) faits — reste 1.1 (ADR bloquant), 1.2 (bundle), 4.1/4.3 (doc+freeze) | 2026-08-22 | terminée (partielle, cf. commits) |
 | `plan-master-v1` | Vague 1 : Hygiène, Backup Cron, Env Example, Sessions | 2026-08-20 | terminée |
 | `valo-ip-groundtruth` | Analyse lecture seule métriques codebase + rédaction valorisation IP/financière (docs/ uniquement) | 2026-08-22 | terminée |

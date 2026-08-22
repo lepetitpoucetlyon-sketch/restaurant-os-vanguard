@@ -31,6 +31,11 @@ export function MembersDashboard() {
   if (loading) return <div className="p-6 text-sm text-gray-500">Calcul en cours…</div>;
   if (!report) return null;
 
+  // Rétention de cohorte : membres inscrits il y a ≥30j toujours actifs (KPI SaaS clé)
+  const cohortCutoff = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+  const cohort = memberships.filter(m => m.startedAt <= cohortCutoff);
+  const retentionPct = cohort.length ? (cohort.filter(m => m.status === 'active').length / cohort.length) * 100 : 0;
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-semibold">Membres & Abonnements</h1>
@@ -40,6 +45,7 @@ export function MembersDashboard() {
         <StatCard label="Gelés" value={report.frozenCount} />
         <StatCard label="Taux de churn" value={`${report.churnRatePct.toFixed(1)}%`} />
         <StatCard label="Revenu récurrent mensuel" value={`${(report.monthlyRecurringRevenueInMicrounits / 1_000_000).toFixed(0)} €`} />
+        <StatCard label="Rétention cohorte 30j" value={`${retentionPct.toFixed(1)}%`} />
       </div>
 
       <div className="overflow-x-auto">

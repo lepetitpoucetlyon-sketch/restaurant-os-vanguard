@@ -31,6 +31,11 @@ export function FloralArrangementsPage() {
   if (loading) return <div className="p-6 text-sm text-gray-500">Calcul en cours…</div>;
   if (!report) return null;
 
+  // CA des compositions livrées ce mois (chiffre d'affaires réalisé)
+  const deliveredRevenueInMicrounits = arrangements
+    .filter(a => a.status === 'delivered')
+    .reduce((sum, a) => sum + a.priceInMicrounits, 0);
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-semibold">Compositions & Fraîcheur du Stock</h1>
@@ -40,6 +45,7 @@ export function FloralArrangementsPage() {
         <StatCard label="Frais" value={report.freshCount} />
         <StatCard label="Bientôt fanés" value={report.expiringSoonCount} />
         <StatCard label="Taux de perte" value={`${report.wastageRatePct.toFixed(1)}%`} />
+        <StatCard label="CA livré (mois)" value={`${(deliveredRevenueInMicrounits / 1_000_000).toFixed(0)} €`} />
       </div>
 
       <div className="overflow-x-auto">

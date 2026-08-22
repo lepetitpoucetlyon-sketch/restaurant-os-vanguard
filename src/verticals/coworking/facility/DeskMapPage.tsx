@@ -31,6 +31,11 @@ export function DeskMapPage() {
   if (loading) return <div className="p-6 text-sm text-gray-500">Calcul en cours…</div>;
   if (!report) return null;
 
+  // Part des bureaux privés dans les réservations (mix produit — pilotage tarifaire)
+  const privateOfficeSharePct = bookings.length
+    ? (bookings.filter(b => b.deskType === 'private-office').length / bookings.length) * 100
+    : 0;
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-semibold">Plan Bureaux & Salles</h1>
@@ -40,6 +45,7 @@ export function DeskMapPage() {
         <StatCard label="Check-ins" value={report.checkedInCount} />
         <StatCard label="No-shows" value={report.noShowCount} />
         <StatCard label="Taux d'occupation" value={`${report.occupancyRatePct.toFixed(1)}%`} />
+        <StatCard label="Part bureaux privés" value={`${privateOfficeSharePct.toFixed(1)}%`} />
       </div>
 
       <div className="overflow-x-auto">

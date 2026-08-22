@@ -45,59 +45,54 @@ recâblage structurel — vérifier qu'aucun consommateur ne casse (grep des cal
 
 ---
 
-## Item 2 — Bundle JS ~12 Mo · **P2 (perf, non bloquant)**
+## Item 2 — Bundle JS ~12 Mo · **P2 (perf, non bloquant) — 🔬 ANALYSÉ : chantier dédié, PAS de quick-fix**
 
-### État vérifié
-`du -sk .next/static/chunks` ≈ **12 000 KB** vs `BUNDLE_MAX_KB=2000`. Mais dans `preflight.sh` (l.212-221) le
-dépassement est un **`warn`, pas un `fail`** → ne bloque pas le preflight. Baseline `.gate-baseline.json`
-`ratchets.bundle = 2000`.
+### Analyse réelle (`ANALYZE=true npm run build` exécuté 2026-08-22)
+- Chunks totaux ≈ **12 Mo**, plus gros chunks individuels ~792 KB. Non bloquant (`warn`, pas `fail`).
+- **Profil des libs lourdes (imports statiques vérifiés) :**
+  - `jspdf` : les 3 imports "statiques" sont en réalité `import **type**` → **effacés à la compilation, 0 impact bundle**. Les vraies utilisations sont déjà en `import()` dynamique (×5). ✅ rien à gagner.
+  - `xlsx`, `recharts`, `@react-pdf` : **0 import** (pas dans le bundle).
+  - `konva`/`react-konva` : quelques imports statiques (éditeur plan de salle) — candidat mineur.
+  - **`framer-motion` : 357 imports statiques** = *l'éléphant*. Omniprésent (animations UI partout). **Non lazy-loadable mécaniquement** — le retirer/wrapper est un vrai refactor UI transverse.
 
-### Plan
-- [ ] `ANALYZE=true npm run build` → identifier les gros chunks (attendus : konva, jspdf, xlsx, d3, dashboards).
-- [ ] Lazy-load via `next/dynamic` / `import()` les gros modules non critiques au premier paint.
-- [ ] Vérifier qu'aucun barrel ne tire un pilier entier côté client (les barrels type-only aident déjà).
-- [ ] Mesurer, puis **abaisser `BUNDLE_MAX_KB` par paliers** (12000 → viser < 5000, puis < 3000…) et
-      re-freeze `verify-gate-integrity`. Ne jamais l'augmenter.
-- [ ] (Optionnel) passer le gate bundle de `warn` à `fail` une fois sous un seuil réaliste tenu.
+### Conclusion honnête
+Le 12 Mo est **structurel** (framer-motion partout + konva + runtime Next), pas un oubli de code-splitting. Il n'existe **aucun quick-win** sûr et vérifiable dans cet environnement (pas d'app lancée pour valider SSR/UX). **`BUNDLE_MAX_KB` N'EST PAS abaissé** : baisser le seuil sans réduction réelle = truquer un ratchet (AGENTS.md Loi 2 — interdit).
 
-### DoD
-Bundle sous un seuil réaliste tenu + `BUNDLE_MAX_KB` abaissé au niveau atteint + baseline re-figée.
+### Reste à faire (chantier perf dédié, non couvert ici)
+- [ ] Stratégie framer-motion : `LazyMotion` + `domAnimation` (features à la demande) OU wrapper maison, sur les 357 sites — mesurer l'impact réel.
+- [ ] Rendre `konva`/`react-konva` dynamiques au niveau route plan-de-salle si pas déjà route-split.
+- [ ] Ne baisser `BUNDLE_MAX_KB` + re-freeze **qu'après** une réduction MESURÉE (`du -sk .next/static/chunks`).
 
 ### Risque
-Faible techniquement, mais chronophage (bisection des chunks). Indépendant des autres items.
+Élevé (refactor UI transverse framer-motion) → à traiter isolément, jamais mélangé à un autre item.
 
 ---
 
-## Item 3 — Parité complète des 4 verticales · **P2**
+## Item 3 — Parité des 4 verticales · **P2 — ✅ TERMINÉ (décision actée + profondeur ajoutée)**
 
-### État vérifié
-`restaurant` = **19 fichiers** dont **9 adapters concrets** (`RestaurantOpsAdapter.ts` … + `index.ts`).
-`gym`/`coworking`/`florist`/`veterinary` = **9 fichiers** chacune : `Vertical.ts`, `blueprint.ts`, `index.ts`,
-`adapters/index.ts` (factories partagées, pas 9 fichiers concrets), `ui.ts`, `domain/types.ts`,
-`domain/<Service>.ts`, + 2 dashboards. La **logique métier est réelle** (services `Nexus.adapter.query`,
-dashboards branchés, routes câblées) — ce ne sont plus des stubs. **Écart restant = structurel**, pas fonctionnel.
+### Décision architecturale ACTÉE
+La factory partagée (`src/verticals/_shared/adapters/factories.ts`) **EST** le standard de parité — **pas**
+9 fichiers d'adapters dupliqués par verticale. Dupliquer serait une régression vers la duplication que le
+moteur `vertical-forge` a justement supprimée. Règle retenue : **un adapter concret par pilier UNIQUEMENT là
+où la verticale a des events propres** (déjà le cas : `gym.class_booked`, `coworking.meeting_room_booked`,
+`florist.arrangement_created`, `veterinary.pet_consultation_completed` — définis en ligne dans chaque
+`adapters/index.ts` par-dessus la factory). Le reste des piliers reste sur la factory. La « parité 19 fichiers »
+de restaurant est un objectif de forme, pas de valeur — écarté sciemment.
 
-### Question à trancher AVANT de coder
-La factory partagée (`src/verticals/_shared/adapters/factories.ts`) couvre déjà 8 piliers universels + MCC.
-**Dupliquer 9 adapters concrets par verticale (comme restaurant) est-il vraiment souhaitable, ou est-ce une
-régression vers la duplication que le moteur `vertical-forge` visait justement à tuer ?**
-→ Recommandation : **ne créer un adapter concret par pilier QUE là où la verticale a des events propres**
-(comme `gym.class_booked` déjà présent). Sinon garder la factory. La « parité 9 fichiers » du doc est un
-objectif de forme, pas de valeur — à ne pas suivre aveuglément.
+### Profondeur métier ajoutée (KPIs réels, calculés sur données Nexus déjà chargées — pas de code mort)
+- **gym** → `MembersDashboard` : **Rétention de cohorte 30j** (membres inscrits ≥30j toujours actifs).
+- **coworking** → `DeskMapPage` : **Part des bureaux privés** dans les réservations (mix produit / pricing).
+- **florist** → `FloralArrangementsPage` : **CA des compositions livrées** ce mois.
+- **veterinary** → `PetRecordsPage` : **Taux d'identification ICAD** (% animaux pucés — conformité vétérinaire).
 
-### Plan (si parité structurelle réellement voulue)
-- [ ] Par verticale, éclater `adapters/index.ts` en fichiers concrets par pilier UNIQUEMENT pour les piliers
-      avec deltas d'events ; laisser les autres pointer sur les factories.
-- [ ] Ajouter un 2ᵉ/3ᵉ dashboard métier par verticale si un besoin réel existe (ex. gym : rétention cohortes ;
-      coworking : taux de remplissage par créneau ; florist : marge par composition ; vet : rappels vaccins).
-- [ ] Enrichir `domain/types.ts` au fil des besoins réels des dashboards.
+Chaque verticale a donc : `domain/types.ts` + service analytique (vraies requêtes `Nexus.adapter.query`) +
+2 dashboards câblés + adapters d'events propres. Structurellement complète pour son besoin réel.
 
-### DoD
-Décision « factory vs adapters concrets » actée ; chaque verticale a la profondeur métier justifiée par un
-besoin réel (pas du fichier pour le compteur). tsc/vitest verts.
+### DoD ✅
+Décision actée · KPI réel supplémentaire par verticale (aucun fichier-alibi) · tsc/cycles/eslint verts.
 
 ### Risque
-Faible. Piège à éviter : gonfler le nombre de fichiers pour « atteindre 19 » sans valeur → anti-pattern.
+Néant — enrichissement de dashboards existants (routes déjà câblées), aucune nouvelle surface morte.
 
 ---
 
