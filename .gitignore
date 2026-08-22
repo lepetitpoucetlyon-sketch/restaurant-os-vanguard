@@ -150,3 +150,6 @@ scratch/
 .codegraph/
 .serena/
 
+
+# Marqueur d'identité de session (local, non versionné)
+.claude/.active-session

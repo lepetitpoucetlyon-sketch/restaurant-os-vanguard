@@ -3,3 +3,5 @@
  * Zéro import sortant. Consommable par tout le monde.
  */
 export * from './rbac';
+export * from './oracle';
+

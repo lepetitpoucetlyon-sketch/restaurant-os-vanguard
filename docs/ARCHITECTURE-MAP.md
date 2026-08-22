@@ -5,20 +5,20 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3419** · LOC : **307 572**
+- Fichiers `.ts/.tsx` : **3429** · LOC : **308 097**
 - Pages : **77** · Routes API : **208**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1582 |
-| `src/shared/` | 659 |
+| `src/modules/` | 1583 |
+| `src/shared/` | 663 |
 | `src/app/` | 419 |
 | `src/lib/` | 223 |
 | `src/verticals/` | 206 |
 | `src/infrastructure/` | 46 |
 | `src/store/` | 24 |
-| `src/kernel/` | 20 |
+| `src/kernel/` | 21 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
 | `src/instances/` | 5 |
@@ -35,8 +35,8 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 224 |
-| `shared/components/` | 163 |
+| `shared/eventBus/` | 225 |
+| `shared/components/` | 166 |
 | `shared/nexus/` | 127 |
 | `shared/hooks/` | 44 |
 | `shared/providers/` | 28 |
@@ -59,7 +59,7 @@
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 352 | ✅ |
-| `ops` | 292 | ✅ |
+| `ops` | 293 | ✅ |
 | `finance` | 223 | ✅ |
 | `compliance` | 179 | ✅ |
 | `intelligence` | 161 | ✅ |

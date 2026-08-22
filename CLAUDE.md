@@ -43,12 +43,13 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture. Le barrel de chaque pilier (ex: `src/modules/ops/index.ts`) est la seule surface d'export publique — les domaines et modules internes ne sont pas importables directement.
 
-### Les 3 canaux légitimes de communication cross-module
-1. `import { X } from '@/modules/<pilier>'` (Types, hooks, composants publics)
-2. `Nexus.adapter.get/set(...)` (Données persistées)
-3. `NexusEventBus.emit/on(...)` (Effets de bord async)
+### Les canaux légitimes de communication cross-module (ADR-015)
+1. **NexusEventBus** : `NexusEventBus.emit/on(...)` pour les effets de bord et la synchronisation inter-piliers (découplage total).
+2. **Contrats neutres / DI** : `@/kernel/contracts/` (`IStockOracle`, `StockOracleRegistry`, `rbac`, etc.) pour les requêtes synchrones avec retour sans couplage.
+3. **Composants partagés / Composition Roots** : `@/shared/components/` (ex. `ExpertHub`, layouts) ou slots de composition root dans `src/app/` pour l'UI.
+4. **Données persistées** : `Nexus.adapter.get/set/query(...)` via collections WORM/Sovereign.
+5. **Barrel racine** : `import { X } from '@/modules/<pilier>'` uniquement pour les types/interfaces stables (profondeur inter-pilier interdite par `no-inter-module-imports`).
 
-**Rapatriement progressif** : Le code métier est encore dispersé sur 8 racines (`components/`, `domain/`, `engines/`, etc.). Règle de non-régression : **tout nouveau code d'un pilier va dans `src/modules/<pilier>/`**. À chaque passage sur un fichier orphelin dans `components/` ou `domain/`, le rapatrier vers le bon pilier. Ne jamais créer de nouveau fichier dans `components/<pilier>/` ou `domain/<pilier>/` si `modules/<pilier>/` peut l'accueillir.
 
 ## Conventions critiques
 

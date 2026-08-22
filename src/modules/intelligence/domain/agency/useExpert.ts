@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo } from 'react';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 import { useSettings } from '@/shared/contexts/SettingsContext';

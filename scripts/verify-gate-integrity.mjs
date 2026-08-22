@@ -63,10 +63,11 @@ const base = JSON.parse(read(BASE_PATH));
 const errs = [];
 if (fp.globCount > base.globCount) errs.push(`Exemptions eslint élargies : ${fp.globCount} globs > baseline ${base.globCount}. Une gate barrel a été desserrée.`);
 if (fp.off > base.off) errs.push(`Barrel Contract désactivé sur plus de zones : ${fp.off} > ${base.off}.`);
-for (const k of ['cycles', 'barrel', 'bundle']) {
+for (const k of ['cycles', 'barrel', 'interModule', 'bundle']) {
   const cur = fp.ratchets[k], b = base.ratchets?.[k];
   if (cur != null && b != null && cur > b) errs.push(`Ratchet '${k}' relevé : ${cur} > baseline ${b}.`);
 }
+
 
 if (errs.length) {
   console.error('❌ INTÉGRITÉ DES GATES — une gate a été desserrée au lieu de corriger le code :');

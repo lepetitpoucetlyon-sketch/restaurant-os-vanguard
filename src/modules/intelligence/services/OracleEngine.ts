@@ -1,28 +1,16 @@
 import type { InventoryMovement as StockEvent } from '@nexus/contracts';
 import type { Quantity } from '@/lib/branding/brands';
 import { logger } from '@/lib/logger';
+import { StockOracleRegistry, type IStockOracle, type OraclePrediction } from '@/kernel/contracts';
+
+export type { OraclePrediction };
 
 /**
  * 🔮 OracleEngine - Restaurant OS (Darwin V5.5 Master Code)
  * Predictive-V5-Hybrid: Fusion of Worker Scalability & Bitwise Pattern Matching.
  */
-export interface OraclePrediction {
-    estimatedDaysRemaining: number;
-    confidence: number;
-    trend: 'STABLE' | 'ACCELERATING' | 'DECELERATING';
-    scenarios: {
-        optimistic: number;
-        pessimistic: number;
-        p50: number;
-    };
-    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
-}
-
-/**
- * 🔮 OracleEngine - Restaurant OS (Grade VII "Singularity" Edition)
- * Predictive-V7-MonteCarlo: probabilistic engine using variance distributions.
- */
 export const OracleEngine = {
+
   
   /**
    * Predicts stockout date for a given ingredient using recursive pattern match and Monte Carlo.
@@ -116,7 +104,11 @@ export const OracleEngine = {
   }
 };
 
+// Auto-enregistrement de l'implémentation IA dans le registre universel (ADR-015)
+StockOracleRegistry.register(OracleEngine);
+
 /**
+
  * 🤖 Agent AI : Suggest Procurement
  * Bridges Oracle forecasts with a finance.transfer_proposed event
  * (consumed by finance module via NexusEventBus handler).

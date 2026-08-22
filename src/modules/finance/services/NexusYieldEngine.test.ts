@@ -101,4 +101,39 @@ describe('🌀 NexusYieldEngine — Yield Management & Reassort Automatique', ()
     expect(results[0].yieldFactor).toBe(1.0);
     expect(results[0].adjustedPriceCents).toBe(2800);
   });
+
+  it('devrait plafonner le yieldFactor à 1.15x quel que soit le niveau de rush ou de criticité du stock (test défensif anti-emballement)', async () => {
+    vi.spyOn(MarketingService, 'updateDynamicPricing').mockImplementation(() => {});
+    vi.spyOn(ProcurementService, 'generateAutomatedPO').mockResolvedValue(undefined as never);
+    vi.spyOn(ProcurementService, 'getRecentCostForIngredient').mockReturnValue(1200);
+
+    const extremeStock: StockItem[] = [
+      {
+        id: 'stk_extreme',
+        ingredientId: 'prod_entrecote',
+        name: 'Entrecôte',
+        quantity: 0, // stock à zéro : criticité maximale
+        minQuantity: 5000,
+        reorderQuantity: 10000,
+        unit: 'g',
+        location: 'fridge_1',
+        lotNumber: 'L1',
+        expirationDate: '2026-09-01',
+      } as unknown as StockItem,
+    ];
+
+    const results = await NexusYieldEngine.processYieldCycle({
+      products: [mockProducts[0]],
+      allStock: extremeStock,
+      currentVelocity: 100_000, // vélocité extrême, très au-delà du seuil rush
+    });
+
+    // Le facteur ne doit jamais dépasser le plafond métier de 1.15x, même sous
+    // une charge/criticité extrême — protège contre un futur calcul composé/récursif
+    // qui ferait dériver le prix (ex: yieldFactor *= vélocité par erreur).
+    expect(results[0].yieldFactor).toBeLessThanOrEqual(1.15);
+    expect(results[0].yieldFactor).toBe(1.15);
+    expect(results[0].adjustedPriceCents).toBe(3220);
+    expect(Number.isFinite(results[0].yieldFactor)).toBe(true);
+  });
 });

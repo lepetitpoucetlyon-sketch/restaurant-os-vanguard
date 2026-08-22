@@ -8,6 +8,7 @@ import {
 } from '../../domain/agency/hermes.types';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**
  * 📡 HermesEngine - Grade X Autonomous Orchestrator
@@ -49,20 +50,19 @@ export class HermesEngine {
      * The heartbeat of the autonomous system.
      * Checks for domain anomalies and triggers cross-domain bridges.
      */
-    static async pulse(tenantId: string): Promise<HermesPulseResult> {
-        logger.info(`📡 [HERMES] Heartbeat Pulse for Tenant: ${tenantId}`);
-        
+    static async pulse(tenantId: string = 'default'): Promise<HermesPulseResult> {
         const startTime = Date.now();
         const anomalies: HermesAnomaly[] = [];
         const actionsTaken: string[] = [];
 
-        // 1. SCAN: HACCP -> Finance Anomaly Detection
-        // Here we simulate an autonomous bridge trigger if temperature rises
+        logger.info(`📡 [HERMES] Initiating Sovereign Pulse for tenant [${tenantId}]...`);
+
+        // 1. SCAN: Unprocessed HACCP Critical Alerts
         try {
-            const haccpPath = Nexus.getTenantPath('haccp_readings', tenantId);
-            const haccpResults = await Nexus.adapter.query<import('@modules/compliance/qualite/haccp/types/domain').SensorReading>(haccpPath, {
+            const haccpPath = Nexus.getTenantPath('compliance_haccp', tenantId);
+            const haccpResults = await Nexus.adapter.query<import('@nexus/contracts').SensorReading>(haccpPath, {
                 where: [
-                    { field: 'isAnomaly', operator: '==', value: true },
+                    { field: 'isCritical', operator: '==', value: true },
                     { field: 'processed', operator: '==', value: false }
                 ],
                 limit: 5
@@ -80,9 +80,14 @@ export class HermesEngine {
                         detectedAt: String(reading.timestamp)
                     });
 
-                    // Auto-Trigger Bridge: Themis Agent Intervention
-                    const { FiscalHACCPMapper } = await import('@/modules/finance/services/FiscalHACCPMapper');
-                    await FiscalHACCPMapper.processCriticalWaste(reading, [], tenantId);
+                    // Auto-Trigger Bridge: Themis Agent Intervention via decoupled EventBus (ADR-015)
+                    await NexusEventBus.emit('compliance.critical_waste_detected', {
+                        v: 1,
+                        tenantId,
+                        reading,
+                        impactedStock: [],
+                        detectedAt: Date.now()
+                    });
                     actionsTaken.push(`[THEMIS] Provisioned fiscal loss for sensor ${reading.sensorId || reading.id}`);
                     
                     // Mark as processed in Nexus
@@ -112,7 +117,7 @@ export class HermesEngine {
                     detectedAt: new Date().toISOString()
                 });
             }
-        } catch (err) {
+        } catch (_err) {
             // Log & proceed
         }
 
@@ -128,6 +133,9 @@ export class HermesEngine {
             insights: [] // To be populated by AgentEngine query if needed
         };
     }
+
+    static executePulse = HermesEngine.pulse;
+
 
     /**
      * 📜 Get Manifest

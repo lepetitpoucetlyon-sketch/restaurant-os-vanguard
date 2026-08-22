@@ -8,6 +8,7 @@ import { registerSupplierInvoiceLedgerHandler } from '../handlers/SupplierInvoic
 import { registerQuoteFollowUpHandler } from '../handlers/QuoteFollowUpHandler';
 import { registerOverdueInvoiceHandler } from '../handlers/OverdueInvoiceHandler';
 import { PeriodLockGuardHandler } from '../handlers/PeriodLockGuardHandler';
+import { registerCriticalWasteFiscalHandler } from '../handlers/CriticalWasteFiscalHandler';
 
 export function registerFinanceLedgerHandlers(): Array<() => void> {
   return [
@@ -21,5 +22,7 @@ export function registerFinanceLedgerHandlers(): Array<() => void> {
     registerQuoteFollowUpHandler(),
     registerOverdueInvoiceHandler(),
     PeriodLockGuardHandler.register(),
+    registerCriticalWasteFiscalHandler(),
   ];
 }
+

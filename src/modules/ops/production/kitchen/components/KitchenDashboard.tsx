@@ -27,9 +27,10 @@ const ProductFormModal = dynamic(
   { ssr: false, loading: () => null }
 );
 const ExpertHub = dynamic(
-  () => import('@/modules/commerce/acquisition/marketing/components/agency/ExpertHub').then(m => ({ default: m.ExpertHub })),
+  () => import('@/shared/components/ai/ExpertHub').then(m => ({ default: m.ExpertHub })),
   { ssr: false, loading: () => null }
 );
+
 import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
 import { RecipeDetailDialog } from "./RecipeDetailDialog";
 import { cinematicContainer, fadeInUp } from "@/shared/utils/motion";

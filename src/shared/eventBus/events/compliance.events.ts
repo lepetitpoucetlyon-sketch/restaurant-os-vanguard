@@ -219,4 +219,14 @@ export interface COMPLIANCEEvents {
   'security.gdpr_anonymized': { v:1; tenantId: string; customerId: string; anonymizedFieldsCount: number; anonymizedAt: number };
 
   'security.lockdown_enforced': { v:1; tenantId: string; reason: string; revokedTokensCount: number; lockedAt: number };
+
+  'compliance.critical_waste_detected': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    reading: import('@nexus/contracts').SensorReading;
+    impactedStock?: import('@nexus/contracts').StockItem[];
+    detectedAt: number;
+  };
 }
+

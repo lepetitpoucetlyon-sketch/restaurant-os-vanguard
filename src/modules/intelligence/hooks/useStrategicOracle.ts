@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';

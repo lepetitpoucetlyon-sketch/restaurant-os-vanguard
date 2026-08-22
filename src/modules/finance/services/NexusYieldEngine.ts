@@ -1,5 +1,7 @@
 import type { YieldState } from '@/lib/shared-kernel';
 import { logger } from '@/lib/logger';
+import { MarketingService } from '@/modules/commerce';
+import { ProcurementService } from '@/modules/logistics';
 
 /**
  * 🌀 NexusYieldEngine - Restaurant OS
@@ -19,8 +21,6 @@ export class NexusYieldEngine {
         allStock: import('@nexus/contracts').StockItem[],
         currentVelocity: number
     }): Promise<YieldState[]> {
-        const { MarketingService } = await import('@/modules/commerce');
-        const { ProcurementService } = await import('@/modules/logistics');
         const results: YieldState[] = [];
 
         for (const product of context.products) {

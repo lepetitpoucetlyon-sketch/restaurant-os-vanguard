@@ -10,5 +10,18 @@
       "Bash(./scripts/deploy-prod.sh:*)",
       "Bash(npm run nexus:deploy:*)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/check-session-collision.sh"
+          }
+        ]
+      }
+    ]
   }
 }
