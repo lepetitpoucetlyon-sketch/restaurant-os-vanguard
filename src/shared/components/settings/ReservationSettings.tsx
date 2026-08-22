@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { Save, Loader2, Calendar, MessageSquare } from "lucide-react";
-import { ReservationCapacitySection } from '@/modules/commerce';
-import { ReservationVerificationSection } from '@/modules/commerce';
-import { ReservationCardImprintSection } from '@/modules/commerce';
-import { ReservationNotificationSection } from '@/modules/commerce';
+import {
+    ReservationCapacitySection,
+    ReservationVerificationSection,
+    ReservationCardImprintSection,
+    ReservationNotificationSection,
+} from '@/modules/commerce';
 
 export default function ReservationSettingsComponent() {
     const { settings, updateReservationConfig, updateReservationSlots, isSaving } = useSettings();

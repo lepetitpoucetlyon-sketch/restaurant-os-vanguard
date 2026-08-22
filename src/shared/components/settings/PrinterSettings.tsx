@@ -7,8 +7,7 @@ import {
 } from "lucide-react";
 import { printerService } from "@/modules/ops";
 import type { PrinterDevice, PrinterRole, PrinterConnection, TicketStyle, ReceiptConfig } from "@/modules/ops";
-import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "@/modules/ops";
-import { CONN_ICON, AddPrinterWizard } from '@/modules/ops';
+import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS, CONN_ICON, AddPrinterWizard } from "@/modules/ops";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import { Nexus } from "@/lib/nexus/NexusAdapter";

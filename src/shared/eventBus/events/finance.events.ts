@@ -150,10 +150,19 @@ export interface FINANCEEvents {
     orderId: string;
   };
 
-  // ── Restaurant vertical — NF525 ────────────────────────────────────────────
   'finance.order_sealed': { tenantId: string; orderId: string; totalInMicrounits: number; operatorId: string };
   'finance.z_report_requested': { tenantId: string; operatorId: string; requestedAt: string };
   'finance.refund_issued': { tenantId: string; referenceId: string; amountInMicrounits: number; reason: string };
+  'finance.transfer_proposed': {
+    v: 1;
+    tenantId: string;
+    debitAccount: string;
+    creditAccount: string;
+    amountInCents: number;
+    referenceId: string;
+    description: string;
+    source: string;
+  };
   'stripe.deposit_received': {
     v: 1;
     isSimulation?: boolean;

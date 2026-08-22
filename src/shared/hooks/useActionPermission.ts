@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 "use client";
 
 import { useMemo, useCallback } from "react";
@@ -8,7 +8,7 @@ import {
     type PermissionRole,
     type PermissionCheckResult,
 } from "@nexus/contracts/permissions.types";
-import { policyEngine } from '@/modules/compliance/services/PolicyEngine';
+import { policyEngine } from '@/lib/permissions/PolicyEngine';
 
 // ACTION_MAP (350L de config) extraite dans actionPermissionMap.ts
 import { ACTION_MAP } from './actionPermissionMap';

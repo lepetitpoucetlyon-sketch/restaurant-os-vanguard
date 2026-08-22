@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { Sparkles } from "lucide-react";
 import { LayoutResolver } from "./LayoutResolver";
 import { OTABanner } from "@components/layout/OTABanner";
 import { SovereignLock } from "@components/layout/SovereignLock";

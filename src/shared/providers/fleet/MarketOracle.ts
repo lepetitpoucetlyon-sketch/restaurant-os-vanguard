@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure: deep path required */
+ 
 /**
  * 🔮 MarketOracle — MCC Global Intelligence Engine
  * Grade X Intelligence Layer

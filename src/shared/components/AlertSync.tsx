@@ -11,7 +11,8 @@ import { useHACCP } from '@nexus/guards/NexusGuardProvider';
  * This component renders nothing but performs side effects.
  */
 export function AlertSync(): null {
-    const { lowStockItems } = useInventory();
+    const { data: stockData } = useInventory();
+    const lowStockItems = ((stockData || []) as Array<{ id?: string; ingredientName?: string; name?: string; quantity?: number; threshold?: number; unit?: string }>).filter(i => (i.quantity ?? 0) <= (i.threshold ?? 5));
     const { criticalAlerts } = useHACCP();
     const { addNotification, notifications } = useNotifications();
 

@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 import { logger } from '@/lib/logger';
 import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";

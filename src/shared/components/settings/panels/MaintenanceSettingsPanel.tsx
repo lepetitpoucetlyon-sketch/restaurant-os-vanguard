@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { RefreshCw } from 'lucide-react';
 import {
   type RestaurantZone,
-  type MaintenanceAlertType,
   type MaintenanceAlertRule,
   type NotificationChannel,
   type MaintenanceSettingsConfig,

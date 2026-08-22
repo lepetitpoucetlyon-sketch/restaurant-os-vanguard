@@ -2,10 +2,7 @@ import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
-import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
-import { TaxCalculator } from '@/modules/finance/fiscalite/TaxCalculator';
 import { CryptoService } from '@/lib/CryptoService';
-import type { SovereignData } from '@shared/nexus-contract';
 import { toSovereignData } from "@/lib/toSovereignData";
 
 type TicketZDoc = {
@@ -64,6 +61,7 @@ export function registerTicketZHandler(): () => void {
         // Ne pas accumuler si déjà clôturé (protection post-clôture Z)
         if (existing.closed) return;
 
+        const { TaxCalculator } = await import('@/modules/finance/fiscalite/TaxCalculator');
         const taxBreakdown = { ...existing.taxBreakdown };
         for (const item of items) {
           const rate = item.taxRate ?? '0.10';
@@ -122,6 +120,7 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
   const totalTVAInMicrounits = Object.values(ticketZ.taxBreakdown ?? {}).reduce((a, b) => a + b, 0);
 
   // Numéro séquentiel NF525
+  const { FiscalSealer } = await import('@/modules/finance/fiscalite/FiscalSealer');
   const receiptNumber = await FiscalSealer.generateSequentialReceiptNumber(tenantId);
 
   const journalEntryBase = {
@@ -160,7 +159,7 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
     tenantId,
     false,
     journalEntryBase,
-    (tx, sealId) => tx.update(ticketPath, {
+    (tx: any, sealId: string) => tx.update(ticketPath, {
       closed: true,
       closedAt,
       fiscalSealId: sealId,

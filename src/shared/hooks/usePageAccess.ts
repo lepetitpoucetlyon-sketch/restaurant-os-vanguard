@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { rbacConfigAtom } from "@/store/pillars/rbac";
-import { DEFAULT_PAGE_ACCESS } from "@/modules/human";
+import { DEFAULT_PAGE_ACCESS } from "@/shared/schemas";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
 import type { PageKey, PermissionRole } from "@/shared/nexus/contracts/permissions.types";
 

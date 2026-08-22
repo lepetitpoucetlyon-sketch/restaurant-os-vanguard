@@ -1,8 +1,8 @@
 import { useAtomValue } from "jotai";
 import { rbacConfigAtom } from "@/store/pillars/rbac";
-import { DEFAULT_TAB_ACCESS } from "@/modules/compliance/domain/schemas/rbac";
+import { DEFAULT_TAB_ACCESS } from "@/shared/schemas";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
-import { PageKey, PermissionRole, PERMISSION_ROLE_LEVELS } from "@/shared/nexus/contracts/permissions.types";
+import { PageKey, PermissionRole } from "@/shared/nexus/contracts/permissions.types";
 
 export function useTabAccess(pageKey: PageKey | string, tabKey: string): boolean {
   const { currentUser } = useAuth();
@@ -13,24 +13,23 @@ export function useTabAccess(pageKey: PageKey | string, tabKey: string): boolean
   if (currentUser.role === 'admin' || currentUser.role === 'mcc_super_admin') return true;
 
   const role = currentUser.role as PermissionRole;
-  const userLevel = currentUser.accessLevel ?? PERMISSION_ROLE_LEVELS[role] ?? 0;
 
   // Defaults
-  const pageDefaults = DEFAULT_TAB_ACCESS[pageKey] || {};
-  let minLevel = pageDefaults[tabKey] ?? 0;
+  const pageDefaults = DEFAULT_TAB_ACCESS[pageKey];
+  const tabRoles = pageDefaults ? pageDefaults[tabKey] : undefined;
 
   // Overrides
-  if (config && config.tabOverrides && config.tabOverrides[pageKey] && config.tabOverrides[pageKey][tabKey]) {
+  if (config?.tabOverrides?.[pageKey]?.[tabKey]) {
     const overrides = config.tabOverrides[pageKey][tabKey];
     
     if (overrides.blocked && overrides.blocked.includes(role)) {
       return false; // Blocked explicitly
     }
-    
-    if (overrides.minLevel !== undefined) {
-      minLevel = overrides.minLevel;
-    }
   }
 
-  return userLevel >= minLevel;
+  if (tabRoles && tabRoles.length > 0) {
+    return tabRoles.includes(role);
+  }
+
+  return true;
 }

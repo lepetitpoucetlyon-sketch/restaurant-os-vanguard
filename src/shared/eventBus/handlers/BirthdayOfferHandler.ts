@@ -35,18 +35,18 @@ export class BirthdayOfferHandler {
 
         if (customer?.email) {
           const tenantSettings = await Nexus.adapter.get<{ name?: string }>(`tenants/${tenantId}/settings/general`);
-          const restaurantName = tenantSettings?.name || 'Notre restaurant';
+          const establishmentName = tenantSettings?.name || 'Votre établissement';
           const customerName = [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Client';
           const validUntilFormatted = new Date(validUntil).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
           await NotificationGateway.send({
             tenantId,
             to: customer.email,
-            subject: `${restaurantName} — Joyeux anniversaire ${customer.firstName || ''} !`,
+            subject: `${establishmentName} — Joyeux anniversaire ${customer.firstName || ''} !`,
             text: [
               `Bonjour ${customerName},`,
               ``,
-              `Toute l'équipe de ${restaurantName} vous souhaite un très bon anniversaire !`,
+              `Toute l'équipe de ${establishmentName} vous souhaite un très bon anniversaire !`,
               ``,
               `Pour l'occasion, nous vous offrons ${discountPercent}% de réduction sur votre prochaine visite.`,
               ``,
@@ -54,7 +54,7 @@ export class BirthdayOfferHandler {
               `Valable jusqu'au : ${validUntilFormatted}`,
               ``,
               `Au plaisir de vous revoir,`,
-              `L'équipe ${restaurantName}`
+              `L'équipe ${establishmentName}`
             ].join('\n')
           });
 

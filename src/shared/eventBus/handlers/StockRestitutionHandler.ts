@@ -1,12 +1,12 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { toMicrounits } from '@/shared/schemas/primitives';
 import type { Order } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops/domain/schemas/pos';
-import { FinancialNexusBridge } from '@/modules/finance/comptabilite/FinancialNexusBridge';
+import type { CartItem } from '@/modules/ops';
+import { FinancialNexusBridge } from '@/modules/finance';
 
 /** Produit avec recette (forme runtime Firestore) */
 interface ProductWithRecipe {
@@ -92,20 +92,43 @@ export function registerStockRestitutionHandler(): () => void {
 
       // 4. (P01-I) Création de l'avoir comptable
       try {
-        // L7 Pattern D: cartId synthétique + champs brandés → cast supprimé.
-        // quantity négative = avoir comptable (CartLine.quantity.min(1) est une contrainte Zod runtime, pas TypeScript).
-        const cartItemsForRefund: CartItem[] = (order.items || []).map((i: any) => ({
-          cartId: `refund-${orderId}-${i.productId}`,
-          productId: i.productId,
+        type RefundRawItem = {
+          productId?: string;
+          id?: string;
+          name: string;
+          quantity?: number;
+          unitPriceInMicrounits?: import('@/shared/schemas').Microunits;
+          categoryId?: string;
+          taxRate?: '0.055' | '0.10' | '0.20';
+          discountInMicrounits?: import('@/shared/schemas').Microunits;
+          modifiers?: unknown[];
+        };
+        const cartItemsForRefund: CartItem[] = (order.items || []).map((i: RefundRawItem) => ({
+          cartId: `refund-${orderId}-${i.productId ?? i.id ?? 'item'}`,
+          productId: i.productId ?? i.id ?? '',
           name: i.name,
           quantity: -1 * (i.quantity ?? 1),
-          unitPriceInMicrounits: i.unitPriceInMicrounits,
+          unitPriceInMicrounits: i.unitPriceInMicrounits ?? toMicrounits(0),
           categoryId: i.categoryId ?? '',
-          taxRate: i.taxRate,
+          taxRate: i.taxRate ?? '0.10',
           discountInMicrounits: i.discountInMicrounits ?? toMicrounits(0),
-          modifiers: (i.modifiers ?? []).filter(
-            (m: any): m is Extract<typeof m, { id: string }> => typeof m === 'object' && m !== null
-          ),
+          modifiers: (i.modifiers ?? []).map(m => {
+            if (typeof m === 'object' && m !== null) {
+              const rec = m as Record<string, unknown>;
+              return {
+                id: String(rec.id || 'mod'),
+                name: String(rec.name || 'Mod'),
+                action: (['add', 'remove', 'info'].includes(String(rec.action)) ? rec.action : 'info') as 'add' | 'remove' | 'info',
+                ingredientId: rec.ingredientId ? String(rec.ingredientId) : undefined,
+                quantityImpact: typeof rec.quantityImpact === 'number' ? rec.quantityImpact : undefined,
+              };
+            }
+            return {
+              id: typeof m === 'string' ? m : 'mod',
+              name: typeof m === 'string' ? m : 'Mod',
+              action: 'info' as const,
+            };
+          }),
         }));
 
         await FinancialNexusBridge.processOrder({

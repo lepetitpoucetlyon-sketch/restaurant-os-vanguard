@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useAtom } from "jotai";
 import { logger } from "@/lib/logger";
-import type { ActionProposal } from "@/modules/intelligence/services/AssistantActionDispatcher";
+import type { ActionProposal } from "@/modules/intelligence";
 import {
     assistantViewModeAtom,
     assistantActiveTabAtom,
@@ -88,6 +88,23 @@ function resolvePathKey(path: string): SuggestionKey {
     return 'default';
 }
 
+interface SpeechRecognitionEventLike {
+    results: ArrayLike<ArrayLike<{ transcript: string }>>;
+}
+
+interface ISpeechRecognitionInstance {
+    lang: string;
+    continuous: boolean;
+    interimResults: boolean;
+    onstart: (() => void) | null;
+    onresult: ((e: SpeechRecognitionEventLike) => void) | null;
+    onerror: ((e: { error: string }) => void) | null;
+    onend: (() => void) | null;
+    start: () => void;
+    stop: () => void;
+    abort: () => void;
+}
+
 export function useUniversalAssistant() {
     const pathname = usePathname();
     const [viewMode, setViewMode] = useAtom(assistantViewModeAtom);
@@ -97,7 +114,7 @@ export function useUniversalAssistant() {
     const [error, setError] = useAtom(assistantErrorAtom);
     const [voiceState, setVoiceState] = useAtom(assistantVoiceStateAtom);
     const [toolState, setToolState] = useAtom(assistantToolStateAtom);
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<ISpeechRecognitionInstance | null>(null);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -169,28 +186,8 @@ export function useUniversalAssistant() {
     const startVoiceListening = useCallback(() => {
         if (typeof window === 'undefined') return;
         const win = window as unknown as {
-            SpeechRecognition?: new () => {
-                lang: string;
-                continuous: boolean;
-                interimResults: boolean;
-                onstart: () => void;
-                onresult: (e: { results: Array<Array<{ transcript: string }>> }) => void;
-                onerror: (e: { error: string }) => void;
-                onend: () => void;
-                start: () => void;
-                abort: () => void;
-            };
-            webkitSpeechRecognition?: new () => {
-                lang: string;
-                continuous: boolean;
-                interimResults: boolean;
-                onstart: () => void;
-                onresult: (e: { results: Array<Array<{ transcript: string }>> }) => void;
-                onerror: (e: { error: string }) => void;
-                onend: () => void;
-                start: () => void;
-                abort: () => void;
-            };
+            SpeechRecognition?: new () => ISpeechRecognitionInstance;
+            webkitSpeechRecognition?: new () => ISpeechRecognitionInstance;
         };
         const SpeechRecognitionClass = win.SpeechRecognition || win.webkitSpeechRecognition;
         if (!SpeechRecognitionClass) {
@@ -213,9 +210,9 @@ export function useUniversalAssistant() {
                 setVoiceState(prev => ({ ...prev, isListening: true, speechTranscript: '', lastError: null }));
             };
 
-            recognition.onresult = (event: any) => {
+            recognition.onresult = (event: SpeechRecognitionEventLike) => {
                 const transcript = Array.from(event.results)
-                    .map((r: any) => r[0].transcript)
+                    .map((r) => r[0]?.transcript || '')
                     .join('');
                 setVoiceState(prev => ({ ...prev, speechTranscript: transcript }));
             };
@@ -230,7 +227,7 @@ export function useUniversalAssistant() {
                 });
             };
 
-            recognition.onerror = (event: any) => {
+            recognition.onerror = (event: { error: string }) => {
                 setVoiceState(prev => ({ ...prev, isListening: false, lastError: event.error }));
             };
 

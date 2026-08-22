@@ -4,6 +4,7 @@ import React from 'react';
 import { NexusOpsProvider } from "@/modules/ops";
 import { NexusFiscalProvider } from "@/modules/finance";
 import { NexusFleetProvider } from "@/shared/providers/fleet";
+import { NexusSyncProvider } from "@/shared/providers/NexusSyncProvider";
 import { AuthGate, SaaSBillingGate, ComplianceGate } from "@nexus/guards";
 import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
 
@@ -14,20 +15,22 @@ import { VerticalUIProvider } from "@/shared/providers/VerticalUIProvider";
  */
 export function DomainOrchestrationProviders({ children }: { children: React.ReactNode }) {
   return (
-    <NexusOpsProvider>
-      <NexusFiscalProvider>
-        <NexusFleetProvider>
-          <AuthGate>
-            <VerticalUIProvider>
-              <SaaSBillingGate>
-                <ComplianceGate>
-                  {children}
-                </ComplianceGate>
-              </SaaSBillingGate>
-            </VerticalUIProvider>
-          </AuthGate>
-        </NexusFleetProvider>
-      </NexusFiscalProvider>
-    </NexusOpsProvider>
+    <NexusSyncProvider>
+      <NexusOpsProvider>
+        <NexusFiscalProvider>
+          <NexusFleetProvider>
+            <AuthGate>
+              <VerticalUIProvider>
+                <SaaSBillingGate>
+                  <ComplianceGate>
+                    {children}
+                  </ComplianceGate>
+                </SaaSBillingGate>
+              </VerticalUIProvider>
+            </AuthGate>
+          </NexusFleetProvider>
+        </NexusFiscalProvider>
+      </NexusOpsProvider>
+    </NexusSyncProvider>
   );
 }

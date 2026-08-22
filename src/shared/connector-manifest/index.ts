@@ -9,3 +9,4 @@ export type {
   ConnectorUserContext,
 } from './types';
 export { CONNECTOR_PERM_LEVELS } from './types';
+export { ConnectorHub } from './ConnectorHub';

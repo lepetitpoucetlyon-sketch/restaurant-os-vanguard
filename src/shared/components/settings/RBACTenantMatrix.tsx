@@ -9,10 +9,7 @@ import {
     Lock, 
     Save, 
     RotateCcw, 
-    Info, 
-    Users, 
-    Building2, 
-    Sliders,
+    Info,
     Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -22,11 +19,9 @@ import { tenantIdAtom, currentUserAtom } from '@/store/pillars/sovereign';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { 
     DEFAULT_PAGE_ACCESS, 
-    DEFAULT_TAB_ACCESS, 
     type TenantRBACConfig 
 } from '@/modules/compliance';
 import { 
-    PERMISSION_ROLE_LABELS, 
     PERMISSION_ROLE_LEVELS, 
     type TenantRole, 
     type PermissionRole 

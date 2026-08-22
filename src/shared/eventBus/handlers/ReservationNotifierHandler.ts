@@ -19,9 +19,9 @@ export function registerReservationNotifierHandler() {
   const sendNotification = async (tenantId: string, reservationId: string, eventType: string, payload: NotificationPayload) => {
     if (payload.isSimulation) return;
     try {
-      // Récupérer le nom du restaurant depuis la config tenant
+      // Récupérer le nom de l'établissement depuis la config tenant
       const tenantSettings = await Nexus.adapter.get<{ name?: string }>(`tenants/${tenantId}/settings/general`);
-      const restaurantName = tenantSettings?.name || 'Notre restaurant';
+      const establishmentName = tenantSettings?.name || 'Votre établissement';
 
       const customerName = payload.customerName || 'Client';
       const date = payload.date || '';
@@ -33,62 +33,62 @@ export function registerReservationNotifierHandler() {
 
       switch (eventType) {
         case 'reservation.confirmed':
-          subject = `${restaurantName} — Confirmation de votre réservation`;
+          subject = `${establishmentName} — Confirmation de votre réservation`;
           text = [
             `Bonjour ${customerName},`,
             ``,
-            `Votre réservation au ${restaurantName} est confirmée :`,
+            `Votre réservation auprès de ${establishmentName} est confirmée :`,
             `  - Date : ${date}`,
             `  - Heure : ${time}`,
-            `  - Couverts : ${covers}`,
+            `  - Nombre de personnes : ${covers}`,
             `  - Référence : ${reservationId}`,
             ``,
             `Nous avons hâte de vous accueillir. En cas d'empêchement, merci d'annuler au plus tôt.`,
             ``,
             `À bientôt,`,
-            `L'équipe ${restaurantName}`
+            `L'équipe ${establishmentName}`
           ].join('\n');
           break;
 
         case 'reservation.cancelled':
-          subject = `${restaurantName} — Annulation de votre réservation`;
+          subject = `${establishmentName} — Annulation de votre réservation`;
           text = [
             `Bonjour ${customerName},`,
             ``,
-            `Votre réservation du ${date} à ${time} (${covers} couverts, réf. ${reservationId}) a été annulée.`,
+            `Votre réservation du ${date} à ${time} (${covers} personnes, réf. ${reservationId}) a été annulée.`,
             ``,
             `N'hésitez pas à réserver à nouveau sur notre site.`,
             ``,
-            `L'équipe ${restaurantName}`
+            `L'équipe ${establishmentName}`
           ].join('\n');
           break;
 
         case 'reservation.created':
-          subject = `${restaurantName} — Demande de réservation reçue`;
+          subject = `${establishmentName} — Demande de réservation reçue`;
           text = [
             `Bonjour ${customerName},`,
             ``,
             `Nous avons bien reçu votre demande de réservation :`,
             `  - Date : ${date}`,
             `  - Heure : ${time}`,
-            `  - Couverts : ${covers}`,
+            `  - Nombre de personnes : ${covers}`,
             `  - Référence : ${reservationId}`,
             ``,
             `Vous recevrez une confirmation dès validation par notre équipe.`,
             ``,
-            `L'équipe ${restaurantName}`
+            `L'équipe ${establishmentName}`
           ].join('\n');
           break;
 
         default:
-          subject = `${restaurantName} — Mise à jour de votre réservation`;
+          subject = `${establishmentName} — Mise à jour de votre réservation`;
           text = [
             `Bonjour ${customerName},`,
             ``,
-            `Votre réservation du ${date} à ${time} (${covers} couverts, réf. ${reservationId}) a été mise à jour.`,
+            `Votre réservation du ${date} à ${time} (${covers} personnes, réf. ${reservationId}) a été mise à jour.`,
             `Nouveau statut : ${eventType.replace('reservation.', '')}.`,
             ``,
-            `L'équipe ${restaurantName}`
+            `L'équipe ${establishmentName}`
           ].join('\n');
           break;
       }

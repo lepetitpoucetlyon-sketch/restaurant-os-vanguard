@@ -1,4 +1,4 @@
-import type { CartItem } from '@/modules/ops/domain/schemas/pos';
+import type { CartItem } from '@nexus/contracts';
 
 export interface OPSEvents {
   'order.placed': {

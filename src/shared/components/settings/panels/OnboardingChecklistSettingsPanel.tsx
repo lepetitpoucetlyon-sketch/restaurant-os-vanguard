@@ -4,12 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
-  ClipboardCheck,
   CheckCircle2,
   AlertCircle,
   Clock,
   ChevronRight,
-  Shield,
   RefreshCw,
   Building,
   Utensils,
@@ -22,13 +20,10 @@ import {
   Heart,
   Lock,
   Sparkles,
-  ExternalLink,
-  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 import {
   type OnboardingAuditSummary,
-  type OnboardingPillarStep,
   RestaurantOnboardingMasterService,
 } from '@/modules/commerce';
 

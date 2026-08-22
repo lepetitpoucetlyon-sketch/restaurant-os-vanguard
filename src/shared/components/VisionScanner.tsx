@@ -41,7 +41,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
         setIsProcessing(true);
 
         try {
-            const { VisionService } = await import('@/modules/intelligence');
+            const { VisionService } = await import('@/modules/intelligence/services/VisionService');
             const data = await VisionService.analyzeInvoice(base64);
             onAnalysisComplete(data);
             setPreview(null);

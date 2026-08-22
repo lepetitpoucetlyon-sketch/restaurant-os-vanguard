@@ -27,7 +27,7 @@ export function registerResaReminderHandler(): () => void {
       }
 
       const settings = await Nexus.adapter.get<{ name?: string }>(`tenants/${tenantId}/settings/general`);
-      const restaurantName = settings?.name ?? 'Notre restaurant';
+      const establishmentName = settings?.name ?? 'Votre établissement';
 
       const customerEmail = reservation.email ?? reservation.customerEmail ?? customerId;
       const reservationTime = time ?? reservation.time ?? '';
@@ -35,8 +35,8 @@ export function registerResaReminderHandler(): () => void {
       await NotificationGateway.send({
         tenantId,
         to: customerEmail,
-        subject: `Rappel réservation — ${restaurantName}`,
-        text: `Votre table pour ${covers} couverts est confirmée pour demain à ${reservationTime}`,
+        subject: `Rappel réservation — ${establishmentName}`,
+        text: `Votre réservation pour ${covers} personne(s) est confirmée pour demain à ${reservationTime}`,
       });
 
       await Nexus.adapter.set(
@@ -58,7 +58,7 @@ export function registerResaReminderHandler(): () => void {
       empireAudit.log({
         module: 'crm',
         action: 'RESA_REMINDER_SENT',
-        details: { reservationId, customerId, restaurantName, covers },
+        details: { reservationId, customerId, establishmentName, covers },
         severity: 'low',
         timestamp: new Date(),
       });
