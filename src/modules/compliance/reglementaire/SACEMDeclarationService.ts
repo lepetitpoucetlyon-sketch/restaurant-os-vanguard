@@ -13,7 +13,7 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export interface SACEMLicense {
   licenseNumber: string;

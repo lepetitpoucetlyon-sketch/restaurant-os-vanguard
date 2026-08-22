@@ -2,7 +2,6 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import type { SensorReading } from '../../domain/schemas/haccp';
-import type { JsonObject } from "@/shared/types/json";
 
 /**
  * HACCPLogService — backend du registre sanitaire (hac-6).

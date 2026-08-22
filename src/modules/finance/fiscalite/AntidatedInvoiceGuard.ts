@@ -12,7 +12,7 @@
  *
  * Cf. docs/anglemort-restaurant-mcc.md § T10.
  */
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 const MAX_BACKDATE_DAYS = 3;

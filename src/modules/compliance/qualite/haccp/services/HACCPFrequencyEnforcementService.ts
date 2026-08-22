@@ -1,5 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export interface HACCPTaskSchedule {
   taskType: 'cold_room_temp' | 'frying_oil_polar' | 'cleaning_disinfection' | 'thawing_check';

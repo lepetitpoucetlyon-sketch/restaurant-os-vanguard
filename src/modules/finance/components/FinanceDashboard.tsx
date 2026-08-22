@@ -10,7 +10,7 @@ import { ExpenseClaimDialog } from './accounting';
 import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
-import { useOrders } from '@/modules/ops';
+import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {
@@ -68,7 +68,7 @@ export function FinanceDashboard() {
 
     const { activeTenantId } = useTenant();
     const closePeriodPermission = useActionPermission("finance", "close_period");
-    const { data: orders, isLoading: ordersLoading } = useOrders();
+    const { data: orders, isLoading: ordersLoading } = useSovereignCollection<Order>('orders', { tenantId: activeTenantId ?? undefined, autoSync: true });
 
     const paidOrders = filterPaidOrders(orders as Order[]);
 

@@ -1,5 +1,5 @@
 import type { TaxRate } from '../../domain/schemas/finance';
-import type { ConsumptionMode } from '@/modules/ops';
+import type { ConsumptionMode } from '../../comptabilite/FinancialNexusTypes';
 
 type ProductCategory = 
     | 'food' 
@@ -21,38 +21,47 @@ const RATE_MAP: Record<ProductCategory, Record<ConsumptionMode, TaxRate>> = {
     food: {
         dine_in:  '0.10',
         takeaway: '0.055',
+        delivery: '0.055',
     },
     beverage_soft: {
         dine_in:  '0.10',
         takeaway: '0.055',
+        delivery: '0.055',
     },
     alcohol: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
     service: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
     spare_parts: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
     medical_exempt: {
         dine_in:  '0.00',
         takeaway: '0.00',
+        delivery: '0.00',
     },
     used_goods_margin: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
     merchandise: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
     other: {
         dine_in:  '0.20',
         takeaway: '0.20',
+        delivery: '0.20',
     },
 };
 

@@ -14,7 +14,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § T49 (HAUT).
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export type ConsumptionMode = 'dine_in' | 'takeaway_cold' | 'takeaway_hot' | 'delivery';
 

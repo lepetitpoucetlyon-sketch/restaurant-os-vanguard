@@ -5,7 +5,6 @@ import type { PeriodClosure, PeriodType } from '../domain/schemas/periodClosure'
 import type { JournalEntry } from '@nexus/contracts';
 import type { Microunits } from '@/shared/schemas/primitives';
 import { toMicrounits } from '@/shared/schemas/primitives';
-import type { JsonObject } from "@/shared/types/json";
 
 const GENESIS_HASH = '0'.repeat(64);
 

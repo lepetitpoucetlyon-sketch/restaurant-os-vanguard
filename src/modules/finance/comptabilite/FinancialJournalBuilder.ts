@@ -1,5 +1,4 @@
-import type { JournalLine } from '@nexus/contracts';
-import type { CartItem } from '@/modules/ops';
+import type { JournalLine, CartItem } from '@nexus/contracts';
 import type { BridgePayload, PaymentMode } from './FinancialNexusTypes';
 
 export const PCG_PAYMENT_ACCOUNTS: Record<PaymentMode, { code: string; name: string }> = {

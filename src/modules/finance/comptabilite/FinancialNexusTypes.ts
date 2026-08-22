@@ -4,9 +4,9 @@
  * Types partagés pour le pont financier et le journal comptable.
  */
 
-import type { CartItem } from '@/modules/ops';
-import type { ConsumptionMode } from '@/modules/ops';
+import type { CartItem } from '@nexus/contracts';
 
+export type ConsumptionMode = 'dine_in' | 'takeaway' | 'delivery';
 export type PaymentMode = 'cash' | 'card' | 'check' | 'ticket_resto' | 'transfer' | 'comp';
 
 export interface BridgePayload {

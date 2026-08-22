@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
-import { LegalContractGenerator, type ContractDraftInput, type GeneratedContractDocument, type ContractPartyInfo, type ContractPricingPlan, type VerticalType } from './LegalContractGenerator';
+import { LegalContractGenerator, type ContractDraftInput } from './LegalContractGenerator';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

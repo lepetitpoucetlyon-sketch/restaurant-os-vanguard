@@ -1,11 +1,5 @@
 /**
- * 🏛️ DocumentVault - Grade X
- * Archivage immuable des preuves fiscales.
+ * Re-export canonique pour rétro-compatibilité interne au module compliance.
+ * L'implémentation est hébergée dans src/lib/mcc/vault/DocumentVault.ts (ADR-015).
  */
-export const DocumentVault = {
-    async archive(filename: string, content: string | Buffer, metadata: Record<string, string>): Promise<string> {
-        // Implémentation du stockage WORM (Write Once Read Many)
-        // Retourne un ID ou une URL d'archivage sécurisé.
-        return `vault://${metadata.tenantId || 'global'}/${filename}`;
-    }
-};
+export { DocumentVault } from '@/lib/vault';

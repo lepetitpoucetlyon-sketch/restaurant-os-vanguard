@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useCallback } from 'react';
-import { useOrders, type Order } from '@/modules/ops';
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import type { Order } from '@nexus/contracts';
 import type { JournalEntry } from '../../../types';
 import { InvoiceEngine } from '../domain/InvoiceEngine';
 import { useAtomValue, useStore } from 'jotai';
@@ -19,9 +20,12 @@ import { logger } from '@/lib/logger';
  */
 export function useBilling(options?: { enabled?: boolean }) {
     const enabled = options?.enabled ?? true;
-    const { data: orders, isLoading } = useOrders();
-    const fiscalLedgerNode = useAtomValue(fiscalLedgerNodeAtom);
     const tenantId = useAtomValue(tenantIdAtom);
+    const { data: orders, isLoading } = useSovereignCollection<Order>('orders', {
+        tenantId: (tenantId as string) || undefined,
+        autoSync: true,
+    });
+    const fiscalLedgerNode = useAtomValue(fiscalLedgerNodeAtom);
     const _store = useStore();
 
     /**

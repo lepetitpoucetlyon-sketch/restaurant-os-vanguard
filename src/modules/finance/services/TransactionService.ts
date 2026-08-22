@@ -1,7 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { FiscalEngine, type FiscalSeal } from '../fiscalite/FiscalAdapter';
-import { StockEngine } from '@/modules/logistics';
 import type { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { OperationalIdentity } from '@/shared/nexus-contract';
@@ -96,6 +95,7 @@ export class TransactionService {
             });
 
             // 3. STOCK DEDUCTION (Powered by StockEngine)
+            const { StockEngine } = await import('@/modules/logistics');
             const stockImpact = await StockEngine.calculateOrderStockImpact(
                 order, 
                 recipes, 

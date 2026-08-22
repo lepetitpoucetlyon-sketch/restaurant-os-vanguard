@@ -1,7 +1,14 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import type { EmployeeDocument } from '@/modules/human';
+interface EmployeeDocument {
+  id: string;
+  tenantId: string;
+  type: string;
+  expiresAt?: string;
+  status: string;
+  name?: string;
+}
 import type { License } from '../domain/schemas/license';
 import { toError } from "@/lib/toError";
 

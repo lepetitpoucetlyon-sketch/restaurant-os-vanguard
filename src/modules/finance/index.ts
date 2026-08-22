@@ -2,13 +2,23 @@
 export * from './comptabilite/accounting';
 export * from './comptabilite/billing';
 export * from './comptabilite/fec';
-export * from './comptabilite/components/accountant';
 export { BlockchainLedgerService } from './comptabilite/accounting/domain/BlockchainLedgerService';
 export { PayrollAccountingMapper } from './comptabilite/accounting/domain/PayrollAccountingMapper';
 export { StatementIngestionService } from './comptabilite/accounting/domain/StatementIngestionService';
 export { FECExporter } from './comptabilite/accounting/domain/FECExporter';
 export { MonthlyAccountingPackService } from './comptabilite/services/MonthlyAccountingPackService';
 export type { AccountingMonthlySummary } from './comptabilite/services/MonthlyAccountingPackService';
+export {
+  AccountingPortalHeader,
+  MonthlyCloseHero,
+  AccountingPortalTabs,
+  type AccountingTabKey,
+  SalesFiscalTab,
+  VatDeclarationTab,
+  PayrollSocialTab,
+  ReconciliationPurchasesTab,
+  AiAuditThemisTab,
+} from './comptabilite/components/accountant';
 
 // Domaine : tresorerie (banking, payout, collection, AP)
 export * from './tresorerie/banking/openBanking';
@@ -19,15 +29,18 @@ export { FiscalSealer } from './fiscalite/FiscalSealer';
 export { TaxCalculator } from './fiscalite/TaxCalculator';
 
 // Infrastructure pilier (components, hooks, services, store, providers, connectors, domain, migration)
-export * from './components';
+// Heavy components removed from barrel to break cycles.
+// Import directly from their paths (FinanceDashboard, FacturXDownloadButton, TreasuryDashboard, FiscalAuditView).
 export { formatMu, computeTVABreakdown } from './components/financeUtils';
+// (formatMu and computeTVABreakdown moved up)
 export * from './store/accountingAtoms';
 export { useAccounting } from './hooks/useAccounting';
 export { useFinance } from './hooks/useFinance';
 export { useFinanceReflex } from './hooks/useFinanceReflex';
 export { FiscalHACCPMapper } from './services/FiscalHACCPMapper';
 export { FinanceCore } from './services/FinanceCore';
-export { TransactionService } from './services/TransactionService';
+// TransactionService removed from barrel: imports @/modules/logistics (cycle).
+// Import directly: '@/modules/finance/services/TransactionService'
 export { FinancialNexusBridge } from './comptabilite/FinancialNexusBridge';
 export { PeriodClosureService } from './services/PeriodClosureService';
 export { FiscalEngine, FISCAL_CONSTANTS } from './services/FiscalEngine';
@@ -43,25 +56,23 @@ export { NexusFiscalProvider, useNexusFiscal, useCompliance } from './providers/
 export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mapper';
 export * from './types';
 export { FinanceDashboard } from './components/FinanceDashboard';
-
-export { getAmountInMu } from './hooks/useAccounting';
-export { buildEntryAmountInCents } from './hooks/useAccounting';
 export { CollectionService } from './tresorerie/collection/CollectionService';
+export { getAmountInMu, buildEntryAmountInCents } from './hooks/useAccounting';
+export { generatePrivatisationContract, type PrivatisationData, type PrivatisationFormule } from './comptabilite/documents/PrivatisationContract';
 export { TreasuryEngine } from './services/TreasuryEngine';
 export type { TreasuryReport } from './services/TreasuryEngine';
 export { BillingService } from './services/BillingService';
 export type { FleetTreasuryReport } from './services/BillingService';
-export { useAnalyticsPage } from './comptabilite/analytics/hooks';
-export { percentChange } from './comptabilite/analytics/hooks';
-export type { MacroBrainAlert } from './comptabilite/analytics/hooks';
+export { useAnalyticsPage, percentChange, type MacroBrainAlert } from './comptabilite/analytics/hooks';
 // UsageTracker est server-only — import direct depuis le chemin complet en contexte serveur uniquement.
 export { resolveVatRate } from './fiscalite/tax/vatResolver';
 export { inferCategory } from './fiscalite/tax/vatResolver';
 export { FinanceSyncService } from './finance.sync';
-export { AccountingReportService } from './services/AccountingReportService';
-export { TreasuryDashboard } from './components/accounting';
-export { FiscalAuditView } from './components/accounting';
-export { FacturXDownloadButton } from './components/FacturXDownloadButton';
+// AccountingReportService removed from barrel: imports @/modules/human (cycle).
+// Import directly: '@/modules/finance/services/AccountingReportService'
+// TreasuryDashboard, FiscalAuditView removed: in ./components (already excluded).
+// FacturXDownloadButton removed: imports AccountingReportService → human (cycle).
+// Import directly: '@/modules/finance/components/FacturXDownloadButton'
 export { useBilling } from './comptabilite/billing/hooks';
 
 export { PlaceholderView } from './components/accounting/PlaceholderView';

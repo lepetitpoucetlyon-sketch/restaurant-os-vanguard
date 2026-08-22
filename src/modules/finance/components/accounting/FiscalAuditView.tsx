@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFiscal } from '@/modules/ops';
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import type { JournalEntry } from '@nexus/contracts';
 import { BlockchainLedgerService } from '../../comptabilite/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const FiscalAuditView: React.FC = () => {
-    const { data: seals = [], isLoading: _sealsLoading } = useFiscal();
+    const { data: seals = [], isLoading: _sealsLoading } = useSovereignCollection<JournalEntry>('journalEntries', { autoSync: true });
     const [isVerifying, setIsVerifying] = useState(false);
     const [auditResult, setAuditResult] = useState<{ success: boolean; message: string } | null>(null);
     const [searchTerm, setSearchTerm] = useState('');

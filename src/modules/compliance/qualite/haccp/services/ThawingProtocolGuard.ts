@@ -1,5 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export type ThawingMethod = 'cold_room_positive' | 'microwave_immediate' | 'hot_water_bath' | 'ambient_air';
 

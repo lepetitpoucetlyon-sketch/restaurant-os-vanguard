@@ -9,11 +9,17 @@ import {
 } from "date-fns";
 import { fr } from "date-fns/locale";
 
-import { useQuality, type ComplianceAlert } from '@/modules/compliance';
-import { useOrders, useTables } from '@/modules/ops';
+import { useAtomValue } from "jotai";
+import { qualityAlertsAtom } from '@/store/pillars/quality';
+export interface ComplianceAlert {
+    id: string;
+    userName: string;
+    message: string;
+}
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import type { Table } from '@nexus/contracts';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { predictAttendance } from '@/modules/intelligence';
 
 export type AnalyticsTab = "profitability" | "reputation" | "compliance" | "oracle";
 const VALID_ANALYTICS_TABS: AnalyticsTab[] = ["profitability", "reputation", "compliance", "oracle"];
@@ -28,6 +34,7 @@ export interface MacroBrainAlert {
 }
 
 interface OrderLike {
+    id: string;
     status: string;
     totalInMicrounits?: number | null;
     totalInCents?: number | null;
@@ -62,9 +69,9 @@ export function useAnalyticsPage() {
     const [macroAlerts, setMacroAlerts] = useState<MacroBrainAlert[]>([]);
     const [attendance, setAttendance] = useState<{ low: number; median: number; high: number; label: string; } | null>(null);
 
-    const { alerts: qualityAlerts } = useQuality();
-    const { data: orders } = useOrders();
-    const { tables } = useTables();
+    const qualityAlerts = useAtomValue(qualityAlertsAtom);
+    const { data: orders = [] } = useSovereignCollection<OrderLike>('orders', { tenantId: Nexus.activeTenant ?? undefined, autoSync: true });
+    const { data: tables = [] } = useSovereignCollection<Table>('tables', { tenantId: Nexus.activeTenant ?? undefined, autoSync: true });
 
     const complianceAlerts = useMemo<ComplianceAlert[]>(
         () => qualityAlerts.map((c) => ({
@@ -156,7 +163,8 @@ export function useAnalyticsPage() {
         if (hour < 12) { targetDate = t; serviceLabel = `${format(t, "EEEE", { locale: fr })} déjeuner`; }
         else if (hour < 22) { targetDate = t; serviceLabel = `${format(t, "EEEE", { locale: fr })} dîner`; }
         else { targetDate = new Date(t.getTime() + 24 * 60 * 60 * 1000); serviceLabel = `${format(targetDate, "EEEE", { locale: fr })} déjeuner`; }
-        predictAttendance(targetDate.getTime(), tenantId)
+        import('@/modules/intelligence')
+            .then(({ predictAttendance }) => predictAttendance(targetDate.getTime(), tenantId))
             .then((result) => setAttendance({ ...result, label: serviceLabel }))
             .catch(() => setAttendance(null));
     }, []);

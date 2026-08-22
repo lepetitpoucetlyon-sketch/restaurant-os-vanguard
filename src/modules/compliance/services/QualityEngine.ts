@@ -1,10 +1,8 @@
 import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
-import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-// eslint-disable-next-line no-restricted-imports -- deep import volontaire : évite cycle finance ↔ compliance. Cible α-5 : extraire FiscalEngine vers kernel/.
-import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine } from '@/lib/fiscal';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 
@@ -121,6 +119,7 @@ export class QualityEngine {
         const recentFailures = snapshots.filter(d => d.hygieneStatus === 'dirty');
         
         if (recentFailures.length >= 3) {
+            const { MaintenanceAgent } = await import('@/lib/MaintenanceAgent');
             await MaintenanceAgent.submitSOS({
                 tenantId,
                 userId: 'system_quality',

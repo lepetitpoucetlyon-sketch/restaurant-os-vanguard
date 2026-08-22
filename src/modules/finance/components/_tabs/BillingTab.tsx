@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { FileText } from "lucide-react";
 import { FacturXDownloadButton } from '../FacturXDownloadButton';
-import type { Order } from "@/modules/ops";
+import type { Order } from '@nexus/contracts';
 import { useBilling } from '../../comptabilite/billing/hooks/useBilling';
 
 /**

@@ -1,6 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import type { CartItem } from '@/modules/ops';
+import type { CartItem } from '@nexus/contracts';
 import type { BridgePayload, PaymentMode } from './FinancialNexusTypes';
 
 export function emitPaymentEvents(

@@ -1,5 +1,3 @@
-import { fleetTelemetry } from '@/modules/intelligence';
-import { MaintenanceAgent } from '@/lib/MaintenanceAgent';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
@@ -42,6 +40,7 @@ export const HACCPTelemetryBridge = {
       const healthScore = Math.max(0, 100 - riskPoints);
 
       // 📡 Push to Telemetry Hub
+      const { fleetTelemetry } = await import('@/shared/providers/fleet/FleetTelemetryService');
       await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
         healthScore,
         complianceScore: (receptions as import("@/shared/nexus-contract").SovereignValue[]).length > 0 ? 100 : 50, // Penalty for missing audits
@@ -49,6 +48,7 @@ export const HACCPTelemetryBridge = {
 
       // 🚨 Trigger SOS if health is critical
       if (healthScore < 60 || criticalEvents > 2) {
+        const { MaintenanceAgent } = await import('@/lib/MaintenanceAgent');
         await MaintenanceAgent.submitSOS({
           tenantId,
           userId: 'system_haccp_bridge',

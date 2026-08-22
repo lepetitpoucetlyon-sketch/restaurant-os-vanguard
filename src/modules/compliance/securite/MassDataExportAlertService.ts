@@ -10,7 +10,7 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 const DEFAULT_THRESHOLD = 200;
 const DEFAULT_WINDOW_MS = 3600_000; // 1h

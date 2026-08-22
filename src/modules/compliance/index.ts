@@ -9,7 +9,8 @@ export { useHACCP } from './qualite/haccp/hooks/useHACCP';
 export { useComplianceMapper } from './qualite/haccp/hooks/useComplianceMapper';
 export { RecallService } from './qualite/recall/RecallService';
 export { FoodDonationService } from './qualite/donation/FoodDonationService';
-export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
+// ComplianceCalendar removed from barrel: imports @/modules/human (cycle).
+// Import directly: '@/modules/compliance/qualite/calendar/ComplianceCalendar'
 export { IoTSensorService } from './qualite/haccp/iot';
 export { HACCPTelemetryBridge } from './qualite/haccp/services/HACCPTelemetryBridge';
 
@@ -30,14 +31,11 @@ export type { PiiRecord, PiiFields } from './domain/schemas/pii';
 export { IoTProviderFactory } from './connectors/iot';
 export * from './services';
 
-export * from './qualite/haccp/components';
-export * from './qualite/haccp/components/haccp';
-export * from './qualite/haccp/components/quality';
-export { useHaccpPage } from './qualite/haccp/hooks';
-export { HACCP_TOOLS } from './qualite/haccp/hooks';
+export { useHaccpPage, HACCP_TOOLS, type TempAlert, type LotFilter } from './qualite/haccp/hooks/useHaccpPage';
 export { CleaningPlan } from './qualite/haccp/components/CleaningPlan';
-export { DLCTracker } from './qualite/haccp/components/DLCTracker';
 export { NonConformityForm } from './qualite/haccp/components/NonConformityForm';
+export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
+export { DLCTracker } from './qualite/haccp/components/DLCTracker';
 export { HACCPSyncService } from './qualite/haccp/haccp.sync';
 export { PlanMaitriseSanitaire } from './qualite/haccp/services/PlanMaitriseSanitaire';
 export { qualityActiveControlAtom } from './qualite/haccp/store/qualityAtoms';

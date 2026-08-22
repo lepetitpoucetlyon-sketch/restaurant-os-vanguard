@@ -10,7 +10,7 @@
  *
  * Cf. docs/anglemort-restaurant-mcc.md § MCC-C2 (HAUT — Art. 102 LPF).
  */
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 const RETENTION_YEARS = 6;
 const RETENTION_MS = RETENTION_YEARS * 365.25 * 24 * 3600_000;

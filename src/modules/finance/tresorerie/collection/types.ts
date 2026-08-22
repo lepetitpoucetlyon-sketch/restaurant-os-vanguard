@@ -24,10 +24,4 @@ export interface CollectionAction {
     sealHash?: string;
 }
 
-export interface CommunicationPulse {
-    type: 'EMAIL' | 'SMS' | 'PUSH' | 'MIXED';
-    recipient: string;
-    subject: string;
-    content: string;
-    attachments?: Array<{ filename: string; content: string | Buffer }>;
-}
+export type { CommunicationPulse } from '@/lib/CommunicationService';

@@ -1,6 +1,4 @@
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { policyEngine } from '@/modules/compliance';
+import { policyEngine } from '@/lib/permissions/PolicyEngine';
 import { empireAudit } from '@/lib/audit';
 import type { PermissionRole } from '@nexus/contracts/permissions.types';
 
