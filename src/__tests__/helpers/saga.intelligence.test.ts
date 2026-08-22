@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
@@ -22,12 +22,16 @@ const { mockGet, mockSet, mockUpdate, mockQuery, mockCreate, mockEmit, mockEmitD
     };
   });
 
-vi.mock('@/modules/intelligence', () => ({
-  HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
-  AIProviderRouter: class {
-    generateText = vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) }));
-  },
-}));
+vi.mock('@/modules/intelligence', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/modules/intelligence')>();
+  return {
+    ...actual,
+    HermesKnowledgeManager: { analyze: vi.fn(async () => ({ insights: [] })) },
+    AIProviderRouter: class {
+      generateText = vi.fn(async () => ({ text: JSON.stringify({ kind: 'code_fix', title: 'Fix bug', summary: 'ok', riskLevel: 'low', autoApplicable: true, confidence: 0.9 }) }));
+    },
+  };
+});
 vi.mock('@/modules/intelligence/ia/ai', () => ({
   AI_MODELS: { GEMINI_FLASH: 'gemini-flash', reasoning: 'gemini-pro', fast: 'gemini-flash' },
   LLMManager: {

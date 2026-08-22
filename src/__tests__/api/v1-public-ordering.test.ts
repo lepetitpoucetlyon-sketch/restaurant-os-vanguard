@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { OpenApiSpecService } from '@/lib/api/OpenApiSpecService';
 
 describe('🌐 API REST v1 & Public Ordering Specification (H2)', () => {

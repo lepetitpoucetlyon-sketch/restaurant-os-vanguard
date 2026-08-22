@@ -6,8 +6,6 @@ import type { PurchaseOrder, DeliveryNote } from '@/modules/logistics/approvisio
 import type { StockItem } from '@/modules/logistics/domain/schemas/inventory';
 import type { MercurialeItem } from '@/modules/logistics/approvisionnement/mercuriales/MercurialeTypes';
 import type { SupplierEntity } from '@/modules/logistics/approvisionnement/core/domain/supplier.types';
-import { SovereignLedger } from '@/modules/finance/services/SovereignLedger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 describe('🏛️ E2E Procurement Lifecycle: Approvisionnement ➔ Engagement ➔ Réception BL ➔ 3-Way Match', () => {
   const tenantId = 'tenant_e2e_restaurant';

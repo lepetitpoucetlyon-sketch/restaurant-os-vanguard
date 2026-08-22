@@ -27,7 +27,7 @@ import { CLINIC_BLUEPRINT } from '@/verticals/clinic/clinic.blueprint';
 describe('🏛️ Multi-Verticales — Couverture 100% Architecturale & Blueprints', () => {
   let mockContext: ICoreContext;
   let routesRegistered: Record<string, any>;
-  let handlersRegistered: Record<string, Function>;
+  let handlersRegistered: Record<string, (...args: unknown[]) => unknown>;
 
   beforeEach(() => {
     routesRegistered = {};

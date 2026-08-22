@@ -19,7 +19,7 @@ import { TenantAIRegistry } from '@/kernel/ai/tenant/TenantAIRegistry';
 import { MCCAIRegistry } from '@/kernel/ai/mcc/MCCAIRegistry';
 
 vi.mock('@/lib/logger', () => ({
-    logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+    logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 vi.mock('@/lib/adapters/OpsAlertGateway', () => ({

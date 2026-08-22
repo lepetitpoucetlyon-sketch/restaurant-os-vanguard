@@ -11,15 +11,25 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { emit: vi.fn(), emitDurable: vi.fn() },
 }));
+vi.mock('@/lib/audit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/audit')>();
+  return {
+    ...actual,
+    AuditLogger: { ...actual.AuditLogger, logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
+  };
+});
+vi.mock('@/lib/mcc/audit/AuditLogger', () => ({
+  AuditLogger: { logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
+}));
 vi.mock('@/modules/compliance', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/modules/compliance')>();
   return {
     ...actual,
-    AuditLogger: { ...actual.AuditLogger, logAction: vi.fn() },
+    AuditLogger: { ...actual.AuditLogger, logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
   };
 });
 vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
-  AuditLogger: { logAction: vi.fn() },
+  AuditLogger: { logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
 }));
 vi.mock('@/lib/offline/OutboxService', () => ({
   OutboxService: { enqueue: vi.fn() },
@@ -32,7 +42,7 @@ vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: 
 
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 import { OutboxService } from '@/lib/offline/OutboxService';
 
 import { AgecCarafeService } from '@/modules/ops/service/pos/services/AgecCarafeService';

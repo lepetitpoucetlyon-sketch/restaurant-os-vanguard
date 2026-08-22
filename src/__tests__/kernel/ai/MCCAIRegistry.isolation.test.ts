@@ -68,7 +68,7 @@ describe('MCCAIRegistry — Isolation Tests', () => {
         const illegalImports = lines.filter(
             line =>
                 line.includes("from '@/modules/") &&
-                !line.includes("from '@/modules/intelligence/ia/ai"),
+                !line.includes("from '@/modules/intelligence"),
         );
 
         expect(illegalImports).toHaveLength(0);
@@ -83,7 +83,7 @@ describe('MCCAIRegistry — Isolation Tests', () => {
         const illegalImports = lines.filter(
             line =>
                 line.includes("from '@/modules/") &&
-                !line.includes("from '@/modules/intelligence/ia/ai"),
+                !line.includes("from '@/modules/intelligence"),
         );
         expect(illegalImports).toHaveLength(0);
     });

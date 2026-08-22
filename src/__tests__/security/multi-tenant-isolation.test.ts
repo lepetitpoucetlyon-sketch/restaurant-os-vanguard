@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ShieldedContext, SovereignSecurityViolation } from '@/modules/intelligence/ia/ai/ShieldedContext';
 import { DNAInjector } from '@/modules/intelligence/ia/ai/DNAInjector';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';

@@ -3,7 +3,6 @@ import {
     createLLMProvider,
     resolveModelId,
     detectProvider,
-    AI_MODELS,
     AIProviderRouter,
     SovereignProvider,
     MistralProvider,

@@ -8,6 +8,7 @@ vi.mock('@/store/pillars', () => ({
     ordersNodeAtom: { toString: () => 'ordersNodeAtom' },
     stockItemsNodeAtom: { toString: () => 'stockItemsNodeAtom' },
     journalEntriesNodeAtom: { toString: () => 'journalEntriesNodeAtom' },
+    qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' },
     updateNexusNode: vi.fn((prev, update) => ({ ...prev, ...update }))
 }));
 

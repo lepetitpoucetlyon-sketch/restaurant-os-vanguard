@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { UniversalSystemPromptBuilder, VERTICAL_LABELS_MAP } from '@/modules/intelligence/services/UniversalSystemPromptBuilder';
+import { UniversalSystemPromptBuilder } from '@/modules/intelligence/services/UniversalSystemPromptBuilder';
 import { AssistantActionDispatcher } from '@/modules/intelligence/services/AssistantActionDispatcher';
 
 describe('🤖 Universal Assistant & RBAC Membrane Suite', () => {

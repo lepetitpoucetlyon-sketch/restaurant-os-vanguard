@@ -38,37 +38,54 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   },
 }));
 
+const auditMock = {
+  logAction: vi.fn(async (_admin: string, action: string, targetId: string, metadata?: unknown) => {
+    auditLogs.push({ action, targetId, metadata });
+    return { id: 'log_x', hash: 'fake_hash', previousHash: 'prev', timestamp: Date.now() };
+  }),
+  verifyChain: vi.fn(async (logs: Array<{ id: string; previousHash: string; hash: string }>) => {
+    const breaks: Array<{ id: string; expectedPrev: string; actualPrev: string }> = [];
+    let expectedPrev = logs[0]?.previousHash ?? 'GENESIS';
+    for (const l of logs) {
+      if (l.previousHash !== expectedPrev) {
+        breaks.push({ id: l.id, expectedPrev, actualPrev: l.previousHash });
+      }
+      expectedPrev = l.hash;
+    }
+    return { valid: breaks.length === 0, breaks };
+  }),
+  exportChain: vi.fn(async () => ({
+    logs: [],
+    fromTs: 0,
+    toTs: 0,
+    finalHash: 'FINAL_HASH_MOCK',
+    count: 0,
+    exportedAt: new Date().toISOString(),
+    integrityValid: true,
+    breaks: [],
+  })),
+};
+
+vi.mock('@/lib/audit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/audit')>();
+  return {
+    ...actual,
+    AuditLogger: {
+      ...actual.AuditLogger,
+      ...auditMock,
+    },
+  };
+});
+vi.mock('@/lib/mcc/audit/AuditLogger', () => ({
+  AuditLogger: auditMock,
+}));
 vi.mock('@/modules/compliance', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/modules/compliance')>();
   return {
     ...actual,
     AuditLogger: {
       ...actual.AuditLogger,
-      logAction: vi.fn(async (_admin: string, action: string, targetId: string, metadata?: unknown) => {
-        auditLogs.push({ action, targetId, metadata });
-        return { id: 'log_x', hash: 'fake_hash', previousHash: 'prev', timestamp: Date.now() };
-      }),
-      verifyChain: vi.fn(async (logs: Array<{ id: string; previousHash: string; hash: string }>) => {
-        const breaks: Array<{ id: string; expectedPrev: string; actualPrev: string }> = [];
-        let expectedPrev = logs[0]?.previousHash ?? 'GENESIS';
-        for (const l of logs) {
-          if (l.previousHash !== expectedPrev) {
-            breaks.push({ id: l.id, expectedPrev, actualPrev: l.previousHash });
-          }
-          expectedPrev = l.hash;
-        }
-        return { valid: breaks.length === 0, breaks };
-      }),
-      exportChain: vi.fn(async () => ({
-        logs: [],
-        fromTs: 0,
-        toTs: 0,
-        finalHash: 'FINAL_HASH_MOCK',
-        count: 0,
-        exportedAt: new Date().toISOString(),
-        integrityValid: true,
-        breaks: [],
-      })),
+      ...auditMock,
     },
   };
 });

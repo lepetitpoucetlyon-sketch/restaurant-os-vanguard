@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { NexusEventBus, IdempotencyGuard } from '@/shared/eventBus/NexusEventBus';
 
 describe('V3-BUS-04/05/06: NexusEventBus Multi-Caisse & Idempotence Suite', () => {

@@ -6,6 +6,16 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   NexusEventBus: { emit: vi.fn(), emitDurable: vi.fn() },
 }));
+vi.mock('@/lib/audit', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/audit')>();
+  return {
+    ...actual,
+    AuditLogger: { ...actual.AuditLogger, logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
+  };
+});
+vi.mock('@/lib/mcc/audit/AuditLogger', () => ({
+  AuditLogger: { logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
+}));
 vi.mock('@/modules/compliance', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/modules/compliance')>();
   return {
@@ -29,7 +39,7 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 }));
 
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 import { TpeResilienceSimulatorService } from '@/modules/ops/service/pos/services/TpeResilienceSimulatorService';
 import { PosFiscalSealE2EPipeline } from '@/modules/ops/service/pos/services/PosFiscalSealE2EPipeline';

@@ -13,7 +13,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § D1 (CRITIQUE — refus contrôle fiscal).
  */
 import { describe, it, expect } from 'vitest';
-import type { FECLine, FECExportResult } from '@/modules/finance/comptabilite/fec/types';
+import type { FECExportResult } from '@/modules/finance/comptabilite/fec/types';
 
 const REQUIRED_COLUMNS = [
   'JournalCode', 'JournalLib', 'EcritureNum', 'EcritureDate', 'CompteNum', 'CompteLib',

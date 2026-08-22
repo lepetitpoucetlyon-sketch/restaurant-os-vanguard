@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
 
@@ -28,9 +28,13 @@ vi.mock('jotai', () => ({
   getDefaultStore: vi.fn(() => ({ get: vi.fn(() => ({})), set: vi.fn() })),
   atom: vi.fn(),
 }));
-vi.mock('@/store/pillars/compliance', () => ({
-  quarantinedProductsAtom: {},
-}));
+vi.mock('@/store/pillars/compliance', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/store/pillars/compliance')>();
+  return {
+    ...actual,
+    quarantinedProductsAtom: {},
+  };
+});
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 

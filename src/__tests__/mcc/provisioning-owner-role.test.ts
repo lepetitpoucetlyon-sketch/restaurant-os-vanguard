@@ -1,8 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { setupOwnerAccount } from '@/lib/mcc/provisioning/steps/provisioningSteps';
-import { PERMISSION_ROLE_LEVELS, PermissionRole } from '@nexus/contracts/permissions.types';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { MockAdapter } from '@/lib/adapters/MockAdapter';
+import { describe, it, expect } from 'vitest';
+import { PERMISSION_ROLE_LEVELS } from '@nexus/contracts/permissions.types';
 import { UniversalSystemPromptBuilder } from '@/modules/intelligence/services/UniversalSystemPromptBuilder';
 
 describe('V1-RBAC & MCC Provisioning Compliance', () => {

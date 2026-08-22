@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { generateSyntheticDataset } from '../../../scripts/ai-slm-finetuning/generate_synthetic_dataset';
 import { SovereignSlmClient } from '@/modules/intelligence/ia/ai/SovereignSlmClient';
 

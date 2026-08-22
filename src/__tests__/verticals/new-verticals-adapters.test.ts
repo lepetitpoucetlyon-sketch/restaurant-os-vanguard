@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { GymVertical, GymCommerceAdapter, GymOpsAdapter } from '@/verticals/gym';
-import { CoworkingVertical, CoworkingCommerceAdapter, CoworkingOpsAdapter } from '@/verticals/coworking';
-import { VeterinaryVertical, VeterinaryCommerceAdapter, VeterinaryOpsAdapter } from '@/verticals/veterinary';
-import { FloristVertical, FloristCommerceAdapter, FloristLogisticsAdapter } from '@/verticals/florist';
+import { GymVertical, GymCommerceAdapter } from '@/verticals/gym';
+import { CoworkingVertical, CoworkingCommerceAdapter } from '@/verticals/coworking';
+import { VeterinaryVertical, VeterinaryCommerceAdapter } from '@/verticals/veterinary';
+import { FloristVertical, FloristLogisticsAdapter } from '@/verticals/florist';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 describe('V2-VERT-03: Minimal Adapters & Plugins for 4 New Verticals', () => {
@@ -11,10 +11,10 @@ describe('V2-VERT-03: Minimal Adapters & Plugins for 4 New Verticals', () => {
     expect(plugin.id).toBe('gym');
     expect(plugin.name).toBe('Fitness OS');
 
-    const handlers: Record<string, Function> = {};
+    const handlers: Record<string, (...args: unknown[]) => unknown> = {};
     const mockContext = {
       registerRoute: vi.fn(),
-      registerEventHandler: vi.fn((event: string, handler: Function) => {
+      registerEventHandler: vi.fn((event: string, handler: (...args: unknown[]) => unknown) => {
         handlers[event] = handler;
       }),
       registerNavSection: vi.fn(),
