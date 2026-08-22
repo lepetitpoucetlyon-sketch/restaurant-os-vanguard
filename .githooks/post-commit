@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# ══════════════════════════════════════════════════════════════════════════════
+# post-commit — s'exécute MÊME sur un commit `--no-verify` (non bypassé par ce flag).
+# Détecte un commit dont le pre-commit a été sauté (aucune preuve de vert) et alerte.
+# Ne peut pas bloquer (commit déjà fait) — mais rend la triche VISIBLE.
+# ══════════════════════════════════════════════════════════════════════════════
+cd "$(git rev-parse --show-toplevel)" 2>/dev/null || exit 0
+PROOF="$(git rev-parse --git-dir)/preflight-proof"
+TREE="$(git rev-parse 'HEAD^{tree}' 2>/dev/null)"
+RED='\033[0;31m'; YEL='\033[1;33m'; RST='\033[0m'
+
+if [ ! -f "$PROOF" ] || [ "$(cat "$PROOF" 2>/dev/null)" != "$TREE" ]; then
+  echo -e "${RED}⚠️  COMMIT SANS PREUVE DE VERT — le pre-commit a été sauté (--no-verify ?).${RST}"
+  echo -e "${YEL}   Ce commit n'est PAS certifié. Interdit d'annoncer 'vert / Grade X / 100%' dessus (AGENTS.md Loi 3).${RST}"
+  echo -e "${YEL}   Rejoue les gates en sortie brute : npm run preflight${RST}"
+fi
+exit 0

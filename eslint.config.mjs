@@ -78,11 +78,7 @@ const eslintConfig = defineConfig([
       "src/shared/nexus/engines/**",
       "src/shared/nexus/state/**",
       "src/shared/hooks/**",
-      "src/shared/eventBus/**",
-      "src/lib/NexusTelemetryService.ts",
-      "src/lib/MaintenanceAgent.ts",
       "src/modules/*/domain/schemas/**",
-      "src/kernel/ai/**",
     ],
     rules: {
       "no-restricted-imports": "off",
@@ -107,6 +103,9 @@ const eslintConfig = defineConfig([
     "graphify-out/**",
     "functions/**",
     "scratch/**",
+    "playwright-report/**",
+    "test-results/**",
+    "coverage/**",
   ]),
 ]);
 

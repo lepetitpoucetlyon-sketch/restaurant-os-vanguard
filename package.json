@@ -26,7 +26,10 @@
     "nexus:seal": "node .nexus/scripts/smart-seal.js",
     "nexus:deploy": "node .nexus/scripts/quick-deploy.js",
     "test": "vitest run",
-    "preflight": "./scripts/preflight.sh"
+    "preflight": "./scripts/preflight.sh",
+    "map": "node scripts/generate-architecture-map.mjs",
+    "verify:gates": "node scripts/verify-gate-integrity.mjs",
+    "prepare": "node scripts/install-hooks.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1101.0",

@@ -18,12 +18,18 @@ warn() { echo -e "${YELLOW}  ⚠️  $1${RESET}"; }
 step() { echo -e "\n${BOLD}${BLUE}$1${RESET}"; }
 
 # ────────────────────────────────────────────────────────────────
-step "🔍 [1/8] TypeScript — vérification des types"
-npx tsc --noEmit
-ok "Aucune erreur TypeScript"
+step "🔍 [1/10] TypeScript — vérification des types"
+TSC_OUTPUT=$(npx tsc --noEmit 2>&1) || {
+  TSC_ERRORS=$(echo "$TSC_OUTPUT" | grep -c "error TS" || echo "?")
+  fail "TypeScript : $TSC_ERRORS erreurs de compilation"
+  echo "$TSC_OUTPUT" | grep "error TS" | head -20
+  exit 1
+}
+TSC_ERRORS=0
+ok "TypeScript : $TSC_ERRORS erreur"
 
 # ────────────────────────────────────────────────────────────────
-step "🔒 [2/8] Logique métier — fetch() nu sur routes protégées"
+step "🔒 [2/10] Logique métier — fetch() nu sur routes protégées"
 # Toute route /api/admin/ ou /api/tenant/ exige un JWT Firebase.
 # Les composants client DOIVENT utiliser authedFetch() au lieu de fetch().
 # Les routes API serveur (route.ts) et les adapters hardware sont exemptés.
@@ -65,49 +71,77 @@ fi
 ok "Toutes les routes /api/admin/ ont un guard auth"
 
 # ────────────────────────────────────────────────────────────────
-step "🧹 [3/8] ESLint — ratchet barrel-debt"
+step "🧹 [3/10] ESLint — vérification complète (barrel-debt + totaux réels)"
 # Ratchet : le nombre d'erreurs no-restricted-imports ne peut que descendre.
 # Baseline réelle audit 2026-08-19 : 0 violation (dette entièrement résolue).
 # Ne jamais augmenter ce seuil — 0 violation permanente.
 BARREL_DEBT_MAX=0
-# Compter uniquement les lignes "error" contenant "Barrel Contract"
-ESLINT_ERRORS=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 \
-  | grep -c "error.*Barrel Contract" || true)
+# Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
+ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
+# Métriques réelles — barrel, inter-module, totaux
+BARREL_COUNT=$(echo "$ESLINT_FULL" | grep -c "error.*Barrel Contract" || true)
+INTER_MODULE_COUNT=$(echo "$ESLINT_FULL" | grep -c "error.*no-inter-module-imports" || true)
+ESLINT_TOTAL_ERRORS=$(echo "$ESLINT_FULL" | grep "✖" | sed -E 's/.*\(([0-9]+) error.*/\1/' || echo "0")
+ESLINT_TOTAL_WARNINGS=$(echo "$ESLINT_FULL" | grep "✖" | sed -E 's/.*, ([0-9]+) warning.*/\1/' || echo "0")
 
-if [ "$ESLINT_ERRORS" -gt "$BARREL_DEBT_MAX" ]; then
-  fail "ESLint barrel-debt : $ESLINT_ERRORS erreurs > seuil ratchet ($BARREL_DEBT_MAX)."
+# Gate bloquante : barrel-debt (ratchet)
+if [ "$BARREL_COUNT" -gt "$BARREL_DEBT_MAX" ]; then
+  fail "ESLint barrel-debt : $BARREL_COUNT erreurs > seuil ratchet ($BARREL_DEBT_MAX)."
   fail "Nouvelles violations de Barrel Contract détectées — corrige avant de merger."
-  npx eslint src/ --format stylish --max-warnings 9999 2>&1 \
-    | grep "error.*Barrel Contract" | head -20
+  echo "$ESLINT_FULL" | grep "error.*Barrel Contract" | head -20
   exit 1
-elif [ "$ESLINT_ERRORS" -lt "$BARREL_DEBT_MAX" ]; then
-  ok "ESLint barrel-debt : $ESLINT_ERRORS erreurs < seuil ($BARREL_DEBT_MAX) — baisse BARREL_DEBT_MAX dans preflight.sh !"
+elif [ "$BARREL_COUNT" -lt "$BARREL_DEBT_MAX" ]; then
+  ok "ESLint barrel-debt : $BARREL_COUNT erreurs < seuil ($BARREL_DEBT_MAX) — baisse BARREL_DEBT_MAX dans preflight.sh !"
 else
-  ok "ESLint barrel-debt : $ESLINT_ERRORS / $BARREL_DEBT_MAX — stable (pas de nouvelle violation)"
+  ok "ESLint barrel-debt : $BARREL_COUNT / $BARREL_DEBT_MAX — stable"
+fi
+
+# Gate bloquante : no-inter-module-imports (ratchet)
+INTER_MODULE_MAX=0
+if [ "$INTER_MODULE_COUNT" -gt "$INTER_MODULE_MAX" ]; then
+  fail "ESLint no-inter-module-imports : $INTER_MODULE_COUNT erreurs > seuil ratchet ($INTER_MODULE_MAX)."
+  echo "$ESLINT_FULL" | grep "no-inter-module-imports" | head -20
+  exit 1
+else
+  ok "ESLint no-inter-module-imports : $INTER_MODULE_COUNT / $INTER_MODULE_MAX — 0 violation"
 fi
 
 # ────────────────────────────────────────────────────────────────
-step "🧪 [4/8] Tests Vitest"
-npx vitest run
-ok "Suite de tests verte"
+step "🧪 [4/10] Tests Vitest"
+VITEST_OUTPUT=$(npx vitest run 2>&1) || {
+  fail "Vitest : suite en échec"
+  echo "$VITEST_OUTPUT" | tail -10
+  exit 1
+}
+VITEST_PASSED=$(echo "$VITEST_OUTPUT" | grep "Tests" | sed -E 's/.*Tests[[:space:]]+([0-9]+) passed.*/\1/' || echo "?")
+VITEST_SKIPPED=$(echo "$VITEST_OUTPUT" | grep -oE '[0-9]+ skipped' | head -1 | sed 's/ skipped//' || echo "0")
+VITEST_UNHANDLED=$(echo "$VITEST_OUTPUT" | grep "Errors" | sed -E 's/.*Errors[[:space:]]+([0-9]+) error.*/\1/' || echo "0")
+ok "Vitest : $VITEST_PASSED passés, $VITEST_SKIPPED skippés, $VITEST_UNHANDLED unhandled errors"
 
 # ────────────────────────────────────────────────────────────────
-step "🔄 [5/8] Cycles d'imports (madge ratchet — résout les alias @/)"
+step "🔄 [5/10] Cycles d'imports (madge ratchet — résout les alias @/)"
 # Ratchet : le nombre de cycles circulaires Madge ne peut JAMAIS dépasser le seuil gelé.
-# Baseline après assainissement 2026-08-19 : 428 cycles (réduit depuis 966).
+# Baseline après assainissement 2026-08-22 : 72 cycles (réduit depuis 615 / 430).
 # Ne jamais augmenter ce seuil — chaque vague d'assainissement doit le faire descendre.
-MADGE_CYCLES_MAX=430
-node scripts/cycles-inspector.mjs --threshold="$MADGE_CYCLES_MAX"
-ok "Cycles circulaires sous le seuil ratchet ($MADGE_CYCLES_MAX)"
+MADGE_CYCLES_MAX=0
+CYCLES_OUTPUT=$(node scripts/cycles-inspector.mjs --threshold="$MADGE_CYCLES_MAX" 2>&1) || {
+  fail "Cycles : seuil ratchet dépassé ($MADGE_CYCLES_MAX)"
+  echo "$CYCLES_OUTPUT"
+  exit 1
+}
+MADGE_CYCLES_REAL=$(echo "$CYCLES_OUTPUT" | grep "Total Cycles" | sed -E 's/[^0-9]*([0-9]+).*/\1/' || echo "?")
+MADGE_CROSS_PILIER=$(echo "$CYCLES_OUTPUT" | grep "Cross-Piliers" | sed -E 's/[^0-9]*([0-9]+).*/\1/' || echo "?")
+echo "$CYCLES_OUTPUT"
+ok "Cycles : $MADGE_CYCLES_REAL réels (dont $MADGE_CROSS_PILIER cross-piliers) — seuil ratchet $MADGE_CYCLES_MAX"
 
 # ────────────────────────────────────────────────────────────────
-step "🏗️  [6/8] Build de production (SORTIE BRUTE — jamais via rtk)"
+step "🏗️  [6/10] Build de production (SORTIE BRUTE — jamais via rtk)"
 # rtk peut masquer un échec de build (exit 0 + résumé tronqué). Toujours brut.
 npx next build
 ok "Build de production réussi"
 
 # ────────────────────────────────────────────────────────────────
-step "🏛️  [7/8] sentrux check — règles architecturales (frontières + contraintes)"
+step "🏛️  [7/10] sentrux check — règles architecturales (frontières + contraintes)"
 if ! command -v sentrux >/dev/null 2>&1; then
   warn "sentrux non installé — étape sautée."
   warn "Installe-le : brew install sentrux/tap/sentrux (voir .sentrux/README.md)"
@@ -147,7 +181,7 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────
-step "📉 [8/8] sentrux gate — anti-régression vs baseline"
+step "📉 [8/10] sentrux gate — anti-régression vs baseline"
 if ! command -v sentrux >/dev/null 2>&1; then
   warn "sentrux non installé — étape sautée."
 else
@@ -171,7 +205,7 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────
-step "📦 [9/9] Bundle size — ratchet (non-bloquant si baseline absente)"
+step "📦 [9/10] Bundle size — ratchet (non-bloquant si baseline absente)"
 # Baseline établie post-γ-7. Le gate compare taille chunks vs seuil BUNDLE_MAX_KB.
 # Si .next/static/chunks absent (build pas encore fait), on skippe silencieusement.
 BUNDLE_MAX_KB=${BUNDLE_MAX_KB:-2000}  # baseline empirique à mesurer et bloquer plus tard
@@ -191,16 +225,25 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────
+step "🛡️  [10/10] Intégrité des gates — anti-desserrement (AGENTS.md Loi 2)"
+node scripts/verify-gate-integrity.mjs
+ok "Intégrité des gates : aucune gate desserrée vs baseline"
+
+# ────────────────────────────────────────────────────────────────
+# RÉCAPITULATIF — MÉTRIQUES RÉELLES (jamais hardcodées)
+# Ce bloc affiche les variables capturées pendant l'exécution.
+# Si un chiffre est faux ici, c'est que la capture est cassée, pas qu'on ment.
 echo ""
 echo -e "${GREEN}${BOLD}✅ Preflight complet — prêt pour merge/deploy${RESET}"
 echo ""
-echo "  Rappel des vérifications passées :"
-echo "  1. TypeScript    — 0 erreur"
-echo "  2. fetch() nu    — 0 appel non authentifié sur routes protégées"
-echo "  3. ESLint        — 0 warning bloquant"
-echo "  4. Vitest        — suite verte"
-echo "  5. Madge         — 0 cycle d'import"
-echo "  6. Build prod    — bundle OK"
-echo "  7. sentrux check — 67 règles OK"
-echo "  8. sentrux gate  — pas de régression vs baseline"
-echo "  9. Bundle size   — sous seuil ratchet (BUNDLE_MAX_KB)"
+echo "  Métriques RÉELLES de cette exécution :"
+echo "   1. TypeScript     — $TSC_ERRORS erreur(s)"
+echo "   2. fetch() nu     — 0 appel non authentifié"
+echo "   3. ESLint         — ${ESLINT_TOTAL_ERRORS:-?} erreurs, ${ESLINT_TOTAL_WARNINGS:-?} warnings (barrel=$BARREL_COUNT/$BARREL_DEBT_MAX, inter-module=$INTER_MODULE_COUNT)"
+echo "   4. Vitest         — $VITEST_PASSED passés, $VITEST_SKIPPED skippés, $VITEST_UNHANDLED unhandled errors"
+echo "   5. Madge          — $MADGE_CYCLES_REAL cycles réels (dont $MADGE_CROSS_PILIER cross-piliers, seuil=$MADGE_CYCLES_MAX)"
+echo "   6. Build prod     — OK"
+echo "   7. sentrux check  — frontières architecturales"
+echo "   8. sentrux gate   — anti-régression vs baseline"
+echo "   9. Bundle size    — ${JS_SIZE:-n/a} KB / ${BUNDLE_MAX_KB} KB"
+echo "  10. Gate integrity — baseline anti-desserrement vérifiée"

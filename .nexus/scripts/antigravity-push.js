@@ -63,11 +63,21 @@ async function pushWork() {
 
         // 4. Commit (Forced non-interactive)
         if (!DRY_RUN) {
+            const safeMsg = commitMsg.replace(/"/g, '\\"');
             try {
-                const safeMsg = commitMsg.replace(/"/g, '\\"');
-                // Use --no-edit and GIT_EDITOR=true to block ANY editor popup
+                // --no-edit bloque l'éditeur. JAMAIS --no-verify : les gates de vérité (pre-commit) DOIVENT tourner (AGENTS.md Loi 1).
                 execSync(`GIT_EDITOR=true git commit -m "${safeMsg}" --no-edit`, { ...EXEC_OPTS });
-            } catch (e) { /* Nothing to commit */ }
+            } catch (e) {
+                const out = `${e.stdout || ''}${e.stderr || ''}${e.message || ''}`;
+                if (/nothing to commit|rien à (valider|committer)/i.test(out)) {
+                    console.log('✨ Rien à committer.');
+                } else {
+                    // Le hook a REJETÉ (gates rouges) → on n'ignore pas et on ne pousse PAS du rouge.
+                    console.error('❌ Commit refusé par les gates de vérité. Sync interrompue — corrige le code avant de re-sync.');
+                    if (fs.existsSync(LOCK_FILE)) fs.unlinkSync(LOCK_FILE);
+                    return;
+                }
+            }
         }
 
         // 5. Push to current branch

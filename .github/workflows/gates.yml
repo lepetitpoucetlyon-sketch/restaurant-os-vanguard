@@ -1,0 +1,27 @@
+# Gates de vérité côté serveur (miroir de .gitlab-ci.yml).
+# Barrière inviolable : s'exécute sur chaque push / PR, indépendamment de tout --no-verify local.
+name: Gates de vérité
+on: [push, pull_request]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: TypeScript (brut)
+        run: npx tsc --noEmit
+      - name: Barrel Contract = 0
+        run: test "$(npx eslint src --format stylish --max-warnings 99999 | grep -c 'Barrel Contract')" -eq 0
+      - name: Intégrité des gates (anti-desserrement)
+        run: node scripts/verify-gate-integrity.mjs
+      - name: Cycles d'import
+        run: node scripts/cycles-inspector.mjs --threshold=430
+      - name: Carte d'architecture à jour
+        run: node scripts/generate-architecture-map.mjs && git diff --exit-code docs/ARCHITECTURE-MAP.md docs/architecture-map.json
+      - name: Tests
+        run: npx vitest run

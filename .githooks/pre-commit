@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# ══════════════════════════════════════════════════════════════════════════════
+# Hook pre-commit — GATES DE VÉRITÉ (rapides). Voir AGENTS.md.
+# Installation (une fois) :
+#   git config core.hooksPath .githooks
+#   chmod +x .githooks/pre-commit
+# NE JAMAIS contourner avec --no-verify. Un commit --no-verify n'a PAS de preuve de vert.
+# ══════════════════════════════════════════════════════════════════════════════
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+RED='\033[0;31m'; GRN='\033[0;32m'; YEL='\033[1;33m'; RST='\033[0m'
+fail(){
+  echo -e "${RED}❌ $1${RST}"
+  echo -e "${YEL}   → Corrige le CODE, ne desserre pas la gate.${RST}"
+  echo -e "${YEL}   Interdits (voir AGENTS.md) : --no-verify · exemption eslint · ratchet+ · @ts-ignore · skip test.${RST}"
+  exit 1
+}
+
+echo "🔍 [1/4] TypeScript (sortie brute, sans RTK)…"
+./node_modules/.bin/tsc --noEmit || fail "TypeScript : erreurs de type."
+
+echo "🧹 [2/4] Barrel Contract (0 toléré)…"
+BARREL=$(./node_modules/.bin/eslint src --format stylish --max-warnings 99999 2>/dev/null | grep -c "Barrel Contract" || true)
+[ "${BARREL:-0}" -gt 0 ] && fail "Barrel Contract : ${BARREL} violation(s)."
+
+echo "🔒 [3/4] Intégrité des gates (anti-triche : personne ne desserre une gate)…"
+node scripts/verify-gate-integrity.mjs || fail "Intégrité des gates : une gate a été desserrée."
+
+echo "🔄 [4/4] Cycles d'import…"
+node scripts/cycles-inspector.mjs --threshold=430 || fail "Cycles d'import au-dessus du seuil."
+
+echo "🗺️  Régénération de la carte d'architecture (auto)…"
+node scripts/generate-architecture-map.mjs >/dev/null 2>&1 && git add docs/ARCHITECTURE-MAP.md docs/architecture-map.json 2>/dev/null || true
+
+# Preuve de vert : hash de l'arbre sur le point d'être commité (APRÈS stage de la carte). Écrit HORS index.
+git write-tree > "$(git rev-parse --git-dir)/preflight-proof" 2>/dev/null || true
+
+echo -e "${GRN}✅ Gates rapides vertes — preuve écrite (.git/preflight-proof).${RST}"
+echo -e "${YEL}   (Build de prod complet = CI / pre-push, pas ici. 'green/Grade X' n'est vrai qu'avec preflight complet vert.)${RST}"
+exit 0
