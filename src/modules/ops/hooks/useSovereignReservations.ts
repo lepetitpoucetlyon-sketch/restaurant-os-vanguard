@@ -18,7 +18,9 @@
 
 import { useCallback, useMemo } from 'react';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { Reservation, ReservationStatus } from '@/modules/commerce';
+import type { Reservation } from '../domain/schemas/ops';
+
+type ReservationStatus = 'pending' | 'confirmed' | 'arrived' | 'seated' | 'cancelled' | 'no_show' | 'no-show' | 'completed';
 
 export interface UseSovereignReservationsOptions {
     tenantId: string;
@@ -95,15 +97,17 @@ export function useSovereignReservations(
 
     const create = useCallback(async (input: CreateReservationInput): Promise<string> => {
         const id = `rsv_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-        const nowStr = nowIso();
         const reservation: Reservation = {
             id,
-            crmName: input.customerName,
+            type: 'reservation',
+            customerId: id,
             customerName: input.customerName,
+            crmName: input.customerName,
             email: input.email,
             phone: input.phone,
             date: input.date,
             time: input.time,
+            partySize: input.covers,
             covers: input.covers,
             tableId: input.tableId ?? '',
             status: 'pending',
@@ -112,8 +116,9 @@ export function useSovereignReservations(
             isVip: input.isVip ?? false,
             duration: input.duration ?? 90,
             source: input.source,
-            createdAt: nowStr,
-            updatedAt: nowStr,
+            schemaVersion: 2,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
         };
         await set(reservation);
         return id;
@@ -122,9 +127,9 @@ export function useSovereignReservations(
     const patchStatus = useCallback(async (id: string, status: ReservationStatus, extra?: Partial<Reservation>) => {
         await update(id, {
             status,
-            updatedAt: nowIso(),
+            updatedAt: Date.now(),
             ...(extra ?? {}),
-        } as Partial<Reservation>);
+        } as unknown as Partial<Reservation>);
     }, [update]);
 
     const confirm = useCallback((id: string) => patchStatus(id, 'confirmed'), [patchStatus]);
@@ -139,8 +144,8 @@ export function useSovereignReservations(
     const assignTable = useCallback(async (id: string, tableId: string) => {
         await update(id, {
             tableId,
-            updatedAt: nowIso(),
-        } as Partial<Reservation>);
+            updatedAt: Date.now(),
+        } as unknown as Partial<Reservation>);
     }, [update]);
 
     return {

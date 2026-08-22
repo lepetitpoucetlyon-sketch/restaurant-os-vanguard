@@ -4,7 +4,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Sparkles, CheckCircle, AlertCircle, X, Loader2, Zap } from 'lucide-react';
 import { Button } from '@ui/button';
-import { VisionService, type PlateAuditResult } from '@/modules/intelligence';
+export interface PlateAuditResult {
+    score: number;
+    feedback: string[];
+    isCompliant: boolean;
+    detectedIssues: string[];
+}
 import { cn } from '@/lib/ui.foundations';
 
 interface PlateAuditWizardProps {
@@ -24,6 +29,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
         const file = e.target.files?.[0];
         if (!file) return;
 
+        const { VisionService } = await import('@/modules/intelligence');
         const base64 = await VisionService.fileToBase64(file);
         setCapturedImage(base64);
         setIsScanning(true);

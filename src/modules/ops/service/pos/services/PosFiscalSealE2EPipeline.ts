@@ -1,5 +1,4 @@
 import { logger } from '@/lib/logger';
-import { FiscalSealer } from '@/modules/finance';
 import { TaxRateGuard } from './TaxRateGuard';
 
 export interface PosOrderLineInput {
@@ -97,6 +96,7 @@ export class PosFiscalSealE2EPipeline {
       timestamp: Date.now(),
     };
 
+    const { FiscalSealer } = await import('@/modules/finance');
     const seal = await FiscalSealer.sealDataAtomically(
       JSON.stringify(sealData),
       tenantId,

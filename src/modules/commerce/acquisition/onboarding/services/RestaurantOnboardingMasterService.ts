@@ -1,5 +1,4 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { logger } from '@/lib/logger';
 import { PermissionRole, PERMISSION_ROLE_LEVELS } from '@/shared/nexus/contracts/permissions.types';
 
 export interface OnboardingPillarStep {

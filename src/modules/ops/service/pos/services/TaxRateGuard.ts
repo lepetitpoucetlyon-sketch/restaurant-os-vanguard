@@ -13,7 +13,7 @@
  *
  * Cf. docs/anglemort-restaurant-mcc.md § D5 (CRITIQUE).
  */
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 const ALLOWED_TAX_RATES = new Set(['0.00', '0.055', '0.10', '0.20', '0.021', '0.13']);
 

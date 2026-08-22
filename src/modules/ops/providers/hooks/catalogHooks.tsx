@@ -2,9 +2,7 @@ import { useAtomValue } from 'jotai';
 import { OperationalIdentity } from '@/shared/nexus-contract';
 import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-internal-mapper';
 import { createSovereignHook } from '../opsCore';
-import { useInventory } from '@/modules/logistics';
-
-import { productsNodeAtom, categoriesNodeAtom } from '@/store/pillars/logistics';
+import { productsNodeAtom, categoriesNodeAtom, stockItemsNodeAtom } from '@/store/pillars/logistics';
 import { fiscalLedgerNodeAtom } from '@/store/pillars/compliance';
 import { leaveRequestsNodeAtom } from '@/store/pillars/human';
 import { menuAnalysisSelector, staffPerformanceSelector, laborCostRatioSelector } from '@/store/pillars/commerce';
@@ -33,5 +31,5 @@ export const useIntelligence = () => {
   };
 };
 
-// 🥫 useInventory provient de @modules/logistics — réexporté pour compat.
-export { useInventory };
+// 🥫 useInventory connecté au store logistics
+export const useInventory = createSovereignHook(stockItemsNodeAtom, OperationalIdentity.LOGISTICS);

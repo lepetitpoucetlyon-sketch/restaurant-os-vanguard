@@ -2,7 +2,7 @@
  * 📅 Reservations Module
  * Grade X - Sovereign Suture
  */
-export * from './components';
+// components removed from barrel: import directly from relation/reservations/components
 export * from './store/reservationAtoms';
 export * from './types';
 export { ProcessGoogleBookingUseCase } from './application/use-cases/ProcessGoogleBooking';

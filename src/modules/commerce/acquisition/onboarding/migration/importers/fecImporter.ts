@@ -17,7 +17,7 @@ const FEC_FIELDS = [
   'DateLet', 'ValidDate', 'Montantdevise', 'Idevise',
 ];
 
-function parseFECAmount(raw: string): number {
+export function parseFECAmount(raw: string): number {
   if (!raw || raw.trim() === '') return 0;
   return Math.round(parseFloat(raw.replace(',', '.').replace(/[^0-9.\-]/g, '')) * 1_000_000) || 0;
 }

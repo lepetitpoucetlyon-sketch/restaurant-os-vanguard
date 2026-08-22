@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 import { CashDrawerSession, microunitsToEuros, eurosToMicrounits, parseEuros } from './cashDrawerTypes';
-import { cashDrawerService } from "@/modules/ops";
 import { toast } from "sonner";
 
 interface CashDrawerCloseSectionProps {
@@ -134,8 +133,8 @@ export function CashDrawerCloseSection({
 
       {/* Manual drawer kick */}
       <button
-        onClick={() => { void cashDrawerService.kick(); toast.info('Tiroir-caisse ouvert'); }}
-        className="w-full h-10 rounded-2xl border border-border/50 text-[11px] font-black uppercase tracking-widest text-text-muted hover:text-text-primary hover:border-border transition-colors flex items-center justify-center gap-2"
+        onClick={() => { import('@/modules/ops').then(({ cashDrawerService }) => { void cashDrawerService.kick(); toast.info('Tiroir-caisse ouvert'); }); }}
+        className="w-full py-2 px-3 border border-dashed border-border rounded-xl text-xs font-semibold text-text-muted hover:text-text-primary hover:border-text-primary/40 flex items-center justify-center gap-1.5 transition-colors"
       >
         <Unlock className="w-3.5 h-3.5" />
         Ouvrir le tiroir

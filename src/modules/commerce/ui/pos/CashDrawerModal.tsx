@@ -6,7 +6,6 @@ import { Wallet, X, CheckCircle2 } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { toast } from "sonner";
-import { cashDrawerService } from "@/modules/ops";
 import type { CashDrawerSession } from "./cash-drawer/cashDrawerTypes";
 import { parseEuros, eurosToMicrounits } from "./cash-drawer/cashDrawerTypes";
 import { CashDrawerOpenSection } from "./cash-drawer/CashDrawerOpenSection";
@@ -88,7 +87,7 @@ export function CashDrawerModal({
       batch.set(path, newSession);
       await batch.commit();
       setSession(newSession);
-      setOpeningInput("");
+      const { cashDrawerService } = await import('@/modules/ops');
       void cashDrawerService.kick();
       toast.success(`Caisse ouverte — Fond : ${euros.toFixed(2)} €`);
     } catch {

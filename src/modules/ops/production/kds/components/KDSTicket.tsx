@@ -86,7 +86,7 @@ export function KDSTicket({
 
     // ── kds-4: Drag-to-reorder ────────────────────────────────────────────────
     const buildFlatItems = useCallback((): FlatItem[] =>
-        (ticket.items || []).flatMap((item: any, ti: number) => {
+        (ticket.items || []).flatMap((item: OrderItem, ti: number) => {
             if (((item.modifiers?.length ?? 0) > 0 || item.notes) && item.quantity > 1) {
                 return Array.from({ length: item.quantity }, (_, idx) => ({
                     ...item,
@@ -135,7 +135,7 @@ export function KDSTicket({
 
     // ── kds-2 + not-2: Mark ticket ready ──────────────────────────────────────
     const handleMarkReady = useCallback(async () => {
-        const itemWithStandard = (ticket.items || []).find((item: any) => {
+        const itemWithStandard = (ticket.items || []).find((item: OrderItem) => {
             const r = recipes.find(rec => rec.name === item.name);
             return r?.standardImage;
         });

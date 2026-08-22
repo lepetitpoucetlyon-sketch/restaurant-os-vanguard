@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import {
-    ChefHat,
-    Wine,
     Save,
 } from "lucide-react";
 import type { ServingMethod } from "@nexus/contracts";
@@ -33,14 +31,14 @@ interface ProductFormModalProps {
 }
 
 export function ProductFormModal({ isOpen, onClose, productType, editProduct }: ProductFormModalProps) {
-    const { ingredients } = useInventory();
+    const { data: ingredients = [] } = useInventory();
     const { data: _recipes, add: addRecipe, updateRecipe, calculateRecipeCost: calculateRecipeCostHook } = useRecipes();
     const { showToast } = useToast();
 
     const calculateRecipeCost = (ings: Array<{ ingredientId: string; quantity: number }>) => {
         return calculateRecipeCostHook({
             ingredients: ings.map((ri) => {
-                const ing = ingredients.find((i) => i.id === ri.ingredientId);
+                const ing = (ingredients as Array<{ id?: string }>).find((i) => i?.id === ri.ingredientId);
                 return { ...ing, quantity: ri.quantity };
             })
         } as unknown as Recipe);
@@ -267,7 +265,7 @@ export function ProductFormModal({ isOpen, onClose, productType, editProduct }: 
 
                 <ProductIngredients
                     recipeIngredients={recipeIngredients}
-                    ingredients={ingredients}
+                    ingredients={ingredients as unknown as import('@nexus/contracts').Ingredient[]}
                     addIngredient={addIngredient}
                     updateIngredient={updateIngredient}
                     removeIngredient={removeIngredient}

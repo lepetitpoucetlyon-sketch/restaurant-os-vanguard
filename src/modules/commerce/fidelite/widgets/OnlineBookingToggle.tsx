@@ -2,12 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { Loader2, Globe, WifiOff } from 'lucide-react';
-import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { TableSchema } from '@/modules/ops';
 import { toast } from 'sonner';
-import { z } from 'zod';
-
-type Table = z.infer<typeof TableSchema> & { onlineBookable?: boolean };
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+interface Table {
+  id: string;
+  name?: string;
+  number?: number | string;
+  seats?: number;
+  capacity?: number;
+  onlineBookable?: boolean;
+  [key: string]: unknown;
+}
 
 interface Props {
   tenantId: string;
@@ -110,7 +115,7 @@ export default function OnlineBookingToggle({ tenantId }: Props) {
               </div>
               <div>
                 <p className="text-sm font-medium text-text-primary">Table {table.number}</p>
-                <p className="text-xs text-text-muted">{table.seats} place{table.seats > 1 ? 's' : ''}</p>
+                <p className="text-xs text-text-muted">{table.seats ?? table.capacity ?? 2} place{(table.seats ?? table.capacity ?? 2) > 1 ? 's' : ''}</p>
               </div>
             </div>
             <button

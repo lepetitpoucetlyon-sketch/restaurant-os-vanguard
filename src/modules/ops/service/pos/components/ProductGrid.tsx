@@ -178,7 +178,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
     const { priceMultiplier } = useNexusFleet();
     const performanceMode = useAtomValue(performanceModeAtom);
     const quarantinedProducts = useAtomValue(quarantinedProductsAtom);
-    const stockItems = inventory.data || [];
+    const stockItems = (inventory.data || []) as Array<{ ingredientId?: string; dlc?: string | number; status?: string; quantity?: number }>;
 
     // Read show_images setting from context (defaults to true)
     const showImages = usePageSetting('pos', 'show_images', true);

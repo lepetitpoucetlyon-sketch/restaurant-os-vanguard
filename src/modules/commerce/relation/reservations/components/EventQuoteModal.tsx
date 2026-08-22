@@ -9,15 +9,14 @@
  */
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { X, FileText, Sparkles, ChevronDown } from "lucide-react";
+import { X, FileText, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { cn } from "@/lib/ui.foundations";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 
-import type { PrivatisationFormule, PrivatisationData } from "@/modules/commerce";
+import type { PrivatisationFormule, PrivatisationData } from "../../../domain/schemas/commerce";
 import { EventQuoteClientSection } from "./event-quote/EventQuoteClientSection";
 import { EventQuoteDetailsSection } from "./event-quote/EventQuoteDetailsSection";
 import { EventQuoteTariffSection } from "./event-quote/EventQuoteTariffSection";
@@ -121,9 +120,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
         if (!isValid) return;
         setGenerating(true);
         try {
-            const { generatePrivatisationContract } = await import(
-                "@/modules/finance/comptabilite/documents/PrivatisationContract"
-            );
+            const { generatePrivatisationContract } = await import("@/modules/finance");
 
             const contractData: PrivatisationData = {
                 clientNom: form.clientNom,

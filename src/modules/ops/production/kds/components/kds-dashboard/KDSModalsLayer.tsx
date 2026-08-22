@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import type { Order, Recipe } from "@nexus/contracts";
+import type { Order, OrderStatus, Recipe } from "@nexus/contracts";
 import { ModificationAlertsPanel } from "../../../kitchen/components/ModificationAlerts";
 import { RecipeDetailDialog } from "../../../kitchen/components/RecipeDetailDialog";
 import { PlateAuditWizard } from "../../../kitchen/components/PlateAuditWizard";
@@ -24,7 +24,7 @@ interface KDSModalsLayerProps {
     setAuditTicket: (v: AuditTicket | null) => void;
     displayOrders: Order[];
     tenantId: string | undefined;
-    updateOrderStatus: (id: string, status: any) => Promise<void>;
+    updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
 }
 
 export function KDSModalsLayer({
@@ -69,7 +69,7 @@ export function KDSModalsLayer({
                                     const serverId = (fullTicket as unknown as { serverId?: string }).serverId;
                                     const pushPayload = {
                                         title: 'Plat prêt !',
-                                        body: (fullTicket.items || []).slice(0, 3).map((i: any) => i.name).join(', '),
+                                        body: (fullTicket.items || []).slice(0, 3).map((i: { name?: string }) => i.name || 'Article').join(', '),
                                         url: '/pos',
                                     };
                                     if (serverId) {

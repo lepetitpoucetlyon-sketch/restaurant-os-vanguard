@@ -1,5 +1,4 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 
 export type ServiceSessionType = 'lunch' | 'dinner' | 'continuous' | 'night';

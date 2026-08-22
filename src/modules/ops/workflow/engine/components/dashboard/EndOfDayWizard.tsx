@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
-import { FinanceCore } from '@/modules/finance';
 import { useTenant } from '@/shared/hooks';
 import { useToast } from '@ui/Toast';
 import { 
@@ -38,6 +37,7 @@ export const EndOfDayWizard: React.FC = () => {
         setIsClosing(true);
         try {
             // 📡 Industrial Call to FinanceCore (Grade VI)
+            const { FinanceCore } = await import('@/modules/finance');
             const zReport = await FinanceCore.generateZReport(activeTenantId);
             const signature = zReport._fiscalSeal;
             

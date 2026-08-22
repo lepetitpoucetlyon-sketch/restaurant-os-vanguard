@@ -1,4 +1,4 @@
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
 export interface CashDrawerTriggerRequest {

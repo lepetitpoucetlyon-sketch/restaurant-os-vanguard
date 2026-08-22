@@ -1,6 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { KDSCourseSequencingEngine, type CartItem } from '@/modules/ops';
+import type { CartItem } from '@/modules/ops';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { toMicrounits } from '@/shared/schemas/primitives';
@@ -93,15 +93,7 @@ export class DeliveryWebhookBridge {
       timestamp: now,
     });
 
-    // 2. Initialisation cadençage KDS cuisine
-    await KDSCourseSequencingEngine.initializeOrderCourses(
-      tenantId,
-      orderId,
-      undefined,
-      cartItems
-    );
-
-    // 3. Émission des événements du bus
+    // 2. Émission des événements du bus (déclenche KDS via KDSOrderHandler)
     await NexusEventBus.emit('order.placed', {
       v: 1,
       orderId,

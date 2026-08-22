@@ -13,7 +13,7 @@
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 export interface KdsItemSnapshot {
   id: string;

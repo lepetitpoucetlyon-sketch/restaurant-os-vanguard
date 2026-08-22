@@ -1,4 +1,4 @@
-import { ReservationSlotSettings, GlobalSettings } from '@nexus/contracts';
+import { GlobalSettings } from '@nexus/contracts';
 import { Reservation, Table } from '@nexus/contracts';
 import { format, parse, addMinutes, isBefore, areIntervalsOverlapping } from 'date-fns';
 

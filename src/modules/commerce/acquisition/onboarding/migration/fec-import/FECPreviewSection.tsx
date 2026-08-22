@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText, CheckCircle2, AlertTriangle, X, Eye, ShieldCheck } from 'lucide-react';
-import { parseFECAmount, type FECEntry } from "@/modules/finance";
+import { parseFECAmount } from '../importers/fecImporter';
+import type { FECEntry } from "@/modules/finance";
 import { formatMicrounits, formatFECDate } from './fecImportTypes';
 
 interface FECPreviewSectionProps {

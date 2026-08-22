@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Plus, Edit2, Trash2, Package, Tag, Truck } from "lucide-react";
-import { formatMu } from "@/modules/finance";
+import { formatMu } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 import { useInventory } from '../../../../providers/hooks/catalogHooks';
 
 export function IngredientsTab() {
-    const { data: ingredients, isLoading, error } = useInventory();
+    const { data: rawIngredients, isLoading, error } = useInventory();
+    const ingredients = (rawIngredients || []) as unknown as import('@nexus/contracts').Ingredient[];
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
 

@@ -2,6 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from '@/shared/nexus-contract';
 import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-internal-mapper';
+import type { OrderItem } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
@@ -113,10 +114,10 @@ export const useKitchen = () => {
             printerService.printKitchen({
               orderId: String(order.id ?? 'new'),
               tableLabel: order.tableNumber ?? 'Table ?',
-              items: (order.items ?? []).map((item: any) => ({
+              items: (order.items ?? []).map((item: OrderItem) => ({
                 name: item.name,
                 qty: item.quantity,
-                modifiers: (item.modifiers ?? []).map((m: any) => typeof m === 'string' ? m : m.name),
+                modifiers: (item.modifiers ?? []).map((m: string | { name: string }) => typeof m === 'string' ? m : m.name),
                 course: (item as unknown as { course?: string }).course,
               })),
               serverName: order.serverName,
@@ -150,7 +151,7 @@ export const useKitchen = () => {
     getPendingModifications: useCallback(() => {
       const mods: Array<NonNullable<Order['items'][number]['modification']> & { orderId: string; orderItemId: string }> = [];
       orders.forEach((order: Order) => {
-        (order.items || []).forEach((item: any) => {
+        (order.items || []).forEach((item: OrderItem) => {
           if (item.modification && !item.modification.respondedAt) {
             mods.push({ ...item.modification, orderId: String(order.id), orderItemId: String(item.id) });
           }

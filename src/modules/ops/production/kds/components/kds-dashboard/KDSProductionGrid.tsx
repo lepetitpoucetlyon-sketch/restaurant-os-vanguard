@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { Order, Recipe } from "@nexus/contracts";
+import type { Order, OrderStatus, Recipe } from "@nexus/contracts";
+import type { AuditTicket } from "./KDSModalsLayer";
 import { KDSTicket } from "../KDSTicket";
 import { KDSEmptyState } from "../KDSEmptyState";
 
@@ -12,10 +13,10 @@ interface KDSProductionGridProps {
     tenantId: string;
     gridColumns: number;
     rushMode: boolean;
-    updateOrderStatus: (id: string, status: any) => Promise<void>;
+    updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
     setSelectedRecipe: (recipe: Recipe | null) => void;
     setIsAuditOpen: (open: boolean) => void;
-    setAuditTicket: (ticket: any) => void;
+    setAuditTicket: (ticket: AuditTicket | null) => void;
     recipes: Recipe[] | undefined;
 }
 

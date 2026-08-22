@@ -6,7 +6,7 @@ import { NexusNode } from '@/store/base';
 import { SovereignMath } from '@shared/services/SovereignMath';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { genomeValidator } from '@/lib/GenomeValidator';
-import { ImmunityAuditLogger } from '@/modules/compliance';
+import { ImmunityAuditLogger } from '@/lib/audit';
 import { ModuleId, PowerAction } from '@shared/genome.types';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { tenantIdAtom } from '@/store/pillars/sovereign';
@@ -75,11 +75,11 @@ export function sanitizeToSovereign<T extends object>(data: T): T {
  * 🏭 Générateur de hook CRUD souverain générique.
  * Lie un atome Nexus à un OperationalIdentity et expose data/add/update/remove.
  */
-export const createSovereignHook = <T,>(
+export function createSovereignHook<T>(
   atom: Atom<NexusNode<unknown>>,
   identity: OperationalIdentity,
   mapper: (n: SovereignNode) => T = (n) => n as unknown as T
-) => {
+) {
   return () => {
     const node = useAtomValue(atom);
     const tenantId = useAtomValue(tenantIdAtom) as string;

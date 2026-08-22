@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useKitchen } from '../../../providers/hooks/kitchenHooks';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
-import type { Order } from '@nexus/contracts';
+import type { Order, OrderItem } from '@nexus/contracts';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
 
 function resolveLockedStation(role?: string): KitchenStation | null {
@@ -22,10 +22,10 @@ function filterOrdersByStationAndSearch(orders: Order[], station: KitchenStation
 
     if (station !== 'all') {
         result = result
-            .filter(order => (order.items || []).some((item: any) => resolveStation(item.name) === station))
+            .filter(order => (order.items || []).some((item: OrderItem) => resolveStation(item.name) === station))
             .map(order => ({
                 ...order,
-                items: (order.items || []).filter((item: any) => resolveStation(item.name) === station),
+                items: (order.items || []).filter((item: OrderItem) => resolveStation(item.name) === station),
             }));
     }
 

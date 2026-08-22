@@ -1,4 +1,4 @@
-export * from './components';
+// components removed from barrel: internal to POS UI pages/panels
 export * from './domain';
 export * from './store';
 export * from './hooks';

@@ -3,9 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ShieldCheck, Database, Zap, Activity } from 'lucide-react';
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-        // eslint-disable-next-line vanguard/no-inter-module-imports
-import { AgentReasoningStep } from '@/modules/intelligence';
+import type { AgentReasoningStep } from '@/modules/intelligence';
 
 interface InsightsConsoleProps {
     reasoning: AgentReasoningStep[];

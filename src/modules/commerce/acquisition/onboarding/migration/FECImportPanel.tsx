@@ -2,7 +2,6 @@
 
 import { useCallback, useState } from "react";
 import { Upload, ShieldCheck, AlertTriangle, X } from "lucide-react";
-import { FECImporter } from "@/modules/finance";
 import { useTenant } from "@/shared/hooks";
 import { toError } from "@/lib/toError";
 import type { PanelState } from './fec-import/fecImportTypes';
@@ -18,11 +17,11 @@ export function FECImportPanel() {
   const [exercice, setExercice] = useState<string>(String(CURRENT_YEAR - 1));
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const importer = new FECImporter();
-
   const handleFile = useCallback(
     async (file: File) => {
       try {
+        const { FECImporter } = await import("@/modules/finance");
+        const importer = new FECImporter();
         const content = await file.text();
         const { entries, warnings, isValid } = importer.preview(content);
         setState({ phase: "ready", file, preview: entries, warnings, isValid });
@@ -61,6 +60,8 @@ export function FECImportPanel() {
     setState({ phase: "importing", progress: 10 });
 
     try {
+      const { FECImporter } = await import("@/modules/finance");
+      const importer = new FECImporter();
       const content = await file.text();
       setState({ phase: "importing", progress: 40 });
 

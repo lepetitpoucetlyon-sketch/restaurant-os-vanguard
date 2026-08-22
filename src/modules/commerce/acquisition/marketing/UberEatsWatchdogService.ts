@@ -11,8 +11,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § T45 (HAUT).
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from '@/lib/audit';
 
 const ALERT_THRESHOLD = 4.5;
 const CRITICAL_THRESHOLD = 4.2;

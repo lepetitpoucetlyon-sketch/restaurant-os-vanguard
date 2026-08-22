@@ -13,7 +13,6 @@ import {
     CheckCircle2,
     AlertOctagon,
     X,
-    Send,
     BotMessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';

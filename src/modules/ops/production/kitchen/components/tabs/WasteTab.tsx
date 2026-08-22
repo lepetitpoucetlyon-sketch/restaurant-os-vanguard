@@ -10,9 +10,6 @@ import { useToast } from "@ui/Toast";
 import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { useTenant } from "@/shared/hooks";
-        // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-import { HACCPLogService } from '@/modules/compliance';
-
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
 
 interface WasteTabProps {
@@ -42,6 +39,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
         }
         if (!tenantId) return;
         try {
+            const { HACCPLogService } = await import('@/modules/compliance');
             const ingredient = ingredients.find(i => (i.id || i.name) === selectedIngredient);
             await HACCPLogService.logWaste({
                 tenantId,

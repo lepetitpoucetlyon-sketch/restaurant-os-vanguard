@@ -94,7 +94,7 @@ export const staffPerformanceSelector = atom((get) => {
             )));
             const orderCount = serverOrders.length;
             const upsellOrders = serverOrders.filter((o) =>
-                (o.items || []).some((item: any) => {
+                (o.items || []).some((item: { productId?: string }) => {
                     const product = products.find((p) => p.id === item.productId);
                     return String(product?.category || '')
                         .toLowerCase()

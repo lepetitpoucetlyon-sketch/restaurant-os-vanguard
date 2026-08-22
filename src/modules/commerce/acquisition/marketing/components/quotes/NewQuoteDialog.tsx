@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
+import { useQuotes } from '../../hooks/useQuotes';
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import { Modal } from '@ui/Modal';
-import { useQuotes, useCRM } from '@/modules/ops';
-import { useInventory } from '@/modules/logistics';
 import type { QuoteLine } from '../../types';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
@@ -86,9 +86,9 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
     const totals = calculateTotals();
 
-    const { data: inventoryProducts } = useInventory();
+    const { data: inventoryProducts } = useSovereignCollection<QuoteProduct & { id: string }>('stockItems');
     const { createQuote } = useQuotes();
-    const { selectedCRM } = useCRM();
+    const selectedCRM: { id?: string } | null = null;
 
     const handleSave = async () => {
         if (!crmName || !crmEmail || lines.length === 0) {
@@ -98,7 +98,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
         setIsSaving(true);
         try {
-            await createQuote(buildQuotePayload(lines, crmName, subject, selectedCRM?.id, totals));
+            await createQuote(buildQuotePayload(lines, crmName, subject, undefined, totals) as any);
             toast.success("Le devis a été généré et persisté avec succès.");
             handleClose();
         } catch (error) {

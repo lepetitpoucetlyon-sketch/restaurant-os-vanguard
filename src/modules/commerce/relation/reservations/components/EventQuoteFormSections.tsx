@@ -2,7 +2,7 @@ import React from "react";
 import { Calendar, Users, Coins, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import type { EventQuoteFormData } from "./EventQuoteTypes";
-import type { PrivatisationFormule } from "@/modules/commerce";
+import type { PrivatisationFormule } from "../../../domain/schemas/commerce";
 
 const inputClass =
     "w-full bg-bg-secondary border border-border rounded-2xl px-5 py-3 text-sm text-text-primary focus:outline-none focus:border-accent/50 transition-all";

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/shared/hooks';
-import { RealtimeVoiceFactory, type IRealtimeVoiceService } from '@/modules/intelligence';
+import type { IRealtimeVoiceService } from '@/modules/intelligence';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { SovereignData } from '@/shared/nexus-contract';
 
@@ -77,6 +77,7 @@ export function useRealtimeVoice() {
             processor.connect(audioContext.destination);
 
             // 3. Connecter le service central avec l'ADN injecté
+            const { RealtimeVoiceFactory } = await import('@/modules/intelligence');
             const service = RealtimeVoiceFactory.create(currentUser, rolePermissions, {
                 onTranscript: (text, isUser) => {
                     setTranscripts(prev => [...prev, { text, isUser, timestamp: Date.now() }]);

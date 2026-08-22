@@ -1,5 +1,4 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { StatementIngestionService, inferPCGAccount } from '@/modules/finance';
 import type { ParsedFile, ImportResult } from '../types';
 
 // Cross-impact: StatementIngestionService already has a robust CSV parser with SHA-256 dedup.
@@ -9,6 +8,8 @@ import type { ParsedFile, ImportResult } from '../types';
 
 export async function importStatements(file: ParsedFile, rawFile: File, onProgress: (n: number) => void): Promise<ImportResult> {
   onProgress(5);
+
+  const { StatementIngestionService, inferPCGAccount } = await import('@/modules/finance');
 
   // Delegate parsing to StatementIngestionService (has SHA-256 dedup built in)
   const text = await rawFile.text();

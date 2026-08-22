@@ -5,16 +5,34 @@ export * from './hooks';
 export * from './workflow/engine';
 export type { Order, OrderItem } from './workflow/engine';
 export { OperationsDashboard } from './workflow/engine/components/OperationsDashboard';
+export { useRegistre } from './workflow/engine/hooks/useRegistre';
 
 // Domaine : service (POS, bar, frontdesk, printers)
 export * from './service/pos';
 export { usePOSController } from './service/pos/hooks/usePos';
+export {
+  BarSidebar,
+  KdsTab,
+  WineCellarTab,
+  SommelierTab,
+  CocktailTab,
+  StocksTab,
+  WineDetailPanel,
+} from './service/pos/components/bar';
+export { ProductFormModal } from './service/pos/components/ProductFormModal';
+export { PaymentDialog } from './service/pos/components/PaymentDialog';
+export { SplitBillDialog } from './service/pos/components/SplitBillDialog';
+export { ProductGrid } from './service/pos/components/ProductGrid';
+export { Cart } from './service/pos/components/Cart';
+export { TableSelector } from './service/pos/components/TableSelector';
 
 // Domaine : production (KDS, kitchen, recipes)
-export * from './production/kitchen';
 export * from './production/kds';
 export { KDSDashboard } from './production/kds/components/KDSDashboard';
 export { KitchenDashboard } from './production/kitchen/components/KitchenDashboard';
+export { RecipeDetailDialog } from './production/kitchen/components/RecipeDetailDialog';
+export { RecipeTechnicalSheet } from './production/kitchen/components/RecipeTechnicalSheet';
+export { AddPrinterWizard, CONN_ICON } from './service/printers/components/settings/AddPrinterWizard';
 
 // Domaine : menu-builder (composition catalogue)
 export * from './menu-builder';
@@ -29,10 +47,6 @@ export * from './providers';
 // Resolve TS2308 conflicts: providers and workflow/engine both export these
 export { useGroups } from './providers/hooks/commerceHooks';
 export { useNexusOps, NexusOpsProvider } from './providers/NexusOpsProvider';
-
-// Kitchen components (production/recipes)
-export { RecipeCostBadge } from './production/recipes';
-export { BarRecipeCard } from './production/recipes';
 
 // Bar types (BarTab, Wine, Cocktail, WineRegion)
 export type { BarTab, Wine, Cocktail, WineRegion } from './types/bar';
@@ -56,12 +70,9 @@ export { useCRM } from './providers';
 export { useFiscal } from './providers';
 export { useRecipes } from './providers';
 export { useKitchen } from './providers';
-export { DailyPrepList } from './production/recipes/DailyPrepList';
 export { useIntelligence } from './providers';
 export { useProducts } from './providers';
 export { useCategories } from './providers';
-export { RecipeTechnicalSheet } from './production/kitchen/components/RecipeTechnicalSheet';
-export { CONN_ICON, AddPrinterWizard } from './service/printers/components/settings/AddPrinterWizard';
 export { ordersAtom } from './service/pos/store/orderAtoms';
 
 // 🏛️ Domaine Schemas

@@ -19,15 +19,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
-import { useHACCP } from "@/modules/compliance";
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
-  () => import("@/modules/ops/service/pos/components/ProductFormModal").then(m => m.ProductFormModal),
+  () => import('../../../service/pos/components/ProductFormModal').then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
 const ExpertHub = dynamic(
-  () => import('@/modules/commerce/acquisition/marketing/components/agency/ExpertHub').then(m => m.ExpertHub),
+  () => import('@/modules/commerce/acquisition/marketing/components/agency/ExpertHub').then(m => ({ default: m.ExpertHub })),
   { ssr: false, loading: () => null }
 );
 import { PrepTaskDetailDialog } from "./PrepTaskDetailDialog";
@@ -66,9 +66,9 @@ export function KitchenDashboard() {
         deleteRecipe
     } = recipesHook;
     
-    const { wasteLogs } = useHACCP();
+    const { data: wasteLogs = [] } = useSovereignCollection('wasteLogs');
     
-    const ingredients = (inventory.stockItems || []) as unknown as import("@nexus/contracts").Ingredient[];
+    const ingredients = (inventory.data || []) as unknown as import("@nexus/contracts").Ingredient[];
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [selectedPrepTask, setSelectedPrepTask] = useState<PrepTask | null>(null);
@@ -265,7 +265,7 @@ export function KitchenDashboard() {
                 {activeTab === 'waste' && (
                     <WasteTab
                         ingredients={ingredients}
-                        wasteLogs={wasteLogs}
+                        wasteLogs={wasteLogs as unknown as import('@nexus/contracts').RegulatoryWasteLog[]}
                     />
                 )}
 

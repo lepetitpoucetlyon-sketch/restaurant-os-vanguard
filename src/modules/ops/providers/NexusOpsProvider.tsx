@@ -3,10 +3,8 @@
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { SovereignNode } from '@/shared/nexus-contract';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
-import { NexusSyncService } from '@/lib/NexusSyncService';
-import { TelemetryHook } from '@/modules/intelligence';
+import { TelemetryHook } from '@/lib/telemetry';
 import { logger } from '@/lib/logger';
-import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { EmpireInstance } from '@/shared/types/empire';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';
 import { TenantIdSchema } from '@/shared/schemas/ui';
@@ -14,7 +12,6 @@ import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom, fleetSnapshotAtom } from '@/store/pillars/sovereign';
 
 import { useFloorOpsValue } from './hooks/floorHooks';
-import { isMCCMode } from '@/config/instance';
 
 /**
  * 🛰️ NexusOpsProvider — orchestrateur React du pilier Ops.
@@ -47,29 +44,17 @@ export const NexusOpsProvider: React.FC<{ children: ReactNode }> = ({ children }
     const taskContext = useTaskContext();
 
     useEffect(() => {
-        if (isMCCMode()) {
-            logger.info('[NexusOpsProvider] MCC mode — tenant sync engines disabled');
-            return;
-        }
-        NexusSyncService.init(tenantId as string, taskContext);
         TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusOpsProvider', tenantId: tenantId as string, task: taskContext.taskId });
-        const purgeInterval = setInterval(() => GlobalRegistryService.purgeInactive(store), 120000);
-        return () => {
-            NexusSyncService.stopAll();
-            clearInterval(purgeInterval);
-        };
-    }, [tenantId, taskContext, store]);
+    }, [tenantId, taskContext]);
 
     const switchTenant = useCallback(async (newTenantId: string) => {
         try {
-            await NexusSyncService.stopAll();
             const instances = store.get(fleetSnapshotAtom) as EmpireInstance[];
             const targetInstance = instances.find(i => i.key === newTenantId);
             const { initializeTenantFirebase } = await import('@/lib/firebase');
             await initializeTenantFirebase(targetInstance?.firebaseConfig);
             setTenantId(newTenantId);
             SovereignStorage.set('nexus_tenant_id', newTenantId, TenantIdSchema);
-            await NexusSyncService.init(newTenantId, taskContext);
         } catch (error) {
             logger.error('[NexusOpsProvider] SaaS Switch failed', error);
         }

@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, RotateCcw } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { FiscalSealer } from "@/modules/finance";
 import { IdGenerator } from "@/lib/utils/IdGenerator";
 import { CryptoService } from "@/lib/CryptoService";
 import type { JournalEntry } from "@nexus/contracts";
@@ -77,6 +76,7 @@ export function VoidModal({
                 timestamp: now,
             } as import("@/shared/nexus-contract").SovereignData);
 
+            const { FiscalSealer } = await import('@/modules/finance');
             const { hash, signature, sealId, previousHash } =
                 await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, false);
 
