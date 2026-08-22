@@ -55,7 +55,7 @@ export const DigitalDnaCrawlerService = {
    * Analyse et provisionne une instance sur-mesure à partir des sources publiques.
    */
   async ingestAndMorph(input: DnaCrawlerInput): Promise<DnaMorphogenesisResult> {
-    const { tenantId, adminEmail, websiteUrl, instagramHandle, googleMapsUrl: _googleMapsUrl, businessName, adminPin, siren } = input;
+    const { tenantId, adminEmail, websiteUrl, instagramHandle, businessName, adminPin, siren } = input;
     logger.info("[DigitalDnaCrawler] Début de morphogenèse pour " + tenantId + " (" + (websiteUrl ?? instagramHandle ?? businessName) + ")");
 
     try {

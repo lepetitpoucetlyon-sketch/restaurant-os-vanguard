@@ -13,7 +13,7 @@
  * tenantId TOUJOURS depuis le token vérifié (requireTenantUser) — jamais du body.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
@@ -26,7 +26,7 @@ registerSupportTicketAnalysisHandler();
 const DescriptionSchema = sanitized(10, 2000);
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantRole(req, 'manager');
+  const caller = await requireTenantUser(req);
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantRole(req, "manager");
+  const caller = await requireTenantUser(req);
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
