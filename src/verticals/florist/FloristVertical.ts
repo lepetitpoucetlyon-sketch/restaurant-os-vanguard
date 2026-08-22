@@ -1,3 +1,4 @@
+import React from 'react';
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
@@ -13,6 +14,11 @@ export class FloristVertical implements IVerticalPlugin {
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation de la verticale fleuriste…`);
+
+    context.registerRoute('/arrangements', React.lazy(() =>
+      import('./ops/FloralArrangementsPage').then(m => ({ default: m.FloralArrangementsPage }))));
+    context.registerRoute('/deliveries', React.lazy(() =>
+      import('./logistics/FlowerDeliveriesPage').then(m => ({ default: m.FlowerDeliveriesPage }))));
 
     // Ops — Composition florale créée
     context.registerEventHandler<{ tenantId: string; arrangementId: string; recipeId: string; floristId: string }>(
