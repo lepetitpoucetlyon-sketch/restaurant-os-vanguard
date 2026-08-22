@@ -1,3 +1,4 @@
+import React from 'react';
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
@@ -14,6 +15,11 @@ export class VeterinaryVertical implements IVerticalPlugin {
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation de la verticale vétérinaire…`);
+
+    context.registerRoute('/patients', React.lazy(() =>
+      import('./commerce/PetRecordsPage').then(m => ({ default: m.PetRecordsPage }))));
+    context.registerRoute('/prescriptions', React.lazy(() =>
+      import('./ops/PrescriptionsPage').then(m => ({ default: m.PrescriptionsPage }))));
 
     // Ops — Consultation animal terminée
     context.registerEventHandler<{ tenantId: string; consultationId: string; animalId: string; vetId: string }>(
