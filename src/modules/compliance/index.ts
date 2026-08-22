@@ -18,7 +18,7 @@ export { AuditService, auditService } from './securite/audit/AuditService';
 export { ElevationPrompt } from './securite/audit/ElevationPrompt';
 export { OverrideLogView } from './securite/audit/OverrideLogView';
 export { DocumentVault } from './securite/DocumentVault';
-export { AuditLogger } from './securite/AuditLogger';
+export { AuditLogger, type AuditAction as SecurityAuditAction } from './securite/AuditLogger';
 export { ImmunityAuditLogger } from './securite/ImmunityAuditLogger';
 
 // Domaine : reglementaire (RGPD, Contrats Légaux & Signatures)

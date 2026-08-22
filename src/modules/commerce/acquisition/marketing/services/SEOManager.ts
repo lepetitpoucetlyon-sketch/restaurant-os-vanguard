@@ -29,8 +29,8 @@ export const SEOManager = {
     const instance = instances.find((i: EmpireInstance) => i.id === tenantId) as SEOInstance | undefined;
     
     const resolvedInstance: SEOInstance = instance || {
-      id: tenantId || 'default',
-      key: tenantId || 'default',
+      id: tenantId || 'anonymous',
+      key: tenantId || 'anonymous',
       name: 'Restaurant OS',
       status: 'ONLINE',
       tier: 'STANDARD',

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { FiscalSealer } from '@/modules/finance/fiscalite/FiscalSealer';
+import { FiscalSealer } from '@/modules/finance';
 import { TaxRateGuard } from './TaxRateGuard';
 
 export interface PosOrderLineInput {

@@ -13,7 +13,7 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
 
 export interface RecallAlert {

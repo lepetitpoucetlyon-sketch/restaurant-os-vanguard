@@ -12,7 +12,7 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 const DEFAULT_THRESHOLD_PCT = 5;
 

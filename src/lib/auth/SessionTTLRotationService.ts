@@ -14,7 +14,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § MCC-E3.
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 const SESSION_TTL_MS = 12 * 3600_000;

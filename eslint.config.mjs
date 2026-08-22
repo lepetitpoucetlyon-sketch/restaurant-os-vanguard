@@ -82,6 +82,7 @@ const eslintConfig = defineConfig([
       "src/lib/NexusTelemetryService.ts",
       "src/lib/MaintenanceAgent.ts",
       "src/modules/*/domain/schemas/**",
+      "src/kernel/ai/**",
     ],
     rules: {
       "no-restricted-imports": "off",

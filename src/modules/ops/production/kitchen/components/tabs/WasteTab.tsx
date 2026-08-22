@@ -11,7 +11,7 @@ import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { useTenant } from "@/shared/hooks";
         // FIXME (Modular Monolith): Remove cross-module import. Use domain/ or NexusEventBus.
-import { HACCPLogService } from '@/modules/compliance/qualite/haccp/HACCPLogService';
+import { HACCPLogService } from '@/modules/compliance';
 
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
 

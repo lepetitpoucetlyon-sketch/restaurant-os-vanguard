@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
-import { useHACCP } from "@/modules/compliance/qualite/haccp/hooks/useHACCP";
+import { useHACCP } from "@/modules/compliance";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(

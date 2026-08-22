@@ -3,7 +3,7 @@
  * Fonctions qui touchent Nexus, NexusEventBus ou FinancialNexusBridge.
  * Pas de React ici.
  */
-import { FinancialNexusBridge } from "@/modules/finance/comptabilite/FinancialNexusBridge";
+import { FinancialNexusBridge } from "@/modules/finance";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Table, OrderItem } from "@nexus/contracts";

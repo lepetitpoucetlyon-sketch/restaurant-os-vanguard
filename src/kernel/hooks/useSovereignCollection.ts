@@ -51,7 +51,12 @@ export function useSovereignCollection<T extends { id: string }>(
         );
     }
 
-    const tenantId = options.tenantId ?? 'default';
+    const tenantId = options.tenantId;
+    if (!tenantId || tenantId.trim() === '') {
+        throw new Error(
+            `[useSovereignCollection] VIOLATION ISOLATION : Un tenantId valide est strictement requis pour accéder à la collection "${collectionName}". Aucun fallback 'default' autorisé.`
+        );
+    }
     const basePath = `tenants/${tenantId}/${collectionName}`;
 
     const loadData = useCallback(async () => {

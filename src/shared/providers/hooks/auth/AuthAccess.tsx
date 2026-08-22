@@ -22,13 +22,16 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
     const [isPermissionsLoaded, setIsPermissionsLoaded] = useState<boolean>(() => !firebaseUserId);
 
     useEffect(() => {
-        if (!firebaseUserId) {
-            // No user — permissions already initialized to defaults + loaded=true via lazy init
+        if (!firebaseUserId || !currentUser?.tenantId) {
+            // No user or tenant — permissions already initialized to defaults + loaded=true via lazy init
+            if (!currentUser?.tenantId && firebaseUserId) {
+                setIsPermissionsLoaded(true);
+            }
             return;
         }
 
         let isActive = true;
-        const tenantId = currentUser?.tenantId || 'default';
+        const tenantId = currentUser.tenantId;
         const permissionsPath = `tenants/${tenantId}/${ROLE_PERMISSIONS_COLLECTION}/${ROLE_PERMISSIONS_DOC_ID}`;
 
         const unsubscribePermissions = Nexus.adapter.onSnapshot(
@@ -67,12 +70,13 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
     }, [firebaseUserId, currentUser?.tenantId]);
 
     const updateRolePermissions = useCallback(async (role: UserRole, categories: CategoryKey[]) => {
+        if (!currentUser?.tenantId) return;
         const nextPermissions = AccessPolicyManager.sanitizeRolePermissions({
             ...rolePermissions,
             [role]: categories,
         }, DEFAULT_ROLE_PERMISSIONS);
 
-        const tenantId = currentUser?.tenantId || 'default';
+        const tenantId = currentUser.tenantId;
         const permissionsPath = `tenants/${tenantId}/${ROLE_PERMISSIONS_COLLECTION}/${ROLE_PERMISSIONS_DOC_ID}`;
 
         setRolePermissions(nextPermissions);
@@ -84,7 +88,8 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
     }, [currentUser?.id, currentUser?.tenantId, rolePermissions]);
 
     const createCustomRole = useCallback(async (label: string) => {
-        const tenantId = currentUser?.tenantId || 'default';
+        if (!currentUser?.tenantId) return '';
+        const tenantId = currentUser.tenantId;
         const permissionsPath = `tenants/${tenantId}/${ROLE_PERMISSIONS_COLLECTION}/${ROLE_PERMISSIONS_DOC_ID}`;
         
         const newRoleId = `custom_${label.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Date.now()}`;
@@ -102,7 +107,8 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
     }, [currentUser?.id, currentUser?.tenantId, customRoles]);
 
     const deleteCustomRole = useCallback(async (roleId: string) => {
-        const tenantId = currentUser?.tenantId || 'default';
+        if (!currentUser?.tenantId) return;
+        const tenantId = currentUser.tenantId;
         const permissionsPath = `tenants/${tenantId}/${ROLE_PERMISSIONS_COLLECTION}/${ROLE_PERMISSIONS_DOC_ID}`;
         
         const nextCustomRoles = customRoles.filter(r => r.id !== roleId);

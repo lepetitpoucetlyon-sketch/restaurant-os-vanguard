@@ -17,7 +17,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
-import { AuditLogger, type AuditAction } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger, type SecurityAuditAction as AuditAction } from '@/modules/compliance';
 import { toError } from '@/lib/toError';
 import { logger } from '@/lib/logger';
 

@@ -17,7 +17,7 @@ export function useBrandEditor() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const brandPath = `brands/${tenantId ?? 'default'}/config/tokens`;
+  const brandPath = tenantId ? `brands/${tenantId}/config/tokens` : '';
 
   const saveTokens = useCallback(async (patch: Partial<BrandConfig>) => {
     if (!tenantId) return;

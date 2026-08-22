@@ -13,7 +13,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § D4.
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 export type AccountingSoftware = 'sage' | 'cegid' | 'ebp' | 'csv_generic';
 

@@ -17,7 +17,7 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 export type BiodechetsCategory =
   | 'food_prep_offcuts'    // épluchures, parures

@@ -4,7 +4,7 @@ import { SplitBillDomainService } from '@/modules/finance/services/SplitBillDoma
 import { WormArchiveStorageService } from '@/modules/finance/fiscalite/WormArchiveStorageService';
 import type { CartItem } from '@/modules/ops/workflow/engine/types';
 import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
-import { Microunits, TaxRate } from '@/shared/schemas/primitives';
+import { toMicrounits, TaxRate } from '@/shared/schemas/primitives';
 
 describe('E2E Scénario 2 : Parcours Client & Service 360° (Résa → Allergènes → KDS → Split → WORM)', () => {
   const tenantId = 'gastronomie-lyon';
@@ -13,19 +13,18 @@ describe('E2E Scénario 2 : Parcours Client & Service 360° (Résa → Allergèn
     vi.clearAllMocks();
   });
 
-  it('devrait exécuter le cycle complet sans accroc : Check-in, Cadençage KDS, Split Reliquat & Archive WORM', async () => {
-    // 1. Cadençage Cuisine (Entrée / Plat / Dessert)
-    const orderId = 'ord_e2e_full_001';
+  it('devrait orchestrer le cycle complet sans rupture de charge fiscale ni latence KDS', async () => {
+    const orderId = 'ord-table-12-vip';
     const items: CartItem[] = [
       {
         cartId: 'c1',
         productId: 'p_foie_gras',
         name: 'Foie Gras Poêlé',
         quantity: 2,
-        unitPriceInMicrounits: 22000000 as Microunits,
+        unitPriceInMicrounits: toMicrounits(22000000),
         categoryId: 'cat_entrees',
         taxRate: '0.10' as TaxRate,
-        discountInMicrounits: 0 as Microunits,
+        discountInMicrounits: toMicrounits(0),
         modifiers: [],
         course: 'entree',
       },
@@ -34,10 +33,10 @@ describe('E2E Scénario 2 : Parcours Client & Service 360° (Résa → Allergèn
         productId: 'p_cote_boeuf',
         name: 'Côte de Bœuf Simmental',
         quantity: 1,
-        unitPriceInMicrounits: 75000000 as Microunits,
+        unitPriceInMicrounits: toMicrounits(75000000),
         categoryId: 'cat_plats',
         taxRate: '0.10' as TaxRate,
-        discountInMicrounits: 0 as Microunits,
+        discountInMicrounits: toMicrounits(0),
         modifiers: [],
         course: 'plat',
       },
@@ -46,10 +45,10 @@ describe('E2E Scénario 2 : Parcours Client & Service 360° (Résa → Allergèn
         productId: 'p_souffle',
         name: 'Soufflé Grand Marnier',
         quantity: 2,
-        unitPriceInMicrounits: 14000000 as Microunits,
+        unitPriceInMicrounits: toMicrounits(14000000),
         categoryId: 'cat_desserts',
         taxRate: '0.10' as TaxRate,
-        discountInMicrounits: 0 as Microunits,
+        discountInMicrounits: toMicrounits(0),
         modifiers: [],
         course: 'dessert',
       },

@@ -9,7 +9,7 @@
  * RBAC : `reservations.manage_pacing` (Manager + PIN) pour forcer.
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 import {
   ReservationPacingService,
   type PacingConfig,

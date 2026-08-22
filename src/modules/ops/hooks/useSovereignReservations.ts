@@ -18,7 +18,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { Reservation, ReservationStatus } from '@/modules/commerce/relation/reservations/types';
+import type { Reservation, ReservationStatus } from '@/modules/commerce';
 
 export interface UseSovereignReservationsOptions {
     tenantId: string;

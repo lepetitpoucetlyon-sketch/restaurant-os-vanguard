@@ -13,7 +13,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § L14 (CRITIQUE — Listeria).
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
 
 /** Matrice des enchaînements qui exigent désinfection */

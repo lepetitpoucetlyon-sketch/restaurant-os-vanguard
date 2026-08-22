@@ -12,7 +12,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { OutboxService, OutboxPriority } from '@/lib/offline/OutboxService';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 const ALERT_THRESHOLD_PPM = 5000;
 const CRITICAL_THRESHOLD_PPM = 30000;

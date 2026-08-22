@@ -248,6 +248,11 @@ export class TenantAIRegistry {
         }
     }
 
+    /** Vide tout le cache (tests/reset). */
+    static resetCache(): void {
+        TenantAIRegistry.cache.clear();
+    }
+
     /** Taille du cache (monitoring). */
     static get cacheSize(): number {
         return TenantAIRegistry.cache.size;

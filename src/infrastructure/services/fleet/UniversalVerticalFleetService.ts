@@ -21,7 +21,7 @@ import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import type { PlatformVariant } from '@/modules/system';
-import { VERTICAL_META } from '@/modules/system/domain/schemas/tenant';
+import { VERTICAL_META } from '@/modules/system';
 
 export interface TenantHealthBreakdown {
     pos: number;        // 0-100%

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
 import { Button } from '@ui/button';
 import { cn } from '@/lib/ui.foundations';
-import type { ExtractedInvoice } from '@/modules/intelligence/services/VisionService';
+import type { ExtractedInvoice } from '@/modules/intelligence';
 import { InventoryVisionService, VisionMatchResult } from '../../../../services/InventoryVisionService';
 import { useInventory } from '../../hooks/useInventory';
 

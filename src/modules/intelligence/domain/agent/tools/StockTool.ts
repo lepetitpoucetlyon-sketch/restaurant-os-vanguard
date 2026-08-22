@@ -4,7 +4,7 @@ import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { StockEngine } from '@/modules/logistics/services/StockEngine';
+import { StockEngine } from '@/modules/logistics';
 
 /**
  * 📦 STOCK TOOL - Grade X

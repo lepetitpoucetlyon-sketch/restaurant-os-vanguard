@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Sparkles, CheckCircle, AlertCircle, X, Loader2, Zap } from 'lucide-react';
 import { Button } from '@ui/button';
-import { VisionService, type PlateAuditResult } from '@/modules/intelligence/services/VisionService';
+import { VisionService, type PlateAuditResult } from '@/modules/intelligence';
 import { cn } from '@/lib/ui.foundations';
 
 interface PlateAuditWizardProps {

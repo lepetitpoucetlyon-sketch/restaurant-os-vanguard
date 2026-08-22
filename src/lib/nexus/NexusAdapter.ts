@@ -18,7 +18,7 @@ export type { INexusAdapter, INexusQueryOptions, INexusBatch, NexusContext };
 /**
  * 🏛️ Nexus Singleton Manager
  */
-class NexusManager {
+export class NexusManager {
     private _adapter: INexusAdapter | null = null;
     private _realAdapter: INexusAdapter | null = null;
     private _isSimulacraActive: boolean = false;

@@ -4,7 +4,7 @@ import { ToolDefinition } from './types';
 import { SovereignValue, OperationalIdentity } from '@/shared/nexus-contract';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { FiscalEngine } from '@/modules/finance/services/FiscalEngine';
+import { FiscalEngine } from '@/modules/finance';
 
 /**
  * 🛡️ FISCAL AUDIT TOOL - Grade X

@@ -1,5 +1,5 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import type { Microunits } from '@/shared/schemas/primitives';
+import { toMicrounits, type Microunits } from '@/shared/schemas/primitives';
 
 export type MenuItemCategory = 'star' | 'plow-horse' | 'puzzle' | 'dog';
 
@@ -30,13 +30,14 @@ interface ComputeParams {
 }
 
 function classifyItem(
-  popularityIndex: number,
-  contributionMarginInMicrounits: number,
-  avgPopularity: number,
+  popIndex: number,
+  marginInMicrounits: number,
+  avgPop: number,
   avgMargin: number,
 ): MenuItemCategory {
-  const highPop = popularityIndex >= avgPopularity;
-  const highMargin = contributionMarginInMicrounits >= avgMargin;
+  const highPop = popIndex >= avgPop;
+  const highMargin = marginInMicrounits >= avgMargin;
+
   if (highPop && highMargin) return 'star';
   if (highPop && !highMargin) return 'plow-horse';
   if (!highPop && highMargin) return 'puzzle';
@@ -51,10 +52,10 @@ class MenuEngineeringService {
     ]);
 
     const productMap = new Map<string, Record<string, unknown>>(
-      products.map(p => [p.id as string, p]),
+      products.map((p: Record<string, unknown>) => [p.id as string, p]),
     );
 
-    const periodOrders = orders.filter(o => {
+    const periodOrders = orders.filter((o: Record<string, unknown>) => {
       const d = (o.createdAt as string | undefined)?.slice(0, 10) ?? '';
       return d >= periodStart && d <= periodEnd;
     });
@@ -77,27 +78,30 @@ class MenuEngineeringService {
     const rawItems: Omit<IMenuEngineeringItem, 'category'>[] = [];
     for (const [productId, { qty, priceInMicrounits }] of sold.entries()) {
       const product = productMap.get(productId);
-      const foodCostInMicrounits = (product?.foodCostInMicrounits as number | undefined) ?? 0;
-      const contributionMarginInMicrounits = (priceInMicrounits - foodCostInMicrounits) as Microunits;
-      const foodCostPercent = priceInMicrounits > 0 ? (foodCostInMicrounits / priceInMicrounits) * 100 : 0;
+      const foodCostInMicrounits = toMicrounits((product?.foodCostInMicrounits as number | undefined) ?? 0);
+      const safePrice = toMicrounits(priceInMicrounits);
+      const contributionMarginInMicrounits = toMicrounits(safePrice - foodCostInMicrounits);
+      const foodCostPercent = safePrice > 0 ? (foodCostInMicrounits / safePrice) * 100 : 0;
       const popularityIndex = (qty / totalQty) * 100;
       rawItems.push({
         productId,
         name: (product?.name as string | undefined) ?? productId,
         quantitySold: qty,
-        priceInMicrounits: priceInMicrounits as Microunits,
-        foodCostInMicrounits: foodCostInMicrounits as Microunits,
+        priceInMicrounits: safePrice,
+        foodCostInMicrounits,
         contributionMarginInMicrounits,
         foodCostPercent,
         popularityIndex,
       });
     }
 
-    const avgContributionMarginInMicrounits = (
-      rawItems.length > 0
-        ? rawItems.reduce((s, i) => s + i.contributionMarginInMicrounits, 0) / rawItems.length
-        : 0
-    ) as Microunits;
+    const avgContributionMarginInMicrounits = toMicrounits(
+      Math.round(
+        rawItems.length > 0
+          ? rawItems.reduce((s, i) => s + i.contributionMarginInMicrounits, 0) / rawItems.length
+          : 0
+      )
+    );
 
     const avgPopularityIndex =
       rawItems.length > 0 ? rawItems.reduce((s, i) => s + i.popularityIndex, 0) / rawItems.length : 0;

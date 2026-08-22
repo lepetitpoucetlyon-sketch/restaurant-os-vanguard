@@ -7,7 +7,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { LoyaltyAccount } from '@/modules/commerce/domain/schemas/loyalty';
+import type { LoyaltyAccount } from '@/modules/commerce';
 
 export type SovereignLoyaltyTier = 'bronze' | 'silver' | 'gold' | 'platinum';
 

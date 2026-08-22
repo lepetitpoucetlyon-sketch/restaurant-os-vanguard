@@ -32,6 +32,19 @@ vi.mock('@/shared/eventBus/NexusEventBus', () => ({
   },
 }));
 
+vi.mock('@/modules/compliance', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/modules/compliance')>();
+  return {
+    ...actual,
+    AuditLogger: {
+      ...actual.AuditLogger,
+      logAction: vi.fn(async (_admin: string, action: string, targetId: string, metadata?: unknown) => {
+        auditLogs.push({ action, targetId, metadata });
+        return { id: 'log_1' };
+      }),
+    },
+  };
+});
 vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
   AuditLogger: {
     logAction: vi.fn(async (_admin: string, action: string, targetId: string, metadata?: unknown) => {

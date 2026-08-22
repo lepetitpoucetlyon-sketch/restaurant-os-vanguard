@@ -17,7 +17,7 @@
  * Cf. docs/anglemort-restaurant-mcc.md § MCC-E2 (débloqué par ADR-014).
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
+import { AuditLogger } from '@/modules/compliance';
 
 export interface MfaEnrollmentState {
   uid: string;

@@ -132,6 +132,12 @@ export function TimeclockDashboard() {
         setIsSubmitting(true);
 
         try {
+            const activeTenantId = tenantId;
+            if (!activeTenantId) {
+                toast.error("Établissement non identifié pour ce pointage");
+                return;
+            }
+
             const idArr = crypto.getRandomValues(new Uint32Array(1));
             const timestamp = new Date().toISOString();
 
@@ -139,16 +145,16 @@ export function TimeclockDashboard() {
                 const eventName = type === 'CLOCK_IN' ? 'staff.clock_in' : 'staff.clock_out';
                 await NexusEventBus.emitDurable(eventName, {
                     v: 1,
-                    tenantId: tenantId || 'default',
+                    tenantId: activeTenantId,
                     userId: foundUser.id,
                     userName: foundUser.name,
                     terminalId: "kiosk-1",
                     timestamp,
                 });
             } else {
-                // Break logic fallback (hors spec P1, juste pour ne pas casser)
+                // Break logic
                 const entryId = idArr[0].toString(16);
-                const shiftPath = tenantId ? `tenants/${tenantId}/shiftEntries/${entryId}` : `shiftEntries/${entryId}`;
+                const shiftPath = `tenants/${activeTenantId}/shiftEntries/${entryId}`;
                 await Nexus.adapter.set(shiftPath, {
                     id: entryId,
                     userId: foundUser.id,
