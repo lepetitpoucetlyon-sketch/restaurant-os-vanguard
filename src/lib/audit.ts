@@ -177,3 +177,5 @@ class EmpireAuditLogger {
 }
 
 export const empireAudit = EmpireAuditLogger.getInstance();
+export { AuditLogger, type AuditAction, type AuditLog, type AuditLogOptions } from './mcc/audit/AuditLogger';
+export { ImmunityAuditLogger } from './mcc/audit/ImmunityAuditLogger';

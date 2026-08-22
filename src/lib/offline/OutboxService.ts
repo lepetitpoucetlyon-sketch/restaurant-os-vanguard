@@ -125,7 +125,7 @@ export class OutboxService {
                 if (op.action === 'SET' || op.action === 'CREATE') {
                     await Nexus.adapter.set(`${op.collection}/${op.targetId}`, op.payload);
                 } else if (op.action === 'UPDATE') {
-                    await Nexus.adapter.update(`${op.collection}/${op.targetId}`, op.payload as any);
+                    await Nexus.adapter.update(`${op.collection}/${op.targetId}`, op.payload as Partial<Record<string, unknown>>);
                 } else if (op.action === 'DELETE') {
                     await Nexus.adapter.delete(`${op.collection}/${op.targetId}`);
                 }

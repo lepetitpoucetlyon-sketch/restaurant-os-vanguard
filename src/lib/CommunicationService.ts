@@ -1,5 +1,12 @@
-import type { CommunicationPulse } from '@/modules/finance';
 import { toError } from "@/lib/toError";
+
+export interface CommunicationPulse {
+    type: 'EMAIL' | 'SMS' | 'PUSH' | 'MIXED';
+    recipient: string;
+    subject: string;
+    content: string;
+    attachments?: Array<{ filename: string; content: string | Buffer }>;
+}
 
 /**
  * 📡 CommunicationService
@@ -23,22 +30,18 @@ export class CommunicationService {
 
                 if (result.success) {
                     // Track successful send in local audit log
-                    const { logger } = await import('@/lib/logger');
-                    logger.info('[CommunicationPulse] Email sent', {
+                    const { NexusTelemetryService } = await import('@/lib/NexusTelemetryService');
+                    NexusTelemetryService.emitAuditPulse('system', 'SYSTEM_COMMUNICATION', {
+                        status: 'OK',
                         recipient: pulse.recipient,
-                        type: pulse.type,
-                        messageId: result.messageId
+                        subject: pulse.subject,
+                        timestamp: new Date().toISOString()
                     });
-                } else {
-                    throw new Error(result.error || 'Email send failed');
                 }
-            } catch (error) {
-                const { logger } = await import('@/lib/logger');
-                logger.error('[CommunicationPulse] Failed to send email', {
-                    recipient: pulse.recipient,
-                    type: pulse.type,
-                    error: toError(error).message
-                });
+            } catch (err: unknown) {
+                const e = toError(err);
+                console.error(`[CommunicationService] Failed to emit transactional email: ${e.message}`);
+                throw e;
             }
         }
     }

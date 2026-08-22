@@ -9,7 +9,6 @@ import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
-import type { JsonObject } from "@/shared/types/json";
 import { toError } from "@/lib/toError";
 
 // nexus-core ne doit pas dépendre de la couche config (règle sentrux) : on lit

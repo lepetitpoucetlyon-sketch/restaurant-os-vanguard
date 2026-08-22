@@ -6,7 +6,7 @@
  */
 
 import { z } from 'zod';
-import { CreateOrderInputSchema } from '@/domain/schemas/orders/orderPublicSchemas';
+import { CreateOrderInputSchema } from '@/shared/schemas';
 
 export interface ApiClientConfig {
     baseUrl?: string;

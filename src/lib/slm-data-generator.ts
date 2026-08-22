@@ -1,13 +1,8 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { StockItem } from '@modules/logistics';
-// eslint-disable-next-line vanguard/no-inter-module-imports
+import type { StockItem } from '@/modules/logistics';
 import type { Reservation } from '@/modules/commerce';
-import { User } from '@nexus/contracts';
-import { Recipe } from '@nexus/contracts';
-// eslint-disable-next-line vanguard/no-inter-module-imports
-import { Account } from '@modules/finance';
-import { HygieneLog, Candidate } from '@nexus/contracts';
+import type { User, Recipe, HygieneLog, Candidate } from '@nexus/contracts';
+import type { Account } from '@/modules/finance';
 
 export interface SLMTrainingPair {
     instruction: string;

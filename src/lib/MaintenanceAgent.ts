@@ -1,7 +1,4 @@
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import { LLMManager } from '@/modules/intelligence/ia/ai/LLMManager';
-import { AI_MODELS } from '@/modules/intelligence/ia/ai/LLMProviderFactory';
-import { DNAInjector } from '@/modules/intelligence/ia/ai/DNAInjector';
 import { logger } from "@/lib/logger";
 import type { MaintenanceTicket, MaintenanceAIAnalysis, MaintenanceTicketContext } from "@nexus/contracts/maintenance.types";
 import { toError } from "@/lib/toError";
@@ -91,6 +88,7 @@ export const MaintenanceAgent = {
      * AI CORE : Analyse Gemini Pro avec Injection d'ADN
      */
     async analyzeWithAI(ticket: MaintenanceTicket, context: MaintenanceTicketContext): Promise<MaintenanceAIAnalysis> {
+        const { LLMManager, AI_MODELS, DNAInjector } = await import('@/modules/intelligence');
         const tenantDNA = await DNAInjector.getTenantDNA(ticket.tenantId);
 
         const userPrompt = `

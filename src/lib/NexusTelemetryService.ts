@@ -7,7 +7,7 @@
 import type { TelemetryPulse } from "@shared/nexus-contract";
 import { whiteLabelInstanceConfig } from "@/config/instance";
 import { logger } from "@/lib/logger";
-import { fleetTelemetry } from "@/modules/intelligence/ia/fleet/FleetTelemetryService";
+import { fleetTelemetry } from "@/shared/providers/fleet/FleetTelemetryService";
 import { registerAuditPulseSink } from "@/shared/nexus/telemetry/NexusTelemetryService";
 import type { SiteTelemetry } from "@/shared/nexus/contracts/fleet.types";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
@@ -52,7 +52,11 @@ class TelemetryService {
    * 🖋️ Suture GRADE X+++: Emission d'Audit Pulse
    */
   public emitAuditPulse(pillar: string, action: string, data: object) {
-      logger.debug(`[AuditPulse|${pillar}] ${action}`, data as JsonObject);
+      if (typeof logger.debug === 'function') {
+          logger.debug(`[AuditPulse|${pillar}] ${action}`, data as JsonObject);
+      } else if (typeof logger.info === 'function') {
+          logger.info(`[AuditPulse|${pillar}] ${action}`, data as JsonObject);
+      }
       // Implémentation réelle vers le MCC
   }
 

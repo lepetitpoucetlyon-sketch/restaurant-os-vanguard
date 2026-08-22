@@ -64,6 +64,20 @@ export function formatCurrency(
 }
 
 /**
+ * Formate un montant exprimé en micro-unités (1 € = 1 000 000 μ).
+ * @param mu Montant en micro-unités
+ */
+export function formatMu(mu: number): string {
+    const euros = (mu || 0) / 1_000_000;
+    return new Intl.NumberFormat('fr-FR', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(euros);
+}
+
+/**
  * Formate un nombre avec séparateurs de milliers.
  * 
  * @example
