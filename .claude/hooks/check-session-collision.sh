@@ -39,7 +39,8 @@ while IFS='|' read -r _ session perimetre _ status _; do
   echo "$status" | grep -qi 'termin' && continue
 
   session_name=$(echo "$session" | xargs 2>/dev/null | tr -d '`*')
-  [ -n "$ME" ] && [ "$session_name" = "$ME" ] && continue   # jamais me bloquer moi-même
+  session_key=$(echo "$session_name" | awk '{print $1}')   # 1er mot = cle (ignore suffixes type "(Claude Code)")
+  [ -n "$ME" ] && [ "$session_key" = "$ME" ] && continue    # jamais me bloquer moi-meme
 
   # Extraire les jetons ressemblant à des chemins du périmètre
   for token in $(echo "$perimetre" | grep -oE '(src|scripts|docs|\.claude|\.githooks|eslint[a-z.-]*)[A-Za-z0-9/_.\-]*'); do
