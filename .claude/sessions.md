@@ -14,9 +14,12 @@
 
 | Session | Périmètre | Démarrage | Status |
 |---|---|---|---|
-| `plan-master-v1` | Vague 1 : Hygiène, Backup Cron, Env Example, Sessions | 2026-08-20 | **active** |
+| `profondeur-track1-track4` | Backlog exécutable profondeur : Track 1 (169 inter-module, bundle, events), Track 2 (MCC), Track 3 (Verticales), Track 4 (Doc) | 2026-08-22 | **active** |
+| `plan-master-v1` | Vague 1 : Hygiène, Backup Cron, Env Example, Sessions | 2026-08-20 | terminée |
+| `valo-ip-groundtruth` | Analyse lecture seule métriques codebase + rédaction valorisation IP/financière (docs/ uniquement) | 2026-08-22 | terminée |
 | `audit-holistique-readonly` | Audit global lecture seule (rapport AUDIT-HOLISTIQUE-2026-08-22.md) — preflight ROUGE [1]tsc+[3]barrel, reste vert | 2026-08-22 | terminée |
 | `angles-morts-m101-m110` | Matrice M101-M110 + batch2 (35 services) + batch3 (19 services) — 71 items clos, 169 tests, 0 erreur TS | 2026-08-21 | **terminée** |
+| `verif-plan-deteinture` | Vérification lecture seule état plan Dé-Teinture Sectorielle (§8.6) — pas d'édition de code | 2026-08-22 | terminée |
 
 ---
 
