@@ -1,5 +1,5 @@
 /**
- * 🏛️ SystemTenantRegistry — Registre des 24 tenants système
+ * 🏛️ SystemTenantRegistry — Registre des 36 tenants système
  *
  * Chaque verticale dispose de 3 tiers permanents :
  *   _demo_V      — vitrine prospect (Simulacra Mode, lecture seule store)
@@ -66,19 +66,33 @@ export function isFleetVisible(tenantId: string): boolean {
     return !isSystemTenant(tenantId);
 }
 
-/** Mapping sous-domaine court → tenantId système (Option A du plan) */
-export const DEMO_SUBDOMAIN_MAP: Record<string, string> = {
-    'demo':            '_demo_restaurant',
-    'demo-hotel':      '_demo_hotel',
-    'demo-bakery':     '_demo_bakery',
-    'demo-garage':     '_demo_garage',
-    'demo-salon':      '_demo_salon',
-    'demo-clinic':     '_demo_clinic',
-    'demo-retail':     '_demo_retail',
-    'demo-custom':     '_demo_custom',
+/**
+ * Sous-domaine démo court par verticale — typé `Record<PlatformVariant, string>` :
+ * l'exhaustivité est garantie par tsc, impossible d'oublier une verticale (Track 3.2).
+ */
+export const DEMO_SUBDOMAIN_BY_VARIANT: Record<PlatformVariant, string> = {
+    restaurant: 'demo',
+    hotel:      'demo-hotel',
+    bakery:     'demo-bakery',
+    garage:     'demo-garage',
+    salon:      'demo-salon',
+    clinic:     'demo-clinic',
+    retail:     'demo-retail',
+    custom:     'demo-custom',
+    gym:        'demo-gym',
+    coworking:  'demo-coworking',
+    veterinary: 'demo-veterinary',
+    florist:    'demo-florist',
 };
 
-/** Retourne tous les tenantIds système (24 au total) */
+/** Vue dérivée (sous-domaine court → tenantId système) — dérivée de DEMO_SUBDOMAIN_BY_VARIANT, ne peut pas diverger. */
+export const DEMO_SUBDOMAIN_MAP: Record<string, string> = Object.fromEntries(
+    (Object.entries(DEMO_SUBDOMAIN_BY_VARIANT) as [PlatformVariant, string][]).map(
+        ([variant, subdomain]) => [subdomain, getSystemTenantId(variant, 'DEMO')]
+    )
+);
+
+/** Retourne tous les tenantIds système (36 au total) */
 export function getAllSystemTenantIds(): string[] {
     return Object.values(SYSTEM_TENANTS).flatMap(map => Object.values(map));
 }
