@@ -1,3 +1,4 @@
+import React from 'react';
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
@@ -14,6 +15,11 @@ export class CoworkingVertical implements IVerticalPlugin {
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation de la verticale coworking…`);
+
+    context.registerRoute('/desks', React.lazy(() =>
+      import('./facility/DeskMapPage').then(m => ({ default: m.DeskMapPage }))));
+    context.registerRoute('/plans', React.lazy(() =>
+      import('./commerce/PassPlansPage').then(m => ({ default: m.PassPlansPage }))));
 
     // Ops — Check-in de bureau
     context.registerEventHandler<{ tenantId: string; deskId: string; memberId: string; checkedInAt: string }>(
