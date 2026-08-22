@@ -21,6 +21,22 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         let results = Object.entries(this.storage)
             .filter(([path]) => path.startsWith(collectionPath))
             .map(([, data]) => data as Record<string, unknown>);
+
+        if (options?.where) {
+            for (const clause of options.where) {
+                results = results.filter(item => {
+                    const val = item[clause.field];
+                    if (clause.operator === "==") return val === clause.value;
+                    if (clause.operator === "!=") return val !== clause.value;
+                    if (clause.operator === ">") return (val as number) > (clause.value as number);
+                    if (clause.operator === ">=") return (val as number) >= (clause.value as number);
+                    if (clause.operator === "<") return (val as number) < (clause.value as number);
+                    if (clause.operator === "<=") return (val as number) <= (clause.value as number);
+                    if (clause.operator === "in") return Array.isArray(clause.value) && clause.value.includes(val);
+                    return true;
+                });
+            }
+        }
         
         if (options?.orderBy) {
             const { field, direction } = options.orderBy;

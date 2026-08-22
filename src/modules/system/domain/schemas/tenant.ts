@@ -90,6 +90,7 @@ export const TenantOverridesSchema = z
                 layoutType: z
                     .enum(['default', 'kiosk', 'hud', 'admin', 'sidebar', 'topbar'])
                     .optional(),
+                displayDepth: z.enum(['essential', 'manager', 'enterprise']).optional(),
                 fontScale: z.number().min(0.5).max(2).optional(),
             })
             .optional(),

@@ -28,6 +28,7 @@ const ProvisionBodySchema = z.object({
   variant:    z.string().optional(),
   tier:       z.enum(['STANDARD', 'PREMIUM', 'ENTERPRISE']).optional().default('STANDARD'),
   trialDays:  z.number().int().min(0).optional(),
+  displayDepth: z.enum(['essential', 'manager', 'enterprise']).optional().default('manager'),
   branding: z.object({
     mode:          z.enum(['default', 'custom']).default('default'),
     accentColor:   z.string().optional(),

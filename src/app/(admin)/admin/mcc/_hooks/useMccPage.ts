@@ -49,6 +49,7 @@ export function useMccPage() {
     const [newCloneAccentColor, setNewCloneAccentColor] = useState<string>('#C5A059');
     const [newCloneLogoUrl, setNewCloneLogoUrl] = useState<string>('');
     const [newCloneSplashEnabled, setNewCloneSplashEnabled] = useState<boolean>(false);
+    const [newCloneDisplayDepth, setNewCloneDisplayDepth] = useState<'essential' | 'manager' | 'enterprise'>('manager');
     const [provisioningStatus, setProvisioningStatus] = useState<string | null>(null);
     const [provisionStep, setProvisionStep] = useState(0);
 
@@ -89,6 +90,7 @@ export function useMccPage() {
                     tier: newCloneTier,
                     variant: newCloneVariant,
                     trialDays: newTrialDays > 0 ? newTrialDays : undefined,
+                    displayDepth: newCloneDisplayDepth,
                     branding: {
                         mode: newCloneBrandingMode,
                         accentColor: newCloneBrandingMode === 'custom' ? newCloneAccentColor : undefined,
@@ -120,6 +122,7 @@ export function useMccPage() {
                 setNewCloneAccentColor('#C5A059');
                 setNewCloneLogoUrl('');
                 setNewCloneSplashEnabled(false);
+                setNewCloneDisplayDepth('manager');
             }, 2500);
         } catch (err) {
             timers.forEach(clearTimeout);
@@ -143,6 +146,7 @@ export function useMccPage() {
         newCloneAccentColor, setNewCloneAccentColor,
         newCloneLogoUrl, setNewCloneLogoUrl,
         newCloneSplashEnabled, setNewCloneSplashEnabled,
+        newCloneDisplayDepth, setNewCloneDisplayDepth,
         provisioningStatus, provisionStep,
         handleCreateClone,
     };

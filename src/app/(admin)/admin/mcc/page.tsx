@@ -52,6 +52,7 @@ function MCCDashboardInner() {
         newCloneAccentColor, setNewCloneAccentColor,
         newCloneLogoUrl, setNewCloneLogoUrl,
         newCloneSplashEnabled, setNewCloneSplashEnabled,
+        newCloneDisplayDepth, setNewCloneDisplayDepth,
         provisioningStatus, provisionStep,
         handleCreateClone,
     } = useMccPage();
@@ -273,6 +274,32 @@ function MCCDashboardInner() {
                                                 {newTrialDays > 0 ? `Expire le ${new Date(Date.now() + newTrialDays * 86_400_000).toLocaleDateString('fr-FR')} — paiement requis ensuite` : 'Compte actif immédiatement'}
                                             </p>
                                         </div>
+
+                                        {/* ── Profondeur Métier Initiale ── */}
+                                        <div>
+                                            <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">Niveau de Profondeur Initial</label>
+                                            <div className="grid grid-cols-3 gap-2 mb-4">
+                                                {[
+                                                    { id: 'essential', label: 'Focus (Essentiel)', icon: '⚡', desc: 'Artisan / Solo · 3 boutons · Pilote auto' },
+                                                    { id: 'manager', label: 'Gestion (Standard)', icon: '📊', desc: 'TPE / PME · Marges, planning, stocks' },
+                                                    { id: 'enterprise', label: 'Expert (Enterprise)', icon: '🔍', desc: 'Grand compte · Grand Livre, FEC, IoT' },
+                                                ].map(d => (
+                                                    <button key={d.id} type="button" onClick={() => setNewCloneDisplayDepth(d.id as 'essential' | 'manager' | 'enterprise')}
+                                                        className={`flex flex-col p-3 rounded-2xl border text-left transition-all ${newCloneDisplayDepth === d.id ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
+                                                        <div className="flex items-center gap-1.5 mb-1">
+                                                            <span className="text-sm">{d.icon}</span>
+                                                            <p className={`text-[9px] font-black uppercase tracking-wider truncate ${newCloneDisplayDepth === d.id ? 'text-brand' : 'text-secondary'}`}>
+                                                                {d.label}
+                                                            </p>
+                                                        </div>
+                                                        <p className="text-[7.5px] text-muted leading-tight">
+                                                            {d.desc}
+                                                        </p>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
                                         {/* ── Charte Graphique ── */}
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">Charte Graphique</label>

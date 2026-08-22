@@ -90,6 +90,12 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
   precision: 'L3',
   subVariants: [
     {
+      slug: 'bar_tapas',
+      label: 'Bar & Tapas',
+      description: 'Mode One-Tap POS, tireuses connectées SmartSpout, Happy Hour dynamique.',
+      capabilities: { mod_bar: true, mod_pos: true },
+    },
+    {
       slug: 'brasserie',
       label: 'Brasserie',
       description: 'Débit élevé, service continu, rush intense.',

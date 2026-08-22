@@ -72,3 +72,5 @@ export * from './domain/types/brands';
 export * from './domain/schemas/giftcard';
 export * from './domain/schemas/customerAccount';
 export * from './domain/schemas/loyalty';
+
+export { DigitalDnaCrawlerService } from "./acquisition/onboarding/services/DigitalDnaCrawlerService";
