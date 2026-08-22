@@ -5,14 +5,14 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3387** · LOC : **306 350**
+- Fichiers `.ts/.tsx` : **3396** · LOC : **306 531**
 - Pages : **77** · Routes API : **208**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1582 |
-| `src/shared/` | 647 |
+| `src/shared/` | 656 |
 | `src/app/` | 419 |
 | `src/lib/` | 223 |
 | `src/verticals/` | 186 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 212 |
+| `shared/eventBus/` | 221 |
 | `shared/components/` | 163 |
 | `shared/nexus/` | 127 |
 | `shared/hooks/` | 44 |
@@ -79,7 +79,6 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/shared/eventBus/events/common.events.ts` | 1065 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
 | `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
 | `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
@@ -92,5 +91,6 @@
 | `src/i18n/locales/en.ts` | 566 |
 | `src/i18n/locales/fr.ts` | 545 |
 | `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 512 |
+| `src/shared/eventBus/events/ops.events.ts` | 488 |
 | `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 477 |
 | `src/__tests__/commerce/anglemorts-m101-m110.test.ts` | 465 |

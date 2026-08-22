@@ -173,4 +173,66 @@ export interface FINANCEEvents {
     customerId?: string;
     paidAt: number;
   };
+
+  'payment.rejected': {
+    v: 1;
+    tenantId: string;
+    orderId: string;
+    reason: string;
+    amountInMicrounits: number;
+  };
+
+  'invoice.overdue': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    invoiceId: string;
+    customerId: string;
+    amountInMicrounits: number;
+    dueDaysOverdue: number;
+  };
+
+  'finance.giftcard_locked': {
+    v: 1;
+    tenantId: string;
+    giftcardId: string;
+    lockedBy: 'pos' | 'web';
+    orderId?: string;
+    amountInMicrounits: number;
+    expiresAt: number;
+  };
+
+  'finance.provisional_seal_created': { v:1; tenantId: string; orderId: string; operatorId: string; totalInMicrounits: number; sealedAt: number };
+
+  'finance.provisional_seal_annulled': { v:1; tenantId: string; orderId: string; actorId: string; reason: string; annulledAt: number };
+
+  'finance.addon_ticket_created': { v:1; tenantId: string; parentSealId: string; addonOrderId: string; addonTotalInMicrounits: number; createdAt: number };
+
+  'finance.advance_invoice_issued': { v:1; tenantId: string; invoiceId: string; orderId: string; amountInMicrounits: number; tvaInMicrounits: number; issuedAt: number };
+
+  'finance.cash_variance_recorded': { v:1; tenantId: string; dateIso: string; expectedInMicrounits: number; actualInMicrounits: number; varianceInMicrounits: number; account: '658' | '757'; recordedAt: number };
+
+  'finance.change_as_tip': { v:1; tenantId: string; orderId: string; changeInMicrounits: number; tipInMicrounits: number; operatorId: string; recordedAt: number };
+
+  'finance.tpe_reconciliation_blocked': { v:1; tenantId: string; orderId: string; tpeTransactionId: string; tpeStatus: string; blockedAt: number };
+
+  'finance.ticket_z_missing': { v:1; tenantId: string; missingDateIso: string; detectedAt: number };
+
+  'finance.grand_total_sealed': { v:1; tenantId: string; period: 'monthly' | 'annual'; periodLabel: string; totalInMicrounits: number; hash: string; sealedAt: number };
+
+  'finance.tva_livraison_mismatch': { v:1; tenantId: string; orderId: string; consumptionMode: string; providedTaxRate: string; expectedTaxRate: string; detectedAt: number };
+
+  'finance.dunning_email_sent': { v:1; tenantId: string; invoiceId: string; step: 'j3' | 'j7' | 'j14'; emailRecipient: string; sentAt: number };
+
+  'finance.tenant_suspended_unpaid': { v:1; tenantId: string; invoiceId: string; overduedays: number; suspendedAt: number };
+
+  'finance.complementary_invoice_created': { v:1; tenantId: string; invoiceId: string; originalOrderId: string; customerName: string; deadlineAt: number; createdAt: number };
+
+  'finance.antidated_invoice_blocked': { v:1; tenantId: string; issuedBy: string; invoiceDateIso: string; backdateDays: number; blockedAt: number };
+
+  'finance.reseller_commission_generated': { v:1; resellerId: string; periodLabel: string; totalCommissionInMicrounits: number; tenantCount: number; generatedAt: number };
+
+  'finance.cash_pool_balanced': { v:1; groupTenantId: string; fromTenantId: string; toTenantId: string; transferAmountInMicrounits: number; balancedAt: number };
+
+  'finance.smart_tip_distributed': { v:1; tenantId: string; periodLabel: string; totalPoolInMicrounits: number; beneficiaryCount: number; distributedAt: number };
 }

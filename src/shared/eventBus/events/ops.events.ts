@@ -362,4 +362,126 @@ export interface OPSEvents {
     totalInMicrounits: number;
     printedAt: number;
   };
+
+  'table.assigned': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    reservationId?: string;
+    partySize: number;
+  };
+
+  'table.released': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    orderId?: string;
+  };
+
+  'store.rush_mode_toggled': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    isPaused: boolean;
+    requestedBy: string;
+  };
+
+  'table.cleared': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
+    orderId?: string;
+    sessionEnd?: boolean;
+  };
+
+  'store.shift_ended': {
+    v: 1;
+    tenantId: string;
+    shiftId: string;
+    endTime: string;
+  };
+
+  'service.end': {
+    v: 1;
+    tenantId: string;
+  };
+
+  'commerce.reservation_pacing_saturated': {
+    v: 1;
+    tenantId: string;
+    slot: string;
+    partySize: number;
+    availableCovers: number;
+    suggestedAlternativeSlots: string[];
+  };
+
+  'ops.table_split_released': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    tableId: string;
+    originalPartySize: number;
+    actualArrivedPartySize: number;
+    freedSeats: number;
+    releasedAt: number;
+  };
+
+  'commerce.table_lock_acquired': {
+    v: 1;
+    tenantId: string;
+    tableId: string;
+    slotIso: string;
+    holder: 'google_reserve' | 'widget_web' | 'staff' | 'phone';
+    reservationId: string;
+    expiresAt: number;
+  };
+
+  'commerce.reservation_timezone_normalized': {
+    v: 1;
+    tenantId: string;
+    reservationId: string;
+    originalIso: string;
+    normalizedIso: string;
+    guestTimezone?: string;
+    tenantTimezone: string;
+  };
+
+  'ops.turnover_delay_predicted': {
+    v: 1;
+    tenantId: string;
+    tableId: string;
+    currentReservationId: string;
+    nextReservationId: string;
+    predictedOverstayMinutes: number;
+    nextSlotIso: string;
+  };
+
+  'ops.table_transferred': { v:1; tenantId: string; orderId: string; fromTableId: string; toTableId: string; operatorId: string; transferredAt: number };
+
+  'ops.tables_merged': { v:1; tenantId: string; primaryTableId: string; secondaryTableId: string; mergedOrderId: string; operatorId: string; mergedAt: number };
+
+  'ops.commercial_gesture_offered': { v:1; tenantId: string; orderId: string; tableId: string; itemName: string; amountInMicrounits: number; authorizedBy: string; reason: string; offeredAt: number };
+
+  'ops.allergen_order_blocked': { v:1; tenantId: string; orderId: string; guestAllergens: string[]; matchedItems: string[]; blockedAt: number };
+
+  'ops.ingredient_eightysixted': { v:1; tenantId: string; ingredientId: string; ingredientName: string; affectedDishIds: string[]; blockedBy: string; eightysixedAt: number };
+
+  'commerce.reservation_trust_flagged': { v:1; tenantId: string; ipAddress: string; phoneHash: string; cancelCount: number; windowHours: number; flaggedAt: number };
+
+  'ops.code_ambre_triggered': { v:1; tenantId: string; tableId: string; triggeredBy: string; triggeredAt: number };
+
+  'commerce.aot_terrace_quota_exceeded': { v:1; tenantId: string; currentCapacity: number; maxQuota: number; excessSeats: number; detectedAt: number };
+
+  'ops.agec_carafe_attached': { v:1; tenantId: string; orderId: string; couverts: number; quantity: number; attachedAt: number };
+
+  'ops.dine_and_dash_suspected': { v:1; tenantId: string; orderId: string; tableId: string; openSinceMinutes: number; estimatedLossInMicrounits: number; detectedAt: number };
+
+  'production.self_healing_recipe_substituted': { v:1; tenantId: string; dishId: string; missingIngredientId: string; substituteIngredientId: string; portionCostDiffInMicrounits: number; substitutedAt: number };
+
+  'production.meat_resting_completed': { v:1; tenantId: string; orderId: string; cutName: string; targetRestSeconds: number; completedAt: number };
+
+  'ops.rain_plan_switch_executed': { v:1; tenantId: string; activeTerraceTablesCount: number; reassignedToIndoorCount: number; packedTakeawayCount: number; executedAt: number };
 }

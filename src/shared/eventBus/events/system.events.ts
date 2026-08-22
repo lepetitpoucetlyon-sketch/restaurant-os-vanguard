@@ -140,4 +140,61 @@ export interface SYSTEMEvents {
     deviceId: string;
     timestamp: string;
   };
+
+  'notification.created': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    id: string;
+    type: 'alert' | 'info' | 'warning' | 'error';
+    title: string;
+    message: string;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+    read: boolean;
+    timestamp: string;
+  };
+
+  'notification.urgent': {
+    v: 1;
+    tenantId: string;
+    message: string;
+    metadata?: Record<string, unknown>;
+    roles: string[];
+    priority?: 'CRITICAL' | 'HIGH';
+  };
+
+  'system.sms_delivery_failed': {
+    v: 1;
+    tenantId: string;
+    recipientPhone: string;
+    provider: string;
+    error: string;
+    fallbackUsed: 'email' | 'none';
+    failedAt: number;
+  };
+
+  'system.sms_segment_warning': {
+    v: 1;
+    tenantId: string;
+    recipientPhone: string;
+    originalLength: number;
+    sanitizedLength: number;
+    encoding: 'GSM-7' | 'UCS-2';
+    segments: number;
+    strippedChars: string[];
+  };
+
+  'fleet.merchant_provisioned': { v:1; tenantId: string; merchantSiret: string; tradeName: string; initialPlan: string; provisionedAt: number };
+
+  'fleet.saas_billing_invoiced': { v:1; tenantId: string; invoiceId: string; periodLabel: string; totalAmountInMicrounits: number; invoiceStatus: 'issued' | 'paid' | 'overdue'; invoicedAt: number };
+
+  'fleet.benchmark_computed': { v:1; tenantId: string; clusterCategory: string; avgTicketInMicrounits: number; foodCostRatioPct: number; percentileRank: number; computedAt: number };
+
+  'fleet.compliance_audit_computed': { v:1; tenantId: string; overallScorePct: number; nf525Passed: boolean; haccpPassed: boolean; hcrPassed: boolean; computedAt: number };
+
+  'fleet.kill_switch_toggled': { v:1; tenantId: string; featureFlag: string; isEnabled: boolean; toggledBy: string; toggledAt: number };
+
+  'fleet.alert_escalated': { v:1; tenantId: string; incidentId: string; severity: 'P1' | 'P2'; destinationService: 'pagerduty' | 'opsgenie'; escalatedAt: number };
+
+  'fleet.sla_breach_detected': { v:1; tenantId: string; endpoint: string; latencyMs: number; allowedLatencyMs: number; breachAt: number };
 }
