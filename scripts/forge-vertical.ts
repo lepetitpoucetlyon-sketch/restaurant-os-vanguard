@@ -31,10 +31,15 @@ import { generateVertical, type ForgeOutput } from '@/verticals/_shared/forge';
 import { validateBlueprint, type VerticalBlueprint } from '@/verticals/_shared/blueprint';
 import { runSectorStudy, type StudyLLM } from '@/verticals/_shared/sector-study';
 
-interface Args { blueprint?: string; export?: string; dryRun: boolean; force: boolean; noStudy: boolean; llm: boolean; }
+import * as readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
+import type { ProfileId } from '@/verticals/_shared/catalog';
+import type { PrecisionTier } from '@/verticals/_shared/blueprint';
+
+interface Args { blueprint?: string; export?: string; dryRun: boolean; force: boolean; noStudy: boolean; llm: boolean; interactive: boolean; }
 
 function parseArgs(argv: string[]): Args {
-    const args: Args = { dryRun: false, force: false, noStudy: false, llm: false };
+    const args: Args = { dryRun: false, force: false, noStudy: false, llm: false, interactive: false };
     for (let i = 0; i < argv.length; i++) {
         const a = argv[i];
         if (a === '--dry-run') args.dryRun = true;
@@ -42,11 +47,130 @@ function parseArgs(argv: string[]): Args {
         else if (a === '--no-study') args.noStudy = true;
         else if (a === '--study') { /* étude active par défaut — no-op de compatibilité */ }
         else if (a === '--llm') args.llm = true;
+        else if (a === '--interactive' || a === '-i') args.interactive = true;
         else if (a === '--blueprint') args.blueprint = argv[++i];
         else if (a === '--export') args.export = argv[++i];
     }
     return args;
 }
+
+const PROFILE_PALETTES: Record<ProfileId, { primary: string; accent: string; fontBrand: string; emoji: string }> = {
+    A: { primary: '#C5A059', accent: '#E67E22', fontBrand: 'Playfair Display', emoji: '🍽️' },
+    B: { primary: '#D4A5C7', accent: '#9B59B6', fontBrand: 'Cormorant Garamond', emoji: '✂️' },
+    C: { primary: '#FF6B35', accent: '#2B5C8F', fontBrand: 'Oswald', emoji: '🔧' },
+    D: { primary: '#2ECC71', accent: '#27AE60', fontBrand: 'DM Sans', emoji: '🛍️' },
+    E: { primary: '#1B365D', accent: '#C5A059', fontBrand: 'Cinzel', emoji: '🏨' },
+    F: { primary: '#00A896', accent: '#028090', fontBrand: 'Inter', emoji: '🩺' },
+    G: { primary: '#FF3366', accent: '#00F0FF', fontBrand: 'Teko', emoji: '🏋️' },
+    H: { primary: '#8E44AD', accent: '#F39C12', fontBrand: 'Syne', emoji: '✨' },
+};
+
+async function runInteractiveWizard(): Promise<string> {
+    const rl = readline.createInterface({ input, output });
+    console.log('\n🧭 ════════════════════════════════════════════════════════════════');
+    console.log('   VERTICAL FORGE — Assistant de Qualification & Diagnostic Métier');
+    console.log('   (Basé sur docs/plans/QUALIFICATION_MATRIX.md)');
+    console.log('════════════════════════════════════════════════════════════════\n');
+
+    try {
+        const slugRaw = await rl.question('1. Slug de la verticale (ex: garage, plombier, osteo, floral) : ');
+        const slug = slugRaw.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'custom_vertical';
+
+        const label = (await rl.question(`2. Nom affiché (ex: Garage Pro, Clinique Veto) [défaut: ${slug.toUpperCase()}] : `)).trim() || slug.toUpperCase();
+
+        console.log('\n3. Profil Archétypal :');
+        console.log('   [A] Food & Périssable (Restaurant, Boulangerie)');
+        console.log('   [B] Rendez-vous & Espace (Salon, Spa, Coiffure)');
+        console.log('   [C] Atelier & Technique (Garage, BTP, Réparation)');
+        console.log('   [D] Retail & Variantes (Boutique, Fleuriste)');
+        console.log('   [E] Hébergement PMS (Hôtel, Camping)');
+        console.log('   [F] Santé & Soins (Vétérinaire, Dentiste)');
+        console.log('   [G] Accès & Abonnements (Gym, Coworking)');
+        console.log('   [H] Concept Store Hybride');
+        const profileRaw = (await rl.question('   Choix profil [A-H, défaut: C] : ')).trim().toUpperCase();
+        const profile: ProfileId = (['A','B','C','D','E','F','G','H'].includes(profileRaw) ? profileRaw : 'C') as ProfileId;
+
+        const defaultPalette = PROFILE_PALETTES[profile];
+        const emoji = (await rl.question(`4. Emoji représentatif [défaut: ${defaultPalette.emoji}] : `)).trim() || defaultPalette.emoji;
+
+        console.log('\n5. Niveau de Précision / Échelle cible :');
+        console.log('   [L0] Squelette Express (Artisan solo, micro-boutique)');
+        console.log('   [L1] Opérationnel Roulant (TPE 2-9 salariés)');
+        console.log('   [L2] Expert Métier (PME 10-49 salariés, alertes temps réel)');
+        console.log('   [L3] Enterprise & Réseau (ETI 50+ salariés, multi-sites)');
+        const precisionRaw = (await rl.question('   Choix précision [L0-L3, défaut: L1] : ')).trim().toUpperCase();
+        const precision: PrecisionTier = (['L0','L1','L2','L3'].includes(precisionRaw) ? precisionRaw : 'L1') as PrecisionTier;
+
+        const primaryColor = (await rl.question(`6. Couleur primaire (hex) [défaut: ${defaultPalette.primary}] : `)).trim() || defaultPalette.primary;
+
+        const splashRaw = (await rl.question('7. Activer le Splash Screen cinématique au démarrage ? [O/n, défaut: O] : ')).trim().toLowerCase();
+        const splashEnabled = splashRaw !== 'n';
+
+        const blueprintPath = `src/verticals/${slug}/${slug}.blueprint.ts`;
+        const blueprintContent = `import type { VerticalBlueprint } from '@/verticals/_shared/blueprint';
+
+export const ${slug.toUpperCase()}_BLUEPRINT: VerticalBlueprint = {
+    slug: '${slug}',
+    className: '${slug.charAt(0).toUpperCase() + slug.slice(1)}Vertical',
+    profile: '${profile}',
+    meta: {
+        emoji: '${emoji}',
+        label: '${label}',
+        name: '${label} OS',
+        description: 'Solution métier optimisée pour ${label}.',
+    },
+    capabilities: {},
+    tokens: {
+        appearance: 'dark',
+        defaultTokens: {
+            primaryColor: '${primaryColor}',
+            accentColor: '${defaultPalette.accent}',
+            fontBrand: '${defaultPalette.fontBrand}',
+            splashEnabled: ${splashEnabled},
+            brandingMode: 'custom',
+        },
+        verticalTokens: {
+            '--${slug}-primary': '${primaryColor}',
+            '--${slug}-accent': '${defaultPalette.accent}',
+        },
+    },
+    healthMetrics: {
+        activeCount: 'number',
+    },
+    routes: [
+        {
+            path: '/${slug}/dashboard',
+            label: 'Tableau de bord ${label}',
+            componentPath: './components/${slug.charAt(0).toUpperCase() + slug.slice(1)}Dashboard',
+            componentExport: '${slug.charAt(0).toUpperCase() + slug.slice(1)}Dashboard',
+        },
+    ],
+    events: [
+        {
+            name: '${slug}.activity_logged',
+            pillar: 'ops',
+            durable: true,
+        },
+    ],
+    hardware: [],
+    legalType: 'STANDARD',
+    precision: '${precision}',
+    subVariants: [],
+};
+
+export default ${slug.toUpperCase()}_BLUEPRINT;
+`;
+
+        await fs.mkdir(path.dirname(path.resolve(process.cwd(), blueprintPath)), { recursive: true });
+        await fs.writeFile(path.resolve(process.cwd(), blueprintPath), blueprintContent, 'utf8');
+        console.log(`\n✨ Blueprint généré avec succès : ${blueprintPath}\n`);
+
+        return blueprintPath;
+    } finally {
+        rl.close();
+    }
+}
+
 
 /** Charge le pont LLM du projet, ou undefined (→ baseline déterministe). */
 async function resolveLLM(enabled: boolean): Promise<StudyLLM | undefined> {
@@ -99,7 +223,15 @@ async function writeGeneratedFiles(out: ForgeOutput, args: Args): Promise<{ writ
 
 async function main(): Promise<void> {
     const args = parseArgs(process.argv.slice(2));
-    if (!args.blueprint) { console.error('❌ --blueprint <path> requis.'); process.exit(1); }
+
+    if (args.interactive || (!args.blueprint && process.stdin.isTTY)) {
+        args.blueprint = await runInteractiveWizard();
+    }
+
+    if (!args.blueprint) {
+        console.error('❌ --blueprint <path> ou --interactive (-i) requis.');
+        process.exit(1);
+    }
 
     const abs = path.resolve(process.cwd(), args.blueprint);
     const mod = (await import(pathToFileURL(abs).href)) as Record<string, unknown>;

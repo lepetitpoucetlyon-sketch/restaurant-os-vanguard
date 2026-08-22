@@ -1,159 +1,171 @@
 'use client';
 
 /**
- * SplashScreen — Écran de démarrage branded (mode custom uniquement)
+ * SplashScreen — Écran de démarrage cinématique Empire (mode custom & branded)
  *
- * Affiché une fois par session si le tenant a activé splashEnabled.
- * Logo + fond couleur charte + animation de fondu vers l'app.
- * DB-agnostique : lit uniquement les atoms Jotai (tenantBrandTokensAtom).
+ * Affiché au chargement de l'application si splashEnabled est actif.
+ * Logo + fond verre fumé + lueur charte + barre de synchronisation Nexus Node.
+ * DB-agnostique : lit les atoms Jotai (tenantBrandTokensAtom).
  */
 
 import React, { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
+import { motion, AnimatePresence } from 'framer-motion';
 import { tenantBrandTokensAtom } from '@/store/pillars/sovereign';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
+import { ShieldCheck, Sparkles } from 'lucide-react';
 
 interface SplashScreenProps {
     onDone: () => void;
 }
 
 export function SplashScreen({ onDone }: SplashScreenProps) {
-    const rawTokens   = useAtomValue(tenantBrandTokensAtom);
-    const [phase, setPhase] = useState<'enter' | 'hold' | 'exit'>('enter');
+    const rawTokens = useAtomValue(tenantBrandTokensAtom);
+    const [progress, setProgress] = useState(15);
+    const [isExiting, setIsExiting] = useState(false);
 
     const result = BrandTokensSchema.safeParse(rawTokens ?? defaultBrandTokens);
     const tokens = result.success ? result.data : defaultBrandTokens;
 
-    const primary   = tokens.primaryColor ?? '#C5A059';
-    const logoUrl   = tokens.logoUrl;
+    const primary = tokens.primaryColor ?? '#C5A059';
+    const logoUrl = tokens.logoUrl;
     const brandName = tokens.brandName ?? 'Restaurant OS';
-    const tagline   = tokens.tagline;
+    const tagline = tokens.tagline ?? 'Nexus Sovereign Metaplatform';
+    const fontBrand = tokens.fontBrand ?? 'Playfair Display, Georgia, serif';
 
     useEffect(() => {
-        // enter → hold (300ms) → exit (2200ms) → done
-        const t1 = setTimeout(() => setPhase('hold'), 300);
-        const t2 = setTimeout(() => setPhase('exit'), 2400);
-        const t3 = setTimeout(onDone, 2900);
-        return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+        // Progress animation: 15% -> 60% -> 92% -> 100% -> done
+        const p1 = setTimeout(() => setProgress(60), 400);
+        const p2 = setTimeout(() => setProgress(92), 1100);
+        const p3 = setTimeout(() => setProgress(100), 1800);
+        const p4 = setTimeout(() => setIsExiting(true), 2200);
+        const p5 = setTimeout(onDone, 2700);
+
+        return () => {
+            clearTimeout(p1);
+            clearTimeout(p2);
+            clearTimeout(p3);
+            clearTimeout(p4);
+            clearTimeout(p5);
+        };
     }, [onDone]);
 
-    const opacity = phase === 'enter' ? 0 : phase === 'hold' ? 1 : 0;
-
     return (
-        <div
-            aria-hidden="true"
-            style={{
-                position:       'fixed',
-                inset:          0,
-                zIndex:         9999,
-                display:        'flex',
-                flexDirection:  'column',
-                alignItems:     'center',
-                justifyContent: 'center',
-                gap:            '24px',
-                // Fond : couleur primaire très sombre dérivée de la charte
-                background: `radial-gradient(ellipse at 50% 30%, ${primary}18 0%, ${primary}06 50%, #09090C 100%)`,
-                backgroundColor: '#09090C',
-                opacity,
-                transition: `opacity ${phase === 'exit' ? '500ms' : '300ms'} ease-in-out`,
-                pointerEvents: phase === 'exit' ? 'none' : 'all',
-            }}
-        >
-            {/* Orbe d'ambiance */}
-            <div style={{
-                position:     'absolute',
-                width:        '400px',
-                height:       '400px',
-                borderRadius: '50%',
-                background:   `radial-gradient(circle, ${primary}20 0%, transparent 70%)`,
-                filter:       'blur(60px)',
-                pointerEvents: 'none',
-            }} />
+        <AnimatePresence>
+            {!isExiting && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, scale: 1.03, filter: 'blur(10px)' }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    aria-hidden="true"
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#070709] select-none overflow-hidden"
+                >
+                    {/* Lueur d'ambiance radiale dynamique */}
+                    <div
+                        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none transition-all duration-1000"
+                        style={{
+                            background: `radial-gradient(circle, ${primary}25 0%, ${primary}08 45%, transparent 70%)`,
+                            filter: 'blur(80px)',
+                            transform: 'translate(-50%, -50%)',
+                            top: '40%',
+                            left: '50%',
+                        }}
+                    />
 
-            {/* Logo ou initiale */}
-            <div style={{
-                width:           logoUrl ? 'auto' : '80px',
-                height:          logoUrl ? 'auto' : '80px',
-                maxWidth:        '220px',
-                maxHeight:       '120px',
-                borderRadius:    logoUrl ? '0' : '20px',
-                background:      logoUrl ? 'transparent' : `linear-gradient(145deg, ${primary} 0%, ${adjustBrightness(primary, -30)} 100%)`,
-                display:         'flex',
-                alignItems:      'center',
-                justifyContent:  'center',
-                boxShadow:       logoUrl ? 'none' : `0 20px 60px ${primary}40`,
-                transform:       phase === 'hold' ? 'scale(1) translateY(0)' : 'scale(0.88) translateY(10px)',
-                transition:      'transform 600ms cubic-bezier(0.16,1,0.3,1)',
-            }}>
-                {logoUrl ? (
-                     
-                    <img src={logoUrl} alt={brandName} style={{ maxWidth: '220px', maxHeight: '120px', objectFit: 'contain' }} />
-                ) : (
-                    <span style={{
-                        fontFamily:    'Georgia, "Playfair Display", serif',
-                        fontSize:      '32px',
-                        fontWeight:    700,
-                        color:         '#fff',
-                        letterSpacing: '-0.02em',
-                    }}>
-                        {brandName.charAt(0).toUpperCase()}
-                    </span>
-                )}
-            </div>
+                    {/* Carte Centrale Glassmorphism */}
+                    <motion.div
+                        initial={{ scale: 0.92, y: 20, opacity: 0 }}
+                        animate={{ scale: 1, y: 0, opacity: 1 }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                        className="relative z-10 flex flex-col items-center p-8 md:p-12 rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl shadow-[0_25px_70px_rgba(0,0,0,0.8)] max-w-md w-[90%]"
+                    >
+                        {/* Halo Logo */}
+                        <div className="relative mb-6 flex items-center justify-center">
+                            <div
+                                className="absolute inset-0 rounded-2xl animate-pulse"
+                                style={{
+                                    background: primary,
+                                    filter: 'blur(25px)',
+                                    opacity: 0.35,
+                                }}
+                            />
 
-            {/* Nom + tagline */}
-            <div style={{ textAlign: 'center', transform: phase === 'hold' ? 'translateY(0)' : 'translateY(8px)', transition: 'transform 600ms 100ms cubic-bezier(0.16,1,0.3,1)' }}>
-                <p style={{
-                    fontFamily:    'Georgia, "Playfair Display", serif',
-                    fontSize:      '22px',
-                    fontWeight:    600,
-                    color:         'rgba(255,255,255,0.92)',
-                    letterSpacing: '-0.02em',
-                    margin:        0,
-                }}>
-                    {brandName}
-                </p>
-                {tagline && (
-                    <p style={{
-                        fontFamily:    'system-ui, -apple-system, sans-serif',
-                        fontSize:      '12px',
-                        color:         'rgba(255,255,255,0.38)',
-                        marginTop:     '6px',
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                    }}>
-                        {tagline}
-                    </p>
-                )}
-            </div>
+                            {logoUrl ? (
+                                <img
+                                    src={logoUrl}
+                                    alt={brandName}
+                                    className="relative z-10 max-h-20 max-w-[200px] object-contain drop-shadow-2xl"
+                                />
+                            ) : (
+                                <div
+                                    className="relative z-10 w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl border border-white/20"
+                                    style={{
+                                        background: `linear-gradient(135deg, ${primary} 0%, ${adjustBrightness(primary, -40)} 100%)`,
+                                    }}
+                                >
+                                    <span
+                                        className="text-3xl font-black text-white"
+                                        style={{ fontFamily: fontBrand }}
+                                    >
+                                        {brandName.charAt(0).toUpperCase()}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
 
-            {/* Indicateur de chargement */}
-            <div style={{
-                position:   'absolute',
-                bottom:     '40px',
-                display:    'flex',
-                gap:        '6px',
-                opacity:    phase === 'hold' ? 0.4 : 0,
-                transition: 'opacity 400ms',
-            }}>
-                {[0, 1, 2].map(i => (
-                    <div key={i} style={{
-                        width:        '5px',
-                        height:       '5px',
-                        borderRadius: '50%',
-                        background:   primary,
-                        animation:    `splash-pulse 1.2s ease-in-out ${i * 200}ms infinite`,
-                    }} />
-                ))}
-            </div>
+                        {/* Nom du Tenant / Marque */}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="text-2xl md:text-3xl font-bold text-white tracking-tight text-center"
+                            style={{ fontFamily: fontBrand }}
+                        >
+                            {brandName}
+                        </motion.h1>
 
-            <style>{`
-                @keyframes splash-pulse {
-                    0%, 100% { opacity: 0.3; transform: scale(0.8); }
-                    50% { opacity: 1; transform: scale(1.2); }
-                }
-            `}</style>
-        </div>
+                        {/* Tagline */}
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.6 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            className="text-xs uppercase tracking-[0.2em] text-white/70 mt-2 text-center font-medium"
+                        >
+                            {tagline}
+                        </motion.p>
+
+                        {/* Barre de Synchronisation Nexus */}
+                        <div className="w-full mt-8 flex flex-col gap-2">
+                            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden relative">
+                                <motion.div
+                                    className="h-full rounded-full transition-all duration-500"
+                                    style={{
+                                        width: `${progress}%`,
+                                        background: `linear-gradient(90deg, ${primary} 0%, #FFFFFF 100%)`,
+                                        boxShadow: `0 0 12px ${primary}`,
+                                    }}
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-between text-[10px] text-white/40 font-mono mt-1">
+                                <span className="flex items-center gap-1">
+                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                    <span>Nexus Node Sovereign</span>
+                                </span>
+                                <span>{progress}%</span>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Footer discret */}
+                    <div className="absolute bottom-8 flex items-center gap-2 text-white/30 text-xs tracking-wider">
+                        <Sparkles className="w-3.5 h-3.5 text-accent-gold animate-pulse" />
+                        <span>Grade X Empire Standard</span>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 

@@ -1,7 +1,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
-import { GlobalAlertEscalationMatrixService } from '@/modules/fleet';
+import { GlobalAlertEscalationMatrixService } from '@/lib/mcc/fleet/services/GlobalAlertEscalationMatrixService';
 
 /**
  * SlaBreachHandler

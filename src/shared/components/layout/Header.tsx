@@ -14,9 +14,10 @@ import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/shared/hooks";
 import { useContextualSettings } from "@/shared/components/settings/ContextualSettings";
-import type { PageKey } from "@nexus/contracts/permissions.types";
 import { LANGUAGES } from "@/config/languages";
+import type { PageKey } from "@nexus/contracts/permissions.types";
 import { cn } from "@/lib/ui.foundations";
+import { DisplayDepthToggle } from "@/shared/components/layout/DisplayDepthToggle";
 export function Header() {
     const pathname = usePathname();
     const _router = useRouter();
@@ -124,6 +125,9 @@ export function Header() {
 
                 {/* Unified Status Hub Gallery */}
                 <div className="flex items-center gap-2 md:gap-4 relative z-10">
+                    {/* Switchboard Profondeur / Focus Toggle */}
+                    <DisplayDepthToggle className="hidden sm:flex" />
+
                     {/* Status Hub Gallery */}
                     <div className="hidden md:flex items-center gap-3 bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-2xl p-2 rounded-full border border-default dark:border-white/5 shadow-2xl ring-1 ring-black/5 dark:ring-white/5">
 

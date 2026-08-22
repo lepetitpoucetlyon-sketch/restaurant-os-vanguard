@@ -167,6 +167,16 @@ Les décisions fondamentales du socle sont documentées dans `docs/adrs/` :
 - `ADR-003` : Scellement fiscal inaltérable NF525 & Archives WORM
 - `ADR-004` : Architecture multi-verticales universelle & Vertical Forge
 - `ADR-005` : Résilience déconnectée, Outbox atomique & Dead Letter Queue (DLQ)
+- `ADR-006` : End-to-end Type Safety & Zod Runtime Guarantees
+- `ADR-007` : Offline Conflict Resolution & Eventual Consistency
+- `ADR-008` : MCC vs Tenant AI Scope Isolation & Zero Context Leaks
+- `ADR-009` : Finance Sovereign Collection Migration
+- `ADR-010` : Ops Sovereign Collection Migration
+- `ADR-011` : Logistics Sovereign Collection Migration
+- `ADR-012` : Commerce Sovereign Collection Migration
+- `ADR-013` : Facility Sovereign Collection Migration
+- `ADR-014` : Consolidation Fondations & Résorption Angles Morts
+- `ADR-015` : Loi des Couches & Canaux de Communication Inter-Modules
 
 ## Commandes
 

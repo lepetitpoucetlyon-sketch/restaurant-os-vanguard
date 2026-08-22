@@ -5,16 +5,16 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3429** · LOC : **308 097**
+- Fichiers `.ts/.tsx` : **3430** · LOC : **308 344**
 - Pages : **77** · Routes API : **208**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1583 |
-| `src/shared/` | 663 |
+| `src/modules/` | 1575 |
+| `src/shared/` | 665 |
 | `src/app/` | 419 |
-| `src/lib/` | 223 |
+| `src/lib/` | 228 |
 | `src/verticals/` | 206 |
 | `src/infrastructure/` | 46 |
 | `src/store/` | 24 |
@@ -36,8 +36,8 @@
 | Sous-dossier | Fichiers |
 |---|---:|
 | `shared/eventBus/` | 225 |
-| `shared/components/` | 166 |
-| `shared/nexus/` | 127 |
+| `shared/components/` | 167 |
+| `shared/nexus/` | 128 |
 | `shared/hooks/` | 44 |
 | `shared/providers/` | 28 |
 | `shared/seeds/` | 14 |
@@ -58,20 +58,17 @@
 ## Piliers métier (`src/modules/`)
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
-| `commerce` | 352 | ✅ |
-| `ops` | 293 | ✅ |
+| `commerce` | 351 | ✅ |
+| `ops` | 304 | ✅ |
 | `finance` | 223 | ✅ |
 | `compliance` | 179 | ✅ |
 | `intelligence` | 161 | ✅ |
-| `logistics` | 134 | ✅ |
+| `logistics` | 147 | ✅ |
 | `human` | 132 | ✅ |
 | `facility` | 71 | ✅ |
-| `stock` ⚠️ | 13 | ❌ MANQUANT |
-| `production` ⚠️ | 12 | ❌ MANQUANT |
-| `fleet` ⚠️ | 6 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
-> ⚠️ **Hors taxonomie des 8 piliers** : `fleet`, `production`, `stock`, `system` — à formaliser ou rapatrier.
+> ⚠️ **Hors taxonomie des 8 piliers** : `system` — à formaliser ou rapatrier.
 
 ## Verticales (`src/verticals/`)
 `_shared` · `bakery` · `clinic` · `coworking` · `custom` · `florist` · `garage` · `gym` · `hotel` · `restaurant` · `retail` · `salon` · `veterinary`

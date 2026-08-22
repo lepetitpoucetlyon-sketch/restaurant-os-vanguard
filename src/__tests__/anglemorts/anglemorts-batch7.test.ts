@@ -30,31 +30,31 @@ vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { MultiTenantBillingEngineService } from '@/modules/fleet/services/MultiTenantBillingEngineService';
-import { CrossTenantBenchmarkService } from '@/modules/fleet/services/CrossTenantBenchmarkService';
+import { MultiTenantBillingEngineService } from '@/lib/mcc/fleet/services/MultiTenantBillingEngineService';
+import { CrossTenantBenchmarkService } from '@/lib/mcc/fleet/services/CrossTenantBenchmarkService';
 import { GlobalComplianceAuditMatrixService } from '@/modules/compliance/securite/GlobalComplianceAuditMatrixService';
-import { RemoteConfigKillSwitchService } from '@/modules/fleet/services/RemoteConfigKillSwitchService';
-import { GlobalAlertEscalationMatrixService } from '@/modules/fleet/services/GlobalAlertEscalationMatrixService';
+import { RemoteConfigKillSwitchService } from '@/lib/mcc/fleet/services/RemoteConfigKillSwitchService';
+import { GlobalAlertEscalationMatrixService } from '@/lib/mcc/fleet/services/GlobalAlertEscalationMatrixService';
 import { CrossTenantCashPoolTreasuryService } from '@/modules/finance/tresorerie/CrossTenantCashPoolTreasuryService';
-import { SlaMonitoringFleetService } from '@/modules/fleet/services/SlaMonitoringFleetService';
+import { SlaMonitoringFleetService } from '@/lib/mcc/fleet/services/SlaMonitoringFleetService';
 import { CrossTenantRoleHierarchyService } from '@/modules/compliance/securite/CrossTenantRoleHierarchyService';
 import { GdprDataAnonymizerService } from '@/modules/compliance/securite/GdprDataAnonymizerService';
 import { SecurityIncidentLockdownService } from '@/modules/compliance/securite/SecurityIncidentLockdownService';
-import { NoShowPenaltyShieldService } from '@/modules/commerce/crm/NoShowPenaltyShieldService';
-import { GuestAllergenSafetyProfileService } from '@/modules/commerce/crm/GuestAllergenSafetyProfileService';
-import { AutomaticReviewBoosterService } from '@/modules/commerce/crm/AutomaticReviewBoosterService';
-import { CrossLocationLoyaltyService } from '@/modules/commerce/crm/CrossLocationLoyaltyService';
-import { TableTurnoverOptimizationService } from '@/modules/commerce/crm/TableTurnoverOptimizationService';
-import { SpecialEventDepositEscrowService } from '@/modules/commerce/crm/SpecialEventDepositEscrowService';
+import { NoShowPenaltyShieldService } from '@/modules/commerce/relation/crm/services/NoShowPenaltyShieldService';
+import { GuestAllergenSafetyProfileService } from '@/modules/commerce/relation/crm/services/GuestAllergenSafetyProfileService';
+import { AutomaticReviewBoosterService } from '@/modules/commerce/relation/crm/services/AutomaticReviewBoosterService';
+import { CrossLocationLoyaltyService } from '@/modules/commerce/relation/crm/services/CrossLocationLoyaltyService';
+import { TableTurnoverOptimizationService } from '@/modules/commerce/relation/crm/services/TableTurnoverOptimizationService';
+import { SpecialEventDepositEscrowService } from '@/modules/commerce/relation/crm/services/SpecialEventDepositEscrowService';
 import { SmartTipDigitalPoolService } from '@/modules/finance/tresorerie/SmartTipDigitalPoolService';
-import { PrivateDiningContractSignerService } from '@/modules/commerce/crm/PrivateDiningContractSignerService';
-import { DynamicPricingSurgeEngineService } from '@/modules/commerce/crm/DynamicPricingSurgeEngineService';
-import { SommelierPairingEngineService } from '@/modules/commerce/crm/SommelierPairingEngineService';
-import { VipGuestPreferenceMemoryService } from '@/modules/commerce/crm/VipGuestPreferenceMemoryService';
-import { LostAndFoundRegistryService } from '@/modules/commerce/crm/LostAndFoundRegistryService';
-import { InfluencerCollaborationTrackerService } from '@/modules/commerce/crm/InfluencerCollaborationTrackerService';
-import { DigitalCoatCheckTagService } from '@/modules/commerce/crm/DigitalCoatCheckTagService';
-import { ValetParkingManagementService } from '@/modules/commerce/crm/ValetParkingManagementService';
+import { PrivateDiningContractSignerService } from '@/modules/commerce/relation/crm/services/PrivateDiningContractSignerService';
+import { DynamicPricingSurgeEngineService } from '@/modules/commerce/relation/crm/services/DynamicPricingSurgeEngineService';
+import { SommelierPairingEngineService } from '@/modules/commerce/relation/crm/services/SommelierPairingEngineService';
+import { VipGuestPreferenceMemoryService } from '@/modules/commerce/relation/crm/services/VipGuestPreferenceMemoryService';
+import { LostAndFoundRegistryService } from '@/modules/commerce/relation/crm/services/LostAndFoundRegistryService';
+import { InfluencerCollaborationTrackerService } from '@/modules/commerce/relation/crm/services/InfluencerCollaborationTrackerService';
+import { DigitalCoatCheckTagService } from '@/modules/commerce/relation/crm/services/DigitalCoatCheckTagService';
+import { ValetParkingManagementService } from '@/modules/commerce/relation/crm/services/ValetParkingManagementService';
 
 describe('Angles Morts — Batch 7 (MCC Flotte, Observabilité, Trésorerie, Sécurité & CRM)', () => {
   beforeEach(() => {

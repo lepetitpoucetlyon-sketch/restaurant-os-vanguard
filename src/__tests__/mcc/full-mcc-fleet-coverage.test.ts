@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { SlaMonitoringFleetService } from '@/modules/fleet/services/SlaMonitoringFleetService';
-import { MultiTenantBillingEngineService } from '@/modules/fleet/services/MultiTenantBillingEngineService';
-import { RemoteConfigKillSwitchService } from '@/modules/fleet/services/RemoteConfigKillSwitchService';
-import { GlobalAlertEscalationMatrixService } from '@/modules/fleet/services/GlobalAlertEscalationMatrixService';
-import { CrossTenantBenchmarkService } from '@/modules/fleet/services/CrossTenantBenchmarkService';
+import { SlaMonitoringFleetService } from '@/lib/mcc/fleet/services/SlaMonitoringFleetService';
+import { MultiTenantBillingEngineService } from '@/lib/mcc/fleet/services/MultiTenantBillingEngineService';
+import { RemoteConfigKillSwitchService } from '@/lib/mcc/fleet/services/RemoteConfigKillSwitchService';
+import { GlobalAlertEscalationMatrixService } from '@/lib/mcc/fleet/services/GlobalAlertEscalationMatrixService';
+import { CrossTenantBenchmarkService } from '@/lib/mcc/fleet/services/CrossTenantBenchmarkService';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/modules/compliance/securite/AuditLogger';
 
