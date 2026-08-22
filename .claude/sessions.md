@@ -24,6 +24,7 @@
 | `audit-holistique-readonly` | Audit global lecture seule (rapport AUDIT-HOLISTIQUE-2026-08-22.md) — preflight ROUGE [1]tsc+[3]barrel, reste vert | 2026-08-22 | terminée |
 | `angles-morts-m101-m110` | Matrice M101-M110 + batch2 (35 services) + batch3 (19 services) — 71 items clos, 169 tests, 0 erreur TS | 2026-08-21 | **terminée** |
 | `verif-plan-deteinture` | Vérification lecture seule état plan Dé-Teinture Sectorielle (§8.6) — pas d'édition de code | 2026-08-22 | terminée |
+| `forge-stack-p0-p1` (Claude Code) | MEGA-PLAN Forge Stack — P0 (scrape réel : `CompanyScrapeAgent.ts`, `companyProfile.ts`, route preview-only, suppression `DigitalDnaCrawlerService.ts` + test) + P1 (`CapabilityWiring.ts` 45 caps, `SectorStudyStore.ts` persistance MCC, `--persist` sur `study-sector.ts`). 65 tests ajoutés (42 scrape + 11 wiring + 12 store). Preflight vert (tsc 0, 2024/2025 tests, sentrux baseline inchangé). | 2026-08-22 | terminée |
 
 ---
 

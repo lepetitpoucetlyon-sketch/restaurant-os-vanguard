@@ -16,21 +16,28 @@
 
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { runSectorStudy, type SectorStudyInput, type StudyLLM } from '@/verticals/_shared/sector-study';
+import {
+    runSectorStudy,
+    persistSectorStudy,
+    type SectorStudyInput,
+    type StudyLLM,
+} from '@/verticals/_shared/sector-study';
 import type { VerticalBlueprint } from '@/verticals/_shared/blueprint';
 import type { SectorStudy } from '@/verticals/_shared/blueprint';
 
-interface Args { blueprint?: string; export?: string; sub?: string; llm: boolean; json: boolean; }
+interface Args { blueprint?: string; export?: string; sub?: string; llm: boolean; json: boolean; persist: boolean; author?: string; }
 
 function parseArgs(argv: string[]): Args {
-    const args: Args = { llm: false, json: false };
+    const args: Args = { llm: false, json: false, persist: false };
     for (let i = 0; i < argv.length; i++) {
         const a = argv[i];
         if (a === '--llm') args.llm = true;
         else if (a === '--json') args.json = true;
+        else if (a === '--persist') args.persist = true;
         else if (a === '--blueprint') args.blueprint = argv[++i];
         else if (a === '--export') args.export = argv[++i];
         else if (a === '--sub') args.sub = argv[++i];
+        else if (a === '--author') args.author = argv[++i];
     }
     return args;
 }
@@ -101,6 +108,19 @@ async function main(): Promise<void> {
 
     if (args.json) console.log(JSON.stringify(study, null, 2));
     else printStudy(study);
+
+    if (args.persist) {
+        try {
+            const persisted = await persistSectorStudy(study, {
+                source: llm ? 'llm-enriched' : 'baseline',
+                authorId: args.author,
+            });
+            console.log(`\n💾 Étude persistée : mcc/studies/${persisted.slug}/${persisted.versionId} (source=${persisted.source})`);
+        } catch (err) {
+            console.error(`\n❌ Persistance échouée : ${err instanceof Error ? err.message : String(err)}`);
+            process.exitCode = 2;
+        }
+    }
 }
 
 main().catch(err => {
