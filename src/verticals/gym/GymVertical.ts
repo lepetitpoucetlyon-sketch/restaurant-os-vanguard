@@ -1,3 +1,4 @@
+import React from 'react';
 import { IVerticalPlugin, ICoreContext } from '@/shared/plugins/IVerticalPlugin';
 import { logger } from '@/lib/logger';
 import {
@@ -14,6 +15,11 @@ export class GymVertical implements IVerticalPlugin {
 
   public async initialize(context: ICoreContext): Promise<void> {
     logger.info(`[${this.id}] Initialisation de la verticale salle de sport…`);
+
+    context.registerRoute('/members', React.lazy(() =>
+      import('./commerce/MembersDashboard').then(m => ({ default: m.MembersDashboard }))));
+    context.registerRoute('/classes', React.lazy(() =>
+      import('./ops/ClassSchedulePage').then(m => ({ default: m.ClassSchedulePage }))));
 
     // Ops — Scan de tourniquet
     context.registerEventHandler<{ tenantId: string; memberId: string; accessGranted: boolean; turnstileId: string }>(
