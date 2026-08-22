@@ -14,7 +14,7 @@
 
 | Session | Périmètre | Démarrage | Status |
 |---|---|---|---|
-| `profondeur-track1-track4` (relais Claude Code, Antigravity à l'arrêt) | Backlog exécutable profondeur : Track 1 (3 inter-module restants, bundle, common.events), Track 2 (MCC), Track 3 (Verticales), Track 4 (Doc) | 2026-08-22 | **active** |
+| `profondeur-track1-track4` (relais Claude Code, Antigravity à l'arrêt) | Track 1.3 + Track 2 + Track 3 (4 verticales + démos) faits — reste 1.1 (ADR bloquant), 1.2 (bundle), 4.1/4.3 (doc+freeze) | 2026-08-22 | terminée (partielle, cf. commits) |
 | `plan-master-v1` | Vague 1 : Hygiène, Backup Cron, Env Example, Sessions | 2026-08-20 | terminée |
 | `valo-ip-groundtruth` | Analyse lecture seule métriques codebase + rédaction valorisation IP/financière (docs/ uniquement) | 2026-08-22 | terminée |
 | `audit-holistique-readonly` | Audit global lecture seule (rapport AUDIT-HOLISTIQUE-2026-08-22.md) — preflight ROUGE [1]tsc+[3]barrel, reste vert | 2026-08-22 | terminée |
