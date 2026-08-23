@@ -60,53 +60,61 @@ function ReservationsPage() {
     return (
         <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden">
 
-            {/* ── Toolbar ─────────────────────────────────────────────── */}
-            <motion.div
-                initial={{ opacity: 0, y: -16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-wrap items-center justify-between gap-4 bg-bg-secondary/50 backdrop-blur-md border-b border-border px-6 py-3 z-40 shrink-0 sticky top-0"
-            >
-                <div className="flex items-center gap-4 flex-wrap">
-                    <div className="flex items-center bg-surface-card p-1 rounded-full border border-border-default">
-                        {(["reservations", "customers", "groups"] as const).map((s) => (
+            {/* Editorial toolbar — section switcher · date navigator · actions */}
+            <header className="flex flex-wrap items-center justify-between gap-4 bg-surface-card/60 backdrop-blur-xl border-b border-border/40 px-6 lg:px-10 py-4 z-40 shrink-0 sticky top-0">
+                <div className="flex items-center gap-5 flex-wrap min-w-0">
+                    <div className="flex items-baseline gap-3">
+                        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Salle</span>
+                        <span className="font-serif font-black text-2xl leading-none tracking-[-0.02em] text-text-primary">Réservations</span>
+                    </div>
+
+                    <nav aria-label="Section" className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                        {(["reservations", "customers", "groups"] as const).map((s, i) => (
                             <button
                                 key={s}
                                 onClick={() => setActiveSection(s)}
+                                aria-current={activeSection === s ? "page" : undefined}
                                 className={cn(
-                                    "h-9 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
-                                    activeSection === s
-                                        ? "bg-action-primary text-text-on-primary shadow-sm"
-                                        : "text-text-muted hover:text-text-primary"
+                                    "h-full flex items-center gap-2 px-4 text-xs font-medium tracking-tight transition-colors",
+                                    i > 0 && "border-l border-border/40",
+                                    activeSection === s ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
                                 )}
                             >
-                                {s === "reservations" ? <><LayoutGrid className="w-3 h-3" /> Plan</>
-                                    : s === "customers" ? <><Users className="w-3 h-3" /> Clients</>
-                                    : <><Calendar className="w-3 h-3" /> Groupes</>}
+                                {s === "reservations" ? <><LayoutGrid className="w-[14px] h-[14px]" /> <span>Plan</span></>
+                                    : s === "customers" ? <><Users className="w-[14px] h-[14px]" /> <span>Clients</span></>
+                                    : <><Calendar className="w-[14px] h-[14px]" /> <span>Groupes</span></>}
                             </button>
                         ))}
-                    </div>
+                    </nav>
 
                     {view === "day" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-3 bg-surface-card px-4 py-2 rounded-full border border-border-default">
-                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 1); return n; })} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
-                                <ChevronLeft className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 h-10 px-2 bg-white/[0.03] border border-border/40 rounded-xl">
+                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 1); return n; })}
+                                aria-label="Jour précédent"
+                                className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                                <ChevronLeft className="w-4 h-4" />
                             </button>
-                            <span className="text-[11px] font-serif font-medium italic text-text-primary capitalize min-w-[140px] text-center">{displayDate}</span>
-                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 1); return n; })} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
-                                <ChevronRight className="w-3.5 h-3.5" />
+                            <span className="text-sm font-serif italic text-text-primary capitalize min-w-[150px] text-center tracking-tight">{displayDate}</span>
+                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 1); return n; })}
+                                aria-label="Jour suivant"
+                                className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                                <ChevronRight className="w-4 h-4" />
                             </button>
                         </div>
                     )}
 
                     {view === "week" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-3 bg-surface-card px-4 py-2 rounded-full border border-border-default">
-                            <button onClick={() => setWeekOffset((o) => o - 1)} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
-                                <ChevronLeft className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 h-10 px-2 bg-white/[0.03] border border-border/40 rounded-xl">
+                            <button onClick={() => setWeekOffset((o) => o - 1)}
+                                aria-label="Semaine précédente"
+                                className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                                <ChevronLeft className="w-4 h-4" />
                             </button>
-                            <span className="text-[11px] font-serif italic text-text-primary min-w-[180px] text-center">{weekLabel}</span>
-                            <button onClick={() => setWeekOffset((o) => o + 1)} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
-                                <ChevronRight className="w-3.5 h-3.5" />
+                            <span className="text-sm font-serif italic text-text-primary min-w-[190px] text-center tracking-tight">{weekLabel}</span>
+                            <button onClick={() => setWeekOffset((o) => o + 1)}
+                                aria-label="Semaine suivante"
+                                className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                                <ChevronRight className="w-4 h-4" />
                             </button>
                         </div>
                     )}
@@ -116,21 +124,28 @@ function ReservationsPage() {
                     <button
                         onClick={handleTerraceToggle}
                         title={terraceClosed ? "Terrasse fermée — cliquer pour ouvrir" : "Terrasse ouverte — cliquer pour fermer"}
+                        aria-pressed={!terraceClosed}
                         className={cn(
-                            "flex items-center gap-2 px-4 py-2 rounded-full border text-[9px] font-black uppercase tracking-widest transition-all",
+                            "flex items-center gap-2 h-10 px-3.5 rounded-xl border text-xs font-medium tracking-tight transition-colors",
                             terraceClosed
-                                ? "bg-status-error/10 border-status-error/30 text-status-error hover:bg-status-error/20"
-                                : "bg-status-success/10 border-status-success/30 text-status-success hover:bg-status-success/20"
+                                ? "bg-status-error/10 border-status-error/30 text-status-error hover:bg-status-error/15"
+                                : "bg-status-success/10 border-status-success/30 text-status-success hover:bg-status-success/15"
                         )}
                     >
-                        {terraceClosed ? <><UmbrellaOff className="w-3.5 h-3.5" /> Terrasse fermée</> : <><Umbrella className="w-3.5 h-3.5" /> Terrasse ouverte</>}
+                        {terraceClosed ? <><UmbrellaOff className="w-[14px] h-[14px]" /> <span>Terrasse fermée</span></> : <><Umbrella className="w-[14px] h-[14px]" /> <span>Terrasse ouverte</span></>}
                     </button>
 
                     {activeSection === "reservations" && (
-                        <div className="flex items-center bg-surface-card p-1 rounded-full border border-border-default">
-                            {(["day", "week"] as const).map((v) => (
-                                <button key={v} onClick={() => setView(v)} className={cn("h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5", view === v ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>
-                                    {v === "day" ? <><Calendar className="w-3 h-3" /> Jour</> : <><CalendarDays className="w-3 h-3" /> Semaine</>}
+                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                            {(["day", "week"] as const).map((v, i) => (
+                                <button key={v} onClick={() => setView(v)}
+                                    aria-current={view === v ? "page" : undefined}
+                                    className={cn(
+                                        "h-full flex items-center gap-1.5 px-3.5 text-xs font-medium tracking-tight transition-colors",
+                                        i > 0 && "border-l border-border/40",
+                                        view === v ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
+                                    )}>
+                                    {v === "day" ? <><Calendar className="w-[14px] h-[14px]" /> <span>Jour</span></> : <><CalendarDays className="w-[14px] h-[14px]" /> <span>Semaine</span></>}
                                 </button>
                             ))}
                         </div>
@@ -140,25 +155,24 @@ function ReservationsPage() {
                         <>
                             <button
                                 onClick={() => setIsEventQuoteOpen(true)}
-                                className="h-9 px-4 rounded-full bg-surface-card border border-border-default hover:border-action-primary/50 text-text-muted hover:text-action-primary text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5"
-                            >
-                                <FileText className="w-3.5 h-3.5" /> Devis
+                                className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2">
+                                <FileText className="w-[14px] h-[14px]" /> <span>Devis</span>
                             </button>
                             <button
                                 onClick={() => setIsNewResOpen(true)}
-                                className="h-9 px-5 rounded-full bg-action-primary text-text-on-primary hover:bg-action-primary-hover text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 shadow-md"
-                            >
-                                <Plus className="w-3.5 h-3.5" /> Réserver
+                                className="h-10 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-[#0B0B0C] text-sm font-medium tracking-tight transition-colors flex items-center gap-2 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
+                                <Plus className="w-[15px] h-[15px]" /> <span>Réserver</span>
                             </button>
                         </>
                     )}
                     {activeSection === "groups" && (
-                        <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => setIsGroupModalOpen(true)} className="h-10 px-6 bg-accent text-bg-primary rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg shadow-amber-500/10 flex items-center gap-2 border border-amber-300/20 transition-all">
-                            <Plus className="w-3.5 h-3.5" /> Nouveau groupe
-                        </motion.button>
+                        <button onClick={() => setIsGroupModalOpen(true)}
+                            className="h-10 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-[#0B0B0C] text-sm font-medium tracking-tight transition-colors flex items-center gap-2 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
+                            <Plus className="w-[15px] h-[15px]" /> <span>Nouveau groupe</span>
+                        </button>
                     )}
                 </div>
-            </motion.div>
+            </header>
 
             {/* ── Main content ──────────────────────────────────────────── */}
             <div className="flex-1 flex overflow-hidden">
@@ -190,13 +204,15 @@ function ReservationsPage() {
                     {activeSection === "groups" && (
                         <motion.div key="groups-view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="flex-1 overflow-y-auto p-6">
                             {groups.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center h-full py-24 text-center">
-                                    <div className="w-16 h-16 rounded-[2rem] bg-bg-tertiary flex items-center justify-center mb-6 border border-border">
-                                        <Users strokeWidth={1} className="w-8 h-8 text-text-muted/40" />
+                                <div className="flex flex-col items-center justify-center h-full py-24 text-center max-w-md mx-auto">
+                                    <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-border/40 flex items-center justify-center mb-6">
+                                        <Users strokeWidth={1.4} className="w-6 h-6 text-text-muted/50" />
                                     </div>
-                                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4">Aucun groupe enregistré</p>
-                                    <button onClick={() => setIsGroupModalOpen(true)} className="h-10 px-6 bg-accent text-bg-primary rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg shadow-amber-500/10 flex items-center gap-2">
-                                        <Plus className="w-3.5 h-3.5" /> Créer un groupe
+                                    <h3 className="font-serif font-black italic text-2xl tracking-tight text-text-primary mb-2">Aucun groupe enregistré</h3>
+                                    <p className="text-sm text-text-muted leading-relaxed mb-6">Regroupez vos clients pour organiser mariages, séminaires ou événements privés.</p>
+                                    <button onClick={() => setIsGroupModalOpen(true)}
+                                        className="h-10 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-[#0B0B0C] text-sm font-medium tracking-tight transition-colors flex items-center gap-2 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
+                                        <Plus className="w-[15px] h-[15px]" /> Créer un groupe
                                     </button>
                                 </div>
                             ) : (

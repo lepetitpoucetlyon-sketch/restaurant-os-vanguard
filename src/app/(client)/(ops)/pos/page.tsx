@@ -103,98 +103,173 @@ function POSPage() {
 
     return (
         <div className={cn(
-            "flex flex-1 flex-col h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 overflow-hidden relative pb-24 lg:pb-0 transition-colors duration-1000",
+            "flex flex-1 flex-col h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 overflow-hidden relative pb-24 lg:pb-0 transition-colors duration-700",
             isRushMode ? "bg-surface-sidebar" : "bg-bg-primary"
         )}>
-            {/* Header */}
-            <div className={cn(
-                "px-ui py-ui border-b border-border/50 sticky top-0 z-40 transition-all",
-                isRushMode ? "bg-surface-sidebar/90" : "bg-surface-card/80 dark:bg-bg-primary/80",
+            {/* Rush ribbon — 2px strip anchored to top instead of grayscale wash */}
+            {isRushMode && (
+                <div className="h-[2px] w-full bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0" />
+            )}
+
+            {/* Editorial header — table number as a display title, actions grouped by role */}
+            <header className={cn(
+                "px-ui pt-6 pb-5 border-b border-border/40 sticky top-0 z-40 transition-colors duration-300",
+                isRushMode ? "bg-surface-sidebar/95" : "bg-surface-card/70 dark:bg-bg-primary/85",
                 tokens.blur
             )}>
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                        <button onClick={() => setSelectedTableId(null)} className="text-text-muted">
-                            <ArrowLeft className="w-5 h-5" />
+                <div className="flex items-center justify-between gap-4 mb-6">
+                    {/* Left cluster — back + title + rush pulse */}
+                    <div className="flex items-baseline gap-5 min-w-0">
+                        <button onClick={() => setSelectedTableId(null)}
+                            aria-label="Retour à la sélection des tables"
+                            className="shrink-0 w-9 h-9 -mb-1 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-white/5 rounded-full transition-colors">
+                            <ArrowLeft className="w-[18px] h-[18px]" />
                         </button>
+
                         {isTabletMode ? (
-                            <div className="flex items-center gap-2">
-                                <button onClick={() => setIsTablePickerOpen((v) => !v)} className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent-gold/10 border border-accent-gold/30 hover:bg-accent-gold/20 transition-colors">
-                                    <span className="text-xl font-serif font-black italic text-accent-gold tracking-tight">Table {currentTable?.number || "—"}</span>
-                                    <MoreHorizontal className="w-4 h-4 text-accent-gold/70" />
-                                </button>
-                                {isTablePickerOpen && (
-                                    <div className="absolute top-full mt-2 left-0 z-50 bg-surface-card border border-border rounded-2xl shadow-xl p-3 w-64 grid grid-cols-4 gap-1.5">
-                                        {allTables.map((t) => (
-                                            <button key={t.id} onClick={() => { setSelectedTableId(t.id); setIsTablePickerOpen(false); }}
-                                                className={cn("h-10 rounded-xl border text-[11px] font-black uppercase tracking-wider transition-all", t.id === selectedTableId ? "bg-accent-gold border-accent-gold text-text-primary" : "border-border text-text-muted hover:border-accent-gold/40 hover:text-accent-gold")}>
-                                                {t.number ?? t.id.slice(-3)}
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                            <button onClick={() => setIsTablePickerOpen((v) => !v)}
+                                className="group flex items-baseline gap-3 pr-1 hover:opacity-90 transition-opacity">
+                                <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Table</span>
+                                <span className="font-serif font-black text-[38px] leading-none tracking-[-0.02em] text-accent-gold">
+                                    {currentTable?.number || "—"}
+                                </span>
+                                <MoreHorizontal className="w-4 h-4 text-accent-gold/60 group-hover:text-accent-gold transition-colors -translate-y-0.5" />
+                            </button>
                         ) : (
-                            <PageHeaderWithDocs categoryId="pos" title={`Table ${currentTable?.number || ""}`} className="text-2xl font-serif font-black italic text-text-primary tracking-tight">
-                                <span className="text-accent-gold ml-1">.</span>
-                            </PageHeaderWithDocs>
+                            <div className="flex items-baseline gap-3 min-w-0">
+                                <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Table</span>
+                                <PageHeaderWithDocs
+                                    categoryId="pos"
+                                    title={`${currentTable?.number || ""}`}
+                                    className="font-serif font-black text-[38px] leading-none tracking-[-0.02em] text-text-primary"
+                                />
+                            </div>
                         )}
+
                         {isRushMode && (
-                            <div className="flex items-center gap-2 bg-status-success/10 border border-emerald-500/20 px-3 py-1 rounded-full">
-                                <Zap className="w-3 h-3 text-status-success fill-emerald-400" />
-                                <span className="text-[9px] font-black uppercase text-status-success tracking-widest">Rush Active</span>
+                            <span className="hidden sm:flex items-center gap-2 self-center pl-1">
+                                <span className="relative flex w-2 h-2">
+                                    <span className="absolute inset-0 rounded-full bg-red-500/60 animate-ping" />
+                                    <span className="relative rounded-full w-2 h-2 bg-red-500" />
+                                </span>
+                                <span className="font-serif italic text-[11px] tracking-[0.24em] uppercase text-red-500/90">Rush</span>
+                            </span>
+                        )}
+
+                        {isTabletMode && isTablePickerOpen && (
+                            <div className="absolute top-full mt-2 left-4 z-50 bg-surface-card border border-border rounded-2xl shadow-xl p-3 w-64 grid grid-cols-4 gap-1.5">
+                                {allTables.map((t) => (
+                                    <button key={t.id} onClick={() => { setSelectedTableId(t.id); setIsTablePickerOpen(false); }}
+                                        className={cn("h-10 rounded-lg border text-xs font-medium tracking-wide transition-colors", t.id === selectedTableId ? "bg-accent-gold border-accent-gold text-text-primary" : "border-border/60 text-text-muted hover:border-accent-gold/40 hover:text-accent-gold")}>
+                                        {t.number ?? t.id.slice(-3)}
+                                    </button>
+                                ))}
                             </div>
                         )}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => setIsSosModalOpen(true)} title="SOS Caisse & Urgence Service"
-                            className="h-10 px-3.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 animate-pulse">
-                            <LifeBuoy className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline">SOS</span>
-                        </button>
-                        <button onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')} title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
-                            className={cn("h-10 px-3 rounded-full flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-all border", consumptionMode === 'dine_in' ? "bg-action-primary/10 border-action-primary/30 text-action-primary" : "bg-action-primary/10 border-action-primary/30 text-action-primary")}>
-                            {consumptionMode === 'dine_in' ? <Store className="w-3.5 h-3.5" /> : <ShoppingBag className="w-3.5 h-3.5" />}
-                            {consumptionMode === 'dine_in' ? 'Sur place' : 'Emporter'}
-                        </button>
-                        <button onClick={() => setIsCourseViewOpen((v) => !v)} title="Vue par cours"
-                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isCourseViewOpen ? "bg-accent-gold text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
-                            <BookOpen className="w-4 h-4" />
-                        </button>
-                        <ActionGuard page="pos" action="cash_count">
-                            <button onClick={() => setIsCashDrawerOpen(true)} title="Fond de caisse" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-primary transition-colors">
-                                <Wallet className="w-4 h-4" />
+
+                    {/* Right cluster — 3 role-grouped segments with vertical dividers */}
+                    <div className="flex items-center gap-3 shrink-0">
+                        {/* Group A — consumption mode + course view (customer-facing intent) */}
+                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/50 rounded-xl overflow-hidden">
+                            <button onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')}
+                                title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
+                                className={cn(
+                                    "h-full flex items-center gap-2 px-3.5 text-[11px] font-medium tracking-wide transition-colors border-r border-border/40",
+                                    consumptionMode === 'dine_in' ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
+                                )}>
+                                {consumptionMode === 'dine_in'
+                                    ? <Store className="w-[14px] h-[14px] text-action-primary" />
+                                    : <ShoppingBag className="w-[14px] h-[14px] text-action-primary" />}
+                                <span>{consumptionMode === 'dine_in' ? 'Sur place' : 'Emporter'}</span>
                             </button>
-                        </ActionGuard>
-                        <button onClick={handlePrintReceipt} disabled={cartItems.length === 0} title="Imprimer le ticket" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                            <Printer className="w-4 h-4" />
-                        </button>
-                        <ActionGuard page="pos" action="void_line">
-                            <button onClick={() => setIsVoidModalOpen(true)} title="Annuler / Rembourser" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-danger transition-colors">
-                                <RotateCcw className="w-4 h-4" />
+                            <button onClick={() => setIsCourseViewOpen((v) => !v)} title="Vue par cours"
+                                aria-pressed={isCourseViewOpen}
+                                className={cn(
+                                    "h-full w-10 flex items-center justify-center transition-colors",
+                                    isCourseViewOpen ? "text-accent-gold bg-accent-gold/10" : "text-text-secondary hover:text-text-primary"
+                                )}>
+                                <BookOpen className="w-[15px] h-[15px]" />
                             </button>
-                        </ActionGuard>
+                        </div>
+
+                        {/* Group B — ticket utilities (imprimer / tiroir / annuler) */}
+                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/50 rounded-xl overflow-hidden">
+                            <button onClick={handlePrintReceipt} disabled={cartItems.length === 0} title="Imprimer le ticket"
+                                className="h-full w-10 flex items-center justify-center text-text-secondary hover:text-action-primary transition-colors disabled:opacity-25 disabled:cursor-not-allowed border-r border-border/40">
+                                <Printer className="w-[15px] h-[15px]" />
+                            </button>
+                            <ActionGuard page="pos" action="cash_count">
+                                <button onClick={() => setIsCashDrawerOpen(true)} title="Fond de caisse"
+                                    className="h-full w-10 flex items-center justify-center text-text-secondary hover:text-action-primary transition-colors border-r border-border/40">
+                                    <Wallet className="w-[15px] h-[15px]" />
+                                </button>
+                            </ActionGuard>
+                            <ActionGuard page="pos" action="void_line">
+                                <button onClick={() => setIsVoidModalOpen(true)} title="Annuler / Rembourser"
+                                    className="h-full w-10 flex items-center justify-center text-text-secondary hover:text-red-500 transition-colors">
+                                    <RotateCcw className="w-[15px] h-[15px]" />
+                                </button>
+                            </ActionGuard>
+                        </div>
+
+                        {/* Group C — tablet toggle */}
                         <button onClick={() => setIsTabletMode((v) => !v)} title={isTabletMode ? "Quitter le mode tablette" : "Mode tablette"}
-                            className={cn("w-10 h-10 rounded-full flex items-center justify-center border border-border-default transition-colors", isTabletMode ? "bg-action-primary text-text-on-primary" : "bg-surface-card text-text-muted hover:text-text-primary")}>
-                            <Tablet className="w-4 h-4" />
+                            aria-pressed={isTabletMode}
+                            className={cn(
+                                "h-10 w-10 flex items-center justify-center rounded-xl border transition-colors",
+                                isTabletMode
+                                    ? "bg-action-primary text-text-on-primary border-action-primary"
+                                    : "bg-white/[0.03] border-border/50 text-text-secondary hover:text-text-primary"
+                            )}>
+                            <Tablet className="w-[15px] h-[15px]" />
+                        </button>
+
+                        {/* SOS — dedicated distress button, single semantic red, no idle pulse */}
+                        <button onClick={() => setIsSosModalOpen(true)} title="SOS Caisse & Urgence Service"
+                            className="group h-10 pl-3 pr-4 rounded-xl bg-red-500 text-white hover:bg-red-600 active:scale-[0.98] flex items-center gap-2 text-[11px] font-serif italic tracking-[0.2em] uppercase transition-all shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]">
+                            <LifeBuoy className="w-[14px] h-[14px]" />
+                            <span className="hidden sm:inline">SOS</span>
                         </button>
                     </div>
                 </div>
 
-                <div className={cn("flex gap-2 overflow-x-auto no-scrollbar py-1", isRushMode && "grayscale-[0.3]")}>
-                    <button onClick={() => setSelectedCategory("all")} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === "all" ? "bg-accent-gold text-text-primary shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
-                        <Star className="w-3.5 h-3.5" /> Favoris
+                {/* Category rail — segmented navigation with under-line, no pill scaling, no grayscale wash */}
+                <nav aria-label="Catégories" className="flex gap-6 overflow-x-auto no-scrollbar -mb-[9px] pb-[7px]">
+                    <button onClick={() => setSelectedCategory("all")}
+                        aria-current={selectedCategory === "all" ? "page" : undefined}
+                        className={cn(
+                            "group relative shrink-0 flex items-center gap-2 pb-2 text-xs font-medium tracking-wide transition-colors whitespace-nowrap",
+                            selectedCategory === "all"
+                                ? "text-accent-gold"
+                                : "text-text-muted hover:text-text-primary"
+                        )}>
+                        <Star className={cn("w-[15px] h-[15px] transition-transform", selectedCategory === "all" && "fill-accent-gold/20")} />
+                        <span>Favoris</span>
+                        {selectedCategory === "all" && (
+                            <span className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full" />
+                        )}
                     </button>
                     {categories.map((cat) => {
                         const Icon = ICON_MAP[cat.id] || UtensilsCrossed;
+                        const active = selectedCategory === cat.id;
                         return (
-                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={cn("flex items-center gap-2 h-10 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap", selectedCategory === cat.id ? "bg-accent-gold text-text-primary shadow-lg scale-105" : "bg-bg-tertiary text-text-muted")}>
-                                <Icon className="w-3.5 h-3.5" /> {cat.name}
+                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
+                                aria-current={active ? "page" : undefined}
+                                className={cn(
+                                    "group relative shrink-0 flex items-center gap-2 pb-2 text-xs font-medium tracking-wide transition-colors whitespace-nowrap",
+                                    active ? "text-accent-gold" : "text-text-muted hover:text-text-primary"
+                                )}>
+                                <Icon className={cn("w-[15px] h-[15px] transition-transform", active && "fill-accent-gold/10")} />
+                                <span>{cat.name}</span>
+                                {active && (
+                                    <span className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full" />
+                                )}
                             </button>
                         );
                     })}
-                </div>
-            </div>
+                </nav>
+            </header>
 
             {/* Responsive Main Layout */}
             <ResponsiveShell
@@ -221,10 +296,26 @@ function POSPage() {
                         </div>
 
                         {isCartSidebar && (
-                            <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border-default transition-all overflow-hidden", isRushMode ? "bg-surface-sidebar" : "bg-surface-card")}>
-                                <div className="flex border-b border-border-default shrink-0">
-                                    <button onClick={() => setIsCourseViewOpen(false)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", !isCourseViewOpen ? "border-b-2 border-action-primary text-action-primary" : "text-text-muted hover:text-text-primary")}>Panier</button>
-                                    <button onClick={() => setIsCourseViewOpen(true)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", isCourseViewOpen ? "border-b-2 border-action-primary text-action-primary" : "text-text-muted hover:text-text-primary")}>Cours</button>
+                            <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/50 transition-colors overflow-hidden", isRushMode ? "bg-surface-sidebar" : "bg-surface-card")}>
+                                <div className="flex items-center gap-6 px-5 pt-4 pb-0 border-b border-border/40 shrink-0">
+                                    <button onClick={() => setIsCourseViewOpen(false)}
+                                        aria-current={!isCourseViewOpen ? "page" : undefined}
+                                        className={cn(
+                                            "relative pb-3 text-sm font-medium tracking-tight transition-colors",
+                                            !isCourseViewOpen ? "text-text-primary" : "text-text-muted hover:text-text-primary"
+                                        )}>
+                                        Panier
+                                        {!isCourseViewOpen && <span className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full" />}
+                                    </button>
+                                    <button onClick={() => setIsCourseViewOpen(true)}
+                                        aria-current={isCourseViewOpen ? "page" : undefined}
+                                        className={cn(
+                                            "relative pb-3 text-sm font-medium tracking-tight transition-colors",
+                                            isCourseViewOpen ? "text-text-primary" : "text-text-muted hover:text-text-primary"
+                                        )}>
+                                        Cours
+                                        {isCourseViewOpen && <span className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full" />}
+                                    </button>
                                 </div>
                                 <div className="flex-1 overflow-auto elegant-scrollbar">
                                     {isCourseViewOpen ? (
@@ -239,19 +330,42 @@ function POSPage() {
                 }
             />
 
-            {/* Mobile cart dock */}
+            {/* Mobile cart dock — editorial signature: count · label + tabular total, gold rest, black on rush */}
             <AnimatePresence>
                 {cartItems.length > 0 && !isMobileCartOpen && (isMobile || isTabletMode) && (
-                    <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} className="fixed bottom-28 left-6 right-6 z-50 pointer-events-none">
-                        <button onClick={() => setIsMobileCartOpen(true)} className={cn("pointer-events-auto w-full h-16 rounded-[2rem] px-8 flex items-center justify-between shadow-2xl border transition-all relative overflow-hidden group", isRushMode ? "bg-status-success border-emerald-400" : "bg-text-primary dark:bg-accent-gold border-subtle")}>
-                            <div className="absolute inset-0 bg-surface-card/5 opacity-0 group-active:opacity-100 transition-opacity" />
-                            <div className="flex items-center gap-4 relative z-10">
-                                <div className="w-10 h-10 bg-surface-card/20 rounded-2xl flex items-center justify-center font-black text-xs text-text-primary">{cartCount}</div>
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary">Ouvrir le Panier</span>
+                    <motion.div
+                        initial={{ y: 120, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 120, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        className="fixed bottom-28 left-5 right-5 z-50 pointer-events-none">
+                        <button
+                            onClick={() => setIsMobileCartOpen(true)}
+                            className={cn(
+                                "pointer-events-auto w-full h-[68px] rounded-2xl px-5 flex items-center justify-between transition-colors border relative overflow-hidden group active:scale-[0.99]",
+                                "shadow-[0_24px_48px_-16px_rgba(0,0,0,0.55),0_2px_0_0_rgba(255,255,255,0.05)_inset]",
+                                isRushMode
+                                    ? "bg-red-500 border-red-400/60 text-white"
+                                    : "bg-accent-gold border-accent-gold/40 text-[#0B0B0C]"
+                            )}
+                        >
+                            <div className="flex items-center gap-4">
+                                <span className={cn(
+                                    "w-9 h-9 rounded-lg flex items-center justify-center font-serif font-black text-sm tracking-tight",
+                                    isRushMode ? "bg-white/15 text-white" : "bg-[#0B0B0C]/15 text-[#0B0B0C]"
+                                )}>
+                                    {cartCount}
+                                </span>
+                                <div className="flex flex-col items-start leading-tight">
+                                    <span className="font-serif font-black italic text-[10px] uppercase tracking-[0.24em] opacity-70">Panier</span>
+                                    <span className="text-sm font-medium tracking-tight">Ouvrir</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-4 relative z-10">
-                                <span className="text-xl font-mono font-bold italic text-text-primary">{formatCurrency(cartTotal)}</span>
-                                <Plus className="w-6 h-6 rotate-45 opacity-40 text-text-primary" />
+                            <div className="flex items-center gap-3">
+                                <span className="font-serif font-black text-2xl leading-none tracking-[-0.02em] tabular-nums">
+                                    {formatCurrency(cartTotal)}
+                                </span>
+                                <Plus className="w-5 h-5 opacity-50 -rotate-45" />
                             </div>
                         </button>
                     </motion.div>
