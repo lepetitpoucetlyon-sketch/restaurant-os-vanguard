@@ -27,7 +27,7 @@ function isPublicPath(pathname: string | null): boolean {
  * Only handles PIN Authentication and 2FA Challenges.
  */
 export function AuthGate({ children }: AuthGateProps) {
-    const { isAuthenticated, require2FAChallenge } = useAuth();
+    const { isAuthenticated, isAuthLoading, require2FAChallenge } = useAuth();
     const { isMobileMenuOpen, closeMobileMenu } = useUI();
     const { activeTenantId: _activeTenantId } = useTenant();
     const tenantConfig = useAtomValue(tenantConfigAtom);
@@ -46,6 +46,19 @@ export function AuthGate({ children }: AuthGateProps) {
     // 1. PUBLIC ROUTES BYPASS
     if (isPublicPath(pathname)) {
         return <>{children}</>;
+    }
+
+    // 1.5. LOADING FENCE — do not render PinLogin while session hydration
+    // is still in flight (users list loading, Firebase auth initial resolve,
+    // permissions subscription). Rendering PinLogin during this window flashes
+    // the login screen on top of a valid session and can trigger the guard's
+    // downstream effects before the real state settles.
+    if (isAuthLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-bg-primary">
+                <div className="w-10 h-10 rounded-full border-2 border-accent-gold/20 border-t-accent-gold animate-spin" />
+            </div>
+        );
     }
 
     // 2. PIN ENFORCEMENT
