@@ -9,7 +9,8 @@ import { DesktopSidebar } from "@components/layout/DesktopSidebar";
 import { DesktopTopbar } from "@components/layout/DesktopTopbar";
 import { Header } from "@components/layout/Header";
 import { AppLaunchpad } from "@components/layout/AppLaunchpad";
-import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities, filterByRole } from "@/config/navConfig";
+import { PERMISSION_ROLE_LEVELS } from "@/kernel/contracts/rbac";
 import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
@@ -35,11 +36,19 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
     const capabilities = (config as { capabilities?: Record<string, boolean> })?.capabilities;
     const { isLaunchpadOpen, setIsLaunchpadOpen } = useUI();
 
+    // RBAC — on résout le niveau de l'utilisateur courant pour filtrer la nav
+    const authCtx = (config as { currentUser?: { role?: string } })?.currentUser;
+    const userRole = authCtx?.role as string | undefined;
+    const userLevel = userRole ? (PERMISSION_ROLE_LEVELS as Record<string, number>)[userRole] : undefined;
+
     const launchpad = (
         <AppLaunchpad
             isOpen={isLaunchpadOpen}
             onClose={() => setIsLaunchpadOpen(false)}
-            sections={filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities)}
+            sections={filterByRole(
+                filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities),
+                userLevel,
+            )}
         />
     );
 

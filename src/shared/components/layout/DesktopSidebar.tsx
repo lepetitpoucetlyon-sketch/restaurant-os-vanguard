@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
 import { useNexusCore } from "@/shared/hooks";
-import { NAV_SECTIONS, filterNavSections, filterByCapabilities } from "@/config/navConfig";
+import { NAV_SECTIONS, filterNavSections, filterByCapabilities, filterByRole } from "@/config/navConfig";
+import { PERMISSION_ROLE_LEVELS } from "@/kernel/contracts/rbac";
 import { APP_MODE } from "@/config/instance";
 import { SidebarBranding } from "./sidebar/SidebarBranding";
 import { SidebarNavigation } from "./sidebar/SidebarNavigation";
@@ -28,7 +29,15 @@ export function DesktopSidebar() {
     const toggleSidebar = () => setSidebarCollapsed(!isSidebarCollapsed);
 
     const capabilities = (tenant.activeTenantConfig as { capabilities?: Record<string, boolean> })?.capabilities;
-    const accessibleSections = filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities);
+    const userRole = currentUser?.role as string | undefined;
+    const userLevel = userRole ? (PERMISSION_ROLE_LEVELS as Record<string, number>)[userRole] : undefined;
+    const accessibleSections = filterByRole(
+        filterByCapabilities(
+            filterNavSections(NAV_SECTIONS, APP_MODE),
+            capabilities,
+        ),
+        userLevel,
+    );
 
     return (
         <aside 

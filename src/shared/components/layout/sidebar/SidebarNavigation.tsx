@@ -38,7 +38,7 @@ export function SidebarNavigation({
 }: SidebarNavigationProps) {
     const { t } = useLanguage();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [expandedSections, setExpandedSections] = useState<string[]>(['main', 'intelligence', 'operations', 'clients', 'production', 'team', 'analytics', 'finance', 'accounting', 'admin']);
+    const [expandedSections, setExpandedSections] = useState<string[]>(['main', 'intelligence', 'operations', 'production', 'stocks', 'compliance', 'delivery', 'clients', 'team', 'analytics', 'finance', 'accounting', 'franchise', 'admin']);
 
     const toggleSection = (sectionId: string) => {
         setExpandedSections(prev =>
