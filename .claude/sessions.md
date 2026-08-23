@@ -25,6 +25,7 @@
 | `angles-morts-m101-m110` | Matrice M101-M110 + batch2 (35 services) + batch3 (19 services) — 71 items clos, 169 tests, 0 erreur TS | 2026-08-21 | **terminée** |
 | `verif-plan-deteinture` | Vérification lecture seule état plan Dé-Teinture Sectorielle (§8.6) — pas d'édition de code | 2026-08-22 | terminée |
 | `forge-stack-p0-p1` (Claude Code) | MEGA-PLAN Forge Stack — P0 (scrape réel : `CompanyScrapeAgent.ts`, `companyProfile.ts`, route preview-only, suppression `DigitalDnaCrawlerService.ts` + test) + P1 (`CapabilityWiring.ts` 45 caps, `SectorStudyStore.ts` persistance MCC, `--persist` sur `study-sector.ts`). 65 tests ajoutés (42 scrape + 11 wiring + 12 store). Preflight vert (tsc 0, 2024/2025 tests, sentrux baseline inchangé). | 2026-08-22 | terminée |
+| `forge-stack-p2-p6` (Claude Code) | MEGA-PLAN Forge Stack — refonte plan (§C.9 BlindSpotDetector + §C.10 Couche de Dérivation) puis exécution linéaire : P2bis (`src/verticals/_shared/blind-spot/`), P2a (`src/verticals/_shared/derivation/`, `src/modules/commerce/acquisition/onboarding/qualification/`), P2b/c/d (13 dériveurs), P3 (`src/verticals/_shared/forge/templates/`, extension `generateVertical`), P4 (`src/shared/plugins/`, `resolveUI`), P4bis (`src/kernel/settings/displayDepth.ts`), P5 (`src/verticals/_shared/catalog/derivations.ts`), P6 (`scripts/certify-vertical.ts`). Ne touche PAS `scripts/preflight.sh` ni `src/verticals/{gym,coworking,florist,veterinary}/*.blueprint.ts` (protégé par `item2-3-perf-parite`). | 2026-08-23 | active |
 
 ---
 

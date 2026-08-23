@@ -123,18 +123,28 @@ Transformer `QUALIFICATION_MATRIX.md` (doc) en `QualificationEngine` (code) :
 
 ---
 
-## PARTIE 3 — ROADMAP PHASÉE (ordre, DoD, priorité)
+## PARTIE 3 — ROADMAP PHASÉE (ordre, DoD, priorité) — VERSION ÉLARGIE 2026-08-23
 
-| Phase | Contenu | Pourquoi cet ordre | DoD |
-|---|---|:--|---|
-| **P0** | **Dé-stubber le crawler** → `CompanyScrapeAgent` réel (fetch + JSON-LD + extraction + confiance réelle) + frontière sécurité | C'est un stub déguisé qui ment sur ses capacités ; base de tout l'axe B | Crawl réel testé sur 3 vrais sites ; `CompanyProfile` typé ; 0 donnée codée en dur ; injection-guard testé |
-| **P1** | **Brancher la recherche** : `CompanyScrapeAgent`/`SectorStudyAgent` → `QualificationEngine` → Blueprint/DNA | Connecte les pièces réelles aujourd'hui isolées | Un scrape produit un `QualificationProfile` calibré (tier + capabilities) validé par humain |
-| **P2** | **QualificationEngine exécutable** (wizard + auto-inférence) + registre `capability→module` | Rend la matrice 7 axes opérante ; cocher = activer réellement | Cocher une capability monte/démonte la brique ; wizard produit un config valide |
-| **P3** | **Génération multi-profondeur** (L2/L3 depuis la substance : kpis→dashboards, workflows→services, regs→guards) | Comble le « généré = squelette » ; livre la profondeur promise | Générer en L2 produit dashboards+guards réels ; smoke-test runtime vert |
-| **P4** | **Custom UI** : overrides composants tenant + variant `custom` à la carte + branding issu du scrape réel | Le besoin explicite « custom UI » + tenant custom | Un tenant override un composant ; le variant custom compose des capabilities librement ; couleurs/logo réels |
-| **P5** | **Compléter le skill + CLIs/action MCC + certification smoke-test** | Verrouille et rend reproductible, quel que soit le tier | Skill sans piège doc ; forge lançable ; certif inclut le runtime |
+> Refonte majeure suite à intégration du **BlindSpotDetector** (PARTIE 7) et de la **Couche de Dérivation** (PARTIE 8). Les phases P0 & P1 sont déjà livrées (commit `f0da37781`).
+
+| Phase | Contenu | Statut | DoD |
+|---|---|:-:|---|
+| **P0** | **Dé-stubber le crawler** → `CompanyScrapeAgent` réel (fetch + JSON-LD + extraction + confiance réelle) + frontière sécurité SSRF/injection | ✅ | Scrape réel testé sur 3 vrais sites ; `CompanyProfile` typé Zod ; 0 donnée codée en dur ; 42 tests injection/SSRF verts |
+| **P1** | **CapabilityWiringRegistry + SectorStudyStore** (chaînons transverses) + CLI `--persist` | ✅ | Wiring 45 caps exhaustif ; persistance MCC scope ; 23 tests verts (11 wiring + 12 store) |
+| **P2bis** | **BlindSpotDetector** — moteur + 20 règles fondatrices (5 par famille : régulatoire, échelle, catalogue, cascade), rejouable sur tenant existant | 🔨 | Détecteur audit les 12 blueprints existants et sort un `BlindSpotReport` non vide (identifie les vrais gaps historiques) ; règles ajoutables en 20 lignes chacune |
+| **P2a** | **QualificationEngine + RbacDeriver + BusinessLawsDeriver** — wizard 7 axes + auto-inférence + DepthCalibrator + 2 dériveurs critiques | 🔨 | Un scrape produit un `QualificationProfile` calibré (tier + capabilities + roles auto-calculés + businessLaws dérivés) validé par humain |
+| **P2b** | **Dériveurs conformité** : RgpdDeriver (registre traitements, PIA, DPO), SecurityDeriver (MFA, session, password policy), LegalDeriver (CGV, mentions légales, RC pro) | 🔨 | Un tenant santé multi-site → registre RGPD auto + DPO obligatoire + MFA admin+manager ; blindspot alerte si contradiction |
+| **P2c** | **Dériveurs opérationnels** : LocalizationDeriver (langue/devise/timezone/plan comptable), IntegrationsDeriver (banque/marketplace/CRM/paie), CommsDeriver (canaux+templates), HardwareSizingDeriver | 🔨 | Un tenant belge → plan comptable PCMN + BE format nombres ; un tenant delivery détecté → suggestion Uber Eats/Deliveroo |
+| **P2d** | **Dériveurs de valeur** : KpiDeriver (KPIs sectoriels + dashboards par rôle), FormationDeriver (parcours + doc contextuelle), PricingDeriver (grille SaaS MCC), BackupDeriver (rétention + PCA) | 🔨 | Un tenant restaurant L2 → ticket moyen + rotation table + panier moyen + dashboard chef ≠ dashboard patron ; grille tarifaire proposée à MCC |
+| **P3** | **Génération L2/L3 depuis la substance** — templates `kpiDashboard`, `workflowService`, `regulationGuard`, `hardwareProvisioning`, `verticalTest` + `StudyToBlueprintCompiler` | 🔨 | Générer un blueprint en L2 produit dashboards+services réels ; L3 ajoute guards+hardware+tests ; smoke-test runtime rend chaque route sans crash |
+| **P4** | **Custom UI 3 niveaux** — cascade tenant > verticale > défaut ; `resolveUI` ; store `tenants/{id}/uiOverrides` ; variant `custom` en canevas vierge ; branding tenant depuis `CompanyProfile.branding` | 🔨 | Un tenant remplace un `StatCard` sans toucher le code verticale ; variant custom compose 3 caps librement ; couleurs/logo = ce qui a été scrapé |
+| **P4bis** | **`displayDepth` runtime** — `essential/manager/enterprise` + `<DisplayDepthGate>` + page `/settings/display-depth` | 🔨 | Un gérant en `essential` voit 3 items menu ; en `enterprise` voit FEC ; toggle réversible sans redéploiement ; zéro impact persistance |
+| **P5** | **Câblage unique (8 maps dérivées)** — `derivations.ts` dérive tokens/appearance/meta/support/presets/DNA/tenants/legal du `VerticalBlueprintRegistry` unique | 🔨 | Ajouter une verticale = déposer 1 blueprint + `tsc` vert ; les 8 fichiers existants pointent vers les dérivations |
+| **P6** | **Certification runtime + CLIs + ADR-016** — `scripts/certify-vertical.ts`, `scripts/scrape-company.ts`, MAJ skill `vertical-forge`, ADR-016 (profondeur produite vs affichée) | 🔨 | Forge L0→L3 tourne end-to-end sur `_cert_gym` ; skill décrit exactement ce que le code fait |
 
 **Règle non négociable (AGENTS.md)** : chaque phase finit `npm run preflight` vert en sortie brute ; jamais de stub déguisé (P0 est précisément là pour en supprimer un) ; le socle NF525/SovereignGuard n'est jamais touché par le générateur.
+
+**Chemin critique** : `P0 → P1 → P2bis` (le détecteur audit l'existant immédiatement, sans attendre le wizard) → `P2a` (wizard + 2 dériveurs critiques Rbac+BusinessLaws) → `P2b/c/d` parallélisables (chaque dériveur = commit indépendant) → `P3` (peut démarrer dès P1) → `P4/P4bis/P5/P6` parallélisables une fois P2a fait.
 
 ---
 
@@ -363,3 +373,278 @@ CapabilityWiringRegistry (§5.4) ───────────────�
                     P5 VerticalBlueprintRegistry (câblage unique) + CLIs/MCC action + skill complet + certif runtime
 ```
 **Chemin critique** : P0 (dé-stub) → P1 (calibrage) → P2 (qualification) car tout l'axe B en dépend. `CapabilityWiringRegistry` est un socle transverse à faire tôt (bloque P2, P3, P4). Custom UI (P4) et câblage unique (P5) sont parallélisables une fois le socle posé.
+
+---
+
+# PARTIE 7 — §C.9 DÉTECTION D'ANGLES MORTS (BlindSpotDetector)
+
+> Ajouté 2026-08-23. Complémentaire aux 7 axes de qualification : après la collecte (SectorStudy pour Axe A, CompanyProfile+QualificationProfile pour Axe B), un auditeur automatique lit CE QUI A ÉTÉ RÉCOLTÉ et détecte CE QUI MANQUE. Ne modifie rien : rapporte avec severity + evidence + fix suggéré. Human-in-the-loop.
+
+## 7.1 — Rôle et principe
+
+Le RESTAURANT-OS-CORE a déjà un ADN « angles morts » (batch M101-M110 historique = 71 items). L'objectif ici est d'en faire une **capacité native du forge**, pas une session manuelle ponctuelle. C'est le **completeness critic** classique — typé métier, pas générique — qui reproche à un blueprint/tenant d'être « configuré correctement mais incomplet ».
+
+## 7.2 — 8 familles d'angles morts
+
+| Famille | Question posée par le détecteur |
+|---|---|
+| **1. Regulatory** | L'étude mentionne HACCP/PPSPS/BSDD/PIEC mais la capability ou le guard portant est OFF ? |
+| **2. Scale/tier mismatch** | Les signaux disent franchise/multi-sites mais le tier proposé reste L1 ? |
+| **3. Catalog/capability** | Le scrape révèle des items « vin/cocktail » mais `mod_bar` OFF ? Des recettes/périssable mais `mod_recipes`/`mod_haccp` OFF ? |
+| **4. Hardware** | L'étude implique une sonde température mais le blueprint ne la liste pas ? La capability requiert un scanner mais absent ? |
+| **5. Guards** | `mod_pos` ON mais `FiscalSealGuard` absent du wiring ? Convention collective détectée mais `RestPeriodGuard` OFF ? |
+| **6. Cascade** | `mod_kds` ON mais `mod_pos` OFF (violation `dependsOn`) ? `mod_planning` sans `mod_hr` ? |
+| **7. Route/UI** | Capability ON mais aucune route dans le wiring → invisible pour le gérant ? |
+| **8. Tier completeness** | L3 sans `mod_fleet_management` ? Enterprise sans `mod_audit`/`mod_governance` ? |
+
+Chacune est **une règle déclarative testable** — pas un LLM. Reproductible, débogable, transparent.
+
+## 7.3 — Contrat public
+
+```ts
+// src/verticals/_shared/blind-spot/BlindSpotDetector.ts (🆕)
+
+export type Severity = 'critical' | 'high' | 'medium' | 'low';
+export type BlindSpotFamily =
+  | 'regulatory' | 'scale_tier_mismatch' | 'catalog_capability'
+  | 'hardware' | 'guards' | 'dependency_cascade' | 'route_ui' | 'tier_completeness';
+
+export interface BlindSpot {
+  id: string;                       // stable, testable ('bs.regulatory.haccp_missing')
+  family: BlindSpotFamily;
+  severity: Severity;
+  title: string;
+  evidence: readonly string[];      // preuves textuelles depuis les inputs
+  suggestedFix: {
+    kind: 'enable_capability' | 'raise_tier' | 'add_hardware' | 'add_guard' | 'add_route' | 'manual';
+    target?: string;
+    rationale: string;
+  };
+}
+
+export interface BlindSpotReport {
+  scannedAt: string;
+  scope: 'vertical' | 'tenant';
+  totalRules: number;
+  triggered: readonly BlindSpot[];
+  summary: Record<Severity, number>;
+}
+
+// Deux orchestrateurs, un par axe
+export function detectVerticalBlindSpots(input: {
+  blueprint: VerticalBlueprint;
+  study: SectorStudy;
+}): BlindSpotReport;
+
+export function detectTenantBlindSpots(input: {
+  companyProfile: CompanyProfile;
+  qualification: QualificationProfile;
+  study: SectorStudy;
+}): BlindSpotReport;
+```
+
+## 7.4 — Câblage
+
+```
+AXE A (verticale) :
+  SectorStudyAgent → SectorStudy   ─┐
+  Opérateur draft Blueprint         ─┼─► BlindSpotDetector.detectVertical(…)
+                                    │         │
+                                    │         ▼ Report → opérateur (accept/fix)
+                                    │         │
+                                    └─► generateVertical(blueprint, tier)
+
+AXE B (tenant) :
+  CompanyScrapeAgent → CompanyProfile ─┐
+  QualificationEngine → Qualif Profile ┼─► BlindSpotDetector.detectTenant(…)
+  getLatestSectorStudy(variant)        ─┘         │
+                                                  ▼ Report → wizard
+                                                  │
+                                                  ▼ (accept / fix)
+                                            TenantSeeder.seed(config validé)
+```
+
+**Recommandation : Option A (service autonome + hook auto)** — le détecteur est un service pur, mais le `ProvisioningWizard` (P2a) et l'action MCC « Forger verticale » l'appellent systématiquement en dernière étape avant écriture. Bénéfice : **rejouable** sur un tenant en production à tout moment (nouvelle réglementation → nouvelle règle → gap détecté sur les anciens tenants).
+
+## 7.5 — Anatomie d'une règle
+
+```ts
+// src/verticals/_shared/blind-spot/rules/regulatory.ts (🆕)
+export const HACCP_REQUIRED_BUT_OFF: BlindSpotRule = {
+  id: 'bs.regulatory.haccp_missing',
+  family: 'regulatory',
+  scope: 'both',
+  detect: (ctx) => {
+    const mentionsHaccp = ctx.study.regulations.some(r => /haccp/i.test(r.label + r.description));
+    const capOff = ctx.effectiveCapabilities['mod_haccp'] !== true;
+    if (!mentionsHaccp || !capOff) return null;
+    return {
+      severity: 'critical',
+      evidence: [
+        `study.regulations mentionne HACCP: "${ctx.study.regulations.find(r => /haccp/i.test(r.label))!.label}"`,
+        `effectiveCapabilities.mod_haccp = ${ctx.effectiveCapabilities['mod_haccp']}`,
+      ],
+      suggestedFix: {
+        kind: 'enable_capability', target: 'mod_haccp',
+        rationale: 'Cadre réglementaire du secteur — non-conformité pénale possible.',
+      },
+    };
+  },
+};
+```
+
+Chaque règle = fonction pure avec son propre test unitaire. Le registre `BLIND_SPOT_RULES` s'étend au fil de l'eau (nouvelle loi → nouvelle règle en 20 lignes).
+
+## 7.6 — Set de règles fondatrices (P2bis livrable)
+
+**Regulatory (5)** : HACCP off, PPSPS off (BTP), BSDD off (déchets dangereux), HDS/RGPD art.9 off (santé), SACEM off (ERP musique).
+**Scale/tier (5)** : multi_site sans mod_multisite, franchise sans mod_franchise, staff > 10 avec mod_hr basic, staff > 50 sans mod_payroll advanced, catalogue > 100 items sans mod_analytics.
+**Catalog/capability (5)** : alcool sans mod_bar, périssable sans mod_haccp, prescription sans mod_prescription (à créer), rendez-vous sans mod_reservations, catalogue > 30 items sans mod_inventory.
+**Cascade (5)** : mod_kds sans mod_pos, mod_planning sans mod_hr, mod_leaves sans mod_hr, mod_crm sans mod_customer, mod_kiosk sans mod_pos.
+
+---
+
+# PARTIE 8 — §C.10 COUCHE DE DÉRIVATION (auto-calcul RBAC + businessLaws + 11 autres)
+
+> Ajouté 2026-08-23 suite à demande explicite : « RBAC bien calculé par rapport au nombre d'employés, logique métier auto-calculée par ces paramètres, réfléchir si on n'a pas oublié des angles morts ». La réponse est **oui, beaucoup** — voici la couche qui les gère tous.
+
+## 8.1 — Principe : une couche de dérivation au-dessus des 7 axes
+
+Les 7 axes existants collectent des **choix opérateur**. Ce qu'il manque : une couche qui **DÉRIVE** de ces choix + du `CompanyProfile` + du `SectorStudy` toutes les valeurs opérationnelles concrètes (rôles RBAC réels, businessLaws précis, plan comptable, MFA, dashboards, KPIs, connecteurs, templates, hardware sizing, contrats…).
+
+Aujourd'hui, `TenantConfig.status.businessLaws` est **statiquement défini par blueprint** (`node_capacity: 50`, `tax_rate: 20`, `pmsEnabled: bool`). Rien n'est dérivé des signaux réels. Idem RBAC : Axe 1 Q1.3 propose 3 curseurs mais aucune structure de rôles concrète n'est calculée.
+
+## 8.2 — Architecture
+
+```
+QualificationEngine (P2a) :
+
+  ENTRÉES ─────────────────────────
+  ├── CompanyProfile (scrape)
+  ├── SectorStudy (agent)
+  └── QualificationAnswers (7 axes, wizard/auto)
+                        │
+                        ▼
+  DÉRIVEURS (nouveaux — chacun pur & testable, module feuille)
+  ├── RbacDeriver           → RolesTemplate         (P2a)
+  ├── BusinessLawsDeriver   → businessLaws complet  (P2a)
+  ├── LocalizationDeriver   → langue/devise/timezone/plan comptable  (P2c)
+  ├── SecurityDeriver       → MFA/session/password  (P2b)
+  ├── IntegrationsDeriver   → connecteurs suggérés  (P2c)
+  ├── CommsDeriver          → canaux + templates    (P2c)
+  ├── KpiDeriver            → KPIs + dashboards     (P2d)
+  ├── RgpdDeriver           → registre + PIA + DPO  (P2b)
+  ├── BackupDeriver         → rétention + PCA       (P2d)
+  ├── HardwareSizingDeriver → nb TPE/sondes/impr.   (P2c)
+  ├── FormationDeriver      → parcours + doc        (P2d)
+  ├── PricingDeriver        → grille SaaS MCC       (P2d)
+  └── LegalDeriver          → CGV + assurance       (P2b)
+                        │
+                        ▼
+             CalibratedTenantConfig
+                        │
+                        ▼
+              BlindSpotDetector (§C.9)
+      (audit cross-cutting : incohérences entre dériveurs)
+                        │
+                        ▼
+             Opérateur valide / ajuste
+                        │
+                        ▼
+             TenantSeeder.seed(calibrated)
+```
+
+Chaque dériveur = **module feuille pur** dans `src/verticals/_shared/derivation/*.ts`. Contrat : `derive(inputs) → output` déterministe + Zod strict en sortie + tests unitaires (cas typiques solo/tpe/pme/eti × 12 variants).
+
+## 8.3 — Focus RbacDeriver (P2a critique)
+
+**Entrées** : `axis1_scale`, `axis1_topology`, `sectorSignals.detectedVariant`, capabilities activées, catalogue.
+
+**Sortie** :
+```ts
+type RolesTemplate = {
+  roles: Array<{
+    key: string;                 // 'chef_cuisine', 'commis', 'sommelier'
+    label: string;
+    tier: 'admin' | 'manager' | 'operator' | 'stagiaire';
+    permissions: readonly Permission[];
+    perSite?: boolean;
+    quorum?: number;
+  }>;
+  expectedSeats: number;
+  mfaRequiredFor: readonly string[];
+  passwordPolicy: 'basic' | 'strong' | 'strict';
+}
+```
+
+**Règles de dérivation** (extraits) :
+- `solo` → 1 rôle `admin`, MFA optionnel, password `basic`.
+- `tpe` → `admin` + `caissier` + éventuellement `manager` unique.
+- `pme` → hiérarchie 3 niveaux, MFA sur `admin`+`manager`, password `strong`.
+- `eti` → matrice fine (admin/direction/site_manager/team_lead/operator/stagiaire), MFA obligatoire partout, password `strict`, audit RBAC obligatoire.
+- Multi-site → `site_manager` par site + `regional_manager` si ≥ 3 sites.
+- Franchise → `franchise_admin` + séparation stricte tenant/central.
+- Sectoriel : `restaurant` → +`chef_cuisine`/`second`/`commis`/`sommelier`/`plongeur` ; `clinic` → +`praticien`/`assistant`/`accueil` ; `garage` → +`chef_atelier`/`mécanicien`/`carrossier`/`conseiller_service`.
+- Par capability : `mod_haccp` ON → `responsable_hygiene` obligatoire ; `mod_accounting_management` ON → `comptable` distinct de `admin`.
+
+## 8.4 — Focus BusinessLawsDeriver (P2a critique)
+
+Table des lois auto-dérivées :
+| businessLaw | Source de dérivation |
+|---|---|
+| `node_capacity` | catalogue × axis1_scale × horaires → estimation trafic |
+| `tax_rate_default` + `tax_rate_map` | catégories catalogue → ventilation TVA multi-taux |
+| `currency` + `currency_secondary[]` | pays SIREN + zone frontalière détectée |
+| `fiscal_year_start` | pays (FR = jan, UK = avr) |
+| `timezone` | adresse extraite / hostname TLD |
+| `working_hours_default` | JSON-LD OpeningHoursSpecification |
+| `overtime_threshold` + `night_rate_start` | convention collective inférée (HCR resto = 35h/nuit 22h, BTP = 39h) |
+| `rounding_mode` | secteur (essence = 3 décimales, retail = 2) |
+| `alcohol_service_hours` | si `mod_bar` → règle horaires légaux |
+| `age_restrictions` | catalogue alcool/tabac → gate âge |
+| `witness_dish_days` | resto → 5 jours obligatoire |
+| `frying_oil_change_frequency` | cuisine → auto |
+| `receipt_number_format` | pays + tier (préfixe SIREN) |
+
+## 8.5 — Les 11 autres dériveurs (résumé)
+
+| Dériveur | Phase | Sortie | Exemples de règles |
+|---|:-:|---|---|
+| **LocalizationDeriver** | P2c | `{language, currency, timezone, dateFormat, numberFormat, accountingPlan, invoiceNumbering}` | Belgique → PCMN + BE nombres ; Suisse → CHF+EUR |
+| **SecurityDeriver** | P2b | `{mfaRequired[], sessionTimeoutMin, passwordPolicy, ipWhitelist?, ssoRequired}` | Santé → session 15min ; retail → 8h ; L3 → MFA partout |
+| **IntegrationsDeriver** | P2c | `{banking?, payment[], marketplace[], crm?, payroll?, marketplaceB2B[]}` | Delivery détecté → Uber Eats/Deliveroo ; santé → Doctolib |
+| **CommsDeriver** | P2c | `{alertChannels{critical,normal}, transactionalTemplates[], marketingTemplates[]}` | Templates auto-brandés depuis `CompanyProfile.branding` |
+| **KpiDeriver** | P2d | `{kpis[], dashboardsByRole{}, reportFrequency}` | Resto → ticket moyen, rotation table ; hôtel → occupancy rate ; salon → rebooking rate |
+| **RgpdDeriver** | P2b | `{registerOfProcessing[], piaRequired, dpoRequired, retentionByCategory{}, cookieBanner}` | Santé + biométrie → PIA obligatoire ; > 250 salariés → DPO obligatoire |
+| **BackupDeriver** | P2d | `{retentionByType{}, backupFrequency, dr{rto,rpo}, encryptionAtRest, dataResidency}` | Santé → HDS + UE-only ; banque → PCI-DSS |
+| **HardwareSizingDeriver** | P2c | `{tpeCount, kitchenPrinters, tempProbes, bandwidthMbps, upsRequired}` | Frigo × m² → nb sondes ; pics d'affluence → nb TPE |
+| **FormationDeriver** | P2d | `{onboardingPath[], contextualDocs[], videoDemos[], certificationsRequired[]}` | L0 → 3 tutos ; L3 → plan formation étalé + certification interne santé |
+| **PricingDeriver** | P2d | `{suggestedTier{name,priceMonth}, addons[], competitorComparison?}` | Ex : « vous étiez sur Lightspeed à X€/mois, chez nous ce sera Y€ » |
+| **LegalDeriver** | P2b | `{contractTypes[], legalMentions, cookiePolicy, professionalInsurance{type,coverage}}` | Contrats de travail auto selon convention collective détectée |
+
+## 8.6 — Convergence avec le BlindSpotDetector (§C.9)
+
+Les dériveurs deviennent des **domaines de règles** pour le détecteur :
+- `RbacDeriver.output.roles` sans `responsable_hygiene` alors que `mod_haccp` ON → gap `bs.derivation.rbac_missing_hygiene`.
+- `RgpdDeriver.output.dpoRequired = true` mais `RolesTemplate.roles` sans DPO → gap.
+- `HardwareSizingDeriver.output.tpeCount = 3` mais `blueprint.hardware` liste 1 TPE → gap.
+
+Cette convergence garantit qu'aucun dériveur ne peut « produire une sortie mais qu'aucun consommateur ne la respecte » — le détecteur ferme la boucle.
+
+## 8.7 — Intégration avec P3 (Génération L2/L3)
+
+Le `CalibratedTenantConfig` produit par les dériveurs devient une **entrée du générateur** :
+- `RolesTemplate` → seeds Nexus initiales (`tenants/{id}/rbac/roles/*` + `permissions/*`).
+- `CommsDeriver.templates` → seeds `tenants/{id}/comms/templates/*`.
+- `KpiDeriver.dashboardsByRole` → seeds `tenants/{id}/dashboards/*`.
+- `LegalDeriver.contractTypes` → génération PDF via `LegalContractGenerator`.
+- `BusinessLawsDeriver.output` → écrit dans `TenantConfig.status.businessLaws` (remplace le statique).
+
+## 8.8 — Ordre d'exécution recommandé
+
+1. **P2a** — QualificationEngine + RbacDeriver + BusinessLawsDeriver (les 2 nommés par l'utilisateur, socle des autres).
+2. **P2b** — Dériveurs conformité (RGPD/Security/Legal) — critique pour ne pas livrer de tenants illégaux.
+3. **P2c** — Dériveurs opérationnels (Localization/Integrations/Comms/HardwareSizing).
+4. **P2d** — Dériveurs de valeur (KPI/Formation/Pricing/Backup).
+
+Chaque phase = commit atomique, chaque dériveur ajoute une clé au `CalibratedTenantConfig` sans casser le pipeline (rétro-compatible).
