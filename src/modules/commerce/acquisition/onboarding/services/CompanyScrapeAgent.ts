@@ -24,8 +24,6 @@
  * schéma Zod du contrat de sortie. Aucun cycle possible.
  */
 
-import { lookup as dnsLookup } from 'node:dns/promises';
-import { isIP } from 'node:net';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import { toMicrounits } from '@/shared/schemas/primitives';
@@ -95,8 +93,11 @@ export async function assertUrlIsPublic(rawUrl: string): Promise<URL> {
         throw new Error(`Hostname interne interdit: ${hostname}`);
     }
 
+    // Helper isIP interne sans dépendance node:net statique
+    const ipVersion = checkIsIp(hostname);
+
     // Si c'est déjà une IP littérale → checker directement
-    if (isIP(hostname)) {
+    if (ipVersion !== 0) {
         if (isPrivateIp(hostname)) throw new Error(`IP privée interdite: ${hostname}`);
         return url;
     }
@@ -104,7 +105,8 @@ export async function assertUrlIsPublic(rawUrl: string): Promise<URL> {
     // Sinon résoudre en DNS et bloquer si privée
     let resolved: { address: string; family: number };
     try {
-        resolved = await dnsLookup(hostname);
+        const dns = await import('node:dns/promises');
+        resolved = await dns.lookup(hostname);
     } catch (err) {
         throw new Error(`Résolution DNS impossible pour ${hostname}: ${toError(err).message}`);
     }
@@ -114,9 +116,22 @@ export async function assertUrlIsPublic(rawUrl: string): Promise<URL> {
     return url;
 }
 
+/** Helper de détection IP (v4 / v6) sans dépendance Node. */
+function checkIsIp(ip: string): 0 | 4 | 6 {
+    const ipv4Parts = ip.split('.');
+    if (ipv4Parts.length === 4 && ipv4Parts.every(p => /^\d+$/.test(p) && parseInt(p, 10) >= 0 && parseInt(p, 10) <= 255)) {
+        return 4;
+    }
+    if (ip.includes(':')) {
+        return 6;
+    }
+    return 0;
+}
+
 /** True si l'IP (v4 ou v6) appartient à un range privé/loopback/link-local. */
 export function isPrivateIp(ip: string): boolean {
-    if (isIP(ip) === 4) {
+    const version = checkIsIp(ip);
+    if (version === 4) {
         const parts = ip.split('.').map(n => parseInt(n, 10));
         if (parts.some(n => Number.isNaN(n))) return true;
         const [a, b] = parts as [number, number, number, number];
@@ -127,7 +142,7 @@ export function isPrivateIp(ip: string): boolean {
         if (a === 169 && b === 254) return true;
         return false;
     }
-    if (isIP(ip) === 6) {
+    if (version === 6) {
         const lower = ip.toLowerCase();
         if (lower === '::1' || lower === '::') return true;
         if (lower.startsWith('fc') || lower.startsWith('fd')) return true; // ULA

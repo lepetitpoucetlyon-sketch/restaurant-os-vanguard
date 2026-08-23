@@ -22,24 +22,42 @@ import {
     Sparkles,
     Bell,
     Zap,
-    Mic
+    Mic,
+    ChefHat,
+    MonitorSmartphone,
+    Wine,
+    Clock,
+    Wallet,
+    Heart,
+    ScrollText,
+    FileCheck,
+    BarChart3,
 } from "lucide-react";
 import { mobileSpring } from "@/shared/utils/motion";
 
 const PRIMARY_NAV = [
-    { label: "dashboard", href: "/", icon: LayoutDashboard },
-    { label: "pos", href: "/pos", icon: Store },
-    { label: "floor_plan", href: "/floor-plan", icon: Map },
-    { label: "intelligence", href: "/intelligence", icon: Zap },
+    { label: "dashboard", key: "dashboard", href: "/", icon: LayoutDashboard },
+    { label: "pos", key: "pos", href: "/pos", icon: Store },
+    { label: "floor_plan", key: "floor_plan", href: "/floor-plan", icon: Map },
+    { label: "intelligence", key: "intelligence_hub", href: "/intelligence", icon: Zap },
 ];
 
 const GRID_ITEMS = [
-    { label: "reservations", href: "/reservations", icon: CalendarDays },
-    { label: "inventory", href: "/inventory", icon: Package },
-    { label: "hr", href: "/staff", icon: Users },
-    { label: "planning", href: "/planning", icon: CalendarDays },
-    { label: "haccp", href: "/haccp", icon: Sparkles },
-    { label: "settings", href: "/settings", icon: Settings },
+    { key: "kds", href: "/kds", icon: ChefHat, color: "#F97316" },
+    { key: "pos_mobile", href: "/pos-mobile", icon: MonitorSmartphone, color: "#3B82F6" },
+    { key: "reservations", href: "/reservations", icon: CalendarDays, color: "#EC4899" },
+    { key: "inventory", href: "/inventory", icon: Package, color: "#84CC16" },
+    { key: "timeclock", href: "/timeclock", icon: Clock, color: "#06B6D4" },
+    { key: "bar", href: "/bar", icon: Wine, color: "#F97316" },
+    { key: "crm", href: "/crm", icon: Heart, color: "#EC4899" },
+    { key: "hr", href: "/staff", icon: Users, color: "#06B6D4" },
+    { key: "planning", href: "/staff?tab=planning", icon: CalendarDays, color: "#06B6D4" },
+    { key: "haccp", href: "/haccp", icon: Sparkles, color: "#14B8A6" },
+    { key: "treasury", href: "/finance", icon: Wallet, color: "#EF4444" },
+    { key: "nf525", href: "/nf525", icon: FileCheck, color: "#F59E0B" },
+    { key: "analytics", href: "/analytics", icon: BarChart3, color: "#8B5CF6" },
+    { key: "registre", href: "/registre", icon: ScrollText, color: "#0EA5E9" },
+    { key: "settings", href: "/settings", icon: Settings, color: "#64748B" },
 ];
 
 export function MobileNavBar() {
@@ -119,14 +137,24 @@ export function MobileNavBar() {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-8">
+                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-6 max-h-[55vh] overflow-y-auto elegant-scrollbar pr-1 pb-4">
                                 {GRID_ITEMS.map((item, idx) => (
-                                    <motion.div key={item.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
-                                        <Link href={item.href} prefetch={false} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-3">
-                                            <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border border-border shadow-soft", pathname === item.href ? "bg-accent-gold text-text-primary border-transparent" : "bg-bg-primary")}>
-                                                <item.icon className="w-6 h-6" />
+                                    <motion.div key={item.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(idx * 0.03, 0.3) }}>
+                                        <Link href={item.href} prefetch={false} onClick={() => setIsMenuOpen(false)} className="flex flex-col items-center gap-2 group">
+                                            <div 
+                                                className={cn(
+                                                    "w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-300 shadow-soft", 
+                                                    pathname === item.href 
+                                                        ? "bg-accent-gold text-text-primary border-transparent shadow-glow scale-105" 
+                                                        : "bg-bg-primary text-text-muted hover:text-text-primary hover:scale-105 border-border"
+                                                )}
+                                                style={{ borderColor: pathname === item.href ? undefined : `${item.color}40` }}
+                                            >
+                                                <item.icon className="w-6 h-6" style={{ color: pathname === item.href ? undefined : item.color }} />
                                             </div>
-                                            <span className="text-[8px] font-black uppercase tracking-widest text-text-muted text-center">{t(`common.navigation.${item.label}`)}</span>
+                                            <span className="text-[9px] font-black uppercase tracking-wider text-text-muted text-center line-clamp-1 group-hover:text-text-primary transition-colors">
+                                                {t(`nav.${item.key}`)}
+                                            </span>
                                         </Link>
                                     </motion.div>
                                 ))}
