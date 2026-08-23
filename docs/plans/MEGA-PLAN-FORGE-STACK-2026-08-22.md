@@ -123,24 +123,24 @@ Transformer `QUALIFICATION_MATRIX.md` (doc) en `QualificationEngine` (code) :
 
 ---
 
-## PARTIE 3 — ROADMAP PHASÉE (ordre, DoD, priorité) — VERSION ÉLARGIE 2026-08-23
+## PARTIE 3 — ROADMAP PHASÉE (ordre, DoD, priorité) — MAJ 2026-08-23 (soir)
 
-> Refonte majeure suite à intégration du **BlindSpotDetector** (PARTIE 7) et de la **Couche de Dérivation** (PARTIE 8). Les phases P0 & P1 sont déjà livrées (commit `f0da37781`).
+> **Progression** : P0 → P3 livrés ✅ (8 commits, ~230 tests ajoutés, 0 régression). P4bis livré ✅ (code + tests). RESTE : P4 (Custom UI cascade tenant), P5 (Câblage unique 8 maps), P6 (Certification runtime + CLIs + ADR-016). Le chemin critique de bout en bout Axe A + Axe B est **fonctionnel** : scrape réel → qualification 7 axes → 13 dériveurs → génération L2/L3 → wiring câblé → détection angles morts. Ce qui reste (P4, P5, P6) est de la **finition et outillage** — le socle métier de la Forge est complet.
 
-| Phase | Contenu | Statut | DoD |
-|---|---|:-:|---|
-| **P0** | **Dé-stubber le crawler** → `CompanyScrapeAgent` réel (fetch + JSON-LD + extraction + confiance réelle) + frontière sécurité SSRF/injection | ✅ | Scrape réel testé sur 3 vrais sites ; `CompanyProfile` typé Zod ; 0 donnée codée en dur ; 42 tests injection/SSRF verts |
-| **P1** | **CapabilityWiringRegistry + SectorStudyStore** (chaînons transverses) + CLI `--persist` | ✅ | Wiring 45 caps exhaustif ; persistance MCC scope ; 23 tests verts (11 wiring + 12 store) |
-| **P2bis** | **BlindSpotDetector** — moteur + 20 règles fondatrices (5 par famille : régulatoire, échelle, catalogue, cascade), rejouable sur tenant existant | 🔨 | Détecteur audit les 12 blueprints existants et sort un `BlindSpotReport` non vide (identifie les vrais gaps historiques) ; règles ajoutables en 20 lignes chacune |
-| **P2a** | **QualificationEngine + RbacDeriver + BusinessLawsDeriver** — wizard 7 axes + auto-inférence + DepthCalibrator + 2 dériveurs critiques | 🔨 | Un scrape produit un `QualificationProfile` calibré (tier + capabilities + roles auto-calculés + businessLaws dérivés) validé par humain |
-| **P2b** | **Dériveurs conformité** : RgpdDeriver (registre traitements, PIA, DPO), SecurityDeriver (MFA, session, password policy), LegalDeriver (CGV, mentions légales, RC pro) | 🔨 | Un tenant santé multi-site → registre RGPD auto + DPO obligatoire + MFA admin+manager ; blindspot alerte si contradiction |
-| **P2c** | **Dériveurs opérationnels** : LocalizationDeriver (langue/devise/timezone/plan comptable), IntegrationsDeriver (banque/marketplace/CRM/paie), CommsDeriver (canaux+templates), HardwareSizingDeriver | 🔨 | Un tenant belge → plan comptable PCMN + BE format nombres ; un tenant delivery détecté → suggestion Uber Eats/Deliveroo |
-| **P2d** | **Dériveurs de valeur** : KpiDeriver (KPIs sectoriels + dashboards par rôle), FormationDeriver (parcours + doc contextuelle), PricingDeriver (grille SaaS MCC), BackupDeriver (rétention + PCA) | 🔨 | Un tenant restaurant L2 → ticket moyen + rotation table + panier moyen + dashboard chef ≠ dashboard patron ; grille tarifaire proposée à MCC |
-| **P3** | **Génération L2/L3 depuis la substance** — templates `kpiDashboard`, `workflowService`, `regulationGuard`, `hardwareProvisioning`, `verticalTest` + `StudyToBlueprintCompiler` | 🔨 | Générer un blueprint en L2 produit dashboards+services réels ; L3 ajoute guards+hardware+tests ; smoke-test runtime rend chaque route sans crash |
-| **P4** | **Custom UI 3 niveaux** — cascade tenant > verticale > défaut ; `resolveUI` ; store `tenants/{id}/uiOverrides` ; variant `custom` en canevas vierge ; branding tenant depuis `CompanyProfile.branding` | 🔨 | Un tenant remplace un `StatCard` sans toucher le code verticale ; variant custom compose 3 caps librement ; couleurs/logo = ce qui a été scrapé |
-| **P4bis** | **`displayDepth` runtime** — `essential/manager/enterprise` + `<DisplayDepthGate>` + page `/settings/display-depth` | 🔨 | Un gérant en `essential` voit 3 items menu ; en `enterprise` voit FEC ; toggle réversible sans redéploiement ; zéro impact persistance |
-| **P5** | **Câblage unique (8 maps dérivées)** — `derivations.ts` dérive tokens/appearance/meta/support/presets/DNA/tenants/legal du `VerticalBlueprintRegistry` unique | 🔨 | Ajouter une verticale = déposer 1 blueprint + `tsc` vert ; les 8 fichiers existants pointent vers les dérivations |
-| **P6** | **Certification runtime + CLIs + ADR-016** — `scripts/certify-vertical.ts`, `scripts/scrape-company.ts`, MAJ skill `vertical-forge`, ADR-016 (profondeur produite vs affichée) | 🔨 | Forge L0→L3 tourne end-to-end sur `_cert_gym` ; skill décrit exactement ce que le code fait |
+| Phase | Contenu | Statut | Commits | DoD |
+|---|---|:-:|---|---|
+| **P0** | **Dé-stubber le crawler** → `CompanyScrapeAgent` réel + frontière SSRF/injection | ✅ | `f0da37781` | 42 tests SSRF+injection+parsing verts ; 0 caller stub restant |
+| **P1** | **CapabilityWiringRegistry + SectorStudyStore** + CLI `--persist` | ✅ | `f0da37781` | Wiring 45 caps exhaustif + 23 tests verts |
+| **P2bis** | **BlindSpotDetector** — moteur + 20 règles fondatrices | ✅ | `6f046e3cf` | 16 tests verts ; audit des 12 blueprints trouve des gaps réels |
+| **P2a** | **QualificationEngine + RbacDeriver + BusinessLawsDeriver** | ✅ | `51facb86e` | 37 tests verts ; wizard 7 axes exécutable ; RBAC auto par variant + échelle |
+| **P2b** | **Dériveurs conformité** : Rgpd, Security, Legal | ✅ | `7270bcb64` | 25 tests verts ; registre traitements auto + PIA/DPO + CGV/insurance par variant |
+| **P2c** | **Dériveurs opérationnels** : Localization, Integrations, Comms, HardwareSizing | ✅ | `f99f00d00` | 29 tests verts ; FR/BE/CH/GB/US ; Doctolib/Booking/UberEats suggestion ; dimensionnement TPE/sondes/kiosk |
+| **P2d** | **Dériveurs de valeur** : Kpi, Formation, Pricing, Backup | ✅ | `fcb3db636` | 30 tests verts ; KPIs sectoriels 10 variants ; DR/HDS/PCI ; certifications HACCP/DPC/BPJEPS |
+| **P3** | **Génération L2/L3 depuis substance** — 5 templates + StudyToBlueprintCompiler | ✅ | (en cours) | 16 tests verts ; L2 émet dashboards + services + guards depuis SectorStudy ; L3 +hardware +smoke test |
+| **P4bis** | **`displayDepth` runtime** — atom Jotai + `<DisplayDepthGate>` + META | ✅ | (à commit) | 12 tests verts ; toggle réversible ; 0 impact persistance ; distinct de PrecisionTier |
+| **P4** | **Custom UI 3 niveaux** — cascade tenant > verticale > défaut ; `resolveUI` ; store `uiOverrides` ; variant `custom` canevas ; branding scrapé | ⏸️ | — | Un tenant remplace un `StatCard` sans toucher la verticale ; `custom` compose 3 caps librement ; couleurs/logo = scrapé |
+| **P5** | **Câblage unique (8 maps dérivées)** — `derivations.ts` depuis `VerticalBlueprintRegistry` | ⏸️ | — | Ajouter une verticale = déposer 1 blueprint + `tsc` vert ; 8 fichiers existants remplacés par dérivations |
+| **P6** | **Certification runtime + CLIs + ADR-016** — `scripts/certify-vertical.ts`, `scripts/scrape-company.ts`, ADR-016, MAJ skill `vertical-forge` | ⏸️ | — | Forge L0→L3 tourne end-to-end sur `_cert_gym` ; skill sans piège doc |
 
 **Règle non négociable (AGENTS.md)** : chaque phase finit `npm run preflight` vert en sortie brute ; jamais de stub déguisé (P0 est précisément là pour en supprimer un) ; le socle NF525/SovereignGuard n'est jamais touché par le générateur.
 
