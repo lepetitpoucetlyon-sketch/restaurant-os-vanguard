@@ -53,6 +53,15 @@ Tout vit sous [`src/verticals/_shared/`](../../../src/verticals/_shared/) (la co
 | **Blueprint** | Spec déclarative d'une verticale : capabilities, tokens, routes, events, hardware, DNA, **précision**, **sous-variantes**, **substance** | `blueprint/VerticalBlueprint.ts`, `blueprint/SectorStudy.ts` |
 | **Générateur** | Fonction pure `generateVertical(bp)` → fichiers + patchs de câblage ; CLI `forge-vertical.ts` | `forge/generateVertical.ts`, `scripts/forge-vertical.ts` |
 | **Agent d'Étude de Secteur** | Donne la SUBSTANCE (process, réglementations, matériel, KPIs) — baseline déterministe + enrichissement LLM-agnostique | `sector-study/SectorStudyAgent.ts`, CLI `scripts/study-sector.ts` |
+| **CompanyScrapeAgent (Axe B)** | Scrape RÉEL d'un site public → `CompanyProfile` Zod (identité, catalogue, branding, secteur, échelle) avec frontière SSRF/injection. CLI dédiée. | `src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts`, CLI `scripts/scrape-company.ts` |
+| **CapabilityWiringRegistry** | Source unique `capability → {module, routes, guards, events, hardware}` — cocher = activer le module. 45 caps câblées. | `catalog/CapabilityWiring.ts` |
+| **QualificationEngine + 13 Dériveurs** | Wizard 7 axes ; auto-inférence depuis `CompanyProfile` ; 13 dériveurs (RBAC, businessLaws, RGPD, Security, Legal, Localization, Integrations, Comms, HardwareSizing, Kpi, Formation, Pricing, Backup) → `CalibratedTenantConfig`. | `src/modules/commerce/acquisition/onboarding/qualification/*`, `src/verticals/_shared/derivation/*` |
+| **BlindSpotDetector** | Auditeur cross-cutting — 8 familles × 20 règles fondatrices ; rapport `BlindSpotReport` (severity + evidence + fix). | `src/verticals/_shared/blind-spot/BlindSpotDetector.ts` |
+| **StudyToBlueprintCompiler** | `SectorStudy → VerticalBlueprint` proposé (Axe A auto). 5 templates de génération L2/L3 (dashboard, service, guard, hardware, test). | `src/verticals/_shared/forge/StudyToBlueprintCompiler.ts`, `templates/*` |
+| **Custom UI cascade (P4)** | Tenant peut surcharger tout slot UI via `tenants/{id}/uiOverrides` → cascade tenant > verticale > défaut. Branding scrapé alimente `TenantConfig.theme`. | `src/shared/plugins/{resolveUI,tenantUiOverridesSchema}.ts`, `src/lib/tenantBrandingFromScrape.ts` |
+| **Derivations socle (P5)** | 5 Records dérivés du `VerticalBlueprintRegistry` (meta, tokens, appearance, extra, legal) — 1 seul geste pour ajouter une verticale. | `src/verticals/_shared/catalog/derivations.ts` |
+| **Certif runtime (P6)** | CLI `certify-vertical` : smoke-test par verticale (structure, capabilities, dépendances, routes, parity, blindspots). Verdict `CERTIFIED / DEGRADED / FAILED`. | `scripts/certify-vertical.ts` |
+| **MCC provisioning scrape** | `POST /api/admin/mcc/tenants/scrape-charter` preview + `provisionNewClient({websiteUrl})` scrape auto → overlay branding. | `src/lib/mcc/provisioning/steps/scrapeCharter.ts`, `src/app/api/admin/mcc/tenants/scrape-charter/route.ts` |
 
 ---
 
@@ -113,41 +122,67 @@ Points d'ancrage (le forge en imprime le snippet exact) :
 - [`LegalContractGenerator.ts`](../../../src/modules/legal/services/LegalContractGenerator.ts) — addendum (FITNESS/COWORKING déjà présents)
 - [`HardwareProvisioningService.ts`](../../../src/modules/facility/services/HardwareProvisioningService.ts) — périphériques
 
-> ⚠️ Ces 8 Records `Record<PlatformVariant, …>` sont **exhaustifs** : ajouter un variant force TSC à exiger une entrée partout. (Objectif Phase B : les dériver d'un registre de Blueprints → 1 seul geste.)
+> ✅ **P5 livré** : `src/verticals/_shared/catalog/derivations.ts` fournit 5 dérivations pures depuis `VerticalBlueprintRegistry` (`deriveVerticalMeta`, `deriveDefaultTokens`, `deriveAppearance`, `deriveExtraTokens`, `deriveLegalTypes`) + `assertRegistryPlatformVariantParity()` comme garde-fou TSC. Migration effective des 5 Records concernés en cours (une PR par map, tests de parity `p5-derivations-parity.test.ts` verrouillent les régressions). Les 3 Records restants (SUPPORT_CONTEXTS, DNA_REGISTRY, SYSTEM_TENANTS_MAP) suivront.
 
 ### 🔹 Étape 5 — Certifier
 ```bash
-npx tsc --noEmit      # 0 erreur
-npx vitest run        # tests verts
-sentrux gate .        # pas de régression vs baseline (voir mémoire : baseline peut être périmée)
+npx tsc --noEmit                                       # 0 erreur
+npx vitest run                                         # tests verts
+sentrux gate .                                         # pas de régression vs baseline
+npx tsx scripts/certify-vertical.ts --slug <slug>      # smoke-test runtime (P6)
+npx tsx scripts/certify-vertical.ts --slug <slug> --strict   # exit≠0 si blindspot CRITICAL
+```
+
+La CLI `certify-vertical` (P6) prouve que « généré » = « fonctionne » : elle
+valide la structure Zod, résout les capabilities + dépendances transitives,
+compte les routes atteignables, vérifie la parity registry↔enum, et lance
+`BlindSpotDetector`. Verdict `CERTIFIED / DEGRADED / FAILED` + exit code
+distinct par type de régression.
+
+### 🔹 Étape 6 (Axe B uniquement) — Onboarder un tenant depuis un site
+```bash
+npx tsx scripts/scrape-company.ts --url https://bistro-chez-marie.fr --pretty
+```
+Preview de la charte graphique + catalogue extraits. Pour provisioning MCC :
+```
+POST /api/admin/mcc/tenants/scrape-charter  { websiteUrl }
+  → { profile, brandingOverlay }              # human-in-the-loop
+puis  provisionNewClient({ ...request, websiteUrl })
+  → scrape rejoué + overlay appliqué au TenantSeeder
 ```
 
 ---
 
 ## 🎚️ 4. Précision modulable · Sous-variantes · Capitalisation
 
-- **Tiers de précision** (champ `precision` du Blueprint) :
+- **Tiers de précision — BUILD-TIME** (champ `precision` du Blueprint, cf. **ADR-016**) :
   - **L0** squelette (plugin + index + registry, fallback `custom`).
   - **L1** câblé/roulant (adapters via factories + tokens + DNA + stubs + health ping).
-  - **L2** riche (choreography métier, StatCard custom, features issues de la **substance**).
-  - **L3** certifié (tests unit/E2E, hardware, addendum légal câblé).
-- **Sous-variantes** : `subVariants[]` = deltas sur la base (ex. `restaurant` → `brunch` vs `gastronomique`). `resolveSubVariant(bp, slug)` les aplati. Zéro duplication.
-- **Capitalisation** : les adapters composent les **factories** partagées (`...makeFinanceAdapter()`) + leurs deltas. On n'écrit QUE ce qui est propre à la verticale.
+  - **L2** riche (dashboards + services + guards issus de la **substance** via templates P3).
+  - **L3** certifié (tests unit/E2E, hardware provisioning, addendum légal câblé).
+- **⚠️ NE PAS confondre avec `displayDepth` — RUNTIME** (`essential | manager | enterprise`, cf. ADR-016) : c'est la densité UI que le gérant voit, changeable en un clic. Un tenant L3 peut être affiché `essential`. Le blueprint NE déclare PAS `displayDepth`.
+- **Sous-variantes** : `subVariants[]` = deltas sur la base. `resolveSubVariant(bp, slug)` les aplati. Zéro duplication.
+- **Capitalisation** : les adapters composent les **factories** partagées + leurs deltas. On n'écrit QUE ce qui est propre à la verticale.
+- **Deux axes de création** :
+  - **Axe A — verticale (secteur, réutilisable)** : `SectorStudyAgent` → `StudyToBlueprintCompiler` → Blueprint → `generateVertical(bp, {tier})` → checklist câblage.
+  - **Axe B — tenant (1 entreprise donnée)** : `CompanyScrapeAgent(websiteUrl)` → `CompanyProfile` → `QualificationEngine.inferAnswers` → 7 axes wizard → 13 dériveurs → `CalibratedTenantConfig` → `BlindSpotDetector.detectTenant` → `TenantSeeder.seed({brandingOverlay})`.
 
 ---
 
-## 📋 5. Checklist de Certification (10 critères)
+## 📋 5. Checklist de Certification (12 critères)
 
 - [ ] 1. Blueprint écrit et **valide** (`validateBlueprint` sans issue).
-- [ ] 2. Profil archétypal correct → gating culinaire (`usesCulinaryStock`/`mod_haccp`/`mod_kds`) cohérent.
-- [ ] 3. Capabilities ⊂ catalogue (aucune clé fantôme — `findUnknownCapabilities`).
-- [ ] 4. Events verticaux typés dans [`vertical.events.ts`](../../../src/shared/eventBus/events/vertical.events.ts) + `catalog.ts`.
+- [ ] 2. Profil archétypal correct → gating culinaire cohérent.
+- [ ] 3. Capabilities ⊂ catalogue (aucune clé fantôme).
+- [ ] 4. Events verticaux typés dans [`vertical.events.ts`](../../../src/shared/eventBus/events/vertical.events.ts).
 - [ ] 5. Plugin enregistré dans `VerticalRegistry.ts` (+ UI dans `VerticalUIRegistry.ts` si skin).
-- [ ] 6. DNA `<slug>-full-dna.ts` généré + enregistré dans `seeds/index.ts`.
+- [ ] 6. DNA généré + enregistré dans `seeds/index.ts`.
 - [ ] 7. Triplet de tenants système inscrit dans `SystemTenantRegistry.ts`.
 - [ ] 8. Addendum juridique présent dans `LegalContractGenerator.ts`.
 - [ ] 9. Périphériques du profil déclarés dans `HardwareProvisioningService.ts`.
 - [ ] 10. `npx tsc --noEmit` = **0** · `vitest` vert · `sentrux gate` sans régression.
+- [ ] 11. **P6 — Smoke-test runtime** : `npx tsx scripts/certify-vertical.ts --slug <slug>` renvoie `CERTIFIED` (ou `DEGRADED` avec liste d'angles morts acceptée).
+- [ ] 12. **BlindSpotDetector** — aucun angle mort `critical` non traité (voir `p2bis` rules).
 
 ---
 
