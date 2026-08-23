@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3477** · LOC : **316 732**
+- Fichiers `.ts/.tsx` : **3480** · LOC : **317 240**
 - Pages : **77** · Routes API : **209**
 
 ## Couches
@@ -18,7 +18,7 @@
 | `src/lib/` | 228 |
 | `src/infrastructure/` | 46 |
 | `src/store/` | 24 |
-| `src/kernel/` | 21 |
+| `src/kernel/` | 22 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
 | `src/instances/` | 5 |
@@ -76,8 +76,8 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
+| `src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts` | 735 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
-| `src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts` | 720 |
 | `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
 | `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
 | `src/__tests__/anglemorts/anglemorts-batch4.test.ts` | 612 |

@@ -28,6 +28,13 @@ import {
     precisionAtLeast,
     resolveBlueprintCapabilities,
 } from '../blueprint/VerticalBlueprint';
+import {
+    renderKpiDashboard,
+    renderWorkflowServices,
+    renderRegulationGuards,
+    renderHardwareProvisioning,
+    renderVerticalTest,
+} from './templates';
 
 export interface GeneratedFile {
     /** Chemin relatif à la racine du repo. */
@@ -419,6 +426,8 @@ export function generateVertical(bp: VerticalBlueprint, opts: ForgeOptions = {})
     }
 
     const withAdapters = precisionAtLeast(bp.precision, 'L1');
+    const withSubstance = precisionAtLeast(bp.precision, 'L2');
+    const withHardwareAndTests = precisionAtLeast(bp.precision, 'L3');
 
     // Toujours : plugin + index (L0).
     if (withAdapters) files.push(...renderAdapters(bp));
@@ -430,6 +439,24 @@ export function generateVertical(bp: VerticalBlueprint, opts: ForgeOptions = {})
         files.push(renderTokens(bp));
         files.push({ ...renderDna(bp), skipIfExists: true });
         if (emitStubs) files.push(...renderStubs(bp));
+    }
+
+    // L2+ : émettre la richesse depuis SectorStudy.substance (templates §C.5 P3).
+    if (withSubstance && bp.substance) {
+        files.push(...renderKpiDashboard({ slug: bp.slug, className: bp.className, kpis: bp.substance.kpis, subVariant: bp.substance.subVariant }));
+        files.push(...renderWorkflowServices({ slug: bp.slug, className: bp.className, workflows: bp.substance.workflows }));
+        files.push(...renderRegulationGuards({ slug: bp.slug, className: bp.className, regulations: bp.substance.regulations }));
+    }
+
+    // L3 : hardware provisioning + tests smoke auto-générés.
+    if (withHardwareAndTests && bp.substance) {
+        files.push(...renderHardwareProvisioning({ slug: bp.slug, className: bp.className, hardware: bp.substance.hardware }));
+        files.push(...renderVerticalTest({
+            slug: bp.slug,
+            className: bp.className,
+            routes: bp.routes.map(r => ({ path: r.path, componentPath: r.componentPath, componentExport: r.componentExport })),
+            capabilities: (Object.keys(resolveBlueprintCapabilities(bp)) as CapabilityKey[]).filter(k => resolveBlueprintCapabilities(bp)[k] === true),
+        }));
     }
 
     return { slug: bp.slug, files, wiring: renderWiring(bp), issues };

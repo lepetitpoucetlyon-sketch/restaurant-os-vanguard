@@ -1,13 +1,13 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3477,
-    "loc": 316732,
+    "files": 3480,
+    "loc": 317240,
     "pages": 77,
     "apiRoutes": 209
   },
   "layers": {
-    "kernel": 21,
+    "kernel": 22,
     "lib": 228,
     "shared": 666,
     "modules": 1580,
@@ -114,12 +114,12 @@
   ],
   "godFiles": [
     {
-      "file": "src/__tests__/handlers/saga-handlers.test.ts",
-      "loc": 731
+      "file": "src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts",
+      "loc": 735
     },
     {
-      "file": "src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts",
-      "loc": 720
+      "file": "src/__tests__/handlers/saga-handlers.test.ts",
+      "loc": 731
     },
     {
       "file": "src/__tests__/anglemorts/anglemorts-batch2.test.ts",
