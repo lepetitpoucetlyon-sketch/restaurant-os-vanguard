@@ -14,3 +14,6 @@
 
 export * from './RbacDeriver';
 export * from './BusinessLawsDeriver';
+export * from './RgpdDeriver';
+export * from './SecurityDeriver';
+export * from './LegalDeriver';
