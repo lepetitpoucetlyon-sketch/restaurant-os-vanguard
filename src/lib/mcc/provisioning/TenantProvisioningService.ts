@@ -11,6 +11,7 @@ import { FiscalKeyService } from '@/modules/finance';
 import { toError } from "@/lib/toError";
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
+import { resolveBrandingOverlayFromRequest } from './steps/scrapeCharter';
 import type { ProvisioningRequest, ProvisioningResult } from './types';
 
 export type { ProvisioningRequest, ProvisioningResult };
@@ -47,8 +48,17 @@ export class TenantProvisioningService {
         const compensations: Array<() => Promise<void>> = [];
 
         try {
+            // ── 0. Résolution branding : scrape charte si websiteUrl fourni ──────
+            // Best-effort : échec silencieux → fallback request.branding.
+            const brandingOverlay = await resolveBrandingOverlayFromRequest({
+                websiteUrl: request.websiteUrl,
+                companyName: request.companyName,
+                siret: request.siret,
+            });
+
             // ── 1. Seeding complet ────────────────────────────────────────────────
             // TenantSeeder écrit tenantConfig + PCG + fiscal genesis + tables/zones.
+            // brandingOverlay (s'il existe) écrase primaryColor/logoUrl/fontFamily.
             const seedResult = await TenantSeeder.seed({
                 tenantId,
                 name:        request.companyName,
@@ -56,6 +66,7 @@ export class TenantProvisioningService {
                 variant,
                 primaryColor: request.branding.primaryColor,
                 siren:       request.siret,
+                brandingOverlay: brandingOverlay ?? undefined,
             });
             if (!seedResult.success) {
                 logger.warn('[MCC/prov] TenantSeeder partial failure', { error: seedResult.error });
@@ -70,11 +81,12 @@ export class TenantProvisioningService {
             });
 
             // ── 2. Patch B2B-specific fields ──────────────────────────────────────
+            // Le logo overlay (scrapé) prime sur celui de la request.
             await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
                 siret:              request.siret,
                 subscriptionPlan:   request.planId,
                 b2bProvisionedAt:   new Date().toISOString(),
-                theme: { logo: request.branding.logoUrl ?? null },
+                theme: { logo: brandingOverlay?.logoUrl ?? request.branding.logoUrl ?? null },
             }, { merge: true });
 
             // ── 3. RBAC defaults ──────────────────────────────────────────────────
@@ -113,9 +125,10 @@ export class TenantProvisioningService {
             }
 
             // ── 5. White-label branding ───────────────────────────────────────────
+            // Overlay scrapé prime sur la primaryColor de la request.
             await injectBrandingVars(tenantId, {
                 mode:         'custom',
-                primaryColor: request.branding.primaryColor,
+                primaryColor: brandingOverlay?.primaryColor ?? request.branding.primaryColor,
                 displayName:  request.companyName,
                 splashEnabled: false,
             }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', toError(err).message));
