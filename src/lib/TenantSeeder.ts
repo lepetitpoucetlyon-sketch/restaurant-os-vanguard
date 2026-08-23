@@ -15,6 +15,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { getSystemTenantTier } from '@/lib/mcc/SystemTenantRegistry';
 import type { SystemTier } from '@/lib/mcc/SystemTenantRegistry';
 import { toError } from "@/lib/toError";
+import type { ScrapedBrandingOverlay } from "@/lib/tenantBrandingFromScrape";
 
 export interface SeedInput {
   tenantId: string;
@@ -27,6 +28,16 @@ export interface SeedInput {
   primaryColor?: string;
   /** Nombre de jours d'essai. Si défini et > 0, licenceStatus = 'TRIAL' au lieu de 'ACTIVE'. */
   trialDays?: number;
+  /**
+   * Overlay branding scrapé (P0 CompanyScrapeAgent). Le caller produit cet overlay
+   * via `tenantBrandingFromScrape(companyProfile)` — TenantSeeder n'importe pas
+   * le schema CompanyProfile pour rester sous le seuil `no_god_files` (fan-out).
+   *
+   * Si fourni :
+   *  - `primaryColor / secondaryColor / logoUrl / fontFamily` écrasent les valeurs
+   *    par défaut de la DNA — le tenant démarre à ses couleurs réelles.
+   */
+  brandingOverlay?: ScrapedBrandingOverlay;
 }
 
 /**
@@ -70,10 +81,15 @@ interface SeedResult {
  */
 export const TenantSeeder = {
   async seed(input: SeedInput): Promise<SeedResult> {
-    const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant', trialDays } = input;
+    const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant', trialDays, brandingOverlay } = input;
     const adminPin = resolveAdminPin(input.adminPin, input.adminEmail);
     const seededPaths: string[] = [];
     const baseDNA = resolveDNA(variant);
+
+    // Branding réel scrapé (P0, pré-calculé par le caller via tenantBrandingFromScrape).
+    // TenantSeeder n'importe pas CompanyProfile → fan-out sentrux préservé.
+    const scrapedBranding = brandingOverlay ?? null;
+    const resolvedSiren = siren ?? '';
 
     logger.info(`[TenantSeeder] Seeding tenant ${tenantId} (variant=${variant})...`);
 
@@ -101,11 +117,18 @@ export const TenantSeeder = {
           name,
           ownerId: adminEmail,
           createdAt: Date.now(),
-          siren: siren ?? '',
+          siren: resolvedSiren,
         },
         theme: {
           ...baseDNA.theme,
-          primaryColor: primaryColor ?? baseDNA.theme?.primaryColor ?? '#C5A059',
+          primaryColor:
+            scrapedBranding?.primaryColor
+            ?? primaryColor
+            ?? baseDNA.theme?.primaryColor
+            ?? '#C5A059',
+          ...(scrapedBranding?.secondaryColor ? { secondaryColor: scrapedBranding.secondaryColor } : {}),
+          ...(scrapedBranding?.logoUrl ? { logoUrl: scrapedBranding.logoUrl } : {}),
+          ...(scrapedBranding?.fontFamily ? { fontFamily: scrapedBranding.fontFamily } : {}),
         },
         status: {
           ...baseDNA.status,
@@ -314,14 +337,15 @@ export function buildBrandTokens(
       logoUrl:      null,
     };
   }
-  // REFERENCE ou CLIENT
+  // REFERENCE ou CLIENT — branding scrapé (P0) prioritaire s'il existe.
+  const scraped = input.brandingOverlay ?? null;
   return {
     tenantId,
     brandName:    input.name,
     tagline:      null,
-    primaryColor: input.primaryColor ?? '#C5A358',
-    brandingMode: 'default',
+    primaryColor: scraped?.primaryColor ?? input.primaryColor ?? '#C5A358',
+    brandingMode: scraped ? 'custom' : 'default',
     splashEnabled: false,
-    logoUrl:      null,
+    logoUrl:      scraped?.logoUrl ?? null,
   };
 }

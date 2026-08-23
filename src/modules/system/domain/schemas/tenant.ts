@@ -27,7 +27,7 @@ export const VERTICAL_META: Record<PlatformVariant, { emoji: string; label: stri
     salon: { emoji: '✂️', label: 'Salon' },
     clinic: { emoji: '🏥', label: 'Clinique' },
     retail: { emoji: '🛍️', label: 'Retail' },
-    custom: { emoji: '🏢', label: 'Custom' },
+    custom: { emoji: '✨', label: 'Personnalisé' },
     gym: { emoji: '🏋️', label: 'Salle de Sport' },
     coworking: { emoji: '🏢', label: 'Coworking' },
     veterinary: { emoji: '🐾', label: 'Vétérinaire' },
@@ -40,6 +40,8 @@ export const TenantThemeSchema = z.object({
     logoUrl: z.string(),
     borderRadius: z.string(),
     appearance: z.enum(['light', 'dark']),
+    /** Famille de police détectée par le scrape (P0 CompanyScrapeAgent). Optionnel. */
+    fontFamily: z.string().optional(),
 });
 
 export const OrchestratorSignalSchema = z

@@ -5,17 +5,17 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3481** · LOC : **317 371**
-- Pages : **77** · Routes API : **209**
+- Fichiers `.ts/.tsx` : **3492** · LOC : **318 936**
+- Pages : **77** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1580 |
-| `src/shared/` | 666 |
-| `src/app/` | 420 |
-| `src/verticals/` | 236 |
-| `src/lib/` | 229 |
+| `src/shared/` | 668 |
+| `src/app/` | 421 |
+| `src/verticals/` | 237 |
+| `src/lib/` | 231 |
 | `src/infrastructure/` | 46 |
 | `src/store/` | 24 |
 | `src/kernel/` | 22 |
@@ -43,7 +43,7 @@
 | `shared/seeds/` | 14 |
 | `shared/connector-manifest/` | 11 |
 | `shared/contexts/` | 10 |
-| `shared/plugins/` | 7 |
+| `shared/plugins/` | 9 |
 | `shared/schemas/` | 7 |
 | `shared/utils/` | 7 |
 | `shared/services/` | 3 |
