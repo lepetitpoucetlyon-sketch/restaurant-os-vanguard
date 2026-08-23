@@ -53,47 +53,50 @@ function HaccpPage() {
 
     return (
         <PageShell
+            kicker="Conformité"
             title="HACCP & Qualité"
             subtitle="Relevés sanitaires, traçabilité et contrôle réception — conformité hygiène."
             icon={Thermometer}
             breadcrumbs={[{ label: "Opérations" }, { label: "HACCP" }]}
+            alert={tempAlerts.length > 0 ? "critical" : undefined}
+            status={tempAlerts.length > 0 ? { label: `${tempAlerts.length} alerte${tempAlerts.length > 1 ? "s" : ""}`, tone: "critical" } : undefined}
             actions={
                 <ActionGuard page="haccp" action="archive_logs">
-                    <button
+                    <PageShell.CTA
+                        tone="ghost"
                         onClick={handleExportPMS}
                         disabled={pmsLoading}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card border border-border-default hover:border-action-primary/50 text-text-muted hover:text-action-primary text-xs font-medium transition-all disabled:opacity-40"
                     >
-                        <Download className="w-4 h-4" />
-                        {pmsLoading ? "Génération..." : "Exporter PMS"}
-                    </button>
+                        <Download className="w-[15px] h-[15px]" />
+                        <span>{pmsLoading ? "Génération…" : "Exporter PMS"}</span>
+                    </PageShell.CTA>
                 </ActionGuard>
             }
             tabs={
-                <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                <>
                     {tabs.map((tab: { id: string; label: string; icon: typeof ClipboardCheck; badge?: number }) => {
                         const Icon = tab.icon;
                         const active = activeTab === tab.id;
                         return (
                             <TabGuard key={tab.id} pageKey="haccp" tabKey={tab.id}>
-                                <button
+                                <PageShell.Tab
+                                    active={active}
                                     onClick={() => setActiveTab(tab.id as Parameters<typeof setActiveTab>[0])}
-                                    className={cn(
-                                        "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap",
-                                        active ? "bg-action-primary text-text-on-primary shadow-sm" : "bg-surface-card text-text-muted hover:text-text-primary"
-                                    )}
+                                    icon={Icon}
                                 >
-                                    <Icon className="w-3.5 h-3.5" /> {tab.label}
-                                    {tab.badge != null && tab.badge > 0 && (
-                                        <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-status-danger text-text-primary text-[10px] font-bold">
-                                            {tab.badge > 9 ? "9+" : tab.badge}
-                                        </span>
-                                    )}
-                                </button>
+                                    <span className="inline-flex items-center gap-1.5">
+                                        {tab.label}
+                                        {tab.badge != null && tab.badge > 0 && (
+                                            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-serif font-black tabular-nums">
+                                                {tab.badge > 9 ? "9+" : tab.badge}
+                                            </span>
+                                        )}
+                                    </span>
+                                </PageShell.Tab>
                             </TabGuard>
                         );
                     })}
-                </div>
+                </>
             }
         >
             {tempAlerts.length > 0 && (

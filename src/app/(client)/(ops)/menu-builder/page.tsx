@@ -82,6 +82,7 @@ function MenuBuilderPage() {
     if (isLoading) {
         return (
             <PageShell
+                kicker="Carte"
                 title="Menu Builder"
                 subtitle="Gestion de la carte, des prix, allergènes et liaison recettes."
                 icon={ChefHat}

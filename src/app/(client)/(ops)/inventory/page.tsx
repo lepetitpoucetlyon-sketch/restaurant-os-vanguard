@@ -61,59 +61,60 @@ function InventoryPage() {
 
     return (
         <PageShell
+            kicker="Logistique"
             title="Stocks & Inventaire"
             subtitle="Réception, transferts, préparations et cartographie du stockage."
             icon={Package}
             breadcrumbs={[{ label: "Opérations" }, { label: "Inventaire" }]}
             actions={
-                <div className="flex items-center gap-2 flex-wrap">
-                    <Link href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-default bg-surface-card text-xs font-medium hover:bg-surface-bg transition-colors">
-                        <Wrench className="w-3.5 h-3.5 text-action-primary" /> GMAO
+                <>
+                    <Link
+                        href="/facility"
+                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
+                    >
+                        <Wrench className="w-[14px] h-[14px]" /> <span>GMAO</span>
                     </Link>
-                    <ActionGuard page="inventory" action="adjust_stock">
-                        <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-medium hover:bg-action-primary-hover shadow-sm transition-all">
-                            <PlusCircle className="w-3.5 h-3.5" /> Réception
-                        </button>
-                    </ActionGuard>
-                    <button onClick={() => setPrepOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-default bg-surface-card text-xs font-medium hover:bg-surface-bg transition-colors">
-                        <ChefHat className="w-3.5 h-3.5" /> Préparation
+                    <button
+                        onClick={() => setPrepOpen(true)}
+                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
+                    >
+                        <ChefHat className="w-[14px] h-[14px]" /> <span>Préparation</span>
                     </button>
-                </div>
+                    <ActionGuard page="inventory" action="adjust_stock">
+                        <PageShell.CTA onClick={() => setReceptionOpen(true)}>
+                            <PlusCircle className="w-[15px] h-[15px]" /> <span>Réception</span>
+                        </PageShell.CTA>
+                    </ActionGuard>
+                </>
             }
             tabs={
-                <div className="flex gap-2">
-                    <button
+                <>
+                    <PageShell.Tab
+                        active={activeTab === "stock"}
                         onClick={() => setActiveTab("stock")}
-                        className={cn(
-                            "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
-                            activeTab === "stock" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
-                        )}
+                        icon={Package}
                     >
-                        <Package className="w-3.5 h-3.5" /> Stocks
-                    </button>
+                        Stocks
+                    </PageShell.Tab>
                     <TabGuard pageKey="inventory" tabKey="storage">
-                        <button
+                        <PageShell.Tab
+                            active={activeTab === "storage"}
                             onClick={() => setActiveTab("storage")}
-                            className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
-                                activeTab === "storage" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
-                            )}
+                            icon={Warehouse}
                         >
-                            <Warehouse className="w-3.5 h-3.5" /> Plan de stockage
-                        </button>
+                            Plan de stockage
+                        </PageShell.Tab>
                     </TabGuard>
                     <TabGuard pageKey="inventory" tabKey="rotating_count">
-                        <button
+                        <PageShell.Tab
+                            active={activeTab === "rotating_count"}
                             onClick={() => setActiveTab("rotating_count")}
-                            className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
-                                activeTab === "rotating_count" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
-                            )}
+                            icon={RotateCcw}
                         >
-                            <RotateCcw className="w-3.5 h-3.5" /> Comptage tournant
-                        </button>
+                            Comptage tournant
+                        </PageShell.Tab>
                     </TabGuard>
-                </div>
+                </>
             }
         >
 

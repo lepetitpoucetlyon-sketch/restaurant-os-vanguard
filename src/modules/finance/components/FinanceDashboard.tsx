@@ -92,19 +92,17 @@ export function FinanceDashboard() {
 
     return (
         <PageShell
+            kicker="Trésorerie"
             title="Finance & Comptabilité"
             subtitle="Pilotage financier, facturation, trésorerie et conformité fiscale NF525."
             icon={Landmark}
             breadcrumbs={[{ label: "Opérations" }, { label: "Finance & Comptabilité" }]}
             actions={
                 <ActionGuard page="finance" action="export_fec">
-                    <button
-                        onClick={() => setClaimOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold shadow-md hover:bg-action-primary-hover active:scale-95 transition-all"
-                    >
-                        <PlusCircle className="w-4 h-4" />
-                        <span>Note de Frais</span>
-                    </button>
+                    <PageShell.CTA onClick={() => setClaimOpen(true)}>
+                        <PlusCircle className="w-[15px] h-[15px]" />
+                        <span>Note de frais</span>
+                    </PageShell.CTA>
                 </ActionGuard>
             }
         >

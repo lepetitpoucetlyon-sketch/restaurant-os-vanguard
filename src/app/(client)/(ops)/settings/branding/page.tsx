@@ -9,8 +9,9 @@ import { Sparkles, Palette } from 'lucide-react';
 function BrandingSettingsPage() {
   return (
     <PageShell
-      title="Identité Visuelle & Charte Graphique"
-      subtitle="Personnalisez les couleurs, la typographie, les formes et l'écran de démarrage de votre restaurant"
+      kicker="Charte graphique"
+      title="Identité visuelle"
+      subtitle="Personnalisez les couleurs, la typographie, les formes et l'écran de démarrage de votre restaurant."
       icon={Palette}
       breadcrumbs={[
         { label: 'Paramètres', href: '/settings' },

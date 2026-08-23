@@ -41,7 +41,8 @@ export function PmsPage() {
 
   return (
     <PageShell
-      title="PMS & Hébergement"
+      kicker="Hôtellerie"
+      title="PMS & Chambres"
       subtitle="Facturation chambre, transferts d'addition restaurant et passerelle PMS hôtelière."
       icon={BedDouble}
       breadcrumbs={[{ label: "Opérations" }, { label: "PMS & Chambres" }]}

@@ -14,7 +14,8 @@ function FacilityPage() {
 
   return (
     <PageShell
-      title="GMAO & Maintenance Matériel"
+      kicker="Maintenance"
+      title="GMAO & Matériel"
       subtitle="Gestion des équipements, capteurs IoT et interventions préventives."
       icon={Wrench}
       breadcrumbs={[{ label: "Opérations" }, { label: "GMAO & Matériel" }]}

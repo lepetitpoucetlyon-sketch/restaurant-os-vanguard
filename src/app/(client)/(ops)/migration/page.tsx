@@ -12,7 +12,8 @@ function MigrationPage() {
 
   return (
     <PageShell
-      title="Migration & Reprise d'Antériorité"
+      kicker="Reprise d'antériorité"
+      title="Migration"
       subtitle="Importez vos archives comptables FEC et historiques de réservations (Zenchef, TheFork)."
       icon={ArrowRightLeft}
       breadcrumbs={[{ label: "Administration" }, { label: "Migration" }]}

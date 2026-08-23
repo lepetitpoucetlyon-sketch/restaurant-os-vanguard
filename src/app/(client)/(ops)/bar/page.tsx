@@ -105,10 +105,13 @@ function BarPage() {
 
     return (
         <PageShell
-            title="Bar & Mixologie"
+            kicker="Cave & mixologie"
+            title="Bar"
             subtitle="KDS Bar, gestion de la cave, cocktails et accords mets-vins."
             icon={WineIcon}
             breadcrumbs={[{ label: "Opérations" }, { label: "Bar & Mixologie" }]}
+            alert={rushMode ? "rush" : undefined}
+            status={rushMode ? { label: "Rush", tone: "rush" } : undefined}
         >
             <div className="flex flex-1 h-[calc(100vh-140px)] overflow-hidden">
                 <BarSidebar
