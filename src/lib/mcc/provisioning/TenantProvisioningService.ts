@@ -10,8 +10,7 @@ import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/modules/finance';
 import { toError } from "@/lib/toError";
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
-import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount } from './steps/provisioningSteps';
-import { resolveBrandingOverlayFromRequest } from './steps/scrapeCharter';
+import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount, resolveBrandingOverlayFromRequest } from './steps/provisioningSteps';
 import type { ProvisioningRequest, ProvisioningResult } from './types';
 
 export type { ProvisioningRequest, ProvisioningResult };

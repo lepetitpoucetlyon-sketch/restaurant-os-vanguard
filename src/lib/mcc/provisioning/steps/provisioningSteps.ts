@@ -5,9 +5,14 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
+import { scrapeCompany } from '@/modules/commerce';
 import type { TenantID } from '@/shared/types/brands';
 import { FiscalKeyService } from '@/modules/finance';
 import { toError } from "@/lib/toError";
+import {
+    tenantBrandingFromScrape,
+    type ScrapedBrandingOverlay,
+} from '@/lib/tenantBrandingFromScrape';
 import type { ProvisioningRequest } from '../types';
 
 export async function setupStripeCustomer(tenantId: string, request: ProvisioningRequest): Promise<string> {
@@ -121,5 +126,46 @@ export async function setupOwnerAccount(tenantId: string, ownerId: string, reque
     } catch (authErr) {
         logger.error('[MCC/prov] Échec création compte propriétaire (auth provider)', authErr);
         throw authErr;
+    }
+}
+// ── Scrape charter step (fusionné ici pour préserver le fan-out sentrux
+//     de TenantProvisioningService.ts) ─────────────────────────────────────────
+
+export interface ScrapeCharterInput {
+    websiteUrl?: string;
+    companyName: string;
+    siret: string;
+}
+
+export async function resolveBrandingOverlayFromRequest(
+    input: ScrapeCharterInput,
+): Promise<ScrapedBrandingOverlay | null> {
+    if (!input.websiteUrl) return null;
+    try {
+        const profile = await scrapeCompany({
+            websiteUrl: input.websiteUrl,
+            fallbackName: input.companyName,
+            siren: input.siret,
+        });
+        const overlay = tenantBrandingFromScrape(profile);
+        if (overlay) {
+            logger.info('[MCC/prov] Charte extraite du site', {
+                websiteUrl: input.websiteUrl,
+                primaryColor: overlay.primaryColor,
+                hasLogo: Boolean(overlay.logoUrl),
+                hasFont: Boolean(overlay.fontFamily),
+            });
+        } else {
+            logger.info('[MCC/prov] Scrape sans branding exploitable — fallback request.branding', {
+                websiteUrl: input.websiteUrl,
+            });
+        }
+        return overlay;
+    } catch (err) {
+        logger.warn('[MCC/prov] Scrape charte échoué — fallback request.branding', {
+            websiteUrl: input.websiteUrl,
+            error: toError(err).message,
+        });
+        return null;
     }
 }

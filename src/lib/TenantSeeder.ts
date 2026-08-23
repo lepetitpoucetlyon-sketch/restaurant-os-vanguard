@@ -15,7 +15,20 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { getSystemTenantTier } from '@/lib/mcc/SystemTenantRegistry';
 import type { SystemTier } from '@/lib/mcc/SystemTenantRegistry';
 import { toError } from "@/lib/toError";
-import type { ScrapedBrandingOverlay } from "@/lib/tenantBrandingFromScrape";
+
+/**
+ * Miroir local minimal de `ScrapedBrandingOverlay` (défini dans
+ * `@/lib/tenantBrandingFromScrape`). Inlined pour préserver le fan-out
+ * sentrux (`no_god_files`) — le vrai type est le contrat public,
+ * celui-ci sert uniquement à typer SeedInput.brandingOverlay sans
+ * ajouter de module au graphe d'imports.
+ */
+type SeedBrandingOverlay = {
+  primaryColor: string;
+  secondaryColor?: string;
+  logoUrl?: string;
+  fontFamily?: string;
+};
 
 export interface SeedInput {
   tenantId: string;
@@ -37,7 +50,7 @@ export interface SeedInput {
    *  - `primaryColor / secondaryColor / logoUrl / fontFamily` écrasent les valeurs
    *    par défaut de la DNA — le tenant démarre à ses couleurs réelles.
    */
-  brandingOverlay?: ScrapedBrandingOverlay;
+  brandingOverlay?: SeedBrandingOverlay;
 }
 
 /**

@@ -46,7 +46,7 @@ const mockScrapeCompany = vi.mocked(scrapeCompany);
 
 // ── SUT ────────────────────────────────────────────────────────────────────────
 
-import { resolveBrandingOverlayFromRequest } from '@/lib/mcc/provisioning/steps/scrapeCharter';
+import { resolveBrandingOverlayFromRequest } from '@/lib/mcc/provisioning/steps/provisioningSteps';
 import type { CompanyProfile } from '@/modules/commerce/acquisition/onboarding/schemas/companyProfile';
 
 function makeProfile(
