@@ -21,3 +21,7 @@ export * from './LocalizationDeriver';
 export * from './IntegrationsDeriver';
 export * from './CommsDeriver';
 export * from './HardwareSizingDeriver';
+export * from './KpiDeriver';
+export * from './FormationDeriver';
+export * from './PricingDeriver';
+export * from './BackupDeriver';
