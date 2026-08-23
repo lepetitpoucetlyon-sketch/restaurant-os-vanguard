@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3462** · LOC : **314 513**
+- Fichiers `.ts/.tsx` : **3465** · LOC : **315 196**
 - Pages : **77** · Routes API : **209**
 
 ## Couches
@@ -15,7 +15,7 @@
 | `src/shared/` | 666 |
 | `src/app/` | 420 |
 | `src/lib/` | 228 |
-| `src/verticals/` | 223 |
+| `src/verticals/` | 225 |
 | `src/infrastructure/` | 46 |
 | `src/store/` | 24 |
 | `src/kernel/` | 21 |

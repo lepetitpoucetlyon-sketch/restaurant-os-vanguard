@@ -17,3 +17,7 @@ export * from './BusinessLawsDeriver';
 export * from './RgpdDeriver';
 export * from './SecurityDeriver';
 export * from './LegalDeriver';
+export * from './LocalizationDeriver';
+export * from './IntegrationsDeriver';
+export * from './CommsDeriver';
+export * from './HardwareSizingDeriver';
