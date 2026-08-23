@@ -9,6 +9,7 @@ import type { User } from '@nexus/contracts';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';
+const DEV_BYPASS_KEY = 'executive_dev_bypass_active';
 
 interface LoginWithPinResponse {
     token: string;
@@ -55,7 +56,28 @@ export function useAuthSession() {
             setIsFirebaseAuthReady(true);
 
             if (!firebaseUser) {
-                if (typeof window !== 'undefined') sessionStorage.removeItem(SESSION_STORAGE_KEY);
+                // Dev-mode bypass: preserve the local session when the dev PIN
+                // flow (attemptDevLogin) stamped an active flag. Otherwise the
+                // Firebase-null callback would wipe every dev login within ms.
+                if (
+                    process.env.NODE_ENV === 'development' &&
+                    typeof window !== 'undefined' &&
+                    sessionStorage.getItem(DEV_BYPASS_KEY)
+                ) {
+                    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+                    if (raw) {
+                        try {
+                            const persisted = (JSON.parse(raw) as PersistedSession).userId;
+                            sessionUserIdRef.current = persisted;
+                            setSessionUserId(persisted);
+                            return;
+                        } catch (_e) {}
+                    }
+                }
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+                    sessionStorage.removeItem(DEV_BYPASS_KEY);
+                }
                 sessionUserIdRef.current = null;
                 setSessionUserId(null);
                 return;
@@ -83,6 +105,7 @@ export function useAuthSession() {
     const clearPersistedSession = () => {
         if (typeof window === 'undefined') return;
         sessionStorage.removeItem(SESSION_STORAGE_KEY);
+        sessionStorage.removeItem(DEV_BYPASS_KEY);
         localStorage.removeItem(LEGACY_SESSION_KEY);
     };
 

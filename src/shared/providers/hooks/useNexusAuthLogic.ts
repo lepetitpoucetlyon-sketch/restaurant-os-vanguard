@@ -31,16 +31,25 @@ function resolveActiveUser(
 /**
  * Pure dev-mode fallback (no hooks): validates a PIN locally in development.
  * Returns true and commits the session when the PIN matches, otherwise false.
+ *
+ * Persists the session BEFORE commit and marks a dev-bypass flag in
+ * sessionStorage so `onAuthStateChanged`'s null-user branch preserves the
+ * dev session instead of clearing it (see AuthSession.tsx).
  */
 async function attemptDevLogin(
     users: User[],
     userId: string,
     pin: string,
+    persistSession: (uid: string) => void,
     commitSession: () => void
 ): Promise<boolean> {
     if (process.env.NODE_ENV !== 'development') return false;
     const user = users.find((u: User) => u.id === userId);
     if (user && (pin === '9999' || await IdentityManager.matchesPin(user, pin))) {
+        if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem('executive_dev_bypass_active', userId);
+        }
+        persistSession(userId);
         commitSession();
         return true;
     }
@@ -89,7 +98,7 @@ export function useNexusAuthLogic(
         try {
             const cloudResult = await attemptCloudLogin(session.loginWithPinCallable, session.loginWithFirebase, userId, pin, commitSession);
             if (cloudResult !== null) return cloudResult;
-            return await attemptDevLogin(staff.users, userId, pin, commitSession);
+            return await attemptDevLogin(staff.users, userId, pin, session.persistSession, commitSession);
         } catch { return false; }
     }, [session, staff.users]);
 
