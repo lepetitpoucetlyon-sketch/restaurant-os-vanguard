@@ -85,3 +85,38 @@ export const DEFAULT_TAB_ACCESS: Record<string, Record<string, PermissionRole[]>
         leaves: ['admin', 'directeur', 'manager', 'comptable'],
     },
 };
+
+export const DEFAULT_ACTION_ACCESS: Record<string, Record<string, PermissionRole[]>> = {
+    pos: {
+        void_line: ['admin', 'directeur', 'manager'],
+        apply_discount: ['admin', 'directeur', 'manager', 'chef_rang'],
+        cash_count: ['admin', 'directeur', 'manager', 'comptable'],
+        reopen_bill: ['admin', 'directeur', 'manager'],
+        split_payment: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur'],
+    },
+    kds: {
+        bump_order: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
+        recall_ticket: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
+        clear_station: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
+    },
+    finance: {
+        export_fec: ['admin', 'comptable'],
+        seal_zday: ['admin', 'directeur'],
+        reconcile_bank: ['admin', 'directeur', 'comptable'],
+        cancel_entry: ['admin', 'directeur'],
+    },
+    staff: {
+        edit_shifts: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
+        approve_leaves: ['admin', 'directeur', 'manager'],
+        validate_payroll: ['admin', 'directeur', 'comptable'],
+    },
+    inventory: {
+        adjust_stock: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'comptable'],
+        approve_order: ['admin', 'directeur', 'manager'],
+    },
+    haccp: {
+        validate_temperature: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
+        archive_logs: ['admin', 'directeur'],
+    },
+};
+

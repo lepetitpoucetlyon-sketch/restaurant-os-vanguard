@@ -5,6 +5,7 @@ export { useStockMapper } from './stock/inventory/hooks/useStockMapper';
 export * from './services';
 
 export { InventoryReceptionDashboard } from './approvisionnement/reception/components/InventoryReceptionDashboard';
+export { SupplierHubDashboard } from './approvisionnement/ui/SupplierHubDashboard';
 export * from './approvisionnement/procurement';
 
 export { useInventoryPage } from './stock/inventory/hooks/useInventoryPage';

@@ -12,14 +12,17 @@ import {
     User as UserIcon
 } from "lucide-react";
 import { Button } from "@ui/button";
-import { cn } from "@/lib/ui.foundations";;
+import { cn } from "@/lib/ui.foundations";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { useToast } from "@components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePlanning } from '..';
 import type { Shift as ContextShift } from '../types';
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
+import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 import { BottomSheet } from "@components/ui/BottomSheet";
 import { TimePicker } from "@components/ui/TimePicker";
+import { TipPoolManager } from "./TipPoolManager";
 
 type Shift = ContextShift;
 type ShiftType = 'morning' | 'lunch' | 'evening' | 'double' | 'off';
@@ -117,27 +120,29 @@ export function PlanningDashboard() {
                     
                     <div className="flex items-center gap-6">
                         {!isMobile && (
-                            <Button 
-                                onClick={() => {
-                                    const draftIds = shifts
-                                        .filter(s => s.status === 'scheduled' && weekDays.some(d => isSameDay(new Date(s.date), d)))
-                                        .map(s => s.id);
-                                    if (draftIds.length > 0) {
-                                        publishShifts(draftIds);
-                                        showToast(`${draftIds.length} shifts publiés et provisionnés`, "success");
-                                    } else {
-                                        showToast("Aucun shift en attente de publication", "info");
-                                    }
-                                }}
-                                className="h-12 px-8 bg-accent text-text-primary rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-accent/20"
-                            >
-                                <Bell className="w-4 h-4" />
-                                Publier la semaine
-                            </Button>
+                            <ActionGuard page="staff" action="edit_shifts">
+                                <Button 
+                                    onClick={() => {
+                                        const draftIds = shifts
+                                            .filter(s => s.status === 'scheduled' && weekDays.some(d => isSameDay(new Date(s.date), d)))
+                                            .map(s => s.id);
+                                        if (draftIds.length > 0) {
+                                            publishShifts(draftIds);
+                                            showToast(`${draftIds.length} shifts publiés et provisionnés`, "success");
+                                        } else {
+                                            showToast("Aucun shift en attente de publication", "info");
+                                        }
+                                    }}
+                                    className="h-12 px-8 bg-action-primary text-text-on-primary rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest hover:bg-action-primary-hover transition-all shadow-xl shadow-action-primary/20"
+                                >
+                                    <Bell className="w-4 h-4" />
+                                    Publier la semaine
+                                </Button>
+                            </ActionGuard>
                         )}
-                        <div className="flex bg-bg-tertiary p-1 rounded-full border border-border">
-                            <button onClick={() => setViewMode('daily')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'daily' ? "bg-white dark:bg-bg-primary shadow-sm" : "text-text-muted")}>JOUR</button>
-                            <button onClick={() => setViewMode('staff')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'staff' ? "bg-white dark:bg-bg-primary shadow-sm" : "text-text-muted")}>STAFF</button>
+                        <div className="flex bg-surface-card p-1 rounded-full border border-border-default">
+                            <button onClick={() => setViewMode('daily')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'daily' ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>JOUR</button>
+                            <button onClick={() => setViewMode('staff')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'staff' ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>STAFF</button>
                         </div>
                     </div>
                 </div>
@@ -163,66 +168,134 @@ export function PlanningDashboard() {
                 </div>
             </div>
 
-            {/* List View */}
+            {/* List View with Responsive Adaptation */}
             <div className="flex-1 overflow-auto p-4 space-y-4 elegant-scrollbar">
-                <AnimatePresence mode="wait">
-                    {viewMode === 'daily' ? (
-                        <motion.div key="daily" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                            {users.map(user => {
-                                const shift = dayShifts.find(s => s.userId === user.id);
-                                return (
-                                    <motion.div
-                                        key={user.id}
-                                        onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
-                                        className={cn(
-                                            "bg-white dark:bg-bg-secondary p-5 rounded-[2rem] border border-border/50 flex items-center justify-between",
-                                            !shift && "opacity-60 bg-bg-tertiary/30"
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-14 h-14 rounded-2xl bg-bg-tertiary overflow-hidden border border-border">
-                                                {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-serif italic">{user.name[0]}</div>}
+                <ResponsiveShell
+                    mobile={
+                        <AnimatePresence mode="wait">
+                            {viewMode === 'daily' ? (
+                                <motion.div key="daily-mobile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                    {users.map(user => {
+                                        const shift = dayShifts.find(s => s.userId === user.id);
+                                        return (
+                                            <motion.div
+                                                key={user.id}
+                                                onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
+                                                className={cn(
+                                                    "bg-surface-card p-4 rounded-2xl border border-border-default flex items-center justify-between shadow-sm active:scale-[0.99] transition-all",
+                                                    !shift && "opacity-60 bg-surface-bg"
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-11 h-11 rounded-xl bg-surface-bg border border-border-default flex items-center justify-center font-serif italic text-base">
+                                                        {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover rounded-xl" /> : user.name[0]}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-sm text-text-primary">{user.name}</h4>
+                                                        <p className="text-[9px] font-black text-action-primary uppercase tracking-widest">{t(`planning.roles.${user.role}`)}</p>
+                                                    </div>
+                                                </div>
+                                                {shift ? (
+                                                    <div className="text-right">
+                                                        <p className="text-sm font-mono font-bold text-text-primary">{shift.startTime}—{shift.endTime}</p>
+                                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted">{(shift.position ?? '').toUpperCase()}</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-8 h-8 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted">
+                                                        <Plus className="w-4 h-4" />
+                                                    </div>
+                                                )}
+                                            </motion.div>
+                                        );
+                                    })}
+                                </motion.div>
+                            ) : (
+                                <motion.div key="staff-mobile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                    {users.map(user => (
+                                        <div key={user.id} className="bg-surface-card p-4 rounded-2xl border border-border-default flex flex-col gap-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-9 h-9 rounded-full bg-action-primary/10 flex items-center justify-center text-action-primary">
+                                                    <UserIcon className="w-4 h-4" />
+                                                </div>
+                                                <h4 className="font-serif font-black text-sm text-text-primary">{user.name}</h4>
                                             </div>
-                                            <div>
-                                                <h4 className="text-xl font-serif font-black italic text-text-primary">{user.name}</h4>
-                                                <p className="text-[9px] font-black text-accent-gold uppercase tracking-widest">{t(`planning.roles.${user.role}`)}</p>
+                                            <div className="grid grid-cols-7 gap-1 h-2">
+                                                {weekDays.map((d, i) => (
+                                                    <div key={i} className={cn("rounded-full", shifts.some(s => s.userId === user.id && isSameDay(s.date, d)) ? "bg-action-primary" : "bg-surface-bg border border-border-default")} />
+                                                ))}
                                             </div>
                                         </div>
-                                        {shift ? (
-                                            <div className="text-right">
-                                                <p className="text-lg font-mono font-bold tracking-tighter text-text-primary">{shift.startTime}—{shift.endTime}</p>
-                                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted">{(shift.position ?? '').toUpperCase()}</span>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    }
+                    desktop={
+                        <AnimatePresence mode="wait">
+                            {viewMode === 'daily' ? (
+                                <motion.div key="daily-desktop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                                    {users.map(user => {
+                                        const shift = dayShifts.find(s => s.userId === user.id);
+                                        return (
+                                            <motion.div
+                                                key={user.id}
+                                                onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
+                                                className={cn(
+                                                    "bg-surface-card p-5 rounded-[2rem] border border-border-default flex items-center justify-between hover:border-action-primary/40 cursor-pointer transition-all",
+                                                    !shift && "opacity-60 bg-surface-bg"
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-14 h-14 rounded-2xl bg-surface-bg overflow-hidden border border-border-default">
+                                                        {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-serif italic">{user.name[0]}</div>}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-xl font-serif font-black italic text-text-primary">{user.name}</h4>
+                                                        <p className="text-[9px] font-black text-action-primary uppercase tracking-widest">{t(`planning.roles.${user.role}`)}</p>
+                                                    </div>
+                                                </div>
+                                                {shift ? (
+                                                    <div className="text-right">
+                                                        <p className="text-lg font-mono font-bold tracking-tighter text-text-primary">{shift.startTime}—{shift.endTime}</p>
+                                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted">{(shift.position ?? '').toUpperCase()}</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-10 h-10 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted/40">
+                                                        <Plus className="w-5 h-5" />
+                                                    </div>
+                                                )}
+                                            </motion.div>
+                                        );
+                                    })}
+                                </motion.div>
+                            ) : (
+                                <motion.div key="staff-desktop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 gap-4">
+                                    {users.map(user => (
+                                        <div key={user.id} className="bg-surface-card p-6 rounded-[2.5rem] border border-border-default flex flex-col gap-4">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 rounded-full bg-action-primary/10 flex items-center justify-center text-action-primary">
+                                                    <UserIcon className="w-6 h-6" />
+                                                </div>
+                                                <h4 className="text-2xl font-serif font-black italic text-text-primary">{user.name}</h4>
                                             </div>
-                                        ) : (
-                                            <div className="w-10 h-10 rounded-full border border-dashed border-border flex items-center justify-center text-text-muted/40">
-                                                <Plus className="w-5 h-5" />
+                                            <div className="grid grid-cols-7 gap-1.5 h-3">
+                                                {weekDays.map((d, i) => (
+                                                    <div key={i} className={cn("rounded-full", shifts.some(s => s.userId === user.id && isSameDay(s.date, d)) ? "bg-action-primary" : "bg-surface-bg border border-border-default")} />
+                                                ))}
                                             </div>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
-                        </motion.div>
-                    ) : (
-                        <motion.div key="staff" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                            {users.map(user => (
-                                <div key={user.id} className="bg-white dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50 flex flex-col gap-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                                            <UserIcon className="w-6 h-6" />
                                         </div>
-                                        <h4 className="text-2xl font-serif font-black italic text-text-primary">{user.name}</h4>
-                                    </div>
-                                    <div className="grid grid-cols-7 gap-1 h-2">
-                                        {weekDays.map((d, i) => (
-                                            <div key={i} className={cn("rounded-full", shifts.some(s => s.userId === user.id && isSameDay(s.date, d)) ? "bg-accent-gold" : "bg-bg-tertiary")} />
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    }
+                />
+
+                <div className="mt-8">
+                    <TipPoolManager />
+                </div>
             </div>
+
 
             {/* Shift Editor BottomSheet */}
             <BottomSheet

@@ -68,7 +68,7 @@ function ReservationsPage() {
                 className="flex flex-wrap items-center justify-between gap-4 bg-bg-secondary/50 backdrop-blur-md border-b border-border px-6 py-3 z-40 shrink-0 sticky top-0"
             >
                 <div className="flex items-center gap-4 flex-wrap">
-                    <div className="flex items-center bg-bg-tertiary p-1 rounded-full border border-border">
+                    <div className="flex items-center bg-surface-card p-1 rounded-full border border-border-default">
                         {(["reservations", "customers", "groups"] as const).map((s) => (
                             <button
                                 key={s}
@@ -76,7 +76,7 @@ function ReservationsPage() {
                                 className={cn(
                                     "h-9 px-5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
                                     activeSection === s
-                                        ? "bg-bg-primary text-text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/5"
+                                        ? "bg-action-primary text-text-on-primary shadow-sm"
                                         : "text-text-muted hover:text-text-primary"
                                 )}
                             >
@@ -88,24 +88,24 @@ function ReservationsPage() {
                     </div>
 
                     {view === "day" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-3 bg-bg-tertiary/50 px-4 py-2 rounded-full border border-border/50">
-                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 1); return n; })} className="p-1.5 hover:bg-bg-primary rounded-full text-text-muted hover:text-accent transition-all">
+                        <div className="flex items-center gap-3 bg-surface-card px-4 py-2 rounded-full border border-border-default">
+                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 1); return n; })} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
                                 <ChevronLeft className="w-3.5 h-3.5" />
                             </button>
                             <span className="text-[11px] font-serif font-medium italic text-text-primary capitalize min-w-[140px] text-center">{displayDate}</span>
-                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 1); return n; })} className="p-1.5 hover:bg-bg-primary rounded-full text-text-muted hover:text-accent transition-all">
+                            <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 1); return n; })} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
                                 <ChevronRight className="w-3.5 h-3.5" />
                             </button>
                         </div>
                     )}
 
                     {view === "week" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-3 bg-bg-tertiary/50 px-4 py-2 rounded-full border border-border/50">
-                            <button onClick={() => setWeekOffset((o) => o - 1)} className="p-1.5 hover:bg-bg-primary rounded-full text-text-muted hover:text-accent transition-all">
+                        <div className="flex items-center gap-3 bg-surface-card px-4 py-2 rounded-full border border-border-default">
+                            <button onClick={() => setWeekOffset((o) => o - 1)} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
                                 <ChevronLeft className="w-3.5 h-3.5" />
                             </button>
                             <span className="text-[11px] font-serif italic text-text-primary min-w-[180px] text-center">{weekLabel}</span>
-                            <button onClick={() => setWeekOffset((o) => o + 1)} className="p-1.5 hover:bg-bg-primary rounded-full text-text-muted hover:text-accent transition-all">
+                            <button onClick={() => setWeekOffset((o) => o + 1)} className="p-1.5 hover:bg-surface-bg rounded-full text-text-muted hover:text-action-primary transition-all">
                                 <ChevronRight className="w-3.5 h-3.5" />
                             </button>
                         </div>
@@ -127,9 +127,9 @@ function ReservationsPage() {
                     </button>
 
                     {activeSection === "reservations" && (
-                        <div className="flex items-center bg-bg-tertiary p-1 rounded-full border border-border">
+                        <div className="flex items-center bg-surface-card p-1 rounded-full border border-border-default">
                             {(["day", "week"] as const).map((v) => (
-                                <button key={v} onClick={() => setView(v)} className={cn("h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5", view === v ? "bg-bg-primary text-text-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>
+                                <button key={v} onClick={() => setView(v)} className={cn("h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5", view === v ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>
                                     {v === "day" ? <><Calendar className="w-3 h-3" /> Jour</> : <><CalendarDays className="w-3 h-3" /> Semaine</>}
                                 </button>
                             ))}
@@ -138,12 +138,18 @@ function ReservationsPage() {
 
                     {activeSection === "reservations" && (
                         <>
-                            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => setIsEventQuoteOpen(true)} className="h-10 px-5 bg-bg-secondary text-text-primary rounded-full font-black text-[9px] uppercase tracking-widest shadow-sm flex items-center gap-2 border border-border hover:border-accent/40 hover:text-accent transition-all">
-                                <FileText className="w-3.5 h-3.5" /> Devis événement
-                            </motion.button>
-                            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => setIsNewResOpen(true)} className="h-10 px-6 bg-accent text-bg-primary rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 flex items-center gap-2 border border-amber-300/20 transition-all">
+                            <button
+                                onClick={() => setIsEventQuoteOpen(true)}
+                                className="h-9 px-4 rounded-full bg-surface-card border border-border-default hover:border-action-primary/50 text-text-muted hover:text-action-primary text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5"
+                            >
+                                <FileText className="w-3.5 h-3.5" /> Devis
+                            </button>
+                            <button
+                                onClick={() => setIsNewResOpen(true)}
+                                className="h-9 px-5 rounded-full bg-action-primary text-text-on-primary hover:bg-action-primary-hover text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 shadow-md"
+                            >
                                 <Plus className="w-3.5 h-3.5" /> Réserver
-                            </motion.button>
+                            </button>
                         </>
                     )}
                     {activeSection === "groups" && (

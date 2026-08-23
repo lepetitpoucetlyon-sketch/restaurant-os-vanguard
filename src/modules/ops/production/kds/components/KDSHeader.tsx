@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { STATION_CONFIG, KitchenStation } from '..';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -234,18 +235,20 @@ export function KDSHeader({
                             </button>
 
                             {/* kds-6: Recall mode toggle */}
-                            <button
-                                onClick={() => setIsRecallMode(!isRecallMode)}
-                                className={cn(
-                                    "flex items-center gap-2.5 px-5 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.2em] transition-all border duration-300",
-                                    isRecallMode
-                                        ? "bg-action-primary text-text-primary border-action-primary shadow-lg shadow-purple-500/20"
-                                        : "bg-surface-card border-subtle text-muted hover:text-action-primary hover:border-action-primary/40"
-                                )}
-                            >
-                                <RotateCcw className="w-3.5 h-3.5" strokeWidth={2} />
-                                RAPPEL
-                            </button>
+                            <ActionGuard page="kds" action="recall_ticket">
+                                <button
+                                    onClick={() => setIsRecallMode(!isRecallMode)}
+                                    className={cn(
+                                        "flex items-center gap-2.5 px-5 h-12 rounded-full font-black text-[10px] uppercase tracking-[0.2em] transition-all border duration-300",
+                                        isRecallMode
+                                            ? "bg-action-primary text-text-primary border-action-primary shadow-lg shadow-purple-500/20"
+                                            : "bg-surface-card border-subtle text-muted hover:text-action-primary hover:border-action-primary/40"
+                                    )}
+                                >
+                                    <RotateCcw className="w-3.5 h-3.5" strokeWidth={2} />
+                                    RAPPEL
+                                </button>
+                            </ActionGuard>
 
                             <div className="relative pl-2 pr-1">
                                 <button

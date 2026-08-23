@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, Rocket, LayoutGrid,
     Lock, RefreshCw, GitMerge, BrainCircuit, Wallet, Puzzle, Activity,
-    Network, BookOpen, Database
+    Network, BookOpen, Database, Hammer, EyeOff, Target, Palette, Sliders
 } from 'lucide-react';
 
 import { MFAGate } from './components/MFAGate';
@@ -25,6 +25,12 @@ const EventBusTab     = MCC_TABS_REGISTRY.eventbus;
 const LifecycleTab    = MCC_TABS_REGISTRY.lifecycle;
 const TutorialTab     = MCC_TABS_REGISTRY.tutorial;
 const SystemTenantsTab = MCC_TABS_REGISTRY.systemtenants;
+const ForgeStudioTab   = MCC_TABS_REGISTRY.forgestudio;
+const SectorStudyTab   = MCC_TABS_REGISTRY.sectorstudy;
+const BlindSpotTab     = MCC_TABS_REGISTRY.blindspot;
+const QualificationTab = MCC_TABS_REGISTRY.qualification;
+const DeriversTab      = MCC_TABS_REGISTRY.derivers;
+const ScrapeCharterTab = MCC_TABS_REGISTRY.scrapecharter;
 
 export default function MCCDashboard() {
     return (
@@ -60,14 +66,20 @@ function MCCDashboardInner() {
     const { state: switchboard, toggleModule } = useSovereignSwitchboard();
 
     const TABS = [
-        { id: 'fleet',        label: t.tabs.fleet,        icon: <LayoutGrid className="w-4 h-4" /> },
-        { id: 'compliance',   label: t.tabs.compliance,   icon: <ShieldCheck className="w-4 h-4" /> },
-        { id: 'intelligence', label: t.tabs.intelligence, icon: <BrainCircuit className="w-4 h-4" /> },
-        { id: 'treasury',     label: t.tabs.treasury,     icon: <Wallet className="w-4 h-4" /> },
-        { id: 'patchcenter',  label: t.tabs.patchcenter,  icon: <GitMerge className="w-4 h-4" /> },
-        { id: 'plugins',      label: t.tabs.plugins,      icon: <Puzzle className="w-4 h-4" /> },
-        { id: 'eventbus',     label: t.tabs.eventbus,     icon: <Activity className="w-4 h-4" /> },
-        { id: 'lifecycle',    label: t.tabs.lifecycle,    icon: <Network className="w-4 h-4" /> },
+        { id: 'fleet',          label: t.tabs.fleet,          icon: <LayoutGrid className="w-4 h-4" /> },
+        { id: 'forgestudio',    label: 'Studio Forge',        icon: <Hammer className="w-4 h-4" /> },
+        { id: 'scrapecharter',  label: 'Scrape Charte',       icon: <Palette className="w-4 h-4" /> },
+        { id: 'blindspot',      label: 'Angles Morts',        icon: <EyeOff className="w-4 h-4" /> },
+        { id: 'qualification',  label: 'Qualification',      icon: <Target className="w-4 h-4" /> },
+        { id: 'derivers',       label: '11 Dérivateurs',      icon: <Sliders className="w-4 h-4" /> },
+        { id: 'sectorstudy',    label: 'Études Sectorielles', icon: <Database className="w-4 h-4" /> },
+        { id: 'compliance',     label: t.tabs.compliance,     icon: <ShieldCheck className="w-4 h-4" /> },
+        { id: 'intelligence',   label: t.tabs.intelligence,   icon: <BrainCircuit className="w-4 h-4" /> },
+        { id: 'treasury',       label: t.tabs.treasury,       icon: <Wallet className="w-4 h-4" /> },
+        { id: 'patchcenter',    label: t.tabs.patchcenter,    icon: <GitMerge className="w-4 h-4" /> },
+        { id: 'plugins',        label: t.tabs.plugins,        icon: <Puzzle className="w-4 h-4" /> },
+        { id: 'eventbus',       label: t.tabs.eventbus,       icon: <Activity className="w-4 h-4" /> },
+        { id: 'lifecycle',      label: t.tabs.lifecycle,      icon: <Network className="w-4 h-4" /> },
         { id: 'tutorial',       label: 'CLI & Guide',          icon: <BookOpen  className="w-4 h-4" /> },
         { id: 'systemtenants',  label: 'Tenants Système',      icon: <Database  className="w-4 h-4" /> },
     ] as const;
@@ -166,8 +178,39 @@ function MCCDashboardInner() {
                                         <SystemTenantsTab />
                                     </motion.div>
                                 )}
+                                {activeTab === 'forgestudio' && (
+                                    <motion.div key="forgestudio" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <ForgeStudioTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'scrapecharter' && (
+                                    <motion.div key="scrapecharter" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <ScrapeCharterTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'blindspot' && (
+                                    <motion.div key="blindspot" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <BlindSpotTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'qualification' && (
+                                    <motion.div key="qualification" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <QualificationTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'derivers' && (
+                                    <motion.div key="derivers" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <DeriversTab />
+                                    </motion.div>
+                                )}
+                                {activeTab === 'sectorstudy' && (
+                                    <motion.div key="sectorstudy" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+                                        <SectorStudyTab />
+                                    </motion.div>
+                                )}
                             </AnimatePresence>
                         </div>
+
 
                         {activeTab === 'fleet' && (
                             <div className="col-span-12 lg:col-span-4 space-y-8">

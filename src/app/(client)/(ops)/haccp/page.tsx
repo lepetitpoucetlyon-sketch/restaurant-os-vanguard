@@ -14,6 +14,10 @@ import {
     type LotFilter,
 } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import { cn } from "@/lib/ui.foundations";
 
 const ReleveTemperatures = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.ReleveTemperatures), { ssr: false });
 const GestionHuiles = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.GestionHuiles), { ssr: false });
@@ -24,6 +28,9 @@ const SanitaryReport = dynamic(() => import('@/modules/compliance/qualite/haccp/
 const CleaningPlan = dynamic(() => import('@/modules/compliance/qualite/haccp/components/CleaningPlan').then(m => m.CleaningPlan), { ssr: false });
 const DLCTracker = dynamic(() => import('@/modules/compliance/qualite/haccp/components/DLCTracker').then(m => m.DLCTracker), { ssr: false });
 const NonConformityForm = dynamic(() => import('@/modules/compliance/qualite/haccp/components/NonConformityForm').then(m => m.NonConformityForm), { ssr: false });
+const ReceptionWizard = dynamic(() => import('@/modules/compliance/qualite/haccp/components/quality/ReceptionWizard').then(m => m.ReceptionWizard), { ssr: false });
+const RecallView = dynamic(() => import('@/modules/compliance/qualite/recall/RecallView').then(m => m.RecallView), { ssr: false });
+const PerishableAlertsTracker = dynamic(() => import('@/modules/compliance/qualite/haccp/components/PerishableAlertsTracker').then(m => m.PerishableAlertsTracker), { ssr: false });
 import type { JsonObject } from "@/shared/types/json";
 
 const TOOL_ICONS: Record<string, typeof Thermometer> = {
@@ -45,28 +52,60 @@ function HaccpPage() {
     } = useHaccpPage();
 
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6 flex items-start justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-serif font-bold">HACCP &amp; Qualité</h1>
-                    <p className="text-sm text-text-muted mt-1">Relevés sanitaires, traçabilité et contrôle réception — conformité hygiène.</p>
+        <PageShell
+            title="HACCP & Qualité"
+            subtitle="Relevés sanitaires, traçabilité et contrôle réception — conformité hygiène."
+            icon={Thermometer}
+            breadcrumbs={[{ label: "Opérations" }, { label: "HACCP" }]}
+            actions={
+                <ActionGuard page="haccp" action="archive_logs">
+                    <button
+                        onClick={handleExportPMS}
+                        disabled={pmsLoading}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card border border-border-default hover:border-action-primary/50 text-text-muted hover:text-action-primary text-xs font-medium transition-all disabled:opacity-40"
+                    >
+                        <Download className="w-4 h-4" />
+                        {pmsLoading ? "Génération..." : "Exporter PMS"}
+                    </button>
+                </ActionGuard>
+            }
+            tabs={
+                <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                    {tabs.map((tab: { id: string; label: string; icon: typeof ClipboardCheck; badge?: number }) => {
+                        const Icon = tab.icon;
+                        const active = activeTab === tab.id;
+                        return (
+                            <TabGuard key={tab.id} pageKey="haccp" tabKey={tab.id}>
+                                <button
+                                    onClick={() => setActiveTab(tab.id as Parameters<typeof setActiveTab>[0])}
+                                    className={cn(
+                                        "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap",
+                                        active ? "bg-action-primary text-text-on-primary shadow-sm" : "bg-surface-card text-text-muted hover:text-text-primary"
+                                    )}
+                                >
+                                    <Icon className="w-3.5 h-3.5" /> {tab.label}
+                                    {tab.badge != null && tab.badge > 0 && (
+                                        <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-status-danger text-text-primary text-[10px] font-bold">
+                                            {tab.badge > 9 ? "9+" : tab.badge}
+                                        </span>
+                                    )}
+                                </button>
+                            </TabGuard>
+                        );
+                    })}
                 </div>
-                <button onClick={handleExportPMS} disabled={pmsLoading} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-sidebar border border-border text-text-muted hover:text-text-primary text-sm font-medium transition-colors disabled:opacity-40 flex-shrink-0">
-                    <Download className="w-4 h-4" />
-                    {pmsLoading ? "Génération..." : "Exporter PMS"}
-                </button>
-            </header>
-
+            }
+        >
             {tempAlerts.length > 0 && (
-                <div className="mb-4 rounded-xl border border-status-danger bg-status-danger/10 p-4 space-y-2">
-                    <div className="flex items-center gap-2 text-status-danger font-bold text-sm">
+                <div className="mb-6 rounded-2xl border border-status-danger/30 bg-status-danger/10 p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-status-danger font-bold text-xs uppercase tracking-wider">
                         <BellRing className="w-4 h-4 animate-pulse" />
                         <span>{tempAlerts.length} alerte{tempAlerts.length > 1 ? "s" : ""} température active{tempAlerts.length > 1 ? "s" : ""}</span>
                     </div>
                     <ul className="space-y-1">
                         {tempAlerts.map((alert) => (
                             <li key={alert.id} className="text-xs text-status-danger flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-status-danger inline-block" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-status-danger inline-block" />
                                 <strong>{alert.zone}</strong> — {alert.temperature}°C
                                 {alert.type === "cold" ? ` (dépassement froid, max ${COLD_THRESHOLD}°C)` : ` (insuffisant pour le chaud, min ${HOT_THRESHOLD}°C)`}
                             </li>
@@ -74,18 +113,6 @@ function HaccpPage() {
                     </ul>
                 </div>
             )}
-
-            <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
-                {tabs.map((tab: { id: string; label: string; icon: typeof ClipboardCheck; badge?: number }) => {
-                    const Icon = tab.icon;
-                    return (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id as Parameters<typeof setActiveTab>[0])} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap relative ${activeTab === tab.id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
-                            <Icon className="w-4 h-4" /> {tab.label}
-                            {tab.badge != null && tab.badge > 0 && <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-status-danger text-text-primary text-[10px] font-bold">{tab.badge > 9 ? "9+" : tab.badge}</span>}
-                        </button>
-                    );
-                })}
-            </nav>
 
             <main>
                 {activeTab === "haccp" && (
@@ -107,11 +134,18 @@ function HaccpPage() {
                     </section>
                 )}
 
+                {activeTab === "reception" && (
+                    <section className="bg-surface-card rounded-2xl border border-border-default p-6">
+                        <ReceptionWizard />
+                    </section>
+                )}
+
                 {activeTab === "quality" && <section className="space-y-6"><ProductControlList /><SanitaryReport /></section>}
                 {activeTab === "planning" && <section><CleaningPlan /></section>}
 
                 {activeTab === "compliance" && (
                     <section className="space-y-8">
+                        <PerishableAlertsTracker />
                         <div className="bg-surface-base rounded-2xl border border-border p-5">
                             <div className="flex items-center gap-2 mb-4"><PackageSearch className="w-5 h-5 text-action-primary" /><span className="text-xs font-bold uppercase tracking-widest text-text-muted">Traçabilité</span></div>
                             <DLCTracker />
@@ -122,6 +156,7 @@ function HaccpPage() {
                         </div>
                     </section>
                 )}
+
 
                 {activeTab === "lots" && (
                     <section className="space-y-5">
@@ -188,9 +223,16 @@ function HaccpPage() {
                         </div>
                     </section>
                 )}
+
+                {activeTab === "recall" && (
+                    <section className="bg-surface-card rounded-2xl border border-border-default p-6">
+                        <RecallView />
+                    </section>
+                )}
             </main>
-        </div>
+        </PageShell>
     );
+
 }
 
 export default withPageGuard(HaccpPage, "haccp");

@@ -94,6 +94,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                             {logoUrl ? (
                                 <img
                                     src={logoUrl}
+                                    srcSet={tokens.logoUrl_2x ? `${logoUrl} 1x, ${tokens.logoUrl_2x} 2x` : undefined}
                                     alt={brandName}
                                     className="relative z-10 max-h-20 max-w-[200px] object-contain drop-shadow-2xl"
                                 />

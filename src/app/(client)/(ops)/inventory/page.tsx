@@ -33,6 +33,10 @@ import {
 } from "@/modules/logistics";
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import { cn } from "@/lib/ui.foundations";
 import type { JsonObject } from "@/shared/types/json";
 
 function InventoryPage() {
@@ -56,43 +60,62 @@ function InventoryPage() {
     } = useInventoryPage();
 
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6 flex items-start justify-between">
-                <div>
-                    <h1 className="text-2xl font-serif font-bold">Stocks &amp; Inventaire</h1>
-                    <p className="text-sm text-text-muted mt-1">
-                        Réception, transferts, préparations et cartographie du stockage.
-                        Les déductions s&apos;effectuent automatiquement à la clôture des commandes.
-                    </p>
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                    <Link href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover transition-colors">
-                        <Wrench className="w-4 h-4 text-indigo-400" /> GMAO &amp; Matériel
+        <PageShell
+            title="Stocks & Inventaire"
+            subtitle="Réception, transferts, préparations et cartographie du stockage."
+            icon={Package}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Inventaire" }]}
+            actions={
+                <div className="flex items-center gap-2 flex-wrap">
+                    <Link href="/facility" className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-default bg-surface-card text-xs font-medium hover:bg-surface-bg transition-colors">
+                        <Wrench className="w-3.5 h-3.5 text-action-primary" /> GMAO
                     </Link>
-                    <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90">
-                        <PlusCircle className="w-4 h-4" /> Réception
-                    </button>
-                    <button onClick={() => setPrepOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover">
-                        <ChefHat className="w-4 h-4" /> Préparation
+                    <ActionGuard page="inventory" action="adjust_stock">
+                        <button onClick={() => setReceptionOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-medium hover:bg-action-primary-hover shadow-sm transition-all">
+                            <PlusCircle className="w-3.5 h-3.5" /> Réception
+                        </button>
+                    </ActionGuard>
+                    <button onClick={() => setPrepOpen(true)} className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-default bg-surface-card text-xs font-medium hover:bg-surface-bg transition-colors">
+                        <ChefHat className="w-3.5 h-3.5" /> Préparation
                     </button>
                 </div>
-            </header>
-
-            <nav className="flex gap-1 border-b border-border mb-6">
-                {([
-                    { id: "stock", icon: <Package className="w-4 h-4" />, label: "Stocks" },
-                    { id: "storage", icon: <Warehouse className="w-4 h-4" />, label: "Plan de stockage" },
-                    { id: "rotating_count", icon: <RotateCcw className="w-4 h-4" />, label: "Comptage tournant" },
-                ] as const).map(({ id, icon, label }) => (
+            }
+            tabs={
+                <div className="flex gap-2">
                     <button
-                        key={id}
-                        onClick={() => setActiveTab(id)}
-                        className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}
+                        onClick={() => setActiveTab("stock")}
+                        className={cn(
+                            "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
+                            activeTab === "stock" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
+                        )}
                     >
-                        {icon} {label}
+                        <Package className="w-3.5 h-3.5" /> Stocks
                     </button>
-                ))}
-            </nav>
+                    <TabGuard pageKey="inventory" tabKey="storage">
+                        <button
+                            onClick={() => setActiveTab("storage")}
+                            className={cn(
+                                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
+                                activeTab === "storage" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
+                            )}
+                        >
+                            <Warehouse className="w-3.5 h-3.5" /> Plan de stockage
+                        </button>
+                    </TabGuard>
+                    <TabGuard pageKey="inventory" tabKey="rotating_count">
+                        <button
+                            onClick={() => setActiveTab("rotating_count")}
+                            className={cn(
+                                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
+                                activeTab === "rotating_count" ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary bg-surface-card"
+                            )}
+                        >
+                            <RotateCcw className="w-3.5 h-3.5" /> Comptage tournant
+                        </button>
+                    </TabGuard>
+                </div>
+            }
+        >
 
             <main>
                 {activeTab === "stock" && (
@@ -204,7 +227,7 @@ function InventoryPage() {
                 title="Confirmation de suppression"
                 description="Saisissez votre code PIN pour supprimer cet article du stock."
             />
-        </div>
+        </PageShell>
     );
 }
 

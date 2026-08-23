@@ -23,7 +23,13 @@ export type MccTabId =
   | 'eventbus'
   | 'lifecycle'
   | 'tutorial'
-  | 'systemtenants';
+  | 'systemtenants'
+  | 'forgestudio'
+  | 'sectorstudy'
+  | 'blindspot'
+  | 'qualification'
+  | 'derivers'
+  | 'scrapecharter';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ComponentType<any> volontaire : chaque tab a sa propre signature de props
 export const MCC_TABS_REGISTRY: Record<MccTabId, ComponentType<any>> = {
@@ -38,4 +44,11 @@ export const MCC_TABS_REGISTRY: Record<MccTabId, ComponentType<any>> = {
   lifecycle:     dynamic(() => import('./LifecycleTab').then(m => m.LifecycleTab), { loading: () => <MCCWidgetSkeleton /> }),
   tutorial:      dynamic(() => import('./TutorialTab').then(m => m.TutorialTab), { loading: () => <MCCWidgetSkeleton /> }),
   systemtenants: dynamic(() => import('./SystemTenantsTab').then(m => m.SystemTenantsTab), { loading: () => <MCCWidgetSkeleton /> }),
+  forgestudio:   dynamic(() => import('./ForgeStudioTab').then(m => m.ForgeStudioTab), { loading: () => <MCCWidgetSkeleton /> }),
+  sectorstudy:   dynamic(() => import('./SectorStudyTab').then(m => m.SectorStudyTab), { loading: () => <MCCWidgetSkeleton /> }),
+  blindspot:     dynamic(() => import('./BlindSpotTab').then(m => m.BlindSpotTab), { loading: () => <MCCWidgetSkeleton /> }),
+  qualification: dynamic(() => import('./QualificationTab').then(m => m.QualificationTab), { loading: () => <MCCWidgetSkeleton /> }),
+  derivers:      dynamic(() => import('./DeriversTab').then(m => m.DeriversTab), { loading: () => <MCCWidgetSkeleton /> }),
+  scrapecharter: dynamic(() => import('./ScrapeCharterTab').then(m => m.ScrapeCharterTab), { loading: () => <MCCWidgetSkeleton /> }),
 };
+

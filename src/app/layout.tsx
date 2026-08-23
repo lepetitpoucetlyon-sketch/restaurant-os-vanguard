@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -23,8 +23,7 @@ const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin
 export const metadata: Metadata = {
   title: `Restaurant OS | Premium Intelligence`,
   description: whiteLabelInstanceConfig.appDescription,
-  manifest: "/manifest.json",
-  themeColor: "#C5A059",
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -32,16 +31,26 @@ export const metadata: Metadata = {
   },
   icons: {
     apple: "/icons/icon-192.png",
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
   },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0B0B0C" },
+    { media: "(prefers-color-scheme: light)", color: "#0B0B0C" },
+  ],
+  interactiveWidget: "resizes-content",
 };
+
 
 export default function RootLayout({
   children,
@@ -63,7 +72,17 @@ export default function RootLayout({
       <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ServiceWorkerRegistration />
         <ErrorBoundary>
-          <Suspense fallback={<div className="flex h-screen items-center justify-center bg-surface-sidebar text-text-primary font-mono text-[10px] tracking-widest">[ RELOADING_CORE_STREAMS... ]</div>}>
+          <Suspense fallback={
+            <div className="flex flex-col h-screen items-center justify-center bg-[#070709] text-white select-none">
+              <div className="w-12 h-12 rounded-2xl bg-[#C5A059]/10 border border-[#C5A059]/30 flex items-center justify-center text-[#C5A059] mb-4 animate-pulse">
+                <span className="font-serif font-black text-xl text-[#C5A059]">R</span>
+              </div>
+              <div className="w-36 h-1 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-1/2 h-full bg-[#C5A059] rounded-full animate-pulse" />
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-mono mt-3">Nexus Node Sovereign</span>
+            </div>
+          }>
             <NexusProviderStack>
                 <ThemeApplicator />
                 <ImpersonationBanner />

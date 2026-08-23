@@ -23,6 +23,8 @@ import {
 } from "@/modules/ops";
 import type { Recipe } from "@nexus/contracts";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
+import { Wine as WineIcon } from "lucide-react";
 
 function BarPage() {
     const { showToast } = useToast();
@@ -59,7 +61,7 @@ function BarPage() {
           id: o.id,
           table: o.tableNumber ?? 'T?',
           serverName: o.serverName ?? '—',
-          status: (['new','preparing','ready','delivered'].includes(o.status) ? o.status : 'new') as 'new' | 'preparing' | 'ready' | 'delivered',
+          status: o.status ?? 'new',
           priority: 'normal',
           elapsed: o.createdAt ? Math.floor((Date.now() - new Date(o.createdAt as string | number).getTime()) / 1000) : 0,
           items: ((o.items || []) as BarOrderItem[])
@@ -67,7 +69,7 @@ function BarPage() {
             .map(item => ({
               name: item.name ?? 'Article',
               qty: item.quantity ?? 1,
-              station: 'bar' as const,
+              station: 'bar',
               modifiers: (item.modifiers ?? []).map(m => typeof m === 'string' ? m : m.name),
               notes: item.notes,
             })),
@@ -97,64 +99,71 @@ function BarPage() {
         [wines]
     );
     const lowStockWines = useMemo(() =>
-        wines.filter(w => w.stock <= w.minStock).length,
+        wines.filter(w => w.stock <= w.minStock),
         [wines]
     );
 
     return (
-        <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden pb-20 md:pb-0">
-            <BarSidebar
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                cellarValue={totalCellarValue}
-                referenceCount={wines.length}
-            />
+        <PageShell
+            title="Bar & Mixologie"
+            subtitle="KDS Bar, gestion de la cave, cocktails et accords mets-vins."
+            icon={WineIcon}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Bar & Mixologie" }]}
+        >
+            <div className="flex flex-1 h-[calc(100vh-140px)] overflow-hidden">
+                <BarSidebar
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    cellarValue={totalCellarValue}
+                    referenceCount={wines.length}
+                />
 
-            <div className="flex-1 overflow-auto p-8 custom-scrollbar">
-                {activeTab === 'kds' && (
-                    <KdsTab
-                        orders={orders}
-                        rushMode={rushMode}
-                        searchQueryKDS={searchQueryKDS}
-                        gridColumns={3}
-                        updateOrderStatus={updateOrderStatus}
-                        setRushMode={setRushMode}
-                        setSearchQueryKDS={setSearchQueryKDS}
-                        setSelectedRecipe={setSelectedRecipe}
-                    />
-                )}
+                <div className="flex-1 flex flex-col min-w-0 bg-surface-bg overflow-y-auto">
+                    {activeTab === 'kds' && (
+                        <KdsTab
+                            orders={orders}
+                            searchQueryKDS={searchQueryKDS}
+                            rushMode={rushMode}
+                            gridColumns={3}
+                            updateOrderStatus={updateOrderStatus}
+                            setSearchQueryKDS={setSearchQueryKDS}
+                            setRushMode={setRushMode}
+                            setSelectedRecipe={setSelectedRecipe}
+                        />
+                    )}
 
-                {activeTab === 'wines' && (
-                    <WineCellarTab
-                        wines={filteredWines}
-                        regions={regions}
-                        filterRegion={filterRegion}
-                        searchQuery={searchQuery}
-                        setFilterRegion={setFilterRegion}
-                        setSearchQuery={setSearchQuery}
-                        setSelectedWine={setSelectedWine}
-                    />
-                )}
+                    {activeTab === 'wines' && (
+                        <WineCellarTab
+                            wines={filteredWines}
+                            regions={regions}
+                            filterRegion={filterRegion}
+                            searchQuery={searchQuery}
+                            setFilterRegion={setFilterRegion}
+                            setSearchQuery={setSearchQuery}
+                            setSelectedWine={setSelectedWine}
+                        />
+                    )}
 
-                {activeTab === 'sommelier' && (
-                    <SommelierTab regions={regions} />
-                )}
+                    {activeTab === 'sommelier' && (
+                        <SommelierTab regions={regions} />
+                    )}
 
-                {activeTab === 'cocktails' && (
-                    <CocktailTab
-                        cocktails={cocktails}
-                        setShowCocktailModal={setShowCocktailModal}
-                        setEditingCocktail={setEditingCocktail}
-                    />
-                )}
+                    {activeTab === 'cocktails' && (
+                        <CocktailTab
+                            cocktails={cocktails}
+                            setShowCocktailModal={setShowCocktailModal}
+                            setEditingCocktail={setEditingCocktail}
+                        />
+                    )}
 
-                {activeTab === 'stocks' && (
-                    <StocksTab
-                        lowStockWines={lowStockWines}
-                        totalCellarValue={totalCellarValue}
-                        wineCount={wines.length}
-                    />
-                )}
+                    {activeTab === 'stocks' && (
+                        <StocksTab
+                            lowStockWines={lowStockWines.length}
+                            totalCellarValue={totalCellarValue}
+                            wineCount={wines.length}
+                        />
+                    )}
+                </div>
             </div>
 
             <WineDetailPanel
@@ -180,7 +189,7 @@ function BarPage() {
                 productType="cocktail"
                 editProduct={editingCocktail as unknown as import("@nexus/contracts").Recipe}
             />
-        </div>
+        </PageShell>
     );
 }
 

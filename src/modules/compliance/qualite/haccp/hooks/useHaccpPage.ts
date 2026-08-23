@@ -10,10 +10,10 @@ import { pushToRole } from "@/lib/push/pushClient";
 import { PlanMaitriseSanitaire } from '../services/PlanMaitriseSanitaire';
 import type { StockItem } from "@nexus/contracts";
 import {
-    ClipboardCheck, FileText, CalendarCheck, ShieldAlert, Package,
+    ClipboardCheck, FileText, CalendarCheck, ShieldAlert, Package, Truck, AlertTriangle,
 } from "lucide-react";
 
-export type HaccpTab = "haccp" | "quality" | "planning" | "compliance" | "lots";
+export type HaccpTab = "haccp" | "reception" | "quality" | "planning" | "compliance" | "lots" | "recall";
 export type HaccpTool = "temperatures" | "huiles" | "nettoyage" | "anomalies";
 
 interface TemperatureLogDoc {
@@ -46,7 +46,7 @@ const COLD_THRESHOLD = 8;
 const HOT_THRESHOLD = 63;
 const ONE_HOUR_MS = 60 * 60 * 1000;
 const POLL_INTERVAL_MS = 15 * 60 * 1000;
-const VALID_HACCP_TABS: HaccpTab[] = ["haccp", "quality", "planning", "compliance", "lots"];
+const VALID_HACCP_TABS: HaccpTab[] = ["haccp", "reception", "quality", "planning", "compliance", "lots", "recall"];
 
 export function resolveInitialTab(tabParam: HaccpTab | null): HaccpTab {
     return tabParam && VALID_HACCP_TABS.includes(tabParam) ? tabParam : "haccp";
@@ -138,10 +138,12 @@ export function useHaccpPage() {
 
     const tabs = [
         { id: "haccp" as const, label: "Relevés HACCP", icon: ClipboardCheck, badge: tempAlerts.length || undefined },
+        { id: "reception" as const, label: "Contrôle Réception", icon: Truck },
         { id: "quality" as const, label: "Qualité & Réception", icon: FileText },
         { id: "planning" as const, label: "Plan nettoyage", icon: CalendarCheck },
         { id: "compliance" as const, label: "Conformité", icon: ShieldAlert, badge: openNcCount || undefined },
         { id: "lots" as const, label: "Traçabilité lots", icon: Package },
+        { id: "recall" as const, label: "Rappels Conso", icon: AlertTriangle },
     ];
 
     return {

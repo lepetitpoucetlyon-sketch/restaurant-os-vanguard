@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant OS — Architecture MCC, Cartographie des Chemins & Surface API</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #040608;
+      --bg-surface: rgba(11, 15, 22, 0.9);
+      --bg-card: rgba(17, 23, 33, 0.85);
+      --bg-card-hover: rgba(26, 34, 48, 0.98);
+      
+      --accent-gold: #C5A059;
+      --accent-gold-glow: rgba(197, 160, 89, 0.4);
+      --accent-cyan: #06B6D4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.4);
+      --accent-emerald: #10B981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+      --accent-purple: #A855F7;
+      --accent-purple-glow: rgba(168, 85, 247, 0.4);
+      --accent-blue: #3B82F6;
+      --accent-rose: #F43F5E;
+      --accent-amber: #F59E0B;
+      
+      --pipe-color: #38BDF8;
+      --pipe-glow: rgba(56, 189, 248, 0.35);
+      --pipe-gold: #C5A059;
+      --pipe-gold-glow: rgba(197, 160, 89, 0.45);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(197, 160, 89, 0.35);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: auto;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(197, 160, 89, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(139, 26, 26, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    header {
+      padding: 2.2rem 2rem 1.4rem;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid var(--border-subtle);
+      background: linear-gradient(180deg, rgba(13, 17, 24, 0.95) 0%, rgba(4, 6, 8, 0.8) 100%);
+      backdrop-filter: blur(20px);
+    }
+
+    .badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(197, 160, 89, 0.15);
+      border: 1px solid var(--border-accent);
+      color: var(--accent-gold);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #FFFFFF 30%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Navigation Tabs ── */
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: rgba(11, 15, 22, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.4rem;
+      border-radius: 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid var(--border-subtle);
+      background: rgba(17, 23, 33, 0.6);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      background: rgba(26, 34, 48, 0.9);
+      color: #FFF;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px var(--accent-gold-glow);
+    }
+
+    .canvas-container {
+      max-width: 1600px;
+      min-width: 1280px;
+      margin: 2.5rem auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.35s ease forwards;
+    }
+
+    .view-panel.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Graphical Connecting Circuits & Pipes ── */
+    .circuit-branch {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .circuit-stem-top {
+      width: 3px;
+      height: 28px;
+      background: var(--pipe-gold);
+      box-shadow: 0 0 10px var(--pipe-gold-glow);
+    }
+
+    .circuit-badge-gate {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1.1rem;
+      background: #090C10;
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      box-shadow: 0 0 15px rgba(0,0,0,0.8), 0 0 10px var(--accent-gold-glow);
+      z-index: 10;
+    }
+
+    .circuit-stem-mid {
+      width: 3px;
+      height: 20px;
+      background: var(--pipe-gold);
+      box-shadow: 0 0 10px var(--pipe-gold-glow);
+    }
+
+    .circuit-bus-wrap {
+      width: 100%;
+      position: relative;
+      height: 35px;
+    }
+
+    .bus-3-branches {
+      position: absolute; top: 0; left: 16.66%; right: 16.66%; height: 3px;
+      background: var(--pipe-gold); box-shadow: 0 0 10px var(--pipe-gold-glow);
+    }
+
+    .bus-3-drops {
+      display: flex; justify-content: space-between; width: 66.68%; margin: 0 auto; height: 100%;
+    }
+
+    .bus-drop-line {
+      width: 3px; height: 100%; background: var(--pipe-gold); box-shadow: 0 0 10px var(--pipe-gold-glow); position: relative;
+    }
+
+    .bus-drop-line::after {
+      content: '▼'; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem; color: var(--accent-gold); text-shadow: 0 0 8px var(--accent-gold);
+    }
+
+    .bus-2-branches {
+      position: absolute; top: 0; left: 25%; right: 25%; height: 3px;
+      background: var(--pipe-color); box-shadow: 0 0 10px var(--pipe-glow);
+    }
+
+    .bus-2-drops {
+      display: flex; justify-content: space-between; width: 50%; margin: 0 auto; height: 100%;
+    }
+
+    .bus-drop-cyan {
+      width: 3px; height: 100%; background: var(--pipe-color); box-shadow: 0 0 10px var(--pipe-glow); position: relative;
+    }
+
+    .bus-drop-cyan::after {
+      content: '▼'; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem; color: var(--accent-cyan); text-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .bus-4-branches {
+      position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 3px;
+      background: var(--pipe-color); box-shadow: 0 0 10px var(--pipe-glow);
+    }
+
+    .bus-4-drops {
+      display: flex; justify-content: space-between; width: 75%; margin: 0 auto; height: 100%;
+    }
+
+    .circuit-converge-wrap {
+      width: 100%; position: relative; height: 35px; margin-top: 1rem;
+    }
+
+    .converge-bus {
+      position: absolute; bottom: 0; left: 16.66%; right: 16.66%; height: 3px;
+      background: var(--pipe-gold); box-shadow: 0 0 10px var(--pipe-gold-glow);
+    }
+
+    .converge-drops {
+      display: flex; justify-content: space-between; width: 66.68%; margin: 0 auto; height: 100%;
+    }
+
+    .converge-drop-up {
+      width: 3px; height: 100%; background: var(--pipe-gold); box-shadow: 0 0 10px var(--pipe-gold-glow);
+    }
+
+    /* ── Graphical Node Styles ── */
+    .operator-root-node {
+      background: linear-gradient(135deg, rgba(30, 38, 54, 0.95) 0%, rgba(15, 19, 28, 0.95) 100%);
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 35px var(--accent-gold-glow);
+      border-radius: 1.5rem;
+      padding: 1.25rem 3rem;
+      text-align: center;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      z-index: 10;
+    }
+
+    .operator-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .operator-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .nodes-row { display: grid; width: 100%; gap: 1.5rem; z-index: 2; }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .g-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.35rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .g-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: transparent; transition: all 0.3s ease;
+    }
+
+    .g-card:hover {
+      transform: translateY(-5px);
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+    }
+
+    .card-gold { border-color: rgba(197, 160, 89, 0.35); }
+    .card-gold::before { background: linear-gradient(90deg, var(--accent-gold), #FFF); }
+    .card-cyan { border-color: rgba(6, 182, 212, 0.35); }
+    .card-cyan::before { background: linear-gradient(90deg, var(--accent-cyan), #38BDF8); }
+    .card-purple { border-color: rgba(168, 85, 247, 0.35); }
+    .card-purple::before { background: linear-gradient(90deg, var(--accent-purple), #C084FC); }
+    .card-emerald { border-color: rgba(16, 185, 129, 0.35); }
+    .card-emerald::before { background: linear-gradient(90deg, var(--accent-emerald), #34D399); }
+    .card-blue { border-color: rgba(59, 130, 246, 0.35); }
+    .card-blue::before { background: linear-gradient(90deg, var(--accent-blue), #60A5FA); }
+
+    .g-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .g-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem;
+      border-radius: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .badge-gold { background: rgba(197, 160, 89, 0.15); color: var(--accent-gold); border: 1px solid var(--border-accent); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .g-title {
+      font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #FFF; margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .g-desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; }
+    .g-list { list-style: none; font-size: 0.78rem; color: var(--text-muted); margin-top: auto; }
+    .g-list li { position: relative; padding-left: 1.2rem; margin-bottom: 0.45rem; line-height: 1.4; }
+    .g-list li::before { content: '◆'; position: absolute; left: 0; font-size: 0.6rem; top: 0.2rem; color: var(--accent-gold); }
+
+    .master-pipeline {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(28, 35, 48, 0.95) 0%, rgba(14, 18, 26, 0.95) 100%);
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 35px var(--accent-gold-glow);
+      border-radius: 1.5rem;
+      padding: 1.25rem 2rem;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .terminal-pill {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #000; font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.1rem;
+      padding: 1rem 2.5rem; border-radius: 1rem; display: inline-flex; align-items: center; gap: 0.75rem;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ── Pole & Subdomains ── */
+    .pole-section {
+      background: rgba(11, 15, 22, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pole-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 1.2rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem;
+    }
+
+    .pole-title { font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800; color: #FFF; display: flex; align-items: center; gap: 0.6rem; }
+
+    .subdomains-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.25rem;
+    }
+
+    .subdomain-card {
+      background: rgba(17, 23, 33, 0.85); border: 1px solid var(--border-subtle); border-radius: 1rem; padding: 1.25rem;
+    }
+
+    .subdomain-title {
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent-gold);
+      margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .route-item {
+      display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.6rem;
+      border-radius: 0.5rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 0.4rem; transition: background 0.2s ease;
+    }
+    .route-item:hover { background: rgba(255, 255, 255, 0.06); }
+    .route-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-decoration: none; }
+    .route-name:hover { text-decoration: underline; color: #FFF; }
+    .route-role { font-size: 0.7rem; color: var(--text-dim); }
+
+    /* ── API Grid Component (187 Routes) ── */
+    .api-domain-card {
+      background: rgba(17, 23, 33, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.2rem;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+
+    .api-domain-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .api-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .api-domain-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .api-count-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.45rem;
+      background: rgba(197, 160, 89, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid var(--border-accent);
+    }
+
+    .api-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .api-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 0.4rem;
+      background: rgba(4, 6, 8, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #38BDF8;
+    }
+
+    .api-chip:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38BDF8;
+      color: #FFF;
+    }
+
+    /* ── Table Styles ── */
+    .table-container {
+      overflow-x: auto; border-radius: 1rem; border: 1px solid var(--border-subtle); background: rgba(4, 5, 7, 0.6);
+    }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+    th {
+      background: rgba(15, 19, 26, 0.95); color: var(--text-dim); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em; padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border-subtle);
+    }
+    td { padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: var(--text-muted); vertical-align: middle; }
+    tr:hover td { background: rgba(255, 255, 255, 0.025); color: var(--text-main); }
+    .search-input {
+      width: 100%; background: rgba(4, 5, 7, 0.85); border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.85rem; padding: 0.75rem 1rem 0.75rem 2.5rem; color: #FFF; font-size: 0.9rem; outline: none; margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="badge-top">🏛️ ARCHITECTURE UNIFIÉE MCC & SURFACE API COMPLÈTE</div>
+    <h1>Moteur de Morphogenèse, Arbre des Chemins & 187 Routes API</h1>
+    <p class="subtitle">
+      Cartographie visuelle complète : Tiers système, morphogenèse OSINT, 50+ routes UI et l'inventaire exhaustif des 187 endpoints API HTTP (src/app/api/).
+    </p>
+  </header>
+
+  <!-- ── Global Tab Navigation ── -->
+  <div class="nav-bar">
+    <button class="tab-btn active" onclick="switchView('view-morphogenesis')">🏛️ 1. Schéma Fléché : Architecture MCC & Morphogenèse</button>
+    <button class="tab-btn" onclick="switchView('view-routes-tree')">🗺️ 2. Arbre Graphique : Les 3 Pôles UI (50+ Pages)</button>
+    <button class="tab-btn" onclick="switchView('view-api-surface')">🔌 3. Surface API HTTP (src/app/api/) — 187 Routes</button>
+    <button class="tab-btn" onclick="switchView('view-routes-table')">📊 4. Tableau de Bord Global & Recherche</button>
+  </div>
+
+  <div class="canvas-container">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- VUE 1 : SCHÉMA FLÉCHÉ MCC & MORPHOGENÈSE                       -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="view-morphogenesis" class="view-panel active">
+      
+      <!-- ROOT OPERATOR -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div class="operator-root-node">
+          <div class="operator-title"><span>🏛️</span> OPÉRATEUR SUPER-ADMIN MCC</div>
+          <div class="operator-sub">/admin/mcc &nbsp;•&nbsp; /admin/prospecting</div>
+        </div>
+
+        <!-- FORK 1-TO-3: TO TIERS -->
+        <div class="circuit-branch">
+          <div class="circuit-stem-top"></div>
+          <div class="circuit-badge-gate">▼ 1. QUEL EST L'OBJECTIF CIBLÉ ? ▼</div>
+          <div class="circuit-stem-mid"></div>
+          <div class="circuit-bus-wrap">
+            <div class="bus-3-branches"></div>
+            <div class="bus-3-drops">
+              <div class="bus-drop-line"></div>
+              <div class="bus-drop-line"></div>
+              <div class="bus-drop-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 TIERS -->
+        <div class="nodes-row grid-cols-3">
+          <div class="g-card card-cyan">
+            <div class="g-header"><span class="g-badge badge-cyan">_demo_[vertical]</span><span style="font-size:1.3rem;">👁️</span></div>
+            <div class="g-title">TIER 1 : DEMO / SHOWCASE</div>
+            <div class="g-desc">Vitrine interactive en mode <b>Simulacra</b>. Écriture interceptée, lecture seule store.</div>
+            <ul class="g-list">
+              <li>Données synthétiques réalistes (rushs, stocks, plannings)</li>
+              <li>Zéro écriture dans le Grand Livre réel</li>
+            </ul>
+          </div>
+
+          <div class="g-card card-purple">
+            <div class="g-header"><span class="g-badge badge-purple">_test_[vertical]</span><span style="font-size:1.3rem;">🧪</span></div>
+            <div class="g-title">TIER 2 : TEST / ÉPHÉMÈRE</div>
+            <div class="g-desc">Bac à sable développeur & qualification instantanée par Scrapling (ex: <code>brasserie-georges-test</code>).</div>
+            <ul class="g-list">
+              <li>Écriture libre & resetable à la demande</li>
+              <li>Zéro impact sur la production</li>
+            </ul>
+          </div>
+
+          <div class="g-card card-emerald">
+            <div class="g-header"><span class="g-badge badge-emerald">tenant_[siret]</span><span style="font-size:1.3rem;">🚀</span></div>
+            <div class="g-title">TIER 3 : CLIENT / LIVE</div>
+            <div class="g-desc">Instance réelle de production d'un établissement sous contrat commercial actif.</div>
+            <ul class="g-list">
+              <li>Compte Stripe rattaché & abonnement actif</li>
+              <li>Clé fiscale inaltérable & Sceau Genesis NF525</li>
+              <li>Télémétrie de flotte branchée en direct</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CONVERGE ➔ FORK TO 2 VOIES -->
+        <div class="circuit-branch" style="margin-top:1rem;">
+          <div class="circuit-converge-wrap">
+            <div class="converge-bus"></div>
+            <div class="converge-drops">
+              <div class="converge-drop-up"></div>
+              <div class="converge-drop-up"></div>
+              <div class="converge-drop-up"></div>
+            </div>
+          </div>
+          <div class="circuit-stem-top"></div>
+          <div class="circuit-badge-gate">▼ 2. QUELLE VOIE DE MORPHOGENÈSE ? ▼</div>
+          <div class="circuit-stem-mid"></div>
+          <div class="circuit-bus-wrap">
+            <div class="bus-2-branches"></div>
+            <div class="bus-2-drops">
+              <div class="bus-drop-cyan"></div>
+              <div class="bus-drop-cyan"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 VOIES -->
+        <div class="nodes-row grid-cols-2">
+          <div class="g-card card-cyan">
+            <div class="g-header"><span class="g-badge badge-cyan">SKILL 1 : DNA CRAWLER</span><span style="font-size:1.3rem;">🕷️</span></div>
+            <div class="g-title">VOIE 1 : OSINT AGENT (Morphogenèse par URL)</div>
+            <div class="g-desc">Aspiration 360° du réel terrain par Scrapling en <b>&lt; 7s</b> via <code>investigate_merchant.py</code> :</div>
+            <ul class="g-list">
+              <li><b>Tier 1 Légal :</b> SIREN (957523939), TVA, Raison sociale, Capital, Siège.</li>
+              <li><b>Tier 2 Terrain :</b> 64 Plats réels, prix microunités, TVA 10/20%, Fournisseurs (Fanton, Bobosse, Richard), ZenChef, Bières artisanales.</li>
+            </ul>
+          </div>
+
+          <div class="g-card card-purple">
+            <div class="g-header"><span class="g-badge badge-purple">SKILL 2 : MULTI-VERTICAL FORGE</span><span style="font-size:1.3rem;">⚙️</span></div>
+            <div class="g-title">VOIE 2 : TEMPLATE MULTI-VERTICAL (Blueprints)</div>
+            <div class="g-desc">Scaffolding déclaratif basé sur les 8 profils universels (<code>ProfileArchetype.ts</code>) :</div>
+            <ul class="g-list">
+              <li><b>Profil A (Food & Périssable) :</b> Active KDS, HACCP, DLC et Plan 3D.</li>
+              <li><b>Profil B à H :</b> Services & RDV, Vente, Soin, Abonnements.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CONVERGE ➔ FORK TO 4 BRANDING -->
+        <div class="circuit-branch" style="margin-top:1rem;">
+          <div class="circuit-converge-wrap">
+            <div class="converge-bus" style="left:25%; right:25%; background:var(--pipe-color); box-shadow:0 0 10px var(--pipe-glow);"></div>
+            <div class="converge-drops" style="width:50%;">
+              <div class="converge-drop-up" style="background:var(--pipe-color); box-shadow:0 0 10px var(--pipe-glow);"></div>
+              <div class="converge-drop-up" style="background:var(--pipe-color); box-shadow:0 0 10px var(--pipe-glow);"></div>
+            </div>
+          </div>
+          <div class="circuit-stem-top" style="background:var(--pipe-color); box-shadow:0 0 10px var(--pipe-glow);"></div>
+          <div class="circuit-badge-gate">▼ 3. QUEL CHOIX DE CHARTE GRAPHIQUE ? ▼</div>
+          <div class="circuit-stem-mid" style="background:var(--pipe-color); box-shadow:0 0 10px var(--pipe-glow);"></div>
+          <div class="circuit-bus-wrap">
+            <div class="bus-4-branches"></div>
+            <div class="bus-4-drops">
+              <div class="bus-drop-cyan"></div>
+              <div class="bus-drop-cyan"></div>
+              <div class="bus-drop-cyan"></div>
+              <div class="bus-drop-cyan"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 BRANDING -->
+        <div class="nodes-row grid-cols-4">
+          <div class="g-card card-cyan"><div class="g-header"><span class="g-badge badge-cyan">Option A1</span></div><div class="g-title">Aspirée du Site</div><div class="g-desc">Palette CSS extraite du site, logo officiel webp et typographie réelle d'époque.</div></div>
+          <div class="g-card card-gold"><div class="g-header"><span class="g-badge badge-gold">Option A2</span></div><div class="g-title">Studio Recalibrée</div><div class="g-desc">Palette ajustée : Rouge Bourgogne (<code>#8B1A1A</code>) + Or Laiton (<code>#C5A059</code>).</div></div>
+          <div class="g-card card-purple"><div class="g-header"><span class="g-badge badge-purple">Option B1</span></div><div class="g-title">Thème Usine</div><div class="g-desc">Palette par défaut du secteur d'activité prédéfinie dans le blueprint métier.</div></div>
+          <div class="g-card card-emerald"><div class="g-header"><span class="g-badge badge-emerald">Option B2</span></div><div class="g-title">Upload Custom</div><div class="g-desc">Saisie manuelle des codes HEX primaire/secondaire et upload de logo vectoriel.</div></div>
+        </div>
+
+        <!-- MASTER PIPELINE -->
+        <div class="circuit-branch" style="margin-top:1rem;">
+          <div class="circuit-converge-wrap">
+            <div class="converge-bus" style="left:12.5%; right:12.5%; background:var(--pipe-gold); box-shadow:0 0 10px var(--pipe-gold-glow);"></div>
+            <div class="converge-drops" style="width:75%;">
+              <div class="converge-drop-up"></div><div class="converge-drop-up"></div><div class="converge-drop-up"></div><div class="converge-drop-up"></div>
+            </div>
+          </div>
+          <div class="circuit-stem-top"></div>
+          <div class="circuit-badge-gate">▼ 4. EXÉCUTION DU PIPELINE MAÎTRE & DES SKILLS ▼</div>
+          <div class="circuit-stem-mid"></div>
+        </div>
+
+        <div class="master-pipeline">
+          <div style="font-family:'Outfit'; font-size:1.3rem; font-weight:800; color:#FFF; margin-bottom:0.3rem;">PIPELINE MAÎTRE DE PROVISIONING DU MCC</div>
+          <div style="font-family:'JetBrains Mono'; font-size:0.8rem; color:var(--accent-gold);">src/lib/mcc/provisioning/TenantProvisioningService.ts</div>
+        </div>
+
+        <!-- 4 SKILLS -->
+        <div class="circuit-branch">
+          <div class="circuit-stem-top"></div>
+          <div class="circuit-badge-gate">▼ ACTIVATION CONJOINTE DES 4 SKILLS DU NOYAU ▼</div>
+          <div class="circuit-stem-mid"></div>
+          <div class="circuit-bus-wrap">
+            <div class="bus-4-branches" style="background:var(--pipe-gold); box-shadow:0 0 10px var(--pipe-gold-glow);"></div>
+            <div class="bus-4-drops">
+              <div class="bus-drop-line"></div><div class="bus-drop-line"></div><div class="bus-drop-line"></div><div class="bus-drop-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nodes-row grid-cols-4">
+          <div class="g-card card-gold"><div class="g-header"><span class="g-badge badge-gold">SKILL 3 : FISCAL GUARD</span><span style="font-size:1.2rem;">⚖️</span></div><div class="g-title">Fiscalité NF525</div><div class="g-desc">Clé inaltérable & signature <b>GENESIS</b> SHA-256 scellé.</div></div>
+          <div class="g-card card-cyan"><div class="g-header"><span class="g-badge badge-cyan">SKILL 4 : HARDWARE/IOT</span><span style="font-size:1.2rem;">🖨️</span></div><div class="g-title">KDS & Télémétrie IoT</div><div class="g-desc">KDS 4 postes & débitmètres SmartSpout fûts.</div></div>
+          <div class="g-card card-purple"><div class="g-header"><span class="g-badge badge-purple">SKILL 5 : HERMES/ORACLE</span><span style="font-size:1.2rem;">🧠</span></div><div class="g-title">Intelligence RAG IA</div><div class="g-desc">Workspace RAG & injection des 64 plats réels.</div></div>
+          <div class="g-card card-blue"><div class="g-header"><span class="g-badge badge-blue">SKILL 6 : GOLDEN REF</span><span style="font-size:1.2rem;">🔒</span></div><div class="g-title">Golden Reference</div><div class="g-desc">Contrôle de non-dérive par rapport à <code>_ref_*</code>.</div></div>
+        </div>
+
+        <!-- FINAL SEED -->
+        <div class="circuit-branch" style="margin-top:1rem;">
+          <div class="circuit-converge-wrap">
+            <div class="converge-bus" style="left:12.5%; right:12.5%; background:var(--pipe-gold); box-shadow:0 0 10px var(--pipe-gold-glow);"></div>
+            <div class="converge-drops" style="width:75%;"><div class="converge-drop-up"></div><div class="converge-drop-up"></div><div class="converge-drop-up"></div><div class="converge-drop-up"></div></div>
+          </div>
+          <div class="circuit-stem-top"></div>
+          <div class="circuit-badge-gate">▼ ÉCRITURE ATOMIQUE SOUVERAINE ▼</div>
+          <div class="circuit-stem-mid"></div>
+        </div>
+
+        <div class="g-card card-emerald" style="width:100%; text-align:center; align-items:center;">
+          <div class="g-header" style="width:100%; justify-content:center; gap:1rem;"><span class="g-badge badge-emerald">SKILL 7 : SOVEREIGN GUARD & TENANT SEEDER</span></div>
+          <div class="g-title" style="font-size:1.3rem;">Partitionnement Multi-Tenant & Écriture Atomique</div>
+          <div class="g-desc" style="max-width:800px; margin:0 auto 1.25rem;">
+            Écriture isolée dans <code>tenants/{tenantId}</code> : Comptes comptables PCG, Plan de salle 4 zones & 20 tables, Catalogue des 64 plats, Compte Admin & PIN fort, Télémétrie de flotte.
+          </div>
+          <div class="terminal-pill"><span>🚀</span> INSTANCE LIVE OPÉRATIONNELLE (Prête pour le Service)</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- VUE 2 : ARBRE GRAPHIQUE DES 3 PÔLES UI                         -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="view-routes-tree" class="view-panel">
+      <!-- PÔLE 1 -->
+      <div class="pole-section" style="border-color:var(--accent-gold);">
+        <div class="pole-header">
+          <div class="pole-title"><span style="color:var(--accent-gold);">🏛️</span> PÔLE 1 : MCC & FLOTTE PLATEFORME</div>
+          <span class="g-badge badge-gold">src/app/(admin)/... &nbsp;•&nbsp; Accès: mcc_super_admin</span>
+        </div>
+        <div class="subdomains-grid">
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>👑</span> Gouvernance Flotte</div>
+            <div class="route-item"><a href="/admin/mcc" target="_blank" class="route-name">/admin/mcc ↗</a><span class="route-role">Cockpit Flotte</span></div>
+            <div class="route-item"><a href="/admin/mcc/dlq" target="_blank" class="route-name">/admin/mcc/dlq ↗</a><span class="route-role">Dead Letter Queue</span></div>
+            <div class="route-item"><a href="/admin/dashboard" target="_blank" class="route-name">/admin/dashboard ↗</a><span class="route-role">Dashboard Central</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>🧠</span> Intelligence & Morphogenèse</div>
+            <div class="route-item"><a href="/admin/agent" target="_blank" class="route-name">/admin/agent ↗</a><span class="route-role">Tour IA</span></div>
+            <div class="route-item"><a href="/admin/prospecting" target="_blank" class="route-name">/admin/prospecting ↗</a><span class="route-role">LeadGen OSINT</span></div>
+            <div class="route-item"><a href="/blueprint" target="_blank" class="route-name">/blueprint ↗</a><span class="route-role">12 Blueprints</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>⚡</span> Simulation & Audit</div>
+            <div class="route-item"><a href="/admin/simulation" target="_blank" class="route-name">/admin/simulation ↗</a><span class="route-role">Crash-Test</span></div>
+            <div class="route-item"><a href="/simulator" target="_blank" class="route-name">/simulator ↗</a><span class="route-role">Rush Opérationnel</span></div>
+            <div class="route-item"><a href="/audit-portal" target="_blank" class="route-name">/audit-portal ↗</a><span class="route-role">Audit DGFiP</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PÔLE 2 -->
+      <div class="pole-section" style="border-color:var(--accent-cyan);">
+        <div class="pole-header">
+          <div class="pole-title"><span style="color:var(--accent-cyan);">🍽️</span> PÔLE 2 : OPÉRATIONS RESTAURANT (TENANT CONTEXT)</div>
+          <span class="g-badge badge-cyan">src/app/(client)/(ops)/... &nbsp;•&nbsp; Accès: Brigade & Direction</span>
+        </div>
+        <div class="subdomains-grid">
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>💳</span> Salle, Caisse & POS</div>
+            <div class="route-item"><a href="/pos" target="_blank" class="route-name">/pos ↗</a><span class="route-role">Point de Vente</span></div>
+            <div class="route-item"><a href="/pos-mobile" target="_blank" class="route-name">/pos-mobile ↗</a><span class="route-role">Pad Mobile</span></div>
+            <div class="route-item"><a href="/floor-plan" target="_blank" class="route-name">/floor-plan ↗</a><span class="route-role">Plan 3D</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>🍳</span> Cuisine, Bar & KDS</div>
+            <div class="route-item"><a href="/kds" target="_blank" class="route-name">/kds ↗</a><span class="route-role">KDS 4 Postes</span></div>
+            <div class="route-item"><a href="/kitchen" target="_blank" class="route-name">/kitchen ↗</a><span class="route-role">Fiches Recettes</span></div>
+            <div class="route-item"><a href="/bar" target="_blank" class="route-name">/bar ↗</a><span class="route-role">SmartSpout</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>📦</span> Stocks & HACCP</div>
+            <div class="route-item"><a href="/inventory" target="_blank" class="route-name">/inventory ↗</a><span class="route-role">Stocks Réels</span></div>
+            <div class="route-item"><a href="/haccp" target="_blank" class="route-name">/haccp ↗</a><span class="route-role">Sondes Frigo</span></div>
+            <div class="route-item"><a href="/facility" target="_blank" class="route-name">/facility ↗</a><span class="route-role">GMAO</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>⚖️</span> Finance & NF525</div>
+            <div class="route-item"><a href="/finance" target="_blank" class="route-name">/finance ↗</a><span class="route-role">Trésorerie</span></div>
+            <div class="route-item"><a href="/nf525" target="_blank" class="route-name">/nf525 ↗</a><span class="route-role">Clôtures Z</span></div>
+            <div class="route-item"><a href="/intelligence" target="_blank" class="route-name">/intelligence ↗</a><span class="route-role">Copilote IA</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PÔLE 3 -->
+      <div class="pole-section" style="border-color:var(--accent-emerald);">
+        <div class="pole-header">
+          <div class="pole-title"><span style="color:var(--accent-emerald);">🌐</span> PÔLE 3 : PUBLIC, MARKETING & COMMANDES</div>
+          <span class="g-badge badge-emerald">src/app/(marketing)/ & (public)/</span>
+        </div>
+        <div class="subdomains-grid">
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>🚀</span> Vitrine & Tarifs</div>
+            <div class="route-item"><a href="/" target="_blank" class="route-name">/ ↗</a><span class="route-role">Landing</span></div>
+            <div class="route-item"><a href="/pricing" target="_blank" class="route-name">/pricing ↗</a><span class="route-role">Tarifs B2B</span></div>
+            <div class="route-item"><a href="/pricing/roi-calculator" target="_blank" class="route-name">/pricing/roi-calculator ↗</a><span class="route-role">Simulateur ROI</span></div>
+          </div>
+          <div class="subdomain-card">
+            <div class="subdomain-title"><span>📱</span> Auth & Démo</div>
+            <div class="route-item"><a href="/login" target="_blank" class="route-name">/login ↗</a><span class="route-role">Connexion</span></div>
+            <div class="route-item"><a href="/signup" target="_blank" class="route-name">/signup ↗</a><span class="route-role">Inscription</span></div>
+            <div class="route-item"><a href="/demo" target="_blank" class="route-name">/demo ↗</a><span class="route-role">Démo</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- VUE 3 : SURFACE API HTTP (src/app/api/) — 187 ROUTES           -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="view-api-surface" class="view-panel">
+      <div class="pole-section" style="border-color:var(--accent-purple);">
+        <div class="pole-header">
+          <div class="pole-title"><span style="color:var(--accent-purple);">🔌</span> PÔLE 6 — SURFACE API HTTP (src/app/api/) — 187 ROUTES</div>
+          <span class="g-badge badge-purple">Architecture Micro-Endpoints & Webhooks</span>
+        </div>
+
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem; line-height:1.5;">
+          Inventaire exhaustif des 187 routes API réparties par domaines d'ingénierie (Admin Flotte, Connecteurs, Webhooks, Fiscalité NF525, RAG & Agents IA).
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:1.25rem;">
+          
+          <!-- admin/fleet -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🚢</span> admin/fleet</div>
+              <span class="api-count-pill">37 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">backup</span><span class="api-chip">billing/feature-flags</span><span class="api-chip">billing/portal-session</span>
+              <span class="api-chip">billing/treasury-report</span><span class="api-chip">billing/usage</span><span class="api-chip">catalog</span>
+              <span class="api-chip">changelog</span><span class="api-chip">churn</span><span class="api-chip">command</span><span class="api-chip">contracts</span>
+              <span class="api-chip">cron/nf525-audit</span><span class="api-chip">device-activation</span><span class="api-chip">dns</span>
+              <span class="api-chip">drain-outbox</span><span class="api-chip">health-score</span><span class="api-chip">hotspot</span><span class="api-chip">migrate</span>
+              <span class="api-chip">ota-broadcast</span><span class="api-chip">owner-view</span><span class="api-chip">plugins</span><span class="api-chip">provision</span>
+              <span class="api-chip">public-access</span><span class="api-chip">rag</span><span class="api-chip">region</span><span class="api-chip">restore</span>
+              <span class="api-chip">rgpd-export</span><span class="api-chip">rgpd-purge</span><span class="api-chip">rollout</span><span class="api-chip">seed-demo</span>
+              <span class="api-chip">shadow-mode</span><span class="api-chip">support-access</span><span class="api-chip">support-ai/diagnose</span>
+              <span class="api-chip">telemetry/heartbeat</span><span class="api-chip">tenant-ai-config</span><span class="api-chip">tenant-billing</span>
+              <span class="api-chip">tenant-users</span><span class="api-chip">trusted-devices</span><span class="api-chip">upgrade</span>
+            </div>
+          </div>
+
+          <!-- tenant -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🏢</span> tenant</div>
+              <span class="api-count-pill">17 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">api-keys</span><span class="api-chip">api-keys/[keyId]</span><span class="api-chip">api-keys/validate</span>
+              <span class="api-chip">compliance/inspection-mode</span><span class="api-chip">contracts</span><span class="api-chip">contracts/[id]/sign</span>
+              <span class="api-chip">custom-domain</span><span class="api-chip">domain/check</span><span class="api-chip">franchise/overview</span>
+              <span class="api-chip">onboarding/auto-morphogenesis</span><span class="api-chip">onboarding/connector/pull</span>
+              <span class="api-chip">onboarding/ocr</span><span class="api-chip">onboarding/rollback</span><span class="api-chip">support/tickets</span>
+            </div>
+          </div>
+
+          <!-- finance -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>⚖️</span> finance & accounting</div>
+              <span class="api-count-pill">11 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">accounting-portal/pack</span><span class="api-chip">accounting-portal/summary</span>
+              <span class="api-chip">accounting-portal/transmit</span><span class="api-chip">bank/callback</span><span class="api-chip">bank/sync</span>
+              <span class="api-chip">bank/webhook</span><span class="api-chip">cash-count</span><span class="api-chip">jet/sync</span><span class="api-chip">sync</span>
+            </div>
+          </div>
+
+          <!-- admin/mcc -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>👑</span> admin/mcc</div>
+              <span class="api-count-pill">11 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">api-gateway/[tenantId]/[keyId]</span><span class="api-chip">fleet/devices/lock</span><span class="api-chip">health</span>
+              <span class="api-chip">notify-critical</span><span class="api-chip">reseller</span><span class="api-chip">reseller/commissions</span>
+              <span class="api-chip">system-tenants/promote</span><span class="api-chip">system-tenants/reset-demo</span><span class="api-chip">tenants/scrape-charter</span>
+            </div>
+          </div>
+
+          <!-- connectors -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🔌</span> connectors & webhooks</div>
+              <span class="api-count-pill">10 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">(list)</span><span class="api-chip">[id]/activate</span><span class="api-chip">[id]/credentials</span>
+              <span class="api-chip">[id]/sync</span><span class="api-chip">[id]/test</span><span class="api-chip">delivery/webhook/[provider]</span>
+              <span class="api-chip">iot/webhook/[provider]</span><span class="api-chip">reservations/sync</span><span class="api-chip">reviews/sync</span>
+            </div>
+          </div>
+
+          <!-- admin/hr -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>👥</span> admin/hr & payroll</div>
+              <span class="api-count-pill">9 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">export/csv</span><span class="api-chip">payroll/merge/exchange</span><span class="api-chip">payroll/merge/sync</span>
+              <span class="api-chip">payroll/provider/connect</span><span class="api-chip">payroll/settings</span><span class="api-chip">payroll/silae/connect</span>
+              <span class="api-chip">payroll/silae/sync</span>
+            </div>
+          </div>
+
+          <!-- facility -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🔧</span> facility & matériel</div>
+              <span class="api-count-pill">7 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">equipment</span><span class="api-chip">equipment/[id]</span><span class="api-chip">equipment/[id]/guides</span>
+              <span class="api-chip">equipment/[id]/troubleshoot</span><span class="api-chip">hardware/diagnostics</span><span class="api-chip">settings/maintenance</span>
+            </div>
+          </div>
+
+          <!-- crm -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🎯</span> crm & fidélité</div>
+              <span class="api-count-pill">7 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">ab-test</span><span class="api-chip">anti-spam</span><span class="api-chip">automations/run</span>
+              <span class="api-chip">campaign</span><span class="api-chip">campaign-analytics</span><span class="api-chip">consent</span><span class="api-chip">customers</span>
+            </div>
+          </div>
+
+          <!-- webhooks entrants -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>⚡</span> webhooks entrants</div>
+              <span class="api-count-pill">6 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">delivery/[provider]</span><span class="api-chip">docuseal</span><span class="api-chip">google-reserve</span>
+              <span class="api-chip">sms/inbound</span><span class="api-chip">stripe</span><span class="api-chip">thefork</span>
+            </div>
+          </div>
+
+          <!-- ai / agent / oracle -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🧠</span> ai / agent / oracle</div>
+              <span class="api-count-pill">5 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">agent/report</span><span class="api-chip">ai/review-response</span><span class="api-chip">oracle</span>
+              <span class="api-chip">oracle/index</span><span class="api-chip">gemini-live</span>
+            </div>
+          </div>
+
+          <!-- v1 public API stable -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🌍</span> v1 (public API stable)</div>
+              <span class="api-count-pill">5 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">menu</span><span class="api-chip">openapi.json</span><span class="api-chip">orders</span>
+              <span class="api-chip">orders/[id]</span><span class="api-chip">tables</span>
+            </div>
+          </div>
+
+          <!-- admin/compliance -->
+          <div class="api-domain-card">
+            <div class="api-card-header">
+              <div class="api-domain-name"><span>🛡️</span> admin/compliance</div>
+              <span class="api-count-pill">5 routes</span>
+            </div>
+            <div class="api-chips-wrap">
+              <span class="api-chip">chain-audit</span><span class="api-chip">fiscal-archive-export</span><span class="api-chip">fiscal-tenant-audit</span>
+              <span class="api-chip">nf525-certificate</span><span class="api-chip">brand/extract</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- VUE 4 : TABLEAU DE BORD GLOBAL & RECHERCHE                     -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div id="view-routes-table" class="view-panel">
+      <div class="pole-section">
+        <input type="text" id="route-search" class="search-input" placeholder="🔍 Rechercher instantanément une page UI ou un endpoint API..." oninput="filterRoutes()">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>URL & Route Publique</th>
+                <th>Pôle / Domaine</th>
+                <th>Rôle / Guard</th>
+                <th>Fichier Source TypeScript</th>
+                <th>Spécificité Opérationnelle</th>
+              </tr>
+            </thead>
+            <tbody id="routes-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchView(viewId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    const allData = [
+      // UI Pages
+      { type: 'UI', url: '/admin/mcc', cat: '🏛️ MCC Flotte', role: 'mcc_super_admin', roleClass: 'badge-gold', file: 'src/app/(admin)/admin/mcc/page.tsx', desc: 'Cockpit Central Flotte : KPIs, licences, kill-switch.' },
+      { type: 'UI', url: '/admin/mcc/dlq', cat: '🏛️ MCC Flotte', role: 'mcc_super_admin', roleClass: 'badge-gold', file: 'src/app/(admin)/admin/mcc/dlq/page.tsx', desc: 'Dead Letter Queue (DLQ) : Rejeu transactions crash.' },
+      { type: 'UI', url: '/admin/agent', cat: '🏛️ MCC Flotte', role: 'mcc_super_admin', roleClass: 'badge-gold', file: 'src/app/(admin)/admin/agent/page.tsx', desc: 'Tour Contrôle IA : Hermes, Oracle, Themis.' },
+      { type: 'UI', url: '/admin/prospecting', cat: '🏛️ MCC Flotte', role: 'mcc_super_admin', roleClass: 'badge-gold', file: 'src/app/(admin)/admin/prospecting/page.tsx', desc: 'LeadGen OSINT : Aspiration Scrapling & Seed.' },
+      { type: 'UI', url: '/pos', cat: '🍽️ Salle & POS', role: 'Serveur / Manager', roleClass: 'badge-cyan', file: 'src/app/(client)/(ops)/pos/page.tsx', desc: 'Point de Vente Fixe tactile & Split d\'addition NF525.' },
+      { type: 'UI', url: '/kds', cat: '🍳 Cuisine & Bar', role: 'Chef / Brigade', roleClass: 'badge-purple', file: 'src/app/(client)/(ops)/kds/page.tsx', desc: 'Écran Cuisine KDS 4 postes (Chaud, Froid, Bar, Pâtisserie).' },
+      { type: 'UI', url: '/inventory', cat: '📦 Stocks', role: 'Économe', roleClass: 'badge-emerald', file: 'src/app/(client)/(ops)/inventory/page.tsx', desc: 'Stocks réels, alertes DLC et Food Cost.' },
+      { type: 'UI', url: '/nf525', cat: '⚖️ Finance', role: 'Direction', roleClass: 'badge-gold', file: 'src/app/(client)/(ops)/nf525/page.tsx', desc: 'Fiscalité NF525 : Clôtures Z & Grand Livre inaltérable.' },
+      { type: 'UI', url: '/pricing', cat: '🌐 Public', role: 'Prospect B2B', roleClass: 'badge-emerald', file: 'src/app/(marketing)/pricing/page.tsx', desc: 'Grille tarifaire : Starter, Pro, Enterprise.' },
+      
+      // API Endpoints
+      { type: 'API', url: '/api/billing/checkout', cat: '🔌 Billing', role: 'API Server', roleClass: 'badge-purple', file: 'src/app/api/billing/checkout/route.ts', desc: 'Tunnel de souscription et création de session Stripe.' },
+      { type: 'API', url: '/api/billing/webhook', cat: '🔌 Billing', role: 'Stripe Webhook', roleClass: 'badge-purple', file: 'src/app/api/billing/webhook/route.ts', desc: 'Ingestion des paiements et activation de licences.' },
+      { type: 'API', url: '/api/connectors/[id]/sync', cat: '🔌 Connectors', role: 'Sync Agent', roleClass: 'badge-blue', file: 'src/app/api/connectors/[id]/sync/route.ts', desc: 'Synchronisation bidirectionnelle des intégrations tierces.' },
+      { type: 'API', url: '/api/tenant/onboarding/auto-morphogenesis', cat: '🔌 Tenant', role: 'MCC Engine', roleClass: 'badge-gold', file: 'src/app/api/tenant/onboarding/auto-morphogenesis/route.ts', desc: 'Moteur de morphogenèse instantanée par extraction DNA.' },
+      { type: 'API', url: '/api/v1/orders', cat: '🔌 API v1', role: 'Public API', roleClass: 'badge-emerald', file: 'src/app/api/v1/orders/route.ts', desc: 'API publique stable de passation de commandes.' }
+    ];
+
+    function renderTable(query = '') {
+      const tbody = document.getElementById('routes-tbody');
+      tbody.innerHTML = '';
+      const q = query.toLowerCase();
+
+      const filtered = allData.filter(r => 
+        !q || r.url.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q) || r.file.toLowerCase().includes(q) || r.role.toLowerCase().includes(q)
+      );
+
+      filtered.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="g-badge ${r.type === 'UI' ? 'badge-cyan' : 'badge-purple'}">${r.type}</span></td>
+          <td><a href="${r.url}" target="_blank" class="route-name" style="font-size:0.85rem;">${r.url} ↗</a></td>
+          <td><b>${r.cat}</b></td>
+          <td><span class="g-badge ${r.roleClass}">${r.role}</span></td>
+          <td><span style="font-family:'JetBrains Mono'; font-size:0.75rem; color:#64748B;">${r.file}</span></td>
+          <td style="color:#CBD5E1;">${r.desc}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterRoutes() {
+      const q = document.getElementById('route-search').value;
+      renderTable(q);
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

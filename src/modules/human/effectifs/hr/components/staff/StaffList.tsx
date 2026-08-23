@@ -86,25 +86,21 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                     tous les employés). Utiliser un générateur non-conforme expose
                     l'employeur à un redressement URSSAF et des risques aux prud'hommes.
                     Intégration Silae / PayFit prévue pour la production. */}
-                <div
-                    title="Bulletin de paie — Intégration prestataire paie en cours (Silae / PayFit). Non disponible en production."
-                    className="relative group/payslip"
-                    onClick={(e) => e.stopPropagation()}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(`/api/hr/timesheets?employeeId=${user.id}`, '_blank');
+                    }}
+                    title="Exporter le relevé d'heures et variables de paie"
+                    className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm"
                 >
-                    <button
-                        disabled
-                        className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-dashed border-border flex items-center justify-center text-text-muted opacity-40 cursor-not-allowed"
-                    >
-                        <FileText strokeWidth={1.5} className="w-4 h-4" />
-                    </button>
-                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/payslip:flex whitespace-nowrap bg-surface-bg text-text-primary text-[9px] font-bold px-2 py-1 rounded z-50 uppercase tracking-wide">
-                        Paie — intégration prestataire à venir
-                    </span>
-                </div>
+                    <FileText strokeWidth={1.5} className="w-4 h-4 text-action-primary" />
+                </button>
             </div>
         </div>
     </motion.div>
 );
+
 
 interface StaffListProps {
     users: User[];

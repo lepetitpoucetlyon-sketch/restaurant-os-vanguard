@@ -32,6 +32,10 @@ import {
     type OperationalArea,
     OperationsAreaModal,
 } from './OperationsAreaModal';
+import { EndOfDayWizard } from './dashboard/EndOfDayWizard';
+import { Modal } from '@/shared/components/ui/Modal';
+import { Lock } from 'lucide-react';
+
 export function OperationsDashboard() {
     const floorOps = useOMS();
     const areas = floorOps?.areas ?? [];
@@ -43,6 +47,7 @@ export function OperationsDashboard() {
         }
     };
     const [view, setView] = useState<'grid' | 'map'>('grid');
+    const [showEod, setShowEod] = useState(false);
     const [selectedArea, setSelectedArea] = useState<OperationalArea | null>(null);
     const { activeTenantId } = useTenant();
 
@@ -113,9 +118,16 @@ export function OperationsDashboard() {
                                 <Layers className="w-4 h-4" /> Carte Mentale
                             </button>
                             <div className="h-4 w-[1px] bg-surface-bg" />
+                            <button
+                                onClick={() => setShowEod(true)}
+                                className="px-3.5 py-1.5 rounded-xl bg-status-danger/10 border border-status-danger/20 text-status-danger hover:bg-status-danger/20 transition-all flex items-center gap-2"
+                            >
+                                <Lock className="w-3.5 h-3.5" /> Clôture Z-Report
+                            </button>
                         </nav>
                     </div>
                     <SketchLine className="mt-8" />
+
                 </header>
 
                 <main className="max-w-7xl mx-auto grid grid-cols-12 gap-10">
@@ -317,7 +329,20 @@ export function OperationsDashboard() {
                     onArrival={handleArrival}
                     onMaintenance={handleMaintenance}
                 />
+
+                {/* Clôture Journalière Z-Report Modal */}
+                {showEod && (
+                    <Modal
+                        isOpen={showEod}
+                        onClose={() => setShowEod(false)}
+                        title="Clôture Journalière & Scellage Z-Report"
+                        size="md"
+                    >
+                        <EndOfDayWizard />
+                    </Modal>
+                )}
             </div>
         </div>
     );
 }
+

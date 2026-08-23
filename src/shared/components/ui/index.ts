@@ -46,3 +46,15 @@ export { Spinner } from './spinner';
 export type { SpinnerProps } from './spinner';
 export * from './avatar';
 export * from './chip';
+
+// Phase 6 - Unified V2 Layout & Design System Primitives
+export * from './PageShell';
+export * from './SectionCard';
+export * from './StatGrid';
+export * from './ActionBar';
+export * from './SkeletonList';
+export * from './ResponsiveShell';
+export * from './RoleAwareView';
+export * from './FiscalReceiptSealZone';
+export * from './CelebrationParticles';
+

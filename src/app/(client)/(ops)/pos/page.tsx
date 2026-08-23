@@ -30,6 +30,8 @@ import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 
 const ICON_MAP: Record<string, LucideIcon> = {
     all:      Star,
@@ -159,17 +161,21 @@ function POSPage() {
                             className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isCourseViewOpen ? "bg-accent-gold text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
                             <BookOpen className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setIsCashDrawerOpen(true)} title="Fond de caisse" className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-accent-gold transition-colors">
-                            <Wallet className="w-4 h-4" />
-                        </button>
-                        <button onClick={handlePrintReceipt} disabled={cartItems.length === 0} title="Imprimer le ticket" className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-accent-gold transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                        <ActionGuard page="pos" action="cash_count">
+                            <button onClick={() => setIsCashDrawerOpen(true)} title="Fond de caisse" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-primary transition-colors">
+                                <Wallet className="w-4 h-4" />
+                            </button>
+                        </ActionGuard>
+                        <button onClick={handlePrintReceipt} disabled={cartItems.length === 0} title="Imprimer le ticket" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                             <Printer className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setIsVoidModalOpen(true)} title="Annuler / Rembourser" className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-status-error transition-colors">
-                            <RotateCcw className="w-4 h-4" />
-                        </button>
+                        <ActionGuard page="pos" action="void_line">
+                            <button onClick={() => setIsVoidModalOpen(true)} title="Annuler / Rembourser" className="w-10 h-10 rounded-full bg-surface-card border border-border-default flex items-center justify-center text-text-muted hover:text-action-danger transition-colors">
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                        </ActionGuard>
                         <button onClick={() => setIsTabletMode((v) => !v)} title={isTabletMode ? "Quitter le mode tablette" : "Mode tablette"}
-                            className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-colors", isTabletMode ? "bg-text-primary text-bg-primary dark:bg-accent-gold dark:text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-text-primary")}>
+                            className={cn("w-10 h-10 rounded-full flex items-center justify-center border border-border-default transition-colors", isTabletMode ? "bg-action-primary text-text-on-primary" : "bg-surface-card text-text-muted hover:text-text-primary")}>
                             <Tablet className="w-4 h-4" />
                         </button>
                     </div>
@@ -190,28 +196,48 @@ function POSPage() {
                 </div>
             </div>
 
-            {/* Main */}
-            <div className="flex-1 flex flex-row overflow-hidden">
-                <div className={cn("flex-1 overflow-auto p-ui lg:p-ui elegant-scrollbar transition-all", isRushMode ? "bg-surface-sidebar" : "bg-bg-primary/50")}>
-                    <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
-                </div>
-
-                {isCartSidebar && (
-                    <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/30 transition-all overflow-hidden", isRushMode ? "bg-[#0f172a]" : "bg-surface-card")}>
-                        <div className="flex border-b border-border/40 shrink-0">
-                            <button onClick={() => setIsCourseViewOpen(false)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", !isCourseViewOpen ? "border-b-2 border-accent-gold text-accent-gold" : "text-text-muted hover:text-text-primary")}>Panier</button>
-                            <button onClick={() => setIsCourseViewOpen(true)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", isCourseViewOpen ? "border-b-2 border-accent-gold text-accent-gold" : "text-text-muted hover:text-text-primary")}>Cours</button>
+            {/* Responsive Main Layout */}
+            <ResponsiveShell
+                className="flex-1 overflow-hidden"
+                mobile={
+                    <div className="flex-1 overflow-auto p-3 elegant-scrollbar">
+                        <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
+                    </div>
+                }
+                tablet={
+                    <div className="flex-1 flex flex-row overflow-hidden">
+                        <div className="flex-1 overflow-auto p-4 elegant-scrollbar">
+                            <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
                         </div>
-                        <div className="flex-1 overflow-auto elegant-scrollbar">
-                            {isCourseViewOpen ? (
-                                <CourseManager items={cartItems} onSetCourse={(cartId, course) => handleSetItemCourse(cartId, course as CourseType | undefined)} onSendCourse={(course) => handleSendCourse(course as CourseType)} />
-                            ) : (
-                                <Cart items={cartItems} onUpdateQuantity={handleUpdateQuantity} onClearCart={handleClearCart} onCheckout={handleCheckoutWithTip} onSendToKitchen={handleSendToKitchen} onSplitBill={() => setIsSplitOpen(true)} tableNumber={currentTable?.number} guestCount={currentTable?.seats} onItemContextMenu={handleItemContextMenu} />
-                            )}
+                        <div className="w-[340px] shrink-0 border-l border-border-default bg-surface-card overflow-auto elegant-scrollbar">
+                            <Cart items={cartItems} onUpdateQuantity={handleUpdateQuantity} onClearCart={handleClearCart} onCheckout={handleCheckoutWithTip} onSendToKitchen={handleSendToKitchen} onSplitBill={() => setIsSplitOpen(true)} tableNumber={currentTable?.number} guestCount={currentTable?.seats} onItemContextMenu={handleItemContextMenu} />
                         </div>
                     </div>
-                )}
-            </div>
+                }
+                desktop={
+                    <div className="flex-1 flex flex-row overflow-hidden">
+                        <div className={cn("flex-1 overflow-auto p-ui lg:p-ui elegant-scrollbar transition-all", isRushMode ? "bg-surface-sidebar" : "bg-surface-bg")}>
+                            <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
+                        </div>
+
+                        {isCartSidebar && (
+                            <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border-default transition-all overflow-hidden", isRushMode ? "bg-surface-sidebar" : "bg-surface-card")}>
+                                <div className="flex border-b border-border-default shrink-0">
+                                    <button onClick={() => setIsCourseViewOpen(false)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", !isCourseViewOpen ? "border-b-2 border-action-primary text-action-primary" : "text-text-muted hover:text-text-primary")}>Panier</button>
+                                    <button onClick={() => setIsCourseViewOpen(true)} className={cn("flex-1 h-10 text-[9px] font-black uppercase tracking-widest transition-colors", isCourseViewOpen ? "border-b-2 border-action-primary text-action-primary" : "text-text-muted hover:text-text-primary")}>Cours</button>
+                                </div>
+                                <div className="flex-1 overflow-auto elegant-scrollbar">
+                                    {isCourseViewOpen ? (
+                                        <CourseManager items={cartItems} onSetCourse={(cartId, course) => handleSetItemCourse(cartId, course as CourseType | undefined)} onSendCourse={(course) => handleSendCourse(course as CourseType)} />
+                                    ) : (
+                                        <Cart items={cartItems} onUpdateQuantity={handleUpdateQuantity} onClearCart={handleClearCart} onCheckout={handleCheckoutWithTip} onSendToKitchen={handleSendToKitchen} onSplitBill={() => setIsSplitOpen(true)} tableNumber={currentTable?.number} guestCount={currentTable?.seats} onItemContextMenu={handleItemContextMenu} />
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                }
+            />
 
             {/* Mobile cart dock */}
             <AnimatePresence>

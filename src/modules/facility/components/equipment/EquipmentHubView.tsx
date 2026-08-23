@@ -21,6 +21,9 @@ import { AddEquipmentModal } from './AddEquipmentModal';
 import { EquipmentDetailModal } from './EquipmentDetailModal';
 import { FaultDiagnosticWizard } from './FaultDiagnosticWizard';
 import { AddGuideModal } from './AddGuideModal';
+import { HardwareOnboardingWizard } from '../HardwareOnboardingWizard';
+import { Modal } from '@/shared/components/ui/Modal';
+import { Cpu } from 'lucide-react';
 
 interface EquipmentHubViewProps {
   tenantId: string;
@@ -35,6 +38,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showProvisioningWizard, setShowProvisioningWizard] = useState(false);
   const [detailAsset, setDetailAsset] = useState<EquipmentAsset | null>(null);
   const [troubleshootAsset, setTroubleshootAsset] = useState<EquipmentAsset | null>(null);
   const [guideAsset, setGuideAsset] = useState<EquipmentAsset | null>(null);
@@ -133,6 +137,14 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
           </Link>
 
           <button
+            onClick={() => setShowProvisioningWizard(true)}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-colors"
+          >
+            <Cpu className="w-4 h-4 text-indigo-400" />
+            <span>Hardware Provisioning</span>
+          </button>
+
+          <button
             onClick={() => setShowAddModal(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg shadow-indigo-600/30"
           >
@@ -142,7 +154,8 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
         </div>
       </div>
 
-      {/* ── KPI Cards ──────────────────────────────────────────────────────── */}
+
+      {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
@@ -206,7 +219,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
         </div>
       </div>
 
-      {/* ── Barre de Filtres & Recherche ───────────────────────────────────── */}
+      {/* Barre de Filtres & Recherche */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -310,14 +323,20 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
           />
         )}
 
-        {guideAsset && (
-          <AddGuideModal
-            asset={guideAsset}
-            onClose={() => setGuideAsset(null)}
-            onGuideAdded={fetchAssets}
-          />
+        {showProvisioningWizard && (
+          <Modal
+            isOpen={showProvisioningWizard}
+            onClose={() => setShowProvisioningWizard(false)}
+            title="Hardware Provisioning & Commissioning J-0"
+            size="xl"
+          >
+            <div className="p-4 max-h-[80vh] overflow-y-auto elegant-scrollbar">
+              <HardwareOnboardingWizard tenantId={tenantId} siteName="Établissement Principal" />
+            </div>
+          </Modal>
         )}
       </AnimatePresence>
     </div>
   );
 }
+

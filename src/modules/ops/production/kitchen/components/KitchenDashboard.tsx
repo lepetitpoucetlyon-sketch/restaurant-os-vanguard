@@ -20,6 +20,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
@@ -169,29 +170,23 @@ export function KitchenDashboard() {
                                 const isActive = activeTab === tab;
 
                                 return (
-                                    <motion.button
-                                        key={tab}
-                                        variants={fadeInUp}
-                                        onClick={() => setActiveTab(tab)}
-                                        className={cn(
-                                            "w-full flex items-center justify-between px-5 py-4 rounded-xl font-bold text-[13px] transition-all duration-300 relative group",
-                                            isActive
-                                                ? "text-accent"
-                                                : "text-text-muted hover:text-text-primary hover:bg-bg-tertiary/20"
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-4 relative z-10 truncate">
-                                            <Icon strokeWidth={1.5} className={cn("w-5 h-5 shrink-0", isActive ? "text-accent" : "text-text-muted")} />
-                                            <span className="truncate">{labels[tab]}</span>
-                                        </div>
-                                        {isActive && (
-                                            <motion.div
-                                                layoutId={performanceMode ? undefined : "activeKitchenTab"}
-                                                className="absolute inset-0 bg-bg-tertiary dark:bg-bg-tertiary/50 border border-border/50 rounded-xl shadow-sm z-0"
-                                                transition={performanceMode ? { duration: 0 } : { type: "spring", bounce: 0.2, duration: 0.6 }}
-                                            />
-                                        )}
-                                    </motion.button>
+                                    <TabGuard key={tab} pageKey="kitchen" tabKey={tab}>
+                                        <motion.button
+                                            variants={fadeInUp}
+                                            onClick={() => setActiveTab(tab)}
+                                            className={cn(
+                                                "w-full flex items-center justify-between px-5 py-3.5 rounded-xl font-medium text-xs transition-all duration-200 relative group",
+                                                isActive
+                                                    ? "text-action-primary bg-action-primary/10 border border-action-primary/20"
+                                                    : "text-text-muted hover:text-text-primary hover:bg-surface-card"
+                                            )}
+                                        >
+                                            <div className="flex items-center gap-3 relative z-10 truncate">
+                                                <Icon strokeWidth={1.5} className={cn("w-4 h-4 shrink-0", isActive ? "text-action-primary" : "text-text-muted")} />
+                                                <span className="truncate">{labels[tab]}</span>
+                                            </div>
+                                        </motion.button>
+                                    </TabGuard>
                                 );
                             })}
                         </motion.nav>

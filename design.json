@@ -1,0 +1,39 @@
+{
+  "name": "restaurant-os-empire",
+  "version": "2.0.0",
+  "palette": {
+    "primary": "#C5A059",
+    "primaryHover": "#B08D46",
+    "backgroundDark": "#0B0B0C",
+    "surfaceDark": "#121316",
+    "borderDark": "rgba(255, 255, 255, 0.1)",
+    "backgroundLight": "#F8F7F2",
+    "surfaceLight": "#FFFFFF",
+    "borderLight": "#E5E4DA",
+    "status": {
+      "success": "#059669",
+      "warning": "#F59E0B",
+      "danger": "#DC2626",
+      "info": "#6366F1"
+    }
+  },
+  "typography": {
+    "brand": "Playfair Display, Georgia, serif",
+    "ui": "Inter, system-ui, sans-serif",
+    "mono": "JetBrains Mono, monospace"
+  },
+  "breakpoints": {
+    "mobile": "640px",
+    "tablet": "1024px",
+    "desktop": "1439px",
+    "kiosk": "1440px"
+  },
+  "radius": {
+    "sm": "6px",
+    "md": "10px",
+    "lg": "12px",
+    "xl": "16px",
+    "2xl": "20px",
+    "3xl": "24px"
+  }
+}

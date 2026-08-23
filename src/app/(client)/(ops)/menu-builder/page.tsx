@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { PageHeader } from "@components/ui/PageHeader";
-import { ChefHat, Loader2 } from "lucide-react";
+import { PageShell } from "@/shared/components/ui/PageShell";
+import { SkeletonList } from "@/shared/components/ui/SkeletonList";
+import { ChefHat } from "lucide-react";
 import { useProducts, useCategories } from '@/modules/logistics';
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { Product } from "@nexus/contracts";
@@ -80,22 +81,27 @@ function MenuBuilderPage() {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col h-full bg-bg-primary items-center justify-center gap-4">
-                <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-                <p className="text-text-muted font-bold">Chargement du menu...</p>
-            </div>
+            <PageShell
+                title="Menu Builder"
+                subtitle="Gestion de la carte, des prix, allergènes et liaison recettes."
+                icon={ChefHat}
+                breadcrumbs={[{ label: "Opérations" }, { label: "Menu Builder" }]}
+            >
+                <div className="p-6">
+                    <SkeletonList variant="card" count={6} />
+                </div>
+            </PageShell>
         );
     }
 
     return (
-        <div className="flex flex-col h-full bg-bg-primary">
-            <PageHeader
-                title="Menu Builder"
-                subtitle="Gestion de la carte, des prix, allergènes et liaison recettes."
-                icon={ChefHat}
-            />
-
-            <div className="flex flex-1 overflow-hidden mt-6 gap-6 px-6 pb-6">
+        <PageShell
+            title="Menu Builder"
+            subtitle="Gestion de la carte, des prix, allergènes et liaison recettes."
+            icon={ChefHat}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Menu Builder" }]}
+        >
+            <div className="flex flex-1 overflow-hidden gap-6 p-6">
                 <CategorySidebar
                     categories={categories}
                     activeCategory={activeCategory}
@@ -119,7 +125,7 @@ function MenuBuilderPage() {
                 onToggleAllergen={toggleAllergen}
                 onSave={saveProduct}
             />
-        </div>
+        </PageShell>
     );
 }
 

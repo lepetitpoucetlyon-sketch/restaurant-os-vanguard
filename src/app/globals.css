@@ -88,6 +88,12 @@
   /* ── PREMIUM SHADOWS ── */
   --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-glow-accent: 0 0 20px 4px var(--accent-muted, rgba(197, 160, 89, 0.3));
+
+  /* ── BREAKPOINTS ── */
+  --bp-mobile: 640px;
+  --bp-tablet: 1024px;
+  --bp-desktop: 1439px;
+  --bp-kiosk: 1440px;
 }
 
 .shadow-premium {

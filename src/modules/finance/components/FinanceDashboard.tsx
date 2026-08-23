@@ -6,11 +6,16 @@ import dynamic from "next/dynamic";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
+import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
+import { StatGrid, StatCard } from "@/shared/components/ui";
 import { ExpenseClaimDialog } from './accounting';
 import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
+import { Landmark, PlusCircle } from "lucide-react";
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {
@@ -81,73 +86,161 @@ export function FinanceDashboard() {
         [journalEntries]
     );
 
+    const totalCA = (((metrics?.totalRevenueInMicrounits ?? (metrics?.totalRevenueInCents ?? 0) * 10_000)) / 1_000_000).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+    const totalTVA = ((tvaBreakdown?.reduce((acc, t) => acc + (t.htInCents * 0.1), 0) ?? 0)).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+    const totalEcritures = journalEntries.length;
+
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
+        <PageShell
+            title="Finance & Comptabilité"
+            subtitle="Pilotage financier, facturation, trésorerie et conformité fiscale NF525."
+            icon={Landmark}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Finance & Comptabilité" }]}
+            actions={
+                <ActionGuard page="finance" action="export_fec">
+                    <button
+                        onClick={() => setClaimOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold shadow-md hover:bg-action-primary-hover active:scale-95 transition-all"
+                    >
+                        <PlusCircle className="w-4 h-4" />
+                        <span>Note de Frais</span>
+                    </button>
+                </ActionGuard>
+            }
+        >
             <BankModal open={bank.bankModalOpen} url={bank.bankWebviewUrl} onClose={() => bank.setBankModalOpen(false)} />
 
-            <FinanceHeaderNav
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                setClaimOpen={setClaimOpen}
-                canSeeTreasury={canSeeTreasury}
-                canSeeAudit={canSeeAudit}
-            />
+            <div className="p-6 space-y-6">
+                {/* Financial KPI Summary */}
+                <StatGrid columns={3}>
+                    <StatCard label="Chiffre d'Affaires" value={totalCA} />
+                    <StatCard label="TVA Collectée" value={totalTVA} />
+                    <StatCard label="Écritures au Grand Livre" value={totalEcritures} />
+                </StatGrid>
 
-            <main>
-                {activeTab === "accounting" && (
-                    <AccountingTab
-                        journalEntries={journalEntries}
-                        metrics={metrics}
-                        accountingMetrics={accountingMetrics}
-                        tvaBreakdown={tvaBreakdown}
-                        closingZ={zClosure.closingZ}
-                        payrollMonth={exports.payrollMonth}
-                        pnlExporting={exports.pnlExporting}
-                        bilanExporting={exports.bilanExporting}
-                        payrollExporting={exports.payrollExporting}
-                        activeTenantId={activeTenantId}
-                        closePeriodPermission={closePeriodPermission}
-                        onClotureZ={zClosure.handleClotureZ}
-                        onPayrollMonthChange={exports.setPayrollMonth}
-                        onExportPnL={exports.handleExportPnL}
-                        onExportBilan={exports.handleExportBilan}
-                        onExportPayroll={exports.handleExportPayroll}
-                    />
-                )}
+                <FinanceHeaderNav
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    setClaimOpen={setClaimOpen}
+                    canSeeTreasury={canSeeTreasury}
+                    canSeeAudit={canSeeAudit}
+                />
 
-                {activeTab === "billing" && (
-                    <BillingTab
-                        paidOrders={paidOrders}
-                        ordersLoading={ordersLoading}
-                    />
-                )}
+                <ResponsiveShell
+                    mobile={
+                        <div className="space-y-4">
+                            {activeTab === "accounting" && (
+                                <AccountingTab
+                                    journalEntries={journalEntries}
+                                    metrics={metrics}
+                                    accountingMetrics={accountingMetrics}
+                                    tvaBreakdown={tvaBreakdown}
+                                    closingZ={zClosure.closingZ}
+                                    payrollMonth={exports.payrollMonth}
+                                    pnlExporting={exports.pnlExporting}
+                                    bilanExporting={exports.bilanExporting}
+                                    payrollExporting={exports.payrollExporting}
+                                    activeTenantId={activeTenantId}
+                                    closePeriodPermission={closePeriodPermission}
+                                    onClotureZ={zClosure.handleClotureZ}
+                                    onPayrollMonthChange={exports.setPayrollMonth}
+                                    onExportPnL={exports.handleExportPnL}
+                                    onExportBilan={exports.handleExportBilan}
+                                    onExportPayroll={exports.handleExportPayroll}
+                                />
+                            )}
 
-                {activeTab === "bank" && (
-                    <BankTab
-                        connectingBank={bank.connectingBank}
-                        syncingBank={bank.syncingBank}
-                        loadingBankAccounts={bank.loadingBankAccounts}
-                        bankAccounts={bank.bankAccounts}
-                        bankTransactions={bankTransactions as BankTransaction[]}
-                        onConnectBank={bank.handleConnectBank}
-                        onSync={bank.handleBankSync}
-                    />
-                )}
+                            {activeTab === "billing" && (
+                                <BillingTab
+                                    paidOrders={paidOrders}
+                                    ordersLoading={ordersLoading}
+                                />
+                            )}
 
-                {activeTab === "treasury" && (
-                    <TabGuard pageKey="finance" tabKey="treasury">
-                        <TreasuryTab />
-                    </TabGuard>
-                )}
+                            {activeTab === "bank" && (
+                                <BankTab
+                                    connectingBank={bank.connectingBank}
+                                    syncingBank={bank.syncingBank}
+                                    loadingBankAccounts={bank.loadingBankAccounts}
+                                    bankAccounts={bank.bankAccounts}
+                                    bankTransactions={bankTransactions as BankTransaction[]}
+                                    onConnectBank={bank.handleConnectBank}
+                                    onSync={bank.handleBankSync}
+                                />
+                            )}
 
-                {activeTab === "audit" && (
-                    <TabGuard pageKey="finance" tabKey="audit">
-                        <AuditTab entriesCount={journalEntries.length} journalEntries={journalEntries} />
-                    </TabGuard>
-                )}
-            </main>
+                            {activeTab === "treasury" && (
+                                <TabGuard pageKey="finance" tabKey="treasury">
+                                    <TreasuryTab />
+                                </TabGuard>
+                            )}
+
+                            {activeTab === "audit" && (
+                                <TabGuard pageKey="finance" tabKey="audit">
+                                    <AuditTab entriesCount={journalEntries.length} journalEntries={journalEntries} />
+                                </TabGuard>
+                            )}
+                        </div>
+                    }
+                    desktop={
+                        <main>
+                            {activeTab === "accounting" && (
+                                <AccountingTab
+                                    journalEntries={journalEntries}
+                                    metrics={metrics}
+                                    accountingMetrics={accountingMetrics}
+                                    tvaBreakdown={tvaBreakdown}
+                                    closingZ={zClosure.closingZ}
+                                    payrollMonth={exports.payrollMonth}
+                                    pnlExporting={exports.pnlExporting}
+                                    bilanExporting={exports.bilanExporting}
+                                    payrollExporting={exports.payrollExporting}
+                                    activeTenantId={activeTenantId}
+                                    closePeriodPermission={closePeriodPermission}
+                                    onClotureZ={zClosure.handleClotureZ}
+                                    onPayrollMonthChange={exports.setPayrollMonth}
+                                    onExportPnL={exports.handleExportPnL}
+                                    onExportBilan={exports.handleExportBilan}
+                                    onExportPayroll={exports.handleExportPayroll}
+                                />
+                            )}
+
+                            {activeTab === "billing" && (
+                                <BillingTab
+                                    paidOrders={paidOrders}
+                                    ordersLoading={ordersLoading}
+                                />
+                            )}
+
+                            {activeTab === "bank" && (
+                                <BankTab
+                                    connectingBank={bank.connectingBank}
+                                    syncingBank={bank.syncingBank}
+                                    loadingBankAccounts={bank.loadingBankAccounts}
+                                    bankAccounts={bank.bankAccounts}
+                                    bankTransactions={bankTransactions as BankTransaction[]}
+                                    onConnectBank={bank.handleConnectBank}
+                                    onSync={bank.handleBankSync}
+                                />
+                            )}
+
+                            {activeTab === "treasury" && (
+                                <TabGuard pageKey="finance" tabKey="treasury">
+                                    <TreasuryTab />
+                                </TabGuard>
+                            )}
+
+                            {activeTab === "audit" && (
+                                <TabGuard pageKey="finance" tabKey="audit">
+                                    <AuditTab entriesCount={journalEntries.length} journalEntries={journalEntries} />
+                                </TabGuard>
+                            )}
+                        </main>
+                    }
+                />
+            </div>
 
             <ExpenseClaimDialog isOpen={claimOpen} onClose={() => setClaimOpen(false)} />
-        </div>
+        </PageShell>
     );
 }

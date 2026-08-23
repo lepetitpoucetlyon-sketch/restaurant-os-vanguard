@@ -12,23 +12,51 @@ const workspaceRoot = path.dirname(fileURLToPath(import.meta.url));
  * Requiert `@next/bundle-analyzer` en devDep — installer via `npm i -D @next/bundle-analyzer`
  * puis passer ANALYZE=true à npm run build.
  */
-const withBundleAnalyzer =
-  process.env.ANALYZE === "true"
-    ? // Dynamic require silencieux : si la dep n'est pas installée, on skip proprement.
-      (() => {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          return require("@next/bundle-analyzer")({ enabled: true }) as (
-            c: NextConfig,
-          ) => NextConfig;
-        } catch {
-          console.warn(
-            "[next.config] ANALYZE=true mais @next/bundle-analyzer non installé. Installer via `npm i -D @next/bundle-analyzer`.",
-          );
-          return (config: NextConfig) => config;
-        }
-      })()
-    : (config: NextConfig) => config;
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  workboxOptions: {
+    disableDevLogs: true,
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "google-fonts",
+          expiration: { maxEntries: 20, maxAgeSeconds: 365 * 24 * 60 * 60 },
+        },
+      },
+      {
+        urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/i,
+        handler: "StaleWhileRevalidate",
+        options: {
+          cacheName: "static-image-assets",
+          expiration: { maxEntries: 60, maxAgeSeconds: 30 * 24 * 60 * 60 },
+        },
+      },
+      {
+        urlPattern: /\/api\/(?:menu|products|categories)/i,
+        handler: "StaleWhileRevalidate",
+        options: {
+          cacheName: "api-menu-cache",
+          expiration: { maxEntries: 32, maxAgeSeconds: 24 * 60 * 60 },
+        },
+      },
+      {
+        urlPattern: /\/api\/.*/i,
+        handler: "NetworkFirst",
+        options: {
+          cacheName: "api-dynamic-cache",
+          networkTimeoutSeconds: 10,
+          expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 },
+        },
+      },
+    ],
+  },
+});
 
 const nextConfig: NextConfig = {
   // NOTE: pas de `output: 'export'` — le produit exige un serveur Node
@@ -118,4 +146,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default withPWA(nextConfig);
+

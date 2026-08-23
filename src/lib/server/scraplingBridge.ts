@@ -7,6 +7,14 @@ import { toError } from '@/lib/toError';
 
 const execFileAsync = promisify(execFile);
 
+export interface ScraplingCatalogItem {
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    source?: string;
+}
+
 export interface ScraplingResult {
     success: boolean;
     url: string;
@@ -18,19 +26,26 @@ export interface ScraplingResult {
         og_image: string;
         favicon: string;
     };
+    contact?: {
+        telephones: string[];
+        emails: string[];
+    };
     socials: Record<string, string>;
     internal_target_pages: string[];
+    catalog_items?: ScraplingCatalogItem[];
     json_ld: Record<string, unknown>[];
     headings: {
         h1: string[];
         h2: string[];
         h3: string[];
     };
+    crawled_subpages_count?: number;
     error?: string;
 }
 
 export interface ScraplingOptions {
     stealth?: boolean;
+    crawl?: boolean;
     timeoutSeconds?: number;
 }
 
@@ -45,6 +60,7 @@ export const ScraplingBridge = {
         const args = [scriptPath, '--url', url];
 
         if (options.stealth) args.push('--stealth');
+        if (options.crawl) args.push('--crawl');
         if (options.timeoutSeconds) args.push('--timeout', String(options.timeoutSeconds));
 
         try {

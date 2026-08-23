@@ -5,15 +5,15 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3492** · LOC : **319 290**
-- Pages : **77** · Routes API : **210**
+- Fichiers `.ts/.tsx` : **3540** · LOC : **325 643**
+- Pages : **83** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1580 |
-| `src/shared/` | 668 |
-| `src/app/` | 422 |
+| `src/modules/` | 1584 |
+| `src/shared/` | 696 |
+| `src/app/` | 437 |
 | `src/verticals/` | 237 |
 | `src/lib/` | 230 |
 | `src/infrastructure/` | 46 |
@@ -36,9 +36,9 @@
 | Sous-dossier | Fichiers |
 |---|---:|
 | `shared/eventBus/` | 225 |
-| `shared/components/` | 168 |
+| `shared/components/` | 181 |
 | `shared/nexus/` | 128 |
-| `shared/hooks/` | 44 |
+| `shared/hooks/` | 49 |
 | `shared/providers/` | 28 |
 | `shared/seeds/` | 14 |
 | `shared/connector-manifest/` | 11 |
@@ -46,6 +46,9 @@
 | `shared/plugins/` | 9 |
 | `shared/schemas/` | 7 |
 | `shared/utils/` | 7 |
+| `shared/widgets/` | 4 |
+| `shared/custom-fields/` | 3 |
+| `shared/layout-builder/` | 3 |
 | `shared/services/` | 3 |
 | `shared/types/` | 3 |
 | `shared/atoms/` | 2 |
@@ -59,12 +62,12 @@
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 356 | ✅ |
-| `ops` | 304 | ✅ |
+| `ops` | 306 | ✅ |
 | `finance` | 223 | ✅ |
-| `compliance` | 179 | ✅ |
+| `compliance` | 180 | ✅ |
 | `intelligence` | 161 | ✅ |
 | `logistics` | 147 | ✅ |
-| `human` | 132 | ✅ |
+| `human` | 133 | ✅ |
 | `facility` | 71 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
@@ -80,6 +83,7 @@
 | `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
 | `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
 | `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
+| `src/shared/components/settings/BrandingPanel.tsx` | 618 |
 | `src/__tests__/anglemorts/anglemorts-batch4.test.ts` | 612 |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 608 |
 | `src/__tests__/anglemorts/anglemorts-batch3.test.ts` | 600 |
@@ -88,6 +92,5 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 566 |
 | `src/i18n/locales/en.ts` | 566 |
 | `src/i18n/locales/fr.ts` | 545 |
+| `src/config/navConfig.ts` | 507 |
 | `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 493 |
-| `src/shared/eventBus/events/ops.events.ts` | 488 |
-| `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 477 |

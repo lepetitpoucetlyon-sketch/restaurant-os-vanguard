@@ -62,6 +62,8 @@ export { RFMSegmentation } from './acquisition/marketing/components/crm/RFMSegme
 export { EmailAutomations } from './acquisition/marketing/components/crm/EmailAutomations';
 export { PinModal } from './ui/pos/PinModal';
 export { CustomerImportPanel } from './acquisition/onboarding/migration/CustomerImportPanel';
+export { FECImportPanel } from './acquisition/onboarding/migration/FECImportPanel';
+export { ReservationHistoryImportPanel } from './acquisition/onboarding/migration/ReservationHistoryImportPanel';
 
 export { MarketingSyncService } from './acquisition/marketing/marketing.sync';
 export { registerCRMVipHandler } from './acquisition/marketing/handlers/CRMVipHandler';

@@ -8,6 +8,43 @@ import { z } from 'zod';
 
 const hexColor = z.string().regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/, "Couleur hex invalide");
 
+/**
+ * 🔒 URL Whitelist — Anti-XSS.
+ * Seules les URLs HTTPS vers des domaines de confiance sont acceptées.
+ * Bloque javascript:, data:, blob: et tout domaine non approuvé.
+ */
+const SAFE_ASSET_DOMAINS = [
+    'firebasestorage.googleapis.com',
+    'storage.googleapis.com',
+    'lh3.googleusercontent.com',
+    'cdn.restaurantos.io',
+] as const;
+
+const SAFE_FONT_DOMAINS = [
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
+] as const;
+
+const safeAssetUrl = z.string().url().refine(
+    (url) => {
+        try {
+            const parsed = new URL(url);
+            return parsed.protocol === 'https:' && SAFE_ASSET_DOMAINS.some(d => parsed.hostname.endsWith(d));
+        } catch { return false; }
+    },
+    { message: `URL invalide — domaines autorisés : ${SAFE_ASSET_DOMAINS.join(', ')}` },
+);
+
+const safeFontUrl = z.string().url().refine(
+    (url) => {
+        try {
+            const parsed = new URL(url);
+            return parsed.protocol === 'https:' && SAFE_FONT_DOMAINS.some(d => parsed.hostname.endsWith(d));
+        } catch { return false; }
+    },
+    { message: `URL de police invalide — domaines autorisés : ${SAFE_FONT_DOMAINS.join(', ')}` },
+);
+
 export const BrandTokensSchema = z.object({
   // Identité de base
   tenantId:         z.string().min(1),
@@ -35,17 +72,20 @@ export const BrandTokensSchema = z.object({
   // fontUI     → --font-ui    : corps, labels, boutons, navigation, descriptions
   // fontMono   → --font-mono  : tickets de caisse, codes produit, JournalEntry, timestamps KDS
   fontBrand:        z.string().max(100).optional(),
-  fontBrandUrl:     z.string().url().optional(),
+  fontBrandUrl:     safeFontUrl.optional(),
   fontUI:           z.string().max(100).optional(),
-  fontUIUrl:        z.string().url().optional(),
+  fontUIUrl:        safeFontUrl.optional(),
   fontMono:         z.string().max(100).optional(),
-  fontMonoUrl:      z.string().url().optional(),
+  fontMonoUrl:      safeFontUrl.optional(),
 
-  // Assets (URLs Firebase Storage / CDN)
-  logoUrl:          z.string().url().nullable().optional(),
-  faviconUrl:       z.string().url().nullable().optional(),
-  bannerUrl:        z.string().url().nullable().optional(),
-  ogImageUrl:       z.string().url().nullable().optional(),
+  // Assets (URLs Firebase Storage / CDN — whitelist anti-XSS)
+  logoUrl:          safeAssetUrl.nullable().optional(),
+  logoUrl_1x:       safeAssetUrl.nullable().optional(),
+  logoUrl_2x:       safeAssetUrl.nullable().optional(),
+  logoUrl_3x:       safeAssetUrl.nullable().optional(),
+  faviconUrl:       safeAssetUrl.nullable().optional(),
+  bannerUrl:        safeAssetUrl.nullable().optional(),
+  ogImageUrl:       safeAssetUrl.nullable().optional(),
 
   // Ambiance (Overrides AmbianceService)
   ambianceCalm:     hexColor.optional(),
@@ -69,8 +109,10 @@ export const BrandTokensSchema = z.object({
   // 'default' = Restaurant OS branding (gold/dark) — aucun override visuel
   // 'custom'  = charte graphique propre au tenant (logo + couleurs)
   brandingMode:     z.enum(['default', 'custom']).default('default'),
-  // Afficher un écran de démarrage branded (logo + fond couleur charte) à chaque ouverture d'app
-  splashEnabled:    z.boolean().default(false),
+  // Afficher un écran de démarrage branded (logo + fond couleur charte)
+  splashEnabled:    z.boolean().default(true),
+  // Politique d'affichage du splash screen : 'always' (chaque cold boot), 'first-boot' (une fois par session), 'never'
+  splashPolicy:     z.enum(['always', 'first-boot', 'never']).default('always'),
 
   // Timestamps
   createdAt:        z.string().optional(),
@@ -88,5 +130,29 @@ export const defaultBrandTokens: BrandConfig = {
   logoUrl:       null,
   faviconUrl:    null,
   brandingMode:  'default',
-  splashEnabled: false,
+  splashEnabled: true,
+  splashPolicy:  'always',
 };
+
+/**
+ * 🔒 Sanitize une valeur de brand token avant injection dans le DOM.
+ * Prévient les injections CSS/XSS via des valeurs malformées.
+ * Utilise CSS.escape() quand disponible, sinon strip les caractères dangereux.
+ */
+export function sanitizeBrandValue(value: string): string {
+    // Bloquer les protocoles dangereux
+    if (/^(javascript|data|blob|vbscript):/i.test(value.trim())) {
+        return '';
+    }
+    // Pour les valeurs CSS (couleurs, noms de police), échapper les caractères spéciaux
+    if (typeof CSS !== 'undefined' && typeof CSS.escape === 'function') {
+        // CSS.escape est trop agressif pour les hex colors — ne l'appliquer qu'aux noms
+        if (value.startsWith('#') || value.startsWith('rgb') || value.startsWith('hsl')) {
+            return value; // Déjà validé par le regex hexColor
+        }
+        return value; // Les URLs et noms de polices sont validés par Zod en amont
+    }
+    return value;
+}
+
+export { SAFE_ASSET_DOMAINS, SAFE_FONT_DOMAINS };

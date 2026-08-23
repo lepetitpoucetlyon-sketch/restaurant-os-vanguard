@@ -171,7 +171,7 @@ export const NAV_SECTIONS: NavSection[] = [
         ]
     },
 
-    // ── Production (KDS / Cuisine / Bar) ──────────────────────────────────────
+    // ── Production & Stocks (KDS / Cuisine / Bar / Stocks) ────────────────────
     {
         id: 'production',
         key: 'production',
@@ -183,24 +183,13 @@ export const NAV_SECTIONS: NavSection[] = [
             { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds", requiredCapability: "mod_kds" },
             { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: Coffee, category: "kitchen", requiredCapability: "mod_kitchen_management", minLevel: 45 },
             { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen", requiredCapability: "mod_bar", minLevel: 35 },
-        ]
-    },
-
-    // ── Stocks & Achats ────────────────────────────────────────────────────────
-    {
-        id: 'stocks',
-        key: 'stocks',
-        title: 'Stocks & Achats',
-        icon: Package,
-        color: '#84CC16',
-        mode: 'tenant',
-        items: [
             { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory", requiredCapability: "mod_inventory", minLevel: 50 },
             { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory", requiredCapability: "mod_storage_map", minLevel: 50 },
             { label: "Réception Marchandises", key: "goods_reception", href: "/admin/inventory/reception", icon: Truck, category: "inventory", minLevel: 50 },
             { label: "Achats & Économat", key: "purchasing", href: "/inventory?tab=orders", icon: ShoppingCart, category: "inventory", requiredCapability: "mod_purchasing", minLevel: 60 },
         ]
     },
+
 
     // ── Qualité & Conformité ──────────────────────────────────────────────────
     {
@@ -406,33 +395,41 @@ interface SectionOverride { title?: string; items?: Record<string, string>; }
 const VERTICAL_NAV_OVERRIDES: Record<string, Record<string, SectionOverride>> = {
     garage: {
         operations: { title: 'Atelier & Caisse', items: { floor_plan: 'Plan Atelier & Baies', operations: 'Ordres de Réparation (OR)' } },
+        production: { title: 'Pièces & Déchets', items: { inventory: 'Pièces & Consommables', storage_map: 'Rayonnages & Casiers' } },
         stocks: { title: 'Pièces & Déchets', items: { inventory: 'Pièces & Consommables', storage_map: 'Rayonnages & Casiers' } },
     },
     clinic: {
         operations: { title: 'Consultations & Caisse', items: { pos: 'Encaissement Actes CCAM', floor_plan: 'Plan des Cabinets' } },
+        production: { title: 'Pharmacie & Matériel', items: { inventory: 'Dispositifs & Matériel' } },
         stocks: { title: 'Pharmacie & Matériel', items: { inventory: 'Dispositifs & Matériel' } },
     },
     salon: {
         operations: { title: 'Salon & Prestations', items: { pos: 'Caisse Prestations', floor_plan: 'Plan Fauteuils & Bacs' } },
+        production: { title: 'Produits & Stocks', items: { inventory: 'Stock Cabine & Revente' } },
         stocks: { title: 'Produits & Stocks', items: { inventory: 'Stock Cabine & Revente' } },
     },
     gym: {
         operations: { title: 'Club & Membres', items: { pos: 'Caisse & Forfaits', floor_plan: 'Plan Espaces & Plateaux' } },
+        production: { title: 'Matériel & Nutrition', items: { inventory: 'Stocks & Équipements' } },
         stocks: { title: 'Matériel & Nutrition', items: { inventory: 'Stocks & Équipements' } },
     },
     coworking: {
         operations: { title: 'Espaces & Réservations', items: { pos: 'Caisse & Pass', floor_plan: 'Plan Bureaux & Salles' } },
+        production: { title: 'Fournitures & Boissons', items: { inventory: 'Stocks & Fournitures' } },
         stocks: { title: 'Fournitures & Boissons', items: { inventory: 'Stocks & Fournitures' } },
     },
     veterinary: {
         operations: { title: 'Clinique & Soins', items: { pos: 'Caisse Soins & Actes', floor_plan: 'Plan Salles Consultation' } },
+        production: { title: 'Pharmacie & Matériel', items: { inventory: 'Médicaments & Dispositifs' } },
         stocks: { title: 'Pharmacie & Matériel', items: { inventory: 'Médicaments & Dispositifs' } },
     },
     florist: {
         operations: { title: 'Boutique & Commandes', items: { pos: 'Caisse & Compositions', floor_plan: 'Plan Atelier & Serre' } },
+        production: { title: 'Fleurs & Végétaux', items: { inventory: 'Tiges & Accessoires' } },
         stocks: { title: 'Fleurs & Végétaux', items: { inventory: 'Tiges & Accessoires' } },
     },
 };
+
 
 const FOOD_ONLY_KEYS = ['bar', 'kitchen_management', 'kds', 'menu_builder', 'menu_engineering', 'haccp', 'quality_control', 'dark_kitchen', 'delivery_orders'];
 const FOOD_VARIANTS = ['restaurant', 'bakery', 'hotel'];
@@ -455,4 +452,55 @@ export function filterByVertical(sections: NavSection[], rawVariant?: string): N
             return sec;
         })
         .filter(section => section.items.length > 0);
+}
+
+/**
+ * 🛰️ B2: Filters and re-orders navigation sections based on tenant UXProfile.
+ * - Applies switchboard feature flags (e.g. enableBarTabs, enableFloorPlan3D)
+ * - Re-orders sections according to `navigation.navigationOrder` if defined
+ */
+export function filterByUXProfile(
+    sections: NavSection[],
+    uxProfile?: {
+        switchboard?: {
+            enableBarTabs?: boolean;
+            enableFloorPlan3D?: boolean;
+            enableKDSFocusMode?: boolean;
+            enableCustomerDisplay?: boolean;
+        };
+        navigation?: {
+            navigationOrder?: string[];
+            primaryTab?: string;
+        };
+    },
+): NavSection[] {
+    if (!uxProfile) return sections;
+
+    let result = sections;
+
+    // 1. Switchboard feature-flag filtering
+    if (uxProfile.switchboard) {
+        const { enableBarTabs } = uxProfile.switchboard;
+        if (enableBarTabs === false) {
+            result = result.map(section => ({
+                ...section,
+                items: section.items.filter(item => item.key !== 'bar'),
+            })).filter(section => section.items.length > 0);
+        }
+    }
+
+    // 2. Navigation order reordering
+    if (uxProfile.navigation?.navigationOrder && uxProfile.navigation.navigationOrder.length > 0) {
+        const order = uxProfile.navigation.navigationOrder;
+        result = [...result].sort((a, b) => {
+            const indexA = order.indexOf(a.id);
+            const indexB = order.indexOf(b.id);
+            if (indexA === -1 && indexB === -1) return 0;
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+        });
+    }
+
+    return result;
 }

@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import type { Table, TableStatus } from "@nexus/contracts";
 import type { FloorPlanEditorRef } from '@/modules/facility';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 
 
 const FloorPlanEditor = dynamic(
@@ -157,14 +158,14 @@ function FloorPlanPage() {
                     <div className="flex items-center gap-2 pr-2">
                         {!isMobile ? (
                             <div className="flex items-center gap-3">
-                                <div className="flex bg-bg-tertiary/50 rounded-full p-1 border border-border">
-                                    <button onClick={() => setMode('select')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'select' ? "bg-accent-gold text-text-primary" : "text-text-muted")}>SÉLECTEUR</button>
-                                    <button onClick={() => setMode('add')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'add' ? "bg-accent-gold text-text-primary" : "text-text-muted")}>CONSTRUIRE</button>
+                                <div className="flex bg-surface-card rounded-full p-1 border border-border-default">
+                                    <button onClick={() => setMode('select')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'select' ? "bg-action-primary text-text-on-primary" : "text-text-muted hover:text-text-primary")}>SÉLECTEUR</button>
+                                    <button onClick={() => setMode('add')} className={cn("px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", mode === 'add' ? "bg-action-primary text-text-on-primary" : "text-text-muted hover:text-text-primary")}>CONSTRUIRE</button>
                                 </div>
-                                <button onClick={handleSave} className="h-10 px-8 bg-text-primary text-text-primary rounded-full text-[9px] font-black tracking-widest">HOMOLOGUER</button>
+                                <button onClick={handleSave} className="h-10 px-8 bg-action-primary text-text-on-primary hover:bg-action-primary-hover rounded-full text-[9px] font-black tracking-widest shadow-md transition-all">HOMOLOGUER</button>
                             </div>
                         ) : (
-                            <button onClick={toggleZonesLock} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-all border", isZonesLocked ? "bg-accent text-text-primary border-transparent" : "bg-bg-tertiary border-border text-text-muted")}>
+                            <button onClick={toggleZonesLock} className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-all border", isZonesLocked ? "bg-action-primary text-text-on-primary border-transparent" : "bg-surface-card border-border-default text-text-muted")}>
                                 <Layers className="w-4 h-4" />
                             </button>
                         )}
@@ -172,38 +173,81 @@ function FloorPlanPage() {
                 </motion.div>
             </div>
 
-            {/* Main Interactive Stage */}
-            <div className="flex-1 relative bg-bg-primary overflow-hidden">
-                {showGrid && (
-                    <div className="absolute inset-0 opacity-[0.1]" style={{
-                        backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)',
-                        backgroundSize: '40px 40px'
-                    }} />
-                )}
+            {/* Main Interactive Stage with Responsive Adaptation */}
+            <ResponsiveShell
+                className="flex-1 relative bg-surface-bg overflow-hidden"
+                mobile={
+                    <div className="flex-1 flex flex-col h-full overflow-hidden p-3">
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                            <div className="p-3 rounded-2xl bg-surface-card border border-border-default">
+                                <span className="text-[10px] text-text-muted uppercase font-bold">Total Tables</span>
+                                <p className="text-xl font-serif font-black text-text-primary mt-0.5">{tablesOnCurrentFloor.length}</p>
+                            </div>
+                            <div className="p-3 rounded-2xl bg-surface-card border border-border-default">
+                                <span className="text-[10px] text-text-muted uppercase font-bold">Occupation</span>
+                                <p className="text-xl font-serif font-black text-action-primary mt-0.5">{occupancyPercent}% <span className="text-xs font-sans text-text-muted">({occupiedSeats}/{totalSeatsOnFloor} PAX)</span></p>
+                            </div>
+                        </div>
 
-                <FloorPlanEditor
-                    ref={editorRef}
-                    scale={scale}
-                    onScaleChange={setScale}
-                    position={position}
-                    onPositionChange={setPosition}
-                    mode={mode}
-                    viewMode={viewMode}
-                    currentFloorId={currentFloorId}
-                    onTableSelect={(id: string) => isMobile && setSelectedTableId(id)}
-                />
+                        <div className="flex-1 overflow-auto space-y-2 pb-24 elegant-scrollbar">
+                            {(tablesOnCurrentFloor as Table[]).map((t) => {
+                                const isOccupied = t.status === 'seated' || t.status === 'ordered' || t.status === 'eating' || t.status === 'paying' || (t.status as string) === 'occupied';
+                                return (
+                                    <div
+                                        key={t.id}
+                                        onClick={() => setSelectedTableId(t.id)}
+                                        className={cn(
+                                            "p-4 rounded-2xl border flex items-center justify-between transition-all active:scale-[0.98]",
+                                            isOccupied ? "bg-surface-card border-action-primary/40 shadow-sm" : "bg-surface-card/60 border-border-default"
+                                        )}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={cn(
+                                                "w-10 h-10 rounded-xl flex items-center justify-center font-serif font-black text-sm",
+                                                isOccupied ? "bg-action-primary text-text-on-primary" : "bg-surface-bg text-text-muted border border-border-default"
+                                            )}>
+                                                {t.number ?? t.id.slice(-2)}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-xs text-text-primary">Table {t.number}</h4>
+                                                <p className="text-[11px] text-text-muted">{t.seats} couverts • {t.status}</p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); router.push(`/pos?table=${t.id}`); }}
+                                            className="px-3 py-1.5 rounded-xl bg-action-primary/10 text-action-primary border border-action-primary/20 text-xs font-bold"
+                                        >
+                                            POS
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                }
+                desktop={
+                    <div className="flex-1 relative w-full h-full bg-surface-bg overflow-hidden">
+                        {showGrid && (
+                            <div className="absolute inset-0 opacity-[0.1]" style={{
+                                backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)',
+                                backgroundSize: '40px 40px'
+                            }} />
+                        )}
 
-                {/* Mobile FAB for Template/Add */}
-                {isMobile && !selectedTableId && (
-                    <motion.button
-                        layoutId="floor-fab"
-                        onClick={() => setShowTemplateModal(true)}
-                        className="fixed bottom-28 right-6 w-14 h-14 bg-accent-gold text-text-primary rounded-full flex items-center justify-center shadow-2xl z-40"
-                    >
-                        <LayoutTemplate className="w-6 h-6" />
-                    </motion.button>
-                )}
-            </div>
+                        <FloorPlanEditor
+                            ref={editorRef}
+                            scale={scale}
+                            onScaleChange={setScale}
+                            position={position}
+                            onPositionChange={setPosition}
+                            mode={mode}
+                            viewMode={viewMode}
+                            currentFloorId={currentFloorId}
+                            onTableSelect={(id: string) => isMobile && setSelectedTableId(id)}
+                        />
+                    </div>
+                }
+            />
 
             {/* Table Detail Bottom Sheet (Mobile Only) */}
             <BottomSheet

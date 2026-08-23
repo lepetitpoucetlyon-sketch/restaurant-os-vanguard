@@ -39,3 +39,23 @@ export function getBrandAsset(
   };
   return tenantAssets[key] || defaultAssets[key];
 }
+
+export interface BrandLogoResolutions {
+  logo1x: string;
+  logo2x?: string;
+  logo3x?: string;
+}
+
+// Fonction utilitaire pour obtenir les résolutions de logo du tenant
+export function getBrandLogoSet(
+  brandTokens?: { logoUrl?: string | null; logoUrl_1x?: string | null; logoUrl_2x?: string | null; logoUrl_3x?: string | null }
+): BrandLogoResolutions {
+  const base = brandTokens?.logoUrl || brandTokens?.logoUrl_1x || defaultAssets.logo;
+  return {
+    logo1x: base,
+    logo2x: brandTokens?.logoUrl_2x || base,
+    logo3x: brandTokens?.logoUrl_3x || base,
+  };
+}
+
+

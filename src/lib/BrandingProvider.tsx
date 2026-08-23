@@ -115,6 +115,25 @@ export function BrandingProvider() {
     if (prevVariant && prevVariant !== variant) {
       const prevExtra = VERTICAL_EXTRA_TOKENS[prevVariant] ?? {};
       Object.keys(prevExtra).forEach(key => root.style.removeProperty(key));
+
+      // ── Gap C : cleanup des brand CSS vars de l'ancien tenant ──────────────
+      // Sans ce cleanup, un switch de tenant dans le MCC laisse les anciennes
+      // couleurs/polices/radii sur :root pendant le re-render → flash visuel.
+      const BRAND_CSS_VARS_TO_CLEAN = [
+        '--tenant-primary', '--tenant-primary-rgb',
+        '--tenant-accent', '--tenant-accent-rgb',
+        '--text-on-primary',
+        '--radius-card', '--radius-btn',
+        '--glass-blur', '--glass-opacity',
+        '--font-brand', '--font-ui', '--font-mono',
+        '--brand-primary-color', '--brand-accent-color',
+        '--brand-surface-bg', '--brand-surface-card', '--brand-surface-modal',
+      ] as const;
+      BRAND_CSS_VARS_TO_CLEAN.forEach(v => root.style.removeProperty(v));
+
+      // Retirer les Google Fonts injectées dynamiquement par l'ancien tenant
+      document.querySelectorAll('link[data-font-brand], link[data-font-ui], link[data-font-mono]')
+        .forEach(el => el.remove());
     }
     prevVariantRef.current = variant;
 

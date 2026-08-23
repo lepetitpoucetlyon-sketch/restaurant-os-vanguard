@@ -18,6 +18,7 @@ import { hasAllergens } from "./kds-ticket/kdsTicketHelpers";
 import { KDSRecallSection } from "./kds-dashboard/KDSRecallSection";
 import { KDSProductionGrid } from "./kds-dashboard/KDSProductionGrid";
 import { KDSModalsLayer, type AuditTicket } from "./kds-dashboard/KDSModalsLayer";
+import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 
 export function KDSDashboard() {
     const {
@@ -162,8 +163,8 @@ export function KDSDashboard() {
                 setIsRecallMode={setIsRecallMode}
             />
 
-            <div className="flex-1 p-4 md:p-10 overflow-auto relative custom-scrollbar bg-bg-primary">
-                <div className="absolute top-[10%] left-[5%] w-[60%] h-[60%] blur-[250px] pointer-events-none rounded-full bg-success-soft/30" />
+            <div className="flex-1 p-3 md:p-6 lg:p-10 overflow-auto relative custom-scrollbar bg-surface-bg">
+                <div className="absolute top-[10%] left-[5%] w-[60%] h-[60%] blur-[250px] pointer-events-none rounded-full bg-status-success/10" />
                 <div className="absolute bottom-[10%] right-[5%] w-[50%] h-[50%] blur-[200px] pointer-events-none rounded-full bg-action-primary/5" />
 
                 <AnimatePresence>
@@ -177,21 +178,59 @@ export function KDSDashboard() {
                     />
                 </AnimatePresence>
 
-                <AnimatePresence mode="popLayout">
-                    <KDSProductionGrid
-                        displayOrders={displayOrders}
-                        orders={orders}
-                        isLoading={isLoading}
-                        tenantId={tenantId ?? ''}
-                        gridColumns={gridColumns}
-                        rushMode={rushMode}
-                        updateOrderStatus={updateOrderStatus}
-                        setSelectedRecipe={setSelectedRecipe}
-                        setIsAuditOpen={setIsAuditOpen}
-                        setAuditTicket={setAuditTicket}
-                        recipes={recipes}
-                    />
-                </AnimatePresence>
+                <ResponsiveShell
+                    mobile={
+                        <AnimatePresence mode="popLayout">
+                            <KDSProductionGrid
+                                displayOrders={displayOrders}
+                                orders={orders}
+                                isLoading={isLoading}
+                                tenantId={tenantId ?? ''}
+                                gridColumns={1}
+                                rushMode={rushMode}
+                                updateOrderStatus={updateOrderStatus}
+                                setSelectedRecipe={setSelectedRecipe}
+                                setIsAuditOpen={setIsAuditOpen}
+                                setAuditTicket={setAuditTicket}
+                                recipes={recipes}
+                            />
+                        </AnimatePresence>
+                    }
+                    tablet={
+                        <AnimatePresence mode="popLayout">
+                            <KDSProductionGrid
+                                displayOrders={displayOrders}
+                                orders={orders}
+                                isLoading={isLoading}
+                                tenantId={tenantId ?? ''}
+                                gridColumns={2}
+                                rushMode={rushMode}
+                                updateOrderStatus={updateOrderStatus}
+                                setSelectedRecipe={setSelectedRecipe}
+                                setIsAuditOpen={setIsAuditOpen}
+                                setAuditTicket={setAuditTicket}
+                                recipes={recipes}
+                            />
+                        </AnimatePresence>
+                    }
+                    desktop={
+                        <AnimatePresence mode="popLayout">
+                            <KDSProductionGrid
+                                displayOrders={displayOrders}
+                                orders={orders}
+                                isLoading={isLoading}
+                                tenantId={tenantId ?? ''}
+                                gridColumns={gridColumns}
+                                rushMode={rushMode}
+                                updateOrderStatus={updateOrderStatus}
+                                setSelectedRecipe={setSelectedRecipe}
+                                setIsAuditOpen={setIsAuditOpen}
+                                setAuditTicket={setAuditTicket}
+                                recipes={recipes}
+                            />
+                        </AnimatePresence>
+                    }
+                />
             </div>
 
             <KDSModalsLayer

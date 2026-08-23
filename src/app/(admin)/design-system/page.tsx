@@ -4,13 +4,38 @@ import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_APPEARANCE, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
-import { StatCard, StatsGrid } from '@/shared/components/ui/StatCard';
+import { StatCard } from '@/shared/components/ui/StatCard';
+import { StatGrid } from '@/shared/components/ui/StatGrid';
 import { StatusBadge } from '@/shared/components/ui/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Button } from '@/shared/components/ui/button';
 import GlassCard from '@/shared/components/ui/GlassCard';
+import { PageShell } from '@/shared/components/ui/PageShell';
+import { SectionCard } from '@/shared/components/ui/SectionCard';
+import { ActionBar } from '@/shared/components/ui/ActionBar';
+import { EmptyState } from '@/shared/components/ui/EmptyState';
+import { SkeletonList } from '@/shared/components/ui/SkeletonList';
+import { RoleAwareView } from '@/shared/components/ui/RoleAwareView';
 import type { PlatformVariant } from '@/modules/system';
 import { cn } from '@/lib/ui.foundations';
-import { Users, ShoppingCart, DollarSign, Star, Clock, Package, Heart } from 'lucide-react';
+import {
+  Users,
+  ShoppingCart,
+  DollarSign,
+  Star,
+  Clock,
+  Package,
+  Heart,
+  Layers,
+  Shield,
+  Smartphone,
+  Sparkles,
+  Layout,
+  Plus,
+  Filter,
+  Download,
+  AlertCircle,
+} from 'lucide-react';
 
 // ── Vertical switcher ────────────────────────────────────────────────────────
 
@@ -24,8 +49,6 @@ const VERTICALS: { id: PlatformVariant; label: string; emoji: string }[] = [
   { id: 'retail',     label: 'Commerce',   emoji: '🛍️' },
   { id: 'custom',     label: 'Custom',     emoji: '✨' },
 ];
-
-// ── Token table ───────────────────────────────────────────────────────────────
 
 function TokenRow({ name, value }: { name: string; value: string }) {
   const isColor = /^#[0-9a-fA-F]{3,6}$|^rgba?\(/.test(value);
@@ -44,8 +67,6 @@ function TokenRow({ name, value }: { name: string; value: string }) {
     </div>
   );
 }
-
-// ── Component showcase ────────────────────────────────────────────────────────
 
 function ComponentShowcase({ variant }: { variant: PlatformVariant }) {
   const tokens = VERTICAL_DEFAULT_TOKENS[variant];
@@ -90,126 +111,261 @@ function ComponentShowcase({ variant }: { variant: PlatformVariant }) {
         <h3 className="text-xs font-black uppercase tracking-widest text-text-muted mb-4">
           StatCard — tous les intents
         </h3>
-        <StatsGrid columns={4}>
-          <StatCard label="Chiffre d'affaires" value="12 480 €" icon={<DollarSign />} intent="brand"   trend={{ value: 12, direction: 'up' }} />
-          <StatCard label="Clients"             value="248"      icon={<Users />}      intent="success" />
-          <StatCard label="En attente"           value="7"        icon={<Clock />}      intent="warning" />
-          <StatCard label="Annulé"               value="3"        icon={<ShoppingCart />} intent="danger" />
-        </StatsGrid>
-        <div className="mt-4">
-          <StatsGrid columns={4}>
-            <StatCard label="Compact"   value="42"     icon={<Star />}    intent="info"    variant="compact" />
-            <StatCard label="Défaut"    value="156"    icon={<Package />} intent="neutral" variant="default" />
-            <StatCard label="Large"     value="89 %"   icon={<Heart />}   intent="brand"   variant="large" />
-            <StatCard label="Minimal"   value="↑ 24"   intent="success"   variant="minimal" />
-          </StatsGrid>
-        </div>
-      </section>
-
-      {/* StatusBadges */}
-      <section>
-        <h3 className="text-xs font-black uppercase tracking-widest text-text-muted mb-4">
-          StatusBadge — tous les statuts et variants
-        </h3>
-        <div className="flex flex-wrap gap-3">
-          {(['success', 'warning', 'error', 'info', 'neutral', 'accent'] as const).map(status =>
-            (['soft', 'outline', 'solid'] as const).map(v => (
-              <StatusBadge key={`${status}-${v}`} status={status} variant={v} label={`${status} ${v}`} />
-            ))
-          )}
-        </div>
-        <div className="flex flex-wrap gap-3 mt-3">
-          <StatusBadge status="success" label="Ouvert" pulse />
-          <StatusBadge status="warning" label="Avertissement" pulse />
-          <StatusBadge status="error"   label="Fermé" pulse />
-        </div>
-      </section>
-
-      {/* Cards */}
-      <section>
-        <h3 className="text-xs font-black uppercase tracking-widest text-text-muted mb-4">
-          Card — intents et GlassCard
-        </h3>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {(['default', 'elevated', 'glass', 'ghost', 'premium'] as const).map(intent => (
-            <Card key={intent} intent={intent} className="text-center">
-              <CardContent className="pt-4">
-                <p className="text-xs font-black uppercase tracking-widest text-text-muted">{intent}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          {(['default', 'elevated', 'inset'] as const).map(v => (
-            <GlassCard key={v} variant={v} padding="md" rounded="xl" enableInitialAnimation={false}>
-              <p className="text-xs font-black uppercase tracking-widest text-text-muted text-center">
-                GlassCard {v}
-              </p>
-            </GlassCard>
-          ))}
-        </div>
+        <StatGrid columns={4}>
+          <StatCard label="Chiffre d'affaires" value="12 480 €" icon={<DollarSign />} intent="brand" trend={{ value: 12, direction: 'up' }} />
+          <StatCard label="Clients" value="248" icon={<Users />} intent="success" />
+          <StatCard label="En attente" value="7" icon={<Clock />} intent="warning" />
+          <StatCard label="Annulé" value="3" icon={<ShoppingCart />} intent="danger" />
+        </StatGrid>
       </section>
     </div>
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+function PatternsShowcase() {
+  return (
+    <div className="space-y-10">
+      <SectionCard title="1. PageShell & Header Unifié" subtitle="Structure standardisée pour toutes les pages opérationnelles" variant="glass">
+        <div className="p-4 rounded-xl bg-surface-bg border border-border-default space-y-4">
+          <div className="flex items-center justify-between border-b border-border-subtle pb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-action-primary/10 border border-action-primary/20 text-action-primary flex items-center justify-center font-bold">
+                🍽️
+              </div>
+              <div>
+                <h4 className="font-serif text-lg font-bold text-text-primary">POS Caisse Tactile</h4>
+                <p className="text-xs text-text-secondary">Service du Midi • 24 Tables Actives</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline"><Filter className="w-3.5 h-3.5 mr-1" /> Filtres</Button>
+              <Button size="sm" variant="default"><Plus className="w-3.5 h-3.5 mr-1" /> Nouvelle Commande</Button>
+            </div>
+          </div>
+          <div className="text-xs text-text-muted font-mono">
+            Remplacera les 19 headers ad-hoc divergeant dans le produit.
+          </div>
+        </div>
+      </SectionCard>
 
-export default function DesignSystemPage() {
-  const currentVariant = useAtomValue(tenantVariantAtom);
-  const [selected, setSelected] = useState<PlatformVariant>(currentVariant);
+      <SectionCard title="2. SectionCard & Variantes" subtitle="Conteneur modulaire (default, glass, premium, ghost)" variant="default">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <SectionCard title="Variante Default" variant="default">
+            <p className="text-xs text-text-secondary">Surface opaque standard avec bordure contrastée.</p>
+          </SectionCard>
+          <SectionCard title="Variante Glass" variant="glass">
+            <p className="text-xs text-text-secondary">Flou backdrop-blur et lueur sombre subtile.</p>
+          </SectionCard>
+          <SectionCard title="Variante Premium" variant="premium">
+            <p className="text-xs text-text-secondary">Bordure or et dégradé luxury.</p>
+          </SectionCard>
+          <SectionCard title="Variante Ghost" variant="ghost">
+            <p className="text-xs text-text-secondary">Transparent sans ombre, adapté aux sous-sections.</p>
+          </SectionCard>
+        </div>
+      </SectionCard>
 
-  const handleSelect = (v: PlatformVariant) => {
-    setSelected(v);
-  };
+      <SectionCard title="3. ActionBar Contextuelle" subtitle="Barre d'actions pour filtres, sélection et CTA primaires">
+        <ActionBar
+          leftSlot={<span className="text-xs font-medium text-text-secondary">3 éléments sélectionnés</span>}
+          rightSlot={
+            <>
+              <Button size="sm" variant="outline">Exporter</Button>
+              <Button size="sm" variant="destructive">Supprimer</Button>
+            </>
+          }
+        />
+      </SectionCard>
+
+      <SectionCard title="4. EmptyState v2 & SkeletonList" subtitle="États de repli et squelettes de chargement fluides">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <EmptyState
+            variant="compact"
+            icon={Package}
+            title="Aucune Commande en Attente"
+            description="Toutes les commandes ont été traitées ou envoyées en cuisine."
+            action={<Button size="sm" variant="default">Rafraîchir</Button>}
+          />
+          <SkeletonList count={3} variant="list" />
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
+function RbacPreviewShowcase() {
+  const [simulatedRole, setSimulatedRole] = useState<'admin' | 'manager' | 'serveur' | 'cuisinier'>('admin');
 
   return (
-    <div className="min-h-screen bg-surface-bg p-6 space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-serif font-bold text-text-primary italic mb-1">Design System</h1>
-        <p className="text-text-secondary text-sm">
-          Catalogue des tokens et composants — switcher le vertical applique les tokens en temps réel.
-        </p>
-      </div>
-
-      {/* Vertical switcher */}
-      <div className="flex flex-wrap gap-2">
-        {VERTICALS.map(v => (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-surface-card border border-border-default">
+        <span className="text-xs font-bold text-text-secondary">Simuler le Rôle :</span>
+        {(['admin', 'manager', 'serveur', 'cuisinier'] as const).map((r) => (
           <button
-            key={v.id}
-            onClick={() => handleSelect(v.id)}
+            key={r}
+            onClick={() => setSimulatedRole(r)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border transition-all",
-              selected === v.id
-                ? "bg-action-primary text-action-primary-fg border-action-primary shadow-md"
+              "px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider border transition-all",
+              simulatedRole === r
+                ? "bg-action-primary text-text-on-primary border-action-primary"
                 : "border-border-default text-text-secondary hover:bg-surface-card"
             )}
           >
-            <span>{v.emoji}</span>
-            {v.label}
+            {r}
           </button>
         ))}
       </div>
 
-      {/* Current variant badge */}
-      <div className="flex items-center gap-3">
-        <StatusBadge
-          status="accent"
-          label={`Vertical actif : ${selected}`}
-          variant="soft"
-          size="lg"
-        />
-        <StatusBadge
-          status={VERTICAL_APPEARANCE[selected] === 'dark' ? 'neutral' : 'info'}
-          label={`Apparence par défaut : ${VERTICAL_APPEARANCE[selected]}`}
-          variant="outline"
-          size="sm"
-        />
+      <SectionCard title={`Simulation de Visibilité UI — Rôle : ${simulatedRole.toUpperCase()}`}>
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold text-text-primary">Clôture Fiscale Z (Finance)</div>
+              <div className="text-[11px] text-text-muted">Action critique autorisée pour : admin, directeur</div>
+            </div>
+            {simulatedRole === 'admin' ? (
+              <StatusBadge status="success" label="Autorisé" />
+            ) : (
+              <StatusBadge status="error" label="Masqué par ActionGuard" />
+            )}
+          </div>
+
+          <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold text-text-primary">Annuler une Ligne Ticket (POS)</div>
+              <div className="text-[11px] text-text-muted">Action autorisée pour : admin, directeur, manager</div>
+            </div>
+            {simulatedRole === 'admin' || simulatedRole === 'manager' ? (
+              <StatusBadge status="success" label="Autorisé" />
+            ) : (
+              <StatusBadge status="error" label="Masqué par ActionGuard" />
+            )}
+          </div>
+
+          <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
+            <div>
+              <div className="text-xs font-bold text-text-primary">Prise de Commande & Encaissement (POS)</div>
+              <div className="text-[11px] text-text-muted">Action autorisée pour : admin, manager, serveur</div>
+            </div>
+            {simulatedRole !== 'cuisinier' ? (
+              <StatusBadge status="success" label="Autorisé" />
+            ) : (
+              <StatusBadge status="error" label="Masqué par ActionGuard" />
+            )}
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
+function PwaPreviewShowcase() {
+  return (
+    <div className="space-y-6">
+      <SectionCard title="PWA & Manifest Dynamique" subtitle="Aperçu des configurations de l'application installable">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
+            <div className="text-xs font-bold text-text-primary mb-1">Affichage Standalone</div>
+            <div className="text-[11px] text-text-secondary">Plein écran sans barre d'URL navigateur sur iOS & Android.</div>
+          </div>
+          <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
+            <div className="text-xs font-bold text-text-primary mb-1">Precache Workbox</div>
+            <div className="text-[11px] text-text-secondary">Routes critiques /pos et /kds disponibles immédiatement hors-ligne.</div>
+          </div>
+          <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
+            <div className="text-xs font-bold text-text-primary mb-1">Apple Startup Images</div>
+            <div className="text-[11px] text-text-secondary">12 résolutions iOS générées sans écran blanc au lancement.</div>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
+// ── Page Principale ──────────────────────────────────────────────────────────
+
+export default function DesignSystemPage() {
+  const currentVariant = useAtomValue(tenantVariantAtom);
+  const [selectedVariant, setSelectedVariant] = useState<PlatformVariant>(currentVariant);
+  const [activeMainTab, setActiveMainTab] = useState<'verticals' | 'patterns' | 'rbac' | 'pwa'>('patterns');
+
+  return (
+    <div className="min-h-screen bg-surface-bg p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-text-primary italic mb-1">
+            Design System & Layout Primitives V2
+          </h1>
+          <p className="text-text-secondary text-xs">
+            Fondations unifiées, guide de tokens, intégration RBAC granulaire et architectures multi-devices.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <StatusBadge status="accent" label="Grade X Certified" />
+          <StatusBadge status="success" label="Tailwind v4 Theme" />
+        </div>
       </div>
 
-      {/* Component showcase */}
-      <ComponentShowcase key={selected} variant={selected} />
+      {/* Main Navigation Tabs */}
+      <div className="flex items-center gap-2 border-b border-border-default pb-3">
+        {[
+          { id: 'patterns', label: 'Patterns & Primitives', icon: Layout },
+          { id: 'verticals', label: 'Verticales & Tokens', icon: Layers },
+          { id: 'rbac', label: 'Matrice RBAC Preview', icon: Shield },
+          { id: 'pwa', label: 'PWA & Devices', icon: Smartphone },
+        ].map((t) => {
+          const Icon = t.icon;
+          const isActive = activeMainTab === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setActiveMainTab(t.id as typeof activeMainTab)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all",
+                isActive
+                  ? "bg-action-primary text-text-on-primary shadow-sm"
+                  : "bg-surface-card hover:bg-surface-card/80 text-text-secondary border border-border-default"
+              )}
+            >
+              <Icon className="w-4 h-4" />
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tab Contents */}
+      {activeMainTab === 'patterns' && <PatternsShowcase />}
+
+      {activeMainTab === 'verticals' && (
+        <div className="space-y-6">
+          <div className="flex flex-wrap gap-2">
+            {VERTICALS.map((v) => (
+              <button
+                key={v.id}
+                onClick={() => setSelectedVariant(v.id)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold border transition-all",
+                  selectedVariant === v.id
+                    ? "bg-action-primary text-action-primary-fg border-action-primary shadow-md"
+                    : "border-border-default text-text-secondary hover:bg-surface-card"
+                )}
+              >
+                <span>{v.emoji}</span>
+                {v.label}
+              </button>
+            ))}
+          </div>
+
+          <ComponentShowcase key={selectedVariant} variant={selectedVariant} />
+        </div>
+      )}
+
+      {activeMainTab === 'rbac' && <RbacPreviewShowcase />}
+
+      {activeMainTab === 'pwa' && <PwaPreviewShowcase />}
     </div>
   );
 }
