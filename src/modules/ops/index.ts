@@ -25,6 +25,7 @@ export { SplitBillDialog } from './service/pos/components/SplitBillDialog';
 export { ProductGrid } from './service/pos/components/ProductGrid';
 export { Cart } from './service/pos/components/Cart';
 export { TableSelector } from './service/pos/components/TableSelector';
+export { PosHeader } from './service/pos/components/PosHeader';
 
 // Domaine : production (KDS, kitchen, recipes)
 export * from './production/kds';
