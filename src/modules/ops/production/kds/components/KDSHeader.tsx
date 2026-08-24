@@ -92,7 +92,7 @@ export function KDSHeader({
                 </div>
 
                 {/* Station filters — one authored spring-pill motion */}
-                <nav aria-label="Stations" className="flex items-center bg-white/[0.04] border border-border/40 rounded-xl p-1 shrink-0">
+                <nav aria-label="Stations" className="flex items-center bg-surface-glass border border-border/40 rounded-xl p-1 shrink-0">
                     {(Object.keys(STATION_CONFIG) as KitchenStation[]).map(station => {
                         const config = STATION_CONFIG[station];
                         const Icon = config.icon;
@@ -159,7 +159,7 @@ export function KDSHeader({
                                         placeholder="Rechercher…"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full h-9 bg-white/[0.03] border border-border/40 focus:border-accent-gold/50 rounded-lg pl-9 pr-3 text-sm font-normal tracking-tight focus:outline-none focus:ring-2 focus:ring-accent-gold/15 transition-colors placeholder:text-text-muted/60"
+                                        className="w-full h-9 bg-surface-glass border border-border/40 focus:border-accent-gold/50 rounded-lg pl-9 pr-3 text-sm font-normal tracking-tight focus:outline-none focus:ring-2 focus:ring-accent-gold/15 transition-colors placeholder:text-text-muted/60"
                                     />
                                 </div>
                             </motion.div>
@@ -184,7 +184,7 @@ export function KDSHeader({
                         className={cn(
                             "flex items-center gap-1.5 h-10 px-3 rounded-lg text-sm font-medium tracking-tight transition-colors border",
                             isGridDropdownOpen
-                                ? "bg-white/[0.05] text-text-primary border-border"
+                                ? "bg-surface-glass-hover text-text-primary border-border"
                                 : "bg-transparent border-transparent hover:bg-white/5 text-text-muted hover:text-text-primary"
                         )}
                     >
@@ -225,7 +225,7 @@ export function KDSHeader({
                         "flex items-center gap-2 h-10 px-4 rounded-lg text-sm font-medium tracking-tight transition-colors border shrink-0",
                         rushMode
                             ? "bg-red-500 text-white border-red-500 shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]"
-                            : "bg-white/[0.03] border-border/50 text-text-muted hover:text-text-primary"
+                            : "bg-surface-glass border-border/50 text-text-muted hover:text-text-primary"
                     )}
                 >
                     <Zap className="w-[15px] h-[15px]" strokeWidth={2} />
@@ -242,7 +242,7 @@ export function KDSHeader({
                             "flex items-center gap-2 h-10 px-4 rounded-lg text-sm font-medium tracking-tight transition-colors border shrink-0",
                             isRecallMode
                                 ? "bg-action-primary text-text-on-primary border-action-primary"
-                                : "bg-white/[0.03] border-border/50 text-text-muted hover:text-text-primary"
+                                : "bg-surface-glass border-border/50 text-text-muted hover:text-text-primary"
                         )}
                     >
                         <RotateCcw className="w-[15px] h-[15px]" strokeWidth={2} />
@@ -258,7 +258,7 @@ export function KDSHeader({
                         "relative w-10 h-10 flex items-center justify-center rounded-lg transition-colors border shrink-0",
                         pendingModificationsCount > 0
                             ? "bg-status-warning/15 text-status-warning border-status-warning/40"
-                            : "bg-white/[0.03] border-border/50 text-text-muted hover:text-text-primary"
+                            : "bg-surface-glass border-border/50 text-text-muted hover:text-text-primary"
                     )}
                 >
                     <Bell className="w-[15px] h-[15px]" strokeWidth={2} />

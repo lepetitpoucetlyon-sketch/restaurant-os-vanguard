@@ -171,7 +171,7 @@ function POSPage() {
                     {/* Right cluster — 3 role-grouped segments with vertical dividers */}
                     <div className="flex items-center gap-3 shrink-0">
                         {/* Group A — consumption mode + course view (customer-facing intent) */}
-                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/50 rounded-xl overflow-hidden">
+                        <div className="flex items-center h-10 bg-surface-glass border border-border/50 rounded-xl overflow-hidden">
                             <button onClick={() => setConsumptionMode(consumptionMode === 'dine_in' ? 'takeaway' : 'dine_in')}
                                 title={consumptionMode === 'dine_in' ? 'Sur place' : 'À emporter'}
                                 className={cn(
@@ -194,7 +194,7 @@ function POSPage() {
                         </div>
 
                         {/* Group B — ticket utilities (imprimer / tiroir / annuler) */}
-                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/50 rounded-xl overflow-hidden">
+                        <div className="flex items-center h-10 bg-surface-glass border border-border/50 rounded-xl overflow-hidden">
                             <button onClick={handlePrintReceipt} disabled={cartItems.length === 0} title="Imprimer le ticket"
                                 className="h-full w-10 flex items-center justify-center text-text-secondary hover:text-action-primary transition-colors disabled:opacity-25 disabled:cursor-not-allowed border-r border-border/40">
                                 <Printer className="w-[15px] h-[15px]" />
@@ -220,7 +220,7 @@ function POSPage() {
                                 "h-10 w-10 flex items-center justify-center rounded-xl border transition-colors",
                                 isTabletMode
                                     ? "bg-action-primary text-text-on-primary border-action-primary"
-                                    : "bg-white/[0.03] border-border/50 text-text-secondary hover:text-text-primary"
+                                    : "bg-surface-glass border-border/50 text-text-secondary hover:text-text-primary"
                             )}>
                             <Tablet className="w-[15px] h-[15px]" />
                         </button>

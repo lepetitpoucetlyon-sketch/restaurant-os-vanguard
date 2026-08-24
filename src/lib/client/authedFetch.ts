@@ -2,8 +2,7 @@
 
 import { auth } from '@/lib/firebase';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
-
-const DEV_PIN_BYPASS_KEY = 'executive_dev_bypass_active';
+import { DEV_PIN_BYPASS_KEY, DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
 
 /**
  * fetch() authentifié pour les routes /api/admin.
@@ -14,7 +13,7 @@ const DEV_PIN_BYPASS_KEY = 'executive_dev_bypass_active';
  *
  * En développement, deux bypass sont acceptés :
  * - `NEXT_PUBLIC_MCC_DEV_MODE=true` (bypass niveau plateforme MCC).
- * - Flag sessionStorage `executive_dev_bypass_active` posé par attemptDevLogin
+ * - Flag sessionStorage `DEV_PIN_BYPASS_KEY` posé par attemptDevLogin
  *   quand le PIN dev tenant est utilisé (voir useNexusAuthLogic.ts).
  * Sans l'un ou l'autre, un throw explicite oblige les callers à gérer.
  */
@@ -29,7 +28,7 @@ export async function authedFetch(input: RequestInfo | URL, init: RequestInit = 
 
     if (MCC_DEV_MODE_CLIENT || hasDevPinBypass) {
       const headers = new Headers(init.headers);
-      headers.set('Authorization', 'Bearer mcc-dev-bypass');
+      headers.set('Authorization', DEV_PIN_BYPASS_HEADER);
       return fetch(input, { ...init, headers });
     }
     throw new Error('[authedFetch] Aucun utilisateur connecté — appel admin refusé côté client.');

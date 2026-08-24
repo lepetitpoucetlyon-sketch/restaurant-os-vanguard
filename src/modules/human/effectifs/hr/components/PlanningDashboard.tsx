@@ -141,9 +141,9 @@ export function PlanningDashboard() {
                                 </Button>
                             </ActionGuard>
                         )}
-                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
-                            <button onClick={() => setViewMode('daily')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40", viewMode === 'daily' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary")}>Jour</button>
-                            <button onClick={() => setViewMode('staff')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors", viewMode === 'staff' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary")}>Staff</button>
+                        <div className="flex items-center h-10 bg-surface-glass border border-border/40 rounded-xl overflow-hidden">
+                            <button onClick={() => setViewMode('daily')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40", viewMode === 'daily' ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary")}>Jour</button>
+                            <button onClick={() => setViewMode('staff')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors", viewMode === 'staff' ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary")}>Staff</button>
                         </div>
                     </div>
                 </div>
@@ -330,7 +330,7 @@ export function PlanningDashboard() {
                                         "h-12 rounded-xl text-sm font-medium tracking-tight border transition-colors capitalize",
                                         editType === type
                                             ? "bg-accent-gold text-[#0B0B0C] border-accent-gold shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]"
-                                            : "bg-white/[0.03] text-text-secondary border-border/40 hover:border-accent-gold/50 hover:text-text-primary"
+                                            : "bg-surface-glass text-text-secondary border-border/40 hover:border-accent-gold/50 hover:text-text-primary"
                                     )}
                                 >
                                     {type}

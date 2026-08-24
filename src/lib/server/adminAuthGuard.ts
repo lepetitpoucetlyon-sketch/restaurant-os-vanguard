@@ -93,7 +93,7 @@ export async function requireMccLevel(
     if (
         process.env.NODE_ENV !== 'production' &&
         MCC_DEV_MODE_SERVER &&
-        authHeader === 'Bearer mcc-dev-bypass'
+        authHeader === DEV_PIN_BYPASS_HEADER
     ) {
         logger.warn('[adminAuth] DEV BYPASS actif — ne pas utiliser en production');
         return { uid: 'dev_admin', role: 'mcc_super_admin' };

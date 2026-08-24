@@ -141,7 +141,7 @@ function FloorPlanPage() {
                                                     aria-selected={isCurrent}
                                                     className={cn(
                                                         "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left",
-                                                        isCurrent ? "bg-accent-gold/12 text-accent-gold" : "text-text-secondary hover:bg-white/5 hover:text-text-primary"
+                                                        isCurrent ? "bg-accent-gold/12 text-accent-gold" : "text-text-secondary hover:bg-surface-glass hover:text-text-primary"
                                                     )}
                                                 >
                                                     <I className="w-4 h-4 opacity-80" />
@@ -176,12 +176,12 @@ function FloorPlanPage() {
                     <div className="flex items-center gap-3 shrink-0">
                         {!isMobile ? (
                             <>
-                                <div className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                                <div className="flex items-center h-10 bg-surface-glass border border-border/40 rounded-xl overflow-hidden">
                                     <button onClick={() => setMode('select')}
                                         aria-pressed={mode === 'select'}
                                         className={cn(
                                             "h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40",
-                                            mode === 'select' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
+                                            mode === 'select' ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary"
                                         )}>
                                         Sélecteur
                                     </button>
@@ -189,7 +189,7 @@ function FloorPlanPage() {
                                         aria-pressed={mode === 'add'}
                                         className={cn(
                                             "h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40",
-                                            mode === 'add' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
+                                            mode === 'add' ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary"
                                         )}>
                                         Construire
                                     </button>
@@ -198,7 +198,7 @@ function FloorPlanPage() {
                                         title={showGrid ? "Masquer la grille" : "Afficher la grille"}
                                         className={cn(
                                             "h-full px-3 text-xs font-medium tracking-tight transition-colors border-r border-border/40",
-                                            showGrid ? "bg-white/[0.05] text-accent-gold" : "text-text-muted hover:text-text-primary"
+                                            showGrid ? "bg-surface-glass-hover text-accent-gold" : "text-text-muted hover:text-text-primary"
                                         )}>
                                         Grille
                                     </button>
@@ -222,7 +222,7 @@ function FloorPlanPage() {
                                 aria-pressed={isZonesLocked}
                                 className={cn(
                                     "w-10 h-10 rounded-xl flex items-center justify-center transition-colors border",
-                                    isZonesLocked ? "bg-accent-gold text-[#0B0B0C] border-accent-gold" : "bg-white/[0.03] border-border/40 text-text-muted"
+                                    isZonesLocked ? "bg-accent-gold text-[#0B0B0C] border-accent-gold" : "bg-surface-glass border-border/40 text-text-muted"
                                 )}>
                                 <Layers className="w-[15px] h-[15px]" />
                             </button>

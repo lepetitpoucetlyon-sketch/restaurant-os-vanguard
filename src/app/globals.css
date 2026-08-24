@@ -45,6 +45,15 @@
   --color-border-focus: var(--border-focus, #C5A059);
   --color-border-subtle: var(--border-subtle, rgba(0, 0, 0, 0.04));
 
+  /* ── GLASS SURFACES (mode-aware — remplace bg-white/[X] hardcodé) ──
+     Utilisation : bg-surface-glass, bg-surface-glass-hover, bg-surface-glass-active.
+     En mode light : teinte noire subtile (rgba 0,0,0). En mode dark : teinte
+     blanche subtile (rgba 255,255,255). Les 3 niveaux couvrent : chip idle,
+     chip hover, chip active/selected. */
+  --color-surface-glass: rgba(0, 0, 0, 0.03);
+  --color-surface-glass-hover: rgba(0, 0, 0, 0.05);
+  --color-surface-glass-active: rgba(0, 0, 0, 0.08);
+
   /* ── SECONDARY ACCENTS ── */
   /* Teal — utilisé dans SEO, réservations, plan de salle, tutoriels (37×) */
   --color-teal: #00D9A6;
@@ -130,6 +139,10 @@
     --status-warning:  #f59e0b;
     --status-danger:   #ef4444;
     --status-info:     #818cf8;
+    /* Glass surfaces inversées en dark : teinte blanche subtile */
+    --color-surface-glass:        rgba(255, 255, 255, 0.03);
+    --color-surface-glass-hover:  rgba(255, 255, 255, 0.05);
+    --color-surface-glass-active: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -149,6 +162,10 @@
   --status-warning:  #f59e0b;
   --status-danger:   #ef4444;
   --status-info:     #818cf8;
+  /* Glass surfaces inversées en dark : teinte blanche subtile */
+  --color-surface-glass:        rgba(255, 255, 255, 0.03);
+  --color-surface-glass-hover:  rgba(255, 255, 255, 0.05);
+  --color-surface-glass-active: rgba(255, 255, 255, 0.08);
 }
 
 /* ============================================

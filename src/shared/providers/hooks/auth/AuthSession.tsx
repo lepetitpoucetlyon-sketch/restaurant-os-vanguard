@@ -6,10 +6,10 @@ import { httpsCallable, getFunctions } from 'firebase/functions';
 import { auth, firebaseApp } from '@/lib/firebase';
 import type { PersistedSession } from '@/lib/IdentityManager';
 import type { User } from '@nexus/contracts';
+import { DEV_PIN_BYPASS_KEY as DEV_BYPASS_KEY } from '@/lib/authConstants';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';
-const DEV_BYPASS_KEY = 'executive_dev_bypass_active';
 
 interface LoginWithPinResponse {
     token: string;

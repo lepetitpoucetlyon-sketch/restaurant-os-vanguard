@@ -68,7 +68,7 @@ function ReservationsPage() {
                         <span className="font-serif font-black text-2xl leading-none tracking-[-0.02em] text-text-primary">Réservations</span>
                     </div>
 
-                    <nav aria-label="Section" className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                    <nav aria-label="Section" className="flex items-center h-10 bg-surface-glass border border-border/40 rounded-xl overflow-hidden">
                         {(["reservations", "customers", "groups"] as const).map((s, i) => (
                             <button
                                 key={s}
@@ -77,7 +77,7 @@ function ReservationsPage() {
                                 className={cn(
                                     "h-full flex items-center gap-2 px-4 text-xs font-medium tracking-tight transition-colors",
                                     i > 0 && "border-l border-border/40",
-                                    activeSection === s ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
+                                    activeSection === s ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary"
                                 )}
                             >
                                 {s === "reservations" ? <><LayoutGrid className="w-[14px] h-[14px]" /> <span>Plan</span></>
@@ -88,7 +88,7 @@ function ReservationsPage() {
                     </nav>
 
                     {view === "day" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-2 h-10 px-2 bg-white/[0.03] border border-border/40 rounded-xl">
+                        <div className="flex items-center gap-2 h-10 px-2 bg-surface-glass border border-border/40 rounded-xl">
                             <button onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 1); return n; })}
                                 aria-label="Jour précédent"
                                 className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
@@ -104,7 +104,7 @@ function ReservationsPage() {
                     )}
 
                     {view === "week" && activeSection === "reservations" && (
-                        <div className="flex items-center gap-2 h-10 px-2 bg-white/[0.03] border border-border/40 rounded-xl">
+                        <div className="flex items-center gap-2 h-10 px-2 bg-surface-glass border border-border/40 rounded-xl">
                             <button onClick={() => setWeekOffset((o) => o - 1)}
                                 aria-label="Semaine précédente"
                                 className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded-lg text-text-muted hover:text-text-primary transition-colors">
@@ -136,14 +136,14 @@ function ReservationsPage() {
                     </button>
 
                     {activeSection === "reservations" && (
-                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                        <div className="flex items-center h-10 bg-surface-glass border border-border/40 rounded-xl overflow-hidden">
                             {(["day", "week"] as const).map((v, i) => (
                                 <button key={v} onClick={() => setView(v)}
                                     aria-current={view === v ? "page" : undefined}
                                     className={cn(
                                         "h-full flex items-center gap-1.5 px-3.5 text-xs font-medium tracking-tight transition-colors",
                                         i > 0 && "border-l border-border/40",
-                                        view === v ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
+                                        view === v ? "bg-surface-glass-hover text-text-primary" : "text-text-muted hover:text-text-primary"
                                     )}>
                                     {v === "day" ? <><Calendar className="w-[14px] h-[14px]" /> <span>Jour</span></> : <><CalendarDays className="w-[14px] h-[14px]" /> <span>Semaine</span></>}
                                 </button>
@@ -155,7 +155,7 @@ function ReservationsPage() {
                         <>
                             <button
                                 onClick={() => setIsEventQuoteOpen(true)}
-                                className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2">
+                                className="h-10 px-3.5 rounded-xl bg-surface-glass border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2">
                                 <FileText className="w-[14px] h-[14px]" /> <span>Devis</span>
                             </button>
                             <button
@@ -205,7 +205,7 @@ function ReservationsPage() {
                         <motion.div key="groups-view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="flex-1 overflow-y-auto p-6">
                             {groups.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full py-24 text-center max-w-md mx-auto">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-border/40 flex items-center justify-center mb-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-surface-glass border border-border/40 flex items-center justify-center mb-6">
                                         <Users strokeWidth={1.4} className="w-6 h-6 text-text-muted/50" />
                                     </div>
                                     <h3 className="font-serif font-black italic text-2xl tracking-tight text-text-primary mb-2">Aucun groupe enregistré</h3>
