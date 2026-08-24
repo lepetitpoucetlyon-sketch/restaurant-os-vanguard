@@ -5,16 +5,16 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3553** · LOC : **327 822**
+- Fichiers `.ts/.tsx` : **3560** · LOC : **327 884**
 - Pages : **83** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1584 |
+| `src/modules/` | 1589 |
 | `src/shared/` | 699 |
 | `src/app/` | 437 |
-| `src/verticals/` | 242 |
+| `src/verticals/` | 244 |
 | `src/lib/` | 232 |
 | `src/infrastructure/` | 46 |
 | `src/kernel/` | 25 |
@@ -61,8 +61,8 @@
 ## Piliers métier (`src/modules/`)
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
-| `commerce` | 353 | ✅ |
-| `ops` | 307 | ✅ |
+| `commerce` | 356 | ✅ |
+| `ops` | 309 | ✅ |
 | `finance` | 223 | ✅ |
 | `compliance` | 180 | ✅ |
 | `intelligence` | 161 | ✅ |
@@ -79,7 +79,6 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent.ts` | 735 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
 | `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
 | `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
@@ -94,3 +93,4 @@
 | `src/i18n/locales/fr.ts` | 545 |
 | `src/config/navConfig.ts` | 507 |
 | `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 493 |
+| `src/shared/eventBus/events/ops.events.ts` | 488 |
