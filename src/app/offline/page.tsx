@@ -33,7 +33,7 @@ export default function OfflinePage() {
           </p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2 text-left text-xs">
+        <div className="p-4 rounded-2xl bg-surface-glass border border-white/5 space-y-2 text-left text-xs">
           <div className="flex items-center justify-between text-emerald-400 font-medium">
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4" />

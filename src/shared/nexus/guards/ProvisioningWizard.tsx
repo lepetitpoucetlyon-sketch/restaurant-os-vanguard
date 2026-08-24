@@ -94,7 +94,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                         value={formData.name}
                                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                                         placeholder="EX: LE PETIT POUCET"
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none focus:border-action-primary/50 transition-all font-serif italic text-lg"
+                                        className="w-full bg-surface-glass border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none focus:border-action-primary/50 transition-all font-serif italic text-lg"
                                         required
                                     />
                                 </div>
@@ -106,7 +106,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                         value={formData.key}
                                         onChange={(e) => setFormData({...formData, key: e.target.value.toLowerCase()})}
                                         placeholder="ex: le-petit-poucet-lyon"
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none focus:border-action-primary/50 transition-all font-mono text-sm"
+                                        className="w-full bg-surface-glass border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none focus:border-action-primary/50 transition-all font-mono text-sm"
                                         required
                                     />
                                 </div>
@@ -148,7 +148,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                     <select 
                                         value={formData.tier}
                                         onChange={(e) => setFormData({...formData, tier: e.target.value as 'STANDARD' | 'PREMIUM' | 'ENTERPRISE'})}
-                                        className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none appearance-none cursor-pointer"
+                                        className="w-full bg-surface-glass border border-white/5 rounded-2xl p-6 text-text-primary focus:outline-none appearance-none cursor-pointer"
                                     >
                                         <option value="STANDARD">Standard Node</option>
                                         <option value="PREMIUM">Premium Pro</option>
@@ -158,7 +158,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Accent Branding</label>
-                                    <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 rounded-2xl p-4">
+                                    <div className="flex items-center gap-4 bg-surface-glass border border-white/5 rounded-2xl p-4">
                                         <input 
                                             type="color" 
                                             value={formData.initialPrimaryColor}

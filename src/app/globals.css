@@ -98,11 +98,20 @@
   --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
   --shadow-glow-accent: 0 0 20px 4px var(--accent-muted, rgba(197, 160, 89, 0.3));
 
-  /* ── BREAKPOINTS ── */
-  --bp-mobile: 640px;
-  --bp-tablet: 1024px;
-  --bp-desktop: 1439px;
-  --bp-kiosk: 1440px;
+  /* ── BREAKPOINTS ──
+     Source unique de vérité, alignée avec `useBreakpoint` (JS) ET Tailwind v4
+     (émet les variantes sm:, md:, lg:, xl:, 2xl:). Les 4 tiers métier JS
+     (mobile/tablet/desktop/kiosk) mappent sur ces bornes :
+       mobile  ≤ 640  → en dessous de sm
+       tablet  ≤ 1024 → sm..lg
+       desktop ≤ 1440 → lg..xl  (poste caisse fixe)
+       kiosk   > 1440 → xl..2xl (écran mural KDS, drive-thru grand format)
+     ⚠️ Toute modif ici DOIT être répercutée dans src/shared/hooks/useBreakpoint.ts. */
+  --breakpoint-sm: 40rem;    /* 640px  — mobile portrait, PDA */
+  --breakpoint-md: 48rem;    /* 768px  — mobile paysage / tablette */
+  --breakpoint-lg: 64rem;    /* 1024px — iPad landscape, tablette KDS chef */
+  --breakpoint-xl: 90rem;    /* 1440px — poste caisse fixe, écran mural KDS */
+  --breakpoint-2xl: 100rem;  /* 1600px — kiosk grand format, drive-thru */
 }
 
 .shadow-premium {

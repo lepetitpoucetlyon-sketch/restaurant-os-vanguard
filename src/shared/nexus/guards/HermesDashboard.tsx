@@ -58,7 +58,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                 <button 
                     onClick={triggerPulse}
                     disabled={isPulsing}
-                    className="group relative px-6 py-3 bg-white/[0.03] border border-white/5 rounded-xl flex items-center gap-3 hover:bg-white/[0.08] transition-all active:scale-95 disabled:opacity-50 overflow-hidden"
+                    className="group relative px-6 py-3 bg-surface-glass border border-white/5 rounded-xl flex items-center gap-3 hover:bg-surface-glass-active transition-all active:scale-95 disabled:opacity-50 overflow-hidden"
                 >
                     <AnimatePresence mode="wait">
                         {isPulsing ? (
@@ -87,7 +87,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
             {/* 🛡️ VANGUARD TEAM GRID */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {manifest.activeAgents.map((agent) => (
-                    <div key={agent.id} className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-6 hover:border-accent/30 transition-all group overflow-hidden relative">
+                    <div key={agent.id} className="bg-surface-glass border border-white/5 rounded-[2rem] p-6 hover:border-accent/30 transition-all group overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                             <AgentIcon id={agent.id} className="w-16 h-16" />
                         </div>
@@ -137,7 +137,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                                     key={anomaly.id}
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex items-start gap-4 hover:bg-white/[0.05] transition-all"
+                                    className="p-4 bg-surface-glass border border-white/5 rounded-2xl flex items-start gap-4 hover:bg-surface-glass-hover transition-all"
                                 >
                                     <div className={cn(
                                         "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",

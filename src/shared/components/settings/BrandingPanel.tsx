@@ -556,7 +556,7 @@ export function BrandingPanel() {
               {/* StatCard Preview */}
               <div className="grid grid-cols-2 gap-3">
                 <div
-                  className="p-4 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md"
+                  className="p-4 rounded-2xl border border-white/10 bg-surface-glass-hover backdrop-blur-md"
                   style={{
                     borderRadius: draft.borderRadiusCard === 'sm' ? '8px' : draft.borderRadiusCard === 'lg' ? '20px' : '12px',
                   }}
@@ -571,7 +571,7 @@ export function BrandingPanel() {
                 </div>
 
                 <div
-                  className="p-4 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md"
+                  className="p-4 rounded-2xl border border-white/10 bg-surface-glass-hover backdrop-blur-md"
                   style={{
                     borderRadius: draft.borderRadiusCard === 'sm' ? '8px' : draft.borderRadiusCard === 'lg' ? '20px' : '12px',
                   }}

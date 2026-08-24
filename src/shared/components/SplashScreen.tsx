@@ -78,7 +78,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                         initial={{ scale: 0.92, y: 20, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                        className="relative z-10 flex flex-col items-center p-8 md:p-12 rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-2xl shadow-[0_25px_70px_rgba(0,0,0,0.8)] max-w-md w-[90%]"
+                        className="relative z-10 flex flex-col items-center p-8 md:p-12 rounded-3xl border border-white/10 bg-surface-glass backdrop-blur-2xl shadow-[0_25px_70px_rgba(0,0,0,0.8)] max-w-md w-[90%]"
                     >
                         {/* Halo Logo */}
                         <div className="relative mb-6 flex items-center justify-center">

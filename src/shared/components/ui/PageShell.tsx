@@ -237,7 +237,7 @@ export function PageShell({
 /* ─── Sub-components — building blocks for consistent action rows and tabs ────────────── */
 
 /**
- * Groups related action buttons in a single bg-white/[0.03] rail with
+ * Groups related action buttons in a single bg-surface-glass rail with
  * vertical dividers between them. Use in `actions={…}` slot.
  */
 export function PageShellActionGroup({
@@ -250,7 +250,7 @@ export function PageShellActionGroup({
   return (
     <div
       className={cn(
-        "flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden",
+        "flex items-center h-10 bg-surface-glass border border-border/40 rounded-xl overflow-hidden",
         "[&>*:not(:first-child)]:border-l [&>*]:border-border/40",
         className
       )}
@@ -291,7 +291,7 @@ export function PageShellActionCTA({
         tone === "danger" &&
           "bg-red-500 hover:bg-red-600 text-white shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]",
         tone === "ghost" &&
-          "bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold",
+          "bg-surface-glass border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold",
         className
       )}
     >

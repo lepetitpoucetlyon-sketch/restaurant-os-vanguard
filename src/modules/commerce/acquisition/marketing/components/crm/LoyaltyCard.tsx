@@ -188,7 +188,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
                 className={`flex items-center gap-4 p-5 rounded-2xl border transition-all ${
                   canRedeem
                     ? "border-accent/30 bg-accent/5"
-                    : "border-white/5 bg-white/[0.02] opacity-50"
+                    : "border-white/5 bg-surface-glass opacity-50"
                 }`}
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${

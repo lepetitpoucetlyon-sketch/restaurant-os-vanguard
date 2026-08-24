@@ -114,7 +114,7 @@ export function OnboardingChecklist({ tenantId, variant = 'restaurant' }: Props)
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="rounded-2xl bg-white/[0.03] border border-amber-500/20 p-6 backdrop-blur-xl mb-8"
+          className="rounded-2xl bg-surface-glass border border-amber-500/20 p-6 backdrop-blur-xl mb-8"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export function OnboardingChecklist({ tenantId, variant = 'restaurant' }: Props)
                 className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                   step.completed
                     ? 'bg-emerald-500/[0.04] border-emerald-500/20'
-                    : 'bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12]'
+                    : 'bg-surface-glass border-white/[0.06] hover:border-white/[0.12]'
                 }`}
               >
                 <div className="flex items-center gap-3">

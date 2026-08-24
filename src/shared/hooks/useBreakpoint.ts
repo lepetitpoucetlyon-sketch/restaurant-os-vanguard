@@ -4,6 +4,21 @@ import { useState, useEffect } from "react";
 
 export type Breakpoint = "mobile" | "tablet" | "desktop" | "kiosk";
 
+/**
+ * Bornes (en px) des 4 tiers métier. DOIT rester synchronisé avec les tokens
+ * `--breakpoint-*` de `src/app/globals.css` (source unique de vérité partagée
+ * avec Tailwind v4). Chaque valeur = borne SUPÉRIEURE inclusive du tier :
+ *   mobile  ≤ 640  (< sm)
+ *   tablet  ≤ 1024 (sm..lg)
+ *   desktop ≤ 1440 (lg..xl — poste caisse fixe)
+ *   kiosk   > 1440 (xl..2xl — écran mural KDS, drive-thru)
+ */
+export const BREAKPOINTS = {
+  mobile: 640,
+  tablet: 1024,
+  desktop: 1440,
+} as const;
+
 export interface BreakpointState {
   breakpoint: Breakpoint;
   isMobile: boolean;
@@ -30,11 +45,11 @@ export function useBreakpoint(): BreakpointState {
       const w = window.innerWidth;
       let bp: Breakpoint = "desktop";
 
-      if (w <= 640) {
+      if (w <= BREAKPOINTS.mobile) {
         bp = "mobile";
-      } else if (w <= 1024) {
+      } else if (w <= BREAKPOINTS.tablet) {
         bp = "tablet";
-      } else if (w < 1440) {
+      } else if (w <= BREAKPOINTS.desktop) {
         bp = "desktop";
       } else {
         bp = "kiosk";

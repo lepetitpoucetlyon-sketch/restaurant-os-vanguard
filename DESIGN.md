@@ -29,10 +29,16 @@ Ce document définit les règles de design, tokens, typographies, hiérarchies e
 
 ## 4. Breakpoints Sémantiques (CSS & JS Sync)
 
-- `--bp-mobile`: `640px` (Smartphones portrait, PDA Serveurs & Plongeurs)
-- `--bp-tablet`: `1024px` (iPads Serveurs, Tablettes Accueil & KDS Chef)
-- `--bp-desktop`: `1439px` (Postes Caisses Fixes, Écrans Muraux, Postes Comptables)
-- `--bp-kiosk`: `1440px+` (Bornes interactives tactiles, Drive-thru)
+**Source unique de vérité** : tokens `--breakpoint-*` dans `src/app/globals.css` (`@theme`).
+Tailwind v4 les lit pour émettre `sm:`/`md:`/`lg:`/`xl:`/`2xl:`, et `src/shared/hooks/useBreakpoint.ts` (constante `BREAKPOINTS`) lit les mêmes bornes — **toute modif doit être répercutée aux deux endroits**.
+
+- `--breakpoint-sm`: `640px` (Smartphones portrait, PDA Serveurs & Plongeurs)
+- `--breakpoint-md`: `768px` (Smartphones paysage / Tablettes compactes)
+- `--breakpoint-lg`: `1024px` (iPads Serveurs, Tablettes Accueil & KDS Chef)
+- `--breakpoint-xl`: `1440px` (Postes Caisses Fixes, Écrans Muraux, Postes Comptables)
+- `--breakpoint-2xl`: `1600px` (Bornes interactives tactiles, Drive-thru grand format)
+
+Mapping vers les 4 tiers métier JS (`useBreakpoint`) : `mobile` ≤ 640 · `tablet` ≤ 1024 · `desktop` ≤ 1440 · `kiosk` > 1440.
 
 ## 5. Motion Dynamics & Transitions
 
