@@ -48,11 +48,11 @@ export function MaintenanceRulesTab({
                   />
                 </button>
                 <h4 className="text-sm font-bold text-white tracking-tight">{rule.label}</h4>
-                <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-[10px] font-mono">
                   {rule.alertType}
                 </span>
               </div>
-              <p className="text-xs text-slate-400">{rule.description}</p>
+              <p className="text-xs text-text-muted">{rule.description}</p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -69,20 +69,20 @@ export function MaintenanceRulesTab({
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center gap-3">
-            <span className="text-[11px] font-bold text-slate-500">Destinataires notifiés :</span>
+            <span className="text-[11px] font-bold text-text-muted/80">Destinataires notifiés :</span>
             {rule.recipients.map((rec) => (
               <div
                 key={rec.id}
-                className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300"
+                className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-text-secondary"
               >
                 <span className="font-semibold text-white">{rec.name || rec.role}</span>
-                <span className="text-slate-500">({rec.minSeverity}+)</span>
+                <span className="text-text-muted/80">({rec.minSeverity}+)</span>
                 <div className="flex items-center gap-1 ml-1 border-l border-slate-800 pl-2">
                   <button
                     onClick={() => onToggleRecipientChannel(rule.id, rec.id, 'IN_APP')}
                     title="Canal In-App"
                     className={`p-1 rounded ${
-                      rec.channels.includes('IN_APP') ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-600'
+                      rec.channels.includes('IN_APP') ? 'text-emerald-400 bg-emerald-500/10' : 'text-text-muted/70'
                     }`}
                   >
                     <Bell className="w-3 h-3" />
@@ -91,7 +91,7 @@ export function MaintenanceRulesTab({
                     onClick={() => onToggleRecipientChannel(rule.id, rec.id, 'EMAIL')}
                     title="Canal Email"
                     className={`p-1 rounded ${
-                      rec.channels.includes('EMAIL') ? 'text-blue-400 bg-blue-500/10' : 'text-slate-600'
+                      rec.channels.includes('EMAIL') ? 'text-blue-400 bg-blue-500/10' : 'text-text-muted/70'
                     }`}
                   >
                     <Mail className="w-3 h-3" />
@@ -100,7 +100,7 @@ export function MaintenanceRulesTab({
                     onClick={() => onToggleRecipientChannel(rule.id, rec.id, 'SMS')}
                     title="Canal SMS"
                     className={`p-1 rounded ${
-                      rec.channels.includes('SMS') ? 'text-purple-400 bg-purple-500/10' : 'text-slate-600'
+                      rec.channels.includes('SMS') ? 'text-purple-400 bg-purple-500/10' : 'text-text-muted/70'
                     }`}
                   >
                     <Smartphone className="w-3 h-3" />

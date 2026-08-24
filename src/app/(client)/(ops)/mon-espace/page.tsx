@@ -198,7 +198,7 @@ function MonEspacePage() {
                                     });
                                     setStepUpOpen(true);
                                 }}
-                                className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-amber-500/10 active:scale-98"
+                                className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-text-primary font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-amber-500/10 active:scale-98"
                             >
                                 <Download className="w-4 h-4" />
                                 Télécharger l&apos;archive complète (ZIP/JSON)

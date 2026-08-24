@@ -24,7 +24,7 @@ export function OrdersTab() {
                 <span>Transgourmet (Livraison Mardi)</span>
                 <span className="text-emerald-400">266,00 € HT (Franco: 250 €)</span>
               </div>
-              <div className="text-[11px] text-slate-400 mt-1">
+              <div className="text-[11px] text-text-muted mt-1">
                 2x Carton Beurre (176 €), 2x Colis Crème (90 €)
               </div>
             </div>
@@ -34,7 +34,7 @@ export function OrdersTab() {
                 <span>Pomona TerreAzur (Livraison Mardi)</span>
                 <span className="text-emerald-400">210,00 € HT (Franco: 180 €)</span>
               </div>
-              <div className="text-[11px] text-slate-400 mt-1">
+              <div className="text-[11px] text-text-muted mt-1">
                 2x Colis Saumon Frais (210 €)
               </div>
             </div>
@@ -42,10 +42,10 @@ export function OrdersTab() {
 
           <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
             <div className="text-xs">
-              <span className="text-slate-400">Total Commandes : </span>
+              <span className="text-text-muted">Total Commandes : </span>
               <span className="font-bold text-white">476,00 € HT</span>
             </div>
-            <button className="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs uppercase flex items-center gap-2 hover:bg-emerald-400 transition-colors">
+            <button className="px-4 py-2 rounded-xl bg-emerald-500 text-text-primary font-bold text-xs uppercase flex items-center gap-2 hover:bg-emerald-400 transition-colors">
               <MessageSquare className="w-4 h-4" />
               Envoyer par WhatsApp
             </button>
@@ -63,7 +63,7 @@ export function OrdersTab() {
             <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 flex items-center justify-between">
               <div>
                 <div className="font-bold text-white">BC-202608-0088 — Transgourmet</div>
-                <div className="text-[11px] text-slate-400">Livr. prévue 18/08 • WhatsApp</div>
+                <div className="text-[11px] text-text-muted">Livr. prévue 18/08 • WhatsApp</div>
               </div>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
                 CONFIRMÉE
@@ -73,7 +73,7 @@ export function OrdersTab() {
             <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 flex items-center justify-between">
               <div>
                 <div className="font-bold text-white">BC-202608-0087 — France Boissons</div>
-                <div className="text-[11px] text-slate-400">Livr. prévue 19/08 • Email PDF</div>
+                <div className="text-[11px] text-text-muted">Livr. prévue 19/08 • Email PDF</div>
               </div>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 LIVRAISON EN COURS

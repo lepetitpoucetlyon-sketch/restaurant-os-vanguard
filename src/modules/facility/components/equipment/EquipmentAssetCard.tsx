@@ -37,7 +37,7 @@ const CATEGORY_ICONS: Record<EquipmentCategory, React.ReactNode> = {
   POS_HARDWARE: <Monitor className="w-5 h-5 text-indigo-400" />,
   HVAC_EXTRACTION: <Fan className="w-5 h-5 text-sky-400" />,
   SECURITY_SAFETY: <Shield className="w-5 h-5 text-rose-400" />,
-  OTHER: <HelpCircle className="w-5 h-5 text-slate-400" />,
+  OTHER: <HelpCircle className="w-5 h-5 text-text-muted" />,
 };
 
 const CATEGORY_LABELS: Record<EquipmentCategory, string> = {
@@ -87,7 +87,7 @@ const STATUS_CONFIG: Record<
   DECOMMISSIONED: {
     label: 'Mis au Rebut',
     bg: 'bg-slate-500/10',
-    text: 'text-slate-400',
+    text: 'text-text-muted',
     border: 'border-slate-500/30',
     icon: <Clock className="w-3.5 h-3.5" />,
   },
@@ -137,7 +137,7 @@ export function EquipmentAssetCard({
               {CATEGORY_ICONS[asset.category]}
             </div>
             <div>
-              <span className="text-[11px] font-medium tracking-wide uppercase text-slate-400">
+              <span className="text-[11px] font-medium tracking-wide uppercase text-text-muted">
                 {CATEGORY_LABELS[asset.category]}
               </span>
               <h3 className="text-base font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors">
@@ -155,19 +155,19 @@ export function EquipmentAssetCard({
         </div>
 
         {/* Détails techniques */}
-        <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 mb-4 bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
+        <div className="grid grid-cols-2 gap-2 text-xs text-text-muted mb-4 bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
           <div>
-            <span className="text-slate-500 block text-[10px] uppercase font-semibold">Marque / Modèle</span>
-            <span className="text-slate-200 font-medium truncate block">
+            <span className="text-text-muted/80 block text-[10px] uppercase font-semibold">Marque / Modèle</span>
+            <span className="text-text-primary font-medium truncate block">
               {asset.brand} - {asset.model}
             </span>
           </div>
           <div>
-            <span className="text-slate-500 block text-[10px] uppercase font-semibold">Emplacement</span>
-            <span className="text-slate-200 font-medium truncate block">{asset.location}</span>
+            <span className="text-text-muted/80 block text-[10px] uppercase font-semibold">Emplacement</span>
+            <span className="text-text-primary font-medium truncate block">{asset.location}</span>
           </div>
           <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800/60">
-            <span className="text-slate-500 text-[10px]">S/N: {asset.serialNumber}</span>
+            <span className="text-text-muted/80 text-[10px]">S/N: {asset.serialNumber}</span>
             {asset.purchase?.invoiceUrl && (
               <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
                 <FileText className="w-3 h-3" /> Facture liée
@@ -184,7 +184,7 @@ export function EquipmentAssetCard({
                 ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
                 : isWarrantyActive
                 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
-                : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                : 'bg-slate-800/50 border-slate-700 text-text-muted'
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
@@ -197,7 +197,7 @@ export function EquipmentAssetCard({
       <div className="grid grid-cols-3 gap-1.5 pt-3 border-t border-slate-800/80">
         <button
           onClick={() => onOpenDetails(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-primary text-xs font-medium transition-colors"
           title="Fiche technique, factures & notices"
         >
           <BookOpen className="w-3.5 h-3.5 text-blue-400" />
@@ -206,7 +206,7 @@ export function EquipmentAssetCard({
 
         <button
           onClick={() => onOpenTroubleshoot(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-slate-200 hover:text-rose-300 border border-transparent hover:border-rose-500/30 text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-text-primary hover:text-rose-300 border border-transparent hover:border-rose-500/30 text-xs font-medium transition-colors"
           title="Diagnostic de panne pas-à-pas"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
@@ -215,7 +215,7 @@ export function EquipmentAssetCard({
 
         <button
           onClick={() => onOpenAddGuide(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-primary text-xs font-medium transition-colors"
           title="Ajouter un guide ou une vidéo YouTube"
         >
           <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />

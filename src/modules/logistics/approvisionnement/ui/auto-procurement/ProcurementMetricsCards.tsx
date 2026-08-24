@@ -11,9 +11,9 @@ export function ProcurementMetricsCards({ analysis }: ProcurementMetricsCardsPro
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
-        <div className="text-[11px] font-bold text-slate-400 uppercase">Articles Scannés</div>
+        <div className="text-[11px] font-bold text-text-muted uppercase">Articles Scannés</div>
         <div className="text-2xl font-black text-white mt-1">{analysis.totalItemsScanned}</div>
-        <div className="text-[11px] text-slate-500 mt-0.5">Sur tout le stock restaurant</div>
+        <div className="text-[11px] text-text-muted/80 mt-0.5">Sur tout le stock restaurant</div>
       </div>
 
       <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20">

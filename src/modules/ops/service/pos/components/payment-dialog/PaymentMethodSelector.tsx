@@ -56,7 +56,7 @@ export function PaymentMethodSelector({ method, onSelectMethod, total }: Payment
                         <span>Réseau CONECS (Edenred / Swile / Pluxee / Up / Bimpli)</span>
                         <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-[10px]">Plafond 25,00 € / j</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-slate-300">
+                    <div className="grid grid-cols-2 gap-2 text-text-secondary">
                         <div>Part CONECS éligible : <strong className="text-white">{formatCurrency(Math.min(total, 2500))}</strong></div>
                         <div>Reste à charge : <strong className="text-amber-400">{total > 2500 ? formatCurrency(total - 2500) : "0,00 €"}</strong></div>
                     </div>

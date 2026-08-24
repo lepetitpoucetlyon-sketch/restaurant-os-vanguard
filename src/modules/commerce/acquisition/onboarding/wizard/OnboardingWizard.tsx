@@ -392,8 +392,8 @@ export function OnboardingWizard() {
                   <div className="flex items-center gap-2">
                     <span className="text-xl">✍️</span>
                     <div>
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">Contrat SaaS & Licence NF525</h4>
-                      <p className="text-[11px] text-slate-500">Signature électronique certifiée eIDAS (DocuSeal)</p>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-text-muted/50">Contrat SaaS & Licence NF525</h4>
+                      <p className="text-[11px] text-text-muted/80">Signature électronique certifiée eIDAS (DocuSeal)</p>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700">
@@ -401,7 +401,7 @@ export function OnboardingWizard() {
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-text-muted/70 leading-relaxed">
                   Le contrat d&apos;abonnement et l&apos;accord de traitement des données (DPA) incluant votre nom de domaine réservé ont été préparés.
                 </p>
 
@@ -426,7 +426,7 @@ export function OnboardingWizard() {
 
                   <button
                     onClick={handleResendSms}
-                    className="py-2 px-3 border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-medium transition-colors"
+                    className="py-2 px-3 border border-slate-300 hover:bg-slate-100 text-text-muted/60 rounded-xl text-xs font-medium transition-colors"
                     title="Renvoyer le lien de signature par SMS"
                   >
                     📱 Renvoyer par SMS

@@ -60,7 +60,7 @@ export function AutoProcurementWizard({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="relative w-full max-w-5xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-100"
+        className="relative w-full max-w-5xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-text-primary"
       >
         {/* Header Modal */}
         <div className="flex items-center justify-between p-6 border-b border-slate-800/80 bg-slate-950/60">
@@ -75,14 +75,14 @@ export function AutoProcurementWizard({
                   OPTIMISATION FRANCO
                 </span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Scan automatique des seuils de sécurité, arrondi aux colis grossistes et regroupement multi-fournisseurs.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl bg-slate-800/50 hover:bg-slate-800 transition"
+            className="p-2 text-text-muted hover:text-white rounded-xl bg-slate-800/50 hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -102,7 +102,7 @@ export function AutoProcurementWizard({
               <h3 className="text-2xl font-black text-white tracking-tight">
                 {dispatchedOrders.length} Bon{dispatchedOrders.length > 1 ? 's' : ''} de Commande Généré{dispatchedOrders.length > 1 ? 's' : ''} avec Succès !
               </h3>
-              <p className="text-sm text-slate-400 max-w-md">
+              <p className="text-sm text-text-muted max-w-md">
                 Les pré-commandes sont formatées et prêtes pour transmission WhatsApp / EDI auprès des commerciaux de chaque grossiste.
               </p>
               <div className="pt-4">
@@ -135,7 +135,7 @@ export function AutoProcurementWizard({
         {/* Footer Actions */}
         {!isSuccessStep && (
           <div className="p-6 border-t border-slate-800/80 bg-slate-950/80 flex items-center justify-between">
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-text-muted">
               Total Global Estimé :{' '}
               <span className="text-base font-black text-white ml-1">
                 {(analysis.grandTotalHtCts / 100).toFixed(2)} € HT
@@ -143,13 +143,13 @@ export function AutoProcurementWizard({
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={onClose} className="rounded-xl border-slate-700 text-slate-300">
+              <Button variant="outline" onClick={onClose} className="rounded-xl border-slate-700 text-text-secondary">
                 Annuler
               </Button>
               <Button
                 disabled={analysis.supplierBaskets.length === 0 || isProcessing}
                 onClick={handleConfirmAndSendAll}
-                className="rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-6 shadow-lg shadow-amber-500/20 flex items-center gap-2"
+                className="rounded-xl bg-amber-500 hover:bg-amber-400 text-text-primary font-black px-6 shadow-lg shadow-amber-500/20 flex items-center gap-2"
               >
                 {isProcessing ? (
                   <>

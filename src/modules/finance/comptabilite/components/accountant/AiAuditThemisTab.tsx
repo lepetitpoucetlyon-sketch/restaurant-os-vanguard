@@ -33,7 +33,7 @@ export function AiAuditThemisTab({ summary, selectedPeriod }: AiAuditThemisTabPr
                 {alert.category}
               </span>
             </div>
-            <p className="text-xs text-slate-300">{alert.description}</p>
+            <p className="text-xs text-text-secondary">{alert.description}</p>
             <div className="pt-2 border-t border-white/10 text-[11px] text-amber-300 flex items-center gap-1.5">
               <ArrowRight className="w-3.5 h-3.5" />
               <span>{alert.recommendation}</span>

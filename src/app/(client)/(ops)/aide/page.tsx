@@ -56,7 +56,7 @@ function TenantAidePage() {
                       ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
                       : ticket.status === 'analyzing'
                       ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-                      : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+                      : 'bg-slate-500/10 text-text-muted border border-slate-500/20'
                   }`}>
                     {ticket.status === 'draft_ready' && <CheckCircle2 className="w-3 h-3" />}
                     {ticket.status === 'analyzing' && <Clock className="w-3 h-3" />}

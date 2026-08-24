@@ -51,7 +51,7 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="relative w-72">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Filtrer fournisseurs..."
@@ -60,7 +60,7 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
             className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
           />
         </div>
-        <button className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs tracking-wider uppercase hover:bg-amber-400 transition-colors flex items-center gap-2">
+        <button className="px-4 py-2 rounded-xl bg-amber-500 text-text-primary font-bold text-xs tracking-wider uppercase hover:bg-amber-400 transition-colors flex items-center gap-2">
           <Building2 className="w-4 h-4" />
           Nouveau Fournisseur
         </button>
@@ -76,39 +76,39 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-bold text-white text-base">{s.name}</h3>
-                  <p className="text-[11px] text-slate-400">{s.category}</p>
+                  <p className="text-[11px] text-text-muted">{s.category}</p>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-500/20">
                   {s.channel}
                 </span>
               </div>
 
-              <div className="mt-4 space-y-2 text-xs text-slate-300">
+              <div className="mt-4 space-y-2 text-xs text-text-secondary">
                 <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
-                  <span className="text-slate-400">Franco de port :</span>
+                  <span className="text-text-muted">Franco de port :</span>
                   <span className="font-bold text-white">{s.franco}</span>
                 </div>
                 <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
-                  <span className="text-slate-400">Cut-off commande :</span>
+                  <span className="text-text-muted">Cut-off commande :</span>
                   <span className="font-bold text-amber-400">{s.cutOff}</span>
                 </div>
                 <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
-                  <span className="text-slate-400">Jours de passage :</span>
-                  <span className="font-semibold text-slate-200">{s.deliveryDays}</span>
+                  <span className="text-text-muted">Jours de passage :</span>
+                  <span className="font-semibold text-text-primary">{s.deliveryDays}</span>
                 </div>
                 <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
-                  <span className="text-slate-400">Règlement :</span>
-                  <span className="text-slate-200">{s.payment}</span>
+                  <span className="text-text-muted">Règlement :</span>
+                  <span className="text-text-primary">{s.payment}</span>
                 </div>
               </div>
             </div>
 
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+              <div className="flex items-center gap-2 text-[11px] text-text-muted">
                 <Phone className="w-3.5 h-3.5 text-emerald-400" />
                 <span>{s.primaryContact}</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-slate-500" />
+              <ChevronRight className="w-4 h-4 text-text-muted/80" />
             </div>
           </div>
         ))}

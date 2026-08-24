@@ -98,7 +98,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -113,7 +113,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
               Titre de la fiche ou du tuto *
             </label>
             <input
@@ -128,7 +128,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
                 Type de contenu
               </label>
               <select
@@ -145,7 +145,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
                 Source de l information
               </label>
               <select
@@ -161,7 +161,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
               Lien Web / Vidéo YouTube / PDF (Optionnel)
             </label>
             <input
@@ -174,7 +174,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
               Procédure étape par étape / Notes (Texte Markdown)
             </label>
             <textarea
@@ -187,7 +187,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
               Tags / Mots-clés (séparés par des virgules)
             </label>
             <input
@@ -204,14 +204,14 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-text-primary font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
             >
               <Plus className="w-4 h-4" />
               <span>{isSubmitting ? 'Enregistrement...' : 'Enregistrer le Tuto / Guide'}</span>

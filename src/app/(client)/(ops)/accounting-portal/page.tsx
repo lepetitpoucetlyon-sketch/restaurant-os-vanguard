@@ -103,7 +103,7 @@ function AccountingPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-6 lg:p-10 font-sans">
+    <div className="min-h-screen bg-slate-950 text-text-primary p-6 lg:p-10 font-sans">
       <AccountingPortalHeader
         selectedPeriod={selectedPeriod}
         onPeriodChange={setSelectedPeriod}

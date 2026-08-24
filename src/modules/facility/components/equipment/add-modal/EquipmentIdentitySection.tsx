@@ -34,14 +34,14 @@ export function EquipmentIdentitySection({
 }: EquipmentIdentitySectionProps) {
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+      <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
         <Building className="w-3.5 h-3.5 text-indigo-400" />
         <span>Identité de la Machine</span>
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="md:col-span-2">
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Nom d usage de l équipement *
           </label>
           <input
@@ -55,7 +55,7 @@ export function EquipmentIdentitySection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Catégorie Métier
           </label>
           <select
@@ -76,7 +76,7 @@ export function EquipmentIdentitySection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Emplacement
           </label>
           <input
@@ -89,7 +89,7 @@ export function EquipmentIdentitySection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Marque *
           </label>
           <input
@@ -103,7 +103,7 @@ export function EquipmentIdentitySection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Modèle & N° de Série *
           </label>
           <div className="grid grid-cols-2 gap-2">

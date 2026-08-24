@@ -31,7 +31,7 @@ export function MonthlyCloseHero({
           <h2 className="text-xl lg:text-2xl font-bold text-white">
             Pack Comptable {selectedPeriod} • Prêt pour le Cabinet
           </h2>
-          <p className="text-sm text-slate-300 max-w-2xl">
+          <p className="text-sm text-text-secondary max-w-2xl">
             Contient l'intégralité des pièces légales scellées : FEC DGFiP officiel, Grand Livre des Ventes NF525, 
             ventilations TVA (5.5%, 10%, 20%), variables de paie Silae HCR et lettrage bancaire.
           </p>
@@ -51,44 +51,44 @@ export function MonthlyCloseHero({
 
       {/* Télétransmission Directe API */}
       <div className="mt-6 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-        <div className="text-xs text-slate-400 font-medium">
+        <div className="text-xs text-text-muted font-medium">
           Télétransmission Directe API vers les logiciels comptables français :
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => onTransmit('pennylane')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-amber-500/40"
+            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-amber-500/40"
           >
             <span>🪙 Pennylane</span>
-            <Send className="w-3 h-3 text-slate-400" />
+            <Send className="w-3 h-3 text-text-muted" />
           </button>
 
           <button
             onClick={() => onTransmit('silae')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-indigo-500/40"
+            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-indigo-500/40"
           >
             <span>💼 Silae Paie</span>
-            <Send className="w-3 h-3 text-slate-400" />
+            <Send className="w-3 h-3 text-text-muted" />
           </button>
 
           <button
             onClick={() => onTransmit('sage')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-emerald-500/40"
+            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-emerald-500/40"
           >
             <span>📗 Sage 100</span>
-            <Send className="w-3 h-3 text-slate-400" />
+            <Send className="w-3 h-3 text-text-muted" />
           </button>
 
           <button
             onClick={() => onTransmit('cegid')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-slate-200 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-blue-500/40"
+            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-blue-500/40"
           >
             <span>📘 Cegid Loop</span>
-            <Send className="w-3 h-3 text-slate-400" />
+            <Send className="w-3 h-3 text-text-muted" />
           </button>
         </div>
       </div>

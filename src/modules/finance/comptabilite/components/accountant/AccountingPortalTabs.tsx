@@ -18,7 +18,7 @@ export function AccountingPortalTabs({ activeTab, onTabChange }: AccountingPorta
           "px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all",
           activeTab === 'sales'
             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-            : "text-slate-400 hover:text-white hover:bg-slate-900"
+            : "text-text-muted hover:text-white hover:bg-slate-900"
         )}
       >
         <TrendingUp className="w-4 h-4" />
@@ -31,7 +31,7 @@ export function AccountingPortalTabs({ activeTab, onTabChange }: AccountingPorta
           "px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all",
           activeTab === 'vat'
             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-            : "text-slate-400 hover:text-white hover:bg-slate-900"
+            : "text-text-muted hover:text-white hover:bg-slate-900"
         )}
       >
         <PieChart className="w-4 h-4" />
@@ -44,7 +44,7 @@ export function AccountingPortalTabs({ activeTab, onTabChange }: AccountingPorta
           "px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all",
           activeTab === 'payroll'
             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-            : "text-slate-400 hover:text-white hover:bg-slate-900"
+            : "text-text-muted hover:text-white hover:bg-slate-900"
         )}
       >
         <Users className="w-4 h-4" />
@@ -57,7 +57,7 @@ export function AccountingPortalTabs({ activeTab, onTabChange }: AccountingPorta
           "px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all",
           activeTab === 'reconciliation'
             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-            : "text-slate-400 hover:text-white hover:bg-slate-900"
+            : "text-text-muted hover:text-white hover:bg-slate-900"
         )}
       >
         <CreditCard className="w-4 h-4" />
@@ -70,7 +70,7 @@ export function AccountingPortalTabs({ activeTab, onTabChange }: AccountingPorta
           "px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all",
           activeTab === 'ai-audit'
             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-            : "text-slate-400 hover:text-white hover:bg-slate-900"
+            : "text-text-muted hover:text-white hover:bg-slate-900"
         )}
       >
         <Sparkles className="w-4 h-4 text-amber-400" />

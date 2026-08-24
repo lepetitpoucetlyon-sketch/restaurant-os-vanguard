@@ -18,24 +18,24 @@ export function ReconciliationPurchasesTab({ summary }: ReconciliationPurchasesT
     >
       {/* Rapprochement Bancaire */}
       <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Rapprochement Bancaire DSP2</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Rapprochement Bancaire DSP2</span>
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-emerald-400 flex items-center gap-2">
             <CheckCircle2 className="w-6 h-6" />
             <span>Lettrage Parfait (Écart : 0,00 €)</span>
           </div>
         </div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-slate-300">
+        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
           <div className="flex justify-between">
-            <span className="text-slate-400">Télécollectes TPE / Stripe :</span>
+            <span className="text-text-muted">Télécollectes TPE / Stripe :</span>
             <span className="font-mono font-semibold">{(summary.reconciliation.tpeSettlementsTotalCents / 100).toFixed(2)} €</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Versements Espèces Caisse :</span>
+            <span className="text-text-muted">Versements Espèces Caisse :</span>
             <span className="font-mono font-semibold">{(summary.reconciliation.cashDepositsTotalCents / 100).toFixed(2)} €</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Crédits Relevé Bancaire Open Banking :</span>
+            <span className="text-text-muted">Crédits Relevé Bancaire Open Banking :</span>
             <span className="font-mono font-semibold">{(summary.reconciliation.bankCreditsTotalCents / 100).toFixed(2)} €</span>
           </div>
         </div>
@@ -43,15 +43,15 @@ export function ReconciliationPurchasesTab({ summary }: ReconciliationPurchasesT
 
       {/* Achats & Factures Fournisseurs */}
       <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Factures Fournisseurs (OCR)</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Factures Fournisseurs (OCR)</span>
         <div className="text-2xl font-bold text-white">{summary.purchases.invoicesCount} Factures Traitées</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-slate-300">
+        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
           <div className="flex justify-between">
-            <span className="text-slate-400">Total Achats Matières Premières HT :</span>
+            <span className="text-text-muted">Total Achats Matières Premières HT :</span>
             <span className="font-mono font-semibold">{(summary.purchases.totalPurchasesHtCents / 100).toFixed(2)} €</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">TVA Déductible sur Achats :</span>
+            <span className="text-text-muted">TVA Déductible sur Achats :</span>
             <span className="font-mono font-semibold text-emerald-400">{(summary.purchases.totalPurchasesVatCents / 100).toFixed(2)} €</span>
           </div>
         </div>

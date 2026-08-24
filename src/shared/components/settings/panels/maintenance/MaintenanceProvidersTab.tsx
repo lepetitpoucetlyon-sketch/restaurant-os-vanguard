@@ -20,28 +20,28 @@ export function MaintenanceProvidersTab({ providers }: MaintenanceProvidersTabPr
                 <h4 className="text-sm font-bold text-white">{prov.name}</h4>
                 <p className="text-xs text-emerald-400">{prov.specialty}</p>
               </div>
-              <span className="px-2 py-0.5 rounded-md bg-slate-800 text-[10px] font-mono text-slate-400">
+              <span className="px-2 py-0.5 rounded-md bg-slate-800 text-[10px] font-mono text-text-muted">
                 {prov.contractNumber || 'Contrat Standard'}
               </span>
             </div>
 
-            <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+            <div className="space-y-1.5 text-xs text-text-secondary pt-2 border-t border-slate-800">
               <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-slate-400" />
+                <Phone className="w-3.5 h-3.5 text-text-muted" />
                 <span className="font-semibold text-white">{prov.phone}</span>
               </div>
               {prov.email && (
                 <div className="flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  <Mail className="w-3.5 h-3.5 text-text-muted" />
                   <span>{prov.email}</span>
                 </div>
               )}
             </div>
 
             <div className="pt-2 flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] text-slate-500 font-bold">Zones :</span>
+              <span className="text-[10px] text-text-muted/80 font-bold">Zones :</span>
               {prov.assignedZones.map((z: RestaurantZone) => (
-                <span key={z} className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-300">
+                <span key={z} className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] text-text-secondary">
                   {RESTAURANT_ZONE_LABELS[z] || z}
                 </span>
               ))}

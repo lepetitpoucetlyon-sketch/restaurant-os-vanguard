@@ -19,46 +19,46 @@ export function PayrollSocialTab({ summary, isTransmitting, onTransmit }: Payrol
       className="grid grid-cols-1 lg:grid-cols-3 gap-6"
     >
       <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Effectifs & Heures Travaillées</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Effectifs & Heures Travaillées</span>
         <div className="text-2xl font-bold text-white">{summary.payroll.employeeCount} Salariés en poste</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-slate-300">
+        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
           <div className="flex justify-between">
-            <span className="text-slate-400">Total Heures Travaillées :</span>
+            <span className="text-text-muted">Total Heures Travaillées :</span>
             <span className="font-mono font-semibold">{summary.payroll.totalHoursWorked} h</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Heures Sup (36-39h - +10%) :</span>
+            <span className="text-text-muted">Heures Sup (36-39h - +10%) :</span>
             <span className="font-mono font-semibold text-amber-400">{summary.payroll.overtimeHours10} h</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Heures Sup (40-43h - +20%) :</span>
+            <span className="text-text-muted">Heures Sup (40-43h - +20%) :</span>
             <span className="font-mono font-semibold text-amber-400">{summary.payroll.overtimeHours20} h</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Heures Sup (&gt;43h - +50%) :</span>
+            <span className="text-text-muted">Heures Sup (&gt;43h - +50%) :</span>
             <span className="font-mono font-semibold text-rose-400">{summary.payroll.overtimeHours50} h</span>
           </div>
         </div>
       </div>
 
       <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Avantages en Nature & Pourboires</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Avantages en Nature & Pourboires</span>
         <div className="text-2xl font-bold text-white">{summary.payroll.staffMealsDeclaredCount} Repas Enregistrés</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-slate-300">
+        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
           <div className="flex justify-between">
-            <span className="text-slate-400">Avantage Repas CCN HCR :</span>
+            <span className="text-text-muted">Avantage Repas CCN HCR :</span>
             <span className="font-mono font-semibold">4.15 € / repas</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Pourboires CB Déclarés (DSN) :</span>
+            <span className="text-text-muted">Pourboires CB Déclarés (DSN) :</span>
             <span className="font-mono font-semibold text-emerald-400">{(summary.payroll.declaredTipsTotalCents / 100).toFixed(2)} €</span>
           </div>
         </div>
       </div>
 
       <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Télétransmission Silae Paie</span>
-        <p className="text-xs text-slate-300">
+        <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Télétransmission Silae Paie</span>
+        <p className="text-xs text-text-secondary">
           Export direct des variables de paie vers le dossier Silae du cabinet pour génération instantanée des bulletins.
         </p>
         <button

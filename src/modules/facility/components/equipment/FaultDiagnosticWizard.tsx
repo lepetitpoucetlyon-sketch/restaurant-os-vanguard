@@ -97,7 +97,7 @@ export function FaultDiagnosticWizard({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -115,13 +115,13 @@ export function FaultDiagnosticWizard({
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white">Incident Enregistré & Transmis</h3>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-text-secondary">
                 L appareil a été placé en statut dégradé / hors-service. Une notification d incident a été émise à la
                 direction et transmise au journal de maintenance.
               </p>
               <button
                 onClick={onClose}
-                className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm transition-all"
+                className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-text-primary font-bold text-sm transition-all"
               >
                 Fermer l assistant
               </button>
@@ -131,7 +131,7 @@ export function FaultDiagnosticWizard({
               {/* Formulaire de diagnostic */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                  <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
                     Code Erreur Écran (ex: E12, Err03, 0x82)
                   </label>
                   <input
@@ -144,7 +144,7 @@ export function FaultDiagnosticWizard({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1.5">
+                  <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1.5">
                     Symptôme observé
                   </label>
                   <input
@@ -196,14 +196,14 @@ export function FaultDiagnosticWizard({
 
                   {/* Actions immédiates recommandées */}
                   <div className="space-y-2">
-                    <span className="text-xs font-semibold text-slate-300 uppercase tracking-wide block">
+                    <span className="text-xs font-semibold text-text-secondary uppercase tracking-wide block">
                       Étapes de Dépannage Immédiat :
                     </span>
                     <div className="space-y-1.5">
                       {evaluation.recommendedActions.map((action, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300"
+                          className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-text-secondary"
                         >
                           <ArrowRight className="w-3.5 h-3.5 text-indigo-400 mt-0.5 shrink-0" />
                           <span>{action}</span>
@@ -223,7 +223,7 @@ export function FaultDiagnosticWizard({
                       </div>
                       <a
                         href={`tel:${asset.supportContact.phone}`}
-                        className="px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-slate-950 font-bold transition-colors"
+                        className="px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-text-primary font-bold transition-colors"
                       >
                         Appeler {asset.supportContact.phone}
                       </a>
@@ -240,7 +240,7 @@ export function FaultDiagnosticWizard({
           <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>

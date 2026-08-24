@@ -96,7 +96,7 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentM
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -150,7 +150,7 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentM
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>

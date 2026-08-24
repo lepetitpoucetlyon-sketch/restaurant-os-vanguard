@@ -125,7 +125,7 @@ export function MaintenanceSettingsPanel() {
 
   if (loading && !config) {
     return (
-      <div className="p-16 text-center text-slate-500 text-xs space-y-3">
+      <div className="p-16 text-center text-text-muted/80 text-xs space-y-3">
         <RefreshCw className="w-6 h-6 animate-spin mx-auto text-emerald-400" />
         <span>Chargement des réglages de maintenance & alertes...</span>
       </div>
@@ -158,7 +158,7 @@ export function MaintenanceSettingsPanel() {
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'rules'
               ? 'bg-slate-800 text-white border border-slate-700'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-text-muted hover:text-text-primary'
           }`}
         >
           Règles d Alertes & Déclencheurs ({rulesInZone.length})
@@ -168,7 +168,7 @@ export function MaintenanceSettingsPanel() {
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'recipients'
               ? 'bg-slate-800 text-white border border-slate-700'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-text-muted hover:text-text-primary'
           }`}
         >
           Destinataires & Canaux de Réception
@@ -178,7 +178,7 @@ export function MaintenanceSettingsPanel() {
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'providers'
               ? 'bg-slate-800 text-white border border-slate-700'
-              : 'text-slate-400 hover:text-slate-200'
+              : 'text-text-muted hover:text-text-primary'
           }`}
         >
           Prestataires SAV & Contrats ({providersInZone.length})

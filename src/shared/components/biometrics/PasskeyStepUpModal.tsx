@@ -162,7 +162,7 @@ export function PasskeyStepUpModal({
                 type="button"
                 onClick={handleBiometricChallenge}
                 disabled={isVerifying}
-                className="w-full py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-3 transition-all active:scale-98 shadow-lg shadow-amber-500/20"
+                className="w-full py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-text-primary font-bold text-sm flex items-center justify-center gap-3 transition-all active:scale-98 shadow-lg shadow-amber-500/20"
               >
                 {isVerifying ? (
                   <>
@@ -226,7 +226,7 @@ export function PasskeyStepUpModal({
                 <button
                   type="submit"
                   disabled={pin.length < 4 || isVerifying}
-                  className="flex-1 py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                  className="flex-1 py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-text-primary font-bold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50"
                 >
                   {isVerifying ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
                   Valider

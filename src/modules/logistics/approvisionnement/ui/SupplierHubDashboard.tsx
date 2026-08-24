@@ -45,7 +45,7 @@ export function SupplierHubDashboard() {
       <div className="flex flex-wrap items-center gap-3 justify-end">
         <button
           onClick={() => setIsAutoProcurementOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center gap-2 transition active:scale-95"
+          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-text-primary font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center gap-2 transition active:scale-95"
         >
           <Sparkles className="w-4 h-4" />
           IA Auto-Réassort

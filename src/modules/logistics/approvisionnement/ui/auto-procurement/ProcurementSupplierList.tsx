@@ -17,7 +17,7 @@ export function ProcurementSupplierList({
 }: ProcurementSupplierListProps) {
   return (
     <div className="w-full md:w-1/3 space-y-2">
-      <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
+      <div className="text-xs font-bold uppercase tracking-wider text-text-muted px-1">
         Paniers par Grossiste ({analysis.supplierBaskets.length})
       </div>
       <div className="space-y-2">
@@ -41,7 +41,7 @@ export function ProcurementSupplierList({
                   <Building2 className="w-4 h-4 text-amber-400" />
                   {basket.supplierName}
                 </div>
-                <span className="text-xs font-bold text-slate-300">
+                <span className="text-xs font-bold text-text-secondary">
                   {(basket.basketTotalHtCts / 100).toFixed(2)} €
                 </span>
               </div>
@@ -49,7 +49,7 @@ export function ProcurementSupplierList({
               {/* Barre de Progression Franco */}
               <div className="mt-3 space-y-1">
                 <div className="flex items-center justify-between text-[10px]">
-                  <span className="text-slate-400">Franco : {(basket.francoCts / 100).toFixed(2)} €</span>
+                  <span className="text-text-muted">Franco : {(basket.francoCts / 100).toFixed(2)} €</span>
                   <span className={basket.isFrancoReached ? 'text-emerald-400 font-bold' : 'text-amber-400'}>
                     {basket.isFrancoReached ? 'Franco Atteint ✨' : `Manque ${(basket.amountToFrancoCts / 100).toFixed(2)} €`}
                   </span>

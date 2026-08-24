@@ -29,14 +29,14 @@ export function EquipmentFinanceSection({
 }: EquipmentFinanceSectionProps) {
   return (
     <div className="space-y-3 pt-3 border-t border-slate-800">
-      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+      <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
         <FileText className="w-3.5 h-3.5 text-emerald-400" />
         <span>Facture d Achat & Garantie</span>
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Fournisseur / Revendeur
           </label>
           <input
@@ -49,7 +49,7 @@ export function EquipmentFinanceSection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Prix d Achat (€ HT)
           </label>
           <input
@@ -63,7 +63,7 @@ export function EquipmentFinanceSection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Date d Achat
           </label>
           <input
@@ -75,7 +75,7 @@ export function EquipmentFinanceSection({
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Lien de la Facture Numérisée (PDF / Scan Drive)
           </label>
           <input
@@ -88,7 +88,7 @@ export function EquipmentFinanceSection({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Garantie Constructeur
           </label>
           <select

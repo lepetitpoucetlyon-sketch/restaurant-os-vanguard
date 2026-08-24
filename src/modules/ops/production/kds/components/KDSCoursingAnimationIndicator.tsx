@@ -44,7 +44,7 @@ export function KDSCoursingAnimationIndicator({
 
           <div className="relative z-10 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500 text-slate-950 shadow-md">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500 text-text-primary shadow-md">
                 <Flame className="h-5 w-5 animate-bounce" />
               </div>
               <div>
@@ -64,7 +64,7 @@ export function KDSCoursingAnimationIndicator({
             {onAcknowledge && (
               <button
                 onClick={onAcknowledge}
-                className="flex items-center gap-1 rounded-lg bg-amber-500/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-slate-950 transition-colors"
+                className="flex items-center gap-1 rounded-lg bg-amber-500/20 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-text-primary transition-colors"
               >
                 <Sparkles className="h-3 w-3" />
                 Compris (Fire)

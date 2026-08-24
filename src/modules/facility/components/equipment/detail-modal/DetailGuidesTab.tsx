@@ -14,7 +14,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-text-muted">
           Notices constructeurs, vidéos YouTube, tutoriels de nettoyage et pièces détachées.
         </span>
         <button
@@ -27,7 +27,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
       </div>
 
       {loadingGuides ? (
-        <div className="p-8 text-center text-slate-500 text-xs">Chargement des fiches...</div>
+        <div className="p-8 text-center text-text-muted/80 text-xs">Chargement des fiches...</div>
       ) : guides.length > 0 ? (
         <div className="space-y-3">
           {guides.map((guide) => (
@@ -44,13 +44,13 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
                   )}
                   <h4 className="text-sm font-bold text-white">{guide.title}</h4>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-text-muted border border-slate-700">
                   {guide.authorName}
                 </span>
               </div>
 
               {guide.contentMarkdown && (
-                <p className="text-xs text-slate-300 whitespace-pre-line bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                <p className="text-xs text-text-secondary whitespace-pre-line bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
                   {guide.contentMarkdown}
                 </p>
               )}
@@ -72,7 +72,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
           ))}
         </div>
       ) : (
-        <div className="p-8 text-center bg-slate-950/40 rounded-2xl border border-slate-800 text-slate-400 text-xs space-y-3">
+        <div className="p-8 text-center bg-slate-950/40 rounded-2xl border border-slate-800 text-text-muted text-xs space-y-3">
           <p>Aucun guide ou tuto rattaché pour l instant.</p>
           <button
             onClick={onOpenAddGuide}

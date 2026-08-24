@@ -78,7 +78,7 @@ export function OnboardingChecklistSettingsPanel() {
           <Lock className="w-8 h-8" />
         </div>
         <h3 className="text-xl font-bold text-white mb-1">Accès Réservé à la Direction</h3>
-        <p className="text-sm text-slate-400 max-w-md">
+        <p className="text-sm text-text-muted max-w-md">
           La checklist de mise en service et d audit opérationnel est réservée aux managers et administrateurs de
           l établissement.
         </p>
@@ -108,7 +108,7 @@ export function OnboardingChecklistSettingsPanel() {
             <h2 className="text-2xl font-black text-white tracking-tight">
               Mise en Service & Pré-Requis Restaurant
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-text-muted">
               Vérifiez la conformité des 8 piliers opérationnels avant l ouverture officielle de votre établissement.
             </p>
           </div>
@@ -117,7 +117,7 @@ export function OnboardingChecklistSettingsPanel() {
             <button
               onClick={fetchAudit}
               disabled={loading}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors disabled:opacity-50"
+              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary transition-colors disabled:opacity-50"
               title="Rafraîchir l'audit"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -129,7 +129,7 @@ export function OnboardingChecklistSettingsPanel() {
                 className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
                   filterMandatoryOnly
                     ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white'
+                    : 'bg-slate-800 border-slate-700 text-text-secondary hover:text-white'
                 }`}
               >
                 {filterMandatoryOnly ? 'Obligatoires uniquement (actif)' : 'Toutes les étapes'}
@@ -142,7 +142,7 @@ export function OnboardingChecklistSettingsPanel() {
         {summary && (
           <div className="mt-6 pt-5 border-t border-slate-800/80">
             <div className="flex items-center justify-between text-xs font-bold mb-2">
-              <span className="text-slate-300">
+              <span className="text-text-secondary">
                 Progression globale : {summary.completedStepsCount} / {summary.totalStepsCount} étapes validées
               </span>
               <span className="text-emerald-400">{summary.overallProgressPercent}%</span>
@@ -154,7 +154,7 @@ export function OnboardingChecklistSettingsPanel() {
               />
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+            <div className="mt-3 flex items-center justify-between text-[11px] text-text-muted">
               <span>
                 Étapes obligatoires complétées :{' '}
                 <strong className="text-white">
@@ -170,7 +170,7 @@ export function OnboardingChecklistSettingsPanel() {
       {/* Liste des Étapes par Pilier */}
       <div className="space-y-3">
         {loading && !summary ? (
-          <div className="p-16 text-center text-slate-500 text-xs space-y-2">
+          <div className="p-16 text-center text-text-muted/80 text-xs space-y-2">
             <RefreshCw className="w-6 h-6 animate-spin mx-auto text-emerald-400" />
             <span>Audit des modules en cours...</span>
           </div>
@@ -200,7 +200,7 @@ export function OnboardingChecklistSettingsPanel() {
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
                         Pilier {step.pillarNumber} • {step.pillar}
                       </span>
                       {step.isMandatory ? (
@@ -208,15 +208,15 @@ export function OnboardingChecklistSettingsPanel() {
                           OBLIGATOIRE
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px] font-medium">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-[10px] font-medium">
                           Recommandé
                         </span>
                       )}
-                      <span className="text-[10px] text-slate-500">~{step.estimatedMinutes} min</span>
+                      <span className="text-[10px] text-text-muted/80">~{step.estimatedMinutes} min</span>
                     </div>
 
                     <h4 className="text-sm font-bold text-white tracking-tight">{step.title}</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed max-w-xl">{step.description}</p>
+                    <p className="text-xs text-text-muted leading-relaxed max-w-xl">{step.description}</p>
                   </div>
                 </div>
 
@@ -234,7 +234,7 @@ export function OnboardingChecklistSettingsPanel() {
                         <span>En cours</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-medium">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-text-muted border border-slate-700 text-xs font-medium">
                         <AlertCircle className="w-3.5 h-3.5" />
                         <span>À configurer</span>
                       </span>
@@ -247,15 +247,15 @@ export function OnboardingChecklistSettingsPanel() {
                       onClick={() => router.push(step.route)}
                       className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                         isDone
-                          ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                          : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/20'
+                          ? 'bg-slate-800 hover:bg-slate-700 text-text-secondary'
+                          : 'bg-emerald-500 hover:bg-emerald-400 text-text-primary shadow-md shadow-emerald-500/20'
                       }`}
                     >
                       <span>{step.actionLabel}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <span className="text-[11px] text-slate-500 italic flex items-center gap-1">
+                    <span className="text-[11px] text-text-muted/80 italic flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Requis : {step.minRole}
                     </span>
                   )}

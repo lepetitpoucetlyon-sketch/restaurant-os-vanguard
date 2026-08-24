@@ -17,14 +17,14 @@ export function EquipmentSupportSection({
 }: EquipmentSupportSectionProps) {
   return (
     <div className="space-y-3 pt-3 border-t border-slate-800">
-      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+      <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
         <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
         <span>Assistance & Contact SAV</span>
       </h3>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Prestataire SAV / Dépannage
           </label>
           <input
@@ -36,7 +36,7 @@ export function EquipmentSupportSection({
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wide mb-1">
             Téléphone d Urgence SAV
           </label>
           <input

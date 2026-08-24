@@ -48,7 +48,7 @@ export function MaintenanceHeader({
           <h2 className="text-2xl font-black text-white tracking-tight">
             Paramètres de Maintenance & Routage des Alertes
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-text-muted">
             Définissez les règles de déclenchement, les canaux de notification (In-app, SMS, Email) et qui reçoit les alertes par zone du restaurant.
           </p>
         </div>
@@ -57,7 +57,7 @@ export function MaintenanceHeader({
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary transition-colors"
             title="Rafraîchir"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -65,7 +65,7 @@ export function MaintenanceHeader({
           <button
             onClick={onSave}
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-text-primary font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? 'Enregistrement...' : 'Enregistrer'}</span>
@@ -74,8 +74,8 @@ export function MaintenanceHeader({
       </div>
 
       <div className="pt-4 border-t border-slate-800/80">
-        <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <Building2 className="w-3.5 h-3.5 text-slate-400" />
+        <div className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Building2 className="w-3.5 h-3.5 text-text-muted" />
           <span>Périmètre & Zone d Établissement :</span>
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
@@ -88,7 +88,7 @@ export function MaintenanceHeader({
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
                   isSelected
                     ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-sm'
-                    : 'bg-slate-950/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                    : 'bg-slate-950/60 border-slate-800/80 text-text-muted hover:text-text-primary hover:border-slate-700'
                 }`}
               >
                 {ZONE_ICONS[zoneKey]}

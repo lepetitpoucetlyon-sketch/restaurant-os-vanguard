@@ -22,12 +22,12 @@ export function ProcurementBasketDetail({
           <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
             <div>
               <h4 className="font-black text-base text-white">{selectedBasket.supplierName}</h4>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-text-muted">
                 {selectedBasket.items.length} article{selectedBasket.items.length > 1 ? 's' : ''} à commander
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Date souhaitée :</span>
+              <span className="text-xs text-text-muted">Date souhaitée :</span>
               <input
                 type="date"
                 value={targetDeliveryDate}
@@ -57,7 +57,7 @@ export function ProcurementBasketDetail({
                   </span>
                   <div>
                     <div className="font-bold text-white">{item.name}</div>
-                    <div className="text-[10px] text-slate-400">
+                    <div className="text-[10px] text-text-muted">
                       Stock actuel: {item.currentQuantity} {item.unit} | Cible: {item.targetQuantity} {item.unit}
                     </div>
                   </div>
@@ -67,7 +67,7 @@ export function ProcurementBasketDetail({
                   <div className="font-black text-amber-400">
                     {item.recommendedPackagesCount}x {item.packagingLabel}
                   </div>
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-[10px] text-text-muted">
                     {(item.totalHtCts / 100).toFixed(2)} € HT
                   </div>
                 </div>
@@ -83,7 +83,7 @@ export function ProcurementBasketDetail({
               </div>
               <div className="space-y-1.5">
                 {selectedBasket.suggestedFrancoFillers.map((filler) => (
-                  <div key={filler.mercurialeItemId} className="flex items-center justify-between text-xs text-slate-300">
+                  <div key={filler.mercurialeItemId} className="flex items-center justify-between text-xs text-text-secondary">
                     <span>{filler.name} ({filler.packagingLabel})</span>
                     <span className="text-[11px] text-emerald-400 font-medium">{filler.reason}</span>
                   </div>
@@ -93,7 +93,7 @@ export function ProcurementBasketDetail({
           )}
         </div>
       ) : (
-        <div className="text-center py-12 text-slate-500 text-sm">
+        <div className="text-center py-12 text-text-muted/80 text-sm">
           Aucun réassort nécessaire pour le moment. Tous les stocks sont au-dessus des seuils de sécurité.
         </div>
       )}

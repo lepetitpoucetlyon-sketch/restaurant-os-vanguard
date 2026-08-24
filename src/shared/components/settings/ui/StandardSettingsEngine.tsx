@@ -260,7 +260,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                         className={cn(
                             "flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-xl",
                             isDirty 
-                                ? "bg-status-warning text-slate-950 hover:bg-status-warning hover:scale-[1.02] active:scale-95 shadow-amber-500/20" 
+                                ? "bg-status-warning text-text-primary hover:bg-status-warning hover:scale-[1.02] active:scale-95 shadow-amber-500/20" 
                                 : "bg-surface-sidebar text-secondary cursor-not-allowed border border-default"
                         )}
                     >

@@ -21,7 +21,7 @@ export function AccountingPortalHeader({ selectedPeriod, onPeriodChange }: Accou
                 RBAC 65 • Lecture Seule Fiscale
               </span>
             </div>
-            <p className="text-sm text-slate-400 mt-0.5">
+            <p className="text-sm text-text-muted mt-0.5">
               Clôtures mensuelles scellées NF525, Fichier FEC DGFiP, Ventilation TVA CA3 et Intégration Silae / Pennylane.
             </p>
           </div>
