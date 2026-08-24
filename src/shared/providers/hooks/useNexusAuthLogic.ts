@@ -9,7 +9,7 @@ import { useAuthSession } from '@/shared/providers/hooks/auth/AuthSession';
 import { useAuthAccess } from '@/shared/providers/hooks/auth/AuthAccess';
 import { useAuthStaff } from '@/shared/providers/hooks/auth/AuthStaff';
 import { logger } from '@/lib/logger';
-import { DEV_PIN_BYPASS_KEY } from '@/lib/authConstants';
+import { markDevBypassActive } from '@/lib/auth/DevAuthBridge';
 
 /**
  * Pure resolver (no hooks): finds the active staff user for the current session
@@ -47,9 +47,7 @@ async function attemptDevLogin(
     if (process.env.NODE_ENV !== 'development') return false;
     const user = users.find((u: User) => u.id === userId);
     if (user && (pin === '9999' || await IdentityManager.matchesPin(user, pin))) {
-        if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(DEV_PIN_BYPASS_KEY, userId);
-        }
+        markDevBypassActive(userId);
         persistSession(userId);
         commitSession();
         return true;

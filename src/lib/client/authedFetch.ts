@@ -2,7 +2,8 @@
 
 import { auth } from '@/lib/firebase';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
-import { DEV_PIN_BYPASS_KEY, DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
+import { DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
+import { isDevBypassActive } from '@/lib/auth/DevAuthBridge';
 
 /**
  * fetch() authentifié pour les routes /api/admin.
@@ -13,20 +14,15 @@ import { DEV_PIN_BYPASS_KEY, DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
  *
  * En développement, deux bypass sont acceptés :
  * - `NEXT_PUBLIC_MCC_DEV_MODE=true` (bypass niveau plateforme MCC).
- * - Flag sessionStorage `DEV_PIN_BYPASS_KEY` posé par attemptDevLogin
- *   quand le PIN dev tenant est utilisé (voir useNexusAuthLogic.ts).
+ * - Bypass PIN dev tenant posé par attemptDevLogin (voir `DevAuthBridge` +
+ *   useNexusAuthLogic.ts) quand le PIN dev est utilisé côté client.
  * Sans l'un ou l'autre, un throw explicite oblige les callers à gérer.
  */
 export async function authedFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
   const user = auth.currentUser;
 
   if (!user) {
-    const hasDevPinBypass =
-      process.env.NODE_ENV === 'development' &&
-      typeof window !== 'undefined' &&
-      window.sessionStorage.getItem(DEV_PIN_BYPASS_KEY) !== null;
-
-    if (MCC_DEV_MODE_CLIENT || hasDevPinBypass) {
+    if (MCC_DEV_MODE_CLIENT || isDevBypassActive()) {
       const headers = new Headers(init.headers);
       headers.set('Authorization', DEV_PIN_BYPASS_HEADER);
       return fetch(input, { ...init, headers });

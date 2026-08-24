@@ -15,7 +15,7 @@ import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
-import { Landmark, PlusCircle } from "lucide-react";
+import { Landmark, PlusCircle, BookOpen, Receipt, ShieldCheck, Wallet } from "lucide-react";
 import type { Order, JournalEntry } from "@nexus/contracts";
 
 import {
@@ -26,7 +26,6 @@ import {
 
 import {
     BankModal,
-    FinanceHeaderNav,
     filterPaidOrders,
     useBankConnection,
     useFinancialExports,
@@ -90,6 +89,14 @@ export function FinanceDashboard() {
     const totalTVA = ((tvaBreakdown?.reduce((acc, t) => acc + (t.htInCents * 0.1), 0) ?? 0)).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
     const totalEcritures = journalEntries.length;
 
+    const financeTabs = ([
+        { id: "accounting" as const, label: "Comptabilité", icon: BookOpen, visible: true },
+        { id: "billing" as const, label: "Facturation", icon: Receipt, visible: true },
+        { id: "bank" as const, label: "Connexion Bancaire", icon: Landmark, visible: true },
+        { id: "treasury" as const, label: "Trésorerie", icon: Wallet, visible: canSeeTreasury },
+        { id: "audit" as const, label: "Audit fiscal", icon: ShieldCheck, visible: canSeeAudit },
+    ]).filter((t) => t.visible);
+
     return (
         <PageShell
             kicker="Trésorerie"
@@ -105,6 +112,16 @@ export function FinanceDashboard() {
                     </PageShell.CTA>
                 </ActionGuard>
             }
+            tabs={financeTabs.map((tab) => (
+                <PageShell.Tab
+                    key={tab.id}
+                    active={activeTab === tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    icon={tab.icon}
+                >
+                    {tab.label}
+                </PageShell.Tab>
+            ))}
         >
             <BankModal open={bank.bankModalOpen} url={bank.bankWebviewUrl} onClose={() => bank.setBankModalOpen(false)} />
 
@@ -115,14 +132,6 @@ export function FinanceDashboard() {
                     <StatCard label="TVA Collectée" value={totalTVA} />
                     <StatCard label="Écritures au Grand Livre" value={totalEcritures} />
                 </StatGrid>
-
-                <FinanceHeaderNav
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-                    setClaimOpen={setClaimOpen}
-                    canSeeTreasury={canSeeTreasury}
-                    canSeeAudit={canSeeAudit}
-                />
 
                 <ResponsiveShell
                     mobile={

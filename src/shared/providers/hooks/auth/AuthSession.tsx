@@ -6,7 +6,7 @@ import { httpsCallable, getFunctions } from 'firebase/functions';
 import { auth, firebaseApp } from '@/lib/firebase';
 import type { PersistedSession } from '@/lib/IdentityManager';
 import type { User } from '@nexus/contracts';
-import { DEV_PIN_BYPASS_KEY as DEV_BYPASS_KEY } from '@/lib/authConstants';
+import { clearDevBypass, isDevBypassActive } from '@/lib/auth/DevAuthBridge';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';
@@ -59,11 +59,7 @@ export function useAuthSession() {
                 // Dev-mode bypass: preserve the local session when the dev PIN
                 // flow (attemptDevLogin) stamped an active flag. Otherwise the
                 // Firebase-null callback would wipe every dev login within ms.
-                if (
-                    process.env.NODE_ENV === 'development' &&
-                    typeof window !== 'undefined' &&
-                    sessionStorage.getItem(DEV_BYPASS_KEY)
-                ) {
+                if (isDevBypassActive()) {
                     const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
                     if (raw) {
                         try {
@@ -76,8 +72,8 @@ export function useAuthSession() {
                 }
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(SESSION_STORAGE_KEY);
-                    sessionStorage.removeItem(DEV_BYPASS_KEY);
                 }
+                clearDevBypass();
                 sessionUserIdRef.current = null;
                 setSessionUserId(null);
                 return;
@@ -105,7 +101,7 @@ export function useAuthSession() {
     const clearPersistedSession = () => {
         if (typeof window === 'undefined') return;
         sessionStorage.removeItem(SESSION_STORAGE_KEY);
-        sessionStorage.removeItem(DEV_BYPASS_KEY);
+        clearDevBypass();
         localStorage.removeItem(LEGACY_SESSION_KEY);
     };
 
