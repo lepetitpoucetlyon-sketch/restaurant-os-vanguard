@@ -65,9 +65,9 @@ interface StatCardProps { title: string; value: string; hint?: string }
 function StatCard({ title, value, hint }: StatCardProps) {
   return (
     <div className="rounded-2xl border p-4 shadow-sm">
-      <div className="text-sm text-neutral-500">{title}</div>
+      <div className="text-sm text-text-muted">{title}</div>
       <div className="text-2xl font-semibold mt-1">{value}</div>
-      {hint && <div className="text-xs text-neutral-400 mt-1">{hint}</div>}
+      {hint && <div className="text-xs text-text-muted/70 mt-1">{hint}</div>}
     </div>
   );
 }

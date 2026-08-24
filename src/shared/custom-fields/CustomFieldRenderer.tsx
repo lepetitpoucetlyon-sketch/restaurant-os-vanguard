@@ -239,7 +239,7 @@ function renderInput(
                             onClick={() => !readOnly && onChange(star)}
                             className={cn(
                                 'text-lg transition-all',
-                                star <= stars ? 'text-amber-400' : 'text-neutral-300',
+                                star <= stars ? 'text-accent-gold' : 'text-text-muted/40',
                                 !readOnly && 'hover:scale-110 cursor-pointer',
                             )}
                         >

@@ -111,7 +111,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                                 <div className="w-2 h-2 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                 <span className="text-[8px] font-bold text-status-success uppercase">Operational</span>
                             </div>
-                            <span className="text-[8px] font-mono text-neutral-600">P{agent.priority} Registry</span>
+                            <span className="text-[8px] font-mono text-text-muted/70">P{agent.priority} Registry</span>
                         </div>
                     </div>
                 ))}
@@ -126,7 +126,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                     </h4>
 
                     {pulseResult?.anomalies.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-neutral-600 space-y-4">
+                        <div className="flex flex-col items-center justify-center py-20 text-text-muted/70 space-y-4">
                             <CheckCircle2 className="w-12 h-12 opacity-20" />
                             <p className="text-[10px] font-bold uppercase tracking-widest">No structural anomalies detected</p>
                         </div>
@@ -148,12 +148,12 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-1">
                                             <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{anomaly.domain}</span>
-                                            <span className="text-[7px] font-mono text-neutral-600 italic">ID: {anomaly.id.slice(0,8)}</span>
+                                            <span className="text-[7px] font-mono text-text-muted/70 italic">ID: {anomaly.id.slice(0,8)}</span>
                                         </div>
                                         <p className="text-[11px] font-bold text-text-primary truncate">{anomaly.message}</p>
                                         <div className="flex items-center gap-2 mt-2">
-                                            <Clock className="w-3 h-3 text-neutral-600" />
-                                            <span className="text-[8px] text-neutral-600 font-bold uppercase">{new Date(anomaly.detectedAt).toLocaleTimeString()}</span>
+                                            <Clock className="w-3 h-3 text-text-muted/70" />
+                                            <span className="text-[8px] text-text-muted/70 font-bold uppercase">{new Date(anomaly.detectedAt).toLocaleTimeString()}</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -169,7 +169,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                     </h4>
 
                     {pulseResult?.actionsTaken.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-neutral-600 space-y-4">
+                        <div className="flex flex-col items-center justify-center py-20 text-text-muted/70 space-y-4">
                             <Crosshair className="w-12 h-12 opacity-20" />
                             <p className="text-[10px] font-bold uppercase tracking-widest">Sovereign Guard Standby</p>
                         </div>
