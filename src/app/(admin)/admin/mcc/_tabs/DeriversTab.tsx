@@ -10,7 +10,7 @@ interface DeriverSpec {
   category: string;
   icon: typeof Shield;
   description: string;
-  sampleOutput: Record<string, any>;
+  sampleOutput: Record<string, unknown>;
 }
 
 const DERIVERS: DeriverSpec[] = [

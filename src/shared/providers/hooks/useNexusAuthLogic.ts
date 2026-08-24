@@ -72,7 +72,9 @@ async function attemptCloudLogin(
             commitSession();
             return true;
         }
-    } catch {}
+    } catch (err) {
+        logger.warn('[AuthLogic] attemptCloudLogin failed', { error: err });
+    }
     return null;
 }
 
@@ -99,7 +101,10 @@ export function useNexusAuthLogic(
             const cloudResult = await attemptCloudLogin(session.loginWithPinCallable, session.loginWithFirebase, userId, pin, commitSession);
             if (cloudResult !== null) return cloudResult;
             return await attemptDevLogin(staff.users, userId, pin, session.persistSession, commitSession);
-        } catch { return false; }
+        } catch (err) {
+            logger.error('[AuthLogic] login failed', { error: err });
+            return false;
+        }
     }, [session, staff.users]);
 
     const logout = useCallback(async () => {

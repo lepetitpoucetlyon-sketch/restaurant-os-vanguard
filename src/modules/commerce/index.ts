@@ -90,32 +90,3 @@ export type {
 } from './acquisition/onboarding/schemas/companyProfile';
 export { emptyCompanyProfile } from './acquisition/onboarding/schemas/companyProfile';
 
-// P2a — QualificationEngine + dériveurs RBAC/BusinessLaws (couche §C.10)
-export {
-    QualificationEngine,
-    inferAnswers,
-    calibrateDepth,
-    resolveCapabilitiesFromAnswers,
-    defaultDisplayDepth,
-    resolve as resolveQualification,
-} from './acquisition/onboarding/qualification/QualificationEngine';
-export type {
-    QualificationProfile,
-    FeatureSuggestion,
-    PrecisionTier,
-} from './acquisition/onboarding/qualification/QualificationEngine';
-export {
-    QualificationAnswersSchema,
-    defaultAnswers,
-} from './acquisition/onboarding/qualification/QualificationAnswers';
-export type {
-    QualificationAnswers,
-    Scale as QualificationScale,
-    Topology as QualificationTopology,
-    RbacGranularity,
-    CommerceModel,
-    VatRegime,
-    PaymentMethod as QualificationPaymentMethod,
-    RegulationKey,
-    AiLevel,
-} from './acquisition/onboarding/qualification/QualificationAnswers';

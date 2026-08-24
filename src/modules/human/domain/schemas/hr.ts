@@ -72,3 +72,23 @@ export interface ShiftStats {
   punctualityScore: number;
   period: string;
 }
+
+export type TipPoolingMethod = 'equal' | 'weighted-hours' | 'weighted-covers' | 'custom';
+
+export interface ITipParticipant {
+  employeeId: string;
+  name: string;
+  hoursWorked?: number;
+  coversServed?: number;
+  sharePercent: number;
+  amountInMicrounits: number;
+}
+
+export interface ITipPool {
+  id: string;
+  date: string;
+  totalTipsInMicrounits: number;
+  method: TipPoolingMethod;
+  participants: ITipParticipant[];
+}
+

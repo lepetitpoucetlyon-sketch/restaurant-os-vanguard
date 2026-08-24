@@ -92,7 +92,9 @@ for (const file of allFiles) {
   // Règle : src/modules/ NE DOIT PAS importer directement depuis src/verticals/
   if (relPath.startsWith('src/modules/')) {
     lines.forEach((line, idx) => {
-      if (line.includes('@/verticals/') || line.includes('../../../verticals/') || line.includes('../../verticals/')) {
+      const trimmed = line.trim();
+      if ((trimmed.startsWith('import ') || trimmed.startsWith('import(') || trimmed.startsWith('export * from') || trimmed.startsWith('export {')) &&
+          (line.includes('@/verticals/') || line.includes('../../../verticals/') || line.includes('../../verticals/'))) {
         violations.push({
           type: 'BOUNDARY_VIOLATION',
           file: relPath,

@@ -10,8 +10,8 @@
 
 import type { PlatformVariant } from '@/modules/system';
 import type { CapabilitySet } from '../catalog/CapabilityCatalog';
-import type { QualificationAnswers } from '@/modules/commerce';
-import type { PrecisionTier } from '@/modules/commerce';
+import type { QualificationAnswers } from '../qualification/QualificationAnswers';
+import type { PrecisionTier } from '../qualification/QualificationEngine';
 
 // ── Types de sortie ─────────────────────────────────────────────────────────────
 

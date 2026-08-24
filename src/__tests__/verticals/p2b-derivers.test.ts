@@ -9,7 +9,7 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { defaultAnswers, type QualificationAnswers } from '@/modules/commerce';
+import { defaultAnswers, type QualificationAnswers } from '@/verticals/_shared/qualification';
 import { deriveRgpd } from '@/verticals/_shared/derivation/RgpdDeriver';
 import { deriveSecurity } from '@/verticals/_shared/derivation/SecurityDeriver';
 import { deriveLegal } from '@/verticals/_shared/derivation/LegalDeriver';

@@ -9,6 +9,7 @@ import {
     ArrowDownLeft,
     ArrowUpRight,
 } from "lucide-react";
+import { ActionGuard } from '@/shared/components/rbac/ActionGuard';
 import type { BankTransaction } from '../../types';
 import { type BankAccount, formatEur, centsToEur, muToEur } from "../financeUtils";
 
@@ -36,7 +37,6 @@ export function BankTab({
 }: BankTabProps) {
     return (
         <section className="space-y-6">
-
             {/* Connect / sync actions */}
             <div className="rounded-lg border border-border p-6 bg-surface-sidebar">
                 <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -49,26 +49,28 @@ export function BankTab({
                             Connectez vos comptes via Powens (Budget Insight) pour le rapprochement automatique et la trésorerie en temps réel.
                         </p>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                        <button
-                            onClick={onConnectBank}
-                            disabled={connectingBank}
-                            className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <Link2 className="w-4 h-4" />
-                            {connectingBank ? "Connexion…" : "Connecter ma banque"}
-                        </button>
-                        <button
-                            onClick={onSync}
-                            disabled={syncingBank}
-                            className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <RefreshCw
-                                className={`w-4 h-4 ${syncingBank ? "animate-spin" : ""}`}
-                            />
-                            {syncingBank ? "Synchro…" : "Synchroniser"}
-                        </button>
-                    </div>
+                    <ActionGuard page="finance" action="reconcile_bank">
+                        <div className="flex items-center gap-2 shrink-0">
+                            <button
+                                onClick={onConnectBank}
+                                disabled={connectingBank}
+                                className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Link2 className="w-4 h-4" />
+                                {connectingBank ? "Connexion…" : "Connecter ma banque"}
+                            </button>
+                            <button
+                                onClick={onSync}
+                                disabled={syncingBank}
+                                className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <RefreshCw
+                                    className={`w-4 h-4 ${syncingBank ? "animate-spin" : ""}`}
+                                />
+                                {syncingBank ? "Synchro…" : "Synchroniser"}
+                            </button>
+                        </div>
+                    </ActionGuard>
                 </div>
             </div>
 

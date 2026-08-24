@@ -104,6 +104,7 @@ export const DEFAULT_ACTION_ACCESS: Record<string, Record<string, PermissionRole
         seal_zday: ['admin', 'directeur'],
         reconcile_bank: ['admin', 'directeur', 'comptable'],
         cancel_entry: ['admin', 'directeur'],
+        create_expense_claim: ['admin', 'directeur', 'manager', 'comptable'],
     },
     staff: {
         edit_shifts: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],

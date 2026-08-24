@@ -9,7 +9,7 @@
  * (requêtes Nexus réelles à câbler manuellement dans le service généré).
  */
 
-import type { GeneratedFile } from '../generateVertical';
+import type { GeneratedFile } from '../types';
 import type { KpiSpec } from '../../blueprint/SectorStudy';
 
 export interface KpiDashboardTemplateInput {

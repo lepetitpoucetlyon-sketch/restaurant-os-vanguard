@@ -5,7 +5,7 @@
  * la configuration ne l'active pas. Non-conformité potentielle → severity haute.
  */
 
-import type { BlindSpotRule, RuleOutput, VerticalContext, TenantContext } from '../BlindSpotDetector';
+import type { BlindSpotRule, RuleOutput, VerticalContext, TenantContext } from '../types';
 
 /** Test unifié : le study ou le catalogue mentionne-t-il un thème régulatoire ? */
 function studyMentions(ctx: { study: VerticalContext['study'] }, patterns: readonly RegExp[]): string | null {

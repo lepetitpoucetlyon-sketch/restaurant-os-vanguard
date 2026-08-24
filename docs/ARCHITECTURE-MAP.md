@@ -5,20 +5,20 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3541** · LOC : **326 204**
+- Fichiers `.ts/.tsx` : **3553** · LOC : **327 822**
 - Pages : **83** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1585 |
-| `src/shared/` | 696 |
+| `src/modules/` | 1584 |
+| `src/shared/` | 699 |
 | `src/app/` | 437 |
-| `src/verticals/` | 237 |
-| `src/lib/` | 230 |
+| `src/verticals/` | 242 |
+| `src/lib/` | 232 |
 | `src/infrastructure/` | 46 |
+| `src/kernel/` | 25 |
 | `src/store/` | 24 |
-| `src/kernel/` | 22 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
 | `src/instances/` | 5 |
@@ -36,7 +36,7 @@
 | Sous-dossier | Fichiers |
 |---|---:|
 | `shared/eventBus/` | 225 |
-| `shared/components/` | 181 |
+| `shared/components/` | 184 |
 | `shared/nexus/` | 128 |
 | `shared/hooks/` | 49 |
 | `shared/providers/` | 28 |
@@ -61,14 +61,14 @@
 ## Piliers métier (`src/modules/`)
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
-| `commerce` | 356 | ✅ |
+| `commerce` | 353 | ✅ |
 | `ops` | 307 | ✅ |
 | `finance` | 223 | ✅ |
 | `compliance` | 180 | ✅ |
 | `intelligence` | 161 | ✅ |
 | `logistics` | 147 | ✅ |
-| `human` | 133 | ✅ |
-| `facility` | 71 | ✅ |
+| `human` | 134 | ✅ |
+| `facility` | 72 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
 > ⚠️ **Hors taxonomie des 8 piliers** : `system` — à formaliser ou rapatrier.

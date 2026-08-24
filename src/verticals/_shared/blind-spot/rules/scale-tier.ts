@@ -5,7 +5,7 @@
  * proposé ou les capabilities activées sont sous-dimensionnées.
  */
 
-import type { BlindSpotRule, RuleOutput } from '../BlindSpotDetector';
+import type { BlindSpotRule, RuleOutput } from '../types';
 
 // ── R.1 Multi-site sans capability multisite ────────────────────────────────────
 

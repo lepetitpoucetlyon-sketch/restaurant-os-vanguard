@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { AlertTriangle, Clock, ShieldCheck, Trash2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import type { IPerishableItem, IPerishableAlert } from "@/verticals/restaurant/domain/types";
+import type { IPerishableItem, IPerishableAlert } from "../../../domain/schemas/haccp";
 
 const SAMPLE_PERISHABLES: IPerishableItem[] = [
   { id: "per_1", productId: "prod_creme", name: "Crème Fraîche Épaisse 35%", lotNumber: "LOT-CR-8921", receivedAt: "2026-08-20", expiresAt: "2026-08-24", quantityUnits: 6, unitLabel: "L", status: "expiring-soon" },

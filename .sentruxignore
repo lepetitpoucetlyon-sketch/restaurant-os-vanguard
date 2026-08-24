@@ -7,6 +7,18 @@ services/**
 **/sovereign-rag/**
 .nexus/
 .nexus/**
+.agent/
+.agent/**
+.agents/
+.agents/**
+.claude/
+.claude/**
+.gemini/
+.gemini/**
+.github/
+.github/**
+demo/
+demo/**
 
 # Artefacts de build
 .next/

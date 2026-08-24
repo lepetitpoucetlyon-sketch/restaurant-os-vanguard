@@ -71,49 +71,7 @@ export interface IMenuEngineeringReport {
   avgPopularityIndex: number;
 }
 
-// ─── TIP POOLING ──────────────────────────────────────────────────────────────
+// ─── TIP POOLING & PERISHABLES ───────────────────────────────────────────────
+export type { TipPoolingMethod, ITipPool, ITipParticipant } from '@/modules/human';
+export type { PerishableStatus, IPerishableItem, IPerishableAlert } from '@/modules/compliance';
 
-export type TipPoolingMethod = 'equal' | 'weighted-hours' | 'weighted-covers' | 'custom';
-
-export interface ITipPool {
-  id: string;
-  date: string;
-  totalTipsInMicrounits: Microunits;
-  method: TipPoolingMethod;
-  participants: ITipParticipant[];
-}
-
-export interface ITipParticipant {
-  employeeId: string;
-  name: string;
-  hoursWorked?: number;
-  coversServed?: number;
-  sharePercent: number;   // calculé par la règle active
-  amountInMicrounits: Microunits;
-}
-
-// ─── PERISHABLES ──────────────────────────────────────────────────────────────
-
-export type PerishableStatus = 'ok' | 'expiring-soon' | 'expired' | 'recalled';
-
-export interface IPerishableItem {
-  id: string;
-  productId: string;
-  name: string;
-  lotNumber: string;
-  receivedAt: string;
-  expiresAt: string;
-  quantityUnits: number;
-  unitLabel: string;              // kg, L, pièce
-  status: PerishableStatus;
-  alertSentAt?: string;
-}
-
-export interface IPerishableAlert {
-  itemId: string;
-  productName: string;
-  expiresAt: string;
-  daysRemaining: number;
-  quantityUnits: number;
-  unitLabel: string;
-}

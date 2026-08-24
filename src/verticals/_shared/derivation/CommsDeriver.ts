@@ -13,7 +13,7 @@
 import type { PlatformVariant } from '@/modules/system';
 import type { CapabilitySet } from '../catalog/CapabilityCatalog';
 import type { CompanyProfile } from '@/modules/commerce';
-import type { QualificationAnswers } from '@/modules/commerce';
+import type { QualificationAnswers } from '../qualification/QualificationAnswers';
 
 // ── Types de sortie ─────────────────────────────────────────────────────────────
 

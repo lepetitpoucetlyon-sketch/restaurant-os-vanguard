@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
+import { useTenant } from '@/shared/providers/NexusCoreProvider';
+import { withPageGuard } from '@/shared/components/rbac/PageGuard';
 import {
   AccountingPortalHeader,
   MonthlyCloseHero,
@@ -15,11 +18,12 @@ import {
   type AccountingMonthlySummary,
 } from '@/modules/finance';
 
-export default function AccountingPortalPage() {
+function AccountingPortalPage() {
+  const { activeTenantId } = useTenant();
   const [selectedPeriod, setSelectedPeriod] = useState<string>('2026-08');
   const [activeTab, setActiveTab] = useState<AccountingTabKey>('sales');
   const [summary, setSummary] = useState<AccountingMonthlySummary | null>(null);
-  const [, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTransmitting, setIsTransmitting] = useState<string | null>(null);
   const [transmitSuccess, setTransmitSuccess] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
@@ -73,7 +77,7 @@ export default function AccountingPortalPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tenantId: 'demo-restaurant',
+          tenantId: activeTenantId || 'default',
           period: selectedPeriod,
           provider,
         }),
@@ -89,6 +93,14 @@ export default function AccountingPortalPage() {
       setIsTransmitting(null);
     }
   };
+
+  if (isLoading && !summary) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-6 lg:p-10 font-sans">
@@ -148,3 +160,5 @@ export default function AccountingPortalPage() {
     </div>
   );
 }
+
+export default withPageGuard(AccountingPortalPage, 'accounting_portal');

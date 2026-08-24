@@ -9,7 +9,7 @@
  * bloquer les actions illégales.
  */
 
-import type { GeneratedFile } from '../generateVertical';
+import type { GeneratedFile } from '../types';
 import type { RegulationSpec } from '../../blueprint/SectorStudy';
 
 export interface RegulationGuardTemplateInput {

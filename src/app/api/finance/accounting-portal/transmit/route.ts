@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAnyAuth } from '@/lib/server/requireAnyAuth';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
@@ -10,8 +11,9 @@ import { toError } from '@/lib/toError';
  */
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAnyAuth(request);
     const body = await request.json();
-    const { tenantId = 'demo-restaurant', period, provider } = body;
+    const { tenantId = auth.tenantId, period, provider } = body;
 
     if (!provider || !period) {
       return NextResponse.json({ error: 'Provider et période requis.' }, { status: 400 });
@@ -23,7 +25,7 @@ export async function POST(request: NextRequest) {
     empireAudit.log({
       action: 'finance.accounting_direct_transmit',
       module: 'finance',
-      userId: 'accountant',
+      userId: auth.userId,
       instanceId: tenantId,
       timestamp: new Date(),
       details: { provider, period, status: 'TRANSMITTED' },
@@ -38,6 +40,7 @@ export async function POST(request: NextRequest) {
       timestamp: Date.now(),
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
     logger.error('[API accounting-portal/transmit] error', toError(err).message);
     return NextResponse.json({ error: 'Erreur lors de la télétransmission.' }, { status: 500 });
   }

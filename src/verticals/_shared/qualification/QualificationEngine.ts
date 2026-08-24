@@ -17,12 +17,12 @@
  */
 
 import type { PlatformVariant } from '@/modules/system';
-import type { CapabilitySet, CapabilityKey, HardwareKind } from '@/verticals/_shared/catalog/CapabilityCatalog';
-import { resolveCapabilityDependencies, requiredHardwareFor } from '@/verticals/_shared/catalog/CapabilityCatalog';
-import type { SectorStudy } from '@/verticals/_shared/blueprint/SectorStudy';
+import type { CapabilitySet, CapabilityKey, HardwareKind } from '../catalog/CapabilityCatalog';
+import { resolveCapabilityDependencies, requiredHardwareFor } from '../catalog/CapabilityCatalog';
+import type { SectorStudy } from '../blueprint/SectorStudy';
 import type { CompanyProfile } from '@/modules/commerce';
-import { deriveRbac, type RolesTemplate } from '@/verticals/_shared/derivation/RbacDeriver';
-import { deriveBusinessLaws, type DerivedBusinessLaws } from '@/verticals/_shared/derivation/BusinessLawsDeriver';
+import { deriveRbac, type RolesTemplate } from '../derivation/RbacDeriver';
+import { deriveBusinessLaws, type DerivedBusinessLaws } from '../derivation/BusinessLawsDeriver';
 import type { QualificationAnswers, AiLevel } from './QualificationAnswers';
 import { defaultAnswers } from './QualificationAnswers';
 

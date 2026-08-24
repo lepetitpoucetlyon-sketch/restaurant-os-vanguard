@@ -10,7 +10,7 @@
  * cassée, ce test le voit avant le déploiement.
  */
 
-import type { GeneratedFile } from '../generateVertical';
+import type { GeneratedFile } from '../types';
 
 export interface VerticalTestTemplateInput {
     readonly slug: string;

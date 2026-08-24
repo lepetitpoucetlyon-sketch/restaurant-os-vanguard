@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { defaultAnswers } from '@/modules/commerce';
+import { defaultAnswers } from '@/verticals/_shared/qualification';
 import { deriveKpis } from '@/verticals/_shared/derivation/KpiDeriver';
 import { deriveFormation } from '@/verticals/_shared/derivation/FormationDeriver';
 import { derivePricing } from '@/verticals/_shared/derivation/PricingDeriver';

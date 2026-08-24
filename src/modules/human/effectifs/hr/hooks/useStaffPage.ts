@@ -15,6 +15,7 @@ import { useTenant } from "@/shared/hooks/useTenant";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
 import { computePayroll, type StaffTab, type StaffDocument } from "@/app/(client)/(ops)/staff/staffUtils";
+import { DigitalEmployeeVault } from "../../../services/DigitalEmployeeVault";
 import type { JsonObject } from "@/shared/types/json";
 
 const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
@@ -91,10 +92,27 @@ export function useStaffPage() {
         if ('error' in result) { toast.error(result.error); return; }
         const { doc } = result;
         try {
+            if (tenantId) {
+                await DigitalEmployeeVault.sealDocument(
+                    tenantId,
+                    {
+                        id: doc.id,
+                        tenantId,
+                        userId: doc.userId,
+                        type: 'contract',
+                        name: doc.name,
+                        url: doc.url,
+                        uploadedAt: doc.uploadedAt,
+                        status: 'valid',
+                        vaultArchiveEligible: true,
+                    },
+                    currentUser?.id ?? 'manager'
+                );
+            }
             await Nexus.adapter.set(`staffDocuments/${doc.id}`, doc);
             setStaffDocs(prev => [doc, ...prev]);
             setDocForm(null);
-            toast.success("Document enregistré.");
+            toast.success("Document scellé et enregistré dans le coffre-fort RH.");
         } catch { toast.error("Erreur lors de l'enregistrement."); }
     };
 

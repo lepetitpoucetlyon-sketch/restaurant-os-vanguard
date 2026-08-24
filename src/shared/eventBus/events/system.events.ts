@@ -47,6 +47,15 @@ export interface SYSTEMEvents {
     deviceId: string;
   };
 
+  "security.device_remote_wipe": {
+    v?: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    deviceId: string;
+    revokedAt: string;
+    revokedBy: string;
+  };
+
   "fleet.weekly_report_due": {
     v: 1;
     isSimulation?: boolean;

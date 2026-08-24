@@ -72,7 +72,7 @@ export function FinanceDashboard() {
     } = useFinance();
 
     const { activeTenantId } = useTenant();
-    const closePeriodPermission = useActionPermission("finance", "close_period");
+    const closePeriodPermission = useActionPermission("finance", "seal_zday");
     const { data: orders, isLoading: ordersLoading } = useSovereignCollection<Order>('orders', { tenantId: activeTenantId ?? undefined, autoSync: true });
 
     const paidOrders = filterPaidOrders(orders as Order[]);
@@ -98,7 +98,7 @@ export function FinanceDashboard() {
             icon={Landmark}
             breadcrumbs={[{ label: "Opérations" }, { label: "Finance & Comptabilité" }]}
             actions={
-                <ActionGuard page="finance" action="export_fec">
+                <ActionGuard page="finance" action="create_expense_claim">
                     <PageShell.CTA onClick={() => setClaimOpen(true)}>
                         <PlusCircle className="w-[15px] h-[15px]" />
                         <span>Note de frais</span>

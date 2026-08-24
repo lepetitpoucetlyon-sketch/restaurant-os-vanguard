@@ -11,7 +11,7 @@
 
 import type { PlatformVariant } from '@/modules/system';
 import type { CapabilitySet } from '../catalog/CapabilityCatalog';
-import type { QualificationAnswers } from '@/modules/commerce';
+import type { QualificationAnswers } from '../qualification/QualificationAnswers';
 import type { RolesTemplate } from './RbacDeriver';
 
 // ── Types de sortie ─────────────────────────────────────────────────────────────

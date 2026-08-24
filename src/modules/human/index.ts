@@ -18,6 +18,7 @@ export { TipsDistributionEngine, DEFAULT_TIPS_SETTINGS, type TipsDistributionSet
 export { LaborCostAnalyzer } from './effectifs/hr/services/LaborCostAnalyzer';
 export { LaborCostService } from './effectifs/hr/services/laborCost';
 export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
+export { DigitalEmployeeVault, type VaultArchiveManifest } from './services/DigitalEmployeeVault';
 
 export { useStaffPage } from './effectifs/hr/hooks';
 export { RecruitmentBoard } from './effectifs/hr/components/RecruitmentBoard';

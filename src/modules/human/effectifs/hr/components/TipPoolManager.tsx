@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Coins, Users, Scale, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";
-import type { ITipPool, ITipParticipant, TipPoolingMethod } from "@/verticals/restaurant/domain/types";
+import type { ITipPool, ITipParticipant, TipPoolingMethod } from "../../../domain/schemas/hr";
 
 const SAMPLE_PARTICIPANTS: ITipParticipant[] = [
   { employeeId: "emp_1", name: "Alexandre Dumas", hoursWorked: 7.5, coversServed: 32, sharePercent: 35, amountInMicrounits: (45.5 * 10_000) as any },

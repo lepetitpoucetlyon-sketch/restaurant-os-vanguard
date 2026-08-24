@@ -26,6 +26,7 @@ export {
   type HardwareCheckItemResult,
 } from './services/HardwareProvisioningService';
 export { MaintenanceAlertConfigService } from './services/MaintenanceAlertConfigService';
+export { DeviceFleetManager, type DeviceRecord, type DeviceType, type DeviceStatus } from './services/DeviceFleetManager';
 export { AmbianceService, type RestaurantAmbiance } from './spaces/AmbianceService';
 
 export { EquipmentHubView } from './components/equipment/EquipmentHubView';

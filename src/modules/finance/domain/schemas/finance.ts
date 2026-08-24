@@ -21,6 +21,31 @@ export type TaxRate = z.infer<typeof TaxRateSchema>;
  * Pour la validation d'entrée (API, Bridge), utiliser ce schéma :
  *   JournalEntrySchema.parse(data)
  */
+// ── Ligne d'écriture comptable (Partie double NF525 / PCG) ──────────────────
+export const JournalLineSchema = z.object({
+  id:                         UUIDSchema.optional(),
+  accountId:                  z.string().optional(),
+  accountCode:                z.string().optional(),
+  accountName:                z.string().optional(),
+  description:                z.string().optional(),
+  side:                       z.enum(['debit', 'credit']).default('debit'),
+  amountInCents:              z.number().int().optional(),
+  amountInMicrounits:         MicrounitsSchema.optional(),
+  date:                       TimestampSchema.optional(),
+  pieceNumber:                z.string().optional(),
+  debitInCents:               z.number().int().optional(),
+  debitInMicrounits:          MicrounitsSchema.optional(),
+  creditInCents:              z.number().int().optional(),
+  creditInMicrounits:         MicrounitsSchema.optional(),
+  runningBalanceInCents:      z.number().optional(),
+  runningBalanceInMicrounits: MicrounitsSchema.optional(),
+  vatRate:                    TaxRateSchema.optional(),
+  reference:                  z.string().optional(),
+  journalCode:                z.string().optional(),
+});
+
+export type JournalLine = z.infer<typeof JournalLineSchema>;
+
 export const JournalEntrySchema = z.object({
   id:                 UUIDSchema,
   receiptNumber:      z.string()
@@ -41,7 +66,7 @@ export const JournalEntrySchema = z.object({
   date:               TimestampSchema.optional(), // Added for interface parity
   pieceNumber:        z.string().optional(),       // Added for interface parity
   description:        z.string().default(''),      // Added for interface parity
-  lines:              z.array(z.any()).default([]), // Added for interface parity
+  lines:              z.array(JournalLineSchema).default([]),
   isValidated:        z.boolean().default(true),    // NF525 Requirement
   isSystemGenerated:  z.boolean().default(false),   // Audit requirement
   updatedAt:          TimestampSchema.optional(),   // Interface parity
@@ -52,6 +77,20 @@ export const JournalEntrySchema = z.object({
 ).refine(
   data => data.taxAmountInMicrounits <= data.amountInMicrounits,
   { message: 'La TVA ne peut pas dépasser le montant total', path: ['taxAmountInMicrounits'] }
+).refine(
+  data => {
+    // Si des lignes avec débits/crédits explicites sont fournies (>= 2 lignes), valider la partie double
+    if (data.lines && data.lines.length >= 2) {
+      const hasExplicitDebitCredit = data.lines.some(l => (l.debitInMicrounits ?? l.debitInCents ?? 0) > 0 || (l.creditInMicrounits ?? l.creditInCents ?? 0) > 0);
+      if (hasExplicitDebitCredit) {
+        const totalDebit = data.lines.reduce((sum, l) => sum + (l.debitInMicrounits ?? (l.debitInCents ? l.debitInCents * 10_000 : 0)), 0);
+        const totalCredit = data.lines.reduce((sum, l) => sum + (l.creditInMicrounits ?? (l.creditInCents ? l.creditInCents * 10_000 : 0)), 0);
+        return totalDebit === totalCredit;
+      }
+    }
+    return true;
+  },
+  { message: 'VIOLATION NF525 : Débit !== Crédit (Écriture comptable déséquilibrée)', path: ['lines'] }
 );
 
 export type JournalEntry = z.infer<typeof JournalEntrySchema>;

@@ -8,7 +8,7 @@
  * et émettant les events déclarés (via NexusEventBus).
  */
 
-import type { GeneratedFile } from '../generateVertical';
+import type { GeneratedFile } from '../types';
 import type { WorkflowSpec } from '../../blueprint/SectorStudy';
 
 export interface WorkflowServiceTemplateInput {

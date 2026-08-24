@@ -24,7 +24,18 @@ import type { ProfitAndLossReport, BalanceSheetReport, LedgerAccount } from '@ne
 function computeLedger(accounts: Account[], journalEntries: JournalEntry[]): LedgerAccount[] {
     return accounts.map(account => {
         const movements = journalEntries
-            .flatMap(e => e.lines)
+            .flatMap(e => (e.lines || []).map(l => ({
+                accountId: l.accountId ?? account.id ?? '',
+                accountCode: l.accountCode ?? account.code ?? '',
+                accountName: l.accountName ?? account.name ?? '',
+                description: l.description ?? e.description ?? '',
+                side: l.side ?? 'debit',
+                amountInCents: l.amountInCents ?? 0,
+                debitInCents: l.debitInCents ?? 0,
+                creditInCents: l.creditInCents ?? 0,
+                date: typeof l.date === 'number' ? new Date(l.date).toISOString() : (l.date ?? (typeof e.date === 'number' ? new Date(e.date).toISOString() : String(e.date ?? new Date().toISOString()))),
+                pieceNumber: l.pieceNumber ?? e.pieceNumber ?? '',
+            })))
             .filter(l => l.accountId === account.id || l.accountCode === account.code);
         let running = 0;
         const movementsWithBalance = movements.map(m => {

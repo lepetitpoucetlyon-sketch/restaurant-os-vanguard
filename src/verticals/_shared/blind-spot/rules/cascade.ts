@@ -5,7 +5,7 @@
  * absence d'une capability prérequise implicite.
  */
 
-import type { BlindSpotRule, RuleOutput, VerticalContext, TenantContext } from '../BlindSpotDetector';
+import type { BlindSpotRule, RuleOutput, VerticalContext, TenantContext } from '../types';
 import type { CapabilityKey, CapabilitySet } from '../../catalog/CapabilityCatalog';
 import { getCapability } from '../../catalog/CapabilityCatalog';
 

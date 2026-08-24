@@ -5,7 +5,7 @@
  * correspondante n'est pas activée dans la qualification.
  */
 
-import type { BlindSpotRule, RuleOutput, TenantContext } from '../BlindSpotDetector';
+import type { BlindSpotRule, RuleOutput, TenantContext } from '../types';
 
 function catalogMatches(ctx: TenantContext, pat: RegExp): TenantContext['companyProfile']['catalog'][number] | null {
     return ctx.companyProfile.catalog.find(it => pat.test(`${it.name} ${it.description ?? ''} ${it.category ?? ''}`)) ?? null;

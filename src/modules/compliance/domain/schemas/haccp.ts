@@ -90,3 +90,28 @@ export type SensorTransport = z.infer<typeof SensorTransportSchema>;
 export type IoTSensor = z.infer<typeof IoTSensorSchema>;
 export type IoTSensorReading = z.infer<typeof IoTSensorReadingSchema>;
 export type { IoTSensorReading as SensorReading };
+
+export type PerishableStatus = 'ok' | 'expiring-soon' | 'expired' | 'recalled';
+
+export interface IPerishableItem {
+  id: string;
+  productId: string;
+  name: string;
+  lotNumber: string;
+  receivedAt: string;
+  expiresAt: string;
+  quantityUnits: number;
+  unitLabel: string;
+  status: PerishableStatus;
+  alertSentAt?: string;
+}
+
+export interface IPerishableAlert {
+  itemId: string;
+  productName: string;
+  expiresAt: string;
+  daysRemaining: number;
+  quantityUnits: number;
+  unitLabel: string;
+}
+

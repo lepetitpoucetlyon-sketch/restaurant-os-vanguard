@@ -11,7 +11,7 @@
  */
 
 import type { PlatformVariant } from '@/modules/system';
-import type { QualificationAnswers } from '@/modules/commerce';
+import type { QualificationAnswers } from '../qualification/QualificationAnswers';
 import type { CompanyProfile } from '@/modules/commerce';
 
 // ── Types de sortie ─────────────────────────────────────────────────────────────

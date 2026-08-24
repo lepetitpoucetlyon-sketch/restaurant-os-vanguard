@@ -16,18 +16,12 @@
  */
 
 import type { TreasurySnapshot, TreasuryTrendPoint } from '../types';
+import type { JournalLine } from '../domain/schemas/finance';
 
 const DAY_MS = 86_400_000;
 // 1 centime = 0,01 € = 10 000 microunits (1 € = 1 000 000 µ).
 // Cohérent avec FinancialNexusBridge : amountInCents = microunits / 10 000.
 const CENTS_TO_MICRO = 10_000;
-
-/** Une ligne d'écriture telle que stockée (schema `lines: z.array(z.any())`). */
-interface RawLine {
-    accountCode?: string;
-    debitInCents?: number;
-    creditInCents?: number;
-}
 
 /**
  * Entrée minimale attendue par le moteur — type STRUCTUREL découplé des variantes
@@ -37,7 +31,7 @@ export interface TreasuryEntryInput {
     type?: string;
     date?: number | string | Date;
     amountInMicrounits?: number;
-    lines?: unknown[];
+    lines?: readonly JournalLine[] | readonly unknown[];
 }
 
 /** Normalise une date d'écriture (number | string | Date) en timestamp ms. */
@@ -75,12 +69,12 @@ export function computeTreasury(
     let payables = 0;
 
     for (const entry of entries) {
-        const lines = (entry.lines ?? []) as RawLine[];
+        const lines = (entry.lines ?? []) as readonly JournalLine[];
         for (const line of lines) {
             const code = line.accountCode ?? "";
             if (!code) continue;
-            const debit = (line.debitInCents ?? 0) * CENTS_TO_MICRO;
-            const credit = (line.creditInCents ?? 0) * CENTS_TO_MICRO;
+            const debit = line.debitInMicrounits ?? ((line.debitInCents ?? 0) * CENTS_TO_MICRO);
+            const credit = line.creditInMicrounits ?? ((line.creditInCents ?? 0) * CENTS_TO_MICRO);
 
             if (code.startsWith("53")) {
                 cashOnHand += debit - credit;            // actif : le débit augmente le solde

@@ -6,6 +6,8 @@ import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
+import { DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
+import { DeviceFleetManager } from '@/modules/facility';
 import { toError } from "@/lib/toError";
 
 interface StoredDevice {
@@ -219,12 +221,25 @@ async function checkFleetAdminMFA(
 
 async function verifyCaller(request: Request): Promise<AdminCaller | NextResponse | null> {
   const authHeader = request.headers.get('authorization');
+  const deviceId = request.headers.get('x-device-id');
+
+  if (deviceId) {
+    const isRevoked = await DeviceFleetManager.isDeviceRevoked(deviceId);
+    if (isRevoked) {
+      logger.warn(`[adminAuth] Accès bloqué : appareil ${deviceId} révoqué`);
+      return new NextResponse(
+        JSON.stringify({ error: 'DEVICE_REVOKED', message: 'Cet appareil a été révoqué.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
   // Dev bypass tenant (NODE_ENV=development uniquement — jamais en production)
   if (
     process.env.NODE_ENV !== 'production' &&
-    authHeader === 'Bearer dev-tenant-bypass'
+    (authHeader === 'Bearer dev-tenant-bypass' || authHeader === DEV_PIN_BYPASS_HEADER)
   ) {
     const tenantId = request.headers.get('x-nexus-tenant-id') ?? request.headers.get('x-resolved-tenant-id') ?? 'lepetitpoucet';
     logger.warn('[adminAuth] DEV TENANT BYPASS actif — ne pas utiliser en production');

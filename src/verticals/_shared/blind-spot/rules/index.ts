@@ -9,7 +9,7 @@
  * Ajouter une famille = créer un fichier + le pousser ici. Simple, testable.
  */
 
-import type { BlindSpotRule } from '../BlindSpotDetector';
+import type { BlindSpotRule } from '../types';
 import { REGULATORY_RULES } from './regulatory';
 import { SCALE_TIER_RULES } from './scale-tier';
 import { CATALOG_CAPABILITY_RULES } from './catalog-capability';

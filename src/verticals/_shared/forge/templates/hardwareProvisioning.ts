@@ -9,7 +9,7 @@
  * placeholders pour les références partenaires (à choisir manuellement).
  */
 
-import type { GeneratedFile } from '../generateVertical';
+import type { GeneratedFile } from '../types';
 import type { HardwareSpec } from '../../blueprint/SectorStudy';
 
 export interface HardwareProvisioningTemplateInput {

@@ -4,6 +4,7 @@ import React from "react";
 import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Lock, Download, FileText } from "lucide-react";
 import { TreasuryDashboard } from '../accounting/TreasuryDashboard';
 import { type TvaGroup, formatEur, centsToEur, muToEur } from "../financeUtils";
+import { ActionGuard } from '@/shared/components/rbac/ActionGuard';
 
 /**
  * Onglet « Comptabilité » de la page Finance — extrait de page.tsx (dette-4).
@@ -177,19 +178,27 @@ export function AccountingTab({
                         Scelle le Ticket Z du jour et génère l&apos;écriture comptable agrégée (NF525).
                     </p>
                 </div>
-                <button
-                    onClick={onClotureZ}
-                    disabled={closingZ || !activeTenantId || !closePeriodPermission.allowed}
-                    title={
-                        !closePeriodPermission.allowed
-                            ? closePeriodPermission.reason
-                            : undefined
-                    }
-                    className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                <ActionGuard
+                    page="finance"
+                    action="seal_zday"
+                    requiresPin={true}
+                    pinTitle="Clôture Fiscale Z Sécurisée"
+                    pinDescription="Scellement inaltérable NF525 du Grand Livre. Veuillez confirmer votre identité."
                 >
-                    <Lock className="w-4 h-4" />
-                    {closingZ ? "Clôture en cours…" : "Clôture Z"}
-                </button>
+                    <button
+                        onClick={onClotureZ}
+                        disabled={closingZ || !activeTenantId || !closePeriodPermission.allowed}
+                        title={
+                            !closePeriodPermission.allowed
+                                ? closePeriodPermission.reason
+                                : undefined
+                        }
+                        className="flex items-center gap-2 px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <Lock className="w-4 h-4" />
+                        {closingZ ? "Clôture en cours…" : "Clôture Z"}
+                    </button>
+                </ActionGuard>
             </div>
 
             {/* fin-12 + fin-13: Export actions */}

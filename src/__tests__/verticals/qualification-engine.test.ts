@@ -14,13 +14,13 @@ import { describe, it, expect } from 'vitest';
 
 import {
     QualificationEngine,
-    resolveQualification,
+    resolve as resolveQualification,
     defaultAnswers,
     calibrateDepth,
     inferAnswers,
     resolveCapabilitiesFromAnswers,
     type QualificationAnswers,
-} from '@/modules/commerce';
+} from '@/verticals/_shared/qualification';
 import { emptyCompanyProfile } from '@/modules/commerce';
 import { deriveRbac } from '@/verticals/_shared/derivation/RbacDeriver';
 import { deriveBusinessLaws } from '@/verticals/_shared/derivation/BusinessLawsDeriver';

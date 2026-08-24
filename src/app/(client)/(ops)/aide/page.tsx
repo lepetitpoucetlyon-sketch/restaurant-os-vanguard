@@ -1,9 +1,11 @@
-"use client";
+'use client';
+
 import React from 'react';
 import { HelpCircle, Sparkles, CheckCircle2, Clock, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { useSupportTickets } from '@/shared/components/support/useSupportTickets';
+import { withPageGuard } from '@/shared/components/rbac/PageGuard';
 
-export default function TenantAidePage() {
+function TenantAidePage() {
   const { tickets, loading, refresh } = useSupportTickets();
 
   return (
@@ -100,3 +102,5 @@ export default function TenantAidePage() {
     </div>
   );
 }
+
+export default withPageGuard(TenantAidePage, "operations");

@@ -4,7 +4,8 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { defaultAnswers, emptyCompanyProfile } from '@/modules/commerce';
+import { defaultAnswers } from '@/verticals/_shared/qualification';
+import { emptyCompanyProfile } from '@/modules/commerce';
 import { deriveLocalization } from '@/verticals/_shared/derivation/LocalizationDeriver';
 import { deriveIntegrations } from '@/verticals/_shared/derivation/IntegrationsDeriver';
 import { deriveComms } from '@/verticals/_shared/derivation/CommsDeriver';

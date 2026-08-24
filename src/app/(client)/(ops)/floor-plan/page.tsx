@@ -44,8 +44,8 @@ function FloorPlanPage() {
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [mode, setMode] = useState<'select' | 'add'>('select');
-    const [viewMode, _setViewMode] = useState<'2d' | '3d'>('2d');
-    const [showGrid, _setShowGrid] = useState(true);
+    const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
+    const [showGrid, setShowGrid] = useState(true);
     const [showTemplateModal, setShowTemplateModal] = useState(false);
     const [_showFloorModal, setShowFloorModal] = useState(false);
     const [showFloorSelector, setShowFloorSelector] = useState(false);
@@ -188,10 +188,28 @@ function FloorPlanPage() {
                                     <button onClick={() => setMode('add')}
                                         aria-pressed={mode === 'add'}
                                         className={cn(
-                                            "h-full px-4 text-xs font-medium tracking-tight transition-colors",
+                                            "h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40",
                                             mode === 'add' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary"
                                         )}>
                                         Construire
+                                    </button>
+                                    <button onClick={() => setShowGrid(v => !v)}
+                                        aria-pressed={showGrid}
+                                        title={showGrid ? "Masquer la grille" : "Afficher la grille"}
+                                        className={cn(
+                                            "h-full px-3 text-xs font-medium tracking-tight transition-colors border-r border-border/40",
+                                            showGrid ? "bg-white/[0.05] text-accent-gold" : "text-text-muted hover:text-text-primary"
+                                        )}>
+                                        Grille
+                                    </button>
+                                    <button onClick={() => setViewMode(v => v === '2d' ? '3d' : '2d')}
+                                        aria-pressed={viewMode === '3d'}
+                                        title={viewMode === '3d' ? "Passer en vue 2D" : "Passer en vue 3D"}
+                                        className={cn(
+                                            "h-full px-3 text-xs font-medium tracking-tight transition-colors",
+                                            viewMode === '3d' ? "bg-accent-gold/20 text-accent-gold font-bold" : "text-text-muted hover:text-text-primary"
+                                        )}>
+                                        {viewMode.toUpperCase()}
                                     </button>
                                 </div>
                                 <button onClick={handleSave}
