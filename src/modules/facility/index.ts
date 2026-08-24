@@ -32,6 +32,7 @@ export { AmbianceService, type RestaurantAmbiance } from './spaces/AmbianceServi
 export { EquipmentHubView } from './components/equipment/EquipmentHubView';
 export { FloorPlanEditor } from './spaces/floor-plan/FloorPlanEditor';
 export type { FloorPlanEditorRef } from './spaces/floor-plan/FloorPlanEditor';
+export { FloorPlanHeader } from './spaces/components/FloorPlanHeader';
 export {
   DUERPSection,
   IncendieSection,
