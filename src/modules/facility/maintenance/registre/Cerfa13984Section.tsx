@@ -84,7 +84,7 @@ export function Cerfa13984Section() {
                         <div key={i} className={`p-5 rounded-xl border ${cat.declared ? 'bg-action-primary/5 border-focus/10' : 'bg-bg-tertiary/30 border-border opacity-60'}`}>
                             <div className="flex items-center justify-between mb-2">
                                 <span className="font-bold text-[13px] text-text-primary">{cat.category}</span>
-                                <span className={`text-[9px] font-black uppercase tracking-widest ${cat.declared ? 'text-brand' : 'text-text-muted'}`}>
+                                <span className={`text-chip-label-sm ${cat.declared ? 'text-brand' : 'text-text-muted'}`}>
                                     {cat.declared ? '✓ Déclaré' : 'Non déclaré'}
                                 </span>
                             </div>

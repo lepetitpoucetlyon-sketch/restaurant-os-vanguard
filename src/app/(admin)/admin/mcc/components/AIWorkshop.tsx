@@ -109,13 +109,13 @@ export const AIWorkshop: React.FC = () => {
                 <div className="flex gap-3 pt-1">
                   <button
                     onClick={() => updateStatus(patch, 'DEPLOYED')}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-status-success/10 hover:bg-status-success/20 text-status-success border border-emerald-500/30 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-status-success/10 hover:bg-status-success/20 text-status-success border border-emerald-500/30 rounded-xl text-chip-label transition-all"
                   >
                     <CheckCircle className="w-3.5 h-3.5" /> Deploy
                   </button>
                   <button
                     onClick={() => updateStatus(patch, 'REJECTED')}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-status-danger/10 hover:bg-status-danger/20 text-status-danger border border-rose-500/30 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-status-danger/10 hover:bg-status-danger/20 text-status-danger border border-rose-500/30 rounded-xl text-chip-label transition-all"
                   >
                     <XCircle className="w-3.5 h-3.5" /> Reject
                   </button>

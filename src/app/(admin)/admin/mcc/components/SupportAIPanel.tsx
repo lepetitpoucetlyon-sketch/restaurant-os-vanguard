@@ -252,7 +252,7 @@ export function SupportAIPanel() {
         <button
           onClick={handleDiagnose}
           disabled={!tenantId.trim() || !description.trim() || isLoading}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-action-primary/20 text-brand border border-focus/30 text-[10px] font-black uppercase tracking-widest disabled:opacity-40 transition-all hover:bg-action-primary/30 active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-action-primary/20 text-brand border border-focus/30 text-chip-label disabled:opacity-40 transition-all hover:bg-action-primary/30 active:scale-[0.98]"
         >
           {isLoading ? (
             <><Loader2 className="w-4 h-4 animate-spin" />Analyse en cours…</>
@@ -266,7 +266,7 @@ export function SupportAIPanel() {
       {result && d && sevStyle && (
         <div className="space-y-4 border-t border-border-subtle pt-5">
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <span className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-widest ${sevStyle.cls}`}>
+            <span className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-chip-label ${sevStyle.cls}`}>
               {d.severity === 'critical' || d.severity === 'high'
                 ? <AlertTriangle className="w-3.5 h-3.5" />
                 : <CheckCircle2 className="w-3.5 h-3.5" />}
@@ -289,7 +289,7 @@ export function SupportAIPanel() {
           {d.escalate && (
             <button
               onClick={handleEscalate}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-status-danger/10 text-status-danger border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-danger/20 transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-status-danger/10 text-status-danger border border-red-500/20 text-chip-label hover:bg-status-danger/20 transition-colors"
             >
               <ArrowUpRight className="w-4 h-4" />
               Escalader en L1

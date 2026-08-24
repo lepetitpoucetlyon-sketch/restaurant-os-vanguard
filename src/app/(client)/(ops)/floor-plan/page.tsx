@@ -203,14 +203,14 @@ function FloorPlanPage() {
                             className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50 hover:bg-bg-primary transition-all"
                         >
                             <ClipboardList className="w-8 h-8 text-accent" />
-                            <span className="text-[10px] font-black uppercase tracking-widest">Prendre Commande</span>
+                            <span className="text-chip-label">Prendre Commande</span>
                         </button>
                         <button
                             onClick={() => { router.push(`/reservations?table=${selectedTableId}`); setSelectedTableId(null); }}
                             className="bg-bg-tertiary p-6 rounded-3xl flex flex-col items-center gap-3 border border-border/50 hover:bg-bg-primary transition-all"
                         >
                             <Users className="w-8 h-8 text-accent-gold" />
-                            <span className="text-[10px] font-black uppercase tracking-widest">Réservation</span>
+                            <span className="text-chip-label">Réservation</span>
                         </button>
                     </div>
 

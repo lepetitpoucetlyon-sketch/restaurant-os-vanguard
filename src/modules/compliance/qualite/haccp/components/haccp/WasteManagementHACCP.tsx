@@ -61,7 +61,7 @@ export function WasteManagementHACCP() {
                                 <div className="flex bg-bg-tertiary p-1.5 rounded-2xl border border-border">
                                     {['Bio-déchets', 'Huiles', 'Bac à Graisse'].map((t, i) => (
                                         <button key={i} className={cn(
-                                            "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
+                                            "px-4 py-2 rounded-xl text-chip-label-sm transition-all",
                                             i === 0 ? "bg-surface-card dark:bg-bg-secondary text-accent-gold shadow-sm" : "text-text-muted hover:text-text-primary"
                                         )}>{t}</button>
                                     ))}

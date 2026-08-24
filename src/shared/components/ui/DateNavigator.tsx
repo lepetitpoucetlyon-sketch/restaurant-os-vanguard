@@ -63,7 +63,7 @@ export function DateNavigator({
                     <div className="w-px h-6 bg-border/50" />
                     <button
                         onClick={onToday}
-                        className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+                        className="text-chip-label text-text-muted hover:text-accent transition-colors"
                     >
                         Aujourd'hui
                     </button>

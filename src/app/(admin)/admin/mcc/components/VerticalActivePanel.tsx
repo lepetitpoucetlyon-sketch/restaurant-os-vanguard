@@ -57,7 +57,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
 
       {config.registeredRoutes.length > 0 && (
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted mb-2">Routes enregistrées</p>
+          <p className="text-chip-label text-muted mb-2">Routes enregistrées</p>
           <div className="flex flex-wrap gap-2">
             {config.registeredRoutes.map(r => (
               <span key={r} className="text-[10px] font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{r}</span>
@@ -68,7 +68,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
 
       {config.registeredAtoms.length > 0 && (
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted mb-2">Atoms Jotai actifs</p>
+          <p className="text-chip-label text-muted mb-2">Atoms Jotai actifs</p>
           <div className="flex flex-wrap gap-2">
             {config.registeredAtoms.map(a => (
               <span key={a} className="text-[10px] font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{a}</span>
@@ -78,7 +78,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
       )}
 
       <div>
-        <p className="text-[10px] font-black uppercase tracking-widest text-muted mb-2">Verticals disponibles</p>
+        <p className="text-chip-label text-muted mb-2">Verticals disponibles</p>
         <div className="flex gap-2 flex-wrap">
           {availableVariants.map(v => {
             const m = VERTICAL_META[v] ?? { emoji: '🏢', label: v, color: 'text-muted' };

@@ -106,7 +106,7 @@ export function SanitaryComplianceSection() {
 
                             <div className="flex flex-col items-center md:items-end gap-4 min-w-[140px]">
                                 <div className={cn(
-                                    "px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-2 shadow-sm",
+                                    "px-4 py-2 rounded-full text-chip-label border flex items-center gap-2 shadow-sm",
                                     s.doc?.status === 'valid' ? 'bg-success/10 text-success border-success/20' : 'bg-warning/10 text-warning border-warning/20'
                                 )}>
                                     {s.doc?.status === 'valid' ? (
@@ -115,7 +115,7 @@ export function SanitaryComplianceSection() {
                                         <><AlertTriangle className="w-4 h-4" /> Attention</>
                                     )}
                                 </div>
-                                <button className="text-[10px] font-black uppercase tracking-widest text-accent hover:underline decoration-2 underline-offset-4">Voir le document</button>
+                                <button className="text-chip-label text-accent hover:underline decoration-2 underline-offset-4">Voir le document</button>
                             </div>
                         </div>
                     </div>

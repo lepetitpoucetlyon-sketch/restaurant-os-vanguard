@@ -10,7 +10,7 @@ interface SeatBadgeProps { seat: number | string }
 
 function SeatBadge({ seat }: SeatBadgeProps) {
     return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-action-primary/15 text-action-primary border border-action-primary/30">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-chip-label-sm bg-action-primary/15 text-action-primary border border-action-primary/30">
             Siège {seat}
         </span>
     );
@@ -86,7 +86,7 @@ export function KDSItemCard({ item, recipeByName, setSelectedRecipe }: KDSItemCa
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40" />
 
                     <div className={cn(
-                        "absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-default shadow-md",
+                        "absolute top-3 left-3 px-3 py-1 rounded-full text-chip-label border border-default shadow-md",
                         badgeColor
                     )}>
                         {stationLabel}
@@ -143,7 +143,7 @@ export function KDSItemCard({ item, recipeByName, setSelectedRecipe }: KDSItemCa
                         </div>
                     )}
 
-                    <div className="mt-4 pt-3 border-t border-dashed border-subtle flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-secondary">
+                    <div className="mt-4 pt-3 border-t border-dashed border-subtle flex items-center justify-between text-chip-label text-secondary">
                         <div className="flex items-center gap-1.5">
                             <Clock className="w-3 h-3" />
                             <span>{product?.prepTime ?? 15} MIN</span>

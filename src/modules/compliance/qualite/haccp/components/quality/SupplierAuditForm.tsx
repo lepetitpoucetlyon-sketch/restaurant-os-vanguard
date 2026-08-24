@@ -17,7 +17,7 @@ export const SupplierAuditForm: React.FC = () => {
 
             <div className="space-y-6">
                 <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted mb-2 block">Ponctualité & Livraison</label>
+                    <label className="text-chip-label text-muted mb-2 block">Ponctualité & Livraison</label>
                     <div className="flex gap-2">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <Star key={star} className="w-5 h-5 text-accent-gold fill-accent-gold" />

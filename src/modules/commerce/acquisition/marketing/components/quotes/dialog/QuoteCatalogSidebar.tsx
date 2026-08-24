@@ -45,7 +45,7 @@ export function QuoteCatalogSidebar({
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="FILTRER LES PRODUITS..."
-                            className="w-full h-12 pl-12 pr-6 bg-bg-tertiary border border-border rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:border-accent-gold transition-all"
+                            className="w-full h-12 pl-12 pr-6 bg-bg-tertiary border border-border rounded-2xl text-chip-label outline-none focus:border-accent-gold transition-all"
                         />
                     </div>
 

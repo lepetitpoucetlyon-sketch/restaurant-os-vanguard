@@ -163,7 +163,7 @@ export function ReservationSidebar({
                                                 <div className="w-8 h-8 rounded-xl bg-bg-primary flex items-center justify-center text-[10px] font-mono font-bold text-text-primary border border-border">
                                                     {(res.tableId ?? '').replace(/^t/, "")}
                                                 </div>
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-text-muted/50 italic">
+                                                <span className="text-chip-label-sm text-text-muted/50 italic">
                                                     Unité
                                                 </span>
                                             </div>

@@ -136,7 +136,7 @@ export function DeploymentEngine() {
                     </div>
                 </div>
                 <div className={cn(
-                    "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all",
+                    "px-3 py-1 rounded-full text-chip-label-sm border transition-all",
                     status && status.modifiedCount > 0 
                         ? "bg-status-warning/10 text-status-warning border-action-primary/20 animate-pulse" 
                         : "bg-status-success/10 text-status-success border-emerald-500/20"
@@ -217,7 +217,7 @@ export function DeploymentEngine() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
                             className={cn(
-                                "flex items-center gap-2 text-[10px] font-black uppercase tracking-widest p-3 rounded-xl border",
+                                "flex items-center gap-2 text-chip-label p-3 rounded-xl border",
                                 lastResult.success
                                     ? "bg-status-success/10 text-status-success border-emerald-500/20"
                                     : "bg-status-danger/10 text-status-danger border-red-500/20"
@@ -269,7 +269,7 @@ export function DeploymentEngine() {
                         <button
                             onClick={handleRagReindexFleet}
                             disabled={isRagIndexing}
-                            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-card border border-border-subtle text-[9px] font-black uppercase tracking-widest text-muted hover:border-brand hover:text-brand transition-all disabled:opacity-50"
+                            className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface-card border border-border-subtle text-chip-label-sm text-muted hover:border-brand hover:text-brand transition-all disabled:opacity-50"
                         >
                             <RotateCcw className={cn("w-3.5 h-3.5", isRagIndexing && "animate-spin")} />
                             Réindexer flotte
@@ -289,7 +289,7 @@ export function DeploymentEngine() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0 }}
                                 className={cn(
-                                    "flex items-center gap-2 text-[10px] font-black uppercase tracking-widest p-3 rounded-xl border",
+                                    "flex items-center gap-2 text-chip-label p-3 rounded-xl border",
                                     ragResult.success
                                         ? "bg-status-success/10 text-status-success border-emerald-500/20"
                                         : "bg-status-danger/10 text-status-danger border-red-500/20"

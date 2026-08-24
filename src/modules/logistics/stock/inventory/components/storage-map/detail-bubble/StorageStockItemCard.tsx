@@ -106,7 +106,7 @@ export function StorageStockItemCard({
                         ) : (
                             <button
                                 onClick={() => setMovingItemId(item.id)}
-                                className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-text-primary transition-all text-[10px] font-black uppercase tracking-widest shadow-lg"
+                                className="flex items-center gap-2 px-4 py-2 bg-text-primary text-bg-primary rounded-xl hover:bg-accent hover:text-text-primary transition-all text-chip-label shadow-lg"
                             >
                                 <ArrowRight className="w-3.5 h-3.5" />
                                 Déplacer

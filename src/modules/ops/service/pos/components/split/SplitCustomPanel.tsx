@@ -24,7 +24,7 @@ export function SplitCustomPanel({
             <div className="space-y-3">
                 {convivePayments.map((_, idx) => (
                     <div key={idx} className="flex items-center justify-between gap-4">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/50">
+                        <span className="text-chip-label text-text-primary/50">
                             {t('pos.split.master')} {idx + 1}
                         </span>
                         <div className="flex items-center gap-2">

@@ -145,7 +145,7 @@ export default function ExpertGovernanceHub() {
                                 <button
                                     onClick={() => handleUpdateExpert(expert.domain as AgentDomain, { enabled: !expert.enabled })}
                                     className={cn(
-                                        "px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all border",
+                                        "px-5 py-2 rounded-full text-chip-label-sm transition-all border",
                                         expert.enabled 
                                             ? "bg-text-primary text-text-primary border-transparent shadow-xl" 
                                             : "bg-bg-tertiary text-text-muted border-border hover:bg-bg-primary"

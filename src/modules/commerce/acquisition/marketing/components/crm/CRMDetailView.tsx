@@ -63,11 +63,11 @@ export function CRMDetailView() {
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-6">
-                        <Button className="h-16 rounded-2xl bg-text-primary text-text-primary text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        <Button className="h-16 rounded-2xl bg-text-primary text-text-primary text-chip-label shadow-lg">
                             <Calendar className="w-4 h-4 mr-2" />
                             Réserver
                         </Button>
-                        <Button variant="outline" className="h-16 rounded-2xl border-border text-[10px] font-black uppercase tracking-widest">
+                        <Button variant="outline" className="h-16 rounded-2xl border-border text-chip-label">
                             <Send className="w-4 h-4 mr-2" />
                             Message
                         </Button>

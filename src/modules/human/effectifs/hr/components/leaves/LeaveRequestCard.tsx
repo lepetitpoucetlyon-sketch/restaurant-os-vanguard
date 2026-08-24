@@ -91,7 +91,7 @@ export function LeaveRequestCard({
 
                 <div className="flex flex-col items-end gap-3">
                     <span className={cn(
-                        "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm",
+                        "px-4 py-1.5 rounded-full text-chip-label shadow-sm",
                         request.status === 'approved' && "bg-status-success text-status-success border border-emerald-200",
                         request.status === 'pending_approval' && "bg-status-warning text-status-warning border border-amber-200",
                         request.status === 'rejected' && "bg-status-danger text-status-danger border border-rose-200",

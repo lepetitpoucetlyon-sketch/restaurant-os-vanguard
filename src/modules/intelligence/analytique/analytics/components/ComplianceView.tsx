@@ -80,7 +80,7 @@ export const IoTView: React.FC<{ metrics: IoTMetric[] }> = ({ metrics }) => {
                 <p className="text-sm opacity-60 font-light mb-6 leading-relaxed">
                     Oracle détecte une usure prématurée sur le groupe froid n°4. Maintenance préventive suggérée pour éviter une rupture de chaîne du froid.
                 </p>
-                <Button className="w-full h-14 bg-accent-gold text-bg-primary rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors">
+                <Button className="w-full h-14 bg-accent-gold text-bg-primary rounded-2xl text-chip-label-sm hover:bg-surface-card transition-colors">
                     Planifier Technicien
                 </Button>
             </div>

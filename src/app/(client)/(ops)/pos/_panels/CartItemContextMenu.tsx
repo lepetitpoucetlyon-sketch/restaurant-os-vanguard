@@ -100,7 +100,7 @@ export function CartItemContextMenu({
 
                         {/* Discount */}
                         <div className="mb-5">
-                            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+                            <p className="text-chip-label-sm text-text-muted mb-3 flex items-center gap-2">
                                 <Percent className="w-3 h-3" />
                                 Appliquer remise
                             </p>
@@ -157,7 +157,7 @@ export function CartItemContextMenu({
 
                         {/* Note */}
                         <div className="mb-5">
-                            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+                            <p className="text-chip-label-sm text-text-muted mb-3 flex items-center gap-2">
                                 <MessageSquare className="w-3 h-3" />
                                 Note cuisine
                             </p>
@@ -198,7 +198,7 @@ export function CartItemContextMenu({
                         {/* Consumption mode per-line override (T12) */}
                         {onConsumptionModeOverride && (
                             <div className="mb-5">
-                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+                                <p className="text-chip-label-sm text-text-muted mb-3 flex items-center gap-2">
                                     <Store className="w-3 h-3" />
                                     Mode consommation
                                 </p>

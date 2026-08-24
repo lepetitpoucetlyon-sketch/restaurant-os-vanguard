@@ -18,7 +18,7 @@ export function BrandingAccessSection({
 }: BrandingAccessSectionProps) {
   return (
     <section className="p-4 bg-violet-500/5 border border-violet-500/20 rounded-2xl space-y-4">
-      <p className="text-[10px] font-black uppercase tracking-widest text-violet-400 flex items-center gap-2">
+      <p className="text-chip-label text-violet-400 flex items-center gap-2">
         <Palette className="w-3.5 h-3.5" /> Accès Branding
       </p>
 

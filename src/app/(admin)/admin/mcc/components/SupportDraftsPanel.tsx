@@ -284,21 +284,21 @@ export function SupportDraftsPanel() {
                         <button
                           onClick={() => handleCorrect(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-info/10 text-blue-400 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-info/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-info/10 text-blue-400 border border-blue-500/20 text-chip-label hover:bg-status-info/20 transition-colors disabled:opacity-40"
                         >
                           <FileEdit className="w-3.5 h-3.5" />Corriger
                         </button>
                         <button
                           onClick={() => handleApprove(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-success/10 text-status-success border border-emerald-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-success/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-success/10 text-status-success border border-emerald-500/20 text-chip-label hover:bg-status-success/20 transition-colors disabled:opacity-40"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />Approuver
                         </button>
                         <button
                           onClick={() => handleReject(ticket)}
                           disabled={isBusy}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-danger/10 text-status-danger border border-red-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-status-danger/20 transition-colors disabled:opacity-40"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-danger/10 text-status-danger border border-red-500/20 text-chip-label hover:bg-status-danger/20 transition-colors disabled:opacity-40"
                         >
                           <XCircle className="w-3.5 h-3.5" />Refuser
                         </button>

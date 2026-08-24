@@ -89,7 +89,7 @@ export function RecallView() {
                 <button
                     onClick={handleTrace}
                     disabled={loading || !lotId.trim()}
-                    className="h-11 px-5 rounded-xl bg-status-error text-text-primary text-[10px] font-black uppercase tracking-widest hover:bg-status-error/90 transition-colors disabled:opacity-30"
+                    className="h-11 px-5 rounded-xl bg-status-error text-text-primary text-chip-label hover:bg-status-error/90 transition-colors disabled:opacity-30"
                 >
                     <Search className="w-4 h-4" />
                 </button>
@@ -123,7 +123,7 @@ export function RecallView() {
 
                     {result.preparations.length > 0 && (
                         <div>
-                            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-2">Recettes impactées</p>
+                            <p className="text-chip-label-sm text-text-muted mb-2">Recettes impactées</p>
                             <div className="space-y-1">
                                 {result.preparations.map((p) => (
                                     <div key={p.recipeId} className="flex items-center gap-2 text-[11px] text-text-primary px-3 py-2 rounded-lg bg-bg-tertiary">
@@ -137,7 +137,7 @@ export function RecallView() {
 
                     {result.orderLines.length > 0 && (
                         <div>
-                            <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-2">Commandes affectées</p>
+                            <p className="text-chip-label-sm text-text-muted mb-2">Commandes affectées</p>
                             <div className="max-h-48 overflow-auto space-y-1 elegant-scrollbar">
                                 {result.orderLines.map((line, i) => (
                                     <div key={`${line.orderId}-${i}`} className="flex items-center justify-between text-[11px] px-3 py-2 rounded-lg bg-bg-tertiary">

@@ -206,7 +206,7 @@ export function ReleveTemperatures() {
                         <Button
                             onClick={submitRecord}
                             className={cn(
-                                "w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-2xl transition-all",
+                                "w-full h-16 rounded-[24px] text-chip-label shadow-2xl transition-all",
                                 (tempValue < recordingEq.min || tempValue > recordingEq.max)
                                     ? "bg-status-danger text-text-primary shadow-rose-500/20 hover:bg-status-danger"
                                     : "bg-text-primary text-bg-primary"

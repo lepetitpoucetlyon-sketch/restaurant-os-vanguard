@@ -165,7 +165,7 @@ export const FleetCommandTableRow = React.memo(({
             <button
               onClick={() => onToggleCommandMenu(instance.id)}
               disabled={commanding}
-              className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary hover:text-text-primary transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-action-primary/10 text-brand border border-focus/20 text-chip-label-sm hover:bg-action-primary hover:text-text-primary transition-all shadow-lg shadow-indigo-500/10 opacity-0 group-hover:opacity-100 disabled:opacity-40"
             >
               {commanding ? (
                 <>
@@ -195,7 +195,7 @@ export const FleetCommandTableRow = React.memo(({
                     <button
                       key={key}
                       onClick={() => onCommand(instance.id, key)}
-                      className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors ${
+                      className={`flex items-center gap-2.5 w-full px-4 py-2.5 text-chip-label-sm hover:bg-surface-card transition-colors ${
                         danger ? 'text-error hover:bg-status-danger/10' : 'text-muted hover:text-text-primary'
                       }`}
                     >

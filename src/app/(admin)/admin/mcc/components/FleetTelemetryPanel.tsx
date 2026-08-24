@@ -75,7 +75,7 @@ export function FleetTelemetryPanel() {
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="p-4 bg-surface-card border border-border-subtle rounded-2xl flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Pouls Réseau</span>
+            <span className="text-chip-label text-secondary">Pouls Réseau</span>
             {offlineDevices.length === 0 ? (
               <Wifi className="w-4 h-4 text-emerald-500" />
             ) : (
@@ -95,7 +95,7 @@ export function FleetTelemetryPanel() {
 
         <div className="p-4 bg-surface-card border border-border-subtle rounded-2xl flex flex-col">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">Rapports de Plantage</span>
+            <span className="text-chip-label text-secondary">Rapports de Plantage</span>
             <AlertTriangle className={`w-4 h-4 ${crashes.length > 0 ? 'text-amber-500' : 'text-emerald-500'}`} />
           </div>
           <div className="flex items-baseline gap-2">
@@ -107,7 +107,7 @@ export function FleetTelemetryPanel() {
 
       <div className="space-y-4">
         <div>
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Nœuds Critiques Hors Ligne</h4>
+          <h4 className="text-chip-label text-secondary mb-3">Nœuds Critiques Hors Ligne</h4>
           {loading ? (
             <div className="text-xs text-muted animate-pulse">Analyse en cours...</div>
           ) : offlineDevices.length === 0 ? (
@@ -131,7 +131,7 @@ export function FleetTelemetryPanel() {
 
         {crashes.length > 0 && (
           <div className="pt-4 border-t border-border-subtle">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Derniers Plantages</h4>
+            <h4 className="text-chip-label text-secondary mb-3">Derniers Plantages</h4>
             <div className="space-y-2">
               {crashes.slice(0, 5).map(c => (
                 <div key={c.id} className="flex items-center justify-between p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">

@@ -74,7 +74,7 @@ export function TpeAddWizard({ step, setStep, form, setForm, onSave, onCancel }:
             {step === "configure" && (
                 <div className="space-y-4">
                     <div>
-                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">Nom du terminal</label>
+                        <label className="text-chip-label-sm text-text-muted block mb-1.5">Nom du terminal</label>
                         <input
                             autoFocus
                             type="text"
@@ -86,7 +86,7 @@ export function TpeAddWizard({ step, setStep, form, setForm, onSave, onCancel }:
                     </div>
                     {adapterNeedsAddress(form.adapter) && (
                         <div>
-                            <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                            <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                 {form.adapter === "worldline" ? "IP du terminal (LAN)" : "Reader ID (Stripe)"}
                             </label>
                             <input
@@ -100,7 +100,7 @@ export function TpeAddWizard({ step, setStep, form, setForm, onSave, onCancel }:
                     )}
                     {adapterNeedsMerchantRef(form.adapter) && (
                         <div>
-                            <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                            <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                 {form.adapter === "worldline" ? "Numéro commerçant (MERCHANT_ID)" : "Affiliate Key SumUp"}
                             </label>
                             <input

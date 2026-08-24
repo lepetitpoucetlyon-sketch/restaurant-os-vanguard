@@ -91,7 +91,7 @@ export const ProductControlList: React.FC = () => {
                                                 : "bg-status-danger border-rose-100 text-status-danger"
                                         )}>
                                             <Thermometer className="w-3 h-3" />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">{item.checks.temperature.measured}°C</span>
+                                            <span className="text-chip-label-sm">{item.checks.temperature.measured}°C</span>
                                         </div>
                                     )}
                                 </div>

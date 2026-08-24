@@ -24,7 +24,7 @@ export function TreasuryKpis({
       <div className="rounded-xl border border-border bg-surface-card p-5">
         <div className="flex items-center gap-2 text-text-muted mb-2">
           <TrendingUp className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">
+          <span className="text-chip-label">
             Prévision CA (7j)
           </span>
         </div>
@@ -39,7 +39,7 @@ export function TreasuryKpis({
       <div className="rounded-xl border border-border bg-surface-card p-5">
         <div className="flex items-center gap-2 text-text-muted mb-2">
           <ArrowUpDown className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">
+          <span className="text-chip-label">
             Fournisseurs à payer
           </span>
         </div>
@@ -54,7 +54,7 @@ export function TreasuryKpis({
       <div className="rounded-xl border border-border bg-surface-card p-5">
         <div className="flex items-center gap-2 text-text-muted mb-2">
           <TrendingDown className="w-4 h-4" />
-          <span className="text-[10px] font-black uppercase tracking-widest">
+          <span className="text-chip-label">
             En retard
           </span>
         </div>

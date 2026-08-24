@@ -42,7 +42,7 @@ export default function MigrationPlaceholder({ moduleName }: MigrationPlaceholde
                 
                 <div className="flex items-center gap-3 px-6 py-3 bg-surface-sidebar/5 rounded-full border border-black/10">
                     <Cpu className="w-4 h-4 text-accent-gold animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                    <span className="text-chip-label text-text-muted">
                         Nexus Core: 100% Stable
                     </span>
                 </div>

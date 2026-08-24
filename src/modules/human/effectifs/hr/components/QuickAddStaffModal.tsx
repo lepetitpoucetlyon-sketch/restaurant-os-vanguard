@@ -130,7 +130,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                         <div className="space-y-4">
                             {/* Name */}
                             <div>
-                                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-2">
+                                <label className="text-chip-label-sm text-text-muted block mb-2">
                                     Prénom & Nom
                                 </label>
                                 <input
@@ -146,7 +146,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
 
                             {/* Role */}
                             <div>
-                                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-2">
+                                <label className="text-chip-label-sm text-text-muted block mb-2">
                                     Rôle
                                 </label>
                                 <div className="relative">
@@ -186,7 +186,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                         /* PIN reveal step */
                         <div className="space-y-5">
                             <div className="rounded-2xl bg-bg-tertiary/50 border border-border/50 p-5 text-center">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-text-muted mb-3">
+                                <p className="text-chip-label text-text-muted mb-3">
                                     PIN de {createdName}
                                 </p>
                                 <div className="flex items-center justify-center gap-3 mb-4">
@@ -214,7 +214,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                             </div>
 
                             <div className="rounded-2xl bg-bg-primary border border-border/40 p-4 space-y-1">
-                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted">Lien de première connexion</p>
+                                <p className="text-chip-label-sm text-text-muted">Lien de première connexion</p>
                                 <p className="text-[10px] font-mono text-accent-gold/80 break-all">
                                     /welcome-staff?pin={createdPin}&amp;name={encodeURIComponent(createdName)}
                                 </p>

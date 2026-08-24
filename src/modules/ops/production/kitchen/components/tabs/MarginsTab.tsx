@@ -87,7 +87,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                         </div>
                         <div className="text-5xl font-serif font-black text-text-primary tracking-tighter mb-4">{kpi.value}</div>
                         <p className={cn(
-                            "text-[10px] font-black uppercase tracking-widest",
+                            "text-chip-label",
                             kpi.isPositive ? "text-accent-gold" : "text-error"
                         )}>
                             {kpi.sub}

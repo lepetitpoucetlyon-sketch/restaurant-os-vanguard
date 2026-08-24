@@ -65,7 +65,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                             <motion.div 
                                 key="pulsing"
                                 initial={{ y: 20 }} animate={{ y: 0 }} exit={{ y: -20 }}
-                                className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest"
+                                className="flex items-center gap-3 text-chip-label-sm"
                             >
                                 <Activity className="w-3.5 h-3.5 animate-pulse text-accent" />
                                 Synchronizing...
@@ -74,7 +74,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                             <motion.div 
                                 key="idle"
                                 initial={{ y: 20 }} animate={{ y: 0 }} exit={{ y: -20 }}
-                                className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest"
+                                className="flex items-center gap-3 text-chip-label-sm"
                             >
                                 <Zap className="w-3.5 h-3.5" />
                                 Trigger Global Pulse
@@ -186,7 +186,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                                     <div className="w-8 h-8 rounded-lg bg-accent text-text-primary flex items-center justify-center shadow-lg shadow-accent/20">
                                         <Zap size={14} fill="currentColor" />
                                     </div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-accent/80 italic">{action}</p>
+                                    <p className="text-chip-label text-accent/80 italic">{action}</p>
                                 </motion.div>
                             ))}
                             

@@ -57,7 +57,7 @@ export function CustomerDetailPanel({
                     <Button
                         variant="ghost"
                         onClick={onClose}
-                        className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-text-primary/40 hover:text-text-primary border border-subtle transition-all"
+                        className="h-16 px-10 rounded-full text-chip-label text-text-primary/40 hover:text-text-primary border border-subtle transition-all"
                     >
                         Fermer le Profil
                     </Button>

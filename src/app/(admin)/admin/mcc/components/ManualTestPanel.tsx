@@ -100,7 +100,7 @@ function InstanceRow({
                 key={test.id}
                 onClick={() => onRun(test.id)}
                 disabled={isRunning || running !== null}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-40 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-chip-label transition-all disabled:opacity-40 ${
                   test.id === 'health_ping'
                     ? 'bg-status-success/10 border-status-success/30 text-status-success hover:bg-status-success/20'
                     : 'bg-status-warning/10 border-status-warning/30 text-status-warning hover:bg-status-warning/20'
@@ -181,7 +181,7 @@ export function ManualTestPanel({ instances: instancesProp }: { instances?: Empi
           <div key={t.id} className="flex items-start gap-2 p-3 rounded-xl bg-surface-card border border-border-subtle">
             <span className={t.color}>{t.icon}</span>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">{t.label}</p>
+              <p className="text-chip-label text-text-primary">{t.label}</p>
               <p className="text-[10px] text-secondary leading-relaxed mt-0.5">{t.description}</p>
             </div>
           </div>
@@ -196,7 +196,7 @@ export function ManualTestPanel({ instances: instancesProp }: { instances?: Empi
               key={t.id}
               onClick={() => handleRunAll(t.id)}
               disabled={globalRunning || running !== null}
-              className="flex items-center gap-1.5 px-4 py-2 bg-action-primary/10 border border-focus/30 text-brand rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-action-primary/20 transition-all disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2 bg-action-primary/10 border border-focus/30 text-brand rounded-xl text-chip-label hover:bg-action-primary/20 transition-all disabled:opacity-40"
             >
               <Play className="w-3.5 h-3.5" />
               Tous — {t.label}

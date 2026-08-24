@@ -85,7 +85,7 @@ export function ReservationCardImprintSection({ config, setConfig }: Props) {
                           onClick={() => setConfig(c => ({ ...c, cardImprintCondition: opt.value }))}
                           className={cn('px-4 py-4 rounded-2xl border text-left transition-all', config.cardImprintCondition === opt.value ? 'bg-status-success/10 border-status-success/40 text-text-primary' : 'bg-bg-secondary border-border text-text-muted hover:border-status-success/30')}
                         >
-                          <p className="text-[10px] font-black uppercase tracking-widest">{opt.label}</p>
+                          <p className="text-chip-label">{opt.label}</p>
                           <p className="text-[9px] font-medium mt-0.5 opacity-70">{desc}</p>
                         </button>
                       );

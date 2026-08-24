@@ -137,7 +137,7 @@ export function DisasterRecoveryPanel() {
             ? <CheckCircle2 className="w-4 h-4 text-status-success shrink-0" />
             : <Clock className="w-4 h-4 text-rose-400 shrink-0 animate-pulse" />}
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-rose-400">
+            <p className="text-chip-label text-rose-400">
               Job {activeRestoreJob.jobId.slice(0, 8)}… — {activeRestoreJob.status.toUpperCase()}
             </p>
             <p className="text-[9px] text-secondary">{activeRestoreJob.tenantId} · initié à {new Date(activeRestoreJob.initiatedAt).toLocaleTimeString('fr-FR')}</p>
@@ -162,7 +162,7 @@ export function DisasterRecoveryPanel() {
               <button
                 onClick={() => toggleShadowMode(inst.id)}
                 disabled={loadingAction === `shadow-${inst.id}`}
-                className="px-3 py-1.5 flex items-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest rounded-lg border border-amber-500/20 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 flex items-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 text-chip-label rounded-lg border border-amber-500/20 transition-colors disabled:opacity-50"
               >
                 {loadingAction === `shadow-${inst.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldAlert className="w-3.5 h-3.5" />}
                 Mode Survie
@@ -170,7 +170,7 @@ export function DisasterRecoveryPanel() {
               <button
                 onClick={() => triggerRestore(inst.id)}
                 disabled={loadingAction === `restore-${inst.id}`}
-                className="px-3 py-1.5 flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-[10px] font-black uppercase tracking-widest rounded-lg border border-rose-500/20 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-chip-label rounded-lg border border-rose-500/20 transition-colors disabled:opacity-50"
               >
                 {loadingAction === `restore-${inst.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
                 Restauration 1-Clic

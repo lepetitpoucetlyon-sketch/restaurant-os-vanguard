@@ -712,6 +712,26 @@
   .py-ui { padding-top: var(--ui-padding, 1rem); padding-bottom: var(--ui-padding, 1rem); }
   .gap-ui { gap: var(--ui-gap, 1rem); }
 
+  /* ─── CHIP LABELS ─────────────────────────────────────────────────────
+     Remplace l'anti-pattern text-chip-label-sm
+     (dense, tacky, sous le seuil de lisibilite mobile). text-chip-label est
+     10px (au-dessus du minimum WCAG), weight 700 (vs black 900), tracking
+     un chouilla plus aere. text-chip-label-sm garde le look 9px pour les
+     chips vraiment secondaires (badges compte, IDs). Consommer via
+     `<span className="text-chip-label">Status</span>`. */
+  .text-chip-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .text-chip-label-sm {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
   /* Fade Animations */
   .animate-fade-in {
     animation: fade-in var(--duration-normal) var(--ease-out-expo) forwards;

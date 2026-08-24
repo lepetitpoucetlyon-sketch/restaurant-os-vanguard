@@ -55,13 +55,13 @@ export function PrestatairesSection() {
                                 </div>
                                 <div>
                                     <h4 className="font-serif font-bold text-lg text-text-primary group-hover:text-accent transition-colors">{p.name}</h4>
-                                    <span className={cn("inline-flex px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border mt-1", TYPE_COLORS[p.type as string])}>
+                                    <span className={cn("inline-flex px-2.5 py-0.5 rounded-lg text-chip-label-sm border mt-1", TYPE_COLORS[p.type as string])}>
                                         {TYPE_LABELS[p.type as string]}
                                     </span>
                                 </div>
                             </div>
                             <span className={cn(
-                                "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-1.5",
+                                "px-3 py-1.5 rounded-full text-chip-label-sm border flex items-center gap-1.5",
                                 p.status === 'valide' ? 'bg-success/10 text-success border-success/20' :
                                 p.status === 'a_renouveler' ? 'bg-warning/10 text-warning border-warning/20' :
                                 'bg-error/10 text-error border-error/20'

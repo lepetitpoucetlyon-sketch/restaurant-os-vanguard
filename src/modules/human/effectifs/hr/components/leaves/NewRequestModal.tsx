@@ -90,7 +90,7 @@ export function NewRequestModal({
                         <div>
                             <div className="flex items-center gap-3 mb-1">
                                 <Sparkles className="w-4 h-4 text-accent" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-accent">Demande d'Absence</span>
+                                <span className="text-chip-label text-accent">Demande d'Absence</span>
                             </div>
                             <h2 className="text-2xl font-serif italic text-text-primary">Nouvelle Requête</h2>
                         </div>

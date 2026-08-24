@@ -91,11 +91,11 @@ export function RecipeTechnicalSheet({
                         <h3 className="text-[10px] font-black text-primary dark:text-text-primary uppercase tracking-widest mb-4">Allergènes</h3>
                         <div className="flex flex-wrap gap-2 pb-10">
                             {allergens.length > 0 ? allergens.map((allergen, i) => (
-                                <span key={i} className="px-5 py-2 rounded-full bg-error/10 text-error text-[9px] font-black uppercase tracking-widest">
+                                <span key={i} className="px-5 py-2 rounded-full bg-error/10 text-error text-chip-label-sm">
                                     {allergen}
                                 </span>
                             )) : (
-                                <span className="px-5 py-2 rounded-full bg-success/10 text-success text-[9px] font-black uppercase tracking-widest">
+                                <span className="px-5 py-2 rounded-full bg-success/10 text-success text-chip-label-sm">
                                     AUCUN
                                 </span>
                             )}

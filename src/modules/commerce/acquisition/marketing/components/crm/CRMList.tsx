@@ -82,7 +82,7 @@ export function CRMList() {
                             <h3 className="text-xl md:text-4xl font-serif text-text-primary italic tracking-tight leading-none group-hover:text-accent-gold transition-colors">
                                 {getInitial(getFirstName(crm))}. {getLastName(crm)}
                             </h3>
-                            <span className="inline-flex px-3 py-1 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest bg-bg-tertiary text-text-muted/60">
+                            <span className="inline-flex px-3 py-1 rounded-full text-[8px] md:text-chip-label bg-bg-tertiary text-text-muted/60">
                                 {t(`crm.segments.${crm.segment || 'new'}`) || crm.segment || 'Nouveau'}
                             </span>
                         </div>

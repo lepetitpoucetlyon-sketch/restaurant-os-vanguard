@@ -116,7 +116,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                             }`}
                                         >
                                             <ct.icon className={`w-6 h-6 ${type === ct.id ? 'text-brand' : 'text-text-muted'}`} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">{ct.label}</span>
+                                            <span className="text-chip-label">{ct.label}</span>
                                         </button>
                                     ))}
                                 </div>

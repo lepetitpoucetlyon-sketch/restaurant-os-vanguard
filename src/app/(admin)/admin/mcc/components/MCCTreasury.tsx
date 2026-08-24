@@ -66,7 +66,7 @@ export function MCCTreasury() {
                         <RefreshCw className="w-3 h-3 animate-spin" /> Chargement Stripe…
                     </span>
                 ) : (
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded border ${dataSource === 'stripe' ? 'text-status-success border-emerald-500/30 bg-status-success/10' : 'text-text-muted border-border-subtle bg-surface-card'}`}>
+                    <span className={`text-chip-label-sm px-2 py-0.5 rounded border ${dataSource === 'stripe' ? 'text-status-success border-emerald-500/30 bg-status-success/10' : 'text-text-muted border-border-subtle bg-surface-card'}`}>
                         {dataSource === 'stripe' ? '● Données Stripe réelles' : '○ Estimation théorique — STRIPE_SECRET_KEY absent'}
                     </span>
                 )}
@@ -145,7 +145,7 @@ export function MCCTreasury() {
                                 <TrendingUp className="w-4 h-4 text-brand" />
                             </div>
                             <div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">Master Supply Portal</span>
+                                <span className="text-chip-label text-text-primary">Master Supply Portal</span>
                                 <p className="text-[9px] text-secondary mt-0.5">{instances.length} site{instances.length > 1 ? 's' : ''} · Coalition active</p>
                             </div>
                         </div>
@@ -226,7 +226,7 @@ function FinancialCard({ label, value, trend, icon, chartColor, isSpecial = fals
                 {isSpecial && <div className="px-2 py-1 rounded bg-action-primary/10 border border-focus/20 text-[8px] font-black text-brand uppercase tracking-widest">Premium Power</div>}
             </div>
             
-            <h3 className="text-secondary text-[10px] font-black uppercase tracking-widest mb-2">{label}</h3>
+            <h3 className="text-secondary text-chip-label mb-2">{label}</h3>
             <div className="text-3xl font-black mb-2 tracking-tighter">{value}</div>
             <p className="text-[10px] font-medium text-secondary uppercase tracking-tighter">{trend}</p>
 

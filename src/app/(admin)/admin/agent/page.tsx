@@ -82,7 +82,7 @@ export default function AgentIntelligencePage() {
         />
         <button 
           onClick={fetchReport}
-          className="flex items-center gap-2 px-4 py-2 bg-bg-secondary border border-border rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-action-primary transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-bg-secondary border border-border rounded-full text-chip-label hover:bg-action-primary transition-colors"
         >
           <RefreshCcw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
           Refresh Audit
@@ -261,7 +261,7 @@ export default function AgentIntelligencePage() {
                        </p>
                     </div>
                     <button
-                       className="mt-8 w-full px-6 py-3 bg-action-primary text-text-primary rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                       className="mt-8 w-full px-6 py-3 bg-action-primary text-text-primary rounded-xl text-chip-label hover:opacity-90 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        onClick={fetchReport}
                        disabled={loading}
                     >
@@ -275,12 +275,12 @@ export default function AgentIntelligencePage() {
            <div className="grid grid-cols-2 gap-4">
               <GlassCard padding="md" variant="inset" className="flex flex-col items-center justify-center text-center">
                  <Cpu className="w-5 h-5 text-text-muted mb-2" />
-                 <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">Sentinel Clock</span>
+                 <span className="text-chip-label-sm text-text-muted">Sentinel Clock</span>
                  <p className="font-brand italic text-sm mt-1">Real-time (Active)</p>
               </GlassCard>
               <GlassCard padding="md" variant="inset" className="flex flex-col items-center justify-center text-center">
                  <Sparkles className="w-5 h-5 text-action-primary mb-2" />
-                 <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">Empire Health</span>
+                 <span className="text-chip-label-sm text-text-muted">Empire Health</span>
                  <p className={`font-serif italic text-sm mt-1 ${displayStability < 70 ? 'text-status-danger' : 'text-status-success'}`}>
                     {displayStability < 50 ? 'Critique' : displayStability < 80 ? 'Instable' : 'Parfaite'}
                  </p>

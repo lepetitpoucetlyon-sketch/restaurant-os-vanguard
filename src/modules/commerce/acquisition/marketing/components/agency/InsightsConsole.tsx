@@ -22,7 +22,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                     </div>
                     <div>
                         <h3 className="text-text-primary font-serif italic font-black text-lg tracking-tight uppercase">Expertise {domain}</h3>
-                        <p className="text-text-primary/40 text-[9px] font-black uppercase tracking-widest">Console de Diagnostic Système</p>
+                        <p className="text-text-primary/40 text-chip-label-sm">Console de Diagnostic Système</p>
                     </div>
                 </div>
                 {isAnalyzing && (
@@ -74,7 +74,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
             <div className="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
                 <div className="flex items-center gap-2 text-success/60">
                     <ShieldCheck className="w-4 h-4" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Expertise Sécurisée</span>
+                    <span className="text-chip-label-sm">Expertise Sécurisée</span>
                 </div>
                 <div className="text-[9px] font-mono text-text-primary/20 uppercase">
                     Moteur {modelId}

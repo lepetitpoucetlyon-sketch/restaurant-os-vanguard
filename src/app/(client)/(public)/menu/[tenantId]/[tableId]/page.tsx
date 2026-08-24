@@ -132,7 +132,7 @@ export default function PublicMenuPage() {
                     <button
                         onClick={() => setSelectedCategory('all')}
                         className={cn(
-                            'h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
+                            'h-8 px-4 rounded-full text-chip-label-sm whitespace-nowrap transition-all',
                             selectedCategory === 'all' ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                         )}
                     >
@@ -143,7 +143,7 @@ export default function PublicMenuPage() {
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
                             className={cn(
-                                'h-8 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
+                                'h-8 px-4 rounded-full text-chip-label-sm whitespace-nowrap transition-all',
                                 selectedCategory === cat.id ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                             )}
                         >

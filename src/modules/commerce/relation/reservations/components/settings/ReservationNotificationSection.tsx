@@ -128,7 +128,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
           })}
 
           <div className="pt-3 border-t border-border/40 space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">Canaux de notification gérant</p>
+            <p className="text-chip-label text-text-muted">Canaux de notification gérant</p>
             <div className="flex gap-2 flex-wrap">
               {(['email', 'sms', 'push'] as const).map((ch) => {
                 const channels = (cfg.mgrNotifChannels as string[]) ?? ['email'];
@@ -188,7 +188,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
           })}
 
           <div className="pt-3 border-t border-border/40 space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">Cadencement des Rappels Programmés</p>
+            <p className="text-chip-label text-text-muted">Cadencement des Rappels Programmés</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest flex items-center gap-1">
@@ -266,7 +266,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
 
         {/* Dynamic Variable Chips */}
         <div className="space-y-2">
-          <p className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-1.5">
+          <p className="text-chip-label text-text-muted flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 text-accent" /> Variables dynamiques disponibles (cliquez pour insérer) :
           </p>
           <div className="flex flex-wrap gap-2">

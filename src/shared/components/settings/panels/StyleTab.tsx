@@ -29,7 +29,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
             <div className="space-y-8 pb-6 border-b border-border/50">
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-1 h-4 bg-accent-gold rounded-full" />
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-text-primary">{t('settings.aura_title')}</h3>
+                    <h3 className="text-chip-label text-text-primary">{t('settings.aura_title')}</h3>
                 </div>
 
                 {/* Theme Mode Selection */}
@@ -93,7 +93,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                 key={d}
                                 onClick={() => theme.setDensity(d)}
                                 className={cn(
-                                    "py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border-2 transition-all",
+                                    "py-2 rounded-xl text-chip-label-sm border-2 transition-all",
                                     theme.density === d
                                         ? "bg-accent/10 border-accent text-accent"
                                         : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
@@ -156,7 +156,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                         )}>
                             <Zap className="w-4 h-4" />
                         </div>
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-primary">{t('settings.animations_label')}</label>
+                        <label className="text-chip-label text-text-primary">{t('settings.animations_label')}</label>
                     </div>
                     <button
                         onClick={() => theme.setAnimations(!theme.animations)}
@@ -178,7 +178,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                 <div className="space-y-4">
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-1 h-4 bg-accent rounded-full" />
-                        <h3 className="text-[10px] font-black uppercase tracking-widest text-text-primary">{t('settings.page_options')}</h3>
+                        <h3 className="text-chip-label text-text-primary">{t('settings.page_options')}</h3>
                     </div>
                     {filteredSettings.map((setting) => (
                         <div

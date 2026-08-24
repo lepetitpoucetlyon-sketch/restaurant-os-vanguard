@@ -85,7 +85,7 @@ export const AnalyticsTab = () => {
                             ))}
                             {(analytics.topKeywords ?? []).length === 0 && (
                                 <tr>
-                                    <td colSpan={3} className="py-12 text-center text-text-muted text-[10px] font-black uppercase tracking-widest">
+                                    <td colSpan={3} className="py-12 text-center text-text-muted text-chip-label">
                                         Aucun mot-clé détecté pour le moment
                                     </td>
                                 </tr>

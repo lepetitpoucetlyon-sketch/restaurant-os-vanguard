@@ -47,7 +47,7 @@ export const DLCAlertBadge: React.FC<DLCAlertBadgeProps> = ({ expiryDate, classN
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className={cn(
-                "flex items-center gap-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-transparent shadow-sm",
+                "flex items-center gap-2 px-3 py-1 rounded-full text-chip-label-sm border border-transparent shadow-sm",
                 current.color,
                 status === 'critical' && "border-rose-100 shadow-rose-500/10",
                 className

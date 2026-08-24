@@ -303,7 +303,7 @@ export function SettingsDashboard() {
                 <div className="flex-1 bg-bg-primary relative flex flex-col h-full overflow-hidden min-w-0">
                     <div className="p-6 md:p-10 pb-0 flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <p className="text-text-muted text-[10px] font-black uppercase tracking-widest mb-2">Intelligence Système</p>
+                            <p className="text-text-muted text-chip-label mb-2">Intelligence Système</p>
                             <PageHeaderWithDocs categoryId="settings" title="" className="text-2xl md:text-4xl font-brand text-text-primary uppercase italic">
                                 PARAMÈTRES <span className="text-border">/</span> <span className="text-action-primary">{activeConfig.label.toUpperCase()}</span>
                             </PageHeaderWithDocs>

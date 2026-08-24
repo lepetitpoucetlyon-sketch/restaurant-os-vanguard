@@ -94,7 +94,7 @@ export function DUERPSection() {
                                     </td>
                                     <td className="px-8 py-5">
                                         <span className={cn(
-                                            "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                            "px-3 py-1.5 rounded-full text-chip-label-sm border",
                                             cat.level === 'élevé' ? 'bg-error/10 text-error border-error/20' :
                                             cat.level === 'moyen' ? 'bg-warning/10 text-warning border-warning/20' :
                                             'bg-success/10 text-success border-success/20'

@@ -17,7 +17,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
             {/* Profit Monitor with Smooth Sparkline */}
             <GlassCard className="p-5 flex flex-col gap-4 group hover:border-success/30 transition-all duration-500">
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Chiffre d'Affaire</span>
+                    <span className="text-chip-label text-text-muted">Chiffre d'Affaire</span>
                     <motion.div 
                         animate={isRunning ? { rotate: [0, 10, -10, 0] } : {}}
                         transition={{ repeat: Infinity, duration: 2 }}
@@ -54,7 +54,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
             {/* Stress Meter (Brigade) with Critical Glow */}
             <GlassCard className={`p-5 flex flex-col gap-4 transition-all duration-700 ${metrics.burnoutIndex > 75 ? 'border-error/40 shadow-[0_0_30px_rgba(239,68,68,0.15)] bg-error/5' : ''}`}>
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Stress-Meter (Brigade)</span>
+                    <span className="text-chip-label text-text-muted">Stress-Meter (Brigade)</span>
                     <motion.div
                         animate={metrics.burnoutIndex > 75 ? { scale: [1, 1.2, 1], filter: ["blur(0px)", "blur(2px)", "blur(0px)"] } : {}}
                         transition={{ repeat: Infinity, duration: 1 }}
@@ -91,7 +91,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
             {/* Convives Count */}
             <GlassCard className="p-5 flex flex-col gap-2 hover:border-accent/30 transition-all">
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Identités Actives</span>
+                    <span className="text-chip-label text-text-muted">Identités Actives</span>
                     <Users size={16} className="text-accent" />
                 </div>
                 <motion.span 

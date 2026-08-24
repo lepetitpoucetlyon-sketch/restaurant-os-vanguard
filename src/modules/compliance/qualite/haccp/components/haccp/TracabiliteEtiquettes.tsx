@@ -205,7 +205,7 @@ export function TracabiliteEtiquettes() {
                     <div className="col-span-1 md:col-span-2 lg:col-span-3 py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-[32px] bg-bg-primary/50">
                         <Tags size={48} className="text-text-muted/30 mb-4" />
                         <h3 className="text-xl font-serif italic text-text-muted">Aucune étiquette scannée aujourd'hui</h3>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/50 mt-2">Utilisez le bouton scanner pour enregistrer une traçabilité</p>
+                        <p className="text-chip-label text-text-muted/50 mt-2">Utilisez le bouton scanner pour enregistrer une traçabilité</p>
                     </div>
                 )}
             </div>
@@ -283,7 +283,7 @@ export function TracabiliteEtiquettes() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={isUploading}
-                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-text-primary hover:bg-action-primary border border-focus/20"
+                                className="w-full h-16 rounded-[24px] text-chip-label shadow-xl transition-all bg-action-primary text-text-primary hover:bg-action-primary border border-focus/20"
                             >
                                 {isUploading ? (
                                     <>

@@ -209,7 +209,7 @@ function ContextualSettingsPanelContent({
                                     : "text-text-muted hover:text-text-primary"
                             )}
                         >
-                            <span className="text-[10px] font-black uppercase tracking-widest">{t('settings.tab_logic')}</span>
+                            <span className="text-chip-label">{t('settings.tab_logic')}</span>
                             {activeTab === 'logic' && (
                                 <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />
                             )}
@@ -223,7 +223,7 @@ function ContextualSettingsPanelContent({
                                     : "text-text-muted hover:text-text-primary"
                             )}
                         >
-                            <span className="text-[10px] font-black uppercase tracking-widest text-accent-gold">{t('settings.tab_style')}</span>
+                            <span className="text-chip-label text-accent-gold">{t('settings.tab_style')}</span>
                             {activeTab === 'style' && (
                                 <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-gold" />
                             )}

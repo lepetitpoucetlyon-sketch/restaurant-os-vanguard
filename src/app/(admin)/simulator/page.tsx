@@ -55,7 +55,7 @@ export default function SimulatorPage() {
                 <GlassCard className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Horizon Temporel (Jours)</label>
+                        <label className="text-chip-label text-text-muted">Horizon Temporel (Jours)</label>
                         <input 
                             type="number" 
                             value={days} 
@@ -64,7 +64,7 @@ export default function SimulatorPage() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Itérations (Timelines)</label>
+                        <label className="text-chip-label text-text-muted">Itérations (Timelines)</label>
                         <input 
                             type="number" 
                             value={iterations} 
@@ -73,7 +73,7 @@ export default function SimulatorPage() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Profil de Charge</label>
+                        <label className="text-chip-label text-text-muted">Profil de Charge</label>
                         <select 
                             value={profile} 
                             onChange={(e) => setProfile(e.target.value as SimulationProfile)}

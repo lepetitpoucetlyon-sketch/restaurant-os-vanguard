@@ -36,7 +36,7 @@ export const SettingsTab = () => {
                                 </div>
                             </div>
                             <span className={cn(
-                                "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border",
+                                "px-3 py-1.5 rounded-lg text-chip-label-sm border",
                                 integration.connected
                                     ? "bg-teal/10 text-teal border-teal/20"
                                     : "bg-bg-tertiary text-text-muted border-border"

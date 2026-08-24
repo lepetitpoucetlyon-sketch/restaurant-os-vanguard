@@ -45,7 +45,7 @@ export function IngredientsTab() {
                                 key={String(cat)}
                                 onClick={() => setSelectedCategory(String(cat))}
                                 className={cn(
-                                    "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                                    "px-4 py-2 rounded-lg text-chip-label transition-all",
                                     selectedCategory === String(cat)
                                         ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                                         : "text-text-muted hover:text-text-primary"

@@ -150,7 +150,7 @@ export function TenantOverridePanel() {
           <div className="flex gap-3">
             <button
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-bg-primary/30 border border-border-subtle text-[10px] font-black uppercase tracking-widest text-secondary hover:text-muted transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-bg-primary/30 border border-border-subtle text-chip-label text-secondary hover:text-muted transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Reset
@@ -158,7 +158,7 @@ export function TenantOverridePanel() {
             <button
               onClick={handleApply}
               disabled={isSaving}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-text-primary text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-text-primary text-chip-label transition-all disabled:opacity-50"
             >
               {isSaving ? 'Application...' : 'Appliquer l\'override'}
             </button>
@@ -171,7 +171,7 @@ export function TenantOverridePanel() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 className={cn(
-                  'flex items-center gap-2 p-3 rounded-xl border text-[10px] font-black uppercase tracking-widest',
+                  'flex items-center gap-2 p-3 rounded-xl border text-chip-label',
                   result.success
                     ? 'bg-status-success/10 text-status-success border-emerald-500/20'
                     : 'bg-status-danger/10 text-status-danger border-red-500/20'

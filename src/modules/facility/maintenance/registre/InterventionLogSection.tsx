@@ -74,7 +74,7 @@ export function InterventionLogSection() {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-3">
                                         <h4 className="font-serif font-bold text-lg text-text-primary group-hover:text-accent transition-colors">{int.prestataire}</h4>
-                                        <span className="px-2 py-0.5 rounded-lg bg-bg-tertiary border border-border text-[9px] font-black uppercase tracking-widest text-text-muted">
+                                        <span className="px-2 py-0.5 rounded-lg bg-bg-tertiary border border-border text-chip-label-sm text-text-muted">
                                             {int.type}
                                         </span>
                                     </div>

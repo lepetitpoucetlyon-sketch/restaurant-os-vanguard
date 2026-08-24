@@ -47,7 +47,7 @@ export function MCCInsights() {
                                     <TrendingUp className="w-4 h-4 text-status-success" />
                                 )}
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">{insight.type}</span>
+                            <span className="text-chip-label text-secondary">{insight.type}</span>
                         </div>
                         <span className="text-[9px] font-bold text-brand uppercase tracking-tighter">Impact: {insight.impact}</span>
                     </div>

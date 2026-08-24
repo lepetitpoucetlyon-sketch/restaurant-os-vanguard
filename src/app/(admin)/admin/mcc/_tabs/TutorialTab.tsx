@@ -152,7 +152,7 @@ export function TutorialTab() {
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-chip-label border transition-all ${
               activeSection === s.id
                 ? 'bg-action-primary/10 border-focus/40 text-brand'
                 : 'bg-surface-card border-border-subtle text-secondary hover:text-text-primary'

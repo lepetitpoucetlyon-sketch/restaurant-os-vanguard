@@ -253,7 +253,7 @@ function MCCDashboardInner() {
                                                     <button key={v} type="button" onClick={() => setNewCloneVariant(v)}
                                                         className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
                                                         <span className="text-xl">{VERTICAL_META[v].emoji}</span>
-                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${newCloneVariant === v ? 'text-brand' : 'text-secondary'}`}>{VERTICAL_META[v].label}</span>
+                                                        <span className={`text-chip-label-sm ${newCloneVariant === v ? 'text-brand' : 'text-secondary'}`}>{VERTICAL_META[v].label}</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -272,7 +272,7 @@ function MCCDashboardInner() {
                                                                     {info.tagline}
                                                                 </span>
                                                             )}
-                                                            <span className={`text-[9px] font-black uppercase tracking-widest mb-1 ${active ? 'text-brand' : 'text-secondary'}`}>{tier}</span>
+                                                            <span className={`text-chip-label-sm mb-1 ${active ? 'text-brand' : 'text-secondary'}`}>{tier}</span>
                                                             <span className={`text-base font-black leading-none ${active ? 'text-brand' : 'text-text-primary'}`}>{info.price}</span>
                                                             {info.period && <span className="text-[9px] text-muted mb-2">{info.period}</span>}
                                                             <ul className="mt-2 space-y-1 w-full">
@@ -293,7 +293,7 @@ function MCCDashboardInner() {
                                             <div className="flex gap-2">
                                                 {([7, 14, 30] as const).map(days => (
                                                     <button key={days} type="button" onClick={() => setNewTrialDays(days)}
-                                                        className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${newTrialDays === days ? 'bg-action-primary/10 border-focus/50 text-brand' : 'bg-surface-bg border-subtle text-secondary hover:border-border-subtle'}`}>
+                                                        className={`flex-1 py-2.5 rounded-xl text-chip-label transition-all border ${newTrialDays === days ? 'bg-action-primary/10 border-focus/50 text-brand' : 'bg-surface-bg border-subtle text-secondary hover:border-border-subtle'}`}>
                                                         {days}j
                                                     </button>
                                                 ))}
@@ -352,7 +352,7 @@ function MCCDashboardInner() {
                                                         className={`flex items-center gap-2 p-3 rounded-2xl border text-left transition-all ${newCloneBrandingMode === m ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
                                                         <span className="text-base">{m === 'default' ? '🏢' : '🎨'}</span>
                                                         <div>
-                                                            <p className={`text-[10px] font-black uppercase tracking-widest ${newCloneBrandingMode === m ? 'text-brand' : 'text-secondary'}`}>
+                                                            <p className={`text-chip-label ${newCloneBrandingMode === m ? 'text-brand' : 'text-secondary'}`}>
                                                                 {m === 'default' ? 'Restaurant OS' : 'Personnalisé'}
                                                             </p>
                                                             <p className="text-[8px] text-muted leading-tight mt-0.5">
@@ -378,7 +378,7 @@ function MCCDashboardInner() {
                                                             <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">Aperçu</label>
                                                             <div className="h-9 rounded-xl border border-subtle flex items-center justify-center"
                                                                 style={{ background: `linear-gradient(135deg, ${newCloneAccentColor}22 0%, ${newCloneAccentColor}08 100%)`, borderColor: `${newCloneAccentColor}40` }}>
-                                                                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: newCloneAccentColor }}>Aperçu</span>
+                                                                <span className="text-chip-label" style={{ color: newCloneAccentColor }}>Aperçu</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -395,7 +395,7 @@ function MCCDashboardInner() {
                                                             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${newCloneSplashEnabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
                                                         </div>
                                                         <div>
-                                                            <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">Splash screen</p>
+                                                            <p className="text-chip-label text-text-primary">Splash screen</p>
                                                             <p className="text-[8px] text-muted">Écran de démarrage branded à l&apos;ouverture de l&apos;app</p>
                                                         </div>
                                                     </label>

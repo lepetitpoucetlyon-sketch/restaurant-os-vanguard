@@ -50,7 +50,7 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
                     <button
                         onClick={() => setViewMode('grid')}
                         className={cn(
-                            "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
+                            "flex items-center gap-2 px-6 py-2 rounded-full text-chip-label-sm transition-all",
                             viewMode === 'grid'
                                 ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
                                 : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"
@@ -62,7 +62,7 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
                     <button
                         onClick={() => setViewMode('zones')}
                         className={cn(
-                            "flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
+                            "flex items-center gap-2 px-6 py-2 rounded-full text-chip-label-sm transition-all",
                             viewMode === 'zones'
                                 ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
                                 : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"

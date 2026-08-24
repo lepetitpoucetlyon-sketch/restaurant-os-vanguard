@@ -188,7 +188,7 @@ export default function NexusSettings() {
                                             <Bot className="w-4 h-4" style={{ color: isActive ? meta.color : undefined }} />
                                         )}
                                     </div>
-                                    <span className={cn("text-[10px] font-black uppercase tracking-widest", isActive ? "text-text-primary" : "text-text-muted")}>
+                                    <span className={cn("text-chip-label", isActive ? "text-text-primary" : "text-text-muted")}>
                                         {meta.label}
                                     </span>
                                     {isActive && <Check className="w-3 h-3 text-accent" />}

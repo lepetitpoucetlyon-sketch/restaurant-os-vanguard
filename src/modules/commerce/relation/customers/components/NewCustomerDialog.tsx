@@ -222,7 +222,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                                             ? prev.preferences.filter(p => p !== opt)
                                                             : [...prev.preferences, opt],
                                                     }))}
-                                                    className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${active ? 'bg-accent text-bg-primary border-accent shadow-lg shadow-amber-500/20' : 'bg-bg-secondary border-border text-text-muted hover:border-accent/40'}`}
+                                                    className={`px-5 py-2.5 rounded-2xl text-chip-label transition-all border ${active ? 'bg-accent text-bg-primary border-accent shadow-lg shadow-amber-500/20' : 'bg-bg-secondary border-border text-text-muted hover:border-accent/40'}`}
                                                 >
                                                     {opt}
                                                 </button>
@@ -250,7 +250,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 exit={{ opacity: 0, scale: 0.8 }}
-                                                className="px-6 py-3 bg-accent text-bg-primary rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-4 relative z-10 shadow-lg shadow-amber-500/20"
+                                                className="px-6 py-3 bg-accent text-bg-primary rounded-2xl text-chip-label flex items-center gap-4 relative z-10 shadow-lg shadow-amber-500/20"
                                             >
                                                 {tag}
                                                 <button type="button" onClick={() => setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }))} className="hover:text-bg-primary transition-colors">

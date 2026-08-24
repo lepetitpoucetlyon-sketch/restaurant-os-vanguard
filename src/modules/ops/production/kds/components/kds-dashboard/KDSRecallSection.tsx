@@ -41,7 +41,7 @@ export function KDSRecallSection({
                 </div>
                 <button
                     onClick={() => setIsRecallMode(false)}
-                    className="flex items-center gap-2 px-4 h-9 rounded-full text-[10px] font-black uppercase tracking-widest text-muted hover:text-primary border border-subtle hover:border-default bg-surface-card transition-all"
+                    className="flex items-center gap-2 px-4 h-9 rounded-full text-chip-label text-muted hover:text-primary border border-subtle hover:border-default bg-surface-card transition-all"
                 >
                     Fermer rappel
                 </button>
@@ -77,7 +77,7 @@ export function KDSRecallSection({
                                     </p>
                                 </div>
                                 <span className={cn(
-                                    "px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                    "px-2.5 py-1 rounded-full text-chip-label-sm border",
                                     ticket.status === 'delivered'
                                         ? "bg-status-success/10 text-status-success border-status-success/30"
                                         : "bg-surface-card text-muted border-subtle"

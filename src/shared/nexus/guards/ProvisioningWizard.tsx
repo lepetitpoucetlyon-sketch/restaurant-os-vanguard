@@ -112,7 +112,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
 
                                 {error && (
-                                    <div className="flex items-center gap-2 text-status-danger text-[10px] font-black uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 text-status-danger text-chip-label">
                                         <AlertCircle size={14} /> {error}
                                     </div>
                                 )}
@@ -207,13 +207,13 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                             </div>
 
                             <div className="w-full max-w-sm space-y-4 pt-8">
-                                <div className="flex items-center gap-3 text-status-success/60 text-[9px] font-black uppercase tracking-widest">
+                                <div className="flex items-center gap-3 text-status-success/60 text-chip-label-sm">
                                     <CheckCircle2 size={12} /> Firebase Node ID: ros-{formData.key}
                                 </div>
-                                <div className="flex items-center gap-3 text-status-success/60 text-[9px] font-black uppercase tracking-widest">
+                                <div className="flex items-center gap-3 text-status-success/60 text-chip-label-sm">
                                     <CheckCircle2 size={12} /> DNS Routing Table: {formData.key}.restaurant-os.app
                                 </div>
-                                <div className="flex items-center gap-3 text-status-success text-[9px] font-black uppercase tracking-widest animate-breath">
+                                <div className="flex items-center gap-3 text-status-success text-chip-label-sm animate-breath">
                                     <Loader2 size={12} className="animate-spin" /> Sealing Fiscal Chains (Audit Ready)
                                 </div>
                             </div>

@@ -33,14 +33,14 @@ export function QuoteMatrixGrid({
                 <div className="flex gap-4">
                     <button
                         onClick={onOpenCatalog}
-                        className="px-6 py-2.5 bg-bg-secondary border border-border rounded-full text-[9px] font-black uppercase tracking-widest text-text-muted hover:text-accent-gold transition-all flex items-center gap-2 shadow-sm"
+                        className="px-6 py-2.5 bg-bg-secondary border border-border rounded-full text-chip-label-sm text-text-muted hover:text-accent-gold transition-all flex items-center gap-2 shadow-sm"
                     >
                         <Search className="w-3.5 h-3.5" />
                         Catalogue Artefacts
                     </button>
                     <button
                         onClick={onAddNewLine}
-                        className="px-6 py-2.5 bg-accent-gold text-primary rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-premium hover:bg-surface-card transition-all"
+                        className="px-6 py-2.5 bg-accent-gold text-primary rounded-full text-chip-label-sm flex items-center gap-2 shadow-premium hover:bg-surface-card transition-all"
                     >
                         <Plus className="w-3.5 h-3.5" />
                         Ligne Manuelle

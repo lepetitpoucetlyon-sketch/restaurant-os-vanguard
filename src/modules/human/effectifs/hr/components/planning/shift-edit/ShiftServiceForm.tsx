@@ -69,7 +69,7 @@ export function ShiftServiceForm({
                             <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">
                                 {type.emoji}
                             </span>
-                            <p className="text-[10px] font-black uppercase tracking-widest">
+                            <p className="text-chip-label">
                                 {type.label}
                             </p>
                         </button>

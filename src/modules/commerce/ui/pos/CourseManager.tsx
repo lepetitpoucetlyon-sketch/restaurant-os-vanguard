@@ -43,7 +43,7 @@ function CourseChip({
         <button
             onClick={onClick}
             className={cn(
-                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all",
+                "px-3 py-1 rounded-full text-chip-label-sm border transition-all",
                 active
                     ? meta.color
                     : "border-border text-text-muted bg-bg-tertiary hover:border-border/80"
@@ -82,7 +82,7 @@ function CourseSection({
             <div className={cn("flex items-center justify-between px-4 py-3 border-b border-border/40 bg-bg-tertiary/50")}>
                 <div className="flex items-center gap-2">
                     <Icon className={cn("w-4 h-4", meta.color.split(" ")[0])} />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">
+                    <span className="text-chip-label text-text-primary">
                         {meta.label}
                     </span>
                     <span className="text-[9px] text-text-muted">
@@ -99,7 +99,7 @@ function CourseSection({
                     <button
                         onClick={onSendCourse}
                         disabled={isSending}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-gold text-text-primary text-[9px] font-black uppercase tracking-widest hover:bg-accent-gold/90 active:scale-95 transition-all disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-gold text-text-primary text-chip-label-sm hover:bg-accent-gold/90 active:scale-95 transition-all disabled:opacity-50"
                     >
                         <ChefHat className="w-3 h-3" />
                         Envoyer
@@ -193,7 +193,7 @@ export function CourseManager({ items, onSetCourse, onSendCourse, isLoading }: C
                         className="rounded-2xl border border-dashed border-border/60 overflow-hidden"
                     >
                         <div className="px-4 py-2.5 bg-bg-tertiary/30 border-b border-border/30">
-                            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">
+                            <span className="text-chip-label-sm text-text-muted">
                                 Sans cours ({unassigned.length})
                             </span>
                         </div>

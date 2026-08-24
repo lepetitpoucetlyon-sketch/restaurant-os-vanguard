@@ -171,7 +171,7 @@ export function SimulationDashboard() {
                         <div className="flex items-center justify-between mb-6 pb-4 border-b border-default">
                             <div className="flex items-center gap-3">
                                 <Database size={16} className="text-secondary" />
-                                <h3 className="text-[10px] font-black uppercase tracking-widest text-muted">Neural Shield Logs</h3>
+                                <h3 className="text-chip-label text-muted">Neural Shield Logs</h3>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-status-danger animate-pulse" />
@@ -298,7 +298,7 @@ function MetricCard({ label, value, icon, subtitle, highlight = false }: MetricC
                 </div>
                 <div className="bg-surface-card/5 rounded-full px-2 py-0.5 text-[7px] font-black uppercase text-secondary tracking-tighter">Live</div>
             </div>
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-1">{label}</h4>
+            <h4 className="text-chip-label text-secondary mb-1">{label}</h4>
             <div className="text-3xl font-mono font-black italic tracking-tighter mb-2">{value}</div>
             <p className="text-[9px] font-black text-secondary uppercase tracking-tighter">{subtitle}</p>
         </div>

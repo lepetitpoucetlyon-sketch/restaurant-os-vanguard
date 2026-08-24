@@ -63,7 +63,7 @@ export function IncendieSection() {
                                     <td className="px-6 py-5 text-text-muted font-mono text-[12px]">{ext.nextCheck}</td>
                                     <td className="px-6 py-5">
                                         <span className={cn(
-                                            "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                            "px-3 py-1.5 rounded-full text-chip-label-sm border",
                                             ext.status === 'ok' ? 'bg-success/10 text-success border-success/20' :
                                             ext.status === 'a_verifier' ? 'bg-warning/10 text-warning border-warning/20' :
                                             'bg-error/10 text-error border-error/20'
@@ -96,7 +96,7 @@ export function IncendieSection() {
                             ex.status === 'planifie' ? 'border-dashed border-accent/30' : 'border-border'
                         )}>
                             {ex.status === 'planifie' && (
-                                <div className="absolute top-4 right-4 px-2.5 py-1 bg-accent/10 text-accent rounded-full text-[9px] font-black uppercase tracking-widest">
+                                <div className="absolute top-4 right-4 px-2.5 py-1 bg-accent/10 text-accent rounded-full text-chip-label-sm">
                                     Planifié
                                 </div>
                             )}

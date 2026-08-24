@@ -151,7 +151,7 @@ function KanbanColumn({
             {/* Header */}
             <div className={cn("flex items-center justify-between mb-3 pb-3 border-b", border)}>
                 <div className="flex items-center gap-2">
-                    <span className={cn("text-[10px] font-black uppercase tracking-widest", accent)}>
+                    <span className={cn("text-chip-label", accent)}>
                         {label}
                     </span>
                     <span className={cn(

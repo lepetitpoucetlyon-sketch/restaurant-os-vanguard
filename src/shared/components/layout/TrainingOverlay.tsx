@@ -42,7 +42,7 @@ export function TrainingOverlay() {
                             variant="ghost"
                             size="sm"
                             onClick={toggleTrainingMode}
-                            className="h-8 bg-status-warning/20 hover:bg-status-warning/30 text-status-warning border border-action-primary/10 rounded-lg text-[9px] font-black uppercase tracking-widest group transition-all"
+                            className="h-8 bg-status-warning/20 hover:bg-status-warning/30 text-status-warning border border-action-primary/10 rounded-lg text-chip-label-sm group transition-all"
                         >
                             Quitter le Mode École
                             <XCircle className="w-3 h-3 ml-2 group-hover:rotate-90 transition-transform" />

@@ -17,7 +17,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                 <div className="border-b border-subtle p-4 flex items-center justify-between bg-surface-card/5">
                     <div className="flex items-center gap-2">
                         <TrendingUp size={16} className="text-success animate-pulse" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-success/80">Nexus Yield Engine (Live)</span>
+                        <span className="text-chip-label text-success/80">Nexus Yield Engine (Live)</span>
                     </div>
                     <AnimatePresence>
                         {metrics.burnoutIndex > 75 && (
@@ -49,7 +49,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                     </AnimatePresence>
 
                     <div className="flex flex-col gap-1 relative z-10">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-50">Sovereign Pricing Velocity</span>
+                        <span className="text-chip-label text-text-muted opacity-50">Sovereign Pricing Velocity</span>
                         <div className="h-24 w-full flex items-end gap-1.5 overflow-hidden">
                             {Array.from({ length: 15 }).map((_, i) => (
                                 <motion.div 
@@ -65,7 +65,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
 
                     <div className={`p-4 rounded-xl transition-colors duration-500 flex items-center justify-between relative z-10 ${metrics.burnoutIndex > 75 ? 'bg-error/10 border-error/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]' : 'bg-success/5 border-success/10'}`}>
                         <div className="flex flex-col">
-                            <span className={`text-[10px] font-black uppercase tracking-widest leading-none ${metrics.burnoutIndex > 75 ? 'text-error' : 'text-success'}`}>
+                            <span className={`text-chip-label leading-none ${metrics.burnoutIndex > 75 ? 'text-error' : 'text-success'}`}>
                                 {metrics.burnoutIndex > 75 ? 'PROTOCOL BREACH' : 'YIELD STABLE'}
                             </span>
                             <span className="text-[8px] text-text-muted font-bold opacity-70 uppercase tracking-tighter mt-1">
@@ -103,7 +103,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                             <div className="w-2.5 h-2.5 rounded-full bg-warning/50" />
                             <div className="w-2.5 h-2.5 rounded-full bg-success/50" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-accent/80">Sovereign Terminal Stream v1.0.4</span>
+                        <span className="text-chip-label text-accent/80">Sovereign Terminal Stream v1.0.4</span>
                     </div>
                     <div className="px-2 py-0.5 rounded bg-accent/10 border border-accent/20">
                         <span className="text-[8px] font-mono text-accent uppercase tracking-widest">Grade X Engine</span>

@@ -47,7 +47,7 @@ export function CustomerIntelligenceSidebar({
                         </div>
 
                         <div className="space-y-2">
-                            <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-text-muted">
+                            <div className="flex justify-between text-chip-label text-text-muted">
                                 <span>Score Fidélité</span>
                                 <span className="text-accent">Gold Member</span>
                             </div>

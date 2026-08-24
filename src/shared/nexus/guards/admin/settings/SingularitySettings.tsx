@@ -127,7 +127,7 @@ export function SingularitySettings() {
                                             ...settings!,
                                             accountingConfig: { ...settings?.accountingConfig, complexityMode: mode as AccountingMode } as import('@nexus/contracts').AccountingConfig
                                         })}
-                                        className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                                        className={`py-2 rounded-lg text-chip-label transition-all ${
                                             settings?.accountingConfig?.complexityMode === mode 
                                             ? 'bg-accent text-text-primary shadow-lg' 
                                             : 'text-text-muted hover:text-text-primary'
@@ -151,7 +151,7 @@ export function SingularitySettings() {
                 <GlassCard className="md:col-span-2 p-4 flex items-center justify-between border-accent/20 bg-accent/5">
                     <div className="flex items-center gap-3">
                         <Shield size={14} className="text-accent" />
-                        <span className="text-[9px] font-black uppercase tracking-widest text-accent">Status RBAC : Session {rbacLevel} Autorisée</span>
+                        <span className="text-chip-label-sm text-accent">Status RBAC : Session {rbacLevel} Autorisée</span>
                     </div>
                     <div className="flex gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_#10b981]" />

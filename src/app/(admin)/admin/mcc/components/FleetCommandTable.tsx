@@ -133,7 +133,7 @@ export function FleetCommandTable() {
             <button
               onClick={() => setPage(p => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-border-subtle bg-surface-card hover:bg-surface-hover disabled:opacity-30 transition-colors"
+              className="px-2 py-1 rounded-lg text-chip-label-sm border border-border-subtle bg-surface-card hover:bg-surface-hover disabled:opacity-30 transition-colors"
             >
               ←
             </button>
@@ -143,7 +143,7 @@ export function FleetCommandTable() {
             <button
               onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
               disabled={page >= totalPages - 1}
-              className="px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-border-subtle bg-surface-card hover:bg-surface-hover disabled:opacity-30 transition-colors"
+              className="px-2 py-1 rounded-lg text-chip-label-sm border border-border-subtle bg-surface-card hover:bg-surface-hover disabled:opacity-30 transition-colors"
             >
               →
             </button>

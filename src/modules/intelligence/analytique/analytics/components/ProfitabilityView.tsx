@@ -39,7 +39,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                                 {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
                         </div>
-                        <Button className="h-11 px-8 bg-text-primary text-text-primary rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
+                        <Button className="h-11 px-8 bg-text-primary text-text-primary rounded-xl text-chip-label-sm hover:bg-surface-sidebar transition-colors">
                             Appliquer
                         </Button>
                     </div>
@@ -93,7 +93,7 @@ export const SimulatorView: React.FC = () => {
             >
                 <div className="space-y-8 py-6">
                     <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">Type de Scénario</label>
+                        <label className="text-chip-label-sm text-text-muted px-2">Type de Scénario</label>
                         <div className="grid grid-cols-2 gap-2">
                             {['Augmentation Prix', 'Nouveau Menu', 'Events', 'Coupure Réseau'].map(s => (
                                 <button key={s} className="h-14 rounded-2xl bg-bg-tertiary border border-border text-[10px] font-black uppercase text-text-muted hover:bg-bg-primary transition-all">
@@ -103,12 +103,12 @@ export const SimulatorView: React.FC = () => {
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">Impact Estimé</label>
+                        <label className="text-chip-label-sm text-text-muted px-2">Impact Estimé</label>
                         <input type="range" className="w-full accent-accent-gold" />
                     </div>
                     <Button 
                         onClick={() => setShowSimulationSheet(false)} 
-                        className="w-full h-16 bg-accent-gold text-bg-primary rounded-2xl text-[10px] font-black uppercase tracking-widest"
+                        className="w-full h-16 bg-accent-gold text-bg-primary rounded-2xl text-chip-label"
                     >
                         Lancer l'Analyse
                     </Button>

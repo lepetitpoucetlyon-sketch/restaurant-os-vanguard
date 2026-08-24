@@ -198,7 +198,7 @@ export function OperationsDashboard() {
 
                                         <div className="relative z-10">
                                             <div className="flex items-center gap-2 mb-4">
-                                                <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-surface-bg border border-subtle italic">No. {area.number}</span>
+                                                <span className="text-chip-label px-2 py-1 rounded bg-surface-bg border border-subtle italic">No. {area.number}</span>
                                                 <div className={cn(
                                                     "w-2 h-2 rounded-full",
                                                     area.status === 'vacant' ? "bg-status-success" :
@@ -286,7 +286,7 @@ export function OperationsDashboard() {
                                                 ))}
                                             </div>
                                             <ArrowRight className="w-4 h-4 text-muted" />
-                                            <div className="text-[10px] font-black uppercase tracking-widest bg-surface-sidebar text-text-primary px-3 py-1 rounded-full">Dashboard Global</div>
+                                            <div className="text-chip-label bg-surface-sidebar text-text-primary px-3 py-1 rounded-full">Dashboard Global</div>
                                         </div>
                                     </div>
                                 </div>

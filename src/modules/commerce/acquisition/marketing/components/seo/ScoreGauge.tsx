@@ -41,7 +41,7 @@ export function ScoreGauge({ score, size = 160 }: { score: number; size?: number
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-5xl font-serif italic font-black text-text-primary">{score}</span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted mt-1">/100</span>
+                <span className="text-chip-label text-text-muted mt-1">/100</span>
             </div>
         </div>
     );

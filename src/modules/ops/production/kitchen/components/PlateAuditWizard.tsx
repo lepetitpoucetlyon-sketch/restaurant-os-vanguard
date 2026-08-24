@@ -105,7 +105,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                                                 <div className="w-16 h-16 rounded-full bg-status-warning/10 text-status-warning flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                                     <Camera size={28} />
                                                 </div>
-                                                <p className="text-[9px] font-black uppercase tracking-widest text-status-warning">Scanner l'assiette</p>
+                                                <p className="text-chip-label-sm text-status-warning">Scanner l'assiette</p>
                                             </button>
                                         )}
                                     </div>
@@ -198,13 +198,13 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                             <div className="grid grid-cols-2 gap-4 pt-8">
                                 <Button 
                                     onClick={() => setAuditResult(null)}
-                                    className="h-14 bg-surface-card/5 text-muted hover:text-text-primary text-[10px] font-black uppercase tracking-widest rounded-2xl border border-subtle"
+                                    className="h-14 bg-surface-card/5 text-muted hover:text-text-primary text-chip-label rounded-2xl border border-subtle"
                                 >
                                     Refaire
                                 </Button>
                                 <Button 
                                     onClick={() => onComplete(true)}
-                                    className="h-14 bg-status-success text-text-primary hover:bg-status-success text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20"
+                                    className="h-14 bg-status-success text-text-primary hover:bg-status-success text-chip-label rounded-2xl shadow-xl shadow-emerald-500/20"
                                 >
                                     Valider l'Envoi
                                 </Button>

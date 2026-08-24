@@ -93,7 +93,7 @@ export function FleetUpgradePanel() {
 
       {/* Version */}
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-secondary block mb-2">Version cible</label>
+        <label className="text-chip-label-sm text-secondary block mb-2">Version cible</label>
         <input
           type="text"
           value={version}
@@ -105,7 +105,7 @@ export function FleetUpgradePanel() {
 
       {/* Target state */}
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-secondary block mb-2">Canal</label>
+        <label className="text-chip-label-sm text-secondary block mb-2">Canal</label>
         <div className="grid grid-cols-3 gap-2">
           {(Object.keys(STATE_META) as TargetState[]).map(s => (
             <button
@@ -124,7 +124,7 @@ export function FleetUpgradePanel() {
 
       {/* Release notes */}
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-secondary block mb-2">Release notes</label>
+        <label className="text-chip-label-sm text-secondary block mb-2">Release notes</label>
         <textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}
@@ -136,7 +136,7 @@ export function FleetUpgradePanel() {
 
       {/* OTA URL */}
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-secondary block mb-2">OTA URL (optionnel)</label>
+        <label className="text-chip-label-sm text-secondary block mb-2">OTA URL (optionnel)</label>
         <input
           type="text"
           value={otaUrl}
@@ -158,7 +158,7 @@ export function FleetUpgradePanel() {
       >
         <AlertTriangle className={cn('w-4 h-4 shrink-0', breaking ? 'text-status-danger' : 'text-secondary')} />
         <div className="flex-1">
-          <p className={cn('text-[10px] font-black uppercase tracking-widest', breaking ? 'text-status-danger' : 'text-secondary')}>
+          <p className={cn('text-chip-label', breaking ? 'text-status-danger' : 'text-secondary')}>
             Breaking change
           </p>
           <p className="text-[9px] text-secondary">Déclenche une alerte critique dans l'audit</p>
@@ -173,7 +173,7 @@ export function FleetUpgradePanel() {
 
       {/* Scope selector */}
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-secondary block mb-2">Cible</label>
+        <label className="text-chip-label-sm text-secondary block mb-2">Cible</label>
         <div className="grid grid-cols-2 gap-2 mb-3">
           <button
             onClick={() => setScope('fleet')}
@@ -247,7 +247,7 @@ export function FleetUpgradePanel() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={cn(
-              'flex items-center gap-2 p-3 rounded-xl border text-[10px] font-black uppercase tracking-widest',
+              'flex items-center gap-2 p-3 rounded-xl border text-chip-label',
               result.success
                 ? 'bg-status-success/10 text-status-success border-emerald-500/20'
                 : 'bg-status-danger/10 text-status-danger border-red-500/20'

@@ -167,7 +167,7 @@ export function SimpleDashboardView() {
                         <h3 className="text-xl font-bold">Mes derniers flux</h3>
                         <p className="text-text-muted text-xs uppercase tracking-widest font-bold mt-1">Dépenses & Recettes récentes</p>
                     </div>
-                    <button className="px-6 py-2 bg-bg-tertiary rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-border transition-all flex items-center gap-2">
+                    <button className="px-6 py-2 bg-bg-tertiary rounded-full text-chip-label hover:bg-border transition-all flex items-center gap-2">
                         TOUT VOIR <ArrowRight className="w-4 h-4" />
                     </button>
                 </div>

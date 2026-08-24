@@ -65,7 +65,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                     {step === 1 ? (
                         <div className="grid grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-2">Prénom</label>
+                                <label className="text-chip-label text-text-muted ml-2">Prénom</label>
                                 <input 
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
                                     value={formData.firstName}
@@ -73,7 +73,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-2">Nom</label>
+                                <label className="text-chip-label text-text-muted ml-2">Nom</label>
                                 <input 
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
                                     value={formData.lastName}
@@ -81,7 +81,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-2">Email</label>
+                                <label className="text-chip-label text-text-muted ml-2">Email</label>
                                 <input 
                                     type="email"
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
@@ -90,7 +90,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-2">Téléphone</label>
+                                <label className="text-chip-label text-text-muted ml-2">Téléphone</label>
                                 <input 
                                     className="w-full h-14 bg-bg-secondary border border-border rounded-xl px-5 text-sm font-medium outline-none focus:border-accent-gold"
                                     value={formData.phone}
@@ -98,7 +98,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                                 />
                             </div>
                             <div className="col-span-2 space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted ml-2">Poste Visé</label>
+                                <label className="text-chip-label text-text-muted ml-2">Poste Visé</label>
                                 <PremiumSelect 
                                     value={formData.appliedRole}
                                     onChange={e => setFormData({...formData, appliedRole: e})}
@@ -119,13 +119,13 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                                     <div className="w-16 h-16 rounded-2xl bg-bg-primary flex items-center justify-center text-text-muted group-hover:text-accent-gold transition-colors shadow-soft">
                                         <Camera className="w-8 h-8" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Scanner CV Papier</span>
+                                    <span className="text-chip-label">Scanner CV Papier</span>
                                 </button>
                                 <button className="flex flex-col items-center justify-center gap-4 p-8 bg-bg-secondary border border-dashed border-border rounded-[2rem] hover:bg-bg-tertiary transition-all group">
                                     <div className="w-16 h-16 rounded-2xl bg-bg-primary flex items-center justify-center text-text-muted group-hover:text-blue-500 transition-colors shadow-soft">
                                         <Download className="w-8 h-8 rotate-180" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Télécharger PDF</span>
+                                    <span className="text-chip-label">Télécharger PDF</span>
                                 </button>
                             </div>
 
@@ -151,7 +151,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                 {/* Modal Footer */}
                 <div className="p-10 border-t border-border bg-bg-secondary/30 flex justify-between items-center">
                     <button 
-                        className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-text-primary"
+                        className="text-chip-label text-text-muted hover:text-text-primary"
                         onClick={() => step === 1 ? onClose() : setStep(1)}
                     >
                         {step === 1 ? 'Annuler' : 'Précédent'}

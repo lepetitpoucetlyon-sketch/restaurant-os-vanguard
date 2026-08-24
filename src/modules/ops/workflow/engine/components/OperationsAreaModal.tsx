@@ -39,7 +39,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                         {/* Left Side: Sketch placeholder */}
                         <div className="w-2/5 p-12 border-r border-subtle bg-surface-card/30 relative">
                             <div className="absolute top-8 left-8">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-muted">Croquis de la Configuration</span>
+                                <span className="text-chip-label text-muted">Croquis de la Configuration</span>
                             </div>
                             <div className="w-full h-full rounded-2xl border-2 border-dashed border-subtle flex flex-col items-center justify-center text-center p-10">
                                 <motion.div
@@ -99,7 +99,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                                     <p className="text-xs text-secondary leading-relaxed">
                                         "Cette zone bénéficie d'un éclairage optimal. Recommandation : vérifier le dressage des couverts."
                                     </p>
-                                    <div className="flex items-center gap-2 text-brand text-[10px] font-black uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 text-brand text-chip-label">
                                         <CheckCircle2 className="w-4 h-4" /> Validé par Gouvernance
                                     </div>
                                 </div>

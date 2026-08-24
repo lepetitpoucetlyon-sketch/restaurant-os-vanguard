@@ -192,7 +192,7 @@ export function ReceptionMarchandises() {
                     <div className="col-span-1 md:col-span-2 lg:grid-cols-3 py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-[32px] bg-bg-primary/50">
                         <Truck size={48} className="text-text-muted/30 mb-4" />
                         <h3 className="text-xl font-serif italic text-text-muted">Aucune réception enregistrée</h3>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-text-muted/50 mt-2">Cliquez sur nouvelle réception pour commencer</p>
+                        <p className="text-chip-label text-text-muted/50 mt-2">Cliquez sur nouvelle réception pour commencer</p>
                     </div>
                 )}
             </div>
@@ -216,7 +216,7 @@ export function ReceptionMarchandises() {
                                     ) : (
                                         <>
                                             <Camera size={24} />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">Photo du Bon / Étiquette</span>
+                                            <span className="text-chip-label-sm">Photo du Bon / Étiquette</span>
                                         </>
                                     )}
                                     {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
@@ -274,7 +274,7 @@ export function ReceptionMarchandises() {
                                     <button
                                         onClick={() => setFormData({ ...formData, integrityStatus: 'conforme' })}
                                         className={cn(
-                                            "h-14 rounded-2xl border transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2",
+                                            "h-14 rounded-2xl border transition-all text-chip-label-sm flex items-center justify-center gap-2",
                                             formData.integrityStatus === 'conforme' 
                                                 ? "bg-status-success/10 border-emerald-500 text-status-success" 
                                                 : "bg-bg-tertiary border-border text-text-muted"
@@ -285,7 +285,7 @@ export function ReceptionMarchandises() {
                                     <button
                                         onClick={() => setFormData({ ...formData, integrityStatus: 'non-conforme' })}
                                         className={cn(
-                                            "h-14 rounded-2xl border transition-all text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-2",
+                                            "h-14 rounded-2xl border transition-all text-chip-label-sm flex items-center justify-center gap-2",
                                             formData.integrityStatus === 'non-conforme' 
                                                 ? "bg-status-danger/10 border-rose-500 text-status-danger" 
                                                 : "bg-bg-tertiary border-border text-text-muted"
@@ -299,7 +299,7 @@ export function ReceptionMarchandises() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={isUploading}
-                                className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-action-primary text-text-primary hover:bg-action-primary border border-focus/20"
+                                className="w-full h-16 rounded-[24px] text-chip-label shadow-xl transition-all bg-action-primary text-text-primary hover:bg-action-primary border border-focus/20"
                             >
                                 {isUploading ? (
                                     <>

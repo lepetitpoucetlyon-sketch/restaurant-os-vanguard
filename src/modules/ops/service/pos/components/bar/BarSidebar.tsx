@@ -71,7 +71,7 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
             
             <div className="flex items-center gap-3 mb-3 relative z-10">
                 <Wine className="w-5 h-5 text-text-primary/60" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-text-primary/60">Valeur Cave</span>
+                <span className="text-chip-label-sm text-text-primary/60">Valeur Cave</span>
             </div>
             <p className="text-2xl font-black relative z-10 tracking-tighter">
                 {formatCurrency(cellarValue)}

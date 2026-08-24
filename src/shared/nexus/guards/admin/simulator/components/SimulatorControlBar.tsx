@@ -27,7 +27,7 @@ export function SimulatorControlBar({
         <GlassCard className="p-4 flex items-center justify-between border-subtle hover:border-accent/30 transition-colors duration-500 shadow-2xl shadow-black/20">
             <div className="flex items-center gap-6">
                 <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-70">Temporal Speed</span>
+                    <span className="text-chip-label text-text-muted opacity-70">Temporal Speed</span>
                     <div className="flex items-center gap-2">
                         {[1, 5, 20, 100].map(s => (
                             <motion.button 
@@ -43,7 +43,7 @@ export function SimulatorControlBar({
                     </div>
                 </div>
                 <div className="flex flex-col gap-1 px-4 border-l border-subtle ml-2">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-accent opacity-70 flex items-center gap-2">
+                    <span className="text-chip-label text-accent opacity-70 flex items-center gap-2">
                         <Cpu size={10} />
                         Singularity Status
                     </span>

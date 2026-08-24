@@ -53,7 +53,7 @@ function AlertCard({ alert }: { alert: MacroBrainAlert }) {
     );
 }
 
-// Section header standardisé — remplace text-[10px] font-black uppercase tracking-widest
+// Section header standardisé — remplace text-chip-label
 function SectionHeader({ icon: Icon, children }: { icon: typeof AlertTriangle; children: React.ReactNode }) {
     return (
         <h2 className="flex items-center gap-2 text-xs font-medium tracking-tight text-text-secondary mb-4">

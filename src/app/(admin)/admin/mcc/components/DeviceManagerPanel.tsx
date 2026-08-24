@@ -24,7 +24,7 @@ export function DeviceManagerPanel() {
         <button
           onClick={() => setSubmitted(uid.trim())}
           disabled={!uid.trim()}
-          className="px-4 py-2.5 bg-action-primary/20 text-brand border border-focus/30 rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-40 transition-all hover:bg-action-primary/30"
+          className="px-4 py-2.5 bg-action-primary/20 text-brand border border-focus/30 rounded-xl text-chip-label disabled:opacity-40 transition-all hover:bg-action-primary/30"
         >
           Inspecter
         </button>

@@ -59,7 +59,7 @@ function StatusBadge({ status }: { status: 'conforme' | 'attention' | 'non_confo
     };
     const c = config[status as keyof typeof config] || config.attention;
     return (
-        <span className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border", c.color)}>
+        <span className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-chip-label-sm border", c.color)}>
             <c.icon className="w-3 h-3" />
             {c.label}
         </span>

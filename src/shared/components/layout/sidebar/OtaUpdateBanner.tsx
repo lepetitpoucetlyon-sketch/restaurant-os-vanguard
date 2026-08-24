@@ -58,7 +58,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                     <div className="flex items-center gap-2">
                         <ArrowUpCircle className="w-4 h-4 text-action-primary shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-action-primary">Mise à jour</p>
+                            <p className="text-chip-label text-action-primary">Mise à jour</p>
                             <p className="text-[9px] text-amber-300/70 font-mono">
                                 v{currentVersion} → v{targetVersion}
                             </p>
@@ -74,7 +74,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                 <button
                     onClick={handleUpdate}
                     disabled={updating}
-                    className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-action-primary/20 text-amber-300 text-[9px] font-black uppercase tracking-widest hover:bg-action-primary/30 transition-all disabled:opacity-50"
+                    className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-action-primary/20 text-amber-300 text-chip-label-sm hover:bg-action-primary/30 transition-all disabled:opacity-50"
                 >
                     <Download className="w-3 h-3" />
                     {updating ? 'Mise à jour...' : 'Mettre à jour'}

@@ -28,7 +28,7 @@ export function NexusHeroHeader() {
                 <div className="flex-1 space-y-4 text-center md:text-left">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-2">
                         <Zap className="w-3.5 h-3.5 text-accent" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-accent">Souveraineté Digitale</span>
+                        <span className="text-chip-label text-accent">Souveraineté Digitale</span>
                     </div>
                     <h2 className="text-4xl font-serif text-text-primary tracking-tight">
                         Personalisez votre <span className="text-accent italic">Nexus</span>

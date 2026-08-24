@@ -52,7 +52,7 @@ export function GestionAnomalies() {
                 </div>
 
                 <div className="flex bg-bg-tertiary rounded-full p-1 border border-border">
-                    <div className="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest bg-surface-card dark:bg-bg-secondary shadow-sm text-text-primary flex items-center gap-2">
+                    <div className="px-4 py-2 rounded-full text-chip-label bg-surface-card dark:bg-bg-secondary shadow-sm text-text-primary flex items-center gap-2">
                         <Filter size={12} />
                         Tous les Incidents
                     </div>
@@ -116,7 +116,7 @@ export function GestionAnomalies() {
                     <div className="py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-[32px] bg-bg-primary/50 text-center px-4">
                         <CheckCircle2 size={48} className="text-status-success/30 mb-4" />
                         <h3 className="text-xl font-serif italic text-status-success mb-1">Aucune anomalie enregistrée</h3>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">L'intégrité de vos processus est de 100%.</p>
+                        <p className="text-chip-label text-text-muted">L'intégrité de vos processus est de 100%.</p>
                     </div>
                 ) : (
                     <div className="bg-bg-primary border border-border rounded-[32px] overflow-hidden">
@@ -143,7 +143,7 @@ export function GestionAnomalies() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-[10px] font-black uppercase tracking-widest text-text-muted bg-bg-tertiary px-3 py-1 rounded-full border border-border">
+                                <div className="text-chip-label text-text-muted bg-bg-tertiary px-3 py-1 rounded-full border border-border">
                                     Action Corrective Appliquée
                                 </div>
                             </div>

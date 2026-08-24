@@ -59,7 +59,7 @@ export const MindMapNode = ({ x, y, label, icon: Icon, color, description }: Min
             <Icon className="w-8 h-8" />
         </div>
         <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-surface-sidebar group-hover:text-text-primary relative z-10 w-48 text-center">
-            <span className="text-[10px] font-black uppercase tracking-widest block mb-1">{label}</span>
+            <span className="text-chip-label block mb-1">{label}</span>
             {description && <p className="text-[9px] opacity-60 font-sans leading-tight hidden group-hover:block">{description}</p>}
         </div>
         <motion.div
@@ -73,7 +73,7 @@ export const MindMapNode = ({ x, y, label, icon: Icon, color, description }: Min
 export const HandDrawnLegend = ({ label, color }: { label: string; color: string }) => (
     <div className="flex items-center gap-2 bg-surface-card/80 backdrop-blur-sm px-4 py-2 rounded-full border border-subtle shadow-sm">
         <div className={cn("w-2 h-2 rounded-full", color.replace('text-', 'bg-'))} />
-        <span className={cn("text-[10px] font-black uppercase tracking-widest", color)}>{label}</span>
+        <span className={cn("text-chip-label", color)}>{label}</span>
     </div>
 );
 

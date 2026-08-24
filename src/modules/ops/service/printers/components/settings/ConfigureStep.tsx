@@ -15,7 +15,7 @@ export const INPUT_CLS = "w-full px-4 py-2.5 rounded-xl bg-bg-tertiary border bo
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">{label}</label>
+      <label className="text-chip-label text-text-muted">{label}</label>
       {children}
     </div>
   );

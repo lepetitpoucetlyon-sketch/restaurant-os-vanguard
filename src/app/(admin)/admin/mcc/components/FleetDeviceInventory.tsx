@@ -212,7 +212,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                         <div>
                           <p className="text-xs font-mono font-bold text-text-primary">{device.serialNumber}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className={`text-[9px] font-black uppercase tracking-widest ${
+                            <span className={`text-chip-label-sm ${
                               device.status === 'PREPARATION' ? 'text-status-warning' :
                               device.status === 'SHIPPED' ? 'text-brand' :
                               device.status === 'DELIVERED' ? 'text-status-success' :

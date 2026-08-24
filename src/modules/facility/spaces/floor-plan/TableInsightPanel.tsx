@@ -118,7 +118,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                         <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-3">Intelligence Table • Direct</p>
                         <div className="flex items-center gap-4">
                             <div className={cn(
-                                "px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border shadow-sm",
+                                "px-4 py-1.5 rounded-full text-chip-label-sm border shadow-sm",
                                 activeOrder
                                     ? "bg-action-primary/10 text-brand border-focus/20"
                                     : "bg-bg-tertiary text-text-muted border-border"
@@ -152,7 +152,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     <Calendar strokeWidth={2} className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h4 className="text-[9px] font-black uppercase tracking-widest text-text-muted/60 mb-1">Status Réservation</h4>
+                                    <h4 className="text-chip-label-sm text-text-muted/60 mb-1">Status Réservation</h4>
                                     <p className="text-[14px] font-bold text-text-primary tracking-tight">
                                         {activeReservation ? activeReservation.customerName : "Aucune résa détectée"}
                                     </p>
@@ -175,7 +175,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     <Users strokeWidth={2} className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h4 className="text-[9px] font-black uppercase tracking-widest text-text-muted/60 mb-1">Détection de Présence</h4>
+                                    <h4 className="text-chip-label-sm text-text-muted/60 mb-1">Détection de Présence</h4>
                                     <p className="text-[14px] font-bold text-text-primary tracking-tight">
                                         {activeOrder ? (displayName || "Client Détecté") : "Capteurs Inactifs"}
                                     </p>
@@ -198,7 +198,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     <CheckCircle2 strokeWidth={2} className="w-5 h-5" />
                                 </div>
                                 <div className="flex-1">
-                                    <h4 className="text-[9px] font-black uppercase tracking-widest text-text-muted/60 mb-1">Verdict Logique</h4>
+                                    <h4 className="text-chip-label-sm text-text-muted/60 mb-1">Verdict Logique</h4>
                                     <p className="text-[14px] font-serif italic font-medium text-text-primary leading-tight">
                                         {isSeatedWithReservation ? "Réservation Honorée" : activeOrder ? "Passage Spontané" : "Table Disponible"}
                                     </p>
@@ -275,13 +275,13 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                             <Timer className="w-4 h-4 text-text-muted dark:text-text-primary/40" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted/40 dark:text-text-primary/20">Durée Table</span>
+                                            <span className="text-chip-label-sm text-text-muted/40 dark:text-text-primary/20">Durée Table</span>
                                             <span className="text-[12px] font-mono font-bold text-text-primary dark:text-text-primary/70 italic">45:12</span>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => onCheckout?.(SovereignMath.orderTotalMicrounits(activeOrder) / 1000000)}
-                                        className="h-14 px-8 rounded-2xl bg-accent hover:bg-surface-sidebar dark:hover:bg-surface-card text-bg-primary dark:text-bg-primary hover:text-text-primary dark:hover:text-primary text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/10 active:scale-95"
+                                        className="h-14 px-8 rounded-2xl bg-accent hover:bg-surface-sidebar dark:hover:bg-surface-card text-bg-primary dark:text-bg-primary hover:text-text-primary dark:hover:text-primary text-chip-label transition-all shadow-lg shadow-amber-500/10 active:scale-95"
                                     >
                                         Encaisser
                                     </button>

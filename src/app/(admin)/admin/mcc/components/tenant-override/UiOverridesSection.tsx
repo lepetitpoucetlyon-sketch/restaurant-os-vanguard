@@ -15,7 +15,7 @@ interface UiOverridesSectionProps {
 export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps) {
   return (
     <section className="space-y-4">
-      <p className="text-[10px] font-black uppercase tracking-widest text-secondary flex items-center gap-2">
+      <p className="text-chip-label text-secondary flex items-center gap-2">
         <Sparkles className="w-3.5 h-3.5" /> Interface
       </p>
 

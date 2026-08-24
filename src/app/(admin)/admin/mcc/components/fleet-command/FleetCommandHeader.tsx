@@ -56,7 +56,7 @@ export function FleetCommandHeader({
         <div className="relative" ref={filterRef}>
           <button
             onClick={onToggleFilter}
-            className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl transition-all text-[9px] font-black uppercase tracking-widest ${
+            className={`flex items-center gap-2 px-3 py-2.5 border rounded-xl transition-all text-chip-label-sm ${
               statusFilter !== 'ALL'
                 ? 'bg-action-primary text-text-primary border-focus/40'
                 : 'bg-action-primary/10 text-brand border-focus/20 hover:bg-action-primary/20'
@@ -79,7 +79,7 @@ export function FleetCommandHeader({
                   <button
                     key={f.value}
                     onClick={() => onSelectFilter(f.value)}
-                    className="flex items-center justify-between w-full px-4 py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-surface-card transition-colors text-left"
+                    className="flex items-center justify-between w-full px-4 py-2.5 text-chip-label-sm hover:bg-surface-card transition-colors text-left"
                   >
                     <span className={statusFilter === f.value ? 'text-brand' : 'text-muted'}>{f.label}</span>
                     {statusFilter === f.value && <Check className="w-3 h-3 text-brand" />}

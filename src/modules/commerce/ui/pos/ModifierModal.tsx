@@ -150,7 +150,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                         {/* Selected summary */}
                         {selected.size > 0 && (
                             <div className="mb-4 px-3 py-2 bg-accent-gold/5 border border-accent-gold/20 rounded-2xl">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-accent-gold mb-1">
+                                <p className="text-chip-label text-accent-gold mb-1">
                                     Sélectionnées ({selected.size})
                                 </p>
                                 <p className="text-[11px] text-text-muted">

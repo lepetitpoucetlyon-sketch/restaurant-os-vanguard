@@ -150,7 +150,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
 
                 {/* Notes */}
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">Notes internes & Observations</label>
+                    <label className="text-chip-label text-text-muted">Notes internes & Observations</label>
                     <textarea
                         className="w-full min-h-[120px] p-5 bg-bg-tertiary rounded-2xl border border-border focus:border-accent outline-none font-medium text-[14px] leading-relaxed resize-none"
                         value={formData.notes}

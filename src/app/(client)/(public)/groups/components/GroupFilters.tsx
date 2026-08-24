@@ -27,7 +27,7 @@ export function GroupFilters({
                         key={type}
                         onClick={() => setSelectedType(type)}
                         className={cn(
-                            "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border",
+                            "px-6 py-2.5 rounded-xl text-chip-label transition-all border",
                             selectedType === type
                                 ? "bg-action-primary text-text-primary border-focus shadow-lg shadow-purple-500/20"
                                 : "bg-bg-secondary text-text-muted border-border hover:border-focus/30"
@@ -58,7 +58,7 @@ export function GroupFilters({
                             key={status}
                             onClick={() => setSelectedStatus(status)}
                             className={cn(
-                                "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
+                                "px-4 py-2 rounded-xl text-chip-label-sm transition-all",
                                 selectedStatus === status
                                     ? "bg-bg-tertiary text-text-primary shadow-sm"
                                     : "text-text-muted hover:text-text-primary"

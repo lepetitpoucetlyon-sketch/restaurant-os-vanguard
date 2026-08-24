@@ -210,7 +210,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                                                     <p className={cn("font-serif font-black italic text-md leading-none transition-colors", isActive ? "text-primary hidden-text-shadow" : "text-text-primary")}>
                                                         {item.label}
                                                     </p>
-                                                    <p className={cn("text-[10px] font-black uppercase tracking-widest mt-2", isActive ? "text-primary/60" : "text-text-muted/60")}>
+                                                    <p className={cn("text-chip-label mt-2", isActive ? "text-primary/60" : "text-text-muted/60")}>
                                                         {item.description}
                                                     </p>
                                                 </div>
@@ -232,11 +232,11 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-3">
                             <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↑↓</div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-primary/20">Parcourir</span>
+                            <span className="text-chip-label text-primary/20">Parcourir</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↵</div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-primary/20">Activer</span>
+                            <span className="text-chip-label text-primary/20">Activer</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">

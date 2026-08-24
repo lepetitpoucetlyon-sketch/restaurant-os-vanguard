@@ -18,7 +18,7 @@ export function CandidateCvSection({
 }: CandidateCvSectionProps) {
     return (
         <div className="space-y-4">
-            <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+            <label className="text-chip-label text-text-muted flex items-center gap-2">
                 <FileText className="w-3 h-3 text-accent" /> Curriculum Vitae (CV)
             </label>
             

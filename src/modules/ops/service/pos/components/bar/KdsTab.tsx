@@ -251,7 +251,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                 </div>
                                             )}
 
-                                            <div className="mt-4 pt-3 border-t border-dashed border-border flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-text-muted">
+                                            <div className="mt-4 pt-3 border-t border-dashed border-border flex items-center justify-between text-chip-label-sm text-text-muted">
                                                 <div className="flex items-center gap-1.5">
                                                     <GlassWater className="w-3 h-3" />
                                                     <span>{item.details?.glass || 'VERRE STD'}</span>

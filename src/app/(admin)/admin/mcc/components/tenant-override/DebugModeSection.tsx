@@ -25,7 +25,7 @@ export function DebugModeSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bug className="w-4 h-4 text-action-primary" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-action-primary">Debug Mode</span>
+          <span className="text-chip-label text-action-primary">Debug Mode</span>
         </div>
         <button
           onClick={onToggleDebug}

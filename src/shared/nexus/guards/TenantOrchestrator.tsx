@@ -66,7 +66,7 @@ export const TenantOrchestrator: React.FC = () => {
                         <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">Orchestration Multi-Tenant Active</p>
                     </div>
                     <div className="flex gap-2">
-                         <div className="px-4 py-2 bg-text-primary text-text-primary rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
+                         <div className="px-4 py-2 bg-text-primary text-text-primary rounded-xl text-chip-label-sm flex items-center gap-2">
                             <Activity className="w-3 h-3 text-success animate-pulse" />
                             {displayFleet.length} INSTANCES
                          </div>
@@ -171,7 +171,7 @@ export const TenantOrchestrator: React.FC = () => {
             <div className="p-6 bg-bg-tertiary/20 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-success" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">Canal Ssécurisé • AES-256</span>
+                    <span className="text-chip-label-sm text-text-muted">Canal Ssécurisé • AES-256</span>
                 </div>
                 <Button variant="ghost" className="h-8 px-4 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-bg-tertiary">
                     Paramètres Flotte

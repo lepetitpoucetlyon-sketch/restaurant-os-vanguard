@@ -87,7 +87,7 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
 
       {!selectedInstance && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-[10px] font-black uppercase tracking-widest text-secondary bg-surface-card/80 px-4 py-2 rounded-xl border border-border-subtle backdrop-blur-sm">
+          <p className="text-chip-label text-secondary bg-surface-card/80 px-4 py-2 rounded-xl border border-border-subtle backdrop-blur-sm">
             Sélectionner une instance
           </p>
         </div>

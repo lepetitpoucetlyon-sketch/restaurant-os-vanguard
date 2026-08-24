@@ -37,7 +37,7 @@ export function CandidateFormFields({
             {/* Personal Info */}
             <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+                    <label className="text-chip-label text-text-muted flex items-center gap-2">
                         <User className="w-3 h-3 text-accent" /> Prénom
                     </label>
                     <input
@@ -48,7 +48,7 @@ export function CandidateFormFields({
                     />
                 </div>
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+                    <label className="text-chip-label text-text-muted flex items-center gap-2">
                         <User className="w-3 h-3 text-accent" /> Nom
                     </label>
                     <input
@@ -62,7 +62,7 @@ export function CandidateFormFields({
 
             <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+                    <label className="text-chip-label text-text-muted flex items-center gap-2">
                         <Mail className="w-3 h-3 text-accent" /> Email
                     </label>
                     <input
@@ -73,7 +73,7 @@ export function CandidateFormFields({
                     />
                 </div>
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+                    <label className="text-chip-label text-text-muted flex items-center gap-2">
                         <Phone className="w-3 h-3 text-accent" /> Téléphone
                     </label>
                     <input

@@ -130,7 +130,7 @@ export function GestionHuiles() {
                     </div>
                     <div className="flex items-center gap-2 bg-bg-tertiary px-4 py-2 rounded-full border border-border">
                         <Search size={14} className="text-text-muted" />
-                        <input type="text" placeholder="Filtrer..." className="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest w-24" />
+                        <input type="text" placeholder="Filtrer..." className="bg-transparent border-none outline-none text-chip-label w-24" />
                     </div>
                 </div>
 
@@ -161,7 +161,7 @@ export function GestionHuiles() {
                                         </span>
                                     </td>
                                     <td className="px-8 py-5">
-                                        <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-text-muted">
+                                        <div className="flex items-center gap-2 text-chip-label-sm text-text-muted">
                                             {log.action === 'changing' && <RefreshCcw size={12} className="text-brand" />}
                                             {log.action === 'changing' ? 'Renouvellement' : log.action === 'fitering' ? 'Filtration' : 'Contrôle Simple'}
                                         </div>
@@ -238,7 +238,7 @@ export function GestionHuiles() {
                                     key={action}
                                     onClick={() => setFormData({ ...formData, action })}
                                     className={cn(
-                                        "h-14 rounded-2xl border transition-all text-[9px] font-black uppercase tracking-widest flex flex-col items-center justify-center gap-1",
+                                        "h-14 rounded-2xl border transition-all text-chip-label-sm flex flex-col items-center justify-center gap-1",
                                         formData.action === action
                                             ? "bg-accent-gold/10 border-accent-gold text-accent-gold" 
                                             : "bg-bg-tertiary border-border text-text-muted"
@@ -255,7 +255,7 @@ export function GestionHuiles() {
 
                     <Button
                         onClick={handleSubmit}
-                        className="w-full h-16 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-xl transition-all bg-status-warning text-text-primary hover:bg-status-warning border border-action-primary/20"
+                        className="w-full h-16 rounded-[24px] text-chip-label shadow-xl transition-all bg-status-warning text-text-primary hover:bg-status-warning border border-action-primary/20"
                     >
                         Valider l'Intervention
                     </Button>

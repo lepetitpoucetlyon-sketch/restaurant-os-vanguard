@@ -48,7 +48,7 @@ export function CRMContactForm() {
     const formContent = (
         <div className="space-y-8 py-6">
             <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">
+                <label className="text-chip-label-sm text-text-muted px-2">
                     {t('crm.full_name') || 'Nom Complet'}
                 </label>
                 <input 
@@ -60,7 +60,7 @@ export function CRMContactForm() {
                 />
             </div>
             <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">
+                <label className="text-chip-label-sm text-text-muted px-2">
                     {t('crm.phone') || 'Téléphone'}
                 </label>
                 <input 
@@ -72,7 +72,7 @@ export function CRMContactForm() {
                 />
             </div>
             <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">
+                <label className="text-chip-label-sm text-text-muted px-2">
                     {t('crm.notes') || 'Commentaires'}
                 </label>
                 <textarea 
@@ -84,7 +84,7 @@ export function CRMContactForm() {
             </div>
             <Button 
                 onClick={handleSave} 
-                className="w-full h-16 bg-success hover:bg-success/90 text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl transition-all"
+                className="w-full h-16 bg-success hover:bg-success/90 text-text-primary rounded-2xl text-chip-label shadow-xl transition-all"
             >
                 {t('crm.approve_profile') || 'Homologuer Profil'}
             </Button>

@@ -49,7 +49,7 @@ export function SimulatorOverridesPanel({
                             {/* Ratio Tuning */}
                             <div className="flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Staffing Ratio</span>
+                                    <span className="text-chip-label text-text-muted">Staffing Ratio</span>
                                     <span className="text-xs font-mono font-bold text-accent">1 : {staffRatio}</span>
                                 </div>
                                 <input 
@@ -70,13 +70,13 @@ export function SimulatorOverridesPanel({
 
                             {/* Finance Toggle */}
                             <div className="flex flex-col gap-3">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Financial Complexity</span>
+                                <span className="text-chip-label text-text-muted">Financial Complexity</span>
                                 <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
                                     {['SIMPLE', 'EXPERT'].map((mode) => (
                                         <button
                                             key={mode}
                                             onClick={() => toggleAccountingMode()}
-                                            className={`py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                                            className={`py-2 rounded-lg text-chip-label transition-all ${
                                                 accountingMode === mode 
                                                 ? 'bg-accent text-text-primary shadow-lg shadow-accent/20' 
                                                 : 'text-text-muted hover:text-text-primary'

@@ -59,7 +59,7 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
                                     isToday ? "bg-accent/10" : "bg-bg-tertiary"
                                 )}
                             >
-                                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted">
+                                <p className="text-chip-label-sm text-text-muted">
                                     {format(day, "EEE", { locale: fr })}
                                 </p>
                                 <p

@@ -41,7 +41,7 @@ export function QuoteCrmSection({
                         <button
                             onClick={() => setCRMType('company')}
                             className={cn(
-                                "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
+                                "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-chip-label transition-all",
                                 crmType === 'company' ? "bg-surface-card dark:bg-surface-card/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                             )}
                         >
@@ -51,7 +51,7 @@ export function QuoteCrmSection({
                         <button
                             onClick={() => setCRMType('individual')}
                             className={cn(
-                                "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-[10px] font-black uppercase tracking-widest transition-all",
+                                "flex-1 flex items-center justify-center gap-3 py-3 rounded-[20px] text-chip-label transition-all",
                                 crmType === 'individual' ? "bg-surface-card dark:bg-surface-card/10 text-text-primary shadow-premium" : "text-text-muted hover:text-text-primary"
                             )}
                         >

@@ -166,7 +166,7 @@ export default function WelcomePage() {
                  </div>
                  {/* Step B */}
                  <div className="bg-surface-card/5 border border-accent/30 p-10 rounded-3xl backdrop-blur-md relative transform lg:-translate-y-6 shadow-2xl shadow-accent/20">
-                     <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                     <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-chip-label">
                          L'Oracle Intervient
                      </div>
                      <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-8">

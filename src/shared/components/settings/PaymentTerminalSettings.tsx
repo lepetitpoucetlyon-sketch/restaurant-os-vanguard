@@ -86,7 +86,7 @@ export default function PaymentTerminalSettings() {
 
             {/* Env vars reminder */}
             <div className="rounded-2xl border border-border/40 bg-bg-tertiary/30 p-4 space-y-2">
-                <p className="text-[9px] font-black uppercase tracking-widest text-text-muted">Variables d&apos;environnement requises</p>
+                <p className="text-chip-label-sm text-text-muted">Variables d&apos;environnement requises</p>
                 <div className="space-y-1 font-mono text-[10px] text-text-muted/80">
                     <p><span className="text-accent-gold">Stripe</span> → NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY · STRIPE_SECRET_KEY · STRIPE_TERMINAL_LOCATION_ID</p>
                     <p><span className="text-cyan-400">SumUp</span> → SUMUP_API_KEY · SUMUP_AFFILIATE_KEY</p>

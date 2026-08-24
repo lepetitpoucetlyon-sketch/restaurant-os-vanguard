@@ -26,7 +26,7 @@ export function BrandPromptGuide() {
                         <div key={color.name} className="space-y-2 group">
                             <div className={`aspect-square rounded-2xl ${color.class} border border-white/10 group-hover:scale-105 transition-transform shadow-lg`} />
                             <div>
-                                <h5 className="text-[10px] font-black uppercase tracking-widest text-text-primary">{color.name}</h5>
+                                <h5 className="text-chip-label text-text-primary">{color.name}</h5>
                                 <p className="text-[9px] text-text-muted font-mono">{color.hex}</p>
                             </div>
                         </div>

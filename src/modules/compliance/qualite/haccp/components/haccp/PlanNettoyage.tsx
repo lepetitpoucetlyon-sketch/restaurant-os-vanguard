@@ -193,7 +193,7 @@ export function PlanNettoyage() {
                                             )}
                                         </div>
                                         <div className="flex items-center gap-3 mt-1">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2 py-0.5 rounded-lg border border-border bg-surface-card dark:bg-bg-secondary">
+                                            <span className="text-chip-label-sm text-text-muted px-2 py-0.5 rounded-lg border border-border bg-surface-card dark:bg-bg-secondary">
                                                 {task.frequency}
                                             </span>
                                             {isDone && (

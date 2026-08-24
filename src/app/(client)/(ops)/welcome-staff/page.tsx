@@ -141,7 +141,7 @@ function WelcomeStaffInner() {
                                     <Icon className="w-8 h-8" strokeWidth={1.5} />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                                    <p className="text-chip-label text-text-muted">
                                         Bienvenue
                                     </p>
                                     <h1 className="text-2xl font-serif font-black text-text-primary mt-1">
@@ -173,7 +173,7 @@ function WelcomeStaffInner() {
 
                                 {/* New PIN */}
                                 <div>
-                                    <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                                    <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                         Nouveau PIN (4 chiffres)
                                     </label>
                                     <div className="flex items-center border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-accent-gold/50 transition-colors gap-3">
@@ -198,7 +198,7 @@ function WelcomeStaffInner() {
 
                                 {/* Confirm PIN */}
                                 <div>
-                                    <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                                    <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                         Confirmer le PIN
                                     </label>
                                     <div className="flex items-center border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-accent-gold/50 transition-colors gap-3">

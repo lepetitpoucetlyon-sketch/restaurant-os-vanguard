@@ -71,7 +71,7 @@ export function VoidFormFields({
 
             {/* Ticket reference */}
             <div>
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                <label className="text-chip-label-sm text-text-muted block mb-1.5">
                     Référence du ticket original
                 </label>
                 <div className="flex items-center gap-3 border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">
@@ -88,7 +88,7 @@ export function VoidFormFields({
 
             {/* Original amount */}
             <div>
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                <label className="text-chip-label-sm text-text-muted block mb-1.5">
                     Montant original TTC (€)
                 </label>
                 <div className="flex items-center gap-3 border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">
@@ -110,7 +110,7 @@ export function VoidFormFields({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                 >
-                    <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                    <label className="text-chip-label-sm text-text-muted block mb-1.5">
                         Montant à rembourser (€, ≤ {(originalMicrounits / 1_000_000).toFixed(2)} €)
                     </label>
                     <div className="flex items-center gap-3 border border-border rounded-2xl px-4 h-12 bg-bg-primary focus-within:border-status-error/50 transition-colors">
@@ -134,7 +134,7 @@ export function VoidFormFields({
 
             {/* Optional reason */}
             <div>
-                <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                <label className="text-chip-label-sm text-text-muted block mb-1.5">
                     Motif (optionnel)
                 </label>
                 <input

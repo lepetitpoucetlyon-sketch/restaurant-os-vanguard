@@ -66,7 +66,7 @@ export function LandingExecutiveHeader({ userName, isMobile }: LandingExecutiveH
               )}>
                 <action.icon strokeWidth={1.5} className="w-5 h-5" />
               </div>
-              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-text-secondary">
+              <span className="text-[9px] md:text-chip-label text-text-secondary">
                 {action.label}
               </span>
             </motion.div>

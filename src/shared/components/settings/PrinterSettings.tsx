@@ -341,7 +341,7 @@ function PrinterCard({
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-text-primary">{printer.name}</span>
             {printer.isDefault && (
-              <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-action-primary bg-action-primary/10 border border-action-primary/20 px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-chip-label-sm text-action-primary bg-action-primary/10 border border-action-primary/20 px-2 py-0.5 rounded-full">
                 <Star className="w-2.5 h-2.5" /> Défaut
               </span>
             )}

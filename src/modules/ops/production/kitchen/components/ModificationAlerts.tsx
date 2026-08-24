@@ -78,7 +78,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         <div>
                             <div className="flex items-center gap-3 mb-1">
                                 <span className="font-serif font-black italic text-2xl md:text-3xl text-primary dark:text-text-primary tracking-tight">Table {tableNumber}</span>
-                                <span className="px-2 py-0.5 rounded-full bg-status-danger dark:bg-status-danger/30 text-status-danger dark:text-status-danger text-[10px] font-black uppercase tracking-widest border border-red-200 dark:border-red-800 animate-pulse">
+                                <span className="px-2 py-0.5 rounded-full bg-status-danger dark:bg-status-danger/30 text-status-danger dark:text-status-danger text-chip-label border border-red-200 dark:border-red-800 animate-pulse">
                                     Prioritaire
                                 </span>
                             </div>

@@ -205,7 +205,7 @@ export default function SimulatorPage() {
                                                 <h3 className="font-bold text-lg text-text-primary">{scenario.name}</h3>
                                                 <p className="text-sm text-text-muted mt-1">{scenario.description}</p>
                                             </div>
-                                            <div className="px-3 py-1 bg-bg-tertiary rounded-full text-[9px] font-black uppercase tracking-widest text-text-muted flex items-center gap-2">
+                                            <div className="px-3 py-1 bg-bg-tertiary rounded-full text-chip-label-sm text-text-muted flex items-center gap-2">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-success" />
                                                 Confiance {(scenario.confidenceScore * 100).toFixed(0)}%
                                             </div>

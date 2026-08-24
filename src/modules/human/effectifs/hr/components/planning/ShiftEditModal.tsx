@@ -126,7 +126,7 @@ export function ShiftEditModal({
                                 if (shift) onDelete(shift.id);
                                 onClose();
                             }}
-                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-status-danger hover:bg-surface-bg transition-all flex items-center gap-3"
+                            className="h-16 px-10 rounded-full text-chip-label text-status-danger hover:bg-surface-bg transition-all flex items-center gap-3"
                         >
                             <Trash2 className="w-4 h-4" />
                             AUTORISER DESTRUCTION
@@ -137,7 +137,7 @@ export function ShiftEditModal({
                     <div className="flex gap-4">
                         <button
                             onClick={onClose}
-                            className="h-16 px-10 rounded-full text-[10px] font-black uppercase tracking-widest text-muted hover:text-primary transition-all"
+                            className="h-16 px-10 rounded-full text-chip-label text-muted hover:text-primary transition-all"
                         >
                             ANNULER
                         </button>

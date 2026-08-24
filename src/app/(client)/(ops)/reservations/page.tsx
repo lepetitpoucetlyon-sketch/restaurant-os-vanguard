@@ -114,7 +114,7 @@ function ReservationsPage() {
                                                 <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
                                                     <Users className="w-5 h-5 text-accent" />
                                                 </div>
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-text-muted border border-border rounded-full px-2 py-0.5">{g.status ?? "en attente"}</span>
+                                                <span className="text-chip-label-sm text-text-muted border border-border rounded-full px-2 py-0.5">{g.status ?? "en attente"}</span>
                                             </div>
                                             <h3 className="font-black text-text-primary text-sm truncate">{g.name}</h3>
                                             {Boolean((g as JsonObject)["minCovers"]) && (

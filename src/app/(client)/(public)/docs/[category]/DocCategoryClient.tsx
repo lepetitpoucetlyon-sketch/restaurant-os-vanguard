@@ -38,7 +38,7 @@ export default function DocCategoryClient() {
             <nav className="sticky top-0 z-50 bg-surface-card/80 dark:bg-bg-primary/80 backdrop-blur-md border-b border-subtle dark:border-border px-8 py-4 flex items-center justify-between">
                 <button
                     onClick={() => router.back()}
-                    className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-text-primary transition-colors group"
+                    className="flex items-center gap-2 text-chip-label text-text-muted hover:text-text-primary transition-colors group"
                 >
                     <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     Retour

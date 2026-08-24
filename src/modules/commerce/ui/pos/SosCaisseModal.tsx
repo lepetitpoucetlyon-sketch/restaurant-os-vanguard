@@ -170,7 +170,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
                         <div className="py-6 space-y-6">
                             {/* Preset Buttons */}
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                                <label className="text-chip-label text-text-muted">
                                     Type d'incident constaté
                                 </label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -211,7 +211,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
 
                             {/* Additional details */}
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                                <label className="text-chip-label text-text-muted">
                                     Précision supplémentaire (Optionnel)
                                 </label>
                                 <textarea

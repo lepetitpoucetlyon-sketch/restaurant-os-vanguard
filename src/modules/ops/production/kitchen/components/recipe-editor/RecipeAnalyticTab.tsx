@@ -77,7 +77,7 @@ export function RecipeAnalyticTab({
                                 key={a}
                                 onClick={() => toggleAllergen(a)}
                                 className={cn(
-                                    "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
+                                    "px-6 py-3 rounded-2xl text-chip-label-sm transition-all border-2",
                                     formData.allergens?.includes(a)
                                         ? "bg-error text-text-primary border-error shadow-lg shadow-error/20"
                                         : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"
@@ -96,7 +96,7 @@ export function RecipeAnalyticTab({
                                 key={d}
                                 onClick={() => toggleDietary(d)}
                                 className={cn(
-                                    "px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border-2",
+                                    "px-6 py-3 rounded-2xl text-chip-label-sm transition-all border-2",
                                     formData.dietaryInfo?.includes(d)
                                         ? "bg-success text-text-primary border-success shadow-lg shadow-success/20"
                                         : "bg-surface-card text-text-muted border-border hover:border-text-muted/30"

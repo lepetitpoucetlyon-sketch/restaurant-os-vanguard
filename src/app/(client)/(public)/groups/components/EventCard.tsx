@@ -58,7 +58,7 @@ export function EventCard({ group }: { group: Group }) {
 
                 <div className="flex flex-wrap items-center gap-3">
                     {(group.tags || []).map((tag: string, tid: number) => (
-                        <span key={tid} className="text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-xl bg-action-primary/5 text-brand dark:text-brand border border-focus/10">
+                        <span key={tid} className="text-chip-label-sm px-4 py-1.5 rounded-xl bg-action-primary/5 text-brand dark:text-brand border border-focus/10">
                             {tag}
                         </span>
                     ))}

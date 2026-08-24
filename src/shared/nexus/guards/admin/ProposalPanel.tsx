@@ -55,7 +55,7 @@ export function ProposalPanel() {
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2 px-2">
                 <AlertTriangle size={16} className="text-warning animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Conseil Suzerain : Propositions en Attente</span>
+                <span className="text-chip-label text-text-muted">Conseil Suzerain : Propositions en Attente</span>
             </div>
 
             <AnimatePresence>

@@ -86,7 +86,7 @@ export function PMRSection() {
                             </div>
                             <div className="text-right shrink-0 ml-4">
                                 <span className={cn(
-                                    "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                                    "px-3 py-1.5 rounded-full text-chip-label-sm border",
                                     am.status === 'conforme' ? 'bg-success/10 text-success border-success/20' :
                                     am.status === 'en_cours' ? 'bg-warning/10 text-warning border-warning/20' :
                                     'bg-error/10 text-error border-error/20'

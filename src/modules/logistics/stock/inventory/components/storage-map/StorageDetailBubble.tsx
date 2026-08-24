@@ -65,7 +65,7 @@ export function StorageDetailBubble({
                     <button
                         onClick={() => setActiveTab('stock')}
                         className={cn(
-                            "flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                            "flex-1 py-3 rounded-xl text-chip-label transition-all",
                             activeTab === 'stock'
                                 ? "bg-bg-primary shadow-sm text-text-primary ring-1 ring-black/5 dark:ring-white/5"
                                 : "text-text-muted hover:text-text-primary hover:bg-bg-primary/50"

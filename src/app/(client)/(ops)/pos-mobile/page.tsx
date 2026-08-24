@@ -66,7 +66,7 @@ function POSMobilePage() {
                     <button
                         onClick={() => handleSendToKitchen()}
                         disabled={cartItems.length === 0}
-                        className="h-10 px-4 rounded-full bg-status-success text-text-primary text-[10px] font-black uppercase tracking-widest disabled:opacity-30 flex items-center gap-2"
+                        className="h-10 px-4 rounded-full bg-status-success text-text-primary text-chip-label disabled:opacity-30 flex items-center gap-2"
                     >
                         <Send className="w-3.5 h-3.5" />
                         Envoyer
@@ -79,7 +79,7 @@ function POSMobilePage() {
                 <button
                     onClick={() => setSelectedCategory('all')}
                     className={cn(
-                        'h-9 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
+                        'h-9 px-4 rounded-full text-chip-label-sm whitespace-nowrap transition-all',
                         selectedCategory === 'all' ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                     )}
                 >
@@ -90,7 +90,7 @@ function POSMobilePage() {
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
                         className={cn(
-                            'h-9 px-4 rounded-full text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all',
+                            'h-9 px-4 rounded-full text-chip-label-sm whitespace-nowrap transition-all',
                             selectedCategory === cat.id ? 'bg-accent-gold text-text-primary' : 'bg-bg-tertiary text-text-muted'
                         )}
                     >

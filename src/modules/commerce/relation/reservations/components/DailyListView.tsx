@@ -87,7 +87,7 @@ export function DailyListView({
                                             </p>
                                             <div className="flex items-center gap-3 mt-1 flex-wrap">
                                                 <span className={cn(
-                                                    "text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border",
+                                                    "text-chip-label-sm px-2 py-0.5 rounded-full border",
                                                     statusInfo.color
                                                 )}>
                                                     {statusInfo.label}

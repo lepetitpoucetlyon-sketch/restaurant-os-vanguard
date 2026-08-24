@@ -19,7 +19,7 @@ export function CashDrawerOpenSection({
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-2">
+        <label className="text-chip-label-sm text-text-muted block mb-2">
           Fond d'ouverture (€)
         </label>
         <div className="flex items-center gap-3 border border-border rounded-2xl px-4 h-14 bg-bg-primary focus-within:border-accent-gold/50 transition-colors">

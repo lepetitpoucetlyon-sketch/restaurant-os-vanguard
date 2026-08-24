@@ -119,7 +119,7 @@ export function StrategyOracle() {
                                 whileTap={{ scale: 0.95 }}
                                 onClick={getExecutiveBriefing}
                                 disabled={isProcessing}
-                                className="px-4 py-2 bg-action-primary hover:bg-action-primary disabled:opacity-50 text-text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                                className="px-4 py-2 bg-action-primary hover:bg-action-primary disabled:opacity-50 text-text-primary rounded-xl text-chip-label transition-all flex items-center gap-2"
                             >
                                 <Sparkles className="w-3 h-3" />
                                 {isProcessing ? 'Analyzing...' : 'Refresh Briefing'}
@@ -211,7 +211,7 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
                     <button
                         onClick={handleExecute}
                         disabled={status !== 'idle'}
-                        className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
+                        className={`px-5 py-2 rounded-xl text-chip-label transition-all flex items-center gap-2 ${
                             status === 'done' 
                             ? 'bg-status-success/20 text-status-success' 
                             : 'bg-surface-card hover:bg-surface-card text-primary shadow-[0_10px_20px_rgba(255,255,255,0.05)]'

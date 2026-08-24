@@ -130,12 +130,12 @@ export default function CashDrawerSettings() {
             {/* Extra config for network mode */}
             {config.mode === "network" && (
                 <div className="rounded-2xl border border-border bg-bg-tertiary/40 p-5 space-y-4">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                    <p className="text-chip-label text-text-muted">
                         Configuration réseau
                     </p>
                     <div className="grid grid-cols-3 gap-3">
                         <div className="col-span-2">
-                            <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                            <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                 Adresse IP du tiroir
                             </label>
                             <input
@@ -147,7 +147,7 @@ export default function CashDrawerSettings() {
                             />
                         </div>
                         <div>
-                            <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                            <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                 Port TCP
                             </label>
                             <input
@@ -165,11 +165,11 @@ export default function CashDrawerSettings() {
             {/* Extra config for serial mode */}
             {config.mode === "serial" && (
                 <div className="rounded-2xl border border-border bg-bg-tertiary/40 p-5 space-y-4">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                    <p className="text-chip-label text-text-muted">
                         Configuration série
                     </p>
                     <div className="max-w-[200px]">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1.5">
+                        <label className="text-chip-label-sm text-text-muted block mb-1.5">
                             Baud rate
                         </label>
                         <select
@@ -228,7 +228,7 @@ export default function CashDrawerSettings() {
             {/* Note on printer-kick */}
             {config.mode === "printer-kick" && (
                 <div className="rounded-2xl border border-border/40 bg-bg-tertiary/30 p-4">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-text-muted mb-1">Note</p>
+                    <p className="text-chip-label-sm text-text-muted mb-1">Note</p>
                     <p className="text-[10px] text-text-muted leading-relaxed">
                         Le tiroir doit être branché sur le port DK de l'imprimante de ticket configurée comme réception. La commande ESC/POS <span className="font-mono text-accent-gold/80">ESC p 0</span> sera envoyée via l'imprimante.
                     </p>
