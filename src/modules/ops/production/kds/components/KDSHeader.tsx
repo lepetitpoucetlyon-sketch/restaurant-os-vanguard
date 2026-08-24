@@ -168,7 +168,7 @@ export function KDSHeader({
                                 key="search-btn"
                                 onClick={() => setIsSearchExpanded(true)}
                                 aria-label="Rechercher un ticket"
-                                className="w-10 h-10 flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-white/5 transition-colors"
+                                className="w-10 h-10 flex items-center justify-center rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-glass-hover transition-colors"
                             >
                                 <Search className="w-[15px] h-[15px]" strokeWidth={2} />
                             </button>
@@ -185,7 +185,7 @@ export function KDSHeader({
                             "flex items-center gap-1.5 h-10 px-3 rounded-lg text-sm font-medium tracking-tight transition-colors border",
                             isGridDropdownOpen
                                 ? "bg-surface-glass-hover text-text-primary border-border"
-                                : "bg-transparent border-transparent hover:bg-white/5 text-text-muted hover:text-text-primary"
+                                : "bg-transparent border-transparent hover:bg-surface-glass-hover text-text-muted hover:text-text-primary"
                         )}
                     >
                         <LayoutGrid className="w-[15px] h-[15px]" strokeWidth={2} />
@@ -206,7 +206,7 @@ export function KDSHeader({
                                         onClick={() => { setGridColumns(num); setIsGridDropdownOpen(false); }}
                                         className={cn(
                                             "w-full h-8 rounded-md flex items-center justify-center text-sm font-medium tabular-nums transition-colors",
-                                            gridColumns === num ? "bg-accent-gold/15 text-accent-gold" : "text-text-muted hover:bg-white/5 hover:text-text-primary"
+                                            gridColumns === num ? "bg-accent-gold/15 text-accent-gold" : "text-text-muted hover:bg-surface-glass-hover hover:text-text-primary"
                                         )}
                                     >
                                         {num}

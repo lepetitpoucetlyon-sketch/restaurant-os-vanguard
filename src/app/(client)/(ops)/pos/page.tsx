@@ -122,7 +122,7 @@ function POSPage() {
                     <div className="flex items-baseline gap-5 min-w-0">
                         <button onClick={() => setSelectedTableId(null)}
                             aria-label="Retour à la sélection des tables"
-                            className="shrink-0 w-9 h-9 -mb-1 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-white/5 rounded-full transition-colors">
+                            className="shrink-0 w-9 h-9 -mb-1 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-glass-hover rounded-full transition-colors">
                             <ArrowLeft className="w-[18px] h-[18px]" />
                         </button>
 

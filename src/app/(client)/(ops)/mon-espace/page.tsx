@@ -250,7 +250,7 @@ function MonEspacePage() {
                                                     href={doc.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="p-2 rounded-lg border border-zinc-700 hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors"
+                                                    className="p-2 rounded-lg border border-border/40 hover:bg-surface-glass-hover text-text-muted hover:text-text-primary transition-colors"
                                                     title="Visualiser le document"
                                                 >
                                                     <ExternalLink className="w-4 h-4" />
