@@ -59,19 +59,19 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                   <FileText className="w-5 h-5 text-emerald-400" />
                   {selectedContract.document.title}
                 </h3>
-                <p className="text-xs text-zinc-400 font-mono">
+                <p className="text-xs text-text-muted font-mono">
                   Réf : {selectedContract.id} — Statut : {selectedContract.status}
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white"
+                className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-6 text-sm text-zinc-300 font-sans">
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-text-secondary font-sans">
               {feedbackMessage && (
                 <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 text-xs font-medium">
                   {feedbackMessage}
@@ -106,7 +106,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                     <Download className="w-5 h-5 text-indigo-400" />
                     <div>
                       <h4 className="text-xs font-bold text-white">Document Signé PDF (DocuSeal)</h4>
-                      <p className="text-[11px] text-zinc-400">PDF horodaté avec certificat et logs d&apos;audit</p>
+                      <p className="text-[11px] text-text-muted">PDF horodaté avec certificat et logs d&apos;audit</p>
                     </div>
                   </div>
                   <a
@@ -120,7 +120,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                 </div>
               )}
 
-              <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800/80 whitespace-pre-wrap font-mono text-xs leading-relaxed text-zinc-300 max-h-[45vh] overflow-y-auto">
+              <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800/80 whitespace-pre-wrap font-mono text-xs leading-relaxed text-text-secondary max-h-[45vh] overflow-y-auto">
                 {selectedContract.document.fullTextContent}
               </div>
             </div>

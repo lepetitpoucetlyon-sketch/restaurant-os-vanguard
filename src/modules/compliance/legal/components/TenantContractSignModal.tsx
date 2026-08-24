@@ -163,21 +163,21 @@ export function TenantContractSignModal({
             </div>
             <div>
               <h3 className="text-lg font-bold text-white">Signature Électronique Certifiée eIDAS</h3>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-text-muted">
                 Contrat SaaS & DPA RGPD Art. 28 — {contract.client.companyName} ({contract.vertical})
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white"
+            className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Reader & Signature Form */}
-        <div className="p-6 overflow-y-auto space-y-6 text-sm text-zinc-300">
+        <div className="p-6 overflow-y-auto space-y-6 text-sm text-text-secondary">
           {errorMessage && (
             <div className="p-4 rounded-2xl bg-rose-950/30 border border-rose-500/30 flex items-center gap-3 text-rose-400 text-xs font-medium">
               <AlertCircle className="w-5 h-5 shrink-0" />
@@ -187,23 +187,23 @@ export function TenantContractSignModal({
 
           {/* Contract Full Text Box */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider flex items-center gap-2">
               <FileText className="w-3.5 h-3.5 text-emerald-400" />
               1. Consultation intégrale des termes contractuels
             </label>
-            <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800/80 max-h-56 overflow-y-auto font-mono text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap select-text">
+            <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800/80 max-h-56 overflow-y-auto font-mono text-xs text-text-secondary leading-relaxed whitespace-pre-wrap select-text">
               {contract.document.fullTextContent}
             </div>
           </div>
 
           {/* Signer Identity Information */}
           <div className="space-y-3">
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">
               2. Informations et pouvoir du signataire
             </label>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-[11px] text-zinc-400 mb-1">Nom et Prénom</label>
+                <label className="block text-[11px] text-text-muted mb-1">Nom et Prénom</label>
                 <input
                   type="text"
                   value={signerName}
@@ -213,7 +213,7 @@ export function TenantContractSignModal({
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-zinc-400 mb-1">Qualité / Titre</label>
+                <label className="block text-[11px] text-text-muted mb-1">Qualité / Titre</label>
                 <input
                   type="text"
                   value={signerRole}
@@ -223,7 +223,7 @@ export function TenantContractSignModal({
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-zinc-400 mb-1">Email Professionnel</label>
+                <label className="block text-[11px] text-text-muted mb-1">Email Professionnel</label>
                 <input
                   type="email"
                   value={signerEmail}
@@ -238,13 +238,13 @@ export function TenantContractSignModal({
           {/* Canvas Signature Pad */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                 3. Apposez votre signature manuscrite (Pad tactile / Souris)
               </label>
               <button
                 type="button"
                 onClick={clearCanvas}
-                className="text-xs text-zinc-400 hover:text-emerald-400 flex items-center gap-1 transition"
+                className="text-xs text-text-muted hover:text-emerald-400 flex items-center gap-1 transition"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Effacer
               </button>
@@ -265,7 +265,7 @@ export function TenantContractSignModal({
                 className="w-full h-40 cursor-crosshair touch-none"
               />
               {!hasDrawn && (
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-zinc-600 text-xs">
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-text-muted/70 text-xs">
                   Signez ici avec votre doigt ou la souris
                 </div>
               )}
@@ -281,7 +281,7 @@ export function TenantContractSignModal({
               onChange={(e) => setConsentConfirmed(e.target.checked)}
               className="mt-1 w-4 h-4 rounded border-zinc-700 text-emerald-500 focus:ring-emerald-500 bg-zinc-900 cursor-pointer"
             />
-            <label htmlFor="consent" className="text-xs text-zinc-300 leading-relaxed cursor-pointer select-none">
+            <label htmlFor="consent" className="text-xs text-text-secondary leading-relaxed cursor-pointer select-none">
               Je confirme être dûment habilité(e) à engager la société{' '}
               <strong>{contract.client.companyName}</strong>, avoir lu et accepté sans réserve l intégralité des{' '}
               <strong>CGU/CGV SaaS</strong>, les tarifs de la formule <strong>{contract.pricing.planName}</strong> (
@@ -293,7 +293,7 @@ export function TenantContractSignModal({
 
         {/* Footer Actions */}
         <div className="p-5 border-t border-zinc-800 bg-zinc-950/60 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-zinc-400">
+          <div className="flex items-center gap-2 text-xs text-text-muted">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             Scellement SHA-256 & Certificat eIDAS Horodaté
           </div>

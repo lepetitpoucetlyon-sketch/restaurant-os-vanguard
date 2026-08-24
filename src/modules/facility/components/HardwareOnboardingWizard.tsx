@@ -71,7 +71,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
       case 'FISCAL':
         return <ShieldCheck className="w-4 h-4 text-teal-400" />;
       default:
-        return <Cpu className="w-4 h-4 text-zinc-400" />;
+        return <Cpu className="w-4 h-4 text-text-muted" />;
     }
   };
 
@@ -95,7 +95,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             <h2 className="text-xl font-bold text-white">
               Wizard d Onboarding & Recette Matérielle — {siteName}
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-muted">
               Autodiagnostic en 12 points : TPE Stripe, Imprimantes ESC/POS, Tiroir RJ11, Sondes IoT & Secours 4G.
             </p>
           </div>
@@ -124,7 +124,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
         {/* Inputs Signataires */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-zinc-800/80">
           <div>
-            <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Technicien Déploiement</label>
+            <label className="block text-[11px] font-semibold text-text-muted mb-1">Technicien Déploiement</label>
             <input
               type="text"
               value={technicianName}
@@ -133,7 +133,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Directeur / Gérant Signataire</label>
+            <label className="block text-[11px] font-semibold text-text-muted mb-1">Directeur / Gérant Signataire</label>
             <input
               type="text"
               value={managerName}
@@ -153,7 +153,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
               activeCategory === cat
                 ? 'bg-zinc-100 text-zinc-900 shadow-md'
-                : 'bg-zinc-900/60 border border-zinc-800 text-zinc-400 hover:text-white'
+                : 'bg-zinc-900/60 border border-zinc-800 text-text-muted hover:text-white'
             }`}
           >
             {cat === 'ALL' ? 'Tous les Périphériques (12)' : cat}
@@ -189,7 +189,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                     <h4 className="text-sm font-bold text-white flex items-center gap-2">
                       {item.name}
                     </h4>
-                    <p className="text-xs text-zinc-400 mt-0.5">
+                    <p className="text-xs text-text-muted mt-0.5">
                       {checkResult ? checkResult.details : (item as { description?: string }).description}
                     </p>
                   </div>
@@ -207,7 +207,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                       </span>
                     )
                   ) : (
-                    <span className="text-[11px] font-mono text-zinc-500">En attente</span>
+                    <span className="text-[11px] font-mono text-text-muted/80">En attente</span>
                   )}
                 </div>
               </div>
@@ -232,7 +232,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                 <h3 className="text-base font-bold text-white">
                   Procès-Verbal de Recette d Installation Matérielle (Validé)
                 </h3>
-                <p className="text-xs text-zinc-400 font-mono">
+                <p className="text-xs text-text-muted font-mono">
                   Réf : {report.reportId} — Horodatage : {new Date(report.createdAt).toLocaleString('fr-FR')}
                 </p>
               </div>
@@ -245,14 +245,14 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 text-xs text-zinc-300 space-y-2">
+          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 text-xs text-text-secondary space-y-2">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-zinc-500">Installé & Certifié par :</span>{' '}
+                <span className="text-text-muted/80">Installé & Certifié par :</span>{' '}
                 <strong className="text-white">{report.technicianName}</strong>
               </div>
               <div>
-                <span className="text-zinc-500">Contresigné par le Gérant :</span>{' '}
+                <span className="text-text-muted/80">Contresigné par le Gérant :</span>{' '}
                 <strong className="text-white">{report.managerName}</strong>
               </div>
             </div>

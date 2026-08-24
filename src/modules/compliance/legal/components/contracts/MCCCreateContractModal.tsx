@@ -77,7 +77,7 @@ export function MCCCreateContractModal({
               </h3>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white"
+                className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -86,7 +86,7 @@ export function MCCCreateContractModal({
             <form onSubmit={onSubmit} className="p-6 overflow-y-auto space-y-4 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Tenant ID</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Tenant ID</label>
                   <input
                     type="text"
                     value={tenantId}
@@ -96,7 +96,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Verticale Métier</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Verticale Métier</label>
                   <select
                     value={vertical}
                     onChange={(e) => setVertical(e.target.value as VerticalType)}
@@ -119,7 +119,7 @@ export function MCCCreateContractModal({
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Raison Sociale</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Raison Sociale</label>
                   <input
                     type="text"
                     value={companyName}
@@ -129,7 +129,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Forme Juridique</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Forme Juridique</label>
                   <input
                     type="text"
                     value={legalForm}
@@ -142,7 +142,7 @@ export function MCCCreateContractModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">SIREN</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">SIREN</label>
                   <input
                     type="text"
                     value={siren}
@@ -152,7 +152,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Email Signataire</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Email Signataire</label>
                   <input
                     type="email"
                     value={email}
@@ -165,7 +165,7 @@ export function MCCCreateContractModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Nom du Représentant</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Nom du Représentant</label>
                   <input
                     type="text"
                     value={representativeName}
@@ -175,7 +175,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Qualité / Rôle</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Qualité / Rôle</label>
                   <input
                     type="text"
                     value={representativeRole}
@@ -188,7 +188,7 @@ export function MCCCreateContractModal({
 
               <div className="grid grid-cols-3 gap-4 border-t border-zinc-800 pt-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Tarif Mensuel (€ HT)</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Tarif Mensuel (€ HT)</label>
                   <input
                     type="number"
                     value={monthlyPrice}
@@ -198,7 +198,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Setup Initial (€ HT)</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Setup Initial (€ HT)</label>
                   <input
                     type="number"
                     value={setupFee}
@@ -208,7 +208,7 @@ export function MCCCreateContractModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Engagement</label>
+                  <label className="block text-xs font-semibold text-text-muted mb-1">Engagement</label>
                   <select
                     value={commitmentMonths}
                     onChange={(e) => setCommitmentMonths(Number(e.target.value))}

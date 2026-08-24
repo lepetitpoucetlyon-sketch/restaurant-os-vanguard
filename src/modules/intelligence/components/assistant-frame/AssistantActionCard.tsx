@@ -64,7 +64,7 @@ export function AssistantActionCard({ proposal, onExecute, onDismiss }: Assistan
         if (level >= 70) return "bg-amber-500/20 text-amber-300 border-amber-500/40";
         if (level >= 50) return "bg-indigo-500/20 text-indigo-300 border-indigo-500/40";
         if (level >= 30) return "bg-blue-500/20 text-blue-300 border-blue-500/40";
-        return "bg-zinc-500/20 text-zinc-300 border-zinc-500/40";
+        return "bg-zinc-500/20 text-text-secondary border-zinc-500/40";
     };
 
     return (
