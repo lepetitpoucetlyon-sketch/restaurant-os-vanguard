@@ -1,0 +1,71 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-08-24T19:21:48.922Z",
+        "reason": "Design-system --ease-out-back token, consommé par animate-scale-in-bounce + animate-check-bounce (celebrations POS PaymentSuccess + checkmarks confirmation). Bounce UX-motivé délibéré."
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "scale-in-bounce",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-08-24T19:21:49.888Z",
+        "reason": "Design-system utility, reveal des modals de succès POS (PaymentSuccessView)."
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "bounce-subtle",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-08-24T19:21:50.861Z",
+        "reason": "Design-system utility subtle attention-drawing, consommé sur badges anomalies + KDS warnings."
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "check-bounce",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-08-24T19:21:51.850Z",
+        "reason": "Design-system utility checkmark de confirmation (paiement validé, action homologuée, PasskeyStepUp)."
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "animate-bounce",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-08-24T19:21:52.931Z",
+        "reason": "Utility Tailwind interne au design system, consommé sur 8+ surfaces UX (célébration/attention délibéré)."
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "src/shared/components/settings/BrandingPanel.tsx"
+        ],
+        "createdAt": "2026-08-24T19:22:05.665Z",
+        "reason": "Option du font-picker tenant (le client choisit sa police brand), pas la police que l'app utilise. Legitime showcase."
+      },
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "files": [
+          "src/shared/components/settings/BrandingPanel.tsx"
+        ],
+        "createdAt": "2026-08-24T19:22:06.658Z",
+        "reason": "Option du font-picker tenant (le client choisit sa police brand), pas la police que l'app utilise. Legitime showcase."
+      }
+    ]
+  }
+}
