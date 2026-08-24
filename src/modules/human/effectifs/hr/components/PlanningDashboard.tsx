@@ -111,10 +111,11 @@ export function PlanningDashboard() {
             {/* Header / Week Navigator */}
             <div className="bg-white/80 dark:bg-bg-primary/80 backdrop-blur-2xl px-6 py-6 border-b border-border/50 sticky top-0 z-40">
                 <div className="flex items-center justify-between mb-6">
-                    <div className="space-y-1">
-                        <h1 className="text-4xl font-serif font-black italic text-text-primary tracking-tight">Planning<span className="text-accent-gold">.</span></h1>
+                    <div className="flex items-baseline gap-3">
+                        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Effectifs</span>
+                        <h1 className="font-serif font-black text-[34px] leading-none tracking-[-0.02em] text-text-primary">Planning</h1>
                         {!isMobile && (
-                             <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">Module de Supervision RH & Paie</p>
+                             <p className="text-xs text-text-muted italic ml-2">Supervision RH &amp; Paie</p>
                         )}
                     </div>
                     
@@ -133,16 +134,16 @@ export function PlanningDashboard() {
                                             showToast("Aucun shift en attente de publication", "info");
                                         }
                                     }}
-                                    className="h-12 px-8 bg-action-primary text-text-on-primary rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest hover:bg-action-primary-hover transition-all shadow-xl shadow-action-primary/20"
+                                    className="h-10 px-5 bg-accent-gold text-[#0B0B0C] rounded-xl flex items-center gap-2 text-sm font-medium tracking-tight hover:bg-accent-gold/90 transition-colors shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]"
                                 >
-                                    <Bell className="w-4 h-4" />
+                                    <Bell className="w-[15px] h-[15px]" />
                                     Publier la semaine
                                 </Button>
                             </ActionGuard>
                         )}
-                        <div className="flex bg-surface-card p-1 rounded-full border border-border-default">
-                            <button onClick={() => setViewMode('daily')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'daily' ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>JOUR</button>
-                            <button onClick={() => setViewMode('staff')} className={cn("px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all", viewMode === 'staff' ? "bg-action-primary text-text-on-primary shadow-sm" : "text-text-muted hover:text-text-primary")}>STAFF</button>
+                        <div className="flex items-center h-10 bg-white/[0.03] border border-border/40 rounded-xl overflow-hidden">
+                            <button onClick={() => setViewMode('daily')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors border-r border-border/40", viewMode === 'daily' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary")}>Jour</button>
+                            <button onClick={() => setViewMode('staff')} className={cn("h-full px-4 text-xs font-medium tracking-tight transition-colors", viewMode === 'staff' ? "bg-white/[0.05] text-text-primary" : "text-text-muted hover:text-text-primary")}>Staff</button>
                         </div>
                     </div>
                 </div>
@@ -160,8 +161,8 @@ export function PlanningDashboard() {
                                     isSelected ? "bg-accent-gold text-text-on-primary border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
                                 )}
                             >
-                                <span className="text-[8px] font-black uppercase tracking-widest opacity-60 mb-1">{format(day, "EEE", { locale: fr })}</span>
-                                <span className="text-xl font-serif italic font-black">{format(day, "d")}</span>
+                                <span className="text-[11px] font-medium uppercase tracking-wide opacity-70 mb-1">{format(day, "EEE", { locale: fr })}</span>
+                                <span className="text-xl font-serif italic font-black tabular-nums">{format(day, "d")}</span>
                             </button>
                         );
                     })}
@@ -192,13 +193,13 @@ export function PlanningDashboard() {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold text-sm text-text-primary">{user.name}</h4>
-                                                        <p className="text-[9px] font-black text-action-primary uppercase tracking-widest">{t(`planning.roles.${user.role}`)}</p>
+                                                        <p className="text-[11px] font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
                                                     </div>
                                                 </div>
                                                 {shift ? (
                                                     <div className="text-right">
                                                         <p className="text-sm font-mono font-bold text-text-primary">{shift.startTime}—{shift.endTime}</p>
-                                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted">{(shift.position ?? '').toUpperCase()}</span>
+                                                        <span className="font-serif italic text-[11px] tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
                                                     </div>
                                                 ) : (
                                                     <div className="w-8 h-8 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted">
@@ -241,7 +242,7 @@ export function PlanningDashboard() {
                                                 key={user.id}
                                                 onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
                                                 className={cn(
-                                                    "bg-surface-card p-5 rounded-[2rem] border border-border-default flex items-center justify-between hover:border-action-primary/40 cursor-pointer transition-all",
+                                                    "bg-surface-card p-5 rounded-2xl border border-border-default flex items-center justify-between hover:border-accent-gold/40 cursor-pointer transition-colors",
                                                     !shift && "opacity-60 bg-surface-bg"
                                                 )}
                                             >
@@ -251,13 +252,13 @@ export function PlanningDashboard() {
                                                     </div>
                                                     <div>
                                                         <h4 className="text-xl font-serif font-black italic text-text-primary">{user.name}</h4>
-                                                        <p className="text-[9px] font-black text-action-primary uppercase tracking-widest">{t(`planning.roles.${user.role}`)}</p>
+                                                        <p className="text-[11px] font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
                                                     </div>
                                                 </div>
                                                 {shift ? (
                                                     <div className="text-right">
                                                         <p className="text-lg font-mono font-bold tracking-tighter text-text-primary">{shift.startTime}—{shift.endTime}</p>
-                                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-text-muted">{(shift.position ?? '').toUpperCase()}</span>
+                                                        <span className="font-serif italic text-[11px] tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
                                                     </div>
                                                 ) : (
                                                     <div className="w-10 h-10 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted/40">
@@ -271,7 +272,7 @@ export function PlanningDashboard() {
                             ) : (
                                 <motion.div key="staff-desktop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 gap-4">
                                     {users.map(user => (
-                                        <div key={user.id} className="bg-surface-card p-6 rounded-[2.5rem] border border-border-default flex flex-col gap-4">
+                                        <div key={user.id} className="bg-surface-card p-6 rounded-2xl border border-border-default flex flex-col gap-4">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-12 h-12 rounded-full bg-action-primary/10 flex items-center justify-center text-action-primary">
                                                     <UserIcon className="w-6 h-6" />
@@ -319,17 +320,17 @@ export function PlanningDashboard() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted px-2">Service</label>
+                        <label className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/80 px-2">Service</label>
                         <div className="grid grid-cols-3 gap-2">
                             {['lunch', 'evening', 'double'].map(type => (
-                                <button 
-                                    key={type} 
+                                <button
+                                    key={type}
                                     onClick={() => setEditType(type as ShiftType)}
                                     className={cn(
-                                        "h-12 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all",
+                                        "h-12 rounded-xl text-sm font-medium tracking-tight border transition-colors capitalize",
                                         editType === type
-                                            ? "bg-accent-gold text-text-on-primary border-transparent shadow-lg scale-105"
-                                            : "bg-bg-tertiary text-text-muted border-border hover:border-accent-gold/50"
+                                            ? "bg-accent-gold text-[#0B0B0C] border-accent-gold shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]"
+                                            : "bg-white/[0.03] text-text-secondary border-border/40 hover:border-accent-gold/50 hover:text-text-primary"
                                     )}
                                 >
                                     {type}
@@ -344,7 +345,7 @@ export function PlanningDashboard() {
                                 <Trash2 className="w-6 h-6" />
                             </Button>
                         )}
-                        <Button className="flex-1 h-16 bg-accent-gold text-text-on-primary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-accent-gold/90 shadow-premium shadow-accent-gold/20 active:scale-[0.98] transition-all" onClick={handleHomologuer}>
+                        <Button className="flex-1 h-14 bg-accent-gold text-[#0B0B0C] rounded-2xl text-sm font-medium tracking-tight hover:bg-accent-gold/90 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)] active:scale-[0.99] transition-colors" onClick={handleHomologuer}>
                             Homologuer le shift
                         </Button>
                     </div>

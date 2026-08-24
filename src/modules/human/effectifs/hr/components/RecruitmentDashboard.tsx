@@ -29,16 +29,19 @@ export function RecruitmentDashboard() {
         <div className="space-y-8 animate-in fade-in duration-700">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div>
-                    <h1 className="text-4xl font-serif font-black italic text-text-primary tracking-tighter mb-2">
-                        Pipeline de <span className="text-accent-gold not-italic">Recrutement</span>
-                    </h1>
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-status-success bg-status-success/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                            <ShieldCheck className="w-3 h-3" />
-                            RGPD : Conforme
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-baseline gap-3">
+                        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Effectifs</span>
+                        <h1 className="font-serif font-black text-[34px] leading-none tracking-[-0.02em] text-text-primary">
+                            Recrutement
+                        </h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-tight text-status-success bg-status-success/10 px-3 py-1 rounded-full border border-status-success/20">
+                            <ShieldCheck className="w-3.5 h-3.5" />
+                            RGPD conforme
                         </span>
-                        <span className="text-text-muted text-xs font-bold uppercase tracking-widest opacity-60">
+                        <span className="text-text-muted text-xs italic tabular-nums">
                             {candidates.length} candidatures actives
                         </span>
                     </div>
@@ -68,15 +71,15 @@ export function RecruitmentDashboard() {
             {/* Kanban Board */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 h-[calc(100vh-280px)] min-h-[600px]">
                 {COLUMNS.map(column => (
-                    <div key={column.id} className="flex flex-col gap-4 bg-bg-secondary/30 rounded-[2rem] p-4 border border-border/50">
+                    <div key={column.id} className="flex flex-col gap-4 bg-bg-secondary/30 rounded-2xl p-4 border border-border/50">
                         <div className="flex items-center justify-between px-4 py-2">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: column.color }} />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+                                <span className="text-xs font-medium tracking-tight text-text-secondary">
                                     {column.label}
                                 </span>
                             </div>
-                            <span className="text-[10px] font-bold text-text-muted bg-bg-tertiary px-2 py-0.5 rounded-md">
+                            <span className="text-xs font-medium text-text-muted bg-bg-tertiary px-2 py-0.5 rounded-md tabular-nums">
                                 {filteredCandidates.filter(c => c.status === column.id).length}
                             </span>
                         </div>

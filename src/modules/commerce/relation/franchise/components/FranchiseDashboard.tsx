@@ -41,10 +41,10 @@ export function FranchiseDashboard() {
                         <Building2 className="w-6 h-6" />
                     </div>
                     <div className="space-y-1.5">
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.32em]">
+                        <p className="font-serif italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">
                             Réseau Multi-Sites
                         </p>
-                        <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-tight leading-none">
+                        <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-[-0.02em] leading-none">
                             Empire<span className="text-accent-gold not-italic">.</span>
                         </h1>
                         <p className="text-xs text-text-secondary">
@@ -56,7 +56,7 @@ export function FranchiseDashboard() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="h-11 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-text-on-primary font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-accent-gold/20 hover:-translate-y-0.5"
+                        className="h-10 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-[#0B0B0C] text-sm font-medium tracking-tight flex items-center gap-2 transition-colors shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]"
                     >
                         <ArrowRightLeft className="w-4 h-4" />
                         Nouveau Transfert

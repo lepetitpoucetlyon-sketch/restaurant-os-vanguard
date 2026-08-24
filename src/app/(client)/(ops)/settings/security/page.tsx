@@ -176,7 +176,7 @@ function SecuritySettingsPage() {
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between gap-2 mb-1">
                                                     <span className="font-bold text-sm text-text-primary">{meta.label}</span>
-                                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${
+                                                    <span className={`text-[11px] font-medium tracking-tight px-2.5 py-0.5 rounded-full ${
                                                         meta.securityLevel === 'strong' ? 'bg-status-success/10 text-status-success' :
                                                         meta.securityLevel === 'medium' ? 'bg-amber-500/10 text-amber-500' :
                                                         'bg-text-muted/10 text-text-muted'
@@ -238,7 +238,7 @@ function SecuritySettingsPage() {
                             <button
                                 onClick={generateNewCodes}
                                 disabled={isGenerating}
-                                className="h-10 px-4 rounded-xl bg-accent-gold text-text-on-primary text-xs font-black uppercase tracking-widest hover:bg-accent-gold/90 shadow-lg shadow-accent-gold/20 transition-all flex items-center gap-2 disabled:opacity-50"
+                                className="h-10 px-5 rounded-xl bg-accent-gold text-[#0B0B0C] text-sm font-medium tracking-tight hover:bg-accent-gold/90 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)] transition-colors flex items-center gap-2 disabled:opacity-50"
                             >
                                 {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
                                 {remaining > 0 ? 'Régénérer' : 'Générer 10 codes'}

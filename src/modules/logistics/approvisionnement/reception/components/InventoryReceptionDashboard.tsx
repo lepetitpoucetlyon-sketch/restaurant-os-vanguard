@@ -53,7 +53,7 @@ function ScanContent({ isScanning, onScan }: { isScanning: boolean; onScan: () =
 
 function AdviceSaveButton({ isSaving, onSave }: { isSaving: boolean; onSave: () => void }) {
     return (
-        <button onClick={onSave} disabled={isSaving} className="w-full bg-surface-bg text-text-primary py-5 rounded-2xl font-black uppercase text-sm flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50">
+        <button onClick={onSave} disabled={isSaving} className="w-full bg-accent-gold text-[#0B0B0C] py-4 rounded-2xl font-medium text-sm tracking-tight flex items-center justify-center gap-3 active:scale-[0.99] transition-colors disabled:opacity-50 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
             {isSaving ? (
                 <span className="animate-pulse">Synchronisation...</span>
             ) : (
@@ -65,18 +65,18 @@ function AdviceSaveButton({ isSaving, onSave }: { isSaving: boolean; onSave: () 
 
 function StepIndicator({ step, active, label }: { step: string; active: boolean; label: string }) {
     return (
-        <div className={`px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${active ? 'bg-action-primary text-text-primary shadow-lg' : 'text-text-secondary'}`}>
-            <span className="opacity-50">{step === 'scan' ? '01' : step === 'verify' ? '02' : '03'}</span>
-            {label}
+        <div className={`px-4 py-2 rounded-lg text-xs font-medium tracking-tight transition-colors flex items-center gap-2 ${active ? 'bg-accent-gold/12 text-accent-gold border border-accent-gold/30' : 'text-text-secondary'}`}>
+            <span className="font-serif italic opacity-60 tabular-nums">{step === 'scan' ? '01' : step === 'verify' ? '02' : '03'}</span>
+            <span>{label}</span>
         </div>
     );
 }
 
 function LogItem({ label, value, trend }: { label: string; value: string; trend: 'up' | 'ok' }) {
     return (
-        <div className="flex justify-between items-center text-[10px] font-bold">
-            <span className="text-text-secondary uppercase tracking-tighter">{label}</span>
-            <span className={trend === 'up' ? 'text-status-success' : 'text-action-primary'}>{value}</span>
+        <div className="flex justify-between items-baseline text-xs">
+            <span className="text-text-muted">{label}</span>
+            <span className={`font-medium tabular-nums ${trend === 'up' ? 'text-status-success' : 'text-accent-gold'}`}>{value}</span>
         </div>
     );
 }
@@ -205,7 +205,7 @@ export function InventoryReceptionDashboard() {
                             exit={{ opacity: 0, scale: 1.05 }}
                             className="flex flex-col items-center"
                         >
-                            <div className="w-full aspect-video md:aspect-[21/9] bg-surface-sidebar rounded-[2.5rem] border-2 border-dashed border-border-default flex flex-col items-center justify-center relative overflow-hidden group">
+                            <div className="w-full aspect-video md:aspect-[21/9] bg-surface-sidebar rounded-3xl border-2 border-dashed border-border-default flex flex-col items-center justify-center relative overflow-hidden group">
                                 <ScanContent isScanning={isScanning} onScan={handleScan} />
                             </div>
                         </motion.div>
