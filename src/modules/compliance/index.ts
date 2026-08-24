@@ -57,3 +57,26 @@ export * from './domain/schemas/rbac';
 export * from './domain/schemas/license';
 export type { SensorReading } from './qualite/haccp/types';
 export type { IoTSensor, SensorTransport, IoTSensorReading } from './domain/schemas/haccp';
+
+// P0.4 — MFA multi-canaux (Plan v3.1)
+export {
+    MfaChannelsService,
+    MFA_CHANNEL_META,
+    DEFAULT_MFA_CONFIG,
+    MfaChannelsConfigSchema,
+    MfaChannelSchema,
+    getMfaConfig,
+    updateMfaConfig,
+    isChannelEnabled,
+    isMfaRequiredForRole,
+} from './securite/MfaChannelsService';
+export type { MfaChannel, MfaChannelsConfig, MfaChannelMeta } from './securite/MfaChannelsService';
+export {
+    BackupCodesService,
+    BackupCodeEntrySchema,
+    BackupCodesRecordSchema,
+    generateBackupCodes,
+    verifyAndConsume,
+    remainingBackupCodes,
+} from './securite/BackupCodesService';
+export type { BackupCodesRecord, GenerateBackupCodesResult } from './securite/BackupCodesService';
