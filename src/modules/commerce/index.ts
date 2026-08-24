@@ -43,6 +43,7 @@ export { GroupFormModal } from './relation/reservations/components/GroupFormModa
 export { EventQuoteModal } from './relation/reservations/components/EventQuoteModal';
 export { ReservationCreateDialog } from './relation/reservations/components/ReservationCreateDialog';
 export { ReservationSidebar } from './relation/reservations/components/ReservationSidebar';
+export { ReservationsHeader } from './relation/reservations/components/ReservationsHeader';
 export { TableGrid } from './relation/reservations/components/TableGrid';
 export { CustomerCustomerView, CustomerDetailPanel, NewCustomerDialog } from './relation/customers/components';
 export { useReservationsPage } from './relation/reservations/hooks';
