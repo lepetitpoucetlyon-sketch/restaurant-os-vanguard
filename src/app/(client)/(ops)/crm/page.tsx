@@ -22,8 +22,21 @@ import {
     EmailAutomations,
 } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
+
+const CRM_TABS = [
+    { id: "pipeline", label: "Pipeline CRM", icon: Contact },
+    { id: "customers", label: "Clients", icon: Users },
+    { id: "history", label: "Historique", icon: History },
+    { id: "import", label: "Import CSV", icon: Upload },
+    { id: "promos", label: "Codes Promo", icon: Tag },
+    { id: "emails", label: "Campagnes Email", icon: Mail },
+    { id: "automations", label: "Automations", icon: Zap },
+    { id: "rfm", label: "Segmentation RFM", icon: TrendingUp },
+    { id: "analytics", label: "Analytiques", icon: BarChart2 },
+] as const;
 
 function CrmPage() {
     const [activeTab, setActiveTab] = useState<CrmTab>("pipeline");
@@ -33,53 +46,32 @@ function CrmPage() {
     const { data: customers = [], upsertCustomer } = useCRM();
 
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6 flex items-start justify-between">
-                <div>
-                    <h1 className="text-2xl font-serif font-bold">CRM Clients</h1>
-                    <p className="text-sm text-text-muted mt-1">
-                        Pipeline commercial, fiches clients et historique de relation.
-                    </p>
-                </div>
-                <button
-                    onClick={() => setIsNewOpen(true)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
-                >
-                    <PlusCircle className="w-4 h-4" /> Nouveau client
-                </button>
-            </header>
-
-            <nav className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
-                {([
-                    { id: "pipeline", label: "Pipeline CRM", icon: Contact },
-                    { id: "customers", label: "Clients", icon: Users },
-                    { id: "history", label: "Historique", icon: History },
-                    { id: "import", label: "Import CSV", icon: Upload },
-                    { id: "promos", label: "Codes Promo", icon: Tag },
-                    { id: "emails", label: "Campagnes Email", icon: Mail },
-                    { id: "automations", label: "Automations", icon: Zap },
-                    { id: "rfm", label: "Segmentation RFM", icon: TrendingUp },
-                    { id: "analytics", label: "Analytiques", icon: BarChart2 },
-                ] as const).map((tab) => {
-                    const Icon = tab.icon;
-                    const active = activeTab === tab.id;
-                    return (
-                        <button
+        <PageShell
+            kicker="Commerce"
+            title="CRM Clients"
+            subtitle="Pipeline commercial, fiches clients et historique de relation."
+            icon={Users}
+            breadcrumbs={[{ label: "Opérations" }, { label: "CRM" }]}
+            actions={
+                <PageShell.CTA onClick={() => setIsNewOpen(true)}>
+                    <PlusCircle className="w-[15px] h-[15px]" /> <span>Nouveau client</span>
+                </PageShell.CTA>
+            }
+            tabs={
+                <>
+                    {CRM_TABS.map((tab) => (
+                        <PageShell.Tab
                             key={tab.id}
+                            active={activeTab === tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                                active
-                                    ? "border-action-primary text-action-primary"
-                                    : "border-transparent text-text-muted hover:text-text-primary"
-                            }`}
+                            icon={tab.icon}
                         >
-                            <Icon className="w-4 h-4" />
                             {tab.label}
-                        </button>
-                    );
-                })}
-            </nav>
-
+                        </PageShell.Tab>
+                    ))}
+                </>
+            }
+        >
             <main>
                 {activeTab === "pipeline" && (
                     <section className="flex gap-4 min-h-[60vh]">
@@ -197,7 +189,7 @@ function CrmPage() {
                     setIsNewOpen(false);
                 }}
             />
-        </div>
+        </PageShell>
     );
 }
 

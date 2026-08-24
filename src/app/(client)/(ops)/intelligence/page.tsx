@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Map, BarChart3, MessageSquare, TrendingUp, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
 
 /**
  * Hub /intelligence — passerelle vers les surfaces d'analyse et d'IA du produit.
@@ -56,30 +57,13 @@ const CARDS: HubCard[] = [
 
 function IntelligenceHubPage() {
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-8">
-            <motion.header
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="mb-10"
-            >
-                <div className="flex items-center gap-4 mb-3">
-                    <div className="w-14 h-14 rounded-2xl bg-accent-gold/10 flex items-center justify-center">
-                        <Sparkles className="w-7 h-7 text-accent-gold" strokeWidth={1.6} />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-serif font-black italic text-text-primary">Intelligence IA.</h1>
-                        <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em] mt-1">
-                            Hub — agent · analytics · cartographie · prévisionnel
-                        </p>
-                    </div>
-                </div>
-                <p className="text-sm text-text-muted max-w-2xl leading-relaxed">
-                    Point d'entrée unique vers les surfaces d'analyse et d'automatisation
-                    du système. Ouvrez un module pour l'utiliser en pleine surface.
-                </p>
-            </motion.header>
-
+        <PageShell
+            kicker="Intelligence"
+            title="Intelligence IA"
+            subtitle="Point d'entrée unique vers les surfaces d'analyse et d'automatisation du système. Ouvrez un module pour l'utiliser en pleine surface."
+            icon={Sparkles}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Intelligence" }]}
+        >
             <section className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl">
                 {CARDS.map((card, i) => {
                     const Icon = card.icon;
@@ -111,7 +95,7 @@ function IntelligenceHubPage() {
                     );
                 })}
             </section>
-        </div>
+        </PageShell>
     );
 }
 

@@ -10,6 +10,7 @@ import { useAnalyticsPage, percentChange, type MacroBrainAlert } from '@/modules
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { PageShell } from "@/shared/components/ui/PageShell";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
 } from "@/modules/intelligence";
@@ -73,34 +74,40 @@ function AnalyticsPage() {
 
     const fmt = (v: number) => `${v.toLocaleString("fr-FR", { maximumFractionDigits: 2 })} €`;
 
-    return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6">
-                <h1 className="text-2xl font-serif font-bold">Analytique &amp; Intelligence</h1>
-                <p className="text-sm text-text-muted mt-1">Rentabilité, réputation, conformité et prédictions Oracle.</p>
-            </header>
+    const analyticsTabs = ([
+        { id: "profitability", label: "Rentabilité", icon: TrendingUp },
+        { id: "reputation", label: "Réputation", icon: Star },
+        { id: "compliance", label: "Conformité", icon: ShieldCheck },
+        { id: "oracle", label: "Oracle", icon: Brain },
+    ] as const).filter(tab => tab.id !== "oracle" || canSeeOracle);
 
+    return (
+        <PageShell
+            kicker="Intelligence"
+            title="Analytique & Intelligence"
+            subtitle="Rentabilité, réputation, conformité et prédictions Oracle."
+            icon={BarChart2}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Analytics" }]}
+            tabs={
+                <>
+                    {analyticsTabs.map(({ id, label, icon: Icon }) => (
+                        <PageShell.Tab
+                            key={id}
+                            active={activeTab === id}
+                            onClick={() => setActiveTab(id)}
+                            icon={Icon}
+                        >
+                            {label}
+                        </PageShell.Tab>
+                    ))}
+                </>
+            }
+        >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 <KpiCard label="CA Aujourd'hui" value={fmt(todayCA)} change={percentChange(todayCA, yesterdayCA)} up={todayCA >= yesterdayCA} />
                 <KpiCard label="CA Cette Semaine" value={fmt(weekCA)} change={percentChange(weekCA, prevWeekCA)} up={weekCA >= prevWeekCA} />
                 <KpiCard label="CA Ce Mois" value={fmt(monthCA)} change={percentChange(monthCA, prevMonthCA)} up={monthCA >= prevMonthCA} />
             </div>
-
-            <nav className="flex gap-1 border-b border-border mb-6">
-                {([
-                    { id: "profitability", label: "Rentabilité", icon: TrendingUp },
-                    { id: "reputation", label: "Réputation", icon: Star },
-                    { id: "compliance", label: "Conformité", icon: ShieldCheck },
-                    { id: "oracle", label: "Oracle", icon: Brain },
-                ] as const).filter(tab => {
-                    if (tab.id === "oracle") return canSeeOracle;
-                    return true;
-                }).map(({ id, label, icon: Icon }) => (
-                    <button key={id} onClick={() => setActiveTab(id)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
-                        <Icon className="w-4 h-4" /> {label}
-                    </button>
-                ))}
-            </nav>
 
             <main>
                 {activeTab === "profitability" && <div className="space-y-8"><MenuEngineeringMatrix /><ProfitabilityView alerts={[]} /></div>}
@@ -204,7 +211,7 @@ function AnalyticsPage() {
                     </TabGuard>
                 )}
             </main>
-        </div>
+        </PageShell>
     );
 }
 

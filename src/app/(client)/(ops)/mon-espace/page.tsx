@@ -13,6 +13,7 @@ import { TipDistributionService, DigitalEmployeeVault, type EmployeeDocument } f
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { PasskeyStepUpModal } from "@/shared/components/biometrics/PasskeyStepUpModal";
 import { useToast } from "@ui/Toast";
+import { PageShell } from "@/shared/components/ui/PageShell";
 
 type Tab = 'planning' | 'pointage' | 'conges' | 'pourboires' | 'coffre' | 'formations';
 
@@ -83,39 +84,31 @@ function MonEspacePage() {
         return <div className="flex items-center justify-center h-full text-text-secondary">Chargement...</div>;
     }
 
+    const userRole = (currentUser as unknown as Record<string, string>).role ?? 'Employé';
+
     return (
-        <div className="flex flex-col h-full bg-surface-bg">
-            <header className="border-b border-zinc-800 px-6 py-4 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center">
-                    <User className="w-5 h-5 text-text-secondary" />
-                </div>
-                <div>
-                    <h1 className="text-lg font-semibold text-text-primary">{currentUser.name ?? 'Mon espace'}</h1>
-                    <p className="text-sm text-text-secondary">{(currentUser as unknown as Record<string, string>).role ?? 'Employé'}</p>
-                </div>
-            </header>
-
-            <nav className="border-b border-zinc-800 px-2 flex gap-1 overflow-x-auto" role="tablist" aria-label="Sections">
-                {TABS.map(tab => (
-                    <button
-                        key={tab.id}
-                        role="tab"
-                        aria-selected={activeTab === tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={cn(
-                            "flex items-center gap-2 px-4 py-3 text-sm whitespace-nowrap border-b-2 transition-colors",
-                            activeTab === tab.id
-                                ? "border-blue-500 text-text-primary"
-                                : "border-transparent text-text-secondary hover:text-zinc-200"
-                        )}
-                    >
-                        <tab.icon className="w-4 h-4" />
-                        {tab.label}
-                    </button>
-                ))}
-            </nav>
-
-            <div className="flex-1 overflow-y-auto p-6" role="tabpanel" aria-label={TABS.find(t => t.id === activeTab)?.label}>
+        <PageShell
+            kicker="Humain"
+            title={currentUser.name ?? 'Mon espace'}
+            subtitle={`Mes shifts, congés, pourboires, coffre-fort et formations — ${userRole}.`}
+            icon={User}
+            breadcrumbs={[{ label: 'Opérations' }, { label: 'Mon espace' }]}
+            tabs={
+                <>
+                    {TABS.map(tab => (
+                        <PageShell.Tab
+                            key={tab.id}
+                            active={activeTab === tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            icon={tab.icon}
+                        >
+                            {tab.label}
+                        </PageShell.Tab>
+                    ))}
+                </>
+            }
+        >
+            <div role="tabpanel" aria-label={TABS.find(t => t.id === activeTab)?.label}>
                 {activeTab === 'planning' && (
                     <div className="space-y-3">
                         <h2 className="text-text-primary font-medium mb-4">Mes prochains shifts</h2>
@@ -294,7 +287,7 @@ function MonEspacePage() {
                 actionDescription="Confirmez votre identité par FaceID, TouchID ou code PIN pour exporter vos bulletins et contrats de travail."
                 severity="sensitive"
             />
-        </div>
+        </PageShell>
     );
 }
 

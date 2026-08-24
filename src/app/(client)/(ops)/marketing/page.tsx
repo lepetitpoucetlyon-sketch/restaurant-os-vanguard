@@ -17,10 +17,19 @@ const NewQuoteDialog = dynamic(
   { ssr: false, loading: () => null }
 );
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+import { PageShell } from "@/shared/components/ui/PageShell";
 
 type MktTab = "campaigns" | "social" | "quotes" | "ai" | "seo";
 
 const VALID_TABS: MktTab[] = ["campaigns", "social", "quotes", "ai", "seo"];
+
+const MKT_TABS = [
+    { id: "campaigns", label: "Campagnes", icon: Megaphone },
+    { id: "social", label: "Réseaux sociaux", icon: Instagram },
+    { id: "quotes", label: "Devis", icon: FileSpreadsheet },
+    { id: "ai", label: "Assistant IA", icon: Sparkles },
+    { id: "seo", label: "SEO", icon: Globe },
+] as const;
 
 type CampaignRow = { id: string; name?: string; type?: string };
 type SocialRow = { id: string; platform?: string; handle?: string; followers?: number };
@@ -43,57 +52,40 @@ function MarketingPage() {
     const quoteRows = quotes as QuoteRow[];
 
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6 flex items-start justify-between">
-                <div>
-                    <h1 className="text-2xl font-serif font-bold">Marketing &amp; Social</h1>
-                    <p className="text-sm text-text-muted mt-1">
-                        Campagnes, réseaux sociaux, devis et assistant IA de croissance.
-                    </p>
-                </div>
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setCampaignModalOpen(true)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90"
-                    >
-                        <PlusCircle className="w-4 h-4" /> Campagne
-                    </button>
+        <PageShell
+            kicker="Commerce"
+            title="Marketing & Social"
+            subtitle="Campagnes, réseaux sociaux, devis et assistant IA de croissance."
+            icon={Megaphone}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Marketing" }]}
+            actions={
+                <>
                     <button
                         onClick={() => setQuoteModalOpen(true)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-hover"
+                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
                     >
-                        <FileSpreadsheet className="w-4 h-4" /> Devis
+                        <FileSpreadsheet className="w-[14px] h-[14px]" /> <span>Devis</span>
                     </button>
-                </div>
-            </header>
-
-            <nav className="flex gap-1 border-b border-border mb-6">
-                {([
-                    { id: "campaigns", label: "Campagnes", icon: Megaphone },
-                    { id: "social", label: "Réseaux sociaux", icon: Instagram },
-                    { id: "quotes", label: "Devis", icon: FileSpreadsheet },
-                    { id: "ai", label: "Assistant IA", icon: Sparkles },
-                    { id: "seo", label: "SEO", icon: Globe },
-                ] as const).map((tab) => {
-                    const Icon = tab.icon;
-                    const active = activeTab === tab.id;
-                    return (
-                        <button
+                    <PageShell.CTA onClick={() => setCampaignModalOpen(true)}>
+                        <PlusCircle className="w-[15px] h-[15px]" /> <span>Campagne</span>
+                    </PageShell.CTA>
+                </>
+            }
+            tabs={
+                <>
+                    {MKT_TABS.map((tab) => (
+                        <PageShell.Tab
                             key={tab.id}
+                            active={activeTab === tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                                active
-                                    ? "border-action-primary text-action-primary"
-                                    : "border-transparent text-text-muted hover:text-text-primary"
-                            }`}
+                            icon={tab.icon}
                         >
-                            <Icon className="w-4 h-4" />
                             {tab.label}
-                        </button>
-                    );
-                })}
-            </nav>
-
+                        </PageShell.Tab>
+                    ))}
+                </>
+            }
+        >
             <main>
                 {activeTab === "campaigns" && (
                     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -196,7 +188,7 @@ function MarketingPage() {
 
             <NewCampaignModal isOpen={campaignModalOpen} onClose={() => setCampaignModalOpen(false)} />
             <NewQuoteDialog isOpen={quoteModalOpen} onClose={() => setQuoteModalOpen(false)} />
-        </div>
+        </PageShell>
     );
 }
 

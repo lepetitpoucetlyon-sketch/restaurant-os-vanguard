@@ -1,35 +1,27 @@
 'use client';
 
 import React from 'react';
-import { HelpCircle, Sparkles, CheckCircle2, Clock, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { HelpCircle, Sparkles, CheckCircle2, Clock, AlertTriangle, ShieldAlert, RefreshCw } from 'lucide-react';
 import { useSupportTickets } from '@/shared/components/support/useSupportTickets';
 import { withPageGuard } from '@/shared/components/rbac/PageGuard';
+import { PageShell } from '@/shared/components/ui/PageShell';
 
 function TenantAidePage() {
   const { tickets, loading, refresh } = useSupportTickets();
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-6 font-sans">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-subtle pb-5">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-amber-500/10 rounded-2xl border border-amber-500/20">
-            <HelpCircle className="w-6 h-6 text-amber-500" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-text-primary">Centre d&apos;Aide & Support IA</h1>
-            <p className="text-xs text-text-secondary">Suivi de vos demandes de support et diagnostics intelligents</p>
-          </div>
-        </div>
-        <button
-          onClick={refresh}
-          className="px-4 py-2 bg-surface-card hover:bg-surface-hover border border-subtle rounded-xl text-xs font-semibold text-text-primary transition-all"
-        >
-          Actualiser
-        </button>
-      </div>
-
-      {/* Ticket List */}
+    <PageShell
+      kicker="Support"
+      title="Centre d'Aide & Support IA"
+      subtitle="Suivi de vos demandes de support et diagnostics intelligents."
+      icon={HelpCircle}
+      breadcrumbs={[{ label: 'Opérations' }, { label: 'Aide' }]}
+      actions={
+        <PageShell.CTA onClick={refresh}>
+          <RefreshCw className="w-[15px] h-[15px]" /> <span>Actualiser</span>
+        </PageShell.CTA>
+      }
+    >
       {loading ? (
         <div className="py-16 text-center text-xs text-text-secondary flex items-center justify-center gap-2">
           <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
@@ -99,7 +91,7 @@ function TenantAidePage() {
           ))}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }
 

@@ -12,6 +12,7 @@ import type { StaffTab } from "./staffUtils";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
+import { PageShell } from "@/shared/components/ui/PageShell";
 
 const BadgeControl = dynamic(() => import('@/modules/human').then(m => m.BadgeControl), { ssr: false });
 const StaffMemberForm = dynamic(() => import('@/modules/human').then(m => m.StaffMemberForm), { ssr: false });
@@ -64,35 +65,44 @@ function StaffPage() {
     } = useStaffPage();
 
     return (
-        <div className="min-h-screen bg-surface-base text-text-primary p-6">
-            <header className="mb-6">
-                <h1 className="text-2xl font-serif font-bold">Ressources Humaines</h1>
-                <p className="text-sm text-text-muted mt-1">Équipe, planning, congés et recrutement — pilotage RH de l&apos;établissement.</p>
-            </header>
-
-            <nav className="flex gap-1 border-b border-border mb-6">
-                {visibleTabs.map((tab) => {
-                    const Icon = tab.icon;
-                    return (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id ? "border-action-primary text-action-primary" : "border-transparent text-text-muted hover:text-text-primary"}`}>
-                            <Icon className="w-4 h-4" /> {tab.label}
-                        </button>
-                    );
-                })}
-            </nav>
-
+        <PageShell
+            kicker="Humain"
+            title="Ressources Humaines"
+            subtitle="Équipe, planning, congés et recrutement — pilotage RH de l'établissement."
+            icon={Users}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Équipe" }]}
+            actions={activeTab === "team" ? (
+                <>
+                    <button
+                        onClick={() => openStaffModal()}
+                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
+                    >
+                        <Plus className="w-[14px] h-[14px]" /> <span>Formulaire complet</span>
+                    </button>
+                    <PageShell.CTA onClick={() => setIsQuickAddOpen(true)}>
+                        <Plus className="w-[15px] h-[15px]" /> <span>Ajout rapide</span>
+                    </PageShell.CTA>
+                </>
+            ) : undefined}
+            tabs={
+                <>
+                    {visibleTabs.map((tab) => (
+                        <PageShell.Tab
+                            key={tab.id}
+                            active={activeTab === tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            icon={tab.icon}
+                        >
+                            {tab.label}
+                        </PageShell.Tab>
+                    ))}
+                </>
+            }
+        >
             <main>
                 {activeTab === "team" && (
                     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2">
-                            <div className="flex items-center justify-end mb-3 gap-2">
-                                <button onClick={() => setIsQuickAddOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-gold text-text-primary text-xs font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors shadow">
-                                    <Plus className="w-3.5 h-3.5" /> Ajout rapide
-                                </button>
-                                <button onClick={() => openStaffModal()} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-xs font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors">
-                                    <Plus className="w-3.5 h-3.5" /> Formulaire complet
-                                </button>
-                            </div>
                             <StaffList users={staffMembers} onOpenModal={openStaffModal} />
                         </div>
                         <div><StaffRecentActivity logs={auditLogs} /></div>
@@ -143,7 +153,7 @@ function StaffPage() {
 
             {/* BadgeControl reserved for team tab actions */}
             <BadgeControl />
-        </div>
+        </PageShell>
     );
 }
 
