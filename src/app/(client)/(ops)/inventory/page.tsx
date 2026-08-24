@@ -68,13 +68,13 @@ function InventoryPage() {
                 <>
                     <Link
                         href="/facility"
-                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
+                        className="h-10 px-3.5 rounded-xl bg-surface-glass border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
                     >
                         <Wrench className="w-[14px] h-[14px]" /> <span>GMAO</span>
                     </Link>
                     <button
                         onClick={() => setPrepOpen(true)}
-                        className="h-10 px-3.5 rounded-xl bg-white/[0.03] border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
+                        className="h-10 px-3.5 rounded-xl bg-surface-glass border border-border/40 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold text-xs font-medium tracking-tight transition-colors flex items-center gap-2"
                     >
                         <ChefHat className="w-[14px] h-[14px]" /> <span>Préparation</span>
                     </button>
