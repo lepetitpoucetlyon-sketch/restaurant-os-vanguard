@@ -157,7 +157,7 @@ export function PlanningDashboard() {
                                 onClick={() => setSelectedDay(day)}
                                 className={cn(
                                     "flex flex-col items-center justify-center min-w-[64px] h-20 rounded-2xl border transition-all",
-                                    isSelected ? "bg-text-primary text-text-primary border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
+                                    isSelected ? "bg-accent-gold text-text-on-primary border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
                                 )}
                             >
                                 <span className="text-[8px] font-black uppercase tracking-widest opacity-60 mb-1">{format(day, "EEE", { locale: fr })}</span>
@@ -326,9 +326,9 @@ export function PlanningDashboard() {
                                     key={type} 
                                     onClick={() => setEditType(type as ShiftType)}
                                     className={cn(
-                                        "h-12 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all", 
-                                        editType === type 
-                                            ? "bg-text-primary text-text-primary border-transparent shadow-lg scale-105" 
+                                        "h-12 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all",
+                                        editType === type
+                                            ? "bg-accent-gold text-text-on-primary border-transparent shadow-lg scale-105"
                                             : "bg-bg-tertiary text-text-muted border-border hover:border-accent-gold/50"
                                     )}
                                 >
@@ -344,7 +344,7 @@ export function PlanningDashboard() {
                                 <Trash2 className="w-6 h-6" />
                             </Button>
                         )}
-                        <Button className="flex-1 h-16 bg-text-primary text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black shadow-premium active:scale-[0.98] transition-all" onClick={handleHomologuer}>
+                        <Button className="flex-1 h-16 bg-accent-gold text-text-on-primary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-accent-gold/90 shadow-premium shadow-accent-gold/20 active:scale-[0.98] transition-all" onClick={handleHomologuer}>
                             Homologuer le shift
                         </Button>
                     </div>

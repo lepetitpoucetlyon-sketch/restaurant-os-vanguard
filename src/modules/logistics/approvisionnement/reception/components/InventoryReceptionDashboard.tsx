@@ -176,12 +176,16 @@ export function InventoryReceptionDashboard() {
             {/* Header */}
             <header className="flex justify-between items-center mb-10">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-status-success border border-emerald-500/20 rounded-2xl flex items-center justify-center">
-                        <ClipboardList className="text-status-success w-6 h-6" />
+                    <div className="w-12 h-12 bg-status-success/10 border border-status-success/20 rounded-2xl flex items-center justify-center text-status-success">
+                        <ClipboardList className="w-6 h-6" />
                     </div>
-                    <div>
-                        <h1 className="text-2xl font-black tracking-tight uppercase">Réception Marchandise</h1>
-                        <p className="text-text-secondary text-xs font-bold tracking-widest uppercase">Flux Empire • Ingestion Intelligente</p>
+                    <div className="space-y-1">
+                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.32em]">
+                            Flux Empire • Ingestion Intelligente
+                        </p>
+                        <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-tight leading-none">
+                            Réception<span className="text-accent-gold not-italic">.</span>
+                        </h1>
                     </div>
                 </div>
                 <div className="flex bg-surface-sidebar p-1 rounded-xl border border-border-subtle">

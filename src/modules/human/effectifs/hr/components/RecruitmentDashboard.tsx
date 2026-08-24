@@ -55,9 +55,9 @@ export function RecruitmentDashboard() {
                             className="w-full pl-12 pr-4 h-12 bg-bg-secondary border border-border rounded-xl text-sm font-medium focus:border-accent-gold outline-none transition-all"
                         />
                     </div>
-                    <button 
+                    <button
                         onClick={() => setIsAddModalOpen(true)}
-                        className="h-12 px-6 bg-text-primary text-text-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-xl hover:-translate-y-0.5"
+                        className="h-12 px-6 bg-accent-gold text-text-on-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-accent-gold/90 transition-all flex items-center gap-2 shadow-xl shadow-accent-gold/20 hover:-translate-y-0.5"
                     >
                         <UserPlus className="w-4 h-4" />
                         Nouveau Candidat

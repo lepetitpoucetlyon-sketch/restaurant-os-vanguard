@@ -36,16 +36,19 @@ export function FranchiseDashboard() {
     return (
         <div className="min-h-screen bg-bg-primary text-text-primary p-6 md:p-8 space-y-8">
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-subtle pb-6">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand">
-                        <Building2 className="w-5 h-5" />
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-accent-gold/10 border border-accent-gold/20 flex items-center justify-center text-accent-gold">
+                        <Building2 className="w-6 h-6" />
                     </div>
-                    <div>
-                        <h1 className="text-2xl font-black tracking-tight text-text-primary">
-                            Réseau &amp; Multi-Sites
+                    <div className="space-y-1.5">
+                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.32em]">
+                            Réseau Multi-Sites
+                        </p>
+                        <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-tight leading-none">
+                            Empire<span className="text-accent-gold not-italic">.</span>
                         </h1>
                         <p className="text-xs text-text-secondary">
-                            Pilotage consolidé et transferts de stocks pour l’ensemble de vos restaurants
+                            Pilotage consolidé et transferts de stocks pour l&apos;ensemble de vos restaurants.
                         </p>
                     </div>
                 </div>
@@ -53,10 +56,10 @@ export function FranchiseDashboard() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="px-4 py-2.5 rounded-xl bg-brand hover:bg-brand/90 text-bg-primary font-bold text-xs flex items-center gap-2 transition-all shadow-lg shadow-brand/10"
+                        className="h-11 px-5 rounded-xl bg-accent-gold hover:bg-accent-gold/90 text-text-on-primary font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-accent-gold/20 hover:-translate-y-0.5"
                     >
                         <ArrowRightLeft className="w-4 h-4" />
-                        Nouveau Transfert de Stock
+                        Nouveau Transfert
                     </button>
                     <button
                         onClick={refresh}
