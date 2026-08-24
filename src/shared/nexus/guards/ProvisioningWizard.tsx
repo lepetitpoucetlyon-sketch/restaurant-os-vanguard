@@ -196,7 +196,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 <div className="w-32 h-32 rounded-full border-4 border-action-primary/20 flex items-center justify-center">
                                     <Loader2 className="w-16 h-16 text-action-primary animate-spin" />
                                 </div>
-                                <div className="absolute -top-2 -right-2 w-10 h-10 bg-action-primary rounded-xl flex items-center justify-center animate-bounce shadow-2xl">
+                                <div className="absolute -top-2 -right-2 w-10 h-10 bg-action-primary rounded-xl flex items-center justify-center animate-pulse-soft shadow-2xl">
                                     <Rocket size={20} className="text-bg-primary" />
                                 </div>
                             </div>
