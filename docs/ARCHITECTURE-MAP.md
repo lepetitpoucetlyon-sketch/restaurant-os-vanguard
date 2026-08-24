@@ -5,13 +5,13 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3560** · LOC : **327 884**
+- Fichiers `.ts/.tsx` : **3561** · LOC : **328 056**
 - Pages : **83** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1589 |
+| `src/modules/` | 1590 |
 | `src/shared/` | 699 |
 | `src/app/` | 437 |
 | `src/verticals/` | 244 |
@@ -67,7 +67,7 @@
 | `compliance` | 180 | ✅ |
 | `intelligence` | 161 | ✅ |
 | `logistics` | 147 | ✅ |
-| `human` | 134 | ✅ |
+| `human` | 135 | ✅ |
 | `facility` | 72 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 

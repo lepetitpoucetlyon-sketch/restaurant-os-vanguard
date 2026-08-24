@@ -1,8 +1,8 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3560,
-    "loc": 327884,
+    "files": 3561,
+    "loc": 328056,
     "pages": 83,
     "apiRoutes": 210
   },
@@ -10,7 +10,7 @@
     "kernel": 25,
     "lib": 232,
     "shared": 699,
-    "modules": 1589,
+    "modules": 1590,
     "app": 437,
     "verticals": 244,
     "infrastructure": 46,
@@ -77,7 +77,7 @@
       "barrel": true
     },
     "human": {
-      "files": 134,
+      "files": 135,
       "barrel": true
     },
     "intelligence": {
