@@ -84,6 +84,66 @@ function computeChecksum(buffer: Buffer): string {
     return createHash('sha256').update(buffer).digest('hex');
 }
 
+function verifyChecksum(buffer: Buffer, expected: string | undefined): void {
+    if (!expected) return;
+    const actual = computeChecksum(buffer);
+    if (actual !== expected) {
+        throw new Error(
+            `[SnapshotService] Checksum mismatch: expected ${expected}, got ${actual}`,
+        );
+    }
+}
+
+function decodeAndValidatePayload(buffer: Buffer, opts: RestoreOptions): SnapshotPayload {
+    const raw = gunzipSync(buffer).toString('utf-8');
+    const payload = JSON.parse(raw) as SnapshotPayload;
+
+    if (payload.version !== SNAPSHOT_VERSION) {
+        throw new Error(
+            `[SnapshotService] Unsupported snapshot version ${payload.version} (expected ${SNAPSHOT_VERSION})`,
+        );
+    }
+    if (opts.expectedTenantId && payload.tenantId !== opts.expectedTenantId) {
+        throw new Error(
+            `[SnapshotService] TenantId mismatch: snapshot=${payload.tenantId}, expected=${opts.expectedTenantId}`,
+        );
+    }
+    return payload;
+}
+
+async function wipeCollection(
+    adapter: INexusAdapter,
+    tenantId: string,
+    collection: string,
+): Promise<void> {
+    const existing = await adapter.query<Record<string, unknown>>(
+        `tenants/${tenantId}/${collection}`,
+    );
+    for (const doc of existing) {
+        const id = String(doc.id ?? '');
+        if (id) {
+            await adapter.delete(`tenants/${tenantId}/${collection}/${id}`);
+        }
+    }
+}
+
+async function writeCollection(
+    adapter: INexusAdapter,
+    tenantId: string,
+    collection: string,
+    rows: Array<Record<string, unknown>>,
+    merge: boolean,
+): Promise<number> {
+    let written = 0;
+    for (const doc of rows) {
+        const id = String(doc.id ?? '');
+        if (!id) continue;
+        await adapter.set(`tenants/${tenantId}/${collection}/${id}`, doc, { merge });
+        written++;
+    }
+    return written;
+}
+
 /**
  * Sérialise l'état d'un tenant en un buffer gzippé + checksum SHA-256.
  * Provider-agnostique : lit uniquement via `adapter.query(collectionPath)`.
@@ -141,29 +201,8 @@ export async function restoreSnapshot(
     buffer: Buffer,
     opts: RestoreOptions = {},
 ): Promise<RestoreResult> {
-    if (opts.expectedChecksum) {
-        const actual = computeChecksum(buffer);
-        if (actual !== opts.expectedChecksum) {
-            throw new Error(
-                `[SnapshotService] Checksum mismatch: expected ${opts.expectedChecksum}, got ${actual}`,
-            );
-        }
-    }
-
-    const raw = gunzipSync(buffer).toString('utf-8');
-    const payload = JSON.parse(raw) as SnapshotPayload;
-
-    if (payload.version !== SNAPSHOT_VERSION) {
-        throw new Error(
-            `[SnapshotService] Unsupported snapshot version ${payload.version} (expected ${SNAPSHOT_VERSION})`,
-        );
-    }
-
-    if (opts.expectedTenantId && payload.tenantId !== opts.expectedTenantId) {
-        throw new Error(
-            `[SnapshotService] TenantId mismatch: snapshot=${payload.tenantId}, expected=${opts.expectedTenantId}`,
-        );
-    }
+    verifyChecksum(buffer, opts.expectedChecksum);
+    const payload = decodeAndValidatePayload(buffer, opts);
 
     const restoredCollections: Record<string, number> = {};
     const skippedImmutable: Record<string, number> = {};
@@ -177,32 +216,16 @@ export async function restoreSnapshot(
             continue;
         }
 
-        // Wipe préalable (optionnel)
         if (overwrite) {
-            const existing = await adapter.query<Record<string, unknown>>(
-                `tenants/${payload.tenantId}/${collection}`,
-            );
-            for (const doc of existing) {
-                const id = String(doc.id ?? '');
-                if (id) {
-                    await adapter.delete(`tenants/${payload.tenantId}/${collection}/${id}`);
-                }
-            }
+            await wipeCollection(adapter, payload.tenantId, collection);
         }
-
-        // Réécriture doc par doc
-        let written = 0;
-        for (const doc of rows) {
-            const id = String(doc.id ?? '');
-            if (!id) continue;
-            await adapter.set(
-                `tenants/${payload.tenantId}/${collection}/${id}`,
-                doc,
-                { merge: !overwrite },
-            );
-            written++;
-        }
-        restoredCollections[collection] = written;
+        restoredCollections[collection] = await writeCollection(
+            adapter,
+            payload.tenantId,
+            collection,
+            rows,
+            !overwrite,
+        );
     }
 
     return {
