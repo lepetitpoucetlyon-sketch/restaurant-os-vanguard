@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { UserPlus, Search, ShieldCheck } from 'lucide-react';
+import { UserPlus, Search } from 'lucide-react';
 import { useRecruitment } from '..';
 import type { CandidateStatus } from '@nexus/contracts';
 import { CandidateCard } from './recruitment-dashboard/CandidateCard';
@@ -26,27 +26,12 @@ export function RecruitmentDashboard() {
     );
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700">
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-baseline gap-3">
-                        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Effectifs</span>
-                        <h1 className="font-serif font-black text-[34px] leading-none tracking-[-0.02em] text-text-primary">
-                            Recrutement
-                        </h1>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1.5 text-[11px] font-medium tracking-tight text-status-success bg-status-success/10 px-3 py-1 rounded-full border border-status-success/20">
-                            <ShieldCheck className="w-3.5 h-3.5" />
-                            RGPD conforme
-                        </span>
-                        <span className="text-text-muted text-xs italic tabular-nums">
-                            {candidates.length} candidatures actives
-                        </span>
-                    </div>
-                </div>
-
+        <div className="space-y-6 animate-in fade-in duration-700 p-6">
+            {/* Actions bar : search + CTA + count chip */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <span className="text-text-muted text-xs italic tabular-nums">
+                    {candidates.length} candidature{candidates.length > 1 ? "s" : ""} active{candidates.length > 1 ? "s" : ""}
+                </span>
                 <div className="flex items-center gap-4 w-full md:w-auto">
                     <div className="relative flex-1 md:w-72">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
@@ -55,15 +40,15 @@ export function RecruitmentDashboard() {
                             placeholder="Rechercher un candidat..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 h-12 bg-bg-secondary border border-border rounded-xl text-sm font-medium focus:border-accent-gold outline-none transition-all"
+                            className="w-full pl-12 pr-4 h-11 bg-surface-card border border-border rounded-xl text-sm font-medium focus:border-accent-gold outline-none transition-all"
                         />
                     </div>
                     <button
                         onClick={() => setIsAddModalOpen(true)}
-                        className="h-12 px-6 bg-accent-gold text-text-on-primary rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-accent-gold/90 transition-all flex items-center gap-2 shadow-xl shadow-accent-gold/20 hover:-translate-y-0.5"
+                        className="h-11 px-5 rounded-xl bg-accent-gold text-[#0B0B0C] text-sm font-medium tracking-tight hover:bg-accent-gold/90 transition-colors flex items-center gap-2 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]"
                     >
-                        <UserPlus className="w-4 h-4" />
-                        Nouveau Candidat
+                        <UserPlus className="w-[15px] h-[15px]" />
+                        <span>Nouveau candidat</span>
                     </button>
                 </div>
             </div>
