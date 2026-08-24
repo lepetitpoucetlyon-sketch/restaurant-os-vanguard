@@ -28,7 +28,7 @@ export function SupplierHubDashboard() {
   const [isAutoProcurementOpen, setIsAutoProcurementOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-950 text-slate-100 p-6 overflow-y-auto space-y-6">
+    <div className="space-y-6">
       {/* Auto Procurement Wizard Modal */}
       <AutoProcurementWizard
         isOpen={isAutoProcurementOpen}
@@ -41,63 +41,41 @@ export function SupplierHubDashboard() {
         businessName="Le Petit Poucet Lyon"
       />
 
-      {/* Header Hub */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shadow-lg shadow-amber-500/5">
-              <Building2 className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2">
-                FOURNISSEURS 360°
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase tracking-wider">
-                  SRM SOUVERAIN
-                </span>
-              </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Mercuriales, Commandes Multi-Canaux, Réceptions & Litiges Avoirs, Contrats RFA & Brasseurs
-              </p>
-            </div>
+      {/* KPI badges + CTA — le titre est porté par le PageShell parent (suppliers/page.tsx) */}
+      <div className="flex flex-wrap items-center gap-3 justify-end">
+        <button
+          onClick={() => setIsAutoProcurementOpen(true)}
+          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center gap-2 transition active:scale-95"
+        >
+          <Sparkles className="w-4 h-4" />
+          IA Auto-Réassort
+        </button>
+
+        <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
+          <Truck className="w-4 h-4 text-blue-500" />
+          <div>
+            <div className="text-[10px] font-bold text-text-muted uppercase">Livraisons J-0</div>
+            <div className="text-sm font-black text-text-primary">3 Attendues</div>
           </div>
         </div>
-
-        {/* Action Button & Global KPI quick badges */}
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => setIsAutoProcurementOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center gap-2 transition active:scale-95"
-          >
-            <Sparkles className="w-4 h-4" />
-            IA Auto-Réassort
-          </button>
-
-          <div className="px-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-3">
-            <Truck className="w-4 h-4 text-blue-400" />
-            <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase">Livraisons J-0</div>
-              <div className="text-sm font-black text-white">3 Attendues</div>
-            </div>
+        <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
+          <AlertTriangle className="w-4 h-4 text-amber-500" />
+          <div>
+            <div className="text-[10px] font-bold text-text-muted uppercase">Litiges / Avoirs</div>
+            <div className="text-sm font-black text-amber-500">2 En cours (318,50 €)</div>
           </div>
-          <div className="px-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-3">
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
-            <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase">Litiges / Avoirs</div>
-              <div className="text-sm font-black text-amber-400">2 En cours (318,50 €)</div>
-            </div>
-          </div>
-          <div className="px-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-3">
-            <Award className="w-4 h-4 text-emerald-400" />
-            <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase">RFA Acquises 2026</div>
-              <div className="text-sm font-black text-emerald-400">1 560,00 €</div>
-            </div>
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
+          <Award className="w-4 h-4 text-emerald-500" />
+          <div>
+            <div className="text-[10px] font-bold text-text-muted uppercase">RFA Acquises 2026</div>
+            <div className="text-sm font-black text-emerald-500">1 560,00 €</div>
           </div>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-800/60 pb-1 overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-2 border-b border-border pb-1 overflow-x-auto no-scrollbar">
         {[
           { id: 'directory', label: 'Annuaire SRM & Contacts', icon: Building2 },
           { id: 'mercuriales', label: 'Mercuriales & Comparateur', icon: Scale },
@@ -114,8 +92,8 @@ export function SupplierHubDashboard() {
               className={cn(
                 'flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200',
                 isActive
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-lg shadow-amber-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                  ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30 shadow-lg shadow-amber-500/10'
+                  : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
               )}
             >
               <Icon className="w-4 h-4" />
