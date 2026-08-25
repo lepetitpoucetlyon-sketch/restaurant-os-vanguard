@@ -107,7 +107,7 @@ else
 fi
 
 # Gate bloquante : ratchet microunits (le compteur InCents ne doit jamais remonter)
-MICROUNITS_BASELINE=821
+MICROUNITS_BASELINE=818
 MICROUNITS_CURRENT=$(grep -rn "InCents" src/ --include="*.ts" --include="*.tsx" | wc -l)
 if [ "$MICROUNITS_CURRENT" -gt "$MICROUNITS_BASELINE" ]; then
   fail "Régression microunits : $MICROUNITS_CURRENT occurrences InCents > seuil baseline ($MICROUNITS_BASELINE)"

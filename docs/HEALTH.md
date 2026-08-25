@@ -1,6 +1,6 @@
 # Health Dashboard — RESTAURANT-OS-CORE
 
-> Auto-généré le **2026-08-25 11:13 UTC** · commit `0e93408d0`
+> Auto-généré le **2026-08-25 11:18 UTC** · commit `fbda653f9`
 > Source : `scripts/health-snapshot.sh` (Zero-Claim Policy)
 
 ---
@@ -62,7 +62,7 @@
 
 | Indicateur | Mesure | Seuil / Objectif |
 |---|---|---|
-| Occurrences `*InCents` (code source) | **822** | Ratchet bloquant preflight ≤ 821 |
+| Occurrences `*InCents` (code source) | **818** | Ratchet bloquant preflight ≤ 821 |
 | Schémas Zod (`src/domain/schemas/`) | **0 InCents** | 100% microunits ✅ |
 | Imports profonds (Barrel violations) | **45** | Voir `docs/BARREL-EXCEPTIONS.md` (39 légitimes) |
 | Verticales universelles déployées | **12 / 12** | 100% conformes à `PLATFORM_VARIANTS` |
@@ -71,7 +71,7 @@
 
 ## 6. 💾 Synchronisation & Sauvegarde
 
-- **Commits locaux en avance sur `origin/main`** : `66` commit(s).
+- **Commits locaux en avance sur `origin/main`** : `67` commit(s).
 
 ---
 

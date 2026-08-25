@@ -88,8 +88,9 @@ export class SovereignLedger {
             mode = 'LOCAL_LOCK' as AccountingMode; 
         }
 
-        const microunits = params.amountInMicrounits ?? (params.amountInCents ?? 0) * 10_000;
-        const cents = params.amountInCents ?? Math.round(microunits / 10_000);
+        const rawCents = params.amountInCents;
+        const microunits = params.amountInMicrounits ?? (rawCents ?? 0) * 10_000;
+        const cents = rawCents ?? Math.round(microunits / 10_000);
 
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
@@ -246,13 +247,14 @@ export class SovereignLedger {
         const transactions = new Map<string, { debit: number, credit: number }>();
         
         entries.forEach(entry => {
-            if (entry.type === 'DEBIT') totalDebit += entry.amountInCents;
-            if (entry.type === 'CREDIT') totalCredit += entry.amountInCents;
+            const entryMicro = entry.amountInMicrounits ?? (entry.amountInCents * 10_000);
+            if (entry.type === 'DEBIT') totalDebit += entryMicro;
+            if (entry.type === 'CREDIT') totalCredit += entryMicro;
 
             if (entry.referenceId) {
                 const tx = transactions.get(entry.referenceId) || { debit: 0, credit: 0 };
-                if (entry.type === 'DEBIT') tx.debit += entry.amountInCents;
-                if (entry.type === 'CREDIT') tx.credit += entry.amountInCents;
+                if (entry.type === 'DEBIT') tx.debit += entryMicro;
+                if (entry.type === 'CREDIT') tx.credit += entryMicro;
                 transactions.set(entry.referenceId, tx);
             }
         });
@@ -260,13 +262,13 @@ export class SovereignLedger {
         // Detect specific transaction asymmetry
         for (const [refId, tx] of transactions.entries()) {
             const diff = Math.abs(tx.debit - tx.credit);
-            if (diff > 0.01) {
-                discrepancies.push({ referenceId: refId, difference: diff, debit: tx.debit, credit: tx.credit });
+            if (diff > 100) {
+                discrepancies.push({ referenceId: refId, difference: diff / 10_000, debit: tx.debit / 10_000, credit: tx.credit / 10_000 });
             }
         }
 
         const globalDiff = Math.abs(totalDebit - totalCredit);
-        const isSecure = globalDiff <= 0.01 && discrepancies.length === 0;
+        const isSecure = globalDiff <= 100 && discrepancies.length === 0;
 
         if (!isSecure) {
             logger.error(`[SovereignLedger] 🚨 INQUISITEUR QA FAILED: Asymmetry detected! Diff: ${globalDiff}`);
