@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { ArrowRight, ChevronDown, CheckCircle2, FileText, Smartphone, Laptop, ChefHat, Database, Box, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 const staggerContainer = {
   hidden: { opacity: 0 },

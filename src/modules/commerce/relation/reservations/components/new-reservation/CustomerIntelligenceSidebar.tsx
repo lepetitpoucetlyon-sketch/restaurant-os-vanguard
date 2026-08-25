@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Tag, Sparkles, UserCheck, ArrowRight } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import type { Customer } from "@nexus/contracts";
 
 interface CustomerIntelligenceSidebarProps {

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Calculator, Shield, Cpu, Save } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SettingsManager } from '@/lib/SettingsManager';
 import { AccountingMode, DEFAULT_STAFF_RATIO } from '@/lib/shared-kernel';

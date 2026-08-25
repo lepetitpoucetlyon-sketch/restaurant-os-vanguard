@@ -1,7 +1,7 @@
 "use client";
 
 import { Upload, Camera, FileText } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface CandidateCvSectionProps {
     cvFile: string | null;

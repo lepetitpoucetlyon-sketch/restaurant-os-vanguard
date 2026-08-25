@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/shared/hooks';
 import { Lock, Home, AlertTriangle } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { motion } from 'framer-motion';
 import { canAccessModule, User } from '@nexus/contracts';
 

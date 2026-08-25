@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Check, X, AlertTriangle, TrendingUp } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { StaffingProposal } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusStaffingOracle } from '@/modules/human';

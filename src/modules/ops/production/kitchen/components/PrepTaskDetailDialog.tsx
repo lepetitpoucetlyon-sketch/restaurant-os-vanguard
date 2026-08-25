@@ -1,7 +1,7 @@
 "use client";
 
 import { X, Utensils, Scale, Clock, Thermometer, Users, CheckCircle2, AlertTriangle, RotateCcw } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";;
 import { Modal } from "@ui/Modal";
 import { motion } from "framer-motion";

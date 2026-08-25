@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClipboardCheck, Star, ShieldAlert } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export const SupplierAuditForm: React.FC = () => {
     return (

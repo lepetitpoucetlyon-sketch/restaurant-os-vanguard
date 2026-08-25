@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, ShoppingCart, TrendingUp, HelpCircle, Save, X } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { cn } from '@/lib/ui.foundations';
 import type { ExtractedInvoice } from '../../../../domain/schemas/inventory';
 import { InventoryVisionService, VisionMatchResult } from '../../../../services/InventoryVisionService';

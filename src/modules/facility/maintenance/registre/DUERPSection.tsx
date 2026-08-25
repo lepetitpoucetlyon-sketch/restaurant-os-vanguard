@@ -2,7 +2,7 @@
 
 import { useRegistre } from "@/shared/contexts/RegistreContext";
 import { FileText, Calendar, Clock, AlertTriangle, Download, Eye, History, Users } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 
 const RISK_CATEGORIES = [

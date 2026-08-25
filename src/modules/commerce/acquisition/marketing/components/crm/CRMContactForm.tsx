@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { crmFormAtom, crmNewCRMModalAtom } from '../../store/crmAtoms';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/shared/hooks';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { BottomSheet } from '@ui/BottomSheet';
 import { useIsMobile } from '@/shared/hooks';
 

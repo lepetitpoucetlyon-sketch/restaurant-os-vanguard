@@ -12,7 +12,7 @@ import {
     BarChart3
 } from "lucide-react";
 import { useNexusFleet } from '@/shared/hooks/useNexusFleet';
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
 import { useNotifications } from "@/shared/contexts/NotificationsContext";

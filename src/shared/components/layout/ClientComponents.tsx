@@ -8,7 +8,7 @@ import { SovereignLock } from "@components/layout/SovereignLock";
 
 // Lazy load system components
 const DocumentationPortal = dynamic(
-    () => import("@/shared/components/DocumentationPortal").then(mod => ({ default: mod.DocumentationPortal })),
+    () => import("@/shared/components/docs").then(mod => ({ default: mod.DocumentationPortal })),
     { ssr: false }
 );
 const TutorialBubble = dynamic(

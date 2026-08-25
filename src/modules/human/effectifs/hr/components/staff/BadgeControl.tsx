@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { activeShiftsAtom } from '../../store/staffAtoms';
 import { hrLoadingAtom } from '../../store/hrAtoms';
 import { NexusPayrollEngine } from '../../../../services/NexusPayrollEngine';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { Clock, Shield, Fingerprint, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/ui.foundations';

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, X, CheckCircle2, Send, Loader2 } from 'lucide-react';
 import { useAutoProcurement, type UseAutoProcurementProps } from '../procurement/hooks/useAutoProcurement';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 import { ProcurementMetricsCards } from './auto-procurement/ProcurementMetricsCards';
 import { ProcurementSupplierList } from './auto-procurement/ProcurementSupplierList';

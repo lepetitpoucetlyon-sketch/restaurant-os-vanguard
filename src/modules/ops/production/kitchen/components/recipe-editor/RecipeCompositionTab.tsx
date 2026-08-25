@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, UtensilsCrossed, DollarSign } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Recipe, RecipeIngredient } from "@nexus/contracts";
 

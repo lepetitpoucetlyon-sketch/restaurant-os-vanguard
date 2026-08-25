@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Plus, LucideIcon } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { useUI } from "@/shared/providers/NexusCoreContext";
 
 interface PlaceholderViewProps {

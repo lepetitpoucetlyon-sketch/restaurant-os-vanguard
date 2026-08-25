@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, ShieldAlert, XCircle } from 'lucide-react';
 import { useFleet } from '@/shared/contexts/FleetContext';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export function TrainingOverlay() {
     const { isTrainingMode, toggleTrainingMode } = useFleet();

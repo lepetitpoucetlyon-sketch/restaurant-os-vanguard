@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Sparkles, CheckCircle, AlertCircle, X, Loader2, Zap } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 export interface PlateAuditResult {
     score: number;
     feedback: string[];

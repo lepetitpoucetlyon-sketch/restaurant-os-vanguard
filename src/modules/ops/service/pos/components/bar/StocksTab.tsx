@@ -8,7 +8,7 @@ import {
   Beer, 
   GlassWater 
 } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface StocksTabProps {
   lowStockWines: number;

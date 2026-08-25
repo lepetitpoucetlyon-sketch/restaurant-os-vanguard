@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export interface Review {
     id: string;

@@ -5,10 +5,7 @@ import { useAtomValue } from 'jotai';
 import { tenantBrandTokensAtom, activeTenantIdAtom } from '@/store/pillars/sovereign';
 import { defaultBrandTokens, type BrandConfig } from '@/shared/nexus/tokens/brand';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
-import { useToast } from '@/shared/components/ui/Toast';
-import { Button } from '@/shared/components/ui/button';
-import { SectionCard } from '@/shared/components/ui/SectionCard';
-import { StatusBadge } from '@/shared/components/ui/StatusBadge';
+import { useToast, Button, SectionCard, StatusBadge } from '@/shared/components/ui';
 import { BrandScraper } from './BrandScraper';
 import { PresetSelector } from './PresetSelector';
 import {

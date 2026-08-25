@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { cn } from "@/lib/ui.foundations";
-import { ScrollArea } from "@ui/scroll-area";
+import { ScrollArea } from "@ui/ScrollArea";
 
 import { Table, Order, Reservation, TableStatus } from "@nexus/contracts";
 

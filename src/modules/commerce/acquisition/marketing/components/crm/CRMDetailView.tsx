@@ -11,7 +11,7 @@ import { useLanguage } from '@/shared/hooks';
 import { cn } from '@/lib/ui.foundations';
 import { useIsMobile } from '@/shared/hooks';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import type { CRM } from '@nexus/contracts';
 
 const getFirstName = (c: CRM): string => c?.firstName || '';

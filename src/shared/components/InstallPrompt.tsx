@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, PlusSquare, Sparkles } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { BottomSheet } from '@/shared/components/ui/BottomSheet';
+import { Button, BottomSheet } from '@/shared/components/ui';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;

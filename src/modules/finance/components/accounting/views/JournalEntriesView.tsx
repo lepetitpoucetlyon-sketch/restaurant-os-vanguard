@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { CheckCircle2, Clock, Eye } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/utils";
 import { useAccounting } from "../../../hooks/useAccounting";
 import { formatMu } from "../../financeUtils";

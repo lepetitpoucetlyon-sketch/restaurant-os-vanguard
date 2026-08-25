@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Customer } from "@nexus/contracts";
-import { Button } from "@ui/button";
-import { ScrollArea } from "@ui/scroll-area";
+import { Button } from "@ui/Button";
+import { ScrollArea } from "@ui/ScrollArea";
 import { Calendar } from "lucide-react";
 import { LoyaltyCard } from '../../../acquisition/marketing/components/crm/LoyaltyCard';
 

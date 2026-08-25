@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db, DeadLetterEntry } from '@/lib/offline/offline-store';
 import { NexusEventBus, NexusEventName } from '@/shared/eventBus/NexusEventBus';
 import { PayloadMigrator } from '@/shared/eventBus/PayloadMigrator';
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/shared/components/ui';
 import { logger } from '@/lib/logger';
 import type { JsonObject } from "@/shared/types/json";
 import { toError } from "@/lib/toError";

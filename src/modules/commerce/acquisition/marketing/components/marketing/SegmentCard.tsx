@@ -1,7 +1,7 @@
 "use client";
 
 import { Users, MoreHorizontal } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface SegmentCardProps {
     segment: {

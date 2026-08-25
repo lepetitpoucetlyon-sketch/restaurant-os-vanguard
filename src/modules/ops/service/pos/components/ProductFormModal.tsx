@@ -5,7 +5,7 @@ import {
     Save,
 } from "lucide-react";
 import type { ServingMethod } from "@nexus/contracts";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
 import { useToast } from "@ui/Toast";

@@ -17,7 +17,7 @@ import {
     CheckCircle2
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { SimulationService, SimulationMode, MonteCarloResult } from '../SimulationService';
 import { useAtomValue } from "jotai";

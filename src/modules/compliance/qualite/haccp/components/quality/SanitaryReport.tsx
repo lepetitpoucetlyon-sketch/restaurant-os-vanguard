@@ -1,6 +1,6 @@
 import React from 'react';
 import { Download, ShieldCheck } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { useHACCP } from '../../hooks/useHACCP';
 import { toast } from 'sonner';
 import type { JsonObject } from "@/shared/types/json";

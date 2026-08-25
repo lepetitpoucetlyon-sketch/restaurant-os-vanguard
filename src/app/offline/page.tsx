@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { WifiOff, RefreshCw, ShoppingCart, UtensilsCrossed, ShieldCheck } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { EmptyState } from '@/shared/components/ui/EmptyState';
+import { Button, EmptyState } from '@/shared/components/ui';
 import { useRouter } from 'next/navigation';
 
 export default function OfflinePage() {

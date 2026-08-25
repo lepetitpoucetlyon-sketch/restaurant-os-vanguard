@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag, Printer } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export const BatchLabelGenerator: React.FC = () => {
     return (

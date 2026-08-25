@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cpu, ChevronRight, Calculator } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { cn } from '@/lib/ui.foundations';
 
 interface SimulatorOverridesPanelProps {

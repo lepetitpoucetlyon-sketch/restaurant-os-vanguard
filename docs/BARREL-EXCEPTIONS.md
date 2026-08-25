@@ -45,3 +45,16 @@ Le registre `src/lib/sync/pillarSyncRegistry.ts` a pour rôle structurel d'agré
 Les routes API `src/app/api/connectors/*/route.ts` importent directement les providers `@/modules/ops/connectors/*`.
 Comme documenté dans `src/modules/ops/index.ts` :
 > `DeliveryProviderFactory` et `ReservationProviderFactory` sont strictement **server-only** et ne doivent pas être exposés dans le barrel client/isomorphe.
+
+---
+
+## 4. Catégorie D — Imports POS Anti-Cycles (3 imports délibérés)
+
+Le hook `src/modules/ops/service/pos/hooks/usePos.ts` importe directement en intra-pilier :
+```typescript
+import { useOrders }   from '../../../providers/hooks/kitchenHooks';
+import { useTables }   from '../../../providers/hooks/floorHooks';
+import { useProducts } from '../../../providers/hooks/catalogHooks';
+```
+> ⚠️ **Mine anti-piège** : Ne **JAMAIS** faire transiter ces 3 imports par le barrel `@/modules/ops/providers` ou `'../../../providers'`. Passer par le barrel réintroduirait le cycle circulaire `providers → pos → providers` détecté par Sentrux. Ces imports profonds intra-pilier sont protégés et ne doivent pas être « nettoyés ».
+

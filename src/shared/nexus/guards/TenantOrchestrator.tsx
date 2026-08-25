@@ -14,7 +14,7 @@ import {
     Building2
 } from "lucide-react";
 import { cn } from '@/lib/ui.foundations';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { useToast } from '@components/ui/Toast';
 
 import { FleetCommander } from '@/modules/intelligence';

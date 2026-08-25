@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { X, Camera, ReceiptEuro, Save, Sparkles, ShieldCheck } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { motion } from "framer-motion";
 import { useAccounting } from '../../hooks/useAccounting';
 import { useNexusFiscal } from '../../providers/NexusFiscalProvider';

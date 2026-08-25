@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, Zap, Globe, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
 import { ProvisioningDNA } from '@/shared/types/empire';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 interface ProvisioningWizardProps {
     onClose: () => void;

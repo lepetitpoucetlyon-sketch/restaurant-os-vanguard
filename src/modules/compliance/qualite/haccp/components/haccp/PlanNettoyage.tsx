@@ -16,7 +16,7 @@ import { ZONES_CONFIG, type CleaningTask } from '../../types/domain';
 import { useHygieneLogs, useCreateHygieneLog, useDeleteHygieneLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export function PlanNettoyage() {
     const { data: logs = [] } = useHygieneLogs();

@@ -87,6 +87,47 @@ BARREL_VIOLATIONS=$(grep -rn "from '@/modules/[^']*\/[^']*\/[^']*'" src/ --inclu
   | wc -l | tr -d ' ' || echo "?")
 
 VERTICALS_COUNT=$(find src/verticals -mindepth 1 -maxdepth 1 -type d ! -name "_shared" 2>/dev/null | wc -l | tr -d ' ')
+# Nombre de variantes déclarées dans le schéma (source de vérité) — jamais recopié
+VARIANTS_DECLARED=$(grep -c "^    '" src/modules/system/domain/schemas/tenant.ts 2>/dev/null || echo "?")
+
+# Cycles madge (résout les alias @/) — mesuré, pas supposé
+MADGE_CYCLES=$({ node scripts/cycles-inspector.mjs --threshold=0 2>/dev/null || true; } \
+  | grep "Total Cycles" | head -1 | sed -E 's/[^0-9]*([0-9]+).*/\1/')
+MADGE_CYCLES="${MADGE_CYCLES:-?}"
+
+# InCents dans les schémas Zod canoniques (doit rester à 0)
+DOMAIN_INCENTS=$({ grep -rn "InCents" src/domain/ --include="*.ts" 2>/dev/null || true; } | wc -l | tr -d ' ')
+
+# Baseline du ratchet microunits, lue dans preflight.sh — jamais recopiée ici
+MU_BASELINE=$({ grep -oE "MICROUNITS_BASELINE=[0-9]+" scripts/preflight.sh 2>/dev/null || true; } | grep -oE "[0-9]+" | head -1)
+MU_BASELINE="${MU_BASELINE:-?}"
+
+# Exceptions barrel documentées (lues dans le doc, pas recopiées)
+BARREL_DOCUMENTED=$({ grep -cE '^\| .src/' docs/BARREL-EXCEPTIONS.md 2>/dev/null || echo 0; } | head -1)
+BARREL_DOCUMENTED="${BARREL_DOCUMENTED:-0}"
+
+# ── 7. Exploitation & sécurité (issus des audits 2026-08-25) ───────────────────
+API_ROUTES_TOTAL=$(find src/app/api -name "route.ts" 2>/dev/null | wc -l | tr -d ' ')
+API_ROUTES_UNGUARDED=0
+for f in $(find src/app/api -name "route.ts" 2>/dev/null); do
+  grep -qE "requireAnyAuth|adminAuthGuard|requireMccLevel|requireAuth|verifySignature|stripe\.webhooks" "$f" \
+    || API_ROUTES_UNGUARDED=$((API_ROUTES_UNGUARDED+1))
+done
+
+ERROR_PAGES=$(find src/app \( -name "error.tsx" -o -name "global-error.tsx" -o -name "not-found.tsx" \) 2>/dev/null | wc -l | tr -d ' ')
+ARIA_COUNT=$({ grep -rn "aria-" src/ --include="*.tsx" 2>/dev/null || true; } | wc -l | tr -d ' ')
+
+# ── 8. Pattern "construit mais non branché" ───────────────────────────────────
+# Compte les consommateurs réels (hors définition et hors ré-export de barrel).
+count_consumers() {
+  { grep -rln "$1" src/ --include="*.tsx" 2>/dev/null || true; } \
+    | { grep -v "/$1\.tsx$" || true; } | wc -l | tr -d ' '
+}
+C_LEXICON=$({ grep -rln "useLexicon" src/ --include="*.tsx" 2>/dev/null || true; } | wc -l | tr -d ' ')
+C_WIDGETGRID=$(count_consumers "DashboardWidgetGrid")
+C_CUSTOMFIELD=$(count_consumers "CustomFieldRenderer")
+C_LAYOUTRENDER=$(count_consumers "DynamicLayoutRenderer")
+C_FISCALSEAL=$(count_consumers "FiscalReceiptSealZone")
 
 # ── Écriture de docs/HEALTH.md ────────────────────────────────────────────────
 mkdir -p docs
@@ -119,7 +160,7 @@ ${SEC_GEMINI}
 | Score qualité | ${QUALITY} | |
 | Couplage | ${COUPLING} | |
 | Cycles import (Sentrux) | ${CYCLES} | max = 0 |
-| Cycles import (Madge) | 0 cycle | Seuil ratchet = 0 ✅ |
+| Cycles import (Madge, alias @/ résolus) | ${MADGE_CYCLES} | Seuil ratchet = 0 |
 | God files | ${GOD_FILES} | max = 0 |
 | TypeScript erreurs | ${TSC_ERRORS} | Bloquant au push (0 toléré) |
 
@@ -137,7 +178,7 @@ ${SEC_GEMINI}
 | \`human\` | ${TESTS_HUMAN} tests | |
 | \`intelligence\` | ${TESTS_INTELLIGENCE} tests | *(tests centralisés dans \`src/__tests__/\`)* |
 | \`facility\` | ${TESTS_FACILITY} tests | *(tests centralisés dans \`src/__tests__/\`)* |
-| **Total suite Vitest** | ${TEST_SUMMARY} | 2 319 passés / 1 skipped |
+| **Total suite Vitest** | ${TEST_SUMMARY} | \`npx vitest run\` |
 
 ---
 
@@ -156,14 +197,42 @@ ${SEC_GEMINI}
 
 | Indicateur | Mesure | Seuil / Objectif |
 |---|---|---|
-| Occurrences \`*InCents\` (code source) | **${INCENTS_TOTAL}** | Ratchet bloquant preflight ≤ 821 |
-| Schémas Zod (\`src/domain/schemas/\`) | **0 InCents** | 100% microunits ✅ |
-| Imports profonds (Barrel violations) | **${BARREL_VIOLATIONS}** | Voir \`docs/BARREL-EXCEPTIONS.md\` (39 légitimes) |
-| Verticales universelles déployées | **${VERTICALS_COUNT} / 12** | 100% conformes à \`PLATFORM_VARIANTS\` |
+| Occurrences \`*InCents\` (code source) | **${INCENTS_TOTAL}** | Ratchet preflight ≤ ${MU_BASELINE} |
+| InCents dans \`src/domain/\` (schémas canoniques) | **${DOMAIN_INCENTS}** | doit rester à 0 |
+| Imports profonds (Barrel violations) | **${BARREL_VIOLATIONS}** | dont ${BARREL_DOCUMENTED} documentés dans \`docs/BARREL-EXCEPTIONS.md\` |
+| Verticales déployées | **${VERTICALS_COUNT}** | \`PLATFORM_VARIANTS\` en déclare ${VARIANTS_DECLARED} (INV-8) |
 
 ---
 
-## 6. 💾 Synchronisation & Sauvegarde
+## 6. 🚨 Exploitation & Sécurité
+
+| Indicateur | Mesure | Seuil / Note |
+|---|---|---|
+| Routes API sans garde détectée | **${API_ROUTES_UNGUARDED}** / ${API_ROUTES_TOTAL} | Certaines sont légitimement publiques — cf. \`AUDIT-23-AXES\` |
+| Pages d'erreur (\`error.tsx\`, \`not-found\`, \`global-error\`) | **${ERROR_PAGES}** | 0 = écran blanc Next en cas d'exception |
+| Attributs \`aria-\` | ${ARIA_COUNT} sur ${TOTAL_TSX} fichiers \`.tsx\` | Indicateur d'accessibilité |
+
+---
+
+## 7. 🔌 Construit mais non branché
+
+> Pattern systémique du projet : des briques complètes, exportées par un barrel,
+> que **aucun écran ne rend**. Mesuré ici pour éviter l'accumulation silencieuse.
+
+| Brique | Consommateurs \`.tsx\` |
+|---|---|
+| \`useLexicon()\` (lexique par verticale) | ${C_LEXICON} |
+| \`DashboardWidgetGrid\` | ${C_WIDGETGRID} |
+| \`CustomFieldRenderer\` | ${C_CUSTOMFIELD} |
+| \`DynamicLayoutRenderer\` | ${C_LAYOUTRENDER} |
+| \`FiscalReceiptSealZone\` | ${C_FISCALSEAL} |
+
+**Règle :** une brique à 0 consommateur depuis plus d'un mois doit être branchée,
+supprimée, ou documentée comme gelée.
+
+---
+
+## 8. 💾 Synchronisation & Sauvegarde
 
 - **Commits locaux en avance sur \`origin/main\`** : \`${UNPUSHED_COMMITS}\` commit(s).
 

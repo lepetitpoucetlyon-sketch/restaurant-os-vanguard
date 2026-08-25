@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, X, Filter, TrendingUp, Clock, ShoppingBag } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface NewSegmentModalProps {
     isOpen: boolean;

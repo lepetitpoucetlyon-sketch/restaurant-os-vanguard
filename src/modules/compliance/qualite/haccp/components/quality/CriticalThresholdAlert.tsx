@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle, ArrowRight } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 interface CriticalThresholdAlertProps {
     title: string;

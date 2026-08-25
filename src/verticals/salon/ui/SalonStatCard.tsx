@@ -2,8 +2,8 @@
 
 import { cn } from '@/lib/ui.foundations';
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
-import type { StatCardIntent } from '@/shared/components/ui/statCardTypes';
+import type { ReactNode } from 'react';
+import type { StatCardIntent } from '@/shared/components/ui/StatCardTypes';
 
 interface SalonStatCardProps {
   label: string;

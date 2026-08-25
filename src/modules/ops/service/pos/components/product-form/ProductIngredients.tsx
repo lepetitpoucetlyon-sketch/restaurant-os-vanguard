@@ -2,7 +2,7 @@
 
 import { UtensilsCrossed, Plus, Trash2, ChefHat } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { PremiumSelect } from "@ui/PremiumSelect";
 
 import type { Ingredient as MasterIngredient } from "@nexus/contracts";

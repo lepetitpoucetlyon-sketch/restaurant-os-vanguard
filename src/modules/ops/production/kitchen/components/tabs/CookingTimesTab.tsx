@@ -2,7 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 

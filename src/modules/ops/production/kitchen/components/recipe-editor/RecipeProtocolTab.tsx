@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Clock, Timer, AlertTriangle } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { Recipe, RecipeStep } from "@nexus/contracts";
 
 interface RecipeProtocolTabProps {

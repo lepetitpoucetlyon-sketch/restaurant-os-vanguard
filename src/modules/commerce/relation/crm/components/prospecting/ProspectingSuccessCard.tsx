@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, RefreshCcw, ArrowRight } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import type { ExtractedTokens } from './prospectingConstants';
 
 interface ProspectingSuccessCardProps {

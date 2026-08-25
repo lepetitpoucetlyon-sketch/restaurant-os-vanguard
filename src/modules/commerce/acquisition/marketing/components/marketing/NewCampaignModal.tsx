@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Megaphone, X, Send, Mail, MessageSquare, Calendar, Clock, Users } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 import { useMarketing } from '../../hooks/useMarketing';
 

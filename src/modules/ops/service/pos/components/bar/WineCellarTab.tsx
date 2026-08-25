@@ -8,7 +8,7 @@ import {
   Grape, 
   ThermometerSun 
 } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 import type { Wine, WineRegion } from '../../../../types/bar';
 import { formatCurrency } from "@/lib/formatters";

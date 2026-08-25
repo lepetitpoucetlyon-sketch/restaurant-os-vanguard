@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, AreaChart } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { BottomSheet } from "@ui/BottomSheet";
 import type { ProfitabilityAlert } from '../types';
 

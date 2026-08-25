@@ -14,7 +14,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useOilLogs, useCreateOilLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { StatusBadge } from '@ui/StatusBadge';
 
 export function GestionHuiles() {

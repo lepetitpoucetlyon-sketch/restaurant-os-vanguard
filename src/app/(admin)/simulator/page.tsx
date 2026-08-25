@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PageHeader } from "@ui/PageHeader";
 import { GlassCard } from "@ui/GlassCard";
 import { StatCard, StatsGrid } from "@ui/StatCard";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { SimulationService, type MonteCarloResult, type SimulationProfile } from "@/modules/intelligence";
 import { SimulatorConsole } from '@/shared/nexus/guards/admin/simulator/SimulatorConsole';
 import { TrendingUp, Users, AlertTriangle, Play, RefreshCcw, DollarSign } from "lucide-react";

@@ -14,7 +14,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useHygieneLabels, useCreateHygieneLabel, useDeleteHygieneLabel } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { CameraCapture } from '@/shared/components/ui/CameraCapture';
 import { StorageService } from '@/lib/Storage';
 import { useTenant } from '@/shared/hooks';

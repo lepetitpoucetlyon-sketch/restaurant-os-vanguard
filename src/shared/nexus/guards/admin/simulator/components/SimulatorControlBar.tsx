@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Square, Cpu, Settings } from 'lucide-react';
 import { GlassCard } from '@ui/GlassCard';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 interface SimulatorControlBarProps {
     speed: number;

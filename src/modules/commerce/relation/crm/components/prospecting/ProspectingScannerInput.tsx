@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Wand2, Loader2, AlertTriangle } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import type { BrandInput } from '@/lib/BrandingService';
 import { PRESETS } from './prospectingConstants';
 

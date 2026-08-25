@@ -84,7 +84,7 @@ const labelVariants = cva(
 );
 
 /** Nouveau prop sémantique — `brand` utilise --action-primary (couleur tenant) */
-import type { StatCardIntent } from './statCardTypes';
+import type { StatCardIntent } from './StatCardTypes';
 export type { StatCardIntent };
 
 /** @deprecated Utiliser `intent` à la place */

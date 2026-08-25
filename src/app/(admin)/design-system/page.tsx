@@ -4,18 +4,23 @@ import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_APPEARANCE, VERTICAL_EXTRA_TOKENS } from '@/shared/nexus/tokens/verticals';
-import { StatCard } from '@/shared/components/ui/StatCard';
-import { StatGrid } from '@/shared/components/ui/StatGrid';
-import { StatusBadge } from '@/shared/components/ui/StatusBadge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import GlassCard from '@/shared/components/ui/GlassCard';
-import { PageShell } from '@/shared/components/ui/PageShell';
-import { SectionCard } from '@/shared/components/ui/SectionCard';
-import { ActionBar } from '@/shared/components/ui/ActionBar';
-import { EmptyState } from '@/shared/components/ui/EmptyState';
-import { SkeletonList } from '@/shared/components/ui/SkeletonList';
-import { RoleAwareView } from '@/shared/components/ui/RoleAwareView';
+import {
+  StatCard,
+  StatGrid,
+  StatusBadge,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Button,
+  GlassCard,
+  PageShell,
+  SectionCard,
+  ActionBar,
+  EmptyState,
+  SkeletonList,
+  RoleAwareView,
+} from '@/shared/components/ui';
 import type { PlatformVariant } from '@/modules/system';
 import { cn } from '@/lib/ui.foundations';
 import {

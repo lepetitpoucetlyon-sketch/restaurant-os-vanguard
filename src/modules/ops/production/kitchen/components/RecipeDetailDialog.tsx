@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Printer } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { Modal } from "@ui/Modal";
 import type { Recipe } from "@nexus/contracts";
 import { printRecipeTechnicalSheet } from './recipe-detail/recipePrintHelper';

@@ -11,7 +11,7 @@ import {
     Trash2,
     User as UserIcon
 } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { useToast } from "@components/ui/Toast";

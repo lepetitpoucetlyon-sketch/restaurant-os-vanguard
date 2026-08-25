@@ -17,7 +17,7 @@ import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { useTenant } from '@/shared/hooks/useTenant';
 import { HACCPLogService } from '../../HACCPLogService';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 
 export function ReleveTemperatures() {
     const { data: logs = [] } = useHygieneLogs();

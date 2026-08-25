@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useToast } from '@/shared/components/ui/Toast';
-import { Button } from '@/shared/components/ui/button';
-import { SectionCard } from '@/shared/components/ui/SectionCard';
+import { useToast, Button, SectionCard } from '@/shared/components/ui';
 import { getAllSystemTenantIds } from '@/lib/mcc/SystemTenantRegistry';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { Palette, ShieldAlert, RotateCcw, Save } from 'lucide-react';

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChefHat, CheckCircle2 } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import type { Recipe } from "@nexus/contracts";
 

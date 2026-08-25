@@ -6,7 +6,7 @@ import { qualityActiveControlAtom } from '../../store/qualityAtoms';
 import type { QualityControlItem, DecisionType } from '@nexus/contracts';
 import { cn } from "@/lib/ui.foundations";
 import { CheckCircle2, AlertTriangle, XOctagon, Thermometer, Box } from 'lucide-react';
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface DeliveryItemRowProps {
   item: QualityControlItem;

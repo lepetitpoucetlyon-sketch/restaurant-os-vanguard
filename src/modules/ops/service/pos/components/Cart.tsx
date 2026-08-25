@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X, MoreHorizontal, Trash2, Percent } from "lucide-react";
-import { ScrollArea } from "@ui/scroll-area";
+import { ScrollArea } from "@ui/ScrollArea";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 

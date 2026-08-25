@@ -4,7 +4,7 @@ import React from 'react';
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CreditCard, Lock } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { useTenant } from "@/shared/hooks";
 
 interface SaaSBillingGateProps {

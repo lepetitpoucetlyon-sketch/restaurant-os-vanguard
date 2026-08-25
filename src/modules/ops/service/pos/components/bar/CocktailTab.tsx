@@ -7,7 +7,7 @@ import {
   Martini, 
   TrendingUp 
 } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import type { Cocktail } from '../../../../types/bar';
 import { formatCurrency } from "@/lib/formatters";
 

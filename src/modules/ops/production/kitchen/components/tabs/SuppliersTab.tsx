@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Truck } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 export function SuppliersTab() {

@@ -3,7 +3,7 @@ import { Shield, User as UserIcon } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { cinematicContainer } from "@/shared/utils/motion";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 
 export interface StaffAuditEntry {

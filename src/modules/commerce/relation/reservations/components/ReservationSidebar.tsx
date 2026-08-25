@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Search, Filter, Clock, Users, MoreHorizontal, UserCheck } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";;
-import { ScrollArea } from "@ui/scroll-area";
+import { ScrollArea } from "@ui/ScrollArea";
 import { Reservation } from "@nexus/contracts";
 import { fadeInUp, easing } from "@/shared/utils/motion";
 

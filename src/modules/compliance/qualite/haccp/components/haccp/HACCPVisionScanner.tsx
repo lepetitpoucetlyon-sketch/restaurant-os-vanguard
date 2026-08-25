@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, ShieldCheck, AlertTriangle, Loader2, X } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { useHACCP } from '@nexus/guards/NexusGuardProvider';
 import { cn } from '@/lib/ui.foundations';
 

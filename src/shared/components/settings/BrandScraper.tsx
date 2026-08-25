@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Globe, Wand2, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { useToast } from '@ui/Toast';
 import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';

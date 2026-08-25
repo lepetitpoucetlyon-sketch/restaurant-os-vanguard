@@ -6,7 +6,7 @@ import { X, User, Phone, Mail, Plus, Save, Tag as TagIcon, Star, Sparkles, Gem, 
 const DIETARY_OPTIONS = ['Végétarien', 'Vegan', 'Sans gluten', 'Halal', 'Casher', 'Sans lactose'];
 const SEATING_OPTIONS = ['Fenêtre', 'Terrasse', 'Salle calme', 'Bar', 'Isolé', 'Grande tablée'];
 const OCCASION_OPTIONS = ['Anniversaire', 'EVJF', 'Business', 'Romantique', 'Famille', 'Amis'];
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 

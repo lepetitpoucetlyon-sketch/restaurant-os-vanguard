@@ -8,7 +8,7 @@ import {
 } from '../../store/qualityAtoms';
 import { HACCPGauge } from './HACCPGauge';
 import { DeliveryItemRow } from './DeliveryItemRow';
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { 
     Truck as TruckIcon,
     ShieldCheck as ShieldIcon,

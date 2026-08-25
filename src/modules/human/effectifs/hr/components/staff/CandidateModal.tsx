@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Modal } from "@ui/Modal";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 import { useToast } from "@ui/Toast";
 import { useRecruitment } from "../../hooks/useRecruitment";
 import type { Candidate, CandidateStatus, GDPRConsent } from "@nexus/contracts";

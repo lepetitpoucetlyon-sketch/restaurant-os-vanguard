@@ -35,6 +35,7 @@ Plusieurs agents (Antigravity, Claude Code, Cursor, Copilot…) écrivent **en p
 3. **Vérifier les collisions** : si une autre session `active` déclare un chemin que tu vas toucher → **STOP**, se coordonner ou demander à l'humain. Ne jamais écraser.
 4. **Tenir les autres au courant** : mettre à jour ta ligne (progrès / fichiers clés touchés) au fil de l'eau, pas seulement au début. Passer le status à `terminée` à la fin.
 5. **S'auto-identifier** (Claude Code) : écrire son nom de session dans `.claude/.active-session` (local, gitignoré). Le hook `PreToolUse` `.claude/hooks/check-session-collision.sh` s'en sert pour **bloquer** (exit 2) toute écriture dans le périmètre d'une AUTRE session active. Ce hook est branché dans `.claude/settings.json` — ne pas le désactiver (cf. Loi 1).
+6. **Commits atomiques à chemins explicites** : Ne JAMAIS exécuter de `git add .` ou `git add -A` aveugle qui absorberait les modifications en cours d'une autre session active. Toujours stager et commiter explicitement son propre périmètre : `git commit -- <fichiers> -m "..."` ou `git add <fichier1> <fichier2> && git commit -m "..."`.
 
 Garde technique inter-agents commune = le hook `pre-commit` (tourne quel que soit l'agent qui `git commit`) + ces fichiers partagés (`AGENTS.md`, `.claude/sessions.md`) que tout agent doit lire. Un agent qui écrit sans s'inscrire fabrique une collision silencieuse — interdit par cette loi.
 

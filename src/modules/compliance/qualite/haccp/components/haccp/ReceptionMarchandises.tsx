@@ -16,7 +16,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useReceptionLogs, useCreateReceptionLog, useDeleteReceptionLog } from '@nexus/guards/NexusGuardProvider';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
 import { BottomSheet } from '@ui/BottomSheet';
-import { Button } from '@ui/button';
+import { Button } from '@ui/Button';
 import { StatusBadge } from '@ui/StatusBadge';
 import { CameraCapture } from '@/shared/components/ui/CameraCapture';
 import { StorageService } from '@/lib/Storage';

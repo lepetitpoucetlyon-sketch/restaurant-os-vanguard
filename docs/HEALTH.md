@@ -1,6 +1,6 @@
 # Health Dashboard — RESTAURANT-OS-CORE
 
-> Auto-généré le **2026-08-25 11:18 UTC** · commit `fbda653f9`
+> Auto-généré le **2026-08-25 14:10 UTC** · commit `5a592e8d1`
 > Source : `scripts/health-snapshot.sh` (Zero-Claim Policy)
 
 ---
@@ -21,13 +21,13 @@
 
 | Métrique | Valeur | Statut / Seuil |
 |---|---|---|
-| Sentrux gate vs baseline | ✅ | Bloquant au push |
-| Score qualité | 3258 -> 3260 | |
-| Couplage | 0.45 → 0.45 | |
-| Cycles import (Sentrux) | 2 → 2 | max = 0 |
-| Cycles import (Madge) | 0 cycle | Seuil ratchet = 0 ✅ |
-| God files | 18 → 18 | max = 0 |
-| TypeScript erreurs | 0 | Bloquant au push (0 toléré) |
+| Sentrux gate vs baseline | ❌ | Bloquant au push |
+| Score qualité | 3258 -> 3080 | |
+| Couplage | 0.45 → 0.44 | |
+| Cycles import (Sentrux) | 2 → 3 | max = 0 |
+| Cycles import (Madge, alias @/ résolus) | 2 | Seuil ratchet = 0 |
+| God files | 18 → 17 | max = 0 |
+| TypeScript erreurs | 24 | Bloquant au push (0 toléré) |
 
 ---
 
@@ -43,7 +43,7 @@
 | `human` | 6 tests | |
 | `intelligence` | 0 tests | *(tests centralisés dans `src/__tests__/`)* |
 | `facility` | 0 tests | *(tests centralisés dans `src/__tests__/`)* |
-| **Total suite Vitest** | (voir CI) | 2 319 passés / 1 skipped |
+| **Total suite Vitest** | (voir CI) | `npx vitest run` |
 
 ---
 
@@ -62,16 +62,44 @@
 
 | Indicateur | Mesure | Seuil / Objectif |
 |---|---|---|
-| Occurrences `*InCents` (code source) | **818** | Ratchet bloquant preflight ≤ 821 |
-| Schémas Zod (`src/domain/schemas/`) | **0 InCents** | 100% microunits ✅ |
-| Imports profonds (Barrel violations) | **45** | Voir `docs/BARREL-EXCEPTIONS.md` (39 légitimes) |
-| Verticales universelles déployées | **12 / 12** | 100% conformes à `PLATFORM_VARIANTS` |
+| Occurrences `*InCents` (code source) | **818** | Ratchet preflight ≤ 818 |
+| InCents dans `src/domain/` (schémas canoniques) | **0** | doit rester à 0 |
+| Imports profonds (Barrel violations) | **45** | dont 8 documentés dans `docs/BARREL-EXCEPTIONS.md` |
+| Verticales déployées | **12** | `PLATFORM_VARIANTS` en déclare 12 (INV-8) |
 
 ---
 
-## 6. 💾 Synchronisation & Sauvegarde
+## 6. 🚨 Exploitation & Sécurité
 
-- **Commits locaux en avance sur `origin/main`** : `67` commit(s).
+| Indicateur | Mesure | Seuil / Note |
+|---|---|---|
+| Routes API sans garde détectée | **39** / 210 | Certaines sont légitimement publiques — cf. `AUDIT-23-AXES` |
+| Pages d'erreur (`error.tsx`, `not-found`, `global-error`) | **0** | 0 = écran blanc Next en cas d'exception |
+| Attributs `aria-` | 98 sur 902 fichiers `.tsx` | Indicateur d'accessibilité |
+
+---
+
+## 7. 🔌 Construit mais non branché
+
+> Pattern systémique du projet : des briques complètes, exportées par un barrel,
+> que **aucun écran ne rend**. Mesuré ici pour éviter l'accumulation silencieuse.
+
+| Brique | Consommateurs `.tsx` |
+|---|---|
+| `useLexicon()` (lexique par verticale) | 0 |
+| `DashboardWidgetGrid` | 0 |
+| `CustomFieldRenderer` | 0 |
+| `DynamicLayoutRenderer` | 0 |
+| `FiscalReceiptSealZone` | 0 |
+
+**Règle :** une brique à 0 consommateur depuis plus d'un mois doit être branchée,
+supprimée, ou documentée comme gelée.
+
+---
+
+## 8. 💾 Synchronisation & Sauvegarde
+
+- **Commits locaux en avance sur `origin/main`** : `70` commit(s).
 
 ---
 

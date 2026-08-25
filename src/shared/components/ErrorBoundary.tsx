@@ -2,7 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCcw } from "lucide-react";
-import { Button } from "@ui/button";
+import { Button } from "@ui/Button";
 
 interface Props {
     children: ReactNode;
