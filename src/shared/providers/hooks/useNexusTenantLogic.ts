@@ -55,11 +55,13 @@ export function useNexusTenantLogic(): NexusTenantState {
         NexusTelemetryEngine.initSession(tenantId);
         fetchRbac(tenantId);
         
-        // Auto-provision Demo Mode — URL param OU dev local sans Firebase réel
+        // Auto-provision Demo Mode — URL param OU dev local sans Firebase réel (strictement hors production)
         if (typeof window !== 'undefined') {
-            const isSimulacra =
+            const isDev = process.env.NODE_ENV !== 'production';
+            const isSimulacra = isDev && (
                 new URLSearchParams(window.location.search).get('simulacra') === 'true' ||
-                (process.env.NODE_ENV !== 'production' && !process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+                !process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+            );
             if (isSimulacra) {
                 Nexus.activateSimulacraMode(tenantId).then(() => {
                     import('@/infrastructure/services/demo/DemoSeeder').then(({ DemoSeeder }) => {
