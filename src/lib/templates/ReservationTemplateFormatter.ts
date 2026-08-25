@@ -16,10 +16,10 @@ export interface ReservationTemplateContext {
 }
 
 export const DEFAULT_RESERVATION_TEMPLATES = {
-  confirmationSms: 'Bonjour {prenom}, votre table pour {couverts} pers. chez {restaurant} est confirmée le {date} à {heure}. Modifier/Annuler : {lien_modification}',
+  confirmationSms: 'Bonjour {prenom}, votre réservation pour {couverts} pers. chez {restaurant} est confirmée le {date} à {heure}. Modifier/Annuler : {lien_modification}',
   reminderSms: 'Bonjour {prenom}, nous vous attendons chez {restaurant} le {date} à {heure} pour {couverts} pers. À très bientôt !',
   cancellationSms: 'Bonjour {prenom}, votre réservation du {date} à {heure} chez {restaurant} a bien été annulée.',
-  waitlistSms: 'Bonne nouvelle {prenom} ! Une table pour {couverts} pers. vient de se libérer chez {restaurant} pour {heure}. Confirmez ici sous 15 min : {lien_modification}',
+  waitlistSms: 'Bonne nouvelle {prenom} ! Une place pour {couverts} pers. vient de se libérer chez {restaurant} pour {heure}. Confirmez ici sous 15 min : {lien_modification}',
 };
 
 /**
@@ -87,6 +87,7 @@ export class ReservationTemplateFormatter {
       '{nom_complet}': fullName,
       '{fullName}': fullName,
       '{restaurant}': restaurant,
+      '{etablissement}': restaurant,
       '{businessName}': restaurant,
       '{date}': formattedDate,
       '{date_courte}': ctx.date || '',

@@ -428,6 +428,26 @@ const VERTICAL_NAV_OVERRIDES: Record<string, Record<string, SectionOverride>> = 
         production: { title: 'Fleurs & Végétaux', items: { inventory: 'Tiges & Accessoires' } },
         stocks: { title: 'Fleurs & Végétaux', items: { inventory: 'Tiges & Accessoires' } },
     },
+    hotel: {
+        operations: { title: 'Réception & Hébergement', items: { pos: 'Facturation & Caisse', floor_plan: 'Plan des Chambres & Étages', menu_builder: 'Services & Tarifs' } },
+        production: { title: 'Gouvernance & Lingerie', items: { inventory: 'Stocks Linge & Produits', kds: 'Service d’Étage & Commandes' } },
+        stocks: { title: 'Gouvernance & Lingerie', items: { inventory: 'Stocks Linge & Produits' } },
+    },
+    bakery: {
+        operations: { title: 'Vente & Boutique', items: { pos: 'Caisse & Vente Comptoir', floor_plan: 'Vitrine & Espaces', menu_builder: 'Catalogue Pains & Pâtisseries' } },
+        production: { title: 'Fournil & Laboratoire', items: { inventory: 'Farines & Ingrédients', kds: 'Fournées & Préparations' } },
+        stocks: { title: 'Matières Premières', items: { inventory: 'Farines & Ingrédients' } },
+    },
+    retail: {
+        operations: { title: 'Vente & Magasin', items: { pos: 'Caisse Enregistreuse', floor_plan: 'Plan Magasin & Rayons', menu_builder: 'Catalogue Articles' } },
+        production: { title: 'Marchandises & Réserve', items: { inventory: 'Stock Boutique & Réserve' } },
+        stocks: { title: 'Marchandises & Stocks', items: { inventory: 'Stock Boutique & Réserve' } },
+    },
+    custom: {
+        operations: { title: 'Opérations & Caisse', items: { pos: 'Caisse & Encaissement', floor_plan: 'Plan des Espaces', menu_builder: 'Catalogue Services' } },
+        production: { title: 'Activité & Stocks', items: { inventory: 'Inventaire & Stocks' } },
+        stocks: { title: 'Activité & Stocks', items: { inventory: 'Inventaire & Stocks' } },
+    },
 };
 
 

@@ -24,5 +24,8 @@ export const OrderResponseSchema = StandardResponseSchema(z.object({
 export const ProductResponseSchema = StandardResponseSchema(z.object({
   id: z.string(),
   name: z.string(),
-  priceInCents: z.number()
+  priceInMicrounits: z.number().optional(),
+  /** @deprecated Utiliser priceInMicrounits */
+  priceInCents: z.number().optional(),
 }));
+

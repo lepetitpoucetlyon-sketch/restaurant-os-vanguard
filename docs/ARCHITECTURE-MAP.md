@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3568** · LOC : **330 285**
+- Fichiers `.ts/.tsx` : **3568** · LOC : **330 309**
 - Pages : **84** · Routes API : **210**
 
 ## Couches
@@ -92,5 +92,5 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 566 |
 | `src/i18n/locales/en.ts` | 566 |
 | `src/i18n/locales/fr.ts` | 545 |
-| `src/config/navConfig.ts` | 507 |
+| `src/config/navConfig.ts` | 527 |
 | `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 493 |
