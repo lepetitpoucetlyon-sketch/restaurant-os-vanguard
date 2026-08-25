@@ -83,8 +83,11 @@ export function TimeclockDashboard() {
         try {
             const res = await fetch('/api/timeclock/verify-pin', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pin: enteredPin, terminalId: 'kiosk-1' }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-tenant-id': tenantId || '',
+                },
+                body: JSON.stringify({ pin: enteredPin, terminalId: 'kiosk-1', tenantId }),
             });
 
             if (res.ok) {

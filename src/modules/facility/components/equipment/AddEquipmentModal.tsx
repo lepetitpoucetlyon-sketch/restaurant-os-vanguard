@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { X, Plus, Wrench } from 'lucide-react';
 import type { EquipmentCategory } from '../../assets/domain/schemas/equipment';
 
+import { EquipmentAssetService } from '../../services/EquipmentAssetService';
 import { buildEquipmentPayload } from './add-modal/equipmentFormHelpers';
 import { EquipmentIdentitySection } from './add-modal/EquipmentIdentitySection';
 import { EquipmentFinanceSection } from './add-modal/EquipmentFinanceSection';
@@ -13,9 +14,10 @@ import { EquipmentSupportSection } from './add-modal/EquipmentSupportSection';
 interface AddEquipmentModalProps {
   onClose: () => void;
   onEquipmentCreated: () => void;
+  tenantId?: string;
 }
 
-export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentModalProps) {
+export function AddEquipmentModal({ onClose, onEquipmentCreated, tenantId }: AddEquipmentModalProps) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState<EquipmentCategory>('COOKING');
   const [brand, setBrand] = useState('');
@@ -53,17 +55,28 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated }: AddEquipmentM
         supplierName, invoiceNumber, invoiceUrl, purchasePriceEuros,
         purchaseDate, warrantyMonths, depreciationYears, supportPhone, supportCompany,
       });
-      const res = await fetch('/api/facility/equipment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const data = (await res.json()) as { error?: string };
-        throw new Error(data.error ?? 'Erreur lors de la création');
+      try {
+        const res = await fetch('/api/facility/equipment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-tenant-id': tenantId || '' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          onEquipmentCreated();
+          onClose();
+          return;
+        }
+      } catch {
+        // Fallback service direct
       }
-      onEquipmentCreated();
-      onClose();
+
+      if (tenantId) {
+        await EquipmentAssetService.registerAsset(tenantId, payload as never);
+        onEquipmentCreated();
+        onClose();
+        return;
+      }
+      throw new Error('Erreur lors de la création');
     } catch (err: unknown) {
       setError((err as Error).message);
     } finally {

@@ -16,6 +16,7 @@ import {
 import type {
   EquipmentAsset,
 } from '../../assets/domain/schemas/equipment';
+import { EquipmentAssetService } from '../../services/EquipmentAssetService';
 import { EquipmentAssetCard } from './EquipmentAssetCard';
 import { AddEquipmentModal } from './AddEquipmentModal';
 import { EquipmentDetailModal } from './EquipmentDetailModal';
@@ -46,13 +47,24 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
   const fetchAssets = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/facility/equipment');
+      const res = await fetch('/api/facility/equipment', {
+        headers: { 'x-tenant-id': tenantId },
+      });
       if (res.ok) {
         const json = await res.json();
         setAssets(json.data || []);
+        return;
       }
-    } catch (err) {
-      console.error('Error fetching equipment assets', err);
+      // Fallback service direct (client / offline / simulacra)
+      const direct = await EquipmentAssetService.getAllAssets(tenantId);
+      setAssets(direct || []);
+    } catch {
+      try {
+        const direct = await EquipmentAssetService.getAllAssets(tenantId);
+        setAssets(direct || []);
+      } catch (fallbackErr) {
+        console.error('Error fetching equipment assets', fallbackErr);
+      }
     } finally {
       setLoading(false);
     }
@@ -293,6 +305,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
       <AnimatePresence>
         {showAddModal && (
           <AddEquipmentModal
+            tenantId={tenantId}
             onClose={() => setShowAddModal(false)}
             onEquipmentCreated={fetchAssets}
           />

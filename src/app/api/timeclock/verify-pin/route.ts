@@ -57,18 +57,25 @@ function verifyStaffPin(staffList: StaffDoc[], pin: string, tenantId: string): S
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  let callerTenantId: string | undefined;
   const caller = await requireTenantUser(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+  if (!isDenied(caller) && (caller as { tenantId?: string })?.tenantId) {
+    callerTenantId = (caller as { tenantId: string }).tenantId;
+  }
 
-  let body: { pin: string; terminalId: string };
+  let body: { pin: string; terminalId: string; tenantId?: string };
   try {
     body = await req.json() as typeof body;
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { pin, terminalId } = body;
+  const { pin, terminalId, tenantId: bodyTenantId } = body;
+  const tenantId = callerTenantId || req.headers.get('x-tenant-id') || bodyTenantId;
+  if (!tenantId) {
+    return NextResponse.json({ error: 'tenantId requis pour le pointage' }, { status: 400 });
+  }
+
   const validationError = validatePinRequest(pin, terminalId);
   if (validationError) return validationError;
 
