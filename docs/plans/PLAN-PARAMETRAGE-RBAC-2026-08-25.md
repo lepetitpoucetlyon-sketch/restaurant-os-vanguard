@@ -55,7 +55,62 @@ tenir la promesse.
 
 ---
 
-## Les deux manques réels
+## ⚡ MAJ 2026-08-25 (fin de journée) — un troisième manque, plus grave
+
+> Re-mesuré sur `main@d4283ad19`. Les deux manques ci-dessous sont **confirmés**
+> (`savePageSettings` : 0 · chemin `pageSettings → Nexus` : 0 · `SettingsReader` : 0).
+> Mais la mesure a révélé un problème que le plan initial ne voyait pas.
+
+### Manque 3 — 142 réglages sur 150 ne sont lus par personne 🔴
+
+**Mesure :** pour chacune des 150 clés uniques de `config-registry.ts`, recherche de sa
+lecture dans `src/modules` et `src/app` :
+
+```
+Clés déclarées dans le registre  : 150
+Clés réellement lues par le code :   8
+```
+
+Les 8 qui fonctionnent : `button_size` · `ca_target` · `columns` · `occupation_target` ·
+`show_ca` · `show_images` · `split_bill_enabled` · `tickets_target`.
+
+**Ce que ça signifie :** le panneau de réglages affiche 150 boutons dont **142 ne font rien**.
+Un manager change « Délai no-show » → l'interface enregistre → **le comportement ne change pas**.
+
+**Pourquoi :** deux systèmes de réglages coexistent sans se parler.
+
+| Système | Contenu | RBAC | UI | Lu par le code |
+|---|---|---|---|---|
+| `config-registry.ts` | 150 réglages | ✅ | ✅ | ❌ (8/150) |
+| `settings.defaults.ts` | les valeurs réelles | ❌ | ❌ | ✅ |
+
+Exemple vérifié — le délai de no-show :
+```
+config-registry.ts  → { key: "noshow_delay", label: "Délai no-show (min)", roles: [...] }
+                      lu par le code : 0 occurrence
+settings.defaults.ts → noShowDelayMinutes: 20
+                      lu par le code : 2 occurrences   ← c'est celui-ci qui décide
+```
+
+**Conséquence sur ce plan :** la Phase 3 est moins lourde que prévu — **9 des 29 décisions
+sont déjà déclarées** dans le registre (`noshow_delay`, `min_advance`, `max_advance`,
+`reminder_hours_before`, `low_stock_threshold`, `alert_delay`, `sound_alert`,
+`temperature_alerts`, `max_discount_no_pin`). Mais la Phase 4 est **beaucoup plus lourde** :
+il ne s'agit pas de brancher 29 constantes, mais de réconcilier deux systèmes entiers.
+
+**Nouvelle phase 3 bis — Réconcilier les deux systèmes** *(2 sessions)*
+1. Pour chaque clé du registre, identifier sa contrepartie dans `settings.defaults.ts`
+2. Faire de `settings.defaults.ts` la **table des défauts** du registre (une seule source)
+3. Brancher les lectures : le code lit le registre, qui retombe sur le défaut
+4. Supprimer les clés du registre qui n'ont aucune contrepartie — ce sont des promesses vides
+
+> ⚠️ **Ce manque touche déjà les utilisateurs**, indépendamment des 29 décisions figées.
+> Une UI de réglages qui n'a aucun effet est pire qu'une absence de réglages : elle fait
+> croire au restaurateur qu'il a la main.
+
+---
+
+## Les deux manques réels *(rédaction initiale)*
 
 ### Manque 1 — Les réglages de page ne quittent pas la tablette 🔴
 
