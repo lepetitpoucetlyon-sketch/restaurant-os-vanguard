@@ -4,6 +4,10 @@ import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import type { Customer } from '@shared/nexus/contracts/nexus-internal-mapper';
 import type { JsonObject } from "@/shared/types/json";
+import { getSetting } from '@/lib/settings/SettingsReader';
+
+/** 1 € = 1 000 000 microunits (cf. CLAUDE.md — convention monnaie). */
+const EUR_TO_MICROUNITS = 1_000_000;
 
 /**
  * P3-1: CRM VIP Handler
@@ -36,10 +40,14 @@ export function registerCRMVipHandler(): () => void {
         const visits = (stats?.totalVisits ?? 0) + 1;
         const totalSpent = (stats?.totalSpentInMicrounits ?? 0) + (order.totalTTCInMicrounits as number ?? 0);
 
-        const VIP_VISITS_THRESHOLD = 5;
-        const VIP_SPENT_THRESHOLD = 500_000_000; // 500€ en microunits
+        // DF-K2 — seuils VIP réglables par le gérant (page `customer` du registre).
+        // Le registre expose `vip_threshold_spend` en EUROS ; le code raisonne en
+        // microunits, d'où la conversion explicite (1 € = 1 000 000 µ).
+        const vipVisitsThreshold = getSetting<number>('customer', 'vip_threshold_visits', 5);
+        const vipSpentThresholdEur = getSetting<number>('customer', 'vip_threshold_spend', 500);
+        const vipSpentThreshold = vipSpentThresholdEur * EUR_TO_MICROUNITS;
 
-        const becomesVip = visits >= VIP_VISITS_THRESHOLD || totalSpent >= VIP_SPENT_THRESHOLD;
+        const becomesVip = visits >= vipVisitsThreshold || totalSpent >= vipSpentThreshold;
 
         // Met à jour les stats client en passant
         await Nexus.adapter.update(`tenants/${tenantId}/customers/${customerId}`, {
@@ -63,7 +71,7 @@ export function registerCRMVipHandler(): () => void {
           empireAudit.log({
             module: 'crm',
             action: 'CUSTOMER_UPGRADED_VIP',
-            details: { customerId, reason: visits >= VIP_VISITS_THRESHOLD ? 'VISITS' : 'SPENT', orderId },
+            details: { customerId, reason: visits >= vipVisitsThreshold ? 'VISITS' : 'SPENT', orderId },
             severity: 'low',
             timestamp: new Date(),
           });
