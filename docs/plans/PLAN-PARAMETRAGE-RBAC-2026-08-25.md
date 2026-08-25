@@ -1,6 +1,6 @@
 # Plan — Paramétrage RBAC des décisions figées
 
-> Rédigé le **2026-08-25** · mesuré sur `main@5a592e8d1`
+> Rédigé le **2026-08-25** · **re-mesuré et rendu cohérent sur `main@11fe8d025`**
 > Répond à : *« régler l'ensemble du problème c'est simple, il faut que chaque personne,
 > dans le respect du RBAC, puisse paramétrer par défaut. »*
 > Source : `docs/DECISIONS-FIGEES-RESTAURANT.md` (29 décisions)
@@ -37,7 +37,7 @@ export interface PageSettingConfig {
 | Brique | Emplacement | État |
 |---|---|---|
 | Schéma d'un réglage avec `roles[]` | `permissions.types.ts:147` | ✅ |
-| Registre des réglages | `settings/config-registry.ts` — **156 réglages déclarés** | ✅ |
+| Registre des réglages | `settings/config-registry.ts` — **150 clés uniques** (156 déclarations, 6 doublons inter-pages) | ⚠️ voir Manque 3 |
 | Lecture dans un composant | `usePageSetting(page, key, défaut)` | ✅ |
 | Panneau de réglages contextuel | `settings/ContextualSettings.tsx` | ✅ |
 | Filtrage par rôle | `canModifySetting(setting)` | ✅ |
@@ -50,8 +50,8 @@ Exemple réel déjà en place :
 ```
 
 **Le travail n'est donc pas de construire un système. C'est de brancher 29 décisions
-dans un système qui tourne déjà** — et de corriger deux manques qui l'empêchent de
-tenir la promesse.
+dans un système qui tourne déjà** — et de corriger **trois manques** qui l'empêchent de
+tenir la promesse (le troisième, découvert en fin de journée, est le plus grave).
 
 ---
 
@@ -92,10 +92,19 @@ settings.defaults.ts → noShowDelayMinutes: 20
                       lu par le code : 2 occurrences   ← c'est celui-ci qui décide
 ```
 
-**Conséquence sur ce plan :** la Phase 3 est moins lourde que prévu — **9 des 29 décisions
-sont déjà déclarées** dans le registre (`noshow_delay`, `min_advance`, `max_advance`,
-`reminder_hours_before`, `low_stock_threshold`, `alert_delay`, `sound_alert`,
-`temperature_alerts`, `max_discount_no_pin`). Mais la Phase 4 est **beaucoup plus lourde** :
+**Conséquence sur ce plan :** la Phase 3 s'allège nettement — **~14 des 29 décisions sont
+déjà déclarées** dans le registre :
+
+| Zone | Clés déjà présentes dans `config-registry.ts` |
+|---|---|
+| Réservations (DF-C1→C4) | `noshow_delay` · `min_advance` · `max_advance` · `reminder_hours_before` |
+| KDS (DF-B3) | `alert_delay` · `sound_alert` · `sound_new_order` |
+| Stocks (DF-F1) | `low_stock_threshold` · `critical_threshold` |
+| HACCP (DF-E2, DF-E4) | `temperature_alerts` · `temp_check_frequency` · `alert_delay_minutes` · `retention_years` |
+| RH (Zone H) | `max_hours_day` · `max_hours_week` · `min_rest_hours` |
+| POS | `max_discount_no_pin` |
+
+**Aucune n'est lue par le code.** La Phase 4 est donc **beaucoup plus lourde** que prévu :
 il ne s'agit pas de brancher 29 constantes, mais de réconcilier deux systèmes entiers.
 
 **Nouvelle phase 3 bis — Réconcilier les deux systèmes** *(2 sessions)*
@@ -129,7 +138,7 @@ sur la sienne, garde l'ancienne valeur. La caisse du comptoir aussi. **Chaque ap
 propre configuration.**
 
 Ce n'est pas un détail de mise en œuvre : c'est ce qui fait que le modèle proposé ne peut
-pas fonctionner tel quel. Les 156 réglages RBAC existants souffrent déjà du problème.
+pas fonctionner tel quel. Les 150 réglages RBAC existants souffrent déjà du problème.
 
 ### Manque 2 — Les services ne savent pas lire un réglage 🔴
 
@@ -148,7 +157,7 @@ Recherche d'un lecteur non-React (`getPageSetting`, `settingsService`…) : **au
 
 ---
 
-## Le plan — 4 phases
+## Le plan — 6 phases
 
 ### PHASE 1 — Persister les réglages au niveau tenant *(1,5 session)* 🔴 **prérequis**
 
@@ -282,7 +291,12 @@ Ajouter les entrées dans `config-registry.ts`, **groupées par métier** — c'
   group: "logic", type: "number", min: 0, max: 100,
   roles: ["admin", "directeur"] },                                // DF-C6
 ```
-*(DF-C1 à C4 existent déjà dans `settings.defaults.ts` — les exposer dans le registre RBAC.)*
+> ⚠️ **Corrigé après re-mesure :** DF-C1 à C4 sont **déjà déclarés dans le registre**
+> (`noshow_delay`, `min_advance`, `max_advance`, `reminder_hours_before`). Le problème
+> n'est donc pas de les déclarer, mais qu'**aucun n'est lu par le code** — cf. Manque 3.
+> Idem pour `low_stock_threshold`, `alert_delay`, `sound_alert`, `temperature_alerts`,
+> `max_discount_no_pin`, `temp_check_frequency`, `alert_delay_minutes`, `retention_years`,
+> `max_hours_day`, `max_hours_week`, `min_rest_hours`.
 
 #### Page `printers` — gérant
 ```typescript
@@ -439,14 +453,16 @@ Deux décisions ne se paramètrent pas :
 ## Séquencement & conflits
 
 ```
-PHASE 1  1,5 sess.  Persistance tenant       ← prérequis absolu
-PHASE 2  1   sess.  Lecteur non-React        ← dépend de rien, parallélisable avec 1
-PHASE 3  1,5 sess.  Déclarer les 29 réglages ← dépend de 1 (sinon local à la tablette)
-PHASE 4  2   sess.  Remplacer les constantes ← dépend de 2 et 3
-PHASE 5  1   sess.  Cascade HACCP N3→N0      ← table catégories + bornes légales
+PHASE 1    1,5 sess.  Persistance tenant        ← prérequis absolu
+PHASE 2    1   sess.  Lecteur non-React         ← parallélisable avec 1
+PHASE 3    1   sess.  Déclarer les réglages     ← allégée : ~14 des 29 existent déjà
+PHASE 3bis 2   sess.  Réconcilier les 2 systèmes ← LE plus gros poste (142 clés inertes)
+PHASE 4    2   sess.  Remplacer les constantes  ← dépend de 2, 3 et 3bis
+PHASE 5    1   sess.  Cascade HACCP N3→N0       ← table catégories + bornes légales
 ```
 
-**Total : 7 sessions.**
+**Total : 8,5 sessions** (7 dans la version initiale — la phase 3 s'allège d'une demi-session,
+la phase 3 bis en ajoute deux).
 
 ### Conflits identifiés
 
@@ -455,7 +471,7 @@ PHASE 5  1   sess.  Cascade HACCP N3→N0      ← table catégories + bornes l�
 | `config-registry.ts` touché par plusieurs sessions | Écrivain unique — c'est un fichier-registre |
 | Phase 2 dépend de l'invariant **INV-9** (store Jotai unique) | Si INV-9 casse, `getSetting` lit un store fantôme. Vérifier avant la phase 4. |
 | Phase 4 touche `usePos.ts` / `Cart.tsx` | ⚠️ Même périmètre que la **migration microunits Lot 4**. Ne pas paralléliser. |
-| Session `vague0-ui-cleanup` active sur `shared/components/` | `ContextualSettings.tsx` y vit — attendre sa clôture avant la phase 1.2 |
+| ~~Session `vague0-ui-cleanup`~~ | ✅ **Levé** — session close, 0 session active au 2026-08-25 fin de journée |
 
 ---
 
@@ -472,4 +488,5 @@ pour choisir les **bons défauts** et les **bornes** (`min`/`max`), pas pour gra
 
 ---
 
-*Infrastructure mesurée le 2026-08-25 sur `main@5a592e8d1`. Chaque chemin est vérifiable.*
+*Infrastructure mesurée le 2026-08-25, document rendu cohérent sur `main@11fe8d025`.
+Chaque chemin et chaque chiffre est vérifiable par commande.*
