@@ -31,12 +31,29 @@ fi
 # IA (non bloquant : vision/brand-extract dégradent proprement).
 [ -z "$GEMINI_API_KEY" ] && warn "GEMINI_API_KEY absent — vision IA et extraction de marque désactivées." || ok "GEMINI_API_KEY présent."
 
-echo "🚫 [2/4] Fuites côté client..."
+echo "🚫 [2/4] Fuites côté client & bypass d'authentification..."
 # Aucun secret ne doit être exposé en NEXT_PUBLIC_*.
 if env | grep -E '^NEXT_PUBLIC_.*(SECRET|SERVICE_ACCOUNT|PRIVATE|SIGNING)' >/dev/null 2>&1; then
   ko "Un secret est exposé en NEXT_PUBLIC_* :"; env | grep -E '^NEXT_PUBLIC_.*(SECRET|SERVICE_ACCOUNT|PRIVATE|SIGNING)' | cut -d= -f1 | sed 's/^/      /'
 else
   ok "Aucun secret exposé en NEXT_PUBLIC_*."
+fi
+
+# NODE_ENV est la condition RACINE des 3 bypass d'auth serveur.
+# Si elle n'est pas 'production', les bypass dev s'ouvrent tous :
+#   requireAnyAuth.ts:50 · adminAuthGuard.ts:93 et :241
+if [ "$NODE_ENV" != "production" ]; then
+  ko "NODE_ENV='${NODE_ENV:-non défini}' — les bypass d'auth dev sont ACTIFS. Attendu : production."
+else
+  ok "NODE_ENV=production — bypass d'auth dev neutralisés."
+fi
+
+# Ceinture supplémentaire : MCC_DEV_MODE accorde 'mcc_super_admin' via
+# adminAuthGuard.ts:93 (déjà bloqué par NODE_ENV, mais ne doit jamais être posé).
+if [ -n "$MCC_DEV_MODE" ]; then
+  ko "MCC_DEV_MODE='$MCC_DEV_MODE' est défini — ne doit JAMAIS l'être en production (accorde mcc_super_admin)."
+else
+  ok "MCC_DEV_MODE absent."
 fi
 
 echo "📜 [3/4] Règles de sécurité serveur..."
