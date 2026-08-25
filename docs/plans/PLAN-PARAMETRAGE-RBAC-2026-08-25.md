@@ -107,7 +107,7 @@ déclarées** dans le registre :
 **Aucune n'est lue par le code.** La Phase 4 est donc **beaucoup plus lourde** que prévu :
 il ne s'agit pas de brancher 48 constantes, mais de réconcilier deux systèmes entiers.
 
-**Nouvelle phase 3 bis — Réconcilier les deux systèmes** *(2 sessions)*
+#### PHASE 3 bis — Réconcilier les deux systèmes *(2 sessions)* 🔴 **le plus gros poste**
 1. Pour chaque clé du registre, identifier sa contrepartie dans `settings.defaults.ts`
 2. Faire de `settings.defaults.ts` la **table des défauts** du registre (une seule source)
 3. Brancher les lectures : le code lit le registre, qui retombe sur le défaut
@@ -541,11 +541,11 @@ Le paramétrage doit donc être **borné par le bas** :
 C'est la différence entre « configurable » et « libre ». Le champ `min`/`max` de
 `PageSettingConfig` sert précisément à ça — et rend le plancher légal **inviolable par l'UI**.
 
+#### PHASE 5 — Cascade HACCP *(1 session)*
+
 **Travail à prévoir :** une table `CATEGORY_TEMP_DEFAULTS` de 12 entrées, validée par un
 référent hygiène, avec les bornes légales — puis brancher la cascade N3→N0 et supprimer
 le `> 5` de `useComplianceMapper`.
-
-**Effort :** +1 session (à ajouter à la Phase 4).
 
 ---
 
@@ -591,15 +591,22 @@ selon l'écran consulté, le restaurateur voit deux vérités.
 ## Séquencement & conflits
 
 ```
+PHASE 0    0,5 sess.  Trancher DF-O1            ← divergence rotation, indépendante
 PHASE 1    1,5 sess.  Persistance tenant        ← prérequis absolu
 PHASE 2    1   sess.  Lecteur non-React         ← parallélisable avec 1
-PHASE 3    1   sess.  Déclarer les réglages     ← allégée : ~16 des 48 existent déjà
+PHASE 3    1,5 sess.  Déclarer les manquantes   ← ~16 des 48 existent déjà
 PHASE 3bis 2   sess.  Réconcilier les 2 systèmes ← LE plus gros poste (142 clés inertes)
-PHASE 4    2   sess.  Remplacer les constantes  ← dépend de 2, 3 et 3bis
+PHASE 4    3   sess.  Remplacer les constantes  ← 13 lots · dépend de 2, 3 et 3bis
 PHASE 5    1   sess.  Cascade HACCP N3→N0       ← table catégories + bornes légales
 ```
 
-**Total : 9 sessions** (7 initialement · phase 3 bis +2 · extension de 19 décisions +0,5).
+**Total : 10,5 sessions.**
+
+| Version | Total | Motif |
+|---|---|---|
+| Initiale | 7 | 29 décisions · 2 manques |
+| + Manque 3 | 9 | phase 3 bis — 142 clés inertes |
+| + Extension | **10,5** | 48 décisions · phase 4 à 13 lots · DF-O1 isolé en phase 0 |
 
 ### Les 4 décisions au sommet de la priorité
 
