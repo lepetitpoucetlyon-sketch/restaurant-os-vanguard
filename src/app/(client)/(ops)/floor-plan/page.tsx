@@ -167,6 +167,28 @@ function FloorPlanPage() {
                         </div>
                     </div>
                 }
+                tablet={
+                    <div className="flex-1 relative w-full h-full bg-surface-bg overflow-hidden">
+                        {showGrid && (
+                            <div className="absolute inset-0 opacity-[0.1]" style={{
+                                backgroundImage: 'radial-gradient(var(--color-border) 1px, transparent 1px)',
+                                backgroundSize: '40px 40px'
+                            }} />
+                        )}
+
+                        <FloorPlanEditor
+                            ref={editorRef}
+                            scale={scale}
+                            onScaleChange={setScale}
+                            position={position}
+                            onPositionChange={setPosition}
+                            mode={mode}
+                            viewMode={viewMode}
+                            currentFloorId={currentFloorId}
+                            onTableSelect={(id: string) => setSelectedTableId(id)}
+                        />
+                    </div>
+                }
                 desktop={
                     <div className="flex-1 relative w-full h-full bg-surface-bg overflow-hidden">
                         {showGrid && (

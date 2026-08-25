@@ -257,9 +257,9 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                 )}
             </div>
 
-            {/* Insight Panel (Right) */}
+            {/* Insight Panel (Right) — Mode Exploitation / Sélecteur */}
             <AnimatePresence>
-                {selectedTable && (
+                {selectedTable && mode === 'select' && (
                     <TableInsightPanel
                         selectedTable={selectedTable as Table}
                         onClose={() => setSelectedId(null)}
@@ -275,9 +275,9 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                 onPaymentComplete={handlePaymentComplete}
             />
 
-            {/* Editing UI Overlay */}
+            {/* Editing UI Overlay — Mode Construction / Édition */}
             <AnimatePresence>
-                {selectedTable && (
+                {selectedTable && mode === 'add' && (
                     <EditPanel
                         selectedTable={selectedTable as Table}
                         updateTable={updateTable}
