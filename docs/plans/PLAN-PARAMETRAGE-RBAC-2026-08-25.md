@@ -3,7 +3,7 @@
 > Rédigé le **2026-08-25** · **re-mesuré et rendu cohérent sur `main@11fe8d025`**
 > Répond à : *« régler l'ensemble du problème c'est simple, il faut que chaque personne,
 > dans le respect du RBAC, puisse paramétrer par défaut. »*
-> Source : `docs/DECISIONS-FIGEES-RESTAURANT.md` (29 décisions)
+> Source : `docs/DECISIONS-FIGEES-RESTAURANT.md` — **48 décisions** (29 + extension de 19)
 
 ---
 
@@ -461,8 +461,21 @@ PHASE 4    2   sess.  Remplacer les constantes  ← dépend de 2, 3 et 3bis
 PHASE 5    1   sess.  Cascade HACCP N3→N0       ← table catégories + bornes légales
 ```
 
-**Total : 8,5 sessions** (7 dans la version initiale — la phase 3 s'allège d'une demi-session,
-la phase 3 bis en ajoute deux).
+**Total : 9 sessions** (7 initialement · phase 3 bis +2 · extension de 19 décisions +0,5).
+
+> **MAJ extension :** le second balayage a porté le corpus de 29 à **48 décisions**
+> (zones finance/trésorerie, approvisionnement, fidélité, marketing, livraison,
+> comptabilité). Trois d'entre elles rejoignent le haut de la pile de priorité :
+> - **DF-N1** — `AUTO_RECONCILE_SCORE = 98` : le rapprochement bancaire s'automatise
+>   sans validation humaine au-delà de ce score. Décision comptable prise dans le code.
+> - **DF-K1** — `POINTS_PER_EURO = 1` : le cœur économique du programme de fidélité,
+>   non réglable.
+> - **DF-J3** — un coefficient `0,3` transforme une flambée de cours en **recommandation
+>   de prix de vente**.
+>
+> Et une seconde divergence du type DF-E1 : **DF-O1**, deux modèles de rotation de table
+> concurrents (`TurnoverPredictionService` vs `TableTurnoverOptimizationService`) qui
+> donnent des durées différentes pour la même table. À trancher, pas à paramétrer.
 
 ### Conflits identifiés
 

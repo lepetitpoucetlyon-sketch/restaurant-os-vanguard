@@ -420,3 +420,184 @@ et que personne n'a encore posée.**
 ---
 
 *Mesuré le 2026-08-25 sur `main@0e93408d0`. Chaque référence `fichier:ligne` est vérifiable.*
+
+---
+
+# ⚡ EXTENSION 2026-08-25 — 6 zones supplémentaires (+19 décisions)
+
+> Second balayage sur les piliers non couverts par la première passe :
+> finance/trésorerie, approvisionnement, fidélité, marketing, livraison, comptabilité.
+> **Total du document : 29 → 48 décisions.**
+
+---
+
+## Zone I — Finance & Trésorerie
+
+### DF-I1 — Seuil d'approbation MCC d'un virement 🔴
+`SovereignPayout.ts:12` — `MCC_APPROVAL_THRESHOLD_CENTS = 50000` (**500 €**), en dur.
+*Question :* au-delà de quel montant un virement exige-t-il une validation éditeur ?
+*Qui tranche :* toi (MCC), pas le restaurateur. Mais ça devrait dépendre du volume du tenant.
+
+### DF-I2 — Délai de relance impayé 🔴
+`EscalationEngine.ts:26` — `diffDays >= 30`, en dur.
+*Question :* après combien de jours relance-t-on une facture impayée ?
+*Qui tranche :* le gérant, ou l'expert-comptable.
+
+### DF-I3 — Routage carte par taux d'interchange 🟠
+`SmartCardRoutingService.ts:7` — barème en points de base (20 bps CB, 380 bps Amex US).
+*À vérifier :* ces taux évoluent avec les accords acquéreurs. Figés = obsolètes à terme.
+
+---
+
+## Zone J — Approvisionnement
+
+### DF-J1 — Fenêtre d'urgence avant cutoff fournisseur 🔴
+`SupplierOrderCutoffScheduler.ts:33` — urgent si `diffMinutes <= 60`.
+*Question :* combien de temps avant la clôture faut-il alerter le chef ?
+
+### DF-J2 — Flambée de cours « critique » 🔴
+`CommodityPriceSurgeWatcherService.ts:13` — `> 15 %`.
+*Question :* à partir de quelle hausse alerte-t-on sur une matière première ?
+
+### DF-J3 — Poids du food cost dans l'ajustement de prix 🔴
+`CommodityPriceSurgeWatcherService.ts:48` — `surgePct * 0.3` (**30 % de poids food cost**).
+*Question :* si le cours monte de 20 %, de combien remonter le prix menu ?
+Ce coefficient **pilote une recommandation de prix de vente**.
+
+### DF-J4 — Seuil de confiance OCR facture 🔴
+`DoublePassOcrService.ts:31` — `avgConfidence >= 90`.
+*Question :* en dessous, la facture part en validation manuelle. 90 est-il le bon curseur ?
+
+### DF-J5 — Ajustement météo des approvisionnements 🔴
+`PredictiveProcurementEngine.ts:29` — **+15 % si température > 25 °C** (produits frais/salades).
+*Question :* deux nombres arbitraires — le seuil (25 °C) et l'ajustement (15 %).
+
+---
+
+## Zone K — Fidélité & CRM
+
+### DF-K1 — Barème de points de fidélité 🔴
+`LoyaltyEngine.ts:19` — `POINTS_PER_EURO = 1`, en dur.
+*Question :* combien de points par euro dépensé ? C'est **le cœur économique du programme
+de fidélité** — et il n'est pas réglable.
+
+### DF-K2 — Seuils VIP ⚠️ **cas d'école du Manque 3**
+`CRMVipHandler.ts:40` — `VIP_SPENT_THRESHOLD = 500_000_000` (500 €) et `VIP_VISITS_THRESHOLD`, en dur.
+
+**Or le registre déclare déjà les deux réglages :**
+```typescript
+{ key: "vip_threshold_visits", label: "Seuil visites VIP", min: 1,   max: 50,    roles: ["admin","directeur"] }
+{ key: "vip_threshold_spend",  label: "Seuil dépenses VIP (€)", min: 100, max: 10000, roles: ["admin","directeur"] }
+```
+Le gérant voit deux curseurs dans l'interface, les règle — **et le code continue d'utiliser
+500 €**. Illustration parfaite des 142 réglages inertes.
+
+### DF-K3 — Score de base d'un devis 🟠
+`quotes-service.ts:41` — `let score = 70`.
+
+---
+
+## Zone L — Marketing & Avis
+
+### DF-L1 — Détection de review bombing 🔴
+`ReviewBombingDetectorService.ts:55` — `lowRated.length >= BURST_THRESHOLD && noTextRatio >= 0.5`.
+*Question :* deux seuils qui décident si une salve d'avis est une attaque ou une mauvaise
+semaine. Un faux positif fait signaler à tort des clients mécontents légitimes.
+
+### DF-L2 — Paliers du score de visibilité 🟠
+`marketing-engine.ts:69-72` — `95 / 80 / 60 / 40` → « Elite / Excellente / Bonne / Moyenne ».
+Barème d'affichage, faible enjeu, mais arbitraire.
+
+---
+
+## Zone M — Livraison
+
+### DF-M1 — Température de remise au chaud ✅ **LÉGAL, ne pas paramétrer**
+`ColdMealDeliveryDisputeEvidenceService.ts:23` — `MIN_HOT_HANDOVER_TEMP_CELSIUS = 63.0`.
+**63 °C est le minimum réglementaire** (arrêté du 21 décembre 2009). À documenter comme
+plancher légal, jamais à exposer en réglage libre — même logique que la cascade HACCP.
+
+### DF-M2 — Barème de scoring d'adresse 🟠
+`DeliveryAddressScoringService.ts:24-33` — départ à `100`, `-25`, `-20` selon les critères.
+*Question :* en dessous de quel score refuse-t-on une livraison ?
+
+---
+
+## Zone N — Comptabilité
+
+### DF-N1 — Barème de rapprochement bancaire 🔴
+`AccountingMatchingService.ts:19-21` — `THRESHOLD_HIGH = 90` · `THRESHOLD_MEDIUM = 70` ·
+`AUTO_RECONCILE_SCORE = 98`, plus une dizaine de bonus (`+60`, `+55`, `+25`, `+15`, `+10`).
+
+*Question :* à partir de quel score un rapprochement bancaire se fait **automatiquement**,
+sans validation humaine ? `98` est le seuil actuel. C'est une décision **comptable**, pas
+technique — et elle engage la fiabilité des écritures.
+
+*Qui tranche :* l'expert-comptable du tenant.
+
+### DF-N2 — Taux de no-show historique « préoccupant » 🟠
+`NoShowAndWeatherForecaster.ts:62` — `historicalNoShowRate > 0.3` (**30 %**).
+
+---
+
+## Zone O — Anomalie : deux modèles de rotation de table 🔴
+
+Même classe de problème que **DF-E1** : deux services répondent à la même question avec
+des règles différentes.
+
+| Service | Règle |
+|---|---|
+| `TurnoverPredictionService.ts:55` | `base × (1 + 0,06 × (convives − 2)) × facteurKDS` |
+| `TableTurnoverOptimizationService.ts:26` | paliers : `≤ 2 → 75 min` · `≤ 4 → 90 min` · `6+ → 120 min` |
+
+Pour une table de 4, le premier donne `base × 1,12`, le second impose `90 min`.
+**Lequel fait foi ?** Selon l'écran consulté, le restaurateur verra deux disponibilités
+différentes.
+
+**Ce n'est pas un arbitrage à paramétrer — c'est une divergence à trancher**, comme DF-E1.
+
+---
+
+## Zone RH — précision importante ✅
+
+Les valeurs relevées dans `human/` ne sont **pas** des décisions arbitraires :
+
+| Valeur | Nature |
+|---|---|
+| `HCRPayrollCalculatorService.ts:52-54` — majorations `× 1,10 · 1,20 · 1,50` | **Taux légaux** HCR |
+| `HcrLegalGuardService.MAX_WEEKLY_HOURS = 48` | **Plafond légal** |
+| `HcrLegalGuardService.ts:162` — nuit = `hour >= 22 \|\| hour < 7` | **Définition légale** |
+
+À documenter comme telles dans le code (référence à l'article/convention), **pas à exposer
+en réglage**. Un curseur laisserait croire qu'on peut les modifier.
+
+> ⚠️ **Contradiction à trancher :** le registre déclare pourtant déjà `max_hours_day`,
+> `max_hours_week` et `min_rest_hours`. Quelqu'un a jugé qu'ils devaient être réglables.
+> Position défendable **si** les bornes n'autorisent que du **plus protecteur** que la loi.
+> À arbitrer avec un expert-paie.
+
+---
+
+## Synthèse de l'extension
+
+| Zone | Nouvelles décisions | Dont 🔴 figées |
+|---|---|---|
+| I — Finance & Trésorerie | 3 | 2 |
+| J — Approvisionnement | 5 | 5 |
+| K — Fidélité & CRM | 3 | 2 |
+| L — Marketing & Avis | 2 | 1 |
+| M — Livraison | 2 | 0 (1 légale) |
+| N — Comptabilité | 2 | 1 |
+| O — Anomalie rotation | 1 | — (divergence) |
+| RH — reclassement | 3 | 0 (légales) |
+| **Total** | **+19** | **+11** |
+
+**Document complet : 48 décisions** (29 initiales + 19).
+
+### Les 3 plus impactantes de cette extension
+
+1. **DF-N1** — le rapprochement bancaire s'automatise à partir d'un score de `98`. Décision
+   comptable engageant la fiabilité des écritures, prise dans le code.
+2. **DF-K1** — `POINTS_PER_EURO = 1`. Le cœur économique du programme de fidélité, non réglable.
+3. **DF-J3** — un coefficient de `0,3` transforme une flambée de cours en **recommandation
+   de prix de vente**. Personne ne l'a validé.
