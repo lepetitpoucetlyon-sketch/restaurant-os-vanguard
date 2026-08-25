@@ -43,14 +43,14 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
     const allItems = (sections || []).flatMap(section =>
         (section.items || [])
             // bypass hasAccess to show all items
-            .map(item => ({ ...item, sectionKey: section.key, sectionColor: section.color }))
+            .map(item => ({ ...item, sectionKey: section.key, sectionTitle: section.title, sectionColor: section.color }))
     );
 
     // Filter items if searching
     const filteredItems = searchQuery
         ? allItems.filter(item =>
             t(`nav.${item.key}`, item.label).toLowerCase().includes(searchQuery.toLowerCase()) ||
-            t(`nav.${item.sectionKey}`).toLowerCase().includes(searchQuery.toLowerCase())
+            t(`nav.${item.sectionKey}`, item.sectionTitle || item.sectionKey).toLowerCase().includes(searchQuery.toLowerCase())
         )
         : allItems;
 
