@@ -1,17 +1,20 @@
 # Sessions Actives (TOUS agents : Antigravity · Claude Code · Cursor · Copilot)
 
-> **Protocole obligatoire — cf. AGENTS.md Loi 6.** Tout agent qui écrit ici doit :
+> **Protocole obligatoire — cf. AGENTS.md Loi 6 & Loi 7.** Tout agent qui écrit ici doit :
 > 1. **Lire** ce fichier AVANT toute action.
 > 2. **S'inscrire** : nom court, périmètre **avec chemins explicites** (`src/modules/...`, `scripts/...`) — un périmètre en prose sans chemin ne protège rien, date, status `active`.
 > 3. **Vérifier les collisions** : si une autre session `active` déclare un chemin que tu vas toucher → STOP, se coordonner ou demander à l'humain. Ne jamais écraser.
 > 4. **Tenir les autres au courant** : mettre à jour ta ligne au fil de l'eau (progrès, fichiers clés), pas seulement au début. Passer à `terminée` à la fin.
-> 5. **Claude Code uniquement** : écrire son nom dans `.claude/.active-session` (gitignoré). Le hook `PreToolUse` `.claude/hooks/check-session-collision.sh` (branché dans `.claude/settings.json`) **BLOQUE** (exit 2) toute écriture dans le périmètre d'une autre session active.
+> 5. **Loi 7 (Zero-Claim)** : tout chiffre dans un rapport doit être **mesuré dans la session courante** avec commande reproductible (ex: `2 319 tests (npx vitest run)`), jamais recopié.
+> 6. **Claude Code uniquement** : écrire son nom dans `.claude/.active-session` (gitignoré). Le hook `PreToolUse` `.claude/hooks/check-session-collision.sh` (branché dans `.claude/settings.json`) **BLOQUE** (exit 2) toute écriture dans le périmètre d'une autre session active.
 >
 > Garde inter-agents commune = hook `pre-commit` (tout `git commit`) + ce fichier + `AGENTS.md`.
 
 ---
 
 ## 🟢 Sessions Actives
+
+| `zero-claim-docs-policy` (Antigravity) | **LIVRÉ** — Exécution du plan Documentation Vérifiable : (1) `src/__tests__/architecture/invariants.test.ts` créé et 100% vert (INV-1 agnosticisme LLM 0 SDK tiers, INV-2 Firestore confiné aux 4 adapters, INV-3 ratchet Auth couplage ≤ 17 fichiers, INV-8 conformité structure 8 piliers + 17 ADRs + 12 variantes `PLATFORM_VARIANTS` + fichiers clés) ; (2) `scripts/health-snapshot.sh` v2 enrichi & `docs/HEALTH.md` régénéré dynamiquement (readiness secrets prod dont `FISCAL_SIGNING_SECRET`, i18n 33/902 .tsx, tests colocalisés par pilier, décompte avance remote) ; (3) `CLAUDE.md` épuré de tout chiffre en dur (avertissement Zero-Claim, renvoi vers `HEALTH.md`, 12 variantes) ; (4) Loi 7 (Zero-Claim Policy) ajoutée dans `AGENTS.md` et `.claude/sessions.md`. Preflight vert. | 2026-08-25 | terminée |
 
 | `verifiable-docs-plan` (Claude Code) | **LIVRÉ** — `docs/plans/PLAN-DOCUMENTATION-VERIFIABLE-2026-08-25.md` (Zero-Claim Policy : toute affirmation GÉNÉRÉE / TESTÉE / SUPPRIMÉE). Vérifications ground truth : agnosticisme **LLM ✅ TENU** (0 SDK direct dans src/, 6 providers AIProviderRouter, registries MCC/tenant testés) · agnosticisme **DB ✅ TENU** (firebase/firestore confiné à 4 fichiers adapter, INexusAdapter + SimulacraAdapter) · agnosticisme **auth ❌ NON TENU** (17 fichiers firebase/auth, aucune IAuthProvider) · divergence **8 variants dans CLAUDE.md vs 12 dans PLATFORM_VARIANTS** (gym/coworking/veterinary/florist absents du doc) · `FISCAL_SIGNING_SECRET` absent = scellement NF525 serveur inopérant. Écriture : `docs/plans/` uniquement. Ne touche PAS `scripts/preflight.sh` (périmètre Antigravity). | 2026-08-25 | terminée |
 

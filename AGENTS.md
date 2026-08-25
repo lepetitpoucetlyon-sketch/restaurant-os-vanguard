@@ -38,6 +38,15 @@ Plusieurs agents (Antigravity, Claude Code, Cursor, Copilot…) écrivent **en p
 
 Garde technique inter-agents commune = le hook `pre-commit` (tourne quel que soit l'agent qui `git commit`) + ces fichiers partagés (`AGENTS.md`, `.claude/sessions.md`) que tout agent doit lire. Un agent qui écrit sans s'inscrire fabrique une collision silencieuse — interdit par cette loi.
 
+## Loi 7 — Mesure avant affirmation (Zero-Claim Policy)
+Un agent qui découvre un fait doit le **MESURER**, pas le **RECOPIER**.
+Si tu écris un chiffre, un « 0 / aucun / tous / jamais », ou un état système :
+1. Tu l'as **mesuré toi-même** dans cette session (commande exécutée, sortie vue) → OK, et tu cites la commande.
+2. Tu l'as **lu quelque part** (plan, doc, session précédente, résumé d'un autre agent) → **tu le re-mesures avant de l'écrire.**
+3. Tu ne peux pas le mesurer → tu ne l'écris pas.
+
+Toute métrique dynamique projet doit être GÉNÉRÉE (`docs/HEALTH.md`) ou TESTÉE (`invariants.test.ts`), jamais rédigée en prose dans `CLAUDE.md`. **Un chiffre sans commande reproductible est une opinion.**
+
 ---
 
 ## Installation des gardes (une fois, par la personne humaine de préférence)

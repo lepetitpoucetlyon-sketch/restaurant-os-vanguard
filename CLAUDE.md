@@ -1,5 +1,9 @@
 # RESTAURANT-OS-CORE — Conventions Claude Code
 
+> ⚠️ **Zero-Claim Policy** : Ce fichier contient des **RÈGLES et CONVENTIONS**, pas des MESURES.
+> Tout chiffre dynamique appartient à `docs/HEALTH.md` (auto-généré) ou à un test d'invariant (`invariants.test.ts`).
+> Ne jamais ajouter de chiffre/comptage en dur ici sous peine de créer de la dette documentaire.
+>
 > 📐 Pour une analyse complète (flux NF525, RAG, modèle de données, audit de dette), voir **`ARCHITECTURE.md`**.
 
 ## Coordination multi-sessions (OBLIGATOIRE — PREMIÈRE ACTION)
@@ -39,7 +43,9 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **Anti-cycles** : `src/store/base.ts` est le module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les dépendances circulaires Registry ↔ Atomes.
 
-**i18n** : infrastructure **câblée et fonctionnelle** (mesuré 2026-08-25). `NexusCoreProvider` charge `loadTranslations` et expose `t` + `setLanguage` ; `useLanguage()` retourne le vrai contexte. Locales : `fr.ts` (482 clés) et `en.ts` (500 clés) complètes, `es/pt/ja` partielles (~25 %). **Couverture UI : 33 fichiers `.tsx` sur 902 (3,6 %), 120 appels `t()`** — l'app reste donc majoritairement en français en dur. Câbler `t()` dans un nouveau composant est possible et fonctionne ; ne pas traduire les libellés réglementaires (NF525, FEC, PCG) qui doivent rester en français légal. Plan de complétion : `docs/plans/PLAN-DETTE-TECHNIQUE-2026-08-25.md` chantier 4.
+**i18n** : infrastructure câblée et fonctionnelle (`NexusCoreProvider` charge `loadTranslations`, `useLanguage()` expose `t` + `setLanguage`).
+**Règle** : ne jamais traduire les libellés réglementaires (NF525, FEC, PCG) qui doivent rester en français légal.
+📊 Couverture et métriques réelles mesurées dynamiquement : voir `docs/HEALTH.md`.
 
 **Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture. Le barrel de chaque pilier (ex: `src/modules/ops/index.ts`) est la seule surface d'export publique — les domaines et modules internes ne sont pas importables directement.
 
@@ -75,11 +81,11 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 - `CartItem` ops = `src/modules/ops/workflow/engine/types.ts` (microunits)
 - `CartItem` legacy = `src/modules/ops/service/pos/hooks/usePos.ts` (cents → bridge via `toMicrounits`)
 
-### PlatformVariant — multi-industrie
-- Variants supportés : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom`
-- DNA templates dans `src/shared/seeds/` — `resolveDNA(variant)` route vers le bon template
+### PlatformVariant — multi-industrie (12 variantes)
+- Variants supportés : `restaurant | hotel | bakery | garage | salon | clinic | retail | custom | gym | coworking | veterinary | florist`
+- DNA templates dans `src/shared/seeds/` et blueprints dans `src/verticals/`
 - Nav gating : `filterByCapabilities(sections, tenant.capabilities)` dans `src/config/navConfig.ts`
-- `variant` dans `TenantConfigSchema` (optionnel, défaut `'restaurant'` à runtime dans `TenantSeeder`)
+- `variant` dans `TenantConfigSchema` (défaut `'restaurant'` à runtime dans `TenantSeeder`)
 
 ## Structure `lib/` — couches transversales
 
@@ -152,8 +158,8 @@ Chaque route a une **importance map** déclarée dans `src/lib/icm/TaskContext.t
 |---------|------|
 | `src/modules/finance/comptabilite/FinancialNexusBridge.ts` | Bridge POS → JournalEntry NF525 |
 | `src/modules/finance/fiscalite/FiscalAdapter.ts` | `FiscalEngine.sealEntry()` — chaîne de scellement |
-| `src/domain/schemas/pos.ts` | `PosTicket`, `CartLine` (schéma canonique) |
-| `src/domain/schemas/finance.ts` | `JournalEntry` (Zod) |
+| `src/modules/ops/domain/schemas/pos.ts` | `PosTicket`, `CartLine` (schéma canonique) |
+| `src/modules/finance/domain/schemas/finance.ts` | `JournalEntry` (Zod) |
 | `src/lib/nexus/NexusAdapter.ts` | Singleton Nexus |
 | `src/modules/finance/providers/NexusFiscalProvider.tsx` | Context fiscal React |
 | `src/modules/intelligence/knowledge/rag/HermesKnowledgeManager.ts` | Orchestrateur LightRAG |
@@ -183,11 +189,11 @@ Les décisions fondamentales du socle sont documentées dans `docs/adrs/` :
 ## Commandes
 
 ```bash
-npx tsc --noEmit          # Vérification types
-npx vitest run             # Tests (175 suites, 1120+ tests)
-npm run preflight          # Gate complète d'intégrité (TypeScript, tests, ESLint, sentrux, Next.js build)
-sentrux check .            # Gate architectural (cycles, god files, couches) — voir .sentrux/
-docker-compose up          # App + LightRAG sidecar
+npx tsc --noEmit          # Vérification types (0 erreur tolérée)
+npx vitest run            # Exécution des tests unitaires et d'intégration
+npm run preflight         # Gate complète d'intégrité (TypeScript, tests, ESLint, sentrux, Next.js build)
+sentrux check .           # Gate architectural (cycles, god files, couches) — voir .sentrux/
+docker-compose up         # App + LightRAG sidecar
 ```
 
 ## Stack
