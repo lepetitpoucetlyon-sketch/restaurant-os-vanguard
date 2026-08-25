@@ -26,8 +26,8 @@ async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean>
         if (!user.status) return true; // champ absent → on ne bloque pas (compat legacy)
         return !BLOCKED_STATUSES.includes(user.status);
     } catch (err) {
-        logger.warn('[Oracle] Impossible de vérifier le statut employé, accès accordé par défaut', toError(err).message);
-        return true; // fail-open : on ne bloque pas sur erreur Nexus
+        logger.error('[Oracle] Nexus dégradé — vérification statut employé impossible, accès REFUSÉ par précaution', toError(err).message);
+        return false; // fail-closed : erreur Nexus = accès bloqué (defense-in-depth)
     }
 }
 

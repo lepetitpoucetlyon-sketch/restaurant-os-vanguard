@@ -82,11 +82,3 @@ export const useNexusOps = (): NexusOpsState => {
 };
 
 export const useFloorOps = () => useNexusOps().floorOps;
-
-// ── Réexports de compatibilité (les hooks vivent désormais dans ./hooks/*) ──────────
-export {
-    useOperationalNodes, useTables,
-    useOrders, useRecipes, useKitchen,
-    useAllocations, useReservations, useGroups, useMarketing, useCRM, useManagement, useQuotes,
-    useProducts, useCategories, useFiscal, useHR, useIntelligence, useInventory,
-} from './hooks';

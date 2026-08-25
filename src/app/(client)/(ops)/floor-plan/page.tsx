@@ -8,6 +8,7 @@ import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";
 import { useTables } from '@/modules/ops';
 import { useIsMobile } from "@/shared/hooks";
+import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useRouter } from "next/navigation";
@@ -29,6 +30,7 @@ const FloorPlanEditor = dynamic(
 function FloorPlanPage() {
     const router = useRouter();
     const isMobile = useIsMobile();
+    const { activeTenantId } = useTenant();
     const { showToast } = useToast();
     const editorRef = useRef<FloorPlanEditorRef>(null);
 
@@ -220,7 +222,7 @@ function FloorPlanPage() {
                             updateTable(selectedTableId, { status: 'seated' as TableStatus });
                             await NexusEventBus.emitDurable('reservation.matched', {
                                 v: 1,
-                                tenantId: 'tenant_default',
+                                tenantId: activeTenantId ?? '',
                                 reservationId: `resa_${selectedTableId}`,
                                 tableId: selectedTableId,
                                 allergens: [],

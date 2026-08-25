@@ -39,7 +39,7 @@ function isConforming(zone: string, temp: number): boolean {
       return temp <= threshold;
     }
   }
-  return true; // Zone inconnue → non évaluée = conforme par défaut
+  return false; // Zone inconnue → défaut prudent = non conforme (à revalider manuellement)
 }
 
 function normalizeRow(row: Record<string, string>): HaccpHistoricalReading | null {

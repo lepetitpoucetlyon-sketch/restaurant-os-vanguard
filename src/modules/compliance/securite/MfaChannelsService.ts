@@ -15,7 +15,7 @@
 
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AuditLogger } from '@/modules/compliance';
+import { AuditLogger } from './AuditLogger';
 import { logger } from '@/lib/logger';
 
 // ── Schéma Zod ──────────────────────────────────────────────────────────────────

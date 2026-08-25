@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import {
   Building2,
   ShoppingCart,
@@ -26,6 +27,7 @@ export function SupplierHubDashboard() {
   const [activeTab, setActiveTab] = useState<HubTab>('directory');
   const [searchFilter, setSearchFilter] = useState('');
   const [isAutoProcurementOpen, setIsAutoProcurementOpen] = useState(false);
+  const { activeTenantId } = useTenant();
 
   return (
     <div className="space-y-6">
@@ -33,7 +35,7 @@ export function SupplierHubDashboard() {
       <AutoProcurementWizard
         isOpen={isAutoProcurementOpen}
         onClose={() => setIsAutoProcurementOpen(false)}
-        tenantId="tenant_demo"
+        tenantId={activeTenantId ?? ''}
         stockItems={sampleStockItems}
         mercurialeItems={sampleMercuriales}
         suppliers={sampleSuppliers}
