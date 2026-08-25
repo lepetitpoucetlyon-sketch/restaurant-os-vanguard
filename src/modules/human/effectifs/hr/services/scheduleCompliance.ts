@@ -23,6 +23,8 @@ interface HcrConfig {
     breakDurationMinutes: number;
 }
 
+import { getSetting } from '@/lib/settings/SettingsReader';
+
 const DEFAULT_HCR: HcrConfig = {
     minRestBetweenShifts: 11,
     maxConsecutiveDays: 6,
@@ -31,6 +33,21 @@ const DEFAULT_HCR: HcrConfig = {
     minBreakAfterHours: 6,
     breakDurationMinutes: 20,
 };
+
+export function resolveHcrConfig(customConfig?: Partial<HcrConfig>): HcrConfig {
+    const minRest = customConfig?.minRestBetweenShifts ?? getSetting<number>('planning', 'min_rest_hours', DEFAULT_HCR.minRestBetweenShifts);
+    const maxDaily = customConfig?.maxDailyHours ?? getSetting<number>('planning', 'max_hours_day', DEFAULT_HCR.maxDailyHours);
+    const maxWeekly = customConfig?.maxWeeklyHours ?? getSetting<number>('planning', 'max_hours_week', DEFAULT_HCR.maxWeeklyHours);
+
+    return {
+        minRestBetweenShifts: minRest,
+        maxConsecutiveDays: customConfig?.maxConsecutiveDays ?? DEFAULT_HCR.maxConsecutiveDays,
+        maxDailyHours: maxDaily,
+        maxWeeklyHours: maxWeekly,
+        minBreakAfterHours: customConfig?.minBreakAfterHours ?? DEFAULT_HCR.minBreakAfterHours,
+        breakDurationMinutes: customConfig?.breakDurationMinutes ?? DEFAULT_HCR.breakDurationMinutes,
+    };
+}
 
 function parseTime(date: string, time: string): number {
     return new Date(`${date}T${time}`).getTime();
@@ -76,8 +93,9 @@ function daysBetween(a: string, b: string): number {
 
 export function checkCompliance(
     shifts: Shift[],
-    config: HcrConfig = DEFAULT_HCR,
+    customConfig?: Partial<HcrConfig>,
 ): ComplianceViolation[] {
+    const config = resolveHcrConfig(customConfig);
     const violations: ComplianceViolation[] = [];
     const byUser = new Map<string, Shift[]>();
 

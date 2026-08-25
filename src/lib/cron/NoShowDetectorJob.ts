@@ -24,6 +24,8 @@ interface ReservationRecord {
  * Détecte les réservations confirmées dont l'heure d'arrivée est dépassée de plus de `noShowDelayMinutes` (ex: 30 min),
  * passe le statut en `no_show`, émet l'événement `reservation.no_show` et déclenche le prélèvement si une empreinte existe.
  */
+import { getSetting } from '@/lib/settings/SettingsReader';
+
 export class NoShowDetectorJob {
   static async run(): Promise<void> {
     logger.info('[NoShowDetectorJob] Analyse des réservations en retard...');
@@ -38,7 +40,8 @@ export class NoShowDetectorJob {
 
         const rawTenantConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
         const resaConfig = (rawTenantConfig as JsonObject | null)?.reservationConfig as JsonObject | undefined;
-        const noShowDelayMinutes = (resaConfig?.noShowDelayMinutes as number | undefined) ?? 30;
+        const defaultDelay = (resaConfig?.noShowDelayMinutes as number | undefined) ?? 20;
+        const noShowDelayMinutes = getSetting<number>('reservations', 'noshow_delay', defaultDelay);
 
         const todayStr = new Date().toISOString().split('T')[0];
         const reservations = await Nexus.adapter.query<ReservationRecord>(`tenants/${tenantId}/reservations`, {

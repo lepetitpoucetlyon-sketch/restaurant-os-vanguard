@@ -34,6 +34,8 @@ export interface RestPeriodResult {
   }>;
 }
 
+import { getSetting } from '@/lib/settings/SettingsReader';
+
 export class RestPeriodGuard {
   static check(proposal: ShiftProposal): RestPeriodResult {
     const violations: RestPeriodResult['violations'] = [];
@@ -49,7 +51,9 @@ export class RestPeriodGuard {
     if (proposal.previousShiftEndIso) {
       const prevEnd = new Date(proposal.previousShiftEndIso).getTime();
       const gapMinutes = (shiftStart - prevEnd) / 60_000;
-      if (gapMinutes < MIN_REST_MINUTES) {
+      const configuredMinRest = getSetting<number>('planning', 'min_rest_hours', 11);
+      const minRestMinutes = Math.max(11, configuredMinRest) * 60; // Plafond légal = minimum 11h (Art. L. 3131-1 CT)
+      if (gapMinutes < minRestMinutes) {
         violations.push({ type: 'insufficient_rest', gapMinutes });
       }
     }

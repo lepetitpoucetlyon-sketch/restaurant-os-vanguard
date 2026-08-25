@@ -42,21 +42,24 @@ interface TipPool {
     distributedAt: string;
 }
 
+import { getSetting } from '@/lib/settings/SettingsReader';
+
 export const TipDistributionService = {
     distribute(
         totalInMicrounits: Microunits,
         staff: StaffMember[],
-        rule: DistributionRule = 'hours_worked',
+        rule?: DistributionRule,
         customWeights?: RankWeight[]
     ): TipShare[] {
         if (staff.length === 0 || totalInMicrounits <= 0) return [];
 
+        const activeRule: DistributionRule = rule ?? getSetting<DistributionRule>('finance', 'tips_distribution_method', 'hours_worked');
         const weights = customWeights ?? DEFAULT_RANK_WEIGHTS;
         const weightMap = new Map(weights.map(w => [w.role, w.weight]));
 
         let shares: TipShare[];
 
-        switch (rule) {
+        switch (activeRule) {
             case 'equal': {
                 const perPerson = Math.floor(totalInMicrounits / staff.length);
                 shares = staff.map(s => ({
