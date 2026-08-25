@@ -42,16 +42,19 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
         return () => { isMounted = false; };
     }, [currentLanguage]);
 
-    const t = useCallback((key: string): string => {
-        if (!activeDictionary) return key;
+    const t = useCallback((key: string, fallback?: string): string => {
+        // Clé absente → on préfère un libellé lisible fourni par l'appelant
+        // plutôt que d'afficher la clé brute à l'utilisateur.
+        const defaut = fallback ?? key;
+        if (!activeDictionary) return defaut;
         const keys = key.split('.');
         let val: SovereignValue | SovereignData = activeDictionary;
         for (const k of keys) {
             if (val && typeof val === 'object' && val !== null && k in val) {
                 val = (val as Record<string, SovereignValue | SovereignData>)[k];
-            } else return key; 
+            } else return defaut;
         }
-        return typeof val === 'string' ? val : key;
+        return typeof val === 'string' ? val : defaut;
     }, [activeDictionary]);
 
     const langValue: NexusLangState = useMemo(() => ({

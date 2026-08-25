@@ -84,8 +84,8 @@ export function SidebarNavigation({
                                     >
                                         <SectionIcon className="w-4 h-4 opacity-70 group-hover:opacity-100" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted dark:text-text-primary/80 group-hover:text-text-primary dark:group-hover:text-text-primary transition-all">
-                                        {t(`nav.${section.key}`)}
+                                    <span className="text-nano font-black uppercase tracking-[0.2em] text-text-muted dark:text-text-primary/80 group-hover:text-text-primary dark:group-hover:text-text-primary transition-all">
+                                        {t(`nav.${section.key}`, section.title)}
                                     </span>
                                 </div>
                                 <motion.div
@@ -104,7 +104,7 @@ export function SidebarNavigation({
                                     }}
                                     className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:bg-bg-tertiary/50 outline-none"
                                     style={{ color: section.color }}
-                                    title={t(`nav.${section.key}`)}
+                                    title={t(`nav.${section.key}`, section.title)}
                                 >
                                     <SectionIcon className="w-4 h-4 opacity-50 hover:opacity-100" />
                                 </button>
@@ -174,9 +174,9 @@ export function SidebarNavigation({
                                                                     "tracking-tight transition-colors duration-700 font-serif italic text-lg font-bold leading-none py-1 flex items-center gap-2",
                                                                     isActive ? "text-text-primary" : "text-text-secondary dark:text-text-primary/90"
                                                                 )}>
-                                                                    {t(`nav.${item.key}`)}
+                                                                    {t(`nav.${item.key}`, item.label)}
                                                                     {item.badge && (
-                                                                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-action-primary/15 text-amber-600 dark:text-action-primary border border-action-primary/30 leading-none not-italic">
+                                                                        <span className="text-nano font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-action-primary/15 text-amber-600 dark:text-action-primary border border-action-primary/30 leading-none not-italic">
                                                                             {item.badge}
                                                                         </span>
                                                                     )}
@@ -190,9 +190,9 @@ export function SidebarNavigation({
                                                             animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
                                                             exit={{ opacity: 0, x: 10, scale: 0.95, filter: "blur(4px)" }}
                                                             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                                            className="absolute left-full ml-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-text-primary dark:bg-bg-secondary text-bg-primary dark:text-text-primary text-[11px] font-black uppercase tracking-widest rounded-xl z-[100] shadow-2xl border border-border/50"
+                                                            className="absolute left-full ml-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-text-primary dark:bg-bg-secondary text-bg-primary dark:text-text-primary text-micro font-black uppercase tracking-widest rounded-xl z-[100] shadow-2xl border border-border/50"
                                                         >
-                                                            {t(`nav.${item.key}`)}
+                                                            {t(`nav.${item.key}`, item.label)}
                                                         </motion.div>
                                                     )}
                                                 </div>

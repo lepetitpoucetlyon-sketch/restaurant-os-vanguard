@@ -102,7 +102,17 @@ export interface NexusSettingsState {
 
 
 export interface NexusLangState {
-    t: (key: string) => string;
+    /**
+     * Traduit `key`. Si la clé est absente du dictionnaire actif, renvoie
+     * `fallback` s'il est fourni, sinon la clé brute.
+     *
+     * ⚠️ Toujours passer un `fallback` lorsqu'un libellé lisible existe déjà
+     * côté appelant (ex. `navConfig.label`). Sans lui, une clé oubliée s'affiche
+     * telle quelle à l'écran : 31 entrées de navigation montraient « nav.crm »,
+     * « nav.timeclock », « nav.aide »… en clair dans la barre latérale et le
+     * lanceur d'applications.
+     */
+    t: (key: string, fallback?: string) => string;
     currentLanguage: Language;
     language: Language; // Heritage alias
     setLanguage: (l: Language) => void;

@@ -152,7 +152,10 @@ export function MobileNavBar() {
                                             >
                                                 <item.icon className="w-6 h-6" style={{ color: pathname === item.href ? undefined : item.color }} />
                                             </div>
-                                            <span className="text-[9px] font-black uppercase tracking-wider text-text-muted text-center line-clamp-1 group-hover:text-text-primary transition-colors">
+                                            <span className="text-nano font-black uppercase tracking-wider text-text-muted text-center line-clamp-1 group-hover:text-text-primary transition-colors">
+                                                {/* Pas de repli ici : GRID_ITEMS ne porte pas de libellé
+                                                    affichable (seulement `key`). Les clés correspondantes
+                                                    sont toutes présentes dans les locales. */}
                                                 {t(`nav.${item.key}`)}
                                             </span>
                                         </Link>
@@ -166,7 +169,7 @@ export function MobileNavBar() {
                                         <Bell className="w-5 h-5" />
                                         {unreadCount > 0 && <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-status-danger rounded-full border-2 border-white" />}
                                     </div>
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">Alertes</span>
+                                    <span className="text-nano font-black uppercase tracking-widest text-text-muted">Alertes</span>
                                 </button>
                                 <button
                                     onClick={() => {
@@ -178,7 +181,7 @@ export function MobileNavBar() {
                                     <div className="w-12 h-12 rounded-full bg-accent-gold/10 flex items-center justify-center">
                                         <Mic className="w-5 h-5 text-accent-gold" />
                                     </div>
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">Vocal</span>
+                                    <span className="text-nano font-black uppercase tracking-widest text-text-muted">Vocal</span>
                                 </button>
                             </div>
                         </motion.div>

@@ -49,7 +49,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
     // Filter items if searching
     const filteredItems = searchQuery
         ? allItems.filter(item =>
-            t(`nav.${item.key}`).toLowerCase().includes(searchQuery.toLowerCase()) ||
+            t(`nav.${item.key}`, item.label).toLowerCase().includes(searchQuery.toLowerCase()) ||
             t(`nav.${item.sectionKey}`).toLowerCase().includes(searchQuery.toLowerCase())
         )
         : allItems;
@@ -171,7 +171,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                 />
                                             </div>
                                             <div className="flex flex-col items-center text-center">
-                                                <span className="font-black text-[11px] md:text-[13px] uppercase tracking-[0.2em] group-hover:text-accent-gold transition-colors duration-500 text-primary/40">
+                                                <span className="font-black text-micro md:text-[13px] uppercase tracking-[0.2em] group-hover:text-accent-gold transition-colors duration-500 text-primary/40">
                                                     {t('common.search')}
                                                 </span>
                                                 <div className="w-0 group-hover:w-10 h-0.5 bg-accent-gold transition-all duration-700 mt-2 rounded-full" />
@@ -250,7 +250,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
 
                                                 <div className="flex flex-col items-center text-center px-2">
                                                     <span className="font-serif font-black italic text-[13px] md:text-[15px] uppercase tracking-wider group-hover:text-accent-gold transition-all duration-300 line-clamp-2 max-w-[110px] md:max-w-[140px] leading-tight opacity-95 group-hover:opacity-100 text-primary">
-                                                        {t(`nav.${item.key}`)}
+                                                        {t(`nav.${item.key}`, item.label)}
                                                     </span>
                                                     <motion.div
                                                         initial={{ width: 0 }}

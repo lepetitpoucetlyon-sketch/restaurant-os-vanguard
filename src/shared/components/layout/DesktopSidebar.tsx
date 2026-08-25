@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { usePathname } from "next/navigation";
-import { useNexusCore } from "@/shared/hooks";
+import { useNexusCore, useUI } from "@/shared/hooks";
 import { NAV_SECTIONS, filterNavSections, filterByCapabilities, filterByRole } from "@/config/navConfig";
 import { PERMISSION_ROLE_LEVELS } from "@/kernel/contracts/rbac";
 import { APP_MODE } from "@/config/instance";
@@ -18,6 +18,10 @@ export function DesktopSidebar() {
     const pathname = usePathname();
     const { auth, tenant } = useNexusCore();
     const { currentUser, logout } = auth;
+    // Le vrai setter partagé (atome `isMap3DOpenAtom` via UIThemeProvider).
+    // Il était remplacé par `() => {}` : le clic sur « Cartographie 3D » appelait
+    // donc un no-op et n'ouvrait jamais rien.
+    const { setIsMap3DOpen } = useUI();
 
     const [isSidebarCollapsed, setSidebarCollapsed] = useAtom(isSidebarCollapsedAtom);
     const [_isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
@@ -68,7 +72,7 @@ export function DesktopSidebar() {
                     isSidebarCollapsed={isSidebarCollapsed}
                     isMobileMenuOpen={false}
                     setSidebarCollapsed={setSidebarCollapsed}
-                    setIsMap3DOpen={() => {}} // Integration bridge
+                    setIsMap3DOpen={setIsMap3DOpen}
                 />
             </div>
 

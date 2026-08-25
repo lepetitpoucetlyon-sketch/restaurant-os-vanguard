@@ -19,6 +19,13 @@ const UniversalAssistantFrame = dynamic(
     () => import("@/modules/intelligence/components/UniversalAssistantFrame").then(mod => ({ default: mod.UniversalAssistantFrame })),
     { ssr: false }
 );
+// Map3DOverlay n'était monté NULLE PART : `SidebarNavigation` appelait bien
+// `setIsMap3DOpen(true)` au clic sur « Cartographie 3D », mais aucun consommateur
+// de l'atome n'existait dans l'arbre — le clic ne pouvait rien produire.
+const Map3DOverlay = dynamic(
+    () => import("@components/layout/Map3DOverlay").then(mod => ({ default: mod.Map3DOverlay })),
+    { ssr: false }
+);
 
 const PUBLIC_MARKETING_PATHS = ['/verticales', '/pricing', '/signup', '/legal', '/landing', '/welcome', '/auth', '/login', '/demo', '/showcase'];
 
@@ -39,6 +46,7 @@ export function ClientComponents({ children }: { children: React.ReactNode }) {
             <OTABanner />
             <SovereignLock />
             <UniversalAssistantFrame />
+            <Map3DOverlay />
         </LayoutResolver>
     );
 }
