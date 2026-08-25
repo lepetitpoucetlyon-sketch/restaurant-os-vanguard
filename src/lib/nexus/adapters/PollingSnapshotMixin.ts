@@ -37,8 +37,26 @@ export interface PollingOptions {
   onError?: (error: Error) => void;
 }
 
+/** Plafond du backoff : au-delà, on retente à cadence fixe (le POS doit se rétablir seul). */
+const MAX_BACKOFF_MS = 60_000;
+/** Nombre d'erreurs consécutives signalées à l'appelant avant de museler `onError`. */
+const MAX_REPORTED_ERRORS = 3;
+
 /**
  * Noyau partagé du polling — utilisé par `pollingSnapshot` et `pollingQuerySnapshot`.
+ *
+ * Boucle auto-planifiée (`setTimeout` récursif) et non `setInterval` : avec un
+ * `setInterval` + fetcher asynchrone, un poll lent est relancé avant d'avoir fini,
+ * les requêtes se chevauchent et s'empilent. Ici le tick suivant n'est armé
+ * qu'une fois le précédent terminé.
+ *
+ * Backoff exponentiel en cas d'échec — indispensable sur tablette POS : une panne
+ * durable (règles Firestore, session expirée, réseau coupé) faisait auparavant
+ * repartir le poll toutes les 2 s indéfiniment, soit ~30 requêtes/minute et par
+ * collection, pendant les 8 à 12 h d'un service. On ne renonce jamais totalement
+ * (le POS doit se rétablir seul dès que l'accès revient), mais on plafonne à
+ * MAX_BACKOFF_MS et on cesse de spammer `onError`.
+ *
  * @internal
  */
 function createPoller<T>(
@@ -49,28 +67,48 @@ function createPoller<T>(
   const intervalMs = options?.intervalMs ?? 2000;
   let lastSeen: string | null = null;
   let stopped = false;
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  let consecutiveErrors = 0;
+
+  const nextDelay = () =>
+    consecutiveErrors === 0
+      ? intervalMs
+      : Math.min(intervalMs * 2 ** consecutiveErrors, MAX_BACKOFF_MS);
+
+  const schedule = () => {
+    if (stopped) return;
+    timer = setTimeout(poll, nextDelay());
+  };
 
   const poll = async () => {
     if (stopped) return;
     try {
       const data = await fetcher();
+      consecutiveErrors = 0; // rétabli : on repasse à la cadence nominale
       const serialized = JSON.stringify(data);
       if (serialized !== lastSeen) {
         lastSeen = serialized;
         callback(data);
       }
     } catch (err) {
-      options?.onError?.(err instanceof Error ? err : new Error(String(err)));
+      consecutiveErrors += 1;
+      // On ne remonte que les premières occurrences : au-delà, l'information est
+      // acquise et chaque appel supplémentaire ne fait que polluer la console et,
+      // en production, brûler du quota de reporting.
+      if (consecutiveErrors <= MAX_REPORTED_ERRORS) {
+        options?.onError?.(err instanceof Error ? err : new Error(String(err)));
+      }
+    } finally {
+      schedule();
     }
   };
 
   // Premier appel immédiat pour peupler le state sans attendre le 1er intervalle
   void poll();
-  const timer = setInterval(poll, intervalMs);
 
   return () => {
     stopped = true;
-    clearInterval(timer);
+    if (timer !== null) clearTimeout(timer);
   };
 }
 

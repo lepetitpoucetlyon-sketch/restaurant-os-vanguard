@@ -100,10 +100,12 @@ const nextConfig: NextConfig = {
     // @ts-expect-error - appIsrStatus not in NextConfig types
     appIsrStatus: false,
   },
-  onDemandEntries: {
-    maxInactiveAge: 10 * 1000, // Encore plus agressif (10s)
-    pagesBufferLength: 1,      // 1 seule page
-  },
+  // NOTE: `onDemandEntries` a été retiré — c'est une option **Webpack** que
+  // Turbopack ignore silencieusement. Elle laissait croire à un garde-fou
+  // mémoire en dev alors qu'elle n'avait aucun effet (le dev tourne en
+  // `next dev --turbo`). Le vrai levier est `--max-old-space-size` dans le
+  // script `dev` de package.json, et il ne borne que le tas V8 : Turbopack
+  // (Rust) alloue hors de ce tas.
   typescript: {
     ignoreBuildErrors: false,
   },

@@ -5,12 +5,13 @@ import type { SovereignData } from '@/shared/nexus-contract';
 import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';
 import { IdGenerator } from '@/lib/utils/IdGenerator';
-import { 
-    IDocumentStore, 
-    IQueryEngine, 
-    IRealtimeSubscriber, 
-    IQueryOptions 
+import {
+    IDocumentStore,
+    IQueryEngine,
+    IRealtimeSubscriber,
+    IQueryOptions
 } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
+import { pollingSnapshot, pollingQuerySnapshot } from './PollingSnapshotMixin';
 
 /**
  * 🌀 SimulacraAdapter - Restaurant OS (Grade X - Pure I/O)
@@ -62,19 +63,38 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         return merged as T[];
     }
 
-    onSnapshot<T = SovereignData>(path: string, callback: (data: T) => void, _options?: IQueryOptions, _context?: NexusContext): () => void {
-        logger.warn("[Simulacra] Real-time snapshots are simulated via polling in Grade X.");
-        
-        // Initial load
-        this.get<T>(path).then((data) => callback(data as T));
-        
-        // Polling simulation (every 2s)
-        const interval = setInterval(async () => {
-            const data = await this.get<T>(path);
-            callback(data as T);
-        }, 2000);
+    onSnapshot<T = SovereignData>(
+        path: string,
+        callback: (data: T) => void,
+        options?: IQueryOptions & { onError?: (error: Error) => void },
+        _context?: NexusContext,
+    ): () => void {
+        // Un chemin à nombre de segments IMPAIR est une COLLECTION
+        // (ex. tenants/{t}/orders → 3 segments), PAIR est un DOCUMENT.
+        // Même convention que FirestoreAdapter.onSnapshot.
+        //
+        // ⚠️ Historique : cette méthode appelait `get()` sur TOUS les chemins,
+        // y compris les collections. `get()` n'accepte qu'un document, donc les
+        // 10 souscriptions du POS/KDS (orders, tables, zones, floors, stockItems,
+        // products, categories, recipes, reservations, groups) jetaient
+        // « Invalid document reference » toutes les 2 s — sans `.catch()`, donc en
+        // unhandledRejection, et sans jamais appeler le `onError` de l'appelant.
+        // Résultat : ~500 rejets/minute indéfiniment + fuite d'intervals.
+        const isCollection = path.split('/').length % 2 !== 0;
 
-        return () => clearInterval(interval);
+        if (isCollection) {
+            return pollingQuerySnapshot<T>(
+                () => this.query<T>(path, options),
+                (data) => callback(data as T),
+                options,
+            );
+        }
+
+        return pollingSnapshot<T>(
+            () => this.get<T>(path),
+            (data) => callback(data as T),
+            options,
+        );
     }
 
     batch(context?: NexusContext): INexusBatch {

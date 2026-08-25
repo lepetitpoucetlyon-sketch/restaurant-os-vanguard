@@ -56,14 +56,16 @@ export class NexusInterceptor implements INexusAdapter {
             try {
                 access = await this.guard.validateAccessGradeX('READ', scopedForValidation, ctx);
             } catch (error) {
-                this.emitDenial('READ', path, ctx, error instanceof Error ? error.message : 'VALIDATION_EXCEPTION');
+                // emitDenial est async : sans .catch() son rejet remonte en
+                // unhandledRejection hors de toute pile appelante.
+                void this.emitDenial('READ', path, ctx, error instanceof Error ? error.message : 'VALIDATION_EXCEPTION').catch(() => {});
                 options?.onError?.(new NexusError(NexusErrorCode.ACCESS_DENIED, 'Access validation failed'));
                 return; // No listener started, no data transmitted
             }
 
             // Step 2: If denied, emit denial and do NOT start the listener
             if (!access.granted) {
-                this.emitDenial('READ', path, ctx, access.reason || 'ACCESS_DENIED');
+                void this.emitDenial('READ', path, ctx, access.reason || 'ACCESS_DENIED').catch(() => {});
                 options?.onError?.(new NexusError(NexusErrorCode.ACCESS_DENIED, 'Access denied'));
                 return; // No listener started, no data transmitted
             }
@@ -79,8 +81,15 @@ export class NexusInterceptor implements INexusAdapter {
             );
         };
 
-        // Fire the init (no await — onSnapshot must return synchronously)
-        initListener();
+        // Fire the init (no await — onSnapshot must return synchronously).
+        // Le .catch() est OBLIGATOIRE : sans lui, toute exception levée par
+        // l'adapter sous-jacent (chemin invalide, adapter non initialisé…) devient
+        // un unhandledRejection que personne ne voit, et le `onError` fourni par
+        // l'appelant n'est jamais honoré. C'est ainsi qu'un bug de polling dans
+        // SimulacraAdapter a pu inonder la console ~500 fois/minute sans alerte.
+        initListener().catch((error: unknown) => {
+            options?.onError?.(error instanceof Error ? error : new Error(String(error)));
+        });
 
         // Return a stable unsubscribe that works even during validation
         return () => {
