@@ -14,12 +14,16 @@ interface WineDetailPanelProps {
   selectedWine: WineType | null;
   regions: WineRegion[];
   onClose: () => void;
+  onEdit?: (wine: WineType) => void;
+  onOrderRestock?: (wine: WineType) => void;
 }
 
 export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({ 
   selectedWine,
   regions,
-  onClose
+  onClose,
+  onEdit,
+  onOrderRestock
 }) => {
   if (!selectedWine) return null;
 
@@ -90,11 +94,18 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
 
             {/* Actions */}
             <div className="flex gap-3 pt-4 border-t border-subtle dark:border-border">
-                <Button variant="outline" className="flex-1 h-11 rounded-xl">
+                <Button 
+                    variant="outline" 
+                    onClick={() => onEdit?.(selectedWine)}
+                    className="flex-1 h-11 rounded-xl"
+                >
                     <Edit3 className="w-4 h-4 mr-2" />
                     Modifier
                 </Button>
-                <Button className="flex-1 h-11 bg-wine hover:bg-[#5A252C] rounded-xl text-text-primary">
+                <Button 
+                    onClick={() => onOrderRestock?.(selectedWine)}
+                    className="flex-1 h-11 bg-wine hover:bg-[#5A252C] rounded-xl text-text-primary"
+                >
                     <Plus className="w-4 h-4 mr-2" />
                     Commander
                 </Button>

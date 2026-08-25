@@ -113,7 +113,7 @@ function BarPage() {
             alert={rushMode ? "rush" : undefined}
             status={rushMode ? { label: "Rush", tone: "rush" } : undefined}
         >
-            <div className="flex flex-1 h-[calc(100vh-140px)] overflow-hidden">
+            <div className="flex flex-col lg:flex-row flex-1 h-[calc(100vh-140px)] overflow-hidden">
                 <BarSidebar
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -144,6 +144,10 @@ function BarPage() {
                             setFilterRegion={setFilterRegion}
                             setSearchQuery={setSearchQuery}
                             setSelectedWine={setSelectedWine}
+                            onAddWine={() => {
+                                setEditingCocktail(null);
+                                setShowCocktailModal(true);
+                            }}
                         />
                     )}
 
@@ -164,6 +168,10 @@ function BarPage() {
                             lowStockWines={lowStockWines.length}
                             totalCellarValue={totalCellarValue}
                             wineCount={wines.length}
+                            onViewAlerts={() => {
+                                setFilterRegion(null);
+                                setActiveTab('wines');
+                            }}
                         />
                     )}
                 </div>
@@ -173,6 +181,12 @@ function BarPage() {
                 selectedWine={selectedWine}
                 regions={regions}
                 onClose={() => setSelectedWine(null)}
+                onEdit={(wine) => {
+                    showToast(`Édition de ${wine.name}`, "info");
+                }}
+                onOrderRestock={(wine) => {
+                    showToast(`Demande de réapprovisionnement envoyée pour ${wine.name}`, "success");
+                }}
             />
 
             {selectedRecipe && (

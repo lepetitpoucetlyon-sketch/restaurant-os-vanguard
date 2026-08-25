@@ -14,13 +14,30 @@ interface StocksTabProps {
   lowStockWines: number;
   totalCellarValue: number;
   wineCount: number;
+  onViewAlerts?: () => void;
+  categories?: Array<{
+    name: string;
+    count: number;
+    value: number;
+    icon: React.ElementType;
+    color: string;
+  }>;
 }
 
 export const StocksTab: React.FC<StocksTabProps> = ({ 
   lowStockWines,
   totalCellarValue,
-  wineCount
+  wineCount,
+  onViewAlerts,
+  categories
 }) => {
+  const displayCategories = categories || [
+    { name: 'Spiritueux', count: 45, value: 8500, icon: Wine, color: '#722F37' },
+    { name: 'Vins', count: wineCount, value: totalCellarValue, icon: Grape, color: '#8B0000' },
+    { name: 'Bières', count: 12, value: 450, icon: Beer, color: '#D4A574' },
+    { name: 'Softs', count: 28, value: 320, icon: GlassWater, color: '#4285F4' },
+  ];
+
   return (
     <div className="animate-in fade-in duration-300">
         <div className="flex items-center justify-between mb-8">
@@ -38,7 +55,11 @@ export const StocksTab: React.FC<StocksTabProps> = ({
                     <p className="font-bold text-status-danger">{lowStockWines} références en stock critique</p>
                     <p className="text-sm text-text-muted">Passez commande auprès de vos fournisseurs</p>
                 </div>
-                <Button variant="outline" className="ml-auto rounded-xl border-status-danger text-status-danger hover:bg-status-danger/10 transition-colors">
+                <Button 
+                    variant="outline" 
+                    onClick={onViewAlerts}
+                    className="ml-auto rounded-xl border-status-danger text-status-danger hover:bg-status-danger/10 transition-colors"
+                >
                     Voir les alertes
                 </Button>
             </div>
@@ -46,12 +67,7 @@ export const StocksTab: React.FC<StocksTabProps> = ({
 
         {/* Stock Categories */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-                { name: 'Spiritueux', count: 45, value: 8500, icon: Wine, color: '#722F37' },
-                { name: 'Vins', count: wineCount, value: totalCellarValue, icon: Grape, color: '#8B0000' },
-                { name: 'Bières', count: 12, value: 450, icon: Beer, color: '#D4A574' },
-                { name: 'Softs', count: 28, value: 320, icon: GlassWater, color: '#4285F4' },
-            ].map((cat, i) => {
+            {displayCategories.map((cat, i) => {
                 const Icon = cat.icon;
                 return (
                     <div key={i} className="bg-surface-card dark:bg-bg-secondary rounded-2xl p-6 border border-subtle dark:border-border shadow-sm">

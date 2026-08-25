@@ -12,9 +12,16 @@ import type { WineRegion } from '../../../../types/bar';
 
 interface SommelierTabProps {
   regions: WineRegion[];
+  pairings?: Array<{ dish: string; wine: string; reason: string }>;
 }
 
-export const SommelierTab: React.FC<SommelierTabProps> = ({ regions }) => {
+export const SommelierTab: React.FC<SommelierTabProps> = ({ regions, pairings }) => {
+  const displayPairings = pairings && pairings.length > 0 ? pairings : [
+    { dish: 'Filet de Boeuf Rossini', wine: 'Château Margaux 2015', reason: 'La puissance du vin sublime le foie gras' },
+    { dish: 'Homard Thermidor', wine: 'Dom Pérignon 2012', reason: 'Bulles fines et richesse du homard' },
+    { dish: 'Pigeon aux Cerises', wine: 'Romanée-Conti 2018', reason: 'Pinot Noir et fruits rouges en harmonie' },
+  ];
+
   return (
     <div className="animate-in fade-in duration-150">
         <div className="flex items-center justify-between mb-8">
@@ -32,11 +39,7 @@ export const SommelierTab: React.FC<SommelierTabProps> = ({ regions }) => {
                     Accords du Jour
                 </h3>
                 <div className="space-y-4">
-                    {[
-                        { dish: 'Filet de Boeuf Rossini', wine: 'Château Margaux 2015', reason: 'La puissance du vin sublime le foie gras' },
-                        { dish: 'Homard Thermidor', wine: 'Dom Pérignon 2012', reason: 'Bulles fines et richesse du homard' },
-                        { dish: 'Pigeon aux Cerises', wine: 'Romanée-Conti 2018', reason: 'Pinot Noir et fruits rouges en harmonie' },
-                    ].map((pairing, i) => (
+                    {displayPairings.map((pairing, i) => (
                         <div key={i} className="p-4 rounded-xl bg-bg-primary dark:bg-bg-tertiary border border-border">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="font-bold text-text-primary">{pairing.dish}</span>

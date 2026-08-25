@@ -34,17 +34,17 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
   ] as const;
 
   return (
-    <div className="w-72 bg-bg-secondary border-r border-border flex flex-col p-6 h-full">
-        <div className="mb-8 flex items-center justify-between">
+    <div className="w-full lg:w-72 bg-bg-secondary border-b lg:border-b-0 lg:border-r border-border flex flex-col p-4 lg:p-6 lg:h-full shrink-0">
+        <div className="mb-4 lg:mb-8 flex items-center justify-between">
             <div>
-                <h1 className="text-xl font-black text-text-primary tracking-tight leading-none">Bar & Sommellerie</h1>
-                <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mt-2">
+                <h1 className="text-lg lg:text-xl font-black text-text-primary tracking-tight leading-none">Bar & Sommellerie</h1>
+                <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mt-1 lg:mt-2">
                     Cave • Cocktails • Service
                 </p>
             </div>
         </div>
 
-        <nav className="space-y-2 flex-1">
+        <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 flex-1 custom-scrollbar">
             {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -52,21 +52,21 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
                         className={cn(
-                            "w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-300",
+                            "flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-xl lg:rounded-2xl font-bold text-xs lg:text-sm whitespace-nowrap transition-all duration-300",
                             activeTab === item.id 
                                 ? "bg-accent text-text-primary shadow-xl shadow-accent/20" 
                                 : "text-text-muted hover:bg-bg-tertiary hover:text-text-primary"
                         )}
                     >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-4 h-4 lg:w-5 lg:h-5" />
                         {item.label}
                     </button>
                 );
             })}
         </nav>
 
-        {/* Quick Stats Overlay */}
-        <div className="mt-auto p-5 bg-gradient-to-br from-accent/90 to-bg-tertiary dark:to-accent/30 rounded-[2rem] text-text-primary shadow-lg relative overflow-hidden group">
+        {/* Quick Stats Overlay (desktop only) */}
+        <div className="hidden lg:block mt-auto p-5 bg-gradient-to-br from-accent/90 to-bg-tertiary dark:to-accent/30 rounded-[2rem] text-text-primary shadow-lg relative overflow-hidden group">
             <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-surface-card/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
             
             <div className="flex items-center gap-3 mb-3 relative z-10">

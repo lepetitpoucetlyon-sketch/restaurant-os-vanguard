@@ -21,6 +21,7 @@ interface WineCellarTabProps {
   setFilterRegion: (region: string | null) => void;
   setSearchQuery: (query: string) => void;
   setSelectedWine: (wine: Wine) => void;
+  onAddWine?: () => void;
 }
 
 export const WineCellarTab: React.FC<WineCellarTabProps> = ({
@@ -30,7 +31,8 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
   searchQuery,
   setFilterRegion,
   setSearchQuery,
-  setSelectedWine
+  setSelectedWine,
+  onAddWine
 }) => {
   return (
     <div className="animate-in fade-in duration-300">
@@ -50,7 +52,10 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
                         className="w-64 h-11 pl-11 pr-4 bg-bg-secondary dark:bg-bg-tertiary border border-border rounded-xl font-bold text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                     />
                 </div>
-                <Button className="h-11 bg-accent hover:bg-accent/90 rounded-xl">
+                <Button 
+                    onClick={onAddWine}
+                    className="h-11 bg-accent hover:bg-accent/90 rounded-xl"
+                >
                     <Plus className="w-4 h-4 mr-2" />
                     Ajouter Vin
                 </Button>
