@@ -1,6 +1,6 @@
 # Plan — Paramétrage RBAC des décisions figées
 
-> Rédigé le **2026-08-25** · **re-mesuré et rendu cohérent sur `main@11fe8d025`**
+> Rédigé le **2026-08-25** · **à jour sur `main@095b83645`** (corpus étendu à 48 décisions)
 > Répond à : *« régler l'ensemble du problème c'est simple, il faut que chaque personne,
 > dans le respect du RBAC, puisse paramétrer par défaut. »*
 > Source : `docs/DECISIONS-FIGEES-RESTAURANT.md` — **48 décisions** (29 + extension de 19)
@@ -49,7 +49,7 @@ Exemple réel déjà en place :
   type: "number", min: 0, max: 100000, roles: ["admin", "directeur"] }
 ```
 
-**Le travail n'est donc pas de construire un système. C'est de brancher 29 décisions
+**Le travail n'est donc pas de construire un système. C'est de brancher 48 décisions
 dans un système qui tourne déjà** — et de corriger **trois manques** qui l'empêchent de
 tenir la promesse (le troisième, découvert en fin de journée, est le plus grave).
 
@@ -92,8 +92,8 @@ settings.defaults.ts → noShowDelayMinutes: 20
                       lu par le code : 2 occurrences   ← c'est celui-ci qui décide
 ```
 
-**Conséquence sur ce plan :** la Phase 3 s'allège nettement — **~14 des 29 décisions sont
-déjà déclarées** dans le registre :
+**Conséquence sur ce plan :** la Phase 3 s'allège — **~16 des 48 décisions sont déjà
+déclarées** dans le registre :
 
 | Zone | Clés déjà présentes dans `config-registry.ts` |
 |---|---|
@@ -105,7 +105,7 @@ déjà déclarées** dans le registre :
 | POS | `max_discount_no_pin` |
 
 **Aucune n'est lue par le code.** La Phase 4 est donc **beaucoup plus lourde** que prévu :
-il ne s'agit pas de brancher 29 constantes, mais de réconcilier deux systèmes entiers.
+il ne s'agit pas de brancher 48 constantes, mais de réconcilier deux systèmes entiers.
 
 **Nouvelle phase 3 bis — Réconcilier les deux systèmes** *(2 sessions)*
 1. Pour chaque clé du registre, identifier sa contrepartie dans `settings.defaults.ts`
@@ -113,7 +113,7 @@ il ne s'agit pas de brancher 29 constantes, mais de réconcilier deux systèmes 
 3. Brancher les lectures : le code lit le registre, qui retombe sur le défaut
 4. Supprimer les clés du registre qui n'ont aucune contrepartie — ce sont des promesses vides
 
-> ⚠️ **Ce manque touche déjà les utilisateurs**, indépendamment des 29 décisions figées.
+> ⚠️ **Ce manque touche déjà les utilisateurs**, indépendamment des 48 décisions figées.
 > Une UI de réglages qui n'a aucun effet est pire qu'une absence de réglages : elle fait
 > croire au restaurateur qu'il a la main.
 
@@ -157,7 +157,27 @@ Recherche d'un lecteur non-React (`getPageSetting`, `settingsService`…) : **au
 
 ---
 
-## Le plan — 6 phases
+## Le plan — 7 phases
+
+### PHASE 0 — Trancher DF-O1 *(0,5 session)* — indépendante, à faire quand on veut
+
+Deux services calculent la durée d'occupation d'une table avec des règles différentes :
+
+| Service | Règle | Table de 4 |
+|---|---|---|
+| `TurnoverPredictionService.ts:55` | `base × (1 + 0,06 × (convives − 2)) × facteurKDS` | `base × 1,12` |
+| `TableTurnoverOptimizationService.ts:26` | paliers `≤2 → 75` · `≤4 → 90` · `6+ → 120` min | `90 min` |
+
+Selon l'écran consulté, le restaurateur voit **deux disponibilités différentes**.
+
+**Ce n'est pas un arbitrage à paramétrer** — c'est une divergence à supprimer. Un des deux
+services doit devenir la source, l'autre l'appeler. Le choix du modèle (multiplicatif ou
+paliers) devient ensuite un réglage unique (DF-C5).
+
+*Critère :* une seule fonction répond à « combien de temps cette table sera-t-elle occupée ».
+*Ne dépend d'aucune autre phase.*
+
+---
 
 ### PHASE 1 — Persister les réglages au niveau tenant *(1,5 session)* 🔴 **prérequis**
 
@@ -224,7 +244,7 @@ tant qu'aucun réglage n'est posé.
 
 ---
 
-### PHASE 3 — Déclarer les 29 décisions *(1,5 session)*
+### PHASE 3 — Déclarer les décisions manquantes *(1,5 session)*
 
 Ajouter les entrées dans `config-registry.ts`, **groupées par métier** — c'est le champ
 `roles` qui matérialise ton idée.
@@ -342,6 +362,89 @@ Ajouter les entrées dans `config-registry.ts`, **groupées par métier** — c'
   roles: ["admin", "directeur"] },                                // DF-E2 (manque identifié)
 ```
 
+#### Page `finance` — gérant & comptable *(extension)*
+```typescript
+{ key: "auto_reconcile_score", label: "Score de rapprochement automatique",
+  description: "Au-delà, une écriture est rapprochée sans validation humaine.",
+  group: "logic", type: "number", min: 80, max: 100,
+  roles: ["admin", "directeur", "comptable"] },                   // DF-N1 ⭐
+
+{ key: "dunning_delay_days", label: "Relance impayé après (jours)",
+  group: "logic", type: "number", min: 7, max: 90,
+  roles: ["admin", "directeur", "comptable"] },                   // DF-I2
+
+{ key: "payout_approval_threshold_eur", label: "Seuil d'approbation virement (€)",
+  description: "Au-delà, une validation éditeur est requise.",
+  group: "logic", type: "number", min: 100, max: 50000,
+  roles: ["admin"] },                                             // DF-I1
+```
+
+> **DF-N1 rejoint DF-D3 au sommet de la priorité.** Un score de `98` déclenche
+> aujourd'hui un rapprochement bancaire **sans validation humaine**. C'est une décision
+> comptable, elle appartient à l'expert-comptable du tenant — pas au code.
+
+#### Page `inventory` / approvisionnement — chef & gérant *(extension)*
+```typescript
+{ key: "supplier_cutoff_warning_min", label: "Alerte avant clôture fournisseur (min)",
+  group: "logic", type: "number", min: 15, max: 240,
+  roles: ["admin", "directeur", "chef_cuisinier"] },              // DF-J1
+
+{ key: "commodity_surge_alert_pct", label: "Flambée de cours — seuil d'alerte (%)",
+  group: "logic", type: "number", min: 5, max: 50,
+  roles: ["admin", "directeur", "chef_cuisinier"] },              // DF-J2
+
+{ key: "food_cost_weight_pct", label: "Poids food cost dans l'ajustement prix (%)",
+  description: "Si un cours monte de 20 %, le prix menu est recommandé à +20 % × ce poids.",
+  group: "logic", type: "number", min: 10, max: 60,
+  roles: ["admin", "directeur"] },                                // DF-J3 ⭐
+
+{ key: "ocr_confidence_threshold", label: "Confiance OCR minimale (%)",
+  description: "En dessous, la facture part en validation manuelle.",
+  group: "logic", type: "number", min: 60, max: 99,
+  roles: ["admin", "directeur", "comptable"] },                   // DF-J4
+
+{ key: "weather_procurement_temp_c", label: "Température déclenchant l'ajustement (°C)",
+  group: "logic", type: "number", min: 15, max: 40,
+  roles: ["admin", "directeur", "chef_cuisinier"] },              // DF-J5
+{ key: "weather_procurement_boost_pct", label: "Ajustement météo produits frais (%)",
+  group: "logic", type: "number", min: 0, max: 50,
+  roles: ["admin", "directeur", "chef_cuisinier"] },              // DF-J5
+```
+
+#### Page `customer` — fidélité & CRM *(extension)*
+```typescript
+{ key: "loyalty_points_per_euro", label: "Points de fidélité par euro dépensé",
+  description: "Cœur économique du programme. Permet les opérations ponctuelles (×2).",
+  group: "logic", type: "number", min: 0, max: 10,
+  roles: ["admin", "directeur"] },                                // DF-K1 ⭐
+
+{ key: "quote_base_score", label: "Score de base d'un devis",
+  group: "logic", type: "number", min: 0, max: 100,
+  roles: ["admin", "directeur"] },                                // DF-K3
+```
+> ⚠️ **DF-K2 (seuils VIP) n'a rien à déclarer :** `vip_threshold_visits` et
+> `vip_threshold_spend` **existent déjà** dans le registre. Le travail est en Phase 3 bis —
+> faire lire ces clés par `CRMVipHandler.ts:40` au lieu de sa constante en dur.
+
+#### Page `seo` / marketing *(extension)*
+```typescript
+{ key: "review_bombing_burst_threshold", label: "Avis négatifs déclenchant une alerte",
+  group: "logic", type: "number", min: 3, max: 50,
+  roles: ["admin", "directeur"] },                                // DF-L1
+{ key: "review_bombing_no_text_ratio", label: "Part d'avis sans texte suspecte (%)",
+  group: "logic", type: "number", min: 20, max: 100,
+  roles: ["admin", "directeur"] },                                // DF-L1
+```
+
+#### Page `pos` / livraison *(extension)*
+```typescript
+{ key: "delivery_min_address_score", label: "Score d'adresse minimal accepté",
+  group: "logic", type: "number", min: 0, max: 100,
+  roles: ["admin", "directeur", "manager"] },                     // DF-M2
+```
+> **DF-M1 n'est pas déclaré** — `MIN_HOT_HANDOVER_TEMP_CELSIUS = 63 °C` est un
+> **minimum réglementaire** (arrêté du 21 décembre 2009). Cf. §hors périmètre.
+
 #### Page `security` — administrateur uniquement
 ```typescript
 { key: "max_concurrent_sessions", label: "Appareils simultanés par utilisateur",
@@ -352,7 +455,7 @@ Ajouter les entrées dans `config-registry.ts`, **groupées par métier** — c'
 
 ---
 
-### PHASE 4 — Remplacer les constantes *(2 sessions)*
+### PHASE 4 — Remplacer les constantes *(3 sessions · 13 lots)*
 
 Ordre imposé par l'impact, pas par la facilité :
 
@@ -364,6 +467,13 @@ Ordre imposé par l'impact, pas par la facilité :
 | 4 | `FlashAlcoholInventoryService.ts` · `SmartSpoutTelemetryService.ts` | DF-A3 · DF-A4 | Bruit ou silence permanent |
 | 5 | `TableLockService.ts` · `ThawingProtocolGuard.ts` | DF-A1 · DF-E3 | |
 | 6 | `PrinterFailoverManager.ts` · `PrintingService.ts` | DF-D1 · DF-D3 | Dépend d'une décision produit |
+| 7 | `AccountingMatchingService.ts` | DF-N1 | Automatise des écritures comptables sans humain |
+| 8 | `LoyaltyEngine.ts` | DF-K1 | Cœur économique du programme de fidélité |
+| 9 | `CommodityPriceSurgeWatcherService.ts` | DF-J2 · DF-J3 | Pilote une recommandation de prix de vente |
+| 10 | `CRMVipHandler.ts` | DF-K2 | ⚠️ Clés registre existantes — relève surtout de la Phase 3 bis |
+| 11 | `SovereignPayout.ts` · `EscalationEngine.ts` | DF-I1 · DF-I2 | Argent |
+| 12 | `DoublePassOcrService.ts` · `SupplierOrderCutoffScheduler.ts` · `PredictiveProcurementEngine.ts` | DF-J1 · DF-J4 · DF-J5 | |
+| 13 | `ReviewBombingDetectorService.ts` · `DeliveryAddressScoringService.ts` | DF-L1 · DF-M2 | |
 
 **Règle de sécurité :** chaque remplacement conserve la valeur actuelle en `fallback`.
 Un tenant qui ne configure rien ne voit **aucune** différence. Le comportement ne change
@@ -441,12 +551,40 @@ le `> 5` de `useComplianceMapper`.
 
 ## Ce qui reste hors de portée de ce plan
 
-Deux décisions ne se paramètrent pas :
+### Valeurs légales — à documenter, jamais à exposer
 
-| Décision | Pourquoi pas un réglage |
+| Décision | Référence |
+|---|---|
+| **Zone H** (RH) — majorations `× 1,10 / 1,20 / 1,50`, plafond 48 h, nuit 22 h–7 h | Convention HCR · Code du travail |
+| **DF-M1** — remise au chaud à `63 °C` | Arrêté du 21 décembre 2009 |
+
+Un curseur laisserait croire qu'on peut les modifier. À annoter dans le code avec leur
+référence légale.
+
+> ⚠️ **Contradiction à trancher :** le registre déclare pourtant déjà `max_hours_day`,
+> `max_hours_week` et `min_rest_hours`. Position défendable **si** les bornes n'autorisent
+> que du **plus protecteur** que la loi. À arbitrer avec un expert-paie.
+
+### Divergences — à trancher, pas à paramétrer
+
+Trois endroits du code répondent différemment à la même question. Ce ne sont pas des
+arbitrages métier, ce sont des **contradictions internes** :
+
+| Code | Contradiction | Effort |
+|---|---|---|
+| **DF-E1** | Seuil température : configurable par capteur **vs** `> 5` en dur | Phase 5 |
+| **DF-K2** | Seuils VIP : réglables au registre **vs** `500 €` en dur | Phase 3 bis |
+| **DF-O1** | Rotation de table : `TurnoverPredictionService` (multiplicatif) **vs** `TableTurnoverOptimizationService` (paliers 75/90/120 min) | **0,5 session** |
+
+**Elles sont les moins chères à corriger et les plus dangereuses tant qu'elles vivent** —
+selon l'écran consulté, le restaurateur voit deux vérités.
+
+### Non paramétrable pour d'autres raisons
+
+| Décision | Pourquoi |
 |---|---|
 | **DF-A6** (dilution cocktails) | Six coefficients physiques. Les exposer serait ingérable — les documenter comme approximation assumée, ou exposer un seul facteur de correction global. |
-| **Zone H** (RH) | Code du travail et convention HCR. Ce sont des **plafonds légaux**, pas des préférences. Un réglage donnerait l'illusion qu'on peut les dépasser — même logique que le plancher HACCP ci-dessus, mais ici il n'y a rien à choisir. |
+| **DF-I3** (taux d'interchange carte) | Dépend des accords acquéreurs, pas du restaurateur. À faire évoluer avec les contrats. |
 
 ---
 
@@ -455,7 +593,7 @@ Deux décisions ne se paramètrent pas :
 ```
 PHASE 1    1,5 sess.  Persistance tenant        ← prérequis absolu
 PHASE 2    1   sess.  Lecteur non-React         ← parallélisable avec 1
-PHASE 3    1   sess.  Déclarer les réglages     ← allégée : ~14 des 29 existent déjà
+PHASE 3    1   sess.  Déclarer les réglages     ← allégée : ~16 des 48 existent déjà
 PHASE 3bis 2   sess.  Réconcilier les 2 systèmes ← LE plus gros poste (142 clés inertes)
 PHASE 4    2   sess.  Remplacer les constantes  ← dépend de 2, 3 et 3bis
 PHASE 5    1   sess.  Cascade HACCP N3→N0       ← table catégories + bornes légales
@@ -463,19 +601,17 @@ PHASE 5    1   sess.  Cascade HACCP N3→N0       ← table catégories + bornes
 
 **Total : 9 sessions** (7 initialement · phase 3 bis +2 · extension de 19 décisions +0,5).
 
-> **MAJ extension :** le second balayage a porté le corpus de 29 à **48 décisions**
-> (zones finance/trésorerie, approvisionnement, fidélité, marketing, livraison,
-> comptabilité). Trois d'entre elles rejoignent le haut de la pile de priorité :
-> - **DF-N1** — `AUTO_RECONCILE_SCORE = 98` : le rapprochement bancaire s'automatise
->   sans validation humaine au-delà de ce score. Décision comptable prise dans le code.
-> - **DF-K1** — `POINTS_PER_EURO = 1` : le cœur économique du programme de fidélité,
->   non réglable.
-> - **DF-J3** — un coefficient `0,3` transforme une flambée de cours en **recommandation
->   de prix de vente**.
->
-> Et une seconde divergence du type DF-E1 : **DF-O1**, deux modèles de rotation de table
-> concurrents (`TurnoverPredictionService` vs `TableTurnoverOptimizationService`) qui
-> donnent des durées différentes pour la même table. À trancher, pas à paramétrer.
+### Les 4 décisions au sommet de la priorité
+
+| Code | Ce qu'elle décide aujourd'hui, seule |
+|---|---|
+| **DF-D3** | Ticket scellé NF525, impression échouée → comportement non tranché |
+| **DF-N1** | `AUTO_RECONCILE_SCORE = 98` — écritures comptables rapprochées **sans humain** |
+| **DF-K1** | `POINTS_PER_EURO = 1` — cœur économique du programme de fidélité |
+| **DF-J3** | Coefficient `0,3` — transforme une flambée de cours en **prix de vente recommandé** |
+
+Ces quatre-là ont un point commun : elles engagent **de l'argent ou une responsabilité
+légale**, et aucune n'a été validée par la personne concernée.
 
 ### Conflits identifiés
 
@@ -496,10 +632,12 @@ valeurs. C'est utile, mais insuffisant : **le restaurateur suivant aura d'autres
 Paramétrer, c'est répondre une fois pour tous les clients. L'entretien reste utile — mais
 pour choisir les **bons défauts** et les **bornes** (`min`/`max`), pas pour graver 29 nombres.
 
-> Ton intuition transforme 29 questions ouvertes en 29 réglages bornés.
+> Ton intuition transforme 48 questions ouvertes en 45 réglages bornés — les 3 restantes
+> étant des divergences à trancher, pas des arbitrages.
 > C'est la différence entre un produit qui suppose et un produit qui s'adapte.
 
 ---
 
-*Infrastructure mesurée le 2026-08-25, document rendu cohérent sur `main@11fe8d025`.
+*Infrastructure mesurée le 2026-08-25, document à jour sur `main@095b83645`
+(corpus 48 décisions, 6 phases, 10,5 sessions).
 Chaque chemin et chaque chiffre est vérifiable par commande.*
