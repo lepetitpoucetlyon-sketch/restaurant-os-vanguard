@@ -134,9 +134,9 @@ export function TenantUsersPanel({ instance }: Props) {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-text-primary truncate">{u.name}</p>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[10px] text-secondary truncate">{u.email ?? '—'}</span>
+                    <span className="text-nano text-secondary truncate">{u.email ?? '—'}</span>
                     {u.lastActive && (
-                      <span className="flex items-center gap-1 text-[10px] text-secondary whitespace-nowrap">
+                      <span className="flex items-center gap-1 text-nano text-secondary whitespace-nowrap">
                         <Clock className="w-2.5 h-2.5" />
                         {new Date(u.lastActive).toLocaleDateString('fr-FR')}
                       </span>
@@ -150,7 +150,7 @@ export function TenantUsersPanel({ instance }: Props) {
                 <div className="relative">
                   <button
                     onClick={() => setRoleEditing(roleEditing === u.id ? null : u.id)}
-                    className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-surface-card border border-border-subtle text-secondary hover:text-text-primary transition-colors"
+                    className="flex items-center gap-1 text-nano font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-surface-card border border-border-subtle text-secondary hover:text-text-primary transition-colors"
                   >
                     {ROLE_LABELS[u.role] ?? u.role}
                     <ChevronDown className="w-3 h-3" />
@@ -172,14 +172,14 @@ export function TenantUsersPanel({ instance }: Props) {
 
                 <button
                   onClick={() => handleResetPin(u.id)}
-                  className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-action-primary/10 border border-yellow-500/20 text-yellow-400 hover:bg-action-primary/20 transition-colors"
+                  className="text-nano font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-action-primary/10 border border-yellow-500/20 text-yellow-400 hover:bg-action-primary/20 transition-colors"
                 >
                   Reset PIN
                 </button>
 
                 <button
                   onClick={() => handleImpersonate(u.id)}
-                  className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-action-primary/10 border border-focus/20 text-brand hover:bg-action-primary/20 transition-colors"
+                  className="text-nano font-bold uppercase tracking-widest px-2 py-1 rounded-lg bg-action-primary/10 border border-focus/20 text-brand hover:bg-action-primary/20 transition-colors"
                 >
                   Voir comme
                 </button>

@@ -149,7 +149,7 @@ export function PluginCatalogManager() {
           {catalog.map(item => (
             <div key={item.id} className="flex items-center justify-between p-4 bg-surface-card border border-border-subtle rounded-xl group hover:border-focus/30 transition-all">
               {editingId === item.id ? (
-                <div className="flex-1 grid grid-cols-4 gap-4 mr-4">
+                <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-4 mr-4">
                   <input 
                     type="text" 
                     value={editForm.name || ''}
@@ -173,15 +173,15 @@ export function PluginCatalogManager() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-text-primary">{item.name}</span>
-                    <span className="px-2 py-0.5 bg-brand/10 text-brand text-[10px] font-black rounded uppercase tracking-widest">{item.category}</span>
+                    <span className="px-2 py-0.5 bg-brand/10 text-brand text-nano font-black rounded uppercase tracking-widest">{item.category}</span>
                   </div>
-                  <div className="text-[10px] text-secondary font-mono mt-1">ID: {item.id}</div>
+                  <div className="text-nano text-secondary font-mono mt-1">ID: {item.id}</div>
                 </div>
               )}
 
               <div className="flex items-center gap-4">
                 {editingId !== item.id && (
-                  <div className="text-sm font-bold">{item.basePrice.toFixed(2)} € <span className="text-[10px] text-secondary font-normal">/ mois</span></div>
+                  <div className="text-sm font-bold">{item.basePrice.toFixed(2)} € <span className="text-nano text-secondary font-normal">/ mois</span></div>
                 )}
                 
                 <div className="flex items-center gap-2">

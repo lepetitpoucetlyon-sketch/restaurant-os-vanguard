@@ -163,7 +163,7 @@ export function PageShell({
 
             {/* Editorial kicker + title */}
             {derivedKicker && (
-              <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
+              <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
                 {derivedKicker}
               </span>
             )}
@@ -191,7 +191,7 @@ export function PageShell({
                 </span>
                 <span
                   className={cn(
-                    "font-serif italic text-[11px] tracking-[0.24em] uppercase",
+                    "font-serif italic text-micro tracking-[0.24em] uppercase",
                     STATUS_TEXT[statusTone]
                   )}
                 >
@@ -356,8 +356,8 @@ export function PageShellFraction({
           <span className="font-serif font-medium text-sm text-text-muted tabular-nums">{denominator}</span>
         </>
       )}
-      {unit && <span className="text-text-muted/70 uppercase tracking-wider text-[10px] ml-0.5">{unit}</span>}
-      {label && <span className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/70 ml-2">{label}</span>}
+      {unit && <span className="text-text-muted/70 uppercase tracking-wider text-nano ml-0.5">{unit}</span>}
+      {label && <span className="font-serif italic text-micro uppercase tracking-[0.24em] text-text-muted/70 ml-2">{label}</span>}
     </span>
   );
 }
@@ -467,7 +467,7 @@ export function PageShellEditorialTitle({
   const inner = (
     <>
       {kicker && (
-        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
+        <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
           {kicker}
         </span>
       )}
@@ -510,7 +510,7 @@ export function PageShellEditorialTitle({
           </span>
           <span
             className={cn(
-              "font-serif italic text-[11px] tracking-[0.24em] uppercase",
+              "font-serif italic text-micro tracking-[0.24em] uppercase",
               STATUS_TEXT[statusTone]
             )}
           >

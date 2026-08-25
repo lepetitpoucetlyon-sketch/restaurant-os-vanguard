@@ -164,7 +164,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                         className="flex-1 bg-transparent text-text-primary text-2xl font-serif font-black italic outline-none tracking-tighter transition-colors placeholder:text-text-muted/20"
                     />
                     <div className="flex items-center gap-3 px-4 py-2 border border-border bg-bg-tertiary/40 rounded-2xl transition-colors">
-                        <span className="text-[11px] font-black tracking-[0.2em] text-text-muted/60">ECHAP</span>
+                        <span className="text-micro font-black tracking-[0.2em] text-text-muted/60">ECHAP</span>
                     </div>
                 </div>
 
@@ -179,7 +179,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                             <div key={section} className="space-y-3">
                                 <div className="flex items-center gap-4 px-4 mb-4 mt-2">
                                     <div className="w-8 h-0.5 bg-accent-gold rounded-full" />
-                                    <p className="text-[11px] font-black text-accent-gold uppercase tracking-[0.4em]">
+                                    <p className="text-micro font-black text-accent-gold uppercase tracking-[0.4em]">
                                         {section}
                                     </p>
                                 </div>
@@ -231,18 +231,18 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                 <div className="p-8 border-t flex items-center justify-between relative z-10 shrink-0 border-black/5 bg-surface-sidebar/[0.02]">
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-3">
-                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↑↓</div>
+                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-nano font-black">↑↓</div>
                             <span className="text-chip-label text-primary/20">Parcourir</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-[9px] font-black">↵</div>
+                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-nano font-black">↵</div>
                             <span className="text-chip-label text-primary/20">Activer</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col text-right">
-                            <span className="text-[9px] font-black text-accent-gold uppercase tracking-[0.3em]">IA Maître</span>
-                            <span className="text-[7px] font-black uppercase tracking-[0.5em] mt-1 text-primary/20 transition-colors">Version 2.5 Alpha</span>
+                            <span className="text-nano font-black text-accent-gold uppercase tracking-[0.3em]">IA Maître</span>
+                            <span className="text-nano font-black uppercase tracking-[0.5em] mt-1 text-primary/20 transition-colors">Version 2.5 Alpha</span>
                         </div>
                         <div className="w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/20 flex items-center justify-center">
                             <Sparkles className="w-4 h-4 text-accent-gold" />

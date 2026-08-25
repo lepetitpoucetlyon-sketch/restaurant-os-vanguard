@@ -66,7 +66,7 @@ export function ActionImpactMap() {
                                     {step.items.map(item => (
                                         <div key={item} className="flex items-center gap-2">
                                             <div className="w-1 h-1 rounded-full bg-border" />
-                                            <span className="text-[10px] font-mono text-text-muted/80">{item}</span>
+                                            <span className="text-nano font-mono text-text-muted/80">{item}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -99,7 +99,7 @@ export function ActionImpactMap() {
                     </p>
                 </div>
                 <div className="flex gap-4">
-                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-[10px] uppercase tracking-widest text-status-success">
+                    <div className="px-5 py-3 bg-bg-tertiary rounded-2xl border border-border font-mono text-nano uppercase tracking-widest text-status-success">
                         Propagation: ~150ms
                     </div>
                 </div>

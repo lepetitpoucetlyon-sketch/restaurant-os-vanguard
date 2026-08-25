@@ -40,20 +40,20 @@ export function StoragePreparationCard({
                                     {prep.quantity} {prep.unit}
                                 </span>
                                 {prep.portions && (
-                                    <span className="text-[9px] font-black text-accent uppercase px-2 py-0.5 bg-accent/5 rounded-sm border border-accent/20">
+                                    <span className="text-nano font-black text-accent uppercase px-2 py-0.5 bg-accent/5 rounded-sm border border-accent/20">
                                         {prep.portions} portions
                                     </span>
                                 )}
                             </div>
                         </div>
-                        <div className={cn("px-2.5 py-1 rounded-lg text-[9px] font-black uppercase border shadow-sm",
+                        <div className={cn("px-2.5 py-1 rounded-lg text-nano font-black uppercase border shadow-sm",
                             prep.status === 'use_today' ? 'text-status-warning bg-status-warning border-orange-200' : dlcStatus.color
                         )}>
                             {prep.status === 'use_today' ? "À utiliser" : dlcStatus.label}
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 mt-3 text-[10px] font-black text-text-muted uppercase tracking-wider">
+                    <div className="flex items-center gap-4 mt-3 text-nano font-black text-text-muted uppercase tracking-wider">
                         <span className="flex items-center gap-1.5">
                             <ChefHat className="w-3 h-3" />
                             {prep.preparedBy}
@@ -69,8 +69,8 @@ export function StoragePreparationCard({
                         {isMoving ? (
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-[10px] font-black text-text-primary uppercase">Déplacer vers :</p>
-                                    <button onClick={() => setMovingPrepId(null)} className="text-[10px] font-bold text-text-muted hover:text-text-primary">
+                                    <p className="text-nano font-black text-text-primary uppercase">Déplacer vers :</p>
+                                    <button onClick={() => setMovingPrepId(null)} className="text-nano font-bold text-text-muted hover:text-text-primary">
                                         Annuler
                                     </button>
                                 </div>
@@ -88,7 +88,7 @@ export function StoragePreparationCard({
                                                 className="flex items-center gap-2 p-2.5 bg-bg-tertiary border border-border rounded-xl hover:border-accent hover:bg-accent/5 transition-all text-left group/loc"
                                             >
                                                 <LocIcon className="w-3.5 h-3.5 text-text-muted group-hover/loc:text-accent transition-colors" />
-                                                <span className="text-[10px] font-bold text-text-primary truncate">{loc.name}</span>
+                                                <span className="text-nano font-bold text-text-primary truncate">{loc.name}</span>
                                             </button>
                                         );
                                     })}

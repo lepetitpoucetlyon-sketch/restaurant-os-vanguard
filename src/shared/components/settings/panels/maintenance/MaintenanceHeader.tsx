@@ -38,10 +38,10 @@ export function MaintenanceHeader({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[11px] font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-micro font-bold uppercase tracking-wider">
               GMAO & Maintenance Intelligente
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-micro font-bold">
               Pilier 8 Facility
             </span>
           </div>
@@ -74,7 +74,7 @@ export function MaintenanceHeader({
       </div>
 
       <div className="pt-4 border-t border-slate-800/80">
-        <div className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <div className="text-micro font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <Building2 className="w-3.5 h-3.5 text-text-muted" />
           <span>Périmètre & Zone d Établissement :</span>
         </div>

@@ -45,7 +45,7 @@ export function Map3DOverlay() {
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-serif italic font-black text-text-primary">Cartographie <span className="text-accent-gold not-italic">3D</span></h2>
-                                    <p className="text-[10px] uppercase tracking-widest text-text-muted mt-0.5">Intelligence Géospatiale & Flux Opérationnels</p>
+                                    <p className="text-nano uppercase tracking-widest text-text-muted mt-0.5">Intelligence Géospatiale & Flux Opérationnels</p>
                                 </div>
                             </div>
 
@@ -96,11 +96,11 @@ export function Map3DOverlay() {
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
-                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-status-success">Système Connecté</span>
+                                    <span className="text-nano font-black uppercase tracking-[0.2em] text-status-success">Système Connecté</span>
                                 </div>
-                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Rendu GPU Accéléré</span>
+                                <span className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Rendu GPU Accéléré</span>
                             </div>
-                            <span className="text-[9px] font-medium text-text-muted font-mono italic">v1.2.0-STABLE</span>
+                            <span className="text-nano font-medium text-text-muted font-mono italic">v1.2.0-STABLE</span>
                         </div>
                     </motion.div>
                 </>

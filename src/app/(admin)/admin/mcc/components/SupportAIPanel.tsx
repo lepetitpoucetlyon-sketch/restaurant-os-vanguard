@@ -197,7 +197,7 @@ export function SupportAIPanel() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-xs text-text-primary">[{t.tenantId}]</span>
-                    <span className="text-[10px] text-text-muted flex items-center gap-1">
+                    <span className="text-nano text-text-muted flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -205,7 +205,7 @@ export function SupportAIPanel() {
                   <p className="text-xs text-text-muted truncate mt-0.5">{t.description}</p>
                 </div>
 
-                <button className="px-2.5 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg bg-action-primary/10 text-brand border border-focus/20 shrink-0">
+                <button className="px-2.5 py-1 text-nano font-black uppercase tracking-wider rounded-lg bg-action-primary/10 text-brand border border-focus/20 shrink-0">
                   Charger
                 </button>
               </div>
@@ -234,7 +234,7 @@ export function SupportAIPanel() {
         {/* Advanced (screenshot URL) */}
         <button
           onClick={() => setShowAdvanced(v => !v)}
-          className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-muted hover:text-secondary transition-colors"
+          className="flex items-center gap-1.5 text-nano font-bold uppercase tracking-widest text-muted hover:text-secondary transition-colors"
         >
           <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
           Options avancées
@@ -277,11 +277,11 @@ export function SupportAIPanel() {
 
           <div className="space-y-4">
             <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Cause probable</p>
+              <p className="text-nano font-black uppercase tracking-[0.2em] text-muted mb-1.5">Cause probable</p>
               <p className="text-sm text-text-primary/80 leading-relaxed">{d.probableCause}</p>
             </div>
             <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted mb-1.5">Résolution recommandée</p>
+              <p className="text-nano font-black uppercase tracking-[0.2em] text-muted mb-1.5">Résolution recommandée</p>
               <p className="text-sm text-text-primary/80 leading-relaxed whitespace-pre-wrap">{d.recommendedFix}</p>
             </div>
           </div>
@@ -296,7 +296,7 @@ export function SupportAIPanel() {
             </button>
           )}
 
-          <p className="text-[9px] text-muted text-right font-mono">Ticket #{result.ticketId.slice(0, 8)}</p>
+          <p className="text-nano text-muted text-right font-mono">Ticket #{result.ticketId.slice(0, 8)}</p>
         </div>
       )}
     </div>

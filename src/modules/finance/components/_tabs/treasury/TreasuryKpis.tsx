@@ -31,7 +31,7 @@ export function TreasuryKpis({
         <p className="text-2xl font-serif font-bold text-status-success">
           {microToEur(totalForecast)}
         </p>
-        <p className="text-[10px] text-text-muted mt-1">
+        <p className="text-nano text-text-muted mt-1">
           {forecasts.length} jour(s) de prévision
         </p>
       </div>
@@ -46,7 +46,7 @@ export function TreasuryKpis({
         <p className="text-2xl font-serif font-bold text-action-primary">
           {microToEur(totalPending)}
         </p>
-        <p className="text-[10px] text-text-muted mt-1">
+        <p className="text-nano text-text-muted mt-1">
           {pendingInvoices.length} facture(s) approuvée(s)
         </p>
       </div>
@@ -68,7 +68,7 @@ export function TreasuryKpis({
         >
           {overdueInvoices.length}
         </p>
-        <p className="text-[10px] text-text-muted mt-1">
+        <p className="text-nano text-text-muted mt-1">
           facture(s) en souffrance
         </p>
       </div>

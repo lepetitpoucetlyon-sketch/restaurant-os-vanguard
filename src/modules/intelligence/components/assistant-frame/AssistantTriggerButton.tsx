@@ -27,7 +27,7 @@ export function AssistantTriggerButton({ onClick }: AssistantTriggerButtonProps)
 
             <div className="text-left hidden sm:block">
                 <span className="text-xs font-bold block leading-none text-text-primary">Copilote IA</span>
-                <span className="text-[10px] text-text-muted font-mono">⌘K</span>
+                <span className="text-nano text-text-muted font-mono">⌘K</span>
             </div>
         </motion.button>
     );

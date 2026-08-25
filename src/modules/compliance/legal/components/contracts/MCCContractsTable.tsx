@@ -58,7 +58,7 @@ export function MCCContractsTable({
                   </div>
                 </td>
                 <td className="px-5 py-4">
-                  <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-800 text-text-secondary border border-zinc-700">
+                  <span className="px-2 py-0.5 rounded text-micro font-mono bg-zinc-800 text-text-secondary border border-zinc-700">
                     {c.vertical}
                   </span>
                 </td>

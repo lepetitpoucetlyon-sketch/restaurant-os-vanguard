@@ -33,7 +33,7 @@ export function DynamicIsland<T extends object>({
         <h4 className="text-xs font-bold text-text-primary tracking-wide">
           Chargement de l&apos;îlot {islandName}
         </h4>
-        <p className="text-[11px] text-text-muted mt-0.5">
+        <p className="text-micro text-text-muted mt-0.5">
           {category === 'CANVAS' && 'Initialisation du moteur de rendu vectoriel 2D/3D'}
           {category === 'PDF_ENGINE' && 'Chargement du compilateur fiscal Factur-X / PDF'}
           {category === 'DATAVIZ' && 'Calcul des projections graphiques & agrégats'}

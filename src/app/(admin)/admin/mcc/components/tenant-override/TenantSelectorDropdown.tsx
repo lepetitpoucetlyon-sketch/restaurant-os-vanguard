@@ -56,7 +56,7 @@ export function TenantSelectorDropdown({
                 )}
               >
                 {inst.name ?? inst.id}
-                <span className="ml-2 text-secondary text-[10px]">{inst.id}</span>
+                <span className="ml-2 text-secondary text-nano">{inst.id}</span>
               </button>
             ))}
             {instances.length === 0 && (

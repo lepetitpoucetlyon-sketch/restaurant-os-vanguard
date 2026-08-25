@@ -113,7 +113,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                 <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                                     {step === "form" ? "Ajout rapide" : "Collaborateur créé"}
                                 </h3>
-                                <p className="text-[10px] text-text-muted uppercase tracking-wider">
+                                <p className="text-nano text-text-muted uppercase tracking-wider">
                                     {step === "form" ? "Nom + rôle en 10 secondes" : "Transmettez le PIN ci-dessous"}
                                 </p>
                             </div>
@@ -163,7 +163,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                 </div>
                             </div>
 
-                            <p className="text-[9px] text-text-muted leading-relaxed">
+                            <p className="text-nano text-text-muted leading-relaxed">
                                 Un PIN à 4 chiffres sera généré automatiquement. Vous pourrez le transmettre au collaborateur à l&apos;étape suivante.
                             </p>
 
@@ -202,7 +202,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                 <button
                                     onClick={copyPin}
                                     className={cn(
-                                        "flex items-center gap-2 mx-auto px-4 h-8 rounded-full text-[10px] font-black uppercase tracking-wider transition-all",
+                                        "flex items-center gap-2 mx-auto px-4 h-8 rounded-full text-nano font-black uppercase tracking-wider transition-all",
                                         copied
                                             ? "bg-status-success/10 text-status-success border border-status-success/20"
                                             : "bg-bg-primary border border-border text-text-muted hover:text-text-primary"
@@ -215,10 +215,10 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
 
                             <div className="rounded-2xl bg-bg-primary border border-border/40 p-4 space-y-1">
                                 <p className="text-chip-label-sm text-text-muted">Lien de première connexion</p>
-                                <p className="text-[10px] font-mono text-accent-gold/80 break-all">
+                                <p className="text-nano font-mono text-accent-gold/80 break-all">
                                     /welcome-staff?pin={createdPin}&amp;name={encodeURIComponent(createdName)}
                                 </p>
-                                <p className="text-[9px] text-text-muted mt-1">
+                                <p className="text-nano text-text-muted mt-1">
                                     Transmettez ce lien + PIN par SMS ou en personne. Le collaborateur pourra changer son PIN à la première connexion.
                                 </p>
                             </div>

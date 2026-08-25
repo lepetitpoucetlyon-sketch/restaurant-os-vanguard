@@ -162,7 +162,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                 <div className="pt-4">
                     <Button 
                         className={cn(
-                            "w-full h-14 rounded-2xl font-black uppercase text-[11px] tracking-[0.25em] transition-all",
+                            "w-full h-14 rounded-2xl font-black uppercase text-micro tracking-[0.25em] transition-all",
                             formData.gdpr?.consented 
                                 ? "bg-accent hover:bg-surface-sidebar text-text-primary shadow-xl shadow-accent/10" 
                                 : "bg-bg-tertiary text-text-muted cursor-not-allowed border border-border"

@@ -29,12 +29,12 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
       >
         <div className="flex justify-between items-start mb-6 relative z-10">
           <div>
-            <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${
+            <h4 className={`text-nano font-black uppercase tracking-[0.2em] mb-1 ${
               auditStatus === 'valid' ? 'text-status-success' :
               auditStatus === 'invalid' ? 'text-status-danger' :
               'text-brand'
             }`}>Analyse Cryptographique du Registre</h4>
-            <p className="text-[10px] text-secondary font-medium">Authentification de l'intégrité de la chaîne de blocs (Protocole NF525).</p>
+            <p className="text-nano text-secondary font-medium">Authentification de l'intégrité de la chaîne de blocs (Protocole NF525).</p>
           </div>
           <AnimatePresence mode="wait">
             {auditStatus === 'valid' && (
@@ -54,7 +54,7 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
           <button
             onClick={onCheckAudit}
             disabled={!selectedInstanceId}
-            className="relative group overflow-hidden text-[10px] font-bold text-text-primary uppercase tracking-widest bg-surface-card px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
+            className="relative group overflow-hidden text-nano font-bold text-text-primary uppercase tracking-widest bg-surface-card px-6 py-3 rounded-xl border border-subtle transition-all disabled:opacity-30"
           >
             <span className="relative z-10">Lancer l'Audit Global</span>
             <div className="absolute inset-0 bg-gradient-to-r from-action-primary/0 via-white/5 to-action-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
@@ -79,7 +79,7 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
                   className="absolute left-[-20%] right-[-20%] h-[1px] bg-gradient-to-r from-transparent via-action-primary/50 to-transparent blur-[1px] z-10"
                 />
               </div>
-              <div className="flex items-center gap-3 text-[10px] text-brand font-black uppercase tracking-[0.3em] animate-pulse">
+              <div className="flex items-center gap-3 text-nano text-brand font-black uppercase tracking-[0.3em] animate-pulse">
                 Traçage des Sceaux...
               </div>
             </div>
@@ -96,17 +96,17 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
 
         {auditStatus === 'valid' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-            <div className="flex items-center gap-2 text-[10px] text-status-success font-black uppercase tracking-[0.2em]">
+            <div className="flex items-center gap-2 text-nano text-status-success font-black uppercase tracking-[0.2em]">
               <CheckCircle className="w-4 h-4" />
               Consensus Atteint : Intégrité 100%
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
-                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Sceaux Vérifiés</p>
+                <p className="text-nano text-secondary uppercase font-black tracking-widest">Sceaux Vérifiés</p>
                 <p className="text-sm font-black text-text-primary">{auditReport?.totalSeals ?? 0}</p>
               </div>
               <div className="bg-surface-card p-3 rounded-xl border border-border-subtle">
-                <p className="text-[8px] text-secondary uppercase font-black tracking-widest">Continuité de la Chaîne</p>
+                <p className="text-nano text-secondary uppercase font-black tracking-widest">Continuité de la Chaîne</p>
                 <p className="text-sm font-black text-text-primary">SÉCURISÉ</p>
               </div>
             </div>
@@ -115,8 +115,8 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
 
         {auditStatus === 'invalid' && (
           <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="p-4 bg-status-danger/10 border border-red-500/20 rounded-xl">
-            <p className="text-[10px] text-status-danger font-black uppercase tracking-tight">Violation du Protocole de Sécurité</p>
-            <p className="text-[8px] text-status-danger/70 mt-1 leading-relaxed">Lien cryptographique rompu. Échec de la vérification.</p>
+            <p className="text-nano text-status-danger font-black uppercase tracking-tight">Violation du Protocole de Sécurité</p>
+            <p className="text-nano text-status-danger/70 mt-1 leading-relaxed">Lien cryptographique rompu. Échec de la vérification.</p>
           </motion.div>
         )}
 
@@ -137,7 +137,7 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
         <button
           onClick={onGenerate}
           disabled={!selectedInstanceId || isGenerating || auditStatus !== 'valid'}
-          className={`w-full py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-4 transition-all duration-500 ${
+          className={`w-full py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-nano flex items-center justify-center gap-4 transition-all duration-500 ${
             !selectedInstanceId || isGenerating || auditStatus !== 'valid'
               ? 'bg-surface-card0 text-secondary cursor-not-allowed border border-border-subtle'
               : 'bg-surface-card text-primary hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-[0.98]'
@@ -155,7 +155,7 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
             </>
           )}
         </button>
-        <p className="text-center text-[8px] text-secondary font-black uppercase tracking-[0.3em] opacity-50">
+        <p className="text-center text-nano text-secondary font-black uppercase tracking-[0.3em] opacity-50">
           NF525 · Art. 286 I-3° bis CGI
         </p>
       </motion.div>

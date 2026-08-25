@@ -79,7 +79,7 @@ export function CardImprintStep({
         </button>
       </div>
 
-      <p className="text-center text-[10px] text-text-secondary">
+      <p className="text-center text-nano text-text-secondary">
         Paiement sécurisé par Stripe · PCI DSS Level 1
       </p>
     </div>

@@ -22,13 +22,13 @@ export function SecurityProtocolSection({
   return (
     <div className="space-y-8">
       <div className="space-y-6">
-        <h4 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+        <h4 className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
           <Shield className="w-4 h-4" />
           Security Protocol
         </h4>
         <div className="space-y-4">
           <div className="group">
-            <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
+            <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
               Nouveau code PIN (laisser vide pour conserver l&apos;actuel)
             </label>
             <div className="relative">
@@ -59,7 +59,7 @@ export function SecurityProtocolSection({
             </div>
           </div>
           <div className="group">
-            <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
+            <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
               Identity Avatar Relay
             </label>
             <div className="relative">

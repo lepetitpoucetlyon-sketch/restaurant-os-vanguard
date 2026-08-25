@@ -29,7 +29,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                 </div>
                 <div className="space-y-1">
                     <p className="text-sm font-serif italic">Aucun paramètre spécifique</p>
-                    <p className="text-[10px] uppercase tracking-widest opacity-50">Pour la section Configuration</p>
+                    <p className="text-nano uppercase tracking-widest opacity-50">Pour la section Configuration</p>
                 </div>
             </div>
         );
@@ -45,11 +45,11 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                     className="space-y-4 p-5 rounded-[24px] bg-bg-secondary/30 border border-border/50 hover:border-accent/30 transition-all group"
                 >
                     <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70 group-hover:text-accent-gold transition-colors">
+                        <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70 group-hover:text-accent-gold transition-colors">
                             {setting.label}
                         </label>
                         {setting.description && (
-                            <p className="text-[9px] text-text-muted italic leading-relaxed">
+                            <p className="text-nano text-text-muted italic leading-relaxed">
                                 {setting.description}
                             </p>
                         )}

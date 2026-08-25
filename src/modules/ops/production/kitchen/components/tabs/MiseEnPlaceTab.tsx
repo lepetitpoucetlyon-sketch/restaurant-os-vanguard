@@ -32,7 +32,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                     whileHover={{ scale: 1.05 }}
                     className="bg-success-soft dark:bg-success/10 px-5 py-2.5 rounded-xl border border-success/10"
                 >
-                    <span className="text-success font-bold text-[11px] uppercase tracking-wider">
+                    <span className="text-success font-bold text-micro uppercase tracking-wider">
                         {prepTasks.filter(t => t.isCompleted).length} / {prepTasks.length} Tâches Terminer
                     </span>
                 </motion.div>
@@ -42,12 +42,12 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                 {isLoading && prepTasks.length === 0 ? (
                     <div className="flex items-center justify-center py-16 text-text-muted gap-3">
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span className="text-[11px] font-bold uppercase tracking-widest">Chargement des tâches…</span>
+                        <span className="text-micro font-bold uppercase tracking-widest">Chargement des tâches…</span>
                     </div>
                 ) : !isLoading && prepTasks.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 text-text-muted text-center">
                         <CheckCircle2 strokeWidth={1} className="w-10 h-10 mb-4 opacity-30" />
-                        <p className="text-[11px] font-bold uppercase tracking-widest">Aucune tâche planifiée</p>
+                        <p className="text-micro font-bold uppercase tracking-widest">Aucune tâche planifiée</p>
                     </div>
                 ) : null}
                 <AnimatePresence mode="popLayout">
@@ -78,7 +78,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                                     <h4 className={cn("font-serif font-semibold text-xl transition-all", task.isCompleted ? "text-text-muted line-through" : "text-text-primary group-hover:text-accent")}>
                                         {task.name}
                                     </h4>
-                                    <div className="flex items-center gap-4 mt-2 text-text-muted text-[10px] font-bold uppercase tracking-widest">
+                                    <div className="flex items-center gap-4 mt-2 text-text-muted text-nano font-bold uppercase tracking-widest">
                                         <span className="bg-bg-tertiary dark:bg-bg-tertiary/50 px-2.5 py-1 rounded border border-border/40 text-text-primary font-mono">{task.quantity} {task.unit}</span>
                                         <span className="flex items-center gap-2">
                                             <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />

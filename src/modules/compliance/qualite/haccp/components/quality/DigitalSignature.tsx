@@ -110,7 +110,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                         <PenTool className="w-4 h-4 text-status-success" />
                         Signature Mobile
                     </h3>
-                    <p className="text-[10px] font-bold text-muted uppercase tracking-tighter mt-1">Certification HACCP • Nexus-Darwin 5</p>
+                    <p className="text-nano font-bold text-muted uppercase tracking-tighter mt-1">Certification HACCP • Nexus-Darwin 5</p>
                 </div>
                 <button 
                     onClick={clear}
@@ -134,7 +134,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                 />
                 {!hasSigned && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <p className="text-[10px] font-black text-muted uppercase tracking-widest italic">Signer ici</p>
+                        <p className="text-nano font-black text-muted uppercase tracking-widest italic">Signer ici</p>
                     </div>
                 )}
             </div>
@@ -157,7 +157,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                     onClick={handleSave}
                     disabled={!hasSigned || !signerName || isSaved}
                     className={cn(
-                        "w-full py-6 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all",
+                        "w-full py-6 rounded-2xl font-black uppercase text-nano tracking-widest transition-all",
                         isSaved ? "bg-status-success text-text-primary" : "bg-surface-sidebar text-text-primary hover:bg-surface-sidebar"
                     )}
                 >
@@ -169,7 +169,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                 </Button>
             </div>
             
-            <p className="text-[9px] text-center text-muted font-bold leading-relaxed px-4 italic">
+            <p className="text-nano text-center text-muted font-bold leading-relaxed px-4 italic">
                 La signature électronique apposée certifie la conformité de l'agréage et des relevés de température enregistrés.
             </p>
         </div>

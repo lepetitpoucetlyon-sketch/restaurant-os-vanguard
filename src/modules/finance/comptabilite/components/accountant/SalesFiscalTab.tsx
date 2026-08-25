@@ -54,7 +54,7 @@ export function SalesFiscalTab({ summary, selectedPeriod, onDownloadPack }: Sale
         </div>
         <div className="pt-2 border-t border-white/10 text-xs text-text-muted space-y-1">
           <div>Master Hash SHA-256 :</div>
-          <div className="font-mono text-[10px] text-text-secondary bg-slate-950 p-2 rounded-lg break-all">
+          <div className="font-mono text-nano text-text-secondary bg-slate-950 p-2 rounded-lg break-all">
             {summary.nf525.masterHashSha256}
           </div>
         </div>

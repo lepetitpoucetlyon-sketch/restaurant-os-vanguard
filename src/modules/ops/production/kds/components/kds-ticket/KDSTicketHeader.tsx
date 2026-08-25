@@ -35,7 +35,7 @@ export function KDSTicketHeader({
 
             {/* kds-3: Allergen banner */}
             {allergens.length > 0 && (
-                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-status-danger/10 border border-red-500/40 text-status-danger text-[10px] font-black uppercase tracking-wider animate-pulse">
+                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-status-danger/10 border border-red-500/40 text-status-danger text-nano font-black uppercase tracking-wider animate-pulse">
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
                     <span>ALLERGIE: {allergens.join(', ')}</span>
                 </div>
@@ -63,7 +63,7 @@ export function KDSTicketHeader({
 
                     {/* kds-1: Live timer badge */}
                     <div className={cn(
-                        "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-mono text-[11px] font-black border border-current/20 bg-surface-card/70 backdrop-blur-sm shadow-sm shrink-0 transition-colors duration-300",
+                        "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-mono text-micro font-black border border-current/20 bg-surface-card/70 backdrop-blur-sm shadow-sm shrink-0 transition-colors duration-300",
                         timerColorClass(elapsedSeconds)
                     )}>
                         <Clock className="w-3 h-3" strokeWidth={2.5} />
@@ -83,12 +83,12 @@ export function KDSTicketHeader({
                     )}>
                         <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} strokeWidth={2.5} />
                         <span className="text-xs font-black pt-0.5">
-                            {elapsedMinutes}<span className="text-[9px] opacity-70 ml-0.5 font-normal">MIN</span>
+                            {elapsedMinutes}<span className="text-nano opacity-70 ml-0.5 font-normal">MIN</span>
                         </span>
                     </div>
 
                     <div className="flex items-center gap-3 min-w-0 justify-end h-full">
-                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-secondary truncate text-right leading-none pt-0.5">
+                        <span className="text-nano font-black uppercase tracking-[0.15em] text-secondary truncate text-right leading-none pt-0.5">
                             {ticket.serverName}
                         </span>
                         <div className="w-8 h-8 rounded-full bg-surface-card flex items-center justify-center border border-subtle shrink-0 shadow-sm">

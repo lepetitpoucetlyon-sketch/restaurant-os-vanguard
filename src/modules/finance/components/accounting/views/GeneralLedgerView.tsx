@@ -22,7 +22,7 @@ export function GeneralLedgerView() {
             <div className="w-80 bg-bg-secondary rounded-2xl border border-border flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-border">
                     <h3 className="text-sm font-bold text-text-primary">Comptes Mouvementés</h3>
-                    <p className="text-[10px] text-text-muted">{accountsWithMovements.length} comptes</p>
+                    <p className="text-nano text-text-muted">{accountsWithMovements.length} comptes</p>
                 </div>
                 <div className="flex-1 overflow-auto elegant-scrollbar">
                     {accountsWithMovements.map(account => (
@@ -57,7 +57,7 @@ export function GeneralLedgerView() {
                                     <h2 className="text-xl font-bold text-text-primary">{selectedAccount.name}</h2>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[10px] text-text-muted uppercase tracking-widest">Solde</p>
+                                    <p className="text-nano text-text-muted uppercase tracking-widest">Solde</p>
                                      <p className={cn("text-2xl font-black font-mono", (selectedAccount.balanceInMicrounits ?? selectedAccount.balanceInCents) >= 0 ? "text-success" : "text-error")}>
                                         {fmu(selectedAccount.balanceInMicrounits, selectedAccount.balanceInCents)}
                                     </p>
@@ -68,12 +68,12 @@ export function GeneralLedgerView() {
                             <table className="w-full">
                                 <thead>
                                     <tr className="border-b border-border">
-                                        <th className="text-left py-3 text-[10px] font-black text-text-muted uppercase">Date</th>
-                                        <th className="text-left py-3 text-[10px] font-black text-text-muted uppercase">Pièce</th>
-                                        <th className="text-left py-3 text-[10px] font-black text-text-muted uppercase">Libellé</th>
-                                        <th className="text-right py-3 text-[10px] font-black text-text-muted uppercase">Débit</th>
-                                        <th className="text-right py-3 text-[10px] font-black text-text-muted uppercase">Crédit</th>
-                                        <th className="text-right py-3 text-[10px] font-black text-text-muted uppercase">Solde</th>
+                                        <th className="text-left py-3 text-nano font-black text-text-muted uppercase">Date</th>
+                                        <th className="text-left py-3 text-nano font-black text-text-muted uppercase">Pièce</th>
+                                        <th className="text-left py-3 text-nano font-black text-text-muted uppercase">Libellé</th>
+                                        <th className="text-right py-3 text-nano font-black text-text-muted uppercase">Débit</th>
+                                        <th className="text-right py-3 text-nano font-black text-text-muted uppercase">Crédit</th>
+                                        <th className="text-right py-3 text-nano font-black text-text-muted uppercase">Solde</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-border/50">

@@ -112,7 +112,7 @@ export function PlanningDashboard() {
             <div className="bg-white/80 dark:bg-bg-primary/80 backdrop-blur-2xl px-6 py-6 border-b border-border/50 sticky top-0 z-40">
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-baseline gap-3">
-                        <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Effectifs</span>
+                        <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Effectifs</span>
                         <h1 className="font-serif font-black text-[34px] leading-none tracking-[-0.02em] text-text-primary">Planning</h1>
                         {!isMobile && (
                              <p className="text-xs text-text-muted italic ml-2">Supervision RH &amp; Paie</p>
@@ -161,7 +161,7 @@ export function PlanningDashboard() {
                                     isSelected ? "bg-accent-gold text-text-on-primary border-transparent shadow-xl scale-105" : "bg-bg-tertiary/50 text-text-muted border-border"
                                 )}
                             >
-                                <span className="text-[11px] font-medium uppercase tracking-wide opacity-70 mb-1">{format(day, "EEE", { locale: fr })}</span>
+                                <span className="text-micro font-medium uppercase tracking-wide opacity-70 mb-1">{format(day, "EEE", { locale: fr })}</span>
                                 <span className="text-xl font-serif italic font-black tabular-nums">{format(day, "d")}</span>
                             </button>
                         );
@@ -193,13 +193,13 @@ export function PlanningDashboard() {
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold text-sm text-text-primary">{user.name}</h4>
-                                                        <p className="text-[11px] font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
+                                                        <p className="text-micro font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
                                                     </div>
                                                 </div>
                                                 {shift ? (
                                                     <div className="text-right">
                                                         <p className="text-sm font-mono font-bold text-text-primary">{shift.startTime}—{shift.endTime}</p>
-                                                        <span className="font-serif italic text-[11px] tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
+                                                        <span className="font-serif italic text-micro tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
                                                     </div>
                                                 ) : (
                                                     <div className="w-8 h-8 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted">
@@ -252,13 +252,13 @@ export function PlanningDashboard() {
                                                     </div>
                                                     <div>
                                                         <h4 className="text-xl font-serif font-black italic text-text-primary">{user.name}</h4>
-                                                        <p className="text-[11px] font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
+                                                        <p className="text-micro font-medium tracking-wide text-accent-gold/80 uppercase">{t(`planning.roles.${user.role}`)}</p>
                                                     </div>
                                                 </div>
                                                 {shift ? (
                                                     <div className="text-right">
                                                         <p className="text-lg font-mono font-bold tracking-tighter text-text-primary">{shift.startTime}—{shift.endTime}</p>
-                                                        <span className="font-serif italic text-[11px] tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
+                                                        <span className="font-serif italic text-micro tracking-wide text-text-muted/80 uppercase">{shift.position ?? ''}</span>
                                                     </div>
                                                 ) : (
                                                     <div className="w-10 h-10 rounded-full border border-dashed border-border-default flex items-center justify-center text-text-muted/40">
@@ -320,8 +320,8 @@ export function PlanningDashboard() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/80 px-2">Service</label>
-                        <div className="grid grid-cols-3 gap-2">
+                        <label className="font-serif italic text-micro uppercase tracking-[0.24em] text-text-muted/80 px-2">Service</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {['lunch', 'evening', 'double'].map(type => (
                                 <button
                                     key={type}

@@ -76,7 +76,7 @@ export function RoleCategoriesGrid({
                                                         {feature.label}
                                                     </span>
                                                     {feature.description && (
-                                                        <span className="text-[10px] text-text-muted/70 leading-tight mt-0.5 whitespace-normal">
+                                                        <span className="text-nano text-text-muted/70 leading-tight mt-0.5 whitespace-normal">
                                                             {feature.description}
                                                         </span>
                                                     )}

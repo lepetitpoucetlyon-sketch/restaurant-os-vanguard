@@ -90,7 +90,7 @@ export function PayrollTab({ isManager, payrollMonth, setPayrollMonth, payrollRo
                 </table>
             </div>
 
-            <p className="text-[11px] text-text-muted">
+            <p className="text-micro text-text-muted">
                 Estimation brute — ne tient pas compte des pauses, des heures supp différenciées (36–43h +25%, 44h+ +50%), des primes HCR ni des absences. Utiliser PrepaieBuilder pour l&apos;export officiel.
             </p>
         </section>

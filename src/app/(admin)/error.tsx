@@ -45,7 +45,7 @@ export default function AdminError({
               {error.message}
             </p>
             {error.digest && (
-              <p className="text-[10px] font-mono text-gray-500">
+              <p className="text-nano font-mono text-gray-500">
                 Digest: {error.digest}
               </p>
             )}

@@ -73,10 +73,10 @@ const labelVariants = cva(
   {
     variants: {
       size: {
-        compact: "text-[8px]",
-        default: "text-[9px]",
-        large:   "text-[10px]",
-        minimal: "text-[8px]",
+        compact: "text-nano",
+        default: "text-nano",
+        large:   "text-nano",
+        minimal: "text-nano",
       },
     },
     defaultVariants: { size: "default" },
@@ -196,7 +196,7 @@ function StatCardBase({
         {trend && typeof trend === "object" && (
           <div
             className={cn(
-              "flex items-center gap-1 text-[10px] font-bold",
+              "flex items-center gap-1 text-nano font-bold",
               trend.direction === "up"      && "text-status-success",
               trend.direction === "down"    && "text-status-danger",
               trend.direction === "neutral" && "text-text-muted"
@@ -213,7 +213,7 @@ function StatCardBase({
         <p className={valueVariants({ size: variant })}>{value}</p>
         <p className={labelVariants({ size: variant })}>{label}</p>
         {trend && typeof trend === "string" && (
-          <p className="text-[9px] font-medium text-text-muted mt-1 tracking-tighter uppercase">{trend}</p>
+          <p className="text-nano font-medium text-text-muted mt-1 tracking-tighter uppercase">{trend}</p>
         )}
       </div>
     </motion.div>

@@ -124,9 +124,9 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                 <div className="p-12 pb-8 flex items-end justify-between relative z-10 shrink-0 border-b border-border/30">
                     <div>
                         <div className="flex items-center gap-3 mb-4">
-                            <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em]">Architecture de Devis</span>
+                            <span className="text-nano font-black text-accent-gold uppercase tracking-[0.4em]">Architecture de Devis</span>
                             <div className="w-1 h-1 rounded-full bg-border" />
-                            <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">Protocol v4.2</span>
+                            <span className="text-nano font-black text-text-muted uppercase tracking-[0.4em]">Protocol v4.2</span>
                         </div>
                         <h2 className="text-5xl font-serif font-black text-text-primary italic tracking-tighter leading-none">Nouveau Devis</h2>
                     </div>

@@ -97,7 +97,7 @@ export function ReceptionMarchandises() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Réception Marchandises</h2>
-                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
+                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@ export function ReceptionMarchandises() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setIsAdding(true)}
-                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-[10px] uppercase tracking-widest shadow-2xl flex items-center gap-2"
+                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-nano uppercase tracking-widest shadow-2xl flex items-center gap-2"
                 >
                     <Plus size={16} />
                     Nouvelle Réception
@@ -146,7 +146,7 @@ export function ReceptionMarchandises() {
                             <h3 className="text-lg font-serif italic font-black text-text-primary mb-1 truncate">
                                 {log.productName}
                             </h3>
-                            <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-6 border-b border-border pb-4">
+                            <div className="text-nano font-black text-text-muted uppercase tracking-widest mb-6 border-b border-border pb-4">
                                 FOURNISSEUR: {log.supplier}
                             </div>
 
@@ -156,7 +156,7 @@ export function ReceptionMarchandises() {
                                         <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <Thermometer size={14} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">TEMP.</span>
+                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">TEMP.</span>
                                     </div>
                                     <span className={cn(
                                         "text-sm font-black",
@@ -171,7 +171,7 @@ export function ReceptionMarchandises() {
                                         <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <ShieldCheck size={14} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">INTÉGRITÉ</span>
+                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">INTÉGRITÉ</span>
                                     </div>
                                     <StatusBadge 
                                         status={log.integrityStatus === 'conforme' ? 'success' : 'error'} 
@@ -179,7 +179,7 @@ export function ReceptionMarchandises() {
                                     />
                                 </div>
 
-                                <div className="pt-4 flex items-center justify-between text-[8px] font-black uppercase tracking-[0.2em] text-text-muted border-t border-border">
+                                <div className="pt-4 flex items-center justify-between text-nano font-black uppercase tracking-[0.2em] text-text-muted border-t border-border">
                                     <span>Par: {log.user}</span>
                                     <span>{new Date(log.receptionDate).toLocaleDateString()}</span>
                                 </div>
@@ -225,7 +225,7 @@ export function ReceptionMarchandises() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Fournisseur</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Fournisseur</label>
                                     <input
                                         type="text"
                                         value={formData.supplier}
@@ -235,7 +235,7 @@ export function ReceptionMarchandises() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Produit</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Produit</label>
                                     <input
                                         type="text"
                                         value={formData.productName}
@@ -248,7 +248,7 @@ export function ReceptionMarchandises() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Température (°C)</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Température (°C)</label>
                                     <input
                                         type="number"
                                         step="0.1"
@@ -258,7 +258,7 @@ export function ReceptionMarchandises() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">DLC / DLUO</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">DLC / DLUO</label>
                                     <input
                                         type="date"
                                         value={formData.expirationDate}
@@ -269,7 +269,7 @@ export function ReceptionMarchandises() {
                             </div>
 
                             <div className="flex flex-col gap-3">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1 text-center">État du Conditionnement</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">État du Conditionnement</label>
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         onClick={() => setFormData({ ...formData, integrityStatus: 'conforme' })}

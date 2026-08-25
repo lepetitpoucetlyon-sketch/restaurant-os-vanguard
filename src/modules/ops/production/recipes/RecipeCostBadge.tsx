@@ -76,7 +76,7 @@ export function RecipeCostBadge({ recipe, className, compact = false }: RecipeCo
         ) : (
           <TrendingUp className={cn('w-3 h-3', colorClass)} strokeWidth={2} />
         )}
-        <span className={cn('text-[10px] font-black uppercase tracking-wider', colorClass)}>
+        <span className={cn('text-nano font-black uppercase tracking-wider', colorClass)}>
           Coût: {formatMicrounits(foodCostMu)}
           {costPct != null && ` (${costPct.toFixed(0)}%)`}
         </span>
@@ -95,7 +95,7 @@ export function RecipeCostBadge({ recipe, className, compact = false }: RecipeCo
           ) : (
             <TrendingUp className={cn('w-3.5 h-3.5', colorClass)} strokeWidth={2} />
           )}
-          <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+          <span className="text-nano font-black text-text-muted uppercase tracking-widest">
             Coût matière
           </span>
         </div>
@@ -106,7 +106,7 @@ export function RecipeCostBadge({ recipe, className, compact = false }: RecipeCo
           {costPct != null && (
             <span
               className={cn(
-                'px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border',
+                'px-2 py-0.5 rounded-md text-nano font-black uppercase tracking-wider border',
                 bgClass,
                 colorClass,
                 borderClass,
@@ -121,10 +121,10 @@ export function RecipeCostBadge({ recipe, className, compact = false }: RecipeCo
       {/* Margin row */}
       {mrgPct != null && (
         <div className="flex items-center justify-between pt-2 border-t border-border/30">
-          <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+          <span className="text-nano font-black text-text-muted uppercase tracking-widest">
             Marge brute
           </span>
-          <span className={cn('text-[11px] font-mono font-black', colorClass)}>
+          <span className={cn('text-micro font-mono font-black', colorClass)}>
             {mrgPct.toFixed(0)}%
           </span>
         </div>
@@ -135,11 +135,11 @@ export function RecipeCostBadge({ recipe, className, compact = false }: RecipeCo
         <div className="flex items-center justify-between pt-2 border-t border-border/30">
           <div className="flex items-center gap-1.5">
             <Info className="w-3 h-3 text-text-muted" strokeWidth={2} />
-            <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">
+            <span className="text-nano font-black text-text-muted uppercase tracking-widest">
               Prix mini (30%)
             </span>
           </div>
-          <span className="text-[11px] font-mono font-black text-text-primary">
+          <span className="text-micro font-mono font-black text-text-primary">
             {formatMicrounits(minPrice)}
           </span>
         </div>

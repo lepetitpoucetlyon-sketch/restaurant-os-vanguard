@@ -33,20 +33,20 @@ export function DUERPSection() {
                             <div className="flex items-center gap-6 mt-4">
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">MAJ : {String(duerp?.updatedAt || 'N/A')}</span>
+                                    <span className="text-nano font-mono font-bold">MAJ : {String(duerp?.updatedAt || 'N/A')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-text-muted">
                                     <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[10px] font-mono font-bold">Révision : {String(duerp?.validUntil || 'N/A')}</span>
+                                    <span className="text-nano font-mono font-bold">Révision : {String(duerp?.validUntil || 'N/A')}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="flex gap-3">
-                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-[10px] uppercase tracking-widest">
+                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-nano uppercase tracking-widest">
                             <Eye strokeWidth={1.5} className="w-4 h-4 mr-2" /> Consulter
                         </Button>
-                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-[10px] uppercase tracking-widest">
+                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-nano uppercase tracking-widest">
                             <Download strokeWidth={1.5} className="w-4 h-4 mr-2" /> PDF
                         </Button>
                     </div>
@@ -58,7 +58,7 @@ export function DUERPSection() {
                 <div className="flex items-start gap-4">
                     <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-brand mt-0.5 shrink-0" />
                     <div className="bg-bg-tertiary/30 rounded-2xl p-6 border border-border/50">
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
                         <p className="text-sm text-brand dark:text-brand leading-relaxed">Document validé et archivé dans le coffre-fort numérique Nexus.</p>
                     </div>
                 </div>
@@ -66,14 +66,14 @@ export function DUERPSection() {
 
             {/* Risk Evaluation by Zone */}
             <div className="space-y-4">
-                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
+                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
                     <AlertTriangle strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Évaluation des Risques par Zone
                 </h3>
                 <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
                     <table className="w-full text-sm text-left">
                         <thead>
-                            <tr className="bg-bg-tertiary/30 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
+                            <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
                                 <th className="px-8 py-5">Zone</th>
                                 <th className="px-8 py-5">Risques identifiés</th>
                                 <th className="px-8 py-5">Niveau</th>
@@ -88,7 +88,7 @@ export function DUERPSection() {
                                     <td className="px-8 py-5">
                                         <div className="flex flex-wrap gap-2">
                                             {cat.risks.map((risk, j) => (
-                                                <span key={j} className="px-2.5 py-1 rounded-lg bg-bg-tertiary text-[10px] font-bold text-text-muted">{risk}</span>
+                                                <span key={j} className="px-2.5 py-1 rounded-lg bg-bg-tertiary text-nano font-bold text-text-muted">{risk}</span>
                                             ))}
                                         </div>
                                     </td>
@@ -111,7 +111,7 @@ export function DUERPSection() {
 
             {/* Revision History */}
             <div className="space-y-4">
-                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
+                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
                     <History strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Historique des Révisions
                 </h3>
@@ -123,12 +123,12 @@ export function DUERPSection() {
                     ].map((rev, i) => (
                         <div key={i} className="flex items-start gap-6 border-b border-border/50 pb-6 last:border-0 last:pb-0">
                             <div className="w-14 h-14 bg-bg-tertiary rounded-xl flex flex-col items-center justify-center border border-border shrink-0">
-                                <span className="text-[10px] font-black text-accent uppercase">{rev.version}</span>
+                                <span className="text-nano font-black text-accent uppercase">{rev.version}</span>
                             </div>
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-1">
                                     <span className="font-serif font-semibold text-text-primary">{rev.date}</span>
-                                    <span className="text-[9px] font-black text-text-muted uppercase tracking-widest flex items-center gap-1">
+                                    <span className="text-nano font-black text-text-muted uppercase tracking-widest flex items-center gap-1">
                                         <Users strokeWidth={1.5} className="w-3 h-3" /> {rev.author}
                                     </span>
                                 </div>

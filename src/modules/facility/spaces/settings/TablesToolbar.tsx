@@ -53,7 +53,7 @@ export function TablesToolbar({
                             </span>
                             <ChevronDown className="w-3 h-3 text-text-muted" />
                         </div>
-                        <p className="text-[10px] text-text-muted font-bold tracking-wider mt-0.5">8 UNITÉS • 30 PAX</p>
+                        <p className="text-nano text-text-muted font-bold tracking-wider mt-0.5">8 UNITÉS • 30 PAX</p>
                     </div>
                 </button>
 
@@ -67,7 +67,7 @@ export function TablesToolbar({
                 <h1 className="font-serif text-3xl italic leading-none text-text-primary whitespace-nowrap">
                     Configuration <span className="text-accent">de Salle</span>
                 </h1>
-                <p className="text-[9px] font-bold text-text-muted uppercase tracking-[0.3em] mt-1">
+                <p className="text-nano font-bold text-text-muted uppercase tracking-[0.3em] mt-1">
                     ÉDITEUR D'AGENCEMENT INTELLIGENT
                 </p>
             </div>
@@ -78,7 +78,7 @@ export function TablesToolbar({
                     <button
                         onClick={() => setActiveTab('zones')}
                         className={cn(
-                            "flex-1 md:flex-none flex items-center gap-2 px-6 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all",
+                            "flex-1 md:flex-none flex items-center gap-2 px-6 py-2.5 rounded-full text-nano font-bold tracking-widest transition-all",
                             activeTab === 'zones' || activeTab === 'tables'
                                 ? "bg-text-primary text-bg-primary shadow-lg"
                                 : "text-text-muted hover:text-text-primary"
@@ -90,7 +90,7 @@ export function TablesToolbar({
                     <button
                         onClick={onAdd}
                         className={cn(
-                            "flex-1 md:flex-none flex items-center gap-2 px-6 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all",
+                            "flex-1 md:flex-none flex items-center gap-2 px-6 py-2.5 rounded-full text-nano font-bold tracking-widest transition-all",
                             isEditing
                                 ? "bg-text-primary text-bg-primary shadow-lg"
                                 : "text-text-muted hover:text-text-primary"
@@ -104,12 +104,12 @@ export function TablesToolbar({
                 <div className="flex items-center gap-3 w-full md:w-auto justify-center">
                     <button className="px-5 py-3 bg-bg-primary hover:bg-bg-tertiary text-text-primary border border-border rounded-full flex items-center gap-2 transition-all">
                         <Sparkles className="w-3 h-3 text-accent" />
-                        <span className="text-[10px] font-bold tracking-widest uppercase">VUE OPTIMISÉE</span>
+                        <span className="text-nano font-bold tracking-widest uppercase">VUE OPTIMISÉE</span>
                     </button>
 
                     <div className="flex items-center p-1 bg-bg-primary rounded-full border border-border relative">
-                        <button className="px-4 py-2 bg-text-primary rounded-full text-bg-primary text-[10px] font-bold z-10">2D</button>
-                        <button className="px-4 py-2 text-text-muted text-[10px] font-bold hover:text-text-primary transition-colors z-10">3D</button>
+                        <button className="px-4 py-2 bg-text-primary rounded-full text-bg-primary text-nano font-bold z-10">2D</button>
+                        <button className="px-4 py-2 text-text-muted text-nano font-bold hover:text-text-primary transition-colors z-10">3D</button>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@ export function TablesToolbar({
                 <div className="flex items-center gap-3 hidden md:flex">
                     <div className="px-4 py-2 bg-status-success/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
-                        <span className="text-[9px] font-bold text-status-success tracking-wider uppercase">SYNC ACTIVE</span>
+                        <span className="text-nano font-bold text-status-success tracking-wider uppercase">SYNC ACTIVE</span>
                     </div>
 
                     <button className="w-10 h-10 rounded-full bg-bg-primary border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-all">
@@ -128,7 +128,7 @@ export function TablesToolbar({
                     <button
                         onClick={onSave}
                         disabled={isSaving}
-                        className="px-6 py-3 bg-text-primary hover:bg-text-secondary text-bg-primary rounded-full text-[10px] font-bold tracking-widest transition-all shadow-lg flex items-center gap-2"
+                        className="px-6 py-3 bg-text-primary hover:bg-text-secondary text-bg-primary rounded-full text-nano font-bold tracking-widest transition-all shadow-lg flex items-center gap-2"
                     >
                         {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
                         HOMOLOGUER

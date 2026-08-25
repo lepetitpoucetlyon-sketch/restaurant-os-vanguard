@@ -40,11 +40,11 @@ export class ErrorBoundary extends Component<Props, State> {
                             <p className="text-text-muted text-sm uppercase tracking-widest font-bold">L'application a rencontré un problème inattendu.</p>
                         </div>
                         <div className="p-4 bg-bg-tertiary rounded-xl text-left overflow-auto max-h-32">
-                            <code className="text-[10px] text-error font-mono">{this.state.error?.message}</code>
+                            <code className="text-nano text-error font-mono">{this.state.error?.message}</code>
                         </div>
                         <Button
                             onClick={() => window.location.reload()}
-                            className="w-full bg-accent hover:bg-surface-sidebar text-text-primary h-12 rounded-xl font-black text-[11px] uppercase tracking-[0.2em]"
+                            className="w-full bg-accent hover:bg-surface-sidebar text-text-primary h-12 rounded-xl font-black text-micro uppercase tracking-[0.2em]"
                         >
                             <RefreshCcw className="w-4 h-4 mr-3" />
                             Recharger l'application

@@ -95,14 +95,14 @@ export default function IntegrationSettings() {
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Neural Access Keys
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Global Secret Management</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Global Secret Management</p>
                     </div>
                 </div>
 
                 <div className="space-y-6 relative z-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-3">
-                            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1 group-hover:text-accent transition-colors">Public Identifier</label>
+                            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1 group-hover:text-accent transition-colors">Public Identifier</label>
                             <div className="relative">
                                 <input
                                     type={showSecrets ? 'text' : 'password'}
@@ -120,7 +120,7 @@ export default function IntegrationSettings() {
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Cryptographic Secret</label>
+                            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Cryptographic Secret</label>
                             <input
                                 type={showSecrets ? 'text' : 'password'}
                                 value={localConfig.stripeSecretKey}
@@ -130,7 +130,7 @@ export default function IntegrationSettings() {
                         </div>
                     </div>
                     <div className="space-y-3 pt-2">
-                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Webhook Signature Secret</label>
+                        <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Webhook Signature Secret</label>
                         <input
                             type={showSecrets ? 'text' : 'password'}
                             value={localConfig.stripeWebhookSecret}
@@ -159,7 +159,7 @@ export default function IntegrationSettings() {
                                 <h3 className="text-xl font-serif text-text-primary uppercase tracking-tight italic">
                                     {category}
                                 </h3>
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">External Node Bridge</p>
+                                <p className="text-nano font-bold text-text-muted uppercase tracking-widest">External Node Bridge</p>
                             </div>
                         </div>
 
@@ -193,7 +193,7 @@ export default function IntegrationSettings() {
                                                 </div>
                                                 <div>
                                                     <p className="font-serif text-text-primary uppercase tracking-tight text-lg italic">{meta.name}</p>
-                                                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{meta.description}</p>
+                                                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{meta.description}</p>
                                                 </div>
                                             </div>
                                             <div className="flex flex-col items-end gap-1.5">
@@ -205,7 +205,7 @@ export default function IntegrationSettings() {
                                                             className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20"
                                                         >
                                                             <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                                                            <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Linked</span>
+                                                            <span className="text-nano font-bold text-accent uppercase tracking-widest">Linked</span>
                                                         </motion.div>
                                                     )}
                                                 </AnimatePresence>
@@ -219,7 +219,7 @@ export default function IntegrationSettings() {
                                                             title="Changement en attente de sauvegarde"
                                                         >
                                                             <div className="w-1.5 h-1.5 rounded-full bg-status-warning" />
-                                                            <span className="text-[8px] font-bold text-status-warning uppercase tracking-widest">Non sauvegardé</span>
+                                                            <span className="text-nano font-bold text-status-warning uppercase tracking-widest">Non sauvegardé</span>
                                                         </motion.div>
                                                     )}
                                                 </AnimatePresence>
@@ -230,7 +230,7 @@ export default function IntegrationSettings() {
                                             <button
                                                 onClick={() => toggleConnection(meta.id)}
                                                 className={cn(
-                                                    "flex-1 py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-500 border",
+                                                    "flex-1 py-4 rounded-xl font-bold text-nano uppercase tracking-widest transition-all duration-500 border",
                                                     integration.isActive
                                                         ? "bg-bg-tertiary border-border text-text-muted hover:bg-status-danger/10 hover:text-status-danger hover:border-rose-500/20"
                                                         : "bg-accent text-bg-primary border-accent hover:brightness-110 shadow-lg"
@@ -274,12 +274,12 @@ export default function IntegrationSettings() {
                             <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                                 Neural Signals (Webhooks)
                             </h3>
-                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Inbound & Outbound Data Projections</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Inbound & Outbound Data Projections</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20">
                         <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                        <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Active Dispatch</span>
+                        <span className="text-nano font-bold text-accent uppercase tracking-widest">Active Dispatch</span>
                     </div>
                 </div>
 
@@ -290,7 +290,7 @@ export default function IntegrationSettings() {
                                 <div className={cn("w-3 h-3 rounded-full shadow-[0_0_10px_currentcolor]", webhook.isActive ? "text-accent" : "text-text-muted")} />
                                 <div>
                                     <p className={cn("text-xs font-bold uppercase tracking-[0.2em] mb-1", webhook.isActive ? "text-accent" : "text-text-muted")}>{webhook.event}</p>
-                                    <p className="text-[10px] text-text-muted group-hover:text-text-primary transition-colors">{webhook.url}</p>
+                                    <p className="text-nano text-text-muted group-hover:text-text-primary transition-colors">{webhook.url}</p>
                                 </div>
                             </div>
                             <button

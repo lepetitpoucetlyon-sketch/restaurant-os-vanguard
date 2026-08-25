@@ -23,7 +23,7 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
       >
         <div className="text-center pb-2 mb-2 border-b-2 border-black px-4 pt-4">
           <p className="text-[5px] uppercase tracking-widest text-gray-500 mb-0.5">Direction Générale des Finances Publiques</p>
-          <p className="text-[9px] font-bold uppercase tracking-tight leading-tight">Attestation Individuelle de Conformité</p>
+          <p className="text-nano font-bold uppercase tracking-tight leading-tight">Attestation Individuelle de Conformité</p>
           <p className="text-[5.5px] italic text-gray-600">Art. 286, I-3° bis du CGI · Réf. BOI-LETTRE-000242</p>
         </div>
 

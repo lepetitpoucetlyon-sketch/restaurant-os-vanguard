@@ -69,11 +69,11 @@ export function TipPoolManager() {
                 <div key={p.employeeId} className="p-3 rounded-2xl bg-surface-bg border border-border-default flex items-center justify-between">
                   <div>
                     <span className="font-bold text-xs text-text-primary">{p.name}</span>
-                    <p className="text-[10px] text-text-muted">{p.hoursWorked}h travaillées · {p.coversServed} couverts</p>
+                    <p className="text-nano text-text-muted">{p.hoursWorked}h travaillées · {p.coversServed} couverts</p>
                   </div>
                   <div className="text-right">
                     <span className="font-mono font-bold text-sm text-action-primary">{formatCurrency(amount)}</span>
-                    <span className="text-[10px] text-text-muted block">{p.sharePercent}%</span>
+                    <span className="text-nano text-text-muted block">{p.sharePercent}%</span>
                   </div>
                 </div>
               );

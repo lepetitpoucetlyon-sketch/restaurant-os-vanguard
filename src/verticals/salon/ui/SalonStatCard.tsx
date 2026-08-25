@@ -83,7 +83,7 @@ export function SalonStatCard({
 
         {trend && typeof trend === 'object' && (
           <div className={cn(
-            "flex items-center gap-1 text-[10px] font-semibold px-2 py-1 rounded-full",
+            "flex items-center gap-1 text-nano font-semibold px-2 py-1 rounded-full",
             trend.direction === 'up'      && "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
             trend.direction === 'down'    && "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400",
             trend.direction === 'neutral' && "bg-surface-card text-text-muted"
@@ -104,11 +104,11 @@ export function SalonStatCard({
         >
           {value}
         </p>
-        <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.25em] mt-1.5">
+        <p className="text-nano font-black text-text-muted uppercase tracking-[0.25em] mt-1.5">
           {label}
         </p>
         {trend && typeof trend === 'string' && (
-          <p className="text-[9px] font-medium text-text-muted mt-1 italic">{trend}</p>
+          <p className="text-nano font-medium text-text-muted mt-1 italic">{trend}</p>
         )}
       </div>
     </motion.div>

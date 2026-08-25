@@ -59,7 +59,7 @@ export function MenuCategorySection({
                             <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                                 Category Hierarchy
                             </h3>
-                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{categories.length} Operational Nodes Configured</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{categories.length} Operational Nodes Configured</p>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@ export function MenuCategorySection({
                         whileHover={{ scale: 1.05, x: -8 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={addCategory}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 px-8 py-3 bg-text-primary text-bg-primary rounded-2xl font-bold uppercase text-[10px] tracking-widest shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 px-8 py-3 bg-text-primary text-bg-primary rounded-2xl font-bold uppercase text-nano tracking-widest shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
                     >
                         <Plus className="w-4 h-4" />
                         Initialize
@@ -112,7 +112,7 @@ export function MenuCategorySection({
                             </div>
                             <div className="flex-1">
                                 <p className="font-serif text-text-primary uppercase tracking-tight text-lg italic">{cat.name}</p>
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{cat.productCount} Linked Products</p>
+                                <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{cat.productCount} Linked Products</p>
                             </div>
                             <div className="flex items-center gap-4">
                                 <button
@@ -154,7 +154,7 @@ export function MenuCategorySection({
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Compliance Biomatrix
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Active Allergen Shield Enforcement</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Active Allergen Shield Enforcement</p>
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@ export function MenuCategorySection({
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3 + (idx * 0.03) }}
                             whileHover={{ scale: 1.1 }}
-                            className="px-6 py-3 bg-bg-primary text-text-primary rounded-2xl text-[10px] font-bold uppercase tracking-widest border border-border hover:border-accent hover:text-accent cursor-crosshair transition-all shadow-sm"
+                            className="px-6 py-3 bg-bg-primary text-text-primary rounded-2xl text-nano font-bold uppercase tracking-widest border border-border hover:border-accent hover:text-accent cursor-crosshair transition-all shadow-sm"
                         >
                             {allergen}
                         </motion.span>

@@ -158,7 +158,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl">
-          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider block mb-1">
+          <span className="text-micro font-semibold text-text-muted uppercase tracking-wider block mb-1">
             Parc Matériel
           </span>
           <div className="flex items-baseline gap-2">
@@ -172,7 +172,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl">
-          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider block mb-1">
+          <span className="text-micro font-semibold text-text-muted uppercase tracking-wider block mb-1">
             Incidents / Pannes
           </span>
           <div className="flex items-baseline gap-2">
@@ -188,7 +188,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl">
-          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider block mb-1">
+          <span className="text-micro font-semibold text-text-muted uppercase tracking-wider block mb-1">
             Valeur Parc HT
           </span>
           <div className="flex items-baseline gap-2">
@@ -203,7 +203,7 @@ export function EquipmentHubView({ tenantId }: EquipmentHubViewProps) {
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl">
-          <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider block mb-1">
+          <span className="text-micro font-semibold text-text-muted uppercase tracking-wider block mb-1">
             Garanties J-30
           </span>
           <div className="flex items-baseline gap-2">

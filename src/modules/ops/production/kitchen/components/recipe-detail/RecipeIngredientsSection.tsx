@@ -22,7 +22,7 @@ export function RecipeIngredientsSection({
         <div className="space-y-10">
             <div>
                 <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-[11px] font-black uppercase tracking-[0.4em] transition-colors text-primary">Ingrédients</h3>
+                    <h3 className="text-micro font-black uppercase tracking-[0.4em] transition-colors text-primary">Ingrédients</h3>
                     <div className="h-px w-20 transition-colors bg-surface-sidebar/10" />
                 </div>
                 <motion.ul
@@ -61,11 +61,11 @@ export function RecipeIngredientsSection({
                 >
                     <div className="flex items-center gap-3 mb-4">
                         <AlertTriangle className="w-5 h-5 text-error" />
-                        <span className="text-[10px] font-black uppercase text-error tracking-[0.3em]">Alertes Allergènes</span>
+                        <span className="text-nano font-black uppercase text-error tracking-[0.3em]">Alertes Allergènes</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {recipe.allergens.map((a: string) => (
-                            <span key={a} className="px-3 py-1.5 rounded-xl border text-[11px] font-black text-error uppercase tracking-wider shadow-sm transition-colors bg-surface-card/40 border-error/20">
+                            <span key={a} className="px-3 py-1.5 rounded-xl border text-micro font-black text-error uppercase tracking-wider shadow-sm transition-colors bg-surface-card/40 border-error/20">
                                 {a}
                             </span>
                         ))}

@@ -45,7 +45,7 @@ export default function OpsError({
               {error.message}
             </p>
             {error.digest && (
-              <p className="text-[10px] font-mono text-gray-600 mt-1">
+              <p className="text-nano font-mono text-gray-600 mt-1">
                 Réf: {error.digest}
               </p>
             )}

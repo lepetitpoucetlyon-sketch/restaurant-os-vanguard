@@ -20,7 +20,7 @@ import {
 function KpiCard({ label, value, change, up }: { label: string; value: string; change: string; up: boolean }) {
     return (
         <div className="rounded-xl border border-border/60 bg-surface-base p-5 flex flex-col gap-2.5">
-            <p className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/80">{label}</p>
+            <p className="font-serif italic text-micro uppercase tracking-[0.24em] text-text-muted/80">{label}</p>
             <p className="font-serif font-black text-3xl leading-none tracking-[-0.02em] text-text-primary tabular-nums">{value}</p>
             <span className={`inline-flex items-center gap-1.5 self-start rounded-full px-2.5 py-1 text-xs font-medium tabular-nums ${up ? "bg-status-success/10 text-status-success" : "bg-status-danger/10 text-status-danger"}`}>
                 {up ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
@@ -44,7 +44,7 @@ function AlertCard({ alert }: { alert: MacroBrainAlert }) {
             <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                     <p className="text-sm font-medium text-text-primary leading-tight tracking-tight">{alert.title}</p>
-                    <span className="font-serif italic text-[11px] tracking-wide text-text-muted/80 shrink-0 tabular-nums">{format(new Date(alert.timestamp), "dd/MM HH:mm")}</span>
+                    <span className="font-serif italic text-micro tracking-wide text-text-muted/80 shrink-0 tabular-nums">{format(new Date(alert.timestamp), "dd/MM HH:mm")}</span>
                 </div>
                 <p className="text-xs text-text-secondary leading-relaxed">{alert.message}</p>
                 {alert.suggestedAction && <p className="text-xs font-medium mt-2.5 opacity-75">→ {alert.suggestedAction}</p>}
@@ -137,7 +137,7 @@ function AnalyticsPage() {
                                             <div className="flex-1 w-full flex items-end">
                                                 <div className="w-full rounded-t-sm bg-accent-gold/30 group-hover:bg-accent-gold transition-colors duration-150" style={{ height: `${Math.max((d.revenue / maxChartRevenue) * 100, 2)}%` }} />
                                             </div>
-                                            {i % 5 === 0 && <span className="text-[10px] text-text-muted leading-none tabular-nums">{d.label}</span>}
+                                            {i % 5 === 0 && <span className="text-nano text-text-muted leading-none tabular-nums">{d.label}</span>}
                                         </div>
                                     ))}
                                 </div>
@@ -182,7 +182,7 @@ function AnalyticsPage() {
                                     </div>
                                     {attendance && (
                                         <div className="pt-3 border-t border-border/40">
-                                            <p className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/80 mb-2">Prévision prochain service</p>
+                                            <p className="font-serif italic text-micro uppercase tracking-[0.24em] text-text-muted/80 mb-2">Prévision prochain service</p>
                                             <p className="text-xs font-medium text-text-secondary capitalize mb-1">{attendance.label}</p>
                                             <p className="text-sm text-text-primary tabular-nums">
                                                 <span className="font-serif font-black">{attendance.low}–{attendance.high}</span> couverts
@@ -210,7 +210,7 @@ function AnalyticsPage() {
                                     </p>
                                     {EXAMPLE_ALERTS.map((alert) => (
                                         <div key={alert.id} className="relative">
-                                            <span className="absolute top-2 right-2 z-10 font-serif italic text-[10px] uppercase tracking-[0.2em] bg-surface-base border border-border/60 text-text-muted/80 px-2 py-0.5 rounded-full">Exemple</span>
+                                            <span className="absolute top-2 right-2 z-10 font-serif italic text-nano uppercase tracking-[0.2em] bg-surface-base border border-border/60 text-text-muted/80 px-2 py-0.5 rounded-full">Exemple</span>
                                             <AlertCard alert={alert} />
                                         </div>
                                     ))}

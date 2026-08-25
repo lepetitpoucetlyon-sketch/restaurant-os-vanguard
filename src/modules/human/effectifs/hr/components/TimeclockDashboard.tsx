@@ -300,7 +300,7 @@ export function TimeclockDashboard() {
                         </p>
 
                         {/* PIN pad */}
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             {pinPad.flat().map((key) => {
                                 const isSpecial = key === "clear" || key === "back";
                                 const Icon = key === "back" ? Delete : key === "clear" ? RotateCcw : null;
@@ -327,7 +327,7 @@ export function TimeclockDashboard() {
 
                         <div className="flex items-center justify-center gap-2 mt-8 text-text-primary/15">
                             <Clock className="w-3 h-3" />
-                            <span className="text-[10px] uppercase tracking-widest font-bold">
+                            <span className="text-nano uppercase tracking-widest font-bold">
                                 Pointeuse Kiosque
                             </span>
                         </div>

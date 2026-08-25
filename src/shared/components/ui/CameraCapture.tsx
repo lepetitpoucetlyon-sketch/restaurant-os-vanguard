@@ -99,7 +99,7 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
         <div className="relative w-full bg-surface-sidebar flex flex-col overflow-hidden">
             {(title || onClose) && (
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
-                    {title && <p className="text-[11px] font-black uppercase tracking-[0.2em] text-text-secondary">{title}</p>}
+                    {title && <p className="text-micro font-black uppercase tracking-[0.2em] text-text-secondary">{title}</p>}
                     {onClose && (
                         <button onClick={onClose} className="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-tertiary text-text-muted transition-colors">
                             <X className="w-4 h-4" />
@@ -157,7 +157,7 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
                         <div className="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-accent rounded-bl-3xl m-[-4px]" />
                         <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-accent rounded-br-3xl m-[-4px]" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <p className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em] font-serif italic bg-surface-sidebar/20 px-6 py-3 rounded-full backdrop-blur-sm">Cadrage CV</p>
+                            <p className="text-text-primary/40 text-nano font-black uppercase tracking-[0.3em] font-serif italic bg-surface-sidebar/20 px-6 py-3 rounded-full backdrop-blur-sm">Cadrage CV</p>
                         </div>
                     </div>
                 </>
@@ -168,14 +168,14 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
                     <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-8">
                         <Button 
                             variant="outline" 
-                            className="h-16 px-10 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 text-text-primary border-default font-black uppercase text-[11px] tracking-widest transition-all"
+                            className="h-16 px-10 rounded-2xl bg-surface-card/10 hover:bg-surface-card/20 text-text-primary border-default font-black uppercase text-micro tracking-widest transition-all"
                             onClick={() => setCapturedImage(null)}
                         >
                             <X className="w-5 h-5 mr-3" />
                             Recommencer
                         </Button>
                         <Button 
-                            className="h-16 px-12 rounded-2xl bg-accent hover:bg-surface-card text-text-primary hover:text-primary font-black uppercase text-[11px] tracking-widest shadow-2xl transition-all"
+                            className="h-16 px-12 rounded-2xl bg-accent hover:bg-surface-card text-text-primary hover:text-primary font-black uppercase text-micro tracking-widest shadow-2xl transition-all"
                             onClick={confirmPhoto}
                         >
                             <Check className="w-5 h-5 mr-3" />

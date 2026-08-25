@@ -27,7 +27,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                                 className="px-2 py-0.5 rounded bg-error/20 border border-error/40 flex items-center gap-1 shadow-[0_0_10px_rgba(239,68,68,0.4)]"
                             >
                                 <AlertCircle size={10} className="text-error" />
-                                <span className="text-[8px] font-mono text-error uppercase tracking-widest font-black">CRITICAL RUPTURE</span>
+                                <span className="text-nano font-mono text-error uppercase tracking-widest font-black">CRITICAL RUPTURE</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -68,7 +68,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                             <span className={`text-chip-label leading-none ${metrics.burnoutIndex > 75 ? 'text-error' : 'text-success'}`}>
                                 {metrics.burnoutIndex > 75 ? 'PROTOCOL BREACH' : 'YIELD STABLE'}
                             </span>
-                            <span className="text-[8px] text-text-muted font-bold opacity-70 uppercase tracking-tighter mt-1">
+                            <span className="text-nano text-text-muted font-bold opacity-70 uppercase tracking-tighter mt-1">
                                 {metrics.burnoutIndex > 75 ? 'Demand Surge Detected' : 'Velocity < Threshold'}
                             </span>
                         </div>
@@ -76,7 +76,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                             <span className={`text-xl font-serif italic ${metrics.burnoutIndex > 75 ? 'text-error' : 'text-success'}`}>
                                 {metrics.burnoutIndex > 75 ? '+15%' : 'Standard'}
                             </span>
-                            <span className="text-[8px] font-mono opacity-50 uppercase">Factor x{metrics.burnoutIndex > 75 ? '1.15' : '1.00'}</span>
+                            <span className="text-nano font-mono opacity-50 uppercase">Factor x{metrics.burnoutIndex > 75 ? '1.15' : '1.00'}</span>
                         </div>
                     </div>
 
@@ -88,7 +88,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                                 className="p-3 rounded-lg bg-error/20 border border-error/30 flex items-center gap-3 relative z-10 shadow-[0_0_15px_rgba(239,68,68,0.3)]"
                             >
                                 <TrendingUp size={14} className="text-error animate-bounce" />
-                                <span className="text-[9px] font-black text-error uppercase tracking-widest">Auto-Sourcing: Procurement PO#GRADE-X-ARCHIVE</span>
+                                <span className="text-nano font-black text-error uppercase tracking-widest">Auto-Sourcing: Procurement PO#GRADE-X-ARCHIVE</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -106,10 +106,10 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                         <span className="text-chip-label text-accent/80">Sovereign Terminal Stream v1.0.4</span>
                     </div>
                     <div className="px-2 py-0.5 rounded bg-accent/10 border border-accent/20">
-                        <span className="text-[8px] font-mono text-accent uppercase tracking-widest">Grade X Engine</span>
+                        <span className="text-nano font-mono text-accent uppercase tracking-widest">Grade X Engine</span>
                     </div>
                 </div>
-                <div className="flex-1 overflow-y-auto p-5 font-mono text-[10px] flex flex-col gap-2 leading-relaxed custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-5 font-mono text-nano flex flex-col gap-2 leading-relaxed custom-scrollbar">
                     <AnimatePresence initial={false}>
                         {logs.map(log => (
                             <motion.div key={log.id} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className={`flex gap-4 ${log.type === 'warn' ? 'text-warning' : log.type === 'error' ? 'text-error' : 'text-text-muted/80'}`}>
@@ -124,7 +124,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                     {logs.length === 0 && (
                         <div className="h-full flex flex-col items-center justify-center text-text-muted/20 gap-3 opacity-50">
                             <Terminal size={32} className="animate-pulse" />
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-black">Waiting for Temporal Sequence...</span>
+                            <span className="text-nano uppercase tracking-[0.2em] font-black">Waiting for Temporal Sequence...</span>
                         </div>
                     )}
                 </div>

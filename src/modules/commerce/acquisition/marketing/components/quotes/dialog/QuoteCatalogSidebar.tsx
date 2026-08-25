@@ -32,7 +32,7 @@ export function QuoteCatalogSidebar({
                     className="absolute top-0 right-0 w-[400px] h-full bg-bg-secondary border-l border-border z-50 shadow-2xl p-8 flex flex-col"
                 >
                     <div className="flex items-center justify-between mb-10">
-                        <h4 className="text-[11px] font-black text-text-primary uppercase tracking-[0.4em]">Bibliothèque Artefacts</h4>
+                        <h4 className="text-micro font-black text-text-primary uppercase tracking-[0.4em]">Bibliothèque Artefacts</h4>
                         <button onClick={onCloseCatalog} className="p-2 text-text-muted hover:text-text-primary">
                             <X className="w-5 h-5" />
                         </button>
@@ -58,7 +58,7 @@ export function QuoteCatalogSidebar({
                             >
                                 <div>
                                     <p className="text-sm font-black text-text-primary group-hover:text-accent-gold transition-colors">{String(product.name || '')}</p>
-                                    <p className="text-[10px] text-text-muted font-medium mt-1">{(Number(product.priceInMicrounits || 0) / 1_000_000).toFixed(2)}€ HT</p>
+                                    <p className="text-nano text-text-muted font-medium mt-1">{(Number(product.priceInMicrounits || 0) / 1_000_000).toFixed(2)}€ HT</p>
                                 </div>
                                 <div className="w-10 h-10 rounded-full bg-bg-tertiary border border-border flex items-center justify-center text-text-muted group-hover:bg-accent-gold group-hover:text-text-primary transition-all">
                                     <Plus className="w-4 h-4" />

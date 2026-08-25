@@ -50,7 +50,7 @@ function SEOPage() {
                         <h1 className="text-2xl font-serif italic font-black text-text-primary tracking-tight leading-none">
                             SEO & Référencement
                         </h1>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mt-1">
+                        <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted mt-1">
                             Optimisez votre visibilité sur les moteurs de recherche
                         </p>
                     </div>
@@ -58,7 +58,7 @@ function SEOPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-teal text-text-primary hover:bg-teal rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3"
+                        className="h-12 px-8 bg-teal text-text-primary hover:bg-teal rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3"
                         id="seo-analyze-button"
                     >
                         <RefreshCw className="w-4 h-4" />
@@ -80,7 +80,7 @@ function SEOPage() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as 'overview' | 'pages' | 'analytics' | 'settings')}
                                 className={cn(
-                                    "px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2",
+                                    "px-6 py-3 rounded-xl text-nano font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2",
                                     activeTab === tab.id
                                         ? "bg-text-primary text-bg-primary shadow-xl"
                                         : "text-text-muted hover:text-text-primary hover:bg-bg-tertiary"

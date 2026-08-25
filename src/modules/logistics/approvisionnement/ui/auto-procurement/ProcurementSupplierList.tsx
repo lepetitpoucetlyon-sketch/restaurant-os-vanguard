@@ -48,7 +48,7 @@ export function ProcurementSupplierList({
 
               {/* Barre de Progression Franco */}
               <div className="mt-3 space-y-1">
-                <div className="flex items-center justify-between text-[10px]">
+                <div className="flex items-center justify-between text-nano">
                   <span className="text-text-muted">Franco : {(basket.francoCts / 100).toFixed(2)} €</span>
                   <span className={basket.isFrancoReached ? 'text-emerald-400 font-bold' : 'text-amber-400'}>
                     {basket.isFrancoReached ? 'Franco Atteint ✨' : `Manque ${(basket.amountToFrancoCts / 100).toFixed(2)} €`}

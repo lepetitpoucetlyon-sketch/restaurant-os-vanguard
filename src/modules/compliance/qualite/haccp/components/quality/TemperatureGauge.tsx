@@ -71,13 +71,13 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
           <div className={`p-2 rounded-xl ${status === 'idle' ? 'bg-surface-bg' : 'bg-surface-card/80 shadow-sm'}`}>
             <Thermometer className="w-5 h-5" />
           </div>
-          <span className="font-black text-[10px] tracking-widest uppercase opacity-70">
+          <span className="font-black text-nano tracking-widest uppercase opacity-70">
             Sonde IoT Bluetooth
           </span>
         </div>
         
         {isSensing && (
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-action-primary text-brand text-[10px] font-black tracking-tighter shadow-sm border border-focus">
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-action-primary text-brand text-nano font-black tracking-tighter shadow-sm border border-focus">
             <Bluetooth className="w-3 h-3 animate-pulse" />
             LIVE
           </div>
@@ -103,9 +103,9 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
             }`}
           />
         </div>
-        <div className="flex justify-between text-[10px] font-black opacity-40 tracking-widest">
+        <div className="flex justify-between text-nano font-black opacity-40 tracking-widest">
           <span>{target.min}{unit}</span>
-          <span className="text-[9px]">HACCP ZONE</span>
+          <span className="text-nano">HACCP ZONE</span>
           <span>{target.max}{unit}</span>
         </div>
       </div>
@@ -114,7 +114,7 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-4 flex items-center gap-2 text-[10px] font-black tracking-widest relative z-10"
+          className="mt-4 flex items-center gap-2 text-nano font-black tracking-widest relative z-10"
         >
           {status === 'ok' ? (
             <><CheckCircle2 className="w-4 h-4 text-status-success" /> CONFORME</>

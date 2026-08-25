@@ -23,7 +23,7 @@ export function PrepLogisticsGrid({
     return (
         <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <MapPin className="w-3.5 h-3.5 text-accent-gold" />
                     ARCHIVE DE STOCKAGE *
                 </label>
@@ -37,7 +37,7 @@ export function PrepLogisticsGrid({
                 />
             </div>
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2">
                     VÉHICULE / CONTENEUR
                 </label>
                 <PremiumSelect

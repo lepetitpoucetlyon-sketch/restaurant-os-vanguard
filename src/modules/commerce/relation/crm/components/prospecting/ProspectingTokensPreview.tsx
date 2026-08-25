@@ -56,7 +56,7 @@ export function ProspectingTokensPreview({
           <Button
             onClick={onApply}
             disabled={isSaving || isApplying}
-            className="h-9 px-5 rounded-full bg-status-success text-text-primary font-bold uppercase tracking-widest text-[10px] hover:opacity-90 flex items-center gap-2"
+            className="h-9 px-5 rounded-full bg-status-success text-text-primary font-bold uppercase tracking-widest text-nano hover:opacity-90 flex items-center gap-2"
           >
             {isApplying ? (
               <Loader2 className="w-3 h-3 animate-spin" />
@@ -77,7 +77,7 @@ export function ProspectingTokensPreview({
           style={{ backgroundColor: tokens.primaryColor }}
         >
           <div style={{ color: textOn(tokens.primaryColor) }}>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">Couleur principale</p>
+            <p className="text-nano font-black uppercase tracking-[0.3em] opacity-60">Couleur principale</p>
             <p className="text-2xl font-mono font-bold">{tokens.primaryColor}</p>
           </div>
           {tokens.brandName && (
@@ -101,13 +101,13 @@ export function ProspectingTokensPreview({
                   title={s.value}
                 >
                   <span
-                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl text-[9px] font-mono font-bold"
+                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl text-nano font-mono font-bold"
                     style={{ color: textOn(s.value), backgroundColor: s.value }}
                   >
                     {s.value}
                   </span>
                 </div>
-                <p className="text-[9px] font-bold text-text-muted uppercase tracking-wider">{s.label}</p>
+                <p className="text-nano font-bold text-text-muted uppercase tracking-wider">{s.label}</p>
               </div>
             ))}
           </div>

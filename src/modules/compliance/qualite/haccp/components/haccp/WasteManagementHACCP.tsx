@@ -44,7 +44,7 @@ export function WasteManagementHACCP() {
                             </div>
                             <span className="text-2xl font-serif font-black italic text-text-primary">{stat.value}</span>
                         </div>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">{stat.label}</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">{stat.label}</p>
                     </div>
                 ))}
             </div>
@@ -70,21 +70,21 @@ export function WasteManagementHACCP() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Quantité Estimée</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest ml-1">Quantité Estimée</label>
                                     <div className="relative">
                                         <input type="number" placeholder="0.0" className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-xl font-serif font-bold focus:outline-none focus:border-accent-gold/50" />
-                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-text-muted uppercase tracking-widest">kg</span>
+                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-nano font-black text-text-muted uppercase tracking-widest">kg</span>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest ml-1">Date du relevé</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest ml-1">Date du relevé</label>
                                     <div className="relative">
                                         <input type="date" className="w-full h-16 bg-bg-tertiary/50 border border-border rounded-2xl px-6 text-sm font-bold focus:outline-none focus:border-accent-gold/50" defaultValue={new Date().toISOString().split('T')[0]} />
                                     </div>
                                 </div>
                             </div>
 
-                            <Button className="w-full h-16 bg-text-primary text-text-primary rounded-[20px] font-black uppercase text-[10px] tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
+                            <Button className="w-full h-16 bg-text-primary text-text-primary rounded-[20px] font-black uppercase text-nano tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
                                 Enregistrer le relevé HACCP
                             </Button>
                         </div>
@@ -106,7 +106,7 @@ export function WasteManagementHACCP() {
                                     Prochaine intervention réglementaire conseillée avant le **{String(hottesDoc?.validUntil || 'N/A')}**.
                                 </p>
                                 <div className="pt-2">
-                                    <button className="text-[10px] font-black text-accent-gold uppercase tracking-[0.2em] flex items-center gap-2 hover:gap-3 transition-all">
+                                    <button className="text-nano font-black text-accent-gold uppercase tracking-[0.2em] flex items-center gap-2 hover:gap-3 transition-all">
                                         Voir l'attestation dans Registre <ArrowRight className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
@@ -120,7 +120,7 @@ export function WasteManagementHACCP() {
                     <div className="bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] border border-border p-8 shadow-sm">
                         <div className="flex items-center gap-3 mb-8">
                             <History className="w-5 h-5 text-text-muted" />
-                            <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Passages Récents</h3>
+                            <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Passages Récents</h3>
                         </div>
 
                         <div className="space-y-6">
@@ -133,9 +133,9 @@ export function WasteManagementHACCP() {
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between">
                                             <p className="text-sm font-bold text-text-primary">{log.quantity}{log.unit} - {log.type === 'biodechets' ? 'Bio' : 'Huiles'}</p>
-                                            <span className="text-[9px] font-mono font-bold text-text-muted">{log.date}</span>
+                                            <span className="text-nano font-mono font-bold text-text-muted">{log.date}</span>
                                         </div>
-                                        <p className="text-[10px] text-text-muted mt-0.5 tracking-tight font-medium">Prestataire: {log.provider}</p>
+                                        <p className="text-nano text-text-muted mt-0.5 tracking-tight font-medium">Prestataire: {log.provider}</p>
                                     </div>
                                 </div>
                             ))}
@@ -145,12 +145,12 @@ export function WasteManagementHACCP() {
                     <div className="bg-status-danger/5 border border-rose-500/20 rounded-[2.5rem] p-8 space-y-4">
                         <div className="flex items-center gap-3">
                             <AlertTriangle className="w-5 h-5 text-status-danger" />
-                            <h3 className="text-[10px] font-black text-status-danger uppercase tracking-[0.3em]">Alerte Bac à Graisse</h3>
+                            <h3 className="text-nano font-black text-status-danger uppercase tracking-[0.3em]">Alerte Bac à Graisse</h3>
                         </div>
-                        <p className="text-[11px] text-status-danger/80 dark:text-status-danger/60 font-medium leading-relaxed italic">
+                        <p className="text-micro text-status-danger/80 dark:text-status-danger/60 font-medium leading-relaxed italic">
                             « Le bac à graisse n'a pas été inspecté visuellement cette semaine. Risque d'engorgement et de mauvaises odeurs. »
                         </p>
-                        <Button variant="outline" className="w-full h-10 rounded-xl border-rose-500/20 text-status-danger font-black uppercase text-[8px] tracking-[0.2em] bg-status-danger/5 hover:bg-status-danger/10">
+                        <Button variant="outline" className="w-full h-10 rounded-xl border-rose-500/20 text-status-danger font-black uppercase text-nano tracking-[0.2em] bg-status-danger/5 hover:bg-status-danger/10">
                             Effectuer le contrôle maintenant
                         </Button>
                     </div>

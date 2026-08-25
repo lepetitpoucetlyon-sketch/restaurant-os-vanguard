@@ -48,7 +48,7 @@ export default function Loading() {
                     </h1>
                     <div className="flex items-center justify-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-pulse" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-text-muted/60">
+                        <span className="text-nano font-black uppercase tracking-[0.4em] text-text-muted/60">
                             CHARGEMENT
                         </span>
                     </div>

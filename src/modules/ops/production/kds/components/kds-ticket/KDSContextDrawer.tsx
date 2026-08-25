@@ -33,8 +33,8 @@ export function KDSContextDrawer({
                 className="w-full flex items-center justify-between p-4 text-secondary hover:text-primary hover:bg-surface-bg transition-colors"
             >
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em]">Commande Complète (Accords)</span>
-                    <span className="px-2 py-0.5 rounded-full bg-surface-card border border-subtle text-[9px] font-black">
+                    <span className="text-nano font-black uppercase tracking-[0.15em]">Commande Complète (Accords)</span>
+                    <span className="px-2 py-0.5 rounded-full bg-surface-card border border-subtle text-nano font-black">
                         {ticket.items.length}
                     </span>
                 </div>
@@ -51,7 +51,7 @@ export function KDSContextDrawer({
                         <div className="p-4 pt-0 flex flex-col gap-4">
                             {Object.entries(fullOrderGroupedBySeat).map(([seat, items]) => (
                                 <div key={seat} className="flex flex-col gap-2">
-                                    <div className="text-[10px] font-bold text-muted uppercase tracking-wider pl-1 border-b border-subtle pb-1">
+                                    <div className="text-nano font-bold text-muted uppercase tracking-wider pl-1 border-b border-subtle pb-1">
                                         {seat === 'Partagé' ? 'À Partager' : `Convive ${seat}`}
                                     </div>
                                     {items.map((cItem, i: number) => {
@@ -76,7 +76,7 @@ export function KDSContextDrawer({
                                                         <span className={cn("text-xs font-bold", isActiveStation ? "text-primary" : "text-secondary")}>
                                                             {cItem.quantity && (cItem.quantity as number) > 1 ? `${cItem.quantity}x ` : ''}{cItem.name as string}
                                                         </span>
-                                                        <span className="text-[9px] text-muted uppercase tracking-wider">{station}</span>
+                                                        <span className="text-nano text-muted uppercase tracking-wider">{station}</span>
                                                     </div>
                                                 </div>
                                             </div>

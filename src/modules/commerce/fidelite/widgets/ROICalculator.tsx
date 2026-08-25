@@ -74,7 +74,7 @@ export default function ROICalculator() {
       {/* Comparison */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl bg-red-50 border border-red-100 p-4 space-y-1">
-          <p className="text-[10px] font-bold text-status-danger uppercase tracking-widest">TheFork / mois</p>
+          <p className="text-nano font-bold text-status-danger uppercase tracking-widest">TheFork / mois</p>
           <p className="text-2xl font-serif font-bold text-red-600">
             {calc.theForkCost.toLocaleString('fr-FR')} €
           </p>
@@ -83,7 +83,7 @@ export default function ROICalculator() {
           </p>
         </div>
         <div className="rounded-2xl bg-green-50 border border-green-100 p-4 space-y-1">
-          <p className="text-[10px] font-bold text-status-success uppercase tracking-widest">Restaurant OS / mois</p>
+          <p className="text-nano font-bold text-status-success uppercase tracking-widest">Restaurant OS / mois</p>
           <p className="text-2xl font-serif font-bold text-green-700">
             {OUR_FLAT_FEE} €
           </p>

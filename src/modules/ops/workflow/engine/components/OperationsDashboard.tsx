@@ -104,7 +104,7 @@ export function OperationsDashboard() {
                             </motion.p>
                         </div>
 
-                        <nav className="flex items-center gap-8 font-sans font-bold text-[11px] uppercase tracking-widest text-muted">
+                        <nav className="flex items-center gap-8 font-sans font-bold text-micro uppercase tracking-widest text-muted">
                             <button
                                 onClick={() => setView('grid')}
                                 className={cn("hover:text-primary transition-colors flex items-center gap-2", view === 'grid' && "text-primary")}
@@ -144,7 +144,7 @@ export function OperationsDashboard() {
                                 <p>• Prise de poste Brigade à 14h.</p>
                             </div>
                             <div className="mt-8 pt-6 border-t border-dashed border-subtle">
-                                <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest text-muted">
+                                <div className="flex justify-between items-center text-nano uppercase font-black tracking-widest text-muted">
                                     <span>Occupation Totale</span>
                                     <span>84%</span>
                                 </div>
@@ -166,7 +166,7 @@ export function OperationsDashboard() {
                             >
                                 <Cloud className="w-32 h-32" />
                             </motion.div>
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-4">Météo Locale</h4>
+                            <h4 className="text-nano font-black uppercase tracking-[0.2em] text-muted mb-4">Météo Locale</h4>
                             <div className="flex items-center gap-4">
                                 <div className="text-4xl font-black">18°C</div>
                                 <div className="text-sm text-secondary italic">Ensoleillé avec quelques nuages</div>
@@ -211,7 +211,7 @@ export function OperationsDashboard() {
 
                                             <div className="flex items-end justify-between">
                                                 <div>
-                                                    <p className="text-[10px] text-muted font-sans font-bold uppercase tracking-widest mb-1 italic">Tarif / Service</p>
+                                                    <p className="text-nano text-muted font-sans font-bold uppercase tracking-widest mb-1 italic">Tarif / Service</p>
                                                     <p className="text-xl font-sans font-black">€{area.price}</p>
                                                 </div>
                                                 <button className="w-10 h-10 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
@@ -271,7 +271,7 @@ export function OperationsDashboard() {
                                 </div>
 
                                 <div className="absolute bottom-10 left-10 max-w-sm bg-bg-primary/90 backdrop-blur-md p-8 rounded-[2rem] border-2 border-dashed border-subtle shadow-xl">
-                                    <div className="flex items-center gap-2 mb-4 text-muted font-bold text-[10px] uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 mb-4 text-muted font-bold text-nano uppercase tracking-widest">
                                         <PenTool className="w-4 h-4 text-brand" /> Note de Conception
                                     </div>
                                     <div className="space-y-4">
@@ -282,7 +282,7 @@ export function OperationsDashboard() {
                                         <div className="flex items-center gap-4 pt-4">
                                             <div className="flex -space-x-2">
                                                 {[1, 2, 3].map(i => (
-                                                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-surface-bg flex items-center justify-center text-[10px] font-bold">U{i}</div>
+                                                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-surface-bg flex items-center justify-center text-nano font-bold">U{i}</div>
                                                 ))}
                                             </div>
                                             <ArrowRight className="w-4 h-4 text-muted" />

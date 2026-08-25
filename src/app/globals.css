@@ -734,6 +734,31 @@
     letter-spacing: 0.16em;
   }
 
+  /* ─── PLANCHER TYPOGRAPHIQUE TACTILE ──────────────────────────────────
+     Remplace les valeurs arbitraires text-[8px]/[9px]/[10px]/[11px], qui
+     étaient au nombre de 2 115 dans src/ et illisibles sur tablette —
+     d'autant que le zoom au doigt était désactivé dans app/layout.tsx.
+
+     Principe : la taille « poste fixe » est conservée à l'identique au-dessus
+     de --breakpoint-lg (1024px, iPad paysage / caisse), et un plancher plus
+     généreux s'applique en dessous, là où l'écran est tenu à bout de bras.
+     Aucune régression de densité sur poste fixe, gain net sur tablette.
+
+     text-nano  ← ancien text-[8px], text-[9px], text-[10px]
+     text-micro ← ancien text-[11px]
+
+     Ne pas réintroduire de text-[Npx] arbitraire : passer par ces classes,
+     sinon le plancher tactile est contourné silencieusement. */
+  .text-nano  { font-size: 10px; }
+  .text-micro { font-size: 11px; }
+
+  @media (width < 64rem) {
+    .text-nano          { font-size: 12px; }
+    .text-micro         { font-size: 13px; }
+    .text-chip-label    { font-size: 12px; letter-spacing: 0.10em; }
+    .text-chip-label-sm { font-size: 12px; letter-spacing: 0.12em; }
+  }
+
   /* Fade Animations */
   .animate-fade-in {
     animation: fade-in var(--duration-normal) var(--ease-out-expo) forwards;

@@ -207,7 +207,7 @@ export function LifecycleTreePanel() {
                                                             <div className="flex-1">
                                                                 <p className="text-sm font-medium text-text-primary">{step.label}</p>
                                                             </div>
-                                                            <div className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-brand bg-action-primary/10 px-2 py-1 rounded-lg">
+                                                            <div className="hidden sm:flex items-center gap-1 text-nano font-mono text-brand bg-action-primary/10 px-2 py-1 rounded-lg">
                                                                 <Activity className="w-3 h-3" />
                                                                 {step.action}
                                                             </div>

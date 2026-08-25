@@ -98,7 +98,7 @@ export function SimulationDashboard() {
                         </div>
                         <div>
                             <h1 className="text-5xl font-serif italic font-light tracking-tighter">Nexus <span className="font-black not-italic text-text-primary">Hardcore Test</span></h1>
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary mt-2">Empire Mode Audit • Stress-Testing • Chaos Injection v1.2</p>
+                            <p className="text-nano font-black uppercase tracking-[0.4em] text-secondary mt-2">Empire Mode Audit • Stress-Testing • Chaos Injection v1.2</p>
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@ export function SimulationDashboard() {
                         <Button 
                             variant="outline" 
                             onClick={() => window.location.reload()}
-                            className="h-14 px-8 rounded-2xl border-default bg-transparent hover:bg-surface-sidebar text-muted font-black text-[10px] uppercase tracking-widest transition-all"
+                            className="h-14 px-8 rounded-2xl border-default bg-transparent hover:bg-surface-sidebar text-muted font-black text-nano uppercase tracking-widest transition-all"
                         >
                             <RotateCcw size={16} className="mr-2" /> Reset
                         </Button>
@@ -114,7 +114,7 @@ export function SimulationDashboard() {
                             disabled={isSimulating}
                             onClick={handleRunSimulation}
                             className={cn(
-                                "h-14 px-10 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-2xl",
+                                "h-14 px-10 rounded-2xl font-black text-nano uppercase tracking-widest transition-all shadow-2xl",
                                 mode === 'EMPIRE' ? "bg-surface-card text-primary hover:bg-surface-bg" : "bg-status-danger text-text-primary hover:bg-status-danger"
                             )}
                         >
@@ -124,7 +124,7 @@ export function SimulationDashboard() {
                 </div>
 
                 {/* KPI GRID */}
-                <div className="grid grid-cols-4 gap-8 mb-16">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                     <MetricCard 
                         label="Revenu Simulé" 
                         value={`${(stats.revenue / 100).toLocaleString()}€`} 
@@ -165,7 +165,7 @@ export function SimulationDashboard() {
                 </div>
 
                 {/* MAIN CONTENT SPLIT */}
-                <div className="grid grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                     {/* LOGS PANEL */}
                     <div className="col-span-1 bg-surface-sidebar/30 border border-default/50 rounded-[2.5rem] p-8 backdrop-blur-3xl overflow-hidden flex flex-col h-[500px]">
                         <div className="flex items-center justify-between mb-6 pb-4 border-b border-default">
@@ -175,7 +175,7 @@ export function SimulationDashboard() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-status-danger animate-pulse" />
-                                <span className="text-[8px] font-black uppercase text-status-danger tracking-tighter">Live Audit</span>
+                                <span className="text-nano font-black uppercase text-status-danger tracking-tighter">Live Audit</span>
                             </div>
                         </div>
 
@@ -188,18 +188,18 @@ export function SimulationDashboard() {
                                         animate={{ opacity: 1, x: 0 }}
                                         className="space-y-2"
                                     >
-                                        <div className="text-[8px] font-black text-secondary flex justify-between uppercase">
+                                        <div className="text-nano font-black text-secondary flex justify-between uppercase">
                                             <span>Day {14 - results.length + idx + 1}</span>
                                             <span>{dayResult.date}</span>
                                         </div>
                                         {dayResult.anomalies.map((ano: string, i: number) => (
-                                            <div key={i} className="p-3 bg-status-danger/10 border border-red-500/20 rounded-xl text-[9px] font-medium text-status-danger flex items-start gap-2">
+                                            <div key={i} className="p-3 bg-status-danger/10 border border-red-500/20 rounded-xl text-nano font-medium text-status-danger flex items-start gap-2">
                                                 <AlertTriangle size={10} className="mt-0.5 shrink-0" />
                                                 {ano}
                                             </div>
                                         ))}
                                         {dayResult.anomalies.length === 0 && (
-                                            <div className="p-3 bg-surface-card/5 border border-subtle rounded-xl text-[9px] font-medium text-muted flex items-start gap-2 italic">
+                                            <div className="p-3 bg-surface-card/5 border border-subtle rounded-xl text-nano font-medium text-muted flex items-start gap-2 italic">
                                                 <CheckCircle2 size={10} className="mt-0.5 shrink-0 text-status-success" />
                                                 Flux nominal. Aucun écart détecté.
                                             </div>
@@ -215,13 +215,13 @@ export function SimulationDashboard() {
                         <div className="flex items-center justify-between mb-10">
                             <div>
                                 <h3 className="text-2xl font-serif italic text-text-primary mb-1">Analyse Comparative</h3>
-                                <p className="text-[9px] font-black uppercase text-secondary tracking-[0.2em] font-mono">Performance Empire (Semaine 1) vs Déclassement Chaos (Semaine 2)</p>
+                                <p className="text-nano font-black uppercase text-secondary tracking-[0.2em] font-mono">Performance Empire (Semaine 1) vs Déclassement Chaos (Semaine 2)</p>
                             </div>
                             <div className="flex gap-4">
-                                <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-nano font-black uppercase tracking-widest">
                                     <div className="w-2 h-2 rounded-full bg-surface-card" /> Empire
                                 </div>
-                                <div className="flex items-center gap-2 text-[8px] font-black uppercase tracking-widest text-status-danger">
+                                <div className="flex items-center gap-2 text-nano font-black uppercase tracking-widest text-status-danger">
                                     <div className="w-2 h-2 rounded-full bg-status-danger shadow-[0_0_10px_#EF4444]" /> Chaos
                                 </div>
                             </div>
@@ -243,7 +243,7 @@ export function SimulationDashboard() {
                                         >
                                             <div className={cn("absolute bottom-0 left-0 w-full h-[2px]", i < 7 ? "bg-surface-card" : "bg-status-danger shadow-[0_-5px_15px_#EF4444]")} />
                                         </motion.div>
-                                        <span className="text-[7px] font-black text-secondary uppercase">J{i+1}</span>
+                                        <span className="text-nano font-black text-secondary uppercase">J{i+1}</span>
                                     </div>
                                 );
                             })}
@@ -257,12 +257,12 @@ export function SimulationDashboard() {
                             <div className="flex items-center gap-4">
                                 <Skull className="text-status-danger" size={24} />
                                 <div>
-                                    <p className="text-[8px] font-black uppercase text-secondary tracking-widest">Diagnostic Automatisé</p>
-                                    <p className="text-[11px] font-medium text-muted">Drift de stock de <span className="text-status-danger font-bold">18.4%</span> injecté. Écarts fiscaux identifiés sur 4 ordres.</p>
+                                    <p className="text-nano font-black uppercase text-secondary tracking-widest">Diagnostic Automatisé</p>
+                                    <p className="text-micro font-medium text-muted">Drift de stock de <span className="text-status-danger font-bold">18.4%</span> injecté. Écarts fiscaux identifiés sur 4 ordres.</p>
                                 </div>
                             </div>
                             <Button
-                                className="h-10 bg-surface-card text-primary text-[8px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+                                className="h-10 bg-surface-card text-primary text-nano font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
                                 onClick={() => {
                                     showToast("Export FEC des données simulées en cours...", "info");
                                     window.open('/api/admin/finance/fec/export', '_blank');
@@ -296,11 +296,11 @@ function MetricCard({ label, value, icon, subtitle, highlight = false }: MetricC
                 <div className="w-10 h-10 rounded-xl bg-surface-sidebar/50 flex items-center justify-center border border-default/50">
                     {icon}
                 </div>
-                <div className="bg-surface-card/5 rounded-full px-2 py-0.5 text-[7px] font-black uppercase text-secondary tracking-tighter">Live</div>
+                <div className="bg-surface-card/5 rounded-full px-2 py-0.5 text-nano font-black uppercase text-secondary tracking-tighter">Live</div>
             </div>
             <h4 className="text-chip-label text-secondary mb-1">{label}</h4>
             <div className="text-3xl font-mono font-black italic tracking-tighter mb-2">{value}</div>
-            <p className="text-[9px] font-black text-secondary uppercase tracking-tighter">{subtitle}</p>
+            <p className="text-nano font-black text-secondary uppercase tracking-tighter">{subtitle}</p>
         </div>
     );
 }

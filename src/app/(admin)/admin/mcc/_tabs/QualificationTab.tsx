@@ -56,7 +56,7 @@ export function QualificationTab() {
           <div className="space-y-4">
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Display Depth</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {(['essential', 'manager', 'enterprise'] as const).map((d) => (
                   <button
                     key={d}
@@ -76,7 +76,7 @@ export function QualificationTab() {
 
             <div>
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Niveau IA & Autonomie</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {(['none', 'copilot', 'autonomous'] as const).map((lvl) => (
                   <button
                     key={lvl}
@@ -115,7 +115,7 @@ export function QualificationTab() {
                 <span>Rôles RBAC Dérivés</span>
               </div>
               <p className="text-sm font-bold text-white mt-2">DIRECTOR · CHEF · WAITER · CASHIER</p>
-              <p className="text-[11px] text-slate-500">Matrice de permission et double validation PIN</p>
+              <p className="text-micro text-slate-500">Matrice de permission et double validation PIN</p>
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1">
@@ -124,7 +124,7 @@ export function QualificationTab() {
                 <span>Règles Métier (Business Laws)</span>
               </div>
               <p className="text-sm font-bold text-white mt-2">NF525 Strict · HACCP DGAL · Pas de stock négatif</p>
-              <p className="text-[11px] text-slate-500">Validation d'inaltérabilité et scellage Z</p>
+              <p className="text-micro text-slate-500">Validation d'inaltérabilité et scellage Z</p>
             </div>
           </div>
 

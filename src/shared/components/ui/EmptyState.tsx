@@ -31,7 +31,7 @@ export function EmptyState({
       iconContainer: "w-10 h-10 rounded-xl mb-3",
       iconSize: "w-5 h-5",
       title: "text-xs",
-      description: "text-[11px]",
+      description: "text-micro",
     },
     default: {
       container: "py-14 px-6",

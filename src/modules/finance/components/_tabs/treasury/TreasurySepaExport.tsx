@@ -27,7 +27,7 @@ export function TreasurySepaExport({
             <h3 className="text-sm font-black uppercase tracking-widest">
               Virements SEPA
             </h3>
-            <p className="text-[10px] text-text-muted">
+            <p className="text-nano text-text-muted">
               Générer un fichier pain.001.001.03 pour les factures approuvées
             </p>
           </div>
@@ -55,13 +55,13 @@ export function TreasurySepaExport({
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-border text-text-muted text-left">
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px]">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano">
                   Fournisseur
                 </th>
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px]">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano">
                   Échéance
                 </th>
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px] text-right">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano text-right">
                   Montant
                 </th>
               </tr>

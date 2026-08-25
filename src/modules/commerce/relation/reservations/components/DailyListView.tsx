@@ -40,14 +40,14 @@ export function DailyListView({
             {sorted.length === 0 && isLoading ? (
                 <div className="flex items-center justify-center py-24 gap-3 text-text-muted">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">Chargement…</span>
+                    <span className="text-nano font-black uppercase tracking-[0.3em]">Chargement…</span>
                 </div>
             ) : sorted.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center">
                     <div className="w-16 h-16 rounded-[2rem] bg-bg-tertiary flex items-center justify-center mb-6 border border-border">
                         <Clock strokeWidth={1} className="w-8 h-8 text-text-muted/50" />
                     </div>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">
                         Aucune réservation pour cette journée
                     </p>
                 </div>
@@ -92,12 +92,12 @@ export function DailyListView({
                                                 )}>
                                                     {statusInfo.label}
                                                 </span>
-                                                <span className="flex items-center gap-1 text-[10px] text-text-muted">
+                                                <span className="flex items-center gap-1 text-nano text-text-muted">
                                                     <Users className="w-3 h-3" />
                                                     {res.covers ?? res.partySize ?? 0}p
                                                 </span>
                                                 {res.tableId && (
-                                                    <span className="flex items-center gap-1 text-[10px] text-text-muted">
+                                                    <span className="flex items-center gap-1 text-nano text-text-muted">
                                                         <MapPin className="w-3 h-3" />
                                                         {String(res.tableId).replace(/^t/, '#')}
                                                     </span>
@@ -123,7 +123,7 @@ export function DailyListView({
                                             {/* No-show inline confirm */}
                                             {isConfirmingNoShow ? (
                                                 <div className="flex items-center gap-1 bg-status-error/10 border border-status-error/20 rounded-xl px-2 py-1">
-                                                    <span className="text-[9px] text-status-error font-black uppercase tracking-wider">
+                                                    <span className="text-nano text-status-error font-black uppercase tracking-wider">
                                                         No-show ?
                                                     </span>
                                                     <button

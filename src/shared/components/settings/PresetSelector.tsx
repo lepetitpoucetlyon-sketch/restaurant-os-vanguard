@@ -88,7 +88,7 @@ export function PresetSelector({ draft, onApplyPreset }: PresetSelectorProps) {
                             <div className="text-xs font-bold text-text-primary">
                                 {preset.label}
                             </div>
-                            <div className="text-[10px] text-text-muted mt-0.5">
+                            <div className="text-nano text-text-muted mt-0.5">
                                 {preset.appearance === 'dark' ? '🌙 Sombre' : '☀️ Clair'}
                                 {preset.fontBrand && ` • ${preset.fontBrand}`}
                             </div>

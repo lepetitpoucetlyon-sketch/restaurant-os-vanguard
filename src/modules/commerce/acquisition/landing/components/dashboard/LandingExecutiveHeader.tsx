@@ -32,7 +32,7 @@ export function LandingExecutiveHeader({ userName, isMobile }: LandingExecutiveH
         className="pt-4 md:pt-12 flex flex-col md:flex-row md:items-end justify-between gap-6"
       >
         <div className="space-y-2 md:space-y-6">
-          <div className="flex items-center gap-3 text-accent-gold text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em]">
+          <div className="flex items-center gap-3 text-accent-gold text-nano md:text-[10px] font-black uppercase tracking-[0.3em]">
             <div className="w-6 md:w-12 h-[1px] bg-accent-gold/30" />
             {format(new Date(), "EEEE d MMMM", { locale: fr })} • {new Date().getHours() < 16 ? "MIDI" : "SOIR"}
           </div>
@@ -46,7 +46,7 @@ export function LandingExecutiveHeader({ userName, isMobile }: LandingExecutiveH
         {!isMobile && (
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">{t('dashboard.status')}</p>
+              <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">{t('dashboard.status')}</p>
               <p className="text-[13px] font-serif italic text-accent">{t('dashboard.status_text')}</p>
             </div>
             <SettingsGearButton pageKey="dashboard" className="h-10 w-10 shrink-0" />
@@ -68,7 +68,7 @@ export function LandingExecutiveHeader({ userName, isMobile }: LandingExecutiveH
               )}>
                 <action.icon strokeWidth={1.5} className="w-5 h-5" />
               </div>
-              <span className="text-[9px] md:text-chip-label text-text-secondary">
+              <span className="text-nano md:text-chip-label text-text-secondary">
                 {action.label}
               </span>
             </motion.div>

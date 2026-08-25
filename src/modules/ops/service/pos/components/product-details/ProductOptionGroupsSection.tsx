@@ -30,14 +30,14 @@ export function ProductOptionGroupsSection({
                 {t(`pos.options.${group.id}`)}
               </h3>
               {group.required && (
-                <span className="text-[9px] font-black bg-accent-gold text-text-primary px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                <span className="text-nano font-black bg-accent-gold text-text-primary px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
                   {t('pos.details.required')}
                 </span>
               )}
             </div>
             <div className="flex items-center gap-3">
               <div className="w-1 h-1 rounded-full bg-border" />
-              <span className="text-[10px] font-black text-text-muted uppercase tracking-widest opacity-60">
+              <span className="text-nano font-black text-text-muted uppercase tracking-widest opacity-60">
                 {group.type === 'single'
                   ? t('pos.details.single_choice')
                   : `${t('pos.details.max_selection')}: ${group.maxSelections || '∞'}`}
@@ -82,7 +82,7 @@ export function ProductOptionGroupsSection({
                   {option.priceModifierInCents > 0 && (
                     <span
                       className={cn(
-                        "text-[11px] font-serif italic font-bold px-3 py-1 rounded-full transition-all",
+                        "text-micro font-serif italic font-bold px-3 py-1 rounded-full transition-all",
                         isSelected
                           ? "bg-accent-gold text-text-primary"
                           : "text-accent-gold bg-accent-gold/10"

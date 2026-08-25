@@ -127,7 +127,7 @@ export function ResellerPortal() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {[
           { label: "Revendeurs actifs", value: String(activeResellers), icon: <Users className="w-4 h-4 text-brand" /> },
           { label: "Tenants apportés", value: String(totalReferrals), icon: <TrendingUp className="w-4 h-4 text-status-success" /> },
@@ -136,7 +136,7 @@ export function ResellerPortal() {
           <div key={k.label} className="bg-surface-card border border-border-subtle rounded-xl p-3 text-center">
             <div className="flex justify-center mb-1">{k.icon}</div>
             <div className="text-lg font-bold text-text-primary">{k.value}</div>
-            <div className="text-[10px] text-secondary uppercase tracking-wider">{k.label}</div>
+            <div className="text-nano text-secondary uppercase tracking-wider">{k.label}</div>
           </div>
         ))}
       </div>
@@ -178,18 +178,18 @@ export function ResellerPortal() {
                   <input value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} placeholder="Nom" className="bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
                   <input value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} placeholder="Email" className="bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-secondary">COM:</span>
+                    <span className="text-nano font-bold text-secondary">COM:</span>
                     <input type="number" step="0.01" value={(editForm.commissionRate ?? 0) * 100} onChange={e => setEditForm(f => ({ ...f, commissionRate: parseFloat(e.target.value) / 100 }))} placeholder="10" className="w-16 bg-surface-card border border-border-subtle rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-focus/50" />
-                    <span className="text-[10px] text-secondary">%</span>
+                    <span className="text-nano text-secondary">%</span>
                   </div>
                 </div>
               ) : (
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-text-primary truncate">{r.name}</span>
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-status-success/20 text-status-success" : "bg-slate-600/30 text-text-secondary"}`}>{r.status}</span>
+                    <span className={`text-nano px-1.5 py-0.5 rounded-full font-bold uppercase ${r.status === "active" ? "bg-status-success/20 text-status-success" : "bg-slate-600/30 text-text-secondary"}`}>{r.status}</span>
                   </div>
-                  <div className="text-[11px] text-secondary">{r.email} · {r.totalTenantsReferred} tenants · Com. {(r.commissionRate * 100).toFixed(0)}% · €{r.totalCommissionsEur.toFixed(2)}</div>
+                  <div className="text-micro text-secondary">{r.email} · {r.totalTenantsReferred} tenants · Com. {(r.commissionRate * 100).toFixed(0)}% · €{r.totalCommissionsEur.toFixed(2)}</div>
                 </div>
               )}
               
@@ -201,13 +201,13 @@ export function ResellerPortal() {
                   </>
                 ) : (
                   <>
-                    <button onClick={() => copyCode(r.affiliateCode)} className="flex items-center gap-1.5 bg-surface-card px-2.5 py-1.5 rounded-lg text-[11px] font-mono hover:bg-surface-hover transition-colors" title="Copier le code d'affiliation">
+                    <button onClick={() => copyCode(r.affiliateCode)} className="flex items-center gap-1.5 bg-surface-card px-2.5 py-1.5 rounded-lg text-micro font-mono hover:bg-surface-hover transition-colors" title="Copier le code d'affiliation">
                       {copied === r.affiliateCode ? <CheckCircle2 className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3 text-secondary" />}
                       {r.affiliateCode}
                     </button>
                     <button onClick={() => { setEditingId(r.id); setEditForm(r); }} className="p-1.5 text-secondary hover:text-text-primary opacity-0 group-hover:opacity-100 transition-opacity"><Edit2 className="w-4 h-4" /></button>
                     <button onClick={() => deleteReseller(r.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
-                    <button onClick={() => toggleStatus(r)} className="text-[10px] px-2 py-1 rounded-lg border border-border-subtle hover:bg-surface-card transition-colors text-secondary ml-2">
+                    <button onClick={() => toggleStatus(r)} className="text-nano px-2 py-1 rounded-lg border border-border-subtle hover:bg-surface-card transition-colors text-secondary ml-2">
                       {r.status === "active" ? "Désactiver" : "Activer"}
                     </button>
                   </>
@@ -218,7 +218,7 @@ export function ResellerPortal() {
         </div>
       )}
 
-      <p className="text-[10px] text-secondary opacity-60">
+      <p className="text-nano text-secondary opacity-60">
         Commission personnalisable par revendeur. Le code d'affiliation s'entre lors du provisioning d'un nouveau tenant (champ "Referred by").
       </p>
     </div>

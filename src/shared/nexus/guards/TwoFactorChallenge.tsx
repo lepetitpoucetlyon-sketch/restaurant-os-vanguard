@@ -65,7 +65,7 @@ export function TwoFactorChallenge() {
                         <ShieldCheck strokeWidth={1.5} className="w-10 h-10 text-accent" />
                     </div>
                     <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Double <span className="text-accent not-italic">Vérification</span></h2>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.3em] mt-2">Protocole de sécurité Multi-Gènes</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-[0.3em] mt-2">Protocole de sécurité Multi-Gènes</p>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -91,7 +91,7 @@ export function TwoFactorChallenge() {
                                     ) : (
                                         <Mail className="w-4 h-4 text-accent" />
                                     )}
-                                    <span className="text-[11px] font-bold text-text-primary uppercase tracking-widest">
+                                    <span className="text-micro font-bold text-text-primary uppercase tracking-widest">
                                         {method === 'sms' ? "Code envoyé par SMS" : "Code envoyé par Email"}
                                     </span>
                                 </div>
@@ -129,13 +129,13 @@ export function TwoFactorChallenge() {
                             <div className="flex flex-col gap-4 pt-4">
                                 <button 
                                     onClick={() => setShowRescueOptions(true)}
-                                    className="text-[10px] font-black text-accent uppercase tracking-widest hover:text-accent/80 transition-colors"
+                                    className="text-nano font-black text-accent uppercase tracking-widest hover:text-accent/80 transition-colors"
                                 >
                                     Méthodes de secours
                                 </button>
                                 <button 
                                     onClick={logout}
-                                    className="text-[10px] font-black text-text-muted/40 uppercase tracking-widest hover:text-text-muted transition-colors"
+                                    className="text-nano font-black text-text-muted/40 uppercase tracking-widest hover:text-text-muted transition-colors"
                                 >
                                     Se déconnecter
                                 </button>
@@ -149,7 +149,7 @@ export function TwoFactorChallenge() {
                             exit={{ opacity: 0, x: -20 }}
                             className="space-y-6"
                         >
-                            <h4 className="text-[11px] font-black text-text-primary uppercase tracking-widest mb-4">Canaux Emergences</h4>
+                            <h4 className="text-micro font-black text-text-primary uppercase tracking-widest mb-4">Canaux Emergences</h4>
                             
                             <div className="space-y-3">
                                 {phones.map((p: string, idx: number) => (
@@ -165,8 +165,8 @@ export function TwoFactorChallenge() {
                                     >
                                         <Smartphone className="w-5 h-5 text-text-muted group-hover:text-accent" />
                                         <div className="text-left">
-                                            <p className="text-[11px] font-bold text-text-primary">Numéro de secours {idx + 1}</p>
-                                            <p className="text-[10px] text-text-muted">{p}</p>
+                                            <p className="text-micro font-bold text-text-primary">Numéro de secours {idx + 1}</p>
+                                            <p className="text-nano text-text-muted">{p}</p>
                                         </div>
                                     </button>
                                 ))}
@@ -182,8 +182,8 @@ export function TwoFactorChallenge() {
                                     >
                                         <Mail className="w-5 h-5 text-text-muted group-hover:text-accent" />
                                         <div className="text-left">
-                                            <p className="text-[11px] font-bold text-text-primary">Email de secours</p>
-                                            <p className="text-[10px] text-text-muted">{currentUser.rescueEmail}</p>
+                                            <p className="text-micro font-bold text-text-primary">Email de secours</p>
+                                            <p className="text-nano text-text-muted">{currentUser.rescueEmail}</p>
                                         </div>
                                     </button>
                                 )}
@@ -191,7 +191,7 @@ export function TwoFactorChallenge() {
 
                             <button 
                                 onClick={() => setShowRescueOptions(false)}
-                                className="w-full py-4 text-[10px] font-black text-text-muted uppercase tracking-widest hover:text-text-primary transition-colors"
+                                className="w-full py-4 text-nano font-black text-text-muted uppercase tracking-widest hover:text-text-primary transition-colors"
                             >
                                 Retour
                             </button>

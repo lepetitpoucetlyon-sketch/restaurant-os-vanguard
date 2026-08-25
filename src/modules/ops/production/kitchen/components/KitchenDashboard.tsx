@@ -129,7 +129,7 @@ export function KitchenDashboard() {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 0.6 }}
                                         transition={{ delay: 0.3 }}
-                                        className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mt-2"
+                                        className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] mt-2"
                                     >
                                         Opérations & Production
                                     </motion.p>
@@ -204,7 +204,7 @@ export function KitchenDashboard() {
                                 >
                                     <ChefHat strokeWidth={1.5} className="w-4 h-4 text-accent" />
                                 </motion.div>
-                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-primary">Objectif Prep</span>
+                                <span className="text-nano font-bold uppercase tracking-[0.2em] text-text-primary">Objectif Prep</span>
                             </div>
                             <p className="text-[12px] text-text-muted leading-relaxed font-medium">
                                 Basé sur <span className="text-text-primary font-bold">{Object.keys(miseEnPlaceTarget).length} articles</span> pour les services à venir.

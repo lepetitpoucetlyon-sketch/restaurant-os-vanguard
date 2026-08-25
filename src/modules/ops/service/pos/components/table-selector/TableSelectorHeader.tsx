@@ -22,7 +22,7 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
                 transition={{ duration: 0.8 }}
                 className="flex flex-col"
             >
-                <span className="text-accent-gold text-[10px] font-black uppercase tracking-[0.4em] mb-2">Protocole Service</span>
+                <span className="text-accent-gold text-nano font-black uppercase tracking-[0.4em] mb-2">Protocole Service</span>
                 <h2 className="text-4xl md:text-5xl font-serif font-black text-text-primary tracking-tighter italic">
                     Plan de <span className="text-accent-gold not-italic">Salle</span>.
                 </h2>
@@ -36,7 +36,7 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
                     className="px-6 py-3 rounded-full bg-accent-gold/5 border border-accent-gold/20 text-accent-gold flex items-center gap-4 shadow-soft backdrop-blur-sm"
                 >
                     <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                    <p className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap">
+                    <p className="text-micro font-black uppercase tracking-widest whitespace-nowrap">
                         {activeCount} / {tables.length} Actives
                     </p>
                 </motion.div>

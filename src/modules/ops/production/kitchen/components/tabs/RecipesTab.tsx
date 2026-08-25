@@ -56,7 +56,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full md:w-auto">
                         <Button
                             onClick={onNewRecipe}
-                            className="w-full md:w-auto h-12 px-8 bg-accent hover:bg-accent/90 text-text-primary rounded-xl font-bold text-[11px] uppercase tracking-widest shadow-xl shadow-accent/20"
+                            className="w-full md:w-auto h-12 px-8 bg-accent hover:bg-accent/90 text-text-primary rounded-xl font-bold text-micro uppercase tracking-widest shadow-xl shadow-accent/20"
                         >
                             <ChefHat strokeWidth={1.5} className="w-4 h-4 mr-2" />
                             Nouveau Plat
@@ -70,7 +70,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                 <button
                     onClick={() => setSelectedCategory(null)}
                     className={cn(
-                        "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-micro uppercase tracking-widest transition-all",
                         selectedCategory === null
                             ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                             : "bg-bg-secondary text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border"
@@ -83,7 +83,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
                         className={cn(
-                            "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                            "whitespace-nowrap px-6 py-2.5 rounded-xl font-bold text-micro uppercase tracking-widest transition-all",
                             selectedCategory === cat
                                 ? "bg-accent text-text-primary shadow-lg shadow-accent/20"
                                 : "bg-bg-secondary text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border"
@@ -98,12 +98,12 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
             {isLoading && recipes.length === 0 ? (
                 <div className="flex items-center justify-center py-24 gap-3 text-text-muted">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span className="text-[11px] font-bold uppercase tracking-widest">Chargement des recettes…</span>
+                    <span className="text-micro font-bold uppercase tracking-widest">Chargement des recettes…</span>
                 </div>
             ) : filteredRecipes.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center">
                     <ChefHat strokeWidth={1} className="w-12 h-12 text-text-muted/30 mb-4" />
-                    <p className="text-[11px] font-bold text-text-muted uppercase tracking-widest">
+                    <p className="text-micro font-bold text-text-muted uppercase tracking-widest">
                         {searchQuery ? `Aucun résultat pour "${searchQuery}"` : "Aucune recette enregistrée"}
                     </p>
                 </div>
@@ -203,7 +203,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                             <div className={cn("p-8", !recipe.image && "text-center")}>
                                 <div className={cn("mb-8", !recipe.image && "flex flex-col items-center")}>
                                     <h3 className="font-serif font-semibold text-2xl text-text-primary tracking-tight group-hover:text-accent transition-colors">{String(recipe.name)}</h3>
-                                    <p className="text-text-muted text-[10px] font-bold uppercase tracking-[0.2em] mt-2 font-mono">
+                                    <p className="text-text-muted text-nano font-bold uppercase tracking-[0.2em] mt-2 font-mono">
                                         {recipe.prepTime} MIN PREP • 4 ITEMS
                                     </p>
                                 </div>
@@ -211,12 +211,12 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     {recipe.allergens && recipe.allergens.length > 0 && (
                                         <div className={cn("flex items-center gap-3 px-4 py-2 bg-warning-soft dark:bg-warning/10 rounded-lg border border-warning/10", !recipe.image && "justify-center")}>
                                             <AlertTriangle strokeWidth={1.5} className="w-4 h-4 text-warning" />
-                                            <span className="text-[11px] font-bold text-warning uppercase tracking-wider">Allergènes Présents</span>
+                                            <span className="text-micro font-bold text-warning uppercase tracking-wider">Allergènes Présents</span>
                                         </div>
                                     )}
                                     {/* cui-1: Food cost + margin display */}
                                     <RecipeCostBadge recipe={recipe} compact />
-                                    <Button className="w-full h-12 bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-[11px] uppercase tracking-widest border border-border/50 group-hover:border-accent transition-all duration-300">
+                                    <Button className="w-full h-12 bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-micro uppercase tracking-widest border border-border/50 group-hover:border-accent transition-all duration-300">
                                         Détails Techniques
                                     </Button>
                                 </div>

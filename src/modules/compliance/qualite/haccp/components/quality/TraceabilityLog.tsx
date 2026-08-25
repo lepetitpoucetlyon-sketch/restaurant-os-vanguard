@@ -15,7 +15,7 @@ export const TraceabilityLog: React.FC = () => {
                 </div>
             </div>
             <div className="space-y-3">
-                <p className="text-[10px] text-text-muted italic uppercase tracking-widest text-center py-4">Consultez les archives pour la conformité NF525/HACCP</p>
+                <p className="text-nano text-text-muted italic uppercase tracking-widest text-center py-4">Consultez les archives pour la conformité NF525/HACCP</p>
             </div>
         </div>
     );

@@ -126,11 +126,11 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-text-primary/40 text-[10px] font-black uppercase tracking-[0.3em]">Validation Administrative Requise</span>
+                                    <span className="text-text-primary/40 text-nano font-black uppercase tracking-[0.3em]">Validation Administrative Requise</span>
                                     <div className="h-1 w-1 rounded-full bg-accent/40" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
-                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Compliance Protocol Active</span>
+                                        <span className="text-accent text-nano font-black uppercase tracking-[0.2em]">Compliance Protocol Active</span>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 )}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Volume de la Dépense (TTC)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Volume de la Dépense (TTC)</label>
                             <div className="relative group">
                                 <div className="absolute left-8 top-1/2 -translate-y-1/2 font-serif font-black text-accent text-2xl">€</div>
                                 <input
@@ -179,7 +179,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
                             Motivations & Justifications <Sparkles className="w-3 h-3 text-accent" />
                         </label>
                         <textarea
@@ -194,14 +194,14 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                     {/* Receipt Section */}
                     <div className="space-y-6">
                         <div className="flex items-center justify-between px-4">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                            <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Camera className="w-4 h-4 text-accent" /> Preuve de paiement Scanner
                             </label>
                             {formData.receiptImage && (
                                 <button
                                     type="button"
                                     onClick={() => setFormData(prev => ({ ...prev, receiptImage: null }))}
-                                    className="text-[9px] font-black text-error uppercase tracking-widest hover:opacity-70"
+                                    className="text-nano font-black text-error uppercase tracking-widest hover:opacity-70"
                                 >
                                     Effacer et Recommencer
                                 </button>
@@ -227,7 +227,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     </div>
                                     <div className="text-center space-y-2">
                                         <p className="text-[12px] font-black uppercase text-text-primary tracking-[0.3em]">Scanner / Téléverser le reçu</p>
-                                        <p className="text-[10px] text-text-muted italic font-serif opacity-60">Reconnaissance de texte IA active sur le document</p>
+                                        <p className="text-nano text-text-muted italic font-serif opacity-60">Reconnaissance de texte IA active sur le document</p>
                                     </div>
                                 </div>
                             )}
@@ -248,7 +248,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                             <ShieldCheck className="w-6 h-6 text-accent" />
                         </div>
                         <div className="space-y-2 relative z-10">
-                            <p className="text-[11px] font-black text-text-primary uppercase tracking-widest">Certification d'Intégrité Digitale</p>
+                            <p className="text-micro font-black text-text-primary uppercase tracking-widest">Certification d'Intégrité Digitale</p>
                             <p className="text-[12px] text-text-muted font-serif italic leading-relaxed">
                                 En soumettant ce formulaire, vous attestez sur l'honneur que cette dépense est en stricte conformité avec la politique de frais de l'établissement. Toute soumission frauduleuse est tracée et archivée.
                             </p>
@@ -261,7 +261,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted hover:text-text-primary transition-colors py-2"
+                        className="text-nano font-black uppercase tracking-[0.3em] text-text-muted hover:text-text-primary transition-colors py-2"
                     >
                         Annuler la soumission
                     </button>
@@ -269,7 +269,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <Button
                             disabled={isSubmitting}
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-text-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-text-primary rounded-[2rem] font-black text-micro uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             {isSubmitting ? (
                                 <Sparkles className="w-5 h-5 animate-spin" />

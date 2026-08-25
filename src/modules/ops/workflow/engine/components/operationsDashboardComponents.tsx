@@ -60,7 +60,7 @@ export const MindMapNode = ({ x, y, label, icon: Icon, color, description }: Min
         </div>
         <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-surface-sidebar group-hover:text-text-primary relative z-10 w-48 text-center">
             <span className="text-chip-label block mb-1">{label}</span>
-            {description && <p className="text-[9px] opacity-60 font-sans leading-tight hidden group-hover:block">{description}</p>}
+            {description && <p className="text-nano opacity-60 font-sans leading-tight hidden group-hover:block">{description}</p>}
         </div>
         <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}

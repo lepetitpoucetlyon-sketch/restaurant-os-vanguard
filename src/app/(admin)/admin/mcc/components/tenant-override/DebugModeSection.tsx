@@ -50,7 +50,7 @@ export function DebugModeSection({
               key={l}
               onClick={() => onSetDebugLevel(l)}
               className={cn(
-                'flex-1 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
+                'flex-1 py-1.5 text-nano font-black uppercase tracking-wider rounded-lg border transition-all',
                 form.debug?.level === l
                   ? 'bg-action-primary/20 border-action-primary/50 text-amber-300'
                   : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
@@ -65,7 +65,7 @@ export function DebugModeSection({
       {current.debug?.enabled && (
         <button
           onClick={onRemoveDebug}
-          className="text-[9px] font-black uppercase tracking-wider text-action-primary/60 hover:text-action-primary transition-colors"
+          className="text-nano font-black uppercase tracking-wider text-action-primary/60 hover:text-action-primary transition-colors"
         >
           Retirer le mode debug
         </button>

@@ -87,7 +87,7 @@ export function FleetUpgradePanel() {
         </div>
         <div>
           <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Mises à Niveau Flotte</h3>
-          <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Déploiement de version &amp; notes de mise à jour</p>
+          <p className="text-nano font-bold text-secondary uppercase tracking-tighter">Déploiement de version &amp; notes de mise à jour</p>
         </div>
       </div>
 
@@ -106,13 +106,13 @@ export function FleetUpgradePanel() {
       {/* Target state */}
       <div>
         <label className="text-chip-label-sm text-secondary block mb-2">Canal</label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {(Object.keys(STATE_META) as TargetState[]).map(s => (
             <button
               key={s}
               onClick={() => setTargetState(s)}
               className={cn(
-                'py-2 text-[9px] font-black uppercase tracking-wider rounded-xl border transition-all',
+                'py-2 text-nano font-black uppercase tracking-wider rounded-xl border transition-all',
                 targetState === s ? STATE_META[s].color : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
               )}
             >
@@ -161,13 +161,13 @@ export function FleetUpgradePanel() {
           <p className={cn('text-chip-label', breaking ? 'text-status-danger' : 'text-secondary')}>
             Breaking change
           </p>
-          <p className="text-[9px] text-secondary">Déclenche une alerte critique dans l'audit</p>
+          <p className="text-nano text-secondary">Déclenche une alerte critique dans l'audit</p>
         </div>
         <div className={cn(
           'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
           breaking ? 'bg-status-danger border-red-400' : 'border-border-default'
         )}>
-          {breaking && <span className="text-text-primary text-[8px]">✓</span>}
+          {breaking && <span className="text-text-primary text-nano">✓</span>}
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export function FleetUpgradePanel() {
           <button
             onClick={() => setScope('fleet')}
             className={cn(
-              'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
+              'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-nano font-black uppercase tracking-wider transition-all',
               scope === 'fleet' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
             )}
           >
@@ -188,7 +188,7 @@ export function FleetUpgradePanel() {
           <button
             onClick={() => setScope('select')}
             className={cn(
-              'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all',
+              'flex items-center justify-center gap-2 py-2.5 rounded-xl border text-nano font-black uppercase tracking-wider transition-all',
               scope === 'select' ? 'bg-action-primary/20 border-action-primary/40 text-amber-300' : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
             )}
           >
@@ -215,10 +215,10 @@ export function FleetUpgradePanel() {
                   'w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0',
                   selectedIds.has(inst.id) ? 'bg-action-primary border-amber-400' : 'border-border-default'
                 )}>
-                  {selectedIds.has(inst.id) && <span className="text-[7px] text-text-primary">✓</span>}
+                  {selectedIds.has(inst.id) && <span className="text-nano text-text-primary">✓</span>}
                 </div>
                 <span className="truncate">{inst.name ?? inst.id}</span>
-                <span className="font-mono text-[9px] text-secondary/60 ml-auto">{inst.id}</span>
+                <span className="font-mono text-nano text-secondary/60 ml-auto">{inst.id}</span>
               </button>
             ))}
           </div>
@@ -230,7 +230,7 @@ export function FleetUpgradePanel() {
         onClick={handlePush}
         disabled={isPushing || !version.trim() || (scope === 'select' && selectedIds.size === 0)}
         className={cn(
-          'w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all',
+          'w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-black text-nano uppercase tracking-widest transition-all',
           'bg-action-primary hover:bg-action-primary text-black',
           'disabled:opacity-40 disabled:cursor-not-allowed',
           isPushing && 'animate-pulse'

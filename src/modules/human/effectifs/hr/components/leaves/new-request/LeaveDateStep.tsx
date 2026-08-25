@@ -38,7 +38,7 @@ export function LeaveDateStep({
         >
             <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
-                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest">
                         Début
                     </label>
                     <input
@@ -58,7 +58,7 @@ export function LeaveDateStep({
                     />
                 </div>
                 <div className="space-y-3">
-                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest">
                         Fin
                     </label>
                     <input
@@ -91,7 +91,7 @@ export function LeaveDateStep({
                     </div>
                     {selectedBalance && (
                         <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-sm">
-                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Solde prévisionnel</span>
+                            <span className="text-nano font-bold text-text-muted uppercase tracking-widest">Solde prévisionnel</span>
                             <span className={cn(
                                 "font-bold font-mono px-2 py-0.5 rounded",
                                 selectedBalance.remaining - workingDays >= 0

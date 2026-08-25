@@ -62,7 +62,7 @@ export function AssistantMessageList({
                     </div>
                     <div>
                         <p className="text-xs font-bold text-text-primary">Comment puis-je vous assister ?</p>
-                        <p className="text-[11px] text-text-muted mt-1 max-w-xs">
+                        <p className="text-micro text-text-muted mt-1 max-w-xs">
                             Posez une question métier, demandez une analyse ou déclenchez une action.
                         </p>
                     </div>
@@ -97,7 +97,7 @@ export function AssistantMessageList({
                         ))}
                     </div>
 
-                    <span className="text-[9px] text-text-muted px-1 mt-1 font-mono">
+                    <span className="text-nano text-text-muted px-1 mt-1 font-mono">
                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>

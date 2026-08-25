@@ -54,7 +54,7 @@ export function ProductFooterBar({
         <div className="flex items-center gap-8">
           <ShoppingCart className="w-6 h-6 text-text-primary dark:text-primary" strokeWidth={1.5} />
           <div className="flex flex-col items-start translate-y-[1px]">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 dark:text-primary/40 leading-none mb-1">
+            <span className="text-nano font-black uppercase tracking-[0.3em] text-text-primary/40 dark:text-primary/40 leading-none mb-1">
               {t('pos.details.add_to')}
             </span>
             <span className="text-[13px] font-black uppercase tracking-[0.3em] text-text-primary dark:text-primary leading-none">

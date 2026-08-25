@@ -93,7 +93,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         <div className="p-10 space-y-8 bg-bg-primary/30 max-h-[60vh] overflow-y-auto elegant-scrollbar">
                             {/* Name */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Nom du segment</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Nom du segment</label>
                                 <input
                                     type="text"
                                     value={name}
@@ -105,7 +105,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
 
                             {/* Description */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Description</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Description</label>
                                 <textarea
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
@@ -117,7 +117,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
 
                             {/* Criteria */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-4 block">Critères de filtrage</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-4 block">Critères de filtrage</label>
                                 <div className="space-y-6">
                                     {CRITERIA_OPTIONS.map((criterion) => (
                                         <div key={criterion.id}>
@@ -130,7 +130,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                                     <button
                                                         key={opt}
                                                         onClick={() => toggleCriteria(criterion.id, opt)}
-                                                        className={`px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-wider border transition-all ${
+                                                        className={`px-5 py-2.5 rounded-full text-micro font-bold uppercase tracking-wider border transition-all ${
                                                             criteria[criterion.id] === opt
                                                                 ? 'bg-status-success text-text-primary border-emerald-500 shadow-lg shadow-emerald-500/20'
                                                                 : 'border-border/50 text-text-muted hover:border-emerald-500/30 hover:text-status-success'

@@ -111,7 +111,7 @@ export function SubdomainSelectorStep({ initialSlug = '', onSelect, onSkip }: Su
             <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
           </div>
-          <div className="flex items-center gap-1.5 rounded-md bg-slate-800/80 px-3 py-1 text-[11px] font-mono text-text-secondary">
+          <div className="flex items-center gap-1.5 rounded-md bg-slate-800/80 px-3 py-1 text-micro font-mono text-text-secondary">
             <Sparkles className="w-3 h-3 text-indigo-400" />
             https://{slug || 'mon-restaurant'}.{rootDomain}
           </div>
@@ -120,7 +120,7 @@ export function SubdomainSelectorStep({ initialSlug = '', onSelect, onSkip }: Su
 
         <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800/50 space-y-2">
           <div className="text-xs font-semibold text-indigo-400">⚡ Inclus dans votre abonnement :</div>
-          <ul className="text-[11px] text-text-muted space-y-1">
+          <ul className="text-micro text-text-muted space-y-1">
             <li>• Certificat SSL HTTPS Let&apos;s Encrypt dédié et renouvelé à vie.</li>
             <li>• Redirection transparente vers votre caisse et menu QR code.</li>
             <li>• Gestion de l&apos;infrastructure assurée par Restaurant OS Master MCC.</li>

@@ -72,7 +72,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                             <div className="p-8 flex items-center justify-between">
                                 <div>
                                     <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight uppercase">Centre d'Expertise</h2>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-gold mt-1">Diagnostic Système Intégré</p>
+                                    <p className="text-nano font-black uppercase tracking-[0.3em] text-accent-gold mt-1">Diagnostic Système Intégré</p>
                                 </div>
                                 <button 
                                     onClick={() => setIsOpen(false)}
@@ -108,7 +108,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                         </button>
                                     </div>
                                     {!isConfigured && (
-                                        <p className="text-[9px] text-error font-black uppercase text-center tracking-widest">
+                                        <p className="text-nano text-error font-black uppercase text-center tracking-widest">
                                             ⚠️ Paramètres d'expertise manquants
                                         </p>
                                     )}
@@ -126,7 +126,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                             className="p-4 rounded-2xl bg-bg-tertiary border border-border/50 hover:border-accent-gold/30 flex flex-col items-center gap-2 transition-all"
                                         >
                                             <s.icon className="w-4 h-4 text-accent-gold" />
-                                            <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{s.label}</span>
+                                            <span className="text-nano font-black uppercase tracking-widest text-text-muted">{s.label}</span>
                                         </button>
                                     ))}
                                 </div>

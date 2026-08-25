@@ -135,7 +135,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                             </div>
                             <div>
                                 <h2 className="text-4xl font-serif font-black text-text-primary italic tracking-tight">Sceau de Préparation.</h2>
-                                <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-2">Mise en place & Alchimie Culinaire</p>
+                                <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-2">Mise en place & Alchimie Culinaire</p>
                             </div>
                         </div>
                         <button
@@ -159,7 +159,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                                 <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
                             </motion.div>
                             <p className="text-4xl font-serif font-black text-text-primary italic">Mise en Place Scellée.</p>
-                            <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4">L&apos;œuvre culinaire a été archivée avec succès</p>
+                            <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-4">L&apos;œuvre culinaire a été archivée avec succès</p>
                         </div>
                     ) : (
                         <div className="space-y-10">
@@ -211,7 +211,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={onClose}
-                            className="px-10 py-5 text-[10px] font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-[22px]"
+                            className="px-10 py-5 text-nano font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-[22px]"
                         >
                             ANNULATION
                         </motion.button>
@@ -221,7 +221,7 @@ export function CreatePreparationModal({ isOpen, onClose }: CreatePreparationMod
                             onClick={handleSubmit}
                             disabled={!name || !quantity || !storageLocation || isSubmitting}
                             className={cn(
-                                "flex items-center gap-6 px-16 py-6 rounded-[22px] text-[11px] font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
+                                "flex items-center gap-6 px-16 py-6 rounded-[22px] text-micro font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
                                 name && quantity && storageLocation
                                     ? "bg-text-primary text-text-primary hover:bg-accent-gold"
                                     : "bg-text-muted/10 text-text-muted/20 cursor-not-allowed"

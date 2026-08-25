@@ -97,7 +97,7 @@ export const MenuEngineeringMatrix: React.FC = () => {
                 <h2 className="text-lg font-serif font-black italic text-text-primary">
                     Matrice Menu Engineering
                 </h2>
-                <p className="text-[10px] font-black text-text-muted uppercase tracking-widest mt-1">
+                <p className="text-nano font-black text-text-muted uppercase tracking-widest mt-1">
                     Classement Kasavana & Smith · popularité × marge
                 </p>
             </header>
@@ -124,7 +124,7 @@ export const MenuEngineeringMatrix: React.FC = () => {
                                             ({items.length})
                                         </span>
                                     </h3>
-                                    <p className="text-[10px] opacity-70 leading-tight">{q.help}</p>
+                                    <p className="text-nano opacity-70 leading-tight">{q.help}</p>
                                 </div>
                             </div>
 
@@ -144,7 +144,7 @@ export const MenuEngineeringMatrix: React.FC = () => {
                                     <li className="text-xs italic opacity-60 px-3 py-1.5">Aucun plat</li>
                                 )}
                                 {items.length > 6 && (
-                                    <li className="text-[10px] opacity-60 px-3 pt-1">
+                                    <li className="text-nano opacity-60 px-3 pt-1">
                                         +{items.length - 6} autres
                                     </li>
                                 )}

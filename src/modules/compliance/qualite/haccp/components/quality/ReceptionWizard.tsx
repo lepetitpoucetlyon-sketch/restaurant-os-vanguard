@@ -81,7 +81,7 @@ export function ReceptionWizard() {
           <h2 className="text-3xl font-serif font-black italic text-text-primary px-2">
             Protocole d&apos;Agréage<span className="text-status-success not-italic">.</span>
           </h2>
-          <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.3em] mt-2 px-2 flex items-center gap-2">
+          <p className="text-nano text-text-muted font-black uppercase tracking-[0.3em] mt-2 px-2 flex items-center gap-2">
             <ShieldIcon className="w-3 h-3 text-status-success" />
             ID RÉCEPTION: {selectedId?.slice(0, 12) || 'NOUVEAU'}
           </p>
@@ -121,7 +121,7 @@ export function ReceptionWizard() {
                     />
                     
                     <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle">
-                        <h4 className="font-bold uppercase text-[10px] tracking-widest text-primary mb-4 flex items-center gap-2">
+                        <h4 className="font-bold uppercase text-nano tracking-widest text-primary mb-4 flex items-center gap-2">
                             <TruckIcon className="w-4 h-4 text-status-success" />
                             Hygiène Véhicule
                         </h4>
@@ -131,7 +131,7 @@ export function ReceptionWizard() {
                                     key={status}
                                     onClick={() => updateConditions({ vehicle_cleanliness: status as CleanlinessStatus })}
                                     className={cn(
-                                        "flex-1 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all",
+                                        "flex-1 py-4 rounded-2xl border text-nano font-black uppercase tracking-[0.15em] transition-all",
                                         session?.delivery_conditions?.vehicle_cleanliness === status 
                                             ? "bg-surface-sidebar text-text-primary border-transparent shadow-lg"
                                             : "bg-surface-card border-default hover:border-emerald-500/40 text-muted"
@@ -150,7 +150,7 @@ export function ReceptionWizard() {
                     </div>
                     <div>
                         <p className="font-serif font-black italic text-lg text-primary">Photo du Bon de Livraison</p>
-                        <p className="text-[10px] text-muted mt-1 font-black uppercase tracking-widest">Preuve numérique HACCP requise</p>
+                        <p className="text-nano text-muted mt-1 font-black uppercase tracking-widest">Preuve numérique HACCP requise</p>
                     </div>
                 </div>
             </motion.div>
@@ -168,7 +168,7 @@ export function ReceptionWizard() {
                     <h3 className="text-xl font-serif font-black italic text-primary">Contrôle des Articles</h3>
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-status-success rounded-full border border-emerald-100">
                         <SearchIcon className="w-3.5 h-3.5 text-status-success" />
-                        <span className="text-[10px] font-black text-status-success uppercase tracking-widest">{stats.total} Articles</span>
+                        <span className="text-nano font-black text-status-success uppercase tracking-widest">{stats.total} Articles</span>
                     </div>
                 </div>
 
@@ -207,11 +207,11 @@ export function ReceptionWizard() {
 
                 <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                    <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle text-center">
-                       <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Items Acceptés</p>
+                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Items Acceptés</p>
                        <p className="text-3xl font-mono font-bold text-status-success">{stats.accepted}</p>
                    </div>
                    <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle text-center">
-                       <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Items Rejetés</p>
+                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Items Rejetés</p>
                        <p className="text-3xl font-mono font-bold text-status-danger">{stats.rejected}</p>
                    </div>
                 </div>
@@ -222,7 +222,7 @@ export function ReceptionWizard() {
                     </div>
                    <div className="text-left">
                        <p className="font-black text-sm tracking-tight text-primary">Signature Électronique</p>
-                       <p className="text-[10px] text-secondary uppercase font-black tracking-widest">Validation Finale Grade VI</p>
+                       <p className="text-nano text-secondary uppercase font-black tracking-widest">Validation Finale Grade VI</p>
                    </div>
                 </div>
             </motion.div>
@@ -235,21 +235,21 @@ export function ReceptionWizard() {
             variant="ghost" 
             onClick={prevStep}
             disabled={step === 1 || isSubmitting}
-            className="rounded-xl px-6 font-black uppercase tracking-widest text-[9px] flex items-center gap-2"
+            className="rounded-xl px-6 font-black uppercase tracking-widest text-nano flex items-center gap-2"
         >
             <LeftIcon className="w-3.5 h-3.5" />
             Retour
         </Button>
 
         <div className="flex gap-2">
-            <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">Phase {step}/3</span>
+            <span className="text-nano font-black text-muted uppercase tracking-[0.2em]">Phase {step}/3</span>
         </div>
 
         <Button
             onClick={nextStep}
             disabled={isSubmitting}
             className={cn(
-                "px-8 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-2 shadow-xl transition-all",
+                "px-8 rounded-xl font-black uppercase tracking-widest text-nano flex items-center gap-2 shadow-xl transition-all",
                 step === 3 ? "bg-status-success hover:bg-status-success text-text-primary" : "bg-surface-sidebar hover:bg-surface-sidebar text-text-primary"
             )}
         >

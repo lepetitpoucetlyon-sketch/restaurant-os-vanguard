@@ -22,7 +22,7 @@ export const QualityModuleLayout: React.FC<QualityModuleLayoutProps> = ({
                         {title}<span className="text-accent-gold not-italic">.</span>
                     </h1>
                     {subtitle && (
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">
                             {subtitle}
                         </p>
                     )}

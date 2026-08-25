@@ -108,7 +108,7 @@ function MCCDashboardInner() {
                             </button>
                             <div className="hidden sm:flex items-center gap-2 bg-surface-card border border-border-subtle px-3 py-2.5 rounded-xl">
                                 <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
-                                <span className="text-[10px] font-bold text-muted uppercase tracking-widest">{t.header.axiomBridge}</span>
+                                <span className="text-nano font-bold text-muted uppercase tracking-widest">{t.header.axiomBridge}</span>
                             </div>
                             <div className="w-10 h-10 rounded-full bg-action-primary/20 border border-focus/30 flex items-center justify-center font-bold text-brand">{userInitials}</div>
                         </div>
@@ -248,7 +248,7 @@ function MCCDashboardInner() {
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-2 ml-1 tracking-widest">Secteur d&apos;activité</label>
-                                            <div className="grid grid-cols-4 gap-2">
+                                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                                                 {PLATFORM_VARIANTS.map(v => (
                                                     <button key={v} type="button" onClick={() => setNewCloneVariant(v)}
                                                         className={`flex flex-col items-center gap-1 p-3 rounded-2xl border text-center transition-all ${newCloneVariant === v ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
@@ -260,7 +260,7 @@ function MCCDashboardInner() {
                                         </div>
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">{t.clone.tier}</label>
-                                            <div className="grid grid-cols-3 gap-2">
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                                 {(['STANDARD', 'PREMIUM', 'ENTERPRISE'] as const).map((tier) => {
                                                     const info = t.clone.tiers[tier] as { tagline?: string, price: string, period?: string, features: readonly string[] };
                                                     const active = newCloneTier === tier;
@@ -268,18 +268,18 @@ function MCCDashboardInner() {
                                                         <button key={tier} type="button" onClick={() => setNewCloneTier(tier)}
                                                             className={`relative flex flex-col items-start p-3 rounded-2xl text-left transition-all border ${active ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
                                                             {tier === 'PREMIUM' && (
-                                                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-action-primary text-text-primary text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full whitespace-nowrap">
+                                                                <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-action-primary text-text-primary text-nano font-black uppercase tracking-widest px-2 py-0.5 rounded-full whitespace-nowrap">
                                                                     {info.tagline}
                                                                 </span>
                                                             )}
                                                             <span className={`text-chip-label-sm mb-1 ${active ? 'text-brand' : 'text-secondary'}`}>{tier}</span>
                                                             <span className={`text-base font-black leading-none ${active ? 'text-brand' : 'text-text-primary'}`}>{info.price}</span>
-                                                            {info.period && <span className="text-[9px] text-muted mb-2">{info.period}</span>}
+                                                            {info.period && <span className="text-nano text-muted mb-2">{info.period}</span>}
                                                             <ul className="mt-2 space-y-1 w-full">
                                                                 {info.features.map((f: string) => (
                                                                     <li key={f} className="flex items-start gap-1">
-                                                                        <span className={`text-[8px] mt-0.5 ${active ? 'text-brand' : 'text-status-success'}`}>✓</span>
-                                                                        <span className="text-[8px] text-muted leading-tight">{f}</span>
+                                                                        <span className={`text-nano mt-0.5 ${active ? 'text-brand' : 'text-status-success'}`}>✓</span>
+                                                                        <span className="text-nano text-muted leading-tight">{f}</span>
                                                                     </li>
                                                                 ))}
                                                             </ul>
@@ -309,11 +309,11 @@ function MCCDashboardInner() {
                                                             if (!isNaN(v) && v > 0) setNewTrialDays(v);
                                                         }}
                                                         onFocus={() => { if ([7, 14, 30].includes(newTrialDays)) setNewTrialDays(0); }}
-                                                        className={`w-full py-2.5 px-3 rounded-xl text-[10px] font-black text-center transition-all border bg-surface-bg focus:outline-none ${![7, 14, 30].includes(newTrialDays) && newTrialDays > 0 ? 'border-focus/50 text-brand' : 'border-subtle text-secondary'}`}
+                                                        className={`w-full py-2.5 px-3 rounded-xl text-nano font-black text-center transition-all border bg-surface-bg focus:outline-none ${![7, 14, 30].includes(newTrialDays) && newTrialDays > 0 ? 'border-focus/50 text-brand' : 'border-subtle text-secondary'}`}
                                                     />
                                                 </div>
                                             </div>
-                                            <p className="text-[9px] text-muted mt-1.5 ml-1">
+                                            <p className="text-nano text-muted mt-1.5 ml-1">
                                                 {newTrialDays > 0 ? `Expire le ${new Date(Date.now() + newTrialDays * 86_400_000).toLocaleDateString('fr-FR')} — paiement requis ensuite` : 'Compte actif immédiatement'}
                                             </p>
                                         </div>
@@ -321,7 +321,7 @@ function MCCDashboardInner() {
                                         {/* ── Profondeur Métier Initiale ── */}
                                         <div>
                                             <label className="block text-xs font-black text-secondary uppercase mb-3 ml-1 tracking-widest">Niveau de Profondeur Initial</label>
-                                            <div className="grid grid-cols-3 gap-2 mb-4">
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
                                                 {[
                                                     { id: 'essential', label: 'Focus (Essentiel)', icon: '⚡', desc: 'Artisan / Solo · 3 boutons · Pilote auto' },
                                                     { id: 'manager', label: 'Gestion (Standard)', icon: '📊', desc: 'TPE / PME · Marges, planning, stocks' },
@@ -331,11 +331,11 @@ function MCCDashboardInner() {
                                                         className={`flex flex-col p-3 rounded-2xl border text-left transition-all ${newCloneDisplayDepth === d.id ? 'bg-action-primary/10 border-focus/50' : 'bg-surface-bg border-subtle hover:border-border-subtle'}`}>
                                                         <div className="flex items-center gap-1.5 mb-1">
                                                             <span className="text-sm">{d.icon}</span>
-                                                            <p className={`text-[9px] font-black uppercase tracking-wider truncate ${newCloneDisplayDepth === d.id ? 'text-brand' : 'text-secondary'}`}>
+                                                            <p className={`text-nano font-black uppercase tracking-wider truncate ${newCloneDisplayDepth === d.id ? 'text-brand' : 'text-secondary'}`}>
                                                                 {d.label}
                                                             </p>
                                                         </div>
-                                                        <p className="text-[7.5px] text-muted leading-tight">
+                                                        <p className="text-nano text-muted leading-tight">
                                                             {d.desc}
                                                         </p>
                                                     </button>
@@ -355,7 +355,7 @@ function MCCDashboardInner() {
                                                             <p className={`text-chip-label ${newCloneBrandingMode === m ? 'text-brand' : 'text-secondary'}`}>
                                                                 {m === 'default' ? 'Restaurant OS' : 'Personnalisé'}
                                                             </p>
-                                                            <p className="text-[8px] text-muted leading-tight mt-0.5">
+                                                            <p className="text-nano text-muted leading-tight mt-0.5">
                                                                 {m === 'default' ? 'Branding standard (gold/dark)' : 'Logo + couleurs du client'}
                                                             </p>
                                                         </div>
@@ -366,7 +366,7 @@ function MCCDashboardInner() {
                                                 <div className="space-y-3 p-4 bg-surface-card/50 border border-subtle rounded-2xl">
                                                     <div className="flex items-center gap-3">
                                                         <div>
-                                                            <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">Couleur principale</label>
+                                                            <label className="block text-nano font-black text-secondary uppercase tracking-widest mb-1">Couleur principale</label>
                                                             <div className="flex items-center gap-2">
                                                                 <input type="color" value={newCloneAccentColor} onChange={e => setNewCloneAccentColor(e.target.value)}
                                                                     className="w-9 h-9 rounded-xl border border-subtle cursor-pointer bg-transparent p-0.5" />
@@ -375,7 +375,7 @@ function MCCDashboardInner() {
                                                             </div>
                                                         </div>
                                                         <div className="flex-1">
-                                                            <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">Aperçu</label>
+                                                            <label className="block text-nano font-black text-secondary uppercase tracking-widest mb-1">Aperçu</label>
                                                             <div className="h-9 rounded-xl border border-subtle flex items-center justify-center"
                                                                 style={{ background: `linear-gradient(135deg, ${newCloneAccentColor}22 0%, ${newCloneAccentColor}08 100%)`, borderColor: `${newCloneAccentColor}40` }}>
                                                                 <span className="text-chip-label" style={{ color: newCloneAccentColor }}>Aperçu</span>
@@ -383,11 +383,11 @@ function MCCDashboardInner() {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label className="block text-[9px] font-black text-secondary uppercase tracking-widest mb-1">URL Logo (optionnel)</label>
+                                                        <label className="block text-nano font-black text-secondary uppercase tracking-widest mb-1">URL Logo (optionnel)</label>
                                                         <input type="url" placeholder="https://cdn.exemple.com/logo.svg"
                                                             value={newCloneLogoUrl} onChange={e => setNewCloneLogoUrl(e.target.value)}
                                                             className="w-full bg-surface-bg border border-subtle rounded-xl py-2 px-3 text-xs focus:outline-none focus:border-focus/50 font-mono" />
-                                                        <p className="text-[8px] text-muted mt-1">PNG / SVG recommandé · fond transparent</p>
+                                                        <p className="text-nano text-muted mt-1">PNG / SVG recommandé · fond transparent</p>
                                                     </div>
                                                     <label className="flex items-center gap-3 cursor-pointer select-none">
                                                         <div className={`w-9 h-5 rounded-full transition-colors relative ${newCloneSplashEnabled ? 'bg-action-primary' : 'bg-border-subtle'}`}
@@ -396,7 +396,7 @@ function MCCDashboardInner() {
                                                         </div>
                                                         <div>
                                                             <p className="text-chip-label text-text-primary">Splash screen</p>
-                                                            <p className="text-[8px] text-muted">Écran de démarrage branded à l&apos;ouverture de l&apos;app</p>
+                                                            <p className="text-nano text-muted">Écran de démarrage branded à l&apos;ouverture de l&apos;app</p>
                                                         </div>
                                                     </label>
                                                 </div>
@@ -405,16 +405,16 @@ function MCCDashboardInner() {
 
                                         <div className="p-4 bg-action-primary/5 border border-focus/10 rounded-2xl flex items-center gap-3">
                                             <Lock className="w-5 h-5 text-brand shrink-0" />
-                                            <p className="text-[10px] text-muted leading-relaxed uppercase tracking-tighter">{t.clone.policy}</p>
+                                            <p className="text-nano text-muted leading-relaxed uppercase tracking-tighter">{t.clone.policy}</p>
                                         </div>
                                         {provisioningStatus ? (
                                             <div className="flex flex-col py-4 gap-3">
                                                 {PROV_STEPS.map((step, i) => (
                                                     <div key={step} className="flex items-center gap-3">
                                                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${i < provisionStep ? 'bg-status-success border-emerald-500' : i === provisionStep ? 'border-brand animate-pulse bg-action-primary/20' : 'border-border-subtle'}`}>
-                                                            {i < provisionStep && <span className="text-[8px] text-text-primary">✓</span>}
+                                                            {i < provisionStep && <span className="text-nano text-text-primary">✓</span>}
                                                         </div>
-                                                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-text-primary/20'}`}>{step}</span>
+                                                        <span className={`text-nano font-bold uppercase tracking-widest transition-colors ${i === provisionStep ? 'text-brand' : i < provisionStep ? 'text-status-success/60' : 'text-text-primary/20'}`}>{step}</span>
                                                     </div>
                                                 ))}
                                             </div>

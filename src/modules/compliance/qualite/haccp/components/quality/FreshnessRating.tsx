@@ -11,7 +11,7 @@ interface FreshnessRatingProps {
 export const FreshnessRating: React.FC<FreshnessRatingProps> = ({ value, onChange, className }) => {
     return (
         <div className={cn("flex flex-col gap-2", className)}>
-            <p className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Score Fraîcheur</p>
+            <p className="text-nano font-black text-muted uppercase tracking-widest ml-1">Score Fraîcheur</p>
             <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <button

@@ -66,7 +66,7 @@ export function LeaveTypeStep({
                                         isSelected ? "text-text-primary" : "text-text-primary/70"
                                     )}>{label}</span>
                                     {balance && (
-                                        <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em] mt-1 block">
+                                        <span className="text-nano font-black text-text-muted/60 uppercase tracking-[0.2em] mt-1 block">
                                             {balance.remaining}j dispos.
                                         </span>
                                     )}

@@ -52,7 +52,7 @@ export function StockReceptionForm({
         <div className="space-y-10">
             {/* Vision Scanner — scan invoice to auto-fill (log-4) */}
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shadow-glow" />
                     SCAN AUTOMATIQUE (OPTIONNEL)
                 </label>
@@ -64,7 +64,7 @@ export function StockReceptionForm({
 
             {/* Ingredient Selection */}
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shadow-glow" />
                     IDENTITÉ DE LA RESSOURCE *
                 </label>
@@ -82,7 +82,7 @@ export function StockReceptionForm({
             {/* Quantity & Unit */}
             <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-4">
-                    <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                    <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                         MASSE / VOLUME *
                     </label>
                     <input
@@ -95,7 +95,7 @@ export function StockReceptionForm({
                     />
                 </div>
                 <div className="space-y-4">
-                    <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                    <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                         MESURE PROTOCOLE
                     </label>
                     <PremiumSelect
@@ -111,7 +111,7 @@ export function StockReceptionForm({
 
             {/* Supplier dropdown (log-1: dynamic from Nexus) */}
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <Truck className="w-3.5 h-3.5 text-accent-gold" />
                     FOURNISSEUR
                 </label>
@@ -130,7 +130,7 @@ export function StockReceptionForm({
 
             {/* Storage Location */}
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <MapPin className="w-3.5 h-3.5 text-accent-gold" />
                     DESTINATION D&apos;ARCHIVAGE *
                 </label>
@@ -148,7 +148,7 @@ export function StockReceptionForm({
             {/* Dates Section */}
             <div className="grid grid-cols-2 gap-8 pt-4">
                 <div className="space-y-4">
-                    <label className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-[0.4em] px-2 outline-none">
+                    <label className="flex items-center gap-3 text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 outline-none">
                         <Calendar className="w-4 h-4 text-accent-gold" />
                         RÉCEPTION PROTOCOLÉE
                     </label>
@@ -160,7 +160,7 @@ export function StockReceptionForm({
                     />
                 </div>
                 <div className="space-y-4">
-                    <label className="flex items-center gap-3 text-[10px] font-black text-error uppercase tracking-[0.4em] px-2 outline-none">
+                    <label className="flex items-center gap-3 text-nano font-black text-error uppercase tracking-[0.4em] px-2 outline-none">
                         <AlertTriangle className="w-4 h-4" />
                         EXPIRATION (DLC) *
                     </label>

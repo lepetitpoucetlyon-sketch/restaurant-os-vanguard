@@ -90,20 +90,20 @@ export const AIWorkshop: React.FC = () => {
             <div key={patch.id} className="border border-border-subtle rounded-2xl p-4 bg-surface-card space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono text-brand">{patch.ticketId}</span>
+                  <span className="text-nano font-mono text-brand">{patch.ticketId}</span>
                   <p className="text-sm font-bold text-text-primary mt-0.5">{patch.description}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase border tracking-widest ${STATUS_STYLES[patch.status]}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-nano font-black uppercase border tracking-widest ${STATUS_STYLES[patch.status]}`}>
                     {patch.status}
                   </span>
-                  <span className="text-[10px] text-secondary font-mono">
+                  <span className="text-nano text-secondary font-mono">
                     {(patch.confidenceScore * 100).toFixed(0)}% confidence
                   </span>
                 </div>
               </div>
               <div className="overflow-x-auto rounded-xl bg-surface-card p-3 border border-border-subtle">
-                <pre className="text-[10px] font-mono text-status-success whitespace-pre-wrap">{patch.codeDiff}</pre>
+                <pre className="text-nano font-mono text-status-success whitespace-pre-wrap">{patch.codeDiff}</pre>
               </div>
               {patch.status === 'PENDING' && (
                 <div className="flex gap-3 pt-1">

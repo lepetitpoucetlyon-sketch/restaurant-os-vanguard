@@ -33,7 +33,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                         Rémunération & Primes
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Majoration & Bonus Temporels</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Majoration & Bonus Temporels</p>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     <div className="space-y-4 bg-bg-primary p-8 rounded-[2rem] border border-border">
                         <div className="flex items-center gap-3">
                             <Moon className="w-5 h-5 text-text-muted" />
-                            <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Début Heures de Nuit</label>
+                            <label className="text-nano font-bold text-text-muted uppercase tracking-widest">Début Heures de Nuit</label>
                         </div>
                         <input
                             type="time"
@@ -54,7 +54,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     <div className="space-y-4 bg-bg-primary p-8 rounded-[2rem] border border-border">
                         <div className="flex items-center gap-3">
                             <Timer className="w-5 h-5 text-text-muted" />
-                            <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Prime de Nuit</label>
+                            <label className="text-nano font-bold text-text-muted uppercase tracking-widest">Prime de Nuit</label>
                         </div>
                         <div className="relative">
                             <input
@@ -71,7 +71,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     <div className="space-y-4 bg-bg-primary p-8 rounded-[2rem] border border-border">
                         <div className="flex items-center gap-3">
                             <Sun className="w-5 h-5 text-text-muted" />
-                            <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Majoration Dimanche</label>
+                            <label className="text-nano font-bold text-text-muted uppercase tracking-widest">Majoration Dimanche</label>
                         </div>
                         <div className="relative">
                             <input
@@ -86,7 +86,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     <div className="space-y-4 bg-bg-primary p-8 rounded-[2rem] border border-border">
                         <div className="flex items-center gap-3">
                             <Flame className="w-5 h-5 text-text-muted" />
-                            <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Majoration Jours Fériés</label>
+                            <label className="text-nano font-bold text-text-muted uppercase tracking-widest">Majoration Jours Fériés</label>
                         </div>
                         <div className="relative">
                             <input
@@ -116,7 +116,7 @@ export function StaffCompensationSection({ localConfig, setLocalConfig }: StaffC
                     </div>
                     <div>
                         <p className={cn("font-serif text-lg uppercase tracking-tight italic", localConfig.paidBreaks ? "text-text-primary" : "text-text-muted")}>Pauses Payées</p>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Inclure les temps de pause dans les cycles de travail</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Inclure les temps de pause dans les cycles de travail</p>
                     </div>
                 </div>
                 <button

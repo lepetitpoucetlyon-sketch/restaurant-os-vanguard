@@ -143,7 +143,7 @@ export function ShiftEditModal({
                         </button>
                         <button
                             onClick={handleSave}
-                            className="h-16 px-12 bg-surface-sidebar text-text-primary rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
+                            className="h-16 px-12 bg-surface-sidebar text-text-primary rounded-full font-black text-nano uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
                         >
                             <Save className="w-4 h-4 text-accent" />
                             {isNew ? "SCELLER SHIFT" : "MAINTENIR MODIFICATIONS"}

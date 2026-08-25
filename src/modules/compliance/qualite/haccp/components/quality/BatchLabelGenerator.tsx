@@ -10,9 +10,9 @@ export const BatchLabelGenerator: React.FC = () => {
                 <h3 className="font-bold font-serif italic">Générateur d'Étiquettes Traçabilité</h3>
             </div>
             <div className="p-4 bg-bg-tertiary rounded-xl border border-border mb-6">
-                <p className="text-[10px] font-mono text-text-muted">Prêt pour l'impression (Zebra/Dymo)</p>
+                <p className="text-nano font-mono text-text-muted">Prêt pour l'impression (Zebra/Dymo)</p>
             </div>
-            <Button className="w-full bg-accent-gold text-text-primary font-black uppercase text-[10px] tracking-widest flex items-center gap-2">
+            <Button className="w-full bg-accent-gold text-text-primary font-black uppercase text-nano tracking-widest flex items-center gap-2">
                 <Printer className="w-4 h-4" /> Imprimer les Étiquettes
             </Button>
         </div>

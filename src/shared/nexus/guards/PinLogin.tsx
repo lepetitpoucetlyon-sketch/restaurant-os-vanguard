@@ -77,28 +77,32 @@ export function PinLogin() {
                     {isAuthLoading ? (
                         <div className="flex flex-col items-center justify-center py-12 animate-pulse">
                             <RefreshCw className="w-10 h-10 text-accent animate-spin mb-6" />
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Initialisation de la liaison sécurisée...</p>
+                            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Initialisation de la liaison sécurisée...</p>
                         </div>
                     ) : !selectedUserId ? (
-                        <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
                             {users.map(user => (
                                 <button
                                     key={user.id}
                                     onClick={() => handleQuickLogin(user.id)}
                                     className={cn(
-                                        "flex flex-col items-center gap-3 p-4 rounded-[2rem] transition-all duration-500 border border-border",
+                                        // min-w-0 : sans lui, un item de grille prend pour largeur
+                                        // minimale celle de son contenu (min-width:auto) et déborde
+                                        // de sa cellule au lieu de la contraindre. C'est ce qui
+                                        // faisait sortir « ADMINISTRATEUR » (99px) d'une carte de 71px.
+                                        "flex flex-col items-center gap-3 p-4 rounded-[2rem] transition-all duration-500 border border-border min-w-0",
                                         "bg-bg-tertiary hover:bg-bg-tertiary/80 hover:border-accent/30 hover:scale-105 hover:shadow-lg group"
                                     )}
                                 >
-                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black bg-bg-primary text-text-primary group-hover:text-accent group-hover:bg-bg-primary transition-colors shadow-inner border border-border">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black bg-bg-primary text-text-primary group-hover:text-accent group-hover:bg-bg-primary transition-colors shadow-inner border border-border shrink-0">
                                         {(user.name || '').charAt(0)}
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-wider text-center leading-tight text-text-muted group-hover:text-text-primary transition-colors">
+                                    <span className="text-nano font-black uppercase tracking-wider text-center leading-tight text-text-muted group-hover:text-text-primary transition-colors min-w-0 max-w-full break-words">
                                         {(user.name || '').split(' ')[0]}
                                         <br />
                                         {(user.name || '').split(' ')[1] || ''}
                                     </span>
-                                    <span className="text-[8px] font-bold text-accent/50 group-hover:text-accent uppercase tracking-wider transition-colors">
+                                    <span className="text-nano font-bold text-accent/50 group-hover:text-accent uppercase tracking-wider transition-colors min-w-0 max-w-full break-words text-center">
                                         {ROLE_LABELS[user.role]}
                                     </span>
                                 </button>
@@ -122,7 +126,7 @@ export function PinLogin() {
                                     </div>
                                     <div className="text-left">
                                         <p className="text-text-primary font-bold text-sm leading-none">{selectedUser?.name}</p>
-                                        <p className="text-[9px] text-accent font-bold uppercase mt-1">
+                                        <p className="text-nano text-accent font-bold uppercase mt-1">
                                             {selectedUser ? ROLE_LABELS[selectedUser.role] : ''}
                                         </p>
                                     </div>
@@ -194,15 +198,15 @@ export function PinLogin() {
                 <div className="mt-8 flex flex-col items-center gap-4">
                     <div className="flex items-center gap-3 bg-bg-tertiary px-5 py-2.5 rounded-full border border-border backdrop-blur-md">
                         <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                        <span className="text-[9px] font-bold text-text-muted uppercase tracking-[0.2em]">Sécurité Chiffrée</span>
+                        <span className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Sécurité Chiffrée</span>
                     </div>
 
                     <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-text-muted hover:text-text-primary transition-colors group">
                         <Fingerprint className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        <span className="text-[9px] font-bold uppercase tracking-wider">Accès Biométrique</span>
+                        <span className="text-nano font-bold uppercase tracking-wider">Accès Biométrique</span>
                     </button>
 
-                    <p className="text-[9px] font-black text-text-muted/40 text-center mt-4">
+                    <p className="text-nano font-black text-text-muted/40 text-center mt-4">
                         Chaque compte exige désormais son propre code PIN chiffré.
                     </p>
                 </div>

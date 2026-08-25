@@ -19,7 +19,7 @@ export function MaintenanceRecipientsTab() {
             <Shield className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="text-xs text-text-secondary font-medium">Reçoit les alertes critiques (Panne bloquante, J-30 fin de garantie, contrôle CERFA).</p>
-          <div className="pt-2 text-[11px] text-text-muted/80 space-y-1">
+          <div className="pt-2 text-micro text-text-muted/80 space-y-1">
             <div>Canaux activés : In-App, Email, SMS</div>
           </div>
         </div>
@@ -30,7 +30,7 @@ export function MaintenanceRecipientsTab() {
             <Clock className="w-4 h-4 text-indigo-400" />
           </div>
           <p className="text-xs text-text-secondary font-medium">Reçoit toutes les alertes de maintenance préventive J-7, pannes dégradées et retards de nettoyage.</p>
-          <div className="pt-2 text-[11px] text-text-muted/80 space-y-1">
+          <div className="pt-2 text-micro text-text-muted/80 space-y-1">
             <div>Canaux activés : In-App, Email</div>
           </div>
         </div>
@@ -41,7 +41,7 @@ export function MaintenanceRecipientsTab() {
             <Flame className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-xs text-text-secondary font-medium">Reçoit les anomalies de température des chambres froides et les incidents matériel de cuisson/bar.</p>
-          <div className="pt-2 text-[11px] text-text-muted/80 space-y-1">
+          <div className="pt-2 text-micro text-text-muted/80 space-y-1">
             <div>Canaux activés : In-App, SMS</div>
           </div>
         </div>
@@ -52,7 +52,7 @@ export function MaintenanceRecipientsTab() {
             <Phone className="w-4 h-4 text-cyan-400" />
           </div>
           <p className="text-xs text-text-secondary font-medium">Notification immédiate par email/SMS dès la déclaration d une panne critique bloquante.</p>
-          <div className="pt-2 text-[11px] text-text-muted/80 space-y-1">
+          <div className="pt-2 text-micro text-text-muted/80 space-y-1">
             <div>Canaux activés : Email, SMS</div>
           </div>
         </div>

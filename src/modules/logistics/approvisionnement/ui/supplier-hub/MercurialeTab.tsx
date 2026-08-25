@@ -12,7 +12,7 @@ export function MercurialeTab() {
             <div className="text-xs font-bold text-amber-300">
               OPTIMISEUR DE MERCURIALES EN TEMPS RÉEL
             </div>
-            <div className="text-[11px] text-text-secondary">
+            <div className="text-micro text-text-secondary">
               Détection automatique des écarts de prix par kg/L et calcul de l'impact food cost.
             </div>
           </div>
@@ -24,7 +24,7 @@ export function MercurialeTab() {
 
       <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-900 border-b border-slate-800 text-text-muted font-semibold uppercase tracking-wider text-[10px]">
+          <thead className="bg-slate-900 border-b border-slate-800 text-text-muted font-semibold uppercase tracking-wider text-nano">
             <tr>
               <th className="p-3.5">Ingrédient</th>
               <th className="p-3.5">Meilleure Offre</th>

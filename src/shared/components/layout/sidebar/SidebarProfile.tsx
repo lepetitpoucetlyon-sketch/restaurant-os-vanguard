@@ -79,7 +79,7 @@ export function SidebarProfile({
                             className="flex flex-col overflow-hidden flex-1"
                         >
                             <span className="text-[13px] font-black text-text-primary truncate uppercase tracking-tight font-sans">{currentUser?.name}</span>
-                            <span className="text-[9px] text-accent-gold/60 truncate font-black uppercase tracking-[0.3em] mt-1 group-hover:text-accent-gold transition-colors">
+                            <span className="text-nano text-accent-gold/60 truncate font-black uppercase tracking-[0.3em] mt-1 group-hover:text-accent-gold transition-colors">
                                 {currentUser?.role ? ROLE_LABELS[currentUser.role as keyof typeof ROLE_LABELS] : t('sidebar.admin_fallback')}
                             </span>
                         </motion.div>

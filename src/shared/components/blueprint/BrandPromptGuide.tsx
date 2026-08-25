@@ -27,7 +27,7 @@ export function BrandPromptGuide() {
                             <div className={`aspect-square rounded-2xl ${color.class} border border-white/10 group-hover:scale-105 transition-transform shadow-lg`} />
                             <div>
                                 <h5 className="text-chip-label text-text-primary">{color.name}</h5>
-                                <p className="text-[9px] text-text-muted font-mono">{color.hex}</p>
+                                <p className="text-nano text-text-muted font-mono">{color.hex}</p>
                             </div>
                         </div>
                     ))}
@@ -42,15 +42,15 @@ export function BrandPromptGuide() {
                 </div>
                 <div className="space-y-4">
                     <div className="p-4 rounded-xl bg-bg-tertiary/20">
-                        <span className="text-[10px] text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Titres (Serif Luxe)</span>
+                        <span className="text-nano text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Titres (Serif Luxe)</span>
                         <h1 className="text-3xl font-serif">Le Geste & La Saveur</h1>
                     </div>
                     <div className="p-4 rounded-xl bg-bg-tertiary/20">
-                        <span className="text-[10px] text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Interface (Inter Sans)</span>
+                        <span className="text-nano text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Interface (Inter Sans)</span>
                         <p className="text-sm font-sans tracking-tight">Interface utilisateur moderne pour le management hôtelier.</p>
                     </div>
                     <div className="p-4 rounded-xl bg-bg-tertiary/20">
-                        <span className="text-[10px] text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Technique (Mono Spaced)</span>
+                        <span className="text-nano text-text-muted uppercase tracking-widest mb-2 block font-bold italic">Technique (Mono Spaced)</span>
                         <p className="text-xs font-mono text-accent-gold uppercase tracking-[0.1em] mb-1 leading-none">RESTAURANT OS v12.0</p>
                     </div>
                 </div>
@@ -79,10 +79,10 @@ export function BrandPromptGuide() {
                     </div>
 
                     <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-[10px] text-brand/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
+                        <span className="text-nano text-brand/60 uppercase font-black tracking-widest">Modèle: Gemini 3.1 </span>
                         <div className="flex gap-2">
                             <span className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
-                            <span className="text-[10px] text-status-success uppercase font-black">Agent En Ligne</span>
+                            <span className="text-nano text-status-success uppercase font-black">Agent En Ligne</span>
                         </div>
                     </div>
                 </div>

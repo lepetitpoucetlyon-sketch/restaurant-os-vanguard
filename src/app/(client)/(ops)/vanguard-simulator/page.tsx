@@ -84,12 +84,12 @@ export default function SimulatorPage() {
             <div className="bg-bg-secondary px-10 pt-10 pb-6 flex justify-between items-end border-b border-border shadow-sm">
                 <div>
                     <h1 className="text-4xl font-serif font-black italic text-text-primary tracking-tighter">Business Simulator<span className="text-accent-gold not-italic">.</span></h1>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">Digital Twin • Scénarios • Prédictions</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">Digital Twin • Scénarios • Prédictions</p>
                 </div>
 
                 <Button
                     onClick={() => setShowNewSimModal(true)}
-                    className="h-12 bg-accent-gold text-text-primary rounded-xl text-[10px] font-black uppercase tracking-[0.2em] px-8 shadow-premium hover:bg-accent-gold/90 transition-all"
+                    className="h-12 bg-accent-gold text-text-primary rounded-xl text-nano font-black uppercase tracking-[0.2em] px-8 shadow-premium hover:bg-accent-gold/90 transition-all"
                 >
                     <Play className="w-3.5 h-3.5 mr-2" />
                     Nouveau Scénario
@@ -101,7 +101,7 @@ export default function SimulatorPage() {
                     {/* Left: Current Reality (Baseline) */}
                     <div className="lg:col-span-1 space-y-6">
                         <div className="p-8 rounded-[2rem] bg-bg-tertiary/20 border border-border">
-                            <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                            <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                                 <BarChart3 className="w-3 h-3" />
                                 Performance Actuelle (Baseline)
                             </h3>
@@ -114,13 +114,13 @@ export default function SimulatorPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="p-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border">
-                                        <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Food Cost</p>
+                                        <p className="text-nano font-black text-text-muted uppercase tracking-wider">Food Cost</p>
                                         <div className={cn("text-2xl font-bold mt-2", (financialInsight?.foodCostPercent || 0) > 30 ? "text-error" : "text-success")}>
                                             {Math.round(financialInsight?.foodCostPercent || 0)}%
                                         </div>
                                     </div>
                                     <div className="p-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border">
-                                        <p className="text-[10px] font-black text-text-muted uppercase tracking-wider">Labor Cost</p>
+                                        <p className="text-nano font-black text-text-muted uppercase tracking-wider">Labor Cost</p>
                                         <div className={cn("text-2xl font-bold mt-2", (financialInsight?.laborCostPercent || 0) > 35 ? "text-error" : "text-success")}>
                                             {Math.round(financialInsight?.laborCostPercent || 0)}%
                                         </div>
@@ -129,18 +129,18 @@ export default function SimulatorPage() {
 
                                 <div className="p-6 bg-accent-gold/10 rounded-2xl border border-accent-gold/20">
                                     <div className="flex justify-between items-center mb-2">
-                                        <p className="text-[10px] font-black text-accent-gold uppercase tracking-wider">Prime Cost</p>
+                                        <p className="text-nano font-black text-accent-gold uppercase tracking-wider">Prime Cost</p>
                                         <Zap className="w-4 h-4 text-accent-gold" fill="currentColor" />
                                     </div>
                                     <div className="text-3xl font-black text-accent-gold">{Math.round(financialInsight?.primeCost || 0)}%</div>
-                                    <p className="text-[9px] text-text-muted mt-2">Objectif: &lt; 60%</p>
+                                    <p className="text-nano text-text-muted mt-2">Objectif: &lt; 60%</p>
                                 </div>
 
                                 {/* Master Inflation Controller */}
                                 <div className="p-6 bg-surface-sidebar/5 dark:bg-surface-card/5 rounded-[2rem] border border-border backdrop-blur-xl">
                                     <div className="flex justify-between items-center mb-6">
-                                        <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Master Inflation Simulation</h4>
-                                        <div className="px-3 py-1 bg-accent-gold/20 rounded-full text-[10px] font-black text-accent-gold italic">
+                                        <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Master Inflation Simulation</h4>
+                                        <div className="px-3 py-1 bg-accent-gold/20 rounded-full text-nano font-black text-accent-gold italic">
                                             {globalInflationRate}%
                                         </div>
                                     </div>
@@ -155,12 +155,12 @@ export default function SimulatorPage() {
                                         className="w-full h-1.5 bg-surface-bg dark:bg-surface-card/10 rounded-lg appearance-none cursor-pointer accent-accent-gold"
                                     />
                                     
-                                    <div className="flex justify-between mt-3 text-[8px] font-black text-text-muted tracking-widest uppercase">
+                                    <div className="flex justify-between mt-3 text-nano font-black text-text-muted tracking-widest uppercase">
                                         <span>Stable</span>
                                         <span>Crisis (20%)</span>
                                     </div>
 
-                                    <p className="text-[9px] text-text-muted mt-6 italic opacity-70">
+                                    <p className="text-nano text-text-muted mt-6 italic opacity-70">
                                         Impact global sur les marges POS et scores de signature Customer.
                                     </p>
                                 </div>
@@ -173,7 +173,7 @@ export default function SimulatorPage() {
                             <p className="text-sm text-text-primary/70 mt-2 z-10 relative leading-relaxed">
                                 "Augmenter vos prix de 5% sur la gamme 'Vins' pourrait générer +1,2k€ de marge nette sans impacter la demande, selon les tendances actuelles."
                             </p>
-                            <Button variant="outline" className="mt-6 border-default text-text-primary hover:bg-surface-card/10 z-10 relative h-10 rounded-xl text-[9px] font-black uppercase tracking-wider">
+                            <Button variant="outline" className="mt-6 border-default text-text-primary hover:bg-surface-card/10 z-10 relative h-10 rounded-xl text-nano font-black uppercase tracking-wider">
                                 Appliquer ce scénario
                             </Button>
                         </div>
@@ -211,9 +211,9 @@ export default function SimulatorPage() {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                             <div className="p-4 rounded-2xl bg-success/5 border border-success/10">
-                                                <p className="text-[9px] text-success/80 font-black uppercase tracking-wider mb-2">Impact Revenu</p>
+                                                <p className="text-nano text-success/80 font-black uppercase tracking-wider mb-2">Impact Revenu</p>
                                                 <div className="text-2xl font-black text-success flex items-center gap-2">
                                                     {scenario.projections.revenueImpact > 0 ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
                                                     {Math.abs(scenario.projections.revenueImpact).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
@@ -221,7 +221,7 @@ export default function SimulatorPage() {
                                             </div>
 
                                             <div className="p-4 rounded-2xl bg-bg-tertiary border border-border">
-                                                <p className="text-[9px] text-text-muted font-black uppercase tracking-wider mb-2">Impact Coûts</p>
+                                                <p className="text-nano text-text-muted font-black uppercase tracking-wider mb-2">Impact Coûts</p>
                                                 <div className="text-xl font-bold text-text-primary">
                                                     {scenario.projections.laborCostImpact > 0 ? '+' : ''}{scenario.projections.laborCostImpact.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
                                                 </div>
@@ -231,7 +231,7 @@ export default function SimulatorPage() {
                                                 "p-4 rounded-2xl border",
                                                 scenario.projections.netProfitChange > 0 ? "bg-accent-gold text-text-primary border-accent-gold" : "bg-error text-text-primary border-error"
                                             )}>
-                                                <p className="text-[9px] opacity-80 font-black uppercase tracking-wider mb-2">Profit Net Est.</p>
+                                                <p className="text-nano opacity-80 font-black uppercase tracking-wider mb-2">Profit Net Est.</p>
                                                 <div className="text-2xl font-black">
                                                     {scenario.projections.netProfitChange > 0 ? '+' : ''}{scenario.projections.netProfitChange.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
                                                 </div>
@@ -258,7 +258,7 @@ export default function SimulatorPage() {
             >
                 <div className="space-y-8 p-6">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-4">Nom du Scénario</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-4">Nom du Scénario</label>
                         <input
                             type="text"
                             value={newSimConfig.name}
@@ -270,7 +270,7 @@ export default function SimulatorPage() {
 
                     <div className="grid grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-4">Ajustement Prix (%)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-4">Ajustement Prix (%)</label>
                             <div className="flex items-center gap-4">
                                 <DollarSign className="w-5 h-5 text-text-muted" />
                                 <input
@@ -282,7 +282,7 @@ export default function SimulatorPage() {
                             </div>
                         </div>
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-4">Coût Staff (%)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-4">Coût Staff (%)</label>
                             <div className="flex items-center gap-4">
                                 <Users className="w-5 h-5 text-text-muted" />
                                 <input
@@ -298,7 +298,7 @@ export default function SimulatorPage() {
                     <Button
                         onClick={handleRunSimulation}
                         disabled={isSimulating || !newSimConfig.name}
-                        className="w-full h-16 bg-accent-gold text-text-primary rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-accent-gold/20 flex items-center justify-center gap-3"
+                        className="w-full h-16 bg-accent-gold text-text-primary rounded-2xl font-black text-nano uppercase tracking-[0.3em] shadow-xl shadow-accent-gold/20 flex items-center justify-center gap-3"
                     >
                         {isSimulating ? (
                             <>

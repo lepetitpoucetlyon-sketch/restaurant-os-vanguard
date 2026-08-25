@@ -97,24 +97,24 @@ export function IngredientsTab() {
                                  <h3 className="text-lg font-serif font-black text-text-primary tracking-tight truncate">{String(ing.ingredientName || ing.name || '')}</h3>
                                  <div className="flex items-center gap-2 mt-1">
                                      <Tag className="w-3 h-3 text-accent" />
-                                     <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{String(ing.category || '')}</span>
+                                     <span className="text-nano font-bold text-text-muted uppercase tracking-wider">{String(ing.category || '')}</span>
                                  </div>
                              </div>
  
                              <div className="grid grid-cols-2 gap-4 py-4 border-y border-border/50">
                                  <div>
-                                     <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
-                                     <p className="text-xl font-mono font-black text-text-primary">{formatMu(_costMu)}<span className="text-[10px] text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
+                                     <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
+                                     <p className="text-xl font-mono font-black text-text-primary">{formatMu(_costMu)}<span className="text-nano text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
                                  </div>
                                  <div className="text-right">
-                                     <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Stock Min</p>
-                                     <p className="text-xl font-mono font-black text-text-primary">{String(ing.minQuantity || 0)} <span className="text-[10px] text-text-muted ml-0.5">{String(ing.unit || '')}</span></p>
+                                     <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">Stock Min</p>
+                                     <p className="text-xl font-mono font-black text-text-primary">{String(ing.minQuantity || 0)} <span className="text-nano text-text-muted ml-0.5">{String(ing.unit || '')}</span></p>
                                  </div>
                              </div>
 
                             <div className="flex items-center gap-3 text-text-muted">
                                 <Truck className="w-4 h-4" />
-                                <span className="text-[11px] font-bold truncate">{String(ing.supplierName || 'Nexus')}</span>
+                                <span className="text-micro font-bold truncate">{String(ing.supplierName || 'Nexus')}</span>
                             </div>
                         </div>
                     </motion.div>);
@@ -128,7 +128,7 @@ export function IngredientsTab() {
                     <div className="w-16 h-16 rounded-full bg-accent/5 flex items-center justify-center group-hover:bg-accent transition-colors">
                         <Plus className="w-8 h-8 text-accent group-hover:text-text-primary transition-colors" />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted group-hover:text-accent">Ajouter au Catalogue</span>
+                    <span className="text-nano font-black uppercase tracking-[0.3em] text-text-muted group-hover:text-accent">Ajouter au Catalogue</span>
                 </motion.button>
             </div>
         </motion.div>

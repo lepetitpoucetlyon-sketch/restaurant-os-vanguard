@@ -16,7 +16,7 @@ export const CriticalThresholdAlert: React.FC<CriticalThresholdAlertProps> = ({ 
             <div className="flex-1">
                 <h4 className="font-bold text-error uppercase text-xs tracking-widest">{title}</h4>
                 <p className="text-sm text-text-primary mt-1">{message}</p>
-                <Button variant="link" className="p-0 h-auto mt-3 text-error font-black uppercase text-[9px] tracking-widest flex items-center gap-2">
+                <Button variant="link" className="p-0 h-auto mt-3 text-error font-black uppercase text-nano tracking-widest flex items-center gap-2">
                     Ouvrir le Protocole de Crise <ArrowRight className="w-3 h-3" />
                 </Button>
             </div>

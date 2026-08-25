@@ -71,7 +71,7 @@ export default function AuditPortal() {
                 <header className="mb-32 text-center">
                     <div className="inline-flex items-center gap-4 px-6 py-2 bg-action-primary border border-action-primary rounded-full mb-8">
                         <Sparkles className="w-4 h-4 text-action-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-action-primary">Excellence Hub</span>
+                        <span className="text-nano font-black uppercase tracking-[0.4em] text-action-primary">Excellence Hub</span>
                     </div>
                     <h1 className="text-7xl md:text-9xl font-brand italic tracking-tighter leading-[0.8] mb-8 text-text-primary">
                         L'Audit <br />
@@ -85,7 +85,7 @@ export default function AuditPortal() {
 
                 {/* Metrics Grid */}
                 <section className="mb-32">
-                    <p className="text-center text-[9px] font-mono text-text-muted/30 uppercase tracking-widest mb-6">
+                    <p className="text-center text-nano font-mono text-text-muted/30 uppercase tracking-widest mb-6">
                         Snapshot du {AUDIT_METRICS_SNAPSHOT.snapshotDate}
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -97,8 +97,8 @@ export default function AuditPortal() {
                                                 <metric.icon className="w-8 h-8 mx-auto mb-6 text-text-muted/20" />
                                                 <p className="text-5xl font-brand italic mb-2 tracking-tighter" style={{ color: metric.isGold ? 'var(--action-primary)' : undefined }}>{metric.value}</p>
                                                 <div className="space-y-1">
-                                                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-text-muted/40">{metric.label}</p>
-                                                    <p className="text-[10px] font-bold text-text-muted/60 lowercase italic">{metric.sub}</p>
+                                                    <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted/40">{metric.label}</p>
+                                                    <p className="text-nano font-bold text-text-muted/60 lowercase italic">{metric.sub}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -110,7 +110,7 @@ export default function AuditPortal() {
                     <div className="flex items-end justify-between mb-16 px-4">
                         <div className="space-y-4">
                             <h2 className="text-6xl font-brand italic tracking-tight text-text-primary">Axes de Transformation</h2>
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-text-muted/30">DIMENSIONS STRATÉGIQUES</p>
+                            <p className="text-nano font-black uppercase tracking-[0.4em] text-text-muted/30">DIMENSIONS STRATÉGIQUES</p>
                         </div>
                     </div>
 

@@ -113,13 +113,13 @@ function ShiftCard({ shift, warnings }: { shift: Shift; warnings: LegalWarning[]
                 <span className="text-xs text-text-muted">
                     {shift.startTime}–{shift.endTime}
                 </span>
-                <span className="text-[10px] text-text-muted/70">({duration.toFixed(1)}h)</span>
+                <span className="text-nano text-text-muted/70">({duration.toFixed(1)}h)</span>
             </div>
 
             {/* Status badge */}
             <span
                 className={cn(
-                    'text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded',
+                    'text-nano font-bold uppercase tracking-widest px-2 py-0.5 rounded',
                     shift.status === 'published'
                         ? 'bg-status-success/15 text-status-success'
                         : 'bg-text-muted/10 text-text-muted'
@@ -133,7 +133,7 @@ function ShiftCard({ shift, warnings }: { shift: Shift; warnings: LegalWarning[]
                 <span
                     key={i}
                     className={cn(
-                        'flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded',
+                        'flex items-center gap-1 text-nano font-bold uppercase tracking-widest px-2 py-0.5 rounded',
                         w.level === 'red'
                             ? 'bg-status-danger/15 text-status-danger'
                             : 'bg-action-primary/10 text-amber-600 dark:text-action-primary'
@@ -275,7 +275,7 @@ export function PlanningWeekView({
             </div>
 
             {/* Legend */}
-            <div className="flex flex-wrap gap-4 text-[10px] font-bold text-text-muted uppercase tracking-widest">
+            <div className="flex flex-wrap gap-4 text-nano font-bold text-text-muted uppercase tracking-widest">
                 <span className="flex items-center gap-1.5">
                     <AlertTriangle className="w-3 h-3 text-action-primary" />
                     Avertissement (non bloquant)

@@ -87,7 +87,7 @@ function HaccpPage() {
                                     <span className="inline-flex items-center gap-1.5">
                                         {tab.label}
                                         {tab.badge != null && tab.badge > 0 && (
-                                            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-serif font-black tabular-nums">
+                                            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-nano font-serif font-black tabular-nums">
                                                 {tab.badge > 9 ? "9+" : tab.badge}
                                             </span>
                                         )}
@@ -185,7 +185,7 @@ function HaccpPage() {
                                         <thead>
                                             <tr className="border-b border-border bg-surface-sidebar">
                                                 {["Produit", "N° Lot", "Date réception", "DLC", "Fournisseur", "Qté initiale", "Qté actuelle"].map((h) => (
-                                                    <th key={h} className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-widest text-text-muted">{h}</th>
+                                                    <th key={h} className="px-4 py-2.5 text-left text-nano font-bold uppercase tracking-widest text-text-muted">{h}</th>
                                                 ))}
                                             </tr>
                                         </thead>
@@ -208,7 +208,7 @@ function HaccpPage() {
                                                             <td className="px-4 py-3 text-text-muted">{item.receptionDate ? new Date(item.receptionDate).toLocaleDateString("fr-FR") : "—"}</td>
                                                             <td className={`px-4 py-3 font-medium ${isExpired ? "text-status-danger" : "text-text-primary"}`}>
                                                                 {dlcDate !== "—" ? new Date(dlcDate).toLocaleDateString("fr-FR") : "—"}
-                                                                {isExpired && <span className="ml-1 text-[10px] font-bold bg-status-danger/10 text-status-danger px-1 py-0.5 rounded">PÉRIMÉ</span>}
+                                                                {isExpired && <span className="ml-1 text-nano font-bold bg-status-danger/10 text-status-danger px-1 py-0.5 rounded">PÉRIMÉ</span>}
                                                             </td>
                                                             <td className="px-4 py-3 text-text-muted">{item.supplierName ?? item.supplierId ?? "—"}</td>
                                                             <td className="px-4 py-3 tabular-nums text-text-muted">{(item as JsonObject).initialQuantity != null ? `${String((item as JsonObject).initialQuantity)} ${item.unit}` : "—"}</td>

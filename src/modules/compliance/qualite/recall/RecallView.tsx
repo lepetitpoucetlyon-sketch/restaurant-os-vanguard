@@ -68,7 +68,7 @@ export function RecallView() {
                     <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                         Retrait-Rappel Produit
                     </h3>
-                    <p className="text-[10px] text-text-muted">
+                    <p className="text-nano text-text-muted">
                         Traçabilité lot → plats → clients
                     </p>
                 </div>
@@ -103,21 +103,21 @@ export function RecallView() {
 
             {result && !loading && (
                 <div className="space-y-4">
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div className="rounded-xl border border-border p-3 text-center">
                             <Utensils className="w-4 h-4 text-text-muted mx-auto mb-1" />
                             <div className="text-lg font-black text-text-primary">{result.preparations.length}</div>
-                            <div className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Recettes</div>
+                            <div className="text-nano font-bold uppercase tracking-widest text-text-muted">Recettes</div>
                         </div>
                         <div className="rounded-xl border border-border p-3 text-center">
                             <FileText className="w-4 h-4 text-text-muted mx-auto mb-1" />
                             <div className="text-lg font-black text-text-primary">{result.orderLines.length}</div>
-                            <div className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Commandes</div>
+                            <div className="text-nano font-bold uppercase tracking-widest text-text-muted">Commandes</div>
                         </div>
                         <div className="rounded-xl border border-border p-3 text-center">
                             <Users className="w-4 h-4 text-text-muted mx-auto mb-1" />
                             <div className="text-lg font-black text-text-primary">{result.totalCovers}</div>
-                            <div className="text-[9px] font-bold uppercase tracking-widest text-text-muted">Couverts</div>
+                            <div className="text-nano font-bold uppercase tracking-widest text-text-muted">Couverts</div>
                         </div>
                     </div>
 
@@ -126,7 +126,7 @@ export function RecallView() {
                             <p className="text-chip-label-sm text-text-muted mb-2">Recettes impactées</p>
                             <div className="space-y-1">
                                 {result.preparations.map((p) => (
-                                    <div key={p.recipeId} className="flex items-center gap-2 text-[11px] text-text-primary px-3 py-2 rounded-lg bg-bg-tertiary">
+                                    <div key={p.recipeId} className="flex items-center gap-2 text-micro text-text-primary px-3 py-2 rounded-lg bg-bg-tertiary">
                                         <Utensils className="w-3 h-3 text-status-error" />
                                         {p.recipeName}
                                     </div>
@@ -140,9 +140,9 @@ export function RecallView() {
                             <p className="text-chip-label-sm text-text-muted mb-2">Commandes affectées</p>
                             <div className="max-h-48 overflow-auto space-y-1 elegant-scrollbar">
                                 {result.orderLines.map((line, i) => (
-                                    <div key={`${line.orderId}-${i}`} className="flex items-center justify-between text-[11px] px-3 py-2 rounded-lg bg-bg-tertiary">
+                                    <div key={`${line.orderId}-${i}`} className="flex items-center justify-between text-micro px-3 py-2 rounded-lg bg-bg-tertiary">
                                         <span className="text-text-primary font-bold">{line.productName} ×{line.quantity}</span>
-                                        <span className="text-text-muted font-mono text-[10px]">
+                                        <span className="text-text-muted font-mono text-nano">
                                             {line.timestamp ? new Date(line.timestamp).toLocaleDateString('fr-FR') : '—'}
                                         </span>
                                     </div>
@@ -164,7 +164,7 @@ export function RecallView() {
                                 onClick={handleInitiateRecall}
                                 disabled={!reason.trim() || loading}
                                 className={cn(
-                                    "w-full h-12 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all",
+                                    "w-full h-12 rounded-xl text-micro font-black uppercase tracking-widest transition-all",
                                     "bg-status-error text-text-primary hover:bg-status-error/90 disabled:opacity-30"
                                 )}
                             >
@@ -174,7 +174,7 @@ export function RecallView() {
                     )}
 
                     {recalled && (
-                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-status-success/10 border border-status-success/20 text-status-success text-[11px] font-bold">
+                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-status-success/10 border border-status-success/20 text-status-success text-micro font-bold">
                             <AlertTriangle className="w-4 h-4" />
                             Procédure de rappel tracée dans le journal d'audit
                         </div>

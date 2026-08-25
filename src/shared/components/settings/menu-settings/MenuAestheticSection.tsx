@@ -46,7 +46,7 @@ export function MenuAestheticSection({ menuSettings, setMenuSettings }: MenuAest
                     <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                         Menu Aesthetic Engine
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Global Terminal Presentation Params</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Global Terminal Presentation Params</p>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@ export function MenuAestheticSection({ menuSettings, setMenuSettings }: MenuAest
                             </div>
                             <div>
                                 <p className="font-serif text-text-primary uppercase tracking-tight text-xs mb-1 italic">{setting.label}</p>
-                                <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">{setting.sub}</p>
+                                <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{setting.sub}</p>
                             </div>
                         </motion.button>
                     );

@@ -57,7 +57,7 @@ export function SimpleDashboardView() {
                                     <CloudRain className="w-6 h-6" />
                                 </div>
                             )}
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-text-muted">Météo de mon Busines</p>
+                            <p className="text-nano font-black uppercase tracking-[0.4em] text-text-muted">Météo de mon Busines</p>
                         </div>
                         <h2 className="text-5xl font-serif font-black italic">
                             {healthStatus === 'sunny' ? "Grand Soleil" : "Averse passagère"}
@@ -84,7 +84,7 @@ export function SimpleDashboardView() {
                 {/* 2. Jauge de Marge */}
                 <div className="card-premium p-10 bg-bg-secondary flex flex-col justify-between h-[300px]">
                     <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-text-muted mb-6">Ma Marge Nette</p>
+                        <p className="text-nano font-black uppercase tracking-[0.4em] text-text-muted mb-6">Ma Marge Nette</p>
                         <div className="flex items-end gap-4">
                             <span className={cn(
                                 "text-7xl font-sans font-black tracking-tighter",
@@ -92,7 +92,7 @@ export function SimpleDashboardView() {
                             )}>
                                 {profitMargin.toFixed(1)}%
                             </span>
-                            <span className="text-text-muted font-bold mb-3 uppercase tracking-widest text-[10px]">Rentabilité</span>
+                            <span className="text-text-muted font-bold mb-3 uppercase tracking-widest text-nano">Rentabilité</span>
                         </div>
                     </div>
                     
@@ -108,7 +108,7 @@ export function SimpleDashboardView() {
                                 )}
                             />
                         </div>
-                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-text-muted">
+                        <div className="flex justify-between text-nano font-black uppercase tracking-widest text-text-muted">
                             <span>Marge Critique (0%)</span>
                             <span>Moyenne Resto (12%)</span>
                         </div>
@@ -128,7 +128,7 @@ export function SimpleDashboardView() {
                     <p className="text-3xl font-black font-mono">
                         {fmu(null, bankTransactions.reduce((s, t) => s + (t.amountInCents || 0), 0))}
                     </p>
-                    <div className="flex items-center gap-2 mt-2 text-[10px] text-status-success font-bold uppercase">
+                    <div className="flex items-center gap-2 mt-2 text-nano text-status-success font-bold uppercase">
                         <Activity className="w-3 h-3" /> Connecté en direct
                     </div>
                 </div>
@@ -141,7 +141,7 @@ export function SimpleDashboardView() {
                         <h4 className="text-xs font-black tracking-widest uppercase">Ratio Food Cost</h4>
                     </div>
                     <p className="text-3xl font-black font-mono">29.4%</p>
-                    <div className="flex items-center gap-2 mt-2 text-[10px] text-accent font-bold uppercase transition-all hover:translate-x-1 cursor-pointer">
+                    <div className="flex items-center gap-2 mt-2 text-nano text-accent font-bold uppercase transition-all hover:translate-x-1 cursor-pointer">
                         Voir le détail <ArrowUpRight className="w-3 h-3" />
                     </div>
                 </div>
@@ -154,7 +154,7 @@ export function SimpleDashboardView() {
                         <h4 className="text-xs font-black tracking-widest uppercase">Productivité Staff</h4>
                     </div>
                     <p className="text-3xl font-black font-mono">31% CA</p>
-                    <div className="flex items-center gap-2 mt-2 text-[10px] text-text-muted font-bold uppercase">
+                    <div className="flex items-center gap-2 mt-2 text-nano text-text-muted font-bold uppercase">
                         Ratio Masse Salariale
                     </div>
                 </div>
@@ -181,12 +181,12 @@ export function SimpleDashboardView() {
                                 </div>
                                 <div>
                                     <h5 className="font-bold text-sm tracking-tight">{exp.accountName}</h5>
-                                    <p className="text-[10px] text-text-muted font-black uppercase tracking-widest mt-1">Catégorie: Dépense Opérationnelle</p>
+                                    <p className="text-nano text-text-muted font-black uppercase tracking-widest mt-1">Catégorie: Dépense Opérationnelle</p>
                                 </div>
                             </div>
                             <div className="text-right">
                                 <p className="text-lg font-mono font-black text-error">-{fmu(exp.amountInMicrounits, exp.amountInCents)}</p>
-                                <p className="text-[10px] text-text-muted font-bold">Aujourd'hui, 14:32</p>
+                                <p className="text-nano text-text-muted font-bold">Aujourd'hui, 14:32</p>
                             </div>
                         </div>
                     ))}

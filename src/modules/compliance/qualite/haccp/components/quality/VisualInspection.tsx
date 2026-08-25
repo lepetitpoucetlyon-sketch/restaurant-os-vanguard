@@ -82,7 +82,7 @@ export const VisualInspection: React.FC = () => {
                 </div>
                 <div>
                     <h3 className="text-xl font-serif font-black italic tracking-tight">Audit Sensoriel</h3>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-widest">Contrôle Organoleptique Grade VI</p>
+                    <p className="text-nano font-black text-muted uppercase tracking-widest">Contrôle Organoleptique Grade VI</p>
                 </div>
             </div>
             
@@ -124,7 +124,7 @@ export const VisualInspection: React.FC = () => {
                 <div className="mt-0.5 text-status-warning">
                     <CircleDot className="w-4 h-4" />
                 </div>
-                <p className="text-[10px] font-bold text-secondary uppercase leading-relaxed tracking-widest">
+                <p className="text-nano font-bold text-secondary uppercase leading-relaxed tracking-widest">
                     Les critères sensoriels sont obligatoires pour la certification de fraîcheur. 
                     Un échec sur 2 critères entraîne un rejet automatique du lot.
                 </p>

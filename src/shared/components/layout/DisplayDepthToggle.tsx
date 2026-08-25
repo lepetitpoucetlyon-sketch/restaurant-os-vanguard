@@ -73,7 +73,7 @@ export function DisplayDepthToggle({ className }: { className?: string }) {
                         initial={{ opacity: 0, scale: 0.8, x: -10 }}
                         animate={{ opacity: 1, scale: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.8, x: -10 }}
-                        className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-medium text-emerald-400"
+                        className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-micro font-medium text-emerald-400"
                         title="Toutes les écritures comptables et mouvements de stock sont résolus par défaut sans intervention manuelle."
                     >
                         <Sparkles className="w-3 h-3 text-emerald-400 animate-pulse" />

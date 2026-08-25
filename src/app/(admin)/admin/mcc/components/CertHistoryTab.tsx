@@ -39,8 +39,8 @@ export function CertHistoryTab({ certificates, isSyncing, onDownload, onPrint, o
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-text-primary text-[11px] font-black uppercase tracking-tight">{cert.instanceName}</h4>
-                  <p className="text-secondary text-[9px] font-medium uppercase tracking-widest">{cert.year} | {cert.type}</p>
+                  <h4 className="text-text-primary text-micro font-black uppercase tracking-tight">{cert.instanceName}</h4>
+                  <p className="text-secondary text-nano font-medium uppercase tracking-widest">{cert.year} | {cert.type}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export function CertHistoryTab({ certificates, isSyncing, onDownload, onPrint, o
         <button
           onClick={onSync}
           disabled={isSyncing}
-          className="w-full text-[10px] font-black text-secondary hover:text-brand uppercase tracking-widest transition-all disabled:opacity-40"
+          className="w-full text-nano font-black text-secondary hover:text-brand uppercase tracking-widest transition-all disabled:opacity-40"
         >
           {isSyncing ? 'Synchronisation…' : 'Synchroniser les Archives Globales'}
         </button>

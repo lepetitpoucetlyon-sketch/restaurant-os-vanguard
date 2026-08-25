@@ -104,7 +104,7 @@ export function TracabiliteEtiquettes() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Traçabilité & DLC</h2>
-                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Numérisation des étiquettes sanitaires</p>
+                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Numérisation des étiquettes sanitaires</p>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@ export function TracabiliteEtiquettes() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setIsAdding(true)}
-                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-[10px] uppercase tracking-widest shadow-2xl flex items-center gap-2"
+                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-nano uppercase tracking-widest shadow-2xl flex items-center gap-2"
                 >
                     <Camera size={16} />
                     Scanner Étiquette
@@ -152,7 +152,7 @@ export function TracabiliteEtiquettes() {
                                 <h3 className="text-lg font-serif italic font-black text-text-primary mb-1 truncate">
                                     {label.productName}
                                 </h3>
-                                <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-6 border-b border-border pb-4">
+                                <div className="text-nano font-black text-text-muted uppercase tracking-widest mb-6 border-b border-border pb-4">
                                     FOURNISSEUR: {label.supplier || 'NON SPÉCIFIÉ'}
                                 </div>
 
@@ -162,7 +162,7 @@ export function TracabiliteEtiquettes() {
                                             <div className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted">
                                                 <Tags size={14} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">LOT</span>
+                                            <span className="text-nano font-black uppercase text-text-muted tracking-widest">LOT</span>
                                         </div>
                                         <span className="text-sm font-black font-mono bg-bg-tertiary px-3 py-1 rounded-lg border border-border">
                                             {label.batchNumber}
@@ -174,7 +174,7 @@ export function TracabiliteEtiquettes() {
                                             <div className="w-8 h-8 rounded-full bg-status-warning/10 flex items-center justify-center text-status-warning">
                                                 <CalendarClock size={14} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">DLC</span>
+                                            <span className="text-nano font-black uppercase text-text-muted tracking-widest">DLC</span>
                                         </div>
                                         <span className={cn(
                                             "text-xs font-black uppercase tracking-widest",
@@ -189,9 +189,9 @@ export function TracabiliteEtiquettes() {
                                             <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                                 <Box size={14} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase text-text-muted tracking-widest">ZONE</span>
+                                            <span className="text-nano font-black uppercase text-text-muted tracking-widest">ZONE</span>
                                         </div>
-                                        <span className="text-[10px] font-black text-text-primary uppercase tracking-widest text-right truncate pl-4">
+                                        <span className="text-nano font-black text-text-primary uppercase tracking-widest text-right truncate pl-4">
                                             {label.storageLocation}
                                         </span>
                                     </div>
@@ -229,7 +229,7 @@ export function TracabiliteEtiquettes() {
                                     ) : (
                                         <>
                                             <Camera size={32} />
-                                            <span className="text-[8px] font-black uppercase tracking-widest">Scanner OCR / Photo</span>
+                                            <span className="text-nano font-black uppercase tracking-widest">Scanner OCR / Photo</span>
                                         </>
                                     )}
                                     {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
@@ -237,7 +237,7 @@ export function TracabiliteEtiquettes() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Produit</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Produit</label>
                                 <input
                                     type="text"
                                     value={formData.productName}
@@ -249,7 +249,7 @@ export function TracabiliteEtiquettes() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">N° de Lot</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">N° de Lot</label>
                                     <input
                                         type="text"
                                         value={formData.batchNumber}
@@ -259,7 +259,7 @@ export function TracabiliteEtiquettes() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">DLC / DLUO</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">DLC / DLUO</label>
                                     <input
                                         type="date"
                                         value={formData.expirationDate}
@@ -270,7 +270,7 @@ export function TracabiliteEtiquettes() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Fournisseur</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Fournisseur</label>
                                 <input
                                     type="text"
                                     value={formData.supplier}

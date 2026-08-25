@@ -28,13 +28,13 @@ export function ProductSteps({
             <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-3">
                     <Clock className="w-4 h-4 text-accent" />
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Étapes de Production</h3>
+                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Étapes de Production</h3>
                 </div>
                 <Button
                     type="button"
                     variant="outline"
                     onClick={addStep}
-                    className="h-10 rounded-xl bg-surface-card font-black text-[10px] tracking-widest uppercase border-border hover:bg-bg-tertiary"
+                    className="h-10 rounded-xl bg-surface-card font-black text-nano tracking-widest uppercase border-border hover:bg-bg-tertiary"
                 >
                     <Plus className="w-3 h-3 mr-2" /> Ajouter Étape
                 </Button>

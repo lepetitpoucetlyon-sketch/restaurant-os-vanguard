@@ -77,32 +77,32 @@ export function ProposalPanel() {
                                             <span className="text-xs font-black uppercase tracking-tight text-text-primary/90">
                                                 Renfort Suggéré : {proposal.targetDate}
                                             </span>
-                                            <span className="text-[10px] text-text-muted font-bold opacity-70">
+                                            <span className="text-nano text-text-muted font-bold opacity-70">
                                                 ID: {proposal.id}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-sidebar/40 border border-subtle">
                                         <TrendingUp size={10} className="text-success" />
-                                        <span className="text-[9px] font-mono font-bold text-success">
+                                        <span className="text-nano font-mono font-bold text-success">
                                             Velocity: {proposal.predictedVelocity}
                                         </span>
                                     </div>
                                 </div>
 
-                                <p className="text-[11px] leading-relaxed italic text-text-primary/80 border-l-2 border-warning/40 pl-3 py-1">
+                                <p className="text-micro leading-relaxed italic text-text-primary/80 border-l-2 border-warning/40 pl-3 py-1">
                                     "{proposal.reason}"
                                 </p>
 
                                 <div className="flex items-center justify-between pt-2 border-t border-white/5">
                                     <div className="flex items-center gap-4">
                                         <div className="flex flex-col">
-                                            <span className="text-[8px] uppercase font-black text-text-muted opacity-50">Actuel</span>
+                                            <span className="text-nano uppercase font-black text-text-muted opacity-50">Actuel</span>
                                             <span className="text-xs font-mono font-bold">{proposal.currentStaffCount}</span>
                                         </div>
                                         <div className="text-warning opacity-30">→</div>
                                         <div className="flex flex-col">
-                                            <span className="text-[8px] uppercase font-black text-warning opacity-70">Suggéré</span>
+                                            <span className="text-nano uppercase font-black text-warning opacity-70">Suggéré</span>
                                             <span className="text-xs font-mono font-bold text-warning">{proposal.suggestedStaffCount}</span>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@ export function ProposalPanel() {
                                             className="h-8 bg-success hover:bg-success/90 text-text-primary gap-2 px-4 shadow-lg shadow-success/20"
                                         >
                                             <Check size={14} />
-                                            <span className="text-[10px] font-bold">Approuver</span>
+                                            <span className="text-nano font-bold">Approuver</span>
                                         </Button>
                                     </div>
                                 </div>

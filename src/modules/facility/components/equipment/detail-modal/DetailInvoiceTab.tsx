@@ -21,7 +21,7 @@ export function DetailInvoiceTab({ asset, depreciationSchedule }: DetailInvoiceT
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
         <div>
           <span className="text-text-muted/80 text-xs block font-semibold">Fournisseur</span>
           <span className="text-white font-medium text-sm">{asset.purchase.supplierName}</span>

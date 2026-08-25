@@ -30,13 +30,13 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
         </motion.div>
         <div>
           <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Capacity Matrix</h3>
-          <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Load Balancing &amp; Availability Slots</p>
+          <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Load Balancing &amp; Availability Slots</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
         <div className="space-y-3">
-          <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Slot Granularity</label>
+          <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Slot Granularity</label>
           <select
             value={slots.slotDuration}
             onChange={(e) => setSlots(s => ({ ...s, slotDuration: Number(e.target.value) }))}
@@ -49,7 +49,7 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
           </select>
         </div>
         <div className="space-y-3">
-          <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Buffer Interval</label>
+          <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Buffer Interval</label>
           <select
             value={slots.intervalBetweenSlots}
             onChange={(e) => setSlots(s => ({ ...s, intervalBetweenSlots: Number(e.target.value) }))}
@@ -61,7 +61,7 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
           </select>
         </div>
         <div className="space-y-3">
-          <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Load Cap / Slot</label>
+          <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Load Cap / Slot</label>
           <div className="relative group">
             <input
               type="number"
@@ -90,7 +90,7 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
             </motion.div>
             <div>
               <p className="font-serif text-text-primary uppercase tracking-tight italic">Stress-Test Protocols</p>
-              <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1">Exceed capacity limits by defined threshold</p>
+              <p className="text-nano font-bold text-text-muted uppercase tracking-widest mt-1">Exceed capacity limits by defined threshold</p>
             </div>
           </div>
           <button
@@ -110,7 +110,7 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
               <div className="mt-8 pt-8 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="block text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Intensity Threshold (%)</label>
+                  <label className="block text-nano font-bold text-accent uppercase tracking-[0.2em]">Intensity Threshold (%)</label>
                   <div className="relative group">
                     <input
                       type="number"
@@ -122,7 +122,7 @@ export function ReservationCapacitySection({ config, setConfig, slots, setSlots 
                   </div>
                 </div>
                 <div className="flex items-center bg-accent/5 rounded-2xl p-6 border border-accent/10">
-                  <p className="text-[10px] font-bold text-accent uppercase tracking-widest leading-relaxed">
+                  <p className="text-nano font-bold text-accent uppercase tracking-widest leading-relaxed">
                     Warning: Overbooking protocol activated. This targets higher occupancy at the cost of service pressure.
                   </p>
                 </div>

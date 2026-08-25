@@ -141,7 +141,7 @@ export function RFMSegmentation({ customers }: Props) {
                                 <span className={cn("text-xs font-bold uppercase tracking-wide", meta.color)}>{meta.label}</span>
                             </div>
                             <p className="text-2xl font-black text-text-primary">{count}</p>
-                            <p className="text-[10px] text-text-muted leading-snug">{meta.desc}</p>
+                            <p className="text-nano text-text-muted leading-snug">{meta.desc}</p>
                         </div>
                     );
                 })}
@@ -181,7 +181,7 @@ export function RFMSegmentation({ customers }: Props) {
                                             <td className="px-4 py-2 font-medium text-text-primary">
                                                 {row.customer.firstName} {row.customer.lastName}
                                                 {row.customer.email && (
-                                                    <span className="block text-[10px] text-text-muted font-normal">{row.customer.email}</span>
+                                                    <span className="block text-nano text-text-muted font-normal">{row.customer.email}</span>
                                                 )}
                                             </td>
                                             <td className="px-3 py-2 text-center text-text-muted">

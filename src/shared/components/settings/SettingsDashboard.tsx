@@ -312,7 +312,7 @@ export function SettingsDashboard() {
                             {lastSaved && (
                                 <div className="px-4 py-2 rounded-full bg-success/10 border border-success/20 flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                                    <span className="text-[10px] font-bold text-success uppercase">Synchronisé {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                    <span className="text-nano font-bold text-success uppercase">Synchronisé {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
                             )}
                             <div className="flex gap-2">

@@ -226,7 +226,7 @@ function RbacPreviewShowcase() {
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
               <div className="text-xs font-bold text-text-primary">Clôture Fiscale Z (Finance)</div>
-              <div className="text-[11px] text-text-muted">Action critique autorisée pour : admin, directeur</div>
+              <div className="text-micro text-text-muted">Action critique autorisée pour : admin, directeur</div>
             </div>
             {simulatedRole === 'admin' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -238,7 +238,7 @@ function RbacPreviewShowcase() {
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
               <div className="text-xs font-bold text-text-primary">Annuler une Ligne Ticket (POS)</div>
-              <div className="text-[11px] text-text-muted">Action autorisée pour : admin, directeur, manager</div>
+              <div className="text-micro text-text-muted">Action autorisée pour : admin, directeur, manager</div>
             </div>
             {simulatedRole === 'admin' || simulatedRole === 'manager' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -250,7 +250,7 @@ function RbacPreviewShowcase() {
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
               <div className="text-xs font-bold text-text-primary">Prise de Commande & Encaissement (POS)</div>
-              <div className="text-[11px] text-text-muted">Action autorisée pour : admin, manager, serveur</div>
+              <div className="text-micro text-text-muted">Action autorisée pour : admin, manager, serveur</div>
             </div>
             {simulatedRole !== 'cuisinier' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -271,15 +271,15 @@ function PwaPreviewShowcase() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Affichage Standalone</div>
-            <div className="text-[11px] text-text-secondary">Plein écran sans barre d'URL navigateur sur iOS & Android.</div>
+            <div className="text-micro text-text-secondary">Plein écran sans barre d'URL navigateur sur iOS & Android.</div>
           </div>
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Precache Workbox</div>
-            <div className="text-[11px] text-text-secondary">Routes critiques /pos et /kds disponibles immédiatement hors-ligne.</div>
+            <div className="text-micro text-text-secondary">Routes critiques /pos et /kds disponibles immédiatement hors-ligne.</div>
           </div>
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Apple Startup Images</div>
-            <div className="text-[11px] text-text-secondary">12 résolutions iOS générées sans écran blanc au lancement.</div>
+            <div className="text-micro text-text-secondary">12 résolutions iOS générées sans écran blanc au lancement.</div>
           </div>
         </div>
       </SectionCard>

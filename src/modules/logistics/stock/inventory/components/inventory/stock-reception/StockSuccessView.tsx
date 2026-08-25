@@ -14,7 +14,7 @@ export function StockSuccessView() {
                 <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
             </motion.div>
             <p className="text-4xl font-serif font-black text-text-primary italic">Stock Scellé avec Succès.</p>
-            <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4">Les ressources ont été intégrées à l&apos;archive maître</p>
+            <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-4">Les ressources ont été intégrées à l&apos;archive maître</p>
         </div>
     );
 }

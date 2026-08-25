@@ -79,7 +79,7 @@ export default function CSVTemplateDownloads() {
               {tpl.columns.map((col) => (
                 <span
                   key={col}
-                  className="inline-block rounded px-1.5 py-0.5 text-[10px] font-mono bg-bg-tertiary text-text-muted border border-border"
+                  className="inline-block rounded px-1.5 py-0.5 text-nano font-mono bg-bg-tertiary text-text-muted border border-border"
                 >
                   {col}
                 </span>

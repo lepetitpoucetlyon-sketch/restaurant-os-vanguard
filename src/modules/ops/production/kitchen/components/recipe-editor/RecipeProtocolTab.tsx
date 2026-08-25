@@ -56,14 +56,14 @@ export function RecipeProtocolTab({
                         onChange={(e) => setNewStep((prev: Partial<RecipeStep>) => ({ ...prev, tip: e.target.value }))}
                         className="w-full h-20 px-6 py-4 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold italic text-sm outline-none resize-none"
                     />
-                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                    <Button onClick={handleAddStep} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-nano tracking-widest transition-all">
                         <Plus className="w-4 h-4 mr-2" /> Intégrer cette étape au protocole
                     </Button>
                 </div>
             </div>
 
             <div className="space-y-6">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Chronologie d'Exécution</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Chronologie d'Exécution</label>
                 <AnimatePresence mode="popLayout">
                     {formData.steps?.map((step: RecipeStep, _idx: number) => (
                         <motion.div
@@ -81,12 +81,12 @@ export function RecipeProtocolTab({
                                 <div className="flex-1 space-y-4">
                                     <p className="text-xl font-serif font-medium text-text-primary leading-relaxed">{step.instruction}</p>
                                     <div className="flex items-center gap-6">
-                                        <span className="flex items-center gap-2 text-[10px] font-black text-text-muted uppercase tracking-widest">
+                                        <span className="flex items-center gap-2 text-nano font-black text-text-muted uppercase tracking-widest">
                                             <Timer className="w-3.5 h-3.5" />
                                             {step.duration} MINUTES
                                         </span>
                                         {step.tip && (
-                                            <span className="flex items-center gap-2 text-[10px] font-black text-accent uppercase tracking-widest">
+                                            <span className="flex items-center gap-2 text-nano font-black text-accent uppercase tracking-widest">
                                                 <AlertTriangle className="w-3.5 h-3.5" />
                                                 CONSEIL DU CHEF
                                             </span>

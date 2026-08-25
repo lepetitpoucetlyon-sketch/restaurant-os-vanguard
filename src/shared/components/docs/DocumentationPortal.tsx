@@ -69,7 +69,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                     {showFullTutorial ? "Tutoriel Guidé : " : "Fiche Technique : "}
                                     <span className="font-normal text-accent dark:text-accent/90">{doc.title}</span>
                                 </h2>
-                                <p className="text-[9px] font-black text-secondary dark:text-text-muted uppercase tracking-[0.2em] mt-1">Manuel d'utilisation Restaurant OS</p>
+                                <p className="text-nano font-black text-secondary dark:text-text-muted uppercase tracking-[0.2em] mt-1">Manuel d'utilisation Restaurant OS</p>
                             </div>
                         </div>
                         {!isPage && (
@@ -160,7 +160,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                         {steps.map((step, stepIdx) => (
                                                                             <div key={stepIdx} className="flex items-start gap-3">
                                                                                 <div className="flex flex-col items-center shrink-0">
-                                                                                    <div className="w-6 h-6 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-[10px] font-bold text-accent">
+                                                                                    <div className="w-6 h-6 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-nano font-bold text-accent">
                                                                                         {String.fromCharCode(97 + stepIdx)}
                                                                                     </div>
                                                                                     {stepIdx < steps.length - 1 && (
@@ -198,11 +198,11 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                                     {doc.details.map((detail, idx) => (
                                         <div key={idx} className="flex gap-6 group">
-                                            <div className="w-10 h-10 rounded-xl bg-surface-card dark:bg-bg-tertiary border border-subtle dark:border-border flex items-center justify-center text-[10px] font-mono font-bold text-accent-gold dark:text-accent-gold/80 shadow-sm shrink-0">
+                                            <div className="w-10 h-10 rounded-xl bg-surface-card dark:bg-bg-tertiary border border-subtle dark:border-border flex items-center justify-center text-nano font-mono font-bold text-accent-gold dark:text-accent-gold/80 shadow-sm shrink-0">
                                                 0{idx + 1}
                                             </div>
                                             <div className="space-y-2">
-                                                <h4 className="text-[10px] font-black text-primary dark:text-text-primary uppercase tracking-widest">{detail.label}</h4>
+                                                <h4 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest">{detail.label}</h4>
                                                 <p className="text-sm text-secondary dark:text-text-muted leading-relaxed font-serif italic">
                                                     {detail.content}
                                                 </p>
@@ -218,13 +218,13 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                     <div className="p-8 bg-bg-primary dark:bg-bg-tertiary/40 border-t border-subtle dark:border-border flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                            <span className="text-[8px] font-black text-secondary dark:text-text-muted uppercase tracking-widest italic">Aide Contextuelle Active</span>
+                            <span className="text-nano font-black text-secondary dark:text-text-muted uppercase tracking-widest italic">Aide Contextuelle Active</span>
                         </div>
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => setShowFullTutorial(!showFullTutorial)}
                                 className={cn(
-                                    "h-12 px-8 rounded-full font-black text-[9px] uppercase tracking-widest transition-all flex items-center gap-3",
+                                    "h-12 px-8 rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3",
                                     showFullTutorial
                                         ? "bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent border border-accent/20 dark:border-accent/40"
                                         : "bg-status-warning dark:bg-status-warning/20 text-status-warning dark:text-status-warning border border-amber-200 dark:border-amber-900/40"
@@ -236,12 +236,12 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
 
                             <div className="flex items-center gap-3 pr-6 border-r border-subtle dark:border-border">
                                 <CategoryIcon className="w-5 h-5" style={{ color: doc.color }} />
-                                <span className="text-[9px] font-bold text-muted dark:text-text-muted uppercase tracking-widest">Support {doc.title}</span>
+                                <span className="text-nano font-bold text-muted dark:text-text-muted uppercase tracking-widest">Support {doc.title}</span>
                             </div>
                             {!isPage && (
                                 <button
                                     onClick={closeDocumentation}
-                                    className="h-12 px-8 bg-surface-sidebar dark:bg-surface-card hover:bg-surface-sidebar dark:hover:bg-surface-bg text-text-primary dark:text-primary rounded-full font-black text-[9px] uppercase tracking-widest transition-all shadow-xl shadow-neutral-900/10 dark:shadow-black/40"
+                                    className="h-12 px-8 bg-surface-sidebar dark:bg-surface-card hover:bg-surface-sidebar dark:hover:bg-surface-bg text-text-primary dark:text-primary rounded-full font-black text-nano uppercase tracking-widest transition-all shadow-xl shadow-neutral-900/10 dark:shadow-black/40"
                                 >
                                     Compris, Fermer
                                 </button>

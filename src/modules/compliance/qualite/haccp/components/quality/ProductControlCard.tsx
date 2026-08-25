@@ -31,7 +31,7 @@ export const ProductControlCard: React.FC<ProductControlCardProps> = ({
           <h4 className="text-sm font-bold text-primary group-hover:text-status-success transition-colors">
             {item.product_name}
           </h4>
-          <span className="text-[10px] font-bold text-muted uppercase tracking-widest">
+          <span className="text-nano font-bold text-muted uppercase tracking-widest">
             {item.product_category} • {item.quantity_delivered} {item.unit}
           </span>
         </div>
@@ -67,14 +67,14 @@ export const ProductControlCard: React.FC<ProductControlCardProps> = ({
 
       {item.is_rejected && (
         <div className="mt-3 pt-3 border-t border-rose-100">
-          <p className="text-[10px] font-bold text-status-danger uppercase">
+          <p className="text-nano font-bold text-status-danger uppercase">
             REFUSÉ : {item.decision_reason || 'Critères non conformes'}
           </p>
         </div>
       )}
 
       {item.is_short_dlc && !item.is_rejected && (
-        <div className="mt-2 text-[8px] font-black tracking-widest text-status-warning bg-status-warning px-2 py-0.5 rounded-full inline-block">
+        <div className="mt-2 text-nano font-black tracking-widest text-status-warning bg-status-warning px-2 py-0.5 rounded-full inline-block">
           DLC COURTE ({item.days_until_expiry}j)
         </div>
       )}

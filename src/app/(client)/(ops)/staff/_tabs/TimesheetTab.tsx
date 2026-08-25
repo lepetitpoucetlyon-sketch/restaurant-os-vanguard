@@ -22,7 +22,7 @@ export function TimesheetTab({ visibleShiftLogs, isManager, staffMembers }: Time
                             {isManager ? "Vue équipe complète" : "Vos derniers pointages"} — 30 dernières entrées
                         </p>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-text-muted">
+                    <span className="text-nano font-black uppercase tracking-wider text-text-muted">
                         {visibleShiftLogs.length} entrée{visibleShiftLogs.length !== 1 ? "s" : ""}
                     </span>
                 </div>
@@ -63,7 +63,7 @@ export function TimesheetTab({ visibleShiftLogs, isManager, staffMembers }: Time
                                                 {employee?.displayName ?? employee?.email ?? log.performedBy}
                                             </td>
                                         )}
-                                        <td className="px-4 py-2.5 font-mono text-[10px] text-text-muted truncate max-w-[160px]">
+                                        <td className="px-4 py-2.5 font-mono text-nano text-text-muted truncate max-w-[160px]">
                                             {log.shiftId}
                                         </td>
                                     </tr>

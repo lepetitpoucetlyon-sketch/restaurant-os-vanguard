@@ -112,7 +112,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: S
             >
                 <div className="space-y-6">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Nom Complet</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Nom Complet</label>
                         <input
                             type="text"
                             value={formData.name}
@@ -130,7 +130,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: S
                         />
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Code PIN (4 chiffres)</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Code PIN (4 chiffres)</label>
                         <input
                             type="password"
                             maxLength={4}
@@ -153,7 +153,7 @@ export const StaffMemberForm = ({ isOpen, onClose, editingUser, prefillData }: S
                             </Button>
                         )}
                         <Button
-                            className="flex-[2] h-14 bg-accent hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-[11px] tracking-widest transition-all"
+                            className="flex-[2] h-14 bg-accent hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-micro tracking-widest transition-all"
                             onClick={handleSaveStaff}
                         >
                             {editingUser ? "Mettre à jour" : "Recruter"}

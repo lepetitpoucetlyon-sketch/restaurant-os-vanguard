@@ -48,13 +48,13 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Fiscal Chain Explorer</h3>
-            <p className="text-[10px] text-secondary font-medium">Node: {instanceId || 'Global Fleet'}</p>
+            <p className="text-nano text-secondary font-medium">Node: {instanceId || 'Global Fleet'}</p>
           </div>
         </div>
         
         <div className="flex items-center gap-2 px-3 py-1 bg-status-success/5 border border-emerald-500/10 rounded-full">
           <div className="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse" />
-          <span className="text-[10px] font-bold text-status-success uppercase tracking-tighter">Live Chain</span>
+          <span className="text-nano font-bold text-status-success uppercase tracking-tighter">Live Chain</span>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
           {nodes.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-secondary opacity-50 py-12">
               <Lock className="w-8 h-8 mb-3 stroke-1" />
-              <p className="text-[11px] uppercase tracking-[0.2em] text-center">
+              <p className="text-micro uppercase tracking-[0.2em] text-center">
                 Waiting for first<br/>cryptographic seal...
               </p>
             </div>
@@ -78,22 +78,22 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-brand/50 uppercase tracking-tighter">Sequence</span>
+                    <span className="text-nano font-black text-brand/50 uppercase tracking-tighter">Sequence</span>
                     <span className="text-[12px] font-mono text-muted">BLOCK_#{node.index.toString().padStart(6, '0')}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-bold text-status-success/70 border border-emerald-500/20 px-1.5 py-0.5 rounded uppercase tracking-tighter bg-status-success/5">Signed</span>
+                    <span className="text-nano font-bold text-status-success/70 border border-emerald-500/20 px-1.5 py-0.5 rounded uppercase tracking-tighter bg-status-success/5">Signed</span>
                     <CheckCircle2 className="w-4 h-4 text-status-success" />
                   </div>
                 </div>
                 
                 <div className="space-y-3 mt-4">
                   <div className="flex flex-col space-y-1">
-                    <div className="flex items-center justify-between text-[9px] font-black text-secondary uppercase tracking-tighter">
+                    <div className="flex items-center justify-between text-nano font-black text-secondary uppercase tracking-tighter">
                       <span>Hash Actuel</span>
                       <span className="text-primary italic">SHA-256</span>
                     </div>
-                    <div className="p-2 bg-surface-card rounded-lg border border-border-subtle font-mono text-[10px] text-brand break-all leading-tight relative overflow-hidden group-hover:text-brand transition-colors">
+                    <div className="p-2 bg-surface-card rounded-lg border border-border-subtle font-mono text-nano text-brand break-all leading-tight relative overflow-hidden group-hover:text-brand transition-colors">
                       {node.hash}
                       <motion.div 
                         initial={{ x: '-100%' }}
@@ -105,8 +105,8 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                   </div>
                   
                   <div className="flex flex-col space-y-1">
-                    <span className="text-[9px] font-black text-secondary uppercase tracking-tighter">Back-Link Pointer</span>
-                    <div className="font-mono text-[10px] text-secondary truncate opacity-60 group-hover:opacity-100 transition-opacity">
+                    <span className="text-nano font-black text-secondary uppercase tracking-tighter">Back-Link Pointer</span>
+                    <div className="font-mono text-nano text-secondary truncate opacity-60 group-hover:opacity-100 transition-opacity">
                       {node.previousHash}
                     </div>
                   </div>
@@ -115,7 +115,7 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
                 <div className="mt-4 pt-3 border-t border-border-subtle flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Search className="w-3 h-3 text-secondary" />
-                    <span className="text-[9px] text-secondary font-medium">{node.timestamp}</span>
+                    <span className="text-nano text-secondary font-medium">{node.timestamp}</span>
                   </div>
                   <ShieldCheck className="w-3 h-3 text-brand/50" />
                 </div>
@@ -140,9 +140,9 @@ export function FiscalChainExplorer({ instanceId }: { instanceId?: string }) {
         <div className="absolute inset-0 bg-gradient-to-r from-action-primary/0 via-action-primary/[0.02] to-action-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
         <div className="flex items-center gap-2 mb-1">
           <Database className="w-3 h-3 text-brand" />
-          <span className="text-[10px] font-black text-brand uppercase tracking-widest">Chain Integrity Verified</span>
+          <span className="text-nano font-black text-brand uppercase tracking-widest">Chain Integrity Verified</span>
         </div>
-        <p className="text-[10px] text-secondary leading-relaxed font-medium">
+        <p className="text-nano text-secondary leading-relaxed font-medium">
           CRYPTOGRAPHIC_LOCK: Active. Last block timestamp {lastUpdate}. All verification points passed Art. A47 A-1 standards.
         </p>
       </div>

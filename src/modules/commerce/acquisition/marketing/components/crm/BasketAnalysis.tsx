@@ -118,18 +118,18 @@ export function BasketAnalysis() {
                       style={{ width: `${pct}%` }}
                     >
                       {pct > 20 && (
-                        <span className="text-[10px] font-mono font-bold text-text-primary whitespace-nowrap">
+                        <span className="text-nano font-mono font-bold text-text-primary whitespace-nowrap">
                           {bucket.avgSpendEur.toFixed(0)}€
                         </span>
                       )}
                     </div>
                   </div>
                   {pct <= 20 && (
-                    <span className="text-[10px] font-mono text-text-muted w-10 shrink-0">
+                    <span className="text-nano font-mono text-text-muted w-10 shrink-0">
                       {bucket.avgSpendEur.toFixed(0)}€
                     </span>
                   )}
-                  <span className="text-[10px] text-text-muted w-16 shrink-0 text-right">
+                  <span className="text-nano text-text-muted w-16 shrink-0 text-right">
                     {bucket.customerCount} client{bucket.customerCount !== 1 ? "s" : ""}
                   </span>
                 </div>

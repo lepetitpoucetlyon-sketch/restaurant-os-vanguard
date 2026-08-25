@@ -124,7 +124,7 @@ export function InventoryReceptionDashboard() {
         <div className="min-h-screen bg-surface-sidebar text-text-primary p-6 md:p-10 font-ui">
             {/* ── log-5: Barcode scan strip ───────────────────────────────────── */}
             <div className="mb-8 bg-surface-sidebar border border-border-subtle rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-text-secondary shrink-0">
+                <div className="flex items-center gap-2 text-nano font-black uppercase tracking-[0.25em] text-text-secondary shrink-0">
                     <Barcode className="w-4 h-4 text-status-success" />
                     Scan code-barres
                 </div>
@@ -156,9 +156,9 @@ export function InventoryReceptionDashboard() {
             {barcodeResult && (
                 <div className="mb-6 bg-status-success/10 border border-status-success/20 rounded-2xl px-5 py-4 flex items-start justify-between gap-4">
                     <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-status-success mb-1">Produit identifié</p>
+                        <p className="text-nano font-black uppercase tracking-[0.3em] text-status-success mb-1">Produit identifié</p>
                         <p className="font-bold text-text-primary">{barcodeResult.name}</p>
-                        <div className="flex gap-4 mt-1 text-[10px] text-text-secondary font-bold uppercase">
+                        <div className="flex gap-4 mt-1 text-nano text-text-secondary font-bold uppercase">
                             {barcodeResult.unit && <span>Unité : {barcodeResult.unit}</span>}
                             {barcodeResult.sku && <span>SKU : {barcodeResult.sku}</span>}
                             {barcodeResult.supplier && <span>Fournisseur : {barcodeResult.supplier}</span>}
@@ -180,7 +180,7 @@ export function InventoryReceptionDashboard() {
                         <ClipboardList className="w-6 h-6" />
                     </div>
                     <div className="space-y-1">
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.32em]">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.32em]">
                             Flux Empire • Ingestion Intelligente
                         </p>
                         <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-tight leading-none">
@@ -224,7 +224,7 @@ export function InventoryReceptionDashboard() {
                                         <FileText className="text-action-primary" />
                                         Données Extraites (OCR)
                                     </h2>
-                                    <span className="text-[10px] font-black bg-action-primary text-action-primary px-3 py-1 rounded-full uppercase tracking-widest">Confidence 98.4%</span>
+                                    <span className="text-nano font-black bg-action-primary text-action-primary px-3 py-1 rounded-full uppercase tracking-widest">Confidence 98.4%</span>
                                 </div>
                                 <div className="space-y-4">
                                     {scanResult.map((item, idx) => (
@@ -233,13 +233,13 @@ export function InventoryReceptionDashboard() {
                                                 <div className="w-10 h-10 bg-surface-card rounded-xl flex items-center justify-center font-bold text-xs">0{idx + 1}</div>
                                                 <div>
                                                     <p className="font-bold text-sm uppercase">{item.name}</p>
-                                                    <p className="text-[10px] text-text-secondary font-bold tracking-widest">DLC: {item.dlc}</p>
+                                                    <p className="text-nano text-text-secondary font-bold tracking-widest">DLC: {item.dlc}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-8">
                                                 <div className="text-right">
                                                     <p className="text-sm font-black">{item.qty} {item.unit}</p>
-                                                    <p className="text-[10px] text-status-success font-bold">€{item.price.toFixed(2)}</p>
+                                                    <p className="text-nano text-status-success font-bold">€{item.price.toFixed(2)}</p>
                                                 </div>
                                                 <div className="flex gap-2">
                                                     <button className={`p-2 rounded-lg transition-all ${item.forceScan ? 'bg-status-warning text-status-warning' : 'bg-surface-card text-text-secondary hover:text-text-primary'}`}>
@@ -292,7 +292,7 @@ export function InventoryReceptionDashboard() {
                                         <div className="flex items-center justify-between p-6 bg-surface-card rounded-2xl">
                                             <div>
                                                 <h4 className="font-bold text-sm uppercase">Scellement de Rigueur</h4>
-                                                <p className="text-[10px] text-text-secondary font-bold tracking-tight uppercase">Imposer le scan pour sortir le SAUMON</p>
+                                                <p className="text-nano text-text-secondary font-bold tracking-tight uppercase">Imposer le scan pour sortir le SAUMON</p>
                                             </div>
                                             <div className="w-14 h-8 bg-status-success rounded-full relative p-1 flex items-center justify-end cursor-pointer">
                                                 <div className="w-6 h-6 bg-surface-card rounded-full shadow-sm" />
@@ -310,7 +310,7 @@ export function InventoryReceptionDashboard() {
                                     <AdviceSaveButton isSaving={isSaving} onSave={handleSaveToStock} />
                                 </div>
                                 <div className="bg-surface-sidebar border border-border-subtle p-6 rounded-3xl">
-                                    <h4 className="text-[10px] font-black text-text-secondary uppercase mb-4 tracking-widest">Impact sur l'Empire</h4>
+                                    <h4 className="text-nano font-black text-text-secondary uppercase mb-4 tracking-widest">Impact sur l'Empire</h4>
                                     <div className="space-y-3">
                                         <LogItem label="Marge Calculée" value="+1.4%" trend="up" />
                                         <LogItem label="Fiscalité" value="Signé" trend="ok" />

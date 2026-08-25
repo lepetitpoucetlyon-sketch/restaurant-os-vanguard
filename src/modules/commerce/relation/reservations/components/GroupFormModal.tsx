@@ -69,7 +69,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                                     <h2 className="text-sm font-black uppercase tracking-widest text-text-primary">
                                         Nouveau Groupe
                                     </h2>
-                                    <p className="text-[10px] text-text-muted uppercase tracking-wider mt-0.5">
+                                    <p className="text-nano text-text-muted uppercase tracking-wider mt-0.5">
                                         Banquet / Séminaire / Événement
                                     </p>
                                 </div>
@@ -85,7 +85,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                         <div className="space-y-5">
                             {/* Name */}
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest">
                                     Nom du groupe *
                                 </label>
                                 <input
@@ -100,7 +100,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                             {/* Covers range */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest">
                                         Couverts min
                                     </label>
                                     <input
@@ -112,7 +112,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest">
                                         Couverts max
                                     </label>
                                     <input
@@ -127,7 +127,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
 
                             {/* Notes */}
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest">
                                     Notes
                                 </label>
                                 <textarea
@@ -143,7 +143,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                         <div className="flex gap-3 mt-8">
                             <button
                                 onClick={handleClose}
-                                className="flex-1 h-12 rounded-2xl border border-border text-text-muted text-[11px] font-black uppercase tracking-widest hover:border-text-muted/40 hover:text-text-primary transition-all"
+                                className="flex-1 h-12 rounded-2xl border border-border text-text-muted text-micro font-black uppercase tracking-widest hover:border-text-muted/40 hover:text-text-primary transition-all"
                             >
                                 Annuler
                             </button>
@@ -151,7 +151,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                                 onClick={handleSubmit}
                                 disabled={!form.name.trim() || saving}
                                 className={cn(
-                                    "flex-1 h-12 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg",
+                                    "flex-1 h-12 rounded-2xl font-black text-micro uppercase tracking-widest transition-all shadow-lg",
                                     "bg-accent text-bg-primary hover:shadow-accent/20 disabled:opacity-40 disabled:cursor-not-allowed"
                                 )}
                             >

@@ -99,11 +99,11 @@ export function PmsPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-text-primary">{room.guestName}</h3>
-                    <span className="text-[10px] text-text-muted">Séjour: {room.checkIn} → {room.checkOut}</span>
+                    <span className="text-nano text-text-muted">Séjour: {room.checkIn} → {room.checkOut}</span>
                   </div>
                 </div>
                 <span className={cn(
-                  "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
+                  "px-2 py-0.5 rounded-full text-nano font-bold uppercase",
                   room.status === 'occupied' ? "bg-status-success/10 text-status-success" :
                   room.status === 'available' ? "bg-action-primary/10 text-action-primary" : "bg-status-warning/10 text-status-warning"
                 )}>
@@ -113,7 +113,7 @@ export function PmsPage() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] text-text-muted uppercase font-bold">Encours Folio</span>
+                  <span className="text-nano text-text-muted uppercase font-bold">Encours Folio</span>
                   <p className="text-base font-mono font-bold text-text-primary mt-0.5">{formatCurrency(room.balanceCents / 100)}</p>
                 </div>
                 <button className="px-3 py-1.5 rounded-xl bg-surface-bg border border-border-default text-xs font-bold text-text-primary hover:border-action-primary transition-all">

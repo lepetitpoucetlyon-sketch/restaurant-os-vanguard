@@ -176,7 +176,7 @@ function SecuritySettingsPage() {
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between gap-2 mb-1">
                                                     <span className="font-bold text-sm text-text-primary">{meta.label}</span>
-                                                    <span className={`text-[11px] font-medium tracking-tight px-2.5 py-0.5 rounded-full ${
+                                                    <span className={`text-micro font-medium tracking-tight px-2.5 py-0.5 rounded-full ${
                                                         meta.securityLevel === 'strong' ? 'bg-status-success/10 text-status-success' :
                                                         meta.securityLevel === 'medium' ? 'bg-amber-500/10 text-amber-500' :
                                                         'bg-text-muted/10 text-text-muted'
@@ -186,7 +186,7 @@ function SecuritySettingsPage() {
                                                 </div>
                                                 <p className="text-xs text-text-muted leading-relaxed">{meta.description}</p>
                                                 {meta.costHint && (
-                                                    <p className="text-[10px] text-text-muted mt-1">💰 {meta.costHint}</p>
+                                                    <p className="text-nano text-text-muted mt-1">💰 {meta.costHint}</p>
                                                 )}
                                             </div>
                                             <div className={`w-10 h-6 rounded-full transition-colors shrink-0 relative ${enabled ? 'bg-accent-gold' : 'bg-border'}`}>

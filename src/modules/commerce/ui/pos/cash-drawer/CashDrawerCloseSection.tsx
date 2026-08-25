@@ -43,7 +43,7 @@ export function CashDrawerCloseSection({
     <div className="space-y-4">
       {/* Session info */}
       <div className="rounded-2xl bg-bg-tertiary/50 border border-border/50 p-4 space-y-2">
-        <div className="flex items-center justify-between text-[11px]">
+        <div className="flex items-center justify-between text-micro">
           <span className="text-text-muted flex items-center gap-1.5">
             <Clock className="w-3 h-3" />
             Ouverture
@@ -52,13 +52,13 @@ export function CashDrawerCloseSection({
             {new Date(session.openedAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
           </span>
         </div>
-        <div className="flex items-center justify-between text-[11px]">
+        <div className="flex items-center justify-between text-micro">
           <span className="text-text-muted">Fond initial</span>
           <span className="font-mono text-text-primary font-bold">
             {microunitsToEuros(session.openingInMicrounits)} €
           </span>
         </div>
-        <div className="flex items-center justify-between text-[11px]">
+        <div className="flex items-center justify-between text-micro">
           <span className="text-text-muted flex items-center gap-1.5">
             <TrendingUp className="w-3 h-3 text-status-success" />
             Espèces encaissées
@@ -67,7 +67,7 @@ export function CashDrawerCloseSection({
             +{microunitsToEuros(collectedInMicrounits)} €
           </span>
         </div>
-        <div className="flex items-center justify-between text-[11px]">
+        <div className="flex items-center justify-between text-micro">
           <span className="text-text-muted flex items-center gap-1.5">
             <TrendingDown className="w-3 h-3 text-status-error" />
             Monnaie rendue

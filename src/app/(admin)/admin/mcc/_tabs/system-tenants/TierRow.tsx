@@ -55,7 +55,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
     return (
         <div className={`flex items-center justify-between px-4 py-3 rounded-xl border ${tierCfg.bg} gap-4`}>
             <div className="flex items-center gap-3 min-w-0">
-                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest ${tierCfg.badge}`}>
+                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-nano font-bold uppercase tracking-widest ${tierCfg.badge}`}>
                     {tierCfg.icon}
                     {tierCfg.label}
                 </span>
@@ -85,7 +85,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
                     <button
                         onClick={onPromote}
                         title="Promouvoir vers REFERENCE"
-                        className="p-1.5 rounded-lg text-muted hover:text-brand hover:bg-surface-sidebar transition-all flex items-center gap-1 text-[10px] font-bold"
+                        className="p-1.5 rounded-lg text-muted hover:text-brand hover:bg-surface-sidebar transition-all flex items-center gap-1 text-nano font-bold"
                     >
                         <ArrowUpCircle className="w-3.5 h-3.5" />
                         <span className="hidden sm:inline">Promouvoir</span>

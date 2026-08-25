@@ -26,9 +26,9 @@ export function RecipeAnalyticTab({
 }: RecipeAnalyticTabProps) {
     return (
         <div className="space-y-12 text-primary">
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                 <div className="bg-surface-card p-10 rounded-[3rem] border border-border shadow-soft">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Coût de Revient HT</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Coût de Revient HT</label>
                     <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-serif font-black text-text-primary">{((formData.costPriceInMicrounits || 0) / 1_000_000).toFixed(2)}</span>
                         <span className="text-xl font-black text-text-muted">€</span>
@@ -36,7 +36,7 @@ export function RecipeAnalyticTab({
                 </div>
                 <div className="bg-surface-card p-10 rounded-[3rem] border-2 border-accent shadow-xl shadow-accent/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-accent/10 rounded-full blur-3xl -mr-12 -mt-12 pointer-events-none" />
-                    <label className="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-4 block">Prix de Vente Conseillé</label>
+                    <label className="text-nano font-black text-accent uppercase tracking-[0.2em] mb-4 block">Prix de Vente Conseillé</label>
                     <div className="flex items-center gap-2 relative z-10">
                         <input
                             type="number"
@@ -55,7 +55,7 @@ export function RecipeAnalyticTab({
                         parseFloat(margin) >= 40 ? "bg-warning-soft border-warning/20" :
                             "bg-error-soft border-error/20"
                 )}>
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Marge Brute Estimée</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Marge Brute Estimée</label>
                     <div className="flex items-baseline gap-2">
                         <span className={cn(
                             "text-4xl font-serif font-black",
@@ -70,7 +70,7 @@ export function RecipeAnalyticTab({
 
             <div className="grid grid-cols-2 gap-10">
                 <div className="space-y-6">
-                    <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.15em] px-4">Bioshield Allergen Matrix</h4>
+                    <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.15em] px-4">Bioshield Allergen Matrix</h4>
                     <div className="flex flex-wrap gap-3">
                         {allergens.map(a => (
                             <button
@@ -89,7 +89,7 @@ export function RecipeAnalyticTab({
                     </div>
                 </div>
                 <div className="space-y-6">
-                    <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.15em] px-4">Dietary Compliance Shield</h4>
+                    <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.15em] px-4">Dietary Compliance Shield</h4>
                     <div className="flex flex-wrap gap-3">
                         {dietary.map(d => (
                             <button

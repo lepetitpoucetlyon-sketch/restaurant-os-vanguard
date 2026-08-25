@@ -78,10 +78,10 @@ export function DeviceManager({ uid }: { uid: string }) {
                 )}
                 <div>
                   <p className="text-sm font-bold text-text-primary font-mono">{device.fingerprint.substring(0, 12)}...</p>
-                  <p className="text-[10px] text-secondary uppercase tracking-widest mt-1">
+                  <p className="text-nano text-secondary uppercase tracking-widest mt-1">
                     {device.userAgent.substring(0, 40)}...
                   </p>
-                  <div className="flex gap-2 mt-2 text-[9px] font-black uppercase tracking-wider">
+                  <div className="flex gap-2 mt-2 text-nano font-black uppercase tracking-wider">
                     {device.revoked ? (
                       <span className="text-status-danger">Révoqué le {new Date(device.revokedAt!).toLocaleDateString()}</span>
                     ) : (
@@ -95,7 +95,7 @@ export function DeviceManager({ uid }: { uid: string }) {
               {!device.revoked && (
                 <button 
                   onClick={() => handleRevoke(device.id)}
-                  className="p-2 bg-status-danger/10 text-status-danger rounded-lg hover:bg-status-danger/20 transition-colors border border-red-500/20 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest"
+                  className="p-2 bg-status-danger/10 text-status-danger rounded-lg hover:bg-status-danger/20 transition-colors border border-red-500/20 flex items-center gap-2 text-nano font-bold uppercase tracking-widest"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Révoquer

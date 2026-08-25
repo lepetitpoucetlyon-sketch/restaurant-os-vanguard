@@ -45,14 +45,14 @@ export function CRMSidebar() {
                     placeholder={t('crm.search_placeholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full h-16 pl-16 pr-8 bg-bg-tertiary/50 rounded-[2rem] border-none font-sans font-black text-[10px] text-text-primary outline-none tracking-widest focus:bg-bg-tertiary transition-all"
+                    className="w-full h-16 pl-16 pr-8 bg-bg-tertiary/50 rounded-[2rem] border-none font-sans font-black text-nano text-text-primary outline-none tracking-widest focus:bg-bg-tertiary transition-all"
                 />
             </div>
 
             <div className="space-y-4 flex-1">
                 <button
                     onClick={() => (setNewCRMModalOpen as (v: boolean) => void)(true)}
-                    className="w-full h-16 bg-accent-gold text-text-primary rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
+                    className="w-full h-16 bg-accent-gold text-text-primary rounded-[2rem] font-black text-nano uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all mb-4"
                 >
                     <Plus className="w-4 h-4" />
                     {t('crm.add_crm') || 'Ajouter Client'}
@@ -67,11 +67,11 @@ export function CRMSidebar() {
                 >
                     <div className="flex items-center gap-5 relative z-10">
                         <Users className={cn("w-5 h-5", !filterSegment ? "text-accent-gold" : "text-text-muted/30")} />
-                        <span className="font-black text-[11px] tracking-[0.2em] uppercase">
+                        <span className="font-black text-micro tracking-[0.2em] uppercase">
                             {t('crm.global_portfolio') || 'Portefeuille Global'}
                         </span>
                     </div>
-                    <span className="text-[10px] font-mono font-bold opacity-50">{getCount(null)}</span>
+                    <span className="text-nano font-mono font-bold opacity-50">{getCount(null)}</span>
                 </button>
 
                 {Object.entries(SEGMENTS).map(([key, segment]) => {
@@ -92,11 +92,11 @@ export function CRMSidebar() {
                                 )}>
                                     <Icon className="w-5 h-5" style={{ color: segment.color }} />
                                 </div>
-                                <span className="font-black text-[11px] tracking-[0.2em] uppercase">
+                                <span className="font-black text-micro tracking-[0.2em] uppercase">
                                     {t(`crm.segments.${key}`) || segment.name}
                                 </span>
                             </div>
-                            <span className="text-[10px] font-mono font-bold opacity-50">{getCount(key)}</span>
+                            <span className="text-nano font-mono font-bold opacity-50">{getCount(key)}</span>
                         </button>
                     );
                 })}

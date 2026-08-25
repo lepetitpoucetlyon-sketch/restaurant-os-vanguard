@@ -42,7 +42,7 @@ export function ContentSection({
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         {subtitle && (
-                            <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">
+                            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-1">
                                 {subtitle}
                             </p>
                         )}

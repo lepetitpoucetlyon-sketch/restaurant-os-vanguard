@@ -20,7 +20,7 @@ export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemPro
                 <div className="absolute inset-0 flex items-center justify-center text-text-muted group-hover:scale-110 transition-transform duration-700">
                     {post.media.type === 'image' ? <ImageIcon size={32} /> : <Video size={32} />}
                 </div>
-                <div className="absolute top-2 left-2 px-2 py-1 bg-surface-sidebar/60 backdrop-blur-md rounded-lg text-[9px] font-bold text-text-primary uppercase tracking-wider border border-subtle">
+                <div className="absolute top-2 left-2 px-2 py-1 bg-surface-sidebar/60 backdrop-blur-md rounded-lg text-nano font-bold text-text-primary uppercase tracking-wider border border-subtle">
                     {new Date(post.scheduledFor).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
                 </div>
             </div>
@@ -39,7 +39,7 @@ export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemPro
                             );
                         })}
                         <div className="w-px h-4 bg-border mx-1" />
-                        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                        <span className="text-nano font-black text-text-muted uppercase tracking-widest">
                             {new Date(post.scheduledFor).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                     </div>

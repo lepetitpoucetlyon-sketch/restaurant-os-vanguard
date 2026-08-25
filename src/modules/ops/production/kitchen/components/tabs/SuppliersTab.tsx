@@ -53,11 +53,11 @@ export function SuppliersTab() {
                             </motion.div>
                             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-text-primary shadow-xl shadow-accent/20">
                                 <span className="text-[12px]">★</span>
-                                <span className="text-[11px] font-mono leading-none">{supplier.rating}</span>
+                                <span className="text-micro font-mono leading-none">{supplier.rating}</span>
                             </div>
                         </div>
                         <h3 className="font-serif font-semibold text-xl text-text-primary mb-2 group-hover:text-accent transition-colors">{supplier.name}</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-8">{supplier.category}</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] mb-8">{supplier.category}</p>
                         <div className="space-y-4 text-[13px] relative z-10">
                             <div className="flex items-center gap-3 text-text-muted group-hover:text-text-primary transition-colors">
                                 <span className="opacity-60 text-base">📞</span>
@@ -68,7 +68,7 @@ export function SuppliersTab() {
                                 <span className="font-medium tracking-tight break-all">{supplier.email}</span>
                             </div>
                         </div>
-                        <Button className="w-full mt-8 h-12 bg-bg-tertiary dark:bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border border-border/50 group-hover:border-accent">
+                        <Button className="w-full mt-8 h-12 bg-bg-tertiary dark:bg-bg-tertiary/50 hover:bg-accent text-text-primary hover:text-text-primary rounded-lg font-bold text-micro uppercase tracking-widest transition-all duration-300 border border-border/50 group-hover:border-accent">
                             Catalogue & Tarifs
                         </Button>
                     </motion.div>

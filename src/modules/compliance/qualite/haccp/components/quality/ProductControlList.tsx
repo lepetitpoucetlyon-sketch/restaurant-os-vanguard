@@ -37,9 +37,9 @@ export const ProductControlList: React.FC = () => {
             <div className="flex justify-between items-end px-4">
                 <div>
                     <h3 className="text-sm font-black text-primary uppercase tracking-widest">Détail des Produits</h3>
-                    <p className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">Audit Unitaire ({items.length} articles)</p>
+                    <p className="text-nano font-bold text-muted uppercase tracking-widest mt-1">Audit Unitaire ({items.length} articles)</p>
                 </div>
-                <span className="text-[10px] font-black text-status-success bg-status-success px-3 py-1 rounded-full uppercase tracking-widest">
+                <span className="text-nano font-black text-status-success bg-status-success px-3 py-1 rounded-full uppercase tracking-widest">
                     Live Sync
                 </span>
             </div>
@@ -68,11 +68,11 @@ export const ProductControlList: React.FC = () => {
                                 <div>
                                     <p className="font-serif font-black text-xl text-primary tracking-tight leading-none mb-1">{item.product_name}</p>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest bg-surface-bg px-2.5 py-1 rounded-lg border border-subtle">
+                                        <span className="text-nano font-black text-muted uppercase tracking-widest bg-surface-bg px-2.5 py-1 rounded-lg border border-subtle">
                                             {item.quantity_delivered} {item.unit || 'U'}
                                         </span>
                                         {item.batch_number && (
-                                            <span className="text-[10px] font-black text-muted uppercase tracking-widest">
+                                            <span className="text-nano font-black text-muted uppercase tracking-widest">
                                                 Lot: {item.batch_number}
                                             </span>
                                         )}
@@ -140,7 +140,7 @@ export const ProductControlList: React.FC = () => {
                         <PackageSearch className="w-8 h-8 text-muted" />
                     </div>
                     <h4 className="text-sm font-black text-muted uppercase tracking-widest mb-2">En attente de scanning</h4>
-                    <p className="max-w-xs mx-auto text-[10px] font-bold text-muted uppercase leading-relaxed tracking-widest">
+                    <p className="max-w-xs mx-auto text-nano font-bold text-muted uppercase leading-relaxed tracking-widest">
                         Utilisez le module OCR pour charger les données de la livraison ou saisissez manuellement les articles.
                     </p>
                 </div>

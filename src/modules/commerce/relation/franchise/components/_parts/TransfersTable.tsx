@@ -26,7 +26,7 @@ export function TransfersTable({
         <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                    <thead className="bg-bg-tertiary/40 text-text-secondary text-[10px] uppercase font-black tracking-wider border-b border-border-subtle">
+                    <thead className="bg-bg-tertiary/40 text-text-secondary text-nano uppercase font-black tracking-wider border-b border-border-subtle">
                         <tr>
                             <th className="px-6 py-4">Réf Transfert</th>
                             <th className="px-6 py-4">Origine</th>
@@ -49,7 +49,7 @@ export function TransfersTable({
                                 </td>
                                 <td className="px-6 py-4">
                                     <span
-                                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                        className={`px-2.5 py-1 rounded-full text-nano font-bold ${
                                             transfer.status === 'RECEIVED'
                                                 ? 'bg-emerald-500/10 text-emerald-400'
                                                 : 'bg-amber-500/10 text-amber-400'
@@ -62,7 +62,7 @@ export function TransfersTable({
                                     {transfer.status === 'REQUESTED' && (
                                         <button
                                             onClick={() => onExecute(transfer)}
-                                            className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold transition-all flex items-center gap-1.5 ml-auto"
+                                            className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-nano font-bold transition-all flex items-center gap-1.5 ml-auto"
                                         >
                                             <CheckCircle2 className="w-3 h-3" />
                                             Réceptionner (Stock +)

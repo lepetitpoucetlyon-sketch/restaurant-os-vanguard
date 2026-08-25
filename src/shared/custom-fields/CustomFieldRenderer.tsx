@@ -58,7 +58,7 @@ export function CustomFieldRenderer({
             {renderInput(field, value, handleChange, readOnly)}
 
             {field.display?.helpText && (
-                <p className="text-[10px] text-text-muted mt-1">{field.display.helpText}</p>
+                <p className="text-nano text-text-muted mt-1">{field.display.helpText}</p>
             )}
         </div>
     );
@@ -194,7 +194,7 @@ function renderInput(
                                     onChange(next);
                                 }}
                                 className={cn(
-                                    'px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all',
+                                    'px-2.5 py-1 rounded-lg text-micro font-medium border transition-all',
                                     isSelected
                                         ? 'border-action-primary bg-action-primary/10 text-action-primary'
                                         : 'border-border-default bg-surface-card text-text-secondary',

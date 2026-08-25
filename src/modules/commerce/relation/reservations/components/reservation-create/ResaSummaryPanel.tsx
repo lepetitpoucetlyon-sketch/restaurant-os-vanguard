@@ -37,22 +37,22 @@ export function ResaSummaryPanel({
                 {selectedCustomer ? (
                     <>
                         <div>
-                            <p className="text-[9px] font-black text-text-muted uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <p className="text-nano font-black text-text-muted uppercase tracking-widest mb-3 flex items-center gap-2">
                                 <Sparkles className="w-3 h-3 text-accent" /> Profil client
                             </p>
                             <p className="text-xl font-serif italic text-text-primary">
                                 {selectedCustomer.firstName} {selectedCustomer.lastName}
                             </p>
-                            <p className="text-[11px] text-text-muted mt-1">{selectedCustomer.phone}</p>
+                            <p className="text-micro text-text-muted mt-1">{selectedCustomer.phone}</p>
                             {selectedCustomer.email && (
-                                <p className="text-[10px] text-text-muted">{selectedCustomer.email}</p>
+                                <p className="text-nano text-text-muted">{selectedCustomer.email}</p>
                             )}
                         </div>
 
                         {selectedCustomer.preferences.length > 0 && (
                             <div className="flex flex-wrap gap-1.5">
                                 {selectedCustomer.preferences.slice(0, 4).map((p, i) => (
-                                    <span key={i} className="px-3 py-1 bg-bg-tertiary text-[9px] font-black text-text-muted rounded-xl border border-border uppercase tracking-widest">
+                                    <span key={i} className="px-3 py-1 bg-bg-tertiary text-nano font-black text-text-muted rounded-xl border border-border uppercase tracking-widest">
                                         {p}
                                     </span>
                                 ))}
@@ -60,8 +60,8 @@ export function ResaSummaryPanel({
                         )}
 
                         <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
-                            <p className="text-[9px] font-black text-accent uppercase tracking-widest mb-2">Résumé</p>
-                            <p className="text-[11px] text-text-muted leading-relaxed">
+                            <p className="text-nano font-black text-accent uppercase tracking-widest mb-2">Résumé</p>
+                            <p className="text-micro text-text-muted leading-relaxed">
                                 {formData.date} à {formData.time} — {formData.covers} couv.
                                 {(formData.tableId || suggestedTable) && (
                                     <> — Table #{(formData.tableId ? availableTables.find((t) => t.id === formData.tableId)?.number : suggestedTable?.number) ?? "?"}</>
@@ -74,7 +74,7 @@ export function ResaSummaryPanel({
                         <div className="w-16 h-16 rounded-full bg-bg-tertiary flex items-center justify-center mx-auto border border-dashed border-border">
                             <Users strokeWidth={1} className="w-8 h-8 text-text-muted/30" />
                         </div>
-                        <p className="text-[11px] font-black uppercase tracking-widest text-text-muted max-w-[160px] mx-auto leading-relaxed italic">
+                        <p className="text-micro font-black uppercase tracking-widest text-text-muted max-w-[160px] mx-auto leading-relaxed italic">
                             Sélectionnez un client pour continuer
                         </p>
                     </div>
@@ -84,7 +84,7 @@ export function ResaSummaryPanel({
             <button
                 disabled={!selectedCustomer || step !== 2 || saving}
                 onClick={onSubmit}
-                className="w-full h-16 bg-accent text-bg-primary rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] transition-all shadow-2xl shadow-amber-500/20 disabled:opacity-20 disabled:cursor-not-allowed hover:scale-[1.02] flex items-center justify-center gap-3"
+                className="w-full h-16 bg-accent text-bg-primary rounded-[1.5rem] font-black text-micro uppercase tracking-[0.25em] transition-all shadow-2xl shadow-amber-500/20 disabled:opacity-20 disabled:cursor-not-allowed hover:scale-[1.02] flex items-center justify-center gap-3"
             >
                 <ArrowRight className="w-4 h-4" />
                 {saving ? "Enregistrement…" : "Confirmer"}

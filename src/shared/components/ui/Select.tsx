@@ -49,7 +49,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                 </select>
                 <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                 {error && (
-                    <p className="mt-1 text-[11px] text-status-danger">{error}</p>
+                    <p className="mt-1 text-micro text-status-danger">{error}</p>
                 )}
             </div>
         );

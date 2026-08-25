@@ -71,7 +71,7 @@ export function AutoProcurementWizard({
             <div>
               <h2 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
                 AUTO-APPROVISIONNEMENT INTELLIGENT
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase tracking-wider">
+                <span className="text-nano px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase tracking-wider">
                   OPTIMISATION FRANCO
                 </span>
               </h2>

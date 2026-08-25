@@ -32,7 +32,7 @@ export function InterventionLogSection() {
                             Le restaurateur est **légalement tenu** de conserver tous les avis de passage et bons d'intervention des entreprises spécialisées (Hottes, Dératisation, Maintenance, Déchets). Ces documents sont indispensables en cas de contrôle sanitaire ou de sinistre assurance.
                         </p>
                     </div>
-                    <Button className="md:ml-auto h-14 px-8 bg-status-warning hover:bg-status-warning text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-amber-600/20">
+                    <Button className="md:ml-auto h-14 px-8 bg-status-warning hover:bg-status-warning text-text-primary rounded-2xl font-black uppercase text-nano tracking-widest shadow-xl shadow-amber-600/20">
                         <Plus className="w-4 h-4 mr-2" /> Numériser un bon
                     </Button>
                 </div>
@@ -49,8 +49,8 @@ export function InterventionLogSection() {
                     />
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
-                    <Button variant="outline" className="h-12 flex-1 md:px-6 rounded-2xl border-border font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">Trier par date</Button>
-                    <Button variant="outline" className="h-12 flex-1 md:px-6 rounded-2xl border-border font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">Filtrer</Button>
+                    <Button variant="outline" className="h-12 flex-1 md:px-6 rounded-2xl border-border font-bold text-nano uppercase tracking-widest whitespace-nowrap">Trier par date</Button>
+                    <Button variant="outline" className="h-12 flex-1 md:px-6 rounded-2xl border-border font-bold text-nano uppercase tracking-widest whitespace-nowrap">Filtrer</Button>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@ export function InterventionLogSection() {
             <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-center gap-3 px-2 mb-2">
                     <History className="w-4 h-4 text-text-muted" />
-                    <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Historique des Interventions</h3>
+                    <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Historique des Interventions</h3>
                 </div>
 
                 {(interventions || []).map((int: import("@/shared/nexus/contracts/context/registre.contracts").InterventionDocument) => (
@@ -83,7 +83,7 @@ export function InterventionLogSection() {
                             </div>
 
                             <div className="flex items-center md:flex-col md:items-end justify-between gap-4 md:gap-2 border-t md:border-t-0 pt-4 md:pt-0 mt-4 md:mt-0 border-border/50">
-                                <div className="flex items-center gap-2 text-text-primary font-mono text-[11px] font-bold bg-bg-tertiary px-3 py-1.5 rounded-full border border-border">
+                                <div className="flex items-center gap-2 text-text-primary font-mono text-micro font-bold bg-bg-tertiary px-3 py-1.5 rounded-full border border-border">
                                     <Calendar className="w-3.5 h-3.5" />
                                     {int.date}
                                 </div>
@@ -114,7 +114,7 @@ export function InterventionLogSection() {
                 </div>
                 <div>
                     <p className="text-sm font-bold text-text-muted uppercase tracking-widest">Fin de l'historique</p>
-                    <p className="text-[11px] text-text-muted/60 mt-1">L'archivage automatique conserve vos bons pendant 10 ans.</p>
+                    <p className="text-micro text-text-muted/60 mt-1">L'archivage automatique conserve vos bons pendant 10 ans.</p>
                 </div>
             </div>
         </div>

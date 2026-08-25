@@ -149,7 +149,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                                 />
                             </div>
 
-                            <div className="flex items-center justify-between text-[10px] text-white/40 font-mono mt-1">
+                            <div className="flex items-center justify-between text-nano text-white/40 font-mono mt-1">
                                 <span className="flex items-center gap-1">
                                     <ShieldCheck className="w-3 h-3 text-emerald-400" />
                                     <span>Nexus Node Sovereign</span>

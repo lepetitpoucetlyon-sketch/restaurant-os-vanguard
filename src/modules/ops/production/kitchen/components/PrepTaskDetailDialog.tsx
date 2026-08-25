@@ -54,7 +54,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                         <div>
                             <div className="flex items-center gap-3 mb-3">
                                 <span className={cn(
-                                    "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.15em] border",
+                                    "px-3 py-1 rounded-full text-nano font-black uppercase tracking-[0.15em] border",
                                     task.isCompleted
                                         ? "bg-success/10 text-success border-success/20"
                                         : "bg-warning/10 text-warning border-warning/20"
@@ -91,10 +91,10 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                         <div className={cn("w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center group-hover:bg-accent group-hover:text-text-primary transition-all duration-300 shadow-inner")}>
                                             <card.icon className={cn("w-5 h-5", card.color, "group-hover:text-text-primary")} />
                                         </div>
-                                        <span className="text-[10px] font-black uppercase text-text-muted tracking-[0.2em]">{card.label}</span>
+                                        <span className="text-nano font-black uppercase text-text-muted tracking-[0.2em]">{card.label}</span>
                                     </div>
                                     <div className="text-2xl font-serif font-black text-text-primary tracking-tight">{card.value}</div>
-                                    <p className="text-[11px] text-text-muted mt-2 font-bold uppercase tracking-widest opacity-60">{card.sub}</p>
+                                    <p className="text-micro text-text-muted mt-2 font-bold uppercase tracking-widest opacity-60">{card.sub}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -145,12 +145,12 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                                     {item.instruction}
                                                 </p>
                                                 <div className="flex items-center gap-4 mt-2">
-                                                    <span className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                                                    <span className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                                                         <Clock className="w-3 h-3" />
                                                         {item.duration} ESTIMÉ
                                                     </span>
                                                     {!item.done && (
-                                                        <span className="text-[9px] font-black text-accent uppercase tracking-widest bg-accent/10 px-2 py-0.5 rounded">Priorité Alpha</span>
+                                                        <span className="text-nano font-black text-accent uppercase tracking-widest bg-accent/10 px-2 py-0.5 rounded">Priorité Alpha</span>
                                                     )}
                                                 </div>
                                             </div>
@@ -196,7 +196,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                     <Button
                         type="button"
                         variant="outline"
-                        className="flex-1 md:flex-none rounded-2xl font-black h-14 border-border px-8 bg-surface-card hover:bg-bg-tertiary transition-all text-[11px] uppercase tracking-widest"
+                        className="flex-1 md:flex-none rounded-2xl font-black h-14 border-border px-8 bg-surface-card hover:bg-bg-tertiary transition-all text-micro uppercase tracking-widest"
                         onClick={onClose}
                     >
                         Fermer

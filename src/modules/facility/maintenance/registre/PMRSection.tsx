@@ -26,16 +26,16 @@ export function PMRSection() {
                     </div>
                     <div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Accessibilité PMR</h2>
-                        <p className="text-[10px] font-black text-brand uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
+                        <p className="text-nano font-black text-brand uppercase tracking-[0.3em] mt-1">Registre Public d'Accessibilité</p>
                         <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(pmrDoc?.name || 'Diagnostic accessibilité PMR en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {String(pmrDoc?.updatedAt || 'N/A')}</span>
+                                <span className="text-nano font-mono font-bold">MAJ : {String(pmrDoc?.updatedAt || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {String(pmrDoc?.validUntil || 'N/A')}</span>
+                                <span className="text-nano font-mono font-bold">Révision : {String(pmrDoc?.validUntil || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@ export function PMRSection() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                 {[
                     { label: 'Conforme', count: stats.conforme, icon: CheckCircle2, color: 'text-success', bg: 'bg-success/5 border-success/10' },
                     { label: 'En cours', count: stats.en_cours, icon: Wrench, color: 'text-warning', bg: 'bg-warning/5 border-warning/10' },
@@ -54,14 +54,14 @@ export function PMRSection() {
                             <s.icon className={cn("w-6 h-6", s.color)} strokeWidth={1.5} />
                             <span className={cn("text-3xl font-serif font-black", s.color)}>{s.count}</span>
                         </div>
-                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-muted">{s.label}</p>
+                        <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted">{s.label}</p>
                     </div>
                 ))}
             </div>
 
             {/* Aménagements */}
             <div className="space-y-4">
-                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
+                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-3">
                     <MapPin strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Diagnostic par Zone
                 </h3>
@@ -94,7 +94,7 @@ export function PMRSection() {
                                     {am.status === 'conforme' ? 'Conforme' : am.status === 'en_cours' ? 'En cours' : 'À faire'}
                                 </span>
                                 {am.deadline && (
-                                    <p className="text-[10px] font-mono text-text-muted mt-2">Échéance : {am.deadline}</p>
+                                    <p className="text-nano font-mono text-text-muted mt-2">Échéance : {am.deadline}</p>
                                 )}
                             </div>
                         </div>
@@ -107,7 +107,7 @@ export function PMRSection() {
                 <div className="flex items-start gap-4">
                     <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-brand mt-0.5 shrink-0" />
                     <div className="bg-bg-tertiary/30 rounded-2xl p-6 border border-border/50">
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-2">Note de conformité</p>
                         <p className="text-sm text-brand dark:text-brand/80 leading-relaxed">Document validé et archivé dans le coffre-fort numérique Nexus.</p>
                     </div>
                 </div>

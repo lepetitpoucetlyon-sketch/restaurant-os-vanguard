@@ -157,7 +157,7 @@ export function DeviceFleetInventoryModal({ open, onClose }: DeviceFleetInventor
                           <h4 className="text-sm font-bold text-text-primary truncate max-w-[150px]">
                             {device.deviceName}
                           </h4>
-                          <p className="text-[11px] text-text-muted flex items-center gap-1">
+                          <p className="text-micro text-text-muted flex items-center gap-1">
                             <User className="w-3 h-3" />
                             {device.userName || 'Non assigné'}
                           </p>
@@ -166,7 +166,7 @@ export function DeviceFleetInventoryModal({ open, onClose }: DeviceFleetInventor
 
                       {/* Status Badge */}
                       <span
-                        className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${
+                        className={`text-nano uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${
                           isRevoked
                             ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
                             : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
@@ -177,7 +177,7 @@ export function DeviceFleetInventoryModal({ open, onClose }: DeviceFleetInventor
                     </div>
 
                     {/* Metadata */}
-                    <div className="mt-4 pt-3 border-t border-border/40 grid grid-cols-2 gap-2 text-[11px] text-text-muted">
+                    <div className="mt-4 pt-3 border-t border-border/40 grid grid-cols-2 gap-2 text-micro text-text-muted">
                       <div className="flex items-center gap-1 truncate">
                         <Clock className="w-3 h-3 text-text-muted shrink-0" />
                         <span>{new Date(device.lastActiveAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -201,7 +201,7 @@ export function DeviceFleetInventoryModal({ open, onClose }: DeviceFleetInventor
                           Kill-Switch (Bloquer)
                         </button>
                       ) : (
-                        <span className="text-[11px] text-rose-400 italic">
+                        <span className="text-micro text-rose-400 italic">
                           Accès & cache révoqués
                         </span>
                       )}

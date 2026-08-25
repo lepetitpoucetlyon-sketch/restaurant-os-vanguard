@@ -49,17 +49,17 @@ export function MCCInsights() {
                             </div>
                             <span className="text-chip-label text-secondary">{insight.type}</span>
                         </div>
-                        <span className="text-[9px] font-bold text-brand uppercase tracking-tighter">Impact: {insight.impact}</span>
+                        <span className="text-nano font-bold text-brand uppercase tracking-tighter">Impact: {insight.impact}</span>
                     </div>
 
                     <h4 className="text-sm font-bold text-text-primary mb-2 leading-tight">{insight.title}</h4>
-                    <p className="text-[11px] text-secondary mb-6 leading-relaxed">
+                    <p className="text-micro text-secondary mb-6 leading-relaxed">
                         {insight.description}
                     </p>
 
                     <button 
                         onClick={() => triggerRebalancing(insight)}
-                        className="w-full py-3 bg-surface-card hover:bg-surface-card border border-border-subtle rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all group-hover:border-focus/30 active:scale-[0.98]"
+                        className="w-full py-3 bg-surface-card hover:bg-surface-card border border-border-subtle rounded-xl flex items-center justify-center gap-2 text-nano font-bold uppercase tracking-widest transition-all group-hover:border-focus/30 active:scale-[0.98]"
                     >
                         {insight.action}
                         <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

@@ -85,7 +85,7 @@ function CourseSection({
                     <span className="text-chip-label text-text-primary">
                         {meta.label}
                     </span>
-                    <span className="text-[9px] text-text-muted">
+                    <span className="text-nano text-text-muted">
                         ({items.length} article{items.length > 1 ? "s" : ""})
                     </span>
                 </div>
@@ -93,7 +93,7 @@ function CourseSection({
                 {allSent ? (
                     <div className="flex items-center gap-1.5 text-status-success">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span className="text-[9px] font-black uppercase tracking-wider">Envoyé</span>
+                        <span className="text-nano font-black uppercase tracking-wider">Envoyé</span>
                     </div>
                 ) : pendingItems.length > 0 ? (
                     <button
@@ -124,18 +124,18 @@ function CourseSection({
                             {item.name}
                         </span>
 
-                        <span className="text-[10px] text-text-muted tabular-nums">
+                        <span className="text-nano text-text-muted tabular-nums">
                             x{item.quantity}
                         </span>
 
-                        <span className="text-[11px] font-mono text-text-muted tabular-nums">
+                        <span className="text-micro font-mono text-text-muted tabular-nums">
                             {formatCurrency(SovereignMath.toCents(BigInt(item.unitPriceInMicrounits * item.quantity)))}
                         </span>
 
                         {item.sentAt && (
                             <div className="flex items-center gap-1 text-text-muted">
                                 <Clock className="w-3 h-3" />
-                                <span className="text-[9px]">
+                                <span className="text-nano">
                                     {new Date(item.sentAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
                                 </span>
                             </div>
@@ -146,7 +146,7 @@ function CourseSection({
 
             {sentItems.length > 0 && pendingItems.length > 0 && (
                 <div className="px-4 py-1.5 bg-status-success/5 border-t border-status-success/10">
-                    <span className="text-[9px] text-status-success font-bold">
+                    <span className="text-nano text-status-success font-bold">
                         {sentItems.length} envoyé{sentItems.length > 1 ? "s" : ""} · {pendingItems.length} en attente
                     </span>
                 </div>
@@ -175,7 +175,7 @@ export function CourseManager({ items, onSetCourse, onSendCourse, isLoading }: C
         return (
             <div className="flex flex-col items-center justify-center py-12 text-text-muted gap-3">
                 <UtensilsCrossed className="w-8 h-8 opacity-30" />
-                <p className="text-[11px] uppercase tracking-widest font-bold">Panier vide</p>
+                <p className="text-micro uppercase tracking-widest font-bold">Panier vide</p>
             </div>
         );
     }
@@ -202,7 +202,7 @@ export function CourseManager({ items, onSetCourse, onSendCourse, isLoading }: C
                                 <div key={item.cartId} className="px-4 py-2.5">
                                     <div className="flex items-center gap-2 mb-2">
                                         <span className="text-[12px] font-medium text-text-primary flex-1">{item.name}</span>
-                                        <span className="text-[10px] text-text-muted">x{item.quantity}</span>
+                                        <span className="text-nano text-text-muted">x{item.quantity}</span>
                                     </div>
                                     <div className="flex gap-1.5 flex-wrap">
                                         {COURSE_ORDER.map((course) => (

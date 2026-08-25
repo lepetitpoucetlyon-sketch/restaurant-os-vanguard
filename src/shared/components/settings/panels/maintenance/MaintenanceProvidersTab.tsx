@@ -20,7 +20,7 @@ export function MaintenanceProvidersTab({ providers }: MaintenanceProvidersTabPr
                 <h4 className="text-sm font-bold text-white">{prov.name}</h4>
                 <p className="text-xs text-emerald-400">{prov.specialty}</p>
               </div>
-              <span className="px-2 py-0.5 rounded-md bg-slate-800 text-[10px] font-mono text-text-muted">
+              <span className="px-2 py-0.5 rounded-md bg-slate-800 text-nano font-mono text-text-muted">
                 {prov.contractNumber || 'Contrat Standard'}
               </span>
             </div>
@@ -39,9 +39,9 @@ export function MaintenanceProvidersTab({ providers }: MaintenanceProvidersTabPr
             </div>
 
             <div className="pt-2 flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] text-text-muted/80 font-bold">Zones :</span>
+              <span className="text-nano text-text-muted/80 font-bold">Zones :</span>
               {prov.assignedZones.map((z: RestaurantZone) => (
-                <span key={z} className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] text-text-secondary">
+                <span key={z} className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-nano text-text-secondary">
                   {RESTAURANT_ZONE_LABELS[z] || z}
                 </span>
               ))}

@@ -67,12 +67,12 @@ export function FloorArchitecture({
                     </div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Architecture Spatiale</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Niveaux & Hiérarchie</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Niveaux & Hiérarchie</p>
                     </div>
                 </div>
                 <button 
                   onClick={handleAddFloor}
-                  className="px-4 py-2 bg-text-primary text-bg-primary rounded-xl text-[10px] font-bold tracking-widest uppercase hover:bg-text-secondary transition-all"
+                  className="px-4 py-2 bg-text-primary text-bg-primary rounded-xl text-nano font-bold tracking-widest uppercase hover:bg-text-secondary transition-all"
                 >
                   Ajouter un Étage
                 </button>
@@ -89,7 +89,7 @@ export function FloorArchitecture({
                         <div className="p-6 bg-bg-primary rounded-2xl border border-border">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Nom</label>
+                                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Nom</label>
                                     <input
                                         type="text"
                                         value={editingFloor.name}
@@ -99,7 +99,7 @@ export function FloorArchitecture({
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Niveau</label>
+                                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Niveau</label>
                                     <input
                                         type="number"
                                         value={editingFloor.level}
@@ -108,7 +108,7 @@ export function FloorArchitecture({
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Description</label>
+                                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Description</label>
                                     <input
                                         type="text"
                                         value={editingFloor.description}

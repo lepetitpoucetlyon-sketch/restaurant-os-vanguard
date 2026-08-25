@@ -37,7 +37,7 @@ export function CustomerImportDone({
             className="rounded-lg border border-border bg-surface-base px-3 py-2 text-center"
           >
             <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-[10px] text-text-muted mt-0.5">{stat.label}</p>
+            <p className="text-nano text-text-muted mt-0.5">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -53,7 +53,7 @@ export function CustomerImportDone({
             {result.errors.map((err, i) => (
               <li
                 key={i}
-                className="text-[11px] text-text-muted font-mono bg-bg-secondary rounded px-2 py-1"
+                className="text-micro text-text-muted font-mono bg-bg-secondary rounded px-2 py-1"
               >
                 {err}
               </li>

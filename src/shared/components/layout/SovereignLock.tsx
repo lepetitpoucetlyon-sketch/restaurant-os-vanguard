@@ -43,7 +43,7 @@ export const SovereignLock: React.FC = () => {
                             Régulariser l'Abonnement
                         </button>
 
-                        <div className="mt-8 text-[9px] font-mono text-secondary uppercase tracking-widest text-center">
+                        <div className="mt-8 text-nano font-mono text-secondary uppercase tracking-widest text-center">
                             Empire Engine • Code 402 Payment Required
                         </div>
                     </div>

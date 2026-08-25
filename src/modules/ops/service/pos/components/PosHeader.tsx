@@ -133,7 +133,7 @@ export function PosHeader({
                             onClick={() => setIsTablePickerOpen((v) => !v)}
                             className="group flex items-baseline gap-3 pr-1 hover:opacity-90 transition-opacity"
                         >
-                            <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Table</span>
+                            <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70">Table</span>
                             <span className="font-serif font-black text-[38px] leading-none tracking-[-0.02em] text-accent-gold">
                                 {currentTable?.number || "—"}
                             </span>
@@ -141,7 +141,7 @@ export function PosHeader({
                         </button>
                     ) : (
                         <div className="flex items-baseline gap-3 min-w-0">
-                            <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Table</span>
+                            <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70">Table</span>
                             <PageHeaderWithDocs
                                 categoryId="pos"
                                 title={`${currentTable?.number || ""}`}
@@ -156,12 +156,12 @@ export function PosHeader({
                                 <span className="absolute inset-0 rounded-full bg-status-danger/60 animate-ping" />
                                 <span className="relative rounded-full w-2 h-2 bg-status-danger" />
                             </span>
-                            <span className="font-serif italic text-[11px] tracking-[0.24em] uppercase text-status-danger/90">Rush</span>
+                            <span className="font-serif italic text-micro tracking-[0.24em] uppercase text-status-danger/90">Rush</span>
                         </span>
                     )}
 
                     {isTabletMode && isTablePickerOpen && (
-                        <div className="absolute top-full mt-2 left-4 z-50 bg-surface-card border border-border rounded-2xl shadow-xl p-3 w-64 grid grid-cols-4 gap-1.5">
+                        <div className="absolute top-full mt-2 left-4 z-50 bg-surface-card border border-border rounded-2xl shadow-xl p-3 w-64 grid grid-cols-2 lg:grid-cols-4 gap-1.5">
                             {allTables.map((t) => (
                                 <button
                                     key={t.id}
@@ -191,7 +191,7 @@ export function PosHeader({
                             onClick={() => setConsumptionMode(consumptionMode === "dine_in" ? "takeaway" : "dine_in")}
                             title={consumptionMode === "dine_in" ? "Sur place" : "À emporter"}
                             className={cn(
-                                "h-full flex items-center gap-2 px-3.5 text-[11px] font-medium tracking-wide transition-colors border-r border-border/40",
+                                "h-full flex items-center gap-2 px-3.5 text-micro font-medium tracking-wide transition-colors border-r border-border/40",
                                 consumptionMode === "dine_in" ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
                             )}
                         >
@@ -264,7 +264,7 @@ export function PosHeader({
                     <button
                         onClick={() => setIsSosModalOpen(true)}
                         title="SOS Caisse & Urgence Service"
-                        className="group h-10 pl-3 pr-4 rounded-xl bg-status-danger text-white hover:bg-status-danger/90 active:scale-[0.98] flex items-center gap-2 text-[11px] font-serif italic tracking-[0.2em] uppercase transition-all shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]"
+                        className="group h-10 pl-3 pr-4 rounded-xl bg-status-danger text-white hover:bg-status-danger/90 active:scale-[0.98] flex items-center gap-2 text-micro font-serif italic tracking-[0.2em] uppercase transition-all shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]"
                     >
                         <LifeBuoy className="w-[14px] h-[14px]" />
                         <span className="hidden sm:inline">SOS</span>

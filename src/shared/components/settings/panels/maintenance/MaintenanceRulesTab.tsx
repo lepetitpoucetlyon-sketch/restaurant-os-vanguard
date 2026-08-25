@@ -48,7 +48,7 @@ export function MaintenanceRulesTab({
                   />
                 </button>
                 <h4 className="text-sm font-bold text-white tracking-tight">{rule.label}</h4>
-                <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-nano font-mono">
                   {rule.alertType}
                 </span>
               </div>
@@ -69,7 +69,7 @@ export function MaintenanceRulesTab({
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center gap-3">
-            <span className="text-[11px] font-bold text-text-muted/80">Destinataires notifiés :</span>
+            <span className="text-micro font-bold text-text-muted/80">Destinataires notifiés :</span>
             {rule.recipients.map((rec) => (
               <div
                 key={rec.id}

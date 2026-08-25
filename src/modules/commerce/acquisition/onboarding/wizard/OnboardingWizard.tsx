@@ -393,10 +393,10 @@ export function OnboardingWizard() {
                     <span className="text-xl">✍️</span>
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-text-muted/50">Contrat SaaS & Licence NF525</h4>
-                      <p className="text-[11px] text-text-muted/80">Signature électronique certifiée eIDAS (DocuSeal)</p>
+                      <p className="text-micro text-text-muted/80">Signature électronique certifiée eIDAS (DocuSeal)</p>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700">
+                  <span className="px-2 py-0.5 text-nano font-bold rounded-full bg-indigo-100 text-indigo-700">
                     {contractDispatched ? 'Envoyé par SMS & Email' : 'Prêt à signer'}
                   </span>
                 </div>

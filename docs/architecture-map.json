@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3587,
-    "loc": 332122,
+    "loc": 332215,
     "pages": 84,
     "apiRoutes": 210
   },
@@ -157,16 +157,16 @@
       "loc": 595
     },
     {
+      "file": "src/i18n/locales/fr.ts",
+      "loc": 581
+    },
+    {
       "file": "src/__tests__/helpers/saga.finance2.test.ts",
       "loc": 566
     },
     {
       "file": "src/i18n/locales/en.ts",
       "loc": 566
-    },
-    {
-      "file": "src/i18n/locales/fr.ts",
-      "loc": 545
     },
     {
       "file": "src/__tests__/anglemorts/anglemorts-batch7.test.ts",

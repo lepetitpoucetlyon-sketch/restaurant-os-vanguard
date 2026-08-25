@@ -40,7 +40,7 @@ export function NewTransferModal({
 
                         <div className="space-y-3">
                             <div>
-                                <label className="text-[10px] font-bold uppercase text-text-secondary">Destination</label>
+                                <label className="text-nano font-bold uppercase text-text-secondary">Destination</label>
                                 <select
                                     value={targetId}
                                     onChange={(e) => setTargetId(e.target.value)}
@@ -58,7 +58,7 @@ export function NewTransferModal({
                             </div>
 
                             <div>
-                                <label className="text-[10px] font-bold uppercase text-text-secondary">
+                                <label className="text-nano font-bold uppercase text-text-secondary">
                                     Ingrédient / Produit
                                 </label>
                                 <input
@@ -71,7 +71,7 @@ export function NewTransferModal({
                             </div>
 
                             <div>
-                                <label className="text-[10px] font-bold uppercase text-text-secondary">Quantité</label>
+                                <label className="text-nano font-bold uppercase text-text-secondary">Quantité</label>
                                 <input
                                     type="number"
                                     value={quantity}

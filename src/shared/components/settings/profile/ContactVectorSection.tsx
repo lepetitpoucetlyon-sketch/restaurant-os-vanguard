@@ -18,13 +18,13 @@ export function ContactVectorSection({
 }: ContactVectorSectionProps) {
   return (
     <div className="space-y-6">
-      <h4 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+      <h4 className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
         <Terminal className="w-4 h-4" />
         Contact Vector
       </h4>
       <div className="space-y-4">
         <div className="group">
-          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
+          <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
             Digital Mail Relay
           </label>
           <div className="relative">
@@ -44,7 +44,7 @@ export function ContactVectorSection({
           </div>
         </div>
         <div className="group">
-          <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
+          <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-1.5 ml-1">
             Voice Link
           </label>
           <div className="relative">

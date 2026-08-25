@@ -122,11 +122,11 @@ function FloorPlanPage() {
                     <div className="flex-1 flex flex-col h-full overflow-hidden p-3">
                         <div className="grid grid-cols-2 gap-2 mb-3">
                             <div className="p-3 rounded-2xl bg-surface-card border border-border-default">
-                                <span className="text-[10px] text-text-muted uppercase font-bold">Total Tables</span>
+                                <span className="text-nano text-text-muted uppercase font-bold">Total Tables</span>
                                 <p className="text-xl font-serif font-black text-text-primary mt-0.5">{tablesOnCurrentFloor.length}</p>
                             </div>
                             <div className="p-3 rounded-2xl bg-surface-card border border-border-default">
-                                <span className="text-[10px] text-text-muted uppercase font-bold">Occupation</span>
+                                <span className="text-nano text-text-muted uppercase font-bold">Occupation</span>
                                 <p className="text-xl font-serif font-black text-action-primary mt-0.5">{occupancyPercent}% <span className="text-xs font-sans text-text-muted">({occupiedSeats}/{totalSeatsOnFloor} PAX)</span></p>
                             </div>
                         </div>
@@ -152,7 +152,7 @@ function FloorPlanPage() {
                                             </div>
                                             <div>
                                                 <h4 className="font-bold text-xs text-text-primary">Table {t.number}</h4>
-                                                <p className="text-[11px] text-text-muted">{t.seats} couverts • {t.status}</p>
+                                                <p className="text-micro text-text-muted">{t.seats} couverts • {t.status}</p>
                                             </div>
                                         </div>
                                         <button
@@ -232,20 +232,20 @@ function FloorPlanPage() {
                             showToast(`Table ${selectedTable?.number} installée — KDS notifié`, 'success');
                             setSelectedTableId(null);
                         }}
-                        className="w-full py-4 rounded-2xl bg-accent-gold hover:bg-accent-gold/90 text-text-primary text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                        className="w-full py-4 rounded-2xl bg-accent-gold hover:bg-accent-gold/90 text-text-primary text-micro font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95"
                     >
                         <CheckCircle2 className="w-4 h-4" />
                         Accueillir Client (Check-In & KDS)
                     </button>
 
                     <div className="space-y-2 pt-4">
-                        <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] px-4">Statut de la Table</p>
-                        <div className="grid grid-cols-4 gap-2">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-4">Statut de la Table</p>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                             {['available', 'seated', 'ordered', 'paying'].map(s => (
                                 <button
                                     key={s}
                                     onClick={() => { updateTable(selectedTableId!, { status: s as TableStatus }); setSelectedTableId(null); }}
-                                    className={cn("h-10 rounded-xl text-[8px] font-black uppercase tracking-tighter border", selectedTable?.status === s ? "bg-accent-gold text-text-primary border-transparent" : "bg-bg-primary text-text-muted border-border")}
+                                    className={cn("h-10 rounded-xl text-nano font-black uppercase tracking-tighter border", selectedTable?.status === s ? "bg-accent-gold text-text-primary border-transparent" : "bg-bg-primary text-text-muted border-border")}
                                 >
                                     {s}
                                 </button>

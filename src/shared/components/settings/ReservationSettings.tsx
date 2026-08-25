@@ -48,7 +48,7 @@ export default function ReservationSettingsComponent() {
                     </motion.div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Temporal Horizons</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Booking Lead Times &amp; Restrictions</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Booking Lead Times &amp; Restrictions</p>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
@@ -58,7 +58,7 @@ export default function ReservationSettingsComponent() {
                         { label: 'Standard Occupancy', key: 'defaultDuration', unit: 'Min',   sub: 'Table turnover time' },
                     ].map((item) => (
                         <div key={item.key} className="space-y-3">
-                            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">{item.label}</label>
+                            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">{item.label}</label>
                             <div className="relative group">
                                 <input
                                     type="number"
@@ -67,9 +67,9 @@ export default function ReservationSettingsComponent() {
                                     className="w-full px-6 py-5 bg-bg-primary border border-border rounded-2xl text-text-primary font-serif outline-none focus:border-accent shadow-sm"
                                     data-tutorial={item.key === 'minAdvanceHours' ? 'settings-5-3' : undefined}
                                 />
-                                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-bold text-text-muted uppercase tracking-widest pointer-events-none">{item.unit}</span>
+                                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-nano font-bold text-text-muted uppercase tracking-widest pointer-events-none">{item.unit}</span>
                             </div>
-                            <p className="text-[9px] font-medium text-text-muted uppercase tracking-widest px-1 ml-1">{item.sub}</p>
+                            <p className="text-nano font-medium text-text-muted uppercase tracking-widest px-1 ml-1">{item.sub}</p>
                         </div>
                     ))}
                 </div>
@@ -88,7 +88,7 @@ export default function ReservationSettingsComponent() {
                     </motion.div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Synthetic Output</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Automated Communication Scripts</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Automated Communication Scripts</p>
                     </div>
                 </div>
                 <div className="space-y-8">
@@ -98,7 +98,7 @@ export default function ReservationSettingsComponent() {
                         { label: 'Termination Policy', key: 'cancellationPolicy',  placeholder: 'Erasure protocol: 24h notice required for system flush.' },
                     ].map((template) => (
                         <div key={template.key} className="space-y-3">
-                            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">{template.label}</label>
+                            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">{template.label}</label>
                             <textarea
                                 value={config[template.key as keyof typeof config] as string}
                                 onChange={(e) => setConfig(c => ({ ...c, [template.key]: e.target.value }))}

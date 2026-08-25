@@ -23,7 +23,7 @@ export function SplitSummaryFooter({
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
 
             <div className="flex flex-col">
-                <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.6em] mb-2">
+                <span className="text-nano font-black text-accent-gold uppercase tracking-[0.6em] mb-2">
                     {t('pos.split.remaining')}
                 </span>
                 <div className="flex items-end gap-3">
@@ -46,7 +46,7 @@ export function SplitSummaryFooter({
                 </button>
             ) : (
                 <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.5em] mb-4">
+                    <span className="text-nano font-black text-text-primary/30 uppercase tracking-[0.5em] mb-4">
                         À encaisser maintenant
                     </span>
                     <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">

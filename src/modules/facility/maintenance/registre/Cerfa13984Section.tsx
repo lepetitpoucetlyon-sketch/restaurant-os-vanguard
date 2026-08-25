@@ -19,22 +19,22 @@ export function Cerfa13984Section() {
                         </div>
                         <div>
                             <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Cerfa 13984</h2>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
+                            <p className="text-nano font-black text-brand uppercase tracking-[0.3em] mt-1">Déclaration de manipulation de denrées alimentaires d'origine animale</p>
                             <p className="text-text-muted text-sm mt-3 max-w-xl leading-relaxed">{String(cerfa?.name || 'Détails réglementaires en attente de synchronisation.')}</p>
                                 <div className="flex items-center gap-6 mt-4">
                                     <div className="flex items-center gap-2 text-text-muted">
                                         <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] font-mono font-bold">Déclaration : {String(cerfa?.updatedAt || 'N/A')}</span>
+                                        <span className="text-nano font-mono font-bold">Déclaration : {String(cerfa?.updatedAt || 'N/A')}</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-text-muted">
                                         <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] font-mono font-bold">Prochaine vérification : {String(cerfa?.validUntil || 'N/A')}</span>
+                                        <span className="text-nano font-mono font-bold">Prochaine vérification : {String(cerfa?.validUntil || 'N/A')}</span>
                                     </div>
                                 </div>
                         </div>
                     </div>
                     <div className="flex gap-3">
-                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-[10px] uppercase tracking-widest">
+                        <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-nano uppercase tracking-widest">
                             <Download strokeWidth={1.5} className="w-4 h-4 mr-2" /> Télécharger PDF
                         </Button>
                     </div>
@@ -43,7 +43,7 @@ export function Cerfa13984Section() {
 
             {/* Informations de l'établissement */}
             <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
-                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                     <Building2 strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Informations de l'Établissement (pré-remplies)
                 </h3>
@@ -57,7 +57,7 @@ export function Cerfa13984Section() {
                         { label: 'DD(CS)PP compétente', value: 'Direction Départementale du Rhône' },
                     ].map((field, i) => (
                         <div key={i} className="space-y-1.5">
-                            <label className="text-[9px] font-black text-text-muted uppercase tracking-widest">{field.label}</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">{field.label}</label>
                             <div className="h-12 px-5 bg-bg-tertiary/50 rounded-xl border border-border flex items-center">
                                 <span className="text-sm font-medium text-text-primary">{field.value}</span>
                             </div>
@@ -68,7 +68,7 @@ export function Cerfa13984Section() {
 
             {/* Catégories de denrées */}
             <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border p-8 shadow-sm space-y-6">
-                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                     <FileText strokeWidth={1.5} className="w-3.5 h-3.5" />
                     Catégories de Denrées Manipulées
                 </h3>
@@ -88,7 +88,7 @@ export function Cerfa13984Section() {
                                     {cat.declared ? '✓ Déclaré' : 'Non déclaré'}
                                 </span>
                             </div>
-                            <p className="text-[11px] text-text-muted">{cat.details}</p>
+                            <p className="text-micro text-text-muted">{cat.details}</p>
                         </div>
                     ))}
                 </div>
@@ -112,7 +112,7 @@ export function Cerfa13984Section() {
 
             {/* Actions */}
             <div className="flex gap-4">
-                <Button className="h-14 flex-1 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-[10px] tracking-widest">
+                <Button className="h-14 flex-1 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-nano tracking-widest">
                     <Send strokeWidth={1.5} className="w-4 h-4 mr-3" />
                     Envoyer à la DD(CS)PP
                 </Button>

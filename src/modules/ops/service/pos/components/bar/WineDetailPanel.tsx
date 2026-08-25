@@ -51,29 +51,29 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
                 </div>
                 <div className="text-right">
                     <p className="text-2xl font-black text-wine dark:text-text-primary">{((selectedWine.priceInMicrounits / 1_000_000)).toLocaleString('fr-FR')} €</p>
-                    <p className="text-[11px] text-text-muted">Coût: {(selectedWine.costPriceInMicrounits / 1_000_000).toLocaleString('fr-FR')} €</p>
+                    <p className="text-micro text-text-muted">Coût: {(selectedWine.costPriceInMicrounits / 1_000_000).toLocaleString('fr-FR')} €</p>
                 </div>
             </div>
 
             {/* Details */}
             <div className="space-y-4">
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
-                    <p className="text-[10px] font-black text-text-muted uppercase">Cépage</p>
+                    <p className="text-nano font-black text-text-muted uppercase">Cépage</p>
                     <p className="font-bold text-text-primary">{selectedWine.grape}</p>
                 </div>
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
-                    <p className="text-[10px] font-black text-text-muted uppercase">Température de service</p>
+                    <p className="text-nano font-black text-text-muted uppercase">Température de service</p>
                     <p className="font-bold text-text-primary">{selectedWine.servingTemp}</p>
                 </div>
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
-                    <p className="text-[10px] font-black text-text-muted uppercase">Emplacement</p>
+                    <p className="text-nano font-black text-text-muted uppercase">Emplacement</p>
                     <p className="font-bold text-text-primary">{selectedWine.location}</p>
                 </div>
             </div>
 
             {/* Pairings */}
             <div>
-                <p className="text-[10px] font-black text-text-muted uppercase mb-3">Accords suggérés</p>
+                <p className="text-nano font-black text-text-muted uppercase mb-3">Accords suggérés</p>
                 <div className="flex flex-wrap gap-2">
                     {selectedWine.pairings.map((pairing, i) => (
                         <span key={i} className="px-3 py-1.5 bg-wine/10 text-wine rounded-lg text-sm font-bold">

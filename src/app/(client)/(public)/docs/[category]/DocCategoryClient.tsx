@@ -24,7 +24,7 @@ export default function DocCategoryClient() {
                 </p>
                 <Link
                     href="/dashboard"
-                    className="px-10 py-4 bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
+                    className="px-10 py-4 bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary rounded-full font-black text-nano uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-transform"
                 >
                     Retour au Dashboard
                 </Link>
@@ -46,8 +46,8 @@ export default function DocCategoryClient() {
 
                 <div className="flex items-center gap-6">
                     <div className="flex flex-col items-end">
-                        <span className="text-[8px] font-black text-accent-gold uppercase tracking-[0.3em]">Restaurant OS Documentation</span>
-                        <span className="text-[10px] font-serif italic text-text-muted">Système Expert de Gestion</span>
+                        <span className="text-nano font-black text-accent-gold uppercase tracking-[0.3em]">Restaurant OS Documentation</span>
+                        <span className="text-nano font-serif italic text-text-muted">Système Expert de Gestion</span>
                     </div>
                 </div>
             </nav>

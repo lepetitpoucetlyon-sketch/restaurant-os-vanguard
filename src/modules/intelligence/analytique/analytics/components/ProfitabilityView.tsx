@@ -26,7 +26,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                     <div className="flex justify-between items-start mb-6">
                         <div>
                             <h4 className="text-xl font-serif font-black italic text-text-primary">{alert.productName}</h4>
-                            <p className="text-[9px] font-black text-error uppercase tracking-widest mt-1">
+                            <p className="text-nano font-black text-error uppercase tracking-widest mt-1">
                                 Marge sous le seuil ({(alert.currentMarginBps / 100).toFixed(1)}%)
                             </p>
                         </div>
@@ -34,7 +34,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                     </div>
                     <div className="flex items-end justify-between bg-bg-tertiary p-5 rounded-3xl">
                         <div>
-                            <p className="text-[8px] font-black uppercase opacity-40 mb-1">Prix Suggéré</p>
+                            <p className="text-nano font-black uppercase opacity-40 mb-1">Prix Suggéré</p>
                             <div className="text-3xl font-serif italic text-accent-gold font-black">
                                 {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
@@ -79,7 +79,7 @@ export const SimulatorView: React.FC = () => {
                 </div>
                 <Button
                     onClick={() => setShowSimulationSheet(true)}
-                    className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
+                    className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl text-nano font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all"
                 >
                     Configurer Simulation
                 </Button>
@@ -96,7 +96,7 @@ export const SimulatorView: React.FC = () => {
                         <label className="text-chip-label-sm text-text-muted px-2">Type de Scénario</label>
                         <div className="grid grid-cols-2 gap-2">
                             {['Augmentation Prix', 'Nouveau Menu', 'Events', 'Coupure Réseau'].map(s => (
-                                <button key={s} className="h-14 rounded-2xl bg-bg-tertiary border border-border text-[10px] font-black uppercase text-text-muted hover:bg-bg-primary transition-all">
+                                <button key={s} className="h-14 rounded-2xl bg-bg-tertiary border border-border text-nano font-black uppercase text-text-muted hover:bg-bg-primary transition-all">
                                     {s}
                                 </button>
                             ))}

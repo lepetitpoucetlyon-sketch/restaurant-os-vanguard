@@ -132,7 +132,7 @@ export function DeploymentEngine() {
                     </div>
                     <div>
                         <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Moteur de Déploiement</h3>
-                        <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Extension Contrôle Source</p>
+                        <p className="text-nano font-bold text-secondary uppercase tracking-tighter">Extension Contrôle Source</p>
                     </div>
                 </div>
                 <div className={cn(
@@ -148,14 +148,14 @@ export function DeploymentEngine() {
             <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 bg-bg-primary/50 border border-border-subtle rounded-2xl">
-                        <p className="text-[9px] font-black text-secondary uppercase mb-1 tracking-widest">Active Branch</p>
+                        <p className="text-nano font-black text-secondary uppercase mb-1 tracking-widest">Active Branch</p>
                         <div className="flex items-center gap-2">
                             <GitBranch className="w-3 h-3 text-brand" />
                             <span className="text-xs font-mono font-bold text-muted">{status?.branch || '...'}</span>
                         </div>
                     </div>
                     <div className="p-4 bg-bg-primary/50 border border-border-subtle rounded-2xl">
-                        <p className="text-[9px] font-black text-secondary uppercase mb-1 tracking-widest">Master Status</p>
+                        <p className="text-nano font-black text-secondary uppercase mb-1 tracking-widest">Master Status</p>
                         <div className="flex items-center gap-2">
                             <ShieldCheck className="w-3 h-3 text-status-success" />
                             <span className="text-xs font-bold text-muted uppercase tracking-tighter">Injected</span>
@@ -164,10 +164,10 @@ export function DeploymentEngine() {
                 </div>
 
                 <div className="p-4 bg-bg-primary/30 border border-border-subtle rounded-2xl space-y-2">
-                    <p className="text-[9px] font-black text-secondary uppercase tracking-widest flex items-center gap-2">
+                    <p className="text-nano font-black text-secondary uppercase tracking-widest flex items-center gap-2">
                         <GitCommit className="w-3 h-3" /> Latest Snapshot
                     </p>
-                    <p className="text-[11px] font-medium text-muted italic line-clamp-1">
+                    <p className="text-micro font-medium text-muted italic line-clamp-1">
                         "{status?.lastCommit || 'Waiting for first scan...'}"
                     </p>
                 </div>
@@ -182,8 +182,8 @@ export function DeploymentEngine() {
                             />
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-[10px] font-black text-brand animate-pulse uppercase tracking-[0.2em]">Engaging Sync Protocol...</span>
-                            <span className="text-[10px] font-mono text-secondary">{pushProgress}%</span>
+                            <span className="text-nano font-black text-brand animate-pulse uppercase tracking-[0.2em]">Engaging Sync Protocol...</span>
+                            <span className="text-nano font-mono text-secondary">{pushProgress}%</span>
                         </div>
                     </div>
                 ) : (
@@ -234,10 +234,10 @@ export function DeploymentEngine() {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Brain className="w-3.5 h-3.5 text-brand" />
-                            <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Sovereign RAG</span>
+                            <span className="text-nano font-black text-secondary uppercase tracking-widest">Sovereign RAG</span>
                         </div>
                         <div className={cn(
-                            "px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border",
+                            "px-2.5 py-1 rounded-full text-nano font-black uppercase tracking-wider border",
                             ragHealth?.status === 'online'
                                 ? "bg-status-success/10 text-status-success border-emerald-500/20"
                                 : ragHealth?.status === 'offline'
@@ -249,17 +249,17 @@ export function DeploymentEngine() {
                     </div>
 
                     {ragHealth && (
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
-                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Docs</p>
+                                <p className="text-nano font-black text-secondary uppercase tracking-widest">Docs</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.documentCount ?? '—'}</p>
                             </div>
                             <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
-                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Latence</p>
+                                <p className="text-nano font-black text-secondary uppercase tracking-widest">Latence</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.latencyMs}ms</p>
                             </div>
                             <div className="p-2.5 bg-bg-primary/30 border border-border-subtle rounded-xl text-center">
-                                <p className="text-[8px] font-black text-secondary uppercase tracking-widest">Version</p>
+                                <p className="text-nano font-black text-secondary uppercase tracking-widest">Version</p>
                                 <p className="text-xs font-bold text-muted">{ragHealth.version ?? '—'}</p>
                             </div>
                         </div>

@@ -29,7 +29,7 @@ export function PrepIngredientsSection({
 }: PrepIngredientsSectionProps) {
     return (
         <div className="bg-surface-card/40 backdrop-blur-md rounded-[2.5rem] p-10 border border-border/40 space-y-10 shadow-soft">
-            <label className="flex items-center gap-4 text-[11px] font-black text-text-primary uppercase tracking-[0.5em] mb-4">
+            <label className="flex items-center gap-4 text-micro font-black text-text-primary uppercase tracking-[0.5em] mb-4">
                 <div className="w-8 h-8 rounded-xl bg-accent-gold/10 flex items-center justify-center shadow-soft">
                     <Package className="w-4 h-4 text-accent-gold" />
                 </div>

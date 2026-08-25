@@ -18,7 +18,7 @@ export function SplitEqualPanel({ splitCount, amountPerPerson, onSplitCountChang
         <div className="p-12 border-b border-white/5 shrink-0">
             <div className="flex items-center justify-between">
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.5em] mb-3">
+                    <span className="text-nano font-black text-accent-gold uppercase tracking-[0.5em] mb-3">
                         {t('pos.split.seats_control')}
                     </span>
                     <span className="text-2xl font-serif italic font-black text-text-primary">
@@ -48,7 +48,7 @@ export function SplitEqualPanel({ splitCount, amountPerPerson, onSplitCountChang
                     <div className="w-12 h-12 rounded-2xl bg-accent-gold/10 flex items-center justify-center">
                         <Sparkles className="w-6 h-6 text-accent-gold animate-pulse" />
                     </div>
-                    <span className="text-[11px] font-black text-text-primary/60 uppercase tracking-[0.4em]">
+                    <span className="text-micro font-black text-text-primary/60 uppercase tracking-[0.4em]">
                         {t('pos.split.investment_per_seat')}
                     </span>
                 </div>

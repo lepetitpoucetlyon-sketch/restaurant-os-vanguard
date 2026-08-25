@@ -63,7 +63,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                                 <div>
                                     <h2 className="text-4xl font-black italic tracking-tighter mb-2">Détails de l'Espace {area.number}</h2>
                                     <div className="flex gap-4 items-center">
-                                        <div className="px-3 py-1 bg-surface-sidebar text-text-primary rounded-full text-[10px] font-bold uppercase tracking-widest italic">{area.status}</div>
+                                        <div className="px-3 py-1 bg-surface-sidebar text-text-primary rounded-full text-nano font-bold uppercase tracking-widest italic">{area.status}</div>
                                         <p className="text-xs text-muted font-sans font-bold uppercase tracking-widest">{area.type} Premium</p>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="space-y-6">
                                     <div>
-                                        <p className="text-[10px] text-muted font-bold uppercase tracking-widest mb-2 italic flex items-center gap-2">
+                                        <p className="text-nano text-muted font-bold uppercase tracking-widest mb-2 italic flex items-center gap-2">
                                             <Calendar className="w-3 h-3 text-brand" /> Dernière Mise en Place
                                         </p>
                                         <p className="text-sm font-sans font-black italic">
@@ -86,7 +86,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-[10px] text-muted font-bold uppercase tracking-widest mb-2 italic flex items-center gap-2">
+                                        <p className="text-nano text-muted font-bold uppercase tracking-widest mb-2 italic flex items-center gap-2">
                                             <Key className="w-3 h-3 text-status-warning" /> Disponibilité Immédiate
                                         </p>
                                         <p className="text-sm font-sans font-black italic">
@@ -108,13 +108,13 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                             <div className="pt-8 border-t border-dashed border-subtle flex gap-4">
                                 <button
                                     onClick={() => onArrival(area)}
-                                    className="h-14 px-8 bg-surface-sidebar text-text-primary rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                    className="h-14 px-8 bg-surface-sidebar text-text-primary rounded-2xl font-black text-micro uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                                 >
                                     <User className="w-4 h-4" /> Accueil Client
                                 </button>
                                 <button
                                     onClick={() => onMaintenance(area)}
-                                    className="h-14 px-8 border border-subtle rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-surface-card transition-all flex items-center gap-3"
+                                    className="h-14 px-8 border border-subtle rounded-2xl font-black text-micro uppercase tracking-widest hover:bg-surface-card transition-all flex items-center gap-3"
                                 >
                                     <Coffee className="w-4 h-4" /> Mise en Place
                                 </button>

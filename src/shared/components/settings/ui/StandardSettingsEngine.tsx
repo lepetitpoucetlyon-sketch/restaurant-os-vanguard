@@ -303,7 +303,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     className="flex items-center justify-center space-x-2 text-status-success/80 bg-status-success/5 py-3 rounded-full border border-green-500/10"
                 >
                     <CheckCircle2 size={14} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Données Nexus-Sync Synchronisées</span>
+                    <span className="text-nano font-black uppercase tracking-[0.2em]">Données Nexus-Sync Synchronisées</span>
                 </motion.div>
             )}
         </motion.div>

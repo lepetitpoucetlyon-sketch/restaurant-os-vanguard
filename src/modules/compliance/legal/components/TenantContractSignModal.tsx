@@ -201,9 +201,9 @@ export function TenantContractSignModal({
             <label className="text-xs font-semibold text-text-muted uppercase tracking-wider">
               2. Informations et pouvoir du signataire
             </label>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-[11px] text-text-muted mb-1">Nom et Prénom</label>
+                <label className="block text-micro text-text-muted mb-1">Nom et Prénom</label>
                 <input
                   type="text"
                   value={signerName}
@@ -213,7 +213,7 @@ export function TenantContractSignModal({
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-text-muted mb-1">Qualité / Titre</label>
+                <label className="block text-micro text-text-muted mb-1">Qualité / Titre</label>
                 <input
                   type="text"
                   value={signerRole}
@@ -223,7 +223,7 @@ export function TenantContractSignModal({
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-text-muted mb-1">Email Professionnel</label>
+                <label className="block text-micro text-text-muted mb-1">Email Professionnel</label>
                 <input
                   type="email"
                   value={signerEmail}

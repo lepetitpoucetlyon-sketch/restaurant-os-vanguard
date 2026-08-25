@@ -168,7 +168,7 @@ export function CashDrawerModal({
                 <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                   Fond de caisse
                 </h3>
-                <p className="text-[10px] text-text-muted uppercase tracking-wider">
+                <p className="text-nano text-text-muted uppercase tracking-wider">
                   {session ? "Session en cours" : closed ? "Session clôturée" : "Aucune session ouverte"}
                 </p>
               </div>
@@ -191,12 +191,12 @@ export function CashDrawerModal({
               <p className="text-sm font-black uppercase tracking-wider text-text-primary">
                 Caisse clôturée
               </p>
-              <p className="text-[11px] text-text-muted">
+              <p className="text-micro text-text-muted">
                 Résultats enregistrés dans Nexus
               </p>
               <button
                 onClick={onClose}
-                className="mt-2 w-full h-12 rounded-full bg-bg-tertiary text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
+                className="mt-2 w-full h-12 rounded-full bg-bg-tertiary text-micro font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
               >
                 Fermer
               </button>

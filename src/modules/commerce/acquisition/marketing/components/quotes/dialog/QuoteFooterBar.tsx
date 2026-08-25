@@ -27,16 +27,16 @@ export function QuoteFooterBar({
         <div className="p-8 px-12 bg-bg-secondary border-t border-border flex items-center justify-between relative z-10 shrink-0 shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.1)]">
             <div className="flex items-center gap-16">
                 <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">Total HT</span>
+                    <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-1">Total HT</span>
                     <span className="text-2xl font-mono text-text-primary tracking-tighter">{((totals.totalHTInMicrounits || 0) / 1_000_000).toFixed(2)}€</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">TVA (Mixte)</span>
+                    <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-1">TVA (Mixte)</span>
                     <span className="text-2xl font-mono text-text-primary/40 tracking-tighter">{((totals.totalVATInMicrounits || 0) / 1_000_000).toFixed(2)}€</span>
                 </div>
                 <div className="w-px h-10 bg-border mx-4" />
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mb-1">VALEUR FINALE TTC</span>
+                    <span className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mb-1">VALEUR FINALE TTC</span>
                     <span className="text-4xl font-mono font-black text-accent tracking-tighter">
                         {((totals.totalTTCInMicrounits || 0) / 1_000_000).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}€
                     </span>
@@ -46,7 +46,7 @@ export function QuoteFooterBar({
             <div className="flex items-center gap-8">
                 <button
                     onClick={onClose}
-                    className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] hover:text-text-primary transition-colors"
+                    className="text-nano font-black text-text-muted uppercase tracking-[0.4em] hover:text-text-primary transition-colors"
                 >
                     Abandonner
                 </button>
@@ -56,7 +56,7 @@ export function QuoteFooterBar({
                     onClick={onSave}
                     disabled={isSaving}
                     className={cn(
-                        "h-16 px-14 bg-accent text-text-primary rounded-[24px] text-[11px] font-black uppercase tracking-[0.5em] shadow-premium transition-all duration-700 relative overflow-hidden group flex items-center gap-4",
+                        "h-16 px-14 bg-accent text-text-primary rounded-[24px] text-micro font-black uppercase tracking-[0.5em] shadow-premium transition-all duration-700 relative overflow-hidden group flex items-center gap-4",
                         isSaving && "opacity-50 grayscale cursor-not-allowed"
                     )}
                 >

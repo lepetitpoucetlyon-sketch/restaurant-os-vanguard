@@ -59,7 +59,7 @@ export function OtaUpdateBanner({ targetVersion, otaUrl, isSidebarCollapsed }: O
                         <ArrowUpCircle className="w-4 h-4 text-action-primary shrink-0 mt-0.5" />
                         <div>
                             <p className="text-chip-label text-action-primary">Mise à jour</p>
-                            <p className="text-[9px] text-amber-300/70 font-mono">
+                            <p className="text-nano text-amber-300/70 font-mono">
                                 v{currentVersion} → v{targetVersion}
                             </p>
                         </div>

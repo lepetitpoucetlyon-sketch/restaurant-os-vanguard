@@ -51,7 +51,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <UserPlus className="w-5 h-5 text-accent-gold" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-gold">Nouveau Candidat</span>
+                            <span className="text-nano font-black uppercase tracking-[0.3em] text-accent-gold">Nouveau Candidat</span>
                         </div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Saisie du Dossier</h2>
                     </div>
@@ -157,7 +157,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                         {step === 1 ? 'Annuler' : 'Précédent'}
                     </button>
                     <button 
-                        className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] hover:bg-black transition-all shadow-2xl flex items-center gap-3"
+                        className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl font-black text-micro uppercase tracking-[0.3em] hover:bg-black transition-all shadow-2xl flex items-center gap-3"
                         onClick={() => step === 1 ? setStep(2) : handleSubmit()}
                     >
                         {step === 1 ? 'Suivant' : 'Finaliser le Dossier'}

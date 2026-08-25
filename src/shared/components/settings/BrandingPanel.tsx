@@ -201,7 +201,7 @@ export function BrandingPanel() {
                   {(() => {
                     const { ratio, level } = wcagContrastRatio('#FFFFFF', draft.primaryColor ?? '#C5A059');
                     return (
-                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold ${
+                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-nano font-bold ${
                         level === 'AAA' ? 'bg-emerald-500/10 text-emerald-500' :
                         level === 'AA' ? 'bg-amber-500/10 text-amber-500' :
                         'bg-red-500/10 text-red-500'
@@ -235,7 +235,7 @@ export function BrandingPanel() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border-subtle">
                   <div>
-                    <label className="block text-[11px] font-medium text-text-secondary mb-1">
+                    <label className="block text-micro font-medium text-text-secondary mb-1">
                       Statut Succès
                     </label>
                     <input
@@ -246,7 +246,7 @@ export function BrandingPanel() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-text-secondary mb-1">
+                    <label className="block text-micro font-medium text-text-secondary mb-1">
                       Statut Avertissement
                     </label>
                     <input
@@ -257,7 +257,7 @@ export function BrandingPanel() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-text-secondary mb-1">
+                    <label className="block text-micro font-medium text-text-secondary mb-1">
                       Statut Danger / Erreur
                     </label>
                     <input
@@ -327,7 +327,7 @@ export function BrandingPanel() {
                   <label className="block text-xs font-semibold text-text-secondary mb-2">
                     Rayon des Cartes (borderRadiusCard)
                   </label>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     {(['sm', 'md', 'lg', 'full'] as const).map((r) => (
                       <button
                         key={r}
@@ -349,7 +349,7 @@ export function BrandingPanel() {
                   <label className="block text-xs font-semibold text-text-secondary mb-2">
                     Rayon des Boutons (borderRadiusBtn)
                   </label>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     {(['sm', 'md', 'lg', 'full'] as const).map((r) => (
                       <button
                         key={r}
@@ -377,7 +377,7 @@ export function BrandingPanel() {
                   <label className="block text-xs font-semibold text-text-secondary mb-2">
                     Intensité du Flou (glassBlur)
                   </label>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     {(['none', 'sm', 'md', 'lg'] as const).map((b) => (
                       <button
                         key={b}
@@ -399,7 +399,7 @@ export function BrandingPanel() {
                   <label className="block text-xs font-semibold text-text-secondary mb-2">
                     Opacité de la Surface (glassOpacity)
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {(['low', 'medium', 'high'] as const).map((op) => (
                       <button
                         key={op}
@@ -427,7 +427,7 @@ export function BrandingPanel() {
                   <label className="block text-xs font-semibold text-text-secondary mb-2">
                     Politique d'Affichage du Splash
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {[
                       { id: 'always', label: 'À chaque ouverture', desc: 'Splash cinématique ~1.5s' },
                       { id: 'first-boot', label: 'Une fois / session', desc: 'Au premier chargement' },
@@ -444,7 +444,7 @@ export function BrandingPanel() {
                         }`}
                       >
                         <div className="text-xs font-bold">{pol.label}</div>
-                        <div className="text-[10px] text-text-muted mt-1">{pol.desc}</div>
+                        <div className="text-nano text-text-muted mt-1">{pol.desc}</div>
                       </button>
                     ))}
                   </div>
@@ -543,7 +543,7 @@ export function BrandingPanel() {
                     >
                       {draft.brandName ?? 'Restaurant OS'}
                     </div>
-                    <div className="text-[10px] text-white/50">{draft.tagline ?? 'Live Preview'}</div>
+                    <div className="text-nano text-white/50">{draft.tagline ?? 'Live Preview'}</div>
                   </div>
                 </div>
 
@@ -558,7 +558,7 @@ export function BrandingPanel() {
                     borderRadius: draft.borderRadiusCard === 'sm' ? '8px' : draft.borderRadiusCard === 'lg' ? '20px' : '12px',
                   }}
                 >
-                  <div className="text-[9px] uppercase tracking-wider text-white/50">CA du Jour</div>
+                  <div className="text-nano uppercase tracking-wider text-white/50">CA du Jour</div>
                   <div
                     className="text-xl font-bold text-white mt-1"
                     style={{ fontFamily: draft.fontBrand ?? 'serif', color: primary }}
@@ -573,7 +573,7 @@ export function BrandingPanel() {
                     borderRadius: draft.borderRadiusCard === 'sm' ? '8px' : draft.borderRadiusCard === 'lg' ? '20px' : '12px',
                   }}
                 >
-                  <div className="text-[9px] uppercase tracking-wider text-white/50">Couverts</div>
+                  <div className="text-nano uppercase tracking-wider text-white/50">Couverts</div>
                   <div
                     className="text-xl font-bold text-white mt-1"
                     style={{ fontFamily: draft.fontBrand ?? 'serif' }}

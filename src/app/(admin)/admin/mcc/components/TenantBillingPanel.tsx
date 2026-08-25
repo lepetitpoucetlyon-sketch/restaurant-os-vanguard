@@ -78,7 +78,7 @@ export function TenantBillingPanel() {
               <div key={b.tenantId} className="flex items-center justify-between p-3 bg-surface-card border border-border-subtle rounded-xl">
                 <div>
                   <p className="text-sm font-semibold text-text-primary">{b.name}</p>
-                  <p className="text-[10px] text-secondary font-mono">{b.tenantId}</p>
+                  <p className="text-nano text-secondary font-mono">{b.tenantId}</p>
                 </div>
                 <div className="flex items-center gap-4 text-xs">
                   <span className="text-secondary font-bold uppercase tracking-widest">{b.plan}</span>
@@ -92,7 +92,7 @@ export function TenantBillingPanel() {
                     </span>
                   )}
                   {b.monthlyExtraCost > 0 && (
-                    <span className="px-2 py-0.5 bg-brand/10 text-brand rounded font-black text-[10px]">
+                    <span className="px-2 py-0.5 bg-brand/10 text-brand rounded font-black text-nano">
                       +{b.monthlyExtraCost.toFixed(2)}€/m (Plugins)
                     </span>
                   )}

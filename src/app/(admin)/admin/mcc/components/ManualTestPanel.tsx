@@ -63,11 +63,11 @@ async function runTest(
 function ResultBadge({ result }: { result?: TestResult }) {
   if (!result) return null;
   return result.status === 'ok' ? (
-    <span className="flex items-center gap-1 text-[10px] text-status-success font-bold">
+    <span className="flex items-center gap-1 text-nano text-status-success font-bold">
       <CheckCircle className="w-3 h-3" /> {result.message}
     </span>
   ) : (
-    <span className="flex items-center gap-1 text-[10px] text-status-error font-bold">
+    <span className="flex items-center gap-1 text-nano text-status-error font-bold">
       <XCircle className="w-3 h-3" /> {result.message}
     </span>
   );
@@ -89,7 +89,7 @@ function InstanceRow({
       <div className="flex items-center justify-between gap-2">
         <div>
           <p className="text-sm font-bold text-text-primary">{instance.name}</p>
-          <p className="text-[10px] text-secondary font-mono">{instance.key}</p>
+          <p className="text-nano text-secondary font-mono">{instance.key}</p>
         </div>
         <div className="flex gap-2">
           {TESTS.map(test => {
@@ -171,7 +171,7 @@ export function ManualTestPanel({ instances: instancesProp }: { instances?: Empi
         </div>
         <div>
           <h3 className="text-sm font-black uppercase tracking-[0.2em]">Tests manuels handlers</h3>
-          <p className="text-[10px] text-secondary">Déclenche health ping et fiscal audit sur les tenants de la flotte</p>
+          <p className="text-nano text-secondary">Déclenche health ping et fiscal audit sur les tenants de la flotte</p>
         </div>
       </div>
 
@@ -182,7 +182,7 @@ export function ManualTestPanel({ instances: instancesProp }: { instances?: Empi
             <span className={t.color}>{t.icon}</span>
             <div>
               <p className="text-chip-label text-text-primary">{t.label}</p>
-              <p className="text-[10px] text-secondary leading-relaxed mt-0.5">{t.description}</p>
+              <p className="text-nano text-secondary leading-relaxed mt-0.5">{t.description}</p>
             </div>
           </div>
         ))}
@@ -203,7 +203,7 @@ export function ManualTestPanel({ instances: instancesProp }: { instances?: Empi
             </button>
           ))}
           {Object.keys(results).length > 0 && (
-            <div className="flex gap-3 text-[10px] ml-2">
+            <div className="flex gap-3 text-nano ml-2">
               {TESTS.map(t => (
                 <span key={t.id} className="text-secondary">
                   {t.label}: <span className="text-status-success">{okCount(t.id)} ✓</span>

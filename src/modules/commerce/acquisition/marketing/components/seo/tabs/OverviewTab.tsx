@@ -31,7 +31,7 @@ export const OverviewTab = () => {
         >
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div className="p-8 rounded-[2.5rem] bg-bg-secondary border border-border flex flex-col items-center justify-center" id="seo-score-gauge">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mb-6">Score SEO Global</p>
+                    <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted mb-6">Score SEO Global</p>
                     <ScoreGauge score={score} size={160} />
                     <p className={cn("text-sm font-bold mt-6", status.color)}>{status.label}</p>
                 </div>
@@ -64,7 +64,7 @@ export const OverviewTab = () => {
                         <div className="w-10 h-10 rounded-xl bg-action-primary/10 flex items-center justify-center">
                             <AlertTriangle className="w-5 h-5 text-action-primary" />
                         </div>
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Analyse des Pages</h3>
+                        <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Analyse des Pages</h3>
                     </div>
                     {livePages.map((page, idx) => (
                         <PageCard

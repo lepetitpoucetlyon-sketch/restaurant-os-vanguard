@@ -80,7 +80,7 @@ export function TimePicker({
     return (
         <div ref={containerRef} className={cn("relative space-y-2 w-full", className)}>
             {label && (
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-2">
                     {label}
                 </label>
             )}
@@ -177,7 +177,7 @@ export function TimePicker({
                         <div className="p-2 pt-0 mt-2">
                             <button
                                 onClick={handleConfirm}
-                                className="w-full h-14 bg-text-primary text-text-primary dark:bg-accent-gold dark:text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-3 hover:scale-[1.02] shadow-xl transition-all active:scale-[0.98]"
+                                className="w-full h-14 bg-text-primary text-text-primary dark:bg-accent-gold dark:text-text-primary rounded-2xl font-black uppercase text-nano tracking-[0.2em] flex items-center justify-center gap-3 hover:scale-[1.02] shadow-xl transition-all active:scale-[0.98]"
                             >
                                 Confirmer <Check className="w-4 h-4 text-accent-gold dark:text-text-primary" />
                             </button>

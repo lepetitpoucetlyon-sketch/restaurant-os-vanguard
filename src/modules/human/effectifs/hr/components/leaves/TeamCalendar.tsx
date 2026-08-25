@@ -62,7 +62,7 @@ export function TeamCalendar() {
                     </div>
                     <div>
                         <h3 className="text-xl font-serif italic text-text-primary">Planning d'Équipe</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Vue d'ensemble</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Vue d'ensemble</p>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@ export function TeamCalendar() {
             <div className="grid grid-cols-7 gap-2">
                 {/* Header */}
                 {weekDays.map(day => (
-                    <div key={day} className="text-center text-[10px] font-bold text-text-muted uppercase tracking-widest py-3">
+                    <div key={day} className="text-center text-nano font-bold text-text-muted uppercase tracking-widest py-3">
                         {day}
                     </div>
                 ))}

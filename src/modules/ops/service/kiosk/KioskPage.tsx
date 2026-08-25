@@ -194,7 +194,7 @@ export function KioskPage() {
         </div>
 
         <div className="p-4 rounded-2xl bg-surface-bg border border-border-default text-center">
-          <span className="text-[10px] uppercase font-bold text-text-muted">Borne Active</span>
+          <span className="text-nano uppercase font-bold text-text-muted">Borne Active</span>
           <p className="text-xs font-bold text-text-primary mt-0.5">Kiosk #1</p>
         </div>
       </div>

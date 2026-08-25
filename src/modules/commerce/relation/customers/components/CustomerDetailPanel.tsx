@@ -63,7 +63,7 @@ export function CustomerDetailPanel({
                     </Button>
                     <Button
                         onClick={onNewReservation}
-                        className="flex-1 h-16 bg-accent hover:bg-surface-card text-bg-primary rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-amber-500/10 transition-all flex items-center justify-center gap-4"
+                        className="flex-1 h-16 bg-accent hover:bg-surface-card text-bg-primary rounded-full font-black text-nano uppercase tracking-widest shadow-2xl shadow-amber-500/10 transition-all flex items-center justify-center gap-4"
                     >
                         <Calendar strokeWidth={1.5} className="w-5 h-5" />
                         Programmer une Nouvelle Table

@@ -50,7 +50,7 @@ export function CRMList() {
                 <div className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center mb-6">
                     <span className="font-serif italic text-4xl">?</span>
                 </div>
-                <p className="font-black text-[10px] uppercase tracking-widest">{t('crm.no_results') || 'Aucun client trouvé'}</p>
+                <p className="font-black text-nano uppercase tracking-widest">{t('crm.no_results') || 'Aucun client trouvé'}</p>
             </div>
         );
     }
@@ -82,7 +82,7 @@ export function CRMList() {
                             <h3 className="text-xl md:text-4xl font-serif text-text-primary italic tracking-tight leading-none group-hover:text-accent-gold transition-colors">
                                 {getInitial(getFirstName(crm))}. {getLastName(crm)}
                             </h3>
-                            <span className="inline-flex px-3 py-1 rounded-full text-[8px] md:text-chip-label bg-bg-tertiary text-text-muted/60">
+                            <span className="inline-flex px-3 py-1 rounded-full text-nano md:text-chip-label bg-bg-tertiary text-text-muted/60">
                                 {t(`crm.segments.${crm.segment || 'new'}`) || crm.segment || 'Nouveau'}
                             </span>
                         </div>
@@ -90,11 +90,11 @@ export function CRMList() {
 
                     <div className="flex gap-4 md:gap-12 mr-2 md:mr-8 text-right relative z-10">
                         <div className="hidden sm:block">
-                            <p className="text-[7px] md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest">VISITES</p>
+                            <p className="text-nano md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest">VISITES</p>
                             <p className="text-lg md:text-3xl font-serif italic text-text-primary">{getVisitCount(crm)}</p>
                         </div>
                         <div>
-                            <p className="text-[7px] md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest">TOTAL</p>
+                            <p className="text-nano md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest">TOTAL</p>
                             <p className="text-lg md:text-3xl font-serif italic text-accent-gold">
                                 {((crm.totalSpentInMicrounits ?? (crm.totalSpentInCents || 0) * 10_000) / 1_000_000).toFixed(0)}€
                             </p>

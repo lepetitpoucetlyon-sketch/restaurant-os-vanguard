@@ -18,7 +18,7 @@ export function ProfitLossView() {
                 {/* Decorative Pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent-gold/10 via-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
 
-                <p className="text-[10px] text-text-secondary dark:text-text-primary/40 uppercase font-black tracking-[0.4em] mb-3 relative z-10">Archive de Performance</p>
+                <p className="text-nano text-text-secondary dark:text-text-primary/40 uppercase font-black tracking-[0.4em] mb-3 relative z-10">Archive de Performance</p>
                 <h2 className="text-4xl font-serif font-black italic text-neutral-900 dark:text-text-primary leading-tight relative z-10">
                     Résultat: <span className={(metrics.netProfitInMicrounits ?? metrics.netProfitInCents) >= 0 ? "text-success" : "text-error"}>{fmu(metrics.netProfitInMicrounits, metrics.netProfitInCents)}</span>
                 </h2>

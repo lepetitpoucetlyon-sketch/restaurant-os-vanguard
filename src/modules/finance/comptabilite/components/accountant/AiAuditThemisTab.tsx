@@ -29,12 +29,12 @@ export function AiAuditThemisTab({ summary, selectedPeriod }: AiAuditThemisTabPr
           <div key={alert.id} className="bg-slate-900/60 border border-white/10 rounded-2xl p-5 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-white">{alert.title}</span>
-              <span className="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/30 font-semibold">
+              <span className="bg-emerald-500/20 text-emerald-300 text-nano px-2 py-0.5 rounded-full border border-emerald-500/30 font-semibold">
                 {alert.category}
               </span>
             </div>
             <p className="text-xs text-text-secondary">{alert.description}</p>
-            <div className="pt-2 border-t border-white/10 text-[11px] text-amber-300 flex items-center gap-1.5">
+            <div className="pt-2 border-t border-white/10 text-micro text-amber-300 flex items-center gap-1.5">
               <ArrowRight className="w-3.5 h-3.5" />
               <span>{alert.recommendation}</span>
             </div>

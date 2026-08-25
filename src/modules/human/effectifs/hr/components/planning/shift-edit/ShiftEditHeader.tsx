@@ -34,7 +34,7 @@ export function ShiftEditHeader({ user, date, isNew, onClose }: ShiftEditHeaderP
                         <h2 className="text-3xl font-serif italic tracking-tight">
                             {isNew ? "Nouveau Protocole" : "Rectification Shift"}
                         </h2>
-                        <p className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.3em] mt-2">
+                        <p className="text-nano font-black text-text-primary/30 uppercase tracking-[0.3em] mt-2">
                             {user.name} • {format(date, "EEEE d MMMM", { locale: fr })}
                         </p>
                     </div>

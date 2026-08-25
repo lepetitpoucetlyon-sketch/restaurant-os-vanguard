@@ -25,7 +25,7 @@ export function StaffPositionsSection({ positions, updatePosition }: StaffPositi
                     <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                         Postes & Rôles
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Paramétrage par Poste Opérationnel</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Paramétrage par Poste Opérationnel</p>
                 </div>
             </div>
 
@@ -49,14 +49,14 @@ export function StaffPositionsSection({ positions, updatePosition }: StaffPositi
                                 <p className="font-serif text-text-primary uppercase tracking-tight text-xl italic">{pos.name}</p>
                                 <div className="flex items-center gap-2 mt-1">
                                     <div className="w-2 h-2 rounded-full bg-accent" />
-                                    <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">Poste Opérationnel</p>
+                                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Poste Opérationnel</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                             <div className="space-y-2">
-                                <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest px-1">Taux Horaire</label>
+                                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest px-1">Taux Horaire</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -69,7 +69,7 @@ export function StaffPositionsSection({ positions, updatePosition }: StaffPositi
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest px-1">Majoration HS</label>
+                                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest px-1">Majoration HS</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -81,7 +81,7 @@ export function StaffPositionsSection({ positions, updatePosition }: StaffPositi
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="block text-[9px] font-bold text-text-muted uppercase tracking-widest px-1">Temps de Pause</label>
+                                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest px-1">Temps de Pause</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -89,7 +89,7 @@ export function StaffPositionsSection({ positions, updatePosition }: StaffPositi
                                         onChange={(e) => updatePosition(pos.id, { breakDuration: Number(e.target.value) })}
                                         className="w-full px-4 py-4 bg-bg-tertiary/60 border border-border/50 rounded-2xl text-lg font-serif text-text-primary outline-none focus:bg-bg-tertiary transition-all shadow-inner"
                                     />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-text-muted uppercase">Min</span>
+                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-nano font-bold text-text-muted uppercase">Min</span>
                                 </div>
                             </div>
                         </div>

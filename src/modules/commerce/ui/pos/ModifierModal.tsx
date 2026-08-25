@@ -91,7 +91,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                                 <h2 className="text-sm font-black uppercase tracking-widest text-text-primary">
                                     Modifications
                                 </h2>
-                                <p className="text-[11px] text-accent-gold font-bold mt-0.5 italic font-serif">
+                                <p className="text-micro text-accent-gold font-bold mt-0.5 italic font-serif">
                                     {productName}
                                 </p>
                             </div>
@@ -114,7 +114,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => togglePreset(mod)}
                                         className={cn(
-                                            "flex items-center gap-2 px-4 py-2.5 rounded-full border text-[11px] font-black uppercase tracking-wider transition-all duration-200",
+                                            "flex items-center gap-2 px-4 py-2.5 rounded-full border text-micro font-black uppercase tracking-wider transition-all duration-200",
                                             isActive
                                                 ? "bg-accent-gold text-text-primary border-accent-gold shadow-lg shadow-accent-gold/20"
                                                 : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40 hover:text-text-primary"
@@ -153,7 +153,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                                 <p className="text-chip-label text-accent-gold mb-1">
                                     Sélectionnées ({selected.size})
                                 </p>
-                                <p className="text-[11px] text-text-muted">
+                                <p className="text-micro text-text-muted">
                                     {Array.from(selected).join(" · ")}
                                 </p>
                             </div>
@@ -163,13 +163,13 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                         <div className="flex gap-3">
                             <button
                                 onClick={handleClose}
-                                className="flex-1 h-12 rounded-full border border-border text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-border/80 transition-colors"
+                                className="flex-1 h-12 rounded-full border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:border-border/80 transition-colors"
                             >
                                 Annuler
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex-1 h-12 rounded-full bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider shadow-lg shadow-accent-gold/20 hover:brightness-110 transition-all"
+                                className="flex-1 h-12 rounded-full bg-accent-gold text-text-primary text-micro font-black uppercase tracking-wider shadow-lg shadow-accent-gold/20 hover:brightness-110 transition-all"
                             >
                                 Confirmer
                             </button>

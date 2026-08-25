@@ -151,7 +151,7 @@ export function SupportDraftsPanel() {
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Brouillons SAV IA</h3>
-            <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">
+            <p className="text-nano font-bold text-secondary uppercase tracking-tighter">
               {draftReadyCount > 0 ? `${draftReadyCount} en attente de validation` : 'Requêtes tenant → brouillon → review'}
             </p>
           </div>
@@ -186,12 +186,12 @@ export function SupportDraftsPanel() {
               <div className="flex items-start justify-between gap-2 cursor-pointer" onClick={() => toggleExpand(ticket)}>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={cn('px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider border', meta.color)}>
+                    <span className={cn('px-1.5 py-0.5 rounded text-nano font-black uppercase tracking-wider border', meta.color)}>
                       {meta.label}
                     </span>
-                    <span className="text-[9px] text-secondary font-mono truncate">{ticket.tenantId}</span>
+                    <span className="text-nano text-secondary font-mono truncate">{ticket.tenantId}</span>
                     {draft && (
-                      <span className={cn('px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider border', RISK_COLOR[draft.riskLevel])}>
+                      <span className={cn('px-1.5 py-0.5 rounded text-nano font-black uppercase tracking-wider border', RISK_COLOR[draft.riskLevel])}>
                         Risque {draft.riskLevel}
                       </span>
                     )}
@@ -200,7 +200,7 @@ export function SupportDraftsPanel() {
                     {draft?.title ?? ticket.description}
                   </p>
                   {ticket.status === 'analysis_failed' && ticket.analysisError && (
-                    <p className="text-[9px] text-status-danger/80 mt-0.5">{ticket.analysisError}</p>
+                    <p className="text-nano text-status-danger/80 mt-0.5">{ticket.analysisError}</p>
                   )}
                 </div>
                 <ChevronDown className={cn('w-3.5 h-3.5 text-secondary shrink-0 mt-1 transition-transform', isOpen && 'rotate-180')} />
@@ -208,13 +208,13 @@ export function SupportDraftsPanel() {
 
               {isOpen && draft && edit && (
                 <div className="mt-3 pt-3 border-t border-border-subtle space-y-3" onClick={e => e.stopPropagation()}>
-                  <p className="text-[9px] text-secondary">
+                  <p className="text-nano text-secondary">
                     <span className="text-text-primary/30">Requête originale : </span>{ticket.description}
                   </p>
 
                   <div className="space-y-2">
                     <label className="block">
-                      <span className="text-[8px] font-black uppercase tracking-wider text-secondary">Titre</span>
+                      <span className="text-nano font-black uppercase tracking-wider text-secondary">Titre</span>
                       <input
                         value={edit.title}
                         onChange={e => updateEdit(ticket.id, 'title', e.target.value)}
@@ -223,7 +223,7 @@ export function SupportDraftsPanel() {
                       />
                     </label>
                     <label className="block">
-                      <span className="text-[8px] font-black uppercase tracking-wider text-secondary">Résumé</span>
+                      <span className="text-nano font-black uppercase tracking-wider text-secondary">Résumé</span>
                       <textarea
                         rows={3}
                         value={edit.summary}
@@ -233,7 +233,7 @@ export function SupportDraftsPanel() {
                       />
                     </label>
                     <label className="block">
-                      <span className="text-[8px] font-black uppercase tracking-wider text-secondary">Cause probable</span>
+                      <span className="text-nano font-black uppercase tracking-wider text-secondary">Cause probable</span>
                       <textarea
                         rows={2}
                         value={edit.rootCause}
@@ -244,19 +244,19 @@ export function SupportDraftsPanel() {
                     </label>
                     {draft.kind === 'config_patch' && (
                       <label className="block">
-                        <span className="text-[8px] font-black uppercase tracking-wider text-secondary">Patch proposé (JSON overrides)</span>
+                        <span className="text-nano font-black uppercase tracking-wider text-secondary">Patch proposé (JSON overrides)</span>
                         <textarea
                           rows={4}
                           value={edit.proposedPatchText}
                           onChange={e => updateEdit(ticket.id, 'proposedPatchText', e.target.value)}
                           disabled={ticket.status !== 'draft_ready'}
-                          className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-[10px] font-mono text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
+                          className="w-full mt-1 bg-surface-bg border border-subtle rounded-lg py-1.5 px-2.5 text-nano font-mono text-text-primary resize-none focus:outline-none focus:border-focus/50 disabled:opacity-50"
                         />
                       </label>
                     )}
                     {draft.kind !== 'config_patch' && (
                       <label className="block">
-                        <span className="text-[8px] font-black uppercase tracking-wider text-secondary">Brief développeur</span>
+                        <span className="text-nano font-black uppercase tracking-wider text-secondary">Brief développeur</span>
                         <textarea
                           rows={4}
                           value={edit.codeBrief}
@@ -271,7 +271,7 @@ export function SupportDraftsPanel() {
                   {ticket.status === 'draft_ready' && (
                     <div className="space-y-2 pt-1">
                       {draft.kind === 'config_patch' && draft.autoApplicable && (
-                        <label className="flex items-center gap-2 text-[10px] text-secondary">
+                        <label className="flex items-center gap-2 text-nano text-secondary">
                           <input
                             type="checkbox"
                             checked={!!applyPatch[ticket.id]}

@@ -100,13 +100,13 @@ export function TaxAuditPanel() {
                     </div>
                     <div>
                         <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Audit Fiscal Contrôle</h3>
-                        <p className="text-[10px] text-text-muted">Journaux NF525 par restaurant — données pour l'administration fiscale</p>
+                        <p className="text-nano text-text-muted">Journaux NF525 par restaurant — données pour l'administration fiscale</p>
                     </div>
                 </div>
                 {result && (
                     <button
                         onClick={exportJSON}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-500/10 border border-violet-500/20 rounded-lg text-[10px] font-bold text-violet-400 hover:bg-violet-500/20 transition-all uppercase tracking-widest"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-500/10 border border-violet-500/20 rounded-lg text-nano font-bold text-violet-400 hover:bg-violet-500/20 transition-all uppercase tracking-widest"
                     >
                         <Download className="w-3 h-3" />
                         Export JSON
@@ -177,17 +177,17 @@ export function TaxAuditPanel() {
 
                     {/* Statut chaîne + clé */}
                     <div className="flex flex-wrap gap-3">
-                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-[10px] font-bold uppercase tracking-widest ${chainColor}`}>
+                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-nano font-bold uppercase tracking-widest ${chainColor}`}>
                             {result.chainStatus === 'ok' && <ShieldCheck className="w-3.5 h-3.5" />}
                             {result.chainStatus === 'breach' && <AlertTriangle className="w-3.5 h-3.5" />}
                             {result.chainStatus === 'empty' && <Lock className="w-3.5 h-3.5" />}
                             Chaîne : {result.chainStatus === 'ok' ? 'Intègre' : result.chainStatus === 'breach' ? 'RUPTURE DÉTECTÉE' : 'Vide'}
                         </div>
-                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-[10px] font-bold uppercase tracking-widest ${result.tenant.fiscalKeyConfigured ? 'text-status-success border-emerald-500/20 bg-status-success/5' : 'text-status-danger border-red-500/20 bg-status-danger/5'}`}>
+                        <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-lg text-nano font-bold uppercase tracking-widest ${result.tenant.fiscalKeyConfigured ? 'text-status-success border-emerald-500/20 bg-status-success/5' : 'text-status-danger border-red-500/20 bg-status-danger/5'}`}>
                             <Lock className="w-3.5 h-3.5" />
                             Clé fiscale : {result.tenant.fiscalKeyConfigured ? 'Configurée' : 'MANQUANTE'}
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
+                        <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-nano font-bold text-text-secondary uppercase tracking-widest">
                             Région : {result.tenant.dataRegion}
                         </div>
                     </div>
@@ -195,7 +195,7 @@ export function TaxAuditPanel() {
                     {/* Tableau journalEntries */}
                     {result.journalEntries.length > 0 && (
                         <div className="overflow-x-auto rounded-2xl border border-border-subtle">
-                            <table className="w-full text-[10px] text-text-secondary">
+                            <table className="w-full text-nano text-text-secondary">
                                 <thead>
                                     <tr className="border-b border-border-subtle text-text-muted uppercase tracking-widest">
                                         <th className="px-4 py-3 text-left">Date</th>
@@ -220,7 +220,7 @@ export function TaxAuditPanel() {
                                 </tbody>
                             </table>
                             {result.journalEntries.length > JOURNAL_DISPLAY_LIMIT && (
-                                <p className="text-center text-[10px] text-text-muted py-3">
+                                <p className="text-center text-nano text-text-muted py-3">
                                     + {result.journalEntries.length - JOURNAL_DISPLAY_LIMIT} lignes supplémentaires dans l'export JSON
                                 </p>
                             )}
@@ -235,7 +235,7 @@ export function TaxAuditPanel() {
 function StatBadge({ label, value }: { label: string; value: string }) {
     return (
         <div className="bg-surface-card border border-border-subtle rounded-xl p-3">
-            <p className="text-[9px] uppercase tracking-widest text-text-muted mb-1">{label}</p>
+            <p className="text-nano uppercase tracking-widest text-text-muted mb-1">{label}</p>
             <p className="text-sm font-bold text-text-primary tabular-nums">{value}</p>
         </div>
     );

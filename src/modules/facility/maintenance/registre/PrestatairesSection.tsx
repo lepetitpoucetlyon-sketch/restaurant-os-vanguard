@@ -37,10 +37,10 @@ export function PrestatairesSection() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-serif font-black italic text-text-primary tracking-tight">Certifications Prestataires</h2>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">{(prestataires)?.length || 0} prestataires</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">{(prestataires)?.length || 0} prestataires</p>
                     </div>
                 </div>
-                <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-[10px] uppercase tracking-widest">
+                <Button variant="outline" className="h-11 rounded-xl border-border px-5 font-bold text-nano uppercase tracking-widest">
                     <Plus strokeWidth={1.5} className="w-4 h-4 mr-2" /> Ajouter
                 </Button>
             </div>
@@ -71,11 +71,11 @@ export function PrestatairesSection() {
                         </div>
 
                         <div className="bg-bg-tertiary/30 rounded-xl p-5 mb-6 border border-border/50">
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Certification</p>
+                            <p className="text-nano font-black text-text-muted uppercase tracking-widest mb-2">Certification</p>
                             <p className="text-sm font-medium text-text-primary">{p.certification}</p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 text-[11px]">
+                        <div className="grid grid-cols-2 gap-4 text-micro">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
                                 <span className="font-mono">Exp : {p.certificationExpiry}</span>
@@ -88,7 +88,7 @@ export function PrestatairesSection() {
 
                         {p.phone && (
                             <div className="mt-6 pt-6 border-t border-border/50">
-                                <Button variant="outline" className="h-10 rounded-xl border-border px-4 font-bold text-[10px] uppercase tracking-widest w-full">
+                                <Button variant="outline" className="h-10 rounded-xl border-border px-4 font-bold text-nano uppercase tracking-widest w-full">
                                     <Phone strokeWidth={1.5} className="w-3.5 h-3.5 mr-2" /> {p.phone}
                                 </Button>
                             </div>

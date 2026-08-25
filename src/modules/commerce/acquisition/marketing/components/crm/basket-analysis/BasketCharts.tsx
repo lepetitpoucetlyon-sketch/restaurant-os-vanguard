@@ -83,13 +83,13 @@ export function HorizontalBarsSVG({
         return (
           <div key={i} className="flex items-center gap-3">
             <span
-              className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0"
+              className="w-5 h-5 rounded-full flex items-center justify-center text-nano font-black shrink-0"
               style={{ background: `${color}22`, color }}
             >
               {i + 1}
             </span>
             <div className="flex-1 min-w-0">
-              <div className="flex justify-between text-[11px] mb-1">
+              <div className="flex justify-between text-micro mb-1">
                 <span className="text-text-primary font-medium truncate pr-2">{item.label}</span>
                 <span className="text-text-muted font-mono shrink-0">{item.value}×</span>
               </div>

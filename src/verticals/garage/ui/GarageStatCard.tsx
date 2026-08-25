@@ -84,7 +84,7 @@ export function GarageStatCard({
 
         {trend && typeof trend === 'object' && (
           <div className={cn(
-            "font-mono text-[10px] font-bold tracking-wider",
+            "font-mono text-nano font-bold tracking-wider",
             trend.direction === 'up'   && "text-status-success",
             trend.direction === 'down' && "text-status-danger",
             trend.direction === 'neutral' && "text-text-muted"
@@ -103,11 +103,11 @@ export function GarageStatCard({
         >
           {value}
         </p>
-        <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mt-1">
+        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mt-1">
           {label}
         </p>
         {trend && typeof trend === 'string' && (
-          <p className="text-[9px] font-mono text-text-muted mt-1">{trend}</p>
+          <p className="text-nano font-mono text-text-muted mt-1">{trend}</p>
         )}
       </div>
     </motion.div>

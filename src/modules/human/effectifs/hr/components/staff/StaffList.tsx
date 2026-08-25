@@ -43,7 +43,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                     </div>
                     <div>
                         <h3 className="text-xl font-serif font-semibold text-text-primary leading-tight group-hover:text-accent transition-colors">{user.name}</h3>
-                        <p className="text-[10px] font-bold text-accent uppercase tracking-widest mt-1.5 flex items-center gap-2">
+                        <p className="text-nano font-bold text-accent uppercase tracking-widest mt-1.5 flex items-center gap-2">
                             <Briefcase strokeWidth={2} className="w-3 h-3" />
                             {user.role}
                         </p>
@@ -56,11 +56,11 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
 
             <div className="grid grid-cols-2 gap-4 border-t border-border pt-6 mt-2">
                 <div className="space-y-1.5">
-                    <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">Dernier Service</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Dernier Service</p>
                     <p className="text-[12px] font-medium text-text-primary font-mono tracking-tighter">Aujourd&apos;hui, 12:45</p>
                 </div>
                 <div className="space-y-1.5">
-                    <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">Performance</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Performance</p>
                     <div className="flex items-center gap-1.5">
                         <Star strokeWidth={1.5} className="w-3.5 h-3.5 text-warning fill-warning/20" />
                         <span className="text-[12px] font-bold text-text-primary font-mono">4.9</span>
@@ -72,7 +72,7 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
         <div className="px-8 py-5 bg-bg-tertiary/40 border-t border-border flex items-center justify-between group-hover:bg-accent/5 transition-colors">
             <div className="flex items-center gap-2.5">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-                <span className="text-[10px] font-bold text-text-primary uppercase tracking-[0.2em]">En Service</span>
+                <span className="text-nano font-bold text-text-primary uppercase tracking-[0.2em]">En Service</span>
             </div>
             <div className="flex gap-2">
                 <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm">

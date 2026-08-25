@@ -105,7 +105,7 @@ export function ComplianceCalendar() {
                     <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                         Calendrier de conformité
                     </h3>
-                    <p className="text-[10px] text-text-muted">
+                    <p className="text-nano text-text-muted">
                         {expired.length} expiré{expired.length > 1 ? 's' : ''} · {expiring.length} à renouveler
                     </p>
                 </div>
@@ -126,7 +126,7 @@ export function ComplianceCalendar() {
                         <div
                             key={item.id}
                             className={cn(
-                                'flex items-center justify-between rounded-xl border px-4 py-3 text-[11px]',
+                                'flex items-center justify-between rounded-xl border px-4 py-3 text-micro',
                                 statusColor(item.status)
                             )}
                         >
@@ -140,7 +140,7 @@ export function ComplianceCalendar() {
                                 )}
                                 <span className="font-bold">{item.name}</span>
                             </div>
-                            <span className="font-mono text-[10px]">
+                            <span className="font-mono text-nano">
                                 {new Date(item.expiresAt).toLocaleDateString('fr-FR')}
                             </span>
                         </div>

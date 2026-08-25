@@ -43,16 +43,16 @@ export function CRMDetailView() {
                 subtitle={`Profil ${(selectedCRM.id || '').toUpperCase()} • ID: ${(selectedCRM.id || '').slice(0, 8)}`}
             >
                 <div className="space-y-10 py-6">
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {stats.map((s, i) => (
                             <div key={i} className="bg-bg-tertiary p-5 rounded-[2rem] text-center border border-border/50">
                                 <p className={cn("text-xl font-serif italic", s.gold ? "text-accent-gold" : "text-text-primary")}>{s.value}</p>
-                                <p className="text-[7px] font-black text-text-muted/50 uppercase tracking-widest mt-1">{t(s.label) || s.label}</p>
+                                <p className="text-nano font-black text-text-muted/50 uppercase tracking-widest mt-1">{t(s.label) || s.label}</p>
                             </div>
                         ))}
                     </div>
                     <div className="space-y-3">
-                        <h4 className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] px-2">{t('crm.contact_info') || 'INFOS CONTACT'}</h4>
+                        <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-2">{t('crm.contact_info') || 'INFOS CONTACT'}</h4>
                         <div className="p-5 bg-bg-tertiary rounded-3xl flex items-center gap-5">
                             <Phone className="w-5 h-5 text-accent-gold/40" />
                             <p className="text-sm font-bold tracking-[0.1em]">{getPhone(selectedCRM)}</p>
@@ -114,7 +114,7 @@ export function CRMDetailView() {
                     </motion.h3>
                     <div className="flex items-center gap-4">
                         <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-text-primary/40">
+                        <p className="text-nano font-black uppercase tracking-[0.4em] text-text-primary/40">
                             VIP • {(selectedCRM.id || '').slice(0, 8)}
                         </p>
                     </div>
@@ -122,17 +122,17 @@ export function CRMDetailView() {
             </div>
 
             <div className="p-10 space-y-10">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {stats.map((st, i) => (
                         <div key={i} className="bg-bg-tertiary p-6 rounded-[2rem] text-center border border-border/40 hover:border-accent-gold/20 transition-all">
                             <p className={cn("text-2xl font-serif italic", st.gold ? "text-accent-gold" : "text-text-primary")}>{st.value}</p>
-                            <p className="text-[7px] font-black text-text-muted/40 uppercase tracking-[0.2em] mt-1">{t(st.label) || st.label}</p>
+                            <p className="text-nano font-black text-text-muted/40 uppercase tracking-[0.2em] mt-1">{t(st.label) || st.label}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="space-y-4">
-                    <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">{t('crm.contact_info') || 'INFOS CONTACT'}</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">{t('crm.contact_info') || 'INFOS CONTACT'}</p>
                     <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-bg-tertiary border border-border/40 hover:border-accent-gold/20 transition-all group">
                         <Phone className="w-4 h-4 text-accent-gold group-hover:scale-110 transition-transform" />
                         <p className="text-sm font-bold tracking-widest">{getPhone(selectedCRM)}</p>
@@ -144,7 +144,7 @@ export function CRMDetailView() {
                 </div>
 
                 <div className="pt-6 grid grid-cols-1 gap-4">
-                     <Button className="h-16 rounded-[2rem] bg-text-primary text-text-primary text-[10px] font-black uppercase tracking-[0.3em] shadow-xl hover:-translate-y-1 transition-all">
+                     <Button className="h-16 rounded-[2rem] bg-text-primary text-text-primary text-nano font-black uppercase tracking-[0.3em] shadow-xl hover:-translate-y-1 transition-all">
                         {t('crm.book_reservation') || 'RÉSERVER MAINTENANT'}
                      </Button>
                 </div>

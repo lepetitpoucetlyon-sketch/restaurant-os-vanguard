@@ -25,8 +25,8 @@ export function TrainingOverlay() {
                             <GraduationCap className="w-5 h-5 text-bg-primary" />
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-status-warning uppercase tracking-[0.2em] leading-tight">VTC School Mode</p>
-                            <p className="text-[9px] font-bold text-status-warning/60 uppercase tracking-widest">Environnement de Simulation Actif</p>
+                            <p className="text-nano font-black text-status-warning uppercase tracking-[0.2em] leading-tight">VTC School Mode</p>
+                            <p className="text-nano font-bold text-status-warning/60 uppercase tracking-widest">Environnement de Simulation Actif</p>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@ export function TrainingOverlay() {
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                              <ShieldAlert className="w-3 h-3 text-status-warning" />
-                             <span className="text-[9px] font-bold text-status-warning/80 uppercase tracking-widest">Fiscalité Sandbox : ON</span>
+                             <span className="text-nano font-bold text-status-warning/80 uppercase tracking-widest">Fiscalité Sandbox : ON</span>
                         </div>
                         
                         <Button

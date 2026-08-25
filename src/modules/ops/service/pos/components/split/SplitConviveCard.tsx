@@ -44,7 +44,7 @@ export function SplitConviveCard({
                     {convive.paid ? <Check className="w-6 h-6" /> : index + 1}
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-accent-gold uppercase tracking-[0.3em] mb-1">
+                    <span className="text-nano font-black text-accent-gold uppercase tracking-[0.3em] mb-1">
                         {t('pos.split.convive_spirit')}
                     </span>
                     <span className="font-serif italic font-black text-text-primary text-lg">
@@ -60,7 +60,7 @@ export function SplitConviveCard({
             {!convive.paid && (
                 <button
                     onClick={() => onPay(index)}
-                    className="w-full h-14 rounded-[24px] bg-accent-gold text-primary hover:bg-surface-card font-black text-[11px] uppercase tracking-[0.4em] transition-all duration-500 shadow-glow flex items-center justify-center gap-4 active:scale-95 group/btn"
+                    className="w-full h-14 rounded-[24px] bg-accent-gold text-primary hover:bg-surface-card font-black text-micro uppercase tracking-[0.4em] transition-all duration-500 shadow-glow flex items-center justify-center gap-4 active:scale-95 group/btn"
                 >
                     {t('pos.split.collect')}
                     <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" strokeWidth={2.5} />
@@ -68,7 +68,7 @@ export function SplitConviveCard({
             )}
 
             {convive.paid && convive.method && (
-                <div className="flex items-center gap-4 text-[10px] text-accent-gold font-black uppercase tracking-[0.2em] mt-2">
+                <div className="flex items-center gap-4 text-nano text-accent-gold font-black uppercase tracking-[0.2em] mt-2">
                     <div className="w-8 h-8 rounded-xl bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20">
                         {convive.method === 'card' && <CreditCard className="w-4 h-4" />}
                         {convive.method === 'cash' && <Banknote className="w-4 h-4" />}

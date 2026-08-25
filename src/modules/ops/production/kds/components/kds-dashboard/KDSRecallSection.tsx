@@ -71,7 +71,7 @@ export function KDSRecallSection({
                                     <span className="font-serif italic text-2xl text-primary font-medium">
                                         Table <span className="text-accent-gold font-bold not-italic">{ticket.tableNumber ?? '?'}.</span>
                                     </span>
-                                    <p className="text-[10px] font-black uppercase tracking-wider text-muted mt-0.5">
+                                    <p className="text-nano font-black uppercase tracking-wider text-muted mt-0.5">
                                         {ticket.items.length} article{ticket.items.length !== 1 ? 's' : ''}
                                         {ticket.serverName ? ` · ${ticket.serverName}` : ''}
                                     </p>
@@ -89,15 +89,15 @@ export function KDSRecallSection({
                             {/* Item list summary */}
                             <div className="flex-1 px-4 py-3 flex flex-col gap-1">
                                 {(ticket.items || []).slice(0, 4).map((item, i) => (
-                                    <div key={i} className="flex items-center gap-2 text-[11px] text-secondary">
-                                        <span className="w-5 h-5 rounded-full bg-surface-card border border-subtle flex items-center justify-center text-[9px] font-black text-muted shrink-0">
+                                    <div key={i} className="flex items-center gap-2 text-micro text-secondary">
+                                        <span className="w-5 h-5 rounded-full bg-surface-card border border-subtle flex items-center justify-center text-nano font-black text-muted shrink-0">
                                             {item.quantity}
                                         </span>
                                         <span className="truncate font-medium">{item.name}</span>
                                     </div>
                                 ))}
                                 {ticket.items.length > 4 && (
-                                    <p className="text-[10px] text-muted mt-1">+{ticket.items.length - 4} autre{ticket.items.length - 4 > 1 ? 's' : ''}</p>
+                                    <p className="text-nano text-muted mt-1">+{ticket.items.length - 4} autre{ticket.items.length - 4 > 1 ? 's' : ''}</p>
                                 )}
                             </div>
 
@@ -105,7 +105,7 @@ export function KDSRecallSection({
                             <div className="p-3 pt-0">
                                 <button
                                     onClick={() => handleRenvoyer(ticket)}
-                                    className="w-full h-10 rounded-[14px] font-black text-[10px] uppercase tracking-[0.2em] bg-action-primary/10 text-action-primary border border-action-primary/30 hover:bg-action-primary hover:text-text-primary transition-all duration-200 active:scale-95"
+                                    className="w-full h-10 rounded-[14px] font-black text-nano uppercase tracking-[0.2em] bg-action-primary/10 text-action-primary border border-action-primary/30 hover:bg-action-primary hover:text-text-primary transition-all duration-200 active:scale-95"
                                 >
                                     Renvoyer
                                 </button>
@@ -118,7 +118,7 @@ export function KDSRecallSection({
             {/* Divider */}
             <div className="mt-10 flex items-center gap-4">
                 <div className="flex-1 h-px bg-border/40" />
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-muted">Production en cours</span>
+                <span className="text-nano font-black uppercase tracking-[0.4em] text-muted">Production en cours</span>
                 <div className="flex-1 h-px bg-border/40" />
             </div>
         </motion.div>

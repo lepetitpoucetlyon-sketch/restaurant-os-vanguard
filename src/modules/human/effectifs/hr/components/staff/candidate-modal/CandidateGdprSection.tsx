@@ -29,7 +29,7 @@ export function CandidateGdprSection({
                 </div>
                 <div className="flex-1">
                     <h4 className="text-[13px] font-bold text-text-primary uppercase tracking-widest">Conformité RGPD</h4>
-                    <p className="text-[11px] text-text-muted mt-2 leading-relaxed">
+                    <p className="text-micro text-text-muted mt-2 leading-relaxed">
                         Le candidat a été informé de la conservation de ses données par l'entreprise pour une durée maximale de 24 mois.
                         L'entreprise s'engage à ne pas céder ces données et à respecter le droit à l'effacement.
                     </p>
@@ -47,7 +47,7 @@ export function CandidateGdprSection({
                                 };
                             })}
                             className={cn(
-                                "h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2",
+                                "h-10 px-6 rounded-xl text-nano font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2",
                                 formData.gdpr?.consented 
                                     ? "bg-success text-text-primary shadow-lg shadow-success/20" 
                                     : "bg-bg-tertiary text-text-muted border border-border hover:border-error"
@@ -57,7 +57,7 @@ export function CandidateGdprSection({
                             {formData.gdpr?.consented ? "Consentement Donné" : "Donner mon consentement"}
                         </button>
                         {formData.gdpr?.consented && (
-                            <span className="text-[10px] font-bold text-success flex items-center gap-2 italic">
+                            <span className="text-nano font-bold text-success flex items-center gap-2 italic">
                                 <Calendar className="w-3.5 h-3.5" /> Loggé le {new Date().toLocaleDateString('fr-FR')}
                             </span>
                         )}

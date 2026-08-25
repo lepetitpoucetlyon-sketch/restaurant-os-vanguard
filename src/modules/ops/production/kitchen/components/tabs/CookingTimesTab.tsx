@@ -105,8 +105,8 @@ export function CookingTimesTab() {
                                 >
                                     <span className="font-bold text-sm text-text-primary">{item.name}</span>
                                     <div className="flex items-center gap-3">
-                                        <span className={cn("px-2 py-1 rounded-lg text-[10px] font-black", cat.bg, cat.accent)}>{item.temp}</span>
-                                        <span className="text-[11px] font-bold text-text-muted">{item.time}</span>
+                                        <span className={cn("px-2 py-1 rounded-lg text-nano font-black", cat.bg, cat.accent)}>{item.temp}</span>
+                                        <span className="text-micro font-bold text-text-muted">{item.time}</span>
                                     </div>
                                 </motion.div>
                             ))}

@@ -13,7 +13,7 @@ export const StaffRecentActivity = ({ logs }: StaffRecentActivityProps) => {
         <div className="bg-[--color-surface-primary] dark:bg-bg-secondary rounded-xl p-8 border border-border shadow-sm">
             <div className="flex items-center justify-between mb-8">
                 <h3 className="text-xl font-serif font-semibold text-text-primary tracking-tight">Activité Récente de l&apos;Équipe</h3>
-                <button className="text-[11px] font-bold text-accent uppercase tracking-widest border-b border-accent/30 hover:border-accent transition-all">
+                <button className="text-micro font-bold text-accent uppercase tracking-widest border-b border-accent/30 hover:border-accent transition-all">
                     Historique Complet
                 </button>
             </div>
@@ -29,7 +29,7 @@ export const StaffRecentActivity = ({ logs }: StaffRecentActivityProps) => {
                                 <p className="text-[13px] text-text-muted mt-0.5">{log.action}</p>
                             </div>
                         </div>
-                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest font-mono bg-bg-tertiary px-3 py-1 rounded-full">
+                        <span className="text-nano font-bold text-text-muted uppercase tracking-widest font-mono bg-bg-tertiary px-3 py-1 rounded-full">
                             {format(log.timestamp, 'HH:mm', { locale: fr })}
                         </span>
                     </div>

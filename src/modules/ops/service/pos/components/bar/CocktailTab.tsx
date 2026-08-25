@@ -48,7 +48,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
                     className="bg-bg-secondary rounded-2xl p-6 border border-border shadow-sm hover:shadow-lg transition-all relative"
                 >
                     {cocktail.isSignature && (
-                        <div className="absolute top-4 right-4 px-2 py-1 bg-warning-soft dark:bg-warning/10 text-warning text-[10px] font-black rounded-md flex items-center gap-1">
+                        <div className="absolute top-4 right-4 px-2 py-1 bg-warning-soft dark:bg-warning/10 text-warning text-nano font-black rounded-md flex items-center gap-1">
                             <Star className="w-3 h-3 fill-warning" />
                             SIGNATURE
                         </div>
@@ -62,10 +62,10 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
                     <p className="text-sm text-text-muted mb-4">{cocktail.category}</p>
 
                     <div className="space-y-2 mb-4">
-                        <p className="text-[11px] font-black text-text-muted uppercase">Ingrédients</p>
+                        <p className="text-micro font-black text-text-muted uppercase">Ingrédients</p>
                         <div className="flex flex-wrap gap-1">
                             {cocktail.ingredients.map((ing, i) => (
-                                <span key={i} className="px-2 py-1 bg-bg-primary dark:bg-bg-tertiary rounded-md text-[11px] font-bold text-text-muted">
+                                <span key={i} className="px-2 py-1 bg-bg-primary dark:bg-bg-tertiary rounded-md text-micro font-bold text-text-muted">
                                     {ing}
                                 </span>
                             ))}
@@ -75,7 +75,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
                     <div className="flex items-center justify-between pt-4 border-t border-border/30">
                         <div>
                             <p className="text-2xl font-black text-wine dark:text-text-primary">{formatCurrency(cocktail.priceInMicrounits / 1_000_000)}</p>
-                            <p className="text-[10px] text-success font-bold">
+                            <p className="text-nano text-success font-bold">
                                 Marge: {(((cocktail.priceInMicrounits - (cocktail.costPriceInMicrounits ?? 0)) / cocktail.priceInMicrounits) * 100).toFixed(0)}%
                             </p>
                         </div>

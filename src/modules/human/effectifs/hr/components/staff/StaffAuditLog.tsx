@@ -32,12 +32,12 @@ export const StaffAuditLog = ({ logs }: StaffAuditLogProps) => {
                     <Shield strokeWidth={1.5} className="w-6 h-6 text-accent" />
                     Journal d&apos;Audit & Sécurité
                 </h3>
-                <Button variant="ghost" className="text-[11px] font-bold text-text-muted uppercase tracking-widest hover:bg-bg-tertiary">Exporter CSV</Button>
+                <Button variant="ghost" className="text-micro font-bold text-text-muted uppercase tracking-widest hover:bg-bg-tertiary">Exporter CSV</Button>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left border-collapse">
                     <thead>
-                        <tr className="bg-bg-tertiary/20 text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] border-b border-border/50">
+                        <tr className="bg-bg-tertiary/20 text-nano font-bold text-text-muted uppercase tracking-[0.2em] border-b border-border/50">
                             <th className="px-8 py-5">Date & Heure</th>
                             <th className="px-8 py-5">Utilisateur</th>
                             <th className="px-8 py-5">Action</th>
@@ -67,7 +67,7 @@ export const StaffAuditLog = ({ logs }: StaffAuditLogProps) => {
                                 </td>
                                 <td className="px-8 py-5">
                                     <span className={cn(
-                                        "px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest border border-current/10",
+                                        "px-3 py-1.5 rounded-full text-nano font-bold uppercase tracking-widest border border-current/10",
                                         log.status === 'success' ? "bg-success/10 text-success" : "bg-error/10 text-error"
                                     )}>
                                         {log.status === 'success' ? "Succès" : "Échec"}

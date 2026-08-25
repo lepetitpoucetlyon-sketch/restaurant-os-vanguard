@@ -26,10 +26,10 @@ export function TerminalStatePanel({
             <div className="flex flex-col items-center gap-4 py-8 rounded-[2rem] border border-accent-gold/20 bg-accent-gold/5">
                 <Terminal className="w-10 h-10 text-accent-gold animate-pulse" strokeWidth={1.5} />
                 <p className="text-sm font-black uppercase tracking-widest text-text-primary">En attente du terminal…</p>
-                <p className="text-[10px] text-text-muted">Le client peut présenter sa carte</p>
+                <p className="text-nano text-text-muted">Le client peut présenter sa carte</p>
                 <button
                     onClick={onTerminalCancel}
-                    className="mt-2 px-6 h-10 rounded-full border border-border/50 text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-status-error hover:border-status-error/30 transition-colors"
+                    className="mt-2 px-6 h-10 rounded-full border border-border/50 text-micro font-black uppercase tracking-wider text-text-muted hover:text-status-error hover:border-status-error/30 transition-colors"
                 >
                     Annuler
                 </button>
@@ -42,17 +42,17 @@ export function TerminalStatePanel({
             <div className="flex flex-col items-center gap-4 py-8 rounded-[2rem] border border-border bg-bg-tertiary/40">
                 <Loader2 className="w-10 h-10 text-text-muted animate-spin" strokeWidth={1.5} />
                 <p className="text-sm font-black uppercase tracking-widest text-text-primary">En attente de confirmation</p>
-                <p className="text-[10px] text-text-muted">Collectez le paiement sur votre terminal externe</p>
+                <p className="text-nano text-text-muted">Collectez le paiement sur votre terminal externe</p>
                 <div className="flex gap-3 mt-2">
                     <button
                         onClick={onManualCancel}
-                        className="px-6 h-10 rounded-full border border-border/50 text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-status-error transition-colors"
+                        className="px-6 h-10 rounded-full border border-border/50 text-micro font-black uppercase tracking-wider text-text-muted hover:text-status-error transition-colors"
                     >
                         Annuler
                     </button>
                     <button
                         onClick={onManualConfirm}
-                        className="px-6 h-10 rounded-full bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
+                        className="px-6 h-10 rounded-full bg-accent-gold text-text-primary text-micro font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
                     >
                         Paiement reçu
                     </button>
@@ -66,8 +66,8 @@ export function TerminalStatePanel({
             <div className="flex items-center gap-3 p-4 rounded-2xl bg-status-error/10 border border-status-error/20">
                 <AlertCircle className="w-5 h-5 text-status-error shrink-0" />
                 <div>
-                    <p className="text-[11px] font-black uppercase tracking-wider text-status-error">Paiement refusé</p>
-                    <p className="text-[10px] text-text-muted mt-0.5">{terminalError ?? "Réessayez ou changez de mode"}</p>
+                    <p className="text-micro font-black uppercase tracking-wider text-status-error">Paiement refusé</p>
+                    <p className="text-nano text-text-muted mt-0.5">{terminalError ?? "Réessayez ou changez de mode"}</p>
                 </div>
                 <button
                     onClick={onErrorDismiss}

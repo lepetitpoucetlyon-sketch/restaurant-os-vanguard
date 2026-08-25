@@ -30,13 +30,13 @@ export function QuoteCrmSection({
                 <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
                     <User className="w-4 h-4 text-accent" />
                 </div>
-                <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Cible de Haute Excellence</h3>
+                <h3 className="text-micro font-black text-text-muted uppercase tracking-[0.3em]">Cible de Haute Excellence</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* Type Toggle */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Type d'entité</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Type d'entité</label>
                     <div className="flex p-1.5 bg-bg-secondary rounded-[24px] border border-border shadow-inner">
                         <button
                             onClick={() => setCRMType('company')}
@@ -63,7 +63,7 @@ export function QuoteCrmSection({
 
                 {/* Name Input */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Dénomination</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Dénomination</label>
                     <input
                         type="text"
                         value={crmName}
@@ -75,7 +75,7 @@ export function QuoteCrmSection({
 
                 {/* Email Input */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Coordination Email</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Coordination Email</label>
                     <input
                         type="email"
                         value={crmEmail}
@@ -87,7 +87,7 @@ export function QuoteCrmSection({
 
                 {/* Subject Input */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest block ml-2">Objet du Protocole</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Objet du Protocole</label>
                     <input
                         type="text"
                         value={subject}

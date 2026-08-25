@@ -76,9 +76,9 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-bold text-white text-base">{s.name}</h3>
-                  <p className="text-[11px] text-text-muted">{s.category}</p>
+                  <p className="text-micro text-text-muted">{s.category}</p>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-500/20">
+                <span className="text-nano font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-500/20">
                   {s.channel}
                 </span>
               </div>
@@ -104,7 +104,7 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
             </div>
 
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[11px] text-text-muted">
+              <div className="flex items-center gap-2 text-micro text-text-muted">
                 <Phone className="w-3.5 h-3.5 text-emerald-400" />
                 <span>{s.primaryContact}</span>
               </div>

@@ -51,7 +51,7 @@ export function QualityDashboardHeader() {
           Contrôle Qualité
           <span className="text-accent-gold not-italic">.</span>
         </h1>
-        <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic flex items-center gap-2">
+        <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic flex items-center gap-2">
           HACCP 1.0 • Traçabilité Totale • Grade VI Ecosystem
         </p>
       </div>
@@ -61,10 +61,10 @@ export function QualityDashboardHeader() {
           <div key={i} className="text-right px-4 py-3 bg-bg-tertiary rounded-2xl border border-border/50 hover:border-accent-gold transition-all group">
             <div className="flex items-center justify-end gap-2 mb-1">
                <kpi.icon className={cn("w-3 h-3 transition-transform group-hover:scale-125", kpi.color)} />
-               <p className="text-[8px] font-black text-text-muted uppercase tracking-widest leading-none">{kpi.label}</p>
+               <p className="text-nano font-black text-text-muted uppercase tracking-widest leading-none">{kpi.label}</p>
             </div>
             <p className={cn("text-xl font-mono font-bold leading-none", kpi.color)}>{kpi.value}</p>
-            <p className="text-[7px] font-medium text-text-muted/60 mt-1 uppercase tracking-tighter">{kpi.sub}</p>
+            <p className="text-nano font-medium text-text-muted/60 mt-1 uppercase tracking-tighter">{kpi.sub}</p>
           </div>
         ))}
       </div>

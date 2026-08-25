@@ -3,9 +3,9 @@ import React from 'react';
 export function SwitchboardItem({ label, active, onToggle }: { label: string, active: boolean, onToggle: () => void }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">{label}</span>
+      <span className="text-nano font-bold text-secondary uppercase tracking-widest">{label}</span>
       <div className="flex items-center gap-3">
-        <span className={`text-[10px] font-black uppercase tracking-tighter ${active ? 'text-status-success' : 'text-status-danger'}`}>
+        <span className={`text-nano font-black uppercase tracking-tighter ${active ? 'text-status-success' : 'text-status-danger'}`}>
           {active ? 'EN LIGNE' : 'HORS LIGNE'}
         </span>
         <button

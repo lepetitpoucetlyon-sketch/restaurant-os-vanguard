@@ -102,7 +102,7 @@ export function BrandScraper() {
             <Button
               onClick={handleApply}
               disabled={isSaving}
-              className="h-9 px-5 rounded-full bg-status-success text-text-primary font-bold uppercase tracking-widest text-[10px] hover:opacity-90 transition-all"
+              className="h-9 px-5 rounded-full bg-status-success text-text-primary font-bold uppercase tracking-widest text-nano hover:opacity-90 transition-all"
             >
               {isSaving
                 ? <Loader2 className="w-3 h-3 animate-spin" />

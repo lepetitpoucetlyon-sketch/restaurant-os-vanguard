@@ -140,7 +140,7 @@ export function DisasterRecoveryPanel() {
             <p className="text-chip-label text-rose-400">
               Job {activeRestoreJob.jobId.slice(0, 8)}… — {activeRestoreJob.status.toUpperCase()}
             </p>
-            <p className="text-[9px] text-secondary">{activeRestoreJob.tenantId} · initié à {new Date(activeRestoreJob.initiatedAt).toLocaleTimeString('fr-FR')}</p>
+            <p className="text-nano text-secondary">{activeRestoreJob.tenantId} · initié à {new Date(activeRestoreJob.initiatedAt).toLocaleTimeString('fr-FR')}</p>
           </div>
           {activeRestoreJob.status !== 'completed' && activeRestoreJob.status !== 'simulated' && (
             <Loader2 className="w-3.5 h-3.5 animate-spin text-rose-400 ml-auto shrink-0" />
@@ -155,7 +155,7 @@ export function DisasterRecoveryPanel() {
               <ActivitySquare className="w-5 h-5 text-secondary" />
               <div>
                 <div className="text-sm font-bold">{inst.name || inst.id}</div>
-                <div className="text-[10px] text-secondary font-mono">ID: {inst.id}</div>
+                <div className="text-nano text-secondary font-mono">ID: {inst.id}</div>
               </div>
             </div>
             <div className="flex items-center gap-2">

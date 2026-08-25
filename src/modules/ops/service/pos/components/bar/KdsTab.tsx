@@ -83,7 +83,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                 <div className="flex items-center gap-3">
                     <h2 className="text-3xl font-black text-text-primary tracking-tighter">Production Bar</h2>
                     <div className={cn(
-                        "px-3 py-1 rounded-full border text-[10px] font-black tracking-widest",
+                        "px-3 py-1 rounded-full border text-nano font-black tracking-widest",
                         rushMode ? "bg-status-danger text-text-primary border-red-500" : "bg-accent/10 text-accent border-accent/20"
                     )}>
                         {rushMode ? "MODE RUSH ACTIF" : "SERVICE STANDARD"}
@@ -102,14 +102,14 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             placeholder="TABLE..."
                             value={searchQueryKDS}
                             onChange={(e) => setSearchQueryKDS(e.target.value)}
-                            className="h-10 w-32 pl-9 bg-transparent border-none text-[11px] font-bold focus:ring-0 placeholder:text-text-muted/50"
+                            className="h-10 w-32 pl-9 bg-transparent border-none text-micro font-bold focus:ring-0 placeholder:text-text-muted/50"
                         />
                     </div>
                     <div className="w-px h-6 bg-border mx-1" />
                     <button 
                         onClick={() => setRushMode(!rushMode)}
                         className={cn(
-                            "h-10 px-4 rounded-xl flex items-center gap-2 transition-all font-black text-[10px] tracking-widest",
+                            "h-10 px-4 rounded-xl flex items-center gap-2 transition-all font-black text-nano tracking-widest",
                             rushMode ? "bg-status-danger text-text-primary" : "bg-bg-tertiary text-text-muted hover:text-status-danger"
                         )}
                     >
@@ -168,7 +168,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                             </span>
                                         )}
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-text-muted mt-2">
+                                    <span className="text-nano font-black uppercase tracking-[0.25em] text-text-muted mt-2">
                                         {ticket.serverName}
                                     </span>
                                 </div>
@@ -180,7 +180,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                     "bg-surface-card dark:bg-bg-tertiary text-text-primary border-border"
                                 )}>
                                     <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} />
-                                    {elapsed}<span className="text-[9px] opacity-70 ml-0.5">MIN</span>
+                                    {elapsed}<span className="text-nano opacity-70 ml-0.5">MIN</span>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +210,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                                                 </div>
                                             )}
                                             
-                                            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-action-primary text-text-primary text-[9px] font-black tracking-widest shadow-lg">
+                                            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-action-primary text-text-primary text-nano font-black tracking-widest shadow-lg">
                                                 {item.station}
                                             </div>
                                             
@@ -269,7 +269,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             <div className="h-px w-full bg-border/50 mb-6" />
                             {ticket.status === 'new' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'preparing')}
                                 >
                                     <Flame className="w-4 h-4 text-status-warning fill-current" />
@@ -278,7 +278,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             )}
                             {ticket.status === 'preparing' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-status-success text-text-primary hover:bg-status-success hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-status-success text-text-primary hover:bg-status-success hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'ready')}
                                 >
                                     MARQUER PRÊT <ArrowRight className="w-4 h-4" />
@@ -286,7 +286,7 @@ export const KdsTab: React.FC<KdsTabProps> = ({
                             )}
                             {ticket.status === 'ready' && (
                                 <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-[10px] transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-surface-bg dark:hover:bg-surface-sidebar flex items-center justify-center gap-3"
+                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-surface-bg dark:hover:bg-surface-sidebar flex items-center justify-center gap-3"
                                     onClick={() => updateOrderStatus(ticket.id, 'delivered')}
                                 >
                                     <CheckCircle2 className="w-4 h-4 text-status-success" />

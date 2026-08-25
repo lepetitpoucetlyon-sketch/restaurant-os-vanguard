@@ -34,16 +34,16 @@ export function CandidateCard({ candidate, onStatusChange }: CandidateCardProps)
             <h4 className="font-serif italic font-bold text-text-primary text-base mb-1 truncate">
                 {candidate.firstName} {candidate.lastName}
             </h4>
-            <p className="text-[10px] font-bold text-accent uppercase tracking-widest mb-4">
+            <p className="text-nano font-bold text-accent uppercase tracking-widest mb-4">
                 {candidate.appliedRole}
             </p>
 
             <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-[11px] text-text-muted">
+                <div className="flex items-center gap-2 text-micro text-text-muted">
                     <Mail className="w-3 h-3" />
                     <span className="truncate">{candidate.email}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-text-muted">
+                <div className="flex items-center gap-2 text-micro text-text-muted">
                     <Phone className="w-3 h-3" />
                     <span>{candidate.phone}</span>
                 </div>

@@ -126,7 +126,7 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
                             <div className="flex items-center justify-between pt-4 border-t border-border">
                                 <div>
                                     <p className="text-2xl font-black text-accent dark:text-text-primary">{formatCurrency(wine.priceInMicrounits / 1_000_000)}</p>
-                                    <p className="text-[10px] text-text-muted">Marge: {(((wine.priceInMicrounits - (wine.costPriceInMicrounits ?? 0)) / wine.priceInMicrounits) * 100).toFixed(0)}%</p>
+                                    <p className="text-nano text-text-muted">Marge: {(((wine.priceInMicrounits - (wine.costPriceInMicrounits ?? 0)) / wine.priceInMicrounits) * 100).toFixed(0)}%</p>
                                 </div>
                                 <div className={cn(
                                     "px-3 py-1.5 rounded-lg text-sm font-bold",

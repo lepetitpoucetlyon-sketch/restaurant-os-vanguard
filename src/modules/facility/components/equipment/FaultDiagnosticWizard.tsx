@@ -177,7 +177,7 @@ export function FaultDiagnosticWizard({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
-                      <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">
+                      <span className="text-micro font-bold text-indigo-400 uppercase tracking-wider">
                         Diagnostic IA & Base Constructeur
                       </span>
                       <h4 className="text-base font-bold text-white">{evaluation.message}</h4>

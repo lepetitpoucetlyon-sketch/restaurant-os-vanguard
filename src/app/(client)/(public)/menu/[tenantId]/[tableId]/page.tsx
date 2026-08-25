@@ -111,7 +111,7 @@ export default function PublicMenuPage() {
                 <h1 className="text-lg font-black font-serif italic text-text-primary tracking-tight">
                     Menu <span className="text-accent-gold">.</span>
                 </h1>
-                <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest">
+                <p className="text-nano text-text-muted font-bold uppercase tracking-widest">
                     Table {tableId}
                 </p>
 
@@ -155,7 +155,7 @@ export default function PublicMenuPage() {
                 {/* Allergen filters */}
                 {allAllergens.length > 0 && (
                     <div className="mt-3">
-                        <p className="text-[8px] font-black uppercase tracking-widest text-text-muted mb-1.5 flex items-center gap-1">
+                        <p className="text-nano font-black uppercase tracking-widest text-text-muted mb-1.5 flex items-center gap-1">
                             <AlertTriangle className="w-2.5 h-2.5" />
                             Exclure allergènes
                         </p>
@@ -165,7 +165,7 @@ export default function PublicMenuPage() {
                                     key={a}
                                     onClick={() => toggleAllergen(a)}
                                     className={cn(
-                                        'h-6 px-2.5 rounded-full text-[8px] font-bold uppercase tracking-wider transition-all border',
+                                        'h-6 px-2.5 rounded-full text-nano font-bold uppercase tracking-wider transition-all border',
                                         excludedAllergens.has(a)
                                             ? 'bg-status-error/10 border-status-error/30 text-status-error'
                                             : 'bg-bg-tertiary border-border text-text-muted'
@@ -193,17 +193,17 @@ export default function PublicMenuPage() {
                                     <div className="flex items-center gap-2">
                                         <h3 className="text-sm font-bold text-text-primary truncate">{product.name}</h3>
                                         {product.faitMaison && (
-                                            <span className="shrink-0 flex items-center gap-1 text-[8px] font-bold text-status-success bg-status-success/10 px-1.5 py-0.5 rounded-full">
+                                            <span className="shrink-0 flex items-center gap-1 text-nano font-bold text-status-success bg-status-success/10 px-1.5 py-0.5 rounded-full">
                                                 <ChefHat className="w-2.5 h-2.5" />
                                                 Fait maison
                                             </span>
                                         )}
                                     </div>
                                     {product.description && (
-                                        <p className="text-[11px] text-text-muted mt-1 line-clamp-2">{product.description}</p>
+                                        <p className="text-micro text-text-muted mt-1 line-clamp-2">{product.description}</p>
                                     )}
                                     {product.meatOrigin && (
-                                        <span className="inline-flex items-center gap-1 mt-1 text-[8px] text-text-muted">
+                                        <span className="inline-flex items-center gap-1 mt-1 text-nano text-text-muted">
                                             <Beef className="w-2.5 h-2.5" />
                                             Origine : {product.meatOrigin}
                                         </span>
@@ -211,7 +211,7 @@ export default function PublicMenuPage() {
                                     {product.allergens && product.allergens.length > 0 && (
                                         <div className="flex flex-wrap gap-1 mt-2">
                                             {product.allergens.map(a => (
-                                                <span key={a} className="text-[7px] font-bold uppercase tracking-wider text-amber-600 dark:text-action-primary bg-action-primary/10 px-1.5 py-0.5 rounded">
+                                                <span key={a} className="text-nano font-bold uppercase tracking-wider text-amber-600 dark:text-action-primary bg-action-primary/10 px-1.5 py-0.5 rounded">
                                                     {ALLERGEN_LABELS[a] ?? a}
                                                 </span>
                                             ))}
@@ -228,7 +228,7 @@ export default function PublicMenuPage() {
 
                 {/* Legal footer */}
                 <div className="mt-8 text-center">
-                    <p className="text-[9px] text-text-muted">
+                    <p className="text-nano text-text-muted">
                         <Leaf className="w-3 h-3 inline-block mr-1" />
                         Tous les prix sont TTC · Allergènes : nous consulter pour toute question
                     </p>

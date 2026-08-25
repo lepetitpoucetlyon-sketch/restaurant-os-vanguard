@@ -44,7 +44,7 @@ export function KDSProductionGrid({
                     className="flex items-center justify-center py-24 gap-3"
                 >
                     <div className="w-6 h-6 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">Chargement…</span>
+                    <span className="text-micro font-black uppercase tracking-[0.3em] text-text-muted">Chargement…</span>
                 </motion.div>
             );
         }

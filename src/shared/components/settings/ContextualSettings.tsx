@@ -185,7 +185,7 @@ function ContextualSettingsPanelContent({
                                 <h2 className="text-lg font-serif font-semibold text-text-primary">
                                     {pageSettings?.title || "Paramètres"}
                                 </h2>
-                                <p className="text-[10px] text-accent-gold uppercase tracking-[0.2em] font-black">
+                                <p className="text-nano text-accent-gold uppercase tracking-[0.2em] font-black">
                                     Moteur d'Expérience
                                 </p>
                             </div>
@@ -253,14 +253,14 @@ function ContextualSettingsPanelContent({
                     <div className="p-6 border-t border-border bg-bg-secondary/50 flex gap-3">
                         <button
                             onClick={handleReset}
-                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl border border-border text-text-muted hover:bg-bg-tertiary transition-colors text-[10px] font-black uppercase tracking-[0.2em]"
+                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl border border-border text-text-muted hover:bg-bg-tertiary transition-colors text-nano font-black uppercase tracking-[0.2em]"
                         >
                             <RotateCcw className="w-4 h-4" />
                             {t('settings.reset')}
                         </button>
                         <button
                             onClick={handleSave}
-                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-primary font-black uppercase tracking-[0.2em] text-[10px] hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
+                            className="flex-2 flex items-center justify-center gap-2 py-4 px-8 rounded-2xl bg-accent text-primary font-black uppercase tracking-[0.2em] text-nano hover:bg-accent/90 transition-all shadow-lg hover:shadow-accent/20"
                         >
                             <Check className="w-4 h-4" />
                             {t('settings.apply')}

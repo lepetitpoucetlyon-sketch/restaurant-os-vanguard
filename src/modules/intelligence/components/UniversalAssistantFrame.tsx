@@ -136,7 +136,7 @@ export function UniversalAssistantFrame() {
                                 {voiceState.isSpeaking && (
                                     <button
                                         onClick={stopSpeaking}
-                                        className="flex items-center gap-1 px-2 py-1 rounded bg-accent/15 text-accent text-[11px] hover:bg-accent/25 transition-colors animate-pulse"
+                                        className="flex items-center gap-1 px-2 py-1 rounded bg-accent/15 text-accent text-micro hover:bg-accent/25 transition-colors animate-pulse"
                                         title="Arrêter la voix"
                                     >
                                         <Volume2 className="w-3.5 h-3.5" />
@@ -179,7 +179,7 @@ export function UniversalAssistantFrame() {
                                     </div>
                                     <button
                                         onClick={stopVoiceListening}
-                                        className="text-[11px] text-status-danger font-semibold hover:underline"
+                                        className="text-micro text-status-danger font-semibold hover:underline"
                                     >
                                         Arrêter
                                     </button>

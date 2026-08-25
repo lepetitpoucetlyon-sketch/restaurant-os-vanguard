@@ -49,7 +49,7 @@ export function PremiumSelect({
     return (
         <div ref={containerRef} className={cn("relative space-y-3 w-full", className)}>
             {label && (
-                <label className="flex items-center gap-3 text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] px-2 leading-none">
+                <label className="flex items-center gap-3 text-nano font-black text-accent-gold uppercase tracking-[0.4em] px-2 leading-none">
                     {label}
                 </label>
             )}
@@ -138,7 +138,7 @@ export function PremiumSelect({
                                                     </span>
                                                     {option.description && (
                                                         <span className={cn(
-                                                            "text-[9px] font-medium opacity-60",
+                                                            "text-nano font-medium opacity-60",
                                                             isActive ? "text-text-primary" : "text-text-muted"
                                                         )}>
                                                             {option.description}

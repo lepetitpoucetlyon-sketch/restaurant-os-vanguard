@@ -190,7 +190,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
             <div key={row.tenantId} className="bg-surface-card border border-border-subtle rounded-xl p-4 space-y-4 shadow-sm">
               <div className="flex items-center justify-between border-b border-border-subtle pb-2">
                 <span className="text-sm font-bold text-text-primary uppercase tracking-tight">{row.name}</span>
-                <span className="text-[10px] text-secondary font-mono tracking-widest">{row.tenantId}</span>
+                <span className="text-nano text-secondary font-mono tracking-widest">{row.tenantId}</span>
               </div>
 
               {row.error && (
@@ -221,7 +221,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                               {device.status}
                             </span>
                             {device.trackingNumber && (
-                              <span className="text-[9px] text-secondary font-mono flex items-center gap-1">
+                              <span className="text-nano text-secondary font-mono flex items-center gap-1">
                                 <Truck className="w-3 h-3" /> {device.trackingNumber}
                               </span>
                             )}
@@ -248,7 +248,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
               )}
 
               {row.devices.length === 0 && !row.error && (
-                <p className="text-[11px] text-secondary italic text-center py-2">Aucun matériel affecté à cette instance.</p>
+                <p className="text-micro text-secondary italic text-center py-2">Aucun matériel affecté à cette instance.</p>
               )}
 
               {/* Add Device Form */}
@@ -274,7 +274,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                     value={input.tracking}
                     onChange={e => setInputMap(m => ({ ...m, [row.tenantId]: { ...input, tracking: e.target.value } }))}
                     placeholder="N° Suivi Transporteur (Optionnel)"
-                    className="flex-1 bg-surface-card border border-border-subtle rounded-lg px-3 py-1.5 text-[10px] font-mono placeholder:text-secondary/40 focus:outline-none focus:border-brand"
+                    className="flex-1 bg-surface-card border border-border-subtle rounded-lg px-3 py-1.5 text-nano font-mono placeholder:text-secondary/40 focus:outline-none focus:border-brand"
                   />
                   <button
                     onClick={() => addDevice(row.tenantId)}

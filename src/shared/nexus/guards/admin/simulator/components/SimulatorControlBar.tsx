@@ -35,7 +35,7 @@ export function SimulatorControlBar({
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setSpeed(s)} 
-                                className={`px-3 py-1 rounded-md text-[10px] font-bold transition-all ${speed === s ? 'bg-accent text-text-primary shadow-[0_0_15px_rgba(255,46,99,0.4)]' : 'bg-bg-secondary text-text-muted hover:bg-bg-tertiary'}`}
+                                className={`px-3 py-1 rounded-md text-nano font-bold transition-all ${speed === s ? 'bg-accent text-text-primary shadow-[0_0_15px_rgba(255,46,99,0.4)]' : 'bg-bg-secondary text-text-muted hover:bg-bg-tertiary'}`}
                             >
                                 {s}x
                             </motion.button>
@@ -56,7 +56,7 @@ export function SimulatorControlBar({
                     variant="ghost" 
                     size="sm"
                     onClick={() => setIsOverridesOpen(!isOverridesOpen)}
-                    className={`gap-2 text-[10px] uppercase font-black tracking-widest transition-all ${isOverridesOpen ? 'bg-accent/20 text-accent border border-accent/30' : 'text-text-muted hover:text-text-primary'}`}
+                    className={`gap-2 text-nano uppercase font-black tracking-widest transition-all ${isOverridesOpen ? 'bg-accent/20 text-accent border border-accent/30' : 'text-text-muted hover:text-text-primary'}`}
                 >
                     <Settings size={14} />
                     Overrides

@@ -63,7 +63,7 @@ export function MindMapDependencies() {
                             </div>
                             <div className="text-left">
                                 <h4 className="text-lg font-serif tracking-tight text-text-primary leading-none mb-1">{node.label}</h4>
-                                <p className="text-[10px] uppercase font-bold tracking-widest text-text-muted">{node.sub}</p>
+                                <p className="text-nano uppercase font-bold tracking-widest text-text-muted">{node.sub}</p>
                             </div>
                         </div>
 
@@ -76,7 +76,7 @@ export function MindMapDependencies() {
             {/* Visual Guide Overlay */}
             <div className="absolute bottom-10 right-10 flex gap-10">
                 <div className="flex flex-col items-end gap-2">
-                    <span className="text-[9px] uppercase font-black text-accent-gold tracking-[0.2em] mb-1">État de l'Architecture</span>
+                    <span className="text-nano uppercase font-black text-accent-gold tracking-[0.2em] mb-1">État de l'Architecture</span>
                     <span className="text-xs font-mono text-status-success">&bull; 100% Cloud-Native</span>
                 </div>
             </div>

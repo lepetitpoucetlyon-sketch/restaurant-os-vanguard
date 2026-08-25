@@ -199,7 +199,7 @@ function ToggleRow({ icon: Icon, title, subtitle, enabled, onChange }: ToggleRow
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                     <h3 className="text-sm font-medium text-primary">{title}</h3>
-                    <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                    <span className={`text-nano uppercase font-bold px-1.5 py-0.5 rounded ${
                         enabled ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
                     }`}>
                         {enabled ? 'Ouvert' : 'Fermé'}

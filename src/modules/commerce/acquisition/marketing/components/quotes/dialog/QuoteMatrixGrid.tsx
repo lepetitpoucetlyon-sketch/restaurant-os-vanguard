@@ -27,7 +27,7 @@ export function QuoteMatrixGrid({
                     <div className="w-8 h-8 rounded-full bg-accent-gold/10 flex items-center justify-center">
                         <Package className="w-4 h-4 text-accent-gold" />
                     </div>
-                    <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Matrice de Composition</h3>
+                    <h3 className="text-micro font-black text-text-muted uppercase tracking-[0.3em]">Matrice de Composition</h3>
                 </div>
 
                 <div className="flex gap-4">
@@ -49,7 +49,7 @@ export function QuoteMatrixGrid({
             </div>
 
             <div className="bg-bg-secondary/40 border border-border rounded-[42px] overflow-hidden backdrop-blur-md">
-                <div className="grid grid-cols-[1fr,100px,140px,100px,140px,60px] p-6 text-[9px] font-black text-text-muted uppercase tracking-[0.2em] border-b border-border/50 bg-bg-tertiary">
+                <div className="grid grid-cols-[1fr,100px,140px,100px,140px,60px] p-6 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border/50 bg-bg-tertiary">
                     <div>Désignation & Artefact</div>
                     <div className="text-center">Quantité</div>
                     <div className="text-center">Prix Un. HT</div>
@@ -120,7 +120,7 @@ export function QuoteMatrixGrid({
                     {lines.length === 0 && (
                         <div className="py-20 text-center space-y-4">
                             <FileText className="w-12 h-12 mx-auto text-text-muted/10" strokeWidth={1} />
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Matrice Vide • Insérer Artefact</p>
+                            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Matrice Vide • Insérer Artefact</p>
                         </div>
                     )}
                 </div>

@@ -26,7 +26,7 @@ export function StaffLaborLegislationSection({ localConfig, setLocalConfig }: St
                     <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                         Législation du Travail
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Protocoles de Conformité IA</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Protocoles de Conformité IA</p>
                 </div>
             </div>
 
@@ -34,7 +34,7 @@ export function StaffLaborLegislationSection({ localConfig, setLocalConfig }: St
                 <div className="bg-bg-primary p-8 rounded-[2rem] border border-border shadow-sm space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                         <Clock className="w-5 h-5 text-text-muted" />
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest px-1">Plafond Hebdomadaire</label>
+                        <label className="text-nano font-bold text-text-muted uppercase tracking-widest px-1">Plafond Hebdomadaire</label>
                     </div>
                     <div className="relative">
                         <input
@@ -50,7 +50,7 @@ export function StaffLaborLegislationSection({ localConfig, setLocalConfig }: St
                 <div className="bg-bg-primary p-8 rounded-[2rem] border border-border shadow-sm space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                         <Zap className="w-5 h-5 text-text-muted" />
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest px-1">Limite Heures Sup.</label>
+                        <label className="text-nano font-bold text-text-muted uppercase tracking-widest px-1">Limite Heures Sup.</label>
                     </div>
                     <div className="relative">
                         <input
@@ -65,7 +65,7 @@ export function StaffLaborLegislationSection({ localConfig, setLocalConfig }: St
                 <div className="bg-bg-primary p-8 rounded-[2rem] border border-border shadow-sm space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                         <Accessibility className="w-5 h-5 text-text-muted" />
-                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-widest px-1">Repos Inter-Service</label>
+                        <label className="text-nano font-bold text-text-muted uppercase tracking-widest px-1">Repos Inter-Service</label>
                     </div>
                     <div className="relative">
                         <input

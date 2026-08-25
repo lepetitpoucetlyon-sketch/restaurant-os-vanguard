@@ -71,7 +71,7 @@ export function GestionHuiles() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Gestion des Huiles</h2>
-                        <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
+                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@ export function GestionHuiles() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setIsAdding(true)}
-                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-[10px] uppercase tracking-widest shadow-2xl flex items-center gap-2"
+                    className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-nano uppercase tracking-widest shadow-2xl flex items-center gap-2"
                 >
                     <FlaskConical size={16} />
                     Mesurer TPOM
@@ -104,7 +104,7 @@ export function GestionHuiles() {
                                 {lastLog ? (
                                     <StatusBadge status={lastLog.status === 'ok' ? 'success' : lastLog.status === 'warning' ? 'warning' : 'error'} label={lastLog.status} />
                                 ) : (
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">Aucun Relevé</span>
+                                    <span className="text-nano font-black uppercase tracking-widest text-text-muted">Aucun Relevé</span>
                                 )}
                             </div>
 
@@ -113,7 +113,7 @@ export function GestionHuiles() {
                                 {lastLog ? `${lastLog.tpomValue}% TPOM` : '--%'}
                             </div>
 
-                            <div className="mt-6 pt-4 border-t border-border flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-text-muted">
+                            <div className="mt-6 pt-4 border-t border-border flex items-center justify-between text-nano font-black uppercase tracking-widest text-text-muted">
                                 <span>{lastLog ? new Date(lastLog.createdAt).toLocaleDateString() : 'Première utilisation'}</span>
                                 <ChevronRight size={12} />
                             </div>
@@ -138,18 +138,18 @@ export function GestionHuiles() {
                     <table className="w-full">
                         <thead>
                             <tr className="bg-bg-tertiary/50">
-                                <th className="px-8 py-4 text-left text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Date</th>
-                                <th className="px-8 py-4 text-left text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Équipement</th>
-                                <th className="px-8 py-4 text-left text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Valeur</th>
-                                <th className="px-8 py-4 text-left text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Action</th>
-                                <th className="px-8 py-4 text-left text-[9px] font-black uppercase tracking-[0.2em] text-text-muted">Par</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Date</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Équipement</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Valeur</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Action</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Par</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
                             {logs.map((log) => (
                                 <tr key={log.id} className="hover:bg-bg-secondary/50 transition-colors">
-                                    <td className="px-8 py-5 text-[11px] font-black text-text-primary">{new Date(log.createdAt).toLocaleString('fr-FR')}</td>
-                                    <td className="px-8 py-5 text-[11px] font-serif italic font-black text-text-primary">{log.fryerName}</td>
+                                    <td className="px-8 py-5 text-micro font-black text-text-primary">{new Date(log.createdAt).toLocaleString('fr-FR')}</td>
+                                    <td className="px-8 py-5 text-micro font-serif italic font-black text-text-primary">{log.fryerName}</td>
                                     <td className="px-8 py-5">
                                         <span className={cn(
                                             "text-xs font-black px-2 py-1 rounded-lg",
@@ -166,7 +166,7 @@ export function GestionHuiles() {
                                             {log.action === 'changing' ? 'Renouvellement' : log.action === 'fitering' ? 'Filtration' : 'Contrôle Simple'}
                                         </div>
                                     </td>
-                                    <td className="px-8 py-5 text-[10px] font-black uppercase text-text-muted">{log.user}</td>
+                                    <td className="px-8 py-5 text-nano font-black uppercase text-text-muted">{log.user}</td>
                                 </tr>
                             ))}
                             {logs.length === 0 && (
@@ -189,7 +189,7 @@ export function GestionHuiles() {
             >
                 <div className="space-y-6 pt-4 pb-8">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Équipement</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Équipement</label>
                         <select 
                             value={formData.fryerName}
                             onChange={(e) => setFormData({ ...formData, fryerName: e.target.value })}
@@ -204,7 +204,7 @@ export function GestionHuiles() {
 
                     <div className="space-y-4 px-1">
                         <div className="flex justify-between items-end">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Taux de Composés Polaires (%)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">Taux de Composés Polaires (%)</label>
                             <span className={cn(
                                 "text-2xl font-black italic font-serif",
                                 formData.status === 'ok' ? "text-status-success" :
@@ -223,7 +223,7 @@ export function GestionHuiles() {
                             onChange={(e) => handleTPOMChange(parseFloat(e.target.value))}
                             className="w-full h-2 bg-bg-tertiary rounded-lg appearance-none cursor-pointer accent-accent-gold"
                         />
-                        <div className="flex justify-between text-[8px] font-black text-text-muted uppercase tracking-tighter">
+                        <div className="flex justify-between text-nano font-black text-text-muted uppercase tracking-tighter">
                             <span className="text-status-success">CONFORME (&lt;19%)</span>
                             <span className="text-status-warning">LIMITE (19-25%)</span>
                             <span className="text-status-danger">CRITIQUE (&gt;25%)</span>
@@ -231,8 +231,8 @@ export function GestionHuiles() {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1 text-center">Action Effectuée</label>
-                        <div className="grid grid-cols-3 gap-3">
+                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">Action Effectuée</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             {(['control', 'fitering', 'changing'] as const).map((action) => (
                                 <button
                                     key={action}

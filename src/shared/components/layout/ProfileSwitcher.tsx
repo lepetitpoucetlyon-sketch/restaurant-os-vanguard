@@ -42,7 +42,7 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                         {users.map((user) => {
                             const isActive = currentUser?.id === user.id;
                             const initials = (user.name || "")
@@ -79,10 +79,10 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
                                     </div>
 
                                     <div className="text-center flex flex-col gap-1.5">
-                                        <span className="text-[11px] font-black uppercase tracking-tight text-text-primary leading-tight font-sans">
+                                        <span className="text-micro font-black uppercase tracking-tight text-text-primary leading-tight font-sans">
                                             {user.name}
                                         </span>
-                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-accent-gold opacity-80 leading-none">
+                                        <span className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold opacity-80 leading-none">
                                             {ROLE_LABELS[user.role]}
                                         </span>
                                     </div>

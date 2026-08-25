@@ -40,21 +40,21 @@ export function SectionHeader({
             iconSize: "w-8 h-8 rounded-lg",
             iconInner: "w-4 h-4",
             title: "text-lg",
-            subtitle: "text-[9px]",
+            subtitle: "text-nano",
         },
         default: {
             container: "mb-6",
             iconSize: "w-12 h-12 rounded-xl",
             iconInner: "w-5 h-5",
             title: "text-xl",
-            subtitle: "text-[10px]",
+            subtitle: "text-nano",
         },
         large: {
             container: "mb-8",
             iconSize: "w-14 h-14 rounded-2xl",
             iconInner: "w-6 h-6",
             title: "text-2xl",
-            subtitle: "text-[11px]",
+            subtitle: "text-micro",
         },
     };
 

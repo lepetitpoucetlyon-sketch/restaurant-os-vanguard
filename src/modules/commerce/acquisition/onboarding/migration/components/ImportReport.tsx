@@ -39,7 +39,7 @@ export function ImportReport({
         <CheckCircle className="w-5 h-5" />
         <span className="font-semibold">Import {categoryLabel} terminé</span>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[
           { label: 'Créés', value: result.created, cls: 'text-green-600 dark:text-green-400' },
           { label: 'Mis à jour', value: result.updated, cls: 'text-blue-600 dark:text-blue-400' },

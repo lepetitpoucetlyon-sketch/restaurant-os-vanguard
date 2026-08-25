@@ -240,7 +240,7 @@ export function LandingDashboard() {
         >
           <div className="flex items-center justify-between mb-6 border-b border-border/30 pb-4">
             <h3 className="text-xl font-serif font-light text-text-primary">Oracle Intelligence</h3>
-            <span className="text-[9px] font-black text-accent-gold uppercase bg-bg-tertiary px-2 py-1 rounded-full">
+            <span className="text-nano font-black text-accent-gold uppercase bg-bg-tertiary px-2 py-1 rounded-full">
               {String(dynamicAlerts.length).padStart(2, '0')} ALERTES
             </span>
           </div>

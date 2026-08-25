@@ -40,7 +40,7 @@ export default function OfflinePage() {
             </span>
             <span>Prête (Sync auto)</span>
           </div>
-          <p className="text-[11px] text-white/40">
+          <p className="text-micro text-white/40">
             Les tickets Z et scellements fiscaux NF525 restent intègres localement.
           </p>
         </div>

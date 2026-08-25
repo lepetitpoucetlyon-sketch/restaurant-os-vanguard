@@ -101,7 +101,7 @@ export function InstallPrompt() {
                   <span>Installer Restaurant OS</span>
                   <Sparkles className="w-3 h-3 text-action-primary" />
                 </h4>
-                <p className="text-[11px] text-text-secondary mt-0.5 leading-snug">
+                <p className="text-micro text-text-secondary mt-0.5 leading-snug">
                   Accédez au mode plein écran haute performance et travaillez hors-ligne.
                 </p>
               </div>
@@ -140,15 +140,15 @@ export function InstallPrompt() {
 
           <ol className="space-y-3 text-xs text-text-primary font-medium">
             <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-[10px]">1</span>
+              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">1</span>
               <span>Appuyez sur le bouton <strong>Partager</strong> <Share className="w-4 h-4 inline text-action-primary ml-1" /> dans Safari</span>
             </li>
             <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-[10px]">2</span>
+              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">2</span>
               <span>Sélectionnez <strong>Sur l'écran d'accueil</strong> <PlusSquare className="w-4 h-4 inline text-action-primary ml-1" /></span>
             </li>
             <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-[10px]">3</span>
+              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">3</span>
               <span>Touchez <strong>Ajouter</strong> en haut à droite</span>
             </li>
           </ol>

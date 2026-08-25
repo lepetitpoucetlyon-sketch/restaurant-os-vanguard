@@ -106,7 +106,7 @@ export function KDSItemCard({ item, recipeByName, setSelectedRecipe }: KDSItemCa
                     )}
 
                     {hasMods && item.quantity === 1 && (
-                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-warning text-text-primary flex items-center justify-center gap-1 text-[10px] font-black shadow-lg border border-default animate-bounce">
+                        <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-status-warning text-text-primary flex items-center justify-center gap-1 text-nano font-black shadow-lg border border-default animate-bounce">
                             <AlertTriangle className="w-3 h-3 fill-current text-text-primary" />
                             MODIF
                         </div>
@@ -133,7 +133,7 @@ export function KDSItemCard({ item, recipeByName, setSelectedRecipe }: KDSItemCa
                             ))}
                         </div>
                     ) : (
-                        <p className="text-[11px] font-bold text-muted uppercase tracking-wider mt-1">Recette standard</p>
+                        <p className="text-micro font-bold text-muted uppercase tracking-wider mt-1">Recette standard</p>
                     )}
 
                     {item.notes && (

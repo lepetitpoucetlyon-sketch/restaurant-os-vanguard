@@ -54,25 +54,25 @@ export function HardwareHealthGrid({ tenantId }: HardwareHealthGridProps) {
         switch (status) {
             case 'ONLINE':
                 return (
-                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-nano font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <CheckCircle2 className="w-3 h-3" /> Opérationnel
                     </span>
                 );
             case 'WARNING':
                 return (
-                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-nano font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
                         <AlertTriangle className="w-3 h-3" /> {faultCode ?? 'Attention'}
                     </span>
                 );
             case 'FAULT':
                 return (
-                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse">
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-nano font-black uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse">
                         <ShieldAlert className="w-3 h-3" /> {faultCode ?? 'En Panne'}
                     </span>
                 );
             default:
                 return (
-                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-500/10 text-slate-400 border border-slate-500/20">
+                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-nano font-black uppercase tracking-wider bg-slate-500/10 text-slate-400 border border-slate-500/20">
                         Hors Ligne
                     </span>
                 );
@@ -87,7 +87,7 @@ export function HardwareHealthGrid({ tenantId }: HardwareHealthGridProps) {
                         <Printer className="w-4 h-4 text-brand" />
                         Télémétrie Matériel & IoT Terrain
                     </h4>
-                    <p className="text-[11px] text-secondary mt-0.5">
+                    <p className="text-micro text-secondary mt-0.5">
                         Supervision en temps réel des imprimantes, TPE et liaisons failover (Invariant #6).
                     </p>
                 </div>
@@ -121,11 +121,11 @@ export function HardwareHealthGrid({ tenantId }: HardwareHealthGridProps) {
                         </div>
                         <div className="space-y-1">
                             <p className="text-xs font-bold text-text-primary truncate">{device.deviceName}</p>
-                            <p className="text-[10px] font-mono text-secondary truncate">
+                            <p className="text-nano font-mono text-secondary truncate">
                                 IP: {device.ipAddress ?? '192.168.1.10X'}
                             </p>
                             {device.faultMessage && (
-                                <p className="text-[10px] font-medium text-rose-400 line-clamp-2 mt-1">
+                                <p className="text-nano font-medium text-rose-400 line-clamp-2 mt-1">
                                     ⚠️ {device.faultMessage}
                                 </p>
                             )}

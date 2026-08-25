@@ -107,7 +107,7 @@ export default function NexusSettings() {
                             </div>
                             <div>
                                 <h3 className="text-xl font-serif text-text-primary">Moteur Vocal</h3>
-                                <p className="text-[10px] text-text-muted uppercase tracking-widest font-black">Synthèse Gemini Live</p>
+                                <p className="text-nano text-text-muted uppercase tracking-widest font-black">Synthèse Gemini Live</p>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@ export default function NexusSettings() {
                                     <div className="text-left flex-1">
                                         <div className="flex items-center gap-2">
                                             <span className="font-bold text-text-primary">{v.name}</span>
-                                            <span className="text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-bg-primary border border-border text-text-muted">
+                                            <span className="text-nano uppercase tracking-widest px-2 py-0.5 rounded-full bg-bg-primary border border-border text-text-muted">
                                                 {v.gender === 'female' ? 'Féminin' : 'Masculin'}
                                             </span>
                                         </div>
@@ -159,7 +159,7 @@ export default function NexusSettings() {
                         </div>
                         <div>
                             <h3 className="text-xl font-serif text-text-primary">Fournisseur IA</h3>
-                            <p className="text-[10px] text-text-muted uppercase tracking-widest font-black">Moteur d'Intelligence</p>
+                            <p className="text-nano text-text-muted uppercase tracking-widest font-black">Moteur d'Intelligence</p>
                         </div>
                     </div>
 
@@ -218,7 +218,7 @@ export default function NexusSettings() {
                                     <div>
                                         <p className="text-xs font-bold text-text-primary">{m.label}</p>
                                         <p className={cn(
-                                            "text-[9px] uppercase tracking-widest font-black mt-0.5",
+                                            "text-nano uppercase tracking-widest font-black mt-0.5",
                                             m.tier === 'fast' ? "text-status-success" : m.tier === 'powerful' ? "text-status-danger" : "text-action-primary"
                                         )}>{m.tier}</p>
                                     </div>
@@ -254,7 +254,7 @@ export default function NexusSettings() {
                             )}
                         </div>
                         {activeProvider !== 'local' && (
-                            <p className="text-[10px] text-text-muted ml-1">La clé est chiffrée et stockée localement dans Nexus.</p>
+                            <p className="text-nano text-text-muted ml-1">La clé est chiffrée et stockée localement dans Nexus.</p>
                         )}
                     </div>
                 </div>
@@ -274,13 +274,13 @@ export default function NexusSettings() {
                             </div>
                             <div>
                                 <h3 className="text-2xl font-serif text-text-primary">Nexus Macros</h3>
-                                <p className="text-[10px] text-accent font-black uppercase tracking-[0.2em]">Automatisations Short-Circuit</p>
+                                <p className="text-nano text-accent font-black uppercase tracking-[0.2em]">Automatisations Short-Circuit</p>
                             </div>
                         </div>
 
                         <button 
                             onClick={addMacro}
-                            className="flex items-center gap-3 px-6 py-3 bg-text-primary text-bg-primary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl"
+                            className="flex items-center gap-3 px-6 py-3 bg-text-primary text-bg-primary rounded-2xl font-black text-nano uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl"
                         >
                             <Plus className="w-4 h-4" />
                             Nouveau Raccourci

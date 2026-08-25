@@ -150,10 +150,10 @@ export const AmbientAudio: React.FC = () => {
             </div>
             
             <div className={`flex flex-col ml-1 ${isPlaying ? 'mr-6' : 'mr-0'} transition-all`}>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted line-clamp-1">
+                <span className="text-nano font-bold uppercase tracking-widest text-muted line-clamp-1">
                     Ambient Soundtrack
                 </span>
-                <span className={`text-[8px] uppercase tracking-tighter font-black ${isPlaying ? 'text-brand' : 'text-secondary'}`}>
+                <span className={`text-nano uppercase tracking-tighter font-black ${isPlaying ? 'text-brand' : 'text-secondary'}`}>
                     {isPlaying ? 'Playing • Empire Drone' : 'Muted'}
                 </span>
             </div>

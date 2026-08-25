@@ -230,7 +230,7 @@ function MonEspacePage() {
                                             </div>
                                             <div>
                                                 <h4 className="text-sm font-bold text-text-primary">{doc.name}</h4>
-                                                <div className="flex items-center gap-2 text-[11px] text-text-muted mt-0.5">
+                                                <div className="flex items-center gap-2 text-micro text-text-muted mt-0.5">
                                                     <span>{doc.type === 'payslip' ? 'Bulletin de salaire' : doc.type === 'contract' ? 'Contrat de travail' : doc.type}</span>
                                                     <span>•</span>
                                                     <span>Émis le {new Date(doc.uploadedAt).toLocaleDateString('fr-FR')}</span>
@@ -240,7 +240,7 @@ function MonEspacePage() {
 
                                         <div className="flex items-center gap-3">
                                             {doc.sha256Hash && (
-                                                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono flex items-center gap-1.5" title={`Empreinte SHA256 : ${doc.sha256Hash}`}>
+                                                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-nano font-mono flex items-center gap-1.5" title={`Empreinte SHA256 : ${doc.sha256Hash}`}>
                                                     <CheckCircle2 className="w-3 h-3" />
                                                     Scellé SHA-256
                                                 </span>

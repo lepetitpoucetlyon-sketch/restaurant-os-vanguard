@@ -65,11 +65,11 @@ function KPICard({
     return (
         <div className="p-5 rounded-2xl bg-surface-card border border-border-subtle backdrop-blur-md space-y-2">
             <div className="flex items-center justify-between text-text-secondary">
-                <span className="text-[11px] font-bold uppercase tracking-wider">{label}</span>
+                <span className="text-micro font-bold uppercase tracking-wider">{label}</span>
                 <Icon className={`w-4 h-4 ${iconClass}`} />
             </div>
             <div className={`text-2xl font-black tracking-tight ${valueClass}`}>{value}</div>
-            <p className="text-[10px] text-text-secondary">{sub}</p>
+            <p className="text-nano text-text-secondary">{sub}</p>
         </div>
     );
 }

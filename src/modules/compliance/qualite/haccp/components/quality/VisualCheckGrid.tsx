@@ -47,7 +47,7 @@ export const VisualCheckGrid: React.FC<VisualCheckGridProps> = ({
             {item.icon}
           </div>
           
-          <span className={`text-[10px] font-black tracking-widest uppercase mb-4 ${item.ok ? 'text-status-success' : 'text-secondary'}`}>
+          <span className={`text-nano font-black tracking-widest uppercase mb-4 ${item.ok ? 'text-status-success' : 'text-secondary'}`}>
             {item.label}
           </span>
 

@@ -36,7 +36,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                     )}>
                         {config.label}
                     </h4>
-                    <p className="text-[10px] font-black text-text-muted/60 uppercase tracking-[0.3em] ml-1">
+                    <p className="text-nano font-black text-text-muted/60 uppercase tracking-[0.3em] ml-1">
                         {day.isOpen ? "Service Actif" : "Établissement Clos"}
                     </p>
                 </div>
@@ -66,7 +66,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                         )}
                     </button>
                     <span className={cn(
-                        "text-[10px] font-black uppercase tracking-[0.2em] transition-colors",
+                        "text-nano font-black uppercase tracking-[0.2em] transition-colors",
                         day.isOpen ? "text-accent" : "text-text-muted"
                     )}>
                         {day.isOpen ? "ON" : "OFF"}
@@ -84,7 +84,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                                 day.isOpen ? "bg-status-warning/10 border-action-primary/20 text-status-warning" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>
                                 <Sun strokeWidth={2.5} className="w-4 h-4" />
                             </div>
-                            <span className="text-[11px] font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Matinée & Midi</span>
+                            <span className="text-micro font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Matinée & Midi</span>
                         </div>
                         <div className="flex items-center gap-3 md:gap-4">
                             <TimeInput
@@ -112,7 +112,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                                 day.isOpen ? "bg-action-primary/10 border-focus/20 text-brand" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>
                                 <Moon strokeWidth={2.5} className="w-4 h-4" />
                             </div>
-                            <span className="text-[11px] font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Soirée & Cocktail</span>
+                            <span className="text-micro font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Soirée & Cocktail</span>
                         </div>
                         <div className="flex items-center gap-3 md:gap-4">
                             <TimeInput
@@ -143,7 +143,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                             day.isOpen ? "bg-status-danger/10 border-red-500/20 text-status-danger" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>
                             <Coffee strokeWidth={2.5} className="w-4 h-4" />
                         </div>
-                        <span className="text-[11px] font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Fermeture Cuisine</span>
+                        <span className="text-micro font-black text-text-muted dark:text-muted uppercase tracking-[0.3em]">Fermeture Cuisine</span>
                     </div>
                     <TimeInput
                         value={day.lastKitchenOrder || ''}

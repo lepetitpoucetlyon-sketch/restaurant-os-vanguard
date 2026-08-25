@@ -21,16 +21,16 @@ export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps
 
       {/* Button radius */}
       <div>
-        <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
+        <label className="text-nano font-black text-secondary uppercase tracking-widest block mb-2">
           Rayon des boutons
         </label>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           {BUTTON_RADIUS_PRESETS.map(p => (
             <button
               key={p.value}
               onClick={() => onUpdateUI('buttonRadius', p.value)}
               className={cn(
-                'py-2 text-[9px] font-black uppercase tracking-wider border transition-all',
+                'py-2 text-nano font-black uppercase tracking-wider border transition-all',
                 form.ui?.buttonRadius === p.value
                   ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
                   : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
@@ -45,7 +45,7 @@ export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps
 
       {/* Layout type */}
       <div>
-        <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
+        <label className="text-nano font-black text-secondary uppercase tracking-widest block mb-2">
           Layout
         </label>
         <div className="flex flex-wrap gap-2">
@@ -54,7 +54,7 @@ export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps
               key={o.value}
               onClick={() => onUpdateUI('layoutType', o.value)}
               className={cn(
-                'px-3 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-lg border transition-all',
+                'px-3 py-1.5 text-nano font-black uppercase tracking-wider rounded-lg border transition-all',
                 form.ui?.layoutType === o.value
                   ? 'bg-violet-500/20 border-violet-500/50 text-violet-300'
                   : 'bg-bg-primary/30 border-border-subtle text-secondary hover:border-border-default'
@@ -68,7 +68,7 @@ export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps
 
       {/* Primary color */}
       <div>
-        <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
+        <label className="text-nano font-black text-secondary uppercase tracking-widest block mb-2">
           Couleur primaire
         </label>
         <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export function UiOverridesSection({ form, onUpdateUI }: UiOverridesSectionProps
 
       {/* Font scale */}
       <div>
-        <label className="text-[9px] font-black text-secondary uppercase tracking-widest block mb-2">
+        <label className="text-nano font-black text-secondary uppercase tracking-widest block mb-2">
           Échelle de police — {form.ui?.fontScale ?? 1}×
         </label>
         <input

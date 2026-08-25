@@ -19,7 +19,7 @@ export function DisputesTab() {
         <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-amber-400">LIT-202608-0015 — Transgourmet</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="text-nano font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
               AVOIR EN ATTENTE
             </span>
           </div>
@@ -37,7 +37,7 @@ export function DisputesTab() {
         <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-400">LIT-202608-0012 — Pomona</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="text-nano font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               AVOIR REÇU & DÉDUIT
             </span>
           </div>

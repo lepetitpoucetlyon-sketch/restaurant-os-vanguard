@@ -41,7 +41,7 @@ export function FranchiseDashboard() {
                         <Building2 className="w-6 h-6" />
                     </div>
                     <div className="space-y-1.5">
-                        <p className="font-serif italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">
+                        <p className="font-serif italic text-micro uppercase tracking-[0.32em] text-text-muted/70">
                             Réseau Multi-Sites
                         </p>
                         <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-[-0.02em] leading-none">

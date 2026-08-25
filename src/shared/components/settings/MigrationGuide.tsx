@@ -123,7 +123,7 @@ export default function MigrationGuide() {
                     className={`w-[3.25rem] h-[3.25rem] rounded-2xl flex flex-col items-center justify-center border border-border ${step.iconBg}`}
                   >
                     <Icon className={`w-5 h-5 ${step.iconColor}`} />
-                    <span className={`text-[9px] font-bold mt-0.5 ${step.iconColor}`}>
+                    <span className={`text-nano font-bold mt-0.5 ${step.iconColor}`}>
                       0{step.id}
                     </span>
                   </div>

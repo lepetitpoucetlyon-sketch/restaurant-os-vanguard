@@ -60,8 +60,8 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
         <div>
           <h4 className="font-bold text-sm tracking-tight text-text-primary uppercase">{item.product_name}</h4>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[9px] font-mono text-text-muted">ID: {item.product_id.slice(0, 8)}</span>
-            <span className="text-[8px] font-black uppercase text-accent-gold bg-accent-gold/10 px-1.5 py-0.5 rounded-md">{item.product_category}</span>
+            <span className="text-nano font-mono text-text-muted">ID: {item.product_id.slice(0, 8)}</span>
+            <span className="text-nano font-black uppercase text-accent-gold bg-accent-gold/10 px-1.5 py-0.5 rounded-md">{item.product_category}</span>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export function DeliveryItemRow({ item, index }: DeliveryItemRowProps) {
               placeholder="0.0"
               className="w-12 bg-transparent text-lg font-serif italic font-black outline-none border-b border-border focus:border-accent-gold transition-colors"
             />
-            <span className="text-[8px] font-black text-text-muted mb-1 uppercase tracking-tighter">°C</span>
+            <span className="text-nano font-black text-text-muted mb-1 uppercase tracking-tighter">°C</span>
           </div>
         </div>
       )}

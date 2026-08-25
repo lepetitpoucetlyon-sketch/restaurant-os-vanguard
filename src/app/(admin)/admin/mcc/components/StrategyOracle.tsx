@@ -34,7 +34,7 @@ export function StrategyOracle() {
                 
                 <div className="absolute top-6 left-8 z-10">
                     <h3 className="text-xs font-black text-text-primary/40 uppercase tracking-[0.3em] mb-1">Constellation de la Flotte</h3>
-                    <p className="text-[10px] text-secondary font-medium tracking-tight">Distribution des nœuds en temps réel ({instances.length} unités)</p>
+                    <p className="text-nano text-secondary font-medium tracking-tight">Distribution des nœuds en temps réel ({instances.length} unités)</p>
                 </div>
 
                 {/* Simulated Constellation Grid */}
@@ -55,7 +55,7 @@ export function StrategyOracle() {
                             >
                                 <div className={`w-3 h-3 rounded-full blur-[1px] ${inst.metrics.healthScore > 90 ? 'bg-status-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]'}`} />
                                 <div className="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover/node:opacity-100 transition-all pointer-events-none whitespace-nowrap z-20">
-                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-[8px] font-bold text-text-primary uppercase tracking-tighter">
+                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-nano font-bold text-text-primary uppercase tracking-tighter">
                                         {inst.name} • {inst.metrics.healthScore}%
                                     </div>
                                 </div>
@@ -73,11 +73,11 @@ export function StrategyOracle() {
                 <div className="absolute bottom-6 right-8 flex gap-4">
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-status-success" />
-                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">Normal Ops</span>
+                        <span className="text-nano font-black text-muted uppercase tracking-widest">Normal Ops</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-status-warning" />
-                        <span className="text-[9px] font-black text-muted uppercase tracking-widest">Drift Detected</span>
+                        <span className="text-nano font-black text-muted uppercase tracking-widest">Drift Detected</span>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@ export function StrategyOracle() {
                             <BrainCircuit className="w-5 h-5 text-brand" />
                             <h3 className="text-sm font-black uppercase tracking-widest">Oracle Predictions</h3>
                         </div>
-                        <div className="px-2 py-0.5 rounded-full bg-action-primary/10 border border-focus/20 text-[8px] font-black text-brand uppercase tracking-widest">
+                        <div className="px-2 py-0.5 rounded-full bg-action-primary/10 border border-focus/20 text-nano font-black text-brand uppercase tracking-widest">
                             Autonomous Ready
                         </div>
                     </div>
@@ -112,7 +112,7 @@ export function StrategyOracle() {
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-3">
                                 <Terminal className="w-4 h-4 text-secondary" />
-                                <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Strategy Briefing</span>
+                                <span className="text-nano font-black text-secondary uppercase tracking-widest">Strategy Briefing</span>
                             </div>
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
@@ -130,14 +130,14 @@ export function StrategyOracle() {
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                                     <BrainCircuit className="w-12 h-12 mb-4" />
-                                    <p className="text-[10px] font-medium max-w-[200px] leading-relaxed">
+                                    <p className="text-nano font-medium max-w-[200px] leading-relaxed">
                                         REQUÊTE EN ATTENTE : INITIALISEZ LE BRIEFING POUR ANALYSER LA FLOTTE.
                                     </p>
                                 </div>
                             ) : (
                                 messages.map((msg: { role?: string; content?: string }, idx: number) => (
                                     <div key={idx} className={`p-4 rounded-2xl ${msg.role === 'user' ? 'bg-surface-card border border-border-subtle hidden' : 'bg-action-primary/5 border border-focus/10'}`}>
-                                        <p className="text-[11px] text-muted leading-relaxed font-medium">
+                                        <p className="text-micro text-muted leading-relaxed font-medium">
                                             {msg.content}
                                         </p>
                                     </div>
@@ -149,8 +149,8 @@ export function StrategyOracle() {
                             <div className="flex items-center gap-4">
                                 <TrendingUp className="w-4 h-4 text-status-success opacity-50" />
                                 <div>
-                                    <div className="text-[10px] font-black text-text-primary uppercase tracking-tight">Fleet Health Efficiency</div>
-                                    <div className="text-xl font-black text-status-success tracking-tighter">{fleetEfficiency}% <span className="text-[10px] text-status-success/50">score moyen</span></div>
+                                    <div className="text-nano font-black text-text-primary uppercase tracking-tight">Fleet Health Efficiency</div>
+                                    <div className="text-xl font-black text-status-success tracking-tighter">{fleetEfficiency}% <span className="text-nano text-status-success/50">score moyen</span></div>
                                 </div>
                             </div>
                         </div>
@@ -186,24 +186,24 @@ function InsightCard({ insight, onExecute }: { insight: FleetInsight, onExecute:
                         {insight.title}
                     </h4>
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-status-success">+{insight.confidence}% CONFIDENCE</span>
-                        <div className="px-2 py-0.5 rounded bg-surface-card text-[8px] font-bold text-secondary uppercase tracking-widest">{insight.impact} IMPACT</div>
+                        <span className="text-nano font-black text-status-success">+{insight.confidence}% CONFIDENCE</span>
+                        <div className="px-2 py-0.5 rounded bg-surface-card text-nano font-bold text-secondary uppercase tracking-widest">{insight.impact} IMPACT</div>
                     </div>
                 </div>
                 
-                <p className="text-[11px] text-secondary leading-relaxed font-medium mb-6">
+                <p className="text-micro text-secondary leading-relaxed font-medium mb-6">
                     {insight.description}
                 </p>
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                          <div className="flex flex-col">
-                             <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Potential RoI</span>
+                             <span className="text-nano font-black text-secondary uppercase tracking-widest">Potential RoI</span>
                              <span className="text-xs font-black text-text-primary">€{insight.potentialRoI.toLocaleString()}</span>
                          </div>
                          <div className="w-px h-6 bg-surface-card" />
                          <div className="flex flex-col">
-                             <span className="text-[8px] font-black text-secondary uppercase tracking-widest">Target Nodes</span>
+                             <span className="text-nano font-black text-secondary uppercase tracking-widest">Target Nodes</span>
                              <span className="text-xs font-black text-text-primary">{insight.affectedInstances.length} Units</span>
                          </div>
                     </div>

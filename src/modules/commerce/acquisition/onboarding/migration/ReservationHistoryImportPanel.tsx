@@ -240,7 +240,7 @@ export function ReservationHistoryImportPanel() {
                 {state.result.errors.map((err, i) => (
                   <li
                     key={i}
-                    className="text-[11px] text-text-muted font-mono bg-bg-secondary rounded px-2 py-1"
+                    className="text-micro text-text-muted font-mono bg-bg-secondary rounded px-2 py-1"
                   >
                     {err}
                   </li>

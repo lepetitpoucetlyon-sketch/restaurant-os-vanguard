@@ -10,7 +10,7 @@ const inputClass =
 export function Field({ label, children }: { label: string; children: React.ReactNode }) {
     return (
         <div className="space-y-2">
-            <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">{label}</label>
+            <label className="text-nano font-black text-text-muted uppercase tracking-widest">{label}</label>
             {children}
         </div>
     );
@@ -29,10 +29,10 @@ export function Row({
 }) {
     return (
         <div className="flex items-center justify-between">
-            <span className={cn("text-[10px] uppercase tracking-wider", muted ? "text-text-muted/60" : "text-text-muted")}>
+            <span className={cn("text-nano uppercase tracking-wider", muted ? "text-text-muted/60" : "text-text-muted")}>
                 {label}
             </span>
-            <span className={cn("text-[11px] font-black", accent ? "text-accent" : "text-text-primary")}>
+            <span className={cn("text-micro font-black", accent ? "text-accent" : "text-text-primary")}>
                 {value}
             </span>
         </div>
@@ -52,7 +52,7 @@ const FORMULE_OPTIONS: { value: PrivatisationFormule; label: string; desc: strin
 export function EventQuoteClientSection({ form, set }: { form: EventQuoteFormData, set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void }) {
     return (
         <section className="space-y-4">
-            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2">
+            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2">
                 Informations client
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -100,7 +100,7 @@ export function EventQuoteClientSection({ form, set }: { form: EventQuoteFormDat
 export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData, set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void }) {
     return (
         <section className="space-y-4">
-            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
+            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
                 <Calendar className="w-3 h-3" /> Détails de l'événement
             </p>
             <Field label="Nom de l'événement *">
@@ -112,7 +112,7 @@ export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData
                     className={inputClass}
                 />
             </Field>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Field label="Date *">
                     <input
                         type="date"
@@ -175,7 +175,7 @@ export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
                     </div>
-                    <p className="text-[9px] text-text-muted mt-1 pl-1">
+                    <p className="text-nano text-text-muted mt-1 pl-1">
                         {FORMULE_OPTIONS.find((o) => o.value === form.formule)?.desc}
                     </p>
                 </Field>
@@ -197,7 +197,7 @@ export function EventQuoteEventSection({ form, set }: { form: EventQuoteFormData
 export function EventQuoteFinancialSection({ form, set, acompte30, montantTTC }: { form: EventQuoteFormData, set: <K extends keyof EventQuoteFormData>(key: K, val: EventQuoteFormData[K]) => void, acompte30: number, montantTTC: number }) {
     return (
         <section className="space-y-4">
-            <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
+            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
                 <Coins className="w-3 h-3" /> Tarification
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -213,7 +213,7 @@ export function EventQuoteFinancialSection({ form, set, acompte30, montantTTC }:
                     />
                 </Field>
                 <div className="space-y-2">
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">Récapitulatif</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-widest">Récapitulatif</p>
                     <div className="bg-bg-secondary border border-border rounded-2xl px-5 py-3 space-y-2">
                         <Row label="Montant HT" value={fmt(form.montantHT)} />
                         <Row label="TVA 20 %" value={fmt(form.montantHT * 0.2)} muted />

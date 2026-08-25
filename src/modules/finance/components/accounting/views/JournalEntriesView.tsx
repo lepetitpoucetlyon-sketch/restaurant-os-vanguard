@@ -29,7 +29,7 @@ export function JournalEntriesView() {
                             key={f}
                             onClick={() => setFilter(f as 'all' | 'pending' | 'validated')}
                             className={cn(
-                                "px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all",
+                                "px-4 py-2 rounded-lg text-micro font-bold uppercase tracking-widest transition-all",
                                 filter === f ? "bg-accent text-text-primary" : "text-text-muted hover:text-text-primary"
                             )}
                         >
@@ -39,13 +39,13 @@ export function JournalEntriesView() {
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-right">
-                        <p className="text-[9px] text-text-muted uppercase">Total Débits</p>
+                        <p className="text-nano text-text-muted uppercase">Total Débits</p>
                         <p className="text-lg font-black text-success font-mono">
                             {fmu(null, filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'debit').reduce((a, l) => a + (l.amountInCents ?? 0), 0), 0))}
                         </p>
                     </div>
                     <div className="text-right">
-                        <p className="text-[9px] text-text-muted uppercase">Total Crédits</p>
+                        <p className="text-nano text-text-muted uppercase">Total Crédits</p>
                         <p className="text-lg font-black text-error font-mono">
                             {fmu(null, filtered.reduce((acc, e) => acc + e.lines.filter(l => l.side === 'credit').reduce((a, l) => a + (l.amountInCents ?? 0), 0), 0))}
                         </p>
@@ -57,13 +57,13 @@ export function JournalEntriesView() {
                 <table className="w-full">
                     <thead>
                         <tr className="border-b border-border bg-bg-tertiary/30">
-                            <th className="text-left py-4 px-6 text-[10px] font-black text-text-muted uppercase">Date</th>
-                            <th className="text-left py-4 px-6 text-[10px] font-black text-text-muted uppercase">N° Pièce</th>
-                            <th className="text-left py-4 px-6 text-[10px] font-black text-text-muted uppercase">Libellé</th>
-                            <th className="text-center py-4 px-6 text-[10px] font-black text-text-muted uppercase">Lignes</th>
-                            <th className="text-right py-4 px-6 text-[10px] font-black text-text-muted uppercase">Montant</th>
-                            <th className="text-center py-4 px-6 text-[10px] font-black text-text-muted uppercase">Statut</th>
-                            <th className="text-right py-4 px-6 text-[10px] font-black text-text-muted uppercase">Actions</th>
+                            <th className="text-left py-4 px-6 text-nano font-black text-text-muted uppercase">Date</th>
+                            <th className="text-left py-4 px-6 text-nano font-black text-text-muted uppercase">N° Pièce</th>
+                            <th className="text-left py-4 px-6 text-nano font-black text-text-muted uppercase">Libellé</th>
+                            <th className="text-center py-4 px-6 text-nano font-black text-text-muted uppercase">Lignes</th>
+                            <th className="text-right py-4 px-6 text-nano font-black text-text-muted uppercase">Montant</th>
+                            <th className="text-center py-4 px-6 text-nano font-black text-text-muted uppercase">Statut</th>
+                            <th className="text-right py-4 px-6 text-nano font-black text-text-muted uppercase">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border/50">
@@ -79,11 +79,11 @@ export function JournalEntriesView() {
                                     <td className="py-4 px-6 text-right font-mono text-sm font-black">{fmu(null, entry.lines.filter(l => l.side === 'debit').reduce((a, l) => a + (l.amountInCents ?? 0), 0))}</td>
                                     <td className="py-4 px-6 text-center">
                                         {entry.isValidated ? (
-                                            <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase text-success bg-success/5 px-2 py-1 rounded-full">
+                                            <span className="inline-flex items-center gap-1 text-nano font-bold uppercase text-success bg-success/5 px-2 py-1 rounded-full">
                                                 <CheckCircle2 className="w-3 h-3" /> Validé
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase text-amber-600 bg-amber-5 px-2 py-1 rounded-full">
+                                            <span className="inline-flex items-center gap-1 text-nano font-bold uppercase text-amber-600 bg-amber-5 px-2 py-1 rounded-full">
                                                 <Clock className="w-3 h-3" /> Attente
                                             </span>
                                         )}
@@ -92,7 +92,7 @@ export function JournalEntriesView() {
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                                             <Button size="sm" variant="ghost" className="h-8 px-3 rounded-lg"><Eye className="w-4 h-4" /></Button>
                                             {!entry.isValidated && (
-                                                <Button size="sm" className="h-8 px-3 bg-success text-text-primary rounded-lg text-[10px] font-bold" onClick={() => validateJournalEntry(entry.id)}>
+                                                <Button size="sm" className="h-8 px-3 bg-success text-text-primary rounded-lg text-nano font-bold" onClick={() => validateJournalEntry(entry.id)}>
                                                     Valider
                                                 </Button>
                                             )}

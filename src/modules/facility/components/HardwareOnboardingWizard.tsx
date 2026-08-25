@@ -124,7 +124,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
         {/* Inputs Signataires */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-zinc-800/80">
           <div>
-            <label className="block text-[11px] font-semibold text-text-muted mb-1">Technicien Déploiement</label>
+            <label className="block text-micro font-semibold text-text-muted mb-1">Technicien Déploiement</label>
             <input
               type="text"
               value={technicianName}
@@ -133,7 +133,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-text-muted mb-1">Directeur / Gérant Signataire</label>
+            <label className="block text-micro font-semibold text-text-muted mb-1">Directeur / Gérant Signataire</label>
             <input
               type="text"
               value={managerName}
@@ -198,16 +198,16 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                 <div>
                   {checkResult ? (
                     isPassed ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-micro font-bold">
                         <CheckCircle2 className="w-3.5 h-3.5" /> OK ({checkResult.latencyMs}ms)
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-bold">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-micro font-bold">
                         <AlertCircle className="w-3.5 h-3.5" /> Échec
                       </span>
                     )
                   ) : (
-                    <span className="text-[11px] font-mono text-text-muted/80">En attente</span>
+                    <span className="text-micro font-mono text-text-muted/80">En attente</span>
                   )}
                 </div>
               </div>
@@ -256,7 +256,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                 <strong className="text-white">{report.managerName}</strong>
               </div>
             </div>
-            <div className="font-mono text-[11px] text-emerald-400/90 break-all pt-2 border-t border-zinc-800">
+            <div className="font-mono text-micro text-emerald-400/90 break-all pt-2 border-t border-zinc-800">
               Master Seal SHA-256 : {report.masterSealSha256}
             </div>
           </div>

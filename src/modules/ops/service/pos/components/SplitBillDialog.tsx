@@ -110,11 +110,11 @@ export function SplitBillDialog({
                         <div>
                             <div className="flex items-center gap-4 mb-3">
                                 <div className="w-10 h-0.5 bg-accent-gold rounded-full" />
-                                <span className="text-[11px] font-black uppercase tracking-[0.5em] text-accent-gold">{t('pos.split.subtitle')}</span>
+                                <span className="text-micro font-black uppercase tracking-[0.5em] text-accent-gold">{t('pos.split.subtitle')}</span>
                             </div>
                             <h1 className="text-4xl font-serif font-black text-text-primary italic tracking-tight leading-none">{t('pos.split.title')}</h1>
-                            <p className="text-[11px] font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
-                                <span className="text-[10px] font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
+                            <p className="text-micro font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
+                                <span className="text-nano font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
                                 Total TTC: <span className="text-text-primary">{formatCurrency(SovereignMath.toCents(BigInt(total)))}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
                             </p>
                         </div>
@@ -151,7 +151,7 @@ export function SplitBillDialog({
                                         key={m.id}
                                         onClick={() => setMode(m.id as SplitMode)}
                                         className={cn(
-                                            "flex-1 flex items-center justify-center gap-4 py-5 px-8 rounded-[28px] font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-700 border",
+                                            "flex-1 flex items-center justify-center gap-4 py-5 px-8 rounded-[28px] font-black text-nano uppercase tracking-[0.3em] transition-all duration-700 border",
                                             mode === m.id
                                                 ? "bg-accent-gold text-primary border-accent-gold shadow-glow"
                                                 : "bg-surface-card/[0.02] text-text-primary/40 hover:border-accent-gold/30 hover:text-accent-gold border-white/5"

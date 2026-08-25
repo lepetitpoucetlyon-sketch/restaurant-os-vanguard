@@ -55,26 +55,26 @@ export function PerformanceMonitor() {
     <div className="fixed bottom-4 left-4 z-[9999] flex flex-col gap-2">
       <div className={`px-4 py-2 rounded-2xl shadow-2xl border border-white/20 backdrop-blur-md flex items-center gap-4 transition-all duration-500 ${getStatusColor()}`}>
         <div className="flex flex-col">
-          <span className="text-[8px] font-black uppercase tracking-widest opacity-70">Fluidité</span>
+          <span className="text-nano font-black uppercase tracking-widest opacity-70">Fluidité</span>
           <span className="text-sm font-serif italic font-black">{fps} FPS</span>
         </div>
         
         <div className="w-px h-6 bg-surface-card/20" />
         
         <div className="flex flex-col">
-          <span className="text-[8px] font-black uppercase tracking-widest opacity-70">Latence Atome</span>
+          <span className="text-nano font-black uppercase tracking-widest opacity-70">Latence Atome</span>
           <span className="text-sm font-serif italic font-black">{latency}ms</span>
         </div>
 
         <div className="w-px h-6 bg-surface-card/20" />
 
         <div className="flex flex-col">
-          <span className="text-[8px] font-black uppercase tracking-widest opacity-70">RAM Grade</span>
+          <span className="text-nano font-black uppercase tracking-widest opacity-70">RAM Grade</span>
           <span className="text-sm font-serif italic font-black">Grade VI</span>
         </div>
       </div>
       
-      <p className="text-[7px] text-text-muted font-black uppercase tracking-[0.3em] px-2">
+      <p className="text-nano text-text-muted font-black uppercase tracking-[0.3em] px-2">
         EXCALIBUR_9_BIOLOGIQUE_ACTIVE
       </p>
     </div>

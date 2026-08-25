@@ -110,7 +110,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                                     <Minus className="w-4 h-4 text-status-danger dark:text-status-danger" />
                                 </div>
                                 <div className="pt-1.5">
-                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Retirer</p>
+                                    <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Retirer</p>
                                     <p className="font-medium text-primary dark:text-muted text-lg leading-tight line-through decoration-red-500/50 decoration-2">
                                         {removedIngredients.join(', ')}
                                     </p>
@@ -124,7 +124,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                                     <Plus className="w-4 h-4 text-status-success dark:text-status-success" />
                                 </div>
                                 <div className="pt-1.5">
-                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Ajouter</p>
+                                    <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Ajouter</p>
                                     <p className="font-medium text-primary dark:text-muted text-lg leading-tight">
                                         {addedIngredients.join(', ')}
                                     </p>
@@ -136,7 +136,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                             <div className="flex items-start gap-4 p-4 rounded-2xl bg-surface-tertiary dark:bg-action-primary/10 border border-focus dark:border-focus/30">
                                 <MessageSquare className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-1 opacity-70">Note Client</p>
+                                    <p className="text-nano font-black text-brand uppercase tracking-widest mb-1 opacity-70">Note Client</p>
                                     <p className="font-serif italic text-brand dark:text-brand text-lg leading-snug">
                                         "{newNotes}"
                                     </p>

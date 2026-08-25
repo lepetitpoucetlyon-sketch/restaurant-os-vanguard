@@ -43,7 +43,7 @@ export function PaymentMethodSelector({ method, onSelectMethod, total }: Payment
                         )}>
                             <meth.icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
                         </div>
-                        <span className={cn("font-bold text-[9px] md:text-[10px] uppercase tracking-wider text-center transition-colors", method === meth.id ? "text-text-primary" : "text-text-muted")}>
+                        <span className={cn("font-bold text-nano md:text-[10px] uppercase tracking-wider text-center transition-colors", method === meth.id ? "text-text-primary" : "text-text-muted")}>
                             {meth.name}
                         </span>
                     </button>
@@ -54,7 +54,7 @@ export function PaymentMethodSelector({ method, onSelectMethod, total }: Payment
                 <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs space-y-2">
                     <div className="flex items-center justify-between font-bold text-indigo-400">
                         <span>Réseau CONECS (Edenred / Swile / Pluxee / Up / Bimpli)</span>
-                        <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-[10px]">Plafond 25,00 € / j</span>
+                        <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-nano">Plafond 25,00 € / j</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-text-secondary">
                         <div>Part CONECS éligible : <strong className="text-white">{formatCurrency(Math.min(total, 2500))}</strong></div>

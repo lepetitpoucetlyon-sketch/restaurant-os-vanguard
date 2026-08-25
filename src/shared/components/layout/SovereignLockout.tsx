@@ -68,7 +68,7 @@ export function SovereignLockout() {
         </div>
 
         {/* Meta details */}
-        <div className="text-[10px] font-mono text-secondary tracking-widest uppercase">
+        <div className="text-nano font-mono text-secondary tracking-widest uppercase">
           Signal ID: {config?.status?.lastSignalId || 'LOCAL_OVERRIDE'} | NODE: {process.env.NEXT_PUBLIC_TENANT_ID}
         </div>
       </div>

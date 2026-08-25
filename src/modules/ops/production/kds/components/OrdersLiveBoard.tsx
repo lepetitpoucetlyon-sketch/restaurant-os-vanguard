@@ -119,7 +119,7 @@ export function OrdersLiveBoard({ tenantId, tableId }: OrdersLiveBoardProps) {
                 </div>
             )}
 
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {COLUMNS.map(col => {
                     const Icon = col.icon;
                     const orders = grouped.get(col.status) ?? [];

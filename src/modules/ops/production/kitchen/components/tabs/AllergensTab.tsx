@@ -41,7 +41,7 @@ export function AllergensTab() {
                             <span className="text-2xl">{allergen.icon}</span>
                             <span className="font-bold text-sm text-text-primary">{allergen.name}</span>
                         </div>
-                        <p className="text-[11px] text-text-muted">{allergen.count} plats concernés</p>
+                        <p className="text-micro text-text-muted">{allergen.count} plats concernés</p>
                     </motion.div>
                 ))}
             </div>
@@ -67,7 +67,7 @@ export function AllergensTab() {
                                 <span className="text-xl">{diet.icon}</span>
                                 <span className="font-bold text-sm text-text-primary">{diet.name}</span>
                             </div>
-                            <span className="bg-bg-secondary px-3 py-1 rounded-lg text-[11px] font-black text-text-primary shadow-sm">{diet.count} plats</span>
+                            <span className="bg-bg-secondary px-3 py-1 rounded-lg text-micro font-black text-text-primary shadow-sm">{diet.count} plats</span>
                         </motion.div>
                     ))}
                 </div>

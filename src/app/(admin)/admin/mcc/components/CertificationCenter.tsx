@@ -171,7 +171,7 @@ export function CertificationCenter() {
             <motion.div key="generate" initial="hidden" animate="visible" exit="exit" variants={tabVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="space-y-8">
                 <div>
-                  <label className="block text-[10px] font-black text-secondary uppercase mb-3 ml-1 tracking-[0.3em]">Sélection de l'Instance (Nœud)</label>
+                  <label className="block text-nano font-black text-secondary uppercase mb-3 ml-1 tracking-[0.3em]">Sélection de l'Instance (Nœud)</label>
                   <div className="relative group">
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-action-primary/20 to-action-primary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
                     <select
@@ -225,7 +225,7 @@ export function CertificationCenter() {
             </div>
             <div>
               <p className="font-black text-sm uppercase tracking-[0.2em] mb-1">Certification Réussie</p>
-              <p className="text-[11px] font-medium opacity-90 leading-relaxed">
+              <p className="text-micro font-medium opacity-90 leading-relaxed">
                 Attestation signée cryptographiquement.<br />
                 FEC {new Date().getFullYear()} généré et archivé.
               </p>

@@ -178,7 +178,7 @@ export function TenantHealthPanel() {
                                         <td className="p-3.5 font-medium text-text-primary">
                                             <div className="flex flex-col">
                                                 <span>{item.name || item.tenantId}</span>
-                                                <span className="text-[10px] text-text-muted font-mono">{item.tenantId}</span>
+                                                <span className="text-nano text-text-muted font-mono">{item.tenantId}</span>
                                             </div>
                                         </td>
                                         <td className="p-3.5">
@@ -206,7 +206,7 @@ export function TenantHealthPanel() {
                                                 ) : (
                                                     <ShieldAlert className="w-4 h-4 text-status-danger" />
                                                 )}
-                                                <span className="capitalize text-[11px]">{item.backupStatus}</span>
+                                                <span className="capitalize text-micro">{item.backupStatus}</span>
                                             </div>
                                         </td>
                                         <td className="p-3.5 text-right">
@@ -224,7 +224,7 @@ export function TenantHealthPanel() {
                                                     {alertSent[item.tenantId] ? 'Alerte envoyée' : '🚨 Alerter'}
                                                 </button>
                                             ) : (
-                                                <span className="text-[11px] text-text-muted">Conforme</span>
+                                                <span className="text-micro text-text-muted">Conforme</span>
                                             )}
                                         </td>
                                     </motion.tr>

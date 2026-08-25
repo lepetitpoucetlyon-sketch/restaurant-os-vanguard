@@ -67,7 +67,7 @@ function RestrictedScreen() {
                     Contactez le support pour réactiver votre compte.
                 </p>
 
-                <p className="text-[10px] font-black text-text-muted/40 uppercase tracking-widest">
+                <p className="text-nano font-black text-text-muted/40 uppercase tracking-widest">
                     Contactez le support
                 </p>
             </motion.div>
@@ -133,13 +133,13 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
 
                     <div className="space-y-4">
                         <Button
-                            className="w-full h-14 bg-text-primary text-text-primary rounded-2xl font-bold uppercase text-[11px] tracking-widest hover:bg-surface-sidebar transition-all"
+                            className="w-full h-14 bg-text-primary text-text-primary rounded-2xl font-bold uppercase text-micro tracking-widest hover:bg-surface-sidebar transition-all"
                             onClick={() => router.push('/')}
                         >
                             <Home className="w-4 h-4 mr-3" />
                             Retour au Dashboard
                         </Button>
-                        <p className="text-[10px] font-black text-text-muted/40 uppercase tracking-widest">
+                        <p className="text-nano font-black text-text-muted/40 uppercase tracking-widest">
                             Contactez un administrateur pour changer vos droits
                         </p>
                     </div>

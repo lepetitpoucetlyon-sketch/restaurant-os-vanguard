@@ -153,7 +153,7 @@ export function EmailAutomations() {
                                 <div className="px-5 pb-5 pt-0 border-t border-border space-y-4">
                                     {/* Status pill */}
                                     <div className={cn(
-                                        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mt-4",
+                                        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-nano font-bold uppercase tracking-widest mt-4",
                                         cfg.enabled
                                             ? "bg-status-success/10 text-status-success border border-status-success/20"
                                             : "bg-surface-sidebar text-text-muted border border-border"
@@ -190,7 +190,7 @@ export function EmailAutomations() {
 
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Corps du message</label>
-                                        <p className="text-[10px] text-text-muted">Variables disponibles : <code className="bg-surface-sidebar px-1 rounded">{'{{firstName}}'}</code> <code className="bg-surface-sidebar px-1 rounded">{'{{delayDays}}'}</code></p>
+                                        <p className="text-nano text-text-muted">Variables disponibles : <code className="bg-surface-sidebar px-1 rounded">{'{{firstName}}'}</code> <code className="bg-surface-sidebar px-1 rounded">{'{{delayDays}}'}</code></p>
                                         <textarea
                                             rows={5}
                                             value={cfg.body}
@@ -205,7 +205,7 @@ export function EmailAutomations() {
                 })}
             </div>
 
-            <p className="text-[10px] text-text-muted border border-border rounded-lg px-4 py-3 bg-surface-sidebar">
+            <p className="text-nano text-text-muted border border-border rounded-lg px-4 py-3 bg-surface-sidebar">
                 Les automations actives s'exécutent quotidiennement. Utilisez <strong>Lancer</strong> pour un envoi immédiat (utile en test).
             </p>
         </div>

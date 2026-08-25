@@ -69,7 +69,7 @@ export function SingularitySettings() {
                     </div>
                     <div>
                         <h1 className="text-xl font-serif italic text-text-primary">Paramètres de Singularité</h1>
-                        <p className="text-[10px] uppercase tracking-widest text-text-muted font-black">Grade X : Contrôle Operationnel</p>
+                        <p className="text-nano uppercase tracking-widest text-text-muted font-black">Grade X : Contrôle Operationnel</p>
                     </div>
                 </div>
                 <Button 
@@ -92,7 +92,7 @@ export function SingularitySettings() {
                     
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Ratio de Charge (Couverts / Brigadier)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">Ratio de Charge (Couverts / Brigadier)</label>
                             <input 
                                 type="number" 
                                 value={settings?.planningConfig?.staffToCoversRatio || DEFAULT_STAFF_RATIO}
@@ -103,7 +103,7 @@ export function SingularitySettings() {
                                 className="bg-surface-sidebar/40 border border-subtle rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
                             />
                         </div>
-                        <p className="text-[10px] text-text-muted italic leading-relaxed">
+                        <p className="text-nano text-text-muted italic leading-relaxed">
                             Ajuste la sensibilité de l'Oracle. Un ratio de 25 signifie que l'IA suggérera 1 brigadier supplémentaire pour chaque tranche de 25 couverts prédits.
                         </p>
                     </div>
@@ -118,7 +118,7 @@ export function SingularitySettings() {
 
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Mode de Complexité</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">Mode de Complexité</label>
                             <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
                                 {['SIMPLE', 'EXPERT'].map((mode) => (
                                     <button
@@ -138,7 +138,7 @@ export function SingularitySettings() {
                                 ))}
                             </div>
                         </div>
-                        <p className="text-[10px] text-text-muted italic leading-relaxed">
+                        <p className="text-nano text-text-muted italic leading-relaxed">
                             {settings?.accountingConfig?.complexityMode === 'SIMPLE' 
                                 ? "Mode Flux : L'interface se concentre sur les rentrées/sorties de cash. Idéal pour un pilotage rapide."
                                 : "Mode Ledger : Audit complet en partie double. Débit/Crédit activés pour chaque transaction."
@@ -155,7 +155,7 @@ export function SingularitySettings() {
                     </div>
                     <div className="flex gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_#10b981]" />
-                        <span className="text-[8px] font-mono opacity-50 font-black">ENFORCEMENT ACTIVE</span>
+                        <span className="text-nano font-mono opacity-50 font-black">ENFORCEMENT ACTIVE</span>
                     </div>
                 </GlassCard>
             </div>

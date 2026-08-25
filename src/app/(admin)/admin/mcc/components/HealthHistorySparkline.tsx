@@ -67,7 +67,7 @@ export function HealthHistorySparkline({ tenantId }: { tenantId: string }) {
 
   return (
     <div className="flex flex-col gap-1">
-      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary">Santé 7 jours</p>
+      <p className="text-nano font-black uppercase tracking-[0.3em] text-secondary">Santé 7 jours</p>
       {loading ? (
         <div className="h-10 w-full animate-pulse rounded bg-surface-card/60" />
       ) : (
@@ -107,7 +107,7 @@ export function HealthHistorySparkline({ tenantId }: { tenantId: string }) {
       )}
       <div className="flex gap-3 mt-1">
         {(Object.entries(STATUS_COLOR) as [HealthStatus, string][]).map(([s, c]) => (
-          <span key={s} className="flex items-center gap-1 text-[9px] text-secondary">
+          <span key={s} className="flex items-center gap-1 text-nano text-secondary">
             <span className="inline-block w-2 h-2 rounded-sm" style={{ background: c }} />
             {STATUS_LABEL[s]}
           </span>

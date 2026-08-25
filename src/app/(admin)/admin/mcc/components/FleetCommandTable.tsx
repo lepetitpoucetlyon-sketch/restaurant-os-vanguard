@@ -74,7 +74,7 @@ export function FleetCommandTable() {
           <div className="absolute inset-0 border-4 border-focus/20 rounded-full" />
           <div className="absolute inset-0 border-4 border-focus rounded-full border-t-transparent animate-spin" />
         </div>
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary">Synchronisation Télémétrie...</p>
+        <p className="text-nano font-black uppercase tracking-[0.2em] text-secondary">Synchronisation Télémétrie...</p>
       </div>
     );
   }
@@ -95,15 +95,15 @@ export function FleetCommandTable() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-surface-card">
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Instance ID</th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Statut / Santé</th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Risque HACCP</th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest text-right">Utilisateurs</th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Conformité Globale</th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">Instance ID</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">Statut / Santé</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">Risque HACCP</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest text-right">Utilisateurs</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">Conformité Globale</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">
                 <div className="flex items-center gap-1.5"><Brain className="w-3 h-3" />RAG</div>
               </th>
-              <th className="px-6 py-4 text-[10px] font-black text-muted uppercase tracking-widest">Actions</th>
+              <th className="px-6 py-4 text-nano font-black text-muted uppercase tracking-widest">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
@@ -125,7 +125,7 @@ export function FleetCommandTable() {
       </div>
 
       <div className="p-6 bg-surface-card border-t border-border-subtle flex items-center justify-between gap-4 flex-wrap">
-        <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">
+        <p className="text-nano font-bold text-secondary uppercase tracking-[0.2em]">
           {pagedInstances.length} site{pagedInstances.length !== 1 ? 's' : ''} affiché{pagedInstances.length !== 1 ? 's' : ''} / {filteredInstances.length} filtré{filteredInstances.length !== 1 ? 's' : ''} / {instances.length} total
         </p>
         {totalPages > 1 && (
@@ -137,7 +137,7 @@ export function FleetCommandTable() {
             >
               ←
             </button>
-            <span className="text-[9px] font-bold text-secondary uppercase px-2">
+            <span className="text-nano font-bold text-secondary uppercase px-2">
               {page + 1} / {totalPages}
             </span>
             <button
@@ -151,7 +151,7 @@ export function FleetCommandTable() {
         )}
         <div className="flex items-center gap-2">
           <Activity className="w-3 h-3 text-brand" />
-          <span className="text-[9px] font-black text-muted uppercase">Flotte en direct</span>
+          <span className="text-nano font-black text-muted uppercase">Flotte en direct</span>
         </div>
       </div>
     </div>

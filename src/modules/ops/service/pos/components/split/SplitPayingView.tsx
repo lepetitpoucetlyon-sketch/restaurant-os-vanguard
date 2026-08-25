@@ -52,7 +52,7 @@ export function SplitPayingView({
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 w-full max-w-2xl">
                 {[
                     { id: 'card', name: t('pos.split.methods.card'), icon: CreditCard },
                     { id: 'cash', name: t('pos.split.methods.cash'), icon: Banknote },
@@ -74,7 +74,7 @@ export function SplitPayingView({
                         )}>
                             <method.icon className="w-7 h-7" strokeWidth={1.5} />
                         </div>
-                        <span className={cn("text-[10px] font-black uppercase tracking-[0.3em] transition-colors", selectedPaymentMethod === method.id ? "text-text-primary" : "text-text-primary/20 group-hover:text-text-primary/40")}>
+                        <span className={cn("text-nano font-black uppercase tracking-[0.3em] transition-colors", selectedPaymentMethod === method.id ? "text-text-primary" : "text-text-primary/20 group-hover:text-text-primary/40")}>
                             {method.name}
                         </span>
                     </button>
@@ -89,7 +89,7 @@ export function SplitPayingView({
                                 <div className="w-12 h-12 rounded-full bg-accent-gold/20 flex items-center justify-center">
                                     <Loader2 className="w-6 h-6 text-accent-gold animate-spin" />
                                 </div>
-                                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-accent-gold">
+                                <p className="text-micro font-black uppercase tracking-[0.3em] text-accent-gold">
                                     {terminalState === 'manual_wait' ? "Veuillez valider sur le TPE physique" : "Connexion au TPE en cours..."}
                                 </p>
                             </>
@@ -98,11 +98,11 @@ export function SplitPayingView({
                                 <div className="w-12 h-12 rounded-full bg-status-error/20 flex items-center justify-center">
                                     <AlertCircle className="w-6 h-6 text-status-error" />
                                 </div>
-                                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-status-error text-center">
+                                <p className="text-micro font-black uppercase tracking-[0.3em] text-status-error text-center">
                                     Erreur de paiement<br />
-                                    <span className="text-[9px] opacity-70">{terminalError}</span>
+                                    <span className="text-nano opacity-70">{terminalError}</span>
                                 </p>
-                                <button onClick={onResetTerminalState} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-text-primary/50 text-[10px] font-bold uppercase hover:bg-white/10 transition-colors mt-2">
+                                <button onClick={onResetTerminalState} className="px-6 py-2 rounded-full bg-surface-card border border-white/10 text-text-primary/50 text-nano font-bold uppercase hover:bg-white/10 transition-colors mt-2">
                                     Réessayer
                                 </button>
                             </>
@@ -114,7 +114,7 @@ export function SplitPayingView({
                     <button
                         onClick={onCancel}
                         disabled={isProcessing}
-                        className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-text-primary/40 font-black text-[11px] uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-text-primary transition-all duration-500 border border-subtle disabled:opacity-20"
+                        className="flex-1 h-16 rounded-[28px] bg-surface-card/5 text-text-primary/40 font-black text-micro uppercase tracking-[0.4em] hover:bg-surface-card/10 hover:text-text-primary transition-all duration-500 border border-subtle disabled:opacity-20"
                     >
                         {t('pos.split.back')}
                     </button>

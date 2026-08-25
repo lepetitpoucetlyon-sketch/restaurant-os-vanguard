@@ -62,10 +62,10 @@ export function HACCPGauge({
             {type === 'temperature' ? <Thermometer className="w-5 h-5" /> : <StatusIcon className="w-5 h-5" />}
           </div>
           <div>
-            <h4 className="font-bold uppercase text-[10px] tracking-widest text-text-primary">{label}</h4>
+            <h4 className="font-bold uppercase text-nano tracking-widest text-text-primary">{label}</h4>
             <div className="flex items-center gap-1.5 mt-0.5">
               <StatusIcon className={cn("w-3 h-3", statusColor)} />
-              <span className={cn("text-[8px] font-black uppercase tracking-tighter", statusColor)}>
+              <span className={cn("text-nano font-black uppercase tracking-tighter", statusColor)}>
                 {isOutOfRange ? "HORS NORMES" : isWarning ? "A SURVEILLER" : "CONFORME"}
               </span>
             </div>
@@ -94,8 +94,8 @@ export function HACCPGauge({
       </div>
       
       <div className="flex justify-between mt-2 px-1">
-        <span className="text-[8px] font-mono text-text-muted">{min}{unit} (min)</span>
-        <span className="text-[8px] font-mono text-text-muted">{max}{unit} (max)</span>
+        <span className="text-nano font-mono text-text-muted">{min}{unit} (min)</span>
+        <span className="text-nano font-mono text-text-muted">{max}{unit} (max)</span>
       </div>
     </div>
   );

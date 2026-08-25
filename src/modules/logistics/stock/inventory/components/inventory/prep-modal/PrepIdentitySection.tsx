@@ -15,7 +15,7 @@ export function PrepIdentitySection({ name, setName, type, setType }: PrepIdenti
     return (
         <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold shadow-glow" />
                     NOM DE L&apos;ŒUVRE *
                 </label>
@@ -28,7 +28,7 @@ export function PrepIdentitySection({ name, setName, type, setType }: PrepIdenti
                 />
             </div>
             <div className="space-y-4">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-primary uppercase tracking-[0.4em] px-2 text-nowrap">
+                <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2 text-nowrap">
                     CATÉGORIE PROTOCOLE
                 </label>
                 <PremiumSelect

@@ -75,7 +75,7 @@ export default function PosError({
         )}
 
         {error.digest && (
-          <p className="text-[11px] font-mono text-gray-600">
+          <p className="text-micro font-mono text-gray-600">
             Code diagnostic : {error.digest}
           </p>
         )}

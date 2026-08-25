@@ -56,7 +56,7 @@ export function SanitaryComplianceSection() {
                 </div>
                 <div>
                     <h2 className="text-2xl font-serif font-black italic text-text-primary tracking-tight">Conformité Sanitaire & Agréments</h2>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">Suivi des certifications et obligations spécifiques</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mt-0.5">Suivi des certifications et obligations spécifiques</p>
                 </div>
             </div>
 
@@ -73,7 +73,7 @@ export function SanitaryComplianceSection() {
                                     </div>
                                     <h3 className="text-xl font-serif font-bold text-text-primary">{s.title}</h3>
                                     {s.mandatory && (
-                                        <span className="bg-status-danger/10 text-status-danger text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-red-500/10">Obligatoire</span>
+                                        <span className="bg-status-danger/10 text-status-danger text-nano font-black uppercase tracking-widest px-2 py-0.5 rounded-full border border-red-500/10">Obligatoire</span>
                                     )}
                                 </div>
 
@@ -86,20 +86,20 @@ export function SanitaryComplianceSection() {
                                     <div className="flex items-center gap-6">
                                         <div className="flex items-center gap-2 text-text-muted">
                                             <Calendar className="w-3.5 h-3.5" strokeWidth={1.5} />
-                                            <span className="text-[10px] font-mono whitespace-nowrap">MAJ : {String(s.doc?.updatedAt || 'N/A')}</span>
+                                            <span className="text-nano font-mono whitespace-nowrap">MAJ : {String(s.doc?.updatedAt || 'N/A')}</span>
                                         </div>
                                         <div className={cn(
                                             "flex items-center gap-2",
                                             s.doc?.status === 'valid' ? 'text-success' : 'text-warning'
                                         )}>
                                             <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
-                                            <span className="text-[10px] font-mono whitespace-nowrap font-bold text-text-muted">Échéance : {String(s.doc?.validUntil || 'N/A')}</span>
+                                            <span className="text-nano font-mono whitespace-nowrap font-bold text-text-muted">Échéance : {String(s.doc?.validUntil || 'N/A')}</span>
                                         </div>
                                     </div>
 
                                     <div className="flex items-start gap-3 bg-status-warning/5 p-4 rounded-xl border border-action-primary/10">
                                         <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
-                                        <p className="text-[11px] text-warning/80 font-medium italic">{s.warning}</p>
+                                        <p className="text-micro text-warning/80 font-medium italic">{s.warning}</p>
                                     </div>
                                 </div>
                             </div>

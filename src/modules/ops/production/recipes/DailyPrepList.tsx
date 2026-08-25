@@ -208,10 +208,10 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
       {prepItems.length > 0 && (
         <motion.div variants={fadeInUp} className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+            <span className="text-nano font-black text-text-muted uppercase tracking-widest">
               Progression
             </span>
-            <span className="text-[11px] font-mono font-black text-text-primary">
+            <span className="text-micro font-mono font-black text-text-primary">
               {checkedCount} / {prepItems.length}
             </span>
           </div>
@@ -308,7 +308,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
                     >
                       {item.ingredientName}
                     </span>
-                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest mt-0.5 truncate">
+                    <p className="text-nano text-text-muted font-bold uppercase tracking-widest mt-0.5 truncate">
                       {item.recipeName}
                     </p>
                   </div>
@@ -318,7 +318,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
                     <span className="text-[15px] font-mono font-black text-text-primary">
                       {item.displayQty}
                     </span>
-                    <span className="text-[10px] font-bold text-text-muted uppercase">
+                    <span className="text-nano font-bold text-text-muted uppercase">
                       {item.displayUnit}
                     </span>
                   </div>

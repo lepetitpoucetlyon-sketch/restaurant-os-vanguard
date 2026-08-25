@@ -34,7 +34,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
           </motion.div>
           <div>
             <h3 className="text-xl font-serif text-text-primary uppercase tracking-tight italic">Verification Logic</h3>
-            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Confirmation &amp; Collateral</p>
+            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Confirmation &amp; Collateral</p>
           </div>
         </div>
 
@@ -44,7 +44,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <toggle.icon className="w-4 h-4 text-text-muted" />
-                  <p className="font-serif text-text-primary text-[10px] uppercase tracking-widest italic">{toggle.label}</p>
+                  <p className="font-serif text-text-primary text-nano uppercase tracking-widest italic">{toggle.label}</p>
                 </div>
                 <button
                   onClick={() => setConfig(c => ({ ...c, [toggle.id]: !c[toggle.id as keyof typeof c] }))}
@@ -58,7 +58,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
                   />
                 </button>
               </div>
-              <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest leading-none opacity-80">{toggle.desc}</p>
+              <p className="text-nano font-bold text-text-muted uppercase tracking-widest leading-none opacity-80">{toggle.desc}</p>
             </div>
           ))}
         </div>
@@ -67,24 +67,24 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
           <motion.div initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} className="mt-6 p-6 bg-bg-tertiary rounded-[2rem] border border-border space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-text-muted uppercase tracking-widest px-1">Unit</label>
+                <label className="text-nano font-bold text-text-muted uppercase tracking-widest px-1">Unit</label>
                 <select
                   value={config.depositType || 'fixed'}
                   onChange={(e) => setConfig(c => ({ ...c, depositType: e.target.value as 'fixed' | 'percent' }))}
-                  className="w-full px-4 py-3 bg-bg-primary border border-border rounded-xl text-[10px] font-bold uppercase tracking-widest outline-none text-text-primary"
+                  className="w-full px-4 py-3 bg-bg-primary border border-border rounded-xl text-nano font-bold uppercase tracking-widest outline-none text-text-primary"
                 >
                   <option value="fixed" className="dark:bg-bg-secondary">Fixed</option>
                   <option value="percent" className="dark:bg-bg-secondary">Percentage</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-text-muted uppercase tracking-widest px-1">Value</label>
+                <label className="text-nano font-bold text-text-muted uppercase tracking-widest px-1">Value</label>
                 <div className="relative group">
                   <input
                     type="number"
                     value={config.depositAmount || 20}
                     onChange={(e) => setConfig(c => ({ ...c, depositAmount: Number(e.target.value) }))}
-                    className="w-full px-4 py-3 bg-bg-primary border border-border rounded-xl text-[10px] font-bold outline-none text-text-primary"
+                    className="w-full px-4 py-3 bg-bg-primary border border-border rounded-xl text-nano font-bold outline-none text-text-primary"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-text-muted">{config.depositType === 'percent' ? '%' : '€'}</span>
                 </div>
@@ -102,13 +102,13 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
           </motion.div>
           <div>
             <h3 className="text-xl font-serif text-text-primary uppercase tracking-tight italic">Synchronicity</h3>
-            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Reminders &amp; Latency Handlers</p>
+            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Reminders &amp; Latency Handlers</p>
           </div>
         </div>
 
         <div className="space-y-8">
           <div className="space-y-4">
-            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Email Dispatch Window</label>
+            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Email Dispatch Window</label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[2, 4, 24, 48].map((h) => (
                 <motion.button
@@ -116,7 +116,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setConfig(c => ({ ...c, emailReminderHours: h }))}
-                  className={cn('py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border', config.emailReminderHours === h ? 'bg-text-primary text-bg-primary border-text-primary shadow-lg' : 'bg-bg-tertiary text-text-muted hover:text-text-primary border-border')}
+                  className={cn('py-4 rounded-xl font-bold text-nano uppercase tracking-widest transition-all border', config.emailReminderHours === h ? 'bg-text-primary text-bg-primary border-text-primary shadow-lg' : 'bg-bg-tertiary text-text-muted hover:text-text-primary border-border')}
                 >
                   T-{h} Hours
                 </motion.button>
@@ -125,7 +125,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
           </div>
 
           <div className="space-y-4">
-            <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">No-Show Tolerance</label>
+            <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">No-Show Tolerance</label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[10, 15, 20, 30].map((m) => (
                 <motion.button
@@ -133,7 +133,7 @@ export function ReservationVerificationSection({ config, setConfig }: Props) {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setConfig(c => ({ ...c, noShowDelayMinutes: m }))}
-                  className={cn('py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all border', config.noShowDelayMinutes === m ? 'bg-text-primary text-bg-primary border-text-primary shadow-lg' : 'bg-bg-tertiary text-text-muted hover:text-text-primary border-border')}
+                  className={cn('py-4 rounded-xl font-bold text-nano uppercase tracking-widest transition-all border', config.noShowDelayMinutes === m ? 'bg-text-primary text-bg-primary border-text-primary shadow-lg' : 'bg-bg-tertiary text-text-muted hover:text-text-primary border-border')}
                 >
                   +{m} Minutes
                 </motion.button>

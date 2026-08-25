@@ -52,12 +52,12 @@ export function MCCAuditStream() {
                     </div>
                     <div>
                         <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Empire Audit Stream</h3>
-                        <p className="text-[10px] text-secondary font-medium">Real-time Telemetry • Secure Channel</p>
+                        <p className="text-nano text-secondary font-medium">Real-time Telemetry • Secure Channel</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
-                    <span className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Live Connection</span>
+                    <span className="text-nano font-bold text-secondary uppercase tracking-tighter">Live Connection</span>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@ export function MCCAuditStream() {
                     {logs.length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center text-secondary opacity-50">
                             <Database className="w-8 h-8 mb-2 stroke-1" />
-                            <p className="text-[10px] uppercase tracking-widest">Waiting for telemetry data...</p>
+                            <p className="text-nano uppercase tracking-widest">Waiting for telemetry data...</p>
                         </div>
                     ) : (
                         logs.map((log) => (
@@ -99,15 +99,15 @@ export function MCCAuditStream() {
                                         <motion.span 
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="text-[9px] font-bold text-brand/80 uppercase"
+                                            className="text-nano font-bold text-brand/80 uppercase"
                                         >
                                             [{log.module}]
                                         </motion.span>
-                                        <span className="text-[10px] font-medium text-muted group-hover:text-text-primary transition-colors">{log.action}</span>
-                                        <span className="text-[9px] text-secondary ml-auto">{log.timestamp.toLocaleTimeString()}</span>
+                                        <span className="text-nano font-medium text-muted group-hover:text-text-primary transition-colors">{log.action}</span>
+                                        <span className="text-nano text-secondary ml-auto">{log.timestamp.toLocaleTimeString()}</span>
                                     </div>
                                     {log.details ? (
-                                        <p className="text-[9px] text-secondary truncate opacity-60 group-hover:opacity-100 transition-opacity">
+                                        <p className="text-nano text-secondary truncate opacity-60 group-hover:opacity-100 transition-opacity">
                                             {JSON.stringify(log.details)}
                                         </p>
                                     ) : null}
@@ -127,10 +127,10 @@ export function MCCAuditStream() {
                 />
                 <div className="flex items-center gap-2 relative z-10">
                     <div className="w-1.5 h-1.5 rounded-full bg-action-primary" />
-                    <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">NexusAudit Stream</span>
+                    <span className="text-nano font-bold text-secondary uppercase tracking-widest">NexusAudit Stream</span>
                 </div>
                 <div className="w-px h-3 bg-surface-card ml-auto relative z-10" />
-                <span className="text-[8px] font-bold text-secondary uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>
+                <span className="text-nano font-bold text-secondary uppercase tracking-widest relative z-10">Buffer Status: {logs.length}/50</span>
             </div>
         </div>
     );

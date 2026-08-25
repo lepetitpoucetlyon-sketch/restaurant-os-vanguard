@@ -149,7 +149,7 @@ export function ProductBasicDetails({
                     setSelectedAllergens((prev) => [...prev, alg.id]);
                   }
                 }}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-all ${
+                className={`px-2.5 py-1 rounded-md text-micro font-medium border transition-all ${
                   isSelected
                     ? "bg-rose-500/10 border-rose-500/30 text-rose-400"
                     : "bg-surface-card border-subtle text-text-tertiary hover:border-text-secondary"

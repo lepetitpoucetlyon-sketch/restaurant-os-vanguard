@@ -87,7 +87,7 @@ export default function ReviewsSettings() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                     <Star className="w-10 h-10 mb-6 text-accent" />
                     <p className="text-5xl font-serif italic text-text-primary tracking-tighter mb-1">{avgRating.toFixed(1)}</p>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Composite Rating</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Composite Rating</p>
                 </motion.div>
 
                 <motion.div
@@ -99,7 +99,7 @@ export default function ReviewsSettings() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                     <MessageSquare className="w-10 h-10 mb-6 text-accent" />
                     <p className="text-5xl font-serif italic text-text-primary tracking-tighter mb-1">{totalReviews}</p>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Signal Volume</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Signal Volume</p>
                 </motion.div>
 
                 <motion.div
@@ -111,7 +111,7 @@ export default function ReviewsSettings() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-status-success/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                     <TrendingUp className="w-10 h-10 mb-6 text-status-success" />
                     <p className="text-5xl font-serif italic text-text-primary tracking-tighter mb-1">+12%</p>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Trajectory Growth</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Trajectory Growth</p>
                 </motion.div>
             </div>
 
@@ -130,7 +130,7 @@ export default function ReviewsSettings() {
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Reputation Nodes
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Global Signal Source Configuration</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Global Signal Source Configuration</p>
                     </div>
                 </div>
 
@@ -159,7 +159,7 @@ export default function ReviewsSettings() {
                                         <div className="flex items-center gap-2 mt-1">
                                             <Star className="w-3 h-3 text-accent fill-accent" />
                                             <span className="text-sm font-bold text-text-primary">{source.rating}</span>
-                                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">({source.reviewCount} Signals)</span>
+                                            <span className="text-nano font-bold text-text-muted uppercase tracking-widest">({source.reviewCount} Signals)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +183,7 @@ export default function ReviewsSettings() {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: 10 }}
-                                        className="w-full py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted bg-bg-tertiary hover:bg-text-primary hover:text-bg-primary rounded-2xl border border-border flex items-center justify-center gap-3 transition-all duration-500 group/btn"
+                                        className="w-full py-4 text-nano font-bold uppercase tracking-[0.2em] text-text-muted bg-bg-tertiary hover:bg-text-primary hover:text-bg-primary rounded-2xl border border-border flex items-center justify-center gap-3 transition-all duration-500 group/btn"
                                     >
                                         <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                                         Project Portal
@@ -211,7 +211,7 @@ export default function ReviewsSettings() {
                             <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                                 Neural Response Engine
                             </h3>
-                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Automated Semantic Acknowledgement</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Automated Semantic Acknowledgement</p>
                         </div>
                     </div>
                     <button
@@ -242,7 +242,7 @@ export default function ReviewsSettings() {
                                     <div className="w-8 h-8 rounded-xl bg-status-success/10 flex items-center justify-center">
                                         <ThumbsUp className="w-4 h-4 text-status-success" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-success">Positive Vector Spectrum (4-5★)</span>
+                                    <span className="font-bold text-nano uppercase tracking-widest text-status-success">Positive Vector Spectrum (4-5★)</span>
                                 </div>
                                 <textarea
                                     value={templates.positive}
@@ -258,7 +258,7 @@ export default function ReviewsSettings() {
                                     <div className="w-8 h-8 rounded-xl bg-status-warning/10 flex items-center justify-center">
                                         <AlertTriangle className="w-4 h-4 text-status-warning" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-warning">Neutral Signal Buffer (3★)</span>
+                                    <span className="font-bold text-nano uppercase tracking-widest text-status-warning">Neutral Signal Buffer (3★)</span>
                                 </div>
                                 <textarea
                                     value={templates.neutral}
@@ -274,7 +274,7 @@ export default function ReviewsSettings() {
                                     <div className="w-8 h-8 rounded-xl bg-status-danger/10 flex items-center justify-center">
                                         <ThumbsDown className="w-4 h-4 text-status-danger" />
                                     </div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-status-danger">Negative Anomaly Protocol (1-2★)</span>
+                                    <span className="font-bold text-nano uppercase tracking-widest text-status-danger">Negative Anomaly Protocol (1-2★)</span>
                                 </div>
                                 <textarea
                                     value={templates.negative}
@@ -286,7 +286,7 @@ export default function ReviewsSettings() {
 
                             <div className="flex items-center gap-4 px-8 py-5 bg-bg-tertiary rounded-[1.5rem] border border-border">
                                 <PenTool className="w-5 h-5 text-text-muted" />
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest leading-relaxed">
+                                <p className="text-nano font-bold text-text-muted uppercase tracking-widest leading-relaxed">
                                     SYNTAX HINT: Use <code className="bg-bg-primary px-2 py-0.5 rounded text-accent border border-border">{'{name}'}</code> to synthesize the specific node identity within the response projection.
                                 </p>
                             </div>

@@ -22,9 +22,9 @@ export function PrepMeasurementGrid({
     setPortions,
 }: PrepMeasurementGridProps) {
     return (
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div className="space-y-4">
-                <label className="text-[9px] font-black text-text-muted uppercase tracking-[0.4em] px-2">RENDEMENT *</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2">RENDEMENT *</label>
                 <input
                     type="number"
                     step="0.01"
@@ -35,7 +35,7 @@ export function PrepMeasurementGrid({
                 />
             </div>
             <div className="space-y-4">
-                <label className="text-[9px] font-black text-text-muted uppercase tracking-[0.4em] px-2 text-center block">UNITÉ PROTOCOLE</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-center block">UNITÉ PROTOCOLE</label>
                 <PremiumSelect
                     value={unit}
                     onChange={(val) => setUnit(val as IngredientUnit)}
@@ -46,7 +46,7 @@ export function PrepMeasurementGrid({
                 />
             </div>
             <div className="space-y-4">
-                <label className="text-[9px] font-black text-text-muted uppercase tracking-[0.4em] px-2 text-right block">PORTIONS</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-right block">PORTIONS</label>
                 <input
                     type="number"
                     value={portions}

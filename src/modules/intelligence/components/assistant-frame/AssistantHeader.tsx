@@ -22,11 +22,11 @@ export function AssistantHeader({ viewMode, setViewMode, clearSession }: Assista
                         <h3 className="text-xs font-black uppercase tracking-widest text-text-primary">
                             Copilote NEXUS
                         </h3>
-                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-accent/20 text-accent uppercase">
+                        <span className="text-nano font-bold px-1.5 py-0.2 rounded bg-accent/20 text-accent uppercase">
                             Universal
                         </span>
                     </div>
-                    <p className="text-[10px] text-text-muted flex items-center gap-1">
+                    <p className="text-nano text-text-muted flex items-center gap-1">
                         <Shield className="w-3 h-3 text-accent" />
                         <span>Membrane RBAC souveraine</span>
                     </p>

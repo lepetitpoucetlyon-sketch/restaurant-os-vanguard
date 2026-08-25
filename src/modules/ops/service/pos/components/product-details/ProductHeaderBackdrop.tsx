@@ -44,7 +44,7 @@ export function ProductHeaderBackdrop({
         <div className="min-w-0 max-w-2xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-gold">
+            <span className="text-nano font-black uppercase tracking-[0.4em] text-accent-gold">
               {t('pos.details.selection')}
             </span>
           </div>

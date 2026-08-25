@@ -106,7 +106,7 @@ const MetricCard: React.FC<{ label: string, value: string | number, trend: strin
         <p className="text-muted text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
         <div className="flex items-baseline gap-2">
             <h3 className={`text-2xl font-bold ${color || 'text-text-primary'}`}>{value}</h3>
-            <span className="text-[10px] font-mono text-status-success">{trend}</span>
+            <span className="text-nano font-mono text-status-success">{trend}</span>
         </div>
     </div>
 );

@@ -126,7 +126,7 @@ export function SidebarBranding({
                             <h1 className="font-serif font-black text-lg text-text-primary tracking-tight leading-none italic">
                                 {t('sidebar.resto')} <span className="text-accent-gold not-italic transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>{t('sidebar.os')}</span>
                             </h1>
-                            <p className="text-[7px] uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>
+                            <p className="text-nano uppercase tracking-[0.4em] text-accent-gold font-black mt-1.5 whitespace-nowrap overflow-hidden text-ellipsis leading-none opacity-60 transition-colors duration-500" style={config?.theme?.primaryColor ? { color: config.theme.primaryColor } : undefined}>
                                 {t('nav.executive_intelligence')}
                             </p>
                         </motion.div>

@@ -56,7 +56,7 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                     </div>
                     <div>
                         <h3 className="text-3xl font-brand italic text-text-primary tracking-tight mb-2">{section.title}</h3>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">{section.axes.length} Axes Stratégiques</p>
+                        <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/40">{section.axes.length} Axes Stratégiques</p>
                     </div>
                 </div>
                 <motion.div
@@ -86,7 +86,7 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                                         <div className="flex items-start justify-between mb-6">
                                             <div>
                                                 <div className="flex items-center gap-4 mb-3">
-                                                    <span className="text-[10px] font-mono font-black text-action-primary">{axis.id}</span>
+                                                    <span className="text-nano font-mono font-black text-action-primary">{axis.id}</span>
                                                     <h4 className="text-xl font-brand italic text-text-primary">{axis.title}</h4>
                                                 </div>
                                                 <p className="text-xs text-text-muted font-medium uppercase tracking-widest flex items-center gap-3">
@@ -104,7 +104,7 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                                             </Button>
                                         </div>
                                         <div className="relative group/prompt overflow-hidden rounded-2xl bg-surface-bg dark:bg-surface-bg p-6 border border-border/10">
-                                            <pre className="text-[11px] font-mono leading-relaxed text-text-muted/80 whitespace-pre-wrap">
+                                            <pre className="text-micro font-mono leading-relaxed text-text-muted/80 whitespace-pre-wrap">
                                                 {axis.prompt}
                                             </pre>
                                             <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary/40 to-transparent pointer-events-none" />

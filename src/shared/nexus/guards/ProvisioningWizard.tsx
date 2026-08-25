@@ -88,7 +88,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
 
                             <form onSubmit={handleIdentitySubmit} className="space-y-6 pt-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Nom du Restaurant</label>
+                                    <label className="text-nano font-black text-text-secondary uppercase tracking-widest">Nom du Restaurant</label>
                                     <input 
                                         type="text" 
                                         value={formData.name}
@@ -100,7 +100,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Clé Technique (ID Unique)</label>
+                                    <label className="text-nano font-black text-text-secondary uppercase tracking-widest">Clé Technique (ID Unique)</label>
                                     <input 
                                         type="text" 
                                         value={formData.key}
@@ -117,7 +117,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                     </div>
                                 )}
 
-                                <Button type="submit" className="w-full py-8 text-[11px] font-black uppercase tracking-[0.3em] bg-white text-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all">
+                                <Button type="submit" className="w-full py-8 text-micro font-black uppercase tracking-[0.3em] bg-white text-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all">
                                     Passer à la Configuration Infrastructure
                                 </Button>
                             </form>
@@ -144,7 +144,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
 
                             <div className="grid grid-cols-2 gap-6 pt-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Tier de Service</label>
+                                    <label className="text-nano font-black text-text-secondary uppercase tracking-widest">Tier de Service</label>
                                     <select 
                                         value={formData.tier}
                                         onChange={(e) => setFormData({...formData, tier: e.target.value as 'STANDARD' | 'PREMIUM' | 'ENTERPRISE'})}
@@ -157,7 +157,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-text-secondary uppercase tracking-widest">Accent Branding</label>
+                                    <label className="text-nano font-black text-text-secondary uppercase tracking-widest">Accent Branding</label>
                                     <div className="flex items-center gap-4 bg-surface-glass border border-white/5 rounded-2xl p-4">
                                         <input 
                                             type="color" 
@@ -173,14 +173,14 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                             <div className="p-8 bg-status-info/5 border border-blue-500/10 rounded-3xl flex items-start gap-4">
                                 <Globe className="text-blue-500 shrink-0 mt-1" size={20} />
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest leading-none">Global Deployment</p>
+                                    <p className="text-nano font-black text-blue-500 uppercase tracking-widest leading-none">Global Deployment</p>
                                     <p className="text-xs text-blue-500/60">L'instance sera propagée sur la région <span className="font-bold">europe-west9 (Paris)</span> avec isolation de base de données 100% dédiée.</p>
                                 </div>
                             </div>
 
                             <div className="flex gap-4">
-                                <Button onClick={() => setStep('identity')} variant="ghost" className="flex-1 py-8 text-[11px] font-black border border-white/5 uppercase tracking-widest">Retour</Button>
-                                <Button onClick={handleLaunch} className="flex-[2] py-8 bg-action-primary text-bg-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-[1.02] shadow-xl shadow-amber-500/20">Lancer le Déploiement</Button>
+                                <Button onClick={() => setStep('identity')} variant="ghost" className="flex-1 py-8 text-micro font-black border border-white/5 uppercase tracking-widest">Retour</Button>
+                                <Button onClick={handleLaunch} className="flex-[2] py-8 bg-action-primary text-bg-primary text-micro font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-[1.02] shadow-xl shadow-amber-500/20">Lancer le Déploiement</Button>
                             </div>
                         </motion.div>
                     )}

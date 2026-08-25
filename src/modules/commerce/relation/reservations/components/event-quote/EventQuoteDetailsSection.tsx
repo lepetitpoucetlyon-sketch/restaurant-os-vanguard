@@ -20,7 +20,7 @@ interface EventQuoteDetailsSectionProps {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+      <label className="text-micro font-bold uppercase tracking-wider text-text-secondary">
         {label}
       </label>
       {children}
@@ -42,7 +42,7 @@ export function EventQuoteDetailsSection({
 }: EventQuoteDetailsSectionProps) {
   return (
     <section className="space-y-4">
-      <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
+      <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
         <Calendar className="w-3 h-3" /> Détails de l&apos;événement
       </p>
       <Field label="Nom de l'événement *">
@@ -54,7 +54,7 @@ export function EventQuoteDetailsSection({
           className={inputClass}
         />
       </Field>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <Field label="Date *">
           <input
             type="date"
@@ -118,7 +118,7 @@ export function EventQuoteDetailsSection({
               >
                 <div>
                   <p className="text-xs font-bold">{opt.label}</p>
-                  <p className="text-[10px] text-text-muted">{opt.desc}</p>
+                  <p className="text-nano text-text-muted">{opt.desc}</p>
                 </div>
               </button>
             ))}

@@ -59,7 +59,7 @@ export function IdentityCoreHeader({
             <h2 className="text-4xl font-serif text-text-primary uppercase tracking-tight italic">
               {formData.name || 'Unknown Operative'}
             </h2>
-            <span className="px-3 py-1 rounded-lg bg-bg-tertiary text-text-muted text-[10px] font-bold uppercase tracking-widest border border-border">
+            <span className="px-3 py-1 rounded-lg bg-bg-tertiary text-text-muted text-nano font-bold uppercase tracking-widest border border-border">
               Lvl {selectedUser?.accessLevel ?? 1}
             </span>
           </div>

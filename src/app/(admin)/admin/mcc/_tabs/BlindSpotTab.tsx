@@ -90,19 +90,19 @@ export function BlindSpotTab() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-          <span className="text-[11px] font-bold text-slate-400 uppercase">Règles Évaluées</span>
+          <span className="text-micro font-bold text-slate-400 uppercase">Règles Évaluées</span>
           <p className="text-2xl font-black text-white mt-1">{report.totalRulesRun}</p>
         </div>
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-          <span className="text-[11px] font-bold text-rose-400 uppercase">Critiques</span>
+          <span className="text-micro font-bold text-rose-400 uppercase">Critiques</span>
           <p className="text-2xl font-black text-rose-400 mt-1">{report.summary.critical}</p>
         </div>
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-          <span className="text-[11px] font-bold text-amber-400 uppercase">Hautes</span>
+          <span className="text-micro font-bold text-amber-400 uppercase">Hautes</span>
           <p className="text-2xl font-black text-amber-400 mt-1">{report.summary.high}</p>
         </div>
         <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-          <span className="text-[11px] font-bold text-emerald-400 uppercase">Alertes Déclenchées</span>
+          <span className="text-micro font-bold text-emerald-400 uppercase">Alertes Déclenchées</span>
           <p className="text-2xl font-black text-emerald-400 mt-1">{report.triggered.length}</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export function BlindSpotTab() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className={cn(
-                    "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                    "px-2.5 py-0.5 rounded-full text-nano font-bold uppercase tracking-wider",
                     spot.severity === 'critical' ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
                     spot.severity === 'high' ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
                     "bg-blue-500/10 text-blue-400 border border-blue-500/20"
@@ -155,7 +155,7 @@ export function BlindSpotTab() {
 
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
                 <div className="text-xs">
-                  <span className="text-slate-500 font-bold uppercase text-[10px] block">Correction Recommandée :</span>
+                  <span className="text-slate-500 font-bold uppercase text-nano block">Correction Recommandée :</span>
                   <span className="text-slate-300">{spot.suggestedFix.rationale}</span>
                 </div>
                 <button className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md">

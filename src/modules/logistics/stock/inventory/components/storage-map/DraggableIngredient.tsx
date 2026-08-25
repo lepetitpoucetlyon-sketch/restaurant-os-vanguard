@@ -71,14 +71,14 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
                     {highlightQuery ? highlightText(ingredient.name, highlightQuery) : ingredient.name}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[9px] font-black text-text-muted uppercase tracking-widest bg-bg-tertiary px-1.5 py-0.5 rounded-sm">
+                    <span className="text-nano font-black text-text-muted uppercase tracking-widest bg-bg-tertiary px-1.5 py-0.5 rounded-sm">
                         {highlightQuery ? highlightText(ingredient.category, highlightQuery) : ingredient.category}
                     </span>
                 </div>
             </div>
             <div className="flex flex-col items-end gap-1">
                 <div className={cn(
-                    "px-2.5 py-1 rounded-lg text-[10px] font-black transition-colors shadow-sm border border-black/5",
+                    "px-2.5 py-1 rounded-lg text-nano font-black transition-colors shadow-sm border border-black/5",
                     isSelected ? "bg-accent text-text-primary border-accent" : "bg-bg-tertiary text-text-primary"
                 )}>
                     {stockCount}

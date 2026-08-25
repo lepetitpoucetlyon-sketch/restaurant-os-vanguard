@@ -118,10 +118,10 @@ function ReservationsPage() {
                                             </div>
                                             <h3 className="font-black text-text-primary text-sm truncate">{g.name}</h3>
                                             {Boolean((g as JsonObject)["minCovers"]) && (
-                                                <p className="text-[10px] text-text-muted mt-1">{String((g as JsonObject)["minCovers"] ?? "")}–{String((g as JsonObject)["maxCovers"] ?? "")} couverts</p>
+                                                <p className="text-nano text-text-muted mt-1">{String((g as JsonObject)["minCovers"] ?? "")}–{String((g as JsonObject)["maxCovers"] ?? "")} couverts</p>
                                             )}
                                             {Boolean((g as JsonObject)["notes"]) && (
-                                                <p className="text-[10px] text-text-muted mt-2 line-clamp-2 italic">{String((g as JsonObject)["notes"] ?? "")}</p>
+                                                <p className="text-nano text-text-muted mt-2 line-clamp-2 italic">{String((g as JsonObject)["notes"] ?? "")}</p>
                                             )}
                                         </div>
                                     ))}

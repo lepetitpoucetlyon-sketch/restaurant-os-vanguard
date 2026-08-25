@@ -34,7 +34,7 @@ export function CustomerSearchStep({
                 <div className="space-y-4">
                     <div className="flex items-center gap-3 px-2">
                         <Search className="w-4 h-4 text-accent" />
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Identification de l'Hôte</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Identification de l'Hôte</label>
                     </div>
                     <div className="relative group">
                         <Search strokeWidth={1.5} className="absolute left-8 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted/30 group-focus-within:text-accent transition-colors" />
@@ -51,8 +51,8 @@ export function CustomerSearchStep({
 
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-4">
-                        <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Sélections Suggérées</span>
-                        <button className="text-[10px] font-black text-accent uppercase tracking-[0.3em] hover:opacity-70 transition-opacity flex items-center gap-2">
+                        <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Sélections Suggérées</span>
+                        <button className="text-nano font-black text-accent uppercase tracking-[0.3em] hover:opacity-70 transition-opacity flex items-center gap-2">
                             Créer une Fiche <Plus className="w-3 h-3" />
                         </button>
                     </div>
@@ -86,11 +86,11 @@ export function CustomerSearchStep({
                                             {customer.firstName} {customer.lastName}
                                         </p>
                                         <div className="flex items-center gap-4 mt-1">
-                                            <p className={cn("text-[10px] font-black tracking-widest", selectedCustomer?.id === customer.id ? "text-bg-primary/60" : "text-text-muted")}>
+                                            <p className={cn("text-nano font-black tracking-widest", selectedCustomer?.id === customer.id ? "text-bg-primary/60" : "text-text-muted")}>
                                                 {customer.phone}
                                             </p>
                                             <div className="w-1 h-1 rounded-full bg-accent" />
-                                            <p className={cn("text-[10px] font-black tracking-widest uppercase", selectedCustomer?.id === customer.id ? "text-bg-primary" : "text-text-muted")}>
+                                            <p className={cn("text-nano font-black tracking-widest uppercase", selectedCustomer?.id === customer.id ? "text-bg-primary" : "text-text-muted")}>
                                                 {customer.visitCount} SÉJOURS
                                             </p>
                                         </div>

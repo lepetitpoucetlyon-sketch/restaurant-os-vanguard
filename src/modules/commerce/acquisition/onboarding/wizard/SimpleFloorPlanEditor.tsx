@@ -127,7 +127,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
       {!templateApplied && (
         <div>
           <p className="text-sm text-gray-600 mb-3">Choisissez un template de départ ou créez votre plan de zéro :</p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {TEMPLATES.map((tpl, i) => (
               <button
                 key={i}
@@ -234,7 +234,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
               >
                 <div className="text-center">
                   <div className="text-xs font-bold text-gray-700">{table.label}</div>
-                  <div className="text-[10px] text-gray-400">{table.capacity}p</div>
+                  <div className="text-nano text-gray-400">{table.capacity}p</div>
                 </div>
               </div>
             ))}

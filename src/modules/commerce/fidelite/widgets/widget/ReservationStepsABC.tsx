@@ -78,7 +78,7 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
       ) : slots.length === 0 ? (
         <p className="text-center text-text-muted py-10 text-sm">Aucune disponibilité pour cette date. Essayez un autre jour.</p>
       ) : (
-        <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
           {slots.map((s) => (
             <button
               key={s.time}

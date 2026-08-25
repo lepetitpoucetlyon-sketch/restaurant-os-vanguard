@@ -57,12 +57,12 @@ export const AnalyticsTab = () => {
                     <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                         <Search className="w-5 h-5 text-purple-500" />
                     </div>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Top mots-clés</h3>
+                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Top mots-clés</h3>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="text-left text-[10px] font-black uppercase tracking-[0.2em] text-text-muted border-b border-border">
+                            <tr className="text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted border-b border-border">
                                 <th className="pb-4 pr-4">Mot-clé</th>
                                 <th className="pb-4 px-4 text-right">Clics</th>
                                 <th className="pb-4 px-4 text-right">Position</th>

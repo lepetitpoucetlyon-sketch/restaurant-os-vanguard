@@ -30,7 +30,7 @@ export function KDSEmptyState() {
                 />
             </div>
             <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-text-muted transition-colors">Cuisine en stase</h2>
-            <p className="text-[10px] font-black uppercase tracking-[0.5em] mt-8 px-10 py-3 rounded-full border border-border bg-bg-tertiary text-text-muted/50 shadow-inner">
+            <p className="text-nano font-black uppercase tracking-[0.5em] mt-8 px-10 py-3 rounded-full border border-border bg-bg-tertiary text-text-muted/50 shadow-inner">
                 Le flux de production est actuellement vide
             </p>
         </motion.div>

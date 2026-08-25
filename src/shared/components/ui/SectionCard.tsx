@@ -83,7 +83,7 @@ export function SectionCard({
                 {badge && <div className="shrink-0">{badge}</div>}
               </div>
               {subtitle && (
-                <p className="text-[11px] text-text-secondary truncate mt-0.5">
+                <p className="text-micro text-text-secondary truncate mt-0.5">
                   {subtitle}
                 </p>
               )}

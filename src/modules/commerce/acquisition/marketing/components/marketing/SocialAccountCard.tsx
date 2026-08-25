@@ -41,7 +41,7 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {[
                         { label: 'Abonnés', value: (account.followers / 1000).toFixed(1) + 'K', trend: account.trend },
                         { label: 'Publications', value: account.posts, trend: null },
@@ -52,9 +52,9 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                                 {stat.value}
                             </p>
                             <div className="flex items-center gap-2 mt-2">
-                                <p className="text-[9px] font-black text-text-muted uppercase tracking-widest">{stat.label}</p>
+                                <p className="text-nano font-black text-text-muted uppercase tracking-widest">{stat.label}</p>
                                 {stat.trend && (
-                                    <span className="text-[9px] font-bold text-status-success bg-status-success/10 px-1.5 py-0.5 rounded-full">{stat.trend}</span>
+                                    <span className="text-nano font-bold text-status-success bg-status-success/10 px-1.5 py-0.5 rounded-full">{stat.trend}</span>
                                 )}
                             </div>
                         </div>

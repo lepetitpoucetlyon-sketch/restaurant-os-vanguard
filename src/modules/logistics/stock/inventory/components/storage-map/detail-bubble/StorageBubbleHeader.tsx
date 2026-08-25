@@ -60,7 +60,7 @@ export function StorageBubbleHeader({
                             <Thermometer className="w-4 h-4" style={{ color: config.color }} />
                             <span className="text-2xl font-mono font-light text-text-primary">{location.temperature}°C</span>
                             {location.temperatureMin !== undefined && location.temperatureMax !== undefined && (
-                                <span className="text-[10px] font-bold text-text-muted ml-1">
+                                <span className="text-nano font-bold text-text-muted ml-1">
                                     ({location.temperatureMin} à {location.temperatureMax}°C)
                                 </span>
                             )}
@@ -69,7 +69,7 @@ export function StorageBubbleHeader({
                     <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-card/70 dark:bg-surface-sidebar/20 backdrop-blur rounded-xl shadow-sm border border-default">
                         <Package className="w-4 h-4 text-text-muted" />
                         <span className="text-lg font-mono font-light text-text-primary">{stockItems.length}</span>
-                        <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">ARTICLES</span>
+                        <span className="text-nano font-black text-text-muted uppercase tracking-widest">ARTICLES</span>
                     </div>
                 </div>
             </div>

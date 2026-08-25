@@ -88,7 +88,7 @@ export default function GoalsSettings() {
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Fiscal Trajectory
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Revenue Targets & Growth Vectors</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Revenue Targets & Growth Vectors</p>
                     </div>
                 </div>
 
@@ -107,7 +107,7 @@ export default function GoalsSettings() {
                                     </div>
                                     <ArrowUpRight className="w-4 h-4 text-text-muted" />
                                 </div>
-                                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">
+                                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-3">
                                     {goal.label}
                                 </label>
                                 <div className="relative">
@@ -129,7 +129,7 @@ export default function GoalsSettings() {
                                         className="h-full rounded-full bg-accent"
                                     />
                                 </div>
-                                <p className="text-[9px] font-bold text-text-muted uppercase mt-2 tracking-widest">{goal.description}</p>
+                                <p className="text-nano font-bold text-text-muted uppercase mt-2 tracking-widest">{goal.description}</p>
                             </motion.div>
                         );
                     })}
@@ -151,7 +151,7 @@ export default function GoalsSettings() {
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Operational Vectors
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">KPI Thresholds & Quality Metrics</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">KPI Thresholds & Quality Metrics</p>
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@ export default function GoalsSettings() {
                                         </div>
                                         <div>
                                             <p className="font-serif text-text-primary uppercase tracking-tight text-lg italic">{goal.label}</p>
-                                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{goal.description}</p>
+                                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{goal.description}</p>
                                         </div>
                                     </div>
                                     <div className="relative group">
@@ -188,14 +188,14 @@ export default function GoalsSettings() {
                                             className="w-24 text-right bg-transparent text-2xl font-serif text-text-primary outline-none"
                                             data-tutorial={goal.key === 'laborCostPercent' ? 'settings-2-1' : undefined}
                                         />
-                                        <span className="block text-[9px] font-bold text-text-muted text-right uppercase tracking-[0.2em]">{goal.unit || 'Nodes'}</span>
+                                        <span className="block text-nano font-bold text-text-muted text-right uppercase tracking-[0.2em]">{goal.unit || 'Nodes'}</span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-[9px] font-bold text-text-muted uppercase tracking-[0.2em]">Target Intensity</span>
-                                        <span className="text-[9px] font-bold text-accent uppercase tracking-[0.2em]">65% Realized</span>
+                                        <span className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Target Intensity</span>
+                                        <span className="text-nano font-bold text-accent uppercase tracking-[0.2em]">65% Realized</span>
                                     </div>
                                     <div className="h-3 bg-bg-tertiary rounded-full overflow-hidden p-0.5 border border-border/50">
                                         <motion.div
@@ -226,7 +226,7 @@ export default function GoalsSettings() {
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                             Threshold Logic
                         </h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Automatic Neural Signal Triggers</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Automatic Neural Signal Triggers</p>
                     </div>
                 </div>
 

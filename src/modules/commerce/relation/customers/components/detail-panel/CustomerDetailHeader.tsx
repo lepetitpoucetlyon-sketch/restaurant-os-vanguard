@@ -32,7 +32,7 @@ export function CustomerDetailHeader({
                         {(customer.lastName || "").charAt(0)}
                     </div>
                     <div className="flex-1 text-center md:text-left">
-                        <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-2">
+                        <p className="text-nano md:text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-2">
                             Profil Client Executive Intelligence
                         </p>
                         <h2 className="text-2xl md:text-4xl font-serif font-light tracking-tight italic">
@@ -42,7 +42,7 @@ export function CustomerDetailHeader({
                             {customer.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-accent text-bg-primary shadow-lg shadow-amber-500/20"
+                                    className="text-nano md:text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-accent text-bg-primary shadow-lg shadow-amber-500/20"
                                 >
                                     {tag}
                                 </span>

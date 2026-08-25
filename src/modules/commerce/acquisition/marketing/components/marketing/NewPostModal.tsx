@@ -81,7 +81,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
 
                         <div className="p-10 space-y-8 bg-bg-primary/30">
                             <div className="space-y-4">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1">Sélectionner les plateformes</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Sélectionner les plateformes</label>
                                 <div className="flex gap-4">
                                     {socialAccounts.map((account) => {
                                         const Icon = account.icon;
@@ -114,7 +114,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1">Contenu & Média</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Contenu & Média</label>
                                 <div className="relative">
                                     <textarea
                                         value={caption}
@@ -130,7 +130,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                             <Settings size={20} />
                                         </button>
                                     </div>
-                                    <div className="absolute bottom-4 right-4 text-[10px] font-mono text-text-muted">
+                                    <div className="absolute bottom-4 right-4 text-nano font-mono text-text-muted">
                                         {caption.length} / 2200
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
 
                             <div className="grid grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1">Date</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Date</label>
                                     <div className="relative">
                                         <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                         <input
@@ -150,7 +150,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                     </div>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1">Heure</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Heure</label>
                                     <div className="relative">
                                         <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                                         <input

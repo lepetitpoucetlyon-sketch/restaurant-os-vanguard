@@ -63,7 +63,7 @@ export function SuppliersView() {
                 <td className="p-3 font-bold text-text-primary">{s.name}</td>
                 <td className="p-3 text-text-muted">{s.due}</td>
                 <td className="p-3">
-                  <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold", s.status === 'OVERDUE' ? "bg-status-danger/10 text-status-danger" : "bg-status-warning/10 text-status-warning")}>
+                  <span className={cn("px-2 py-0.5 rounded-full text-nano font-bold", s.status === 'OVERDUE' ? "bg-status-danger/10 text-status-danger" : "bg-status-warning/10 text-status-warning")}>
                     {s.status === 'OVERDUE' ? 'Échue' : 'À régler'}
                   </span>
                 </td>

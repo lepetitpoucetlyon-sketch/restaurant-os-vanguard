@@ -19,7 +19,7 @@ export function PrepLifecycleSection({
     return (
         <div className="grid grid-cols-1 gap-12">
             <div className="space-y-6">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-[0.5em] px-2 outline-none">
+                <label className="flex items-center gap-3 text-nano font-black text-text-muted uppercase tracking-[0.5em] px-2 outline-none">
                     <Calendar className="w-4 h-4 text-accent-gold" />
                     CYCLE DE VIE (DLC PROTOCOLE)
                 </label>
@@ -29,7 +29,7 @@ export function PrepLifecycleSection({
                             key={d}
                             onClick={() => setDlcDays(d)}
                             className={cn(
-                                "flex-1 py-5 rounded-[22px] text-[11px] font-black uppercase tracking-[0.3em] transition-all border shadow-soft",
+                                "flex-1 py-5 rounded-[22px] text-micro font-black uppercase tracking-[0.3em] transition-all border shadow-soft",
                                 dlcDays === d
                                     ? "bg-text-primary border-text-primary text-text-primary shadow-premium scale-105"
                                     : "bg-surface-card/60 border-border/40 text-text-muted hover:bg-surface-card hover:border-accent-gold/20"
@@ -41,7 +41,7 @@ export function PrepLifecycleSection({
                 </div>
             </div>
             <div className="space-y-6">
-                <label className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-[0.5em] px-2 outline-none">
+                <label className="flex items-center gap-3 text-nano font-black text-text-muted uppercase tracking-[0.5em] px-2 outline-none">
                     OBSERVATIONS PROTOCOLÉES
                 </label>
                 <textarea

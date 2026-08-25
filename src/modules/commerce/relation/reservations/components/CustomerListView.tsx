@@ -37,11 +37,11 @@ export function CustomerListView({
                         <input 
                             type="text" 
                             placeholder={t('reservations.list.search_placeholder')} 
-                            className="w-full bg-bg-primary border border-border rounded-full pl-16 pr-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40" 
+                            className="w-full bg-bg-primary border border-border rounded-full pl-16 pr-8 py-5 text-nano font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40" 
                         />
                     </div>
                     <div className="pr-4 border-l border-white/5 pl-10">
-                        <p className="text-[8px] font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">{t('reservations.list.registry')}</p>
+                        <p className="text-nano font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">{t('reservations.list.registry')}</p>
                         <span className="text-sm font-mono font-bold text-accent">{customers.length} {t('reservations.list.profiles')}</span>
                     </div>
                 </div>
@@ -70,12 +70,12 @@ export function CustomerListView({
                                     </div>
                                     <div>
                                         <p className="text-[12px] font-mono font-bold text-text-primary">{customer.visitCount}</p>
-                                        <p className="text-[8px] font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">{t('reservations.list.services')}</p>
+                                        <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">{t('reservations.list.services')}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-2xl font-mono font-light text-accent italic">{Number(customer.totalSpent ?? 0).toFixed(0)}€</p>
-                                    <p className="text-[8px] font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">{t('reservations.list.value')}</p>
+                                    <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">{t('reservations.list.value')}</p>
                                 </div>
                             </div>
                             <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-accent/5 blur-[80px] rounded-full group-hover:bg-accent/10 transition-colors" />

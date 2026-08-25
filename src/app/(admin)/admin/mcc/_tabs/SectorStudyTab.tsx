@@ -82,9 +82,9 @@ export function SectorStudyTab() {
                 )}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">{item.slug}</span>
+                  <span className="text-nano font-mono font-bold text-slate-500 uppercase">{item.slug}</span>
                   <span className={cn(
-                    "px-2 py-0.5 rounded-full text-[9px] font-bold uppercase",
+                    "px-2 py-0.5 rounded-full text-nano font-bold uppercase",
                     item.source === 'llm-enriched' ? "bg-amber-500/10 text-amber-400" : "bg-slate-800 text-slate-400"
                   )}>
                     {item.source}
@@ -113,17 +113,17 @@ export function SectorStudyTab() {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-[10px] uppercase font-bold text-slate-500">Workflows Clés</span>
+              <span className="text-nano uppercase font-bold text-slate-500">Workflows Clés</span>
               <p className="text-2xl font-black text-white mt-1">{activeStudy.workflowsCount}</p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-[10px] uppercase font-bold text-slate-500">Capabilities Dérivées</span>
+              <span className="text-nano uppercase font-bold text-slate-500">Capabilities Dérivées</span>
               <p className="text-2xl font-black text-white mt-1">{activeStudy.capabilitiesCount}</p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-[10px] uppercase font-bold text-slate-500">Indicateurs KPIs</span>
+              <span className="text-nano uppercase font-bold text-slate-500">Indicateurs KPIs</span>
               <p className="text-2xl font-black text-white mt-1">{activeStudy.kpisCount}</p>
             </div>
           </div>

@@ -55,7 +55,7 @@ export const EditPanel = ({
                     >
                         Table {selectedTable.number}<span className="text-accent-gold not-italic">.</span>
                     </motion.h3>
-                    <p className="text-[8px] font-black text-text-muted uppercase tracking-[0.3em]">Signature Configuration</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Signature Configuration</p>
                 </div>
                 <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
@@ -69,11 +69,11 @@ export const EditPanel = ({
 
             <div className="flex-1 p-6 space-y-8 elegant-scrollbar overflow-y-auto pb-32">
                 <div className="space-y-6">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                         <Activity className="w-4 h-4 text-accent-gold" />
                         Statut Op&eacute;rationnel
                     </label>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {Object.entries(STATUS_COLORS).map(([status, color]) => (
                             <motion.button
                                 key={status}
@@ -88,7 +88,7 @@ export const EditPanel = ({
                                 )}
                             >
                                 <div className="w-3 h-3 rounded-full mb-3" style={{ backgroundColor: color }} />
-                                <span className="text-[9px] font-black uppercase tracking-wider text-text-primary">{status}</span>
+                                <span className="text-nano font-black uppercase tracking-wider text-text-primary">{status}</span>
                                 {selectedTable.status === status && (
                                     <div className="absolute top-0 right-0 w-2 h-2 bg-accent-gold rounded-bl-lg" />
                                 )}
@@ -98,7 +98,7 @@ export const EditPanel = ({
                 </div>
 
                 <div className="space-y-6">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                         <MapPin className="w-4 h-4 text-accent-gold" />
                         Localisation Dynamique
                     </label>
@@ -118,12 +118,12 @@ export const EditPanel = ({
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: String(zone.color || '') }} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{String(zone.name || '')}</span>
+                                    <span className="text-nano font-black uppercase tracking-[0.2em]">{String(zone.name || '')}</span>
                                 </div>
                                 {selectedTable.zoneId === zone.id ? (
                                     <Check className="w-4 h-4 text-accent-gold font-black" />
                                 ) : (
-                                    <span className="text-[9px] font-black opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest text-accent-gold">Transférer</span>
+                                    <span className="text-nano font-black opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest text-accent-gold">Transférer</span>
                                 )}
                             </motion.button>
                         ))}
@@ -145,7 +145,7 @@ export const EditPanel = ({
                         )}
                     >
                         <div className={cn("w-10 h-8 border-2 rounded-lg mb-4 transition-colors", selectedTable.shape === 'rect' ? "border-accent-gold" : "border-text-muted group-hover:border-text-primary")} />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em]">Rectangle</span>
+                        <span className="text-nano font-black uppercase tracking-[0.2em]">Rectangle</span>
                     </motion.button>
                     <motion.button
                         whileHover={{ scale: 1.02 }}
@@ -159,13 +159,13 @@ export const EditPanel = ({
                         )}
                     >
                         <div className={cn("w-10 h-10 border-2 rounded-full mb-4 transition-colors", selectedTable.shape === 'circle' ? "border-accent-gold" : "border-text-muted group-hover:border-text-primary")} />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em]">Cercle</span>
+                        <span className="text-nano font-black uppercase tracking-[0.2em]">Cercle</span>
                     </motion.button>
                 </div>
 
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                        <label className="text-[11px] font-bold text-text-primary uppercase tracking-widest flex items-center gap-2">
+                        <label className="text-micro font-bold text-text-primary uppercase tracking-widest flex items-center gap-2">
                             <Armchair className="w-4 h-4" />
                             Couverts
                         </label>

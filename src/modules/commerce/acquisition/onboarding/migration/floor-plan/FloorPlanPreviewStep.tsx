@@ -70,7 +70,7 @@ export function FloorPlanPreviewStep({
                     <option value="circle">{SHAPE_LABELS.circle}</option>
                   </select>
                 </td>
-                <td className="px-4 py-2 font-mono text-[11px] text-text-muted">
+                <td className="px-4 py-2 font-mono text-micro text-text-muted">
                   table-{t.zone.toLowerCase().replace(/\s+/g, '-')}-{t.number}
                 </td>
                 <td className="px-4 py-2">

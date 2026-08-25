@@ -25,7 +25,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                             {zone === 'TERRACE' && <div className="w-2.5 h-2.5 rounded-full bg-teal shadow-[0_0_15px_rgba(0,217,166,0.3)]" />}
                             {zone === 'STANDARD' && <div className="w-2.5 h-2.5 rounded-full bg-text-muted/20" />}
                             <span className={cn(
-                                "text-[10px] font-black uppercase tracking-[0.3em]",
+                                "text-nano font-black uppercase tracking-[0.3em]",
                                 zone === 'VIP' ? "text-accent" : zone === 'TERRACE' ? "text-status-success" : "text-text-muted/60"
                             )}>{t('reservations.zones.zone')} {zone}</span>
                             <div className="h-px flex-1 bg-border/40" />
@@ -111,10 +111,10 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                                             </div>
 
                                             <div className="flex flex-col items-center">
-                                                <span className="text-[10px] md:text-[12px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-primary transition-colors">Table</span>
+                                                <span className="text-nano md:text-[12px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-primary transition-colors">Table</span>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <Users className={cn("w-3 md:w-3.5 h-3 md:h-3.5", styles.icon)} />
-                                                    <span className="text-[11px] md:text-[13px] font-bold text-text-primary font-serif italic">{table.seats} Pers.</span>
+                                                    <span className="text-micro md:text-[13px] font-bold text-text-primary font-serif italic">{table.seats} Pers.</span>
                                                 </div>
                                             </div>
                                         </div>

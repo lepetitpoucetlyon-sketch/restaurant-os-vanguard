@@ -38,10 +38,10 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
             <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-3">
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg bg-bg-tertiary text-text-muted border border-border">
+                        <span className="text-nano font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg bg-bg-tertiary text-text-muted border border-border">
                             {pageTypeLabels[page.pageType]}
                         </span>
-                        <code className="text-[11px] font-mono text-teal bg-teal/5 px-2 py-1 rounded-lg">{page.pagePath}</code>
+                        <code className="text-micro font-mono text-teal bg-teal/5 px-2 py-1 rounded-lg">{page.pagePath}</code>
                     </div>
                     <h3 className="text-lg font-serif italic font-black text-text-primary mb-2">{page.meta.title}</h3>
                     <p className="text-sm text-text-muted leading-relaxed line-clamp-2">{page.meta.description}</p>
@@ -49,12 +49,12 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
                     {page.score.issues.length > 0 && (
                         <div className="mt-4 flex items-center gap-2 flex-wrap">
                             {page.score.issues.slice(0, 2).map((issue, i) => (
-                                <span key={i} className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg bg-action-primary/10 text-amber-600 dark:text-action-primary border border-action-primary/20">
+                                <span key={i} className="text-nano font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg bg-action-primary/10 text-amber-600 dark:text-action-primary border border-action-primary/20">
                                     {issue}
                                 </span>
                             ))}
                             {page.score.issues.length > 2 && (
-                                <span className="text-[10px] text-text-muted font-bold">+{page.score.issues.length - 2}</span>
+                                <span className="text-nano text-text-muted font-bold">+{page.score.issues.length - 2}</span>
                             )}
                         </div>
                     )}

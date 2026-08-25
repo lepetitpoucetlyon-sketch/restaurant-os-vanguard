@@ -72,7 +72,7 @@ export function EquipmentDetailModal({
         {/* Header */}
         <div className="flex items-start justify-between pb-4 border-b border-slate-800">
           <div className="space-y-1">
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-widest">
+            <span className="text-micro font-bold text-text-muted uppercase tracking-widest">
               Fiche 360° Équipement & GMAO
             </span>
             <h2 className="text-xl font-bold text-white tracking-tight">

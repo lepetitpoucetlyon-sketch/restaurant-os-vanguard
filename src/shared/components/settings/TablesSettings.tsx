@@ -74,7 +74,7 @@ export default function TablesSettings() {
                 ].map((stat, idx) => (
                     <div key={idx} className="bg-bg-secondary border border-border p-4 rounded-2xl flex items-center justify-between group hover:border-accent/30 transition-all">
                         <div>
-                            <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest mb-1">{stat.label}</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest mb-1">{stat.label}</p>
                             <p className="text-lg font-serif text-text-primary italic">{stat.value}</p>
                         </div>
                         <div className="w-10 h-10 rounded-xl bg-bg-primary flex items-center justify-center text-text-muted group-hover:text-accent transition-colors">

@@ -190,7 +190,7 @@ export function TipsDistributionSettingsSection({ settings = DEFAULT_TIPS_SETTIN
                 <FileSpreadsheet className="w-5 h-5 text-amber-500" />
                 <div>
                   <p className="text-xs font-semibold text-text-primary">Ligne Exonérée sur Bulletins de Paie HCR</p>
-                  <p className="text-[10px] text-text-muted">Intégration automatique dans les exports paie (Loi de Finance)</p>
+                  <p className="text-nano text-text-muted">Intégration automatique dans les exports paie (Loi de Finance)</p>
                 </div>
               </div>
               <button

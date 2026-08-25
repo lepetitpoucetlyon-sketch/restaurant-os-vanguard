@@ -185,7 +185,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                                         Devis Événement
                                         <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
                                     </h2>
-                                    <p className="text-[10px] text-text-muted uppercase tracking-wider mt-0.5">
+                                    <p className="text-nano text-text-muted uppercase tracking-wider mt-0.5">
                                         Privatisation / Séminaire / Banquet
                                     </p>
                                 </div>

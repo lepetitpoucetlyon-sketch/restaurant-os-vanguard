@@ -24,7 +24,7 @@ export function ProductFinancials({
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                     <DollarSign className="w-3.5 h-3.5" /> Prix Carte
                 </label>
                 <div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ export function ProductFinancials({
                 </div>
             </div>
             <div className="p-6 bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border shadow-soft space-y-3">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                     <Timer className="w-3.5 h-3.5" /> Envoi ESTIMÉ
                 </label>
                 <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ export function ProductFinancials({
                 "p-6 rounded-3xl border shadow-soft flex flex-col justify-center",
                 margin >= 70 ? "bg-success-soft border-success/20" : margin >= 50 ? "bg-warning-soft border-warning/20" : "bg-error-soft border-error/20"
             )}>
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                     <Percent className="w-3.5 h-3.5" /> Rentabilité
                 </label>
                 <div className="flex items-baseline gap-2">
@@ -66,7 +66,7 @@ export function ProductFinancials({
                     )}>{margin.toFixed(1)}</span>
                     <span className="text-sm font-black text-text-muted">%</span>
                 </div>
-                <p className="text-[9px] font-bold text-text-muted mt-1">COÛT REVIENT: {formatCurrency(calculatedCost)}</p>
+                <p className="text-nano font-bold text-text-muted mt-1">COÛT REVIENT: {formatCurrency(calculatedCost)}</p>
             </div>
         </div>
     );

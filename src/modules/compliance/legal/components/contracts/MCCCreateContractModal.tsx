@@ -117,7 +117,7 @@ export function MCCCreateContractModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="col-span-2">
                   <label className="block text-xs font-semibold text-text-muted mb-1">Raison Sociale</label>
                   <input
@@ -186,7 +186,7 @@ export function MCCCreateContractModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 border-t border-zinc-800 pt-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-zinc-800 pt-4">
                 <div>
                   <label className="block text-xs font-semibold text-text-muted mb-1">Tarif Mensuel (€ HT)</label>
                   <input

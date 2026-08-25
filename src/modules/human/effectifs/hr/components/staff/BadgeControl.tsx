@@ -71,7 +71,7 @@ export const BadgeControl: React.FC = () => {
                             isClockedIn ? "bg-success" : "bg-warning"
                         )} />
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-tighter text-text-muted leading-tight">État de Service</p>
+                            <p className="text-nano font-black uppercase tracking-tighter text-text-muted leading-tight">État de Service</p>
                             <p className="text-sm font-serif font-black text-text-primary">
                                 {isClockedIn ? "EN POSTE" : "HORS SERVICE"}
                             </p>
@@ -84,7 +84,7 @@ export const BadgeControl: React.FC = () => {
                         onClick={handleBadge}
                         disabled={isProcessing || isLoading}
                         className={cn(
-                            "h-14 px-8 rounded-xl font-bold uppercase tracking-widest text-[11px] transition-all duration-500 shadow-lg relative overflow-hidden",
+                            "h-14 px-8 rounded-xl font-bold uppercase tracking-widest text-micro transition-all duration-500 shadow-lg relative overflow-hidden",
                             isClockedIn 
                                 ? "bg-[--color-status-error] hover:bg-surface-sidebar text-text-primary shadow-red-500/20" 
                                 : "bg-accent hover:bg-surface-sidebar text-text-primary shadow-accent/20"
@@ -119,7 +119,7 @@ export const BadgeControl: React.FC = () => {
                     
                     <div className="flex items-center justify-center gap-2 py-1 px-3 bg-bg-tertiary rounded-lg border border-border/50">
                         <Shield className="w-3 h-3 text-success" />
-                        <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest">Transaction Sécurisée</span>
+                        <span className="text-nano font-bold text-text-muted uppercase tracking-widest">Transaction Sécurisée</span>
                     </div>
                 </div>
             </div>
@@ -127,7 +127,7 @@ export const BadgeControl: React.FC = () => {
             {isClockedIn && currentShift && (
                 <div className="mt-6 pt-6 border-t border-border/50 grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">Début de Session</p>
+                        <p className="text-nano font-black uppercase tracking-tighter text-text-muted">Début de Session</p>
                         <p className="text-xs font-mono font-bold text-text-primary">
                             {(() => {
                                     const ts = currentShift.timestamp;
@@ -145,8 +145,8 @@ export const BadgeControl: React.FC = () => {
                         </p>
                     </div>
                     <div className="space-y-1 text-right">
-                        <p className="text-[9px] font-black uppercase tracking-tighter text-text-muted">ID Séquence Scellé</p>
-                        <p className="text-[10px] font-mono font-bold text-accent truncate max-w-[120px] ml-auto">
+                        <p className="text-nano font-black uppercase tracking-tighter text-text-muted">ID Séquence Scellé</p>
+                        <p className="text-nano font-mono font-bold text-accent truncate max-w-[120px] ml-auto">
                             {currentShift.fiscalSeal?.hash || "PENDING_SYNC"}
                         </p>
                     </div>

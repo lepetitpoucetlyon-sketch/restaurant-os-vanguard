@@ -58,7 +58,7 @@ export function OrderProductCard({
             {product.allergens.map((alg) => (
               <span
                 key={alg}
-                className="text-[10px] bg-rose-500/10 text-rose-300 border border-rose-500/20 px-1.5 py-0.5 rounded"
+                className="text-nano bg-rose-500/10 text-rose-300 border border-rose-500/20 px-1.5 py-0.5 rounded"
               >
                 {alg}
               </span>
@@ -68,7 +68,7 @@ export function OrderProductCard({
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-white/5">
-        <span className="text-[11px] text-slate-500">
+        <span className="text-micro text-slate-500">
           {product.available ? 'En stock' : 'Épuisé'}
         </span>
 

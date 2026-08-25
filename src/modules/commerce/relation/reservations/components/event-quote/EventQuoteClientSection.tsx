@@ -17,7 +17,7 @@ interface EventQuoteClientSectionProps {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+      <label className="text-micro font-bold uppercase tracking-wider text-text-secondary">
         {label}
       </label>
       {children}
@@ -35,7 +35,7 @@ export function EventQuoteClientSection({
 }: EventQuoteClientSectionProps) {
   return (
     <section className="space-y-4">
-      <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2">
+      <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2">
         Informations client
       </p>
       <div className="grid grid-cols-2 gap-4">

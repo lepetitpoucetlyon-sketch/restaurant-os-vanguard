@@ -206,7 +206,7 @@ function POSPage() {
                                     {cartCount}
                                 </span>
                                 <div className="flex flex-col items-start leading-tight">
-                                    <span className="font-serif font-black italic text-[10px] uppercase tracking-[0.24em] opacity-70">Panier</span>
+                                    <span className="font-serif font-black italic text-nano uppercase tracking-[0.24em] opacity-70">Panier</span>
                                     <span className="text-sm font-medium tracking-tight">Ouvrir</span>
                                 </div>
                             </div>
@@ -234,7 +234,7 @@ function POSPage() {
                     <motion.div key="tip-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm px-4 pb-8 sm:pb-0" onClick={(e) => { if (e.target === e.currentTarget) handleTipSkipped(); }}>
                         <motion.div key="tip-card" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ type: "spring", stiffness: 380, damping: 34 }} className="w-full sm:w-[420px]">
                             <TipPanel totalInMicrounits={cartTotal} onTipSelect={handleTipConfirmed} />
-                            <button onClick={handleTipSkipped} className="mt-4 w-full h-12 rounded-full border border-border text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-border/80 bg-surface-card/80 transition-colors">Passer — Sans pourboire</button>
+                            <button onClick={handleTipSkipped} className="mt-4 w-full h-12 rounded-full border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:border-border/80 bg-surface-card/80 transition-colors">Passer — Sans pourboire</button>
                         </motion.div>
                     </motion.div>
                 )}

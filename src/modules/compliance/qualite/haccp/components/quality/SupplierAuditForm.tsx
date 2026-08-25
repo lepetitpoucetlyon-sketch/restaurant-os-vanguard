@@ -28,13 +28,13 @@ export const SupplierAuditForm: React.FC = () => {
                 <div className="p-4 bg-status-danger border border-rose-100 rounded-2xl flex items-center gap-4">
                     <ShieldAlert className="w-5 h-5 text-status-danger" />
                     <div>
-                        <p className="text-[10px] font-black text-status-danger uppercase">Attention</p>
+                        <p className="text-nano font-black text-status-danger uppercase">Attention</p>
                         <p className="text-xs text-status-danger font-medium">Dernier audit : 12/2025. Renouvellement imminent.</p>
                     </div>
                 </div>
             </div>
 
-            <Button className="w-full mt-8 bg-surface-sidebar text-text-primary py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">
+            <Button className="w-full mt-8 bg-surface-sidebar text-text-primary py-4 rounded-xl font-bold uppercase text-nano tracking-widest">
                 Lancer l'Audit de Certification
             </Button>
         </div>

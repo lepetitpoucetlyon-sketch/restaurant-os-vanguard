@@ -25,8 +25,8 @@ export function BrandingAccessSection({
       {/* mod_brand_basic */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-bold text-muted">mod_brand_basic</p>
-          <p className="text-[9px] text-secondary mt-0.5">Logo · couleurs · favicon · splash</p>
+          <p className="text-nano font-bold text-muted">mod_brand_basic</p>
+          <p className="text-nano text-secondary mt-0.5">Logo · couleurs · favicon · splash</p>
         </div>
         <button
           onClick={() => onUpdateBrandCap('mod_brand_basic', !(form.capabilities?.['mod_brand_basic'] !== false))}
@@ -48,8 +48,8 @@ export function BrandingAccessSection({
       {/* mod_brand_plus */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-bold text-muted">mod_brand_plus</p>
-          <p className="text-[9px] text-secondary mt-0.5">Configurateur avancé · AI · presets · polices</p>
+          <p className="text-nano font-bold text-muted">mod_brand_plus</p>
+          <p className="text-nano text-secondary mt-0.5">Configurateur avancé · AI · presets · polices</p>
         </div>
         <button
           onClick={() => onUpdateBrandCap('mod_brand_plus', !(form.capabilities?.['mod_brand_plus'] === true))}
@@ -70,7 +70,7 @@ export function BrandingAccessSection({
 
       {/* Indicateur d'état actuel (Firestore) */}
       {(current.capabilities?.['mod_brand_basic'] !== undefined || current.capabilities?.['mod_brand_plus'] !== undefined) && (
-        <p className="text-[9px] text-secondary/60 border-t border-violet-500/10 pt-2">
+        <p className="text-nano text-secondary/60 border-t border-violet-500/10 pt-2">
           État actuel Firestore —{' '}
           basic: <span className="font-mono">{String(current.capabilities?.['mod_brand_basic'] !== false)}</span>
           {' · '}

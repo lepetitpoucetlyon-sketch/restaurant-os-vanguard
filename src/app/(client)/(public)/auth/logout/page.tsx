@@ -96,7 +96,7 @@ export default function LogoutPage() {
 
                     <div className="mt-12 flex justify-between items-end">
                         <div className="space-y-1">
-                            <p className="text-[10px] text-primary uppercase">System_Status</p>
+                            <p className="text-nano text-primary uppercase">System_Status</p>
                             <div className="flex gap-1">
                                 {[1, 2, 3, 4, 5].map(i => (
                                     <div key={i} className="w-3 h-1 bg-status-danger/30 overflow-hidden">
@@ -110,13 +110,13 @@ export default function LogoutPage() {
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-[10px] text-primary italic">EXCALIBUR_9_BIOLOGIQUE_ACTIVE</p>
-                            <p className="text-[10px] text-primary">grade_vi_lockdown_v5.4</p>
+                            <p className="text-nano text-primary italic">EXCALIBUR_9_BIOLOGIQUE_ACTIVE</p>
+                            <p className="text-nano text-primary">grade_vi_lockdown_v5.4</p>
                         </div>
                     </div>
                 </motion.div>
 
-                <p className="text-center mt-8 text-status-danger/40 text-[10px] uppercase tracking-[0.5em] font-bold">
+                <p className="text-center mt-8 text-status-danger/40 text-nano uppercase tracking-[0.5em] font-bold">
                     [ Access_Denied_Structure_Immutable ]
                 </p>
             </div>

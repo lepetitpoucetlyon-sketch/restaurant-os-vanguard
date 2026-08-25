@@ -50,7 +50,7 @@ export function ConnectivityBanner() {
 
     return (
         <div className={cn(
-            'flex items-center justify-center gap-3 px-4 py-2 text-[11px] font-bold tracking-wider transition-all',
+            'flex items-center justify-center gap-3 px-4 py-2 text-micro font-bold tracking-wider transition-all',
             syncState === 'offline' && 'bg-status-error/10 text-status-error border-b border-status-error/20',
             syncState === 'syncing' && 'bg-action-primary/10 text-amber-600 dark:text-action-primary border-b border-action-primary/20',
             syncState === 'synced' && 'bg-status-success/10 text-status-success border-b border-status-success/20',
@@ -80,7 +80,7 @@ export function ConnectivityBanner() {
                     <span>{syncResult?.failed ?? 0} opération{(syncResult?.failed ?? 0) > 1 ? 's' : ''} en échec</span>
                     <button
                         onClick={runReconciliation}
-                        className="ml-2 px-3 py-1 rounded-full bg-status-error/20 hover:bg-status-error/30 transition-colors text-[10px] font-black uppercase"
+                        className="ml-2 px-3 py-1 rounded-full bg-status-error/20 hover:bg-status-error/30 transition-colors text-nano font-black uppercase"
                     >
                         Réessayer
                     </button>

@@ -19,7 +19,7 @@ export function NexusIdentitySection({ config, updateConfig }: Props) {
                 </div>
                 <div>
                     <h3 className="text-xl font-serif text-text-primary">Identité Assistée</h3>
-                    <p className="text-[10px] text-text-muted uppercase tracking-widest font-black">ADN Système</p>
+                    <p className="text-nano text-text-muted uppercase tracking-widest font-black">ADN Système</p>
                 </div>
             </div>
 
@@ -43,7 +43,7 @@ export function NexusIdentitySection({ config, updateConfig }: Props) {
                                 key={p}
                                 onClick={() => updateConfig({ personality: p as NexusConfig['personality'] })}
                                 className={cn(
-                                    "px-4 py-3 rounded-xl border transition-all text-[11px] font-bold uppercase tracking-widest",
+                                    "px-4 py-3 rounded-xl border transition-all text-micro font-bold uppercase tracking-widest",
                                     config.personality === p 
                                         ? "bg-accent text-primary border-accent" 
                                         : "bg-bg-tertiary border-border text-text-muted hover:border-accent/40"

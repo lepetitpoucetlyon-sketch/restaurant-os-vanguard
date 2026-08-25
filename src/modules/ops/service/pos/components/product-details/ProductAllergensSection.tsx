@@ -83,7 +83,7 @@ export function ProductAllergensSection({
       ) : (
         <button
           onClick={onOpenAllergenInput}
-          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-bg-tertiary/40 hover:bg-bg-tertiary transition-all border border-dashed border-border rounded-[24px] text-[11px] font-black uppercase tracking-[0.2em] text-text-muted hover:text-accent-gold"
+          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-bg-tertiary/40 hover:bg-bg-tertiary transition-all border border-dashed border-border rounded-[24px] text-micro font-black uppercase tracking-[0.2em] text-text-muted hover:text-accent-gold"
         >
           <Plus className="w-4 h-4" />
           {t('pos.details.add_custom_allergen')}

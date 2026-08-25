@@ -120,18 +120,18 @@ export function ForgeStudioTab() {
           </div>
 
           <div className="space-y-3">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Workflows Sectoriels Identifiés</span>
+            <span className="text-micro font-bold text-slate-400 uppercase tracking-wider">Workflows Sectoriels Identifiés</span>
             <div className="space-y-2">
               {study.workflows.map((wf) => (
                 <div key={wf.id} className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs">
                   <div className="flex items-center justify-between font-bold text-slate-200 mb-1">
                     <span>{wf.label}</span>
-                    <span className="text-[10px] font-mono text-slate-500">{wf.id}</span>
+                    <span className="text-nano font-mono text-slate-500">{wf.id}</span>
                   </div>
-                  <p className="text-slate-400 text-[11px] mb-2">{wf.description}</p>
+                  <p className="text-slate-400 text-micro mb-2">{wf.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {wf.capabilities.map((c) => (
-                      <span key={c} className="px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[10px] font-mono">
+                      <span key={c} className="px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-nano font-mono">
                         {c}
                       </span>
                     ))}
@@ -156,7 +156,7 @@ export function ForgeStudioTab() {
 
           <div className="space-y-4">
             <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-2">
                 Capabilities Activées ({Object.keys(proposal.capabilities).length})
               </span>
               <div className="flex flex-wrap gap-2">
@@ -169,20 +169,20 @@ export function ForgeStudioTab() {
             </div>
 
             <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-2">
                 Événements Métier Générés ({proposal.events.length})
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                 {proposal.events.map((ev, idx) => (
                   <div key={idx} className="p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
                     <span className="font-mono text-amber-400">{ev.name}</span>
-                    <span className="text-[10px] text-slate-500">{ev.description}</span>
+                    <span className="text-nano text-slate-500">{ev.description}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-micro text-slate-400 space-y-1">
               <span className="font-bold text-slate-300 block">Justifications de Morphogenèse :</span>
               {proposal.rationale.slice(0, 3).map((r, i) => (
                 <p key={i}>• {r}</p>

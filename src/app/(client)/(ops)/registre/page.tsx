@@ -94,7 +94,7 @@ function RegistrePage() {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={cn(
-                            "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[10px] uppercase tracking-widest transition-all duration-300 whitespace-nowrap",
+                            "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-nano uppercase tracking-widest transition-all duration-300 whitespace-nowrap",
                             activeTab === tab.id
                                 ? "bg-bg-tertiary text-accent border border-accent/20 shadow-sm"
                                 : "text-text-muted hover:text-text-primary hover:bg-bg-tertiary/10"
@@ -129,14 +129,14 @@ function RegistrePage() {
                                             <stat.icon className={cn("w-8 h-8", stat.color)} strokeWidth={1.5} />
                                             <span className={cn("text-4xl font-serif font-black", stat.color)}>{stat.count}</span>
                                         </div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">{stat.label}</p>
+                                        <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted">{stat.label}</p>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Documents Cards */}
                             <div className="space-y-4">
-                                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1">Registres Obligatoires</h3>
+                                <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] px-1">Registres Obligatoires</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {allDocs.map(({ doc, tab, icon: Icon, color, isModal }) => (
                                         <button
@@ -159,11 +159,11 @@ function RegistrePage() {
                                             <div className="flex items-center gap-6 mt-6 pt-6 border-t border-border/50">
                                                 <div className="flex items-center gap-2 text-text-muted">
                                                     <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                                    <span className="text-[10px] font-mono">MAJ : {doc.lastUpdated}</span>
+                                                    <span className="text-nano font-mono">MAJ : {doc.lastUpdated}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 text-text-muted">
                                                     <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                                    <span className="text-[10px] font-mono">Révision : {doc.nextReview}</span>
+                                                    <span className="text-nano font-mono">Révision : {doc.nextReview}</span>
                                                 </div>
                                             </div>
                                         </button>
@@ -183,7 +183,7 @@ function RegistrePage() {
                                         </div>
                                         <div>
                                             <h4 className="text-lg font-serif font-bold text-text-primary group-hover:text-accent transition-colors">Certifications Prestataires</h4>
-                                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest mt-0.5">{prestataires.length} prestataires enregistrés</p>
+                                            <p className="text-nano font-black text-text-muted uppercase tracking-widest mt-0.5">{prestataires.length} prestataires enregistrés</p>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">

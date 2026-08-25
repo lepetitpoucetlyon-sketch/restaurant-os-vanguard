@@ -56,21 +56,21 @@ export function SupplierHubDashboard() {
         <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
           <Truck className="w-4 h-4 text-blue-500" />
           <div>
-            <div className="text-[10px] font-bold text-text-muted uppercase">Livraisons J-0</div>
+            <div className="text-nano font-bold text-text-muted uppercase">Livraisons J-0</div>
             <div className="text-sm font-black text-text-primary">3 Attendues</div>
           </div>
         </div>
         <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
           <AlertTriangle className="w-4 h-4 text-amber-500" />
           <div>
-            <div className="text-[10px] font-bold text-text-muted uppercase">Litiges / Avoirs</div>
+            <div className="text-nano font-bold text-text-muted uppercase">Litiges / Avoirs</div>
             <div className="text-sm font-black text-amber-500">2 En cours (318,50 €)</div>
           </div>
         </div>
         <div className="px-4 py-2 rounded-xl bg-surface-card border border-border flex items-center gap-3">
           <Award className="w-4 h-4 text-emerald-500" />
           <div>
-            <div className="text-[10px] font-bold text-text-muted uppercase">RFA Acquises 2026</div>
+            <div className="text-nano font-bold text-text-muted uppercase">RFA Acquises 2026</div>
             <div className="text-sm font-black text-emerald-500">1 560,00 €</div>
           </div>
         </div>

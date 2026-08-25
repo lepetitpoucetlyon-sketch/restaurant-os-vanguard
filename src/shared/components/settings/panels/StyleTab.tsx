@@ -34,8 +34,8 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                 {/* Theme Mode Selection */}
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.mode_label')}</label>
-                    <div className="grid grid-cols-3 gap-2">
+                    <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.mode_label')}</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {[
                             { id: 'light', label: t('settings.modes.light.label'), desc: t('settings.modes.light.desc') },
                             { id: 'dark', label: t('settings.modes.dark.label'), desc: t('settings.modes.dark.desc') },
@@ -51,8 +51,8 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                         : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
                                 )}
                             >
-                                <span className="text-[9px] font-black uppercase tracking-tighter">{m.label}</span>
-                                <span className="text-[7px] font-bold uppercase opacity-50 tracking-widest">{m.desc}</span>
+                                <span className="text-nano font-black uppercase tracking-tighter">{m.label}</span>
+                                <span className="text-nano font-bold uppercase opacity-50 tracking-widest">{m.desc}</span>
                             </button>
                         ))}
                     </div>
@@ -60,7 +60,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                 {/* Accent Color Selection */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.accent_label')}</label>
+                    <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.accent_label')}</label>
                     <div className="flex justify-between items-center p-2 rounded-2xl bg-bg-tertiary/20 border border-border/50">
                         {(['gold', 'emerald', 'sapphire', 'ruby', 'amethyst'] as const).map((color) => (
                             <button
@@ -86,8 +86,8 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                 {/* UI Density Selection */}
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.density_label')}</label>
-                    <div className="grid grid-cols-3 gap-2">
+                    <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.density_label')}</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {(['compact', 'premium', 'cinematic'] as const).map((d) => (
                             <button
                                 key={d}
@@ -107,8 +107,8 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
 
                 {/* Border Radius Selection */}
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.radius_label')}</label>
-                    <div className="grid grid-cols-4 gap-2">
+                    <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.radius_label')}</label>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                         {[
                             { id: 'none', label: t('settings.radius.none') },
                             { id: 'small', label: t('settings.radius.small') },
@@ -119,7 +119,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                 key={r.id}
                                 onClick={() => theme.setBorderRadius(r.id as never)}
                                 className={cn(
-                                    "py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border-2 transition-all",
+                                    "py-2 rounded-xl text-nano font-black uppercase tracking-widest border-2 transition-all",
                                     theme.borderRadius === r.id
                                         ? "bg-accent/10 border-accent text-accent"
                                         : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
@@ -134,8 +134,8 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                 {/* Glassmorphism Intensity */}
                 <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.glass_label')}</label>
-                        <span className="text-[10px] font-serif italic text-accent-gold">{theme.glassmorphism}%</span>
+                        <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70">{t('settings.glass_label')}</label>
+                        <span className="text-nano font-serif italic text-accent-gold">{theme.glassmorphism}%</span>
                     </div>
                     <input
                         type="range"
@@ -186,11 +186,11 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                             className="space-y-4 p-5 rounded-[24px] bg-bg-secondary/30 border border-border/50 hover:border-accent/30 transition-all group"
                         >
                             <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-gold/70 group-hover:text-accent-gold transition-colors">
+                                <label className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold/70 group-hover:text-accent-gold transition-colors">
                                     {setting.label}
                                 </label>
                                 {setting.description && (
-                                    <p className="text-[9px] text-text-muted italic leading-relaxed">
+                                    <p className="text-nano text-text-muted italic leading-relaxed">
                                         {setting.description}
                                     </p>
                                 )}

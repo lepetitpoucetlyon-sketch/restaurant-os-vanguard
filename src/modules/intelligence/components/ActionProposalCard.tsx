@@ -53,7 +53,7 @@ export function ActionProposalCard({ proposal, onExecute, onDismiss }: ActionPro
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-bg-tertiary border border-border text-text-muted">
+                <div className="flex items-center gap-1 text-nano px-2 py-0.5 rounded-full bg-bg-tertiary border border-border text-text-muted">
                     <Shield className="w-3 h-3 text-accent" />
                     <span>Niv. {proposal.minRoleLevel}</span>
                 </div>
@@ -66,7 +66,7 @@ export function ActionProposalCard({ proposal, onExecute, onDismiss }: ActionPro
 
             {/* Params Snippet */}
             {Object.keys(proposal.params).length > 0 && (
-                <div className="bg-bg-tertiary/60 rounded-lg p-2 mb-3 text-[11px] font-mono border border-border/50 text-text-muted space-y-1">
+                <div className="bg-bg-tertiary/60 rounded-lg p-2 mb-3 text-micro font-mono border border-border/50 text-text-muted space-y-1">
                     {Object.entries(proposal.params).map(([key, val]) => (
                         <div key={key} className="flex items-center justify-between">
                             <span className="text-text-muted">{key}:</span>

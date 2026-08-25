@@ -135,7 +135,7 @@ function LeavesPage() {
                                         <tab.icon className="w-4 h-4" />
                                         {tab.label}
                                         {tab.count !== undefined && tab.count > 0 && (
-                                            <span className="w-5 h-5 rounded-full bg-action-primary text-text-primary flex items-center justify-center text-[9px] shadow-sm">
+                                            <span className="w-5 h-5 rounded-full bg-action-primary text-text-primary flex items-center justify-center text-nano shadow-sm">
                                                 {tab.count}
                                             </span>
                                         )}

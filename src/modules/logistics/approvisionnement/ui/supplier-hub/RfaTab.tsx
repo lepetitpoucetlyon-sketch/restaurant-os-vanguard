@@ -34,7 +34,7 @@ export function RfaTab() {
               style={{ width: '36%' }}
             />
           </div>
-          <div className="flex items-center justify-between text-[11px] text-text-muted">
+          <div className="flex items-center justify-between text-micro text-text-muted">
             <span>Palier 1 : 10k€ (2%)</span>
             <span>Palier 2 : 25k€ (4%) — <em>Manque 7 000 € (+680 € gain)</em></span>
             <span>Palier 3 : 50k€ (6%)</span>

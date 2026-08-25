@@ -152,7 +152,7 @@ export default function PrinterSettings() {
               <p className="text-xs text-text-muted">Choisissez l&apos;esthétique d&apos;impression et la destination du QR Code</p>
             </div>
           </div>
-          <span className="text-[10px] uppercase tracking-widest font-black text-status-success bg-status-success/10 px-2.5 py-1 rounded-full border border-status-success/20">
+          <span className="text-nano uppercase tracking-widest font-black text-status-success bg-status-success/10 px-2.5 py-1 rounded-full border border-status-success/20">
             Conforme NF525
           </span>
         </div>
@@ -210,7 +210,7 @@ export default function PrinterSettings() {
                 }`}
               >
                 <p className="text-xs font-bold text-text-primary">{opt.label}</p>
-                <p className="text-[11px] text-text-muted mt-0.5">{opt.desc}</p>
+                <p className="text-micro text-text-muted mt-0.5">{opt.desc}</p>
               </button>
             ))}
           </div>
@@ -310,7 +310,7 @@ function StyleOptionCard({
     >
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-bold text-text-primary">{title}</span>
-        <span className="text-[9px] uppercase font-black tracking-widest text-text-muted bg-bg-secondary px-2 py-0.5 rounded-md border border-border">
+        <span className="text-nano uppercase font-black tracking-widest text-text-muted bg-bg-secondary px-2 py-0.5 rounded-md border border-border">
           {tag}
         </span>
       </div>

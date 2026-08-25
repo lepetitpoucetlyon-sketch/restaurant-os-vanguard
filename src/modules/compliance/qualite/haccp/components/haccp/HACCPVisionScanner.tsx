@@ -79,7 +79,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
 
                     <div>
                         <h3 className="text-2xl font-serif italic text-text-primary mb-2 uppercase tracking-tighter">Audit Sanitaire</h3>
-                        <p className="text-[10px] font-black text-secondary uppercase tracking-[0.4em] mb-4">{taskName}</p>
+                        <p className="text-nano font-black text-secondary uppercase tracking-[0.4em] mb-4">{taskName}</p>
                         
                         <AnimatePresence>
                             {result && (
@@ -87,7 +87,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className={cn(
-                                        "p-4 rounded-2xl border text-[11px] font-bold",
+                                        "p-4 rounded-2xl border text-micro font-bold",
                                         result.isCompliant ? "bg-status-success/5 border-emerald-500/20 text-status-success" : "bg-status-danger/5 border-red-500/20 text-status-danger"
                                     )}
                                 >
@@ -110,12 +110,12 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                             <Button 
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isProcessing}
-                                className="w-full py-8 bg-surface-card text-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
+                                className="w-full py-8 bg-surface-card text-primary text-micro font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
                             >
                                 <Camera size={18} className="mr-2" />
                                 Capturer la Preuve
                             </Button>
-                            <p className="text-[9px] font-bold text-secondary uppercase tracking-widest leading-relaxed">
+                            <p className="text-nano font-bold text-secondary uppercase tracking-widest leading-relaxed">
                                 L'IA analysera la propreté et la conformité <br />pour valider la tâche automatiquement.
                             </p>
                         </div>

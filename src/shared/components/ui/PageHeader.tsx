@@ -32,14 +32,14 @@ export function PageHeader({
         minimal: {
             container: "py-4 px-6",
             titleSize: "text-xl",
-            subtitleSize: "text-[9px]",
+            subtitleSize: "text-nano",
             iconSize: "w-10 h-10 rounded-xl",
             iconInner: "w-5 h-5",
         },
         default: {
             container: "py-6 px-8",
             titleSize: "text-2xl",
-            subtitleSize: "text-[10px]",
+            subtitleSize: "text-nano",
             iconSize: "w-12 h-12 rounded-2xl",
             iconInner: "w-6 h-6",
         },
@@ -76,12 +76,12 @@ export function PageHeader({
                             {item.href ? (
                                 <a
                                     href={item.href}
-                                    className="text-[10px] font-bold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+                                    className="text-nano font-bold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
                                 >
                                     {item.label}
                                 </a>
                             ) : (
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary">
+                                <span className="text-nano font-bold uppercase tracking-widest text-text-primary">
                                     {item.label}
                                 </span>
                             )}

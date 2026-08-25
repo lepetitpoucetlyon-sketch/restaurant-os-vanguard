@@ -62,7 +62,7 @@ export function MCCTreasury() {
             {/* Source badge */}
             <div className="flex items-center gap-2">
                 {isLoadingStripe ? (
-                    <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-text-muted">
+                    <span className="flex items-center gap-1.5 text-nano font-bold uppercase tracking-widest text-text-muted">
                         <RefreshCw className="w-3 h-3 animate-spin" /> Chargement Stripe…
                     </span>
                 ) : (
@@ -121,7 +121,7 @@ export function MCCTreasury() {
                         <div>
                             <h3 className="text-lg font-bold tracking-tight uppercase">Achats Groupés Flotte</h3>
                             <p className="text-xs text-secondary font-medium tracking-widest mt-1">Statut des négociations groupées industrielles</p>
-                            <p className="text-[9px] text-status-warning font-bold uppercase tracking-widest mt-0.5">Estimations contractuelles — négociations en cours</p>
+                            <p className="text-nano text-status-warning font-bold uppercase tracking-widest mt-0.5">Estimations contractuelles — négociations en cours</p>
                         </div>
                         <div className="p-3 bg-surface-card rounded-2xl">
                             <ShoppingBag className="w-5 h-5 text-brand" />
@@ -129,7 +129,7 @@ export function MCCTreasury() {
                     </div>
 
                     <div className="space-y-1 relative z-10">
-                        <div className="grid grid-cols-12 text-[8px] font-black text-secondary uppercase tracking-widest pb-2 border-b border-border-subtle px-2">
+                        <div className="grid grid-cols-12 text-nano font-black text-secondary uppercase tracking-widest pb-2 border-b border-border-subtle px-2">
                             <span className="col-span-5">Catégorie</span>
                             <span className="col-span-3">Économies</span>
                             <span className="col-span-4 text-right">Statut</span>
@@ -146,10 +146,10 @@ export function MCCTreasury() {
                             </div>
                             <div>
                                 <span className="text-chip-label text-text-primary">Master Supply Portal</span>
-                                <p className="text-[9px] text-secondary mt-0.5">{instances.length} site{instances.length > 1 ? 's' : ''} · Coalition active</p>
+                                <p className="text-nano text-secondary mt-0.5">{instances.length} site{instances.length > 1 ? 's' : ''} · Coalition active</p>
                             </div>
                         </div>
-                        <span className="text-[9px] font-bold uppercase tracking-widest text-status-success border border-emerald-500/30 bg-status-success/10 px-2 py-0.5 rounded-full">Actif</span>
+                        <span className="text-nano font-bold uppercase tracking-widest text-status-success border border-emerald-500/30 bg-status-success/10 px-2 py-0.5 rounded-full">Actif</span>
                     </div>
                 </div>
 
@@ -160,7 +160,7 @@ export function MCCTreasury() {
                         <div className="text-5xl font-black mb-4 tracking-tighter">
                             {hasStripe ? `€${Math.round(netMargin).toLocaleString()}` : '—'}
                         </div>
-                        <p className="text-[11px] text-secondary leading-relaxed font-medium">
+                        <p className="text-micro text-secondary leading-relaxed font-medium">
                             {hasStripe
                                 ? <>MRR encaissé − coûts IA. {mrr > 0 && <> Marge : <span className="text-status-success font-bold">{((netMargin / mrr) * 100).toFixed(1)}%</span>.</>}</>
                                 : 'Disponible dès le premier encaissement Stripe.'
@@ -168,7 +168,7 @@ export function MCCTreasury() {
                         </p>
                         
                         <div className="mt-8 pt-8 border-t border-border-subtle space-y-4">
-                             <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-secondary">
+                             <div className="flex justify-between items-center text-nano font-bold uppercase tracking-widest text-secondary">
                                  <span>Santé Opérationnelle</span>
                                  <span className="text-text-primary">OPTIMAL</span>
                              </div>
@@ -190,12 +190,12 @@ export function MCCTreasury() {
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold uppercase tracking-tight">Inter-Site Logistics</h4>
-                                <p className="text-[10px] text-secondary font-medium uppercase tracking-tighter">{instances.length} nœuds déclarés</p>
+                                <p className="text-nano text-secondary font-medium uppercase tracking-tighter">{instances.length} nœuds déclarés</p>
                             </div>
                         </div>
                         <div className="text-right">
                             <div className="text-sm font-black text-text-primary">€{Math.round(theoreticalReport.collectiveSavings * 0.15).toLocaleString()}</div>
-                            <div className="text-[9px] text-secondary uppercase tracking-widest">économies logistique</div>
+                            <div className="text-nano text-secondary uppercase tracking-widest">économies logistique</div>
                         </div>
                     </div>
                 </div>
@@ -223,12 +223,12 @@ function FinancialCard({ label, value, trend, icon, chartColor, isSpecial = fals
                 <div className="p-3 bg-surface-card rounded-2xl group-hover:bg-surface-card transition-all">
                     {icon}
                 </div>
-                {isSpecial && <div className="px-2 py-1 rounded bg-action-primary/10 border border-focus/20 text-[8px] font-black text-brand uppercase tracking-widest">Premium Power</div>}
+                {isSpecial && <div className="px-2 py-1 rounded bg-action-primary/10 border border-focus/20 text-nano font-black text-brand uppercase tracking-widest">Premium Power</div>}
             </div>
             
             <h3 className="text-secondary text-chip-label mb-2">{label}</h3>
             <div className="text-3xl font-black mb-2 tracking-tighter">{value}</div>
-            <p className="text-[10px] font-medium text-secondary uppercase tracking-tighter">{trend}</p>
+            <p className="text-nano font-medium text-secondary uppercase tracking-tighter">{trend}</p>
 
             {/* Faux Sparkline Decoration */}
             <div className="absolute bottom-0 left-0 right-0 h-12 opacity-20 group-hover:opacity-40 transition-all" style={{ backgroundColor: chartColor, maskImage: 'linear-gradient(to top, black, transparent)' }} />
@@ -250,15 +250,15 @@ function ProcurementRow({ category, volume, unit, discount, status }: Procuremen
             <div className="col-span-5">
                 <span className="text-xs font-bold text-muted group-hover:text-brand transition-colors uppercase">{category}</span>
                 <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[9px] font-bold text-secondary uppercase">{volume.toLocaleString()} {unit}</span>
+                    <span className="text-nano font-bold text-secondary uppercase">{volume.toLocaleString()} {unit}</span>
                 </div>
             </div>
             <div className="col-span-3">
-                <div className="text-[10px] font-black text-status-success uppercase">-{discount}%</div>
-                <span className="text-[8px] font-bold text-secondary uppercase tracking-widest">Max Savings</span>
+                <div className="text-nano font-black text-status-success uppercase">-{discount}%</div>
+                <span className="text-nano font-bold text-secondary uppercase tracking-widest">Max Savings</span>
             </div>
             <div className="col-span-4 text-right">
-                <span className={`text-[8px] font-black px-2 py-0.5 rounded border uppercase tracking-widest ${status === 'NEGOTIATED' ? 'bg-action-primary/10 border-focus/30 text-brand' : 'bg-surface-card border-subtle text-secondary'}`}>
+                <span className={`text-nano font-black px-2 py-0.5 rounded border uppercase tracking-widest ${status === 'NEGOTIATED' ? 'bg-action-primary/10 border-focus/30 text-brand' : 'bg-surface-card border-subtle text-secondary'}`}>
                     {status}
                 </span>
             </div>

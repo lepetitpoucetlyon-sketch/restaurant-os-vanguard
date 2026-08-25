@@ -146,10 +146,10 @@ export function TrustedDevicePanel() {
                     </div>
                     <div>
                         <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Trusted Device Registry</h3>
-                        <p className="text-[10px] text-text-muted">Appareils autorisés à accéder au MCC • ZTNA Layer 2</p>
+                        <p className="text-nano text-text-muted">Appareils autorisés à accéder au MCC • ZTNA Layer 2</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-[10px] font-bold text-text-secondary uppercase tracking-widest">
+                <div className="flex items-center gap-2 px-3 py-1.5 border border-border-subtle bg-surface-card rounded-lg text-nano font-bold text-text-secondary uppercase tracking-widest">
                     <Wifi className="w-3 h-3" />
                     {activeDevices.length} actif{activeDevices.length !== 1 ? 's' : ''}
                 </div>
@@ -163,7 +163,7 @@ export function TrustedDevicePanel() {
                         {myDeviceRegistered ? 'Cet appareil est dans le registre de confiance' : 'Cet appareil n\'est pas encore enregistré'}
                     </p>
                     {myFingerprint && (
-                        <p className="text-[9px] text-text-muted font-mono mt-0.5 truncate">
+                        <p className="text-nano text-text-muted font-mono mt-0.5 truncate">
                             fp: {myFingerprint.slice(0, 16)}…
                         </p>
                     )}
@@ -171,7 +171,7 @@ export function TrustedDevicePanel() {
                 {!myDeviceRegistered && (
                     <button
                         onClick={() => setShowRegisterForm(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-action-primary/20 border border-action-primary/30 rounded-lg text-[10px] font-bold text-action-primary hover:bg-action-primary/30 transition-all uppercase tracking-widest shrink-0"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-action-primary/20 border border-action-primary/30 rounded-lg text-nano font-bold text-action-primary hover:bg-action-primary/30 transition-all uppercase tracking-widest shrink-0"
                     >
                         <Plus className="w-3 h-3" />
                         Enregistrer
@@ -229,7 +229,7 @@ export function TrustedDevicePanel() {
                 <div className="text-center text-xs text-text-muted py-8">Chargement du registre…</div>
             ) : (
                 <div className="space-y-3">
-                    <p className="text-[9px] uppercase tracking-widest text-slate-600 font-bold">Appareils actifs ({activeDevices.length})</p>
+                    <p className="text-nano uppercase tracking-widest text-slate-600 font-bold">Appareils actifs ({activeDevices.length})</p>
                     {activeDevices.length === 0 ? (
                         <div className="flex flex-col items-center gap-2 py-8 text-slate-600">
                             <WifiOff className="w-8 h-8 stroke-1" />
@@ -247,13 +247,13 @@ export function TrustedDevicePanel() {
                                             <div className="min-w-0">
                                                 <p className="text-xs font-bold text-text-primary truncate">
                                                     {device.name}
-                                                    {isMine && <span className="ml-2 text-[9px] text-status-success font-normal">(cet appareil)</span>}
+                                                    {isMine && <span className="ml-2 text-nano text-status-success font-normal">(cet appareil)</span>}
                                                 </p>
-                                                <p className="text-[9px] text-text-muted font-mono">{device.fingerprint}</p>
+                                                <p className="text-nano text-text-muted font-mono">{device.fingerprint}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className={`px-2 py-0.5 border rounded-md text-[9px] font-bold uppercase tracking-widest ${roleInfo.color}`}>
+                                            <span className={`px-2 py-0.5 border rounded-md text-nano font-bold uppercase tracking-widest ${roleInfo.color}`}>
                                                 {roleInfo.label}
                                             </span>
                                             <button
@@ -272,7 +272,7 @@ export function TrustedDevicePanel() {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="flex gap-3 text-[9px] text-slate-600">
+                                    <div className="flex gap-3 text-nano text-slate-600">
                                         <span>Ajouté {new Date(device.addedAt).toLocaleDateString('fr-FR')}</span>
                                         <span>•</span>
                                         <span>Vu {new Date(device.lastSeenAt).toLocaleDateString('fr-FR')}</span>
@@ -285,7 +285,7 @@ export function TrustedDevicePanel() {
                                     {device.allowedRoutes.length > 0 && (
                                         <div className="flex flex-wrap gap-1 pt-1">
                                             {device.allowedRoutes.map(route => (
-                                                <span key={route} className="px-2 py-0.5 bg-surface-card border border-border-subtle rounded text-[9px] font-mono text-text-muted">
+                                                <span key={route} className="px-2 py-0.5 bg-surface-card border border-border-subtle rounded text-nano font-mono text-text-muted">
                                                     {route}
                                                 </span>
                                             ))}
@@ -299,7 +299,7 @@ export function TrustedDevicePanel() {
                     {/* Appareils révoqués (condensé) */}
                     {revokedDevices.length > 0 && (
                         <details className="group">
-                            <summary className="flex items-center gap-2 text-[9px] uppercase tracking-widest text-slate-600 font-bold cursor-pointer select-none mt-4">
+                            <summary className="flex items-center gap-2 text-nano uppercase tracking-widest text-slate-600 font-bold cursor-pointer select-none mt-4">
                                 <ShieldX className="w-3 h-3" />
                                 Révoqués ({revokedDevices.length})
                             </summary>
@@ -308,7 +308,7 @@ export function TrustedDevicePanel() {
                                     <div key={device.deviceId} className="flex items-center gap-3 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl opacity-50">
                                         <ShieldX className="w-3.5 h-3.5 text-status-danger shrink-0" />
                                         <span className="text-xs text-text-muted line-through">{device.name}</span>
-                                        <span className="text-[9px] text-slate-600 ml-auto">{device.ownerEmail}</span>
+                                        <span className="text-nano text-slate-600 ml-auto">{device.ownerEmail}</span>
                                     </div>
                                 ))}
                             </div>

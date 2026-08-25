@@ -89,7 +89,7 @@ export function PlanNettoyage() {
                 </div>
                 <div>
                     <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Plan de Nettoyage</h2>
-                    <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Maintenance sanitaire des zones de production</p>
+                    <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Maintenance sanitaire des zones de production</p>
                 </div>
             </div>
 
@@ -139,10 +139,10 @@ export function PlanNettoyage() {
                                 </div>
                             </div>
                             <div className="text-center relative z-10">
-                                <h3 className={cn("text-[11px] font-black uppercase tracking-widest leading-tight", isSelected ? "text-text-primary" : "text-text-muted")}>
+                                <h3 className={cn("text-micro font-black uppercase tracking-widest leading-tight", isSelected ? "text-text-primary" : "text-text-muted")}>
                                     {zone.label}
                                 </h3>
-                                <div className="mt-2 text-[10px] font-black text-text-muted tracking-tighter">
+                                <div className="mt-2 text-nano font-black text-text-muted tracking-tighter">
                                     {done} / {tasks.length} TÂCHES
                                 </div>
                             </div>
@@ -188,7 +188,7 @@ export function PlanNettoyage() {
                                             {isDone && (
                                                 <div className="flex items-center gap-1 bg-status-success/10 px-2 py-0.5 rounded-full">
                                                     <ShieldCheck size={10} className="text-status-success" />
-                                                    <span className="text-[8px] font-black text-status-success uppercase">Audit IA</span>
+                                                    <span className="text-nano font-black text-status-success uppercase">Audit IA</span>
                                                 </div>
                                             )}
                                         </div>
@@ -197,7 +197,7 @@ export function PlanNettoyage() {
                                                 {task.frequency}
                                             </span>
                                             {isDone && (
-                                                <span className="text-[9px] font-black uppercase text-status-success/70 flex items-center gap-1">
+                                                <span className="text-nano font-black uppercase text-status-success/70 flex items-center gap-1">
                                                     <Clock size={10} /> Complété
                                                 </span>
                                             )}
@@ -218,7 +218,7 @@ export function PlanNettoyage() {
                                         </button>
                                     )}
                                     {hasIncident ? (
-                                        <div className="px-3 py-1.5 bg-status-danger/10 border border-rose-500/20 rounded-xl text-[10px] font-black text-status-danger flex items-center gap-2">
+                                        <div className="px-3 py-1.5 bg-status-danger/10 border border-rose-500/20 rounded-xl text-nano font-black text-status-danger flex items-center gap-2">
                                             <AlertTriangle size={12} />
                                             ANOMALIE SIGNALÉE
                                         </div>
@@ -248,7 +248,7 @@ export function PlanNettoyage() {
             >
                 <div className="space-y-6 pt-4">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-widest px-1">Note de l'incident</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Note de l'incident</label>
                         <textarea
                             value={reportNote}
                             onChange={e => setReportNote(e.target.value)}
@@ -259,7 +259,7 @@ export function PlanNettoyage() {
                     <Button
                         onClick={submitReport}
                         disabled={!reportNote.trim()}
-                        className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-[10px] transition-all"
+                        className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary rounded-2xl shadow-xl shadow-rose-500/20 font-black tracking-widest uppercase text-nano transition-all"
                     >
                         Enregistrer l'anomalie
                     </Button>

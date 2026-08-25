@@ -78,7 +78,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5">
             <Wine className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
-            <span className="text-[9px] font-black text-accent uppercase tracking-[0.3em]">
+            <span className="text-nano font-black text-accent uppercase tracking-[0.3em]">
               {categoryLabel}
             </span>
           </div>
@@ -90,7 +90,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
         {servingLabel && (
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 rounded-xl border border-accent/20 shrink-0 ml-3">
             {createElement(resolveServingIcon(recipe.servingMethod as string | undefined), { className: 'w-3 h-3 text-accent', strokeWidth: 1.5 })}
-            <span className="text-[9px] font-black text-accent uppercase tracking-wider">
+            <span className="text-nano font-black text-accent uppercase tracking-wider">
               {servingLabel}
             </span>
           </div>
@@ -101,7 +101,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
       {recipe.baseSpirit && (
         <div className="flex items-center gap-2 mb-3">
           <Zap className="w-3.5 h-3.5 text-text-muted shrink-0" strokeWidth={1.5} />
-          <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">
+          <span className="text-nano font-black text-text-muted uppercase tracking-widest">
             Base
           </span>
           <span className="text-[12px] font-bold text-text-primary">{String(recipe.baseSpirit)}</span>
@@ -111,14 +111,14 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
       {/* ── Mixers ── */}
       {mixers.length > 0 && (
         <div className="mb-4">
-          <span className="text-[9px] font-black text-text-muted uppercase tracking-widest block mb-2">
+          <span className="text-nano font-black text-text-muted uppercase tracking-widest block mb-2">
             Mixeurs
           </span>
           <div className="flex flex-wrap gap-1.5">
             {mixers.map((mixer, i) => (
               <span
                 key={i}
-                className="px-2.5 py-1 bg-bg-tertiary/60 border border-border/50 rounded-lg text-[10px] font-bold text-text-muted"
+                className="px-2.5 py-1 bg-bg-tertiary/60 border border-border/50 rounded-lg text-nano font-bold text-text-muted"
               >
                 {mixer}
               </span>
@@ -132,22 +132,22 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
         <div className="grid grid-cols-2 gap-3 pt-4 border-t border-border/40">
           {recipe.garnish && (
             <div>
-              <span className="text-[9px] font-black text-text-muted uppercase tracking-widest block mb-1">
+              <span className="text-nano font-black text-text-muted uppercase tracking-widest block mb-1">
                 Garniture
               </span>
-              <span className="text-[11px] font-bold text-text-primary">
+              <span className="text-micro font-bold text-text-primary">
                 {String(recipe.garnish)}
               </span>
             </div>
           )}
           {recipe.glassType && (
             <div>
-              <span className="text-[9px] font-black text-text-muted uppercase tracking-widest block mb-1">
+              <span className="text-nano font-black text-text-muted uppercase tracking-widest block mb-1">
                 Verre
               </span>
               <div className="flex items-center gap-1.5">
                 <GlassWater className="w-3 h-3 text-text-muted" strokeWidth={1.5} />
-                <span className="text-[11px] font-bold text-text-primary">
+                <span className="text-micro font-bold text-text-primary">
                   {String(recipe.glassType)}
                 </span>
               </div>
@@ -158,7 +158,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
 
       {/* ── Footer ── */}
       <div className="mt-4 pt-3 border-t border-border/30">
-        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+        <span className="text-nano font-black text-text-muted uppercase tracking-widest">
           {(recipe.ingredients || []).length} ingrédient
           {(recipe.ingredients || []).length !== 1 ? 's' : ''}
           {(recipe.prepTime || recipe.preparationTimeMinutes)

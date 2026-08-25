@@ -24,7 +24,7 @@ export function RecipeBasicsTab({
         <div className="space-y-10">
             <div className="grid grid-cols-2 gap-8">
                 <div className="col-span-2 lg:col-span-1">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Dénomination Commerciale</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Dénomination Commerciale</label>
                     <input
                         type="text"
                         value={formData.name as string}
@@ -44,7 +44,7 @@ export function RecipeBasicsTab({
             </div>
 
             <div>
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Description Gastronomique</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Description Gastronomique</label>
                 <textarea
                     value={String(formData.description || '')}
                     onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), description: e.target.value } as Partial<Recipe>))}
@@ -53,14 +53,14 @@ export function RecipeBasicsTab({
                 />
             </div>
 
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
                     { label: 'Préparation', value: formData.prepTime, key: 'prepTime' as const, icon: Clock, unit: 'MIN' },
                     { label: 'Cuisson', value: formData.cookTime, key: 'cookTime' as const, icon: Timer, unit: 'MIN' },
                     { label: 'Portions', value: formData.portions, key: 'portions' as const, icon: Users, unit: 'PAX' },
                 ].map(item => (
                     <div key={item.key} className="bg-surface-card p-6 rounded-[2rem] border border-border/50">
-                        <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3 block flex items-center gap-2">
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-3 block flex items-center gap-2">
                             <item.icon className="w-3.5 h-3.5" />
                             {item.label}
                         </label>
@@ -71,7 +71,7 @@ export function RecipeBasicsTab({
                                 onChange={(e) => setFormDraft((prev: Partial<Recipe>) => ({ ...(prev ?? initialFormData), [item.key]: parseInt(e.target.value) || 0 } as Partial<Recipe>))}
                                 className="w-full h-12 px-4 bg-bg-tertiary rounded-xl font-black text-lg outline-none"
                             />
-                            <span className="text-[10px] font-black text-text-muted">{item.unit}</span>
+                            <span className="text-nano font-black text-text-muted">{item.unit}</span>
                         </div>
                     </div>
                 ))}
@@ -91,7 +91,7 @@ export function RecipeBasicsTab({
             </div>
 
             <div>
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Code Couleur Visuel</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Code Couleur Visuel</label>
                 <div className="flex gap-4 p-4 bg-surface-card rounded-3xl border border-border/50 overflow-x-auto no-scrollbar">
                     {colors.map(color => (
                         <button

@@ -46,7 +46,7 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
                     <h2 className="text-3xl font-serif font-black italic tracking-tighter mb-2">
                         {stats.overall_status === 'pass' ? "Agréage Conforme" : "Non-Conformité Détectée"}
                     </h2>
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
+                    <p className="text-nano font-black uppercase tracking-[0.3em] opacity-60">
                         {stats.items_accepted} / {stats.total_items} Lignes Validées • {stats.items_rejected} Rejets
                     </p>
                 </div>
@@ -62,7 +62,7 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
                         <Truck className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Véhicule Logistique</p>
+                        <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Véhicule Logistique</p>
                         <p className="font-bold text-primary">
                             {truckTemp ? `${truckTemp}°C` : 'N/A'} • {isTruckTempCompliant ? 'CONFORME' : 'HORS NORMES'}
                         </p>
@@ -77,7 +77,7 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
                         <Thermometer className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">Items Thermiques</p>
+                        <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Items Thermiques</p>
                         <p className="font-bold text-primary">
                             {stats.temperature_issues} Alertes HACCP
                         </p>

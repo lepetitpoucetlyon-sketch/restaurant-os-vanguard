@@ -104,7 +104,7 @@ export function TenantOverridePanel() {
         </div>
         <div>
           <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Tenant Override</h3>
-          <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Customisation granulaire par client</p>
+          <p className="text-nano font-bold text-secondary uppercase tracking-tighter">Customisation granulaire par client</p>
         </div>
       </div>
 

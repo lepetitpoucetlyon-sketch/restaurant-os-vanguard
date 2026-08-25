@@ -22,11 +22,11 @@ export function GroupStatCard({ stat }: { stat: Stat }) {
                     <Icon className="w-6 h-6" />
                 </div>
                 <div className="text-right">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Evolution</p>
+                    <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Evolution</p>
                     <p className="text-sm font-bold text-status-success">+{stat.change}%</p>
                 </div>
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mb-1">{stat.label}</p>
+            <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted mb-1">{stat.label}</p>
             <p className="text-4xl font-serif italic font-black text-text-primary">{stat.value}</p>
         </motion.div>
     );

@@ -19,10 +19,10 @@ export const HACCPBadge: React.FC<HACCPBadgeProps> = ({ status, size = 'md' }) =
 
     return (
         <div className={cn(
-            "flex items-center gap-2 px-3 py-1 rounded-full border font-black uppercase tracking-widest text-[9px]",
+            "flex items-center gap-2 px-3 py-1 rounded-full border font-black uppercase tracking-widest text-nano",
             color,
-            size === 'sm' && "px-2 py-0.5 text-[8px]",
-            size === 'lg' && "px-4 py-2 text-[10px]"
+            size === 'sm' && "px-2 py-0.5 text-nano",
+            size === 'lg' && "px-4 py-2 text-nano"
         )}>
             <Icon className={cn("w-3 h-3", size === 'sm' && "w-2.5 h-2.5", size === 'lg' && "w-4 h-4")} />
             {label}

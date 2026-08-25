@@ -95,7 +95,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
 
                     <div>
                         <h3 className="text-xl font-serif italic text-text-primary uppercase tracking-tighter mb-2">{label}</h3>
-                        <p className="text-[10px] font-black text-secondary uppercase tracking-[0.3em]">
+                        <p className="text-nano font-black text-secondary uppercase tracking-[0.3em]">
                             {isProcessing ? "IA vision en cours d'analyse brute..." : "Glissez-déposez ou cliquez pour capturer"}
                         </p>
                     </div>
@@ -103,7 +103,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                     {isProcessing && (
                         <div className="flex items-center gap-3 px-4 py-2 bg-surface-sidebar/40 rounded-full border border-white/5">
                             <Loader2 size={12} className="animate-spin text-status-warning" />
-                            <span className="text-[8px] font-bold text-status-warning uppercase tracking-widest">GEMINI 1.5 PRO ACTIVE</span>
+                            <span className="text-nano font-bold text-status-warning uppercase tracking-widest">GEMINI 1.5 PRO ACTIVE</span>
                         </div>
                     )}
                 </div>

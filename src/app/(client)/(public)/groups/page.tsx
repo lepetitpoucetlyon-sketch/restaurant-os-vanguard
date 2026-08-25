@@ -69,7 +69,7 @@ export default function GroupsPage() {
                         <h1 className="text-2xl font-serif italic font-black text-text-primary tracking-tight leading-none">
                             Groupes & Événements
                         </h1>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted mt-1">
+                        <p className="text-nano font-black uppercase tracking-[0.2em] text-text-muted mt-1">
                             Gérez vos réservations de groupe et privatisions
                         </p>
                     </div>
@@ -77,7 +77,7 @@ export default function GroupsPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-action-primary text-text-primary hover:bg-action-primary rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
+                        className="h-12 px-8 bg-action-primary text-text-primary hover:bg-action-primary rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
                         id="groups-create-button"
                     >
                         <Plus className="w-4 h-4" />

@@ -29,9 +29,9 @@ export function ToolbarTabs({
     className,
 }: ToolbarTabsProps) {
     const sizeClasses = {
-        sm: "h-8 px-4 text-[9px]",
-        md: "h-10 px-6 text-[10px]",
-        lg: "h-12 px-8 text-[11px]",
+        sm: "h-8 px-4 text-nano",
+        md: "h-10 px-6 text-nano",
+        lg: "h-12 px-8 text-micro",
     };
 
     const containerClasses = {
@@ -90,7 +90,7 @@ export function ToolbarTabs({
                     {tab.badge !== undefined && (
                         <span
                             className={cn(
-                                "ml-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-black",
+                                "ml-1.5 px-1.5 py-0.5 rounded-full text-nano font-black",
                                 activeTab === tab.id
                                     ? "bg-accent/20 text-accent"
                                     : "bg-text-muted/20 text-text-muted"

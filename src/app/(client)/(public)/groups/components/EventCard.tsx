@@ -29,7 +29,7 @@ export function EventCard({ group }: { group: Group }) {
                             status={(GROUP_STATUS_MAP[group.status] ?? GROUP_STATUS_MAP.Inquiry).status}
                             label={(GROUP_STATUS_MAP[group.status] ?? GROUP_STATUS_MAP.Inquiry).label}
                         />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted px-4 py-1.5 rounded-full bg-bg-tertiary border border-border">
+                        <span className="text-nano font-black uppercase tracking-[0.2em] text-text-muted px-4 py-1.5 rounded-full bg-bg-tertiary border border-border">
                             {group.type}
                         </span>
                     </div>

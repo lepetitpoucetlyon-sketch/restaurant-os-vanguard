@@ -160,7 +160,7 @@ export function VoidModal({
                                 <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                                     Annulation / Remboursement
                                 </h3>
-                                <p className="text-[10px] text-text-muted uppercase tracking-wider">
+                                <p className="text-nano text-text-muted uppercase tracking-wider">
                                     Extourne NF525 — jamais de suppression
                                 </p>
                             </div>

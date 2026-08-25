@@ -88,7 +88,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
             {/* Expiring warning badge */}
             {expiringCount > 0 && !isOver && (
                 <div className="absolute top-3 right-3 w-6 h-6 bg-status-danger rounded-full flex items-center justify-center animate-pulse z-10">
-                    <span className="text-[10px] font-black text-text-primary">{expiringCount}</span>
+                    <span className="text-nano font-black text-text-primary">{expiringCount}</span>
                 </div>
             )}
 
@@ -119,7 +119,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                 </h3>
 
                 <p className={cn(
-                    "text-[9px] font-bold uppercase tracking-widest mt-1 truncate",
+                    "text-nano font-bold uppercase tracking-widest mt-1 truncate",
                     isSelected ? "text-text-primary/70 dark:text-primary/70" : "text-secondary dark:text-muted"
                 )}>
                     {location.name.includes(' - ') ? location.name.split(' - ')[1] : config.label}

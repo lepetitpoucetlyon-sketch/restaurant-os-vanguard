@@ -98,7 +98,7 @@ export function ProspectingScannerInput({
       </div>
 
       {/* Presets */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {PRESETS.map(preset => (
           <button
             key={preset.label}

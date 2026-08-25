@@ -69,7 +69,7 @@ export function LeaveRequestCard({
                     <div>
                         {isManager && (
                             <div className="flex items-center gap-2 mb-1">
-                                <div className="w-5 h-5 rounded-full bg-accent text-text-primary flex items-center justify-center text-[10px] font-bold">
+                                <div className="w-5 h-5 rounded-full bg-accent text-text-primary flex items-center justify-center text-nano font-bold">
                                     {(request.employeeName || '').charAt(0)}
                                 </div>
                                 <span className="text-xs font-bold text-text-muted uppercase tracking-wider">{request.employeeName}</span>
@@ -100,7 +100,7 @@ export function LeaveRequestCard({
                         {statusConfig.label}
                     </span>
                     {request.submittedAt && (
-                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-60">
+                        <span className="text-nano font-bold text-text-muted uppercase tracking-widest opacity-60">
                             {getRelativeTime(request.submittedAt)}
                         </span>
                     )}

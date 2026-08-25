@@ -147,7 +147,7 @@ export function CustomerImportPanel() {
               style={{ width: `${state.progress}%` }}
             />
           </div>
-          <p className="text-[11px] text-text-muted">
+          <p className="text-micro text-text-muted">
             Dédoublonnage par email — veuillez patienter.
           </p>
         </div>

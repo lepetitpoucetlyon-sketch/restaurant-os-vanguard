@@ -91,7 +91,7 @@ export function PlaceholderView({ title, description, icon: Icon }: PlaceholderV
                         transition={{ duration: 0.4, delay: 0.7 }}
                         className="mt-12 pt-8 border-t border-border/50"
                     >
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-4">Fonctionnalités à venir</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] mb-4">Fonctionnalités à venir</p>
                         <div className="flex items-center justify-center gap-3">
                             {['Import Excel', 'Export PDF', 'Synchronisation', 'Alertes'].map((feature, i) => (
                                 <motion.span

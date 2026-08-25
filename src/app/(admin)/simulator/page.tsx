@@ -142,12 +142,12 @@ export default function SimulatorPage() {
                                         className="w-full bg-action-primary border-t-2 border-action-primary rounded-t-lg transition-all hover:bg-action-primary"
                                         style={{ height: `${Math.max(10, (r.metrics.netProfit / results[0].metrics.totalRevenue) * 500)}%` }}
                                     >
-                                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-bg-secondary border border-border p-2 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
+                                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-bg-secondary border border-border p-2 rounded text-nano opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
                                             {r.timelineId}<br/>
                                             Profit: {formatCurrency(r.metrics.netProfit)}
                                         </div>
                                     </div>
-                                    <span className="text-[8px] text-text-muted font-mono">T-{i+1}</span>
+                                    <span className="text-nano text-text-muted font-mono">T-{i+1}</span>
                                 </div>
                             ))}
                         </GlassCard>

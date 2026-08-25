@@ -92,7 +92,7 @@ export function ReleveTemperatures() {
                 </div>
                 <div>
                     <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Relevé de Température</h2>
-                    <p className="text-[10px] font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Surveillance continue des enceintes thermiques</p>
+                    <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Surveillance continue des enceintes thermiques</p>
                 </div>
             </div>
 
@@ -112,7 +112,7 @@ export function ReleveTemperatures() {
                                     {eq.max < 0 ? <Snowflake size={24} /> : eq.min > 10 ? <Flame size={24} /> : <Thermometer size={24} />}
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Dernier Relevé</div>
+                                    <div className="text-nano font-black text-text-muted uppercase tracking-widest mb-1">Dernier Relevé</div>
                                     <div className={cn(
                                         "text-2xl font-serif italic font-black",
                                         !lastLog ? "text-text-muted" : isAlert ? "text-status-danger" : "text-status-success"
@@ -124,10 +124,10 @@ export function ReleveTemperatures() {
 
                             <h3 className="text-sm font-black text-text-primary uppercase tracking-tight mb-1">{eq.label}</h3>
                             <div className="flex items-center gap-2 mb-6">
-                                <span className="px-2 py-0.5 rounded-md bg-bg-tertiary border border-border text-[9px] font-black uppercase text-text-muted">
+                                <span className="px-2 py-0.5 rounded-md bg-bg-tertiary border border-border text-nano font-black uppercase text-text-muted">
                                     Zone: <span className="text-text-primary">{eq.zone}</span>
                                 </span>
-                                <span className="px-2 py-0.5 rounded-md bg-bg-tertiary border border-border text-[9px] font-black uppercase text-text-muted">
+                                <span className="px-2 py-0.5 rounded-md bg-bg-tertiary border border-border text-nano font-black uppercase text-text-muted">
                                     Plage: <span className="text-text-primary">{eq.min}° à {eq.max}°</span>
                                 </span>
                             </div>
@@ -135,7 +135,7 @@ export function ReleveTemperatures() {
                             <Button
                                 onClick={() => handleOpenRecord(eq)}
                                 className={cn(
-                                    "w-full h-12 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all",
+                                    "w-full h-12 rounded-2xl font-black text-nano uppercase tracking-widest transition-all",
                                     !lastLog
                                         ? "bg-text-primary text-bg-primary hover:scale-[1.02] shadow-xl"
                                         : "bg-bg-tertiary text-text-primary border border-border hover:border-text-primary"
@@ -162,8 +162,8 @@ export function ReleveTemperatures() {
                 {recordingEq && (
                     <div className="space-y-8 pt-4 pb-6">
                         <div className="flex justify-between items-center px-4">
-                            <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Plage Conforme</span>
-                            <span className="text-[10px] font-black text-status-success bg-status-success/10 px-3 py-1 rounded-full">{recordingEq.min}°C à {recordingEq.max}°C</span>
+                            <span className="text-nano font-black text-text-muted uppercase tracking-widest">Plage Conforme</span>
+                            <span className="text-nano font-black text-status-success bg-status-success/10 px-3 py-1 rounded-full">{recordingEq.min}°C à {recordingEq.max}°C</span>
                         </div>
 
                         <div className="flex items-center justify-center gap-8 py-8">
@@ -197,7 +197,7 @@ export function ReleveTemperatures() {
                             >
                                 <AlertTriangle className="w-5 h-5 text-status-danger shrink-0" />
                                 <div>
-                                    <h4 className="text-[10px] font-black text-status-danger uppercase tracking-widest">Alerte de Non-Conformité</h4>
+                                    <h4 className="text-nano font-black text-status-danger uppercase tracking-widest">Alerte de Non-Conformité</h4>
                                     <p className="text-xs font-medium text-status-danger/80 mt-1">La température saisie est hors des limites acceptables. Cet incident nécessitera une action corrective.</p>
                                 </div>
                             </motion.div>

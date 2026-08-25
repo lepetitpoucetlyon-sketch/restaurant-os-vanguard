@@ -63,7 +63,7 @@ export const TenantOrchestrator: React.FC = () => {
                             <Globe className="w-5 h-5 text-accent-gold" strokeWidth={2.5} />
                             <h2 className="text-xl font-serif font-black italic tracking-tight text-text-primary">Fleet Commander<span className="text-accent-gold">.</span></h2>
                         </div>
-                        <p className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">Orchestration Multi-Tenant Active</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Orchestration Multi-Tenant Active</p>
                     </div>
                     <div className="flex gap-2">
                          <div className="px-4 py-2 bg-text-primary text-text-primary rounded-xl text-chip-label-sm flex items-center gap-2">
@@ -137,7 +137,7 @@ export const TenantOrchestrator: React.FC = () => {
                                                 isError ? "bg-error" : "bg-warning animate-pulse"
                                             )} />
                                             <span className={cn(
-                                                "text-[8px] font-black uppercase tracking-widest",
+                                                "text-nano font-black uppercase tracking-widest",
                                                 isActive ? "text-text-primary/50" : "text-text-muted"
                                             )}>
                                                 {instance.status}
@@ -147,7 +147,7 @@ export const TenantOrchestrator: React.FC = () => {
                                             <div className="flex items-center gap-3">
                                                 <span className="w-1 h-1 rounded-full bg-border" />
                                                 <span className={cn(
-                                                    "text-[8px] font-black uppercase tracking-widest",
+                                                    "text-nano font-black uppercase tracking-widest",
                                                     isActive ? "text-text-primary/50" : "text-text-muted"
                                                 )}>
                                                     Health: {instance.metrics.healthScore}%
@@ -173,7 +173,7 @@ export const TenantOrchestrator: React.FC = () => {
                     <ShieldCheck className="w-4 h-4 text-success" />
                     <span className="text-chip-label-sm text-text-muted">Canal Ssécurisé • AES-256</span>
                 </div>
-                <Button variant="ghost" className="h-8 px-4 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-bg-tertiary">
+                <Button variant="ghost" className="h-8 px-4 rounded-lg text-nano font-black uppercase tracking-widest hover:bg-bg-tertiary">
                     Paramètres Flotte
                 </Button>
             </div>

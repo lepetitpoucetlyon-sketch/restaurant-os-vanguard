@@ -38,7 +38,7 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
         <div className="mb-8 flex items-center justify-between">
             <div>
                 <h1 className="text-xl font-black text-text-primary tracking-tight leading-none">Bar & Sommellerie</h1>
-                <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mt-2">
+                <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mt-2">
                     Cave • Cocktails • Service
                 </p>
             </div>
@@ -76,7 +76,7 @@ export const BarSidebar: React.FC<BarSidebarProps> = ({
             <p className="text-2xl font-black relative z-10 tracking-tighter">
                 {formatCurrency(cellarValue)}
             </p>
-            <p className="text-[10px] text-text-primary/60 mt-1 relative z-10 font-bold uppercase tracking-wider">
+            <p className="text-nano text-text-primary/60 mt-1 relative z-10 font-bold uppercase tracking-wider">
                 {referenceCount} références actives
             </p>
         </div>

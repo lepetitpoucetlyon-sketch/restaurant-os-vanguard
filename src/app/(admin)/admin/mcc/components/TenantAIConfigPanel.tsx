@@ -166,7 +166,7 @@ export function TenantAIConfigPanel() {
                     {/* Mode */}
                     <div className="p-4 bg-surface border border-default rounded-xl">
                         <h3 className="text-sm font-medium text-primary mb-3">Mode</h3>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {AI_MODES.map(m => (
                                 <button
                                     key={m}

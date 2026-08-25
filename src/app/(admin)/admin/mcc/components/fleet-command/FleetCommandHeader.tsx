@@ -40,7 +40,7 @@ export function FleetCommandHeader({
     <div className="p-8 border-b border-border-subtle flex items-center justify-between bg-gradient-to-r from-action-primary/5 to-transparent">
       <div>
         <h2 className="text-xl font-serif font-black text-text-primary tracking-tighter">Centre de Commandement</h2>
-        <p className="text-[10px] text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
+        <p className="text-nano text-secondary uppercase font-bold tracking-widest mt-1">Orchestration en temps réel des actifs de l'empire</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="px-4 py-2 bg-surface-card rounded-xl border border-border-subtle flex items-center gap-2">
@@ -50,7 +50,7 @@ export function FleetCommandHeader({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="RECHERCHER UN SITE..."
-            className="bg-transparent border-none outline-none text-[10px] font-bold text-text-primary placeholder:text-secondary w-32"
+            className="bg-transparent border-none outline-none text-nano font-bold text-text-primary placeholder:text-secondary w-32"
           />
         </div>
         <div className="relative" ref={filterRef}>

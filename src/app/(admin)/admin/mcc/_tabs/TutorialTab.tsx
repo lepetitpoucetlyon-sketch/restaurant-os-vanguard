@@ -19,7 +19,7 @@ function CodeBlock({ code, comment }: CodeBlockProps) {
     <div className="relative group bg-surface-bg border border-border-subtle rounded-xl overflow-hidden">
       {comment && (
         <div className="px-4 py-2 border-b border-border-subtle">
-          <span className="text-[10px] text-secondary font-mono">{comment}</span>
+          <span className="text-nano text-secondary font-mono">{comment}</span>
         </div>
       )}
       <div className="flex items-start gap-3 p-4">
@@ -182,8 +182,8 @@ export function TutorialTab() {
 
       {/* Env vars quick reference */}
       <div className="mt-8 p-5 rounded-2xl border border-border-subtle bg-surface-card/50 space-y-3">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary">Variables d&apos;environnement MCC</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] font-mono">
+        <p className="text-nano font-black uppercase tracking-[0.3em] text-secondary">Variables d&apos;environnement MCC</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-micro font-mono">
           {[
             ['MCC_DEV_MODE', 'Bypass serveur (routes API)'],
             ['NEXT_PUBLIC_MCC_DEV_MODE', 'Bypass client (polling, MFA, telemetry)'],

@@ -22,7 +22,7 @@ export function SplitByItemPanel({
 
     return (
         <div className="px-12 py-8 border-b border-white/5 shrink-0 overflow-y-auto max-h-56 elegant-scrollbar">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">
+            <p className="text-nano font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">
                 {t('pos.split.assign_items')}
             </p>
             <div className="space-y-2">
@@ -42,7 +42,7 @@ export function SplitByItemPanel({
                                         key={idx}
                                         onClick={() => onToggleItem(idx, item.cartId)}
                                         className={cn(
-                                            "w-7 h-7 rounded-xl text-[10px] font-black transition-all duration-300 border",
+                                            "w-7 h-7 rounded-xl text-nano font-black transition-all duration-300 border",
                                             isAssigned
                                                 ? "bg-accent-gold text-primary border-accent-gold"
                                                 : "bg-transparent border-white/10 text-text-primary/40 hover:border-accent-gold/40 hover:text-accent-gold"

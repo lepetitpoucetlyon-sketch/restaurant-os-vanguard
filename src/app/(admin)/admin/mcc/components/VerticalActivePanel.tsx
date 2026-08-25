@@ -51,7 +51,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
         <span className="text-3xl">{meta.emoji}</span>
         <div>
           <p className={`text-sm font-black uppercase tracking-widest ${meta.color}`}>{meta.label}</p>
-          <p className="text-[10px] text-muted">v{config.pluginVersion} · activé le {new Date(config.activatedAt).toLocaleDateString('fr-FR')}</p>
+          <p className="text-nano text-muted">v{config.pluginVersion} · activé le {new Date(config.activatedAt).toLocaleDateString('fr-FR')}</p>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
           <p className="text-chip-label text-muted mb-2">Routes enregistrées</p>
           <div className="flex flex-wrap gap-2">
             {config.registeredRoutes.map(r => (
-              <span key={r} className="text-[10px] font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{r}</span>
+              <span key={r} className="text-nano font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{r}</span>
             ))}
           </div>
         </div>
@@ -71,7 +71,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
           <p className="text-chip-label text-muted mb-2">Atoms Jotai actifs</p>
           <div className="flex flex-wrap gap-2">
             {config.registeredAtoms.map(a => (
-              <span key={a} className="text-[10px] font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{a}</span>
+              <span key={a} className="text-nano font-mono bg-surface-bg border border-subtle rounded px-2 py-1">{a}</span>
             ))}
           </div>
         </div>
@@ -84,7 +84,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
             const m = VERTICAL_META[v] ?? { emoji: '🏢', label: v, color: 'text-muted' };
             const active = v === config.variant;
             return (
-              <span key={v} className={`text-[10px] px-3 py-1 rounded-full border font-bold ${active ? 'border-focus/50 text-brand bg-action-primary/10' : 'border-subtle text-muted'}`}>
+              <span key={v} className={`text-nano px-3 py-1 rounded-full border font-bold ${active ? 'border-focus/50 text-brand bg-action-primary/10' : 'border-subtle text-muted'}`}>
                 {m.emoji} {m.label}
               </span>
             );

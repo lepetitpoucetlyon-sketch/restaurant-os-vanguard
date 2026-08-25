@@ -141,19 +141,19 @@ export default function AgentIntelligencePage() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-nano font-bold uppercase tracking-wider border ${
                 report?.metrics.knowledgeSync === 'synced' ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-action-primary text-action-primary'
               }`}>
                 <Network className="w-3 h-3" />
                 Nexus: {report?.metrics.knowledgeSync ?? 'Syncing...'}
               </div>
-              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-nano font-bold uppercase tracking-wider border ${
                 (report?.metrics.typeSafety ?? 0) >= 100 ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-focus/20 text-action-primary'
               }`}>
                 <ShieldCheck className="w-3 h-3" />
                 Type Safety: {report?.metrics.typeSafety ?? '--'}%
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-status-warning border border-action-primary/10 rounded-full text-[10px] font-bold text-status-warning uppercase tracking-wider">
+              <div className="flex items-center gap-2 px-4 py-2 bg-status-warning border border-action-primary/10 rounded-full text-nano font-bold text-status-warning uppercase tracking-wider">
                 <AlertTriangle className="w-3 h-3" />
                 Anomalies: {report?.complexity.godObjects.length ?? 0}
               </div>
@@ -192,11 +192,11 @@ export default function AgentIntelligencePage() {
                 <Terminal className="w-4 h-4 text-action-primary" />
                 Diagnostic Terminal
               </h3>
-              <div className="px-3 py-1 bg-bg-primary border border-border rounded-full text-[9px] font-bold text-text-muted uppercase">
+              <div className="px-3 py-1 bg-bg-primary border border-border rounded-full text-nano font-bold text-text-muted uppercase">
                 {report ? `Audit: ${new Date(report.timestamp).toLocaleTimeString()}` : 'Initializing...'}
               </div>
            </div>
-           <div className="p-6 font-mono text-[10px] space-y-4 text-text-muted bg-surface-bg dark:bg-surface-bg overflow-y-auto flex-1 custom-scrollbar">
+           <div className="p-6 font-mono text-nano space-y-4 text-text-muted bg-surface-bg dark:bg-surface-bg overflow-y-auto flex-1 custom-scrollbar">
               {report?.alerts.map((alert, i) => (
                 <div key={i} className="flex gap-3">
                   <span className={alert.type === 'error' ? 'text-status-danger shrink-0' : 'text-status-warning shrink-0'}>
@@ -222,7 +222,7 @@ export default function AgentIntelligencePage() {
                     </p>
                   </div>
                   {obj.proposals && obj.proposals.map((prop, pi) => (
-                    <div key={pi} className="flex gap-2 pl-6 text-[9px] text-action-primary italic leading-tight">
+                    <div key={pi} className="flex gap-2 pl-6 text-nano text-action-primary italic leading-tight">
                       <Network className="w-2 h-2 mt-0.5 shrink-0" />
                       <span>{prop}</span>
                     </div>
@@ -231,7 +231,7 @@ export default function AgentIntelligencePage() {
               ))}
               
               { (report?.complexity.godObjects.length ?? 0) > 10 && (
-                 <div className="text-[9px] italic opacity-50 pl-8">
+                 <div className="text-nano italic opacity-50 pl-8">
                    ...and {(report?.complexity.godObjects.length ?? 0) - 10} more architectural violations.
                  </div>
               )}
@@ -255,7 +255,7 @@ export default function AgentIntelligencePage() {
                        Sentinel a identifié <strong>{report?.complexity.godObjects.length ?? 0} violations</strong> de la règle des "500 lignes / 15 imports". Ces nœuds créent une friction cognitive élevée.
                     </p>
                     <div className="mt-6 flex flex-col gap-2">
-                       <p className="text-[10px] font-black uppercase text-text-muted">Prochaine action recommandée :</p>
+                       <p className="text-nano font-black uppercase text-text-muted">Prochaine action recommandée :</p>
                        <p className="text-sm font-bold text-action-primary italic">
                           {report?.complexity.godObjects[0] ? `"${`Modulariser ${report.complexity.godObjects[0].path} (${report.complexity.godObjects[0].lines} lignes)`}"` : '"Empire Stable"'}
                        </p>

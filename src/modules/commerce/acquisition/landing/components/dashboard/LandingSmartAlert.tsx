@@ -41,7 +41,7 @@ export const LandingSmartAlert = ({
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-baseline mb-1 md:mb-2">
           <h4 className="text-[14px] md:text-[15px] font-serif font-semibold text-text-primary truncate">{title}</h4>
-          <span className="text-[8px] font-black text-text-muted uppercase tracking-widest shrink-0 ml-4">{time}</span>
+          <span className="text-nano font-black text-text-muted uppercase tracking-widest shrink-0 ml-4">{time}</span>
         </div>
         <p className="text-[12px] md:text-[13px] text-text-secondary leading-relaxed mb-3 font-sans font-light">
           {message}
@@ -49,7 +49,7 @@ export const LandingSmartAlert = ({
         {action && (
           <button
             onClick={(e) => { e.stopPropagation(); onAction?.(); }}
-            className="text-[9px] font-black uppercase tracking-[0.2em] text-accent-gold flex items-center gap-2"
+            className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold flex items-center gap-2"
           >
             {action}
             <div className="w-6 h-[1px] bg-accent-gold/30 group-hover:w-10 group-hover:bg-accent transition-all duration-300" />

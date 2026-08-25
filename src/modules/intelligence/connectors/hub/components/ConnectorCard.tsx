@@ -32,7 +32,7 @@ export function ConnectorCard({ entry, isLoading, onConfigure, onActivate, onDea
     }`}>
       {/* Badge premium */}
       {manifest.isPremium && (
-        <span className="absolute top-3 right-3 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-500/15 text-purple-500 uppercase tracking-wide">
+        <span className="absolute top-3 right-3 text-nano font-bold px-1.5 py-0.5 rounded-full bg-purple-500/15 text-purple-500 uppercase tracking-wide">
           Pro
         </span>
       )}
@@ -50,7 +50,7 @@ export function ConnectorCard({ entry, isLoading, onConfigure, onActivate, onDea
       <div className="flex items-center justify-between">
         <ConnectorStatusBadge status={status} />
         {state?.lastSyncAt && (
-          <span className="text-[10px] text-text-muted">
+          <span className="text-nano text-text-muted">
             Sync {new Date(state.lastSyncAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
           </span>
         )}

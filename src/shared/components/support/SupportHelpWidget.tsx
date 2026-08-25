@@ -138,14 +138,14 @@ export function SupportHelpWidget() {
                   ) : (
                     tickets.map((t) => (
                       <div key={t.id} className="p-3 bg-neutral-900/60 border border-neutral-800 rounded-xl space-y-1.5">
-                        <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center justify-between text-micro">
                           <span className="font-mono text-neutral-400">#{t.id.slice(0, 8)}</span>
-                          <span className={"px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider " + (t.status === "applied" || t.status === "approved" ? "bg-emerald-950 text-emerald-400 border border-emerald-500/30" : t.status === "analyzing" ? "bg-amber-950 text-amber-400 border border-amber-500/30" : "bg-neutral-800 text-neutral-300")}>
+                          <span className={"px-2 py-0.5 rounded text-nano font-bold uppercase tracking-wider " + (t.status === "applied" || t.status === "approved" ? "bg-emerald-950 text-emerald-400 border border-emerald-500/30" : t.status === "analyzing" ? "bg-amber-950 text-amber-400 border border-amber-500/30" : "bg-neutral-800 text-neutral-300")}>
                             {t.status}
                           </span>
                         </div>
                         <p className="text-xs text-neutral-200 line-clamp-2">{t.description}</p>
-                        <div className="text-[10px] text-neutral-500 flex items-center gap-1">
+                        <div className="text-nano text-neutral-500 flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           <span>{new Date(t.createdAt).toLocaleString("fr-FR")}</span>
                         </div>

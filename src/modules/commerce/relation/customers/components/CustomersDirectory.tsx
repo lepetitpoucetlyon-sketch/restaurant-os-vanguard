@@ -66,7 +66,7 @@ export function CustomersDirectory({ tenantId }: CustomersDirectoryProps) {
             {/* Create form */}
             {creating && (
                 <div className="p-4 bg-surface border border-default rounded space-y-2">
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         <input
                             placeholder="Prénom"
                             value={newForm.firstName}
@@ -163,7 +163,7 @@ export function CustomersDirectory({ tenantId }: CustomersDirectoryProps) {
                                     {c.tags.map(tag => (
                                         <span
                                             key={tag}
-                                            className="text-[10px] px-1.5 py-0.5 bg-accent/10 border border-accent/20 rounded text-primary flex items-center gap-1"
+                                            className="text-nano px-1.5 py-0.5 bg-accent/10 border border-accent/20 rounded text-primary flex items-center gap-1"
                                         >
                                             {tag}
                                             <button onClick={() => void removeTag(c.id, tag)} className="hover:text-red-400">
@@ -174,7 +174,7 @@ export function CustomersDirectory({ tenantId }: CustomersDirectoryProps) {
                                     {!c.tags.includes('VIP') && (
                                         <button
                                             onClick={() => void addTag(c.id, 'VIP')}
-                                            className="text-[10px] px-1.5 py-0.5 bg-surface-elevated border border-default rounded text-secondary hover:text-yellow-400"
+                                            className="text-nano px-1.5 py-0.5 bg-surface-elevated border border-default rounded text-secondary hover:text-yellow-400"
                                         >+ VIP</button>
                                     )}
                                 </div>

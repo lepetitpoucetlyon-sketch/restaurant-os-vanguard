@@ -50,7 +50,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                         <Zap className={cn("w-6 h-6 text-accent", isPulsing && "animate-ping")} />
                         Hermes Vanguard Engine
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.3em]">
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-[0.3em]">
                         Autonomous Multi-Agent Orchestration • Grade X
                     </p>
                 </div>
@@ -98,20 +98,20 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                             </div>
                             <div>
                                 <h4 className="text-sm font-black uppercase tracking-widest">{agent.id}</h4>
-                                <span className="text-[8px] font-bold text-text-muted uppercase">{agent.domain} Agent</span>
+                                <span className="text-nano font-bold text-text-muted uppercase">{agent.domain} Agent</span>
                             </div>
                         </div>
 
-                        <p className="text-[10px] text-text-secondary mb-6 leading-relaxed">
+                        <p className="text-nano text-text-secondary mb-6 leading-relaxed">
                             {agent.description}
                         </p>
 
                         <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                                <span className="text-[8px] font-bold text-status-success uppercase">Operational</span>
+                                <span className="text-nano font-bold text-status-success uppercase">Operational</span>
                             </div>
-                            <span className="text-[8px] font-mono text-text-muted/70">P{agent.priority} Registry</span>
+                            <span className="text-nano font-mono text-text-muted/70">P{agent.priority} Registry</span>
                         </div>
                     </div>
                 ))}
@@ -120,7 +120,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
             {/* 📊 PULSE RESULTS & ANOMALY FEED */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-surface-sidebar border border-white/5 rounded-[3rem] p-8 space-y-6">
-                    <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
+                    <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
                         <Activity className="w-3.5 h-3.5 text-accent" />
                         Anomaly Detection Feed
                     </h4>
@@ -128,7 +128,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                     {pulseResult?.anomalies.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-text-muted/70 space-y-4">
                             <CheckCircle2 className="w-12 h-12 opacity-20" />
-                            <p className="text-[10px] font-bold uppercase tracking-widest">No structural anomalies detected</p>
+                            <p className="text-nano font-bold uppercase tracking-widest">No structural anomalies detected</p>
                         </div>
                     ) : (
                         <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
@@ -147,13 +147,13 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-1">
-                                            <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{anomaly.domain}</span>
-                                            <span className="text-[7px] font-mono text-text-muted/70 italic">ID: {anomaly.id.slice(0,8)}</span>
+                                            <span className="text-nano font-black uppercase tracking-widest text-text-muted">{anomaly.domain}</span>
+                                            <span className="text-nano font-mono text-text-muted/70 italic">ID: {anomaly.id.slice(0,8)}</span>
                                         </div>
-                                        <p className="text-[11px] font-bold text-text-primary truncate">{anomaly.message}</p>
+                                        <p className="text-micro font-bold text-text-primary truncate">{anomaly.message}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Clock className="w-3 h-3 text-text-muted/70" />
-                                            <span className="text-[8px] text-text-muted/70 font-bold uppercase">{new Date(anomaly.detectedAt).toLocaleTimeString()}</span>
+                                            <span className="text-nano text-text-muted/70 font-bold uppercase">{new Date(anomaly.detectedAt).toLocaleTimeString()}</span>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -163,7 +163,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                 </div>
 
                 <div className="bg-surface-sidebar border border-white/5 rounded-[3rem] p-8 space-y-6">
-                    <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
+                    <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mb-4 flex items-center gap-2">
                         <Cpu className="w-3.5 h-3.5 text-accent" />
                         Autonomous Corrective Chain
                     </h4>
@@ -171,7 +171,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                     {pulseResult?.actionsTaken.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-text-muted/70 space-y-4">
                             <Crosshair className="w-12 h-12 opacity-20" />
-                            <p className="text-[10px] font-bold uppercase tracking-widest">Sovereign Guard Standby</p>
+                            <p className="text-nano font-bold uppercase tracking-widest">Sovereign Guard Standby</p>
                         </div>
                     ) : (
                         <div className="space-y-4">
@@ -193,7 +193,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                             <div className="pt-6 mt-6 border-t border-white/5">
                                 <div className="p-6 bg-[#111111] rounded-2xl border border-white/5 relative overflow-hidden group">
                                     <div className="relative z-10">
-                                        <p className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Grade X Proof</p>
+                                        <p className="text-nano font-black text-text-muted uppercase tracking-widest mb-2">Grade X Proof</p>
                                         <p className="text-xs text-text-secondary italic">"The system is now self-healing across Finance & HACCP boundaries. No human intervention was required for those corrections."</p>
                                     </div>
                                     <SparkleIcon className="absolute -bottom-4 -right-4 w-20 h-20 opacity-5 group-hover:opacity-10 transition-opacity" />

@@ -87,7 +87,7 @@ export function FleetTelemetryPanel() {
             <span className="text-xs text-secondary">/ {devices.length} En Ligne</span>
           </div>
           {offlineDevices.length > 0 && (
-            <div className="mt-2 text-[10px] text-rose-500 font-bold uppercase tracking-widest">
+            <div className="mt-2 text-nano text-rose-500 font-bold uppercase tracking-widest">
               {offlineDevices.length} Instance(s) Hors Ligne
             </div>
           )}
@@ -118,9 +118,9 @@ export function FleetTelemetryPanel() {
                 <div key={d.deviceId} className="flex items-center justify-between p-3 bg-rose-500/5 border border-rose-500/20 rounded-xl">
                   <div>
                     <div className="text-xs font-bold text-text-primary">{d.tenantId}</div>
-                    <div className="text-[10px] text-secondary">Appareil : {d.deviceId}</div>
+                    <div className="text-nano text-secondary">Appareil : {d.deviceId}</div>
                   </div>
-                  <div className="text-[10px] text-rose-500 font-bold uppercase">
+                  <div className="text-nano text-rose-500 font-bold uppercase">
                     Vu le : {d.lastSeen ? new Date(d.lastSeen).toLocaleTimeString() : 'Inconnu'}
                   </div>
                 </div>
@@ -137,9 +137,9 @@ export function FleetTelemetryPanel() {
                 <div key={c.id} className="flex items-center justify-between p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
                   <div className="truncate pr-4">
                     <div className="text-xs font-bold text-amber-500">{c.errorName}</div>
-                    <div className="text-[10px] text-secondary truncate">{c.errorMessage}</div>
+                    <div className="text-nano text-secondary truncate">{c.errorMessage}</div>
                   </div>
-                  <div className="text-[10px] text-secondary whitespace-nowrap">
+                  <div className="text-nano text-secondary whitespace-nowrap">
                     {c.tenantId}
                   </div>
                 </div>

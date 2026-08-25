@@ -146,7 +146,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
       <div className="p-8 rounded-3xl bg-gradient-to-br from-accent/10 to-transparent border border-accent/20 text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Star className="w-5 h-5 text-accent" strokeWidth={1.5} />
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40">
+          <p className="text-nano font-black uppercase tracking-[0.3em] text-text-primary/40">
             Solde de Points
           </p>
         </div>
@@ -155,7 +155,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
 
         {/* Progress bar */}
         <div className="mt-6">
-          <div className="flex justify-between text-[10px] text-text-primary/40 mb-2">
+          <div className="flex justify-between text-nano text-text-primary/40 mb-2">
             <span>{points} pts</span>
             <span>Prochain palier : {nextRewardThreshold} pts</span>
           </div>
@@ -165,7 +165,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <p className="text-[10px] text-text-primary/30 mt-2 text-right">
+          <p className="text-nano text-text-primary/30 mt-2 text-right">
             {Math.max(nextRewardThreshold - points, 0)} pts restants
           </p>
         </div>
@@ -173,7 +173,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
 
       {/* Available Rewards */}
       <div>
-        <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+        <h4 className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
           <Award className="w-3.5 h-3.5 text-accent" />
           Récompenses disponibles
         </h4>
@@ -198,13 +198,13 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-text-primary">{reward.label}</p>
-                  <p className="text-[11px] text-text-primary/40 mt-0.5">{reward.description}</p>
-                  <p className="text-[10px] font-mono text-accent mt-1">{reward.pointsCost} pts requis</p>
+                  <p className="text-micro text-text-primary/40 mt-0.5">{reward.description}</p>
+                  <p className="text-nano font-mono text-accent mt-1">{reward.pointsCost} pts requis</p>
                 </div>
                 <button
                   onClick={() => handleRedeem(reward)}
                   disabled={!canRedeem || isLoading}
-                  className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wide transition-all disabled:cursor-not-allowed ${
+                  className={`px-4 py-2 rounded-xl text-micro font-black uppercase tracking-wide transition-all disabled:cursor-not-allowed ${
                     canRedeem
                       ? "bg-accent text-bg-primary hover:bg-action-primary shadow-lg shadow-accent/20"
                       : "bg-white/5 text-text-primary/20"
@@ -221,7 +221,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
       {/* Active (unredeemed) rewards */}
       {activeRewards.length > 0 && (
         <div>
-          <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h4 className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
             <Gift className="w-3.5 h-3.5 text-accent" />
             Récompenses actives ({activeRewards.length})
           </h4>
@@ -234,11 +234,11 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
                 <Gift className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-text-primary font-medium truncate">{r.label}</p>
-                  <p className="text-[10px] text-text-primary/40 mt-0.5">
+                  <p className="text-nano text-text-primary/40 mt-0.5">
                     Obtenue le {new Date(r.createdAt).toLocaleDateString("fr-FR")}
                   </p>
                 </div>
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-black uppercase tracking-wide whitespace-nowrap">
+                <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-black uppercase tracking-wide whitespace-nowrap">
                   À utiliser
                 </span>
               </div>

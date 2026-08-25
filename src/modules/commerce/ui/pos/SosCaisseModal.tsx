@@ -147,7 +147,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
                                     <h2 className="text-xl font-bold uppercase tracking-tight text-text-primary">
                                         SOS Caisse • Urgence Service
                                     </h2>
-                                    <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider bg-red-500/20 text-red-400 rounded-full">
+                                    <span className="px-2 py-0.5 text-nano font-black uppercase tracking-wider bg-red-500/20 text-red-400 rounded-full">
                                         Priorité P0
                                     </span>
                                 </div>
@@ -199,7 +199,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
                                                     <p className={cn('text-xs font-bold truncate', isSelected ? 'text-red-400' : 'text-text-primary')}>
                                                         {preset.title}
                                                     </p>
-                                                    <p className="text-[10px] text-text-muted line-clamp-1">
+                                                    <p className="text-nano text-text-muted line-clamp-1">
                                                         {preset.desc}
                                                     </p>
                                                 </div>
@@ -262,7 +262,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
                             <div className="p-5 rounded-2xl bg-action-primary/10 border border-action-primary/20 space-y-3">
                                 <div className="flex items-center gap-2 text-action-primary">
                                     <BotMessageSquare className="w-4 h-4" />
-                                    <span className="text-[10px] font-black uppercase tracking-wider">
+                                    <span className="text-nano font-black uppercase tracking-wider">
                                         Diagnostic Immédiat IA & Recommandation
                                     </span>
                                 </div>

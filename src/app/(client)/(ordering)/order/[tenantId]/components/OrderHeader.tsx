@@ -65,7 +65,7 @@ export function OrderHeader({
         {/* Allergen Filter Pills */}
         {availableAllergens.length > 0 && (
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-            <span className="text-[11px] text-slate-400 flex items-center gap-1 shrink-0 mr-1">
+            <span className="text-micro text-slate-400 flex items-center gap-1 shrink-0 mr-1">
               <Filter className="w-3 h-3" /> Sans :
             </span>
             <button

@@ -47,10 +47,10 @@ export function ShiftServiceForm({
 
             {/* Service Type Selector */}
             <div>
-                <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mb-4 block italic">
+                <label className="text-nano font-black text-muted uppercase tracking-[0.3em] mb-4 block italic">
                     Assignation du Service
                 </label>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {[
                         { id: "lunch", label: "Midi", emoji: "☀️" },
                         { id: "evening", label: "Soir", emoji: "🌙" },
@@ -79,7 +79,7 @@ export function ShiftServiceForm({
 
             <div className="grid grid-cols-2 gap-8">
                 <div>
-                    <label className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
+                    <label className="text-nano font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
                         Déclenchement
                     </label>
                     <div className="relative group">
@@ -98,7 +98,7 @@ export function ShiftServiceForm({
                     </div>
                 </div>
                 <div>
-                    <label className="text-[10px] font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
+                    <label className="text-nano font-black text-text-primary/40 uppercase tracking-[0.3em] mb-4 block italic">
                         Clôture
                     </label>
                     <div className="relative group">

@@ -81,7 +81,7 @@ export function AIScopeAuditPanel() {
                 </div>
 
                 {providerInfo ? (
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div className="p-2 bg-surface-elevated rounded-lg">
                             <p className="text-xs text-secondary">Provider actif</p>
                             <p className="text-sm font-medium text-primary capitalize mt-0.5">

@@ -137,7 +137,7 @@ export function EquipmentAssetCard({
               {CATEGORY_ICONS[asset.category]}
             </div>
             <div>
-              <span className="text-[11px] font-medium tracking-wide uppercase text-text-muted">
+              <span className="text-micro font-medium tracking-wide uppercase text-text-muted">
                 {CATEGORY_LABELS[asset.category]}
               </span>
               <h3 className="text-base font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors">
@@ -157,19 +157,19 @@ export function EquipmentAssetCard({
         {/* Détails techniques */}
         <div className="grid grid-cols-2 gap-2 text-xs text-text-muted mb-4 bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
           <div>
-            <span className="text-text-muted/80 block text-[10px] uppercase font-semibold">Marque / Modèle</span>
+            <span className="text-text-muted/80 block text-nano uppercase font-semibold">Marque / Modèle</span>
             <span className="text-text-primary font-medium truncate block">
               {asset.brand} - {asset.model}
             </span>
           </div>
           <div>
-            <span className="text-text-muted/80 block text-[10px] uppercase font-semibold">Emplacement</span>
+            <span className="text-text-muted/80 block text-nano uppercase font-semibold">Emplacement</span>
             <span className="text-text-primary font-medium truncate block">{asset.location}</span>
           </div>
           <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800/60">
-            <span className="text-text-muted/80 text-[10px]">S/N: {asset.serialNumber}</span>
+            <span className="text-text-muted/80 text-nano">S/N: {asset.serialNumber}</span>
             {asset.purchase?.invoiceUrl && (
-              <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
+              <span className="inline-flex items-center gap-1 text-micro text-emerald-400 font-medium">
                 <FileText className="w-3 h-3" /> Facture liée
               </span>
             )}
@@ -194,7 +194,7 @@ export function EquipmentAssetCard({
       </div>
 
       {/* Barre d'actions */}
-      <div className="grid grid-cols-3 gap-1.5 pt-3 border-t border-slate-800/80">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-3 border-t border-slate-800/80">
         <button
           onClick={() => onOpenDetails(asset)}
           className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-primary text-xs font-medium transition-colors"

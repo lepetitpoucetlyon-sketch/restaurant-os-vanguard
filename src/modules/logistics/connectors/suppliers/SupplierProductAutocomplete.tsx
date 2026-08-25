@@ -51,8 +51,8 @@ export function SupplierProductAutocomplete({
   };
 
   const supplierBadge = (id: string) => id === 'metro'
-    ? <span className="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-medium">Metro</span>
-    : <span className="text-[10px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded font-medium">Pomona</span>;
+    ? <span className="text-nano bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-medium">Metro</span>
+    : <span className="text-nano bg-green-100 text-green-600 px-1.5 py-0.5 rounded font-medium">Pomona</span>;
 
   return (
     <div className="relative">

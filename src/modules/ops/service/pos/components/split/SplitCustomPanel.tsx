@@ -18,7 +18,7 @@ export function SplitCustomPanel({
 
     return (
         <div className="px-12 py-8 border-b border-white/5 shrink-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">
+            <p className="text-nano font-black uppercase tracking-[0.3em] text-text-primary/40 mb-4">
                 {t('pos.split.custom_amounts')}
             </p>
             <div className="space-y-3">

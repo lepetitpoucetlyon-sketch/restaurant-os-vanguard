@@ -26,11 +26,11 @@ export function ReservationHeader({ step, onClose }: ReservationHeaderProps) {
                             <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                         </h2>
                         <div className="flex items-center gap-4 mt-1">
-                            <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Signature Client Management</span>
+                            <span className="text-text-muted text-nano font-black uppercase tracking-[0.3em]">Signature Client Management</span>
                             <div className="h-1 w-1 rounded-full bg-accent/40" />
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="w-3 h-3 text-accent" />
-                                <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">IA Ops Active</span>
+                                <span className="text-accent text-nano font-black uppercase tracking-[0.2em]">IA Ops Active</span>
                             </div>
                         </div>
                     </div>

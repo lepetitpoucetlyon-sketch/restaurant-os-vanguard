@@ -79,7 +79,7 @@ export function TreasuryDashboard({ journalEntries }: TreasuryDashboardProps) {
                                 )}
                             />
                         </div>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">
                             {kpi.title}
                         </p>
                         <h3
@@ -102,15 +102,15 @@ export function TreasuryDashboard({ journalEntries }: TreasuryDashboardProps) {
                             <h3 className="text-lg font-serif font-black text-text-primary italic">
                                 Flux de trésorerie
                             </h3>
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest mt-1">
+                            <p className="text-nano font-black text-text-muted uppercase tracking-widest mt-1">
                                 14 derniers jours
                             </p>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted uppercase">
+                            <span className="flex items-center gap-1.5 text-nano font-bold text-text-muted uppercase">
                                 <span className="w-2.5 h-2.5 rounded-full bg-status-success" /> Entrées
                             </span>
-                            <span className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted uppercase">
+                            <span className="flex items-center gap-1.5 text-nano font-bold text-text-muted uppercase">
                                 <span className="w-2.5 h-2.5 rounded-full bg-status-danger" /> Sorties
                             </span>
                         </div>
@@ -148,7 +148,7 @@ export function TreasuryDashboard({ journalEntries }: TreasuryDashboardProps) {
                                             />
                                         )}
                                     </div>
-                                    <span className="text-[8px] text-text-muted mt-1 tabular-nums">{day}</span>
+                                    <span className="text-nano text-text-muted mt-1 tabular-nums">{day}</span>
                                 </div>
                             );
                         })}
@@ -161,7 +161,7 @@ export function TreasuryDashboard({ journalEntries }: TreasuryDashboardProps) {
                         <div className="inline-flex p-2.5 rounded-xl mb-4 bg-accent-gold/10">
                             <TrendingUp className="w-5 h-5 text-accent-gold" />
                         </div>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">
                             Prévision 30 jours
                         </p>
                         <h3
@@ -173,7 +173,7 @@ export function TreasuryDashboard({ journalEntries }: TreasuryDashboardProps) {
                             {fmt(t.forecast30DaysInMicrounits)}
                         </h3>
                     </div>
-                    <p className="text-[11px] text-text-muted mt-4 leading-relaxed">
+                    <p className="text-micro text-text-muted mt-4 leading-relaxed">
                         Position actuelle {fmt(t.netCashPositionInMicrounits)} projetée au flux
                         journalier moyen des 14 derniers jours.
                     </p>

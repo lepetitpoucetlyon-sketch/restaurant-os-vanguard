@@ -45,7 +45,7 @@ export function VoidFormFields({
             {/* NF525 notice */}
             <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-status-warning/5 border border-status-warning/20">
                 <AlertTriangle className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
-                <p className="text-[10px] text-text-muted leading-relaxed">
+                <p className="text-nano text-text-muted leading-relaxed">
                     Conforme NF525 : une écriture <strong>négative</strong> est créée
                     dans journalEntries. Le ticket original n'est jamais modifié ni supprimé.
                 </p>
@@ -58,7 +58,7 @@ export function VoidFormFields({
                         key={m}
                         onClick={() => setMode(m)}
                         className={cn(
-                            "h-11 rounded-2xl border text-[11px] font-black uppercase tracking-wider transition-all",
+                            "h-11 rounded-2xl border text-micro font-black uppercase tracking-wider transition-all",
                             mode === m
                                 ? "bg-status-error border-status-error/50 text-text-primary"
                                 : "bg-bg-primary border-border text-text-muted hover:border-status-error/30"
@@ -125,7 +125,7 @@ export function VoidFormFields({
                         />
                     </div>
                     {refundMicrounits > originalMicrounits && originalMicrounits > 0 && (
-                        <p className="mt-1.5 text-[10px] text-status-error font-bold">
+                        <p className="mt-1.5 text-nano text-status-error font-bold">
                             Le remboursement ne peut pas dépasser le montant original
                         </p>
                     )}
@@ -151,7 +151,7 @@ export function VoidFormFields({
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-3 rounded-2xl bg-status-error/5 border border-status-error/20 text-[11px] flex items-center justify-between"
+                    className="p-3 rounded-2xl bg-status-error/5 border border-status-error/20 text-micro flex items-center justify-between"
                 >
                     <span className="text-text-muted uppercase tracking-wider font-bold">
                         Écriture négative

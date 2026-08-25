@@ -93,7 +93,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                       Horodatage UTC : {selectedContract.proofCertificate.signedAtIso} (IP:{' '}
                       {selectedContract.proofCertificate.ipAddress})
                     </div>
-                    <div className="font-mono text-[10px] text-emerald-400/80 break-all">
+                    <div className="font-mono text-nano text-emerald-400/80 break-all">
                       Master Seal SHA-256 : {selectedContract.proofCertificate.masterSealSha256}
                     </div>
                   </div>
@@ -106,7 +106,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                     <Download className="w-5 h-5 text-indigo-400" />
                     <div>
                       <h4 className="text-xs font-bold text-white">Document Signé PDF (DocuSeal)</h4>
-                      <p className="text-[11px] text-text-muted">PDF horodaté avec certificat et logs d&apos;audit</p>
+                      <p className="text-micro text-text-muted">PDF horodaté avec certificat et logs d&apos;audit</p>
                     </div>
                   </div>
                   <a

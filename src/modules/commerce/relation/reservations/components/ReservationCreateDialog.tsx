@@ -132,13 +132,13 @@ export function ReservationCreateDialog({
                                     <Sparkles className="w-4 h-4 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-3 mt-1">
-                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">
+                                    <span className="text-text-muted text-nano font-black uppercase tracking-[0.3em]">
                                         {step === 1 ? "Sélection du client" : "Détails de la réservation"}
                                     </span>
                                     <div className="h-1 w-1 rounded-full bg-accent/40" />
                                     <div className="flex items-center gap-1.5">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
-                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Attribution auto</span>
+                                        <span className="text-accent text-nano font-black uppercase tracking-[0.2em]">Attribution auto</span>
                                     </div>
                                 </div>
                             </div>

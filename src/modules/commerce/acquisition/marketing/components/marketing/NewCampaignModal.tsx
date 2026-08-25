@@ -91,7 +91,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                         <div className="p-10 space-y-6 bg-bg-primary/30 max-h-[60vh] overflow-y-auto elegant-scrollbar">
                             {/* Campaign Name */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Nom de la campagne</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Nom de la campagne</label>
                                 <input
                                     type="text"
                                     value={name}
@@ -103,8 +103,8 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
 
                             {/* Type Selection */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-3 block">Type de campagne</label>
-                                <div className="grid grid-cols-3 gap-3">
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-3 block">Type de campagne</label>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     {CAMPAIGN_TYPES.map((ct) => (
                                         <button
                                             key={ct.id}
@@ -124,7 +124,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
 
                             {/* Subject */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Objet / Titre</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Objet / Titre</label>
                                 <input
                                     type="text"
                                     value={subject}
@@ -136,7 +136,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
 
                             {/* Content */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Contenu</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block">Contenu</label>
                                 <textarea
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
@@ -148,7 +148,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
 
                             {/* Audience */}
                             <div>
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
                                     <Users className="w-3.5 h-3.5" /> Audience cible
                                 </label>
                                 <input
@@ -163,7 +163,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                             {/* Schedule */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
                                         <Calendar className="w-3.5 h-3.5" /> Date
                                     </label>
                                     <input
@@ -174,7 +174,7 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-2 block flex items-center gap-2">
                                         <Clock className="w-3.5 h-3.5" /> Heure
                                     </label>
                                     <input

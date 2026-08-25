@@ -30,14 +30,14 @@ export function MindMapSidebar({ selectedNode, onClose }: MindMapSidebarProps) {
                     </div>
 
                     <h2 className="text-3xl font-black text-text-primary tracking-tighter mb-2">{selectedNode.label}</h2>
-                    <span className="text-[11px] font-bold text-accent uppercase tracking-[0.2em] mb-8">{selectedNode.group} subsystem</span>
+                    <span className="text-micro font-bold text-accent uppercase tracking-[0.2em] mb-8">{selectedNode.group} subsystem</span>
 
                     <p className="text-sm font-medium text-text-muted leading-relaxed mb-10">
                         {selectedNode.description}
                     </p>
 
                     <div className="space-y-4 flex-1">
-                        <h4 className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2 px-2">Kpis Live</h4>
+                        <h4 className="text-nano font-black text-text-muted uppercase tracking-widest mb-2 px-2">Kpis Live</h4>
                         {selectedNode.metrics?.map((m, i) => (
                             <div key={i} className="bg-bg-tertiary p-5 rounded-[2rem] border border-border/50 flex justify-between items-center group hover:bg-accent/5 hover:border-accent/20 transition-all cursor-default">
                                 <span className="text-[12px] font-bold text-text-muted group-hover:text-text-primary transition-colors">{m.label}</span>

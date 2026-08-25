@@ -17,13 +17,13 @@ export function LandingTrendChart({ chartPath, isMobile }: LandingTrendChartProp
       <div className="flex items-center justify-between mb-8">
         <div>
           <h3 className="text-xl md:text-2xl font-serif font-light text-text-primary tracking-tight">Tendance CA — 7 Jours</h3>
-          <p className="text-[10px] text-text-muted mt-1 uppercase tracking-widest font-black">Données Réelles • Firestore</p>
+          <p className="text-nano text-text-muted mt-1 uppercase tracking-widest font-black">Données Réelles • Firestore</p>
         </div>
         {!isMobile && (
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-accent-gold" />
-              <span className="text-[9px] font-black text-accent-gold uppercase">CA Journalier</span>
+              <span className="text-nano font-black text-accent-gold uppercase">CA Journalier</span>
             </div>
           </div>
         )}

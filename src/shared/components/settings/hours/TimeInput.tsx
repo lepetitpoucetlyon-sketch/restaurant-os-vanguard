@@ -35,7 +35,7 @@ export function TimeInput({ value, onChange, disabled, label, icon: Icon }: Time
             {label && (
                 <div className="absolute -top-7 left-1 flex items-center gap-1.5 opacity-60 group-hover/time:opacity-100 transition-opacity">
                     <div className="w-1 h-1 rounded-full bg-accent" />
-                    <span className="text-[9px] font-black text-text-muted dark:text-muted uppercase tracking-[0.25em]">
+                    <span className="text-nano font-black text-text-muted dark:text-muted uppercase tracking-[0.25em]">
                         {label}
                     </span>
                 </div>

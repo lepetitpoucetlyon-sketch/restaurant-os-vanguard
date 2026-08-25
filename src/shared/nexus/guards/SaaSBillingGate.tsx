@@ -49,13 +49,13 @@ export function SaaSBillingGate({ children }: SaaSBillingGateProps) {
 
                     <Button 
                         onClick={() => router.push('/settings?tab=subscription')}
-                        className="w-full py-8 bg-surface-card text-primary text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
+                        className="w-full py-8 bg-surface-card text-primary text-micro font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
                     >
                         <CreditCard size={18} className="mr-2" />
                         Régulariser la Situation
                     </Button>
 
-                    <p className="mt-8 text-[9px] font-bold text-secondary uppercase tracking-[0.4em]">Finances Integrity Protected</p>
+                    <p className="mt-8 text-nano font-bold text-secondary uppercase tracking-[0.4em]">Finances Integrity Protected</p>
                 </motion.div>
             </div>
         );

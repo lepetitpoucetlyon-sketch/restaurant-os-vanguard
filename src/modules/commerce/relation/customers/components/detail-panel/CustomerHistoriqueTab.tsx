@@ -23,32 +23,32 @@ export function CustomerHistoriqueTab({ customer }: { customer: Customer }) {
     return (
         <div className="p-8 space-y-10">
             {/* KPI Row */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
                     <p className="text-2xl font-mono font-light text-accent italic">{totalVisits}</p>
-                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Visites</p>
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-1">Visites</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
                     <p className="text-2xl font-mono font-light text-text-primary italic">{data.avgSpend.toFixed(0)}€</p>
-                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Moy. ticket</p>
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-1">Moy. ticket</p>
                 </div>
                 <div className="p-5 rounded-2xl bg-surface-card/5 border border-subtle text-center">
                     <p className="text-2xl font-mono font-light text-text-primary italic">{data.orders.length}</p>
-                    <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mt-1">Commandes</p>
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-1">Commandes</p>
                 </div>
             </div>
 
             {/* Top Products */}
             {data.topProducts.length > 0 && (
                 <div>
-                    <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <h4 className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <TrendingUp className="w-3.5 h-3.5 text-accent" /> Top 3 plats
                     </h4>
                     <div className="space-y-2">
                         {data.topProducts.map((p, i) => (
                             <div key={i} className="flex items-center justify-between px-4 py-3 rounded-xl bg-surface-card/5 border border-subtle">
                                 <div className="flex items-center gap-3">
-                                    <span className="w-5 h-5 rounded-full bg-accent/10 text-accent text-[10px] font-black flex items-center justify-center">
+                                    <span className="w-5 h-5 rounded-full bg-accent/10 text-accent text-nano font-black flex items-center justify-center">
                                         {i + 1}
                                     </span>
                                     <span className="text-sm text-text-primary font-medium">{p.name}</span>
@@ -63,7 +63,7 @@ export function CustomerHistoriqueTab({ customer }: { customer: Customer }) {
             {/* Reservations Timeline */}
             {data.reservations.length > 0 && (
                 <div>
-                    <h4 className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <h4 className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-accent" /> Réservations récentes
                     </h4>
                     <div className="space-y-2">
@@ -83,12 +83,12 @@ export function CustomerHistoriqueTab({ customer }: { customer: Customer }) {
                                             {date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })}
                                             {" "}<span className="text-text-primary/40">{r.time}</span>
                                         </p>
-                                        <p className="text-[10px] text-text-primary/40 mt-0.5 capitalize">
+                                        <p className="text-nano text-text-primary/40 mt-0.5 capitalize">
                                             {r.status} · {r.partySize} pers.
                                         </p>
                                     </div>
                                     {isUpcoming && (
-                                        <span className="text-[9px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-black uppercase tracking-wide">
+                                        <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-black uppercase tracking-wide">
                                             À venir
                                         </span>
                                     )}

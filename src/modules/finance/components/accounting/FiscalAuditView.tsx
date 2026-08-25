@@ -110,7 +110,7 @@ export const FiscalAuditView: React.FC = () => {
                                     <span className="text-secondary mr-2 uppercase tracking-tighter">Seal:</span>
                                     {seal.fiscalSealHash || 'PENDING_SEAL'}
                                 </div>
-                                <div className="text-secondary font-mono text-[10px] break-all">
+                                <div className="text-secondary font-mono text-nano break-all">
                                     <span className="text-secondary mr-2 uppercase tracking-tighter">Type:</span>
                                     {seal.type || 'transaction'}
                                 </div>
@@ -120,7 +120,7 @@ export const FiscalAuditView: React.FC = () => {
                                     {seal.isValidated ? 'CERTIFIED' : 'PENDING'}
                                 </div>
                                 {seal.isSystemGenerated && (
-                                    <span className="text-[10px] text-status-warning font-bold uppercase italic px-2 py-0.5 bg-status-warning/10 rounded border border-action-primary/20">
+                                    <span className="text-nano text-status-warning font-bold uppercase italic px-2 py-0.5 bg-status-warning/10 rounded border border-action-primary/20">
                                         Système
                                     </span>
                                 )}

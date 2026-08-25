@@ -111,11 +111,11 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-text-muted text-[10px] font-black uppercase tracking-[0.3em]">Enregistrement Customer Certifié</span>
+                                    <span className="text-text-muted text-nano font-black uppercase tracking-[0.3em]">Enregistrement Customer Certifié</span>
                                     <div className="h-1 w-1 rounded-full bg-surface-card/10" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
-                                        <span className="text-accent text-[10px] font-black uppercase tracking-[0.2em]">Client Integrity Protocol</span>
+                                        <span className="text-accent text-nano font-black uppercase tracking-[0.2em]">Client Integrity Protocol</span>
                                     </div>
                                 </div>
                             </div>
@@ -140,12 +140,12 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                         <motion.div variants={itemVariants} className="space-y-8">
                             <div className="flex items-center gap-4 border-b border-border pb-6">
                                 <Gem className="w-5 h-5 text-accent" />
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-primary">État Civil & Contact</h3>
+                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">État Civil & Contact</h3>
                             </div>
 
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Prénom du client</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Prénom du client</label>
                                     <input
                                         required
                                         value={formData.firstName}
@@ -155,7 +155,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Nom de famille</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Nom de famille</label>
                                     <input
                                         required
                                         value={formData.lastName}
@@ -168,7 +168,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
 
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Ligne Directe</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Ligne Directe</label>
                                     <div className="relative group">
                                         <Phone strokeWidth={1.5} className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-accent group-focus-within:scale-110 transition-transform" />
                                         <input
@@ -181,7 +181,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     </div>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Communication Email</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Communication Email</label>
                                     <div className="relative group">
                                         <Mail strokeWidth={1.5} className="absolute left-8 top-1/2 -translate-y-1/2 w-5 h-5 text-accent group-focus-within:scale-110 transition-transform" />
                                         <input
@@ -199,7 +199,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                         <motion.div variants={itemVariants} className="space-y-8">
                             <div className="flex items-center gap-4 border-b border-border pb-6">
                                 <Heart className="w-5 h-5 text-accent" />
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-primary">Préférences & Régimes</h3>
+                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">Préférences & Régimes</h3>
                             </div>
 
                             {[
@@ -208,7 +208,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                 { label: 'Occasion habituelle', options: OCCASION_OPTIONS },
                             ].map(({ label, options }) => (
                                 <div key={label} className="space-y-3">
-                                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">{label}</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">{label}</label>
                                     <div className="flex flex-wrap gap-3">
                                         {options.map(opt => {
                                             const active = formData.preferences.includes(opt);
@@ -237,11 +237,11 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                         <motion.div variants={itemVariants} className="space-y-8">
                             <div className="flex items-center gap-4 border-b border-border pb-6">
                                 <Star className="w-5 h-5 text-accent" />
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-primary">Segmentation & VIP Profiling</h3>
+                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">Segmentation & VIP Profiling</h3>
                             </div>
 
                             <div className="space-y-6">
-                                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4">Tags de Reconnaissance</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Tags de Reconnaissance</label>
                                 <div className="flex flex-wrap gap-4 p-8 bg-bg-secondary border-2 border-dashed border-border rounded-[2.5rem] relative overflow-hidden">
                                     <AnimatePresence mode="popLayout">
                                         {formData.tags.map(tag => (
@@ -265,7 +265,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                             value={newTag}
                                             onChange={e => setNewTag(e.target.value)}
                                             onKeyPress={e => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                                            className="bg-transparent border-none outline-none py-4 text-[11px] font-black uppercase tracking-widest text-text-primary w-32 placeholder:text-text-muted/40"
+                                            className="bg-transparent border-none outline-none py-4 text-micro font-black uppercase tracking-widest text-text-primary w-32 placeholder:text-text-muted/40"
                                             placeholder="AJOUTER..."
                                         />
                                         <Plus onClick={addTag} className="w-5 h-5 text-accent cursor-pointer hover:scale-120 transition-transform" />
@@ -281,14 +281,14 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                 <div className="px-12 py-10 bg-bg-secondary border-t border-border flex items-center justify-between shrink-0">
                     <button
                         onClick={onClose}
-                        className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted hover:text-text-primary transition-colors px-4 py-2"
+                        className="text-nano font-black uppercase tracking-[0.3em] text-text-muted hover:text-text-primary transition-colors px-4 py-2"
                     >
                         Abandonner la saisie
                     </button>
                     <div className="flex gap-6">
                         <Button
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-surface-card text-bg-primary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-accent hover:bg-surface-card text-bg-primary rounded-[2rem] font-black text-micro uppercase tracking-[0.3em] transition-all shadow-2xl shadow-amber-500/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             <Save className="w-5 h-5 text-bg-primary" />
                             Finaliser le Profil

@@ -151,7 +151,7 @@ function WelcomeStaffInner() {
                                         {config.label}
                                     </p>
                                 </div>
-                                <p className="text-[11px] text-text-muted leading-relaxed">
+                                <p className="text-micro text-text-muted leading-relaxed">
                                     {config.description}
                                 </p>
                             </div>
@@ -166,7 +166,7 @@ function WelcomeStaffInner() {
                                         <Lock className="w-4 h-4 text-accent-gold" />
                                         Choisissez votre PIN
                                     </p>
-                                    <p className="text-[10px] text-text-muted">
+                                    <p className="text-nano text-text-muted">
                                         Votre PIN par défaut vous a été communiqué par votre responsable. Vous devez le remplacer maintenant.
                                     </p>
                                 </div>
@@ -221,7 +221,7 @@ function WelcomeStaffInner() {
                                         </button>
                                     </div>
                                     {confirmPin.length === 4 && confirmPin !== newPin && (
-                                        <p className="text-[10px] text-status-error mt-1">Les PINs ne correspondent pas</p>
+                                        <p className="text-nano text-status-error mt-1">Les PINs ne correspondent pas</p>
                                     )}
                                 </div>
 
@@ -249,7 +249,7 @@ function WelcomeStaffInner() {
                             </div>
                             <div>
                                 <h2 className="text-xl font-serif font-black text-text-primary">Tout est prêt !</h2>
-                                <p className="text-[11px] text-text-muted mt-2">
+                                <p className="text-micro text-text-muted mt-2">
                                     Votre PIN a été mis à jour. Vous pouvez maintenant accéder à votre espace de travail.
                                 </p>
                             </div>

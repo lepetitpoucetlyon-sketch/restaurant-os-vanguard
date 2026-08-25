@@ -105,7 +105,7 @@ export default function ExpertGovernanceHub() {
                     </div>
                     <div>
                         <h2 className="text-4xl font-serif font-black italic text-text-primary tracking-tight uppercase">Gouvernance des Experts</h2>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-gold mt-2">Pilotage Centrale de l'Intelligence Métier</p>
+                        <p className="text-nano font-black uppercase tracking-[0.3em] text-accent-gold mt-2">Pilotage Centrale de l'Intelligence Métier</p>
                     </div>
                 </div>
                 
@@ -138,7 +138,7 @@ export default function ExpertGovernanceHub() {
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black uppercase tracking-[0.1em] text-text-primary font-serif italic">{expert.domain}</h3>
-                                        <p className="text-[10px] font-bold text-text-muted mt-1 uppercase tracking-widest">Domaine Stratégique</p>
+                                        <p className="text-nano font-bold text-text-muted mt-1 uppercase tracking-widest">Domaine Stratégique</p>
                                     </div>
                                 </div>
                                 
@@ -162,7 +162,7 @@ export default function ExpertGovernanceHub() {
                             <div className="space-y-6 pt-6 border-t border-border/50">
                                 {/* Role Control */}
                                 <div className="space-y-3">
-                                    <label className="text-[9px] font-black uppercase tracking-[0.2em] text-text-muted flex items-center gap-2">
+                                    <label className="text-nano font-black uppercase tracking-[0.2em] text-text-muted flex items-center gap-2">
                                         <Lock className="w-3.5 h-3.5" /> Restriction d'Accès (Role Min)
                                     </label>
                                     <div className="flex gap-2">
@@ -171,7 +171,7 @@ export default function ExpertGovernanceHub() {
                                                 key={role}
                                                 onClick={() => handleUpdateExpert(expert.domain as AgentDomain, { minRole: role })}
                                                 className={cn(
-                                                    "px-4 h-9 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all border",
+                                                    "px-4 h-9 rounded-xl text-nano font-black uppercase tracking-widest transition-all border",
                                                     expert.minRole === role 
                                                         ? "bg-surface-sidebar text-accent-gold border-accent-gold/30 shadow-lg" 
                                                         : "bg-bg-tertiary text-text-muted border-border opacity-60 hover:opacity-100"
@@ -185,7 +185,7 @@ export default function ExpertGovernanceHub() {
 
                                 {/* Model Selection */}
                                 <div className="space-y-3">
-                                    <label className="text-[9px] font-black uppercase tracking-[0.2em] text-text-muted flex items-center gap-2">
+                                    <label className="text-nano font-black uppercase tracking-[0.2em] text-text-muted flex items-center gap-2">
                                         <Zap className="w-3.5 h-3.5" /> Intelligence Allouée (Diagnostic Level)
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
@@ -202,11 +202,11 @@ export default function ExpertGovernanceHub() {
                                             >
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <Cpu className={cn("w-3 h-3", expert.modelId === model.id ? "text-accent-gold" : "text-text-muted")} />
-                                                    <span className={cn("text-[8px] font-black uppercase tracking-widest", expert.modelId === model.id ? "text-text-primary" : "text-text-muted")}>
+                                                    <span className={cn("text-nano font-black uppercase tracking-widest", expert.modelId === model.id ? "text-text-primary" : "text-text-muted")}>
                                                         {model.name.split(' ')[0]}
                                                     </span>
                                                 </div>
-                                                <p className="text-[8px] text-text-muted font-medium leading-tight line-clamp-2">
+                                                <p className="text-nano text-text-muted font-medium leading-tight line-clamp-2">
                                                     {model.description}
                                                 </p>
                                             </button>
@@ -228,7 +228,7 @@ export default function ExpertGovernanceHub() {
                     </div>
                     <div className="flex items-center gap-3 px-6 py-2 bg-status-success/10 border border-emerald-500/20 rounded-full">
                         <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
-                        <span className="text-[10px] font-black text-status-success uppercase tracking-widest">Connectivité Active (Google AI)</span>
+                        <span className="text-nano font-black text-status-success uppercase tracking-widest">Connectivité Active (Google AI)</span>
                     </div>
                 </div>
 

@@ -19,7 +19,7 @@ export function BalanceSheetView() {
                 {bs.isBalanced ? <CheckCircle2 className="w-6 h-6 text-success" /> : <AlertCircle className="w-6 h-6 text-error" />}
                 <div>
                     <p className="text-sm font-bold">{bs.isBalanced ? "Bilan Équilibré" : "Déséquilibré"}</p>
-                    <p className="text-[10px] text-text-muted">Actif = {fmu(bs.totalAssetsInMicrounits, bs.totalAssetsInCents)} | Passif = {fmu((bs.totalLiabilitiesInMicrounits ?? 0) + (bs.totalEquityInMicrounits ?? 0) || null, bs.totalLiabilitiesInCents + bs.totalEquityInCents)}</p>
+                    <p className="text-nano text-text-muted">Actif = {fmu(bs.totalAssetsInMicrounits, bs.totalAssetsInCents)} | Passif = {fmu((bs.totalLiabilitiesInMicrounits ?? 0) + (bs.totalEquityInMicrounits ?? 0) || null, bs.totalLiabilitiesInCents + bs.totalEquityInCents)}</p>
                 </div>
             </div>
             <div className="grid grid-cols-2 gap-6">

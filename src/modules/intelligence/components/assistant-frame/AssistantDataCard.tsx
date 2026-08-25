@@ -56,7 +56,7 @@ export function AssistantDataCard({ data }: AssistantDataCardProps) {
                     </span>
                 </div>
 
-                <div className="flex items-center gap-1 text-[10px] text-accent font-semibold px-2 py-0.5 rounded-md bg-accent/10 border border-accent/20">
+                <div className="flex items-center gap-1 text-nano text-accent font-semibold px-2 py-0.5 rounded-md bg-accent/10 border border-accent/20">
                     <ShieldCheck className="w-3 h-3" />
                     <span>Données Certifiées Nexus</span>
                 </div>
@@ -94,7 +94,7 @@ export function AssistantDataCard({ data }: AssistantDataCardProps) {
 
             {/* Meta Footer */}
             {data.meta && (
-                <div className="px-3.5 py-2 border-t border-border/40 bg-bg-secondary/30 flex items-center justify-between text-[10px] text-text-muted">
+                <div className="px-3.5 py-2 border-t border-border/40 bg-bg-secondary/30 flex items-center justify-between text-nano text-text-muted">
                     {Object.entries(data.meta).map(([k, v]) => (
                         <span key={k}>
                             {k}: <strong className="text-text-secondary font-mono">{v}</strong>

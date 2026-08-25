@@ -151,7 +151,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                             </div>
                             <div>
                                 <h2 className="text-4xl font-serif font-black text-text-primary italic tracking-tight">Réception Archive.</h2>
-                                <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-2">Scellement de nouvelles ressources</p>
+                                <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-2">Scellement de nouvelles ressources</p>
                             </div>
                         </div>
                         <button
@@ -198,7 +198,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={onClose}
-                            className="px-10 py-5 text-[10px] font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-[22px]"
+                            className="px-10 py-5 text-nano font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-[22px]"
                         >
                             ANNULATION
                         </motion.button>
@@ -208,7 +208,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                             onClick={handleSubmit}
                             disabled={!selectedIngredient || !quantity || !storageLocation || !dlc || isSubmitting}
                             className={cn(
-                                "flex items-center gap-6 px-16 py-6 rounded-[30px] text-[11px] font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
+                                "flex items-center gap-6 px-16 py-6 rounded-[30px] text-micro font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
                                 selectedIngredient && quantity && storageLocation && dlc
                                     ? "bg-text-primary text-text-primary hover:bg-accent-gold"
                                     : "bg-text-muted/10 text-text-muted/20 cursor-not-allowed"

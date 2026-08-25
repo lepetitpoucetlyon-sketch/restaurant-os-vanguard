@@ -18,7 +18,7 @@ export function TreasuryForecastTable({ forecasts }: TreasuryForecastTableProps)
           <h3 className="text-sm font-black uppercase tracking-widest">
             Prévisions de trésorerie
           </h3>
-          <p className="text-[10px] text-text-muted">
+          <p className="text-nano text-text-muted">
             Basées sur les clôtures Z quotidiennes
           </p>
         </div>
@@ -37,13 +37,13 @@ export function TreasuryForecastTable({ forecasts }: TreasuryForecastTableProps)
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-border text-text-muted text-left">
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px]">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano">
                   Date
                 </th>
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px] text-right">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano text-right">
                   CA prévu
                 </th>
-                <th className="pb-2 font-black uppercase tracking-widest text-[9px] text-right">
+                <th className="pb-2 font-black uppercase tracking-widest text-nano text-right">
                   Basé sur
                 </th>
               </tr>

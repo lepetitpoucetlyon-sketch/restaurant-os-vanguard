@@ -70,7 +70,7 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
                                 >
                                     {format(day, "d")}
                                 </p>
-                                <p className="text-[8px] font-black text-text-muted uppercase tracking-wider mt-0.5">
+                                <p className="text-nano font-black text-text-muted uppercase tracking-wider mt-0.5">
                                     {dayRes.length > 0 ? (
                                         <span className="text-accent">{dayRes.length} rés.</span>
                                     ) : (
@@ -99,20 +99,20 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
                                                         STATUS_DOT[res.status] ?? "bg-text-muted"
                                                     )}
                                                 />
-                                                <span className="text-[9px] font-mono text-text-muted truncate">
+                                                <span className="text-nano font-mono text-text-muted truncate">
                                                     {res.time}
                                                 </span>
                                             </div>
-                                            <p className="text-[10px] font-black text-text-primary truncate leading-tight">
+                                            <p className="text-nano font-black text-text-primary truncate leading-tight">
                                                 {res.customerName}
                                             </p>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <span className="flex items-center gap-0.5 text-[9px] text-text-muted">
+                                                <span className="flex items-center gap-0.5 text-nano text-text-muted">
                                                     <Users className="w-2.5 h-2.5" />
                                                     {res.covers ?? res.partySize ?? 0}
                                                 </span>
                                                 {res.tableId && (
-                                                    <span className="flex items-center gap-0.5 text-[9px] text-text-muted">
+                                                    <span className="flex items-center gap-0.5 text-nano text-text-muted">
                                                         <MapPin className="w-2.5 h-2.5" />
                                                         {String(res.tableId).replace(/^t/, "#")}
                                                     </span>

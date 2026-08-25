@@ -98,7 +98,7 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                                         <div className="flex items-center gap-8 mb-10">
                                             <h3 className="text-4xl font-serif font-bold text-text-primary italic">{(zone.name as string)}</h3>
                                             <div className="h-0.5 flex-1 bg-gradient-to-r from-accent-gold/30 to-transparent" />
-                                            <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
+                                            <span className="text-nano font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
                                             {zoneTables.map((table: Table, idx: number) => (

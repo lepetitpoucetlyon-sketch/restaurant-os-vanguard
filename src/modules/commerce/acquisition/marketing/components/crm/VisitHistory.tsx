@@ -202,7 +202,7 @@ export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
     return (
         <div className="space-y-4">
             {/* ── KPI strip ─────────────────────────────────────────────── */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <StatCard
                     icon={<Users className="w-4 h-4" />}
                     label="Visites"
@@ -269,7 +269,7 @@ export function VisitHistory({ customerId, email, phone }: VisitHistoryProps) {
                                         </div>
                                     </div>
                                     <span
-                                        className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${statusColor}`}
+                                        className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-nano font-bold ${statusColor}`}
                                     >
                                         {statusLabel}
                                     </span>
@@ -298,7 +298,7 @@ function StatCard({
         <div className="bg-surface-base rounded-xl border border-border p-3 flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-text-muted">
                 {icon}
-                <span className="text-[10px] font-bold uppercase tracking-widest">
+                <span className="text-nano font-bold uppercase tracking-widest">
                     {label}
                 </span>
             </div>

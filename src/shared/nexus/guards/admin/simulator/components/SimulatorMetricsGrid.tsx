@@ -75,7 +75,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
                             className="h-full relative" 
                         />
                     </div>
-                    <div className="flex justify-between text-[10px] font-bold text-text-muted">
+                    <div className="flex justify-between text-nano font-bold text-text-muted">
                         <span className="tracking-tighter opacity-50">OPTIMAL FLOW</span>
                         <motion.span 
                             animate={metrics.burnoutIndex > 75 ? { color: '#ef4444' } : {}}

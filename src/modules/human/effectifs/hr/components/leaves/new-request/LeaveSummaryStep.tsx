@@ -31,7 +31,7 @@ export function LeaveSummaryStep({
             className="space-y-6"
         >
             <div className="space-y-3">
-                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest">
                     Motif (Facultatif)
                 </label>
                 <textarea

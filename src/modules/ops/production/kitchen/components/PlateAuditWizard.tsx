@@ -64,7 +64,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                 {/* Header Section (Mobile/Top) */}
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 text-center">
                     <h2 className="text-3xl font-serif italic text-text-primary tracking-tighter mb-1 uppercase">Audit de Dressage</h2>
-                    <p className="text-[10px] font-black text-status-warning uppercase tracking-[0.5em]">{recipeName}</p>
+                    <p className="text-nano font-black text-status-warning uppercase tracking-[0.5em]">{recipeName}</p>
                 </div>
 
                 <button onClick={onClose} className="absolute top-8 right-8 z-50 p-3 rounded-full bg-surface-card/5 text-muted hover:text-text-primary transition-all">
@@ -76,14 +76,14 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
                         {/* Standard Image */}
                         <div className="space-y-4">
-                            <p className="text-[9px] font-black text-secondary uppercase tracking-[0.3em] text-center">STANDARD D'OR</p>
+                            <p className="text-nano font-black text-secondary uppercase tracking-[0.3em] text-center">STANDARD D'OR</p>
                             <div className="aspect-square rounded-[2rem] bg-surface-card/5 border border-subtle overflow-hidden relative group">
                                 {standardImage ? (
                                     <img src={standardImage} className="w-full h-full object-cover opacity-60" alt="Standard" />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center text-secondary">
                                         <Sparkles size={40} className="mb-4 opacity-20" />
-                                        <p className="text-[8px] font-bold uppercase tracking-widest text-center px-6">Aucun standard enregistré</p>
+                                        <p className="text-nano font-bold uppercase tracking-widest text-center px-6">Aucun standard enregistré</p>
                                     </div>
                                 )}
                             </div>
@@ -91,7 +91,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
 
                         {/* Captured Image */}
                         <div className="space-y-4 relative">
-                            <p className="text-[9px] font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">CAPTURE RÉELLE</p>
+                            <p className="text-nano font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">CAPTURE RÉELLE</p>
                             <div className="aspect-square rounded-[2rem] bg-surface-sidebar border-2 border-dashed border-action-primary/30 overflow-hidden relative">
                                 {capturedImage ? (
                                     <img src={capturedImage} className="w-full h-full object-cover" alt="Capture" />
@@ -137,7 +137,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                                 <Zap className="text-primary" size={32} />
                             </div>
                             <h4 className="text-xl font-serif italic text-text-primary">Contrôle de Conformité IA</h4>
-                            <p className="text-[11px] font-bold text-secondary leading-relaxed uppercase tracking-widest">
+                            <p className="text-micro font-bold text-secondary leading-relaxed uppercase tracking-widest">
                                 Prenez une photo pour comparer <br />l'assiette avec le standard technique.
                             </p>
                         </div>
@@ -147,7 +147,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                         <div className="text-center space-y-6">
                             <Loader2 className="animate-spin text-status-warning mx-auto" size={48} />
                             <h4 className="text-xl font-serif italic text-text-primary animate-pulse">Analyse Vision en cours...</h4>
-                            <p className="text-[10px] font-black text-secondary uppercase tracking-[0.4em]">Gemini 1.5 Pro Multimodal</p>
+                            <p className="text-nano font-black text-secondary uppercase tracking-[0.4em]">Gemini 1.5 Pro Multimodal</p>
                         </div>
                     )}
 
@@ -163,7 +163,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                                     {auditResult.score}<span className="text-3xl text-secondary">/10</span>
                                 </div>
                                 <div className={cn(
-                                    "px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mt-4 shadow-lg",
+                                    "px-4 py-1.5 rounded-full text-nano font-black uppercase tracking-[0.3em] mt-4 shadow-lg",
                                     auditResult.isCompliant ? "bg-status-success text-text-primary" : "bg-status-danger text-text-primary"
                                 )}>
                                     {auditResult.isCompliant ? "Dressage Validé" : "Réajustement Requis"}
@@ -173,9 +173,9 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                             {/* Bullet Points */}
                             <div className="space-y-6">
                                 <div className="space-y-3">
-                                    <p className="text-[9px] font-black text-secondary uppercase tracking-widest">Feedback IA</p>
+                                    <p className="text-nano font-black text-secondary uppercase tracking-widest">Feedback IA</p>
                                     {auditResult.feedback.map((f, i) => (
-                                        <div key={i} className="flex gap-3 text-[11px] font-bold text-muted">
+                                        <div key={i} className="flex gap-3 text-micro font-bold text-muted">
                                             <CheckCircle size={14} className="text-status-success shrink-0" />
                                             <span>{f}</span>
                                         </div>
@@ -184,9 +184,9 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
 
                                 {auditResult.detectedIssues.length > 0 && (
                                     <div className="space-y-3">
-                                        <p className="text-[9px] font-black text-status-danger/50 uppercase tracking-widest">Points d'Alerte</p>
+                                        <p className="text-nano font-black text-status-danger/50 uppercase tracking-widest">Points d'Alerte</p>
                                         {auditResult.detectedIssues.map((issue, i) => (
-                                            <div key={i} className="flex gap-3 text-[11px] font-bold text-status-danger">
+                                            <div key={i} className="flex gap-3 text-micro font-bold text-status-danger">
                                                 <AlertCircle size={14} className="shrink-0" />
                                                 <span>{issue}</span>
                                             </div>

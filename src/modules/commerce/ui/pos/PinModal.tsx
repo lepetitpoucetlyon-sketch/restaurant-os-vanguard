@@ -128,7 +128,7 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
                                     <h2 className="text-sm font-black uppercase tracking-widest text-text-primary leading-none">
                                         {title}
                                     </h2>
-                                    <p className="text-[10px] text-text-muted uppercase tracking-wider mt-1">
+                                    <p className="text-nano text-text-muted uppercase tracking-wider mt-1">
                                         Autorisation PIN requise
                                     </p>
                                 </div>
@@ -179,14 +179,14 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
                                     initial={{ opacity: 0, y: -6 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
-                                    className="text-center text-[11px] font-bold text-status-error uppercase tracking-wider mb-4"
+                                    className="text-center text-micro font-bold text-status-error uppercase tracking-wider mb-4"
                                 >
                                     {error}
                                 </motion.p>
                             ) : (
                                 <p
                                     key="hint"
-                                    className="text-center text-[9px] text-text-muted uppercase tracking-[0.3em] mb-4"
+                                    className="text-center text-nano text-text-muted uppercase tracking-[0.3em] mb-4"
                                 >
                                     Saisissez votre code à 4 chiffres
                                 </p>

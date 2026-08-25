@@ -86,7 +86,7 @@ export function CartItemContextMenu({
                                 <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">
                                     Actions article
                                 </h3>
-                                <p className="text-[11px] text-accent-gold font-bold font-serif italic mt-0.5">
+                                <p className="text-micro text-accent-gold font-bold font-serif italic mt-0.5">
                                     {contextMenuItem.name}
                                 </p>
                             </div>
@@ -104,7 +104,7 @@ export function CartItemContextMenu({
                                 <Percent className="w-3 h-3" />
                                 Appliquer remise
                             </p>
-                            <div className="grid grid-cols-3 gap-2 mb-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
                                 {DISCOUNT_PRESETS.map((pct) => {
                                     const isActive = contextMenuItem.discountPercent === pct;
                                     return (
@@ -112,7 +112,7 @@ export function CartItemContextMenu({
                                             key={pct}
                                             onClick={() => onDiscountPreset(pct)}
                                             className={cn(
-                                                "h-10 rounded-2xl border text-[11px] font-black uppercase tracking-wider transition-all",
+                                                "h-10 rounded-2xl border text-micro font-black uppercase tracking-wider transition-all",
                                                 isActive
                                                     ? "bg-accent-gold border-accent-gold text-text-primary shadow-md shadow-accent-gold/20"
                                                     : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
@@ -148,7 +148,7 @@ export function CartItemContextMenu({
                             {(contextMenuItem.discountPercent ?? 0) > 0 && (
                                 <button
                                     onClick={() => onProtectedAction({ type: "discount", cartId: contextMenuItem.cartId, percent: 0 })}
-                                    className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
+                                    className="mt-2 text-nano text-status-error hover:underline font-bold tracking-wider"
                                 >
                                     Retirer la remise actuelle ({contextMenuItem.discountPercent}%)
                                 </button>
@@ -188,7 +188,7 @@ export function CartItemContextMenu({
                             {contextMenuItem.notes && (
                                 <button
                                     onClick={() => { onNoteClear(contextMenuItem.cartId); }}
-                                    className="mt-2 text-[10px] text-status-error hover:underline font-bold tracking-wider"
+                                    className="mt-2 text-nano text-status-error hover:underline font-bold tracking-wider"
                                 >
                                     Effacer la note actuelle
                                 </button>
@@ -202,7 +202,7 @@ export function CartItemContextMenu({
                                     <Store className="w-3 h-3" />
                                     Mode consommation
                                 </p>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                     {([undefined, 'dine_in', 'takeaway'] as const).map((mode) => {
                                         const currentMode = contextMenuItem.consumptionMode;
                                         const isActive = mode === undefined ? currentMode === undefined : currentMode === mode;
@@ -213,7 +213,7 @@ export function CartItemContextMenu({
                                                 key={mode ?? 'inherit'}
                                                 onClick={() => onConsumptionModeOverride(contextMenuItem.cartId, mode)}
                                                 className={cn(
-                                                    "h-10 rounded-2xl border text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
+                                                    "h-10 rounded-2xl border text-nano font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
                                                     isActive
                                                         ? "bg-accent-gold border-accent-gold text-text-primary shadow-md shadow-accent-gold/20"
                                                         : "bg-bg-primary border-border text-text-muted hover:border-accent-gold/40"
@@ -236,7 +236,7 @@ export function CartItemContextMenu({
                                 <button
                                     onClick={() => onToggleDoggyBag(contextMenuItem.cartId)}
                                     className={cn(
-                                        "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
+                                        "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-micro font-black uppercase tracking-wider transition-all",
                                         contextMenuItem.doggyBag
                                             ? "bg-action-primary/10 border-action-primary/30 text-action-primary"
                                             : "border-border bg-bg-primary text-text-muted hover:border-action-primary/40 hover:text-action-primary"
@@ -254,7 +254,7 @@ export function CartItemContextMenu({
                                 onClick={() => onProtectedAction({ type: "offer", cartId: contextMenuItem.cartId })}
                                 disabled={contextMenuItem.isOffer}
                                 className={cn(
-                                    "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider transition-all",
+                                    "w-full h-11 rounded-2xl border flex items-center gap-3 px-4 text-micro font-black uppercase tracking-wider transition-all",
                                     contextMenuItem.isOffer
                                         ? "border-emerald-500/20 bg-status-success/5 text-status-success cursor-not-allowed"
                                         : "border-border bg-bg-primary text-text-muted hover:border-emerald-500/40 hover:text-status-success"
@@ -263,29 +263,29 @@ export function CartItemContextMenu({
                                 <Gift className="w-4 h-4 shrink-0" />
                                 {contextMenuItem.isOffer ? "Article offert" : "Offrir l'article"}
                                 {!contextMenuItem.isOffer && offerRequiresPin && (
-                                    <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
+                                    <span className="ml-auto text-nano text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
                                 )}
                             </button>
 
                             <button
                                 onClick={() => onProtectedAction({ type: "cancel", cartId: contextMenuItem.cartId })}
-                                className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
+                                className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-micro font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
                             >
                                 <Trash2 className="w-4 h-4 shrink-0" />
                                 Annuler l'article
                                 {cancelRequiresPin && (
-                                    <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
+                                    <span className="ml-auto text-nano text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
                                 )}
                             </button>
 
                             <button
                                 onClick={() => onProtectedAction({ type: "refund", cartId: contextMenuItem.cartId })}
-                                className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-[11px] font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
+                                className="w-full h-11 rounded-2xl border border-border bg-bg-primary flex items-center gap-3 px-4 text-micro font-black uppercase tracking-wider text-text-muted hover:border-status-error/40 hover:text-status-error transition-all"
                             >
                                 <X className="w-4 h-4 shrink-0" />
                                 Rembourser l'article
                                 {refundRequiresPin && (
-                                    <span className="ml-auto text-[8px] text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
+                                    <span className="ml-auto text-nano text-accent-gold border border-accent-gold/30 px-2 py-0.5 rounded-full">PIN</span>
                                 )}
                             </button>
                         </div>

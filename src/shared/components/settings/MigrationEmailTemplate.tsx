@@ -43,7 +43,7 @@ const textareaClass =
 
 function FieldLabel({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
   return (
-    <label className="flex items-center gap-1.5 text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-1.5">
+    <label className="flex items-center gap-1.5 text-nano font-bold text-text-muted uppercase tracking-[0.2em] mb-1.5">
       <Icon className="w-3 h-3" />
       {label}
     </label>
@@ -169,7 +169,7 @@ export default function MigrationEmailTemplate() {
             onChange={(e) => setField('body', e.target.value)}
             maxLength={3000}
           />
-          <p className="text-[10px] text-text-muted mt-1 text-right">
+          <p className="text-nano text-text-muted mt-1 text-right">
             {template.body.length} / 3000
           </p>
         </div>
@@ -192,7 +192,7 @@ export default function MigrationEmailTemplate() {
         variants={itemVariants}
         className="bg-bg-secondary border border-border rounded-[2rem] p-6"
       >
-        <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-3">
+        <p className="text-nano font-bold text-text-muted uppercase tracking-[0.2em] mb-3">
           Apercu
         </p>
         <div className="rounded-xl border border-border bg-bg-primary p-4 space-y-2 text-sm text-text-secondary">

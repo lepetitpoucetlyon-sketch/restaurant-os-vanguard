@@ -36,7 +36,7 @@ function POSMobilePage() {
                     <h1 className="text-lg font-black uppercase tracking-widest text-text-primary">
                         POS Mobile
                     </h1>
-                    <p className="text-[10px] text-text-muted">
+                    <p className="text-nano text-text-muted">
                         {currentUser?.name ?? 'Serveur'} — sélectionnez une table
                     </p>
                 </div>
@@ -57,7 +57,7 @@ function POSMobilePage() {
                         <span className="text-base font-black font-serif italic text-text-primary">
                             Table {currentTable?.number || '—'}
                         </span>
-                        <span className="text-[9px] text-text-muted block font-bold uppercase tracking-widest">
+                        <span className="text-nano text-text-muted block font-bold uppercase tracking-widest">
                             {currentUser?.name ?? 'Serveur'}
                         </span>
                     </div>

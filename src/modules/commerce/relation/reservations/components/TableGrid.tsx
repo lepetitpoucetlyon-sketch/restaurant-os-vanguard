@@ -41,7 +41,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
 
                             <span
                                 className={cn(
-                                    "text-[10px] font-black uppercase tracking-[0.3em]",
+                                    "text-nano font-black uppercase tracking-[0.3em]",
                                     zone === "VIP"
                                         ? "text-accent"
                                         : zone === "TERRACE"
@@ -133,19 +133,19 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                                     {/* Footer - Capacity and VIP Badge */}
                                     <div className="flex items-end justify-between">
                                         <div>
-                                            <p className="text-[8px] font-black uppercase tracking-[0.3em] text-text-muted/40 mb-1">
+                                            <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/40 mb-1">
                                                 CAP.
                                             </p>
                                             <div className="flex items-center gap-1.5 text-text-muted">
                                                 <Users className="w-2.5 h-2.5" />
-                                                <span className="text-[10px] font-bold group-hover:text-text-primary transition-colors">
+                                                <span className="text-nano font-bold group-hover:text-text-primary transition-colors">
                                                     {table.seats}p
                                                 </span>
                                             </div>
                                         </div>
 
                                         {table.type === "vip" && (
-                                            <div className="px-2 py-0.5 rounded-full bg-accent text-bg-primary text-[7px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20">
+                                            <div className="px-2 py-0.5 rounded-full bg-accent text-bg-primary text-nano font-black uppercase tracking-widest shadow-lg shadow-amber-500/20">
                                                 VIP
                                             </div>
                                         )}

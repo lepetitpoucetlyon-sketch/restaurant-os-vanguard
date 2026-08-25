@@ -54,10 +54,10 @@ export function PerishableAlertsTracker() {
             <div className="flex items-start justify-between">
               <div>
                 <h4 className="font-bold text-sm text-text-primary">{item.name}</h4>
-                <span className="text-[10px] font-mono text-text-muted">Lot : {item.lotNumber}</span>
+                <span className="text-nano font-mono text-text-muted">Lot : {item.lotNumber}</span>
               </div>
               <span className={cn(
-                "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase",
+                "px-2.5 py-0.5 rounded-full text-nano font-bold uppercase",
                 item.status === 'ok' ? "bg-status-success/10 text-status-success" :
                 item.status === 'expiring-soon' ? "bg-status-warning/10 text-status-warning" :
                 "bg-status-danger/10 text-status-danger"

@@ -96,7 +96,7 @@ export function FloorPlanHeader({
                             aria-expanded={showFloorSelector}
                             className="flex items-baseline gap-3 group"
                         >
-                            <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70">Plan</span>
+                            <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70">Plan</span>
                             <span className="font-serif font-black text-2xl lg:text-3xl leading-none tracking-[-0.02em] text-text-primary truncate">
                                 {String(currentFloor?.name || "—")}
                             </span>
@@ -150,16 +150,16 @@ export function FloorPlanHeader({
                             <span className="font-serif font-black text-xl leading-none tabular-nums text-accent-gold">{occupancyPercent}</span>
                             <span className="text-sm text-accent-gold/60">%</span>
                         </div>
-                        <span className="font-serif italic text-[11px] uppercase tracking-[0.24em] text-text-muted/70">Occupation</span>
+                        <span className="font-serif italic text-micro uppercase tracking-[0.24em] text-text-muted/70">Occupation</span>
                         <span className="text-xs text-text-muted tabular-nums pl-2 border-l border-border/40 ml-1">
                             {occupiedSeats}
                             <span className="text-text-muted/50 mx-0.5">/</span>
                             {totalSeatsOnFloor}
-                            <span className="text-text-muted/60 ml-1 uppercase tracking-wider text-[10px]">pax</span>
+                            <span className="text-text-muted/60 ml-1 uppercase tracking-wider text-nano">pax</span>
                         </span>
                         <span className="text-xs text-text-muted tabular-nums">
                             <span className="tabular-nums">{tablesOnCurrentFloorLength}</span>
-                            <span className="text-text-muted/60 uppercase tracking-wider text-[10px] ml-1">tables</span>
+                            <span className="text-text-muted/60 uppercase tracking-wider text-nano ml-1">tables</span>
                         </span>
                     </div>
                 </div>

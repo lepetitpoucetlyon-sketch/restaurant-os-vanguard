@@ -83,7 +83,7 @@ export function AssistantActionCard({ proposal, onExecute, onDismiss }: Assistan
                         {getSectorIcon(proposal.toolId)}
                     </div>
                     <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-wider text-accent">
+                        <h4 className="text-nano font-bold uppercase tracking-wider text-accent">
                             Action Proposée
                         </h4>
                         <p className="text-xs font-bold text-text-primary">{proposal.title}</p>
@@ -91,7 +91,7 @@ export function AssistantActionCard({ proposal, onExecute, onDismiss }: Assistan
                 </div>
 
                 <div className={cn(
-                    "flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border",
+                    "flex items-center gap-1 text-nano font-semibold px-2 py-0.5 rounded-full border",
                     getRoleBadgeStyle(proposal.minRoleLevel)
                 )}>
                     <Shield className="w-3 h-3" />
@@ -106,7 +106,7 @@ export function AssistantActionCard({ proposal, onExecute, onDismiss }: Assistan
 
             {/* Paramètres Clés */}
             {Object.keys(proposal.params).length > 0 && (
-                <div className="bg-bg-tertiary/60 rounded-lg p-2.5 mb-3 text-[11px] font-mono border border-border/50 text-text-muted space-y-1">
+                <div className="bg-bg-tertiary/60 rounded-lg p-2.5 mb-3 text-micro font-mono border border-border/50 text-text-muted space-y-1">
                     {Object.entries(proposal.params).map(([key, val]) => (
                         <div key={key} className="flex items-center justify-between">
                             <span className="text-text-muted">{key}:</span>

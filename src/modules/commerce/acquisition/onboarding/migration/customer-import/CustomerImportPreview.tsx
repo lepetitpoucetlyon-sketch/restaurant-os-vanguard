@@ -52,7 +52,7 @@ export function CustomerImportPreview({
       {/* Mapping colonnes auto-détectées */}
       {rows.length > 0 && (
         <div className="rounded-xl border border-border bg-bg-secondary p-3 space-y-2">
-          <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wide flex items-center gap-1.5">
+          <p className="text-micro font-semibold text-text-muted uppercase tracking-wide flex items-center gap-1.5">
             <Info className="w-3.5 h-3.5" />
             Colonnes détectées
           </p>
@@ -61,7 +61,7 @@ export function CustomerImportPreview({
               <span
                 key={col}
                 className={[
-                  "inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-mono border",
+                  "inline-flex items-center gap-1 rounded px-2 py-0.5 text-micro font-mono border",
                   FIELD_LABELS[col]
                     ? "bg-action-primary/10 border-action-primary/30 text-action-primary"
                     : "bg-bg-tertiary border-border text-text-muted",
@@ -69,7 +69,7 @@ export function CustomerImportPreview({
               >
                 {col}
                 {FIELD_LABELS[col] && (
-                  <span className="font-sans not-italic text-[10px] opacity-70">
+                  <span className="font-sans not-italic text-nano opacity-70">
                     → {FIELD_LABELS[col]}
                   </span>
                 )}
@@ -82,11 +82,11 @@ export function CustomerImportPreview({
       {/* Prévisualisation des 5 premières lignes */}
       {rows.length > 0 && (
         <div className="rounded-xl border border-border bg-bg-secondary overflow-hidden">
-          <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wide px-3 pt-2.5 pb-1.5">
+          <p className="text-micro font-semibold text-text-muted uppercase tracking-wide px-3 pt-2.5 pb-1.5">
             Aperçu — 5 premières lignes
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full text-[11px]">
+            <table className="w-full text-micro">
               <thead>
                 <tr className="border-b border-border">
                   {Object.keys(rows[0]).slice(0, 8).map((col) => (
@@ -119,7 +119,7 @@ export function CustomerImportPreview({
             </table>
           </div>
           {rows.length > 5 && (
-            <p className="text-[10px] text-text-muted px-3 py-2 border-t border-border">
+            <p className="text-nano text-text-muted px-3 py-2 border-t border-border">
               + {rows.length - 5} ligne(s) supplémentaire(s)
             </p>
           )}

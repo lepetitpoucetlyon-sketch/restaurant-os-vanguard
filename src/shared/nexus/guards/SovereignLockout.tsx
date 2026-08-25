@@ -57,13 +57,13 @@ export function SovereignLockout() {
                 {/* Diagnostics Grid */}
                 <div className="grid grid-cols-2 gap-4 mb-8 text-left">
                     <div className="p-4 rounded-xl bg-surface-card/5 border border-subtle">
-                        <div className="text-[10px] uppercase text-secondary mb-1 flex items-center gap-1">
+                        <div className="text-nano uppercase text-secondary mb-1 flex items-center gap-1">
                             <Terminal className="w-3 h-3" /> Status
                         </div>
                         <div className="font-mono text-sm text-status-error">TERMINATED</div>
                     </div>
                     <div className="p-4 rounded-xl bg-surface-card/5 border border-subtle">
-                        <div className="text-[10px] uppercase text-secondary mb-1 flex items-center gap-1">
+                        <div className="text-nano uppercase text-secondary mb-1 flex items-center gap-1">
                             <Lock className="w-3 h-3" /> Tenant ID
                         </div>
                         <div className="font-mono text-sm text-primary-gold uppercase">{(tenantConfig as { id?: string })?.id || 'REVOKED'}</div>
@@ -83,7 +83,7 @@ export function SovereignLockout() {
                 </button>
 
                 <div className="mt-8 pt-8 border-t border-white/5">
-                    <p className="text-[10px] font-mono text-secondary uppercase tracking-widest">
+                    <p className="text-nano font-mono text-secondary uppercase tracking-widest">
                         Protocol Nexus-Darwin 5.2.0-Grade VI
                     </p>
                 </div>

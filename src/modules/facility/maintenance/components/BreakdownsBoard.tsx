@@ -70,7 +70,7 @@ export function BreakdownsBoard({ tenantId, equipmentId }: BreakdownsBoardProps)
                 </div>
             )}
 
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {COLUMNS.map(col => {
                     const Icon = col.icon;
                     const items = grouped.get(col.status) ?? [];
@@ -87,7 +87,7 @@ export function BreakdownsBoard({ tenantId, equipmentId }: BreakdownsBoardProps)
                                         <p className="text-sm text-primary font-medium truncate">{b.equipmentName}</p>
                                         <p className="text-xs text-secondary truncate">{b.symptom}</p>
                                         <div className="flex items-center justify-between mt-2 text-xs">
-                                            <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold ${
+                                            <span className={`px-1.5 py-0.5 rounded text-nano uppercase font-bold ${
                                                 b.severity === 'critical' ? 'bg-red-500/10 text-red-400' :
                                                 b.severity === 'degraded' ? 'bg-orange-500/10 text-orange-400' :
                                                 'bg-yellow-500/10 text-yellow-400'

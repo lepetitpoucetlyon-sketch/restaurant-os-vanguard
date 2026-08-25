@@ -35,12 +35,12 @@ export function PromoCodeListItem({ promo, toggleActive }: PromoCodeListItemProp
         <div className="flex items-center gap-2">
           <span className="font-mono font-bold text-sm text-text-primary">{promo.code}</span>
           {expired && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-status-danger/10 text-status-danger font-medium">
+            <span className="text-nano px-2 py-0.5 rounded-full bg-status-danger/10 text-status-danger font-medium">
               Expiré
             </span>
           )}
           {!promo.isActive && !expired && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-500/10 text-text-muted font-medium">
+            <span className="text-nano px-2 py-0.5 rounded-full bg-gray-500/10 text-text-muted font-medium">
               Inactif
             </span>
           )}
@@ -61,7 +61,7 @@ export function PromoCodeListItem({ promo, toggleActive }: PromoCodeListItemProp
               style={{ width: `${Math.min(usageRatio * 100, 100)}%` }}
             />
           </div>
-          <span className="text-[10px] text-text-muted whitespace-nowrap font-mono">
+          <span className="text-nano text-text-muted whitespace-nowrap font-mono">
             {promo.currentUses}/{promo.maxUses}
           </span>
         </div>

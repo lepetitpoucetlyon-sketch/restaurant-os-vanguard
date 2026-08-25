@@ -68,7 +68,7 @@ export function RecipeSidebarHero({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
             >
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent mb-4 block">SIGNATURE</span>
+                <span className="text-nano font-black uppercase tracking-[0.4em] text-accent mb-4 block">SIGNATURE</span>
                 <h1 className="text-4xl font-serif font-black leading-[1.1] mb-6 tracking-tight transition-colors text-primary">{String(recipe.name)}</h1>
                 <p className="text-[15px] leading-relaxed font-serif italic mb-10 opacity-80 border-l-2 border-accent/30 pl-4 py-1 transition-colors text-secondary">
                     &ldquo;{String(recipe.description ?? "Une création culinaire d'exception pour sublimer votre carte, alliant technique ancestrale et modernité.")}&rdquo;
@@ -78,7 +78,7 @@ export function RecipeSidebarHero({
             {/* Prep time + difficulty */}
             <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-sidebar/5 border-black/5">
-                    <span className="text-[11px] font-black uppercase text-secondary tracking-[0.3em] block mb-2">Prép.</span>
+                    <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">Prép.</span>
                     <div className="flex items-center gap-3">
                         <Clock className="w-5 h-5 text-accent" />
                         <span className="text-xl font-serif font-black transition-colors text-primary">
@@ -87,7 +87,7 @@ export function RecipeSidebarHero({
                     </div>
                 </div>
                 <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-sidebar/5 border-black/5">
-                    <span className="text-[11px] font-black uppercase text-secondary tracking-[0.3em] block mb-2">Service</span>
+                    <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">Service</span>
                     <div className="flex items-center gap-3">
                         <Flame className="w-5 h-5 text-error" />
                         <span className="text-xl font-serif font-black uppercase text-[15px] transition-colors text-primary">
@@ -100,13 +100,13 @@ export function RecipeSidebarHero({
             {/* Portions scaling spinner */}
             <div className="p-5 rounded-2xl border border-black/5 bg-surface-sidebar/5 mb-8">
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-black uppercase text-secondary tracking-[0.3em]">
+                    <span className="text-micro font-black uppercase text-secondary tracking-[0.3em]">
                         Portions
                     </span>
                     {isScaled && (
                         <button
                             onClick={handleReset}
-                            className="flex items-center gap-1.5 text-[10px] font-black text-accent uppercase tracking-wider hover:opacity-70 transition-opacity"
+                            className="flex items-center gap-1.5 text-nano font-black text-accent uppercase tracking-wider hover:opacity-70 transition-opacity"
                         >
                             <RotateCcw className="w-3 h-3" strokeWidth={2} />
                             Réinitialiser
@@ -131,7 +131,7 @@ export function RecipeSidebarHero({
                         <Plus className="w-4 h-4" strokeWidth={2.5} />
                     </button>
                     {isScaled && (
-                        <span className="text-[10px] font-black text-accent uppercase tracking-widest ml-2">
+                        <span className="text-nano font-black text-accent uppercase tracking-widest ml-2">
                             ×{(currentPortions / basePortions).toFixed(2).replace(/\.?0+$/, '')}
                         </span>
                     )}

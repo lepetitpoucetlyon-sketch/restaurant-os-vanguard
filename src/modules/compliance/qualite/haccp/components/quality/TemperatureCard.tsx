@@ -34,7 +34,7 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
         )}>
             <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">{label}</p>
+                    <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">{label}</p>
                     <div className="flex items-center gap-4">
                         <h4 className={cn(
                             "text-3xl font-black font-mono tracking-tighter",
@@ -85,7 +85,7 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
                 />
             </div>
 
-            <div className="flex justify-between items-center text-[9px] font-black text-muted uppercase tracking-widest px-1">
+            <div className="flex justify-between items-center text-nano font-black text-muted uppercase tracking-widest px-1">
                 <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-surface-tertiary" />
                     Target: {target.min}°C à {target.max}°C

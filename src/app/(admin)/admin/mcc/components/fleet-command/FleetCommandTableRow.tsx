@@ -45,7 +45,7 @@ export const FleetCommandTableRow = React.memo(({
       <td className="px-6 py-5">
         <div className="flex flex-col">
           <span className="text-sm font-bold text-text-primary tracking-tight">{instance.name}</span>
-          <span className="text-[10px] text-secondary font-mono">ID: {instance.id} • {instance.key}</span>
+          <span className="text-nano text-secondary font-mono">ID: {instance.id} • {instance.key}</span>
         </div>
       </td>
       <td className="px-6 py-5">
@@ -60,7 +60,7 @@ export const FleetCommandTableRow = React.memo(({
             }`}
           />
           <div className="flex flex-col">
-            <span className="text-[10px] font-black uppercase text-muted">{instance.status}</span>
+            <span className="text-nano font-black uppercase text-muted">{instance.status}</span>
             <div className="w-16 h-1 bg-surface-card rounded-full mt-1 overflow-hidden">
               <div
                 className={`h-full rounded-full ${
@@ -81,14 +81,14 @@ export const FleetCommandTableRow = React.memo(({
                   instance.metrics.healthScore >= 90 ? 'bg-status-success' : 'bg-status-warning'
                 }`}
               />
-              <span className="text-[9px] font-black text-muted uppercase">
+              <span className="text-nano font-black text-muted uppercase">
                 Sensors {instance.metrics.healthScore}%
               </span>
             </div>
             {instance.metrics.healthScore < 95 && (
               <div className="flex items-center gap-1.5 text-error">
                 <AlertCircle className="w-3 h-3" />
-                <span className="text-[8px] font-black uppercase tracking-tighter">
+                <span className="text-nano font-black uppercase tracking-tighter">
                   Hygiene Drift Detected
                 </span>
               </div>
@@ -99,7 +99,7 @@ export const FleetCommandTableRow = React.memo(({
       <td className="px-6 py-5 text-right">
         <div className="flex flex-col items-end">
           <span className="text-sm font-bold text-text-primary">{instance.metrics.activeUsers}</span>
-          <span className="text-[9px] font-bold text-secondary uppercase tracking-tighter">Sessions</span>
+          <span className="text-nano font-bold text-secondary uppercase tracking-tighter">Sessions</span>
         </div>
       </td>
       <td className="px-6 py-5">
@@ -110,7 +110,7 @@ export const FleetCommandTableRow = React.memo(({
                 instance.security.nf525Certified ? 'text-status-success' : 'text-secondary'
               }`}
             />
-            <span className="text-[9px] font-black uppercase tracking-wider text-muted">NF525 SEALED</span>
+            <span className="text-nano font-black uppercase tracking-wider text-muted">NF525 SEALED</span>
           </div>
         </div>
       </td>
@@ -120,7 +120,7 @@ export const FleetCommandTableRow = React.memo(({
         {instance.rag ? (
           <div className="flex flex-col gap-1">
             <div
-              className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-black uppercase border w-fit ${
+              className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-nano font-black uppercase border w-fit ${
                 instance.rag.status === 'online'
                   ? 'bg-status-success/10 text-status-success border-emerald-500/20'
                   : instance.rag.status === 'indexing'
@@ -134,11 +134,11 @@ export const FleetCommandTableRow = React.memo(({
               {instance.rag.status}
             </div>
             {instance.rag.documentCount !== undefined && (
-              <span className="text-[8px] text-secondary font-mono">{instance.rag.documentCount} docs</span>
+              <span className="text-nano text-secondary font-mono">{instance.rag.documentCount} docs</span>
             )}
           </div>
         ) : (
-          <span className="text-[9px] text-secondary font-mono">—</span>
+          <span className="text-nano text-secondary font-mono">—</span>
         )}
       </td>
 
@@ -187,7 +187,7 @@ export const FleetCommandTableRow = React.memo(({
                   className="absolute right-0 bottom-full mb-2 w-44 bg-surface-card border border-border-subtle rounded-xl shadow-2xl z-50 overflow-hidden"
                 >
                   <div className="px-3 py-2 border-b border-border-subtle">
-                    <p className="text-[8px] font-black uppercase tracking-widest text-secondary">
+                    <p className="text-nano font-black uppercase tracking-widest text-secondary">
                       Action sur {instance.name}
                     </p>
                   </div>

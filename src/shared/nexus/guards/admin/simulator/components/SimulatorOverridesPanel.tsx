@@ -61,7 +61,7 @@ export function SimulatorOverridesPanel({
                                     onChange={(e) => updateStaffRatio(parseInt(e.target.value))}
                                     className="w-full accent-accent bg-surface-card/10 rounded-lg appearance-none h-1.5"
                                 />
-                                <div className="flex justify-between text-[8px] font-mono text-text-muted uppercase">
+                                <div className="flex justify-between text-nano font-mono text-text-muted uppercase">
                                     <span>Palace</span>
                                     <span>Optimal</span>
                                     <span>Fast-Casual</span>
@@ -98,7 +98,7 @@ export function SimulatorOverridesPanel({
                                             integrityStatus === 'BREACH' ? "text-error" : "text-text-primary/50"
                                         )} />
                                         <span className={cn(
-                                            "text-[8px] font-black uppercase tracking-widest",
+                                            "text-nano font-black uppercase tracking-widest",
                                             integrityStatus === 'SECURE' ? "text-success" : 
                                             integrityStatus === 'BREACH' ? "text-error" : "text-text-primary/50"
                                         )}>
@@ -111,7 +111,7 @@ export function SimulatorOverridesPanel({
                             </div>
 
                             <div className="p-3 rounded-lg bg-surface-card/5 border border-subtle">
-                                <p className="text-[9px] leading-relaxed text-text-muted italic">
+                                <p className="text-nano leading-relaxed text-text-muted italic">
                                     "Les réglages appliqués ici modifient la résonance de l'Oracle en temps réel."
                                 </p>
                             </div>

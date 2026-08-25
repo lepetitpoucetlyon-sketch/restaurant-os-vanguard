@@ -61,18 +61,18 @@ export function ReservationSidebar({
                     <input
                         type="text"
                         placeholder="IDENTIFICATION NOMINATIVE..."
-                        className="w-full bg-bg-primary border border-border rounded-full pl-14 pr-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-all"
+                        className="w-full bg-bg-primary border border-border rounded-full pl-14 pr-6 py-4 text-nano font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-all"
                     />
                 </div>
                 <div className="flex items-center justify-between px-2">
                     <div className="flex items-center gap-3">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                        <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">
+                        <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">
                             MANIFESTE{" "}
                             <span className="text-accent">{reservations.length}</span>
                         </span>
                     </div>
-                    <button className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2 hover:text-accent transition-colors">
+                    <button className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2 hover:text-accent transition-colors">
                         <Filter strokeWidth={1.5} className="w-3.5 h-3.5" />
                         TRIER
                     </button>
@@ -95,7 +95,7 @@ export function ReservationSidebar({
                             <div className="w-16 h-16 rounded-[2rem] bg-bg-tertiary flex items-center justify-center mb-6 border border-border">
                                 <Clock strokeWidth={1} className="w-8 h-8 text-text-muted/50" />
                             </div>
-                            <p className="text-[9px] font-black text-text-muted/50 uppercase tracking-[0.3em] italic">
+                            <p className="text-nano font-black text-text-muted/50 uppercase tracking-[0.3em] italic">
                                 Agenda Vacant
                             </p>
                         </motion.div>
@@ -129,7 +129,7 @@ export function ReservationSidebar({
                                                                 : "bg-status-warning shadow-[0_0_10px_rgba(251,191,36,0.3)]"
                                                         )}
                                                     />
-                                                    <span className="text-[8px] font-black text-text-muted uppercase tracking-[0.2em]">
+                                                    <span className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">
                                                         {res.status === "seated" ? "En Cuisine" : "Attendu"}
                                                     </span>
                                                 </div>
@@ -160,7 +160,7 @@ export function ReservationSidebar({
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-xl bg-bg-primary flex items-center justify-center text-[10px] font-mono font-bold text-text-primary border border-border">
+                                                <div className="w-8 h-8 rounded-xl bg-bg-primary flex items-center justify-center text-nano font-mono font-bold text-text-primary border border-border">
                                                     {(res.tableId ?? '').replace(/^t/, "")}
                                                 </div>
                                                 <span className="text-chip-label-sm text-text-muted/50 italic">
@@ -180,7 +180,7 @@ export function ReservationSidebar({
             <div className="p-8 bg-bg-secondary border-t border-border">
                 <div className="flex items-center justify-between bg-bg-tertiary border border-border p-6 rounded-[2.5rem] shadow-2xl group hover:border-accent/40 transition-all cursor-pointer">
                     <div>
-                        <span className="text-[8px] font-black text-text-muted uppercase tracking-[0.3em]">
+                        <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">
                             SERVICES ENGAGÉS
                         </span>
                         <p className="text-3xl font-mono font-light text-accent italic leading-none mt-2">

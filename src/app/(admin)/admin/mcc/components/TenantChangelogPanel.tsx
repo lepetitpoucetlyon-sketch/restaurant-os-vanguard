@@ -81,7 +81,7 @@ export function TenantChangelogPanel() {
           </div>
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Historique</h3>
-            <p className="text-[10px] font-bold text-secondary uppercase tracking-tighter">Changelog auto-catégorisé</p>
+            <p className="text-nano font-bold text-secondary uppercase tracking-tighter">Changelog auto-catégorisé</p>
           </div>
         </div>
         <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
@@ -149,7 +149,7 @@ export function TenantChangelogPanel() {
                   key={c}
                   onClick={() => setFilterCat(c)}
                   className={cn(
-                    'px-2 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-wider transition-all',
+                    'px-2 py-0.5 rounded-full border text-nano font-black uppercase tracking-wider transition-all',
                     CATEGORY_META[c].color,
                     filterCat === c && 'ring-1 ring-white/20'
                   )}
@@ -193,20 +193,20 @@ export function TenantChangelogPanel() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={cn('px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider border', meta.color)}>
+                      <span className={cn('px-1.5 py-0.5 rounded text-nano font-black uppercase tracking-wider border', meta.color)}>
                         {meta.label}
                       </span>
                       {entry.tenantId !== '__FLEET__' && (
-                        <span className="text-[9px] text-secondary font-mono truncate">{entry.tenantId}</span>
+                        <span className="text-nano text-secondary font-mono truncate">{entry.tenantId}</span>
                       )}
                     </div>
                     <p className="text-xs text-muted font-medium mt-1 line-clamp-1">{entry.description}</p>
-                    <p className="text-[9px] font-mono text-secondary mt-0.5">{entry.action}</p>
+                    <p className="text-nano font-mono text-secondary mt-0.5">{entry.action}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-[9px] text-secondary">{timeAgo(entry.appliedAt)}</p>
+                    <p className="text-nano text-secondary">{timeAgo(entry.appliedAt)}</p>
                     {entry.affectedCount && entry.affectedCount > 1 && (
-                      <p className="text-[8px] text-secondary/60">{entry.affectedCount} tenants</p>
+                      <p className="text-nano text-secondary/60">{entry.affectedCount} tenants</p>
                     )}
                   </div>
                 </div>
@@ -214,16 +214,16 @@ export function TenantChangelogPanel() {
                 {isOpen && (
                   <div className="mt-3 pt-3 border-t border-border-subtle space-y-2">
                     {entry.key && (
-                      <p className="text-[9px] font-mono text-secondary">
+                      <p className="text-nano font-mono text-secondary">
                         <span className="text-text-primary/30">Key: </span>{entry.key}
                       </p>
                     )}
-                    <p className="text-[9px] text-secondary">
+                    <p className="text-nano text-secondary">
                       <span className="text-text-primary/30">Scope: </span>{entry.scope}
                       {' — '}
                       <span className="text-text-primary/30">Par: </span>{entry.appliedBy}
                     </p>
-                    <p className="text-[9px] text-secondary">
+                    <p className="text-nano text-secondary">
                       <span className="text-text-primary/30">Date: </span>
                       {new Date(entry.appliedAt).toLocaleString('fr-FR')}
                     </p>
@@ -231,16 +231,16 @@ export function TenantChangelogPanel() {
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         {entry.before !== undefined && (
                           <div className="p-2 bg-status-danger/5 border border-red-500/10 rounded-lg">
-                            <p className="text-[8px] font-black uppercase text-status-danger/60 mb-1">Avant</p>
-                            <pre className="text-[9px] text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
+                            <p className="text-nano font-black uppercase text-status-danger/60 mb-1">Avant</p>
+                            <pre className="text-nano text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
                               {JSON.stringify(entry.before, null, 2)}
                             </pre>
                           </div>
                         )}
                         {entry.after !== undefined && (
                           <div className="p-2 bg-status-success/5 border border-emerald-500/10 rounded-lg">
-                            <p className="text-[8px] font-black uppercase text-status-success/60 mb-1">Après</p>
-                            <pre className="text-[9px] text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
+                            <p className="text-nano font-black uppercase text-status-success/60 mb-1">Après</p>
+                            <pre className="text-nano text-secondary overflow-auto max-h-20 whitespace-pre-wrap break-all">
                               {JSON.stringify(entry.after, null, 2)}
                             </pre>
                           </div>

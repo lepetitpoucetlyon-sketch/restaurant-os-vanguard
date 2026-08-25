@@ -36,7 +36,7 @@ export function PersonnelMatrix({
           <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
             Personnel Matrix
           </h3>
-          <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+          <p className="text-nano font-bold text-text-muted uppercase tracking-widest">
             Active Operatives Count: <span className="text-accent">{users.length}</span>
           </p>
         </div>
@@ -89,7 +89,7 @@ export function PersonnelMatrix({
               </p>
               <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-1 rounded-lg bg-bg-primary/50 border border-border/50">
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: ROLE_COLORS[user.role] }} />
-                <span className="text-[9px] font-bold text-text-muted uppercase tracking-wider">
+                <span className="text-nano font-bold text-text-muted uppercase tracking-wider">
                   {ROLE_LABELS[user.role]?.split(' ')[0]}
                 </span>
               </div>

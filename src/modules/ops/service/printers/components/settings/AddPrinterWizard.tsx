@@ -72,7 +72,7 @@ export function AddPrinterWizard({ onClose, onAdded }: { onClose(): void; onAdde
             </div>
             <div>
               <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">Nouvelle imprimante</h3>
-              <p className="text-[10px] text-text-muted uppercase tracking-widest mt-0.5">{STEP_LABELS[step]}</p>
+              <p className="text-nano text-text-muted uppercase tracking-widest mt-0.5">{STEP_LABELS[step]}</p>
             </div>
             <button onClick={onClose} className="ml-auto text-text-muted hover:text-text-primary text-xl leading-none">&times;</button>
           </div>

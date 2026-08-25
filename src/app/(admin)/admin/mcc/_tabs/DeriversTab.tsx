@@ -77,7 +77,7 @@ export function DeriversTab() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-xs truncate">{d.name}</div>
-                  <div className="text-[10px] text-slate-500">{d.category}</div>
+                  <div className="text-nano text-slate-500">{d.category}</div>
                 </div>
               </button>
             );
@@ -92,7 +92,7 @@ export function DeriversTab() {
                 <Icon className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-[10px] uppercase font-bold text-violet-400">{activeDeriver.category}</span>
+                <span className="text-nano uppercase font-bold text-violet-400">{activeDeriver.category}</span>
                 <h3 className="text-xl font-bold text-white mt-0.5">{activeDeriver.name}</h3>
               </div>
             </div>

@@ -69,13 +69,13 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                         <input
                             type="text"
                             placeholder="IDENTIFICATION DU CONVIVE (NOM, MOBILE)..."
-                            className="w-full bg-bg-primary border border-border rounded-full pl-16 pr-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-all"
+                            className="w-full bg-bg-primary border border-border rounded-full pl-16 pr-8 py-5 text-nano font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-all"
                         />
                     </div>
                     <div className="flex items-center gap-10 pr-4">
                         <div className="h-10 w-px bg-surface-card/5" />
                         <div>
-                            <p className="text-[8px] font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">
+                            <p className="text-nano font-black text-text-primary/20 uppercase tracking-[0.4em] mb-1 italic">
                                 REGISTRE
                             </p>
                             <span className="text-sm font-mono font-bold text-accent">
@@ -143,7 +143,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                                         <p className="text-[12px] font-mono font-bold text-text-primary leading-none">
                                             {getVisitCount(customer)}
                                         </p>
-                                        <p className="text-[8px] font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">
+                                        <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">
                                             Services
                                         </p>
                                     </div>
@@ -152,7 +152,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                                     <p className="text-2xl font-mono font-light text-accent italic tracking-tighter">
                                         {getTotalSpent(customer).toFixed(0)}€
                                     </p>
-                                    <p className="text-[8px] font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">
+                                    <p className="text-nano font-black uppercase tracking-[0.3em] text-text-muted/50 mt-1 italic">
                                         Valeur Totale
                                     </p>
                                 </div>

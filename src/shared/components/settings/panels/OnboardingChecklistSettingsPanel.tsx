@@ -96,11 +96,11 @@ export function OnboardingChecklistSettingsPanel() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-micro font-bold uppercase tracking-wider">
                 Checklist J-0 & Audit Opérationnel
               </span>
               {summary?.isLaunchReady && (
-                <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-[11px] font-bold flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-micro font-bold flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-indigo-400" /> Prêt pour ouverture
                 </span>
               )}
@@ -154,7 +154,7 @@ export function OnboardingChecklistSettingsPanel() {
               />
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-[11px] text-text-muted">
+            <div className="mt-3 flex items-center justify-between text-micro text-text-muted">
               <span>
                 Étapes obligatoires complétées :{' '}
                 <strong className="text-white">
@@ -200,19 +200,19 @@ export function OnboardingChecklistSettingsPanel() {
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                      <span className="text-nano font-bold uppercase tracking-wider text-text-muted">
                         Pilier {step.pillarNumber} • {step.pillar}
                       </span>
                       {step.isMandatory ? (
-                        <span className="px-2 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-300 text-nano font-bold">
                           OBLIGATOIRE
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-[10px] font-medium">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-nano font-medium">
                           Recommandé
                         </span>
                       )}
-                      <span className="text-[10px] text-text-muted/80">~{step.estimatedMinutes} min</span>
+                      <span className="text-nano text-text-muted/80">~{step.estimatedMinutes} min</span>
                     </div>
 
                     <h4 className="text-sm font-bold text-white tracking-tight">{step.title}</h4>
@@ -255,7 +255,7 @@ export function OnboardingChecklistSettingsPanel() {
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <span className="text-[11px] text-text-muted/80 italic flex items-center gap-1">
+                    <span className="text-micro text-text-muted/80 italic flex items-center gap-1">
                       <Lock className="w-3 h-3" /> Requis : {step.minRole}
                     </span>
                   )}

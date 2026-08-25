@@ -64,7 +64,7 @@ export function RecipeCompositionTab({
                         </div>
                     </div>
                     <div className="col-span-8">
-                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-nano tracking-widest transition-all">
                             <Plus className="w-4 h-4 mr-2" /> Valider l'Ingrédient
                         </Button>
                     </div>
@@ -72,7 +72,7 @@ export function RecipeCompositionTab({
             </div>
 
             <div className="space-y-4">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Nomenclature des Ingrédients</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Nomenclature des Ingrédients</label>
                 <AnimatePresence mode="popLayout">
                     {formData.ingredients?.map((ing, idx) => (
                         <motion.div
@@ -83,12 +83,12 @@ export function RecipeCompositionTab({
                             className="group flex items-center justify-between p-6 bg-surface-card rounded-[2rem] border border-border shadow-sm hover:shadow-md transition-all text-primary"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center font-black text-[10px] text-text-muted">
+                                <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center font-black text-nano text-text-muted">
                                     {idx + 1}
                                 </div>
                                 <div>
                                     <p className="font-black text-text-primary">{ing.name}</p>
-                                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-wider mt-1">{ing.quantity} {ing.unit}</p>
+                                    <p className="text-nano font-bold text-text-muted uppercase tracking-wider mt-1">{ing.quantity} {ing.unit}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-8">

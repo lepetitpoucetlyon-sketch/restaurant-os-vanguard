@@ -27,7 +27,7 @@ export function DesktopTopbar() {
 
                 <button
                     onClick={toggleLaunchpad}
-                    className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-accent-gold/10 hover:bg-accent-gold/20 text-accent-gold border border-accent-gold/30 transition-all text-[11px] font-black uppercase tracking-widest group"
+                    className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-accent-gold/10 hover:bg-accent-gold/20 text-accent-gold border border-accent-gold/30 transition-all text-micro font-black uppercase tracking-widest group"
                 >
                     <LayoutGrid className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                     <span>Modules (40+)</span>
@@ -40,7 +40,7 @@ export function DesktopTopbar() {
                             href={section.items[0]?.href || '#'}
                             prefetch={false}
                             className={cn(
-                                "text-[10px] font-black uppercase tracking-[0.25em] transition-all py-1 border-b-2",
+                                "text-nano font-black uppercase tracking-[0.25em] transition-all py-1 border-b-2",
                                 pathname.startsWith(section.items[0]?.href)
                                     ? "text-accent-gold border-accent-gold"
                                     : "text-text-muted hover:text-text-primary border-transparent"
@@ -55,8 +55,8 @@ export function DesktopTopbar() {
             <div className="flex items-center gap-6">
                 <DisplayDepthToggle className="hidden sm:flex" />
                 <div className="flex flex-col items-end">
-                    <span className="text-[11px] font-black uppercase tracking-tight">{currentUser?.name}</span>
-                    <span className="text-[8px] text-accent-gold font-black uppercase tracking-widest">{currentUser?.role}</span>
+                    <span className="text-micro font-black uppercase tracking-tight">{currentUser?.name}</span>
+                    <span className="text-nano text-accent-gold font-black uppercase tracking-widest">{currentUser?.role}</span>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-bg-tertiary border border-border/40 flex items-center justify-center overflow-hidden shadow-premium">
                     {currentUser?.avatar ? (

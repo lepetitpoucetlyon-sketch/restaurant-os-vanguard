@@ -51,18 +51,18 @@ export function StorageStockItemCard({
                                     {item.quantity} {item.unit}
                                 </span>
                                 {item.batchNumber && (
-                                    <span className="text-[9px] font-black text-text-muted uppercase px-2 py-0.5 bg-bg-tertiary rounded-sm border border-border">
+                                    <span className="text-nano font-black text-text-muted uppercase px-2 py-0.5 bg-bg-tertiary rounded-sm border border-border">
                                         Lot: {item.batchNumber}
                                     </span>
                                 )}
                             </div>
                         </div>
-                        <div className={cn("px-2.5 py-1 rounded-lg text-[9px] font-black uppercase border shadow-sm", dlcStatus.color)}>
+                        <div className={cn("px-2.5 py-1 rounded-lg text-nano font-black uppercase border shadow-sm", dlcStatus.color)}>
                             {dlcStatus.label}
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 mt-3 text-[10px] font-black text-text-muted uppercase tracking-wider">
+                    <div className="flex items-center gap-4 mt-3 text-nano font-black text-text-muted uppercase tracking-wider">
                         <span className="flex items-center gap-1.5">
                             <Calendar className="w-3 h-3" />
                             {formatDate(item.receptionDate)}
@@ -78,8 +78,8 @@ export function StorageStockItemCard({
                         {isMoving ? (
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-[10px] font-black text-text-primary uppercase">Déplacer vers :</p>
-                                    <button onClick={() => setMovingItemId(null)} className="text-[10px] font-bold text-text-muted hover:text-text-primary">
+                                    <p className="text-nano font-black text-text-primary uppercase">Déplacer vers :</p>
+                                    <button onClick={() => setMovingItemId(null)} className="text-nano font-bold text-text-muted hover:text-text-primary">
                                         Annuler
                                     </button>
                                 </div>
@@ -97,7 +97,7 @@ export function StorageStockItemCard({
                                                 className="flex items-center gap-2 p-2.5 bg-bg-tertiary border border-border rounded-xl hover:border-accent hover:bg-accent/5 transition-all text-left group/loc"
                                             >
                                                 <LocIcon className="w-3.5 h-3.5 text-text-muted group-hover/loc:text-accent transition-colors" />
-                                                <span className="text-[10px] font-bold text-text-primary truncate">{loc.name}</span>
+                                                <span className="text-nano font-bold text-text-primary truncate">{loc.name}</span>
                                             </button>
                                         );
                                     })}

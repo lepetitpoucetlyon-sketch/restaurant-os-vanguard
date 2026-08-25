@@ -277,7 +277,7 @@ export default function WelcomePage() {
           </div>
       </section>
       
-      <footer className="py-10 text-center font-bold text-[10px] uppercase tracking-widest text-text-muted">
+      <footer className="py-10 text-center font-bold text-nano uppercase tracking-widest text-text-muted">
           &copy; {new Date().getFullYear()} Restaurant OS — Conçu pour l'excellence.
       </footer>
     </div>

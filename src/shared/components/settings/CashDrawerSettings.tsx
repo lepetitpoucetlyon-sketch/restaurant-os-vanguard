@@ -83,7 +83,7 @@ export default function CashDrawerSettings() {
                 </div>
                 <div>
                     <h2 className="text-base font-black uppercase tracking-widest text-text-primary">Tiroir-caisse</h2>
-                    <p className="text-[10px] text-text-muted">Choisissez comment le tiroir est connecté</p>
+                    <p className="text-nano text-text-muted">Choisissez comment le tiroir est connecté</p>
                 </div>
             </div>
 
@@ -114,11 +114,11 @@ export default function CashDrawerSettings() {
                             <p className="text-[12px] font-black uppercase tracking-wider text-text-primary mb-1">
                                 {m.label}
                             </p>
-                            <p className="text-[10px] text-text-muted leading-relaxed">
+                            <p className="text-nano text-text-muted leading-relaxed">
                                 {m.description}
                             </p>
                             {disabled && (
-                                <p className="text-[9px] text-status-error mt-1 font-black uppercase tracking-wider">
+                                <p className="text-nano text-status-error mt-1 font-black uppercase tracking-wider">
                                     Non supporté sur ce navigateur
                                 </p>
                             )}
@@ -133,7 +133,7 @@ export default function CashDrawerSettings() {
                     <p className="text-chip-label text-text-muted">
                         Configuration réseau
                     </p>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div className="col-span-2">
                             <label className="text-chip-label-sm text-text-muted block mb-1.5">
                                 Adresse IP du tiroir
@@ -182,7 +182,7 @@ export default function CashDrawerSettings() {
                             ))}
                         </select>
                     </div>
-                    <p className="text-[9px] text-text-muted">
+                    <p className="text-nano text-text-muted">
                         Le navigateur demandera de sélectionner le port COM au premier test.
                     </p>
                 </div>
@@ -192,7 +192,7 @@ export default function CashDrawerSettings() {
             <div className="flex items-center gap-3 pt-2">
                 <button
                     onClick={handleSave}
-                    className="flex items-center gap-2 px-5 h-10 rounded-xl bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
+                    className="flex items-center gap-2 px-5 h-10 rounded-xl bg-accent-gold text-text-primary text-micro font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors"
                 >
                     <Save className="w-3.5 h-3.5" />
                     Enregistrer
@@ -201,7 +201,7 @@ export default function CashDrawerSettings() {
                 <button
                     onClick={handleTest}
                     disabled={testStatus === "testing"}
-                    className="flex items-center gap-2 px-5 h-10 rounded-xl border border-border text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
+                    className="flex items-center gap-2 px-5 h-10 rounded-xl border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
                 >
                     {testStatus === "testing" ? (
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -212,13 +212,13 @@ export default function CashDrawerSettings() {
                 </button>
 
                 {testStatus === "ok" && (
-                    <div className="flex items-center gap-1.5 text-status-success text-[11px] font-black uppercase tracking-wider">
+                    <div className="flex items-center gap-1.5 text-status-success text-micro font-black uppercase tracking-wider">
                         <CheckCircle2 className="w-4 h-4" />
                         Tiroir ouvert
                     </div>
                 )}
                 {testStatus === "error" && (
-                    <div className="flex items-center gap-1.5 text-status-error text-[11px] font-black uppercase tracking-wider">
+                    <div className="flex items-center gap-1.5 text-status-error text-micro font-black uppercase tracking-wider">
                         <AlertCircle className="w-4 h-4" />
                         {testError ?? "Erreur"}
                     </div>
@@ -229,7 +229,7 @@ export default function CashDrawerSettings() {
             {config.mode === "printer-kick" && (
                 <div className="rounded-2xl border border-border/40 bg-bg-tertiary/30 p-4">
                     <p className="text-chip-label-sm text-text-muted mb-1">Note</p>
-                    <p className="text-[10px] text-text-muted leading-relaxed">
+                    <p className="text-nano text-text-muted leading-relaxed">
                         Le tiroir doit être branché sur le port DK de l'imprimante de ticket configurée comme réception. La commande ESC/POS <span className="font-mono text-accent-gold/80">ESC p 0</span> sera envoyée via l'imprimante.
                     </p>
                 </div>

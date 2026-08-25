@@ -41,8 +41,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // ⚠️ NE PAS remettre `maximumScale: 1` / `userScalable: false`.
+  // Bloquer le zoom au doigt échoue au critère WCAG 2.1 SC 1.4.4 (Resize Text,
+  // niveau AA) et rend inaccessible toute la typographie dense de l'app — que ce
+  // soit pour le personnel en salle sur tablette ou pour le client attablé qui
+  // ouvre le menu depuis son téléphone. Le réflexe « on bloque le zoom pour que
+  // ça fasse natif » coûte ici bien plus qu'il ne rapporte.
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#0B0B0C" },
@@ -80,7 +84,7 @@ export default function RootLayout({
               <div className="w-36 h-1 bg-white/10 rounded-full overflow-hidden">
                 <div className="w-1/2 h-full bg-[#C5A059] rounded-full animate-pulse" />
               </div>
-              <span className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-mono mt-3">Nexus Node Sovereign</span>
+              <span className="text-nano uppercase tracking-[0.25em] text-white/40 font-mono mt-3">Nexus Node Sovereign</span>
             </div>
           }>
             <NexusProviderStack>

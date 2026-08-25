@@ -25,7 +25,7 @@ export function CleaningGridTable({
                         {DAYS.map((day, i) => (
                             <th key={day} className="px-2 py-2 text-center text-text-muted font-medium border-b border-border">
                                 <div>{day}</div>
-                                <div className="text-[10px] text-text-disabled mt-0.5">
+                                <div className="text-nano text-text-disabled mt-0.5">
                                     {new Date(weekDates[i]).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
                                 </div>
                             </th>
@@ -59,7 +59,7 @@ export function CleaningGridTable({
                                                         <div className="flex flex-col items-center gap-0.5">
                                                             <CheckSquare className="w-4 h-4 text-status-success mx-auto" />
                                                             {rec && (
-                                                                <span className="text-[9px] text-text-muted leading-tight">{rec.signedByName.split(' ')[0]}</span>
+                                                                <span className="text-nano text-text-muted leading-tight">{rec.signedByName.split(' ')[0]}</span>
                                                             )}
                                                         </div>
                                                     ) : (

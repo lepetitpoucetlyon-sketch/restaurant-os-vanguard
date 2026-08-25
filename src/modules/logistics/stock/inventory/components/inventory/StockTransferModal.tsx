@@ -75,7 +75,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                             </div>
                             <div>
                                 <h2 className="text-3xl font-serif font-black text-text-primary italic tracking-tight leading-none">Convoi de Stock</h2>
-                                <p className="text-[9px] font-black text-accent-gold uppercase tracking-[0.4em] mt-3 opacity-60">Logistique & Déplacement d&apos;Archive</p>
+                                <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-3 opacity-60">Logistique & Déplacement d&apos;Archive</p>
                             </div>
                         </div>
                         <button
@@ -99,7 +99,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 <Check className="w-12 h-12 text-text-primary" strokeWidth={3} />
                             </motion.div>
                             <p className="text-3xl font-serif font-black text-text-primary italic tracking-tight">Transfert Scellé</p>
-                            <p className="text-[10px] font-black text-accent-gold uppercase tracking-[0.4em] mt-4 opacity-50">L&apos;Archive a rejoint son nouvel emplacement</p>
+                            <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-4 opacity-50">L&apos;Archive a rejoint son nouvel emplacement</p>
                         </div>
                     ) : (
                         <div className="space-y-10">
@@ -130,11 +130,11 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                                 <MapPin className="w-6 h-6" />
                                             </div>
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] leading-none">ORIGINE ACTUELLE</span>
+                                                <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em] leading-none">ORIGINE ACTUELLE</span>
                                                 <span className="text-[15px] font-serif italic font-black text-text-primary tracking-tight leading-none">{String(currentLocation.name || '').toUpperCase()}</span>
                                             </div>
                                         </div>
-                                        <div className="px-5 py-3 rounded-xl bg-accent-gold/10 border border-accent-gold/20 text-accent-gold text-[11px] font-black tracking-widest uppercase">
+                                        <div className="px-5 py-3 rounded-xl bg-accent-gold/10 border border-accent-gold/20 text-accent-gold text-micro font-black tracking-widest uppercase">
                                             {String(currentItem.quantity)} {String(currentItem.unit || '').toUpperCase()}
                                         </div>
                                     </motion.div>
@@ -177,7 +177,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                     <div className="p-10 border-t border-border/50 bg-surface-card/50 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
                         <button
                             onClick={onClose}
-                            className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.4em] text-text-muted hover:text-text-primary transition-all duration-300"
+                            className="px-8 py-4 text-nano font-black uppercase tracking-[0.4em] text-text-muted hover:text-text-primary transition-all duration-300"
                         >
                             ANNULER
                         </button>
@@ -185,7 +185,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                             onClick={handleSubmit}
                             disabled={!selectedItem || !targetLocation || isSubmitting}
                             className={cn(
-                                "flex items-center gap-4 px-12 py-5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-700 relative overflow-hidden group/btn shadow-premium",
+                                "flex items-center gap-4 px-12 py-5 rounded-[22px] text-nano font-black uppercase tracking-[0.4em] transition-all duration-700 relative overflow-hidden group/btn shadow-premium",
                                 selectedItem && targetLocation
                                     ? "bg-text-primary text-text-primary hover:bg-accent-gold hover:text-text-primary"
                                     : "bg-bg-tertiary text-text-muted/40 cursor-not-allowed border border-border/20"

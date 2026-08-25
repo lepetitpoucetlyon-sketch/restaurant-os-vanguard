@@ -88,12 +88,12 @@ export function ZoneService({
                     </div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Espaces & Zones</h3>
-                        <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Secteurs de Service</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Secteurs de Service</p>
                     </div>
                 </div>
                 <button 
                   onClick={handleAddZone}
-                  className="px-4 py-2 bg-text-primary text-bg-primary rounded-xl text-[10px] font-bold tracking-widest uppercase hover:bg-text-secondary transition-all"
+                  className="px-4 py-2 bg-text-primary text-bg-primary rounded-xl text-nano font-bold tracking-widest uppercase hover:bg-text-secondary transition-all"
                 >
                   Nouvelle Zone
                 </button>
@@ -110,7 +110,7 @@ export function ZoneService({
                         <div className="p-6 bg-bg-primary rounded-2xl border border-border">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Nom de la zone</label>
+                                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Nom de la zone</label>
                                     <input
                                         type="text"
                                         value={editingZone.name}
@@ -120,7 +120,7 @@ export function ZoneService({
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Étage</label>
+                                    <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Étage</label>
                                     <select
                                         value={editingZone.floorId}
                                         onChange={(e) => setEditingZone({ ...editingZone!, floorId: e.target.value })}
@@ -131,7 +131,7 @@ export function ZoneService({
                                 </div>
                             </div>
                             <div className="mb-4">
-                                <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Couleur</label>
+                                <label className="block text-nano font-bold text-text-muted uppercase tracking-widest mb-2">Couleur</label>
                                 <div className="flex gap-2 flex-wrap">
                                     {ZONE_COLORS.map((color) => (
                                         <button
@@ -179,7 +179,7 @@ export function ZoneService({
                             <p className="font-serif text-lg italic">{zone.name}</p>
                             <p className="text-xs text-secondary font-bold uppercase tracking-wider">{zone.description || 'Zone Active'}</p>
                             <div className="mt-3 flex items-center gap-2">
-                                <span className="px-2 py-1 bg-surface-card/40 rounded-lg text-[10px] font-bold">
+                                <span className="px-2 py-1 bg-surface-card/40 rounded-lg text-nano font-bold">
                                     {tables.filter(t => t.zoneId === zone.id).length} tables
                                 </span>
                             </div>

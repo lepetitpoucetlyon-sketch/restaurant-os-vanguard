@@ -74,10 +74,22 @@ export function KDSHeader({
                 <div className="h-[2px] w-full bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0" />
             )}
 
-            <div className="w-full max-w-[1800px] mx-auto flex items-center gap-6 px-6 lg:px-10 h-[76px]">
+            {/* gap-3 sous lg : à 768px, `gap-6` sur 9 intervalles consommait 216px —
+                plus du quart de l'écran — et ne laissait rien à la barre de stations,
+                écrasée à 31px. Les 10 enfants de cette rangée génèrent leurs
+                intervalles même lorsqu'ils sont masqués (`hidden lg:flex`). */}
+            {/* Padding calé sur le bleed négatif de KDSDashboard (`-m-4 md:-m-8`) :
+                sans compensation, l'en-tête sort de la coquille arrondie et se fait
+                rogner à gauche (le « C » de CUISINE, puis l'heure elle-même).
+                <md : -16px → px-4 ‖ md..lg : -32px → px-8 ‖ ≥lg : mise en page large. */}
+            <div className="w-full max-w-[1800px] mx-auto flex items-center gap-3 lg:gap-6 px-4 md:px-8 lg:px-10 h-[76px]">
                 {/* Signature editorial title */}
                 <div className="flex items-baseline gap-3 shrink-0">
-                    <span className="font-serif font-black italic text-[11px] uppercase tracking-[0.32em] text-text-muted/70 hidden md:inline">Cuisine</span>
+                    {/* lg et non md : à 768px le `-m-8` de KDSDashboard tire l'en-tête
+                        sous le bord arrondi de la coquille, qui rognait le « C » de
+                        « CUISINE ». Le kicker n'apparaît qu'à partir de la largeur
+                        où il tient réellement. */}
+                    <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 hidden lg:inline">Cuisine</span>
                     <span className="font-serif font-black text-2xl leading-none tracking-[-0.02em] text-text-primary tabular-nums">
                         {currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -87,13 +99,19 @@ export function KDSHeader({
                                 <span className="absolute inset-0 rounded-full bg-red-500/60 animate-ping" />
                                 <span className="relative rounded-full w-2 h-2 bg-red-500" />
                             </span>
-                            <span className="font-serif italic text-[11px] tracking-[0.24em] uppercase text-red-500/90">Rush</span>
+                            <span className="font-serif italic text-micro tracking-[0.24em] uppercase text-red-500/90">Rush</span>
                         </span>
                     )}
                 </div>
 
                 {/* Station filters — one authored spring-pill motion */}
-                <nav aria-label="Stations" className="flex items-center bg-surface-glass border border-border/40 rounded-xl p-1 shrink-0">
+                {/* Sous 1024px (tablette de passe), la rangée d'en-tête mesurait 1218px
+                    pour un viewport de 768px : 450px de stations passaient hors cadre,
+                    et le parent en `overflow-x: hidden` les rendait DÉFINITIVEMENT
+                    inatteignables — un cuisinier ne pouvait plus sélectionner les
+                    dernières stations. La barre défile désormais au doigt ; les
+                    contrôles à droite (recherche, réglages) restent ancrés. */}
+                <nav aria-label="Stations" className="flex items-center bg-surface-glass border border-border/40 rounded-xl p-1 flex-1 min-w-0 overflow-x-auto scrollbar-hide lg:flex-none lg:shrink-0 lg:overflow-x-visible">
                     {(Object.keys(STATION_CONFIG) as KitchenStation[]).map(station => {
                         const config = STATION_CONFIG[station];
                         const Icon = config.icon;
@@ -106,7 +124,9 @@ export function KDSHeader({
                                 disabled={isDisabled}
                                 aria-current={isActive ? "page" : undefined}
                                 className={cn(
-                                    "relative flex items-center gap-2 h-9 px-4 rounded-lg text-xs font-medium tracking-tight transition-colors z-10",
+                                    // shrink-0 : la nav est devenue un conteneur défilable ;
+                                    // sans lui les pastilles se compriment au lieu de défiler.
+                                    "relative flex shrink-0 items-center gap-2 h-9 px-4 rounded-lg text-xs font-medium tracking-tight transition-colors z-10",
                                     isActive ? "text-text-primary" : "text-text-muted hover:text-text-primary",
                                     isDisabled && "opacity-30 cursor-not-allowed hidden md:flex"
                                 )}
@@ -134,11 +154,12 @@ export function KDSHeader({
                     </span>
                     <span className="text-text-muted/60 tabular-nums text-sm">/</span>
                     <span className="font-serif font-medium text-sm text-text-muted tabular-nums">{ordersCount}</span>
-                    <span className="font-serif italic text-[10px] uppercase tracking-[0.24em] text-text-muted/70 ml-1">en cours</span>
+                    <span className="font-serif italic text-nano uppercase tracking-[0.24em] text-text-muted/70 ml-1">en cours</span>
                 </div>
 
-                {/* Spacer */}
-                <div className="flex-1" />
+                {/* Spacer — masqué sous lg : il entrait en concurrence avec la barre
+                    de stations devenue `flex-1` et l'écrasait à 8px de large. */}
+                <div className="hidden lg:block flex-1" />
 
                 {/* Search — collapsible, minimal */}
                 <div ref={searchRef} className="relative flex items-center shrink-0">
@@ -264,7 +285,7 @@ export function KDSHeader({
                 >
                     <Bell className="w-[15px] h-[15px]" strokeWidth={2} />
                     {pendingModificationsCount > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-serif font-black tabular-nums flex items-center justify-center border-2 border-bg-primary">
+                        <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-nano font-serif font-black tabular-nums flex items-center justify-center border-2 border-bg-primary">
                             {pendingModificationsCount}
                         </span>
                     )}

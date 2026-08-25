@@ -39,7 +39,7 @@ export function ScheduleMatrix({ schedule, onDayChange }: ScheduleMatrixProps) {
                         <h3 className="text-3xl font-serif text-text-primary uppercase tracking-tighter italic">
                             Matrice des Opérations Hebdomadaires
                         </h3>
-                        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Configuration de l'Infrastructure Temporelle</p>
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] ml-1">Configuration de l'Infrastructure Temporelle</p>
                     </div>
                 </div>
             </div>

@@ -73,7 +73,7 @@ export function FiscalArchiveExportPanel() {
                         <Archive className="w-4 h-4 text-brand" />
                         Export Légal & Archive Fiscale Scellée (1 Clic)
                     </h4>
-                    <p className="text-[11px] text-secondary">
+                    <p className="text-micro text-secondary">
                         Compilation certifiée NF525 du Grand Livre, des clôtures Z et du scellement SHA-256 pour l'administration fiscale.
                     </p>
                 </div>
@@ -103,7 +103,7 @@ export function FiscalArchiveExportPanel() {
                         <CheckCircle2 className="w-4 h-4" />
                         Dernière Archive Certifiée Prête
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-mono text-secondary">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-micro font-mono text-secondary">
                         <div>
                             <span className="text-text-primary font-bold">Écritures comptables:</span> {lastArchive.totalEntries}
                         </div>

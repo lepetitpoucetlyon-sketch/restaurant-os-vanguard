@@ -19,7 +19,7 @@ export function SitesTable({
         <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                    <thead className="bg-bg-tertiary/40 text-text-secondary text-[10px] uppercase font-black tracking-wider border-b border-border-subtle">
+                    <thead className="bg-bg-tertiary/40 text-text-secondary text-nano uppercase font-black tracking-wider border-b border-border-subtle">
                         <tr>
                             <th className="px-6 py-4">Restaurant</th>
                             <th className="px-6 py-4">Ville</th>
@@ -62,7 +62,7 @@ function SiteRow({
                 <div className="flex items-center gap-2">
                     <span>{site.name}</span>
                     {isCurrent && (
-                        <span className="px-2 py-0.5 rounded-full bg-brand/10 text-brand text-[9px] font-black">
+                        <span className="px-2 py-0.5 rounded-full bg-brand/10 text-brand text-nano font-black">
                             ACTUEL
                         </span>
                     )}
@@ -70,7 +70,7 @@ function SiteRow({
             </td>
             <td className="px-6 py-4 text-text-secondary">{site.city}</td>
             <td className="px-6 py-4">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-nano font-bold">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     {site.status}
                 </span>
@@ -84,24 +84,24 @@ function SiteRow({
             </td>
             <td className="px-6 py-4 text-center">
                 {site.stockAlertsCount > 0 ? (
-                    <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 font-bold text-nano">
                         {site.stockAlertsCount}
                     </span>
                 ) : (
-                    <span className="text-emerald-400 text-[10px]">0</span>
+                    <span className="text-emerald-400 text-nano">0</span>
                 )}
             </td>
             <td className="px-6 py-4 text-right">
                 {!isCurrent ? (
                     <button
                         onClick={onSwitch}
-                        className="px-3 py-1.5 rounded-lg bg-surface-card hover:bg-brand hover:text-bg-primary border border-border-subtle text-[10px] font-bold transition-all flex items-center gap-1.5 ml-auto"
+                        className="px-3 py-1.5 rounded-lg bg-surface-card hover:bg-brand hover:text-bg-primary border border-border-subtle text-nano font-bold transition-all flex items-center gap-1.5 ml-auto"
                     >
                         Basculer
                         <ExternalLink className="w-3 h-3" />
                     </button>
                 ) : (
-                    <span className="text-[10px] text-text-secondary font-medium">Session active</span>
+                    <span className="text-nano text-text-secondary font-medium">Session active</span>
                 )}
             </td>
         </tr>

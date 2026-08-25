@@ -69,7 +69,7 @@ export function OracleChatDrawer({
                   <h3 className="text-sm font-black uppercase tracking-widest">
                     Oracle NEXUS
                   </h3>
-                  <p className="text-[9px] text-text-muted uppercase tracking-widest">
+                  <p className="text-nano text-text-muted uppercase tracking-widest">
                     IA contextuelle · RAG souverain
                   </p>
                 </div>
@@ -100,7 +100,7 @@ export function OracleChatDrawer({
                     <p className="text-xs font-bold">
                       Posez une question à Oracle
                     </p>
-                    <p className="text-[10px] mt-1 max-w-[240px]">
+                    <p className="text-nano mt-1 max-w-[240px]">
                       Menu, stock, finance, planning, conformité... Oracle
                       connaît votre restaurant.
                     </p>
@@ -114,7 +114,7 @@ export function OracleChatDrawer({
                       <button
                         key={q}
                         onClick={() => sendMessage(q)}
-                        className="px-3 py-1.5 rounded-full text-[10px] font-bold border border-border hover:border-accent hover:text-accent transition-colors"
+                        className="px-3 py-1.5 rounded-full text-nano font-bold border border-border hover:border-accent hover:text-accent transition-colors"
                       >
                         {q}
                       </button>
@@ -144,7 +144,7 @@ export function OracleChatDrawer({
                     <p className="whitespace-pre-wrap">{msg.content}</p>
                     <p
                       className={cn(
-                        "text-[8px] mt-1.5 font-mono",
+                        "text-nano mt-1.5 font-mono",
                         msg.role === "user"
                           ? "text-white/50"
                           : "text-text-muted"
@@ -163,7 +163,7 @@ export function OracleChatDrawer({
                 <div className="flex justify-start">
                   <div className="bg-bg-secondary border border-border rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 animate-spin text-accent" />
-                    <span className="text-[10px] text-text-muted">
+                    <span className="text-nano text-text-muted">
                       Oracle réfléchit...
                     </span>
                   </div>

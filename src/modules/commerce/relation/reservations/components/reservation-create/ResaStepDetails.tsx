@@ -52,7 +52,7 @@ export function ResaStepDetails({
                     <ChevronLeft className="w-4 h-4 text-text-primary" />
                 </button>
                 <div>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">Client</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-widest">Client</p>
                     <p className="text-2xl font-serif italic text-text-primary">
                         {selectedCustomer?.firstName} {selectedCustomer?.lastName}
                     </p>
@@ -62,7 +62,7 @@ export function ResaStepDetails({
             <div className="grid grid-cols-2 gap-6">
                 {/* Date */}
                 <motion.div variants={itemV} className="space-y-3">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-accent" /> Date
                     </label>
                     <input
@@ -75,7 +75,7 @@ export function ResaStepDetails({
 
                 {/* Time */}
                 <motion.div variants={itemV} className="space-y-3">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 text-accent" /> Heure
                     </label>
                     <input
@@ -88,7 +88,7 @@ export function ResaStepDetails({
 
                 {/* Covers */}
                 <motion.div variants={itemV} className="space-y-3">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                         <Users className="w-3.5 h-3.5 text-accent" /> Couverts
                     </label>
                     <div className="flex items-center justify-between bg-bg-secondary border border-border rounded-2xl p-2">
@@ -110,19 +110,19 @@ export function ResaStepDetails({
 
                 {/* Auto table suggestion */}
                 <motion.div variants={itemV} className="space-y-3">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                         <MapPin className="w-3.5 h-3.5 text-accent" /> Table
                     </label>
                     {suggestedTable ? (
                         <div className="h-14 bg-accent/5 border border-accent/30 rounded-2xl px-5 flex items-center justify-between">
-                            <span className="text-[11px] font-black text-accent uppercase tracking-widest">
+                            <span className="text-micro font-black text-accent uppercase tracking-widest">
                                 Suggérée : Table {suggestedTable.number} ({suggestedTable.seats} pl.)
                             </span>
                             <Check className="w-4 h-4 text-accent" />
                         </div>
                     ) : (
                         <div className="h-14 bg-bg-secondary border border-border rounded-2xl px-5 flex items-center">
-                            <span className="text-[11px] text-text-muted uppercase tracking-widest">
+                            <span className="text-micro text-text-muted uppercase tracking-widest">
                                 Aucune table disponible
                             </span>
                         </div>
@@ -133,10 +133,10 @@ export function ResaStepDetails({
             {/* Table override grid */}
             {availableTables.length > 0 && (
                 <motion.div variants={itemV} className="space-y-4">
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                    <p className="text-nano font-black text-text-muted uppercase tracking-widest">
                         Choisir manuellement (optionnel)
                     </p>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                         {availableTables.slice(0, 8).map((t) => (
                             <button
                                 key={t.id}
@@ -151,7 +151,7 @@ export function ResaStepDetails({
                                 )}
                             >
                                 <p className="text-xs font-black">#{t.number}</p>
-                                <p className="text-[9px] text-text-muted mt-0.5">{t.seats} pl.</p>
+                                <p className="text-nano text-text-muted mt-0.5">{t.seats} pl.</p>
                             </button>
                         ))}
                     </div>
@@ -160,7 +160,7 @@ export function ResaStepDetails({
 
             {/* Notes */}
             <motion.div variants={itemV} className="space-y-3">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-widest">Notes</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-widest">Notes</label>
                 <textarea
                     value={formData.notes}
                     onChange={(e) => setFormData((f) => ({ ...f, notes: e.target.value }))}

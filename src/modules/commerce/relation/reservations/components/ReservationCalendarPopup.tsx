@@ -62,7 +62,7 @@ export function ReservationCalendarPopup({
                         <button onClick={handlePrevMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <h4 className="text-[11px] font-serif font-bold italic text-text-primary uppercase tracking-[0.2em]">
+                        <h4 className="text-micro font-serif font-bold italic text-text-primary uppercase tracking-[0.2em]">
                             {format(calendarMonth, 'MMMM yyyy', { locale: language === 'fr' ? fr : undefined })}
                         </h4>
                         <button onClick={handleNextMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
@@ -72,7 +72,7 @@ export function ReservationCalendarPopup({
 
                     <div className="grid grid-cols-7 gap-1 mb-2">
                         {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
-                            <div key={i} className="text-[8px] font-black text-text-muted/50 text-center uppercase tracking-widest py-2">
+                            <div key={i} className="text-nano font-black text-text-muted/50 text-center uppercase tracking-widest py-2">
                                 {d}
                             </div>
                         ))}
@@ -99,14 +99,14 @@ export function ReservationCalendarPopup({
                                     )}
                                 >
                                     <span className={cn(
-                                        "text-[10px] font-mono font-bold",
+                                        "text-nano font-mono font-bold",
                                         isCurrent ? "text-bg-primary" : "text-text-primary"
                                     )}>
                                         {format(day, 'd')}
                                     </span>
                                     {resCount > 0 && (
                                         <div className={cn(
-                                            "absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[7px] font-black border-2",
+                                            "absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-nano font-black border-2",
                                             isCurrent 
                                                 ? "bg-white text-accent border-accent" 
                                                 : "bg-accent text-bg-primary border-bg-secondary"

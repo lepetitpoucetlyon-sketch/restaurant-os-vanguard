@@ -23,8 +23,8 @@ const badgeVariants = cva(
         soft:    "",
       },
       size: {
-        sm: "px-2 py-0.5 text-[8px] gap-1",
-        md: "px-3 py-1 text-[10px] gap-1.5",
+        sm: "px-2 py-0.5 text-nano gap-1",
+        md: "px-3 py-1 text-nano gap-1.5",
         lg: "px-4 py-1.5 text-xs gap-2",
       },
     },

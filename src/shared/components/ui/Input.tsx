@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     </div>
                 )}
                 {error && (
-                    <p className="mt-1 text-[11px] text-status-danger">{error}</p>
+                    <p className="mt-1 text-micro text-status-danger">{error}</p>
                 )}
             </div>
         );

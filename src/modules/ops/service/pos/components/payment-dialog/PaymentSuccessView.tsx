@@ -22,16 +22,16 @@ export function PaymentSuccessView({ certifiedHash }: PaymentSuccessViewProps) {
             </div>
             <div className="text-center space-y-4">
                 <h2 className="text-4xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.transaction_success')}</h2>
-                <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em]">{t('pos.payment.archive_updated')}</p>
+                <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em]">{t('pos.payment.archive_updated')}</p>
                 <div className="mt-6 p-4 bg-surface-sidebar/40 rounded-2xl border border-accent-gold/20 backdrop-blur-md">
-                    <p className="text-[8px] font-black text-accent-gold/60 uppercase tracking-widest mb-1">NF525 Certified Seal</p>
-                    <p className="text-[10px] font-mono text-accent-gold break-all font-bold">
+                    <p className="text-nano font-black text-accent-gold/60 uppercase tracking-widest mb-1">NF525 Certified Seal</p>
+                    <p className="text-nano font-mono text-accent-gold break-all font-bold">
                         SHA256: {certifiedHash?.substring(0, 32) || 'NOT_AVAILABLE'}...CERTIFIED
                     </p>
                 </div>
             </div>
             <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-            <div className="flex items-center gap-4 text-[10px] font-black uppercase text-accent-gold tracking-[0.3em] bg-accent-gold/5 px-6 py-3 rounded-full border border-accent-gold/10">
+            <div className="flex items-center gap-4 text-nano font-black uppercase text-accent-gold tracking-[0.3em] bg-accent-gold/5 px-6 py-3 rounded-full border border-accent-gold/10">
                 <Receipt className="w-4 h-4 ml-[-4px]" />
                 {t('pos.payment.generating_receipt')}
             </div>

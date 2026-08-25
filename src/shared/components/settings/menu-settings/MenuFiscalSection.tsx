@@ -26,18 +26,18 @@ export function MenuFiscalSection({ menuSettings, setMenuSettings }: MenuFiscalS
                     <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
                         Fiscal Logic
                     </h3>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Pricing Matrix & VAT Calibration</p>
+                    <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Pricing Matrix & VAT Calibration</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Valuation Mode</label>
+                    <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Valuation Mode</label>
                     <div className="flex gap-4 bg-bg-tertiary p-2 rounded-[1.5rem] border border-border">
                         <button
                             onClick={() => setMenuSettings(s => ({ ...s, pricingMode: 'ttc' }))}
                             className={cn(
-                                "flex-1 py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all",
+                                "flex-1 py-4 rounded-xl font-bold text-nano uppercase tracking-widest transition-all",
                                 menuSettings.pricingMode === 'ttc'
                                     ? "bg-bg-primary shadow-sm text-text-primary border border-border"
                                     : "text-text-muted hover:text-text-primary"
@@ -49,7 +49,7 @@ export function MenuFiscalSection({ menuSettings, setMenuSettings }: MenuFiscalS
                         <button
                             onClick={() => setMenuSettings(s => ({ ...s, pricingMode: 'ht' }))}
                             className={cn(
-                                "flex-1 py-4 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all",
+                                "flex-1 py-4 rounded-xl font-bold text-nano uppercase tracking-widest transition-all",
                                 menuSettings.pricingMode === 'ht'
                                     ? "bg-bg-primary shadow-sm text-text-primary border border-border"
                                     : "text-text-muted hover:text-text-primary"
@@ -61,7 +61,7 @@ export function MenuFiscalSection({ menuSettings, setMenuSettings }: MenuFiscalS
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Default VAT Unit</label>
+                    <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">Default VAT Unit</label>
                     <div className="relative">
                         <input
                             type="number"

@@ -56,7 +56,7 @@ export function StructureOverview() {
                         <div className="flex-1 space-y-2">
                             <div className="flex items-center justify-between">
                                 <h4 className="text-xl font-serif text-text-primary capitalize">{item.title}</h4>
-                                <span className="text-[9px] font-mono p-1 bg-border/20 rounded uppercase text-text-muted">{item.path}</span>
+                                <span className="text-nano font-mono p-1 bg-border/20 rounded uppercase text-text-muted">{item.path}</span>
                             </div>
                             <p className="text-sm text-text-muted max-w-md">{item.desc}</p>
                         </div>
@@ -65,7 +65,7 @@ export function StructureOverview() {
             </div>
 
             {/* Aperçu de l'Arborescence */}
-            <div className="pt-10 border-t border-border/50 font-mono text-[11px] text-text-muted/60 bg-surface-sidebar/20 p-6 rounded-2xl">
+            <div className="pt-10 border-t border-border/50 font-mono text-micro text-text-muted/60 bg-surface-sidebar/20 p-6 rounded-2xl">
                 <div className="flex items-center gap-2 mb-4 text-accent-gold uppercase tracking-[0.2em] font-black">
                     <Folder className="w-3 h-3" /> Structure Racine
                 </div>

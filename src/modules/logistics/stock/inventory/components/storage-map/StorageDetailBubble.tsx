@@ -103,7 +103,7 @@ export function StorageDetailBubble({
                                             <Package className="w-8 h-8 text-text-muted" />
                                         </div>
                                         <p className="font-bold text-text-muted">Aucun ingrédient</p>
-                                        <p className="text-[10px] text-text-muted mt-1 uppercase tracking-widest">Glissez des ingrédients ici</p>
+                                        <p className="text-nano text-text-muted mt-1 uppercase tracking-widest">Glissez des ingrédients ici</p>
                                     </div>
                                 ) : (
                                     stockItems.map(item => (

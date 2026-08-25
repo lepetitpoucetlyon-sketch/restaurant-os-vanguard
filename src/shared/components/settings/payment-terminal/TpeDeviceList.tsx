@@ -20,7 +20,7 @@ export function TpeDeviceList({ devices, statuses, onConnect, onSetDefault, onRe
             <div className="flex flex-col items-center gap-3 py-12 text-center border border-dashed border-border rounded-2xl">
                 <CreditCard className="w-8 h-8 text-text-muted/40" strokeWidth={1} />
                 <p className="text-sm font-black uppercase tracking-widest text-text-muted">Aucun terminal configuré</p>
-                <p className="text-[10px] text-text-muted/70 max-w-xs">
+                <p className="text-nano text-text-muted/70 max-w-xs">
                     Ajoutez un terminal pour encaisser par carte directement depuis le POS.
                     Sans terminal, le mode Manuel sera utilisé en fallback.
                 </p>
@@ -45,12 +45,12 @@ export function TpeDeviceList({ devices, statuses, onConnect, onSetDefault, onRe
                             <div className="flex items-center gap-2">
                                 <p className="text-sm font-black text-text-primary truncate">{device.name}</p>
                                 {device.isDefault && (
-                                    <span className="shrink-0 flex items-center gap-1 px-2 h-5 rounded-full bg-accent-gold/10 text-accent-gold text-[9px] font-black uppercase tracking-wider">
+                                    <span className="shrink-0 flex items-center gap-1 px-2 h-5 rounded-full bg-accent-gold/10 text-accent-gold text-nano font-black uppercase tracking-wider">
                                         <Star className="w-2.5 h-2.5" /> Défaut
                                     </span>
                                 )}
                             </div>
-                            <p className="text-[10px] text-text-muted mt-0.5">
+                            <p className="text-nano text-text-muted mt-0.5">
                                 {ADAPTER_LABELS[device.adapter]} · {CONNECTION_LABELS[device.connection]}
                                 {device.address && ` · ${device.address}`}
                             </p>
@@ -62,7 +62,7 @@ export function TpeDeviceList({ devices, statuses, onConnect, onSetDefault, onRe
                             {status === "error" && <AlertCircle className="w-4 h-4 text-status-error" />}
                             {status === "disconnected" && <div className="w-2 h-2 rounded-full bg-text-muted/40" />}
                             {status === "busy" && <Loader2 className="w-4 h-4 text-accent-gold animate-spin" />}
-                            <span className="text-[10px] text-text-muted capitalize">{status}</span>
+                            <span className="text-nano text-text-muted capitalize">{status}</span>
                         </div>
 
                         {/* Actions */}
@@ -70,7 +70,7 @@ export function TpeDeviceList({ devices, statuses, onConnect, onSetDefault, onRe
                             {status === "disconnected" && (
                                 <button
                                     onClick={() => onConnect(device.id)}
-                                    className="px-3 h-7 rounded-lg bg-bg-tertiary text-[10px] font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
+                                    className="px-3 h-7 rounded-lg bg-bg-tertiary text-nano font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors"
                                 >
                                     Connecter
                                 </button>
@@ -78,7 +78,7 @@ export function TpeDeviceList({ devices, statuses, onConnect, onSetDefault, onRe
                             {!device.isDefault && (
                                 <button
                                     onClick={() => onSetDefault(device.id)}
-                                    className="px-3 h-7 rounded-lg bg-bg-tertiary text-[10px] font-black uppercase tracking-wider text-text-muted hover:text-accent-gold transition-colors"
+                                    className="px-3 h-7 rounded-lg bg-bg-tertiary text-nano font-black uppercase tracking-wider text-text-muted hover:text-accent-gold transition-colors"
                                 >
                                     <Star className="w-3 h-3" />
                                 </button>

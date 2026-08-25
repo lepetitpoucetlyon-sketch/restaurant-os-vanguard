@@ -12,7 +12,7 @@ export function DraggingIngredientOverlay({ ingredient }: { ingredient: Ingredie
             </div>
             <div className="flex-1 min-w-0">
                 <p className="font-black text-sm text-primary dark:text-text-primary uppercase tracking-tight">{ingredient.name}</p>
-                <p className="text-[10px] font-bold text-status-success uppercase tracking-wider mt-0.5">
+                <p className="text-nano font-bold text-status-success uppercase tracking-wider mt-0.5">
                     Déposer sur un emplacement
                 </p>
             </div>

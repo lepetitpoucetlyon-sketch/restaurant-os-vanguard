@@ -283,7 +283,7 @@ export const RBACTenantMatrix: React.FC = () => {
                                 {TENANT_ROLES_LIST.map(({ role, label, level }) => (
                                     <th key={role} className="p-3 font-semibold text-text-primary text-center min-w-[90px]">
                                         <div className="font-bold">{label}</div>
-                                        <div className="text-[10px] text-text-muted font-normal mt-0.5">Niv. {level}</div>
+                                        <div className="text-nano text-text-muted font-normal mt-0.5">Niv. {level}</div>
                                     </th>
                                 ))}
                             </tr>
@@ -293,7 +293,7 @@ export const RBACTenantMatrix: React.FC = () => {
                                 <tr key={page.key} className="hover:bg-surface-hover/30 transition-colors">
                                     <td className="p-4 sticky left-0 bg-surface-base z-10 border-r border-border-base/30">
                                         <div className="font-bold text-text-primary">{page.label}</div>
-                                        <div className="text-[11px] text-text-muted mt-0.5">{page.description}</div>
+                                        <div className="text-micro text-text-muted mt-0.5">{page.description}</div>
                                     </td>
                                     {TENANT_ROLES_LIST.map(({ role }) => {
                                         const allowed = isRoleAllowed(page.key, role);

@@ -112,7 +112,7 @@ export function PluginEnginePanel() {
                         </div>
                         <div>
                           <div className="text-xs font-bold">{info.name}</div>
-                          <div className="text-[10px] text-secondary font-mono">+{info.basePrice}€/mois</div>
+                          <div className="text-nano text-secondary font-mono">+{info.basePrice}€/mois</div>
                         </div>
                       </div>
                       

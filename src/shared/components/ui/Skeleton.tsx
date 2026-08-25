@@ -86,7 +86,7 @@ export function CardSkeleton({ variant = "default", className }: CardSkeletonPro
                         <Skeleton variant="text" className="w-24 h-4" />
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <Skeleton variant="rounded" className="h-16" />
                     <Skeleton variant="rounded" className="h-16" />
                     <Skeleton variant="rounded" className="h-16" />
@@ -175,13 +175,13 @@ export function PageSkeleton({ variant = "dashboard", className }: PageSkeletonP
     return (
         <div className={cn("space-y-6", className)}>
             {/* Stats Row */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
                     <CardSkeleton key={i} variant="stat" />
                 ))}
             </div>
             {/* Main Content */}
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                 <div className="col-span-2">
                     <CardSkeleton />
                 </div>

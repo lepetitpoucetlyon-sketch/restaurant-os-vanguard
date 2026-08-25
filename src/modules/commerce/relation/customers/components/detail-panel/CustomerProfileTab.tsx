@@ -7,12 +7,12 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
     return (
         <div className="flex flex-col">
             {/* Stats Grid */}
-            <div className="grid grid-cols-3 border-b border-white/5 bg-bg-primary">
+            <div className="grid grid-cols-2 sm:grid-cols-3 border-b border-white/5 bg-bg-primary">
                 <div className="p-10 text-center border-r border-white/5">
                     <p className="text-3xl font-mono font-light text-accent italic">
                         {customer.visitCount}
                     </p>
-                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-3">
                         Passages
                     </p>
                 </div>
@@ -20,7 +20,7 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
                     <p className="text-3xl font-mono font-light text-text-primary italic">
                         {((customer.totalSpentInMicrounits ?? (customer.totalSpentInCents ? customer.totalSpentInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                     </p>
-                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-3">
                         CA Réalisé
                     </p>
                 </div>
@@ -28,7 +28,7 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
                     <p className="text-3xl font-mono font-light text-text-primary italic">
                         {((customer.averageSpendInMicrounits ?? (customer.averageSpendInCents ? customer.averageSpendInCents * 10_000 : 0)) / 1_000_000).toFixed(0)}€
                     </p>
-                    <p className="text-[10px] font-black text-text-primary/40 uppercase tracking-widest mt-3">
+                    <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mt-3">
                         Engagement
                     </p>
                 </div>
@@ -38,7 +38,7 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
             <div className="p-10 space-y-12">
                 <div className="grid grid-cols-2 gap-8">
                     <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
-                        <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mb-4">
+                        <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4">
                             Ligne Directe
                         </p>
                         <div className="flex items-center gap-4">
@@ -51,7 +51,7 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
                         </div>
                     </div>
                     <div className="p-8 rounded-3xl bg-surface-card/5 border border-subtle shadow-sm group hover:border-accent/40 transition-all">
-                        <p className="text-[9px] font-black text-text-primary/40 uppercase tracking-widest mb-4">
+                        <p className="text-nano font-black text-text-primary/40 uppercase tracking-widest mb-4">
                             Canal Privilégié
                         </p>
                         <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export function CustomerProfileTab({ customer }: { customer: Customer }) {
 
                 {/* Preferences */}
                 <div>
-                    <h3 className="text-[11px] font-black text-text-primary/40 uppercase tracking-[0.2em] mb-8 flex items-center gap-4">
+                    <h3 className="text-micro font-black text-text-primary/40 uppercase tracking-[0.2em] mb-8 flex items-center gap-4">
                         <Star strokeWidth={2} className="w-4 h-4 text-accent" />
                         ANALYSE DES HABITUDES &amp; PRÉFÉRENCES
                     </h3>

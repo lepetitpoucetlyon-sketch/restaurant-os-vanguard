@@ -33,11 +33,11 @@ export function FECPreviewSection({
           </p>
         </div>
         {isValid ? (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-status-success bg-status-success/10 px-2 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1 text-nano font-bold uppercase tracking-widest text-status-success bg-status-success/10 px-2 py-0.5 rounded-full">
             <CheckCircle2 className="w-3 h-3" /> FEC valide
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-status-danger bg-status-danger/10 px-2 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1 text-nano font-bold uppercase tracking-widest text-status-danger bg-status-danger/10 px-2 py-0.5 rounded-full">
             <AlertTriangle className="w-3 h-3" /> Format invalide
           </span>
         )}
@@ -58,7 +58,7 @@ export function FECPreviewSection({
           </p>
           <ul className="space-y-0.5 max-h-24 overflow-y-auto">
             {warnings.map((w, i) => (
-              <li key={i} className="text-[11px] text-text-muted font-mono">
+              <li key={i} className="text-micro text-text-muted font-mono">
                 {w}
               </li>
             ))}
@@ -125,7 +125,7 @@ export function FECPreviewSection({
       )}
 
       {/* Rappel immuabilité */}
-      <p className="text-[11px] text-text-muted bg-bg-secondary rounded-lg px-3 py-2 flex items-start gap-1.5">
+      <p className="text-micro text-text-muted bg-bg-secondary rounded-lg px-3 py-2 flex items-start gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-action-primary shrink-0 mt-0.5" />
         Ces écritures seront marquées{" "}
         <strong className="text-text-primary">historical</strong> et immuables.

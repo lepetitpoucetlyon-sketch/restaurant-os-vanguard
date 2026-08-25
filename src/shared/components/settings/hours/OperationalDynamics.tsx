@@ -42,14 +42,14 @@ export function OperationalDynamics({ service, onChange }: OperationalDynamicsPr
                     <h3 className="text-3xl font-serif text-text-primary uppercase tracking-tighter italic">
                         Vélocités Opérationnelles
                     </h3>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Optimisation des Flux & Marges de Sécurité</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] ml-1">Optimisation des Flux & Marges de Sécurité</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {items.map((item) => (
                     <div key={item.key} className="space-y-3">
-                        <label className="block text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">
+                        <label className="block text-nano font-bold text-text-muted uppercase tracking-[0.2em] px-1">
                             {item.label}
                         </label>
                         <div className="relative group/input">
@@ -59,7 +59,7 @@ export function OperationalDynamics({ service, onChange }: OperationalDynamicsPr
                                 onChange={(e) => onChange({ [item.key]: Number(e.target.value) })}
                                 className="w-full px-6 py-5 bg-bg-primary border border-border rounded-2xl text-text-primary font-serif italic outline-none text-xl shadow-sm focus:border-accent/50 transition-colors"
                             />
-                            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-bold text-text-muted uppercase">Minutes</span>
+                            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-nano font-bold text-text-muted uppercase">Minutes</span>
                         </div>
                     </div>
                 ))}

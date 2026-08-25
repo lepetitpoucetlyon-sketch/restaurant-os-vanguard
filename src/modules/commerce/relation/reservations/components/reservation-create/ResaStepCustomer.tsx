@@ -29,7 +29,7 @@ export function ResaStepCustomer({
             className="space-y-8"
         >
             <div className="space-y-3">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-2">
                     <Search className="w-3.5 h-3.5 text-accent" />
                     Identification du client
                 </label>
@@ -71,7 +71,7 @@ export function ResaStepCustomer({
                                 <p className={cn("text-lg font-serif italic", selectedCustomer?.id === customer.id ? "text-bg-primary" : "text-text-primary")}>
                                     {customer.firstName} {customer.lastName}
                                 </p>
-                                <p className={cn("text-[10px] font-black tracking-widest", selectedCustomer?.id === customer.id ? "text-bg-primary/60" : "text-text-muted")}>
+                                <p className={cn("text-nano font-black tracking-widest", selectedCustomer?.id === customer.id ? "text-bg-primary/60" : "text-text-muted")}>
                                     {customer.phone} · {customer.visitCount ?? 0} séjours
                                 </p>
                             </div>
@@ -80,7 +80,7 @@ export function ResaStepCustomer({
                     </motion.button>
                 ))}
                 {filteredCustomers.length === 0 && (
-                    <p className="text-center text-[11px] text-text-muted uppercase tracking-widest py-8">
+                    <p className="text-center text-micro text-text-muted uppercase tracking-widest py-8">
                         Aucun client trouvé
                     </p>
                 )}

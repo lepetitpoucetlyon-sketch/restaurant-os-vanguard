@@ -110,7 +110,7 @@ export const EndOfDayWizard: React.FC = () => {
                 GÉNÉRER LE Z DE CAISSE
             </button>
 
-            <p className="mt-4 text-[10px] text-secondary text-center uppercase tracking-widest leading-relaxed">
+            <p className="mt-4 text-nano text-secondary text-center uppercase tracking-widest leading-relaxed">
                 En cliquant, vous certifiez l'exactitude des données de vente <br/> conformément à la norme NF525.
             </p>
         </div>

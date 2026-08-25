@@ -83,7 +83,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                             )}>
                                 <kpi.icon strokeWidth={1.5} className={cn("w-6 h-6", kpi.color)} />
                             </div>
-                            <span className="text-[10px] font-black uppercase text-text-muted tracking-[0.2em] leading-tight max-w-[100px]">{kpi.label}</span>
+                            <span className="text-nano font-black uppercase text-text-muted tracking-[0.2em] leading-tight max-w-[100px]">{kpi.label}</span>
                         </div>
                         <div className="text-5xl font-serif font-black text-text-primary tracking-tighter mb-4">{kpi.value}</div>
                         <p className={cn(
@@ -104,14 +104,14 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                 <div className="p-10 border-b border-border/50 flex items-center justify-between">
                     <h3 className="text-2xl font-serif font-black text-text-primary tracking-tight">Performance par Recette</h3>
                     <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">TRIER PAR :</span>
-                        <button className="text-[10px] font-black text-text-primary uppercase tracking-[0.2em] border-b-2 border-text-primary pb-1">MARGE DÉCROISSANTE</button>
+                        <span className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">TRIER PAR :</span>
+                        <button className="text-nano font-black text-text-primary uppercase tracking-[0.2em] border-b-2 border-text-primary pb-1">MARGE DÉCROISSANTE</button>
                     </div>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="bg-bg-tertiary/30 text-[10px] font-black text-text-muted uppercase tracking-[0.3em] border-b border-border/30">
+                            <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border/30">
                                 <th className="text-left px-10 py-8">DÉSIGNATION DU PLAT</th>
                                 <th className="text-center px-6 py-8">PRIX VENTE</th>
                                 <th className="text-center px-6 py-8">COÛT MAT.</th>
@@ -151,7 +151,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                                     <p className="font-serif font-black text-lg text-text-primary group-hover:text-accent transition-colors tracking-tight">{recipe.name}</p>
                                                     <div className="flex items-center gap-2 mt-1">
                                                         <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: recipe.color as string | undefined }}></span>
-                                                        <p className="text-[9px] text-text-muted uppercase tracking-[0.2em] font-bold">{recipe.prepTime} MIN PREP</p>
+                                                        <p className="text-nano text-text-muted uppercase tracking-[0.2em] font-bold">{recipe.prepTime} MIN PREP</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,7 +193,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                         </td>
                                         <td className="px-10 py-6 text-right">
                                             <span className={cn(
-                                                "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-sm inline-block min-w-[120px] text-center",
+                                                "px-4 py-2 rounded-xl text-nano font-black uppercase tracking-[0.2em] shadow-sm inline-block min-w-[120px] text-center",
                                                 status === 'excellent' ? 'bg-accent-gold/10 text-accent-gold border border-accent-gold/20' :
                                                     status === 'good' ? 'bg-warning/10 text-warning border border-warning/20' :
                                                         'bg-error/10 text-error border border-error/20'

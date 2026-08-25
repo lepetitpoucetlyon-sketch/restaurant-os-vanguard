@@ -245,21 +245,21 @@ export const DLQDiagnosticPanel: React.FC = () => {
                                             <span className="font-mono text-xs font-bold text-accent-gold">
                                                 {entry.eventName}
                                             </span>
-                                            <span className={`text-[10px] px-2 py-0.5 rounded font-semibold uppercase ${
+                                            <span className={`text-nano px-2 py-0.5 rounded font-semibold uppercase ${
                                                 entry.status === 'quarantine' 
                                                     ? 'bg-red-500/20 text-red-400 border border-red-500/30' 
                                                     : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                                             }`}>
                                                 {entry.status === 'quarantine' ? 'Quarantaine' : 'À Relancer'}
                                             </span>
-                                            <span className="text-[11px] text-text-muted">
+                                            <span className="text-micro text-text-muted">
                                                 Tentatives : {entry.attempts || 0}
                                             </span>
                                         </div>
                                         <div className="text-xs text-red-300 font-mono truncate">
                                             {entry.error || 'Erreur non spécifiée'}
                                         </div>
-                                        <div className="text-[10px] text-text-muted">
+                                        <div className="text-nano text-text-muted">
                                             Échec : {new Date(entry.failedAt).toLocaleString('fr-FR')} • ID : <span className="font-mono">{entry.id}</span>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
                                 {isExpanded && (
                                     <div className="bg-surface-elevated/80 border-t border-border-base/50 p-4 space-y-2 text-xs">
                                         <div className="text-text-muted font-semibold">Détail du Payload :</div>
-                                        <pre className="p-3 bg-black/40 rounded-lg text-emerald-400 font-mono text-[11px] overflow-x-auto max-h-48">
+                                        <pre className="p-3 bg-black/40 rounded-lg text-emerald-400 font-mono text-micro overflow-x-auto max-h-48">
                                             {JSON.stringify(entry.payload, null, 2)}
                                         </pre>
                                     </div>

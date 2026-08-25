@@ -25,7 +25,7 @@ export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts
                 <AlertTriangle className="w-10 h-10 text-error" />
                 <div>
                     <h3 className="text-xl font-serif font-black italic text-error">Anomalie Convention</h3>
-                    <p className="text-[9px] font-black uppercase opacity-60 text-text-muted">Réajustement légal requis</p>
+                    <p className="text-nano font-black uppercase opacity-60 text-text-muted">Réajustement légal requis</p>
                 </div>
             </div>
             <div className="space-y-3">
@@ -33,11 +33,11 @@ export const ComplianceView: React.FC<{ alerts: ComplianceAlert[] }> = ({ alerts
                     <div key={alert.id} className="bg-surface-card dark:bg-bg-secondary p-6 rounded-[2.5rem] border border-border/50">
                         <div className="flex justify-between items-start mb-2">
                             <h4 className="text-lg font-serif font-bold italic text-text-primary">{alert.userName}</h4>
-                            <div className="px-2 py-0.5 bg-error text-text-primary text-[7px] font-black uppercase rounded-full">Violation</div>
+                            <div className="px-2 py-0.5 bg-error text-text-primary text-nano font-black uppercase rounded-full">Violation</div>
                         </div>
                         <p className="text-xs text-text-muted mb-4 leading-relaxed">{alert.message}</p>
                         <Button 
-                            className="w-full h-11 bg-bg-tertiary text-text-primary rounded-xl text-[8px] font-black uppercase tracking-widest hover:bg-bg-primary transition-colors" 
+                            className="w-full h-11 bg-bg-tertiary text-text-primary rounded-xl text-nano font-black uppercase tracking-widest hover:bg-bg-primary transition-colors" 
                             onClick={() => router.push('/planning')}
                         >
                             Corriger au Planning
@@ -66,7 +66,7 @@ export const IoTView: React.FC<{ metrics: IoTMetric[] }> = ({ metrics }) => {
                             <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center", m.anomalous ? "bg-error/10 text-error" : "bg-success/10 text-success")}>
                                 {m.type === 'temperature' ? <Thermometer className="w-4 h-4" /> : <Activity className="w-4 h-4" />}
                             </div>
-                            <span className="text-[8px] font-black uppercase tracking-widest truncate text-text-primary">{m.name}</span>
+                            <span className="text-nano font-black uppercase tracking-widest truncate text-text-primary">{m.name}</span>
                         </div>
                         <div className="text-3xl font-serif font-black italic text-text-primary">
                             {m.value}{m.type === 'temperature' ? '°' : 'Hz'}

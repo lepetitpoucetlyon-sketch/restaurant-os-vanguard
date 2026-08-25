@@ -14,8 +14,8 @@ const chipVariants = cva(
                 success:     "bg-status-success/10 text-status-success border-status-success/20",
             },
             size: {
-                sm: "px-2.5 py-0.5 text-[10px]",
-                md: "px-3 py-1 text-[11px]",
+                sm: "px-2.5 py-0.5 text-nano",
+                md: "px-3 py-1 text-micro",
                 lg: "px-4 py-1.5 text-xs",
             },
         },

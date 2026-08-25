@@ -15,15 +15,15 @@ export function CatalogSyncPanel({ satelliteCount }: { satelliteCount: number })
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-bg-primary/50 border border-border-subtle space-y-2">
                     <span className="text-xs font-bold text-text-primary">1. Restaurant Maître</span>
-                    <p className="text-[11px] text-text-secondary">Le Petit Poucet Lyon (Menu Printemps 2026)</p>
+                    <p className="text-micro text-text-secondary">Le Petit Poucet Lyon (Menu Printemps 2026)</p>
                 </div>
                 <div className="p-4 rounded-xl bg-bg-primary/50 border border-border-subtle space-y-2">
                     <span className="text-xs font-bold text-text-primary">2. Cibles Réseau</span>
-                    <p className="text-[11px] text-text-secondary">{satelliteCount} établissements satellites</p>
+                    <p className="text-micro text-text-secondary">{satelliteCount} établissements satellites</p>
                 </div>
                 <div className="p-4 rounded-xl bg-bg-primary/50 border border-border-subtle space-y-2">
                     <span className="text-xs font-bold text-text-primary">3. Mode de Diffusion</span>
-                    <p className="text-[11px] text-text-secondary">Mise à jour incrémentale (sans écraser les stocks)</p>
+                    <p className="text-micro text-text-secondary">Mise à jour incrémentale (sans écraser les stocks)</p>
                 </div>
             </div>
 

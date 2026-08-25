@@ -57,14 +57,14 @@ export function TipPanel({ totalInMicrounits, onTipSelect }: TipPanelProps) {
                     <h3 className="text-sm font-black uppercase tracking-widest text-text-primary leading-none">
                         Pourboire
                     </h3>
-                    <p className="text-[10px] text-text-muted uppercase tracking-wider mt-0.5">
+                    <p className="text-nano text-text-muted uppercase tracking-wider mt-0.5">
                         Facultatif — récompensez votre serveur
                     </p>
                 </div>
             </div>
 
             {/* Preset % buttons */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
                 {TIP_PRESETS.map((pct) => {
                     const tipAmount = tipForPercent(pct);
                     const isActive = activePreset === pct;
@@ -87,7 +87,7 @@ export function TipPanel({ totalInMicrounits, onTipSelect }: TipPanelProps) {
                                 {pct}%
                             </span>
                             <span className={cn(
-                                "text-[10px] font-mono mt-0.5",
+                                "text-nano font-mono mt-0.5",
                                 isActive ? "text-text-primary/80" : "text-text-muted"
                             )}>
                                 {formatCurrency(SovereignMath.toCents(BigInt(tipAmount)))}
@@ -120,7 +120,7 @@ export function TipPanel({ totalInMicrounits, onTipSelect }: TipPanelProps) {
                 <button
                     onClick={handleNoTip}
                     className={cn(
-                        "px-4 h-12 rounded-full border text-[11px] font-black uppercase tracking-wider transition-colors",
+                        "px-4 h-12 rounded-full border text-micro font-black uppercase tracking-wider transition-colors",
                         activePreset === null
                             ? "bg-bg-tertiary border-border text-text-primary"
                             : "border-border text-text-muted hover:border-border/80"

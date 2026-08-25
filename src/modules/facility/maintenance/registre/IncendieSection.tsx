@@ -23,11 +23,11 @@ export function IncendieSection() {
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Calendar strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">MAJ : {String(incendieDoc?.updatedAt || 'N/A')}</span>
+                                <span className="text-nano font-mono font-bold">MAJ : {String(incendieDoc?.updatedAt || 'N/A')}</span>
                             </div>
                             <div className="flex items-center gap-2 text-text-muted">
                                 <Clock strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                <span className="text-[10px] font-mono font-bold">Révision : {String(incendieDoc?.validUntil || 'N/A')}</span>
+                                <span className="text-nano font-mono font-bold">Révision : {String(incendieDoc?.validUntil || 'N/A')}</span>
                             </div>
                         </div>
                     </div>
@@ -37,16 +37,16 @@ export function IncendieSection() {
             {/* Extincteurs */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
-                    <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                    <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                         <MapPin strokeWidth={1.5} className="w-3.5 h-3.5" />
                         Registre des Extincteurs
                     </h3>
-                    <span className="text-[10px] font-mono font-bold text-text-muted">{(extincteurs)?.length || 0} équipements</span>
+                    <span className="text-nano font-mono font-bold text-text-muted">{(extincteurs)?.length || 0} équipements</span>
                 </div>
                 <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
                     <table className="w-full text-sm text-left">
                         <thead>
-                            <tr className="bg-bg-tertiary/30 text-[10px] font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
+                            <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
                                 <th className="px-8 py-5">Emplacement</th>
                                 <th className="px-8 py-5">Type</th>
                                 <th className="px-6 py-5">Dernier Contrôle</th>
@@ -81,11 +81,11 @@ export function IncendieSection() {
             {/* Exercices d'évacuation */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
-                    <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                    <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] flex items-center gap-3">
                         <Users strokeWidth={1.5} className="w-3.5 h-3.5" />
                         Exercices d'Évacuation
                     </h3>
-                    <Button variant="outline" className="h-9 rounded-xl border-border px-4 font-bold text-[10px] uppercase tracking-widest">
+                    <Button variant="outline" className="h-9 rounded-xl border-border px-4 font-bold text-nano uppercase tracking-widest">
                         <Plus strokeWidth={1.5} className="w-3.5 h-3.5 mr-2" /> Planifier
                     </Button>
                 </div>
@@ -109,13 +109,13 @@ export function IncendieSection() {
                                 </div>
                                 <div>
                                     <p className="font-serif font-bold text-text-primary">{ex.date}</p>
-                                    {ex.duration && <p className="text-[10px] font-mono text-text-muted">Durée : {ex.duration}</p>}
+                                    {ex.duration && <p className="text-nano font-mono text-text-muted">Durée : {ex.duration}</p>}
                                 </div>
                             </div>
                             {(ex.participants ?? 0) > 0 && (
                                 <div className="flex items-center gap-2 mb-4 text-text-muted">
                                     <Users strokeWidth={1.5} className="w-3.5 h-3.5" />
-                                    <span className="text-[11px] font-bold">{ex.participants} participants</span>
+                                    <span className="text-micro font-bold">{ex.participants} participants</span>
                                 </div>
                             )}
                             <p className="text-[12px] text-text-muted leading-relaxed">{ex.observations}</p>

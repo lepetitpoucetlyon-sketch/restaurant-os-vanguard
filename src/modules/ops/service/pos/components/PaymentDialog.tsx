@@ -161,7 +161,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                             <div>
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="w-1.5 h-1.5 rounded-full bg-accent-gold" />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-gold">{t('pos.payment.subtitle')}</span>
+                                    <span className="text-nano font-black uppercase tracking-[0.4em] text-accent-gold">{t('pos.payment.subtitle')}</span>
                                 </div>
                                 <h1 className="text-4xl md:text-5xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.title')}</h1>
                             </div>
@@ -178,12 +178,12 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                         {/* Amount */}
                         <div className="bg-bg-tertiary/40 border-y border-border/50 px-10 md:px-14 py-8 md:py-10 flex items-center justify-between shrink-0">
                             <div className="flex flex-col items-center">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
+                                <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
                                 <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
                             </div>
                             {tvaInCents !== undefined && (
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
+                                    <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
                                     <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
                                 </div>
                             )}
@@ -239,13 +239,13 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                     <div className="mt-10 flex flex-col items-center gap-4">
                                         <div className="flex items-center gap-4">
                                             <div className="h-px w-8 bg-border/50" />
-                                            <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.4em] flex items-center gap-3">
+                                            <p className="text-nano text-text-muted font-black uppercase tracking-[0.4em] flex items-center gap-3">
                                                 <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
                                                 {t('pos.payment.security_seal')}
                                             </p>
                                             <div className="h-px w-8 bg-border/50" />
                                         </div>
-                                        <p className="text-[8px] text-text-muted/40 font-black uppercase tracking-[0.2em]">{t('pos.payment.encryption_protocol')}</p>
+                                        <p className="text-nano text-text-muted/40 font-black uppercase tracking-[0.2em]">{t('pos.payment.encryption_protocol')}</p>
                                     </div>
                                 </div>
                             )}

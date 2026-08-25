@@ -46,7 +46,7 @@ export function SkillsTab({
                             <tr>
                                 <th className="px-4 py-2.5 font-medium whitespace-nowrap">Employé</th>
                                 {KNOWN_SKILLS.map(skill => (
-                                    <th key={skill} className="px-3 py-2.5 font-medium text-center whitespace-nowrap text-[11px]">
+                                    <th key={skill} className="px-3 py-2.5 font-medium text-center whitespace-nowrap text-micro">
                                         {skill}
                                     </th>
                                 ))}
@@ -167,7 +167,7 @@ export function SkillsTab({
                                                 <FileText className="w-4 h-4 text-action-primary shrink-0" />
                                                 <div className="min-w-0">
                                                     <p className="text-sm font-medium truncate">{doc.name}</p>
-                                                    <p className="text-[11px] text-text-muted">
+                                                    <p className="text-micro text-text-muted">
                                                         {new Date(doc.uploadedAt).toLocaleDateString("fr-FR")}
                                                     </p>
                                                 </div>

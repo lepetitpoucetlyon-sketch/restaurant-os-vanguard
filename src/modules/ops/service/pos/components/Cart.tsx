@@ -72,26 +72,26 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
                         <div className="min-w-0">
                             <h4 className="text-[14px] font-black text-text-primary uppercase tracking-tight">{item.name}</h4>
                             {(item.modifiers?.length || 0) > 0 && (
-                                <p className="text-[8px] text-text-muted mt-1 uppercase font-black tracking-widest">{item.modifiers?.map(m => m.name).join(", ")}</p>
+                                <p className="text-nano text-text-muted mt-1 uppercase font-black tracking-widest">{item.modifiers?.map(m => m.name).join(", ")}</p>
                             )}
                         </div>
                     </div>
                     <div className="flex flex-col items-end gap-0.5">
                         {item.originalPriceInMicrounits && (
-                            <span className="text-[10px] line-through opacity-40 font-mono text-status-error">
+                            <span className="text-nano line-through opacity-40 font-mono text-status-error">
                                 {formatMu(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier) * item.quantity)}
                             </span>
                         )}
                         <span className="text-sm font-serif font-black italic">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier) * item.quantity)}</span>
-                        <span className="text-[10px] opacity-40 font-mono">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))} unit</span>
+                        <span className="text-nano opacity-40 font-mono">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))} unit</span>
                         
                         {item.isOffer && (
-                            <span className="text-[8px] font-black uppercase tracking-widest bg-status-success/10 text-status-success border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                            <span className="text-nano font-black uppercase tracking-widest bg-status-success/10 text-status-success border border-emerald-500/20 px-2 py-0.5 rounded-full">
                                 OFFERT
                             </span>
                         )}
                         {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
-                            <span className="text-[8px] font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
+                            <span className="text-nano font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
                                 -{item.discountPercent}%
                             </span>
                         )}
@@ -170,7 +170,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         {t('pos.table')} <span className="text-accent-gold not-italic">{tableNumber || '--'}</span>.
                     </h2>
                     <div className="flex items-center gap-4 mt-3">
-                        <div className="flex items-center gap-2 text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">
+                        <div className="flex items-center gap-2 text-nano font-black text-text-muted uppercase tracking-[0.3em]">
                             <Users strokeWidth={1.5} className="w-3.5 h-3.5 text-accent-gold" />
                             {guestCount || 0} {t('common.covers')}
                         </div>
@@ -219,7 +219,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
             {/* Bottom Panel */}
             <div className="p-6 lg:p-10 border-t border-border/50 bg-surface-card/50 dark:bg-surface-sidebar/20 backdrop-blur-3xl">
                 <div className="space-y-4 mb-8">
-                    <div className="flex justify-between items-center text-[10px] font-black text-text-muted uppercase tracking-widest">
+                    <div className="flex justify-between items-center text-nano font-black text-text-muted uppercase tracking-widest">
                         <span>{t('pos.cart.subtotal')}</span>
                         <div className="flex items-center gap-4">
                             {totalInMicrounits > 0 && (
@@ -231,7 +231,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         </div>
                     </div>
                     <div className="flex justify-between text-text-muted mt-1 px-1">
-                        <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
+                        <span className="text-nano font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
                         <span className="font-mono text-sm">{formatMu(htInMicrounits)}</span>
                     </div>
                     <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
@@ -249,7 +249,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         className="h-16 flex flex-col items-center justify-center gap-1.5 bg-bg-tertiary text-text-muted rounded-[2rem] disabled:opacity-30"
                     >
                         <ChefHat className="w-5 h-5" />
-                        <span className="text-[8px] font-black uppercase tracking-[0.2em]">{t('pos.cart.kitchen')}</span>
+                        <span className="text-nano font-black uppercase tracking-[0.2em]">{t('pos.cart.kitchen')}</span>
                     </button>
                     <button
                         onClick={onCheckout}
@@ -257,7 +257,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         className="h-16 flex flex-col items-center justify-center gap-1.5 bg-accent-gold text-text-primary rounded-[2rem] shadow-xl shadow-accent-gold/20 disabled:opacity-30"
                     >
                         <CreditCard className="w-6 h-6" />
-                        <span className="text-[8px] font-black uppercase tracking-[0.2em]">{t('pos.cart.checkout')}</span>
+                        <span className="text-nano font-black uppercase tracking-[0.2em]">{t('pos.cart.checkout')}</span>
                     </button>
                 </div>
             </div>

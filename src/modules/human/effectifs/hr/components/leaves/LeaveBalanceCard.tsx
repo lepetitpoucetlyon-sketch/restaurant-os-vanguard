@@ -30,7 +30,7 @@ export function LeaveBalanceCard({ balance }: LeaveBalanceCardProps) {
                     <span className="font-serif italic text-text-primary text-xl">{label}</span>
                 </div>
                 {balance.pending > 0 && (
-                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-status-warning/10 border border-action-primary/20 text-status-warning text-[10px] uppercase font-bold tracking-wider">
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-status-warning/10 border border-action-primary/20 text-status-warning text-nano uppercase font-bold tracking-wider">
                         <Clock className="w-3 h-3" />
                         {balance.pending} en attente
                     </span>

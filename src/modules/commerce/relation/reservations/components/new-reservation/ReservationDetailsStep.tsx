@@ -62,14 +62,14 @@ export function ReservationDetailsStep({
                     <ChevronLeft className="w-5 h-5 text-text-primary" />
                 </button>
                 <div>
-                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Client Référent</p>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Client Référent</p>
                     <p className="text-3xl font-serif italic text-text-primary">{selectedCustomer?.firstName} {selectedCustomer?.lastName}</p>
                 </div>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-10">
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 text-accent" /> Heure de Service
                     </label>
                     <div className="relative group">
@@ -82,7 +82,7 @@ export function ReservationDetailsStep({
                     </div>
                 </motion.div>
                 <motion.div variants={itemVariants} className="space-y-4">
-                    <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
                         <Users className="w-3.5 h-3.5 text-accent" /> Volume Convives
                     </label>
                     <div className="flex items-center justify-between bg-bg-secondary border border-border rounded-2xl p-3 shadow-sm">
@@ -108,10 +108,10 @@ export function ReservationDetailsStep({
             </div>
 
             <motion.div variants={itemVariants} className="space-y-6">
-                <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4 flex items-center gap-2">
                     <MapPin className="w-3.5 h-3.5 text-accent" /> Assignation Suggérée (Disponibilités Réelles)
                 </label>
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                     {['t1', 't2', 't3', 't4', 't5', 't6'].map((tId, idx) => (
                         <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -126,7 +126,7 @@ export function ReservationDetailsStep({
                                     : "bg-bg-secondary border-border hover:border-accent/20 hover:bg-bg-tertiary"
                             )}
                         >
-                            <p className={cn("text-[9px] font-black tracking-widest mb-2 transition-colors", formData.tableId === tId ? "text-bg-primary/60" : "text-text-primary/40")}>UNITÉ D'ACCUEIL</p>
+                            <p className={cn("text-nano font-black tracking-widest mb-2 transition-colors", formData.tableId === tId ? "text-bg-primary/60" : "text-text-primary/40")}>UNITÉ D'ACCUEIL</p>
                             <p className="text-3xl font-serif font-black italic">#{tId.replace('t', '')}</p>
 
                             {formData.tableId === tId && (

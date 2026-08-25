@@ -17,7 +17,7 @@ export function BlueprintHeader() {
                     className="px-6 py-2 rounded-full border border-accent/20 bg-accent/5 backdrop-blur-md flex items-center gap-3"
                 >
                     <Sparkles className="w-4 h-4 text-accent-gold" />
-                    <span className="text-[10px] uppercase font-black tracking-[0.3em] text-accent-gold">
+                    <span className="text-nano uppercase font-black tracking-[0.3em] text-accent-gold">
                         Artéfact d'Ingénierie & bull; v12.0 &bull; Cloud-Native
                     </span>
                 </motion.div>
@@ -38,14 +38,14 @@ export function BlueprintHeader() {
                     <div className="flex items-center gap-2 text-status-success font-mono text-sm">
                         <Activity className="w-4 h-4" /> 100% EN LIGNE
                     </div>
-                    <span className="text-[10px] text-text-muted uppercase tracking-widest font-bold">Présence Cloud</span>
+                    <span className="text-nano text-text-muted uppercase tracking-widest font-bold">Présence Cloud</span>
                 </div>
                 <div className="w-px h-12 bg-border/50" />
                 <div className="flex flex-col items-center gap-2">
                     <div className="flex items-center gap-2 text-accent-gold font-mono text-sm">
                         <Terminal className="w-4 h-4" /> NEXT.JS 16
                     </div>
-                    <span className="text-[10px] text-text-muted uppercase tracking-widest font-bold">Cœur Turbo</span>
+                    <span className="text-nano text-text-muted uppercase tracking-widest font-bold">Cœur Turbo</span>
                 </div>
             </div>
         </motion.div>

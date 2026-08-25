@@ -145,7 +145,7 @@ export function ExpenseClaimsList({ tenantId, approverId, initialFilter = 'all' 
                             <div key={claim.id} className="p-4 bg-surface flex items-center justify-between gap-4">
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                        <span className={`px-2 py-0.5 text-[10px] uppercase font-bold rounded border ${STATUS_COLOR[claim.status]}`}>
+                                        <span className={`px-2 py-0.5 text-nano uppercase font-bold rounded border ${STATUS_COLOR[claim.status]}`}>
                                             {STATUS_LABEL[claim.status]}
                                         </span>
                                         <span className="text-xs text-secondary">{claim.category}</span>

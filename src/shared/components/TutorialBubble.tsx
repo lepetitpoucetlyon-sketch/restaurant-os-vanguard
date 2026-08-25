@@ -207,7 +207,7 @@ export function TutorialBubble() {
                         <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center text-text-primary text-sm font-black shadow-lg shadow-[#00D9A6]/20">
                             {currentPointIndex + 1}
                         </div>
-                        <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">
+                        <span className="text-nano font-black text-muted uppercase tracking-[0.2em]">
                             Étape {currentPointIndex + 1} / {currentSection.points.length}
                         </span>
                     </div>
@@ -234,7 +234,7 @@ export function TutorialBubble() {
                     {/* We prioritize Next button visibility as per screenshot style */}
                     <button
                         onClick={nextStep}
-                        className="h-12 px-8 bg-surface-sidebar hover:bg-surface-sidebar text-text-primary rounded-full font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
+                        className="h-12 px-8 bg-surface-sidebar hover:bg-surface-sidebar text-text-primary rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
                     >
                         {isLastStep ? "Terminer" : "Suivant"}
                         <ChevronRight className="w-3 h-3" />

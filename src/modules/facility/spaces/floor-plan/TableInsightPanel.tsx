@@ -115,7 +115,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                         <ChevronRight strokeWidth={2.5} className="w-5 h-5" />
                     </button>
                     <div className="flex flex-col items-end text-right">
-                        <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-3">Intelligence Table • Direct</p>
+                        <p className="text-nano font-black text-accent uppercase tracking-[0.3em] mb-3">Intelligence Table • Direct</p>
                         <div className="flex items-center gap-4">
                             <div className={cn(
                                 "px-4 py-1.5 rounded-full text-chip-label-sm border shadow-sm",
@@ -217,7 +217,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
                                         <Star className="w-4 h-4 text-accent" />
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent/80">Intelligence Client</span>
+                                    <span className="text-nano font-black uppercase tracking-[0.2em] text-accent/80">Intelligence Client</span>
                                 </div>
                                 <p className="text-[14px] text-text-primary leading-relaxed font-serif italic pl-11">
                                     "{activeReservation.notes}"
@@ -239,13 +239,13 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     <div>
                                         <div className="flex items-center gap-2 mb-2 opacity-60">
                                             <Wallet className="w-3.5 h-3.5 text-accent" />
-                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-primary dark:text-text-primary">RELEVÉ TICKET</span>
+                                            <span className="text-nano font-black uppercase tracking-[0.3em] text-text-primary dark:text-text-primary">RELEVÉ TICKET</span>
                                         </div>
-                                        <p className="text-[11px] font-black uppercase tracking-widest text-text-muted dark:text-text-primary/30">Intelligence Financière</p>
+                                        <p className="text-micro font-black uppercase tracking-widest text-text-muted dark:text-text-primary/30">Intelligence Financière</p>
                                     </div>
                                     <div className="text-right">
                                         <span className="block text-4xl font-mono font-light text-status-success dark:text-teal tracking-tighter shadow-glow-accent">{formatCurrency(SovereignMath.orderTotalMicrounits(activeOrder) / 1000000)}</span>
-                                        <span className="text-[9px] font-black text-text-muted dark:text-text-primary/20 uppercase tracking-widest mt-1">Total TTC Direct</span>
+                                        <span className="text-nano font-black text-text-muted dark:text-text-primary/20 uppercase tracking-widest mt-1">Total TTC Direct</span>
                                     </div>
                                 </div>
 
@@ -254,13 +254,13 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         <div key={i} className="flex justify-between items-start group">
                                             <div className="flex flex-col gap-1.5 flex-1">
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="w-6 h-6 rounded-lg bg-surface-sidebar/5 dark:bg-surface-card/5 flex items-center justify-center text-[10px] font-mono text-text-muted dark:text-text-primary/40 border border-black/5 dark:border-white/5">{item.quantity}</span>
+                                                    <span className="w-6 h-6 rounded-lg bg-surface-sidebar/5 dark:bg-surface-card/5 flex items-center justify-center text-nano font-mono text-text-muted dark:text-text-primary/40 border border-black/5 dark:border-white/5">{item.quantity}</span>
                                                     <span className="text-[14px] font-medium text-text-primary dark:text-muted group-hover:text-primary dark:group-hover:text-text-primary transition-colors">{item.name}</span>
                                                 </div>
                                                 {item.notes && (
                                                     <div className="ml-8 flex items-start gap-2">
                                                         <div className="w-1.5 h-1.5 rounded-full bg-status-warning/50 mt-1.5 shrink-0" />
-                                                        <span className="text-[11px] text-status-warning/70 italic leading-snug">"{item.notes}"</span>
+                                                        <span className="text-micro text-status-warning/70 italic leading-snug">"{item.notes}"</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -306,7 +306,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                 <button
                                     onClick={handleWelcomeGuest}
                                     disabled={welcoming}
-                                    className="w-full h-12 rounded-2xl bg-accent hover:bg-accent/90 text-bg-primary font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
+                                    className="w-full h-12 rounded-2xl bg-accent hover:bg-accent/90 text-bg-primary font-black text-micro uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
                                 >
                                     {welcoming ? (
                                         <>
@@ -326,7 +326,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         updateTable(selectedTable.id, { status: 'available' as TableStatus });
                                         toast.info(`Table ${selectedTable.label || selectedTable.id} libérée pour Walk-In (Scission d'urgence)`);
                                     }}
-                                    className="w-full h-10 rounded-xl bg-status-danger/10 hover:bg-status-danger/20 text-status-danger font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all border border-status-danger/20"
+                                    className="w-full h-10 rounded-xl bg-status-danger/10 hover:bg-status-danger/20 text-status-danger font-bold text-nano uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all border border-status-danger/20"
                                 >
                                     <AlertTriangle className="w-3.5 h-3.5" />
                                     Scinder / Libérer Table (No-Show Partiel)

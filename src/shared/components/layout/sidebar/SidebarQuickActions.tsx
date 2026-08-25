@@ -58,7 +58,7 @@ export function SidebarQuickActions({
             >
                 <ReceiptEuro strokeWidth={1.5} className="w-5 h-5 shrink-0 group-hover:rotate-12 transition-transform duration-500" />
                 {!isSidebarCollapsed && (
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] truncate">{t('sidebar.expense_claim')}</span>
+                    <span className="text-nano font-black uppercase tracking-[0.3em] truncate">{t('sidebar.expense_claim')}</span>
                 )}
             </motion.button>
 

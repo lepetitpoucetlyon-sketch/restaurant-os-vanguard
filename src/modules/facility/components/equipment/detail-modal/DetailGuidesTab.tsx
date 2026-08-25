@@ -44,7 +44,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
                   )}
                   <h4 className="text-sm font-bold text-white">{guide.title}</h4>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-text-muted border border-slate-700">
+                <span className="text-nano px-2 py-0.5 rounded-full bg-slate-800 text-text-muted border border-slate-700">
                   {guide.authorName}
                 </span>
               </div>

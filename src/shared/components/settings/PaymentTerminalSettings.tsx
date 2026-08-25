@@ -59,10 +59,10 @@ export default function PaymentTerminalSettings() {
                     </div>
                     <div>
                         <h2 className="text-base font-black uppercase tracking-widest text-text-primary">Terminaux de paiement</h2>
-                        <p className="text-[10px] text-text-muted">Stripe · SumUp · Worldline · Manuel</p>
+                        <p className="text-nano text-text-muted">Stripe · SumUp · Worldline · Manuel</p>
                     </div>
                 </div>
-                <button onClick={handleAdd} className="flex items-center gap-2 px-4 h-9 rounded-xl bg-accent-gold text-text-primary text-[11px] font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors">
+                <button onClick={handleAdd} className="flex items-center gap-2 px-4 h-9 rounded-xl bg-accent-gold text-text-primary text-micro font-black uppercase tracking-wider hover:bg-accent-gold/90 transition-colors">
                     <Plus className="w-3.5 h-3.5" /> Ajouter
                 </button>
             </div>
@@ -73,11 +73,11 @@ export default function PaymentTerminalSettings() {
             {/* Test charge */}
             {devices.length > 0 && (
                 <div className="flex items-center gap-3 pt-2">
-                    <button onClick={handleTestCharge} disabled={testStatus === "testing"} className="flex items-center gap-2 px-4 h-9 rounded-xl border border-border text-[11px] font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors">
+                    <button onClick={handleTestCharge} disabled={testStatus === "testing"} className="flex items-center gap-2 px-4 h-9 rounded-xl border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors">
                         {testStatus === "testing" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />} Test 0,10 €
                     </button>
-                    {testStatus === "ok" && <span className="text-[10px] text-status-success font-black">Approuvé</span>}
-                    {testStatus === "error" && <span className="text-[10px] text-status-error font-black">Refusé / erreur</span>}
+                    {testStatus === "ok" && <span className="text-nano text-status-success font-black">Approuvé</span>}
+                    {testStatus === "error" && <span className="text-nano text-status-error font-black">Refusé / erreur</span>}
                 </div>
             )}
 
@@ -87,7 +87,7 @@ export default function PaymentTerminalSettings() {
             {/* Env vars reminder */}
             <div className="rounded-2xl border border-border/40 bg-bg-tertiary/30 p-4 space-y-2">
                 <p className="text-chip-label-sm text-text-muted">Variables d&apos;environnement requises</p>
-                <div className="space-y-1 font-mono text-[10px] text-text-muted/80">
+                <div className="space-y-1 font-mono text-nano text-text-muted/80">
                     <p><span className="text-accent-gold">Stripe</span> → NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY · STRIPE_SECRET_KEY · STRIPE_TERMINAL_LOCATION_ID</p>
                     <p><span className="text-cyan-400">SumUp</span> → SUMUP_API_KEY · SUMUP_AFFILIATE_KEY</p>
                     <p><span className="text-orange-400">Worldline</span> → WORLDLINE_TERMINAL_IP · WORLDLINE_TERMINAL_PORT · WORLDLINE_MERCHANT_ID</p>
