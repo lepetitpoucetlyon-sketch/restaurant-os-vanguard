@@ -45,6 +45,7 @@ import { GuestAllergenSafetyProfileService } from '@/modules/commerce/relation/c
 import { AutomaticReviewBoosterService } from '@/modules/commerce/relation/crm/services/AutomaticReviewBoosterService';
 import { CrossLocationLoyaltyService } from '@/modules/commerce/relation/crm/services/CrossLocationLoyaltyService';
 import { TableTurnoverOptimizationService } from '@/modules/commerce/relation/crm/services/TableTurnoverOptimizationService';
+import { TurnoverPredictionService, type MenuProfile } from '@/modules/commerce/relation/reservations/services/TurnoverPredictionService';
 import { SpecialEventDepositEscrowService } from '@/modules/commerce/relation/crm/services/SpecialEventDepositEscrowService';
 import { SmartTipDigitalPoolService } from '@/modules/finance/tresorerie/SmartTipDigitalPoolService';
 import { PrivateDiningContractSignerService } from '@/modules/commerce/relation/crm/services/PrivateDiningContractSignerService';
@@ -312,8 +313,45 @@ describe('Angles Morts — Batch 7 (MCC Flotte, Observabilité, Trésorerie, Sé
         currentCourseStage: 'dessert',
       });
 
-      expect(pred.predictedTotalDurationMinutes).toBe(75);
+      // Profil par défaut 'standard' → baseline HCR de 90 min, sans majoration
+      // (2 convives = pas de facteur convive supplémentaire).
+      expect(pred.predictedTotalDurationMinutes).toBe(90);
       expect(pred.isSecondSeatingFeasible).toBe(true);
+    });
+
+    it('applique la baseline du profil de menu', () => {
+      const lunch = TableTurnoverOptimizationService.predictTurnover('tenant-1', {
+        tableNumber: '12',
+        covers: 2,
+        seatedAtTimestamp: Date.now(),
+        currentCourseStage: 'plat',
+        menuProfile: 'business_lunch',
+      });
+      // Un déjeuner d'affaires libère la table plus vite qu'un menu standard.
+      expect(lunch.predictedTotalDurationMinutes).toBe(75);
+    });
+
+    // ── DF-O1 : garde anti-divergence ────────────────────────────────────────
+    // Les deux services répondaient autrefois différemment à « combien de temps
+    // cette table sera-t-elle occupée ? ». Ce test échoue si la divergence revient.
+    it('DF-O1 — s\'accorde avec TurnoverPredictionService sur la durée', () => {
+      const cases: Array<{ covers: number; profile: MenuProfile }> = [
+        { covers: 2, profile: 'standard' },
+        { covers: 4, profile: 'standard' },
+        { covers: 8, profile: 'tasting' },
+        { covers: 2, profile: 'quick' },
+      ];
+
+      for (const { covers, profile } of cases) {
+        const viaCrm = TableTurnoverOptimizationService.predictTurnover('tenant-1', {
+          tableNumber: 'T', covers, seatedAtTimestamp: Date.now(),
+          currentCourseStage: 'plat', menuProfile: profile,
+        }).predictedTotalDurationMinutes;
+
+        const viaSource = TurnoverPredictionService.durationMinutes(covers, profile);
+
+        expect(viaCrm, `divergence pour ${covers} couverts en ${profile}`).toBe(viaSource);
+      }
     });
   });
 

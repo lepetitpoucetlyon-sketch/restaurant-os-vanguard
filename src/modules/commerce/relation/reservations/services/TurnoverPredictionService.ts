@@ -50,16 +50,41 @@ const BASELINE_MIN_BY_PROFILE: Record<MenuProfile, number> = {
 export class TurnoverPredictionService {
   static readonly DEFAULT_BUFFER_MIN = 15;
 
-  /** Prédit la durée + statut collision. Pur, testable (DF-C5 / DF-C6). */
-  static predict(input: PredictInput): PredictResult {
-    const base = BASELINE_MIN_BY_PROFILE[input.menuProfile];
+  /**
+   * ⭐ SOURCE UNIQUE de la durée d'occupation d'une table — résolution de **DF-O1**.
+   *
+   * Toute question « combien de temps cette table sera-t-elle occupée ? » passe ici.
+   * `TableTurnoverOptimizationService` appliquait auparavant sa propre formule
+   * (paliers 75/90) et répondait donc différemment pour la même table — le gérant
+   * voyait deux disponibilités selon l'écran consulté.
+   *
+   *   durée = baseline(menuProfile) × facteurConvives × facteurRetardKDS
+   *
+   * Les deux facteurs sont réglables par le gérant (DF-C5 / DF-C6) ; les baselines
+   * sont des moyennes empiriques HCR (cf. `BASELINE_MIN_BY_PROFILE`).
+   */
+  static durationMinutes(
+    partySize: number,
+    menuProfile: MenuProfile = 'standard',
+    kdsDelayMinutes = 0,
+  ): number {
+    const base = BASELINE_MIN_BY_PROFILE[menuProfile];
     const factorPerGuest = getSetting<number>('reservations', 'turnover_factor_per_guest_pct', 6) / 100;
     const maxKdsImpact = getSetting<number>('reservations', 'turnover_kds_impact_max_pct', 50) / 100;
 
-    const partySizeFactor = 1 + Math.max(0, input.partySize - 2) * factorPerGuest; // +6 % par défaut par convive > 2
-    const kdsFactor = 1 + Math.min(maxKdsImpact, (input.currentKdsDelayMinutes ?? 0) / 60);
+    const partySizeFactor = 1 + Math.max(0, partySize - 2) * factorPerGuest; // +6 % par défaut par convive > 2
+    const kdsFactor = 1 + Math.min(maxKdsImpact, kdsDelayMinutes / 60);
 
-    const predictedDurationMinutes = Math.round(base * partySizeFactor * kdsFactor);
+    return Math.round(base * partySizeFactor * kdsFactor);
+  }
+
+  /** Prédit la durée + statut collision. Pur, testable (DF-C5 / DF-C6). */
+  static predict(input: PredictInput): PredictResult {
+    const predictedDurationMinutes = this.durationMinutes(
+      input.partySize,
+      input.menuProfile,
+      input.currentKdsDelayMinutes ?? 0,
+    );
     const predictedEndMs = input.currentStartMs + predictedDurationMinutes * 60 * 1000;
     const buffer = (input.turnoverBufferMinutes ?? this.DEFAULT_BUFFER_MIN) * 60 * 1000;
 
