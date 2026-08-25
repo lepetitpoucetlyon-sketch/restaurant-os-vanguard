@@ -10,3 +10,4 @@ export type {
 } from './types';
 export { CONNECTOR_PERM_LEVELS } from './types';
 export { ConnectorHub } from './ConnectorHub';
+export { IntegrationRegistry, type OperationalIntegration } from './IntegrationRegistry';

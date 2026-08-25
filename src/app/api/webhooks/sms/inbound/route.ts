@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
 
 interface ReservationDoc {
   id: string;
@@ -35,16 +36,93 @@ async function parseSmsPayload(request: NextRequest): Promise<{ fromNumber: stri
   }
 }
 
+async function findReservationByPhone(cleanPhone: string): Promise<{ reservation: ReservationDoc; tenantId: string } | null> {
+  const tenants = await Nexus.adapter.query<{ id: string }>('tenants');
+  for (const t of tenants) {
+    if (!t.id) continue;
+    const reservations = await Nexus.adapter.query<ReservationDoc>(`tenants/${t.id}/reservations`, {
+      where: [{ field: 'status', operator: '==', value: 'confirmed' }],
+    });
+
+    const match = reservations.find(r => {
+      const p1 = (r.customerPhone || '').replace(/\s+/g, '');
+      const p2 = (r.guestPhone || '').replace(/\s+/g, '');
+      return p1 === cleanPhone || p2 === cleanPhone || Boolean(p1 && cleanPhone.endsWith(p1.slice(-9)));
+    });
+
+    if (match) {
+      return { reservation: match, tenantId: t.id };
+    }
+  }
+  return null;
+}
+
+async function handleSmsAction(
+  tenantId: string,
+  reservation: ReservationDoc,
+  fromNumber: string,
+  bodyText: string
+): Promise<string> {
+  const isConfirm = ['1', 'OUI', 'O', 'YES', 'Y', 'CONFIRMER', 'CONFIRME'].includes(bodyText);
+  const isCancel = ['2', 'NON', 'N', 'NO', 'ANNULER', 'ANNULE', 'CANCEL'].includes(bodyText);
+
+  if (isConfirm) {
+    await Nexus.adapter.update(`tenants/${tenantId}/reservations/${reservation.id}`, {
+      reconfirmedByGuestAt: new Date().toISOString(),
+      reconfirmationChannel: 'sms',
+    });
+
+    await NexusEventBus.emit('commerce.reservation_reconfirmed', {
+      v: 1,
+      tenantId,
+      reservationId: reservation.id,
+      customerPhone: fromNumber,
+      date: reservation.date,
+      time: reservation.time,
+    });
+
+    return 'Merci ! Votre table est bien confirmée. Nous nous réjouissons de vous accueillir.';
+  }
+
+  if (isCancel) {
+    await Nexus.adapter.update(`tenants/${tenantId}/reservations/${reservation.id}`, {
+      status: 'cancelled',
+      cancelledAt: new Date().toISOString(),
+      cancellationReason: 'sms_interactive_reply',
+    });
+
+    await NexusEventBus.emit('commerce.reservation_cancelled', {
+      v: 1,
+      tenantId,
+      reservationId: reservation.id,
+      customerPhone: fromNumber,
+      date: reservation.date,
+      time: reservation.time,
+      covers: reservation.covers || 2,
+    });
+
+    return 'Votre réservation a bien été annulée. Merci de nous avoir prévenus !';
+  }
+
+  return 'Veuillez répondre 1 pour CONFIRMER votre venue, ou 2 pour LIBÉRER votre table.';
+}
+
 /**
  * 📲 Inbound SMS Webhook (Twilio / Webhook Bidirectionnel)
  * Gère les re-confirmations et annulations interactives par SMS.
- * Client répond '1' ou 'OUI' -> Re-confirmation enregistrée.
- * Client répond '2' ou 'NON' -> Annulation immédiate & libération pour la Waitlist.
  */
 export async function POST(request: NextRequest) {
+  const isVerified = checkFallbackWebhookSecret(request.headers, 'sms-inbound');
+  if (!isVerified) {
+    logger.warn('[SMS Inbound Webhook] Requête non autorisée');
+    return new NextResponse('<Response><Message>Non autorisé</Message></Response>', {
+      status: 401,
+      headers: { 'Content-Type': 'text/xml' },
+    });
+  }
+
   try {
     const { fromNumber, bodyText } = await parseSmsPayload(request);
-
     if (!fromNumber) {
       return new NextResponse('<Response><Message>Numéro expéditeur manquant</Message></Response>', {
         status: 400,
@@ -53,84 +131,17 @@ export async function POST(request: NextRequest) {
     }
 
     logger.info(`[SMS Inbound Webhook] Reçu de ${fromNumber}: "${bodyText}"`);
-
-    // Normaliser le numéro pour la recherche
     const cleanPhone = fromNumber.replace(/\s+/g, '');
 
-    // Rechercher les réservations associées sur tous les tenants actifs
-    const tenants = await Nexus.adapter.query<{ id: string }>('tenants');
-    let targetReservation: ReservationDoc | null = null;
-    let targetTenantId: string = '';
-
-    for (const t of tenants) {
-      if (!t.id) continue;
-      const reservations = await Nexus.adapter.query<ReservationDoc>(`tenants/${t.id}/reservations`, {
-        where: [{ field: 'status', operator: '==', value: 'confirmed' }],
-      });
-
-      const match = reservations.find(r => {
-        const p1 = (r.customerPhone || '').replace(/\s+/g, '');
-        const p2 = (r.guestPhone || '').replace(/\s+/g, '');
-        return p1 === cleanPhone || p2 === cleanPhone || (p1 && cleanPhone.endsWith(p1.slice(-9)));
-      });
-
-      if (match) {
-        targetReservation = match;
-        targetTenantId = t.id;
-        break;
-      }
-    }
-
-    if (!targetReservation) {
+    const found = await findReservationByPhone(cleanPhone);
+    if (!found) {
       return new NextResponse(
         '<Response><Message>Aucune réservation active trouvée pour ce numéro.</Message></Response>',
         { status: 200, headers: { 'Content-Type': 'text/xml' } }
       );
     }
 
-    const isConfirm = ['1', 'OUI', 'O', 'YES', 'Y', 'CONFIRMER', 'CONFIRME'].includes(bodyText);
-    const isCancel = ['2', 'NON', 'N', 'NO', 'ANNULER', 'ANNULE', 'CANCEL'].includes(bodyText);
-
-    let replyMsg = '';
-
-    if (isConfirm) {
-      await Nexus.adapter.update(`tenants/${targetTenantId}/reservations/${targetReservation.id}`, {
-        reconfirmedByGuestAt: new Date().toISOString(),
-        reconfirmationChannel: 'sms',
-      });
-
-      await NexusEventBus.emit('commerce.reservation_reconfirmed', {
-        v: 1,
-        tenantId: targetTenantId,
-        reservationId: targetReservation.id,
-        customerPhone: fromNumber,
-        date: targetReservation.date,
-        time: targetReservation.time,
-      });
-
-      replyMsg = 'Merci ! Votre table est bien confirmée. Nous nous réjouissons de vous accueillir.';
-    } else if (isCancel) {
-      await Nexus.adapter.update(`tenants/${targetTenantId}/reservations/${targetReservation.id}`, {
-        status: 'cancelled',
-        cancelledAt: new Date().toISOString(),
-        cancellationReason: 'sms_interactive_reply',
-      });
-
-      await NexusEventBus.emit('commerce.reservation_cancelled', {
-        v: 1,
-        tenantId: targetTenantId,
-        reservationId: targetReservation.id,
-        customerPhone: fromNumber,
-        date: targetReservation.date,
-        time: targetReservation.time,
-        covers: targetReservation.covers || 2,
-      });
-
-      replyMsg = 'Votre réservation a bien été annulée. Merci de nous avoir prévenus !';
-    } else {
-      replyMsg = 'Veuillez répondre 1 pour CONFIRMER votre venue, ou 2 pour LIBÉRER votre table.';
-    }
-
+    const replyMsg = await handleSmsAction(found.tenantId, found.reservation, fromNumber, bodyText);
     const xmlResponse = `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${replyMsg}</Message></Response>`;
 
     return new NextResponse(xmlResponse, {

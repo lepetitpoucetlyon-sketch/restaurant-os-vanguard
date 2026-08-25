@@ -1,6 +1,7 @@
  
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
 import {
   ProcessGoogleBookingUseCase,
   InMemoryReservationRepository,
@@ -12,6 +13,13 @@ const reservationRepository = new InMemoryReservationRepository();
 const processGoogleBookingUseCase = new ProcessGoogleBookingUseCase(reservationRepository);
 
 export async function POST(req: NextRequest) {
+  // Vérification de sécurité / signature
+  const isVerified = checkFallbackWebhookSecret(req.headers, 'google-reserve');
+  if (!isVerified) {
+    logger.warn('[GoogleReserveWebhook] Requête non authentifiée');
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const payload = (await req.json()) as RwGCreateBookingRequest;
 

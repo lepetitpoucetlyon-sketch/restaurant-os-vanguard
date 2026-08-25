@@ -5,15 +5,15 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3575** · LOC : **331 092**
+- Fichiers `.ts/.tsx` : **3587** · LOC : **332 055**
 - Pages : **84** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1592 |
-| `src/shared/` | 701 |
-| `src/app/` | 438 |
+| `src/modules/` | 1594 |
+| `src/shared/` | 702 |
+| `src/app/` | 443 |
 | `src/verticals/` | 245 |
 | `src/lib/` | 234 |
 | `src/infrastructure/` | 46 |
@@ -41,7 +41,7 @@
 | `shared/hooks/` | 49 |
 | `shared/providers/` | 28 |
 | `shared/seeds/` | 15 |
-| `shared/connector-manifest/` | 11 |
+| `shared/connector-manifest/` | 12 |
 | `shared/contexts/` | 10 |
 | `shared/plugins/` | 9 |
 | `shared/schemas/` | 7 |
@@ -62,7 +62,7 @@
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 355 | ✅ |
-| `ops` | 309 | ✅ |
+| `ops` | 311 | ✅ |
 | `finance` | 222 | ✅ |
 | `compliance` | 183 | ✅ |
 | `intelligence` | 161 | ✅ |

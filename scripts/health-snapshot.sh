@@ -9,6 +9,21 @@ TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M UTC")
 COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 UNPUSHED_COMMITS=$(git rev-list --count origin/main..main 2>/dev/null || echo "0")
 
+# Charger .env.local / .env.production si non définis dans le shell
+if [ -z "${FISCAL_SIGNING_SECRET:-}" ]; then
+  if [ -f .env.local ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env.local 2>/dev/null || true
+    set +a
+  elif [ -f .env.production ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env.production 2>/dev/null || true
+    set +a
+  fi
+fi
+
 # ── 1. Readiness Production (Secrets & Environnement) ─────────────────────────
 check_secret() {
   local var_name="$1"

@@ -1,6 +1,6 @@
 # Health Dashboard — RESTAURANT-OS-CORE
 
-> Auto-généré le **2026-08-25 14:10 UTC** · commit `5a592e8d1`
+> Auto-généré le **2026-08-25 17:24 UTC** · commit `78f9f38e9`
 > Source : `scripts/health-snapshot.sh` (Zero-Claim Policy)
 
 ---
@@ -9,11 +9,11 @@
 
 | Variable requise | Statut | Impact opérationnel |
 |---|---|---|
-| `FISCAL_SIGNING_SECRET` | 🔴 Bloquant absolu Absent | Scellement NF525 serveur impossible |
+| `FISCAL_SIGNING_SECRET` | ✅ Configuré | Scellement NF525 serveur impossible |
 | `FIREBASE_SERVICE_ACCOUNT_JSON` | 🔴 Bloquant Absent | Auth admin, claims, signup inopérants |
 | `STRIPE_SECRET_KEY` | 🟠 Optionnel Absent | Checkout et paiements Stripe KO |
 | `STRIPE_WEBHOOK_SECRET` | 🟠 Optionnel Absent | Webhooks Stripe non vérifiés |
-| `GEMINI_API_KEY` | 🟢 Non bloquant Absent | Vision IA et OCR dégradés |
+| `GEMINI_API_KEY` | ✅ Configuré | Vision IA et OCR dégradés |
 
 ---
 
@@ -21,13 +21,13 @@
 
 | Métrique | Valeur | Statut / Seuil |
 |---|---|---|
-| Sentrux gate vs baseline | ❌ | Bloquant au push |
-| Score qualité | 3258 -> 3080 | |
+| Sentrux gate vs baseline | ✅ | Bloquant au push |
+| Score qualité | 3258 -> 3261 | |
 | Couplage | 0.45 → 0.44 | |
-| Cycles import (Sentrux) | 2 → 3 | max = 0 |
-| Cycles import (Madge, alias @/ résolus) | 2 | Seuil ratchet = 0 |
+| Cycles import (Sentrux) | 2 → 2 | max = 0 |
+| Cycles import (Madge, alias @/ résolus) | 0 | Seuil ratchet = 0 |
 | God files | 18 → 17 | max = 0 |
-| TypeScript erreurs | 24 | Bloquant au push (0 toléré) |
+| TypeScript erreurs | 0 | Bloquant au push (0 toléré) |
 
 ---
 
@@ -35,7 +35,7 @@
 
 | Pilier | Tests colocalisés | État |
 |---|---|---|
-| `ops` | 13 tests | |
+| `ops` | 14 tests | |
 | `finance` | 5 tests | |
 | `logistics` | 14 tests | |
 | `commerce` | 4 tests | |
@@ -51,7 +51,7 @@
 
 | Métrique | Mesure réelle |
 |---|---|
-| Fichiers `.tsx` avec `t()` | **33 / 902** (114 appels) |
+| Fichiers `.tsx` avec `t()` | **33 / 908** (114 appels) |
 | Clés `fr.ts` (référence) | 482 clés |
 | Clés `en.ts` | 500 clés |
 | Clés `es.ts` / `pt.ts` / `ja.ts` | 127 / 107 / 107 clés (squelettes partiels ~25%) |
@@ -74,8 +74,8 @@
 | Indicateur | Mesure | Seuil / Note |
 |---|---|---|
 | Routes API sans garde détectée | **39** / 210 | Certaines sont légitimement publiques — cf. `AUDIT-23-AXES` |
-| Pages d'erreur (`error.tsx`, `not-found`, `global-error`) | **0** | 0 = écran blanc Next en cas d'exception |
-| Attributs `aria-` | 98 sur 902 fichiers `.tsx` | Indicateur d'accessibilité |
+| Pages d'erreur (`error.tsx`, `not-found`, `global-error`) | **5** | 0 = écran blanc Next en cas d'exception |
+| Attributs `aria-` | 98 sur 908 fichiers `.tsx` | Indicateur d'accessibilité |
 
 ---
 
@@ -99,7 +99,7 @@ supprimée, ou documentée comme gelée.
 
 ## 8. 💾 Synchronisation & Sauvegarde
 
-- **Commits locaux en avance sur `origin/main`** : `70` commit(s).
+- **Commits locaux en avance sur `origin/main`** : `85` commit(s).
 
 ---
 

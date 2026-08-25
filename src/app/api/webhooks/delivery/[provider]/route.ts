@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DeliveryWebhookBridge, type DeliveryProvider, type ExternalDeliveryPayload } from '@/modules/commerce';
+import { checkFallbackWebhookSecret } from '@/lib/server/webhookVerify';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +17,13 @@ export async function POST(
 
   if (!['ubereats', 'deliveroo', 'justeat'].includes(provider)) {
     return NextResponse.json({ error: `Provider non supporté: ${provider}` }, { status: 400 });
+  }
+
+  // Vérification de sécurité / signature
+  const isVerified = checkFallbackWebhookSecret(req.headers, provider);
+  if (!isVerified) {
+    logger.warn(`[webhooks/delivery] Accès non autorisé sur webhook ${provider}`);
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {

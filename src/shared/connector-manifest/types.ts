@@ -64,6 +64,8 @@ export interface IConnectorManifest {
   requiredCapability: string;
 
   isPremium: boolean;
+  comingSoon?: boolean;
+  roadmapQuarter?: string;
 
   // Champs de config pour authType='api_key'
   fields?: ConnectorFieldDef[];

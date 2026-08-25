@@ -31,7 +31,9 @@ const CONNECTORS_WEBHOOK_SECRET = process.env.CONNECTORS_WEBHOOK_SECRET;
  */
 export function checkFallbackWebhookSecret(headers: Headers, providerId: string): boolean {
   if (!CONNECTORS_WEBHOOK_SECRET) {
-    // Intentionnel pendant la migration — loggé par la route appelante
+    if (process.env.NODE_ENV === 'production') {
+      return false;
+    }
     return true;
   }
   const auth = headers.get('authorization');
