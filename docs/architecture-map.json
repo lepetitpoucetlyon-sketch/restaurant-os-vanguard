@@ -1,18 +1,18 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3566,
-    "loc": 328967,
+    "files": 3568,
+    "loc": 329776,
     "pages": 84,
     "apiRoutes": 210
   },
   "layers": {
     "kernel": 25,
     "lib": 233,
-    "shared": 699,
+    "shared": 700,
     "modules": 1593,
     "app": 438,
-    "verticals": 244,
+    "verticals": 245,
     "infrastructure": 46,
     "store": 24,
     "config": 9,
@@ -36,7 +36,7 @@
     "providers": 28,
     "schemas": 7,
     "security": 1,
-    "seeds": 14,
+    "seeds": 15,
     "services": 3,
     "store": 2,
     "types": 3,
@@ -121,6 +121,10 @@
       "loc": 731
     },
     {
+      "file": "src/shared/components/ui/PageShell.tsx",
+      "loc": 729
+    },
+    {
       "file": "src/__tests__/anglemorts/anglemorts-batch2.test.ts",
       "loc": 668
     },
@@ -171,10 +175,6 @@
     {
       "file": "src/__tests__/anglemorts/anglemorts-batch7.test.ts",
       "loc": 493
-    },
-    {
-      "file": "src/shared/eventBus/events/ops.events.ts",
-      "loc": 488
     }
   ]
 }

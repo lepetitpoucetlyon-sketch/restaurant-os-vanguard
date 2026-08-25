@@ -5,16 +5,16 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3566** · LOC : **328 967**
+- Fichiers `.ts/.tsx` : **3568** · LOC : **329 776**
 - Pages : **84** · Routes API : **210**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1593 |
-| `src/shared/` | 699 |
+| `src/shared/` | 700 |
 | `src/app/` | 438 |
-| `src/verticals/` | 244 |
+| `src/verticals/` | 245 |
 | `src/lib/` | 233 |
 | `src/infrastructure/` | 46 |
 | `src/kernel/` | 25 |
@@ -40,7 +40,7 @@
 | `shared/nexus/` | 128 |
 | `shared/hooks/` | 49 |
 | `shared/providers/` | 28 |
-| `shared/seeds/` | 14 |
+| `shared/seeds/` | 15 |
 | `shared/connector-manifest/` | 11 |
 | `shared/contexts/` | 10 |
 | `shared/plugins/` | 9 |
@@ -80,6 +80,7 @@
 | Fichier | LOC |
 |---|---:|
 | `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
+| `src/shared/components/ui/PageShell.tsx` | 729 |
 | `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
 | `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
 | `src/shared/components/settings/BrandingPanel.tsx` | 618 |
@@ -93,4 +94,3 @@
 | `src/i18n/locales/fr.ts` | 545 |
 | `src/config/navConfig.ts` | 507 |
 | `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 493 |
-| `src/shared/eventBus/events/ops.events.ts` | 488 |
