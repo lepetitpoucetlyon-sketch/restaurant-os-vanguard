@@ -66,7 +66,8 @@ export class SovereignLedger {
     async recordTransfer(params: {
         debitAccount: LedgerEntry['accountName'],
         creditAccount: LedgerEntry['accountName'],
-        amountInCents: number,
+        amountInCents?: number,
+        amountInMicrounits?: number,
         referenceId: string,
         description: string,
         _monkeyPatch?: { forceAsymmetry: boolean }
@@ -87,11 +88,14 @@ export class SovereignLedger {
             mode = 'LOCAL_LOCK' as AccountingMode; 
         }
 
+        const microunits = params.amountInMicrounits ?? (params.amountInCents ?? 0) * 10_000;
+        const cents = params.amountInCents ?? Math.round(microunits / 10_000);
+
         const buildEntry = (acc: LedgerEntry['accountName'], type: 'DEBIT' | 'CREDIT'): LedgerEntry => ({
             id: SharedKernel.generateId(`LDR-${type === 'DEBIT' ? 'DB' : 'CR'}`),
             date, accountName: acc, type,
-            amountInCents: params.amountInCents,
-            amountInMicrounits: params.amountInCents * 10_000,
+            amountInCents: cents,
+            amountInMicrounits: microunits,
             referenceId: params.referenceId, description: params.description, scelledAt: date
         });
 
@@ -99,7 +103,7 @@ export class SovereignLedger {
         const credit = buildEntry(params.creditAccount, 'CREDIT');
 
         this.validateIntegrity(debit, credit, mode);
-        logger.info(`[SovereignLedger] [${mode}] Balanced: ${params.amountInCents/100}€ [${params.debitAccount}/${params.creditAccount}]`);
+        logger.info(`[SovereignLedger] [${mode}] Balanced: ${cents/100}€ [${params.debitAccount}/${params.creditAccount}]`);
 
         await Promise.all([
             Nexus.adapter.set(Nexus.getTenantPath(`ledger/entries/${debit.id}`, this.tenantId), debit),
@@ -109,20 +113,21 @@ export class SovereignLedger {
 
     /**
      * ⚖️ Inquisiteur QA Validation
-     * Ensures Debit matches Credit with absolute precision.
+     * Ensures Debit matches Credit with absolute precision in microunits.
      */
     private validateIntegrity(debit: LedgerEntry, credit: LedgerEntry, mode: AccountingMode): void {
-        const diff = Math.abs(debit.amountInCents - credit.amountInCents);
-        const tolerance = 0.01;
+        const debitMicro = debit.amountInMicrounits ?? (debit.amountInCents * 10_000);
+        const creditMicro = credit.amountInMicrounits ?? (credit.amountInCents * 10_000);
+        const diffMicro = Math.abs(debitMicro - creditMicro);
 
-        if (diff > tolerance) {
-            const error = `[LDR-ERR-01] Nexus Balance Violation: Diff=${diff.toFixed(4)} | Debit(${debit.amountInCents}) != Credit(${credit.amountInCents}) [Accounts: ${debit.accountName} / ${credit.accountName}]`;
+        if (diffMicro > 100) {
+            const error = `[LDR-ERR-01] Nexus Balance Violation: Diff=${(diffMicro / 10_000).toFixed(4)} | Debit(${debit.amountInCents}) != Credit(${credit.amountInCents}) [Accounts: ${debit.accountName} / ${credit.accountName}]`;
             logger.error(error);
             if (mode === 'EXPERT') {
                 throw new Error(error);
             }
-        } else if (diff > 0) {
-            logger.info(`[SovereignLedger] Rounded precision correction: ${diff.toFixed(4)} centimes difference auto-settled.`);
+        } else if (diffMicro > 0) {
+            logger.info(`[SovereignLedger] Rounded precision correction: ${(diffMicro / 10_000).toFixed(4)} centimes difference auto-settled.`);
         }
     }
 
@@ -200,20 +205,21 @@ export class SovereignLedger {
 
             const revenue = entries
                 .filter(e => e.accountName === 'SALES' && e.type === 'CREDIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + (e.amountInMicrounits ?? e.amountInCents * 10_000), 0);
 
             const cogs = entries
                 .filter(e => e.accountName === 'PURCHASES' && e.type === 'DEBIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + (e.amountInMicrounits ?? e.amountInCents * 10_000), 0);
 
             const labor = entries
                 .filter(e => (e.accountName === 'PAYROLL' || e.description.toLowerCase().includes('salaire')) && e.type === 'DEBIT')
-                .reduce((sum, e) => sum + e.amountInCents, 0);
+                .reduce((sum, e) => sum + (e.amountInMicrounits ?? e.amountInCents * 10_000), 0);
 
-            const ebitda = revenue - (cogs + labor);
+            const ebitdaMicrounits = revenue - (cogs + labor);
+            const ebitdaCents = Math.round(ebitdaMicrounits / 10_000);
             
-            logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitda / 100}€ (Rev: ${revenue/100}€, COGS: ${cogs/100}€, Labor: ${labor/100}€)`);
-            return ebitda;
+            logger.info(`[SovereignLedger] EBITDA Calculated: ${ebitdaCents / 100}€ (Rev: ${Math.round(revenue/10_000)/100}€, COGS: ${Math.round(cogs/10_000)/100}€, Labor: ${Math.round(labor/10_000)/100}€)`);
+            return ebitdaCents;
         } catch (_e) {
             logger.error('[SovereignLedger] EBITDA Calculation Failed. Falling back to safe 0.');
             return 0;

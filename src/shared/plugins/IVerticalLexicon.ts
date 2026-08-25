@@ -51,3 +51,67 @@ export const HOTEL_LEXICON: IVerticalLexicon = {
   itemLabel: 'Fourniture Chambre',
   customerLabel: 'Client / Résident',
 };
+
+export const BAKERY_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Comptoir / Vitrine',
+  recipeLabel: 'Recette / Fiche Fournil',
+  staffLabel: 'Boulanger / Vendeur',
+  ticketLabel: 'Bon de Préparation',
+  itemLabel: 'Farine / Ingrédient',
+  customerLabel: 'Client',
+};
+
+export const RETAIL_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Caisse / Rayon',
+  recipeLabel: 'Fiche Article',
+  staffLabel: 'Vendeur / Conseiller',
+  ticketLabel: 'Ticket de Caisse',
+  itemLabel: 'Article / Référence',
+  customerLabel: 'Client',
+};
+
+export const GYM_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Plateau / Espace',
+  recipeLabel: 'Abonnement / Forfait',
+  staffLabel: 'Coach / Instructeur',
+  ticketLabel: 'Pass Séance',
+  itemLabel: 'Équipement / Complément',
+  customerLabel: 'Adhérent / Membre',
+};
+
+export const COWORKING_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Bureau / Salle',
+  recipeLabel: 'Pass Coworking',
+  staffLabel: 'Office Manager / Hôte',
+  ticketLabel: 'Réservation Bureau',
+  itemLabel: 'Fourniture / Boisson',
+  customerLabel: 'Résident / Nomade',
+};
+
+export const VETERINARY_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Salle de Soin',
+  recipeLabel: 'Acte / Consultation',
+  staffLabel: 'Vétérinaire / ASV',
+  ticketLabel: 'Fiche de Soin',
+  itemLabel: 'Médicament / Dispositif',
+  customerLabel: 'Propriétaire / Animal',
+};
+
+export const FLORIST_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Atelier / Serre',
+  recipeLabel: 'Composition / Bouquet',
+  staffLabel: 'Fleuriste / Artisan',
+  ticketLabel: 'Bon de Composition',
+  itemLabel: 'Tige / Végétal',
+  customerLabel: 'Client',
+};
+
+export const CUSTOM_LEXICON: IVerticalLexicon = {
+  tableLabel: 'Espace / Poste',
+  recipeLabel: 'Prestation / Service',
+  staffLabel: 'Opérateur / Collaborateur',
+  ticketLabel: 'Fiche d’Activité',
+  itemLabel: 'Fourniture / Article',
+  customerLabel: 'Client / Bénéficiaire',
+};
+

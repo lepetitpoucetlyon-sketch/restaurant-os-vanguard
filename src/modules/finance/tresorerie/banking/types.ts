@@ -28,6 +28,7 @@ export interface VirtualCard {
     expirationDate: string;
     pillarId: string;
     monthlyLimitInCents: number;
+    monthlyLimitInMicrounits?: number; // µ = cents × 10 000
     status: 'active' | 'frozen' | 'cancelled';
 }
 

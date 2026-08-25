@@ -9,6 +9,13 @@ import {
   SALON_LEXICON,
   CLINIC_LEXICON,
   HOTEL_LEXICON,
+  BAKERY_LEXICON,
+  RETAIL_LEXICON,
+  GYM_LEXICON,
+  COWORKING_LEXICON,
+  VETERINARY_LEXICON,
+  FLORIST_LEXICON,
+  CUSTOM_LEXICON,
 } from '../plugins/IVerticalLexicon';
 
 export function useLexicon(): IVerticalLexicon {
@@ -25,10 +32,24 @@ export function useLexicon(): IVerticalLexicon {
         return CLINIC_LEXICON;
       case 'hotel':
         return HOTEL_LEXICON;
-      case 'restaurant':
       case 'bakery':
+        return BAKERY_LEXICON;
+      case 'retail':
+        return RETAIL_LEXICON;
+      case 'gym':
+        return GYM_LEXICON;
+      case 'coworking':
+        return COWORKING_LEXICON;
+      case 'veterinary':
+        return VETERINARY_LEXICON;
+      case 'florist':
+        return FLORIST_LEXICON;
+      case 'custom':
+        return CUSTOM_LEXICON;
+      case 'restaurant':
       default:
         return DEFAULT_RESTAURANT_LEXICON;
     }
   }, [variant]);
 }
+
