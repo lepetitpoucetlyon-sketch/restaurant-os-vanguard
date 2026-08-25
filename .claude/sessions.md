@@ -13,6 +13,8 @@
 
 ## 🟢 Sessions Actives
 
+| `plan-dette-technique` (Claude Code) | **LIVRÉ** — `docs/plans/PLAN-DETTE-TECHNIQUE-2026-08-25.md` (5 chantiers, ground truth mesuré). Découvertes : (1) microunits = **821** occurrences et non 496, mais `domain/schemas/` déjà 100 % propre et jumeaux `InMicrounits` majoritairement présents → suppression de miroirs, pas conversion de valeurs ; (2) les 2 cycles sentrux sont de **probables faux positifs** (résolution par suffixe + 22 `hooks/index.ts` homonymes ; madge/tsc/build = 0 cycle) ; (3) `appointments`/`consultation` = scaffolds `.gitkeep` vides, la logique vit déjà dans `verticals/{salon,clinic,veterinary}` ; (4) **i18n n'est PAS inactif** — 33/902 `.tsx`, 120 `t()`, infra câblée → `CLAUDE.md` corrigé (claim « 0 composant » était faux) ; (5) sur 48 barrel violations, **7 sont obligatoires** (règle sentrux n° 4 store/pillars), ~20 bloquées par la migration schémas, ~9 vraies dont 3 structurelles (`ops → facility`). Aucune modification de `src/`. | 2026-08-25 | terminée |
+
 | `audit-fixes-p0-p2` (Claude Code) | **LIVRÉ** commit `407736d99` — P0-A : cycle NexusOpsProvider cassé (re-export redondant retiré) + 2 cycles compliance (BackupCodesService+MfaChannelsService import direct AuditLogger). P0-B : oracle fail-closed (fail-open → false sur erreur Nexus). P2 : HACCP zone inconnue → non_conforme, floor-plan+SupplierHub tenantId hardcodés → activeTenantId. sentrux gate ✅ 2→2 (baseline pré-existants). tsc 0 erreur. | 2026-08-25 | terminée |
 
 | Session | Périmètre | Démarrage | Status |

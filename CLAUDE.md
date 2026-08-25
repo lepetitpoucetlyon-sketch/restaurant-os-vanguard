@@ -39,7 +39,7 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 **Anti-cycles** : `src/store/base.ts` est le module neutre (`NexusNode`, `updateNexusNode`) ; les types/helpers partagés y vont pour éviter les dépendances circulaires Registry ↔ Atomes.
 
-**i18n** : `src/i18n/` existe (domains/ 464 lignes) mais **0 composant UI ne l'utilise** — l'app est monolingue français en dur. Infrastructure conservée en squelette pour une future internationalisation, mais inactive. Ne pas câbler i18n dans de nouveaux composants sans décision explicite.
+**i18n** : infrastructure **câblée et fonctionnelle** (mesuré 2026-08-25). `NexusCoreProvider` charge `loadTranslations` et expose `t` + `setLanguage` ; `useLanguage()` retourne le vrai contexte. Locales : `fr.ts` (482 clés) et `en.ts` (500 clés) complètes, `es/pt/ja` partielles (~25 %). **Couverture UI : 33 fichiers `.tsx` sur 902 (3,6 %), 120 appels `t()`** — l'app reste donc majoritairement en français en dur. Câbler `t()` dans un nouveau composant est possible et fonctionne ; ne pas traduire les libellés réglementaires (NF525, FEC, PCG) qui doivent rester en français légal. Plan de complétion : `docs/plans/PLAN-DETTE-TECHNIQUE-2026-08-25.md` chantier 4.
 
 **Migration Monolithe Modulaire (Règle du Barrel)** : Un module n'exporte que ce que son `index.ts` expose. Tout import qui court-circuite ce barrel est une violation d'architecture. Le barrel de chaque pilier (ex: `src/modules/ops/index.ts`) est la seule surface d'export publique — les domaines et modules internes ne sont pas importables directement.
 
