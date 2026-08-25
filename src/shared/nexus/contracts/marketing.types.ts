@@ -81,9 +81,15 @@ export interface PromoCode extends SovereignNode {
     type: 'fixed' | 'percentage' | 'bogo';
     value: number;
     discountPercent?: number;
+    /** @deprecated miroir legacy — utiliser discountAmountInMicrounits */
     discountAmountInCents?: number;
+    discountAmountInMicrounits?: number;
+    /** @deprecated miroir legacy — utiliser minOrderAmountInMicrounits */
     minOrderAmountInCents?: number;
+    minOrderAmountInMicrounits?: number;
+    /** @deprecated miroir legacy — utiliser maxDiscountInMicrounits */
     maxDiscountInCents?: number;
+    maxDiscountInMicrounits?: number;
     startDate: string;
     endDate: string;
     expiryDate?: string;

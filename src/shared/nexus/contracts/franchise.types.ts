@@ -27,10 +27,14 @@ export interface FranchiseSiteOverview {
     address?: string;
     city?: string;
     status: 'ONLINE' | 'OFFLINE' | 'BUSY' | 'CLOSED';
+    /** @deprecated miroir legacy — utiliser todayRevenueInMicrounits */
     todayRevenueInCents: number;
+    todayRevenueInMicrounits?: number;
     openOrdersCount: number;
     coversServedCount: number;
+    /** @deprecated miroir legacy — utiliser averageTicketInMicrounits */
     averageTicketInCents: number;
+    averageTicketInMicrounits?: number;
     activeStaffCount: number;
     stockAlertsCount: number;
     healthScore: number;
@@ -41,15 +45,21 @@ export interface FranchiseSiteOverview {
 export interface FranchiseConsolidatedMetrics {
     totalSites: number;
     onlineSites: number;
+    /** @deprecated miroir legacy — utiliser totalTodayRevenueInMicrounits */
     totalTodayRevenueInCents: number;
+    totalTodayRevenueInMicrounits?: number;
     totalOpenOrders: number;
     totalCoversServed: number;
+    /** @deprecated miroir legacy — utiliser averageTicketInMicrounits */
     averageTicketInCents: number;
+    averageTicketInMicrounits?: number;
     totalStockAlerts: number;
     topPerformingSite?: {
         tenantId: string;
         name: string;
+        /** @deprecated miroir legacy — utiliser revenueInMicrounits */
         revenueInCents: number;
+        revenueInMicrounits?: number;
     };
 }
 

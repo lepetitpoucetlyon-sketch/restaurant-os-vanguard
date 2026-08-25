@@ -1,4 +1,4 @@
-// Re-export from canonical location (facility pillar)
- 
-// eslint-disable-next-line no-restricted-imports -- cycle prevention: facility imports from ops, so we can't use the barrel
-export type { TableStatus, TableShape, ZoneId, Floor, Zone, Table, Area } from '@/modules/facility/spaces/types';
+// Neutral ground types re-export (ADR-015 / contracts)
+export type { TableStatus, TableShape, Floor, Zone, Table } from '@/shared/nexus/contracts';
+export type ZoneId = string;
+export type Area = import('@/shared/nexus/contracts').Table;

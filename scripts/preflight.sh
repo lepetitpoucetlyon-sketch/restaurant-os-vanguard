@@ -106,6 +106,16 @@ else
   ok "ESLint no-inter-module-imports : $INTER_MODULE_COUNT / $INTER_MODULE_MAX — 0 violation"
 fi
 
+# Gate bloquante : ratchet microunits (le compteur InCents ne doit jamais remonter)
+MICROUNITS_BASELINE=821
+MICROUNITS_CURRENT=$(grep -rn "InCents" src/ --include="*.ts" --include="*.tsx" | wc -l)
+if [ "$MICROUNITS_CURRENT" -gt "$MICROUNITS_BASELINE" ]; then
+  fail "Régression microunits : $MICROUNITS_CURRENT occurrences InCents > seuil baseline ($MICROUNITS_BASELINE)"
+  exit 1
+else
+  ok "Ratchet microunits : $MICROUNITS_CURRENT / $MICROUNITS_BASELINE InCents — pas de régression"
+fi
+
 # ────────────────────────────────────────────────────────────────
 step "🧪 [4/10] Tests Vitest"
 VITEST_OUTPUT=$(npx vitest run 2>&1) || {
