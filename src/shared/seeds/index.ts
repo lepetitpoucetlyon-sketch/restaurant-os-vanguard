@@ -48,3 +48,5 @@ export { GYM_FULL_DNA } from './gym-full-dna';
 export { COWORKING_FULL_DNA } from './coworking-full-dna';
 export { VETERINARY_FULL_DNA } from './veterinary-full-dna';
 export { FLORIST_FULL_DNA } from './florist-full-dna';
+
+export { KICKERS_BY_VARIANT, resolveKicker, listKickerDomains, type KickerDomain } from './kickers';

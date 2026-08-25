@@ -25,6 +25,7 @@ import {
 } from '../catalog/CapabilityCatalog';
 import { type ProfileId, profileCapabilities } from '../catalog/ProfileArchetype';
 import { type SectorStudy, type SectorStudyDelta, mergeSectorStudy } from './SectorStudy';
+import type { KickerDomain } from '@/shared/seeds/kickers';
 
 /**
  * Tiers de précision — pilotent ce que le générateur produit :
@@ -76,6 +77,49 @@ export interface BlueprintTokens {
 }
 
 /**
+ * Segment d'un `BlueprintHeader` — un rail de choix mutuellement exclusifs
+ * (view=day/week, section=plan/clients/…). Généré comme un `PageShell.Segmented`.
+ */
+export interface BlueprintHeaderSegment {
+    readonly name: string;                 // ex. 'view' → prop `view` + setter `setView`
+    readonly ariaLabel: string;
+    readonly items: readonly {
+        readonly value: string;
+        readonly label: string;
+        readonly icon?: string;            // export name lucide-react
+    }[];
+}
+
+/** CTA solitaire d'un `BlueprintHeader`. Généré comme un `PageShell.CTA`. */
+export interface BlueprintHeaderCTA {
+    readonly name: string;                 // ex. 'onNewReservation'
+    readonly label: string;
+    readonly icon?: string;
+    readonly tone?: 'primary' | 'ghost' | 'danger';
+}
+
+/**
+ * Un header entièrement DÉCLARATIF d'une page opérationnelle de la verticale.
+ *
+ * Consommé par le template forge `renderVerticalHeaders(input)` qui scaffolde
+ * un tsx `src/verticals/<slug>/ui/<Name>.tsx` composé exclusivement des
+ * primitives universelles `PageShell.OperationalHeader/EditorialTitle/Segmented/CTA`
+ * — le kicker est piqué dans `KICKERS_BY_VARIANT` selon `(variant, domain)`.
+ *
+ * Voir ADR-017-vertical-headers.md.
+ */
+export interface BlueprintHeader {
+    readonly name: string;                 // ex. 'MembersCheckoutHeader'
+    readonly domain: KickerDomain;         // pilier universel (finance/commerce/…) ou emblématique
+    readonly title: string;                // big-title Playfair
+    readonly icon?: string;                // lucide subtile
+    readonly titleSize?: 'sm' | 'md' | 'lg';
+    readonly segments?: readonly BlueprintHeaderSegment[];
+    readonly ctas?: readonly BlueprintHeaderCTA[];
+    readonly dense?: boolean;              // 76px POS/KDS-like
+}
+
+/**
  * Sous-variante intra-verticale = deltas appliqués sur la base.
  * Ex. restaurant/brunch (service continu, pas de KDS lourd) vs
  *     restaurant/gastronomique (KDS, cave, réservation stricte, ticket élevé).
@@ -108,6 +152,13 @@ export interface VerticalBlueprint {
     routes: readonly BlueprintRoute[];
     events: readonly BlueprintEvent[];
     hardware: readonly HardwareKind[];
+    /**
+     * Headers éditoriaux propres à la verticale. Scaffoldés par le forge dans
+     * `src/verticals/<slug>/ui/` (skipIfExists) à partir des primitives
+     * PageShell universelles. Facultatif : une verticale peut ne déclarer aucun
+     * header custom et hériter du header par défaut d'une page host.
+     */
+    headers?: readonly BlueprintHeader[];
     /** Type légal (aligné LegalContractGenerator.VerticalType). */
     legalType: string;
     dnaOverrides?: BlueprintDnaOverrides;

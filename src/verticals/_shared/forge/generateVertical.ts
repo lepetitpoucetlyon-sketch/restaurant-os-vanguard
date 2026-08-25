@@ -20,6 +20,7 @@ import {
     renderRegulationGuards,
     renderHardwareProvisioning,
     renderVerticalTest,
+    renderVerticalHeaders,
 } from './templates';
 import type { GeneratedFile, WiringPatch, ForgeOutput } from './types';
 import { renderWiring } from './wiringPatcher';
@@ -66,6 +67,18 @@ export function generateVertical(bp: VerticalBlueprint, opts: ForgeOptions = {})
     if (withAdapters) files.push(...renderAdapters(bp));
     files.push(renderPlugin(bp));
     files.push(renderIndex(bp, withAdapters));
+
+    // Headers universels — dispo dès L0 (ADR-017). Le forge scaffolde tsx si
+    // le blueprint déclare `headers[]`. Slug est cast en PlatformVariant (le
+    // blueprint garantit que slug = futur variant, mais un slug inconnu
+    // retombera sur les kickers `custom` via resolveKicker).
+    if (bp.headers?.length) {
+        files.push(...renderVerticalHeaders({
+            slug: bp.slug,
+            variant: bp.slug as import('@/modules/system').PlatformVariant,
+            headers: bp.headers,
+        }));
+    }
 
     // L1 : tokens + DNA + stubs de route.
     if (withAdapters) {

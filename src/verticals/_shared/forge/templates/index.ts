@@ -11,3 +11,4 @@ export * from './workflowService';
 export * from './regulationGuard';
 export * from './hardwareProvisioning';
 export * from './verticalTest';
+export * from './verticalHeader';
