@@ -13,7 +13,7 @@
 
 ## 🟢 Sessions Actives
 
-| `audit-fixes-p0-p2` (Claude Code) | Corrections issues audit 2026-08-25 : P0-A cycle ops (`src/modules/ops/providers/NexusOpsProvider.tsx`, `src/modules/ops/service/pos/hooks/index.ts`, `kitchenHooks.tsx`) + P0-B fail-open oracle (`src/app/api/oracle/route.ts`) + P1 Sentrux config + P2 microunits finance/ops + P2 tenantId hardcodés (`src/app/(client)/(ops)/floor-plan/page.tsx`, `SupplierHubDashboard.tsx`) + P2 HACCP zone inconnue. | 2026-08-25 | active |
+| `audit-fixes-p0-p2` (Claude Code) | **LIVRÉ** commit `407736d99` — P0-A : cycle NexusOpsProvider cassé (re-export redondant retiré) + 2 cycles compliance (BackupCodesService+MfaChannelsService import direct AuditLogger). P0-B : oracle fail-closed (fail-open → false sur erreur Nexus). P2 : HACCP zone inconnue → non_conforme, floor-plan+SupplierHub tenantId hardcodés → activeTenantId. sentrux gate ✅ 2→2 (baseline pré-existants). tsc 0 erreur. | 2026-08-25 | terminée |
 
 | Session | Périmètre | Démarrage | Status |
 |---|---|---|---|
