@@ -540,7 +540,9 @@ technique — et elle engage la fiabilité des écritures.
 
 ---
 
-## Zone O — Anomalie : deux modèles de rotation de table 🔴
+## Zone O — Anomalie : deux modèles de rotation de table
+
+### DF-O1 — Deux vérités sur la durée d'occupation d'une table 🔴
 
 Même classe de problème que **DF-E1** : deux services répondent à la même question avec
 des règles différentes.
@@ -580,7 +582,7 @@ en réglage**. Un curseur laisserait croire qu'on peut les modifier.
 
 ## Synthèse de l'extension
 
-| Zone | Nouvelles décisions | Dont 🔴 figées |
+| Zone | Codes DF | Dont 🔴 figées |
 |---|---|---|
 | I — Finance & Trésorerie | 3 | 2 |
 | J — Approvisionnement | 5 | 5 |
@@ -588,11 +590,20 @@ en réglage**. Un curseur laisserait croire qu'on peut les modifier.
 | L — Marketing & Avis | 2 | 1 |
 | M — Livraison | 2 | 0 (1 légale) |
 | N — Comptabilité | 2 | 1 |
-| O — Anomalie rotation | 1 | — (divergence) |
-| RH — reclassement | 3 | 0 (légales) |
-| **Total** | **+19** | **+11** |
+| O — Divergence rotation | 1 | — (à trancher) |
+| **Sous-total extension** | **18** | **11** |
 
-**Document complet : 48 décisions** (29 initiales + 19).
+**Décompte exact du document** *(vérifié : `grep -oE "DF-[A-Z][0-9]+" | sort -u | wc -l`)*
+
+| Passe | Zones | Codes DF |
+|---|---|---|
+| Première | A · B · C · D · E · F · G | **30** |
+| Extension | I · J · K · L · M · N · O | **18** |
+| **Total** | | **48** |
+
+**Hors décompte** — la **zone H (RH)** ne porte pas de code DF : ses valeurs sont des
+**plafonds légaux** (majorations HCR, 48 h hebdomadaires, travail de nuit 22 h–7 h), pas
+des décisions arbitraires. Elles relèvent de la documentation, pas du paramétrage.
 
 ### Les 3 plus impactantes de cette extension
 
