@@ -1,5 +1,6 @@
 import { JournalEntry, BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface MatchingResult {
     transactionId: string;
@@ -10,7 +11,7 @@ export interface MatchingResult {
 }
 
 /**
- * AccountingMatchingService - The "Pennylane" Reconciliation Engine
+ * AccountingMatchingService - The "Pennylane" Reconciliation Engine (DF-N1)
  * Specialized in correlating bank flows with internal fiscal truth.
  */
 export class AccountingMatchingService {
@@ -18,7 +19,10 @@ export class AccountingMatchingService {
     // Configurable thresholds
     private static THRESHOLD_HIGH = 90;
     private static THRESHOLD_MEDIUM = 70;
-    private static AUTO_RECONCILE_SCORE = 98;
+    
+    static getAutoReconcileScore(): number {
+        return getSetting<number>('finance', 'auto_reconcile_score', 98);
+    }
 
     /**
      * Matches a single bank transaction against a pool of journal entries.
@@ -111,7 +115,7 @@ export class AccountingMatchingService {
     }
 
     private static getConfidenceLevel(score: number): 'low' | 'medium' | 'high' | 'perfect' {
-        if (score >= 98) return 'perfect';
+        if (score >= this.getAutoReconcileScore()) return 'perfect';
         if (score >= this.THRESHOLD_HIGH) return 'high';
         if (score >= this.THRESHOLD_MEDIUM) return 'medium';
         return 'low';

@@ -1,5 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface SpoutTelemetryEvent {
   tenantId: string;
@@ -9,6 +10,7 @@ export interface SpoutTelemetryEvent {
   dispensedCl: number;
   billedCl: number;
   tolerancePct?: number; // Tolérance acceptable (défaut 5%)
+  timestamp?: number;
 }
 
 export interface SpoutVarianceResult {
@@ -48,7 +50,8 @@ export class SmartSpoutTelemetryService {
         detectedAt: Date.now(),
       });
 
-      if (varianceCl >= 10) { // > 10cl d'écart
+      const maxVarianceCl = getSetting<number>('bar', 'spout_variance_cl', 10);
+      if (varianceCl >= maxVarianceCl) { // Seuil d'écart toléré configuré (DF-A4)
         await AuditLogger.logAction({
           adminId: 'SYSTEM_SPOUT',
           action: 'BAR_SPOUT_DISCREPANCY',

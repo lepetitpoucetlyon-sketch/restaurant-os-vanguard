@@ -22,8 +22,12 @@ export interface TableTurnoverPrediction {
  */
 export class TableTurnoverOptimizationService {
   static predictTurnover(tenantId: string, seating: TableSeatingSpec): TableTurnoverPrediction {
-    // Standard durations: 2 covers = 75 min, 4 covers = 90 min, 6+ = 120 min
-    const baseDuration = seating.covers <= 2 ? 75 : seating.covers <= 4 ? 90 : 120;
+    // Règle unifiée de rotation (baseline standard : 2 convives = 75 min, 4 convives = 90 min, scaling au-delà)
+    const baseDuration = seating.covers <= 2 
+      ? 75 
+      : seating.covers <= 4 
+        ? 90 
+        : Math.round(90 * (1 + (seating.covers - 2) * 0.06));
     const predictedDepartureTimestamp = seating.seatedAtTimestamp + (baseDuration * 60 * 1000);
 
     const isSecondSeatingFeasible = seating.currentCourseStage === 'dessert' || seating.currentCourseStage === 'addition_demandee';

@@ -7,3 +7,4 @@ export * from './hooks/useAuditMapper';
 export * from './store/complianceAtoms';
 export * from './store/qualityAtoms';
 export * from './types';
+export * from './services';

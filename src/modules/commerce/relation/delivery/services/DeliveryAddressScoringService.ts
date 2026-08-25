@@ -1,4 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface DeliveryAddressInput {
   addressLine: string;
@@ -16,8 +17,8 @@ export interface AddressScoreResult {
 }
 
 /**
- * DeliveryAddressScoringService — Angle mort T47.
- * Scoring de la complétude et de l'accessibilité de l'adresse de livraison (manque de digicode, 6e étage sans ascenseur, antécédents d'échec) pour alerter le client avant expédition.
+ * DeliveryAddressScoringService — Angle mort T47 (DF-M2).
+ * Scoring de la complétude et de l'accessibilité de l'adresse de livraison.
  */
 export class DeliveryAddressScoringService {
   static scoreAddress(tenantId: string, input: DeliveryAddressInput): AddressScoreResult {
@@ -40,7 +41,8 @@ export class DeliveryAddressScoringService {
     }
 
     const reliabilityScore = Math.max(0, score);
-    const isAccessible = reliabilityScore >= 50;
+    const minScore = getSetting<number>('pos', 'delivery_min_address_score', 50);
+    const isAccessible = reliabilityScore >= minScore;
 
     NexusEventBus.emit('delivery.address_scored', {
       v: 1,

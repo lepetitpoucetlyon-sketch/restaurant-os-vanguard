@@ -6,7 +6,7 @@ import { ScrollArea } from "@ui/ScrollArea";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
 
-import { usePageSetting } from "@/shared/components/settings/ContextualSettings";
+import { usePageSetting, SettingsGearButton } from "@/shared/components/settings/ContextualSettings";
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
 import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 import { formatMu } from "@/lib/formatters";
@@ -176,11 +176,14 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         </div>
                     </div>
                 </div>
-                {showClose && isMobile && (
-                    <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center">
-                        <X className="w-5 h-5 text-text-muted" />
-                    </button>
-                )}
+                <div className="flex items-center gap-2">
+                    <SettingsGearButton pageKey="pos" className="h-10 w-10 shrink-0" />
+                    {showClose && isMobile && (
+                        <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center">
+                            <X className="w-5 h-5 text-text-muted" />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Items List */}

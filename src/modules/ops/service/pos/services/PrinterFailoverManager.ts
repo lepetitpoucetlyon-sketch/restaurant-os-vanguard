@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface PrinterDevice {
   id: string;
@@ -7,11 +8,12 @@ export interface PrinterDevice {
   ipAddress: string;
   isOnline: boolean;
   hasPaper: boolean;
+  group?: 'kitchen' | 'bar' | 'receipt' | 'counter';
   isBackupPrinter?: boolean;
 }
 
 /**
- * 🖨️ PrinterFailoverManager (Item 2.2)
+ * 🖨️ PrinterFailoverManager (Item 2.2 — DF-D1)
  * Gestionnaire de secours d'imprimantes de caisse & cuisine.
  * Détecte les erreurs réseau/papier et redirige le job d'impression vers l'imprimante secours valide la plus proche.
  */
@@ -26,10 +28,16 @@ export class PrinterFailoverManager {
       return target; // Imprimante principale OK
     }
 
-    logger.warn(`[PrinterFailoverManager] Imprimante ${targetPrinterId} indisponible (Online: ${target?.isOnline}, Paper: ${target?.hasPaper}). Recherche de secours...`);
+    const failoverGroupOnly = getSetting<boolean>('pos', 'failover_group_only', false);
 
-    // Trouver la première imprimante secours disponible
-    const fallback = availablePrinters.find(p => p.id !== targetPrinterId && p.isOnline && p.hasPaper);
+    logger.warn(`[PrinterFailoverManager] Imprimante ${targetPrinterId} indisponible (Online: ${target?.isOnline}, Paper: ${target?.hasPaper}, failoverGroupOnly: ${failoverGroupOnly}). Recherche de secours...`);
+
+    // Trouver la première imprimante secours disponible (filtrée par groupe si configuré)
+    const fallback = availablePrinters.find(p => {
+      if (p.id === targetPrinterId || !p.isOnline || !p.hasPaper) return false;
+      if (failoverGroupOnly && target?.group && p.group && p.group !== target.group) return false;
+      return true;
+    });
 
     if (fallback) {
       logger.info(`[PrinterFailoverManager] Imprimante secours retenue : ${fallback.name} (${fallback.id})`);

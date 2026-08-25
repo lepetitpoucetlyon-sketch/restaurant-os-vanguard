@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Plus, Calendar, Package, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
+import { SettingsGearButton } from "@/shared/components/settings/ContextualSettings";
 
 interface LandingExecutiveHeaderProps {
   userName: string;
@@ -43,11 +44,12 @@ export function LandingExecutiveHeader({ userName, isMobile }: LandingExecutiveH
         </div>
 
         {!isMobile && (
-          <div className="flex flex-col items-end gap-4">
+          <div className="flex items-center gap-4">
             <div className="text-right">
               <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">{t('dashboard.status')}</p>
               <p className="text-[13px] font-serif italic text-accent">{t('dashboard.status_text')}</p>
             </div>
+            <SettingsGearButton pageKey="dashboard" className="h-10 w-10 shrink-0" />
           </div>
         )}
       </motion.div>

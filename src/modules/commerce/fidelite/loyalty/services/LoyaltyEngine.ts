@@ -8,6 +8,7 @@ import {
     type LoyaltyTier,
 } from '../../../domain/schemas/loyalty';
 import type { Microunits } from '@/shared/schemas/primitives';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 function resolveTier(lifetimePoints: number): LoyaltyTier {
     if (lifetimePoints >= TIER_THRESHOLDS.platinum) return 'platinum';
@@ -16,7 +17,9 @@ function resolveTier(lifetimePoints: number): LoyaltyTier {
     return 'bronze';
 }
 
-const POINTS_PER_EURO = 1;
+function getPointsPerEuro(): number {
+    return getSetting<number>('customer', 'loyalty_points_per_euro', 1);
+}
 
 export const LoyaltyEngine = {
     async getOrCreate(tenantId: string, subjectId: string): Promise<LoyaltyAccount> {
@@ -52,7 +55,7 @@ export const LoyaltyEngine = {
     ): Promise<{ pointsEarned: number; newBalance: number; tier: LoyaltyTier }> {
         const account = await this.getOrCreate(tenantId, subjectId);
         const euros = totalInMicrounits / 1_000_000;
-        const pointsEarned = Math.floor(euros * POINTS_PER_EURO);
+        const pointsEarned = Math.floor(euros * getPointsPerEuro());
 
         if (pointsEarned <= 0) return { pointsEarned: 0, newBalance: account.points, tier: account.tier };
 

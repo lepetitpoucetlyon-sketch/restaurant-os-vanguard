@@ -1,4 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface SupplierCutoffConfig {
   supplierId: string;
@@ -16,8 +17,8 @@ export interface CutoffStatusResult {
 }
 
 /**
- * SupplierOrderCutoffScheduler — Angle mort T55.
- * Surveillance des heures limites (cut-off) de commande par fournisseur (ex: Pomona 23h00, Metro 22h30) pour éviter d'être privé de livraison le lendemain.
+ * SupplierOrderCutoffScheduler — Angle mort T55 (DF-J1).
+ * Surveillance des heures limites (cut-off) de commande par fournisseur (ex: Pomona 23h00, Metro 22h30).
  */
 export class SupplierOrderCutoffScheduler {
   static evaluateCutoff(
@@ -30,7 +31,8 @@ export class SupplierOrderCutoffScheduler {
     cutoffDate.setHours(hours, minutes, 0, 0);
 
     const diffMinutes = Math.floor((cutoffDate.getTime() - now.getTime()) / (60 * 1000));
-    const isUrgentCutoffApproaching = diffMinutes > 0 && diffMinutes <= 60;
+    const warningWindowMin = getSetting<number>('inventory', 'supplier_cutoff_warning_min', 60);
+    const isUrgentCutoffApproaching = diffMinutes > 0 && diffMinutes <= warningWindowMin;
 
     if (isUrgentCutoffApproaching) {
       NexusEventBus.emit('stock.cutoff_alert_triggered', {

@@ -1,4 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface CommodityPriceTelemetry {
   ingredientSku: string;
@@ -10,17 +11,23 @@ export interface CommodityPriceTelemetry {
 export interface CommoditySurgeAlert {
   ingredientSku: string;
   surgePct: number;
-  isSurgeCritical: boolean; // > 15% surge
+  isSurgeCritical: boolean; // > 15% surge (ou configuré via RBAC)
   suggestedMenuPriceAdjustmentPct?: number;
   alertBanner?: string;
 }
 
 /**
- * CommodityPriceSurgeWatcherService — Angle mort L33.
- * Surveille la flambée des cours des matières premières (+15% à +30% sur huile, saumon, beurre) et calcule l'impact sur la rentabilité avec recommandation de réajustement carte.
+ * CommodityPriceSurgeWatcherService — Angle mort L33 (DF-J2 / DF-J3).
+ * Surveille la flambée des cours des matières premières et calcule l'impact sur la rentabilité avec recommandation de réajustement carte.
  */
 export class CommodityPriceSurgeWatcherService {
-  public static readonly SURGE_THRESHOLD_PCT = 15.0;
+  public static getSurgeThresholdPct(): number {
+    return getSetting<number>('inventory', 'commodity_surge_alert_pct', 15.0);
+  }
+
+  public static getFoodCostWeight(): number {
+    return getSetting<number>('inventory', 'food_cost_weight_pct', 30) / 100;
+  }
 
   static detectSurge(tenantId: string, item: CommodityPriceTelemetry): CommoditySurgeAlert {
     const diff = item.currentPriceInMicrounits - item.previousPriceInMicrounits;
@@ -28,7 +35,8 @@ export class CommodityPriceSurgeWatcherService {
       ? Math.round((diff / item.previousPriceInMicrounits) * 1000) / 10
       : 0;
 
-    const isSurgeCritical = surgePct >= this.SURGE_THRESHOLD_PCT;
+    const thresholdPct = this.getSurgeThresholdPct();
+    const isSurgeCritical = surgePct >= thresholdPct;
 
     if (isSurgeCritical) {
       NexusEventBus.emit('stock.commodity_price_surge_detected', {
@@ -41,11 +49,12 @@ export class CommodityPriceSurgeWatcherService {
         detectedAt: Date.now(),
       });
 
+      const weight = this.getFoodCostWeight();
       return {
         ingredientSku: item.ingredientSku,
         surgePct,
         isSurgeCritical: true,
-        suggestedMenuPriceAdjustmentPct: Math.round(surgePct * 0.3 * 10) / 10, // ~30% food cost weight
+        suggestedMenuPriceAdjustmentPct: Math.round(surgePct * weight * 10) / 10,
         alertBanner: `📈 FLAMBÉE MATIÈRE PREMIÈRE (+${surgePct}%) sur ${item.ingredientName} : Revoir les fiches techniques ou ajuster le prix carte.`,
       };
     }

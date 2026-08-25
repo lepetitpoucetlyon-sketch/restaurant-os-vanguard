@@ -1,6 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface TableLockData {
   tableId: string;
@@ -24,11 +25,13 @@ export interface ReleaseLockResult {
   error?: string;
 }
 
-/** TTL par défaut du lock : 2 minutes (renouvelé automatiquement par heartbeat) */
-const DEFAULT_LOCK_TTL_MS = 2 * 60 * 1000;
+/** TTL par défaut du lock : 2 minutes (renouvelé automatiquement par heartbeat) ou configuré via RBAC */
+export function getDefaultLockTtlMs(): number {
+  return getSetting<number>('pos', 'table_lock_ttl_sec', 120) * 1000;
+}
 
 /**
- * 🔒 TableLockService — Invariant #2 & #3 de Concurrence
+ * 🔒 TableLockService — Invariant #2 & #3 de Concurrence (DF-A1)
  *
  * Implémente le verrouillage optimiste / CAS (Compare-And-Swap) sur les tables de restaurant.
  * Empêche les conflits d'encaissement et de modification simultanée lors des rushs.
@@ -43,7 +46,7 @@ export class TableLockService {
     operatorId: string,
     operatorName?: string,
     reason: string = 'order_in_progress',
-    ttlMs: number = DEFAULT_LOCK_TTL_MS
+    ttlMs: number = getDefaultLockTtlMs()
   ): Promise<AcquireLockResult> {
     const lockPath = `tenants/${tenantId}/tableLocks/${tableId}`;
     const now = Date.now();
@@ -156,7 +159,7 @@ export class TableLockService {
     tenantId: string,
     tableId: string,
     operatorId: string,
-    ttlMs: number = DEFAULT_LOCK_TTL_MS
+    ttlMs: number = getDefaultLockTtlMs()
   ): Promise<boolean> {
     const lockPath = `tenants/${tenantId}/tableLocks/${tableId}`;
     const now = Date.now();

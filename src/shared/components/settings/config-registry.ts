@@ -17,7 +17,9 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
     },
     vanguard: {
         title: "Paramètres Vanguard",
-        settings: []
+        settings: [
+            { key: "max_concurrent_sessions", label: "Appareils simultanés par utilisateur", description: "1 = un serveur ne peut pas utiliser deux tablettes en même temps.", group: "logic", type: "number", min: 1, max: 5, roles: ["admin"] },
+        ]
     },
     franchise: {
         title: "Paramètres Réseau & Franchise",
@@ -56,10 +58,12 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "vip_priority", label: "Réservation VIP prioritaire", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "auto_assign_tables", label: "Attribution auto tables", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "waitlist_enabled", label: "Liste d'attente activée", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
+            { key: "turnover_factor_per_guest_pct", label: "Allongement par convive au-delà de 2 (%)", description: "Modèle de rotation de table (DF-C5).", group: "logic", type: "number", min: 0, max: 30, roles: ["admin", "directeur"] },
+            { key: "turnover_kds_impact_max_pct", label: "Impact max du retard cuisine (%)", description: "Impact de la surchauffe KDS sur la rotation (DF-C6).", group: "logic", type: "number", min: 0, max: 100, roles: ["admin", "directeur"] },
         ],
     },
     pos: {
-        title: "Paramètres de la Caisse",
+        title: "Paramètres de la Caisse & Vente",
         settings: [
             { key: "service_mode", label: "Mode service", group: "logic", type: "select", options: [{ value: "table", label: "Table" }, { value: "counter", label: "Comptoir" }, { value: "mixed", label: "Mixte" }], roles: ["admin", "directeur"] },
             { key: "button_size", label: "Taille des boutons", group: "style", type: "select", options: [{ value: "small", label: "Petit" }, { value: "medium", label: "Moyen" }, { value: "large", label: "Grand" }], roles: ["admin", "directeur", "manager"] },
@@ -75,6 +79,11 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "show_stock_level", label: "Afficher niveau stock", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "keyboard_shortcuts", label: "Raccourcis clavier", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "loyalty_points_visible", label: "Points fidélité visibles", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
+            { key: "table_lock_ttl_sec", label: "Durée de réservation d'une table (secondes)", description: "Temps avant expiration du verrou table (DF-A1).", group: "logic", type: "number", min: 30, max: 600, roles: ["admin", "directeur", "manager", "chef_rang"] },
+            { key: "warn_no_terminal", label: "Avertir si aucun TPE n'est configuré", description: "Alerte visuelle au démarrage de service (DF-A2).", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
+            { key: "delivery_min_address_score", label: "Score d'adresse livraison minimal", description: "Score d'adresse requis pour acceptation automatique (DF-M2).", group: "logic", type: "number", min: 0, max: 100, roles: ["admin", "directeur", "manager"] },
+            { key: "failover_group_only", label: "Secours imprimante limité au groupe (cuisine/bar)", description: "Évite qu'un bon cuisine sorte au bar (DF-D1).", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
+            { key: "on_print_failure", label: "Comportement si échec d'impression", description: "Gestion d'incident NF525 après validation fiscale (DF-D3).", group: "logic", type: "select", options: [{ value: "queue", label: "Mettre en file et alerter" }, { value: "block", label: "Bloquer la vente" }, { value: "continue", label: "Continuer sans ticket" }], roles: ["admin", "directeur"] },
         ],
     },
     kitchen: {
@@ -96,11 +105,16 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     kds: {
-        title: "Paramètres KDS",
+        title: "Paramètres KDS & Production",
         settings: [
             { key: "columns", label: "Nombre de colonnes", group: "style", type: "select", options: [{ value: "2", label: "2" }, { value: "3", label: "3" }, { value: "4", label: "4" }, { value: "5", label: "5" }], roles: ["admin", "directeur", "manager"] },
             { key: "sort_mode", label: "Tri des commandes", group: "logic", type: "select", options: [{ value: "fifo", label: "FIFO" }, { value: "priority", label: "Priorité" }, { value: "type", label: "Type" }], roles: ["admin", "directeur", "manager"] },
             { key: "alert_delay", label: "Alerte retard (min)", group: "logic", type: "number", min: 5, max: 60, roles: ["admin", "directeur"] },
+            { key: "overheat_threshold_min", label: "Seuil de surchauffe cuisine (min)", description: "Au-delà, le bridage automatique s'active (DF-B1).", group: "logic", type: "number", min: 5, max: 60, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "throttle_max_orders", label: "Commandes max pendant le bridage", description: "Capacité maximale admise par tranche de régulation (DF-B2).", group: "logic", type: "number", min: 1, max: 20, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "throttle_duration_sec", label: "Durée du bridage (secondes)", group: "logic", type: "number", min: 60, max: 3600, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "throttle_enabled", label: "Activer le bridage automatique", description: "Permet de débrider en urgence pendant un coup de feu (DF-B2).", group: "logic", type: "toggle", roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "audio_volume", label: "Volume des alertes cuisine (%)", group: "style", type: "number", min: 0, max: 100, roles: ["admin", "directeur", "chef_cuisinier", "cuisinier"] },
             { key: "sound_new_order", label: "Son nouvelle commande", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "sound_alert", label: "Son alerte retard", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "show_table", label: "Afficher table/client", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
@@ -112,7 +126,7 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     inventory: {
-        title: "Paramètres Inventaire",
+        title: "Paramètres Inventaire & Approvisionnement",
         settings: [
             { key: "low_stock_threshold", label: "Seuil stock bas", group: "logic", type: "number", min: 1, max: 100, roles: ["admin", "directeur", "manager"] },
             { key: "critical_threshold", label: "Seuil critique", group: "logic", type: "number", min: 1, max: 50, roles: ["admin", "directeur"] },
@@ -126,6 +140,12 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "expiry_first_out", label: "DLC prioritaire sortie", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "waste_tracking_mandatory", label: "Suivi pertes obligatoire", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
             { key: "count_frequency_days", label: "Fréquence inventaire (jours)", group: "logic", type: "number", min: 1, max: 30, roles: ["admin", "directeur"] },
+            { key: "supplier_cutoff_warning_min", label: "Alerte avant clôture fournisseur (min)", group: "logic", type: "number", min: 15, max: 240, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "commodity_surge_alert_pct", label: "Flambée de cours — seuil d'alerte (%)", group: "logic", type: "number", min: 5, max: 50, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "food_cost_weight_pct", label: "Poids food cost dans l'ajustement prix (%)", description: "Pondération de la hausse des cours sur la recommandation de prix menu (DF-J3).", group: "logic", type: "number", min: 10, max: 60, roles: ["admin", "directeur"] },
+            { key: "ocr_confidence_threshold", label: "Confiance OCR minimale (%)", description: "En dessous, la facture part en validation manuelle (DF-J4).", group: "logic", type: "number", min: 60, max: 99, roles: ["admin", "directeur", "comptable"] },
+            { key: "weather_procurement_temp_c", label: "Température déclenchant ajustement météo (°C)", group: "logic", type: "number", min: 15, max: 40, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "weather_procurement_boost_pct", label: "Ajustement météo produits frais (%)", group: "logic", type: "number", min: 0, max: 50, roles: ["admin", "directeur", "chef_cuisinier"] },
         ],
     },
     storage_map: {
@@ -139,7 +159,7 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     customer: {
-        title: "Paramètres Customer",
+        title: "Paramètres Clients & Fidélité",
         settings: [
             { key: "default_view", label: "Vue par défaut", group: "style", type: "select", options: [{ value: "list", label: "Liste" }, { value: "cards", label: "Cartes" }, { value: "table", label: "Tableau" }], roles: ["admin", "directeur", "manager"] },
             { key: "required_phone", label: "Téléphone obligatoire", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
@@ -148,6 +168,8 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "vip_auto_upgrade", label: "Upgrade VIP auto", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
             { key: "vip_threshold_visits", label: "Seuil visites VIP", group: "logic", type: "number", min: 1, max: 50, roles: ["admin", "directeur"] },
             { key: "vip_threshold_spend", label: "Seuil dépenses VIP (€)", group: "logic", type: "number", min: 100, max: 10000, roles: ["admin", "directeur"] },
+            { key: "loyalty_points_per_euro", label: "Points de fidélité par euro dépensé", description: "Cœur économique du programme de fidélité (DF-K1).", group: "logic", type: "number", min: 0, max: 10, roles: ["admin", "directeur"] },
+            { key: "quote_base_score", label: "Score de base d'un devis", group: "logic", type: "number", min: 0, max: 100, roles: ["admin", "directeur"] },
             { key: "birthday_reminders", label: "Rappels anniversaires", group: "logic", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "feedback_request_enabled", label: "Demande feedback auto", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
             { key: "gdpr_consent_required", label: "Consentement RGPD requis", group: "logic", type: "toggle", roles: ["admin"] },
@@ -200,7 +222,7 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     finance: {
-        title: "Paramètres Finance",
+        title: "Paramètres Finance & Rapprochement",
         settings: [
             { key: "fiscal_year_start", label: "Début exercice fiscal", group: "logic", type: "text", roles: ["admin"] },
             { key: "default_payment_terms", label: "Conditions paiement (jours)", group: "logic", type: "number", min: 0, max: 90, roles: ["admin", "directeur", "comptable"] },
@@ -208,6 +230,9 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "export_format", label: "Format export", group: "style", type: "select", options: [{ value: "pdf", label: "PDF" }, { value: "csv", label: "CSV" }, { value: "excel", label: "Excel" }], roles: ["admin", "directeur", "comptable"] },
             { key: "auto_invoice_generation", label: "Génération auto factures", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
             { key: "bank_reconciliation_auto", label: "Rapprochement bancaire auto", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
+            { key: "auto_reconcile_score", label: "Score rapprochement automatique", description: "Score minimal au-delà duquel l'écriture est rapprochée sans validation manuelle (DF-N1).", group: "logic", type: "number", min: 80, max: 100, roles: ["admin", "directeur", "comptable"] },
+            { key: "dunning_delay_days", label: "Délai avant relance impayé (jours)", description: "Échéance d'envoi de première relance facture (DF-I2).", group: "logic", type: "number", min: 7, max: 90, roles: ["admin", "directeur", "comptable"] },
+            { key: "payout_approval_threshold_eur", label: "Seuil approbation virement (€)", description: "Plafond au-delà duquel une validation éditeur est requise (DF-I1).", group: "logic", type: "number", min: 100, max: 50000, roles: ["admin"] },
             { key: "expense_approval_threshold", label: "Seuil approbation dépenses (€)", group: "logic", type: "number", min: 50, max: 5000, roles: ["admin", "directeur"] },
             { key: "tips_distribution_method", label: "Méthode répartition pourboires", group: "logic", type: "select", options: [{ value: "equal", label: "Égale" }, { value: "hours", label: "Par heures" }, { value: "points", label: "Par points" }], roles: ["admin", "directeur"] },
         ],
@@ -221,7 +246,7 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     haccp: {
-        title: "Paramètres HACCP",
+        title: "Paramètres HACCP & Hygiène",
         settings: [
             { key: "temp_check_frequency", label: "Fréquence relevés (h)", group: "logic", type: "number", min: 1, max: 12, roles: ["admin", "directeur"] },
             { key: "alert_delay_minutes", label: "Délai alerte (min)", group: "logic", type: "number", min: 5, max: 60, roles: ["admin", "directeur"] },
@@ -229,6 +254,11 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
             { key: "signature_required", label: "Signature requise", group: "style", type: "toggle", roles: ["admin", "directeur"] },
             { key: "report_frequency", label: "Fréquence rapports", group: "logic", type: "select", options: [{ value: "daily", label: "Quotidien" }, { value: "weekly", label: "Hebdomadaire" }], roles: ["admin", "directeur"] },
             { key: "retention_years", label: "Rétention archives (ans)", group: "logic", type: "number", min: 1, max: 10, roles: ["admin"] },
+            { key: "thaw_max_hold_hours", label: "Durée max après décongélation (h)", description: "Délai maximal de conservation des produits décongelés (DF-E3).", group: "logic", type: "number", min: 6, max: 96, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "escalation_target", label: "Escalade non-conformité hygiène", description: "Destinataire de l'alerte en cas d'absence de réaction (DF-E2).", group: "logic", type: "select", options: [{ value: "chef", label: "Chef de cuisine" }, { value: "manager", label: "Gérant" }, { value: "both", label: "Les deux" }], roles: ["admin", "directeur"] },
+            { key: "temp_max_meat", label: "Température max — viandes (°C)", description: "Plafond réglementaire sanitaire viandes (DF-E1).", group: "logic", type: "number", min: 0, max: 4, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "temp_max_fish", label: "Température max — poissons & fruits de mer (°C)", description: "Plafond réglementaire sanitaire poissons (DF-E1).", group: "logic", type: "number", min: 0, max: 2, roles: ["admin", "directeur", "chef_cuisinier"] },
+            { key: "temp_max_dairy", label: "Température max — produits laitiers (°C)", description: "Plafond réglementaire sanitaire crèmerie (DF-E1).", group: "logic", type: "number", min: 0, max: 8, roles: ["admin", "directeur", "chef_cuisinier"] },
         ],
     },
     groups: {
@@ -239,16 +269,21 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         ],
     },
     seo: {
-        title: "Paramètres SEO",
+        title: "Paramètres SEO & Réputation",
         settings: [
             { key: "auto_check_frequency", label: "Fréquence vérification", group: "logic", type: "select", options: [{ value: "daily", label: "Quotidien" }, { value: "weekly", label: "Hebdomadaire" }], roles: ["admin", "directeur"] },
+            { key: "review_bombing_burst_threshold", label: "Avis négatifs déclenchant alerte", description: "Seuil de détection d'attaque e-réputation (DF-L1).", group: "logic", type: "number", min: 3, max: 50, roles: ["admin", "directeur"] },
+            { key: "review_bombing_no_text_ratio", label: "Part suspecte avis sans texte (%)", group: "logic", type: "number", min: 20, max: 100, roles: ["admin", "directeur"] },
         ],
     },
     bar: {
-        title: "Paramètres Bar",
+        title: "Paramètres Bar & Tireuses",
         settings: [
             { key: "sound_new_order", label: "Son nouvelle commande", group: "style", type: "toggle", roles: ["admin", "directeur", "manager"] },
             { key: "auto_print_ticket", label: "Impression auto ticket", group: "logic", type: "toggle", roles: ["admin", "directeur"] },
+            { key: "alcohol_loss_alert_eur", label: "Seuil alerte perte alcool (€)", description: "Seuil d'écart financier déclenchant une alerte inventaire bar (DF-A3).", group: "logic", type: "number", min: 1, max: 500, roles: ["admin", "directeur", "manager", "barman"] },
+            { key: "spout_variance_cl", label: "Écart toléré bec verseur (cl)", description: "Tolérance télémétrique par dose servie SmartSpout (DF-A4).", group: "logic", type: "number", min: 1, max: 50, roles: ["admin", "directeur", "manager", "barman"] },
+            { key: "keg_loss_max_pct", label: "Perte fût maximale acceptée (%)", description: "Coefficient de perte hydrostatique sur fût (DF-A5).", group: "logic", type: "number", min: 0, max: 30, roles: ["admin", "directeur", "barman"] },
         ],
     },
     registre: {
@@ -281,4 +316,3 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         settings: [], // Settings page has its own interface
     },
 };
-

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import { SettingsGearButton } from "@/shared/components/settings/ContextualSettings";
 import { STATION_CONFIG, KitchenStation } from '..';
 
 interface KDSHeaderProps {
@@ -268,6 +269,9 @@ export function KDSHeader({
                         </span>
                     )}
                 </button>
+
+                {/* Settings Gear Button (RBAC Config) */}
+                <SettingsGearButton pageKey="kds" className="h-10 w-10 shrink-0 rounded-lg" />
             </div>
         </header>
     );

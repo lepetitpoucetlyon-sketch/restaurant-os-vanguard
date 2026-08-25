@@ -3,6 +3,7 @@ import { atomWithStorage } from 'jotai/utils';
 import { GlobalSettings, defaultSettings } from '@nexus/contracts';
 import { tenantScopedJSONStorage } from '@/lib/storage/tenantScopedKey';
 import { SovereignData } from '@/shared/nexus-contract';
+import { SettingsManager } from '@/lib/SettingsManager';
 
 /**
  * GLOBAL SETTINGS ATOMS (GRADE VI)
@@ -37,12 +38,18 @@ export const updatePageSettingsAtom = atom(
     null,
     (get, set, { page, settings }: { page: string; settings: SovereignData }) => {
         const current = get(pageSettingsAtom);
+        const merged = {
+            ...(current[page] || {}),
+            ...settings
+        };
         set(pageSettingsAtom, {
             ...current,
-            [page]: {
-                ...(current[page] || {}),
-                ...settings
-            }
+            [page]: merged
+        });
+
+        // Persistance asynchrone au niveau tenant via Nexus
+        SettingsManager.savePageSettings(page, merged).catch((err) => {
+            console.warn(`[Settings] Failed to persist page settings to Nexus for ${page}:`, err);
         });
     }
 );

@@ -1,4 +1,5 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface RawOcrPassResult {
   extractedText: string;
@@ -17,8 +18,8 @@ export interface DoublePassOcrDecision {
 }
 
 /**
- * DoublePassOcrService — Angle mort L29.
- * OCR double passe avec filtrage/débruitage sur factures et bons de livraison dégradés (taches de gras, thermique effacé) : déclenche la revue manuelle si confiance < 90%.
+ * DoublePassOcrService — Angle mort L29 (DF-J4).
+ * OCR double passe avec filtrage/débruitage sur factures et bons de livraison dégradés : déclenche la revue manuelle si confiance sous le seuil configuré.
  */
 export class DoublePassOcrService {
   static evaluatePasses(
@@ -28,7 +29,8 @@ export class DoublePassOcrService {
     pass2: RawOcrPassResult
   ): DoublePassOcrDecision {
     const avgConfidence = Math.round((pass1.ocrConfidence + pass2.ocrConfidence) / 2);
-    const isReliable = avgConfidence >= 90 && pass1.detectedTotalTtc === pass2.detectedTotalTtc;
+    const minConfidence = getSetting<number>('inventory', 'ocr_confidence_threshold', 90);
+    const isReliable = avgConfidence >= minConfidence && pass1.detectedTotalTtc === pass2.detectedTotalTtc;
 
     const totalEuro = pass2.detectedTotalTtc ?? pass1.detectedTotalTtc ?? 0;
     const extractedTotalTtcInMicrounits = Math.round(totalEuro * 1_000_000);

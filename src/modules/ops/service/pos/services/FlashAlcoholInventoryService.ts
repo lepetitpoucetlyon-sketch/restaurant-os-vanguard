@@ -1,5 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export interface BottleWeighingEntry {
   productId: string;
@@ -79,7 +80,10 @@ export class FlashAlcoholInventoryService {
       recordedAt: Date.now(),
     });
 
-    if (totalLossInMicrounits > 10_000_000) { // > 10€ de perte
+    const alertThresholdEur = getSetting<number>('bar', 'alcohol_loss_alert_eur', 10);
+    const alertThresholdMicrounits = alertThresholdEur * 1_000_000;
+
+    if (totalLossInMicrounits > alertThresholdMicrounits) {
       AuditLogger.logAction({
         adminId,
         action: 'FLASH_INVENTORY_VARIANCE',

@@ -13,6 +13,7 @@
  * RBAC : `reservations.reassign_tbl` (Chef de rang).
  */
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export type MenuProfile = 'quick' | 'standard' | 'tasting' | 'business_lunch';
 
@@ -49,11 +50,14 @@ const BASELINE_MIN_BY_PROFILE: Record<MenuProfile, number> = {
 export class TurnoverPredictionService {
   static readonly DEFAULT_BUFFER_MIN = 15;
 
-  /** Prédit la durée + statut collision. Pur, testable. */
+  /** Prédit la durée + statut collision. Pur, testable (DF-C5 / DF-C6). */
   static predict(input: PredictInput): PredictResult {
     const base = BASELINE_MIN_BY_PROFILE[input.menuProfile];
-    const partySizeFactor = 1 + Math.max(0, input.partySize - 2) * 0.06; // +6 % par convive au-dessus de 2
-    const kdsFactor = 1 + Math.min(0.5, (input.currentKdsDelayMinutes ?? 0) / 60);
+    const factorPerGuest = getSetting<number>('reservations', 'turnover_factor_per_guest_pct', 6) / 100;
+    const maxKdsImpact = getSetting<number>('reservations', 'turnover_kds_impact_max_pct', 50) / 100;
+
+    const partySizeFactor = 1 + Math.max(0, input.partySize - 2) * factorPerGuest; // +6 % par défaut par convive > 2
+    const kdsFactor = 1 + Math.min(maxKdsImpact, (input.currentKdsDelayMinutes ?? 0) / 60);
 
     const predictedDurationMinutes = Math.round(base * partySizeFactor * kdsFactor);
     const predictedEndMs = input.currentStartMs + predictedDurationMinutes * 60 * 1000;

@@ -1,5 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 export type ThawingMethod = 'cold_room_positive' | 'microwave_immediate' | 'hot_water_bath' | 'ambient_air';
 
@@ -22,7 +23,7 @@ export interface ThawingComplianceResult {
 }
 
 /**
- * ThawingProtocolGuard — Angle mort T26.
+ * ThawingProtocolGuard — Angle mort T26 (DF-E3).
  * Protocole sanitaire de décongélation (Règlement CE 852/2004) :
  * Interdiction absolue de la décongélation à l'eau chaude ou à l'air libre (multiplication bactérienne explosive), validation stricte en enceinte réfrigérée +0°C/+4°C.
  */
@@ -60,10 +61,12 @@ export class ThawingProtocolGuard {
       };
     }
 
+    const maxHoldTimePostThawHours = getSetting<number>('haccp', 'thaw_max_hold_hours', 48);
+
     return {
       batchId: req.batchId,
       allowed: true,
-      maxHoldTimePostThawHours: 48, // Utilisation dans les 48h max
+      maxHoldTimePostThawHours, // Utilisation dans les X heures max configurées (défaut 48h)
     };
   }
 }

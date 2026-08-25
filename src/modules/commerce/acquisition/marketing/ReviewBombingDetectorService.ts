@@ -17,9 +17,10 @@
  */
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
+import { getSetting } from '@/lib/settings/SettingsReader';
 
 const BURST_WINDOW_HOURS = 4;
-const BURST_THRESHOLD = 5;
+const DEFAULT_BURST_THRESHOLD = 5;
 const LOW_RATING_THRESHOLD = 2;
 
 export interface IncomingReview {
@@ -51,8 +52,11 @@ export class ReviewBombingDetectorService {
       : 5;
     const noTextRatio = inWindow.length ? noText.length / inWindow.length : 0;
 
+    const burstThreshold = getSetting<number>('seo', 'review_bombing_burst_threshold', DEFAULT_BURST_THRESHOLD);
+    const minNoTextRatio = getSetting<number>('seo', 'review_bombing_no_text_ratio', 50) / 100;
+
     const isSuspicious =
-      lowRated.length >= BURST_THRESHOLD && noTextRatio >= 0.5;
+      lowRated.length >= burstThreshold && noTextRatio >= minNoTextRatio;
 
     return {
       isSuspicious,
