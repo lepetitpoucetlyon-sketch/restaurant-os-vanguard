@@ -23,7 +23,7 @@ let eventBuffer: PendingIntelligenceEvent[] = [];
 let debounceTimeout: NodeJS.Timeout | null = null;
 
 export function registerIntelligenceHandler(): () => void {
-  return NexusEventBus.on(
+  const unbind = NexusEventBus.on(
     'order.paid',
     (payload) => {
       eventBuffer.push({
@@ -64,6 +64,15 @@ export function registerIntelligenceHandler(): () => void {
     },
     { id: 'intelligence-analysis', priority: 'BACKGROUND' }
   );
+
+  return () => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = null;
+    }
+    eventBuffer = [];
+    unbind();
+  };
 }
 
 async function analyzeStockTrend(tenantId: string, items: CartItem[]): Promise<void> {

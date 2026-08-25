@@ -1,17 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
-import type { JournalEntry } from '@nexus/contracts';
+import React, { useState, useEffect } from 'react';
+import type { FiscalSeal } from '@/shared/nexus/contracts/finance.types';
 import { BlockchainLedgerService } from '../../comptabilite/accounting/domain/BlockchainLedgerService';
 import { ShieldCheck, Binary, Clock, Search, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTenant } from '@/shared/hooks';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { db } from '@/lib/offline/offline-store';
 
 export const FiscalAuditView: React.FC = () => {
-    const { data: seals = [], isLoading: _sealsLoading } = useSovereignCollection<JournalEntry>('journalEntries', { autoSync: true });
+    const { activeTenantId } = useTenant();
+    const [seals, setSeals] = useState<FiscalSeal[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isVerifying, setIsVerifying] = useState(false);
     const [auditResult, setAuditResult] = useState<{ success: boolean; message: string } | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const fetchSeals = async () => {
+        if (!activeTenantId) {
+            setIsLoading(false);
+            return;
+        }
+        try {
+            setIsLoading(true);
+            const sealsPath = `tenants/${activeTenantId}/fiscalSeals`;
+            const results = await Nexus.adapter.query<FiscalSeal>(sealsPath, {
+                orderBy: { field: 'timestamp', direction: 'desc' },
+                limit: 100,
+            });
+            if (results && results.length > 0) {
+                setSeals(results);
+            } else {
+                const local = await db.fiscalSeals.orderBy('timestamp').reverse().toArray();
+                setSeals(local as unknown as FiscalSeal[]);
+            }
+        } catch {
+            const local = await db.fiscalSeals.orderBy('timestamp').reverse().toArray();
+            setSeals(local as unknown as FiscalSeal[]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchSeals();
+    }, [activeTenantId]);
 
     const runAudit = async () => {
         setIsVerifying(true);
@@ -32,8 +66,8 @@ export const FiscalAuditView: React.FC = () => {
     };
 
     const filteredSeals = seals.filter(s => 
-        (s.pieceNumber || s.id).toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (s.fiscalSealHash || '').toLowerCase().includes(searchTerm.toLowerCase())
+        ((s.transactionId || s.id || '').toLowerCase().includes(searchTerm.toLowerCase())) || 
+        (s.hash || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -99,31 +133,26 @@ export const FiscalAuditView: React.FC = () => {
                             <div className="space-y-2">
                                 <div className="flex items-center gap-3">
                                     <span className="text-xs font-mono bg-status-success/10 text-status-success px-2 py-1 rounded">
-                                        #{(seal.pieceNumber || seal.id).slice(-8).toUpperCase()}
+                                        #{(seal.transactionId || seal.id || seal.hash || '').slice(-8).toUpperCase()}
                                     </span>
                                     <span className="text-secondary text-sm flex items-center gap-1">
                                         <Clock className="w-3 h-3" />
-                                        {new Date(seal.date).toLocaleString()}
+                                        {seal.timestamp ? new Date(seal.timestamp).toLocaleString() : new Date().toLocaleString()}
                                     </span>
                                 </div>
                                 <div className="text-muted font-mono text-xs break-all">
                                     <span className="text-secondary mr-2 uppercase tracking-tighter">Seal:</span>
-                                    {seal.fiscalSealHash || 'PENDING_SEAL'}
+                                    {seal.hash || 'PENDING_SEAL'}
                                 </div>
                                 <div className="text-secondary font-mono text-nano break-all">
-                                    <span className="text-secondary mr-2 uppercase tracking-tighter">Type:</span>
-                                    {seal.type || 'transaction'}
+                                    <span className="text-secondary mr-2 uppercase tracking-tighter">Algorithm:</span>
+                                    {seal.algorithm || 'SHA-256 (NF525)'}
                                 </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
                                 <div className="px-3 py-1 bg-surface-sidebar text-muted rounded-lg text-xs font-bold border border-default">
-                                    {seal.isValidated ? 'CERTIFIED' : 'PENDING'}
+                                    {seal.signature ? 'CERTIFIED' : 'PENDING'}
                                 </div>
-                                {seal.isSystemGenerated && (
-                                    <span className="text-nano text-status-warning font-bold uppercase italic px-2 py-0.5 bg-status-warning/10 rounded border border-action-primary/20">
-                                        Système
-                                    </span>
-                                )}
                             </div>
                         </div>
                         

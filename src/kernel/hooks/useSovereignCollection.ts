@@ -52,14 +52,14 @@ export function useSovereignCollection<T extends { id: string }>(
     }
 
     const tenantId = options.tenantId;
-    if (!tenantId || tenantId.trim() === '') {
-        throw new Error(
-            `[useSovereignCollection] VIOLATION ISOLATION : Un tenantId valide est strictement requis pour accéder à la collection "${collectionName}". Aucun fallback 'default' autorisé.`
-        );
-    }
-    const basePath = `tenants/${tenantId}/${collectionName}`;
+    const isTenantMissing = !tenantId || tenantId.trim() === '';
+    const basePath = isTenantMissing ? '' : `tenants/${tenantId}/${collectionName}`;
 
     const loadData = useCallback(async () => {
+        if (isTenantMissing) {
+            setIsLoading(false);
+            return;
+        }
         setIsLoading(true);
         setError(null);
         try {
@@ -79,7 +79,7 @@ export function useSovereignCollection<T extends { id: string }>(
                 setIsLoading(false);
             }
         }
-    }, [basePath, collectionName, options.filter]);
+    }, [basePath, collectionName, isTenantMissing, options.filter]);
 
     useEffect(() => {
         isMounted.current = true;
@@ -90,6 +90,9 @@ export function useSovereignCollection<T extends { id: string }>(
     }, [loadData]);
 
     const setItem = useCallback(async (item: T) => {
+        if (isTenantMissing) {
+            throw new Error(`[useSovereignCollection] Action impossible: tenantId manquant pour "${collectionName}".`);
+        }
         const itemId = item.id || IDService.generate(collectionName.slice(0, 4));
         const itemWithId = { ...item, id: itemId };
 
@@ -123,9 +126,12 @@ export function useSovereignCollection<T extends { id: string }>(
                     if (isMounted.current) setIsSyncing(false);
                 });
         }
-    }, [basePath, collectionName, options.autoSync]);
+    }, [basePath, collectionName, isTenantMissing, options.autoSync]);
 
     const updateItem = useCallback(async (id: string, patch: Partial<T>) => {
+        if (isTenantMissing) {
+            throw new Error(`[useSovereignCollection] Action impossible: tenantId manquant pour "${collectionName}".`);
+        }
         setData(prev => prev.map(item => item.id === id ? { ...item, ...patch } : item));
 
         const eventId = IDService.generateEventId(`${collectionName}.update`, id);
@@ -145,9 +151,12 @@ export function useSovereignCollection<T extends { id: string }>(
                     if (isMounted.current) setIsSyncing(false);
                 });
         }
-    }, [basePath, collectionName, options.autoSync]);
+    }, [basePath, collectionName, isTenantMissing, options.autoSync]);
 
     const deleteItem = useCallback(async (id: string) => {
+        if (isTenantMissing) {
+            throw new Error(`[useSovereignCollection] Action impossible: tenantId manquant pour "${collectionName}".`);
+        }
         setData(prev => prev.filter(item => item.id !== id));
 
         const eventId = IDService.generateEventId(`${collectionName}.delete`, id);
@@ -167,7 +176,7 @@ export function useSovereignCollection<T extends { id: string }>(
                     if (isMounted.current) setIsSyncing(false);
                 });
         }
-    }, [basePath, collectionName, options.autoSync]);
+    }, [basePath, collectionName, isTenantMissing, options.autoSync]);
 
     return {
         data,

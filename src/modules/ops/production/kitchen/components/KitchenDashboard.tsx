@@ -20,6 +20,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { useKitchen, useRecipes } from '../../../providers/hooks/kitchenHooks';
 import { useInventory } from '../../../providers/hooks/catalogHooks';
 import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import { useTenant } from '@/shared/hooks';
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
@@ -68,7 +69,8 @@ export function KitchenDashboard() {
         deleteRecipe
     } = recipesHook;
     
-    const { data: wasteLogs = [] } = useSovereignCollection('wasteLogs');
+    const { activeTenantId } = useTenant();
+    const { data: wasteLogs = [] } = useSovereignCollection('wasteLogs', { tenantId: activeTenantId ?? undefined });
     
     const ingredients = (inventory.data || []) as unknown as import("@nexus/contracts").Ingredient[];
 

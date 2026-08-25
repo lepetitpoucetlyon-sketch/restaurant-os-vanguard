@@ -16,10 +16,14 @@ export function registerDeliveryRushModeHandler() {
 
       for (const { adapter } of activeIntegrations) {
           let success = false;
-          if (isPaused) {
-              success = await adapter.suspendStore(tenantId);
-          } else {
-              success = await adapter.resumeStore(tenantId);
+          try {
+              if (isPaused) {
+                  success = await adapter.suspendStore(tenantId);
+              } else {
+                  success = await adapter.resumeStore(tenantId);
+              }
+          } catch (adapterErr) {
+              logger.error(`[DeliveryRushMode] Échec bascule pour l'agrégateur ${adapter.platformId || 'inconnu'}:`, adapterErr);
           }
           if (success) successCount++;
       }

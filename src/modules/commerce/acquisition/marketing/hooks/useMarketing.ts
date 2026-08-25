@@ -4,6 +4,7 @@ import { useAtomValue } from "jotai";
 import { marketingCampaignsNodeAtom, socialAccountsNodeAtom, seoProfileAtom } from "@/store/pillars/commerce";
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
 import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
+import { useTenant } from "@/shared/hooks";
 import type { Campaign } from "@nexus/contracts";
 
 export interface MarketingPost {
@@ -21,12 +22,13 @@ export interface MarketingPost {
  */
 export function useMarketing() {
     useVisibilityPurge('marketingCampaigns');
+    const { activeTenantId } = useTenant();
     const campaigns = useAtomValue(marketingCampaignsNodeAtom);
     const social = useAtomValue(socialAccountsNodeAtom);
     const seo = useAtomValue(seoProfileAtom);
 
-    const { set: upsertCampaign, delete: deleteCampaign } = useSovereignCollection<Campaign>('marketingCampaigns');
-    const { set: upsertPostRaw, delete: deletePost } = useSovereignCollection<MarketingPost & { id: string }>('marketingPosts');
+    const { set: upsertCampaign, delete: deleteCampaign } = useSovereignCollection<Campaign>('marketingCampaigns', { tenantId: activeTenantId ?? undefined });
+    const { set: upsertPostRaw, delete: deletePost } = useSovereignCollection<MarketingPost & { id: string }>('marketingPosts', { tenantId: activeTenantId ?? undefined });
 
     const upsertPost = async (post: Partial<MarketingPost>) => {
         const fullPost: MarketingPost & { id: string } = {
