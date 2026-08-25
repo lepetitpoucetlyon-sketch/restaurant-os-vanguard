@@ -11,11 +11,14 @@
 
 | # | Bloqueur | Nature | Sans lui |
 |---|---|---|---|
-| 1 | **Attestation éditeur NF525** | Juridique | **Ton client** risque 7 500 € d'amende par logiciel (art. 1770 duodecies CGI) |
+| 1 | **Société immatriculée** | Juridique | Pas de SIRET → l'attestation NF525 s'imprime en pointillés, et tu ne peux pas facturer |
 | 2 | **`FISCAL_SIGNING_SECRET` posé** | Technique | Aucune vente n'est scellable |
-| 3 | **Société ouverte + RC Pro** | Juridique | Tu ne peux pas facturer, ni te couvrir |
+| 3 | **RC Pro souscrite** | Juridique | Un bug de TVA chez un client engage ton patrimoine |
 
 Tout le reste est important. Ces trois-là sont **binaires**.
+
+> ✅ **L'attestation NF525 n'est PAS un bloqueur** — le système est déjà construit
+> (MCC + tenant + PDF + historique). Il attend seulement le SIRET. Voir §B.1.
 
 ---
 
@@ -61,29 +64,52 @@ Tout le reste est important. Ces trois-là sont **binaires**.
 
 # B — FISCAL & NF525 *(le plus critique)*
 
-## B.1 Attestation éditeur 🔴 **BLOQUANT ABSOLU**
+## B.1 Attestation éditeur ✅ **DÉJÀ CONSTRUITE — reste 5 variables à remplir**
 
-- [ ] **Attestation individuelle de l'éditeur** délivrée, OU certification NF525 (LNE / Infocert)
+> **Correction du 2026-08-25** : une première version de cette checklist annonçait
+> l'attestation comme « bloqueur absolu à instruire ». **C'est faux — le système est
+> déjà implémenté de bout en bout.** Vérifié dans le code :
 
-> **Pourquoi c'est le point n° 1 de cette checklist**
->
-> Depuis 2018, tout assujetti à la TVA utilisant un logiciel de caisse doit détenir soit une
-> certification, soit une **attestation individuelle de l'éditeur**. En contrôle, c'est le
-> **restaurateur** qui doit la présenter — et c'est lui qui prend l'amende de **7 500 € par
-> logiciel** s'il ne l'a pas (art. 1770 duodecies du CGI), avec 60 jours pour régulariser.
->
-> Ce risque est déjà documenté dans tes propres documents :
-> `docs/VALORISATION_INDEPENDANTE_CLAUDE_GROUNDTRUTH_2026.md:362` — *« NF525 : conformité
-> code ≠ attestation certifiée. Vendre légalement en France exige l'attestation éditeur
-> (ou LNE). Bloque le go-to-market An 1. »*
->
-> **Conformité du code ≠ conformité juridique.** Ton code respecte les 4 conditions
-> (inaltérabilité, sécurisation, conservation, archivage) — mais sans le document, ton
-> client est en infraction.
+**Ce qui existe déjà**
 
-- [ ] Modèle d'attestation préparé (nom éditeur, version logiciel, date, client)
-- [ ] Procédure d'émission automatique à chaque nouveau client
-- [ ] Versionnage : une attestation référence une **version précise** du logiciel
+| Composant | Chemin | Rôle |
+|---|---|---|
+| Document légal A4 | `admin/mcc/components/LegalCertificateA4.tsx` (204 l) | Attestation **2 volets** conforme |
+| Centre de certification MCC | `admin/mcc/components/CertificationCenter.tsx` (253 l) | Génération + historique |
+| Aperçu + historique | `CertPreviewPanel.tsx` · `CertHistoryTab.tsx` | |
+| Génération PDF serveur | `api/admin/compliance/nf525-certificate/route.ts` (142 l) | PDF + hash SHA-256, garde `mcc_support` |
+| Auto-attestation tenant | `compliance/qualite/haccp/components/NF525SelfAudit.tsx:167` | « Générer l'attestation NF525 (PDF) » |
+
+**Le document est juridiquement correct :**
+- Référence : **article 286, I-3° bis du CGI** — le bon article
+- Modèle officiel DGFiP : **BOI-LETTRE-000242** — cité explicitement
+- **VOLET 1** (éditeur) : représentant légal, société, adresse, SIRET, nom du logiciel,
+  version, n° de licence, date de mise sur le marché
+- Les 4 conditions légales reprises mot pour mot : *inaltérabilité, sécurisation,
+  conservation, archivage*
+- **VOLET 2** (utilisateur) : « J'atteste l'utiliser pour mes transactions depuis le… »
+- Avertissement pénal art. 441-1 (45 000 € — faux et usage de faux)
+
+**Ce qui reste réellement à faire**
+
+- [ ] Renseigner les **5 variables d'environnement** de l'éditeur :
+      ```
+      NEXT_PUBLIC_PUBLISHER_NAME       # raison sociale
+      NEXT_PUBLIC_PUBLISHER_REP_NAME   # représentant légal
+      NEXT_PUBLIC_PUBLISHER_ADDRESS
+      NEXT_PUBLIC_PUBLISHER_CITY
+      NEXT_PUBLIC_PUBLISHER_SIRET
+      ```
+      → **Seule dépendance restante : que la société existe** (cf. A.1). Sans SIRET, les
+      champs s'impriment en pointillés. Une fois la société immatriculée, c'est 5 minutes.
+- [ ] **Discipline de versionnage** : l'attestation référence `whiteLabelInstanceConfig.version`.
+      Une attestation vaut pour **une version précise** — définir quand une nouvelle version
+      impose de réémettre les attestations clients.
+- [ ] Signature de l'éditeur : vérifier le mode retenu (manuscrite scannée, électronique)
+- [ ] Tester le parcours complet sur `_demo_restaurant` : générer, télécharger, relire le PDF
+
+> **Nuance qui reste vraie :** conformité du code ≠ conformité juridique. Mais ici le pont
+> entre les deux est **déjà construit** — il attend juste l'identité de la société.
 
 ## B.2 Archivage & contrôle
 
@@ -275,8 +301,8 @@ Tout le reste est important. Ces trois-là sont **binaires**.
 EN PARALLÈLE, TOUT DE SUITE
 ├── A.1 Société          ← délais administratifs longs, à lancer en premier
 ├── A.2 RC Pro           ← délai de souscription
-├── B.1 Attestation NF525 ← LE bloqueur, à instruire immédiatement
 └── H   GitLab + push    ← 1 heure, supprime le risque de tout perdre
+    (B.1 attestation NF525 : déjà construite, se règle en 5 min dès le SIRET obtenu)
 
 ENSUITE — TECHNIQUE (5-6 sessions, cf. PLAN-ACTION-UNIFIE vagues 0-1)
 ├── D.1 error.tsx · routes API · impression
@@ -298,22 +324,18 @@ AVANT DE SIGNER
 
 ---
 
-# Les 5 choses qui manquaient le plus à ta liste
+# Les 4 choses qui manquaient le plus à ta liste
 
-1. **Attestation éditeur NF525** — c'est **ton client** qui prend l'amende de 7 500 €.
-   Ton code est conforme ; le document n'existe pas. Déjà identifié comme bloquant dans
-   tes propres documents de valorisation.
-
-2. **RC Pro** — un bug de TVA chez un client déclenche un redressement. Sans assurance,
+1. **RC Pro** — un bug de TVA chez un client déclenche un redressement. Sans assurance,
    c'est ton patrimoine personnel.
 
-3. **DPA (art. 28 RGPD)** — obligatoire, pas optionnel. Le premier client sérieux, ou son
+2. **DPA (art. 28 RGPD)** — obligatoire, pas optionnel. Le premier client sérieux, ou son
    expert-comptable, te le réclamera.
 
-4. **Astreinte** — un restaurant tombe en panne **samedi 20h**, jamais mardi 10h.
+3. **Astreinte** — un restaurant tombe en panne **samedi 20h**, jamais mardi 10h.
    Sans réponse à cette question, le premier week-end difficile détruira la relation.
 
-5. **Allergènes = donnée de santé** — régime RGPD renforcé. Presque personne ne le sait,
+4. **Allergènes = donnée de santé** — régime RGPD renforcé. Presque personne ne le sait,
    et toi tu en stockes à côté de données nominatives de réservation.
 
 ---
