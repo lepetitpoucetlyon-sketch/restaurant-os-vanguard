@@ -3,6 +3,7 @@
 import { LayoutGrid, Layers } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
+import { useLexicon } from "@/shared/hooks/useLexicon";
 import type { Table } from "@nexus/contracts";
 
 interface TableSelectorHeaderProps {
@@ -12,6 +13,7 @@ interface TableSelectorHeaderProps {
 }
 
 export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSelectorHeaderProps) {
+    const lexicon = useLexicon();
     const activeCount = tables.filter((t) => (['seated', 'ordered', 'eating', 'paying'] as const).includes(t.status as 'seated')).length;
 
     return (
@@ -24,7 +26,7 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
             >
                 <span className="text-accent-gold text-nano font-black uppercase tracking-[0.4em] mb-2">Protocole Service</span>
                 <h2 className="text-4xl md:text-5xl font-serif font-black text-text-primary tracking-tighter italic">
-                    Plan de <span className="text-accent-gold not-italic">Salle</span>.
+                    Plan de <span className="text-accent-gold not-italic">{lexicon.tableLabel === 'Table' ? 'Salle' : lexicon.tableLabel}</span>.
                 </h2>
             </motion.div>
 

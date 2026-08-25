@@ -15,6 +15,7 @@ import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
 import { SovereignMath } from "@/shared/services/SovereignMath";
+import { FiscalReceiptSealZone } from "@/shared/components/ui/FiscalReceiptSealZone";
 
 interface CartProps {
     items: CartItem[];
@@ -218,29 +219,31 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
 
             {/* Bottom Panel */}
             <div className="p-6 lg:p-10 border-t border-border/50 bg-surface-card/50 dark:bg-surface-sidebar/20 backdrop-blur-3xl">
-                <div className="space-y-4 mb-8">
-                    <div className="flex justify-between items-center text-nano font-black text-text-muted uppercase tracking-widest">
-                        <span>{t('pos.cart.subtotal')}</span>
-                        <div className="flex items-center gap-4">
-                            {totalInMicrounits > 0 && (
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
-                                    <Sparkles className="w-3 h-3 text-accent-gold" />
-                                    <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInCents / 100, globalInflationRate).toFixed(1)}%</span>
-                                </div>
-                            )}
+                <FiscalReceiptSealZone zoneId="fiscal-seal-receipt-total">
+                    <div className="space-y-4 mb-8">
+                        <div className="flex justify-between items-center text-nano font-black text-text-muted uppercase tracking-widest">
+                            <span>{t('pos.cart.subtotal')}</span>
+                            <div className="flex items-center gap-4">
+                                {totalInMicrounits > 0 && (
+                                    <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
+                                        <Sparkles className="w-3 h-3 text-accent-gold" />
+                                        <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInCents / 100, globalInflationRate).toFixed(1)}%</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-text-muted mt-1 px-1">
+                            <span className="text-nano font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
+                            <span className="font-mono text-sm">{formatMu(htInMicrounits)}</span>
+                        </div>
+                        <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
+                            <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
+                            <span className="text-4xl font-serif font-black italic text-text-primary tracking-tighter drop-shadow-glow">
+                                {formatMu(totalInMicrounits)}
+                            </span>
                         </div>
                     </div>
-                    <div className="flex justify-between text-text-muted mt-1 px-1">
-                        <span className="text-nano font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
-                        <span className="font-mono text-sm">{formatMu(htInMicrounits)}</span>
-                    </div>
-                    <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
-                        <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
-                        <span className="text-4xl font-serif font-black italic text-text-primary tracking-tighter drop-shadow-glow">
-                            {formatMu(totalInMicrounits)}
-                        </span>
-                    </div>
-                </div>
+                </FiscalReceiptSealZone>
 
                 <div className="grid grid-cols-2 gap-4">
                     <button

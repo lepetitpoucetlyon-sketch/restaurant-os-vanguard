@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Search, Plus, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { useLexicon } from "@/shared/hooks/useLexicon";
 import type { Customer } from "@nexus/contracts";
 
 interface CustomerSearchStepProps {
@@ -22,6 +23,7 @@ export function CustomerSearchStep({
     setSelectedCustomer,
     setStep,
 }: CustomerSearchStepProps) {
+    const lexicon = useLexicon();
     return (
         <motion.div
             key="step1"
@@ -34,7 +36,7 @@ export function CustomerSearchStep({
                 <div className="space-y-4">
                     <div className="flex items-center gap-3 px-2">
                         <Search className="w-4 h-4 text-accent" />
-                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Identification de l'Hôte</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Identification — {lexicon.customerLabel}</label>
                     </div>
                     <div className="relative group">
                         <Search strokeWidth={1.5} className="absolute left-8 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted/30 group-focus-within:text-accent transition-colors" />

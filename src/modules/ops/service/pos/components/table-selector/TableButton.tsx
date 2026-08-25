@@ -2,6 +2,7 @@
 
 import { Users, Sparkles } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { useLexicon } from "@/shared/hooks/useLexicon";
 import type { Table } from "@nexus/contracts";
 
 interface TableButtonProps {
@@ -11,6 +12,7 @@ interface TableButtonProps {
 }
 
 export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
+    const lexicon = useLexicon();
     const getStatusStyles = () => {
         switch (table.status) {
             case 'free':
@@ -120,7 +122,7 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
                 </div>
 
                 <div className="flex flex-col items-center">
-                    <span className="text-nano md:text-[12px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-primary transition-colors">Table</span>
+                    <span className="text-nano md:text-[12px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-primary transition-colors">{lexicon.tableLabel}</span>
                     <div className="flex items-center gap-2 mt-1">
                         <Users className={cn("w-3 md:w-3.5 h-3 md:h-3.5", styles.icon)} />
                         <span className="text-micro md:text-[13px] font-bold text-text-primary font-serif italic">{table.seats} Pers.</span>
