@@ -22,20 +22,20 @@ export function PrepMeasurementGrid({
     setPortions,
 }: PrepMeasurementGridProps) {
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
             <div className="space-y-4">
-                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2">RENDEMENT *</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 block">RENDEMENT *</label>
                 <input
                     type="number"
                     step="0.01"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     placeholder="0.00"
-                    className="w-full px-6 py-5 bg-surface-card border border-border/40 rounded-2xl text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
+                    className="w-full px-4 sm:px-6 py-3.5 sm:py-5 bg-surface-card border border-border/40 rounded-2xl text-[18px] sm:text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
                 />
             </div>
             <div className="space-y-4">
-                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-center block">UNITÉ PROTOCOLE</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-left sm:text-center block">UNITÉ PROTOCOLE</label>
                 <PremiumSelect
                     value={unit}
                     onChange={(val) => setUnit(val as IngredientUnit)}
@@ -46,13 +46,13 @@ export function PrepMeasurementGrid({
                 />
             </div>
             <div className="space-y-4">
-                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-right block">PORTIONS</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 text-left sm:text-right block">PORTIONS</label>
                 <input
                     type="number"
                     value={portions}
                     onChange={(e) => setPortions(e.target.value)}
                     placeholder="OPT"
-                    className="w-full px-6 py-5 bg-surface-card border border-border/40 rounded-2xl text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
+                    className="w-full px-4 sm:px-6 py-3.5 sm:py-5 bg-surface-card border border-border/40 rounded-2xl text-[18px] sm:text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
                 />
             </div>
         </div>

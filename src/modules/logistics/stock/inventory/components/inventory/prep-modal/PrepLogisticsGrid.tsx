@@ -21,7 +21,7 @@ export function PrepLogisticsGrid({
     activeLocations,
 }: PrepLogisticsGridProps) {
     return (
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
             <div className="space-y-4">
                 <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                     <MapPin className="w-3.5 h-3.5 text-accent-gold" />

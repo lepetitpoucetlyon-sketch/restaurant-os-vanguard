@@ -138,25 +138,25 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
             showClose={false}
             className="p-0 border-none bg-transparent"
         >
-            <div className="relative bg-bg-primary border border-white/40 rounded-[3rem] shadow-premium w-full max-h-[90vh] flex flex-col overflow-hidden group/modal">
+            <div className="relative bg-bg-primary border border-white/40 rounded-2xl sm:rounded-[3rem] shadow-premium w-full max-h-[90vh] flex flex-col overflow-hidden group/modal">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-accent-gold/10 blur-[100px] pointer-events-none rounded-full" />
                 <div className="absolute bottom-0 left-0 w-60 h-60 bg-accent/5 blur-[80px] pointer-events-none rounded-full" />
 
                 {/* Header */}
-                <div className="p-10 border-b border-border/40 bg-surface-card/40 backdrop-blur-md relative z-10">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 rounded-[22px] bg-text-primary flex items-center justify-center shadow-premium">
-                                <Package className="w-8 h-8 text-text-primary" strokeWidth={1.5} />
+                <div className="p-5 sm:p-8 lg:p-10 border-b border-border/40 bg-surface-card/40 backdrop-blur-md relative z-10">
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-[22px] bg-text-primary flex items-center justify-center shadow-premium shrink-0">
+                                <Package className="w-6 h-6 sm:w-8 sm:h-8 text-text-primary" strokeWidth={1.5} />
                             </div>
-                            <div>
-                                <h2 className="text-4xl font-serif font-black text-text-primary italic tracking-tight">Réception Archive.</h2>
-                                <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-2">Scellement de nouvelles ressources</p>
+                            <div className="min-w-0">
+                                <h2 className="text-xl sm:text-2xl lg:text-4xl font-serif font-black text-text-primary italic tracking-tight truncate">Réception Archive.</h2>
+                                <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-1 sm:mt-2">Scellement de nouvelles ressources</p>
                             </div>
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 rounded-2xl bg-surface-card/60 hover:bg-surface-card flex items-center justify-center transition-all border border-border/40 hover:rotate-90 hover:scale-110 shadow-soft"
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-surface-card/60 hover:bg-surface-card flex items-center justify-center transition-all border border-border/40 hover:rotate-90 hover:scale-110 shadow-soft shrink-0"
                         >
                             <X className="w-5 h-5 text-text-muted" />
                         </button>
@@ -164,7 +164,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                 </div>
 
                 {/* Form Content */}
-                <div className="flex-1 overflow-y-auto p-10 space-y-10 elegant-scrollbar relative z-10">
+                <div className="flex-1 overflow-y-auto p-5 sm:p-8 lg:p-10 space-y-6 sm:space-y-10 elegant-scrollbar relative z-10">
                     {success ? (
                         <StockSuccessView />
                     ) : (
@@ -193,12 +193,12 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
 
                 {/* Footer */}
                 {!success && (
-                    <div className="p-10 border-t border-border/40 bg-surface-card/40 backdrop-blur-md flex items-center justify-between gap-6 relative z-10">
+                    <div className="p-5 sm:p-8 lg:p-10 border-t border-border/40 bg-surface-card/40 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 relative z-10">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={onClose}
-                            className="px-10 py-5 text-nano font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-[22px]"
+                            className="px-6 sm:px-10 py-3 sm:py-5 text-nano font-black uppercase tracking-[0.5em] text-text-muted hover:text-text-primary transition-all rounded-xl sm:rounded-[22px] w-full sm:w-auto text-center"
                         >
                             ANNULATION
                         </motion.button>
@@ -208,16 +208,16 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                             onClick={handleSubmit}
                             disabled={!selectedIngredient || !quantity || !storageLocation || !dlc || isSubmitting}
                             className={cn(
-                                "flex items-center gap-6 px-16 py-6 rounded-[30px] text-micro font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium",
+                                "flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-16 py-3.5 sm:py-6 rounded-xl sm:rounded-[30px] text-micro font-black uppercase tracking-[0.5em] transition-all duration-500 shadow-premium w-full sm:w-auto",
                                 selectedIngredient && quantity && storageLocation && dlc
                                     ? "bg-text-primary text-text-primary hover:bg-accent-gold"
                                     : "bg-text-muted/10 text-text-muted/20 cursor-not-allowed"
                             )}
                         >
                             {isSubmitting ? (
-                                <RefreshCw className="w-6 h-6 animate-spin" />
+                                <RefreshCw className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
                             ) : (
-                                <Plus className="w-6 h-6" />
+                                <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                             )}
                             {isSubmitting ? "SCELLAGE..." : "SCELLER DANS L'ARCHIVE"}
                         </motion.button>

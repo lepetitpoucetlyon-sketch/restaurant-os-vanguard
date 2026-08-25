@@ -49,7 +49,7 @@ export function StockReceptionForm({
     handleInvoiceScanned,
 }: StockReceptionFormProps) {
     return (
-        <div className="space-y-10">
+        <div className="space-y-6 sm:space-y-10">
             {/* Vision Scanner — scan invoice to auto-fill (log-4) */}
             <div className="space-y-4">
                 <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
@@ -80,7 +80,7 @@ export function StockReceptionForm({
             </div>
 
             {/* Quantity & Unit */}
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
                 <div className="space-y-4">
                     <label className="flex items-center gap-3 text-nano font-black text-text-primary uppercase tracking-[0.4em] px-2">
                         MASSE / VOLUME *
@@ -91,7 +91,7 @@ export function StockReceptionForm({
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
                         placeholder="0.00"
-                        className="w-full px-8 py-5 bg-surface-card border border-border/40 rounded-2xl text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
+                        className="w-full px-4 sm:px-8 py-3.5 sm:py-5 bg-surface-card border border-border/40 rounded-2xl text-[18px] sm:text-[20px] font-serif italic font-black text-text-primary text-center focus:outline-none focus:border-accent-gold transition-all tracking-widest shadow-soft"
                     />
                 </div>
                 <div className="space-y-4">
@@ -146,7 +146,7 @@ export function StockReceptionForm({
             </div>
 
             {/* Dates Section */}
-            <div className="grid grid-cols-2 gap-8 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 pt-2 sm:pt-4">
                 <div className="space-y-4">
                     <label className="flex items-center gap-3 text-nano font-black text-text-muted uppercase tracking-[0.4em] px-2 outline-none">
                         <Calendar className="w-4 h-4 text-accent-gold" />
@@ -156,7 +156,7 @@ export function StockReceptionForm({
                         type="date"
                         value={receptionDate}
                         onChange={(e) => setReceptionDate(e.target.value)}
-                        className="w-full px-8 py-5 bg-surface-card/60 border border-border/40 rounded-2xl text-[14px] font-black text-text-primary focus:outline-none focus:border-accent-gold transition-all shadow-soft"
+                        className="w-full px-4 sm:px-8 py-3.5 sm:py-5 bg-surface-card/60 border border-border/40 rounded-2xl text-[14px] font-black text-text-primary focus:outline-none focus:border-accent-gold transition-all shadow-soft"
                     />
                 </div>
                 <div className="space-y-4">
@@ -168,7 +168,7 @@ export function StockReceptionForm({
                         type="date"
                         value={dlc}
                         onChange={(e) => setDlc(e.target.value)}
-                        className="w-full px-8 py-5 bg-error/5 border border-error/20 rounded-2xl text-[14px] font-black text-error focus:outline-none focus:border-error transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] focus:ring-4 focus:ring-error/5"
+                        className="w-full px-4 sm:px-8 py-3.5 sm:py-5 bg-error/5 border border-error/20 rounded-2xl text-[14px] font-black text-error focus:outline-none focus:border-error transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] focus:ring-4 focus:ring-error/5"
                     />
                 </div>
             </div>
