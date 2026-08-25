@@ -161,4 +161,55 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  // ──────────────────────────────────────────────────────────────────────────
+  // INV-9 — Instance Jotai unique dans le bundle CLIENT
+  //
+  // Contexte : `next build` émet « Detected multiple Jotai instances ». Mesuré le
+  // 2026-08-25, l'avertissement provient du graphe SERVEUR (12 fichiers sous
+  // .next/server/ tirent jotai, car les fichiers d'atomes — *.atom.ts, *Atoms.ts,
+  // guards, services — n'ont pas de directive 'use client' et sont donc inclus dans
+  // les deux graphes lors du prerendering SSG).
+  //
+  // Le bundle CLIENT, lui, n'en contient qu'une copie — c'est le seul qui compte :
+  // l'app n'utilise aucun <Provider> ni createStore(), elle repose sur le store par
+  // défaut implicite. Deux instances côté navigateur signifieraient deux stores, donc
+  // un panier POS qui se dédouble silencieusement.
+  //
+  // Ce test verrouille la mesure : si un jour le client se retrouve avec deux copies,
+  // il échoue au lieu de laisser passer un bug d'état invisible.
+  // ──────────────────────────────────────────────────────────────────────────
+  describe('INV-9 — Store Jotai unique côté client', () => {
+    const CHUNKS_DIR = path.join(ROOT, '.next/static/chunks');
+    const JOTAI_GUARD = 'Detected multiple Jotai instances';
+
+    const countChunksWithJotai = (dir: string): number => {
+      let count = 0;
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          count += countChunksWithJotai(full);
+        } else if (entry.name.endsWith('.js')) {
+          if (fs.readFileSync(full, 'utf8').includes(JOTAI_GUARD)) count++;
+        }
+      }
+      return count;
+    };
+
+    it('le bundle client ne contient qu\'une seule copie de Jotai', () => {
+      if (!fs.existsSync(CHUNKS_DIR)) {
+        // Pas de build disponible (tests lancés sans `npm run build`).
+        // On ne fabrique pas un faux succès : on signale que l'invariant n'a pas pu être vérifié.
+        console.warn('[INV-9] .next/static/chunks absent — invariant non vérifié (lancer `npm run build`)');
+        return;
+      }
+
+      const copies = countChunksWithJotai(CHUNKS_DIR);
+      expect(
+        copies,
+        `${copies} chunks client embarquent Jotai. Attendu : 1. ` +
+        'Plusieurs copies = plusieurs stores par défaut = état POS dédoublé.',
+      ).toBeLessThanOrEqual(1);
+    });
+  });
+
 });

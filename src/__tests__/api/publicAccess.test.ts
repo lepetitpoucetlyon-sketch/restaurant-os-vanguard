@@ -176,8 +176,71 @@ describe('getPublicAccessConfig — fail-open behavior', () => {
         const { getPublicAccessConfig, invalidatePublicAccessCache } = await import('@/lib/mcc/PublicAccessConfig');
         invalidatePublicAccessCache();
         const cfg = await getPublicAccessConfig();
-        // Zod safeParse échoue → fallback DEFAULT (ouvert)
+        // Aucune valeur saine connue → fallback DEFAULT (ouvert)
         expect(cfg.landingEnabled).toBe(true);
         expect(cfg.signupEnabled).toBe(true);
+    });
+});
+
+describe('getPublicAccessConfig — last known good (kill-switch résilient)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it('conserve le kill-switch FERMÉ quand Nexus tombe après une lecture saine', async () => {
+        vi.resetModules();
+        const { getPublicAccessConfig, invalidatePublicAccessCache, __resetPublicAccessStateForTests } =
+            await import('@/lib/mcc/PublicAccessConfig');
+        __resetPublicAccessStateForTests();
+
+        // 1. L'admin MCC a fermé la plateforme — lecture saine.
+        mockNexusGet.mockResolvedValueOnce({ landingEnabled: false, signupEnabled: false });
+        const first = await getPublicAccessConfig();
+        expect(first.landingEnabled).toBe(false);
+        expect(first.signupEnabled).toBe(false);
+
+        // 2. Nexus tombe. Sans last known good, la plateforme se rouvrirait.
+        invalidatePublicAccessCache();
+        mockNexusGet.mockRejectedValueOnce(new Error('NEXUS_DOWN'));
+        const during = await getPublicAccessConfig();
+        expect(during.landingEnabled).toBe(false);
+        expect(during.signupEnabled).toBe(false);
+    });
+
+    it('conserve le dernier état sain si la config devient invalide', async () => {
+        vi.resetModules();
+        const { getPublicAccessConfig, invalidatePublicAccessCache, __resetPublicAccessStateForTests } =
+            await import('@/lib/mcc/PublicAccessConfig');
+        __resetPublicAccessStateForTests();
+
+        mockNexusGet.mockResolvedValueOnce({ landingEnabled: true, signupEnabled: false });
+        await getPublicAccessConfig();
+
+        invalidatePublicAccessCache();
+        mockNexusGet.mockResolvedValueOnce({ garbage: 'invalid' });
+        const cfg = await getPublicAccessConfig();
+        expect(cfg.signupEnabled).toBe(false); // l'intention admin survit
+    });
+
+    it('ne fige pas le repli dans le cache TTL — retente dès l\'appel suivant', async () => {
+        vi.resetModules();
+        const { getPublicAccessConfig, invalidatePublicAccessCache, __resetPublicAccessStateForTests } =
+            await import('@/lib/mcc/PublicAccessConfig');
+        __resetPublicAccessStateForTests();
+
+        mockNexusGet.mockResolvedValueOnce({ landingEnabled: false, signupEnabled: false });
+        await getPublicAccessConfig();
+
+        // Panne transitoire…
+        invalidatePublicAccessCache();
+        mockNexusGet.mockRejectedValueOnce(new Error('NEXUS_DOWN'));
+        await getPublicAccessConfig();
+
+        // …puis rétablissement : la lecture suivante doit repartir vers Nexus,
+        // sans attendre l'expiration d'un cache pollué par le repli.
+        mockNexusGet.mockResolvedValueOnce({ landingEnabled: true, signupEnabled: true });
+        const restored = await getPublicAccessConfig();
+        expect(restored.landingEnabled).toBe(true);
+        expect(restored.signupEnabled).toBe(true);
     });
 });
