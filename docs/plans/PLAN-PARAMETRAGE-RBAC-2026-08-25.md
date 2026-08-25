@@ -253,6 +253,18 @@ Ajouter les entrées dans `config-registry.ts`, **groupées par métier** — c'
   group: "logic", type: "number", min: 6, max: 96,
   roles: ["admin", "directeur", "chef_cuisinier"] },              // DF-E3
 
+// DF-E1 — un seuil PAR CATÉGORIE, borné par le plancher légal (cf. §cascade)
+{ key: "temp_max_meat", label: "Température max — viandes (°C)",
+  group: "logic", type: "number", min: 0, max: 4,
+  roles: ["admin", "directeur", "chef_cuisinier"] },
+{ key: "temp_max_fish", label: "Température max — poissons & fruits de mer (°C)",
+  group: "logic", type: "number", min: 0, max: 2,
+  roles: ["admin", "directeur", "chef_cuisinier"] },
+{ key: "temp_max_dairy", label: "Température max — produits laitiers (°C)",
+  group: "logic", type: "number", min: 0, max: 8,
+  roles: ["admin", "directeur", "chef_cuisinier"] },
+// … 9 autres catégories — table complète à valider par un référent hygiène
+
 { key: "escalation_target", label: "Escalade après absence de réaction",
   group: "logic", type: "select",
   options: [{ value: "chef", label: "Chef de cuisine" },
@@ -290,15 +302,82 @@ que lorsque quelqu'un décide de le changer.
 
 ---
 
+## Le principe général : un défaut à chaque niveau, surchargeable à chaque niveau
+
+> *« Il faut mettre des défauts mais configurables. »*
+
+Ce n'est pas un réglage unique par décision — c'est une **cascade**. Le projet applique déjà
+ce modèle pour l'UI (`resolveUI` : tenant → verticale → défaut partagé). Il faut l'appliquer
+aux valeurs métier.
+
+### DF-E1 revu — le cas emblématique
+
+J'avais classé DF-E1 comme « simple divergence à corriger ». **C'est faux.** Le vrai problème
+est plus profond : **un seuil unique pour tous les aliments est faux par construction.**
+
+Une viande maturée, un poisson cru, des légumes et des surgelés n'ont ni les mêmes plages,
+ni la même tolérance. Un seuil global à 5 °C alerte à tort sur les uns et laisse passer
+les autres.
+
+**Les quatre niveaux — état mesuré au 2026-08-25 :**
+
+| Niveau | Portée | Emplacement | État |
+|---|---|---|---|
+| **N3** | Par produit | `ProductQualityConfig.tempRange` · atome `productQualityConfigs` | 🟠 Schéma et atome créés — **0 consommateur** |
+| **N2** | Par capteur / zone | `haccp.ts:72-73` (`alertMinTemp` / `alertMaxTemp`) | ✅ Fonctionnel |
+| **N1** | Par catégorie d'aliment | table de référence sur les **12 `ProductCategory`** | ❌ **N'existe pas** |
+| **N0** | Filet global | `useComplianceMapper.ts:14` — `temperature > 5` | ❌ En dur, court-circuite tout |
+
+**12 catégories sont déclarées** (`vegetables`, `meat`, `poultry`, `fish_seafood`, `dairy`,
+`eggs`, `charcuterie`, `frozen`, `dry_goods`, `beverages`, `fruits`, `other`) — **aucune
+n'a de seuil associé.**
+
+### La règle de résolution à implémenter
+
+```
+seuil(produit) =
+     tempRange du produit                 (N3 — le plus précis)
+  ?? seuils du capteur de la zone         (N2)
+  ?? défaut de la catégorie d'aliment     (N1 — à créer)
+  ?? filet global                         (N0)
+```
+
+Chaque niveau porte un **défaut** et reste **surchargeable** par le niveau au-dessus.
+C'est exactement le principe demandé, appliqué à une donnée sanitaire.
+
+### ⚠️ Une contrainte propre à l'HACCP : le plancher réglementaire
+
+Contrairement aux seuils KDS ou bar, les températures de conservation ont des **minima
+légaux** (règlement CE 852/2004, arrêté du 21 décembre 2009). Un restaurateur peut être
+**plus strict**, jamais plus laxiste.
+
+Le paramétrage doit donc être **borné par le bas** :
+```typescript
+{ key: "temp_max_meat", label: "Température max — viandes (°C)",
+  group: "logic", type: "number",
+  min: 0, max: 4,                      // ← le max ne peut pas dépasser le plancher légal
+  roles: ["admin", "directeur", "chef_cuisinier"] }
+```
+
+C'est la différence entre « configurable » et « libre ». Le champ `min`/`max` de
+`PageSettingConfig` sert précisément à ça — et rend le plancher légal **inviolable par l'UI**.
+
+**Travail à prévoir :** une table `CATEGORY_TEMP_DEFAULTS` de 12 entrées, validée par un
+référent hygiène, avec les bornes légales — puis brancher la cascade N3→N0 et supprimer
+le `> 5` de `useComplianceMapper`.
+
+**Effort :** +1 session (à ajouter à la Phase 4).
+
+---
+
 ## Ce qui reste hors de portée de ce plan
 
-Trois décisions ne se paramètrent pas — elles se corrigent ou se mesurent :
+Deux décisions ne se paramètrent pas :
 
 | Décision | Pourquoi pas un réglage |
 |---|---|
-| **DF-E1** (seuil 5 °C en dur vs configurable) | Ce n'est pas un arbitrage, c'est une **divergence** : deux vérités sur une donnée sanitaire. À corriger. |
-| **DF-A6** (dilution cocktails) | Six coefficients physiques. Les exposer serait ingérable — les documenter comme approximation assumée. |
-| **Zone H** (RH) | Code du travail et convention HCR. Ce sont des **plafonds légaux**, pas des préférences. Un réglage donnerait l'illusion qu'on peut les dépasser. |
+| **DF-A6** (dilution cocktails) | Six coefficients physiques. Les exposer serait ingérable — les documenter comme approximation assumée, ou exposer un seul facteur de correction global. |
+| **Zone H** (RH) | Code du travail et convention HCR. Ce sont des **plafonds légaux**, pas des préférences. Un réglage donnerait l'illusion qu'on peut les dépasser — même logique que le plancher HACCP ci-dessus, mais ici il n'y a rien à choisir. |
 
 ---
 
@@ -309,9 +388,10 @@ PHASE 1  1,5 sess.  Persistance tenant       ← prérequis absolu
 PHASE 2  1   sess.  Lecteur non-React        ← dépend de rien, parallélisable avec 1
 PHASE 3  1,5 sess.  Déclarer les 29 réglages ← dépend de 1 (sinon local à la tablette)
 PHASE 4  2   sess.  Remplacer les constantes ← dépend de 2 et 3
+PHASE 5  1   sess.  Cascade HACCP N3→N0      ← table catégories + bornes légales
 ```
 
-**Total : 6 sessions.**
+**Total : 7 sessions.**
 
 ### Conflits identifiés
 

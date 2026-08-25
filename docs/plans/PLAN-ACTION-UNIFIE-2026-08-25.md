@@ -8,7 +8,53 @@
 
 ---
 
-# PARTIE 0 — État réel au moment de la rédaction
+# ⚡ ÉTAT AU 2026-08-25 (fin de journée) — re-mesuré
+
+> Mesuré sur `main@9c17bca56` après les sessions Antigravity.
+> **Ce bloc prime sur la Partie 0 ci-dessous, rédigée plus tôt dans la journée.**
+
+## ✅ VAGUE 0 — TERMINÉE
+
+| Item | Vérification | État |
+|---|---|---|
+| 0.1 Sauvegarde du dépôt | 1 bundle présent sur le Bureau | ✅ |
+| 0.2 Sessions fantômes | `grep -c "| active |"` → **0** | ✅ |
+| 0.3 Imports POS anti-cycle documentés | 3 lignes dans `BARREL-EXCEPTIONS.md:55-57` | ✅ |
+| 0.4 Règle git | `AGENTS.md:38` — interdiction de `git add .` / `-A` | ✅ |
+
+## ✅ Autres items livrés depuis la rédaction
+
+| Item | Plan d'origine | Vérification | État |
+|---|---|---|---|
+| Cycles `StatCard` (garage/salon) | signalés rouges | **madge = 0 cycle** | ✅ Corrigés |
+| Rangement `ui/` — `atomic/` | Lot 3.2 | dossier supprimé | ✅ |
+| Rangement `ui/` — casse | Lot 3.1 | seul `index.ts` en minuscule (normal) | ✅ |
+| Overrides nav | 4 variantes manquantes | **les 12 présentes** | ✅ |
+| Microunits | 821 | **818** + ratchet abaissé | 🟡 Progresse |
+
+## ❌ Ce qui reste ouvert
+
+| Item | Mesure | Vague |
+|---|---|---|
+| **Pages d'erreur** | `error.tsx` + `not-found` + `global-error` = **0** | 1.1 🔴 |
+| **Routes API sans garde** | **39** / 210 | 1.2 🔴 |
+| **`FISCAL_SIGNING_SECRET`** | absent de l'environnement | 1.4 🔴 |
+| Résilience d'impression | file d'attente absente | 1.3 |
+| Sentry instrumenté | 4 fichiers | 1.5 |
+| `_demo_restaurant` provisionné | non vérifié | 1.6 |
+| `useLexicon()` branché | **0 consommateur** | 3.3 |
+| `.tsx` à la racine `shared/components/` | **8** | 3.3 |
+| Barrel violations | **45** | 3 |
+| Sauvegarde distante | **71 commits** non poussés | — |
+
+## Conclusion
+
+**La Vague 0 est close.** Le chemin critique restant est la **Vague 1**, et il tient
+en trois lignes rouges : `error.tsx`, les 39 routes, le secret fiscal.
+
+---
+
+# PARTIE 0 — État réel au moment de la rédaction *(matin — historique)*
 
 **Re-mesuré avant de planifier.** Antigravity a exécuté `trilogy-execution-sprint2`
 (désormais `terminée`) pendant la rédaction des audits — planifier du travail déjà fait

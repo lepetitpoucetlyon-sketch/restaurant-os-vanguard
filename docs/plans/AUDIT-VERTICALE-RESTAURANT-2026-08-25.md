@@ -1,5 +1,12 @@
 # Audit complet — Verticale Restaurant
 
+> ⚡ **MAJ 2026-08-25 (fin de journée), re-mesuré sur `main@9c17bca56`**
+> — **Lot 1.1** overrides nav : ✅ les 12 variantes présentes
+> — **Lot 3.1** casse `ui/` : ✅ unifiée · **Lot 3.2** `atomic/` : ✅ supprimé
+> — **Lot 3.3** racine `shared/components/` : ❌ 8 `.tsx` encore en vrac
+> — **Lot 1.3** `useLexicon()` : ❌ toujours 0 consommateur
+> — **Lot 4** provisioning `_demo_restaurant` : ❓ non vérifié
+
 > Réalisé le **2026-08-25** · ground truth mesuré sur `main@a31821a0d`
 > Périmètre : verticale restaurant, gestion MCC (ref/test/demo), couches généralistes,
 > design system, structure UI, promesse de customisation.
