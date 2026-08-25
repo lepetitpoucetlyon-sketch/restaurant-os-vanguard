@@ -73,7 +73,7 @@ export function SplitBillDialog({
     const remainingAmount = total - convivePayments.filter(g => g.paid).reduce((sum, g) => sum + g.amount, 0);
 
     const getConviveTotal = (conviveIndex: number): number => {
-        if (mode === 'equal') return amountPerPerson;
+        if (mode === 'equal') return convivePayments[conviveIndex]?.amount ?? amountPerPerson;
         if (mode === 'custom') return customAmounts[conviveIndex] || 0;
         const conviveItems = selectedItems[conviveIndex] || [];
         return items
