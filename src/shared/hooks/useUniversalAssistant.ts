@@ -118,7 +118,7 @@ export function useUniversalAssistant() {
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'j') {
                 e.preventDefault();
                 setViewMode(prev => (prev === 'COLLAPSED' ? 'DOCK_RIGHT' : 'COLLAPSED'));
             }

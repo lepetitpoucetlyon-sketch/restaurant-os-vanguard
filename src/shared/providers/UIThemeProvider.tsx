@@ -31,6 +31,17 @@ export const UIThemeProvider: React.FC<{ children: ReactNode, unreadCount: numbe
 
     const settingsModule = useSettingsInternal();
 
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                setIsCommandOpen(prev => !prev);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [setIsCommandOpen]);
+
     const uiValue: NexusUIState = useMemo(() => ({
         isSidebarCollapsed,
         setSidebarCollapsed: (v: boolean) => setIsSidebarCollapsed(v),

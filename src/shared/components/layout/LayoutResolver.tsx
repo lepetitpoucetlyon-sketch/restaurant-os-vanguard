@@ -77,17 +77,20 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
 
         case 'topbar':
             return (
-                <div className="min-h-screen bg-bg-primary">
-                    <div className="hidden lg:block">
-                        <DesktopTopbar />
+                <>
+                    <div className="min-h-screen bg-bg-primary">
+                        <div className="hidden lg:block">
+                            <DesktopTopbar />
+                        </div>
+                        <MobileHeader />
+                        <ConnectivityBanner />
+                        <main className={cn("relative", "pb-24 lg:pb-0 lg:pt-20")}>
+                            {children}
+                        </main>
+                        <MobileNavBar />
                     </div>
-                    <MobileHeader />
-                    <ConnectivityBanner />
-                    <main className={cn("relative", "pb-24 lg:pb-0 lg:pt-20")}>
-                        {children}
-                    </main>
-                    <MobileNavBar />
-                </div>
+                    {launchpad}
+                </>
             );
 
         case 'kiosk':

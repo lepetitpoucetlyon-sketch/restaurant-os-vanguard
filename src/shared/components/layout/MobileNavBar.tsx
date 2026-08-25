@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks";
 import { useUI } from "@/shared/hooks";
+import { useUniversalAssistant } from "@/shared/hooks/useUniversalAssistant";
 import { useNotifications } from "@/shared/contexts/NotificationsContext";
 import { NotificationPanel } from "@ui/NotificationPanel";
 import {
@@ -67,6 +68,7 @@ export function MobileNavBar() {
     const { t } = useLanguage();
     const { toggleTheme: _toggleTheme, openCommandPalette: _openCommandPalette } = useUI();
     const { unreadCount } = useNotifications();
+    const { setViewMode, startVoiceListening } = useUniversalAssistant();
 
     return (
         <>
@@ -174,7 +176,8 @@ export function MobileNavBar() {
                                 <button
                                     onClick={() => {
                                         setIsMenuOpen(false);
-                                        window.dispatchEvent(new KeyboardEvent('keydown', { altKey: true, key: 'v' }));
+                                        setViewMode('EXPANDED');
+                                        startVoiceListening();
                                     }}
                                     className="flex-1 flex flex-col items-center gap-2"
                                 >
