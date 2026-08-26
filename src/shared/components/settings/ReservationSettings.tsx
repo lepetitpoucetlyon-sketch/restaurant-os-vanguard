@@ -3,16 +3,22 @@
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/shared/contexts/SettingsContext";
-import { Save, Loader2, Calendar, MessageSquare } from "lucide-react";
+import { useTenant } from "@/shared/providers/NexusCoreProvider";
+import { Save, Loader2, Calendar, MessageSquare, Globe, Calculator, Code } from "lucide-react";
 import {
     ReservationCapacitySection,
     ReservationVerificationSection,
     ReservationCardImprintSection,
     ReservationNotificationSection,
+    OnlineBookingToggle,
+    EmbedSnippets,
+    ROICalculator,
 } from '@/modules/commerce';
 
 export default function ReservationSettingsComponent() {
+    const { activeTenantId } = useTenant();
     const { settings, updateReservationConfig, updateReservationSlots, isSaving } = useSettings();
+
     const [config, setConfig] = useState(settings.reservationConfig);
     const [slots, setSlots]   = useState(settings.reservationSlots);
 
@@ -109,6 +115,19 @@ export default function ReservationSettingsComponent() {
                         </div>
                     ))}
                 </div>
+            </motion.div>
+
+            {/* Online Booking & Widgets */}
+            {activeTenantId && (
+                <motion.div variants={cinematicItem} className="space-y-8">
+                    <OnlineBookingToggle tenantId={activeTenantId} />
+                    <EmbedSnippets slug={activeTenantId} />
+                </motion.div>
+            )}
+
+            {/* ROI Comparison Calculator */}
+            <motion.div variants={cinematicItem}>
+                <ROICalculator />
             </motion.div>
 
             {/* Save */}

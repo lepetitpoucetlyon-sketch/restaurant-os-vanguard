@@ -64,7 +64,7 @@ export const QuantumDashboard: React.FC = () => {
 
             {/* 🗺️ FLEET TOPOLOGY */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 bg-surface-sidebar/50 border border-default rounded-2xl p-6 backdrop-blur-xl">
+                <div className="lg:col-span-2 bg-surface-card border border-border rounded-2xl p-6 backdrop-blur-xl">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold">Fleet Topology Map</h2>
                         <span className="px-3 py-1 bg-status-success/10 text-status-success text-xs rounded-full border border-emerald-500/20">LIVE SNAPSHOT</span>
@@ -75,14 +75,14 @@ export const QuantumDashboard: React.FC = () => {
                                 key={node.id} 
                                 title={`${node.name} - Version: ${node.version}`}
                                 className={`aspect-square rounded-sm transition-all cursor-pointer hover:scale-110 ${
-                                    node.status === 'ONLINE' ? 'bg-status-success shadow-sm shadow-emerald-500/50' : 'bg-surface-sidebar'
+                                    node.status === 'ONLINE' ? 'bg-status-success shadow-sm shadow-emerald-500/50' : 'bg-surface-glass'
                                 }`} 
                             />
                         ))}
                     </div>
                 </div>
 
-                <div className="bg-surface-sidebar/50 border border-default rounded-2xl p-6 backdrop-blur-xl">
+                <div className="bg-surface-card border border-border rounded-2xl p-6 backdrop-blur-xl">
                     <h3 className="text-xl font-bold mb-6">Quantum Intelligence</h3>
                     <div className="space-y-4">
                         <InsightLine label="Fleet Entropy" value={`${quantum.fleetEntropy * 100}%`} />
@@ -102,7 +102,7 @@ export const QuantumDashboard: React.FC = () => {
 };
 
 const MetricCard: React.FC<{ label: string, value: string | number, trend: string, color?: string }> = ({ label, value, trend, color }) => (
-    <div className="bg-surface-sidebar/80 border border-default p-6 rounded-2xl shadow-xl">
+    <div className="bg-surface-card border border-border p-6 rounded-2xl shadow-xl">
         <p className="text-muted text-xs font-bold uppercase tracking-widest mb-1">{label}</p>
         <div className="flex items-baseline gap-2">
             <h3 className={`text-2xl font-bold ${color || 'text-text-primary'}`}>{value}</h3>

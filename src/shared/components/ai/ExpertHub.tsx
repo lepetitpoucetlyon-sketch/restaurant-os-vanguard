@@ -44,9 +44,9 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-24 right-8 z-50 w-16 h-16 rounded-[2rem] bg-surface-sidebar text-accent-gold flex items-center justify-center shadow-2xl border border-default group overflow-hidden"
+                className="fixed bottom-24 right-8 z-50 w-16 h-16 rounded-[2rem] bg-accent-gold text-white flex items-center justify-center shadow-2xl border border-border-default group overflow-hidden"
             >
-                <div className="absolute inset-0 bg-gradient-to-br from-accent-gold/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Activity className="w-8 h-8 relative z-10" />
             </motion.button>
 
@@ -59,14 +59,14 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-surface-sidebar/40 backdrop-blur-sm z-[60]"
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
                         />
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 h-full w-full max-w-md bg-surface-card/95 dark:bg-surface-sidebar/95 backdrop-blur-xl z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.3)] border-l border-subtle flex flex-col"
+                            className="fixed top-0 right-0 h-full w-full max-w-md bg-surface-card backdrop-blur-xl z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.3)] border-l border-border-default flex flex-col"
                         >
                             {/* Header */}
                             <div className="p-8 flex items-center justify-between">
@@ -76,7 +76,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                 </div>
                                 <button 
                                     onClick={() => setIsOpen(false)}
-                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center hover:bg-error/10 hover:text-error transition-colors"
+                                    className="w-10 h-10 rounded-full bg-surface-glass-hover flex items-center justify-center hover:bg-status-danger/10 hover:text-status-danger transition-colors"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -97,18 +97,18 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                             value={prompt}
                                             onChange={(e) => setPrompt(e.target.value)}
                                             placeholder={`Lancer un diagnostic sur ${domain}...`}
-                                            className="w-full h-32 p-6 bg-bg-tertiary rounded-[2rem] border-none text-[12px] font-medium leading-relaxed outline-none resize-none focus:ring-2 ring-accent-gold/20 transition-all"
+                                            className="w-full h-32 p-6 bg-surface-glass rounded-[2rem] border border-border-default text-[12px] font-medium leading-relaxed outline-none resize-none focus:ring-2 ring-accent-gold/20 text-text-primary placeholder:text-text-muted/60 transition-all"
                                         />
                                         <button 
                                             onClick={handleRun}
                                             disabled={!prompt || isAnalyzing || !isConfigured}
-                                            className="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-accent-gold text-text-primary flex items-center justify-center shadow-lg disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
+                                            className="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-accent-gold text-white flex items-center justify-center shadow-lg disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
                                         >
                                             <Zap className="w-5 h-5" />
                                         </button>
                                     </div>
                                     {!isConfigured && (
-                                        <p className="text-nano text-error font-black uppercase text-center tracking-widest">
+                                        <p className="text-nano text-status-danger font-black uppercase text-center tracking-widest">
                                             ⚠️ Paramètres d'expertise manquants
                                         </p>
                                     )}
@@ -123,7 +123,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                         <button 
                                             key={i}
                                             onClick={() => setPrompt(s.label)}
-                                            className="p-4 rounded-2xl bg-bg-tertiary border border-border/50 hover:border-accent-gold/30 flex flex-col items-center gap-2 transition-all"
+                                            className="p-4 rounded-2xl bg-surface-card border border-border-default hover:border-accent-gold/30 flex flex-col items-center gap-2 transition-all"
                                         >
                                             <s.icon className="w-4 h-4 text-accent-gold" />
                                             <span className="text-nano font-black uppercase tracking-widest text-text-muted">{s.label}</span>

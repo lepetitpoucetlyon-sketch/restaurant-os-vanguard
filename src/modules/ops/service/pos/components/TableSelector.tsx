@@ -12,41 +12,36 @@ interface TableSelectorProps {
     onSelectTable: (tableId: string) => void;
 }
 
+const DEFAULT_DEV_TABLES: Table[] = [
+    { id: 'table-1', number: 1, seats: 2, status: 'free', zoneId: 'salle' } as unknown as Table,
+    { id: 'table-2', number: 2, seats: 4, status: 'seated', zoneId: 'salle' } as unknown as Table,
+    { id: 'table-3', number: 3, seats: 4, status: 'ordered', zoneId: 'salle' } as unknown as Table,
+    { id: 'table-4', number: 4, seats: 6, status: 'eating', zoneId: 'salle' } as unknown as Table,
+    { id: 'table-5', number: 5, seats: 2, status: 'paying', zoneId: 'salle' } as unknown as Table,
+    { id: 'table-6', number: 6, seats: 8, status: 'free', zoneId: 'terrasse' } as unknown as Table,
+    { id: 'table-7', number: 7, seats: 4, status: 'dirty', zoneId: 'terrasse' } as unknown as Table,
+    { id: 'table-8', number: 8, seats: 2, status: 'reserved', zoneId: 'bar' } as unknown as Table,
+];
+
 export function TableSelector({ onSelectTable }: TableSelectorProps) {
     const { tables: rawTables, zones } = useTables();
-    const tables = rawTables as unknown as Table[];
+    const rawList = rawTables as unknown as Table[];
+    const tables = rawList.length > 0 ? rawList : DEFAULT_DEV_TABLES;
     const [viewMode, setViewMode] = useState<'grid' | 'zones'>('grid');
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (gridRef.current && scrollContainerRef.current) {
-                const top = gridRef.current.offsetTop;
-                scrollContainerRef.current.scrollTo({
-                    top: top - 40,
-                    behavior: 'smooth'
-                });
-            }
-        }, 1200);
-
-        return () => clearTimeout(timer);
-    }, []);
-
     return (
         <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-auto bg-bg-primary transition-colors duration-500 relative elegant-scrollbar scroll-smooth"
+            className="flex-1 overflow-auto bg-bg-primary transition-colors duration-200 relative elegant-scrollbar scroll-smooth"
         >
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-accent-gold/5 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent-gold/5 blur-[150px] pointer-events-none" />
-
             <motion.div 
-                initial={{ opacity: 0, y: 60 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 px-6 md:px-12 pt-10 pb-24"
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 p-6 md:p-8 max-w-7xl mx-auto"
             >
                 <TableSelectorHeader
                     tables={tables}
@@ -63,44 +58,44 @@ export function TableSelector({ onSelectTable }: TableSelectorProps) {
                         visible: {
                             opacity: 1,
                             transition: {
-                                staggerChildren: 0.08,
-                                delayChildren: 0.1
+                                staggerChildren: 0.04,
+                                delayChildren: 0.05
                             }
                         }
                     }}
                 >
                     {viewMode === 'grid' ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-                            {tables.map((table) => (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+                            {tables.map((table, idx) => (
                                 <motion.div
                                     key={table.id}
                                     variants={{
-                                        hidden: { opacity: 0, scale: 0.85, y: 100 },
-                                        visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 20 } }
+                                        hidden: { opacity: 0, scale: 0.96, y: 10 },
+                                        visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.25 } }
                                     }}
                                 >
                                     <TableButton
                                         table={table}
-                                        index={tables.indexOf(table)}
+                                        index={idx}
                                         onSelectTable={onSelectTable}
                                     />
                                 </motion.div>
                             ))}
                         </div>
                     ) : (
-                        <div className="space-y-20">
-                            {zones.map(zone => {
+                        <div className="space-y-10">
+                            {(zones.length > 0 ? zones : [{ id: 'salle', name: 'Salle Principale' }, { id: 'terrasse', name: 'Terrasse' }, { id: 'bar', name: 'Bar' }]).map(zone => {
                                 const zoneTables = (tables as Table[]).filter((t: Table) => t.zoneId === zone.id);
                                 if (zoneTables.length === 0) return null;
 
                                 return (
                                     <div key={zone.id}>
-                                        <div className="flex items-center gap-8 mb-10">
-                                            <h3 className="text-4xl font-serif font-bold text-text-primary italic">{(zone.name as string)}</h3>
-                                            <div className="h-0.5 flex-1 bg-gradient-to-r from-accent-gold/30 to-transparent" />
-                                            <span className="text-nano font-black text-text-muted uppercase tracking-[0.4em]">{zoneTables.length} Unités</span>
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <h3 className="text-lg font-bold text-text-primary">{(zone.name as string)}</h3>
+                                            <div className="h-px flex-1 bg-border" />
+                                            <span className="text-xs text-text-muted font-medium">{zoneTables.length} tables</span>
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
                                             {zoneTables.map((table: Table, idx: number) => (
                                                 <TableButton
                                                     key={table.id}

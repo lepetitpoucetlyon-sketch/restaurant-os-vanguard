@@ -78,8 +78,8 @@ export function FeedbackBanner({
         >
             <div
                 className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                    config.bg
+                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-bg-primary",
+                    config.border
                 )}
             >
                 <Icon className={cn("w-5 h-5", config.iconColor)} />
@@ -99,7 +99,7 @@ export function FeedbackBanner({
                 <button
                     onClick={onDismiss}
                     className={cn(
-                        "p-1 rounded-lg hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/5 transition-colors shrink-0",
+                        "p-1 rounded-lg hover:bg-bg-tertiary transition-colors shrink-0",
                         config.iconColor
                     )}
                 >
@@ -189,7 +189,7 @@ export function ConfirmationDialog({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                         onClick={onCancel}
                     />
 
@@ -198,7 +198,7 @@ export function ConfirmationDialog({
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative bg-bg-secondary rounded-[2rem] shadow-2xl max-w-md w-full p-8 border border-border"
+                        className="relative bg-surface-card rounded-[2rem] shadow-2xl max-w-md w-full p-8 border border-border-default"
                     >
                         <h3 className="text-xl font-serif font-bold text-text-primary mb-2">
                             {title}

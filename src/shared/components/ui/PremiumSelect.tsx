@@ -100,7 +100,7 @@ export function PremiumSelect({
                             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                             exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(10px)" }}
                             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="absolute z-[100] w-full mt-3 py-3 bg-surface-card/95 dark:bg-surface-sidebar/95 backdrop-blur-2xl border-2 border-accent-gold/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
+                            className="absolute z-[100] w-full mt-3 py-3 bg-surface-card/95 backdrop-blur-2xl border-2 border-accent-gold/20 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
                         >
                             <div className="max-h-[300px] overflow-y-auto elegant-scrollbar px-2 space-y-1">
                                 {options.map((option) => {

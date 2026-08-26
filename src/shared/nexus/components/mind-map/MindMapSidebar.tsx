@@ -53,9 +53,9 @@ export function MindMapSidebar({ selectedNode, onClose }: MindMapSidebarProps) {
                         )}
                     </div>
 
-                    <button className="w-full h-16 bg-text-primary rounded-[2rem] text-text-primary font-black flex items-center justify-center gap-3 hover:bg-surface-sidebar transition-all shadow-2xl group">
+                    <button className="w-full h-16 bg-action-primary rounded-[2rem] text-text-on-primary font-black flex items-center justify-center gap-3 hover:bg-action-primary-hover transition-all shadow-2xl group">
                         Dépendances Profondes
-                        <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-5 h-5 text-text-on-primary group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
             )}

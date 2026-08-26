@@ -70,7 +70,7 @@ export function SplitPayingView({
                     >
                         <div className={cn(
                             "w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-700 shadow-sm",
-                            selectedPaymentMethod === method.id ? "bg-accent-gold text-primary rotate-6" : "bg-surface-sidebar/40 text-accent-gold border border-accent-gold/20 group-hover:scale-110"
+                            selectedPaymentMethod === method.id ? "bg-accent-gold text-primary rotate-6" : "bg-surface-glass text-accent-gold border border-accent-gold/20 group-hover:scale-110"
                         )}>
                             <method.icon className="w-7 h-7" strokeWidth={1.5} />
                         </div>

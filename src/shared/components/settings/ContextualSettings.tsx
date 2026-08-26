@@ -163,7 +163,7 @@ function ContextualSettingsPanelContent({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={closeSettings}
-                className="fixed inset-0 bg-surface-sidebar/30 backdrop-blur-sm z-[100]"
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
             />
 
             {/* Panel */}
@@ -172,10 +172,10 @@ function ContextualSettingsPanelContent({
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: "100%", opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-bg-primary dark:bg-bg-secondary border-border shadow-2xl z-[101] flex flex-col"
+                className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-surface-bg border-border-default shadow-2xl z-[101] flex flex-col"
             >
                 {/* Header */}
-                <div className="flex flex-col border-b border-border bg-bg-secondary/50">
+                <div className="flex flex-col border-b border-border-default bg-surface-card/50">
                     <div className="flex items-center justify-between p-6">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
@@ -192,7 +192,7 @@ function ContextualSettingsPanelContent({
                         </div>
                         <button
                             onClick={closeSettings}
-                            className="w-10 h-10 rounded-xl bg-bg-tertiary hover:bg-status-danger/10 hover:text-status-danger flex items-center justify-center transition-all"
+                            className="w-10 h-10 rounded-xl bg-surface-glass-hover hover:bg-status-danger/10 hover:text-status-danger flex items-center justify-center transition-all"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -205,7 +205,7 @@ function ContextualSettingsPanelContent({
                             className={cn(
                                 "flex-1 flex items-center justify-center gap-2 py-3 rounded-t-xl transition-all relative overflow-hidden group",
                                 activeTab === 'logic'
-                                    ? "bg-bg-primary border-t-2 border-x-2 border-border text-accent"
+                                    ? "bg-surface-bg border-t-2 border-x-2 border-border-default text-accent"
                                     : "text-text-muted hover:text-text-primary"
                             )}
                         >
@@ -219,7 +219,7 @@ function ContextualSettingsPanelContent({
                             className={cn(
                                 "flex-1 flex items-center justify-center gap-2 py-3 rounded-t-xl transition-all relative overflow-hidden group",
                                 activeTab === 'style'
-                                    ? "bg-bg-primary border-t-2 border-x-2 border-border text-accent-gold"
+                                    ? "bg-surface-bg border-t-2 border-x-2 border-border-default text-accent-gold"
                                     : "text-text-muted hover:text-text-primary"
                             )}
                         >
@@ -250,10 +250,10 @@ function ContextualSettingsPanelContent({
 
                 {/* Footer */}
                 {accessibleSettings.length > 0 && (
-                    <div className="p-6 border-t border-border bg-bg-secondary/50 flex gap-3">
+                    <div className="p-6 border-t border-border-default bg-surface-card/50 flex gap-3">
                         <button
                             onClick={handleReset}
-                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl border border-border text-text-muted hover:bg-bg-tertiary transition-colors text-nano font-black uppercase tracking-[0.2em]"
+                            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl border border-border-default text-text-muted hover:bg-surface-glass-hover transition-colors text-nano font-black uppercase tracking-[0.2em]"
                         >
                             <RotateCcw className="w-4 h-4" />
                             {t('settings.reset')}

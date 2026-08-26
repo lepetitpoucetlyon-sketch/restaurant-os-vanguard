@@ -23,7 +23,7 @@ export function PaymentSuccessView({ certifiedHash }: PaymentSuccessViewProps) {
             <div className="text-center space-y-4">
                 <h2 className="text-4xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.transaction_success')}</h2>
                 <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em]">{t('pos.payment.archive_updated')}</p>
-                <div className="mt-6 p-4 bg-surface-sidebar/40 rounded-2xl border border-accent-gold/20 backdrop-blur-md">
+                <div className="mt-6 p-4 bg-surface-glass rounded-2xl border border-accent-gold/20 backdrop-blur-md">
                     <p className="text-nano font-black text-accent-gold/60 uppercase tracking-widest mb-1">NF525 Certified Seal</p>
                     <p className="text-nano font-mono text-accent-gold break-all font-bold">
                         SHA256: {certifiedHash?.substring(0, 32) || 'NOT_AVAILABLE'}...CERTIFIED

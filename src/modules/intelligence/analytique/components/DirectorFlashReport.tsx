@@ -54,7 +54,6 @@ export const DirectorFlashReport: React.FC = () => {
                 <StatCard
                     label="Chiffre d'Affaires"
                     value={formatCurrency(report.totalRevenueInCents / 100)}
-                    trend={{ value: 12, direction: 'up' }}
                 />
                 <StatCard
                     label="Couverts"

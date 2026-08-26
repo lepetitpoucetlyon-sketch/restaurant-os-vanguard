@@ -89,7 +89,7 @@ export function RotatingCount() {
 
     if (isLoading) {
         return (
-            <div className="rounded-lg border border-border p-6 bg-surface-sidebar animate-pulse">
+            <div className="rounded-lg border border-border p-6 bg-surface-card animate-pulse">
                 <div className="h-4 bg-surface-hover rounded w-1/3" />
             </div>
         );
@@ -98,7 +98,7 @@ export function RotatingCount() {
     const hasCounts = Object.values(counts).some((v) => v !== "");
 
     return (
-        <div className="rounded-lg border border-border bg-surface-sidebar overflow-hidden">
+        <div className="rounded-lg border border-border bg-surface-card overflow-hidden">
             {/* Header */}
             <div className="px-4 py-3 border-b border-border flex items-center gap-2">
                 <RotateCcw className="w-4 h-4 text-action-primary" />

@@ -70,7 +70,7 @@ export const EndOfDayWizard: React.FC = () => {
     }
 
     return (
-        <div className="p-8 bg-surface-sidebar border border-default rounded-2xl shadow-2xl">
+        <div className="p-8 bg-surface-card border border-border rounded-2xl shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
                 <div className="p-3 bg-status-warning/10 text-status-warning rounded-xl">
                     <Lock size={24} />
@@ -82,11 +82,11 @@ export const EndOfDayWizard: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
+                <div className="p-4 bg-surface-glass rounded-xl border border-border">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">CA à Sceller</p>
                     <p className="text-lg font-bold text-text-primary">{(revenue / 1_000_000).toFixed(2)} €</p>
                 </div>
-                <div className="p-4 bg-surface-sidebar/50 rounded-xl border border-default">
+                <div className="p-4 bg-surface-glass rounded-xl border border-border">
                     <p className="text-xs text-secondary uppercase font-bold mb-1">État Tables</p>
                     <p className={`text-lg font-bold ${activeTables > 0 ? 'text-status-warning' : 'text-status-success'}`}>
                         {activeTables > 0 ? `${activeTables} Active(s)` : 'Toutes closes'}
@@ -104,7 +104,7 @@ export const EndOfDayWizard: React.FC = () => {
             <button 
                 onClick={handleClosure}
                 disabled={isClosing || activeTables > 0}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-surface-card text-primary rounded-xl font-black text-lg hover:bg-surface-bg transition-all disabled:opacity-50 disabled:grayscale"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-action-primary text-text-on-primary rounded-xl font-black text-lg hover:bg-action-primary-hover transition-all disabled:opacity-50 disabled:grayscale"
             >
                 {isClosing ? <Loader2 className="animate-spin" /> : <FileText size={20} />}
                 GÉNÉRER LE Z DE CAISSE

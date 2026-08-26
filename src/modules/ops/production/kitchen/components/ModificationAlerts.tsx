@@ -63,7 +63,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-            className="w-full bg-surface-card dark:bg-surface-sidebar border border-subtle dark:border-default rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 dark:ring-white/5 group"
+            className="w-full bg-surface-card border border-border rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 group"
         >
             {/* Ticket Header */}
             <div className="relative h-2 bg-gradient-to-r from-status-warning via-status-warning to-status-warning w-full" />
@@ -85,7 +85,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                             <div className="flex items-center gap-2 text-secondary text-xs font-bold uppercase tracking-wider">
                                 <Clock className="w-3.5 h-3.5" />
                                 <span>Il y a {String(timeSinceRequest)} min</span>
-                                <span className="w-1 h-1 rounded-full bg-surface-tertiary dark:bg-surface-sidebar" />
+                                <span className="w-1 h-1 rounded-full bg-border" />
                                 <span className="text-status-warning dark:text-status-warning">{String(modification.requestedBy || 'Chef')}</span>
                             </div>
                         </div>
@@ -93,9 +93,9 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                 </div>
 
                 {/* Main Content Card */}
-                <div className="bg-surface-bg dark:bg-surface-sidebar/20 rounded-3xl p-6 border border-subtle dark:border-white/5 mb-8">
-                    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-subtle dark:border-subtle">
-                        <div className="w-10 h-10 rounded-full bg-surface-bg dark:bg-surface-sidebar flex items-center justify-center shrink-0">
+                <div className="bg-surface-glass rounded-3xl p-6 border border-border mb-8">
+                    <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+                        <div className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center shrink-0 border border-border">
                             <ChefHat className="w-5 h-5 text-secondary dark:text-muted" strokeWidth={1.5} />
                         </div>
                         <span className="font-serif font-medium text-xl md:text-2xl text-primary dark:text-text-primary leading-none">
@@ -146,7 +146,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
 
                         {/* Fallback */}
                         {!removedIngredients.length && !addedIngredients.length && !newNotes && (
-                            <div className="p-4 rounded-xl bg-surface-bg dark:bg-surface-sidebar text-secondary dark:text-muted italic">
+                            <div className="p-4 rounded-xl bg-surface-glass text-text-muted italic">
                                 "{modification.description}"
                             </div>
                         )}
@@ -160,7 +160,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                         placeholder="Ajouter une note de cuisine (optionnel)..."
                         value={responseNote}
                         onChange={(e) => setResponseNote(e.target.value)}
-                        className="w-full px-6 py-4 bg-surface-bg dark:bg-surface-sidebar/40 border border-subtle dark:border-default rounded-2xl text-base text-primary dark:text-text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-action-primary/50 transition-all font-medium"
+                        className="w-full px-6 py-4 bg-surface-glass border border-border rounded-2xl text-base text-text-primary placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-action-primary/50 transition-all font-medium"
                     />
                 </div>
 
@@ -177,7 +177,7 @@ export function ModificationAlert({ modification, itemName, tableNumber }: Modif
                     <button
                         onClick={handleApprove}
                         disabled={isResponding}
-                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary hover:bg-status-success dark:hover:bg-status-success hover:text-text-primary hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
+                        className="flex items-center justify-center gap-3 px-6 py-5 rounded-2xl bg-action-primary hover:bg-status-success text-text-on-primary hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-green-500/25 transition-all font-black uppercase tracking-widest text-xs disabled:opacity-50 disabled:scale-100"
                     >
                         <Check className="w-5 h-5" />
                         <span>Approuver</span>
@@ -218,7 +218,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-[200] bg-surface-sidebar/60 backdrop-blur-xl"
+                        className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-xl"
                     />
 
                     {/* Floating Panel Container */}
@@ -228,7 +228,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -40, scale: 0.95 }}
                             transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                            className="bg-surface-card/90 dark:bg-surface-sidebar/90 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden border border-default dark:border-subtle ring-1 ring-black/5 pointer-events-auto"
+                            className="bg-surface-card backdrop-blur-2xl rounded-[2.5rem] shadow-2xl w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden border border-border ring-1 ring-black/5 pointer-events-auto"
                         >
                             {/* Panel Header */}
                             <div className="relative shrink-0 px-8 py-6 border-b border-subtle/50 dark:border-white/5 flex items-center justify-between">

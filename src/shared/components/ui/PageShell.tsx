@@ -398,7 +398,7 @@ export function PageShellOperationalHeader({
       role="banner"
       className={cn(
         "shrink-0 border-b border-border/40 backdrop-blur-xl transition-colors duration-300",
-        rush ? "bg-surface-sidebar/95" : "bg-surface-card/70",
+        rush ? "bg-surface-card" : "bg-surface-glass",
         sticky && "sticky top-0 z-40",
         className
       )}

@@ -28,28 +28,28 @@ export function SaaSBillingGate({ children }: SaaSBillingGateProps) {
 
     if (isSuspended && !isSettingsArea && !isMccArea) {
         return (
-            <div className="fixed inset-0 z-[200] bg-surface-sidebar flex items-center justify-center p-6 overflow-hidden">
+            <div className="fixed inset-0 z-[200] bg-surface-bg flex items-center justify-center p-6 overflow-hidden">
                 <div className="absolute inset-0 bg-status-danger/5 blur-[120px] rounded-full -mt-40 -ml-40" />
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="w-full max-w-xl bg-surface-sidebar border border-red-500/20 rounded-[3rem] p-12 text-center relative overflow-hidden shadow-2xl"
+                    className="w-full max-w-xl bg-surface-card border border-status-danger/20 rounded-[3rem] p-12 text-center relative overflow-hidden shadow-2xl"
                 >
-                    <div className="w-20 h-20 bg-status-danger text-text-primary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-red-500/20">
+                    <div className="w-20 h-20 bg-status-danger text-text-on-primary rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-red-500/20">
                         <Lock size={36} />
                     </div>
                     <h2 className="text-4xl font-serif italic text-text-primary uppercase tracking-tighter mb-4">Accès Suspendu</h2>
-                    <p className="text-sm text-secondary uppercase tracking-widest font-bold mb-8">Solvabilité SaaS Non Conforme</p>
+                    <p className="text-sm text-text-muted uppercase tracking-widest font-bold mb-8">Solvabilité SaaS Non Conforme</p>
                     
-                    <div className="p-8 bg-surface-card/[0.03] border border-white/5 rounded-2xl mb-10">
-                        <p className="text-xs text-muted leading-relaxed">
+                    <div className="p-8 bg-surface-glass border border-border rounded-2xl mb-10">
+                        <p className="text-xs text-text-muted leading-relaxed">
                             L'abonnement de l'instance <span className="text-text-primary font-black">{activeTenantConfig?.metadata?.name}</span> est suspendu suite à un incident de facturation.
                         </p>
                     </div>
 
                     <Button 
                         onClick={() => router.push('/settings?tab=subscription')}
-                        className="w-full py-8 bg-surface-card text-primary text-micro font-black uppercase tracking-[0.3em] rounded-2xl hover:scale-105 transition-all shadow-xl"
+                        className="w-full py-8 bg-action-primary text-text-on-primary text-micro font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-action-primary-hover hover:scale-105 transition-all shadow-xl"
                     >
                         <CreditCard size={18} className="mr-2" />
                         Régulariser la Situation

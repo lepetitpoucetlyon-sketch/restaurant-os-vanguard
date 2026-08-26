@@ -133,7 +133,7 @@ export const RoleGate = ({ children }: { children: React.ReactNode }) => {
 
                     <div className="space-y-4">
                         <Button
-                            className="w-full h-14 bg-text-primary text-text-primary rounded-2xl font-bold uppercase text-micro tracking-widest hover:bg-surface-sidebar transition-all"
+                            className="w-full h-14 bg-action-primary text-text-on-primary rounded-2xl font-bold uppercase text-micro tracking-widest hover:bg-action-primary-hover transition-all"
                             onClick={() => router.push('/')}
                         >
                             <Home className="w-4 h-4 mr-3" />

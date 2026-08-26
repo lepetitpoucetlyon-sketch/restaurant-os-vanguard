@@ -41,42 +41,42 @@ export function SupportHelpWidget() {
       <button
         id="support-help-widget-button"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-neutral-900/90 text-amber-400 border border-amber-500/30 rounded-full shadow-2xl backdrop-blur-md hover:bg-neutral-800 hover:border-amber-500/60 transition-all active:scale-95 group"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-surface-card text-accent-gold border border-accent-gold/30 rounded-full shadow-2xl backdrop-blur-md hover:bg-surface-glass-hover hover:border-accent-gold/60 transition-all active:scale-95 group"
         title="Assistance & Support Plateforme"
       >
-        <LifeBuoy className="w-5 h-5 animate-pulse text-amber-400 group-hover:rotate-45 transition-transform" />
-        <span className="text-xs font-semibold tracking-wide text-neutral-100">Assistance MCC</span>
+        <LifeBuoy className="w-5 h-5 animate-pulse text-accent-gold group-hover:rotate-45 transition-transform" />
+        <span className="text-xs font-semibold tracking-wide text-text-primary">Assistance MCC</span>
       </button>
 
       {/* Support Drawer / Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-end sm:justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+          <div className="relative w-full max-w-lg bg-surface-card border border-border-default rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-800/80 bg-neutral-900/50">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-default bg-surface-card/50">
               <div className="flex items-center gap-2">
-                <LifeBuoy className="w-5 h-5 text-amber-400" />
-                <h3 className="text-sm font-bold text-neutral-100 uppercase tracking-wider">Support Dédié MCC</h3>
+                <LifeBuoy className="w-5 h-5 text-accent-gold" />
+                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Support Dédié MCC</h3>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 text-neutral-400 hover:text-neutral-100 rounded-lg hover:bg-neutral-800 transition"
+                className="p-1 text-text-muted hover:text-text-primary rounded-lg hover:bg-surface-glass-hover transition"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-neutral-800 text-xs font-medium">
+            <div className="flex border-b border-border-default text-xs font-medium">
               <button
                 onClick={() => setTab("new")}
-                className={"flex-1 py-3 text-center transition " + (tab === "new" ? "text-amber-400 border-b-2 border-amber-400 bg-amber-400/5 font-bold" : "text-neutral-400 hover:text-neutral-200")}
+                className={"flex-1 py-3 text-center transition " + (tab === "new" ? "text-accent-gold border-b-2 border-accent-gold bg-accent-gold/5 font-bold" : "text-text-muted hover:text-text-primary")}
               >
                 Nouveau Ticket
               </button>
               <button
                 onClick={() => setTab("history")}
-                className={"flex-1 py-3 text-center transition " + (tab === "history" ? "text-amber-400 border-b-2 border-amber-400 bg-amber-400/5 font-bold" : "text-neutral-400 hover:text-neutral-200")}
+                className={"flex-1 py-3 text-center transition " + (tab === "history" ? "text-accent-gold border-b-2 border-accent-gold bg-accent-gold/5 font-bold" : "text-text-muted hover:text-text-primary")}
               >
                 Historique ({tickets.length})
               </button>
@@ -94,7 +94,7 @@ export function SupportHelpWidget() {
                   )}
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-xs font-medium text-text-secondary mb-1">
                       Description de l incident ou de la demande
                     </label>
                     <textarea
@@ -102,13 +102,13 @@ export function SupportHelpWidget() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Précisez le problème rencontré (ex: blocage au règlement CB, anomalie de stock, demande de configuration...)"
-                      className="w-full px-3 py-2 text-xs bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-amber-400 transition"
+                      className="w-full px-3 py-2 text-xs bg-surface-bg border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-accent-gold transition"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-300 mb-1">
+                    <label className="block text-xs font-medium text-text-secondary mb-1">
                       Lien capture d écran / Logs (Optionnel)
                     </label>
                     <input
@@ -116,14 +116,14 @@ export function SupportHelpWidget() {
                       value={screenshotUrl}
                       onChange={(e) => setScreenshotUrl(e.target.value)}
                       placeholder="https://..."
-                      className="w-full px-3 py-2 text-xs bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:border-amber-400 transition"
+                      className="w-full px-3 py-2 text-xs bg-surface-bg border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-accent-gold transition"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={submitting || description.trim().length < 10}
-                    className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-neutral-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition active:scale-[0.98]"
+                    className="w-full py-2.5 px-4 bg-accent-gold hover:bg-accent-gold/90 disabled:opacity-50 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition active:scale-[0.98]"
                   >
                     <Send className="w-4 h-4" />
                     <span>{submitting ? "Transmission en cours..." : "Envoyer au Support MCC"}</span>
@@ -132,20 +132,20 @@ export function SupportHelpWidget() {
               ) : (
                 <div className="space-y-3">
                   {loading ? (
-                    <p className="text-xs text-neutral-400 text-center py-6">Chargement des demandes...</p>
+                    <p className="text-xs text-text-muted text-center py-6">Chargement des demandes...</p>
                   ) : tickets.length === 0 ? (
-                    <p className="text-xs text-neutral-400 text-center py-6">Aucun ticket de support actif.</p>
+                    <p className="text-xs text-text-muted text-center py-6">Aucun ticket de support actif.</p>
                   ) : (
                     tickets.map((t) => (
-                      <div key={t.id} className="p-3 bg-neutral-900/60 border border-neutral-800 rounded-xl space-y-1.5">
+                      <div key={t.id} className="p-3 bg-surface-glass border border-border-default rounded-xl space-y-1.5">
                         <div className="flex items-center justify-between text-micro">
-                          <span className="font-mono text-neutral-400">#{t.id.slice(0, 8)}</span>
-                          <span className={"px-2 py-0.5 rounded text-nano font-bold uppercase tracking-wider " + (t.status === "applied" || t.status === "approved" ? "bg-emerald-950 text-emerald-400 border border-emerald-500/30" : t.status === "analyzing" ? "bg-amber-950 text-amber-400 border border-amber-500/30" : "bg-neutral-800 text-neutral-300")}>
+                          <span className="font-mono text-text-muted">#{t.id.slice(0, 8)}</span>
+                          <span className={"px-2 py-0.5 rounded text-nano font-bold uppercase tracking-wider " + (t.status === "applied" || t.status === "approved" ? "bg-emerald-950 text-emerald-400 border border-emerald-500/30" : t.status === "analyzing" ? "bg-amber-950 text-amber-400 border border-amber-500/30" : "bg-surface-glass text-text-secondary")}>
                             {t.status}
                           </span>
                         </div>
-                        <p className="text-xs text-neutral-200 line-clamp-2">{t.description}</p>
-                        <div className="text-nano text-neutral-500 flex items-center gap-1">
+                        <p className="text-xs text-text-primary line-clamp-2">{t.description}</p>
+                        <div className="text-nano text-text-muted flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           <span>{new Date(t.createdAt).toLocaleString("fr-FR")}</span>
                         </div>

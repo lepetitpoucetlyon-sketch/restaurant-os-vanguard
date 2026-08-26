@@ -14,7 +14,7 @@ interface InsightsConsoleProps {
 
 export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isAnalyzing, domain, modelId = 'GEMINI-1.5-FLASH' }) => {
     return (
-        <div className="bg-surface-sidebar/90 rounded-3xl p-6 border border-subtle backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
+        <div className="bg-surface-card rounded-3xl p-6 border border-border-default backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-accent-gold/20 flex items-center justify-center border border-accent-gold/30">
@@ -22,7 +22,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                     </div>
                     <div>
                         <h3 className="text-text-primary font-serif italic font-black text-lg tracking-tight uppercase">Expertise {domain}</h3>
-                        <p className="text-text-primary/40 text-chip-label-sm">Console de Diagnostic Système</p>
+                        <p className="text-text-muted text-chip-label-sm">Console de Diagnostic Système</p>
                     </div>
                 </div>
                 {isAnalyzing && (
@@ -45,16 +45,16 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: idx * 0.1 }}
-                            className="relative pl-6 border-l border-subtle"
+                            className="relative pl-6 border-l border-border-default"
                         >
                             <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-accent-gold shadow-[0_0_10px_rgba(197,160,89,0.8)]" />
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-accent-gold text-nano font-black uppercase tracking-widest">{step.action}</span>
-                                <span className="text-text-primary/20 text-nano font-mono">{new Date(step.timestamp).toLocaleTimeString()}</span>
+                                <span className="text-text-muted text-nano font-mono">{new Date(step.timestamp).toLocaleTimeString()}</span>
                             </div>
-                            <p className="text-text-primary/80 text-micro font-serif leading-relaxed mb-1">{step.thought}</p>
-                            <div className="p-2 bg-surface-card/5 rounded-lg border border-white/5">
-                                <p className="text-text-primary/40 text-nano italic flex items-center gap-2">
+                            <p className="text-text-primary text-micro font-serif leading-relaxed mb-1">{step.thought}</p>
+                            <div className="p-2 bg-surface-glass rounded-lg border border-border-default">
+                                <p className="text-text-muted text-nano italic flex items-center gap-2">
                                     <Database className="w-3 h-3" />
                                     {step.observation}
                                 </p>
@@ -71,12 +71,12 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                 )}
             </div>
 
-            <div className="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
-                <div className="flex items-center gap-2 text-success/60">
+            <div className="mt-6 pt-4 border-t border-border-default flex items-center justify-between">
+                <div className="flex items-center gap-2 text-status-success">
                     <ShieldCheck className="w-4 h-4" />
                     <span className="text-chip-label-sm">Expertise Sécurisée</span>
                 </div>
-                <div className="text-nano font-mono text-text-primary/20 uppercase">
+                <div className="text-nano font-mono text-text-muted uppercase">
                     Moteur {modelId}
                 </div>
             </div>

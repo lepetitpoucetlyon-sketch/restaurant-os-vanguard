@@ -88,7 +88,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeMobileMenu}
-                        className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-sm z-[45] lg:hidden"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[45] lg:hidden"
                     />
                 )}
             </AnimatePresence>

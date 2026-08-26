@@ -62,7 +62,7 @@ export function BrandPromptGuide() {
                     <Cpu className="w-5 h-5 text-brand" />
                     <h4 className="text-xl font-serif text-text-primary italic">Prompt Maître Oracle</h4>
                 </div>
-                <div className="p-8 rounded-3xl bg-surface-sidebar/40 border border-focus/20 font-mono text-sm group relative overflow-hidden">
+                <div className="p-8 rounded-3xl bg-surface-card border border-border-focus/20 font-mono text-sm group relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
                         <MessageSquare className="w-20 h-20 text-brand" />
                     </div>

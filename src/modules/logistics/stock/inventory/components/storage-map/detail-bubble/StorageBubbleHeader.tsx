@@ -28,7 +28,7 @@ export function StorageBubbleHeader({
             <div className="relative z-10">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-xl bg-surface-card/80 dark:bg-surface-sidebar/20 backdrop-blur flex items-center justify-center shadow-lg border border-default">
+                        <div className="w-16 h-16 rounded-xl bg-surface-glass backdrop-blur flex items-center justify-center shadow-lg border border-border">
                             <Icon className="w-8 h-8" style={{ color: config.color }} />
                         </div>
                         <div>
@@ -38,7 +38,7 @@ export function StorageBubbleHeader({
                                     {config.label}
                                 </span>
                                 {location.zone && (
-                                    <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-surface-card/40 dark:bg-surface-sidebar/10 text-text-muted">
+                                    <span className="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest bg-surface-glass text-text-muted">
                                         {location.zone}
                                     </span>
                                 )}
@@ -47,7 +47,7 @@ export function StorageBubbleHeader({
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-10 h-10 rounded-xl bg-surface-card/60 dark:bg-surface-sidebar/20 backdrop-blur hover:bg-surface-card dark:hover:bg-surface-card/10 flex items-center justify-center transition-all hover:scale-110 border border-default"
+                        className="w-10 h-10 rounded-xl bg-surface-glass backdrop-blur hover:bg-surface-card flex items-center justify-center transition-all hover:scale-110 border border-border"
                     >
                         <X className="w-5 h-5 text-text-primary" />
                     </button>
@@ -56,7 +56,7 @@ export function StorageBubbleHeader({
                 {/* Temperature & Stats Row */}
                 <div className="flex items-center gap-3 mt-6">
                     {location.temperature !== undefined && (
-                        <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-card/70 dark:bg-surface-sidebar/20 backdrop-blur rounded-xl shadow-sm border border-default">
+                        <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-glass backdrop-blur rounded-xl shadow-sm border border-border">
                             <Thermometer className="w-4 h-4" style={{ color: config.color }} />
                             <span className="text-2xl font-mono font-light text-text-primary">{location.temperature}°C</span>
                             {location.temperatureMin !== undefined && location.temperatureMax !== undefined && (
@@ -66,7 +66,7 @@ export function StorageBubbleHeader({
                             )}
                         </div>
                     )}
-                    <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-card/70 dark:bg-surface-sidebar/20 backdrop-blur rounded-xl shadow-sm border border-default">
+                    <div className="flex items-center gap-2 px-4 py-2.5 bg-surface-glass backdrop-blur rounded-xl shadow-sm border border-border">
                         <Package className="w-4 h-4 text-text-muted" />
                         <span className="text-lg font-mono font-light text-text-primary">{stockItems.length}</span>
                         <span className="text-nano font-black text-text-muted uppercase tracking-widest">ARTICLES</span>

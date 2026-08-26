@@ -17,63 +17,50 @@ export function TableSelectorHeader({ tables, viewMode, setViewMode }: TableSele
     const activeCount = tables.filter((t) => (['seated', 'ordered', 'eating', 'paying'] as const).includes(t.status as 'seated')).length;
 
     return (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="flex flex-col"
-            >
-                <span className="text-accent-gold text-nano font-black uppercase tracking-[0.4em] mb-2">Protocole Service</span>
-                <h2 className="text-4xl md:text-5xl font-serif font-black text-text-primary tracking-tighter italic">
-                    Plan de <span className="text-accent-gold not-italic">{lexicon.tableLabel === 'Table' ? 'Salle' : lexicon.tableLabel}</span>.
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-action-primary">
+                        Service Actif
+                    </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+                    Plan de {lexicon.tableLabel === 'Table' ? 'Salle' : lexicon.tableLabel}
                 </h2>
-            </motion.div>
+            </div>
 
-            <div className="flex items-center gap-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3, duration: 0.8 }}
-                    className="px-6 py-3 rounded-full bg-accent-gold/5 border border-accent-gold/20 text-accent-gold flex items-center gap-4 shadow-soft backdrop-blur-sm"
-                >
-                    <div className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                    <p className="text-micro font-black uppercase tracking-widest whitespace-nowrap">
-                        {activeCount} / {tables.length} Actives
-                    </p>
-                </motion.div>
+            <div className="flex items-center gap-3">
+                <div className="px-3.5 py-1.5 rounded-xl bg-surface-card dark:bg-bg-secondary border border-border flex items-center gap-2 text-xs font-semibold text-text-secondary">
+                    <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                    <span>{activeCount} / {tables.length} tables actives</span>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4, duration: 0.8 }}
-                    className="flex items-center bg-bg-secondary p-1 rounded-full border border-border shadow-soft"
-                >
+                <div className="flex items-center bg-surface-card dark:bg-bg-secondary p-1 rounded-xl border border-border">
                     <button
                         onClick={() => setViewMode('grid')}
                         className={cn(
-                            "flex items-center gap-2 px-6 py-2 rounded-full text-chip-label-sm transition-all",
+                            "flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all",
                             viewMode === 'grid'
-                                ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
-                                : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"
+                                ? "bg-action-primary text-text-on-primary shadow-sm"
+                                : "text-text-muted hover:text-text-primary"
                         )}
                     >
-                        <LayoutGrid strokeWidth={2} className="w-3.5 h-3.5" />
-                        Global
+                        <LayoutGrid className="w-3.5 h-3.5" />
+                        Grille
                     </button>
                     <button
                         onClick={() => setViewMode('zones')}
                         className={cn(
-                            "flex items-center gap-2 px-6 py-2 rounded-full text-chip-label-sm transition-all",
+                            "flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all",
                             viewMode === 'zones'
-                                ? "bg-surface-card dark:bg-surface-card text-primary dark:text-primary shadow-xl"
-                                : "text-text-muted dark:text-text-primary/60 hover:text-text-primary dark:hover:text-text-primary"
+                                ? "bg-action-primary text-text-on-primary shadow-sm"
+                                : "text-text-muted hover:text-text-primary"
                         )}
                     >
-                        <Layers strokeWidth={2} className="w-3.5 h-3.5" />
+                        <Layers className="w-3.5 h-3.5" />
                         Zones
                     </button>
-                </motion.div>
+                </div>
             </div>
         </div>
     );

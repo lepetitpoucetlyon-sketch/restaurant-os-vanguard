@@ -33,7 +33,7 @@ export function StorageStockItemCard({
     onTransferStock,
     otherLocations,
 }: StorageStockItemCardProps) {
-    const dlcStatus = getDlcStatus(item.dlc);
+    const dlcStatus = getDlcStatus(item.dlc || item.expirationDate || '');
 
     return (
         <motion.div
@@ -45,10 +45,10 @@ export function StorageStockItemCard({
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                            <p className="font-serif text-lg font-light text-text-primary italic truncate leading-tight">{item.ingredientName}</p>
+                            <p className="font-serif text-lg font-light text-text-primary italic truncate leading-tight">{item.ingredientName || item.name || 'Article'}</p>
                             <div className="flex items-center gap-3 mt-1.5">
                                 <span className="text-sm font-mono font-bold text-text-secondary">
-                                    {item.quantity} {item.unit}
+                                    {item.quantity ?? item.currentStock ?? 0} {item.unit}
                                 </span>
                                 {item.batchNumber && (
                                     <span className="text-nano font-black text-text-muted uppercase px-2 py-0.5 bg-bg-tertiary rounded-sm border border-border">

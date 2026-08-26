@@ -62,7 +62,7 @@ export function ProductHeaderBackdrop({
           <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
             <button
               onClick={onClose}
-              className="w-12 h-12 bg-surface-card/10 dark:bg-surface-sidebar/20 hover:bg-accent-gold hover:text-text-primary backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-subtle shadow-premium group"
+              className="w-12 h-12 bg-surface-glass hover:bg-accent-gold hover:text-text-primary backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-border shadow-premium group"
             >
               <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
             </button>

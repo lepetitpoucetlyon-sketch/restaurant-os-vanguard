@@ -10,10 +10,10 @@ interface ProcurementMetricsCardsProps {
 export function ProcurementMetricsCards({ analysis }: ProcurementMetricsCardsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
+      <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
         <div className="text-micro font-bold text-text-muted uppercase">Articles Scannés</div>
-        <div className="text-2xl font-black text-white mt-1">{analysis.totalItemsScanned}</div>
-        <div className="text-micro text-text-muted/80 mt-0.5">Sur tout le stock restaurant</div>
+        <div className="text-2xl font-black text-text-primary mt-1">{analysis.totalItemsScanned}</div>
+        <div className="text-micro text-text-muted mt-0.5">Sur tout le stock restaurant</div>
       </div>
 
       <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20">

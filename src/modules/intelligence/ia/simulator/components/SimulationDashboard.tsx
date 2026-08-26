@@ -81,7 +81,7 @@ export function SimulationDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-surface-sidebar text-text-primary p-12 font-sans selection:bg-status-danger/30">
+        <div className="min-h-screen bg-surface-bg text-text-primary p-12 font-sans selection:bg-status-danger/30">
             {/* BACKGROUND EFFECTS */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-danger/10 rounded-full blur-[120px]" />
@@ -93,7 +93,7 @@ export function SimulationDashboard() {
                 {/* HEADER */}
                 <div className="flex items-center justify-between mb-16">
                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-[24px] bg-surface-sidebar border border-default flex items-center justify-center shadow-2xl">
+                        <div className="w-16 h-16 rounded-[24px] bg-surface-card border border-border flex items-center justify-center shadow-2xl">
                             <Zap className="text-status-danger" size={32} />
                         </div>
                         <div>
@@ -106,7 +106,7 @@ export function SimulationDashboard() {
                         <Button 
                             variant="outline" 
                             onClick={() => window.location.reload()}
-                            className="h-14 px-8 rounded-2xl border-default bg-transparent hover:bg-surface-sidebar text-muted font-black text-nano uppercase tracking-widest transition-all"
+                            className="h-14 px-8 rounded-2xl border-border bg-transparent hover:bg-surface-glass text-text-muted font-black text-nano uppercase tracking-widest transition-all"
                         >
                             <RotateCcw size={16} className="mr-2" /> Reset
                         </Button>
@@ -153,7 +153,7 @@ export function SimulationDashboard() {
                 </div>
 
                 {/* PROGRESS BAR */}
-                <div className="mb-16 bg-surface-sidebar/50 h-2 rounded-full overflow-hidden border border-default shadow-inner">
+                <div className="mb-16 bg-surface-card/50 h-2 rounded-full overflow-hidden border border-border shadow-inner">
                     <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}
@@ -167,8 +167,8 @@ export function SimulationDashboard() {
                 {/* MAIN CONTENT SPLIT */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                     {/* LOGS PANEL */}
-                    <div className="col-span-1 bg-surface-sidebar/30 border border-default/50 rounded-[2.5rem] p-8 backdrop-blur-3xl overflow-hidden flex flex-col h-[500px]">
-                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-default">
+                    <div className="col-span-1 bg-surface-card/80 border border-border rounded-[2.5rem] p-8 backdrop-blur-3xl overflow-hidden flex flex-col h-[500px]">
+                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
                             <div className="flex items-center gap-3">
                                 <Database size={16} className="text-secondary" />
                                 <h3 className="text-chip-label text-muted">Neural Shield Logs</h3>
@@ -211,7 +211,7 @@ export function SimulationDashboard() {
                     </div>
 
                     {/* COMPARATIVE ANALYSIS */}
-                    <div className="col-span-2 bg-surface-sidebar border border-default rounded-[2.5rem] p-10 flex flex-col">
+                    <div className="col-span-2 bg-surface-card border border-border rounded-[2.5rem] p-10 flex flex-col">
                         <div className="flex items-center justify-between mb-10">
                             <div>
                                 <h3 className="text-2xl font-serif italic text-text-primary mb-1">Analyse Comparative</h3>
@@ -253,7 +253,7 @@ export function SimulationDashboard() {
                             </div>
                         </div>
                         
-                        <div className="mt-12 bg-surface-sidebar/20 border border-default p-6 rounded-3xl flex items-center justify-between">
+                        <div className="mt-12 bg-surface-glass border border-border p-6 rounded-3xl flex items-center justify-between">
                             <div className="flex items-center gap-4">
                                 <Skull className="text-status-danger" size={24} />
                                 <div>
@@ -262,7 +262,7 @@ export function SimulationDashboard() {
                                 </div>
                             </div>
                             <Button
-                                className="h-10 bg-surface-card text-primary text-nano font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+                                className="h-10 bg-action-primary text-text-on-primary text-nano font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
                                 onClick={() => {
                                     showToast("Export FEC des données simulées en cours...", "info");
                                     window.open('/api/admin/finance/fec/export', '_blank');
@@ -289,11 +289,11 @@ interface MetricCardProps {
 function MetricCard({ label, value, icon, subtitle, highlight = false }: MetricCardProps) {
     return (
         <div className={cn(
-            "bg-surface-sidebar/30 border border-default/50 rounded-[2.5rem] p-8 backdrop-blur-3xl transition-all hover:border-default",
+            "bg-surface-card/80 border border-border rounded-[2.5rem] p-8 backdrop-blur-3xl transition-all hover:border-border/80",
             highlight && "border-red-500/30 bg-red-950/5 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
         )}>
             <div className="flex justify-between items-start mb-6">
-                <div className="w-10 h-10 rounded-xl bg-surface-sidebar/50 flex items-center justify-center border border-default/50">
+                <div className="w-10 h-10 rounded-xl bg-surface-glass flex items-center justify-center border border-border">
                     {icon}
                 </div>
                 <div className="bg-surface-card/5 rounded-full px-2 py-0.5 text-nano font-black uppercase text-secondary tracking-tighter">Live</div>

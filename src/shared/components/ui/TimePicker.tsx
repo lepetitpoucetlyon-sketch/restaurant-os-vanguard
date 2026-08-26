@@ -117,11 +117,11 @@ export function TimePicker({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="absolute z-[110] left-0 right-0 mt-3 p-2 bg-surface-card dark:bg-surface-sidebar border border-border/50 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden"
+                        className="absolute z-[110] left-0 right-0 mt-3 p-2 bg-surface-card border border-border/50 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden"
                     >
                         <div className="flex h-64 relative">
                             {/* Selection Highlight */}
-                            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-14 bg-bg-tertiary/50 dark:bg-surface-card/5 rounded-2xl pointer-events-none border border-accent-gold/10" />
+                            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-14 bg-surface-glass rounded-2xl pointer-events-none border border-accent-gold/10" />
                             
                             {/* Hours Column */}
                             <div 

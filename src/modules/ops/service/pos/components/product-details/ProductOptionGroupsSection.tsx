@@ -65,7 +65,7 @@ export function ProductOptionGroupsSection({
                         "w-6 h-6 rounded-xl border flex items-center justify-center transition-all duration-500",
                         isSelected
                           ? "bg-accent-gold border-accent-gold scale-110 shadow-premium"
-                          : "border-border/80 bg-surface-card dark:bg-surface-sidebar group-hover:scale-105"
+                          : "border-border/80 bg-surface-glass group-hover:scale-105"
                       )}
                     >
                       {isSelected && <Check className="w-3.5 h-3.5 text-text-primary" />}

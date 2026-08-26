@@ -23,8 +23,8 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
             className={cn(
                 "group relative flex flex-col gap-8 xl:grid xl:grid-cols-[200px_1fr] 2xl:grid-cols-[240px_1fr] xl:gap-10 p-6 md:p-10 rounded-[3rem] md:rounded-[4rem] border transition-all duration-700 isolate",
                 day.isOpen
-                    ? "bg-surface-card/95 dark:bg-surface-sidebar/40 backdrop-blur-3xl border-black/5 dark:border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.05)] z-0 hover:z-10 focus-within:z-50 focus-within:shadow-[0_40px_100px_rgba(0,0,0,0.1)] dark:focus-within:shadow-[0_40px_100px_rgba(0,0,0,0.5)]"
-                    : "bg-surface-sidebar/[0.02] dark:bg-surface-card/[0.02] border-transparent opacity-40 hover:opacity-100"
+                    ? "bg-surface-card/95 dark:bg-surface-card/40 backdrop-blur-3xl border-border-default shadow-[0_20px_50px_rgba(0,0,0,0.05)] z-0 hover:z-10 focus-within:z-50 focus-within:shadow-[0_40px_100px_rgba(0,0,0,0.1)] dark:focus-within:shadow-[0_40px_100px_rgba(0,0,0,0.5)]"
+                    : "bg-surface-glass border-transparent opacity-40 hover:opacity-100"
             )}
         >
             {/* Day Control */}
@@ -41,19 +41,19 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4 bg-surface-card/50 dark:bg-surface-card/[0.05] p-2 pr-6 rounded-full border border-black/5 dark:border-white/5">
+                <div className="flex items-center gap-4 bg-surface-card/50 dark:bg-surface-card/[0.05] p-2 pr-6 rounded-full border border-border-default">
                     <button
                         type="button"
                         onClick={() => onChange({ isOpen: !day.isOpen })}
                         className={cn(
                             "w-16 h-10 rounded-full relative transition-all duration-700 shadow-inner group/toggle overflow-hidden",
-                            day.isOpen ? "bg-accent shadow-[0_0_20px_rgba(197,160,89,0.3)]" : "bg-surface-bg dark:bg-surface-sidebar"
+                            day.isOpen ? "bg-accent shadow-[0_0_20px_rgba(197,160,89,0.3)]" : "bg-surface-bg dark:bg-surface-card"
                         )}
                     >
                         <motion.div
                             animate={{ x: day.isOpen ? 26 : 0 }}
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                            className="absolute top-1.5 left-1.5 w-7 h-7 bg-surface-card dark:bg-bg-primary rounded-full shadow-xl z-10 flex items-center justify-center"
+                            className="absolute top-1.5 left-1.5 w-7 h-7 bg-surface-card dark:bg-surface-bg rounded-full shadow-xl z-10 flex items-center justify-center"
                         >
                             <div className={cn("w-1.5 h-1.5 rounded-full transition-all duration-500", day.isOpen ? "bg-accent" : "bg-surface-tertiary")} />
                         </motion.div>

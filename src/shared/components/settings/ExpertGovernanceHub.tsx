@@ -96,11 +96,11 @@ export default function ExpertGovernanceHub() {
             className="space-y-10"
         >
             {/* Header / Context */}
-            <motion.div variants={fadeInUp} className="bg-bg-secondary p-10 rounded-[3rem] border border-border shadow-premium relative overflow-hidden">
+            <motion.div variants={fadeInUp} className="bg-surface-card p-10 rounded-[3rem] border border-border-default shadow-premium relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                 
                 <div className="flex items-center gap-6 relative z-10">
-                    <div className="w-20 h-20 rounded-3xl bg-surface-sidebar border border-subtle flex items-center justify-center shadow-2xl">
+                    <div className="w-20 h-20 rounded-3xl bg-surface-glass-hover border border-border-default flex items-center justify-center shadow-2xl">
                         <Scale className="w-10 h-10 text-accent-gold" />
                     </div>
                     <div>
@@ -125,14 +125,14 @@ export default function ExpertGovernanceHub() {
                         <motion.div 
                             key={expert.domain}
                             variants={fadeInUp}
-                            className="bg-bg-secondary p-8 rounded-[2.5rem] border border-border shadow-lg space-y-8 relative overflow-hidden"
+                            className="bg-surface-card p-8 rounded-[2.5rem] border border-border-default shadow-lg space-y-8 relative overflow-hidden"
                         >
                             {/* Expert Status & Info */}
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-5">
                                     <div className={cn(
                                         "w-14 h-14 rounded-2xl flex items-center justify-center border shadow-inner",
-                                        expert.enabled ? `bg-${meta.color}-500/10 border-${meta.color}-500/20 text-${meta.color}-500` : "bg-bg-tertiary border-border text-text-muted opacity-40"
+                                        expert.enabled ? `bg-${meta.color}-500/10 border-${meta.color}-500/20 text-${meta.color}-500` : "bg-surface-glass border-border-default text-text-muted opacity-40"
                                     )}>
                                         <Icon className="w-7 h-7" />
                                     </div>
@@ -147,8 +147,8 @@ export default function ExpertGovernanceHub() {
                                     className={cn(
                                         "px-5 py-2 rounded-full text-chip-label-sm transition-all border",
                                         expert.enabled 
-                                            ? "bg-text-primary text-text-primary border-transparent shadow-xl" 
-                                            : "bg-bg-tertiary text-text-muted border-border hover:bg-bg-primary"
+                                            ? "bg-accent-gold text-white border-transparent shadow-xl" 
+                                            : "bg-surface-glass text-text-muted border-border-default hover:bg-surface-glass-hover"
                                     )}
                                 >
                                     {expert.enabled ? 'Activé' : 'Désactivé'}
@@ -159,7 +159,7 @@ export default function ExpertGovernanceHub() {
                                 {meta.description}
                             </p>
 
-                            <div className="space-y-6 pt-6 border-t border-border/50">
+                            <div className="space-y-6 pt-6 border-t border-border-default/50">
                                 {/* Role Control */}
                                 <div className="space-y-3">
                                     <label className="text-nano font-black uppercase tracking-[0.2em] text-text-muted flex items-center gap-2">
@@ -173,8 +173,8 @@ export default function ExpertGovernanceHub() {
                                                 className={cn(
                                                     "px-4 h-9 rounded-xl text-nano font-black uppercase tracking-widest transition-all border",
                                                     expert.minRole === role 
-                                                        ? "bg-surface-sidebar text-accent-gold border-accent-gold/30 shadow-lg" 
-                                                        : "bg-bg-tertiary text-text-muted border-border opacity-60 hover:opacity-100"
+                                                        ? "bg-accent-gold text-white border-accent-gold/30 shadow-lg" 
+                                                        : "bg-surface-glass text-text-muted border-border-default opacity-60 hover:opacity-100"
                                                 )}
                                             >
                                                 {role}
@@ -197,7 +197,7 @@ export default function ExpertGovernanceHub() {
                                                     "p-4 rounded-2xl border text-left transition-all group",
                                                     expert.modelId === model.id 
                                                         ? "bg-accent-gold/10 border-accent-gold/30" 
-                                                        : "bg-bg-tertiary border-border/50 opacity-60 hover:opacity-100"
+                                                        : "bg-surface-glass border-border-default/50 opacity-60 hover:opacity-100"
                                                 )}
                                             >
                                                 <div className="flex items-center gap-2 mb-1">
@@ -220,7 +220,7 @@ export default function ExpertGovernanceHub() {
             </div>
 
             {/* Global Settings / API Health */}
-            <motion.div variants={fadeInUp} className="bg-bg-secondary p-10 rounded-[3rem] border border-border mt-12">
+            <motion.div variants={fadeInUp} className="bg-surface-card p-10 rounded-[3rem] border border-border-default mt-12">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h3 className="text-xl font-serif text-text-primary">État du Moteur de Diagnostic</h3>
@@ -232,11 +232,11 @@ export default function ExpertGovernanceHub() {
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-6 border-t border-border/50">
+                <div className="flex justify-end pt-6 border-t border-border-default/50">
                     <button
                         onClick={handleSaveGlobal}
                         disabled={isSaving}
-                        className="flex items-center gap-4 px-10 py-5 bg-surface-sidebar text-accent-gold rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                        className="flex items-center gap-4 px-10 py-5 bg-accent-gold text-white rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
                     >
                         {isSaving ? (
                             <Activity className="w-4 h-4 animate-spin" />

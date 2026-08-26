@@ -33,92 +33,81 @@ interface CartProps {
 }
 
 const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemContextMenu }: { item: CartItem, priceMultiplier: number, onUpdateQuantity: (id: string, d: number) => void, onItemContextMenu?: (id: string, item: CartItem) => void }) => {
+    const itemTotalMicro = Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier) * item.quantity;
+
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="group relative overflow-hidden rounded-[20px] bg-bg-secondary mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="group relative overflow-hidden rounded-xl bg-surface-card dark:bg-bg-secondary border border-border/70 dark:border-white/10 mb-2.5 p-3"
         >
-            {/* Background Actions (Revealed on Swipe) */}
-            <div className="absolute inset-y-0 right-0 flex items-center justify-end px-4 gap-2 w-[120px] bg-surface-sidebar/50">
-                <button
-                    onClick={() => onItemContextMenu?.(item.cartId, item)}
-                    className="w-10 h-10 rounded-full bg-accent-gold/20 flex items-center justify-center text-accent-gold hover:bg-accent-gold/40 transition-colors"
-                >
-                    <Percent className="w-4 h-4" />
-                </button>
-                <button
-                    onClick={() => onItemContextMenu?.(item.cartId, item)} // The context menu handles cancel/refund
-                    className="w-10 h-10 rounded-full bg-status-error/20 flex items-center justify-center text-status-error hover:bg-status-error/40 transition-colors"
-                >
-                    <Trash2 className="w-4 h-4" />
-                </button>
-            </div>
-
-            {/* Foreground Draggable Content */}
-            <motion.div
-                drag="x"
-                dragConstraints={{ left: -120, right: 0 }}
-                dragElastic={0.1}
-                whileTap={{ cursor: "grabbing" }}
-                className="relative bg-bg-secondary p-4 rounded-[20px] border border-border/30 flex flex-col gap-4 shadow-[0_5px_15px_-10px_rgba(0,0,0,0.3)] z-10"
-            >
-                <div className="flex justify-between items-start">
-                    <div className="flex gap-4">
-                        <div className="w-8 h-8 rounded-xl bg-accent-gold/10 text-accent-gold flex items-center justify-center font-serif font-black italic text-xs">
+            <div className="flex justify-between items-start gap-3">
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-md bg-action-primary/10 text-action-primary flex items-center justify-center font-mono font-bold text-xs shrink-0">
                             {item.quantity}
-                        </div>
-                        <div className="min-w-0">
-                            <h4 className="text-[14px] font-black text-text-primary uppercase tracking-tight">{item.name}</h4>
-                            {(item.modifiers?.length || 0) > 0 && (
-                                <p className="text-nano text-text-muted mt-1 uppercase font-black tracking-widest">{item.modifiers?.map(m => m.name).join(", ")}</p>
-                            )}
-                        </div>
+                        </span>
+                        <h4 className="text-sm font-semibold text-text-primary truncate">
+                            {item.name}
+                        </h4>
                     </div>
-                    <div className="flex flex-col items-end gap-0.5">
-                        {item.originalPriceInMicrounits && (
-                            <span className="text-nano line-through opacity-40 font-mono text-status-error">
-                                {formatMu(Math.round(Number(item.originalPriceInMicrounits) * priceMultiplier) * item.quantity)}
-                            </span>
-                        )}
-                        <span className="text-sm font-serif font-black italic">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier) * item.quantity)}</span>
-                        <span className="text-nano opacity-40 font-mono">{formatMu(Math.round(Number(item.unitPriceInMicrounits) * priceMultiplier))} unit</span>
-                        
-                        {item.isOffer && (
-                            <span className="text-nano font-black uppercase tracking-widest bg-status-success/10 text-status-success border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                                OFFERT
-                            </span>
-                        )}
-                        {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
-                            <span className="text-nano font-black uppercase tracking-widest bg-accent-gold/10 text-accent-gold border border-accent-gold/20 px-2 py-0.5 rounded-full">
-                                -{item.discountPercent}%
-                            </span>
-                        )}
-                    </div>
+
+                    {(item.modifiers?.length || 0) > 0 && (
+                        <p className="text-xs text-text-muted mt-1 truncate pl-7">
+                            {item.modifiers?.map(m => m.name).join(", ")}
+                        </p>
+                    )}
                 </div>
 
-                <div className="flex items-center justify-end gap-2 pr-1">
-                    <button onClick={() => onUpdateQuantity(item.cartId, -1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
+                <div className="text-right shrink-0">
+                    <span className="text-sm font-bold font-mono text-text-primary tabular-nums">
+                        {formatMu(itemTotalMicro)}
+                    </span>
+                    {item.isOffer && (
+                        <span className="block text-[10px] font-bold uppercase text-status-success bg-status-success/10 px-1.5 py-0.5 rounded">
+                            Offert
+                        </span>
+                    )}
+                    {!item.isOffer && (item.discountPercent ?? 0) > 0 && (
+                        <span className="block text-[10px] font-bold uppercase text-action-primary bg-action-primary/10 px-1.5 py-0.5 rounded">
+                            -{item.discountPercent}%
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            {/* Actions: Steppers + Ellipsis */}
+            <div className="flex items-center justify-between pt-2.5 mt-2.5 border-t border-border/40">
+                <div className="flex items-center gap-1.5">
+                    <button
+                        onClick={() => onUpdateQuantity(item.cartId, -1)}
+                        className="w-7 h-7 rounded-lg bg-bg-tertiary hover:bg-border flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                        title="Diminuer"
+                    >
                         <Minus className="w-3 h-3" />
                     </button>
                     <span className="w-6 text-center text-xs font-mono font-bold">{item.quantity}</span>
-                    <button onClick={() => onUpdateQuantity(item.cartId, 1)} className="w-8 h-8 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted">
+                    <button
+                        onClick={() => onUpdateQuantity(item.cartId, 1)}
+                        className="w-7 h-7 rounded-lg bg-bg-tertiary hover:bg-border flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                        title="Augmenter"
+                    >
                         <Plus className="w-3 h-3" />
                     </button>
-                    {/* Keep the ellipsis button for non-touch users or quick access */}
-                    {onItemContextMenu && (
-                        <button
-                            onClick={() => onItemContextMenu(item.cartId, item)}
-                            className="w-8 h-8 rounded-lg bg-bg-tertiary/60 flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors ml-4"
-                            title="Actions (remise / offrir / annuler)"
-                        >
-                            <MoreHorizontal className="w-3.5 h-3.5" />
-                        </button>
-                    )}
                 </div>
-            </motion.div>
+
+                {onItemContextMenu && (
+                    <button
+                        onClick={() => onItemContextMenu(item.cartId, item)}
+                        className="w-7 h-7 rounded-lg bg-bg-tertiary/60 hover:bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                        title="Actions (remise / offrir / annuler)"
+                    >
+                        <MoreHorizontal className="w-3.5 h-3.5" />
+                    </button>
+                )}
+            </div>
         </motion.div>
     );
 };
@@ -127,12 +116,6 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
 export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    // ⚠️ `onSplitBill` et ce réglage étaient tous deux préfixés `_` (convention
-    // « paramètre inutilisé ») : le panier n'affichait AUCUN bouton de partage,
-    // `setIsSplitOpen(true)` n'était jamais appelé, et `SplitBillDialog` ne
-    // pouvait donc jamais s'ouvrir — alors que l'écran de répartition existe et
-    // que les paramètres proposaient au gérant un interrupteur « Addition
-    // divisée » (config-registry.ts) qui ne pilotait rien.
     const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
     const { data: config } = useIntelligence();
     const globalInflationRate = config?.globalInflationRate || 0;
@@ -143,7 +126,6 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
         let htMicro = BigInt(0);
 
         items.forEach(item => {
-            // Application du multiplicateur de flotte sur les Microunités
             const basePriceMicro = BigInt(item.unitPriceInMicrounits);
             const multipliedPriceMicro = BigInt(Math.round(Number(basePriceMicro) * priceMultiplier));
             const itemTotalMicro = multipliedPriceMicro * BigInt(item.quantity);
@@ -161,51 +143,51 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
         };
     }, [items, priceMultiplier]);
 
-
     return (
         <div className={cn(
-            "flex flex-col h-full bg-bg-secondary transition-colors duration-500",
-            !isMobile ? "border-l border-border w-[400px]" : "w-full"
+            "flex flex-col h-full bg-surface-card dark:bg-bg-secondary transition-colors duration-200",
+            !isMobile ? "border-l border-border w-[380px] lg:w-[420px]" : "w-full"
         )}>
             {/* Cart Header */}
-            <div className="p-6 lg:p-8 border-b border-border flex items-center justify-between bg-surface-card/50 dark:bg-bg-secondary/50 backdrop-blur-md">
+            <div className="p-5 border-b border-border flex items-center justify-between bg-surface-card dark:bg-bg-secondary">
                 <div>
-                    <h2 className="text-2xl lg:text-3xl font-serif font-black text-text-primary tracking-tight leading-none italic">
-                        {t('pos.table')} <span className="text-accent-gold not-italic">{tableNumber || '--'}</span>.
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-action-primary">Commande</span>
+                    </div>
+                    <h2 className="text-xl font-bold text-text-primary tracking-tight mt-0.5">
+                        {t('pos.table')} {tableNumber || '--'}
                     </h2>
-                    <div className="flex items-center gap-4 mt-3">
-                        <div className="flex items-center gap-2 text-nano font-black text-text-muted uppercase tracking-[0.3em]">
-                            <Users strokeWidth={1.5} className="w-3.5 h-3.5 text-accent-gold" />
-                            {guestCount || 0} {t('common.covers')}
-                        </div>
+                    <div className="flex items-center gap-2 text-xs text-text-muted mt-1 font-medium">
+                        <Users className="w-3.5 h-3.5 text-action-primary" />
+                        <span>{guestCount || 0} {t('common.covers')}</span>
                     </div>
                 </div>
+
                 <div className="flex items-center gap-2">
-                    <SettingsGearButton pageKey="pos" className="h-10 w-10 shrink-0" />
+                    <SettingsGearButton pageKey="pos" className="h-9 w-9 shrink-0" />
                     {showClose && isMobile && (
-                        <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center">
-                            <X className="w-5 h-5 text-text-muted" />
+                        <button onClick={onClose} className="w-9 h-9 rounded-lg bg-bg-tertiary flex items-center justify-center">
+                            <X className="w-4 h-4 text-text-muted" />
                         </button>
                     )}
                 </div>
             </div>
 
             {/* Items List */}
-            <ScrollArea className="flex-1 bg-bg-primary/20 scrollbar-hide">
+            <ScrollArea className="flex-1 bg-bg-primary/30 p-4">
                 <AnimatePresence mode="popLayout">
                     {items.length === 0 ? (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="flex flex-col items-center justify-center min-h-[300px] text-center p-8"
+                            className="flex flex-col items-center justify-center min-h-[220px] text-center p-6 text-text-muted"
                         >
-                            <div className="w-16 h-16 rounded-[2rem] bg-bg-tertiary flex items-center justify-center mb-6">
-                                <ChefHat strokeWidth={1} className="w-8 h-8 text-text-muted opacity-40" />
-                            </div>
-                            <h3 className="text-base font-serif font-black text-text-primary italic">{t('pos.cart.empty')}</h3>
+                            <ChefHat className="w-10 h-10 mb-3 opacity-30" />
+                            <p className="text-sm font-medium">{t('pos.cart.empty')}</p>
+                            <p className="text-xs text-text-muted mt-1">Sélectionnez des articles pour commencer</p>
                         </motion.div>
                     ) : (
-                        <div className="p-6 lg:p-10 space-y-8">
+                        <div>
                             {items.map((item) => (
                                 <SwipeableCartItem
                                     key={item.cartId}
@@ -221,27 +203,16 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
             </ScrollArea>
 
             {/* Bottom Panel */}
-            <div className="p-6 lg:p-10 border-t border-border/50 bg-surface-card/50 dark:bg-surface-sidebar/20 backdrop-blur-3xl">
+            <div className="p-5 border-t border-border bg-surface-card dark:bg-bg-secondary space-y-3">
                 <FiscalReceiptSealZone zoneId="fiscal-seal-receipt-total">
-                    <div className="space-y-4 mb-8">
-                        <div className="flex justify-between items-center text-nano font-black text-text-muted uppercase tracking-widest">
-                            <span>{t('pos.cart.subtotal')}</span>
-                            <div className="flex items-center gap-4">
-                                {totalInMicrounits > 0 && (
-                                    <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
-                                        <Sparkles className="w-3 h-3 text-accent-gold" />
-                                        <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInMicrounits / 1_000_000, globalInflationRate).toFixed(1)}%</span>
-                                    </div>
-                                )}
-                            </div>
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-xs text-text-muted font-medium">
+                            <span>Total HT</span>
+                            <span className="font-mono">{formatMu(htInMicrounits)}</span>
                         </div>
-                        <div className="flex justify-between text-text-muted mt-1 px-1">
-                            <span className="text-nano font-bold uppercase tracking-widest opacity-40">Tax (HT)</span>
-                            <span className="font-mono text-sm">{formatMu(htInMicrounits)}</span>
-                        </div>
-                        <div className="flex justify-between items-baseline mt-2 pt-2 border-t border-subtle px-1">
-                            <span className="text-sm font-serif font-black italic text-accent-gold">TOTAL TTC</span>
-                            <span className="text-4xl font-serif font-black italic text-text-primary tracking-tighter drop-shadow-glow">
+                        <div className="flex justify-between items-baseline pt-2 border-t border-border">
+                            <span className="text-sm font-bold text-text-primary">Total TTC</span>
+                            <span className="text-2xl font-bold font-mono text-text-primary tracking-tight tabular-nums">
                                 {formatMu(totalInMicrounits)}
                             </span>
                         </div>
@@ -252,31 +223,29 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     <button
                         onClick={onSplitBill}
                         disabled={items.length === 0}
-                        className="w-full h-12 mb-4 flex items-center justify-center gap-2.5 bg-bg-tertiary/60 text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border/50 rounded-[2rem] disabled:opacity-30 disabled:hover:text-text-muted transition-colors"
+                        className="w-full py-2.5 flex items-center justify-center gap-2 bg-bg-tertiary hover:bg-border text-text-secondary hover:text-text-primary text-xs font-semibold rounded-xl disabled:opacity-40 transition-colors border border-border"
                     >
-                        <Users className="w-4 h-4" />
-                        <span className="text-nano font-black uppercase tracking-[0.2em]">
-                            {t('pos.split_bill', "Partager l'addition")}
-                        </span>
+                        <Users className="w-3.5 h-3.5" />
+                        <span>{t('pos.split_bill', "Partager l'addition")}</span>
                     </button>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
                     <button
                         onClick={onSendToKitchen}
                         disabled={items.length === 0}
-                        className="h-16 flex flex-col items-center justify-center gap-1.5 bg-bg-tertiary text-text-muted rounded-[2rem] disabled:opacity-30"
+                        className="py-3 flex items-center justify-center gap-2 bg-bg-tertiary hover:bg-border text-text-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-colors border border-border"
                     >
-                        <ChefHat className="w-5 h-5" />
-                        <span className="text-nano font-black uppercase tracking-[0.2em]">{t('pos.cart.kitchen')}</span>
+                        <ChefHat className="w-4 h-4" />
+                        <span>Cuisine</span>
                     </button>
                     <button
                         onClick={onCheckout}
                         disabled={items.length === 0}
-                        className="h-16 flex flex-col items-center justify-center gap-1.5 bg-accent-gold text-text-primary rounded-[2rem] shadow-xl shadow-accent-gold/20 disabled:opacity-30"
+                        className="py-3 flex items-center justify-center gap-2 bg-action-primary hover:opacity-95 text-text-on-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-all shadow-sm"
                     >
-                        <CreditCard className="w-6 h-6" />
-                        <span className="text-nano font-black uppercase tracking-[0.2em]">{t('pos.cart.checkout')}</span>
+                        <CreditCard className="w-4 h-4" />
+                        <span>Encaisser</span>
                     </button>
                 </div>
             </div>

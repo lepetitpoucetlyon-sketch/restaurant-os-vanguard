@@ -34,7 +34,7 @@ export function MaintenanceHeader({
   onSave,
 }: MaintenanceHeaderProps) {
   return (
-    <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl backdrop-blur-xl space-y-5">
+    <div className="p-6 rounded-3xl bg-surface-card border border-border-default shadow-xl backdrop-blur-xl space-y-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export function MaintenanceHeader({
               Pilier 8 Facility
             </span>
           </div>
-          <h2 className="text-2xl font-black text-white tracking-tight">
+          <h2 className="text-2xl font-black text-text-primary tracking-tight">
             Paramètres de Maintenance & Routage des Alertes
           </h2>
           <p className="text-xs text-text-muted">
@@ -57,7 +57,7 @@ export function MaintenanceHeader({
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary transition-colors"
+            className="p-2.5 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-secondary transition-colors"
             title="Rafraîchir"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -73,7 +73,7 @@ export function MaintenanceHeader({
         </div>
       </div>
 
-      <div className="pt-4 border-t border-slate-800/80">
+      <div className="pt-4 border-t border-border-default">
         <div className="text-micro font-bold text-text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <Building2 className="w-3.5 h-3.5 text-text-muted" />
           <span>Périmètre & Zone d Établissement :</span>
@@ -88,7 +88,7 @@ export function MaintenanceHeader({
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
                   isSelected
                     ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-sm'
-                    : 'bg-slate-950/60 border-slate-800/80 text-text-muted hover:text-text-primary hover:border-slate-700'
+                    : 'bg-surface-glass border-border-default text-text-muted hover:text-text-primary hover:border-border-focus'
                 }`}
               >
                 {ZONE_ICONS[zoneKey]}

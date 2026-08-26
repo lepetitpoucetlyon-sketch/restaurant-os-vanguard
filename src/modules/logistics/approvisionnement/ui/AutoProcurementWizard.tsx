@@ -60,16 +60,16 @@ export function AutoProcurementWizard({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="relative w-full max-w-5xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-text-primary"
+        className="relative w-full max-w-5xl max-h-[90vh] bg-surface-card border border-border-default rounded-3xl shadow-2xl flex flex-col overflow-hidden text-text-primary"
       >
         {/* Header Modal */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-800/80 bg-slate-950/60">
+        <div className="flex items-center justify-between p-6 border-b border-border-default bg-surface-card/60">
           <div className="flex items-center gap-3.5">
             <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shadow-lg shadow-amber-500/5">
               <Sparkles className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <h2 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
+              <h2 className="text-xl font-black tracking-tight text-text-primary flex items-center gap-2">
                 AUTO-APPROVISIONNEMENT INTELLIGENT
                 <span className="text-nano px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase tracking-wider">
                   OPTIMISATION FRANCO
@@ -82,7 +82,7 @@ export function AutoProcurementWizard({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-text-muted hover:text-white rounded-xl bg-slate-800/50 hover:bg-slate-800 transition"
+            className="p-2 text-text-muted hover:text-text-primary rounded-xl bg-surface-glass hover:bg-surface-glass-hover transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -99,7 +99,7 @@ export function AutoProcurementWizard({
               <div className="p-4 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-xl shadow-emerald-500/10">
                 <CheckCircle2 className="w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-black text-white tracking-tight">
+              <h3 className="text-2xl font-black text-text-primary tracking-tight">
                 {dispatchedOrders.length} Bon{dispatchedOrders.length > 1 ? 's' : ''} de Commande Généré{dispatchedOrders.length > 1 ? 's' : ''} avec Succès !
               </h3>
               <p className="text-sm text-text-muted max-w-md">
@@ -134,22 +134,22 @@ export function AutoProcurementWizard({
 
         {/* Footer Actions */}
         {!isSuccessStep && (
-          <div className="p-6 border-t border-slate-800/80 bg-slate-950/80 flex items-center justify-between">
+          <div className="p-6 border-t border-border-default bg-surface-card/80 flex items-center justify-between">
             <div className="text-xs text-text-muted">
               Total Global Estimé :{' '}
-              <span className="text-base font-black text-white ml-1">
+              <span className="text-base font-black text-text-primary ml-1">
                 {(analysis.grandTotalHtCts / 100).toFixed(2)} € HT
               </span>
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={onClose} className="rounded-xl border-slate-700 text-text-secondary">
+              <Button variant="outline" onClick={onClose} className="rounded-xl border-border-default text-text-secondary">
                 Annuler
               </Button>
               <Button
                 disabled={analysis.supplierBaskets.length === 0 || isProcessing}
                 onClick={handleConfirmAndSendAll}
-                className="rounded-xl bg-amber-500 hover:bg-amber-400 text-text-primary font-black px-6 shadow-lg shadow-amber-500/20 flex items-center gap-2"
+                className="rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-black px-6 shadow-lg shadow-amber-500/20 flex items-center gap-2"
               >
                 {isProcessing ? (
                   <>

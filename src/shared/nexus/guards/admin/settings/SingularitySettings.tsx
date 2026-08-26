@@ -100,7 +100,7 @@ export function SingularitySettings() {
                                     ...settings!,
                                     planningConfig: { ...settings?.planningConfig, staffToCoversRatio: parseInt(e.target.value) } as import('@nexus/contracts').PlanningConfig
                                 })}
-                                className="bg-surface-sidebar/40 border border-subtle rounded-lg p-3 text-sm font-mono focus:border-accent outline-none transition-colors"
+                                className="bg-surface-glass border border-border rounded-lg p-3 text-sm font-mono focus:border-action-primary outline-none transition-colors"
                             />
                         </div>
                         <p className="text-nano text-text-muted italic leading-relaxed">
@@ -110,7 +110,7 @@ export function SingularitySettings() {
                 </GlassCard>
 
                 {/* Section Finance : Mode Comptable */}
-                <GlassCard className="p-6 flex flex-col gap-6 border-white/5 bg-surface-card/5">
+                <GlassCard className="p-6 flex flex-col gap-6 border-border bg-surface-card">
                     <div className="flex items-center gap-3">
                         <Calculator size={18} className="text-success" />
                         <span className="text-sm font-black uppercase tracking-tight">Souveraineté Financière</span>
@@ -119,7 +119,7 @@ export function SingularitySettings() {
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <label className="text-nano font-black text-text-muted uppercase tracking-widest">Mode de Complexité</label>
-                            <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
+                            <div className="grid grid-cols-2 gap-2 bg-surface-glass p-1 rounded-xl border border-border">
                                 {['SIMPLE', 'EXPERT'].map((mode) => (
                                     <button
                                         key={mode}

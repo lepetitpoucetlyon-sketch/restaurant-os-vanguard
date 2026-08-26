@@ -62,7 +62,7 @@ export function MobileHeader() {
     const categoryId = getPageKeyFromPath(pathname);
 
     return (
-        <header className="lg:hidden min-h-16 pt-[env(safe-area-inset-top)] bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-[40px] px-6 flex items-center justify-between border-b border-subtle dark:border-white/5 sticky top-0 z-[50] shadow-sm">
+        <header className="lg:hidden min-h-16 pt-[env(safe-area-inset-top)] bg-surface-glass backdrop-blur-[40px] px-6 flex items-center justify-between border-b border-border sticky top-0 z-[50] shadow-sm">
             <div className="flex items-center gap-2 py-4">
                 <PageHeaderWithDocs categoryId={categoryId} title={getTitle(pathname)} className="text-xl font-serif font-black italic text-text-primary tracking-tight">
                     <span className="text-accent-gold not-italic">.</span>

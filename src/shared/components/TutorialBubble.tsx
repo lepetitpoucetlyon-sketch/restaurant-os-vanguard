@@ -103,8 +103,8 @@ export function TutorialBubble() {
 
     if (isNavigating) {
         return createPortal(
-            <div className="fixed inset-0 z-[9999] bg-surface-sidebar/50 backdrop-blur-sm flex items-center justify-center">
-                <div className="bg-surface-card dark:bg-bg-secondary p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4">
+            <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                <div className="bg-surface-card p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
                     <p className="font-serif italic text-lg text-text-primary">Navigation vers l'étape suivante...</p>
                 </div>
@@ -136,7 +136,7 @@ export function TutorialBubble() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-[2px]"
+                className="absolute inset-0 bg-black/80 backdrop-blur-[2px]"
                 style={hasTarget ? {
                     clipPath: `polygon(
                         0% 0%, 0% 100%, 
@@ -184,10 +184,10 @@ export function TutorialBubble() {
                     y: hasTarget ? (showAbove ? '-100%' : '0%') : '-50%'
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute w-[320px] bg-surface-card dark:bg-bg-secondary rounded-[2.5rem] shadow-premium shadow-glow-accent/10 dark:shadow-black/80 border border-subtle dark:border-border p-7 pointer-events-auto overflow-hidden ring-1 ring-black/5"
+                className="absolute w-[320px] bg-surface-card rounded-[2.5rem] shadow-premium shadow-glow-accent/10 dark:shadow-black/80 border border-border-default p-7 pointer-events-auto overflow-hidden ring-1 ring-black/5"
             >
                 {/* Status Indicator Bar */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-surface-bg dark:bg-surface-sidebar rounded-b-xl flex items-center justify-center overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-surface-glass rounded-b-xl flex items-center justify-center overflow-hidden">
                     <div className="w-1.5 h-1.5 rounded-full bg-teal shadow-[0_0_8px_rgba(0,217,166,0.6)] animate-pulse" />
                 </div>
 
@@ -195,7 +195,7 @@ export function TutorialBubble() {
                 {hasTarget && (
                     <div
                         className={cn(
-                            "absolute w-6 h-6 bg-surface-card dark:bg-bg-secondary rotate-45 left-1/2 -translate-x-1/2 border-white dark:border-bg-secondary",
+                            "absolute w-6 h-6 bg-surface-card rotate-45 left-1/2 -translate-x-1/2 border-border-default",
                             arrowPosition === 'top' ? "-top-3 border-t border-l" : "-bottom-3 border-b border-r"
                         )}
                     />
@@ -207,24 +207,24 @@ export function TutorialBubble() {
                         <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center text-text-primary text-sm font-black shadow-lg shadow-[#00D9A6]/20">
                             {currentPointIndex + 1}
                         </div>
-                        <span className="text-nano font-black text-muted uppercase tracking-[0.2em]">
+                        <span className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">
                             Étape {currentPointIndex + 1} / {currentSection.points.length}
                         </span>
                     </div>
                     <button
                         onClick={stopTutorial}
-                        className="p-2 hover:bg-surface-bg rounded-full transition-colors group"
+                        className="p-2 hover:bg-surface-glass rounded-full transition-colors group"
                     >
-                        <X className="w-4 h-4 text-muted group-hover:text-primary" />
+                        <X className="w-4 h-4 text-text-muted group-hover:text-text-primary" />
                     </button>
                 </div>
 
                 {/* Content */}
                 <div className="space-y-4 relative z-10 mb-8">
-                    <h4 className="text-2xl font-serif italic font-black text-primary leading-tight">
+                    <h4 className="text-2xl font-serif italic font-black text-text-primary leading-tight">
                         {currentPoint.label}
                     </h4>
-                    <p className="text-sm text-secondary font-medium leading-relaxed">
+                    <p className="text-sm text-text-secondary font-medium leading-relaxed">
                         {currentPoint.description}
                     </p>
                 </div>
@@ -234,7 +234,7 @@ export function TutorialBubble() {
                     {/* We prioritize Next button visibility as per screenshot style */}
                     <button
                         onClick={nextStep}
-                        className="h-12 px-8 bg-surface-sidebar hover:bg-surface-sidebar text-text-primary rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
+                        className="h-12 px-8 bg-accent-gold hover:bg-accent-gold/90 text-white rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
                     >
                         {isLastStep ? "Terminer" : "Suivant"}
                         <ChevronRight className="w-3 h-3" />

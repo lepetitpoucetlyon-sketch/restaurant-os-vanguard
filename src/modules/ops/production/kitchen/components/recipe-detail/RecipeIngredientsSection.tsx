@@ -23,7 +23,7 @@ export function RecipeIngredientsSection({
             <div>
                 <div className="flex items-center justify-between mb-8">
                     <h3 className="text-micro font-black uppercase tracking-[0.4em] transition-colors text-primary">Ingrédients</h3>
-                    <div className="h-px w-20 transition-colors bg-surface-sidebar/10" />
+                    <div className="h-px w-20 transition-colors bg-border" />
                 </div>
                 <motion.ul
                     variants={staggerContainer}
@@ -37,7 +37,7 @@ export function RecipeIngredientsSection({
                             <motion.li
                                 variants={staggerItem}
                                 key={i}
-                                className="flex items-center justify-between py-3 border-b group px-2 rounded-xl transition-all border-black/5 hover:bg-surface-sidebar/5"
+                                className="flex items-center justify-between py-3 border-b group px-2 rounded-xl transition-all border-border hover:bg-surface-glass"
                             >
                                 <span className="text-[14px] font-medium transition-colors group-hover:text-accent text-primary">
                                     {ing.name}

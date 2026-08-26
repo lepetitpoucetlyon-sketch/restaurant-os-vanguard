@@ -26,7 +26,7 @@ export function Map3DOverlay() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsMap3DOpen(false)}
-                        className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[100]"
+                        className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[100]"
                     />
 
                     {/* Window Container */}
@@ -35,10 +35,10 @@ export function Map3DOverlay() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed inset-2 md:inset-4 lg:inset-6 bg-bg-primary rounded-[1rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] z-[101] overflow-hidden flex flex-col"
+                        className="fixed inset-2 md:inset-4 lg:inset-6 bg-surface-card rounded-[1rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] z-[101] overflow-hidden flex flex-col"
                     >
                         {/* Header Bar */}
-                        <div className="flex items-center justify-between px-8 py-5 border-b border-border-default bg-bg-primary">
+                        <div className="flex items-center justify-between px-8 py-5 border-b border-border bg-surface-card">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-accent-gold/10 text-accent-gold flex items-center justify-center border border-accent-gold/20">
                                     <Maximize2 className="w-5 h-5" />
@@ -52,7 +52,7 @@ export function Map3DOverlay() {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleRefresh}
-                                    className="p-3 text-text-secondary hover:text-text-primary hover:bg-surface-sidebar/5 rounded-xl transition-all"
+                                    className="p-3 text-text-secondary hover:text-text-primary hover:bg-surface-glass rounded-xl transition-all"
                                     title="Actualiser la vue"
                                 >
                                     <RefreshCw className="w-5 h-5" />
@@ -61,15 +61,15 @@ export function Map3DOverlay() {
                                     href="/blueprint/index.html"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-3 text-text-secondary hover:text-text-primary hover:bg-surface-sidebar/5 rounded-xl transition-all"
+                                    className="p-3 text-text-secondary hover:text-text-primary hover:bg-surface-glass rounded-xl transition-all"
                                     title="Ouvrir plein écran"
                                 >
                                     <ExternalLink className="w-5 h-5" />
                                 </a>
-                                <div className="w-px h-6 bg-surface-sidebar/10 mx-2" />
+                                <div className="w-px h-6 bg-border mx-2" />
                                 <button
                                     onClick={() => setIsMap3DOpen(false)}
-                                    className="p-3 bg-surface-sidebar/5 hover:bg-surface-sidebar/10 text-text-primary rounded-xl transition-all group"
+                                    className="p-3 bg-surface-glass hover:bg-surface-glass/80 text-text-primary rounded-xl transition-all group"
                                 >
                                     <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
                                 </button>
@@ -77,7 +77,7 @@ export function Map3DOverlay() {
                         </div>
 
                         {/* Content (Iframe) */}
-                        <div className="flex-1 bg-surface-sidebar/40 relative">
+                        <div className="flex-1 bg-surface-bg relative">
                             <iframe
                                 id="map-3d-iframe"
                                 src="/blueprint/index.html"
@@ -92,7 +92,7 @@ export function Map3DOverlay() {
                         </div>
 
                         {/* Footer / Status Bar */}
-                        <div className="px-8 py-3 bg-bg-primary border-t border-border-default flex items-center justify-between">
+                        <div className="px-8 py-3 bg-surface-card border-t border-border flex items-center justify-between">
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-status-success animate-pulse" />

@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         </div>
                         <Button
                             onClick={() => window.location.reload()}
-                            className="w-full bg-accent hover:bg-surface-sidebar text-text-primary h-12 rounded-xl font-black text-micro uppercase tracking-[0.2em]"
+                            className="w-full bg-action-primary hover:bg-action-primary-hover text-text-on-primary h-12 rounded-xl font-black text-micro uppercase tracking-[0.2em]"
                         >
                             <RefreshCcw className="w-4 h-4 mr-3" />
                             Recharger l'application

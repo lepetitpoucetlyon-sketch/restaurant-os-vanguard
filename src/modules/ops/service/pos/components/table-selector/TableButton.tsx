@@ -98,60 +98,67 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
             onClick={() => onSelectTable(table.id)}
             data-tutorial={index === 0 ? "pos-0-0-0" : undefined}
             className={cn(
-                "group relative flex flex-col items-center justify-center min-h-[160px] md:min-h-[180px] rounded-[48px] border transition-all duration-700 overflow-hidden shadow-sm hover:shadow-2xl w-full",
-                styles.container
+                "group relative flex flex-col justify-between p-5 min-h-[140px] rounded-2xl border transition-all duration-200 text-left overflow-hidden",
+                "bg-surface-card dark:bg-bg-secondary border-border/70 dark:border-white/10 hover:border-action-primary/60 hover:shadow-lg active:scale-[0.98]",
+                table.status === 'paying' && "ring-2 ring-emerald-500/40 border-emerald-500",
+                table.status === 'seated' && "ring-1 ring-accent/30"
             )}
         >
-            {/* Museum Spotlight Effect */}
-            <div className={cn(
-                "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none",
-                styles.spotlight
-            )} />
+            {/* Top row: Table number + Status badge */}
+            <div className="flex items-center justify-between w-full">
+                <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-bold font-mono text-text-primary tracking-tight">
+                        {table.number}
+                    </span>
+                    <span className="text-xs font-medium text-text-muted">
+                        {lexicon.tableLabel}
+                    </span>
+                </div>
 
-            {/* Background subtle number */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-700 cursor-pointer pointer-events-none">
-                <span className="text-9xl md:text-[140px] font-serif font-black text-text-primary italic">{table.number}</span>
-            </div>
-
-            <div className="relative z-10 flex flex-col items-center gap-4">
+                {/* Status Pill */}
                 <div className={cn(
-                    "w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center font-serif font-bold text-3xl md:text-4xl transition-all duration-700 border",
-                    styles.circle
+                    "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5",
+                    table.status === 'free' && "bg-status-success/10 text-status-success border border-emerald-500/20",
+                    table.status === 'seated' && "bg-action-primary/10 text-action-primary border border-action-primary/20",
+                    table.status === 'ordered' && "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+                    table.status === 'eating' && "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+                    table.status === 'paying' && "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 animate-pulse",
+                    table.status === 'dirty' && "bg-rose-500/10 text-rose-400 border border-rose-500/20",
+                    table.status === 'reserved' && "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
                 )}>
-                    {table.number}
-                </div>
-
-                <div className="flex flex-col items-center">
-                    <span className="text-nano md:text-[12px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-primary transition-colors">{lexicon.tableLabel}</span>
-                    <div className="flex items-center gap-2 mt-1">
-                        <Users className={cn("w-3 md:w-3.5 h-3 md:h-3.5", styles.icon)} />
-                        <span className="text-micro md:text-[13px] font-bold text-text-primary font-serif italic">{table.seats} Pers.</span>
-                    </div>
+                    <span className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        table.status === 'free' && "bg-status-success",
+                        table.status === 'seated' && "bg-action-primary",
+                        table.status === 'ordered' && "bg-blue-400",
+                        table.status === 'eating' && "bg-amber-400",
+                        table.status === 'paying' && "bg-emerald-400",
+                        table.status === 'dirty' && "bg-rose-400",
+                        table.status === 'reserved' && "bg-indigo-400"
+                    )} />
+                    {table.status === 'free' ? 'Libre' :
+                     table.status === 'seated' ? 'Installé' :
+                     table.status === 'ordered' ? 'Commandé' :
+                     table.status === 'eating' ? 'En cours' :
+                     table.status === 'paying' ? 'Addition' :
+                     table.status === 'dirty' ? 'À nettoyer' : 'Réservé'}
                 </div>
             </div>
 
-            {/* Status Indicator */}
-            {['seated', 'ordered', 'eating', 'paying'].includes(table.status) && (
-                <div className="absolute top-6 right-6">
-                    <div className={cn(
-                        "w-2.5 h-2.5 rounded-full animate-pulse shadow-glow",
-                        styles.indicator
-                    )} />
+            {/* Bottom row: Capacity and zone */}
+            <div className="flex items-center justify-between w-full pt-3 border-t border-border/40 mt-4 text-text-muted text-xs">
+                <div className="flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5" />
+                    <span>{table.seats} couverts</span>
                 </div>
-            )}
 
-            {/* Dirty badge */}
-            {table.status === 'dirty' && (
-                <div className="absolute top-5 right-5 flex items-center gap-1.5 bg-action-primary/15 border border-action-primary/30 rounded-full px-3 py-1">
-                    <Sparkles className="w-3 h-3 text-action-primary" />
-                    <span className="text-nano font-black uppercase tracking-[0.15em] text-action-primary">À nettoyer</span>
-                </div>
-            )}
-
-            <div className={cn(
-                "absolute bottom-0 left-0 right-0 h-1.5 transition-all duration-700 opacity-10 md:opacity-0 group-hover:opacity-100",
-                styles.bar
-            )} />
+                {table.status === 'dirty' && (
+                    <div className="flex items-center gap-1 text-rose-400 font-medium">
+                        <Sparkles className="w-3 h-3" />
+                        <span>Nettoyage</span>
+                    </div>
+                )}
+            </div>
         </button>
     );
 }

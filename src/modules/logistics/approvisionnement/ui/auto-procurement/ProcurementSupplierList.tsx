@@ -33,11 +33,11 @@ export function ProcurementSupplierList({
                 'p-4 rounded-2xl border transition cursor-pointer',
                 isSelected
                   ? 'bg-amber-500/10 border-amber-500/40 shadow-lg shadow-amber-500/5'
-                  : 'bg-slate-950/40 border-slate-800/80 hover:border-slate-700'
+                  : 'bg-surface-glass border-border-default hover:border-border-focus'
               )}
             >
               <div className="flex items-center justify-between">
-                <div className="font-bold text-sm text-white flex items-center gap-2">
+                <div className="font-bold text-sm text-text-primary flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-amber-400" />
                   {basket.supplierName}
                 </div>
@@ -54,7 +54,7 @@ export function ProcurementSupplierList({
                     {basket.isFrancoReached ? 'Franco Atteint ✨' : `Manque ${(basket.amountToFrancoCts / 100).toFixed(2)} €`}
                   </span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-surface-card rounded-full overflow-hidden">
                   <div
                     className={cn(
                       'h-full rounded-full transition-all duration-500',

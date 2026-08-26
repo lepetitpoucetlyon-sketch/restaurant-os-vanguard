@@ -5,7 +5,6 @@
  */
 
 export * from './Cart';
-export * from './CategoryList';
 export * from './PaymentDialog';
 export * from './PosHeader';
 export * from './ProductDetailsDialog';

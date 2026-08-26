@@ -63,7 +63,7 @@ export function SimulatorMetricsGrid({ metrics, history, isRunning, formatCurren
                     </motion.div>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <div className="h-2 bg-surface-sidebar/20 rounded-full overflow-hidden border border-white/5 relative">
+                    <div className="h-2 bg-surface-glass rounded-full overflow-hidden border border-border relative">
                         <motion.div 
                             initial={{ width: 0 }} 
                             animate={{ 

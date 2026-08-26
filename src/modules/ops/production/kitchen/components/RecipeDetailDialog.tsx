@@ -64,7 +64,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                     <div className="p-10 border-t transition-colors duration-500 border-black/5 bg-surface-bg/50">
                         <Button
                             onClick={() => printRecipeTechnicalSheet(recipe, currentPortions)}
-                            className="w-full h-16 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-lg transition-all transform hover:scale-[1.02] bg-surface-sidebar hover:bg-surface-sidebar text-text-primary"
+                            className="w-full h-16 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-lg transition-all transform hover:scale-[1.02] bg-action-primary hover:bg-action-primary-hover text-text-on-primary"
                         >
                             <Printer className="w-5 h-5 mr-3" />
                             Imprimer Fiche Technique

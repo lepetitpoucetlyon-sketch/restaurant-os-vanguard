@@ -75,7 +75,7 @@ export function LaunchpadStatusHub({ isScrolled: _isScrolled = false, onClose }:
                                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 min-w-[160px] bg-surface-card/90 dark:bg-surface-sidebar/90 backdrop-blur-xl rounded-2xl shadow-premium border border-default dark:border-subtle overflow-hidden z-[60]"
+                                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 min-w-[160px] bg-surface-card backdrop-blur-xl rounded-2xl shadow-premium border border-border-default overflow-hidden z-[60]"
                                 >
                                     {LANGUAGES.map((lang) => (
                                         <button

@@ -48,15 +48,17 @@ export class ProcurementBridge {
             throw new Error('PROCUREMENT_002: BL is not pending signature.');
         }
 
-        // 1. Signature cryptographique NF525
-        const payload = JSON.stringify(deliveryNote);
+        // 1. Signature cryptographique NF525 déterministe
+        const { CryptoService } = await import('@/lib/CryptoService');
+        const payload = CryptoService.canonicalStringify(deliveryNote as unknown as import('@/shared/nexus-contract').SovereignData);
         const signatureHash = await QuantumCrypto.sign(payload);
         
         // 2. Archivage WORM
         await DocumentVault.archive(`BL_${deliveryNote.id}.json`, payload, {
             tenantId,
             type: 'DELIVERY_NOTE',
-            signatureHash
+            signatureHash,
+            sealAlgo: 'canonical-v1'
         });
 
         // 3. Réaction Automatique : Contre-passation de l'engagement et création de la dette réelle

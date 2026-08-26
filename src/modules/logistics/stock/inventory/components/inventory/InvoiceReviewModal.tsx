@@ -47,11 +47,11 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
     };
 
     return (
-        <div className="fixed inset-0 z-[100] bg-surface-sidebar/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6">
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6">
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-5xl bg-surface-sidebar border border-subtle rounded-2xl sm:rounded-[3rem] flex flex-col max-h-[90vh] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+                className="w-full max-w-5xl bg-surface-card border border-border rounded-2xl sm:rounded-[3rem] flex flex-col max-h-[90vh] overflow-hidden shadow-2xl"
             >
                 {/* Header */}
                 <div className="p-5 sm:p-8 lg:p-10 border-b border-white/5 flex items-center justify-between gap-4 bg-surface-card/[0.02]">

@@ -135,7 +135,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
     return (
         <div className="space-y-6">
             {/* Header Statut */}
-            <div className="bg-surface-elevated/40 border border-border-base/50 rounded-xl p-6 backdrop-blur-md">
+            <div className="bg-surface-card border border-border-default rounded-xl p-6 backdrop-blur-md">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
@@ -167,7 +167,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={loadEntries}
-                            className="p-2.5 rounded-lg border border-border-base/60 bg-surface-base text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
+                            className="p-2.5 rounded-lg border border-border-default bg-surface-card text-text-muted hover:text-text-primary hover:bg-surface-glass-hover transition-colors"
                             title="Actualiser la file"
                         >
                             <RefreshCw className="w-4 h-4" />
@@ -195,18 +195,18 @@ export const DLQDiagnosticPanel: React.FC = () => {
                 </div>
 
                 {/* Métriques */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-border-base/40">
-                    <div className="bg-surface-base/50 p-3.5 rounded-lg border border-border-base/30">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-border-default">
+                    <div className="bg-surface-glass p-3.5 rounded-lg border border-border-default">
                         <div className="text-xs text-text-muted">Total En File</div>
                         <div className="text-xl font-bold text-text-primary mt-0.5">{entries.length}</div>
                     </div>
-                    <div className="bg-surface-base/50 p-3.5 rounded-lg border border-border-base/30">
+                    <div className="bg-surface-glass p-3.5 rounded-lg border border-border-default">
                         <div className="text-xs text-amber-400 flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" /> En attente de relance
                         </div>
                         <div className="text-xl font-bold text-amber-400 mt-0.5">{retryCount}</div>
                     </div>
-                    <div className="bg-surface-base/50 p-3.5 rounded-lg border border-border-base/30 col-span-2 sm:col-span-1">
+                    <div className="bg-surface-glass p-3.5 rounded-lg border border-border-default col-span-2 sm:col-span-1">
                         <div className="text-xs text-red-400 flex items-center gap-1">
                             <ShieldAlert className="w-3.5 h-3.5" /> En Quarantaine
                         </div>
@@ -217,7 +217,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
 
             {/* Liste des anomalies */}
             {entries.length === 0 ? (
-                <div className="border border-dashed border-border-base/50 rounded-xl p-12 text-center bg-surface-base/20">
+                <div className="border border-dashed border-border-default rounded-xl p-12 text-center bg-surface-glass">
                     <CheckCircle2 className="w-12 h-12 text-emerald-500/60 mx-auto mb-3" />
                     <h4 className="text-base font-medium text-text-primary">Aucun incident détecté</h4>
                     <p className="text-xs text-text-muted mt-1 max-w-md mx-auto">
@@ -237,7 +237,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
                         return (
                             <div 
                                 key={entry.id}
-                                className="bg-surface-base border border-border-base/70 rounded-xl overflow-hidden transition-all hover:border-accent-gold/40 shadow-sm"
+                                className="bg-surface-card border border-border-default rounded-xl overflow-hidden transition-all hover:border-border-focus shadow-sm"
                             >
                                 <div className="p-4 flex items-start justify-between gap-4">
                                     <div className="space-y-1 flex-1 min-w-0">
@@ -275,7 +275,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
                                         </button>
                                         <button
                                             onClick={() => setExpandedId(isExpanded ? null : entry.id)}
-                                            className="p-1.5 text-text-muted hover:text-text-primary rounded-lg hover:bg-surface-hover"
+                                            className="p-1.5 text-text-muted hover:text-text-primary rounded-lg hover:bg-surface-glass-hover"
                                         >
                                             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                         </button>
@@ -283,7 +283,7 @@ export const DLQDiagnosticPanel: React.FC = () => {
                                 </div>
 
                                 {isExpanded && (
-                                    <div className="bg-surface-elevated/80 border-t border-border-base/50 p-4 space-y-2 text-xs">
+                                    <div className="bg-surface-glass border-t border-border-default p-4 space-y-2 text-xs">
                                         <div className="text-text-muted font-semibold">Détail du Payload :</div>
                                         <pre className="p-3 bg-black/40 rounded-lg text-emerald-400 font-mono text-micro overflow-x-auto max-h-48">
                                             {JSON.stringify(entry.payload, null, 2)}

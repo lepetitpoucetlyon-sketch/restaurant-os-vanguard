@@ -33,7 +33,7 @@ export function SimulatorOverridesPanel({
                     exit={{ opacity: 0, x: 300 }}
                     className="fixed top-24 right-8 z-50 w-72"
                 >
-                    <GlassCard className="p-6 border-accent/30 bg-surface-sidebar/80 backdrop-blur-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                    <GlassCard className="p-6 border-action-primary/30 bg-surface-card backdrop-blur-3xl shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-1">
                             <Button variant="ghost" size="sm" onClick={() => setIsOverridesOpen(false)} className="h-6 w-6 p-0 text-text-muted hover:text-text-primary">
                                 <ChevronRight size={14} />
@@ -71,7 +71,7 @@ export function SimulatorOverridesPanel({
                             {/* Finance Toggle */}
                             <div className="flex flex-col gap-3">
                                 <span className="text-chip-label text-text-muted">Financial Complexity</span>
-                                <div className="grid grid-cols-2 gap-2 bg-surface-sidebar/40 p-1 rounded-xl border border-subtle">
+                                <div className="grid grid-cols-2 gap-2 bg-surface-glass p-1 rounded-xl border border-border">
                                     {['SIMPLE', 'EXPERT'].map((mode) => (
                                         <button
                                             key={mode}

@@ -84,7 +84,7 @@ export function BrandUploader({ slot, label, currentUrl, hint }: BrandUploaderPr
           transition-all duration-200 overflow-hidden
           ${isDragging
             ? 'border-action-primary bg-action-primary/5 scale-[1.01]'
-            : 'border-border hover:border-action-primary/50 hover:bg-bg-secondary'
+            : 'border-border-default hover:border-action-primary/50 hover:bg-surface-card'
           }
           ${preview ? 'h-40' : 'h-32'}
         `}
@@ -115,7 +115,7 @@ export function BrandUploader({ slot, label, currentUrl, hint }: BrandUploaderPr
         )}
 
         {isUploading && (
-          <div className="absolute inset-0 bg-bg-primary/60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-surface-bg/60 flex items-center justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-action-primary" />
           </div>
         )}

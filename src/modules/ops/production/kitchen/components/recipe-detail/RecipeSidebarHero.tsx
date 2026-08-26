@@ -77,7 +77,7 @@ export function RecipeSidebarHero({
 
             {/* Prep time + difficulty */}
             <div className="grid grid-cols-2 gap-6 mb-8">
-                <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-sidebar/5 border-black/5">
+                <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-card border-border">
                     <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">Prép.</span>
                     <div className="flex items-center gap-3">
                         <Clock className="w-5 h-5 text-accent" />
@@ -86,7 +86,7 @@ export function RecipeSidebarHero({
                         </span>
                     </div>
                 </div>
-                <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-sidebar/5 border-black/5">
+                <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-card border-border">
                     <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">Service</span>
                     <div className="flex items-center gap-3">
                         <Flame className="w-5 h-5 text-error" />
@@ -98,7 +98,7 @@ export function RecipeSidebarHero({
             </div>
 
             {/* Portions scaling spinner */}
-            <div className="p-5 rounded-2xl border border-black/5 bg-surface-sidebar/5 mb-8">
+            <div className="p-5 rounded-2xl border border-border bg-surface-glass mb-8">
                 <div className="flex items-center justify-between mb-3">
                     <span className="text-micro font-black uppercase text-secondary tracking-[0.3em]">
                         Portions

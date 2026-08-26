@@ -9,3 +9,5 @@ export * from './DraggingIngredientOverlay';
 export * from './DroppableStorageCard';
 export * from './StorageDetailBubble';
 export * from './StorageTypeConfig';
+export * from './StorageMapBoard';
+

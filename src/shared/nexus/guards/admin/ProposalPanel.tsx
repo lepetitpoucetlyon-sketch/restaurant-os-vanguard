@@ -82,7 +82,7 @@ export function ProposalPanel() {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-sidebar/40 border border-subtle">
+                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-glass border border-border">
                                         <TrendingUp size={10} className="text-success" />
                                         <span className="text-nano font-mono font-bold text-success">
                                             Velocity: {proposal.predictedVelocity}

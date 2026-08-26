@@ -37,7 +37,7 @@ import {
 import { mobileSpring } from "@/shared/utils/motion";
 
 const PRIMARY_NAV = [
-    { label: "dashboard", key: "dashboard", href: "/", icon: LayoutDashboard },
+    { label: "dashboard", key: "dashboard", href: "/operations", icon: LayoutDashboard },
     { label: "pos", key: "pos", href: "/pos", icon: Store },
     { label: "floor_plan", key: "floor_plan", href: "/floor-plan", icon: Map },
     { label: "intelligence", key: "intelligence_hub", href: "/intelligence", icon: Zap },
@@ -122,14 +122,14 @@ export function MobileNavBar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMenuOpen(false)}
-                            className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[70]"
+                            className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[70]"
                         />
                         <motion.div
                             initial={{ y: "100%" }}
                             animate={{ y: 0 }}
                             exit={{ y: "100%" }}
                             transition={mobileSpring}
-                            className="fixed bottom-0 left-0 right-0 z-[80] bg-surface-card dark:bg-bg-secondary rounded-t-[3.5rem] p-10 pb-[calc(2rem+env(safe-area-inset-bottom))]"
+                            className="fixed bottom-0 left-0 right-0 z-[80] bg-surface-card rounded-t-[3.5rem] p-10 pb-[calc(2rem+env(safe-area-inset-bottom))]"
                         >
                             <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-10" />
                             <div className="flex justify-between items-center mb-10">

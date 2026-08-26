@@ -101,7 +101,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                     </div>
 
                     {isProcessing && (
-                        <div className="flex items-center gap-3 px-4 py-2 bg-surface-sidebar/40 rounded-full border border-white/5">
+                        <div className="flex items-center gap-3 px-4 py-2 bg-surface-glass rounded-full border border-border">
                             <Loader2 size={12} className="animate-spin text-status-warning" />
                             <span className="text-nano font-bold text-status-warning uppercase tracking-widest">GEMINI 1.5 PRO ACTIVE</span>
                         </div>
@@ -114,7 +114,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                         <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="absolute inset-0 z-10 bg-surface-sidebar/80 backdrop-blur-sm"
+                            className="absolute inset-0 z-10 bg-black/80 backdrop-blur-sm"
                         >
                             <img src={preview} alt="Preview" className="w-full h-full object-cover opacity-40" />
                         </motion.div>

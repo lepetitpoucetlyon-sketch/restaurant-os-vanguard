@@ -8,13 +8,13 @@ const buttonVariants = cva(
     {
         variants: {
             variant: {
-                default: "bg-accent text-text-primary hover:bg-surface-sidebar dark:hover:bg-status-success shadow-sm",
-                destructive: "bg-error text-text-primary hover:bg-error/90",
-                outline: "border border-border bg-surface-card dark:bg-surface-sidebar text-text-primary hover:bg-bg-tertiary dark:hover:bg-surface-sidebar",
-                secondary: "bg-bg-tertiary text-text-primary hover:bg-surface-bg dark:hover:bg-surface-sidebar",
-                ghost: "hover:bg-bg-tertiary text-text-secondary hover:text-text-primary",
-                link: "text-accent underline-offset-4 hover:underline",
-                success: "bg-success text-text-primary hover:bg-success/90",
+                default: "bg-action-primary text-text-on-primary hover:bg-action-primary-hover shadow-sm",
+                destructive: "bg-status-danger text-text-on-primary hover:bg-status-danger/90",
+                outline: "border border-border bg-surface-card text-text-primary hover:bg-surface-glass",
+                secondary: "bg-surface-glass text-text-primary hover:bg-surface-card",
+                ghost: "hover:bg-surface-glass text-text-secondary hover:text-text-primary",
+                link: "text-action-primary underline-offset-4 hover:underline",
+                success: "bg-status-success text-text-on-primary hover:bg-status-success/90",
             },
             size: {
                 default: "h-11 px-6 py-2",

@@ -94,7 +94,7 @@ export function Header() {
 
     return (
         <>
-            <header className="hidden lg:flex h-[100px] bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-[40px] border-b border-subtle dark:border-white/5 sticky top-0 z-[40] px-16 items-center justify-between transition-all duration-700 shadow-sm">
+            <header className="hidden lg:flex h-[100px] bg-surface-glass backdrop-blur-[40px] border-b border-border sticky top-0 z-[40] px-16 items-center justify-between transition-all duration-700 shadow-sm">
                 {/* Visual Architecture Background */}
                 <div className="absolute top-0 right-1/4 w-[40%] h-full bg-accent-gold/5 blur-[100px] pointer-events-none opacity-50" />
                 <div className="absolute top-0 left-1/4 w-[30%] h-full bg-accent/5 blur-[80px] pointer-events-none opacity-30" />

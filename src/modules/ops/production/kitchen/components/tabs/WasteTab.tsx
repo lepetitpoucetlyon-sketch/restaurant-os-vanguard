@@ -68,7 +68,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                 {/* Waste Form */}
                 <motion.div variants={fadeInUp} className="lg:col-span-8">
-                    <div className="bg-surface-card/80 dark:bg-surface-sidebar/60 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 border border-subtle/50 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none">
+                    <div className="bg-surface-card backdrop-blur-xl rounded-[2rem] p-8 md:p-10 border border-border shadow-xl">
                         <div className="flex items-center gap-4 mb-10">
                             <div className="w-12 h-12 rounded-2xl bg-error/10 dark:bg-error/20 flex items-center justify-center border border-error/20">
                                 <Trash2 className="w-6 h-6 text-error" />
@@ -110,7 +110,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                             step="0.01"
                                             className="w-full h-[60px] pl-6 pr-20 bg-surface-bg dark:bg-surface-card/[0.03] border border-subtle dark:border-subtle rounded-[1.25rem] font-mono font-black text-xl focus:ring-4 focus:ring-error/10 focus:border-error outline-none transition-all shadow-inner placeholder:text-muted dark:placeholder:text-text-primary/10"
                                         />
-                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-xl flex items-center justify-center font-black text-text-primary text-micro uppercase tracking-widest shadow-xl pointer-events-none">
+                                        <div className="absolute right-2 top-2 bottom-2 w-14 bg-surface-glass text-text-primary rounded-xl flex items-center justify-center font-black text-micro uppercase tracking-widest shadow-xl pointer-events-none">
                                             KG
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                             type="button"
                                             key={reason.label}
                                             onClick={() => setSelectedReason(reason.label)}
-                                            className={`h-24 flex flex-col items-center justify-center gap-3 border bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-sidebar dark:hover:bg-surface-card hover:border-transparent hover:text-text-primary dark:hover:text-primary rounded-[2rem] font-black text-nano uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm ${selectedReason === reason.label ? 'border-error bg-error/10 text-error' : 'border-subtle dark:border-white/5'}`}
+                                            className={`h-24 flex flex-col items-center justify-center gap-3 border bg-surface-card dark:bg-surface-card/[0.02] hover:bg-surface-glass hover:border-transparent hover:text-text-primary rounded-[2rem] font-black text-nano uppercase tracking-[0.2em] transition-all duration-300 group/btn shadow-sm ${selectedReason === reason.label ? 'border-error bg-error/10 text-error' : 'border-subtle dark:border-white/5'}`}
                                         >
                                             <span className="text-2xl opacity-40 group-hover/btn:opacity-100 group-hover/btn:scale-125 transition-all duration-300">{reason.icon}</span>
                                             {reason.label}
@@ -151,7 +151,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                 whileHover={{ scale: 1.01 }}
                                 whileTap={{ scale: 0.99 }}
                             >
-                                <Button className="w-full h-[72px] bg-surface-sidebar dark:bg-surface-card dark:text-primary text-text-primary rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 dark:hover:shadow-white/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
+                                <Button className="w-full h-[72px] bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:shadow-error/20 transition-all flex items-center justify-center gap-4 overflow-hidden relative group">
                                     <div className="absolute inset-x-0 bottom-0 h-1 bg-error translate-y-full group-hover:translate-y-0 transition-transform" />
                                     Enregistrer la Perte <Trash2 className="w-5 h-5 ml-1 opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
                                 </Button>
@@ -160,24 +160,12 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                     </div>
                 </motion.div>
 
-                {/* Financial Summary */}
-                <div className="lg:col-span-4 lg:sticky lg:top-8 h-fit">
-                    <motion.div
-                        variants={fadeInUp}
-                        whileHover={{ y: -5 }}
-                        className="p-10 bg-gradient-to-br from-surface-sidebar via-neutral-950 to-black dark:from-white dark:via-surface-bg dark:to-surface-bg rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.5)] dark:shadow-[0_30px_70px_rgba(255,255,255,0.1)] relative overflow-hidden group"
-                    >
-                        {/* Decorative background element */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-error/10 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-error/20 transition-all duration-700" />
-
+                {/* KPI Sidebar */}
+                <motion.div variants={fadeInUp} className="lg:col-span-4 space-y-8">
+                    <div className="bg-surface-card rounded-[2rem] p-8 md:p-10 border border-subtle/50 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none relative overflow-hidden group">
+                        <div className="absolute -right-12 -top-12 w-48 h-48 bg-error/5 rounded-full blur-3xl pointer-events-none group-hover:scale-125 transition-all duration-700" />
+                        
                         <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-8">
-                                <div className="w-2 h-2 rounded-full bg-error shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
-                                <h4 className="text-nano font-black uppercase tracking-[0.4em] text-muted dark:text-secondary">
-                                    Impact Financier
-                                </h4>
-                            </div>
-
                             <div className="space-y-1">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.5 }}
@@ -199,7 +187,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                         2.4% du CA Total
                                     </span>
                                 </p>
-                                <div className="mt-6 w-full h-1.5 bg-surface-card/5 dark:bg-surface-sidebar/5 rounded-full overflow-hidden">
+                                <div className="mt-6 w-full h-1.5 bg-surface-glass rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: '2.4%' }}
@@ -209,8 +197,8 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
-                </div>
+                    </div>
+                </motion.div>
             </div>
         </motion.div>
     );

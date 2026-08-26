@@ -58,7 +58,7 @@ export const MindMapNode = ({ x, y, label, icon: Icon, color, description }: Min
         <div className={cn("w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-text-primary shadow-xl transition-all group-hover:scale-110 group-hover:shadow-2xl relative z-10", color)}>
             <Icon className="w-8 h-8" />
         </div>
-        <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-surface-sidebar group-hover:text-text-primary relative z-10 w-48 text-center">
+        <div className="mt-4 bg-surface-card px-4 py-2 rounded-2xl border border-subtle shadow-xl transition-all group-hover:bg-action-primary group-hover:text-text-on-primary relative z-10 w-48 text-center">
             <span className="text-chip-label block mb-1">{label}</span>
             {description && <p className="text-nano opacity-60 font-sans leading-tight hidden group-hover:block">{description}</p>}
         </div>
@@ -93,7 +93,7 @@ export const ExplanatoryCard = ({ title, description, icon: Icon }: ExplanatoryC
         <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <Icon className="w-24 h-24 rotate-12" />
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-surface-bg flex items-center justify-center mb-6 group-hover:bg-surface-sidebar group-hover:text-text-primary transition-colors">
+        <div className="w-12 h-12 rounded-2xl bg-surface-bg flex items-center justify-center mb-6 group-hover:bg-action-primary group-hover:text-text-on-primary transition-colors">
             <Icon className="w-6 h-6" />
         </div>
         <h4 className="text-lg font-black italic mb-3">{title}</h4>

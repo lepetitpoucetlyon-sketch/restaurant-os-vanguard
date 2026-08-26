@@ -33,8 +33,10 @@ import {
     OperationsAreaModal,
 } from './OperationsAreaModal';
 import { EndOfDayWizard } from './dashboard/EndOfDayWizard';
+import { EmpireCockpit } from './dashboard/EmpireCockpit';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Lock } from 'lucide-react';
+
 
 export function OperationsDashboard() {
     const floorOps = useOMS();
@@ -127,7 +129,9 @@ export function OperationsDashboard() {
                         </nav>
                     </div>
                     <SketchLine className="mt-8" />
-
+                    <div className="mt-6">
+                        <EmpireCockpit />
+                    </div>
                 </header>
 
                 <main className="max-w-7xl mx-auto grid grid-cols-12 gap-10">
@@ -214,7 +218,7 @@ export function OperationsDashboard() {
                                                     <p className="text-nano text-muted font-sans font-bold uppercase tracking-widest mb-1 italic">Tarif / Service</p>
                                                     <p className="text-xl font-sans font-black">€{area.price}</p>
                                                 </div>
-                                                <button className="w-10 h-10 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
+                                                <button className="w-10 h-10 rounded-2xl bg-action-primary text-text-on-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
                                             </div>
@@ -222,7 +226,7 @@ export function OperationsDashboard() {
 
                                         {/* Hand-drawn style decorative element */}
                                         <motion.div
-                                            className="absolute bottom-0 left-0 h-1 bg-surface-sidebar"
+                                            className="absolute bottom-0 left-0 h-1 bg-action-primary"
                                             initial={{ width: 0 }}
                                             whileHover={{ width: '100%' }}
                                         />
@@ -233,7 +237,7 @@ export function OperationsDashboard() {
                                     onClick={() => toast.info("Gérez vos unités depuis Admin → Paramètres → Plan de salle")}
                                     className="border-2 border-dashed border-default rounded-[2.5rem] flex flex-col items-center justify-center gap-4 hover:border-default hover:bg-surface-bg transition-all min-h-[220px] group"
                                 >
-                                    <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-sidebar group-hover:text-text-primary transition-all">
+                                    <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-glass group-hover:text-text-primary transition-all">
                                         <Plus className="w-6 h-6" />
                                     </div>
                                     <span className="text-xs font-black uppercase tracking-widest text-muted group-hover:text-primary">Ajouter une Unité</span>
@@ -259,7 +263,7 @@ export function OperationsDashboard() {
                                 </div>
 
                                 {/* Mind Map Nodes */}
-                                <MindMapNode x={100} y={150} label="Établissement" icon={Home} color="bg-surface-sidebar" description="Le cœur de l'établissement (Main Hall & Salons)" />
+                                <MindMapNode x={100} y={150} label="Établissement" icon={Home} color="bg-surface-card" description="Le cœur de l'établissement (Main Hall & Salons)" />
                                 <MindMapNode x={350} y={100} label="Espaces" icon={Key} color="bg-action-primary" description="50 tables, 5 salons de luxe" />
                                 <MindMapNode x={550} y={200} label="Logistique" icon={Layers} color="bg-status-warning" description="Office et maintenance technique" />
                                 <MindMapNode x={180} y={350} label="Salle" icon={Layers} color="bg-status-success" description="Entretien et protocole HACCP de la salle" />
@@ -286,7 +290,7 @@ export function OperationsDashboard() {
                                                 ))}
                                             </div>
                                             <ArrowRight className="w-4 h-4 text-muted" />
-                                            <div className="text-chip-label bg-surface-sidebar text-text-primary px-3 py-1 rounded-full">Dashboard Global</div>
+                                            <div className="text-chip-label bg-surface-glass text-text-primary px-3 py-1 rounded-full">Dashboard Global</div>
                                         </div>
                                     </div>
                                 </div>

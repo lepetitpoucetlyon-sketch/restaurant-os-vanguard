@@ -41,7 +41,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                 isOver
                     ? "border-emerald-500 bg-status-success shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-200 scale-105"
                     : isSelected
-                        ? "border-default bg-surface-sidebar dark:border-white dark:bg-surface-card text-text-primary dark:text-primary shadow-xl"
+                        ? "border-action-primary bg-action-primary/10 text-text-primary shadow-xl"
                         : isHighlighted
                             ? "border-emerald-500 bg-status-success/5 shadow-2xl shadow-emerald-500/20 ring-4 ring-emerald-500/20"
                             : cn(config.borderColor, "bg-surface-card dark:bg-bg-secondary hover:shadow-lg")
@@ -96,7 +96,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
                 <div className="flex items-center gap-3 mb-3">
                     <div className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center",
-                        isSelected ? "bg-surface-card/20 dark:bg-surface-sidebar/10" : config.bgColor
+                        isSelected ? "bg-surface-glass" : config.bgColor
                     )}>
                         <Icon className="w-5 h-5" style={{ color: isSelected ? 'white' : config.color }} />
                     </div>

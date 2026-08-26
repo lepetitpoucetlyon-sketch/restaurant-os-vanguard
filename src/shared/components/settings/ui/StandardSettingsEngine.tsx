@@ -127,7 +127,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     <div className="flex flex-col space-y-2 w-full text-left">
                         <span className="text-sm font-medium text-muted">{field.label}</span>
                         <textarea
-                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none transition-all focus:border-action-primary/50 min-h-[100px]"
+                            className="w-full bg-surface-card backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none transition-all focus:border-action-primary/50 min-h-[100px]"
                             value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         />
@@ -153,20 +153,20 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                     <div className="flex flex-col space-y-2 w-full text-left">
                         <span className="text-sm font-medium text-muted">{field.label}</span>
                         <select
-                            className="w-full bg-surface-sidebar/50 backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none focus:border-action-primary/50"
+                            className="w-full bg-surface-card backdrop-blur-md border border-default/50 rounded-xl px-4 py-3 text-muted outline-none focus:border-action-primary/50"
                             value={SharedKernel.castString(value)}
                             onChange={(e) => onChange(e.target.value)}
                         >
-                            <option value="" className="bg-surface-sidebar">Sélectionner...</option>
+                            <option value="" className="bg-surface-card">Sélectionner...</option>
                             {field.options?.map((opt: SettingsOption) => (
-                                <option key={SharedKernel.castString(opt.value)} value={SharedKernel.castString(opt.value)} className="bg-surface-sidebar">{opt.label}</option>
+                                <option key={SharedKernel.castString(opt.value)} value={SharedKernel.castString(opt.value)} className="bg-surface-card">{opt.label}</option>
                             ))}
                         </select>
                     </div>
                 );
             case 'color':
                 return (
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-surface-sidebar/30 border border-default/50">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-surface-card border border-default/50">
                         <span className="text-sm font-medium text-muted">{field.label}</span>
                         <input 
                             type="color" 
@@ -179,7 +179,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
             case 'list':
                 const listValue = Array.isArray(value) ? value : [];
                 return (
-                    <div className="space-y-4 p-4 rounded-2xl bg-surface-sidebar/30 border border-default/50 text-left">
+                    <div className="space-y-4 p-4 rounded-2xl bg-surface-card border border-default/50 text-left">
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-bold text-status-warning/80 uppercase tracking-wider">{field.label}</span>
                             <button 
@@ -196,7 +196,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                                     initial={{ opacity: 0, scale: 0.98 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.98 }}
-                                    className="relative grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-surface-sidebar/40 rounded-xl border border-default/30 group/item"
+                                    className="relative grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-surface-card rounded-xl border border-default/30 group/item"
                                 >
                                     <button 
                                         onClick={() => onChange(listValue.filter((_, i) => i !== index) as SovereignValue)}
@@ -232,7 +232,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
             className="space-y-8"
         >
             {/* Header Control */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[2rem] bg-surface-sidebar/60 backdrop-blur-xl border border-white/5 shadow-2xl gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[2rem] bg-surface-card backdrop-blur-xl border border-white/5 shadow-2xl gap-4">
                 <div className="text-left">
                     <h2 className="text-2xl font-bold text-text-primary tracking-tight">{schema.title || schema.id.toUpperCase()}</h2>
                     <p className="text-sm text-muted">Configuration gérée par le Nexus-Sync Engine.</p>
@@ -261,7 +261,7 @@ export const StandardSettingsEngine = <K extends keyof GlobalSettings>({ schema 
                             "flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-xl",
                             isDirty 
                                 ? "bg-status-warning text-text-primary hover:bg-status-warning hover:scale-[1.02] active:scale-95 shadow-amber-500/20" 
-                                : "bg-surface-sidebar text-secondary cursor-not-allowed border border-default"
+                                : "bg-surface-card text-secondary cursor-not-allowed border border-default"
                         )}
                     >
                         {isSaving ? (

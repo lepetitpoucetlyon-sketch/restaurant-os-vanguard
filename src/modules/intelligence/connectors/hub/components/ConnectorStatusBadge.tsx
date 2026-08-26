@@ -6,7 +6,7 @@ const CONFIG: Record<NonNullable<ConnectorState['status']>, { label: string; cls
   active:         { label: 'Actif',           cls: 'bg-status-success/15 text-status-success' },
   pending_config: { label: 'À configurer',    cls: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400' },
   error:          { label: 'Erreur',          cls: 'bg-status-danger/15 text-status-danger' },
-  disabled:       { label: 'Désactivé',       cls: 'bg-surface-sidebar text-text-muted' },
+  disabled:       { label: 'Désactivé',       cls: 'bg-surface-glass text-text-muted' },
 };
 
 export function ConnectorStatusBadge({ status }: { status: ConnectorState['status'] | null }) {

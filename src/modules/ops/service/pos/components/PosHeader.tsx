@@ -113,7 +113,7 @@ export function PosHeader({
         <header
             className={cn(
                 "px-ui pt-6 pb-5 border-b border-border/40 sticky top-0 z-40 transition-colors duration-300",
-                isRushMode ? "bg-surface-sidebar/95" : "bg-surface-card/70 dark:bg-bg-primary/85",
+                isRushMode ? "bg-surface-card" : "bg-surface-glass",
                 blurClass
             )}
         >

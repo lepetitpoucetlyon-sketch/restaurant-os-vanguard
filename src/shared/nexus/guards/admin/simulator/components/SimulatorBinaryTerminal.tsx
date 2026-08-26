@@ -13,7 +13,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 min-h-[300px]">
             {/* Yield Management Dashboard */}
-            <GlassCard className={`flex flex-col overflow-hidden transition-all duration-700 ${metrics.burnoutIndex > 75 ? 'border-error/50 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-error/5' : 'bg-surface-sidebar/40 border-white/5'} backdrop-blur-2xl relative group`}>
+            <GlassCard className={`flex flex-col overflow-hidden transition-all duration-700 ${metrics.burnoutIndex > 75 ? 'border-error/50 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-error/5' : 'bg-surface-card border-border'} backdrop-blur-2xl relative group`}>
                 <div className="border-b border-subtle p-4 flex items-center justify-between bg-surface-card/5">
                     <div className="flex items-center gap-2">
                         <TrendingUp size={16} className="text-success animate-pulse" />
@@ -95,7 +95,7 @@ export function SimulatorBinaryTerminal({ metrics, logs }: SimulatorBinaryTermin
                 </div>
             </GlassCard>
 
-            <GlassCard className="flex flex-col overflow-hidden bg-surface-sidebar/60 backdrop-blur-2xl border-white/5">
+            <GlassCard className="flex flex-col overflow-hidden bg-surface-card backdrop-blur-2xl border-border">
                 <div className="border-b border-subtle p-3 flex items-center justify-between bg-surface-card/5">
                     <div className="flex items-center gap-2">
                         <div className="flex gap-1.5 mr-2">

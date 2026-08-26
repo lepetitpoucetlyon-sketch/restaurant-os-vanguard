@@ -46,7 +46,7 @@ export function ImpersonationBanner() {
   );
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999] bg-action-primary text-black flex items-center justify-between px-4 py-2 shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-[9999] bg-action-primary text-text-on-primary flex items-center justify-between px-4 py-2 shadow-lg">
       <div className="flex items-center gap-2 text-sm font-bold">
         <Eye className="w-4 h-4" />
         <AlertTriangle className="w-4 h-4" />

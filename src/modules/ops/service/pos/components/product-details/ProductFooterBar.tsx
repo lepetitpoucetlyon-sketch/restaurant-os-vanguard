@@ -23,7 +23,7 @@ export function ProductFooterBar({
   t,
 }: ProductFooterBarProps) {
   return (
-    <div className="p-10 border-t border-border/40 bg-surface-card dark:bg-surface-sidebar/40 backdrop-blur-xl flex items-center justify-between gap-10 transition-colors relative flex-shrink-0">
+    <div className="p-10 border-t border-border/40 bg-surface-glass backdrop-blur-xl flex items-center justify-between gap-10 transition-colors relative flex-shrink-0">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/20 to-transparent" />
 
       {/* Quality Selective Counter */}
@@ -49,23 +49,23 @@ export function ProductFooterBar({
       <button
         disabled={!isValid}
         onClick={onAdd}
-        className="flex-1 h-20 bg-surface-sidebar dark:bg-surface-card dark:text-primary rounded-full shadow-premium flex items-center justify-between px-10 transition-all active:scale-[0.98] group relative overflow-hidden"
+        className="flex-1 h-20 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-full shadow-premium flex items-center justify-between px-10 transition-all active:scale-[0.98] group relative overflow-hidden"
       >
         <div className="flex items-center gap-8">
-          <ShoppingCart className="w-6 h-6 text-text-primary dark:text-primary" strokeWidth={1.5} />
+          <ShoppingCart className="w-6 h-6 text-text-on-primary" strokeWidth={1.5} />
           <div className="flex flex-col items-start translate-y-[1px]">
-            <span className="text-nano font-black uppercase tracking-[0.3em] text-text-primary/40 dark:text-primary/40 leading-none mb-1">
+            <span className="text-nano font-black uppercase tracking-[0.3em] text-text-on-primary/70 leading-none mb-1">
               {t('pos.details.add_to')}
             </span>
-            <span className="text-[13px] font-black uppercase tracking-[0.3em] text-text-primary dark:text-primary leading-none">
+            <span className="text-[13px] font-black uppercase tracking-[0.3em] text-text-on-primary leading-none">
               {t('pos.details.archive')}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-8 h-full">
-          <div className="w-px h-8 bg-surface-card/10 dark:bg-surface-sidebar/10" />
-          <span className="text-2xl font-sans font-black tracking-tight text-text-primary dark:text-primary">
+          <div className="w-px h-8 bg-white/20" />
+          <span className="text-2xl font-sans font-black tracking-tight text-text-on-primary">
             {(totalInMicrounits / 1_000_000).toFixed(2)}€
           </span>
         </div>

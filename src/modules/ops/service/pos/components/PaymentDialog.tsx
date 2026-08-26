@@ -218,7 +218,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                         className={cn(
                                             "w-full h-16 md:h-20 rounded-[32px] md:rounded-[40px] font-black text-lg md:text-xl transition-all duration-700 flex items-center justify-center gap-6 relative overflow-hidden shadow-premium active:scale-95 group uppercase tracking-[0.3em]",
                                             method
-                                                ? "bg-text-primary text-text-primary hover:bg-surface-sidebar dark:hover:bg-surface-card dark:hover:text-primary"
+                                                ? "bg-action-primary hover:bg-action-primary-hover text-text-on-primary"
                                                 : "bg-bg-tertiary text-text-muted/40 cursor-not-allowed border border-border/50"
                                         )}
                                     >

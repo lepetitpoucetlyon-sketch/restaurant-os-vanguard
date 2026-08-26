@@ -16,12 +16,12 @@ export function ProcurementBasketDetail({
   setTargetDeliveryDate,
 }: ProcurementBasketDetailProps) {
   return (
-    <div className="flex-1 bg-slate-950/50 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+    <div className="flex-1 bg-surface-glass border border-border-default rounded-2xl p-5 flex flex-col justify-between space-y-4">
       {selectedBasket ? (
         <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <div className="flex items-center justify-between border-b border-border-default pb-3">
             <div>
-              <h4 className="font-black text-base text-white">{selectedBasket.supplierName}</h4>
+              <h4 className="font-black text-base text-text-primary">{selectedBasket.supplierName}</h4>
               <p className="text-xs text-text-muted">
                 {selectedBasket.items.length} article{selectedBasket.items.length > 1 ? 's' : ''} à commander
               </p>
@@ -32,7 +32,7 @@ export function ProcurementBasketDetail({
                 type="date"
                 value={targetDeliveryDate}
                 onChange={(e) => setTargetDeliveryDate(e.target.value)}
-                className="bg-slate-900 border border-slate-700 text-xs px-2.5 py-1 rounded-lg text-white font-medium"
+                className="bg-surface-bg border border-border-default text-xs px-2.5 py-1 rounded-lg text-text-primary font-medium"
               />
             </div>
           </div>
@@ -42,7 +42,7 @@ export function ProcurementBasketDetail({
             {selectedBasket.items.map((item) => (
               <div
                 key={item.stockItemId}
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs"
+                className="flex items-center justify-between p-3 rounded-xl bg-surface-card border border-border-default text-xs"
               >
                 <div className="flex items-center gap-3">
                   <span
@@ -56,7 +56,7 @@ export function ProcurementBasketDetail({
                     {item.urgency}
                   </span>
                   <div>
-                    <div className="font-bold text-white">{item.name}</div>
+                    <div className="font-bold text-text-primary">{item.name}</div>
                     <div className="text-nano text-text-muted">
                       Stock actuel: {item.currentQuantity} {item.unit} | Cible: {item.targetQuantity} {item.unit}
                     </div>

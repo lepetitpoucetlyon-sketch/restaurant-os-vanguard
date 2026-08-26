@@ -28,8 +28,8 @@ export function MaintenanceRulesTab({
           animate={{ opacity: 1, y: 0 }}
           className={`p-5 rounded-2xl border transition-all ${
             rule.enabled
-              ? 'bg-slate-900/70 border-slate-800 hover:border-slate-700'
-              : 'bg-slate-900/30 border-slate-900 opacity-60'
+              ? 'bg-surface-card border-border-default hover:border-border-focus'
+              : 'bg-surface-glass border-border-default opacity-60'
           }`}
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -38,7 +38,7 @@ export function MaintenanceRulesTab({
                 <button
                   onClick={() => onToggleRuleEnabled(rule.id)}
                   className={`w-9 h-5 rounded-full transition-colors relative p-0.5 ${
-                    rule.enabled ? 'bg-emerald-500' : 'bg-slate-800'
+                    rule.enabled ? 'bg-emerald-500' : 'bg-surface-glass-hover'
                   }`}
                 >
                   <div
@@ -47,8 +47,8 @@ export function MaintenanceRulesTab({
                     }`}
                   />
                 </button>
-                <h4 className="text-sm font-bold text-white tracking-tight">{rule.label}</h4>
-                <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-nano font-mono">
+                <h4 className="text-sm font-bold text-text-primary tracking-tight">{rule.label}</h4>
+                <span className="px-2 py-0.5 rounded-md bg-surface-glass text-text-muted text-nano font-mono">
                   {rule.alertType}
                 </span>
               </div>
@@ -68,16 +68,16 @@ export function MaintenanceRulesTab({
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center gap-3">
+          <div className="mt-4 pt-3 border-t border-border-default flex flex-wrap items-center gap-3">
             <span className="text-micro font-bold text-text-muted/80">Destinataires notifiés :</span>
             {rule.recipients.map((rec) => (
               <div
                 key={rec.id}
-                className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs text-text-secondary"
+                className="flex items-center gap-2 px-3 py-1 rounded-xl bg-surface-glass border border-border-default text-xs text-text-secondary"
               >
-                <span className="font-semibold text-white">{rec.name || rec.role}</span>
+                <span className="font-semibold text-text-primary">{rec.name || rec.role}</span>
                 <span className="text-text-muted/80">({rec.minSeverity}+)</span>
-                <div className="flex items-center gap-1 ml-1 border-l border-slate-800 pl-2">
+                <div className="flex items-center gap-1 ml-1 border-l border-border-default pl-2">
                   <button
                     onClick={() => onToggleRecipientChannel(rule.id, rec.id, 'IN_APP')}
                     title="Canal In-App"

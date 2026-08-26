@@ -57,10 +57,10 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
             placeholder="Filtrer fournisseurs..."
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+            className="w-full bg-surface-glass border border-border-default rounded-xl pl-9 pr-4 py-2 text-xs text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-amber-500/50"
           />
         </div>
-        <button className="px-4 py-2 rounded-xl bg-amber-500 text-text-primary font-bold text-xs tracking-wider uppercase hover:bg-amber-400 transition-colors flex items-center gap-2">
+        <button className="px-4 py-2 rounded-xl bg-amber-500 text-white font-bold text-xs tracking-wider uppercase hover:bg-amber-400 transition-colors flex items-center gap-2">
           <Building2 className="w-4 h-4" />
           Nouveau Fournisseur
         </button>
@@ -70,45 +70,45 @@ export function DirectoryTab({ searchFilter, setSearchFilter }: DirectoryTabProp
         {suppliers.map((s) => (
           <div
             key={s.id}
-            className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between space-y-4"
+            className="p-5 rounded-2xl bg-surface-card border border-border-default hover:border-border-focus transition-all flex flex-col justify-between space-y-4"
           >
             <div>
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-bold text-white text-base">{s.name}</h3>
+                  <h3 className="font-bold text-text-primary text-base">{s.name}</h3>
                   <p className="text-micro text-text-muted">{s.category}</p>
                 </div>
-                <span className="text-nano font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-500/20">
+                <span className="text-nano font-bold px-2 py-0.5 rounded bg-surface-glass text-amber-300 border border-amber-500/20">
                   {s.channel}
                 </span>
               </div>
 
               <div className="mt-4 space-y-2 text-xs text-text-secondary">
-                <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
+                <div className="flex items-center justify-between py-1 border-b border-border-default/40">
                   <span className="text-text-muted">Franco de port :</span>
-                  <span className="font-bold text-white">{s.franco}</span>
+                  <span className="font-bold text-text-primary">{s.franco}</span>
                 </div>
-                <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
+                <div className="flex items-center justify-between py-1 border-b border-border-default/40">
                   <span className="text-text-muted">Cut-off commande :</span>
                   <span className="font-bold text-amber-400">{s.cutOff}</span>
                 </div>
-                <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
+                <div className="flex items-center justify-between py-1 border-b border-border-default/40">
                   <span className="text-text-muted">Jours de passage :</span>
                   <span className="font-semibold text-text-primary">{s.deliveryDays}</span>
                 </div>
-                <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
+                <div className="flex items-center justify-between py-1 border-b border-border-default/40">
                   <span className="text-text-muted">Règlement :</span>
                   <span className="text-text-primary">{s.payment}</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <div className="pt-2 border-t border-border-default flex items-center justify-between">
               <div className="flex items-center gap-2 text-micro text-text-muted">
                 <Phone className="w-3.5 h-3.5 text-emerald-400" />
                 <span>{s.primaryContact}</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-text-muted/80" />
+              <ChevronRight className="w-4 h-4 text-text-muted" />
             </div>
           </div>
         ))}

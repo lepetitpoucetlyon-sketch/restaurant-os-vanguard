@@ -228,15 +228,15 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
                 </div>
 
                 {/* Footer Center - Operational Protocol */}
-                <div className="p-8 border-t flex items-center justify-between relative z-10 shrink-0 border-black/5 bg-surface-sidebar/[0.02]">
+                <div className="p-8 border-t flex items-center justify-between relative z-10 shrink-0 border-border bg-surface-glass">
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-3">
-                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-nano font-black">↑↓</div>
-                            <span className="text-chip-label text-primary/20">Parcourir</span>
+                            <div className="bg-surface-card border-border text-text-muted px-2 py-1 border rounded-lg text-nano font-black">↑↓</div>
+                            <span className="text-chip-label text-text-muted">Parcourir</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="bg-surface-sidebar/5 border-black/10 text-primary/40 px-2 py-1 border rounded-lg text-nano font-black">↵</div>
-                            <span className="text-chip-label text-primary/20">Activer</span>
+                            <div className="bg-surface-card border-border text-text-muted px-2 py-1 border rounded-lg text-nano font-black">↵</div>
+                            <span className="text-chip-label text-text-muted">Activer</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">

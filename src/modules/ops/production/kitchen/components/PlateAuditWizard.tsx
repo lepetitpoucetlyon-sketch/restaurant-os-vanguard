@@ -50,7 +50,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
     };
 
     return (
-        <div className="fixed inset-0 z-[200] bg-surface-sidebar/98 backdrop-blur-3xl flex items-center justify-center p-4 md:p-12 overflow-hidden">
+        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-3xl flex items-center justify-center p-4 md:p-12 overflow-hidden">
             {/* Animated Laser Grid Background */}
             <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -59,7 +59,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
             <motion.div 
                 initial={{ opacity: 0, y: 50, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                className="w-full max-w-6xl bg-surface-sidebar/80 border border-subtle rounded-[4rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row h-full max-h-[85vh] relative"
+                className="w-full max-w-6xl bg-surface-card border border-border rounded-[4rem] overflow-hidden shadow-2xl flex flex-col md:flex-row h-full max-h-[85vh] relative"
             >
                 {/* Header Section (Mobile/Top) */}
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 text-center">
@@ -92,7 +92,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                         {/* Captured Image */}
                         <div className="space-y-4 relative">
                             <p className="text-nano font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">CAPTURE RÉELLE</p>
-                            <div className="aspect-square rounded-[2rem] bg-surface-sidebar border-2 border-dashed border-action-primary/30 overflow-hidden relative">
+                            <div className="aspect-square rounded-[2rem] bg-surface-glass border-2 border-dashed border-action-primary/30 overflow-hidden relative">
                                 {capturedImage ? (
                                     <img src={capturedImage} className="w-full h-full object-cover" alt="Capture" />
                                 ) : (
@@ -130,7 +130,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                 </div>
 
                 {/* Right: AI Intelligence Panel */}
-                <div className="w-full md:w-[450px] p-12 bg-surface-sidebar flex flex-col justify-center">
+                <div className="w-full md:w-[450px] p-12 bg-surface-card flex flex-col justify-center">
                     {!auditResult && !isScanning && (
                         <div className="text-center space-y-6">
                             <div className="w-20 h-20 bg-surface-card/5 rounded-3xl flex items-center justify-center mx-auto">

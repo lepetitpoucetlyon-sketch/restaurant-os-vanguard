@@ -92,7 +92,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[150] bg-surface-sidebar/20 dark:bg-surface-sidebar/80 backdrop-blur-sm transition-opacity duration-300"
+                className="fixed inset-0 z-[150] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
                 onClick={onClose}
             />
 
@@ -102,13 +102,13 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed top-2 right-2 bottom-2 z-[200] w-[calc(100%-1rem)] md:w-[480px] bg-surface-card dark:bg-surface-sidebar border border-subtle dark:border-accent-gold/20 rounded-[2.5rem] shadow-2xl dark:shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)] overflow-hidden flex flex-col"
+                className="fixed top-2 right-2 bottom-2 z-[200] w-[calc(100%-1rem)] md:w-[480px] bg-surface-card border border-border rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
             >
                 {/* Visual Glow (Dark Mode Only) */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 blur-[100px] pointer-events-none hidden dark:block" />
 
                 {/* Master UI Header */}
-                <div className="p-6 md:p-10 border-b border-subtle dark:border-white/5 flex items-center justify-between relative z-10 bg-surface-card dark:bg-transparent">
+                <div className="p-6 md:p-10 border-b border-border flex items-center justify-between relative z-10 bg-surface-card">
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="relative">
                             <div className="w-12 h-12 md:w-16 md:h-16 rounded-[18px] md:rounded-[22px] bg-surface-bg dark:bg-accent-gold/10 flex items-center justify-center border border-subtle dark:border-accent-gold/20 shadow-lg dark:shadow-glow group transition-all duration-700 hover:rotate-6">
@@ -206,8 +206,8 @@ function NotificationCategory({
                     <div className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm border",
                         unreadCount > 0
-                            ? "bg-surface-sidebar dark:bg-accent-gold text-text-primary dark:text-primary border-transparent"
-                            : "bg-surface-bg dark:bg-surface-card/5 text-muted dark:text-text-primary/40 border-subtle dark:border-subtle"
+                            ? "bg-action-primary text-text-on-primary border-transparent"
+                            : "bg-surface-glass text-text-muted border-border"
                     )}>
                         <Layers className="w-5 h-5" strokeWidth={1.5} />
                     </div>
@@ -326,7 +326,7 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
             {!notification.read && (
                 <div className={cn(
                     "absolute top-5 right-5 w-2 h-2 rounded-full",
-                    notification.type === 'critical' ? "bg-status-danger" : "bg-surface-sidebar dark:bg-accent-gold"
+                    notification.type === 'critical' ? "bg-status-danger" : "bg-action-primary"
                 )} />
             )}
         </motion.div>

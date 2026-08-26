@@ -73,3 +73,5 @@ export { OracleIntentAugmenter } from './services/OracleIntentAugmenter';
 export { ActionProposalCard } from './components/ActionProposalCard';
 export type { ActionProposal, AssistantToolDefinition } from './services/AssistantActionDispatcher';
 export { VisionService, type ExtractedInvoice, type PlateAuditResult } from './services/VisionService';
+export * from './ia/ai/speculative';
+

@@ -69,7 +69,7 @@ export const EmpireCockpit: React.FC = () => {
             {kpis.map((kpi, i) => (
                 <div 
                     key={i}
-                    className="relative overflow-hidden group p-6 rounded-2xl bg-surface-sidebar border border-default shadow-xl hover:border-default transition-all duration-300"
+                    className="relative overflow-hidden group p-6 rounded-2xl bg-surface-card border border-border shadow-xl hover:border-border transition-all duration-300"
                 >
                     <div className={`absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 rounded-full ${kpi.bg} blur-3xl opacity-50 group-hover:opacity-100 transition-opacity`} />
                     

@@ -98,7 +98,7 @@ export function SplitBillDialog({
 
     return (
         <Modal isOpen={isOpen} onClose={handleClose} size="lg" className="p-0 border-none bg-transparent" showClose={false} noPadding>
-            <div className="bg-surface-sidebar border border-accent-gold/20 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)] w-full overflow-hidden relative flex flex-col h-[85vh]">
+            <div className="bg-surface-card border border-border rounded-[3rem] shadow-2xl w-full overflow-hidden relative flex flex-col h-[85vh]">
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent-gold/5 blur-[120px] pointer-events-none" />
 
                 {/* En-tête */}

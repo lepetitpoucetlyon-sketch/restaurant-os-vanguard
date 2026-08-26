@@ -38,10 +38,10 @@ export function QuantitySelector({
                 // Base Pill Shape
                 "relative flex items-center justify-between p-1 rounded-full",
                 "w-36 h-12 select-none",
-                // Background - MC: Light Green | MS: Dark Forest Green
-                "bg-status-success/10 dark:bg-[#062D1F]/80 dark:backdrop-blur-md",
+                // Background
+                "bg-action-primary/10 backdrop-blur-md",
                 // Contour/Border
-                "border border-accent/20 dark:border-accent/30",
+                "border border-action-primary/20",
                 // Liquid Glass Highlight (Top edge)
                 "before:absolute before:top-0 before:left-4 before:right-4 before:h-[1px]",
                 "before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
@@ -56,16 +56,16 @@ export function QuantitySelector({
                 disabled={value <= min}
                 className={cn(
                     "flex items-center justify-center w-10 h-10 rounded-full transition-all",
-                    "hover:bg-surface-sidebar/5 dark:hover:bg-surface-card/5",
-                    "text-secondary dark:text-muted disabled:opacity-30",
-                    "border border-transparent dark:border-white/5"
+                    "hover:bg-surface-glass",
+                    "text-text-muted disabled:opacity-30",
+                    "border border-transparent"
                 )}
             >
                 <Minus size={20} strokeWidth={2.5} />
             </motion.button>
 
             {/* Value Display */}
-            <div className="flex-1 text-center font-bold text-lg text-primary dark:text-text-primary">
+            <div className="flex-1 text-center font-bold text-lg text-text-primary">
                 <AnimatePresence mode="wait">
                     <motion.span
                         key={value}
@@ -79,7 +79,7 @@ export function QuantitySelector({
                 </AnimatePresence>
             </div>
 
-            {/* Plus Button - Round, Radiant Emerald with Glow */}
+            {/* Plus Button - Round, Radiant Action with Glow */}
             <motion.button
                 type="button"
                 whileHover={{ scale: 1.05 }}
@@ -88,10 +88,9 @@ export function QuantitySelector({
                 disabled={value >= max}
                 className={cn(
                     "relative flex items-center justify-center w-10 h-10 rounded-full transition-shadow",
-                    "bg-accent text-text-primary shadow-[0_0_15px_-3px_#C5A059]",
-                    "hover:shadow-[0_0_20px_-2px_#C5A059]",
+                    "bg-action-primary text-text-on-primary shadow-sm hover:bg-action-primary-hover",
                     // Liquid glass highlight on the button itself
-                    "after:absolute after:top-1 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[1px] after:bg-surface-card/40 after:rounded-full after:blur-[0.5px]"
+                    "after:absolute after:top-1 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[1px] after:bg-white/30 after:rounded-full after:blur-[0.5px]"
                 )}
             >
                 <Plus size={22} strokeWidth={3} />

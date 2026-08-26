@@ -28,7 +28,7 @@ export function SplitEqualPanel({ splitCount, amountPerPerson, onSplitCountChang
                 <div className="flex items-center gap-8 bg-surface-card/[0.02] rounded-[32px] p-3 border border-white/5 shadow-inner">
                     <button
                         onClick={() => onSplitCountChange(Math.max(2, splitCount - 1))}
-                        className="w-14 h-14 rounded-[22px] bg-surface-sidebar/40 border border-subtle shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
+                        className="w-14 h-14 rounded-[22px] bg-surface-glass border border-border shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
                     >
                         <Minus className="w-6 h-6" />
                     </button>
@@ -37,7 +37,7 @@ export function SplitEqualPanel({ splitCount, amountPerPerson, onSplitCountChang
                     </span>
                     <button
                         onClick={() => onSplitCountChange(splitCount + 1)}
-                        className="w-14 h-14 rounded-[22px] bg-surface-sidebar/40 border border-subtle shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
+                        className="w-14 h-14 rounded-[22px] bg-surface-glass border border-border shadow-premium flex items-center justify-center hover:text-accent-gold transition-all duration-300 active:scale-90"
                     >
                         <Plus className="w-6 h-6" />
                     </button>

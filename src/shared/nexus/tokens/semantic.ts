@@ -94,9 +94,9 @@ export const semanticTokens = {
 
 export type SemanticTokens = typeof semanticTokens;
 
-// CSS Custom Properties générées depuis les tokens
-// Injectées par BrandingProvider dans :root
-export function generateCSSVariables(
+// CSS Custom Properties d'Identité de Marque
+// Injectées par BrandingProvider dans :root (style inline)
+export function generateBrandCSSVariables(
   tokens: Partial<SemanticTokens> = semanticTokens
 ): Record<string, string> {
   return {
@@ -106,11 +106,36 @@ export function generateCSSVariables(
     '--action-danger':            tokens.action?.danger ?? semanticTokens.action.danger,
     '--action-accent':            tokens.action?.accent ?? semanticTokens.action.accent,
 
+    '--text-brand':               tokens.text?.brand ?? semanticTokens.text.brand,
+    '--border-focus':             tokens.border?.focus ?? semanticTokens.border.focus,
+
+    '--gradient-primary':         tokens.effects?.gradientPrimary ?? semanticTokens.effects.gradientPrimary,
+    '--shadow-card':              tokens.effects?.shadowCard ?? semanticTokens.effects.shadowCard,
+
+    '--font-brand':               'inherit',  // Overridé par BrandingProvider par tenant
+    '--font-ui':                  'inherit',
+
+    '--radius-card':              '1.5rem',   // Overridé par BrandingProvider (sm, md, lg, full)
+    '--radius-btn':               '1rem',
+    '--glass-blur':               '16px',
+    '--glass-opacity':            '0.7',
+    '--text-on-primary':          '#FFFFFF',  // Calculé dynamiquement via WCAG luminance
+  };
+}
+
+// CSS Custom Properties Neutres (Thème clair/sombre)
+// Gérées EXCLUSIVEMENT par globals.css (:root, [data-theme="dark"], prefers-color-scheme)
+// Conservées ici pour les tests, l'introspection et les outils design-system (NON injectées inline).
+export function generateNeutralCSSVariables(
+  tokens: Partial<SemanticTokens> = semanticTokens
+): Record<string, string> {
+  return {
     '--surface-bg':               tokens.surface?.background ?? semanticTokens.surface.background,
     '--surface-card':             tokens.surface?.card ?? semanticTokens.surface.card,
     '--surface-modal':            tokens.surface?.modal ?? semanticTokens.surface.modal,
     '--surface-modal-dark':       tokens.surface?.modalDark ?? semanticTokens.surface.modalDark,
     '--surface-sidebar':          tokens.surface?.sidebar ?? semanticTokens.surface.sidebar,
+    '--surface-glass':            tokens.surface?.glass ?? semanticTokens.surface.glass,
 
     '--status-table-available':   tokens.status?.tableAvailable ?? semanticTokens.status.tableAvailable,
     '--status-table-occupied':    tokens.status?.tableOccupied ?? semanticTokens.status.tableOccupied,
@@ -125,23 +150,18 @@ export function generateCSSVariables(
     '--text-primary':             tokens.text?.primary ?? semanticTokens.text.primary,
     '--text-secondary':           tokens.text?.secondary ?? semanticTokens.text.secondary,
     '--text-muted':               tokens.text?.muted ?? semanticTokens.text.muted,
-    '--text-brand':               tokens.text?.brand ?? semanticTokens.text.brand,
 
     '--border-default':           tokens.border?.default ?? semanticTokens.border.default,
-    '--border-focus':             tokens.border?.focus ?? semanticTokens.border.focus,
     '--border-subtle':            tokens.border?.subtle ?? semanticTokens.border.subtle,
+  };
+}
 
-    '--gradient-primary':         tokens.effects?.gradientPrimary ?? semanticTokens.effects.gradientPrimary,
-    '--shadow-card':              tokens.effects?.shadowCard ?? semanticTokens.effects.shadowCard,
-    '--surface-glass':            tokens.surface?.glass ?? semanticTokens.surface.glass,
-
-    '--font-brand':               'inherit',  // Overridé par BrandingProvider par tenant
-    '--font-ui':                  'inherit',
-
-    '--radius-card':              '1.5rem',   // Overridé par BrandingProvider (sm, md, lg, full)
-    '--radius-btn':               '1rem',
-    '--glass-blur':               '16px',
-    '--glass-opacity':            '0.7',
-    '--text-on-primary':          '#FFFFFF',  // Calculé dynamiquement via WCAG luminance
+// CSS Custom Properties complètes (rétro-compatibilité globale)
+export function generateCSSVariables(
+  tokens: Partial<SemanticTokens> = semanticTokens
+): Record<string, string> {
+  return {
+    ...generateBrandCSSVariables(tokens),
+    ...generateNeutralCSSVariables(tokens),
   };
 }

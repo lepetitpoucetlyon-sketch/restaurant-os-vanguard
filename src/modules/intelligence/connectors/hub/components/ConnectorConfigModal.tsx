@@ -55,7 +55,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
               <p className="text-xs text-text-muted capitalize">{manifest.category.replace('-', ' ')}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-surface-sidebar text-text-muted hover:text-text-primary transition-colors">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -63,7 +63,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
         {/* Body */}
         <div className="p-5 space-y-4">
           {manifest.authType === 'oauth2' && (
-            <div className="rounded-xl border border-border bg-surface-sidebar p-4 text-sm text-text-muted">
+            <div className="rounded-xl border border-border bg-surface-glass p-4 text-sm text-text-muted">
               Ce connecteur utilise OAuth2. Cliquez sur <strong className="text-text-primary">Connecter</strong> pour être redirigé vers la page d'autorisation.
             </div>
           )}
@@ -80,7 +80,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
                   placeholder={field.placeholder ?? ''}
                   value={fields[field.key] ?? ''}
                   onChange={e => set(field.key, e.target.value)}
-                  className="w-full px-3 py-2 pr-10 rounded-xl border border-border bg-surface-sidebar text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 transition"
+                  className="w-full px-3 py-2 pr-10 rounded-xl border border-border bg-surface-glass text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 transition"
                 />
                 {field.type === 'password' && (
                   <button
@@ -104,7 +104,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-2 p-5 border-t border-border">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-text-muted hover:text-text-primary hover:bg-surface-sidebar border border-border transition-colors">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-text-muted hover:text-text-primary hover:bg-surface-glass border border-border transition-colors">
             Annuler
           </button>
           {manifest.authType === 'oauth2' ? (

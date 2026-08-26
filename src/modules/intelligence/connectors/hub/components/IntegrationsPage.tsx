@@ -119,12 +119,12 @@ export function IntegrationsPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Total',       val: stats.total,   cls: 'text-white' },
+          { label: 'Total',       val: stats.total,   cls: 'text-text-primary' },
           { label: 'Actifs',      val: stats.active,  cls: 'text-status-success' },
           { label: 'À configurer', val: stats.pending, cls: 'text-yellow-500' },
           { label: 'En erreur',   val: stats.error,   cls: 'text-status-danger' },
         ].map(s => (
-          <div key={s.label} className="bg-surface-sidebar border border-border rounded-xl p-3">
+          <div key={s.label} className="bg-surface-card border border-border rounded-xl p-3">
             <p className="text-xs text-text-muted">{s.label}</p>
             <p className={`text-2xl font-bold mt-0.5 ${s.cls}`}>{s.val}</p>
           </div>
@@ -140,17 +140,17 @@ export function IntegrationsPage() {
             placeholder="Rechercher un connecteur…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-xl border border-border bg-surface-sidebar text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary transition"
+            className="w-full pl-9 pr-3 py-2 rounded-xl border border-border bg-surface-glass text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary transition"
           />
         </div>
-        <nav className="flex gap-1 p-1 bg-surface-sidebar border border-border rounded-xl self-start">
+        <nav className="flex gap-1 p-1 bg-surface-glass border border-border rounded-xl self-start">
           {(['all', 'active', 'pending', 'error'] as const).map(f => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeFilter === f
-                  ? 'bg-surface-base text-text-primary shadow-sm'
+                  ? 'bg-surface-card text-text-primary shadow-sm'
                   : 'text-text-muted hover:text-text-primary'
               }`}
             >

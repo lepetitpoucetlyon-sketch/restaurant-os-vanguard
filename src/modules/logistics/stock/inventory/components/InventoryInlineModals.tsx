@@ -63,9 +63,9 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
         <ModalShell onClose={onClose}>
             <h3 className="text-base font-semibold mb-4">Seuils — {item.name ?? item.ingredientName}</h3>
             <label className="block text-xs text-text-muted mb-1">Seuil d&apos;alerte ({item.unit})</label>
-            <input type="number" min="0" step="any" value={minQty} onChange={(e) => setMinQty(e.target.value)} className="w-full mb-4 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder={`ex: 2 ${item.unit}`} />
+            <input type="number" min="0" step="any" value={minQty} onChange={(e) => setMinQty(e.target.value)} className="w-full mb-4 px-3 py-2 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder={`ex: 2 ${item.unit}`} />
             <label className="block text-xs text-text-muted mb-1">Quantité de réassort ({item.unit})</label>
-            <input type="number" min="0" step="any" value={reorderQty} onChange={(e) => setReorderQty(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder={`ex: 10 ${item.unit}`} />
+            <input type="number" min="0" step="any" value={reorderQty} onChange={(e) => setReorderQty(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder={`ex: 10 ${item.unit}`} />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
                 <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Enregistrer"}</button>
@@ -95,7 +95,7 @@ export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose
             <h3 className="text-base font-semibold mb-1">Comptage physique</h3>
             <p className="text-xs text-text-muted mb-4">{item.name ?? item.ingredientName} — attendu : <strong>{item.quantity} {item.unit}</strong></p>
             <label className="block text-xs text-text-muted mb-1">Quantité comptée ({item.unit})</label>
-            <input type="number" min="0" step="any" value={counted} onChange={(e) => setCounted(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" />
+            <input type="number" min="0" step="any" value={counted} onChange={(e) => setCounted(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
                 <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Valider"}</button>
@@ -126,9 +126,9 @@ export function AdjustStockModal({ item, onClose }: { item: StockItem; onClose: 
             <h3 className="text-base font-semibold mb-1">Ajustement manuel</h3>
             <p className="text-xs text-text-muted mb-4">{item.name ?? item.ingredientName} — stock actuel : <strong>{item.quantity} {item.unit}</strong></p>
             <label className="block text-xs text-text-muted mb-1">Delta ({item.unit}) — négatif pour retirer</label>
-            <input type="number" step="any" value={delta} onChange={(e) => setDelta(e.target.value)} className="w-full mb-4 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" />
+            <input type="number" step="any" value={delta} onChange={(e) => setDelta(e.target.value)} className="w-full mb-4 px-3 py-2 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" />
             <label className="block text-xs text-text-muted mb-1">Motif (optionnel)</label>
-            <input type="text" value={reason} onChange={(e) => setReason(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder="Perte, correction inventaire…" />
+            <input type="text" value={reason} onChange={(e) => setReason(e.target.value)} className="w-full mb-6 px-3 py-2 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary" placeholder="Perte, correction inventaire…" />
             <div className="flex justify-end gap-2">
                 <button onClick={onClose} className="px-4 py-2 rounded-md text-sm text-text-muted hover:bg-surface-hover">Annuler</button>
                 <button onClick={handleSave} disabled={saving} className="px-4 py-2 rounded-md bg-action-primary text-text-primary text-sm font-medium hover:opacity-90 disabled:opacity-50">{saving ? "Enregistrement…" : "Appliquer"}</button>

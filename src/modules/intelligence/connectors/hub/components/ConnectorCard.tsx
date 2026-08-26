@@ -28,7 +28,7 @@ export function ConnectorCard({ entry, isLoading, onConfigure, onActivate, onDea
       isActive ? 'border-status-success/40 bg-status-success/5' :
       isError  ? 'border-status-danger/40 bg-status-danger/5'  :
       isPending ? 'border-yellow-500/40 bg-yellow-500/5'       :
-      'border-border bg-surface-sidebar'
+      'border-border bg-surface-card'
     }`}>
       {/* Badge premium */}
       {manifest.isPremium && (

@@ -39,7 +39,7 @@ export function SplitConviveCard({
                 </div>
                 <div className={cn(
                     "w-12 h-12 rounded-[20px] flex items-center justify-center font-serif font-black italic text-xl shadow-sm transition-all duration-700",
-                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-sidebar/40 text-text-primary/40 border border-white/5 group-hover/card:scale-110"
+                    convive.paid ? "bg-accent-gold text-primary rotate-12" : "bg-surface-glass text-text-primary/40 border border-white/5 group-hover/card:scale-110"
                 )}>
                     {convive.paid ? <Check className="w-6 h-6" /> : index + 1}
                 </div>

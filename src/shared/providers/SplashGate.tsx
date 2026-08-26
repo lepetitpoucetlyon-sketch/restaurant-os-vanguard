@@ -42,7 +42,11 @@ export function SplashGate({ children }: { children: React.ReactNode }) {
     const tokens = result.success ? result.data : defaultBrandTokens;
 
     const splashEnabled = tokens.splashEnabled !== false;
-    const splashPolicy  = tokens.splashPolicy ?? 'always';
+    // Défaut 'first-boot' : le splash est une intro de marque, pas un écran de
+    // chargement. En 'always' il rejouait à CHAQUE navigation interne (et son
+    // handleSplashDone redirige vers lastPath), donnant l'impression d'un reboot
+    // permanent. Un tenant peut toujours forcer 'always' ou 'never' via ses tokens.
+    const splashPolicy  = tokens.splashPolicy ?? 'first-boot';
 
     // ── Tracking de la dernière page visitée ──────────────────────────────
     useEffect(() => {

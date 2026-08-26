@@ -44,8 +44,8 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={isPage ? {} : { opacity: 0, scale: 0.95, y: 20 }}
             className={cn(
-                "relative w-full bg-surface-card dark:bg-bg-secondary overflow-hidden",
-                !isPage && "rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] dark:shadow-black/60 border border-subtle dark:border-border",
+                "relative w-full bg-surface-card overflow-hidden",
+                !isPage && "rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] dark:shadow-black/60 border border-border-default",
                 doc.isRecipe ? "max-w-6xl h-[85vh]" : "max-w-4xl",
                 isPage && "max-w-none h-full"
             )}
@@ -59,22 +59,22 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
             ) : (
                 <>
                     {/* Linear Header */}
-                    <div className="p-8 border-b border-subtle dark:border-border flex items-center justify-between bg-bg-primary dark:bg-bg-tertiary/40">
+                    <div className="p-8 border-b border-border-default flex items-center justify-between bg-surface-card">
                         <div className="flex items-center gap-5">
                             <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg bg-accent/20">
                                 <BookOpen strokeWidth={1.5} className="w-6 h-6 text-accent dark:text-accent-gold" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-serif font-light text-primary dark:text-text-primary italic">
+                                <h2 className="text-xl font-serif font-light text-text-primary italic">
                                     {showFullTutorial ? "Tutoriel Guidé : " : "Fiche Technique : "}
                                     <span className="font-normal text-accent dark:text-accent/90">{doc.title}</span>
                                 </h2>
-                                <p className="text-nano font-black text-secondary dark:text-text-muted uppercase tracking-[0.2em] mt-1">Manuel d'utilisation Restaurant OS</p>
+                                <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mt-1">Manuel d'utilisation Restaurant OS</p>
                             </div>
                         </div>
                         {!isPage && (
-                            <button onClick={closeDocumentation} className="w-10 h-10 rounded-full hover:bg-surface-bg dark:hover:bg-surface-sidebar flex items-center justify-center transition-colors">
-                                <X className="w-5 h-5 text-secondary dark:text-text-muted" />
+                            <button onClick={closeDocumentation} className="w-10 h-10 rounded-full hover:bg-surface-glass-hover flex items-center justify-center transition-colors">
+                                <X className="w-5 h-5 text-text-muted" />
                             </button>
                         )}
                     </div>
@@ -90,7 +90,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                     doc.fullTutorial.map((section, sidx) => (
                                         <div key={sidx} className="space-y-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-2xl bg-surface-bg dark:bg-bg-tertiary flex items-center justify-center text-2xl shadow-inner border border-subtle dark:border-border">
+                                                <div className="w-12 h-12 rounded-2xl bg-surface-glass flex items-center justify-center text-2xl shadow-inner border border-border-default">
                                                     {section.icon}
                                                 </div>
                                                 <h3 className="text-xl font-serif font-black text-primary dark:text-text-primary italic tracking-tight">
@@ -108,9 +108,9 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                         const steps = parts.slice(1);
 
                                                         return (
-                                                            <div key={pidx} className="rounded-2xl border border-subtle dark:border-border shadow-sm overflow-hidden">
+                                                            <div key={pidx} className="rounded-2xl border border-border shadow-sm overflow-hidden">
                                                                 <div
-                                                                    className="flex items-center gap-4 px-5 py-4 bg-surface-sidebar dark:bg-surface-sidebar text-text-primary cursor-pointer hover:bg-surface-sidebar dark:hover:bg-surface-sidebar transition-colors group/banner"
+                                                                    className="flex items-center gap-4 px-5 py-4 bg-surface-card border-b border-border text-text-primary cursor-pointer hover:bg-surface-glass transition-colors group/banner"
                                                                     onClick={() => {
                                                                         const tutorialSection: import('@nexus/contracts/nexus.types').NexusTutorialSection = {
                                                                             id: activeCategory as string,
@@ -148,7 +148,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                         closeDocumentation();
                                                                     }}
                                                                 >
-                                                                    <div className="w-8 h-8 rounded-xl bg-surface-card/20 flex items-center justify-center text-sm font-black group-hover/banner:bg-accent-gold group-hover/banner:text-primary transition-all">
+                                                                    <div className="w-8 h-8 rounded-xl bg-action-primary/10 flex items-center justify-center text-sm font-black group-hover/banner:bg-action-primary group-hover/banner:text-text-on-primary transition-all">
                                                                         {pidx + 1}
                                                                     </div>
                                                                     <span className="text-sm font-bold uppercase tracking-wider">{actionTitle}</span>
@@ -156,7 +156,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                 </div>
 
                                                                 {steps.length > 0 && (
-                                                                    <div className="p-5 space-y-3 bg-surface-card dark:bg-bg-secondary/50">
+                                                                    <div className="p-5 space-y-3 bg-surface-glass">
                                                                         {steps.map((step, stepIdx) => (
                                                                             <div key={stepIdx} className="flex items-start gap-3">
                                                                                 <div className="flex flex-col items-center shrink-0">
@@ -168,7 +168,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                                     )}
                                                                                 </div>
                                                                                 <div className="flex-1 pt-0.5">
-                                                                                    <span className="text-sm text-primary dark:text-text-primary leading-relaxed">{step}</span>
+                                                                                    <span className="text-sm text-text-primary leading-relaxed">{step}</span>
                                                                                 </div>
                                                                             </div>
                                                                         ))}
@@ -182,15 +182,15 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-center py-20 bg-surface-bg dark:bg-bg-tertiary/20 rounded-[2.5rem] border-2 border-dashed border-subtle dark:border-border/50">
-                                        <p className="text-muted dark:text-text-muted font-serif italic">Le tutoriel détaillé est en cours de rédaction par notre équipe hôtelière.</p>
+                                    <div className="text-center py-20 bg-surface-glass rounded-[2.5rem] border-2 border-dashed border-border">
+                                        <p className="text-text-muted font-serif italic">Le tutoriel détaillé est en cours de rédaction par notre équipe hôtelière.</p>
                                     </div>
                                 )}
                             </div>
                         ) : (
                             <>
-                                <div className="p-8 bg-bg-primary dark:bg-bg-tertiary/20 rounded-3xl border border-border-default dark:border-border/50">
-                                    <p className="text-base text-primary dark:text-text-primary font-serif italic leading-relaxed">
+                                <div className="p-8 bg-surface-glass rounded-3xl border border-border">
+                                    <p className="text-base text-text-primary font-serif italic leading-relaxed">
                                         "{doc.description}"
                                     </p>
                                 </div>
@@ -198,12 +198,12 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                                     {doc.details.map((detail, idx) => (
                                         <div key={idx} className="flex gap-6 group">
-                                            <div className="w-10 h-10 rounded-xl bg-surface-card dark:bg-bg-tertiary border border-subtle dark:border-border flex items-center justify-center text-nano font-mono font-bold text-accent-gold dark:text-accent-gold/80 shadow-sm shrink-0">
+                                            <div className="w-10 h-10 rounded-xl bg-surface-card border border-border flex items-center justify-center text-nano font-mono font-bold text-accent-gold shadow-sm shrink-0">
                                                 0{idx + 1}
                                             </div>
                                             <div className="space-y-2">
-                                                <h4 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest">{detail.label}</h4>
-                                                <p className="text-sm text-secondary dark:text-text-muted leading-relaxed font-serif italic">
+                                                <h4 className="text-nano font-black text-text-primary uppercase tracking-widest">{detail.label}</h4>
+                                                <p className="text-sm text-text-muted leading-relaxed font-serif italic">
                                                     {detail.content}
                                                 </p>
                                             </div>
@@ -215,10 +215,10 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                     </div>
 
                     {/* Footer */}
-                    <div className="p-8 bg-bg-primary dark:bg-bg-tertiary/40 border-t border-subtle dark:border-border flex justify-between items-center">
+                    <div className="p-8 bg-surface-card border-t border-border flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                            <span className="text-nano font-black text-secondary dark:text-text-muted uppercase tracking-widest italic">Aide Contextuelle Active</span>
+                            <span className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
+                            <span className="text-nano font-black text-text-muted uppercase tracking-widest italic">Aide Contextuelle Active</span>
                         </div>
                         <div className="flex items-center gap-4">
                             <button
@@ -226,22 +226,22 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                 className={cn(
                                     "h-12 px-8 rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3",
                                     showFullTutorial
-                                        ? "bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent border border-accent/20 dark:border-accent/40"
-                                        : "bg-status-warning dark:bg-status-warning/20 text-status-warning dark:text-status-warning border border-amber-200 dark:border-amber-900/40"
+                                        ? "bg-action-primary/10 text-action-primary border border-action-primary/20"
+                                        : "bg-action-primary text-text-on-primary hover:bg-action-primary-hover shadow-sm"
                                 )}
                             >
                                 <Zap className="w-4 h-4" />
                                 {showFullTutorial ? "Voir Fiche Technique" : "Voir Tutoriel"}
                             </button>
 
-                            <div className="flex items-center gap-3 pr-6 border-r border-subtle dark:border-border">
+                            <div className="flex items-center gap-3 pr-6 border-r border-border">
                                 <CategoryIcon className="w-5 h-5" style={{ color: doc.color }} />
-                                <span className="text-nano font-bold text-muted dark:text-text-muted uppercase tracking-widest">Support {doc.title}</span>
+                                <span className="text-nano font-bold text-text-muted uppercase tracking-widest">Support {doc.title}</span>
                             </div>
                             {!isPage && (
                                 <button
                                     onClick={closeDocumentation}
-                                    className="h-12 px-8 bg-surface-sidebar dark:bg-surface-card hover:bg-surface-sidebar dark:hover:bg-surface-bg text-text-primary dark:text-primary rounded-full font-black text-nano uppercase tracking-widest transition-all shadow-xl shadow-neutral-900/10 dark:shadow-black/40"
+                                    className="h-12 px-8 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-full font-black text-nano uppercase tracking-widest transition-all shadow-xl"
                                 >
                                     Compris, Fermer
                                 </button>
@@ -254,7 +254,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
     );
 
     if (isPage) {
-        return <div className="h-screen w-full bg-bg-primary overflow-hidden flex flex-col">{content}</div>;
+        return <div className="h-screen w-full bg-surface-bg overflow-hidden flex flex-col">{content}</div>;
     }
 
     return (
@@ -266,7 +266,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeDocumentation}
-                        className="absolute inset-0 bg-text-primary/20 dark:bg-surface-sidebar/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     {content}
                 </div>

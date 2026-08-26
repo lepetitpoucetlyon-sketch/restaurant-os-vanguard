@@ -29,7 +29,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
     return (
         <AnimatePresence>
             {area && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-10 bg-surface-sidebar/5 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-10 bg-black/60 backdrop-blur-sm">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
                         animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -63,7 +63,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                                 <div>
                                     <h2 className="text-4xl font-black italic tracking-tighter mb-2">Détails de l'Espace {area.number}</h2>
                                     <div className="flex gap-4 items-center">
-                                        <div className="px-3 py-1 bg-surface-sidebar text-text-primary rounded-full text-nano font-bold uppercase tracking-widest italic">{area.status}</div>
+                                        <div className="px-3 py-1 bg-surface-glass text-text-primary rounded-full text-nano font-bold uppercase tracking-widest italic">{area.status}</div>
                                         <p className="text-xs text-muted font-sans font-bold uppercase tracking-widest">{area.type} Premium</p>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                             <div className="pt-8 border-t border-dashed border-subtle flex gap-4">
                                 <button
                                     onClick={() => onArrival(area)}
-                                    className="h-14 px-8 bg-surface-sidebar text-text-primary rounded-2xl font-black text-micro uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                    className="h-14 px-8 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-2xl font-black text-micro uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                                 >
                                     <User className="w-4 h-4" /> Accueil Client
                                 </button>

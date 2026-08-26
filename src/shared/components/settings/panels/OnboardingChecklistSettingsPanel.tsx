@@ -73,11 +73,11 @@ export function OnboardingChecklistSettingsPanel() {
   // Sécurité RBAC
   if (!isManagerOrAbove) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 bg-slate-900/60 rounded-3xl border border-slate-800 p-8 text-center">
+      <div className="flex flex-col items-center justify-center py-20 bg-surface-card rounded-3xl border border-border-default p-8 text-center">
         <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 text-rose-400">
           <Lock className="w-8 h-8" />
         </div>
-        <h3 className="text-xl font-bold text-white mb-1">Accès Réservé à la Direction</h3>
+        <h3 className="text-xl font-bold text-text-primary mb-1">Accès Réservé à la Direction</h3>
         <p className="text-sm text-text-muted max-w-md">
           La checklist de mise en service et d audit opérationnel est réservée aux managers et administrateurs de
           l établissement.
@@ -92,7 +92,7 @@ export function OnboardingChecklistSettingsPanel() {
   return (
     <div className="space-y-6">
       {/* Header & Statut de Mise en Service */}
-      <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl backdrop-blur-xl relative overflow-hidden">
+      <div className="p-6 rounded-3xl bg-surface-card border border-border-default shadow-xl backdrop-blur-xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ export function OnboardingChecklistSettingsPanel() {
                 </span>
               )}
             </div>
-            <h2 className="text-2xl font-black text-white tracking-tight">
+            <h2 className="text-2xl font-black text-text-primary tracking-tight">
               Mise en Service & Pré-Requis Restaurant
             </h2>
             <p className="text-xs text-text-muted">
@@ -117,7 +117,7 @@ export function OnboardingChecklistSettingsPanel() {
             <button
               onClick={fetchAudit}
               disabled={loading}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary transition-colors disabled:opacity-50"
+              className="p-2.5 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-secondary transition-colors disabled:opacity-50"
               title="Rafraîchir l'audit"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -129,7 +129,7 @@ export function OnboardingChecklistSettingsPanel() {
                 className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
                   filterMandatoryOnly
                     ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-                    : 'bg-slate-800 border-slate-700 text-text-secondary hover:text-white'
+                    : 'bg-surface-card border-border-default text-text-secondary hover:text-text-primary'
                 }`}
               >
                 {filterMandatoryOnly ? 'Obligatoires uniquement (actif)' : 'Toutes les étapes'}
@@ -140,14 +140,14 @@ export function OnboardingChecklistSettingsPanel() {
 
         {/* Barre de progression globale */}
         {summary && (
-          <div className="mt-6 pt-5 border-t border-slate-800/80">
+          <div className="mt-6 pt-5 border-t border-border-default">
             <div className="flex items-center justify-between text-xs font-bold mb-2">
               <span className="text-text-secondary">
                 Progression globale : {summary.completedStepsCount} / {summary.totalStepsCount} étapes validées
               </span>
               <span className="text-emerald-400">{summary.overallProgressPercent}%</span>
             </div>
-            <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div className="h-2.5 w-full bg-surface-glass rounded-full overflow-hidden border border-border-default">
               <div
                 className="h-full bg-gradient-to-r from-emerald-500 to-indigo-500 transition-all duration-500 rounded-full"
                 style={{ width: `${summary.overallProgressPercent}%` }}
@@ -157,7 +157,7 @@ export function OnboardingChecklistSettingsPanel() {
             <div className="mt-3 flex items-center justify-between text-micro text-text-muted">
               <span>
                 Étapes obligatoires complétées :{' '}
-                <strong className="text-white">
+                <strong className="text-text-primary">
                   {summary.mandatoryCompletedCount}/{summary.mandatoryTotalCount}
                 </strong>
               </span>
@@ -187,14 +187,14 @@ export function OnboardingChecklistSettingsPanel() {
                 animate={{ opacity: 1, y: 0 }}
                 className={`p-4.5 rounded-2xl border transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4 ${
                   isDone
-                    ? 'bg-slate-900/60 border-emerald-500/20 hover:border-emerald-500/40'
+                    ? 'bg-surface-card border-emerald-500/20 hover:border-emerald-500/40'
                     : isInProgress
-                    ? 'bg-slate-900/80 border-amber-500/30'
-                    : 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
+                    ? 'bg-surface-card border-amber-500/30'
+                    : 'bg-surface-card border-border-default hover:border-border-focus'
                 }`}
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 shrink-0">
+                  <div className="p-2.5 rounded-xl bg-surface-glass border border-border-default shrink-0">
                     {PILLAR_ICONS[step.category]}
                   </div>
 
@@ -208,19 +208,19 @@ export function OnboardingChecklistSettingsPanel() {
                           OBLIGATOIRE
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-md bg-slate-800 text-text-muted text-nano font-medium">
+                        <span className="px-2 py-0.5 rounded-md bg-surface-glass text-text-muted text-nano font-medium">
                           Recommandé
                         </span>
                       )}
                       <span className="text-nano text-text-muted/80">~{step.estimatedMinutes} min</span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white tracking-tight">{step.title}</h4>
+                    <h4 className="text-sm font-bold text-text-primary tracking-tight">{step.title}</h4>
                     <p className="text-xs text-text-muted leading-relaxed max-w-xl">{step.description}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between md:justify-end gap-3 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
+                <div className="flex items-center justify-between md:justify-end gap-3 pt-2 md:pt-0 border-t md:border-t-0 border-border-default">
                   {/* Badge de Statut */}
                   <div className="flex items-center gap-2">
                     {isDone ? (
@@ -234,7 +234,7 @@ export function OnboardingChecklistSettingsPanel() {
                         <span>En cours</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-text-muted border border-slate-700 text-xs font-medium">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-glass text-text-muted border border-border-default text-xs font-medium">
                         <AlertCircle className="w-3.5 h-3.5" />
                         <span>À configurer</span>
                       </span>
@@ -247,7 +247,7 @@ export function OnboardingChecklistSettingsPanel() {
                       onClick={() => router.push(step.route)}
                       className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                         isDone
-                          ? 'bg-slate-800 hover:bg-slate-700 text-text-secondary'
+                          ? 'bg-surface-glass-hover hover:bg-surface-glass text-text-secondary'
                           : 'bg-emerald-500 hover:bg-emerald-400 text-text-primary shadow-md shadow-emerald-500/20'
                       }`}
                     >

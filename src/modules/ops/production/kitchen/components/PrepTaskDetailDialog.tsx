@@ -38,7 +38,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                     <button
                         type="button"
                         onClick={onClose}
-                        className="absolute top-8 right-8 w-12 h-12 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 z-10 border cursor-pointer bg-surface-sidebar/5 hover:bg-surface-sidebar/10 text-primary border-black/10"
+                        className="absolute top-8 right-8 w-12 h-12 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 z-10 border cursor-pointer bg-surface-glass hover:bg-surface-glass-hover text-text-primary border-border"
                     >
                         <X className="w-6 h-6" />
                     </button>

@@ -16,7 +16,7 @@ export function SovereignLockout() {
     const tenantConfig = useAtomValue(tenantConfigAtom);
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-sidebar text-text-primary overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-bg text-text-primary overflow-hidden">
             {/* Background Cybernetic Decor */}
             <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-status-error/30 blur-[120px] rounded-full" />
@@ -29,7 +29,7 @@ export function SovereignLockout() {
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative z-10 max-w-lg w-full p-8 rounded-3xl border border-subtle bg-surface-card/5 backdrop-blur-2xl shadow-2xl text-center"
+                className="relative z-10 max-w-lg w-full p-8 rounded-3xl border border-border bg-surface-card backdrop-blur-2xl shadow-2xl text-center"
             >
                 {/* Status Indicator */}
                 <div className="flex justify-center mb-8">
