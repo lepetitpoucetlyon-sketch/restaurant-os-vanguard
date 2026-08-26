@@ -38,3 +38,5 @@ export {
 export { useTenant } from "@/shared/hooks/useTenant";
 export { useConnector } from './useConnector';
 export type { UseConnectorResult } from './useConnector';
+export { useUnsavedChanges } from './useUnsavedChanges';
+export type { UseUnsavedChangesOptions } from './useUnsavedChanges';
