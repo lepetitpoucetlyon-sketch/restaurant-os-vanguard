@@ -78,17 +78,17 @@ export const EventBusHealthPanel: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="p-4 text-gray-500 font-mono text-sm">Loading DLQ...</div>;
+    return <div className="p-4 text-text-muted font-mono text-sm">Loading DLQ...</div>;
   }
 
   return (
-    <div className="p-6 bg-gray-900 rounded-lg text-gray-200 shadow-xl border border-red-900/30">
+    <div className="p-6 bg-surface-card rounded-2xl text-text-primary shadow-xl border border-red-900/30">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold font-mono text-red-400 flex items-center gap-2">
           <span>📡</span> Event Bus Health & DLQ
         </h2>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchDlq} className="border-gray-700 text-gray-300">
+          <Button variant="outline" size="sm" onClick={fetchDlq} className="border-border-default text-text-secondary">
             Refresh
           </Button>
           <Button variant="destructive" size="sm" onClick={handlePurge}>
@@ -98,14 +98,14 @@ export const EventBusHealthPanel: React.FC = () => {
       </div>
 
       {dlqEvents.length === 0 ? (
-        <div className="p-8 text-center text-gray-500 font-mono border border-gray-800 border-dashed rounded bg-gray-900/50">
+        <div className="p-8 text-center text-text-muted font-mono border border-border-default border-dashed rounded-xl bg-surface-glass">
           Aucun événement dans la Dead Letter Queue. Le bus est sain.
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm font-mono border-collapse">
             <thead>
-              <tr className="border-b border-gray-800 text-gray-400">
+              <tr className="border-b border-border-default text-text-muted">
                 <th className="py-3 px-4 font-semibold">Event / Handler</th>
                 <th className="py-3 px-4 font-semibold">Error</th>
                 <th className="py-3 px-4 font-semibold">Attempts</th>
@@ -115,21 +115,21 @@ export const EventBusHealthPanel: React.FC = () => {
             </thead>
             <tbody>
               {dlqEvents.map((entry) => (
-                <tr key={entry.id} className="border-b border-gray-800 hover:bg-gray-800/50 transition-colors">
+                <tr key={entry.id} className="border-b border-border-default/40 hover:bg-surface-glass-hover transition-colors">
                   <td className="py-3 px-4">
                     <div className="font-bold text-yellow-500">{entry.eventName}</div>
-                    <div className="text-xs text-gray-500 mt-1">{entry.handlerId}</div>
+                    <div className="text-xs text-text-muted mt-1">{entry.handlerId}</div>
                   </td>
                   <td className="py-3 px-4">
                     <div className="truncate max-w-[250px] text-red-400" title={entry.error}>
                       {entry.error}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-text-muted mt-1">
                       {new Date(entry.failedAt).toLocaleTimeString()}
                     </div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="bg-gray-800 px-2 py-1 rounded text-gray-300">
+                    <span className="bg-surface-glass border border-border-default px-2 py-1 rounded text-text-secondary">
                       {entry.attempts} / 3
                     </span>
                   </td>

@@ -46,7 +46,7 @@ export function BillingTab({ paidOrders, ordersLoading }: BillingTabProps) {
                     {paidOrders.map((order) => (
                         <div
                             key={order.id}
-                            className="rounded-lg border border-border p-4 flex items-center justify-between bg-surface-sidebar"
+                            className="rounded-lg border border-border p-4 flex items-center justify-between bg-surface-card"
                         >
                             <div className="flex items-center gap-3">
                                 <FileText className="w-4 h-4 text-text-muted shrink-0" />

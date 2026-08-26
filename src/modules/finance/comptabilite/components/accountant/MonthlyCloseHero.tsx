@@ -20,7 +20,7 @@ export function MonthlyCloseHero({
   onTransmit,
 }: MonthlyCloseHeroProps) {
   return (
-    <div className="bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-indigo-950/40 border border-white/10 rounded-3xl p-6 lg:p-8 backdrop-blur-md shadow-2xl relative overflow-hidden">
+    <div className="bg-surface-card border border-border-default rounded-3xl p-6 lg:p-8 backdrop-blur-md shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
@@ -28,7 +28,7 @@ export function MonthlyCloseHero({
           <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" /> Clôture Fiscale Mensuelle en 1 Clic
           </span>
-          <h2 className="text-xl lg:text-2xl font-bold text-white">
+          <h2 className="text-xl lg:text-2xl font-bold text-text-primary">
             Pack Comptable {selectedPeriod} • Prêt pour le Cabinet
           </h2>
           <p className="text-sm text-text-secondary max-w-2xl">
@@ -50,7 +50,7 @@ export function MonthlyCloseHero({
       </div>
 
       {/* Télétransmission Directe API */}
-      <div className="mt-6 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+      <div className="mt-6 pt-6 border-t border-border-default flex flex-wrap items-center justify-between gap-4">
         <div className="text-xs text-text-muted font-medium">
           Télétransmission Directe API vers les logiciels comptables français :
         </div>
@@ -58,7 +58,7 @@ export function MonthlyCloseHero({
           <button
             onClick={() => onTransmit('pennylane')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-amber-500/40"
+            className="flex items-center gap-1.5 bg-surface-glass hover:bg-surface-glass-hover text-text-primary border border-border-default px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-amber-500/40"
           >
             <span>🪙 Pennylane</span>
             <Send className="w-3 h-3 text-text-muted" />
@@ -67,7 +67,7 @@ export function MonthlyCloseHero({
           <button
             onClick={() => onTransmit('silae')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-indigo-500/40"
+            className="flex items-center gap-1.5 bg-surface-glass hover:bg-surface-glass-hover text-text-primary border border-border-default px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-indigo-500/40"
           >
             <span>💼 Silae Paie</span>
             <Send className="w-3 h-3 text-text-muted" />
@@ -76,7 +76,7 @@ export function MonthlyCloseHero({
           <button
             onClick={() => onTransmit('sage')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-emerald-500/40"
+            className="flex items-center gap-1.5 bg-surface-glass hover:bg-surface-glass-hover text-text-primary border border-border-default px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-emerald-500/40"
           >
             <span>📗 Sage 100</span>
             <Send className="w-3 h-3 text-text-muted" />
@@ -85,7 +85,7 @@ export function MonthlyCloseHero({
           <button
             onClick={() => onTransmit('cegid')}
             disabled={!!isTransmitting}
-            className="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-800 text-text-primary border border-white/10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-blue-500/40"
+            className="flex items-center gap-1.5 bg-surface-glass hover:bg-surface-glass-hover text-text-primary border border-border-default px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:border-blue-500/40"
           >
             <span>📘 Cegid Loop</span>
             <Send className="w-3 h-3 text-text-muted" />

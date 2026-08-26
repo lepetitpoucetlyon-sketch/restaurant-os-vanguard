@@ -14,7 +14,7 @@ export function DetailMaintenanceTab({ asset, onOpenTroubleshoot }: DetailMainte
     <div className="space-y-4">
       <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-between gap-3">
         <div className="space-y-1">
-          <h4 className="text-sm font-bold text-white">Un dysfonctionnement sur cet appareil ?</h4>
+          <h4 className="text-sm font-bold text-text-primary">Un dysfonctionnement sur cet appareil ?</h4>
           <p className="text-xs text-text-secondary">
             Lancez l assistant de diagnostic pas-à-pas ou déclarez une panne d urgence.
           </p>
@@ -28,11 +28,11 @@ export function DetailMaintenanceTab({ asset, onOpenTroubleshoot }: DetailMainte
         </button>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-2">
+      <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-2">
         <h4 className="text-xs font-bold text-text-muted uppercase tracking-wider">
           Prochaine Échéance de Maintenance
         </h4>
-        <div className="flex items-center gap-2 text-sm text-white font-medium">
+        <div className="flex items-center gap-2 text-sm text-text-primary font-medium">
           <Calendar className="w-4 h-4 text-emerald-400" />
           <span>
             Prévue le {new Date(asset.nextMaintenanceDueAt).toLocaleDateString('fr-FR')} (Révision {asset.maintenanceFrequencyDays}j)

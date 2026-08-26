@@ -67,15 +67,15 @@ export function EquipmentDetailModal({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-3xl bg-surface-card border border-border-default rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-start justify-between pb-4 border-b border-border-default">
           <div className="space-y-1">
             <span className="text-micro font-bold text-text-muted uppercase tracking-widest">
               Fiche 360° Équipement & GMAO
             </span>
-            <h2 className="text-xl font-bold text-white tracking-tight">
+            <h2 className="text-xl font-bold text-text-primary tracking-tight">
               {asset.name}
             </h2>
             <div className="flex items-center gap-2 text-xs text-text-muted">
@@ -88,20 +88,20 @@ export function EquipmentDetailModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-text-primary rounded-xl hover:bg-surface-glass-hover transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Barre d'onglets */}
-        <div className="flex items-center gap-2 pt-4 pb-2 border-b border-slate-800/80">
+        <div className="flex items-center gap-2 pt-4 pb-2 border-b border-border-default">
           <button
             onClick={() => setActiveTab('DETAILS')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'DETAILS'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                : 'text-text-muted hover:text-white hover:bg-slate-800'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-glass-hover'
             }`}
           >
             <Building className="w-4 h-4" />
@@ -113,7 +113,7 @@ export function EquipmentDetailModal({
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'INVOICE'
                 ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
-                : 'text-text-muted hover:text-white hover:bg-slate-800'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-glass-hover'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -125,7 +125,7 @@ export function EquipmentDetailModal({
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'GUIDES'
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                : 'text-text-muted hover:text-white hover:bg-slate-800'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-glass-hover'
             }`}
           >
             <BookOpen className="w-4 h-4" />
@@ -137,7 +137,7 @@ export function EquipmentDetailModal({
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'MAINTENANCE'
                 ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/20'
-                : 'text-text-muted hover:text-white hover:bg-slate-800'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-glass-hover'
             }`}
           >
             <Wrench className="w-4 h-4" />
@@ -165,10 +165,10 @@ export function EquipmentDetailModal({
         </div>
 
         {/* Footer */}
-        <div className="pt-4 border-t border-slate-800 flex justify-end">
+        <div className="pt-4 border-t border-border-default flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-primary text-xs font-bold transition-colors"
           >
             Fermer la fiche
           </button>

@@ -127,20 +127,20 @@ export function EquipmentAssetCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 backdrop-blur-xl p-5 shadow-xl transition-all duration-300 hover:shadow-2xl flex flex-col justify-between"
+      className="group relative rounded-2xl bg-surface-card border border-border-default hover:border-border-focus backdrop-blur-xl p-5 shadow-xl transition-all duration-300 hover:shadow-2xl flex flex-col justify-between"
     >
       <div>
         {/* Header : Catégorie & Statut */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 shadow-inner">
+            <div className="p-2.5 rounded-xl bg-surface-glass border border-border-default shadow-inner">
               {CATEGORY_ICONS[asset.category]}
             </div>
             <div>
               <span className="text-micro font-medium tracking-wide uppercase text-text-muted">
                 {CATEGORY_LABELS[asset.category]}
               </span>
-              <h3 className="text-base font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors">
+              <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-emerald-400 transition-colors">
                 {asset.name}
               </h3>
             </div>
@@ -155,7 +155,7 @@ export function EquipmentAssetCard({
         </div>
 
         {/* Détails techniques */}
-        <div className="grid grid-cols-2 gap-2 text-xs text-text-muted mb-4 bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
+        <div className="grid grid-cols-2 gap-2 text-xs text-text-muted mb-4 bg-surface-glass p-3 rounded-xl border border-border-default">
           <div>
             <span className="text-text-muted/80 block text-nano uppercase font-semibold">Marque / Modèle</span>
             <span className="text-text-primary font-medium truncate block">
@@ -166,7 +166,7 @@ export function EquipmentAssetCard({
             <span className="text-text-muted/80 block text-nano uppercase font-semibold">Emplacement</span>
             <span className="text-text-primary font-medium truncate block">{asset.location}</span>
           </div>
-          <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800/60">
+          <div className="col-span-2 flex items-center justify-between pt-1 border-t border-border-default">
             <span className="text-text-muted/80 text-nano">S/N: {asset.serialNumber}</span>
             {asset.purchase?.invoiceUrl && (
               <span className="inline-flex items-center gap-1 text-micro text-emerald-400 font-medium">
@@ -184,7 +184,7 @@ export function EquipmentAssetCard({
                 ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
                 : isWarrantyActive
                 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
-                : 'bg-slate-800/50 border-slate-700 text-text-muted'
+                : 'bg-surface-glass border-border-default text-text-muted'
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
@@ -194,10 +194,10 @@ export function EquipmentAssetCard({
       </div>
 
       {/* Barre d'actions */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-3 border-t border-slate-800/80">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-3 border-t border-border-default">
         <button
           onClick={() => onOpenDetails(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-primary text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-primary text-xs font-medium transition-colors"
           title="Fiche technique, factures & notices"
         >
           <BookOpen className="w-3.5 h-3.5 text-blue-400" />
@@ -206,7 +206,7 @@ export function EquipmentAssetCard({
 
         <button
           onClick={() => onOpenTroubleshoot(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-text-primary hover:text-rose-300 border border-transparent hover:border-rose-500/30 text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-surface-glass-hover hover:bg-rose-950/40 text-text-primary hover:text-rose-300 border border-transparent hover:border-rose-500/30 text-xs font-medium transition-colors"
           title="Diagnostic de panne pas-à-pas"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
@@ -215,7 +215,7 @@ export function EquipmentAssetCard({
 
         <button
           onClick={() => onOpenAddGuide(asset)}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-primary text-xs font-medium transition-colors"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-primary text-xs font-medium transition-colors"
           title="Ajouter un guide ou une vidéo YouTube"
         >
           <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />

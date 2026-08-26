@@ -34,7 +34,7 @@ export function AuditTab({ entriesCount, journalEntries }: AuditTabProps) {
                     <button
                         onClick={handleFECExport}
                         disabled={entriesCount === 0}
-                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-sidebar transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-4 py-2 rounded-md border border-border text-sm font-medium hover:bg-surface-glass transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <Download className="w-4 h-4" />
                         Exporter FEC

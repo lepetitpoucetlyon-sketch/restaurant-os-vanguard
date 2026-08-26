@@ -57,7 +57,7 @@ export function HACCPGauge({
           <div className={cn(
             "w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110",
             statusColor,
-            "bg-surface-card dark:bg-surface-sidebar/20"
+            "bg-surface-glass"
           )}>
             {type === 'temperature' ? <Thermometer className="w-5 h-5" /> : <StatusIcon className="w-5 h-5" />}
           </div>

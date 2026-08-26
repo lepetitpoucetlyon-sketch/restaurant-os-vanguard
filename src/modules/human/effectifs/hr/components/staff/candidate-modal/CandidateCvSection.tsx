@@ -33,11 +33,11 @@ export function CandidateCvSection({
                             <p className="text-nano text-text-muted mt-2">Le document a été chargé avec succès</p>
                         </div>
                     )}
-                    <div className="absolute inset-0 bg-surface-sidebar/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 transition-all scale-110 group-hover:scale-100">
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-4 transition-all scale-110 group-hover:scale-100">
                         <Button 
                             variant="outline" 
                             size="sm" 
-                            className="bg-[--color-surface-primary]/10 text-text-primary border-default hover:bg-[--color-surface-primary]/20"
+                            className="bg-surface-card text-text-primary border-border hover:bg-surface-glass"
                             onClick={() => setCvFileDraft(null)}
                         >
                             Remplacer

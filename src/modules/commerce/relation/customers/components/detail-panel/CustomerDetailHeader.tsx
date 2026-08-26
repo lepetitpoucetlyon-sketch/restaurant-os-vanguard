@@ -25,14 +25,14 @@ export function CustomerDetailHeader({
     return (
         <>
             {/* Header */}
-            <div className="bg-surface-sidebar p-6 md:p-10 relative overflow-hidden text-text-primary border-b border-white/5">
+            <div className="bg-surface-card p-6 md:p-10 relative overflow-hidden text-text-primary border-b border-border">
                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 relative z-10">
-                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-surface-card/5 backdrop-blur-md border border-subtle flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-accent">
+                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] bg-surface-glass backdrop-blur-md border border-border flex items-center justify-center text-2xl md:text-4xl font-serif font-light italic shadow-2xl text-action-primary">
                         {(customer.firstName || "").charAt(0)}
                         {(customer.lastName || "").charAt(0)}
                     </div>
                     <div className="flex-1 text-center md:text-left">
-                        <p className="text-nano md:text-[10px] font-black uppercase tracking-[0.3em] text-text-primary/40 mb-2">
+                        <p className="text-nano md:text-[10px] font-black uppercase tracking-[0.3em] text-text-muted mb-2">
                             Profil Client Executive Intelligence
                         </p>
                         <h2 className="text-2xl md:text-4xl font-serif font-light tracking-tight italic">
@@ -54,7 +54,7 @@ export function CustomerDetailHeader({
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-white/5 bg-surface-sidebar">
+            <div className="flex border-b border-border bg-surface-card">
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
                     const active = activeTab === tab.id;

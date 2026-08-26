@@ -133,7 +133,7 @@ export function ReceptionWizard() {
                                     className={cn(
                                         "flex-1 py-4 rounded-2xl border text-nano font-black uppercase tracking-[0.15em] transition-all",
                                         session?.delivery_conditions?.vehicle_cleanliness === status 
-                                            ? "bg-surface-sidebar text-text-primary border-transparent shadow-lg"
+                                            ? "bg-action-primary text-text-on-primary border-transparent shadow-lg"
                                             : "bg-surface-card border-default hover:border-emerald-500/40 text-muted"
                                     )}
                                 >
@@ -250,7 +250,7 @@ export function ReceptionWizard() {
             disabled={isSubmitting}
             className={cn(
                 "px-8 rounded-xl font-black uppercase tracking-widest text-nano flex items-center gap-2 shadow-xl transition-all",
-                step === 3 ? "bg-status-success hover:bg-status-success text-text-primary" : "bg-surface-sidebar hover:bg-surface-sidebar text-text-primary"
+                step === 3 ? "bg-status-success hover:bg-status-success/90 text-text-on-primary" : "bg-action-primary hover:bg-action-primary-hover text-text-on-primary"
             )}
         >
             {isSubmitting ? (

@@ -119,7 +119,7 @@ export function CleaningPlan() {
                 </div>
                 <button
                     onClick={() => setShowDashboard(s => !s)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-sidebar text-text-muted hover:text-text-primary text-sm transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-glass text-text-muted hover:text-text-primary text-sm transition-colors"
                 >
                     <BarChart3 className="w-4 h-4" />
                     {showDashboard ? 'Masquer stats' : 'Voir stats'}

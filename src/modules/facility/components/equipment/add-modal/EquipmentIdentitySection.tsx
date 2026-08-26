@@ -50,7 +50,7 @@ export function EquipmentIdentitySection({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Four Mixte Rational iCombi Pro 10 GN, Lave-verre Hobart..."
-            className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 text-sm"
+            className="w-full px-3.5 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-indigo-500/50 text-sm"
           />
         </div>
 
@@ -61,7 +61,7 @@ export function EquipmentIdentitySection({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as EquipmentCategory)}
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-indigo-500/50 text-sm"
           >
             <option value="COOKING">🔥 Cuisson & Chaud (Fours, pianos...)</option>
             <option value="COLD_STORAGE">❄️ Froid (Chambres froides, armoires...)</option>
@@ -84,7 +84,7 @@ export function EquipmentIdentitySection({
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Ex: Cuisine Chaude, Bar Principal, Cave..."
-            className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 text-sm"
+            className="w-full px-3.5 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-indigo-500/50 text-sm"
           />
         </div>
 
@@ -98,7 +98,7 @@ export function EquipmentIdentitySection({
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
             placeholder="Ex: Rational, Hobart, La Marzocco..."
-            className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 text-sm"
+            className="w-full px-3.5 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-indigo-500/50 text-sm"
           />
         </div>
 
@@ -113,7 +113,7 @@ export function EquipmentIdentitySection({
               value={model}
               onChange={(e) => setModel(e.target.value)}
               placeholder="Modèle"
-              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 text-sm"
+              className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-indigo-500/50 text-sm"
             />
             <input
               type="text"
@@ -121,7 +121,7 @@ export function EquipmentIdentitySection({
               value={serialNumber}
               onChange={(e) => setSerialNumber(e.target.value)}
               placeholder="N° Série (S/N)"
-              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 text-sm"
+              className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-indigo-500/50 text-sm"
             />
           </div>
         </div>

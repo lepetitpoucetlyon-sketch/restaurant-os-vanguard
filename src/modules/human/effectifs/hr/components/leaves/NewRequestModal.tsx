@@ -75,14 +75,14 @@ export function NewRequestModal({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-surface-sidebar/40 backdrop-blur-md z-50 flex items-center justify-center p-4"
+                className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4"
                 onClick={onClose}
             >
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="bg-bg-primary border border-border shadow-2xl rounded-[2.5rem] w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col"
+                    className="bg-surface-card border border-border shadow-2xl rounded-[2.5rem] w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col"
                     onClick={e => e.stopPropagation()}
                 >
                     {/* Header */}

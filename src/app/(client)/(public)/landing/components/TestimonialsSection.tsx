@@ -7,7 +7,7 @@ import { TESTIMONIALS } from "@/app/(client)/(public)/landing/constants";
 
 export function TestimonialsSection() {
     return (
-        <section id="testimonials" className="relative py-32 px-6 bg-surface-sidebar">
+        <section id="testimonials" className="relative py-32 px-6 bg-surface-bg">
             <div className="max-w-6xl mx-auto">
                 {/* Section Header */}
                 <motion.div

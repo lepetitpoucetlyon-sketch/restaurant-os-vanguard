@@ -90,7 +90,7 @@ function MarketingPage() {
                 {activeTab === "campaigns" && (
                     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {campaignRows.map((c) => (
-                            <div key={c.id} className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                            <div key={c.id} className="rounded-lg border border-border p-4 bg-surface-card">
                                 <div className="flex items-center gap-2 font-medium">
                                     <Megaphone className="w-4 h-4 text-action-primary" />
                                     {c.name ?? "Campagne"}
@@ -109,7 +109,7 @@ function MarketingPage() {
                 {activeTab === "social" && (
                     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {socialRows.map((s) => (
-                            <div key={s.id} className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                            <div key={s.id} className="rounded-lg border border-border p-4 bg-surface-card">
                                 <div className="flex items-center gap-2 font-medium">
                                     <Instagram className="w-4 h-4 text-action-primary" />
                                     {s.platform ?? "Réseau"} · {s.handle ?? ""}
@@ -132,7 +132,7 @@ function MarketingPage() {
                         {quoteRows.map((q) => (
                             <div
                                 key={q.id}
-                                className="flex items-center justify-between rounded-lg border border-border p-4 bg-surface-sidebar"
+                                className="flex items-center justify-between rounded-lg border border-border p-4 bg-surface-card"
                             >
                                 <div>
                                     <p className="font-medium">{q.title ?? q.clientName ?? "Devis"}</p>
@@ -163,19 +163,19 @@ function MarketingPage() {
                     const seoConfig = SEOManager.generateConfig();
                     return (
                         <section className="space-y-4 max-w-2xl">
-                            <div className="rounded-lg border border-border p-4 bg-surface-sidebar space-y-2">
+                            <div className="rounded-lg border border-border p-4 bg-surface-card space-y-2">
                                 <p className="text-xs text-text-muted uppercase tracking-wide font-medium flex items-center gap-2">
                                     <Globe className="w-3.5 h-3.5" /> Balises méta
                                 </p>
                                 <p className="text-sm font-medium">{seoConfig.title}</p>
                                 <p className="text-xs text-text-muted">{seoConfig.description}</p>
                             </div>
-                            <div className="rounded-lg border border-border p-4 bg-surface-sidebar space-y-2">
+                            <div className="rounded-lg border border-border p-4 bg-surface-card space-y-2">
                                 <p className="text-xs text-text-muted uppercase tracking-wide font-medium">Open Graph</p>
                                 <p className="text-sm">{seoConfig.openGraph.title}</p>
                                 <p className="text-xs text-text-muted">{seoConfig.openGraph.url}</p>
                             </div>
-                            <div className="rounded-lg border border-border p-4 bg-surface-sidebar space-y-2">
+                            <div className="rounded-lg border border-border p-4 bg-surface-card space-y-2">
                                 <p className="text-xs text-text-muted uppercase tracking-wide font-medium">JSON-LD (Schema.org)</p>
                                 <pre className="text-xs text-text-muted overflow-x-auto bg-surface-hover rounded p-3">
                                     {JSON.stringify(seoConfig.jsonLd, null, 2)}

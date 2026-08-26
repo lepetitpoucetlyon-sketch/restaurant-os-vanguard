@@ -40,7 +40,7 @@ export default function MigrationPlaceholder({ moduleName }: MigrationPlaceholde
                     <ArrowLeft className="w-4 h-4 mr-2" /> Retour
                 </Button>
                 
-                <div className="flex items-center gap-3 px-6 py-3 bg-surface-sidebar/5 rounded-full border border-black/10">
+                <div className="flex items-center gap-3 px-6 py-3 bg-surface-glass rounded-full border border-border">
                     <Cpu className="w-4 h-4 text-accent-gold animate-pulse" />
                     <span className="text-chip-label text-text-muted">
                         Nexus Core: 100% Stable

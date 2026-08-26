@@ -68,16 +68,16 @@ export function MCCCreateContractModal({
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+            className="bg-surface-card border border-border-default rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
           >
-            <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/60">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <div className="p-6 border-b border-border-default flex items-center justify-between bg-surface-card/60">
+              <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
                 <Send className="w-5 h-5 text-emerald-400" />
                 Émettre un Contrat B2B & DPA RGPD
               </h3>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
+                className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -91,7 +91,7 @@ export function MCCCreateContractModal({
                     type="text"
                     value={tenantId}
                     onChange={(e) => setTenantId(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -100,7 +100,7 @@ export function MCCCreateContractModal({
                   <select
                     value={vertical}
                     onChange={(e) => setVertical(e.target.value as VerticalType)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                   >
                     <option value="RESTAURANT">Restaurant / Bar / Café</option>
                     <option value="FAST_FOOD">Restauration Rapide / Dark Kitchen</option>
@@ -124,7 +124,7 @@ export function MCCCreateContractModal({
                     type="text"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -134,7 +134,7 @@ export function MCCCreateContractModal({
                     type="text"
                     value={legalForm}
                     onChange={(e) => setLegalForm(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -147,7 +147,7 @@ export function MCCCreateContractModal({
                     type="text"
                     value={siren}
                     onChange={(e) => setSiren(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ export function MCCCreateContractModal({
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -170,7 +170,7 @@ export function MCCCreateContractModal({
                     type="text"
                     value={representativeName}
                     onChange={(e) => setRepresentativeName(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -180,20 +180,20 @@ export function MCCCreateContractModal({
                     type="text"
                     value={representativeRole}
                     onChange={(e) => setRepresentativeRole(e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-zinc-800 pt-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-border-default pt-4">
                 <div>
                   <label className="block text-xs font-semibold text-text-muted mb-1">Tarif Mensuel (€ HT)</label>
                   <input
                     type="number"
                     value={monthlyPrice}
                     onChange={(e) => setMonthlyPrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -203,7 +203,7 @@ export function MCCCreateContractModal({
                     type="number"
                     value={setupFee}
                     onChange={(e) => setSetupFee(Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                     required
                   />
                 </div>
@@ -212,7 +212,7 @@ export function MCCCreateContractModal({
                   <select
                     value={commitmentMonths}
                     onChange={(e) => setCommitmentMonths(Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-sm"
                   >
                     <option value={0}>Sans engagement</option>
                     <option value={12}>12 mois</option>
@@ -225,7 +225,7 @@ export function MCCCreateContractModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-white hover:bg-zinc-700"
+                  className="px-4 py-2 rounded-xl bg-surface-glass text-xs font-semibold text-text-primary hover:bg-surface-glass-hover"
                 >
                   Annuler
                 </button>

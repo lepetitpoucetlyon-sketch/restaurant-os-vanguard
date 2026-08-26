@@ -12,14 +12,16 @@ export class DemoSeeder {
         }
 
         // 1. Catalog (Products)
+        // 1 € = 1 000 000 µ (toMicrounits est l'identité) — on fournit AUSSI priceInCents
+        // pour satisfaire le type-guard isProduct (champ legacy attendu).
         const products = [
-            { id: 'p-1', name: 'Œuf Mayonnaise', priceInMicrounits: toMicrounits(500), categoryId: 'entrees', taxRate: '0.10' },
-            { id: 'p-2', name: 'Pâté en croûte', priceInMicrounits: toMicrounits(950), categoryId: 'entrees', taxRate: '0.10' },
-            { id: 'p-3', name: 'Entrecôte Frites', priceInMicrounits: toMicrounits(2400), categoryId: 'plats', taxRate: '0.10' },
-            { id: 'p-4', name: 'Tartare de Boeuf', priceInMicrounits: toMicrounits(1800), categoryId: 'plats', taxRate: '0.10' },
-            { id: 'p-5', name: 'Mousse au Chocolat', priceInMicrounits: toMicrounits(700), categoryId: 'desserts', taxRate: '0.10' },
-            { id: 'p-6', name: 'Café Expresso', priceInMicrounits: toMicrounits(250), categoryId: 'boissons', taxRate: '0.10' },
-            { id: 'p-7', name: 'Pinte de Blonde', priceInMicrounits: toMicrounits(800), categoryId: 'boissons', taxRate: '0.20' },
+            { id: 'p-1', name: 'Œuf Mayonnaise', priceInMicrounits: toMicrounits(5_000_000), priceInCents: 500, categoryId: 'entrees', taxRate: '0.10' },
+            { id: 'p-2', name: 'Pâté en croûte', priceInMicrounits: toMicrounits(9_500_000), priceInCents: 950, categoryId: 'entrees', taxRate: '0.10' },
+            { id: 'p-3', name: 'Entrecôte Frites', priceInMicrounits: toMicrounits(24_000_000), priceInCents: 2400, categoryId: 'plats', taxRate: '0.10' },
+            { id: 'p-4', name: 'Tartare de Boeuf', priceInMicrounits: toMicrounits(18_000_000), priceInCents: 1800, categoryId: 'plats', taxRate: '0.10' },
+            { id: 'p-5', name: 'Mousse au Chocolat', priceInMicrounits: toMicrounits(7_000_000), priceInCents: 700, categoryId: 'desserts', taxRate: '0.10' },
+            { id: 'p-6', name: 'Café Expresso', priceInMicrounits: toMicrounits(2_500_000), priceInCents: 250, categoryId: 'boissons', taxRate: '0.10' },
+            { id: 'p-7', name: 'Pinte de Blonde', priceInMicrounits: toMicrounits(8_000_000), priceInCents: 800, categoryId: 'boissons', taxRate: '0.20' },
         ];
 
         for (const p of products) {
@@ -39,12 +41,14 @@ export class DemoSeeder {
         }
 
         // 3. Tables (Floor Plan)
+        // isTable exige `seats: number` ET `number: string` — on garde capacity
+        // (compat) et on fournit seats pour passer le convertisseur.
         const tables = [
-            { id: 't-1', number: '1', status: 'ordered', capacity: 2 },
-            { id: 't-2', number: '2', status: 'dirty', capacity: 4 },
-            { id: 't-3', number: '3', status: 'available', capacity: 2 },
-            { id: 't-4', number: '4', status: 'available', capacity: 6 },
-            { id: 't-5', number: '5', status: 'available', capacity: 2 },
+            { id: 't-1', number: '1', status: 'ordered', seats: 2, capacity: 2 },
+            { id: 't-2', number: '2', status: 'dirty', seats: 4, capacity: 4 },
+            { id: 't-3', number: '3', status: 'available', seats: 2, capacity: 2 },
+            { id: 't-4', number: '4', status: 'available', seats: 6, capacity: 6 },
+            { id: 't-5', number: '5', status: 'available', seats: 2, capacity: 2 },
         ];
 
         for (const t of tables) {
@@ -62,16 +66,18 @@ export class DemoSeeder {
         }
 
         // 5. Orders (Pending to make the KDS alive)
+        // isOrder exige `tableNumber: string` et un total (totalInMicrounits|totalInCents).
         const orders = [
             {
                 id: 'ord-1',
                 tableId: 't-1',
-                tableNumber: 1,
+                tableNumber: '1',
                 serverName: 'Marie Curie',
                 status: 'new',
+                totalInMicrounits: toMicrounits(40_000_000), // 24 € + 2 × 8 €
                 items: [
-                    { id: 'oi-1', productId: 'p-3', name: 'Entrecôte Frites', unitPriceInMicrounits: toMicrounits(2400), quantity: 1, course: 'plat', status: 'pending' },
-                    { id: 'oi-2', productId: 'p-7', name: 'Pinte de Blonde', unitPriceInMicrounits: toMicrounits(800), quantity: 2, status: 'delivered' }
+                    { id: 'oi-1', productId: 'p-3', name: 'Entrecôte Frites', unitPriceInMicrounits: toMicrounits(24_000_000), quantity: 1, course: 'plat', status: 'pending' },
+                    { id: 'oi-2', productId: 'p-7', name: 'Pinte de Blonde', unitPriceInMicrounits: toMicrounits(8_000_000), quantity: 2, status: 'delivered' }
                 ],
                 createdAt: new Date().toISOString()
             }

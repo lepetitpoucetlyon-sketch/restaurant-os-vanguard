@@ -112,7 +112,7 @@ export function Cerfa13984Section() {
 
             {/* Actions */}
             <div className="flex gap-4">
-                <Button className="h-14 flex-1 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-xl font-bold uppercase text-nano tracking-widest">
+                <Button className="h-14 flex-1 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-xl font-bold uppercase text-nano tracking-widest">
                     <Send strokeWidth={1.5} className="w-4 h-4 mr-3" />
                     Envoyer à la DD(CS)PP
                 </Button>

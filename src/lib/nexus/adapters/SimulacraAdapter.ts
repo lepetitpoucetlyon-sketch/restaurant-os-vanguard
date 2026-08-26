@@ -36,11 +36,28 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         }
 
         // 2. Fallback to Real Adapter (Read-only source)
-        return this.realAdapter.get<T>(path);
+        // En mode local pur (pas d'accès Firestore — ex. dev sans backend), la
+        // source cloud peut échouer (permission-denied). On ne fait pas planter la
+        // lecture : on retombe sur « document absent » pour laisser vivre les
+        // données seedées localement.
+        try {
+            return await this.realAdapter.get<T>(path);
+        } catch (e) {
+            logger.warn(`[Simulacra] Source cloud indisponible pour ${path}, lecture locale seule`, (e as Error).message);
+            return null;
+        }
     }
 
     async query<T = SovereignData>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
-        const realResults = await this.realAdapter.query<T>(collectionPath, options);
+        // La source cloud est optionnelle en mode local : si elle échoue
+        // (permission-denied hors ligne), on sert uniquement les données locales
+        // au lieu de laisser l'exception tuer toute la lecture.
+        let realResults: T[] = [];
+        try {
+            realResults = await this.realAdapter.query<T>(collectionPath, options);
+        } catch (e) {
+            logger.warn(`[Simulacra] Source cloud indisponible pour ${collectionPath}, lecture locale seule`, (e as Error).message);
+        }
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
             .filter(doc => doc.path.startsWith(collectionPath))

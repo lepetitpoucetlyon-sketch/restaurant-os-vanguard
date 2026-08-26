@@ -172,7 +172,7 @@ export function ZoneService({
                             <div className="flex items-center justify-between mb-2">
                                 <div className="w-4 h-4 rounded-full border border-black/10" style={{ backgroundColor: zone.color }} />
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onClick={() => handleEditZone(zone)} className="p-1.5 hover:bg-surface-sidebar/5 rounded-lg"><Edit3 className="w-3.5 h-3.5 text-secondary" /></button>
+                                    <button onClick={() => handleEditZone(zone)} className="p-1.5 hover:bg-surface-glass rounded-lg"><Edit3 className="w-3.5 h-3.5 text-secondary" /></button>
                                     <button onClick={() => deleteZone(zone.id)} className="p-1.5 hover:bg-status-danger/10 rounded-lg"><Trash2 className="w-3.5 h-3.5 text-status-danger" /></button>
                                 </div>
                             </div>

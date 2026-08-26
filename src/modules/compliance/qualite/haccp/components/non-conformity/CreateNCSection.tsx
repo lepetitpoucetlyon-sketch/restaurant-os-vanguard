@@ -49,7 +49,7 @@ export function CreateNCSection({
   onSubmit,
 }: CreateNCSectionProps) {
   return (
-    <div className="bg-surface-sidebar rounded-xl border border-border p-5 space-y-4">
+    <div className="bg-surface-card rounded-xl border border-border p-5 space-y-4">
       <h3 className="font-semibold text-text-primary text-sm">Nouvelle non-conformité</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

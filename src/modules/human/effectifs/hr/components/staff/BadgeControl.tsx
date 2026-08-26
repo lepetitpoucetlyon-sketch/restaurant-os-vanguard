@@ -86,8 +86,8 @@ export const BadgeControl: React.FC = () => {
                         className={cn(
                             "h-14 px-8 rounded-xl font-bold uppercase tracking-widest text-micro transition-all duration-500 shadow-lg relative overflow-hidden",
                             isClockedIn 
-                                ? "bg-[--color-status-error] hover:bg-surface-sidebar text-text-primary shadow-red-500/20" 
-                                : "bg-accent hover:bg-surface-sidebar text-text-primary shadow-accent/20"
+                                ? "bg-status-danger hover:bg-status-danger/90 text-text-on-primary shadow-red-500/20" 
+                                : "bg-action-primary hover:bg-action-primary-hover text-text-on-primary shadow-action-primary/20"
                         )}
                     >
                         <AnimatePresence mode="wait">

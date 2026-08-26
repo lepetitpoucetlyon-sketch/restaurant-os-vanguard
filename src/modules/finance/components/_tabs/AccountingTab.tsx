@@ -70,7 +70,7 @@ export function AccountingTab({
 
             {/* KPI metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                <div className="rounded-lg border border-border p-4 bg-surface-card">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
                         <TrendingUp className="w-4 h-4 text-status-success" /> Chiffre d&apos;affaires
                     </div>
@@ -78,7 +78,7 @@ export function AccountingTab({
                         {formatEur(metrics.totalRevenue)}
                     </p>
                 </div>
-                <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                <div className="rounded-lg border border-border p-4 bg-surface-card">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
                         <TrendingDown className="w-4 h-4 text-status-danger" /> Dépenses
                     </div>
@@ -86,7 +86,7 @@ export function AccountingTab({
                         {formatEur(metrics.totalExpenses)}
                     </p>
                 </div>
-                <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                <div className="rounded-lg border border-border p-4 bg-surface-card">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
                         <Wallet className="w-4 h-4 text-action-primary" /> Résultat net
                     </div>
@@ -94,7 +94,7 @@ export function AccountingTab({
                         {formatEur(metrics.netProfit)}
                     </p>
                 </div>
-                <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+                <div className="rounded-lg border border-border p-4 bg-surface-card">
                     <div className="flex items-center gap-2 text-text-muted text-xs uppercase tracking-wide">
                         <TrendingUp className="w-4 h-4 text-status-success" /> Marge
                     </div>
@@ -121,7 +121,7 @@ export function AccountingTab({
             </div>
 
             {/* fin-10: TVA multi-taux recap */}
-            <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+            <div className="rounded-lg border border-border p-4 bg-surface-card">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-text-muted mb-3 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-status-success" />
                     Récapitulatif TVA
@@ -171,7 +171,7 @@ export function AccountingTab({
             </div>
 
             {/* Clôture Z */}
-            <div className="rounded-lg border border-border p-4 flex items-center justify-between bg-surface-sidebar">
+            <div className="rounded-lg border border-border p-4 flex items-center justify-between bg-surface-card">
                 <div>
                     <p className="text-sm font-medium">Clôture Z journalière</p>
                     <p className="text-xs text-text-muted mt-0.5">
@@ -202,7 +202,7 @@ export function AccountingTab({
             </div>
 
             {/* fin-12 + fin-13: Export actions */}
-            <div className="rounded-lg border border-border p-4 bg-surface-sidebar">
+            <div className="rounded-lg border border-border p-4 bg-surface-card">
                 <h3 className="text-sm font-semibold uppercase tracking-wide text-text-muted mb-3 flex items-center gap-2">
                     <Download className="w-4 h-4" />
                     Exports comptables &amp; RH

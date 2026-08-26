@@ -84,7 +84,7 @@ export function WasteManagementHACCP() {
                                 </div>
                             </div>
 
-                            <Button className="w-full h-16 bg-text-primary text-text-primary rounded-[20px] font-black uppercase text-nano tracking-widest hover:bg-surface-sidebar shadow-xl shadow-black/10 transition-all active:scale-[0.98]">
+                            <Button className="w-full h-16 bg-action-primary text-text-on-primary rounded-[20px] font-black uppercase text-nano tracking-widest hover:bg-action-primary-hover shadow-xl shadow-action-primary/10 transition-all active:scale-[0.98]">
                                 Enregistrer le relevé HACCP
                             </Button>
                         </div>

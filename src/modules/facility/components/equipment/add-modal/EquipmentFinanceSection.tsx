@@ -28,7 +28,7 @@ export function EquipmentFinanceSection({
   setWarrantyMonths,
 }: EquipmentFinanceSectionProps) {
   return (
-    <div className="space-y-3 pt-3 border-t border-slate-800">
+    <div className="space-y-3 pt-3 border-t border-border-default">
       <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
         <FileText className="w-3.5 h-3.5 text-emerald-400" />
         <span>Facture d Achat & Garantie</span>
@@ -44,7 +44,7 @@ export function EquipmentFinanceSection({
             value={supplierName}
             onChange={(e) => setSupplierName(e.target.value)}
             placeholder="Ex: Matériel Resto Pro"
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
           />
         </div>
 
@@ -58,7 +58,7 @@ export function EquipmentFinanceSection({
             value={purchasePriceEuros}
             onChange={(e) => setPurchasePriceEuros(e.target.value)}
             placeholder="Ex: 8500"
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
           />
         </div>
 
@@ -70,7 +70,7 @@ export function EquipmentFinanceSection({
             type="date"
             value={purchaseDate}
             onChange={(e) => setPurchaseDate(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-emerald-500/50 text-sm"
           />
         </div>
 
@@ -83,7 +83,7 @@ export function EquipmentFinanceSection({
             value={invoiceUrl}
             onChange={(e) => setInvoiceUrl(e.target.value)}
             placeholder="https://drive.google.com/facture-four.pdf..."
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
           />
         </div>
 
@@ -94,7 +94,7 @@ export function EquipmentFinanceSection({
           <select
             value={warrantyMonths}
             onChange={(e) => setWarrantyMonths(parseInt(e.target.value))}
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-emerald-500/50 text-sm"
           >
             <option value={12}>12 Mois (1 an)</option>
             <option value={24}>24 Mois (2 ans)</option>

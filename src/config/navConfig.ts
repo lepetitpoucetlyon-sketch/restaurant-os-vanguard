@@ -105,7 +105,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#C5A059',
         mode: 'both',
         items: [
-            { label: "Tableau de bord", key: "dashboard", href: "/", icon: LayoutDashboard, category: "dashboard" },
+            { label: "Tableau de bord", key: "dashboard", href: "/operations", icon: LayoutDashboard, category: "dashboard" },
         ]
     },
 

@@ -20,7 +20,7 @@ export function CleaningGridTable({
         <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-xs border-collapse min-w-[720px]">
                 <thead>
-                    <tr className="bg-surface-sidebar">
+                    <tr className="bg-surface-glass">
                         <th className="px-3 py-2 text-left text-text-muted font-medium border-b border-border w-40">Zone / Tâche</th>
                         {DAYS.map((day, i) => (
                             <th key={day} className="px-2 py-2 text-center text-text-muted font-medium border-b border-border">
@@ -46,7 +46,7 @@ export function CleaningGridTable({
                                     </td>
                                 </tr>
                                 {zone.tasks.map((task) => (
-                                    <tr key={`${zone.id}-${task}`} className="hover:bg-surface-sidebar/50 transition-colors border-b border-border/50">
+                                    <tr key={`${zone.id}-${task}`} className="hover:bg-surface-glass transition-colors border-b border-border/50">
                                         <td className="px-3 py-2 text-text-muted pl-7">{task}</td>
                                         {DAYS.map((_, dayIdx) => {
                                             const checked = isChecked(zone.id, dayIdx, task);

@@ -79,10 +79,10 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-xl bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-xl bg-surface-card border border-border-default rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-start justify-between pb-4 border-b border-border-default">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl">
               <BookOpen className="w-6 h-6" />
@@ -91,14 +91,14 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               <span className="text-xs font-semibold text-emerald-400 tracking-wide uppercase">
                 Base de Connaissances & Tutos
               </span>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-text-primary tracking-tight">
                 Attacher un Guide / Notice / Vidéo
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-text-primary rounded-xl hover:bg-surface-glass-hover transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -122,7 +122,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: Tuto Dégivrage & Nettoyage Condenseur, Tuto YouTube Réparation..."
-              className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+              className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
             />
           </div>
 
@@ -134,7 +134,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value as GuideType)}
-                className="w-full px-3 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500/50 text-sm"
+                className="w-full px-3 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-emerald-500/50 text-sm"
               >
                 <option value="VIDEO_TUTO">🎬 Vidéo Tuto (YouTube / Web)</option>
                 <option value="MANUAL_PDF">📄 Manuel / Notice Constructeur (PDF)</option>
@@ -151,7 +151,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               <select
                 value={authorType}
                 onChange={(e) => setAuthorType(e.target.value as 'VENDOR' | 'RESTAURATEUR' | 'COMMUNITY')}
-                className="w-full px-3 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500/50 text-sm"
+                className="w-full px-3 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary focus:outline-none focus:border-emerald-500/50 text-sm"
               >
                 <option value="RESTAURATEUR">👨‍🍳 Équipe Restaurant (Interne)</option>
                 <option value="VENDOR">🏭 Constructeur / Fabricant</option>
@@ -169,7 +169,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://youtube.com/watch?v=... ou https://drive.google.com/..."
-              className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+              className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
             />
           </div>
 
@@ -182,7 +182,7 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               value={contentMarkdown}
               onChange={(e) => setContentMarkdown(e.target.value)}
               placeholder="Décrivez les étapes clés à suivre pour l'équipe (1. Couper le disjoncteur, 2. Dévisser la buse, 3. Nettoyer...)"
-              className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+              className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
             />
           </div>
 
@@ -195,23 +195,23 @@ export function AddGuideModal({ asset, onClose, onGuideAdded }: AddGuideModalPro
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
               placeholder="nettoyage, hebdomadaire, filtre, sav, youtube"
-              className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 text-sm"
+              className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-emerald-500/50 text-sm"
             />
           </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-border-default flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-text-primary font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
             >
               <Plus className="w-4 h-4" />
               <span>{isSubmitting ? 'Enregistrement...' : 'Enregistrer le Tuto / Guide'}</span>

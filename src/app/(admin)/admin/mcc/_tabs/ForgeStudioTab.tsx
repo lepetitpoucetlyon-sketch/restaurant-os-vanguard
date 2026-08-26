@@ -74,15 +74,15 @@ export function ForgeStudioTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-surface-card border border-border-default backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider">
               Forge Stack P3 • Studio & Compilateur
             </span>
           </div>
-          <h2 className="text-xl font-black text-white">Studio de Morphogenèse & Compilateur Blueprint</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h2 className="text-xl font-black text-text-primary">Studio de Morphogenèse & Compilateur Blueprint</h2>
+          <p className="text-xs text-text-muted mt-0.5">
             Compilation déterministe d'une étude sectorielle vers un Blueprint universel (Axe A & Axe B).
           </p>
         </div>
@@ -95,8 +95,8 @@ export function ForgeStudioTab() {
               className={cn(
                 "px-4 py-2 rounded-2xl text-xs font-bold uppercase transition-all",
                 selectedSector === k
-                  ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20"
-                  : "bg-slate-800 text-slate-400 hover:text-white"
+                  ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20"
+                  : "bg-surface-glass text-text-muted hover:text-text-primary"
               )}
             >
               {k}
@@ -108,27 +108,27 @@ export function ForgeStudioTab() {
       {/* Grid Compilateur & Blueprint Output */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Study View */}
-        <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
-          <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+        <div className="p-6 rounded-3xl bg-surface-card border border-border-default space-y-4">
+          <div className="flex items-center gap-3 border-b border-border-default pb-3">
             <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-white">{study.summary}</h3>
-              <p className="text-xs text-slate-400 font-mono">Verticale : {study.vertical}</p>
+              <h3 className="font-bold text-sm text-text-primary">{study.summary}</h3>
+              <p className="text-xs text-text-muted font-mono">Verticale : {study.vertical}</p>
             </div>
           </div>
 
           <div className="space-y-3">
-            <span className="text-micro font-bold text-slate-400 uppercase tracking-wider">Workflows Sectoriels Identifiés</span>
+            <span className="text-micro font-bold text-text-muted uppercase tracking-wider">Workflows Sectoriels Identifiés</span>
             <div className="space-y-2">
               {study.workflows.map((wf) => (
-                <div key={wf.id} className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs">
-                  <div className="flex items-center justify-between font-bold text-slate-200 mb-1">
+                <div key={wf.id} className="p-3 rounded-2xl bg-surface-glass border border-border-default text-xs">
+                  <div className="flex items-center justify-between font-bold text-text-primary mb-1">
                     <span>{wf.label}</span>
-                    <span className="text-nano font-mono text-slate-500">{wf.id}</span>
+                    <span className="text-nano font-mono text-text-muted">{wf.id}</span>
                   </div>
-                  <p className="text-slate-400 text-micro mb-2">{wf.description}</p>
+                  <p className="text-text-secondary text-micro mb-2">{wf.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {wf.capabilities.map((c) => (
                       <span key={c} className="px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-nano font-mono">
@@ -143,20 +143,20 @@ export function ForgeStudioTab() {
         </div>
 
         {/* Compiled Proposal */}
-        <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
-          <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+        <div className="p-6 rounded-3xl bg-surface-card border border-border-default space-y-4">
+          <div className="flex items-center gap-3 border-b border-border-default pb-3">
             <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-white">Blueprint Compilé & Suggestions</h3>
-              <p className="text-xs text-slate-400">Sortie StudyToBlueprintCompiler (Axe A)</p>
+              <h3 className="font-bold text-sm text-text-primary">Blueprint Compilé & Suggestions</h3>
+              <p className="text-xs text-text-muted">Sortie StudyToBlueprintCompiler (Axe A)</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              <span className="text-micro font-bold text-text-muted uppercase tracking-wider block mb-2">
                 Capabilities Activées ({Object.keys(proposal.capabilities).length})
               </span>
               <div className="flex flex-wrap gap-2">
@@ -169,21 +169,21 @@ export function ForgeStudioTab() {
             </div>
 
             <div>
-              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              <span className="text-micro font-bold text-text-muted uppercase tracking-wider block mb-2">
                 Événements Métier Générés ({proposal.events.length})
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                 {proposal.events.map((ev, idx) => (
-                  <div key={idx} className="p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                  <div key={idx} className="p-2 rounded-xl bg-surface-glass border border-border-default flex items-center justify-between text-xs">
                     <span className="font-mono text-amber-400">{ev.name}</span>
-                    <span className="text-nano text-slate-500">{ev.description}</span>
+                    <span className="text-nano text-text-muted">{ev.description}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-micro text-slate-400 space-y-1">
-              <span className="font-bold text-slate-300 block">Justifications de Morphogenèse :</span>
+            <div className="p-3 rounded-2xl bg-surface-glass border border-border-default text-micro text-text-secondary space-y-1">
+              <span className="font-bold text-text-primary block">Justifications de Morphogenèse :</span>
               {proposal.rationale.slice(0, 3).map((r, i) => (
                 <p key={i}>• {r}</p>
               ))}

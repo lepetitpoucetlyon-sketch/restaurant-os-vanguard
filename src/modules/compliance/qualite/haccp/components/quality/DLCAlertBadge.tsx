@@ -34,7 +34,7 @@ export const DLCAlertBadge: React.FC<DLCAlertBadgeProps> = ({ expiryDate, classN
             label: `URGENT (J+${daysRemaining})`
         },
         expired: {
-            color: 'text-muted bg-surface-sidebar',
+            color: 'text-muted bg-surface-glass border border-border',
             icon: <AlertCircle className="w-3 h-3" />,
             label: 'EXPIRÉ'
         }

@@ -39,27 +39,27 @@ export function SectorStudyTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-surface-card border border-border-default backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider">
               Forge Stack P1 • Sector Study Store
             </span>
           </div>
-          <h2 className="text-xl font-black text-white">Registre & Persistance des Études Sectorielles</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h2 className="text-xl font-black text-text-primary">Registre & Persistance des Études Sectorielles</h2>
+          <p className="text-xs text-text-muted mt-0.5">
             Bibliothèque d'études de marchés mutualisées, signaux de qualification et blueprints dérivés.
           </p>
         </div>
 
         <div className="relative min-w-[240px]">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Rechercher une étude..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-surface-glass border border-border-default text-xs text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>
@@ -78,20 +78,20 @@ export function SectorStudyTab() {
                   "p-4 rounded-2xl border cursor-pointer transition-all space-y-2",
                   isSelected
                     ? "bg-blue-600/10 border-blue-500/50 shadow-lg shadow-blue-500/5"
-                    : "bg-slate-900/40 border-slate-800 hover:border-slate-700"
+                    : "bg-surface-glass border-border-default hover:bg-surface-glass-hover"
                 )}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-nano font-mono font-bold text-slate-500 uppercase">{item.slug}</span>
+                  <span className="text-nano font-mono font-bold text-text-muted uppercase">{item.slug}</span>
                   <span className={cn(
                     "px-2 py-0.5 rounded-full text-nano font-bold uppercase",
-                    item.source === 'llm-enriched' ? "bg-amber-500/10 text-amber-400" : "bg-slate-800 text-slate-400"
+                    item.source === 'llm-enriched' ? "bg-amber-500/10 text-amber-400" : "bg-surface-card text-text-muted"
                   )}>
                     {item.source}
                   </span>
                 </div>
-                <h4 className="font-bold text-sm text-white">{item.name}</h4>
-                <div className="flex items-center gap-3 text-xs text-slate-400 pt-1 border-t border-slate-800/60">
+                <h4 className="font-bold text-sm text-text-primary">{item.name}</h4>
+                <div className="flex items-center gap-3 text-xs text-text-muted pt-1 border-t border-border-default/40">
                   <span>{item.workflowsCount} workflows</span>
                   <span>•</span>
                   <span>{item.capabilitiesCount} capabilities</span>
@@ -102,11 +102,11 @@ export function SectorStudyTab() {
         </div>
 
         {/* Selected Study Deep Dive */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="lg:col-span-2 p-6 rounded-3xl bg-surface-card border border-border-default space-y-6">
+          <div className="flex items-center justify-between border-b border-border-default pb-4">
             <div>
               <span className="text-xs font-mono font-bold text-blue-400 uppercase">{activeStudy.category}</span>
-              <h3 className="text-xl font-bold text-white mt-0.5">{activeStudy.name}</h3>
+              <h3 className="text-xl font-bold text-text-primary mt-0.5">{activeStudy.name}</h3>
             </div>
             <button className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md">
               Re-compiler Blueprint
@@ -114,25 +114,25 @@ export function SectorStudyTab() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-nano uppercase font-bold text-slate-500">Workflows Clés</span>
-              <p className="text-2xl font-black text-white mt-1">{activeStudy.workflowsCount}</p>
+            <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
+              <span className="text-nano uppercase font-bold text-text-muted">Workflows Clés</span>
+              <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.workflowsCount}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-nano uppercase font-bold text-slate-500">Capabilities Dérivées</span>
-              <p className="text-2xl font-black text-white mt-1">{activeStudy.capabilitiesCount}</p>
+            <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
+              <span className="text-nano uppercase font-bold text-text-muted">Capabilities Dérivées</span>
+              <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.capabilitiesCount}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-nano uppercase font-bold text-slate-500">Indicateurs KPIs</span>
-              <p className="text-2xl font-black text-white mt-1">{activeStudy.kpisCount}</p>
+            <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
+              <span className="text-nano uppercase font-bold text-text-muted">Indicateurs KPIs</span>
+              <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.kpisCount}</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Métadonnées de persistance MCC</h4>
-            <div className="text-xs text-slate-400 space-y-1 font-mono">
-              <p>• Scope : <span className="text-slate-200">mcc/studies/{activeStudy.slug}</span></p>
-              <p>• Dernière mise à jour : <span className="text-slate-200">{activeStudy.updatedAt}</span></p>
+          <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-2">
+            <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">Métadonnées de persistance MCC</h4>
+            <div className="text-xs text-text-secondary space-y-1 font-mono">
+              <p>• Scope : <span className="text-text-primary">mcc/studies/{activeStudy.slug}</span></p>
+              <p>• Dernière mise à jour : <span className="text-text-primary">{activeStudy.updatedAt}</span></p>
               <p>• Intégrité cryptographique : <span className="text-emerald-400">Validée (FNV-1a)</span></p>
             </div>
           </div>

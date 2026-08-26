@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { tenantBrandTokensAtom, tenantIdAtom } from '@/store/pillars/sovereign';
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
-import { generateCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
+import { generateBrandCSSVariables, semanticTokens } from '@/shared/nexus/tokens/semantic';
 import { BrandTokensSchema, defaultBrandTokens } from '@/shared/nexus/tokens/brand';
 import { VERTICAL_DEFAULT_TOKENS, VERTICAL_EXTRA_TOKENS, VERTICAL_APPEARANCE } from '@/shared/nexus/tokens/verticals';
 import { useFirestoreBrand } from '@/shared/hooks/useFirestoreBrand';
@@ -28,15 +28,25 @@ const OPACITY_MAP: Record<string, string> = { low: '0.4', medium: '0.7', high: '
 
 type BrandTokens = ReturnType<typeof BrandTokensSchema.parse>;
 
+// Variables CSS neutres et de surface gérées exclusivement par CSS (globals.css).
+// Toute écriture inline de ces tokens est proscrite (Option B — cause racine du mélange dark/light).
+const NEUTRAL_CSS_VARS_TO_PURGE = [
+  '--surface-bg', '--surface-card', '--surface-modal', '--surface-modal-dark', '--surface-sidebar',
+  '--surface-glass',
+  '--text-primary', '--text-secondary', '--text-muted',
+  '--border-default', '--border-subtle',
+  '--status-table-available', '--status-table-occupied', '--status-order-pending',
+  '--status-order-ready', '--status-stock-critical',
+  '--status-success', '--status-warning', '--status-danger',
+  '--brand-surface-bg', '--brand-surface-card', '--brand-surface-modal',
+] as const;
+
 function buildSemanticOverrides(brandTokens: BrandTokens): Record<string, Record<string, string>> {
     const overrides: Record<string, Record<string, string>> = {};
     if (brandTokens.primaryColor) {
         overrides.action = { ...semanticTokens.action, primary: brandTokens.primaryColor, primaryHover: brandTokens.primaryHover ?? brandTokens.primaryColor };
         overrides.text   = { ...semanticTokens.text, brand: brandTokens.primaryColor };
         overrides.border = { ...semanticTokens.border, focus: brandTokens.primaryColor };
-    }
-    if (brandTokens.surfaceModal) {
-        overrides.surface = { ...semanticTokens.surface, modal: brandTokens.surfaceModal };
     }
     return overrides;
 }
@@ -110,6 +120,9 @@ export function BrandingProvider() {
   useEffect(() => {
     const root = document.documentElement;
 
+    // ── Purge systématique des tokens neutres inline pour garantir la primauté de globals.css ──
+    NEUTRAL_CSS_VARS_TO_PURGE.forEach(v => root.style.removeProperty(v));
+
     // ── Gap B : cleanup des extra tokens de l'ancien vertical ────────────────
     const prevVariant = prevVariantRef.current;
     if (prevVariant && prevVariant !== variant) {
@@ -127,7 +140,7 @@ export function BrandingProvider() {
         '--glass-blur', '--glass-opacity',
         '--font-brand', '--font-ui', '--font-mono',
         '--brand-primary-color', '--brand-accent-color',
-        '--brand-surface-bg', '--brand-surface-card', '--brand-surface-modal',
+        ...NEUTRAL_CSS_VARS_TO_PURGE,
       ] as const;
       BRAND_CSS_VARS_TO_CLEAN.forEach(v => root.style.removeProperty(v));
 
@@ -172,10 +185,11 @@ export function BrandingProvider() {
       ...(firestoreTokens.faviconUrl ? { faviconUrl: firestoreTokens.faviconUrl } : {}),
     });
 
-    // 4. Générer et injecter les CSS vars sémantiques
+    // 4. Générer et injecter UNIQUEMENT les CSS vars d'identité de marque (Option B)
+    // Les 14 tokens neutres et de surface sont gérés par globals.css (:root, [data-theme="dark"])
     const overrides = buildSemanticOverrides(merged);
-    const cssVars   = generateCSSVariables({ ...semanticTokens, ...overrides });
-    Object.entries(cssVars).forEach(([key, value]) => { if (value) root.style.setProperty(key, value as string); });
+    const brandCssVars = generateBrandCSSVariables({ ...semanticTokens, ...overrides });
+    Object.entries(brandCssVars).forEach(([key, value]) => { if (value) root.style.setProperty(key, value as string); });
 
     if (merged.primaryColor) root.style.setProperty('--text-on-primary', getContrastTextColor(merged.primaryColor));
 

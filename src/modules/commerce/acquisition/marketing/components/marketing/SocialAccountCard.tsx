@@ -19,7 +19,7 @@ interface SocialAccountCardProps {
 export function SocialAccountCard({ account }: SocialAccountCardProps) {
     const Icon = account.icon as import("react").FC<{ size?: number; strokeWidth?: number }> | undefined;
     return (
-        <div className="group relative overflow-hidden bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-xl border border-default dark:border-white/5 rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl transition-all duration-500">
+        <div className="group relative overflow-hidden bg-surface-card backdrop-blur-xl border border-border rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl transition-all duration-500">
             <div className={cn(
                 "absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br rounded-full blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity",
                 account.gradient
@@ -47,7 +47,7 @@ export function SocialAccountCard({ account }: SocialAccountCardProps) {
                         { label: 'Publications', value: account.posts, trend: null },
                         { label: 'Engagement', value: account.engagement + '%', trend: '+0.4%' }
                     ].map((stat, idx) => (
-                        <div key={idx} className="p-5 bg-surface-card/50 dark:bg-surface-sidebar/20 rounded-2xl border border-subtle backdrop-blur-sm hover:bg-surface-card/80 dark:hover:bg-surface-card/5 transition-colors">
+                        <div key={idx} className="p-5 bg-surface-glass rounded-2xl border border-border backdrop-blur-sm hover:bg-surface-glass/80 transition-colors">
                             <p className="text-3xl font-serif font-medium text-text-primary tracking-tighter tabular-nums">
                                 {stat.value}
                             </p>

@@ -153,16 +153,16 @@ export function TenantContractSignModal({
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-surface-card border border-border-default rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
       >
         {/* Header */}
-        <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/60">
+        <div className="p-6 border-b border-border-default flex items-center justify-between bg-surface-card/60">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Signature Électronique Certifiée eIDAS</h3>
+              <h3 className="text-lg font-bold text-text-primary">Signature Électronique Certifiée eIDAS</h3>
               <p className="text-xs text-text-muted">
                 Contrat SaaS & DPA RGPD Art. 28 — {contract.client.companyName} ({contract.vertical})
               </p>
@@ -170,7 +170,7 @@ export function TenantContractSignModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
+            className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
           >
             <X className="w-5 h-5" />
           </button>
@@ -191,7 +191,7 @@ export function TenantContractSignModal({
               <FileText className="w-3.5 h-3.5 text-emerald-400" />
               1. Consultation intégrale des termes contractuels
             </label>
-            <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800/80 max-h-56 overflow-y-auto font-mono text-xs text-text-secondary leading-relaxed whitespace-pre-wrap select-text">
+            <div className="p-5 rounded-2xl bg-surface-glass border border-border-default max-h-56 overflow-y-auto font-mono text-xs text-text-secondary leading-relaxed whitespace-pre-wrap select-text">
               {contract.document.fullTextContent}
             </div>
           </div>
@@ -208,7 +208,7 @@ export function TenantContractSignModal({
                   type="text"
                   value={signerName}
                   onChange={(e) => setSignerName(e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-xs"
+                  className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-xs"
                   required
                 />
               </div>
@@ -218,7 +218,7 @@ export function TenantContractSignModal({
                   type="text"
                   value={signerRole}
                   onChange={(e) => setSignerRole(e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-xs"
+                  className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-xs"
                   required
                 />
               </div>
@@ -228,7 +228,7 @@ export function TenantContractSignModal({
                   type="email"
                   value={signerEmail}
                   onChange={(e) => setSignerEmail(e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-xs"
+                  className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-xs"
                   required
                 />
               </div>
@@ -250,7 +250,7 @@ export function TenantContractSignModal({
               </button>
             </div>
 
-            <div className="relative border-2 border-dashed border-zinc-700 hover:border-emerald-500/50 rounded-2xl bg-zinc-950/80 overflow-hidden">
+            <div className="relative border-2 border-dashed border-border-default hover:border-emerald-500/50 rounded-2xl bg-surface-glass overflow-hidden">
               <canvas
                 ref={canvasRef}
                 width={760}
@@ -273,13 +273,13 @@ export function TenantContractSignModal({
           </div>
 
           {/* Legal Consent Checkbox */}
-          <div className="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/80 flex items-start gap-3">
+          <div className="p-4 rounded-2xl bg-surface-glass border border-border-default flex items-start gap-3">
             <input
               type="checkbox"
               id="consent"
               checked={consentConfirmed}
               onChange={(e) => setConsentConfirmed(e.target.checked)}
-              className="mt-1 w-4 h-4 rounded border-zinc-700 text-emerald-500 focus:ring-emerald-500 bg-zinc-900 cursor-pointer"
+              className="mt-1 w-4 h-4 rounded border-border-default text-emerald-500 focus:ring-emerald-500 bg-surface-card cursor-pointer"
             />
             <label htmlFor="consent" className="text-xs text-text-secondary leading-relaxed cursor-pointer select-none">
               Je confirme être dûment habilité(e) à engager la société{' '}
@@ -292,7 +292,7 @@ export function TenantContractSignModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-5 border-t border-zinc-800 bg-zinc-950/60 flex items-center justify-between">
+        <div className="p-5 border-t border-border-default bg-surface-card/60 flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-text-muted">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             Scellement SHA-256 & Certificat eIDAS Horodaté
@@ -301,7 +301,7 @@ export function TenantContractSignModal({
             <button
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-white hover:bg-zinc-700 transition"
+              className="px-4 py-2 rounded-xl bg-surface-glass text-xs font-semibold text-text-primary hover:bg-surface-glass-hover transition"
             >
               Annuler
             </button>

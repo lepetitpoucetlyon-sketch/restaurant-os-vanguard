@@ -158,7 +158,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                     disabled={!hasSigned || !signerName || isSaved}
                     className={cn(
                         "w-full py-6 rounded-2xl font-black uppercase text-nano tracking-widest transition-all",
-                        isSaved ? "bg-status-success text-text-primary" : "bg-surface-sidebar text-text-primary hover:bg-surface-sidebar"
+                        isSaved ? "bg-status-success text-text-on-primary" : "bg-action-primary text-text-on-primary hover:bg-action-primary-hover"
                     )}
                 >
                     {isSaved ? (

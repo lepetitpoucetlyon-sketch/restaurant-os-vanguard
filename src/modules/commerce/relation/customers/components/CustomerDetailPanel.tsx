@@ -27,13 +27,13 @@ export function CustomerDetailPanel({
 
     return (
         <div
-            className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl flex items-center justify-center z-[100] p-4 md:p-8 animate-in fade-in duration-500"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xl flex items-center justify-center z-[100] p-4 md:p-8 animate-in fade-in duration-500"
             onClick={onClose}
         >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.6)] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-subtle"
+                className="bg-surface-card rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.6)] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden border border-border"
                 onClick={(e) => e.stopPropagation()}
             >
                 <CustomerDetailHeader
@@ -42,7 +42,7 @@ export function CustomerDetailPanel({
                     setActiveTab={setActiveTab}
                 />
 
-                <ScrollArea className="flex-1 elegant-scrollbar bg-bg-primary">
+                <ScrollArea className="flex-1 elegant-scrollbar bg-surface-card">
                     {activeTab === "profil" && <CustomerProfileTab customer={customer} />}
                     {activeTab === "historique" && <CustomerHistoriqueTab customer={customer} />}
                     {activeTab === "fidelite" && (

@@ -14,7 +14,7 @@ interface InsightsConsoleProps {
 
 export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isAnalyzing, domain, modelId = 'GEMINI-1.5-FLASH' }) => {
     return (
-        <div className="bg-surface-sidebar/90 rounded-3xl p-6 border border-subtle backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
+        <div className="bg-surface-card rounded-3xl p-6 border border-border backdrop-blur-3xl shadow-2xl overflow-hidden min-h-[300px] flex flex-col">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-accent-gold/20 flex items-center justify-center border border-accent-gold/30">

@@ -17,7 +17,7 @@ export function ReconciliationPurchasesTab({ summary }: ReconciliationPurchasesT
       className="grid grid-cols-1 lg:grid-cols-2 gap-6"
     >
       {/* Rapprochement Bancaire */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-card border border-border-default rounded-2xl p-6 space-y-4">
         <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Rapprochement Bancaire DSP2</span>
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-emerald-400 flex items-center gap-2">
@@ -25,7 +25,7 @@ export function ReconciliationPurchasesTab({ summary }: ReconciliationPurchasesT
             <span>Lettrage Parfait (Écart : 0,00 €)</span>
           </div>
         </div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
+        <div className="space-y-2 pt-2 border-t border-border-default text-xs text-text-secondary">
           <div className="flex justify-between">
             <span className="text-text-muted">Télécollectes TPE / Stripe :</span>
             <span className="font-mono font-semibold">{(summary.reconciliation.tpeSettlementsTotalCents / 100).toFixed(2)} €</span>
@@ -42,10 +42,10 @@ export function ReconciliationPurchasesTab({ summary }: ReconciliationPurchasesT
       </div>
 
       {/* Achats & Factures Fournisseurs */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-card border border-border-default rounded-2xl p-6 space-y-4">
         <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Factures Fournisseurs (OCR)</span>
-        <div className="text-2xl font-bold text-white">{summary.purchases.invoicesCount} Factures Traitées</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
+        <div className="text-2xl font-bold text-text-primary">{summary.purchases.invoicesCount} Factures Traitées</div>
+        <div className="space-y-2 pt-2 border-t border-border-default text-xs text-text-secondary">
           <div className="flex justify-between">
             <span className="text-text-muted">Total Achats Matières Premières HT :</span>
             <span className="font-mono font-semibold">{(summary.purchases.totalPurchasesHtCents / 100).toFixed(2)} €</span>

@@ -197,7 +197,7 @@ export const EditPanel = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={async () => await updateTable(selectedTable.id, { seats: Math.min(20, selectedTable.seats + 1) })}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-text-primary hover:bg-surface-sidebar text-text-primary transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-action-primary hover:bg-action-primary-hover text-text-on-primary transition-colors"
                         >
                             <Plus className="w-4 h-4" />
                         </motion.button>

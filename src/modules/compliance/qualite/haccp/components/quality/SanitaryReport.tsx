@@ -48,7 +48,7 @@ export const SanitaryReport: React.FC = () => {
 
             <Button 
                 onClick={handleDownloadPDF}
-                className="w-full bg-surface-sidebar text-text-primary rounded-xl py-6 font-black uppercase text-nano tracking-widest flex items-center justify-center gap-2"
+                className="w-full bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-xl py-6 font-black uppercase text-nano tracking-widest flex items-center justify-center gap-2"
             >
                 <Download className="w-4 h-4" /> Télécharger le Rapport Certifié
             </Button>

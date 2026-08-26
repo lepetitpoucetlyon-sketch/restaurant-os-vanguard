@@ -63,7 +63,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-                <button onClick={handleView} title="Ouvrir dans un onglet" className="p-1.5 rounded-lg text-muted hover:text-text-primary hover:bg-surface-sidebar transition-all">
+                <button onClick={handleView} title="Ouvrir dans un onglet" className="p-1.5 rounded-lg text-muted hover:text-text-primary hover:bg-surface-glass transition-all">
                     <Eye className="w-3.5 h-3.5" />
                 </button>
 
@@ -72,7 +72,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
                         onClick={handleReset}
                         disabled={loading === 'reset'}
                         title={tierCfg.tier === 'DEMO' ? 'Reset snapshot DEMO' : 'Reset TEST → DNA REFERENCE'}
-                        className="p-1.5 rounded-lg text-muted hover:text-blue-400 hover:bg-surface-sidebar transition-all disabled:opacity-50"
+                        className="p-1.5 rounded-lg text-muted hover:text-blue-400 hover:bg-surface-glass transition-all disabled:opacity-50"
                     >
                         {loading === 'reset'
                             ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -85,7 +85,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
                     <button
                         onClick={onPromote}
                         title="Promouvoir vers REFERENCE"
-                        className="p-1.5 rounded-lg text-muted hover:text-brand hover:bg-surface-sidebar transition-all flex items-center gap-1 text-nano font-bold"
+                        className="p-1.5 rounded-lg text-muted hover:text-brand hover:bg-surface-glass transition-all flex items-center gap-1 text-nano font-bold"
                     >
                         <ArrowUpCircle className="w-3.5 h-3.5" />
                         <span className="hidden sm:inline">Promouvoir</span>
@@ -93,7 +93,7 @@ export function TierRow({ variant, tierCfg, onPromote }: {
                 )}
 
                 {tierCfg.actions.includes('snapshots') && (
-                    <button title="Voir les snapshots" className="p-1.5 rounded-lg text-muted hover:text-text-primary hover:bg-surface-sidebar transition-all">
+                    <button title="Voir les snapshots" className="p-1.5 rounded-lg text-muted hover:text-text-primary hover:bg-surface-glass transition-all">
                         <Archive className="w-3.5 h-3.5" />
                     </button>
                 )}

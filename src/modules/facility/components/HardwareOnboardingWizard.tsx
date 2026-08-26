@@ -86,13 +86,13 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="p-6 rounded-3xl bg-gradient-to-r from-zinc-900 via-zinc-900/90 to-zinc-950 border border-zinc-800 backdrop-blur-xl shadow-2xl">
+      <div className="p-6 rounded-3xl bg-surface-card border border-border-default backdrop-blur-xl shadow-2xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
               <Activity className="w-3.5 h-3.5" /> Protocole d Installation J-0
             </div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-xl font-bold text-text-primary">
               Wizard d Onboarding & Recette Matérielle — {siteName}
             </h2>
             <p className="text-xs text-text-muted">
@@ -122,14 +122,14 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
         </div>
 
         {/* Inputs Signataires */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-zinc-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-border-default">
           <div>
             <label className="block text-micro font-semibold text-text-muted mb-1">Technicien Déploiement</label>
             <input
               type="text"
               value={technicianName}
               onChange={(e) => setTechnicianName(e.target.value)}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-xs"
+              className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-xs"
             />
           </div>
           <div>
@@ -138,7 +138,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
               type="text"
               value={managerName}
               onChange={(e) => setManagerName(e.target.value)}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-white text-xs"
+              className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary text-xs"
             />
           </div>
         </div>
@@ -152,8 +152,8 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             onClick={() => setActiveCategory(cat)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${
               activeCategory === cat
-                ? 'bg-zinc-100 text-zinc-900 shadow-md'
-                : 'bg-zinc-900/60 border border-zinc-800 text-text-muted hover:text-white'
+                ? 'bg-action-primary text-text-on-primary shadow-md'
+                : 'bg-surface-glass border border-border-default text-text-muted hover:text-text-primary'
             }`}
           >
             {cat === 'ALL' ? 'Tous les Périphériques (12)' : cat}
@@ -177,16 +177,16 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                   ? 'bg-emerald-950/20 border-emerald-500/30'
                   : checkResult?.status === 'FAILED'
                   ? 'bg-rose-950/20 border-rose-500/30'
-                  : 'bg-zinc-900/60 border-zinc-800'
+                  : 'bg-surface-card border-border-default'
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-zinc-800/80 mt-0.5">
+                  <div className="p-2 rounded-xl bg-surface-glass mt-0.5">
                     {getCategoryIcon(item.category)}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    <h4 className="text-sm font-bold text-text-primary flex items-center gap-2">
                       {item.name}
                     </h4>
                     <p className="text-xs text-text-muted mt-0.5">
@@ -221,7 +221,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-6 rounded-3xl bg-zinc-950 border border-emerald-500/30 shadow-2xl space-y-4"
+          className="p-6 rounded-3xl bg-surface-card border border-emerald-500/30 shadow-2xl space-y-4"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -229,7 +229,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
                 <FileCheck className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-text-primary">
                   Procès-Verbal de Recette d Installation Matérielle (Validé)
                 </h3>
                 <p className="text-xs text-text-muted font-mono">
@@ -245,18 +245,18 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 text-xs text-text-secondary space-y-2">
+          <div className="p-4 rounded-2xl bg-surface-glass border border-border-default text-xs text-text-secondary space-y-2">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <span className="text-text-muted/80">Installé & Certifié par :</span>{' '}
-                <strong className="text-white">{report.technicianName}</strong>
+                <strong className="text-text-primary">{report.technicianName}</strong>
               </div>
               <div>
                 <span className="text-text-muted/80">Contresigné par le Gérant :</span>{' '}
-                <strong className="text-white">{report.managerName}</strong>
+                <strong className="text-text-primary">{report.managerName}</strong>
               </div>
             </div>
-            <div className="font-mono text-micro text-emerald-400/90 break-all pt-2 border-t border-zinc-800">
+            <div className="font-mono text-micro text-emerald-400/90 break-all pt-2 border-t border-border-default">
               Master Seal SHA-256 : {report.masterSealSha256}
             </div>
           </div>

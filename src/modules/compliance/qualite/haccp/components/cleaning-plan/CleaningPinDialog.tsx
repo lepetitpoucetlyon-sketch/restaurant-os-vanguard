@@ -30,7 +30,7 @@ export function CleaningPinDialog({
                     <h3 className="font-bold text-text-primary">Signature numérique</h3>
                 </div>
                 <p className="text-sm text-text-muted mb-1">Tâche :</p>
-                <p className="text-sm font-medium text-text-primary mb-4 bg-surface-sidebar rounded-lg px-3 py-2">
+                <p className="text-sm font-medium text-text-primary mb-4 bg-surface-glass rounded-lg px-3 py-2">
                     {pinDialog.taskLabel}
                 </p>
                 <label className="block text-xs text-text-muted mb-1">Votre nom</label>
@@ -39,7 +39,7 @@ export function CleaningPinDialog({
                     value={nameInput}
                     onChange={e => setNameInput(e.target.value)}
                     placeholder="Prénom Nom"
-                    className="w-full mb-3 px-3 py-2 rounded-lg border border-border bg-surface-sidebar text-text-primary text-sm focus:outline-none focus:ring-1 focus:ring-action-primary"
+                    className="w-full mb-3 px-3 py-2 rounded-lg border border-border bg-surface-glass text-text-primary text-sm focus:outline-none focus:ring-1 focus:ring-action-primary"
                 />
                 <label className="block text-xs text-text-muted mb-1">Code PIN (4+ chiffres)</label>
                 <input
@@ -48,7 +48,7 @@ export function CleaningPinDialog({
                     value={pinInput}
                     onChange={e => setPinInput(e.target.value.replace(/\D/g, '').slice(0, 8))}
                     placeholder="••••"
-                    className="w-full mb-4 px-3 py-2 rounded-lg border border-border bg-surface-sidebar text-text-primary text-sm focus:outline-none focus:ring-1 focus:ring-action-primary tracking-widest"
+                    className="w-full mb-4 px-3 py-2 rounded-lg border border-border bg-surface-glass text-text-primary text-sm focus:outline-none focus:ring-1 focus:ring-action-primary tracking-widest"
                 />
                 <div className="flex gap-2">
                     <button

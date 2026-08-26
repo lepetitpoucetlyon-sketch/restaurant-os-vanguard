@@ -11,30 +11,30 @@ interface DetailMachineTabProps {
 export function DetailMachineTab({ asset }: DetailMachineTabProps) {
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+      <div className="grid grid-cols-2 gap-3 bg-surface-glass p-4 rounded-2xl border border-border-default">
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Nom Machine</span>
-          <span className="text-white font-medium text-sm">{asset.name}</span>
+          <span className="text-text-muted text-xs block font-semibold">Nom Machine</span>
+          <span className="text-text-primary font-medium text-sm">{asset.name}</span>
         </div>
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Catégorie</span>
-          <span className="text-white font-medium text-sm">{asset.category}</span>
+          <span className="text-text-muted text-xs block font-semibold">Catégorie</span>
+          <span className="text-text-primary font-medium text-sm">{asset.category}</span>
         </div>
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Marque & Modèle</span>
-          <span className="text-white font-medium text-sm">{asset.brand} - {asset.model}</span>
+          <span className="text-text-muted text-xs block font-semibold">Marque & Modèle</span>
+          <span className="text-text-primary font-medium text-sm">{asset.brand} - {asset.model}</span>
         </div>
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Numéro de Série</span>
-          <span className="text-white font-mono font-medium text-sm">{asset.serialNumber}</span>
+          <span className="text-text-muted text-xs block font-semibold">Numéro de Série</span>
+          <span className="text-text-primary font-mono font-medium text-sm">{asset.serialNumber}</span>
         </div>
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Zone / Emplacement</span>
-          <span className="text-white font-medium text-sm">{asset.location}</span>
+          <span className="text-text-muted text-xs block font-semibold">Zone / Emplacement</span>
+          <span className="text-text-primary font-medium text-sm">{asset.location}</span>
         </div>
         <div>
-          <span className="text-text-muted/80 text-xs block font-semibold">Fréquence de Révision</span>
-          <span className="text-white font-medium text-sm">Tous les {asset.maintenanceFrequencyDays} jours</span>
+          <span className="text-text-muted text-xs block font-semibold">Fréquence de Révision</span>
+          <span className="text-text-primary font-medium text-sm">Tous les {asset.maintenanceFrequencyDays} jours</span>
         </div>
       </div>
 
@@ -46,7 +46,7 @@ export function DetailMachineTab({ asset }: DetailMachineTabProps) {
         </h4>
         <div className="flex items-center justify-between pt-1">
           <div>
-            <span className="text-white font-semibold text-sm block">
+            <span className="text-text-primary font-semibold text-sm block">
               {asset.supportContact?.companyName || asset.brand + ' Service Après-Vente'}
             </span>
             <span className="text-xs text-text-secondary">
@@ -56,7 +56,7 @@ export function DetailMachineTab({ asset }: DetailMachineTabProps) {
           {asset.supportContact?.phone && (
             <a
               href={`tel:${asset.supportContact.phone}`}
-              className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-text-primary font-bold text-xs transition-colors"
+              className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition-colors"
             >
               Appeler le SAV
             </a>

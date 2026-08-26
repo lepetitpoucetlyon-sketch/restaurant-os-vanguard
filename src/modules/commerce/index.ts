@@ -35,8 +35,9 @@ export type { MenuItemCategory, IMenuEngineeringItem, IMenuEngineeringReport } f
 
 export { LandingDashboard } from './acquisition/landing/components/LandingDashboard';
 export { OnboardingWizard } from './acquisition/onboarding/wizard';
-export { ReservationWidget } from './fidelite/widgets';
+export { ReservationWidget, EmbedSnippets, OnlineBookingToggle, ROICalculator } from './fidelite/widgets';
 export { ProspectingDashboard } from './relation/crm/components/ProspectingDashboard';
+
 export { DailyListView } from './relation/reservations/components/DailyListView';
 export { WeeklyView } from './relation/reservations/components/WeeklyView';
 export { GroupFormModal } from './relation/reservations/components/GroupFormModal';

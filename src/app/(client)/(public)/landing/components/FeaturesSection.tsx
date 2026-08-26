@@ -8,7 +8,7 @@ import { FEATURES } from "@/app/(client)/(public)/landing/constants";
 
 export function FeaturesSection() {
     return (
-        <section id="features" className="relative py-32 px-6 bg-surface-sidebar">
+        <section id="features" className="relative py-32 px-6 bg-surface-bg">
             <div className="max-w-7xl mx-auto">
                 {/* Section Header */}
                 <motion.div

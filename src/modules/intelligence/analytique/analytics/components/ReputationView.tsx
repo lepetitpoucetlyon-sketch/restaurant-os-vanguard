@@ -60,7 +60,7 @@ export const ReputationView: React.FC<ReputationViewProps> = ({ reviews }) => {
                             <div className="bg-bg-tertiary/50 p-4 rounded-2xl border border-accent-gold/10">
                                 <p className="text-nano uppercase font-black tracking-widest text-accent-gold mb-2">Oracle Brain :</p>
                                 <p className="text-xs italic opacity-70 mb-3 text-text-muted">{review.suggestedReply}</p>
-                                <Button size="sm" className="h-9 w-full bg-text-primary text-text-primary rounded-xl text-nano font-black uppercase tracking-widest hover:bg-surface-sidebar transition-colors">
+                                <Button size="sm" className="h-9 w-full bg-action-primary text-text-on-primary rounded-xl text-nano font-black uppercase tracking-widest hover:bg-action-primary-hover transition-colors">
                                     Approuver la Réponse
                                 </Button>
                             </div>

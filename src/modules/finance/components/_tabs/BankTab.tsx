@@ -38,7 +38,7 @@ export function BankTab({
     return (
         <section className="space-y-6">
             {/* Connect / sync actions */}
-            <div className="rounded-lg border border-border p-6 bg-surface-sidebar">
+            <div className="rounded-lg border border-border p-6 bg-surface-card">
                 <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div>
                         <h2 className="text-lg font-serif font-semibold flex items-center gap-2">
@@ -96,7 +96,7 @@ export function BankTab({
                         {bankAccounts.map((account) => (
                             <div
                                 key={account.id}
-                                className="rounded-lg border border-border p-4 bg-surface-sidebar"
+                                className="rounded-lg border border-border p-4 bg-surface-card"
                             >
                                 <div className="flex items-center gap-2 mb-1">
                                     <Building2 className="w-4 h-4 text-text-muted shrink-0" />
@@ -133,7 +133,7 @@ export function BankTab({
                     <div className="overflow-x-auto rounded-lg border border-border">
                         <table className="w-full text-sm min-w-[560px]">
                             <thead>
-                                <tr className="bg-surface-sidebar border-b border-border text-xs text-text-muted">
+                                <tr className="bg-surface-glass border-b border-border text-xs text-text-muted">
                                     <th className="text-left px-4 py-2.5 font-medium">Date</th>
                                     <th className="text-left px-4 py-2.5 font-medium">Libellé</th>
                                     <th className="text-right px-4 py-2.5 font-medium">Montant</th>
@@ -162,7 +162,7 @@ export function BankTab({
                                         return (
                                             <tr
                                                 key={tx.id}
-                                                className="border-b border-border/40 last:border-0 hover:bg-surface-sidebar/50 transition-colors"
+                                                className="border-b border-border/40 last:border-0 hover:bg-surface-glass transition-colors"
                                             >
                                                 <td className="px-4 py-2.5 text-text-muted tabular-nums whitespace-nowrap">
                                                     {dateStr}

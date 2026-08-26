@@ -185,6 +185,22 @@ export function CartItemContextMenu({
                                     <Check className="w-4 h-4" />
                                 </button>
                             </div>
+                            <div className="flex flex-wrap gap-1.5 mt-2.5">
+                                {["Sans oignons", "Bien cuit", "À point", "Saignant", "Sauce à part", "Vegan", "Sans gluten"].map((mod) => (
+                                    <button
+                                        key={mod}
+                                        type="button"
+                                        onClick={() => {
+                                            const updated = noteValue ? `${noteValue}, ${mod}` : mod;
+                                            onNoteChange(updated);
+                                            onNoteSave(contextMenuItem.cartId, updated);
+                                        }}
+                                        className="text-nano px-2.5 py-1 rounded-full bg-bg-tertiary hover:bg-accent-gold hover:text-text-primary text-text-muted transition-colors border border-border/50"
+                                    >
+                                        + {mod}
+                                    </button>
+                                ))}
+                            </div>
                             {contextMenuItem.notes && (
                                 <button
                                     onClick={() => { onNoteClear(contextMenuItem.cartId); }}

@@ -108,7 +108,7 @@ export function EmailAutomations() {
                         >
                             {/* Header row */}
                             <div className="flex items-center gap-4 p-5">
-                                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center bg-surface-sidebar shrink-0", meta.color)}>
+                                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center bg-surface-glass shrink-0", meta.color)}>
                                     <Icon className="w-5 h-5" />
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -156,7 +156,7 @@ export function EmailAutomations() {
                                         "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-nano font-bold uppercase tracking-widest mt-4",
                                         cfg.enabled
                                             ? "bg-status-success/10 text-status-success border border-status-success/20"
-                                            : "bg-surface-sidebar text-text-muted border border-border"
+                                            : "bg-surface-glass text-text-muted border border-border"
                                     )}>
                                         {cfg.enabled ? <Play className="w-2.5 h-2.5" /> : <Pause className="w-2.5 h-2.5" />}
                                         {cfg.enabled ? 'Actif' : 'Inactif'}
@@ -190,7 +190,7 @@ export function EmailAutomations() {
 
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Corps du message</label>
-                                        <p className="text-nano text-text-muted">Variables disponibles : <code className="bg-surface-sidebar px-1 rounded">{'{{firstName}}'}</code> <code className="bg-surface-sidebar px-1 rounded">{'{{delayDays}}'}</code></p>
+                                        <p className="text-nano text-text-muted">Variables disponibles : <code className="bg-surface-glass px-1 rounded">{'{{firstName}}'}</code> <code className="bg-surface-glass px-1 rounded">{'{{delayDays}}'}</code></p>
                                         <textarea
                                             rows={5}
                                             value={cfg.body}
@@ -205,7 +205,7 @@ export function EmailAutomations() {
                 })}
             </div>
 
-            <p className="text-nano text-text-muted border border-border rounded-lg px-4 py-3 bg-surface-sidebar">
+            <p className="text-nano text-text-muted border border-border rounded-lg px-4 py-3 bg-surface-glass">
                 Les automations actives s'exécutent quotidiennement. Utilisez <strong>Lancer</strong> pour un envoi immédiat (utile en test).
             </p>
         </div>

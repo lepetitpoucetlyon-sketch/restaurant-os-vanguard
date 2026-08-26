@@ -40,12 +40,12 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
                     <p className="text-xs text-text-muted font-bold uppercase tracking-wider mb-1">Envoyés</p>
                     <p className="font-serif font-bold text-xl">{campaign.sent}</p>
                 </div>
-                <div className="w-px h-8 bg-surface-sidebar/5" />
+                <div className="w-px h-8 bg-border" />
                 <div className="text-center md:text-right">
                     <p className="text-xs text-text-muted font-bold uppercase tracking-wider mb-1">Ouverts</p>
                     <p className="font-serif font-bold text-xl text-status-success">{campaign.opened}</p>
                 </div>
-                <div className="w-px h-8 bg-surface-sidebar/5" />
+                <div className="w-px h-8 bg-border" />
                 <div className="text-center md:text-right">
                     <p className="text-xs text-text-muted font-bold uppercase tracking-wider mb-1">Clics</p>
                     <p className="font-serif font-bold text-xl text-brand">{campaign.clicked}</p>

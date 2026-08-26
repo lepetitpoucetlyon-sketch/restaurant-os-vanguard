@@ -164,7 +164,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
                         className={cn(
                             "w-full h-14 rounded-2xl font-black uppercase text-micro tracking-[0.25em] transition-all",
                             formData.gdpr?.consented 
-                                ? "bg-accent hover:bg-surface-sidebar text-text-primary shadow-xl shadow-accent/10" 
+                                ? "bg-action-primary hover:bg-action-primary-hover text-text-on-primary shadow-xl shadow-action-primary/10" 
                                 : "bg-bg-tertiary text-text-muted cursor-not-allowed border border-border"
                         )}
                         onClick={handleSave}
@@ -177,12 +177,12 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             </div>
 
             {isCameraOpen && (
-                <div className="fixed inset-0 z-[100] bg-surface-sidebar/95 flex items-center justify-center p-4">
-                    <div className="w-full max-w-2xl bg-bg-secondary rounded-[2.5rem] overflow-hidden border border-white/5 relative shadow-2xl">
+                <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4">
+                    <div className="w-full max-w-2xl bg-surface-card rounded-[2.5rem] overflow-hidden border border-border relative shadow-2xl">
                         <CameraCapture onCapture={handleCapture} />
                         <button 
                             onClick={() => setIsCameraOpen(false)}
-                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 text-text-primary flex items-center justify-center transition-all backdrop-blur-md z-10"
+                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-card text-text-primary flex items-center justify-center transition-all backdrop-blur-md z-10"
                         >
                             <X className="w-6 h-6" />
                         </button>

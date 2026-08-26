@@ -77,7 +77,7 @@ export const VisualInspection: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4 mb-10 relative z-10">
-                <div className="w-12 h-12 rounded-2xl bg-surface-sidebar text-text-primary flex items-center justify-center shadow-lg shadow-slate-900/20">
+                <div className="w-12 h-12 rounded-2xl bg-surface-glass text-text-primary flex items-center justify-center shadow-lg shadow-slate-900/20">
                     <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>

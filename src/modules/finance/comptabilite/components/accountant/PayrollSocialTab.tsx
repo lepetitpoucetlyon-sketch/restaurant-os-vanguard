@@ -18,10 +18,10 @@ export function PayrollSocialTab({ summary, isTransmitting, onTransmit }: Payrol
       exit={{ opacity: 0, y: -10 }}
       className="grid grid-cols-1 lg:grid-cols-3 gap-6"
     >
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-card border border-border-default rounded-2xl p-6 space-y-4">
         <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Effectifs & Heures Travaillées</span>
-        <div className="text-2xl font-bold text-white">{summary.payroll.employeeCount} Salariés en poste</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
+        <div className="text-2xl font-bold text-text-primary">{summary.payroll.employeeCount} Salariés en poste</div>
+        <div className="space-y-2 pt-2 border-t border-border-default text-xs text-text-secondary">
           <div className="flex justify-between">
             <span className="text-text-muted">Total Heures Travaillées :</span>
             <span className="font-mono font-semibold">{summary.payroll.totalHoursWorked} h</span>
@@ -41,10 +41,10 @@ export function PayrollSocialTab({ summary, isTransmitting, onTransmit }: Payrol
         </div>
       </div>
 
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-card border border-border-default rounded-2xl p-6 space-y-4">
         <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Avantages en Nature & Pourboires</span>
-        <div className="text-2xl font-bold text-white">{summary.payroll.staffMealsDeclaredCount} Repas Enregistrés</div>
-        <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-text-secondary">
+        <div className="text-2xl font-bold text-text-primary">{summary.payroll.staffMealsDeclaredCount} Repas Enregistrés</div>
+        <div className="space-y-2 pt-2 border-t border-border-default text-xs text-text-secondary">
           <div className="flex justify-between">
             <span className="text-text-muted">Avantage Repas CCN HCR :</span>
             <span className="font-mono font-semibold">4.15 € / repas</span>
@@ -56,7 +56,7 @@ export function PayrollSocialTab({ summary, isTransmitting, onTransmit }: Payrol
         </div>
       </div>
 
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-card border border-border-default rounded-2xl p-6 space-y-4">
         <span className="text-xs font-bold uppercase tracking-wider text-text-muted">Télétransmission Silae Paie</span>
         <p className="text-xs text-text-secondary">
           Export direct des variables de paie vers le dossier Silae du cabinet pour génération instantanée des bulletins.

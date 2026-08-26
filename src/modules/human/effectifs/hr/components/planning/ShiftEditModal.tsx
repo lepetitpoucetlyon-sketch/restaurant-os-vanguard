@@ -98,11 +98,11 @@ export function ShiftEditModal({
     if (!user || !date) return null;
 
     return (
-        <div className="fixed inset-0 bg-surface-sidebar/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-bg-primary rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-subtle"
+                className="bg-surface-card rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-border"
             >
                 <ShiftEditHeader
                     user={user}
@@ -119,14 +119,14 @@ export function ShiftEditModal({
                 />
 
                 {/* Modal Footer */}
-                <div className="p-10 bg-[--color-surface-primary] border-t border-subtle flex items-center justify-between gap-6">
+                <div className="p-10 bg-surface-card border-t border-border flex items-center justify-between gap-6">
                     {!isNew ? (
                         <button
                             onClick={() => {
                                 if (shift) onDelete(shift.id);
                                 onClose();
                             }}
-                            className="h-16 px-10 rounded-full text-chip-label text-status-danger hover:bg-surface-bg transition-all flex items-center gap-3"
+                            className="h-16 px-10 rounded-full text-chip-label text-status-danger hover:bg-surface-glass transition-all flex items-center gap-3"
                         >
                             <Trash2 className="w-4 h-4" />
                             AUTORISER DESTRUCTION
@@ -137,15 +137,15 @@ export function ShiftEditModal({
                     <div className="flex gap-4">
                         <button
                             onClick={onClose}
-                            className="h-16 px-10 rounded-full text-chip-label text-muted hover:text-primary transition-all"
+                            className="h-16 px-10 rounded-full text-chip-label text-text-muted hover:text-text-primary transition-all"
                         >
                             ANNULER
                         </button>
                         <button
                             onClick={handleSave}
-                            className="h-16 px-12 bg-surface-sidebar text-text-primary rounded-full font-black text-nano uppercase tracking-widest shadow-2xl hover:scale-105 transition-all flex items-center gap-4"
+                            className="h-16 px-12 bg-action-primary text-text-on-primary rounded-full font-black text-nano uppercase tracking-widest shadow-2xl hover:bg-action-primary-hover hover:scale-105 transition-all flex items-center gap-4"
                         >
-                            <Save className="w-4 h-4 text-accent" />
+                            <Save className="w-4 h-4 text-text-on-primary" />
                             {isNew ? "SCELLER SHIFT" : "MAINTENIR MODIFICATIONS"}
                         </button>
                     </div>

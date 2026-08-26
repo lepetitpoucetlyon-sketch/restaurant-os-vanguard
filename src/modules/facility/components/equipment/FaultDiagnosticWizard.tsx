@@ -78,10 +78,10 @@ export function FaultDiagnosticWizard({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-2xl bg-surface-card border border-border-default rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-start justify-between pb-4 border-b border-border-default">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-2xl">
               <Wrench className="w-6 h-6" />
@@ -90,14 +90,14 @@ export function FaultDiagnosticWizard({
               <span className="text-xs font-semibold text-rose-400 tracking-wide uppercase">
                 Diagnostic & Assistance Dépannage
               </span>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-text-primary tracking-tight">
                 {asset.name} ({asset.brand} - {asset.model})
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-text-primary rounded-xl hover:bg-surface-glass-hover transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -114,14 +114,14 @@ export function FaultDiagnosticWizard({
               <div className="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">Incident Enregistré & Transmis</h3>
+              <h3 className="text-lg font-bold text-text-primary">Incident Enregistré & Transmis</h3>
               <p className="text-sm text-text-secondary">
                 L appareil a été placé en statut dégradé / hors-service. Une notification d incident a été émise à la
                 direction et transmise au journal de maintenance.
               </p>
               <button
                 onClick={onClose}
-                className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-text-primary font-bold text-sm transition-all"
+                className="mt-4 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all"
               >
                 Fermer l assistant
               </button>
@@ -139,7 +139,7 @@ export function FaultDiagnosticWizard({
                     value={errorCode}
                     onChange={(e) => setErrorCode(e.target.value)}
                     placeholder="Ex: E12, Err03..."
-                    className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-rose-500/50 text-sm"
+                    className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-rose-500/50 text-sm"
                   />
                 </div>
 
@@ -152,7 +152,7 @@ export function FaultDiagnosticWizard({
                     value={symptom}
                     onChange={(e) => setSymptom(e.target.value)}
                     placeholder="Ex: Ne vidange pas, odeur, bip..."
-                    className="w-full px-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-rose-500/50 text-sm"
+                    className="w-full px-4 py-2.5 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-rose-500/50 text-sm"
                   />
                 </div>
               </div>
@@ -173,14 +173,14 @@ export function FaultDiagnosticWizard({
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4 bg-slate-950/60 p-5 rounded-2xl border border-slate-800"
+                  className="space-y-4 bg-surface-glass p-5 rounded-2xl border border-border-default"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <span className="text-micro font-bold text-indigo-400 uppercase tracking-wider">
                         Diagnostic IA & Base Constructeur
                       </span>
-                      <h4 className="text-base font-bold text-white">{evaluation.message}</h4>
+                      <h4 className="text-base font-bold text-text-primary">{evaluation.message}</h4>
                     </div>
 
                     <span
@@ -203,7 +203,7 @@ export function FaultDiagnosticWizard({
                       {evaluation.recommendedActions.map((action, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-text-secondary"
+                          className="flex items-start gap-2.5 p-2.5 rounded-xl bg-surface-card border border-border-default text-xs text-text-secondary"
                         >
                           <ArrowRight className="w-3.5 h-3.5 text-indigo-400 mt-0.5 shrink-0" />
                           <span>{action}</span>
@@ -223,7 +223,7 @@ export function FaultDiagnosticWizard({
                       </div>
                       <a
                         href={`tel:${asset.supportContact.phone}`}
-                        className="px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-text-primary font-bold transition-colors"
+                        className="px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold transition-colors"
                       >
                         Appeler {asset.supportContact.phone}
                       </a>
@@ -237,10 +237,10 @@ export function FaultDiagnosticWizard({
 
         {/* Footer actions */}
         {!reportSuccess && (
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
+          <div className="pt-4 border-t border-border-default flex items-center justify-between gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>

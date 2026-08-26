@@ -57,7 +57,7 @@ export function PromotionModal({
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                className="w-full max-w-lg mx-4 bg-surface-sidebar border border-default rounded-2xl p-6 shadow-2xl"
+                className="w-full max-w-lg mx-4 bg-surface-card border border-border rounded-2xl p-6 shadow-2xl"
             >
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold uppercase tracking-widest text-text-primary">

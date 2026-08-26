@@ -33,7 +33,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
           {guides.map((guide) => (
             <div
               key={guide.id}
-              className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition-all space-y-2"
+              className="p-4 rounded-2xl bg-surface-glass border border-border-default hover:border-border-focus transition-all space-y-2"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -42,15 +42,15 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
                   ) : (
                     <FileText className="w-4 h-4 text-blue-400 shrink-0" />
                   )}
-                  <h4 className="text-sm font-bold text-white">{guide.title}</h4>
+                  <h4 className="text-sm font-bold text-text-primary">{guide.title}</h4>
                 </div>
-                <span className="text-nano px-2 py-0.5 rounded-full bg-slate-800 text-text-muted border border-slate-700">
+                <span className="text-nano px-2 py-0.5 rounded-full bg-surface-glass-hover text-text-muted border border-border-default">
                   {guide.authorName}
                 </span>
               </div>
 
               {guide.contentMarkdown && (
-                <p className="text-xs text-text-secondary whitespace-pre-line bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                <p className="text-xs text-text-secondary whitespace-pre-line bg-surface-card p-3 rounded-xl border border-border-default">
                   {guide.contentMarkdown}
                 </p>
               )}
@@ -72,7 +72,7 @@ export function DetailGuidesTab({ guides, loadingGuides, onOpenAddGuide }: Detai
           ))}
         </div>
       ) : (
-        <div className="p-8 text-center bg-slate-950/40 rounded-2xl border border-slate-800 text-text-muted text-xs space-y-3">
+        <div className="p-8 text-center bg-surface-glass rounded-2xl border border-border-default text-text-muted text-xs space-y-3">
           <p>Aucun guide ou tuto rattaché pour l instant.</p>
           <button
             onClick={onOpenAddGuide}

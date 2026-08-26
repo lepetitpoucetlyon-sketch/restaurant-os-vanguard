@@ -20,6 +20,7 @@ import {
 import {
     useInventoryPage,
     RotatingCount,
+    StorageMapBoard,
     StockReceptionModal,
     StockTransferModal,
     CreatePreparationModal,
@@ -127,7 +128,7 @@ function InventoryPage() {
                         )}
                         <div className="overflow-x-auto rounded-lg border border-border">
                             <table className="w-full text-sm">
-                                <thead className="bg-surface-sidebar text-text-muted text-left">
+                                <thead className="bg-surface-glass text-text-muted text-left">
                                     <tr>
                                         <th className="px-4 py-2.5 font-medium">Article</th>
                                         <th className="px-4 py-2.5 font-medium">Quantité</th>
@@ -190,18 +191,8 @@ function InventoryPage() {
                 )}
 
                 {activeTab === "storage" && (
-                    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {storageLocations.map((loc: { id: string; name: string; type?: string }) => (
-                            <div key={loc.id} className="rounded-lg border border-border p-4 bg-surface-sidebar">
-                                <div className="flex items-center gap-2 font-medium">
-                                    <Warehouse className="w-4 h-4 text-action-primary" /> {loc.name}
-                                </div>
-                                <p className="text-xs text-text-muted mt-1">{loc.type ?? "Zone de stockage"}</p>
-                            </div>
-                        ))}
-                        {storageLocations.length === 0 && (
-                            <p className="text-sm text-text-muted italic py-8 col-span-full text-center">Aucun emplacement de stockage configuré.</p>
-                        )}
+                    <section>
+                        <StorageMapBoard locations={storageLocations} stockItems={stockItems} />
                     </section>
                 )}
 

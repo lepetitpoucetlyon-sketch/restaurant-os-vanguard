@@ -257,7 +257,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                 </form>
 
                 {/* Footer Actions */}
-                <div className="px-12 py-10 bg-[--color-surface-primary] dark:bg-bg-secondary border-t border-subtle dark:border-border flex items-center justify-between shrink-0">
+                <div className="px-12 py-10 bg-surface-card border-t border-border flex items-center justify-between shrink-0">
                     <button
                         type="button"
                         onClick={onClose}
@@ -269,7 +269,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                         <Button
                             disabled={isSubmitting}
                             onClick={handleSubmit}
-                            className="h-16 px-16 bg-accent hover:bg-surface-sidebar text-text-primary rounded-[2rem] font-black text-micro uppercase tracking-[0.3em] transition-all shadow-2xl shadow-accent/30 transform hover:scale-[1.05] flex items-center gap-4"
+                            className="h-16 px-16 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-[2rem] font-black text-micro uppercase tracking-[0.3em] transition-all shadow-2xl shadow-action-primary/30 transform hover:scale-[1.05] flex items-center gap-4"
                         >
                             {isSubmitting ? (
                                 <Sparkles className="w-5 h-5 animate-spin" />

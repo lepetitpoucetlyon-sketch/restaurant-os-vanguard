@@ -65,13 +65,13 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-2xl bg-surface-card dark:bg-surface-sidebar rounded-[3rem] shadow-2xl overflow-hidden border border-subtle"
+                        className="relative w-full max-w-2xl bg-surface-card rounded-[3rem] shadow-2xl overflow-hidden border border-border"
                     >
                         {/* Header */}
                         <div className="px-10 py-8 border-b border-border/50 bg-bg-primary/50 flex items-center justify-between">
@@ -99,7 +99,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Ex: Clients fidèles premium"
-                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all"
+                                    className="w-full bg-surface-glass rounded-2xl border border-border px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all"
                                 />
                             </div>
 
@@ -111,7 +111,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Décrivez l'audience de ce segment..."
                                     rows={2}
-                                    className="w-full bg-surface-card dark:bg-surface-card/5 rounded-2xl border border-border/50 px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all resize-none"
+                                    className="w-full bg-surface-glass rounded-2xl border border-border px-6 py-4 text-sm font-medium outline-none focus:border-emerald-500/50 transition-all resize-none"
                                 />
                             </div>
 
@@ -162,7 +162,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         </div>
 
                         {/* Actions */}
-                        <div className="p-8 bg-surface-card dark:bg-surface-sidebar border-t border-border flex gap-4">
+                        <div className="p-8 bg-surface-card border-t border-border flex gap-4">
                             <Button variant="ghost" className="flex-1 h-16 rounded-[1.5rem] font-bold uppercase tracking-widest text-xs" onClick={onClose}>
                                 Annuler
                             </Button>

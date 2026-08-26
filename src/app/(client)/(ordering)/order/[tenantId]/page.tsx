@@ -141,33 +141,33 @@ export default function OrderPage({ params }: OrderPageProps) {
 
   if (confirmedOrderId) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-surface-bg text-text-primary flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="max-w-md w-full bg-slate-900/80 border border-emerald-500/30 rounded-3xl p-6 text-center space-y-4 backdrop-blur-xl shadow-2xl"
+          className="max-w-md w-full bg-surface-card border border-emerald-500/30 rounded-3xl p-6 text-center space-y-4 backdrop-blur-xl shadow-2xl"
         >
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-8 h-8" />
           </div>
 
-          <h2 className="text-xl font-bold text-white">Commande Envoyée !</h2>
-          <p className="text-sm text-slate-300">
+          <h2 className="text-xl font-bold text-text-primary">Commande Envoyée !</h2>
+          <p className="text-sm text-text-secondary">
             Votre commande a été transmise directement en cuisine.
           </p>
 
-          <div className="bg-white/5 rounded-2xl p-4 border border-white/5 text-left space-y-1.5 font-mono text-xs">
-            <div className="flex justify-between text-slate-400">
+          <div className="bg-surface-glass rounded-2xl p-4 border border-border-default text-left space-y-1.5 font-mono text-xs">
+            <div className="flex justify-between text-text-muted">
               <span>Numéro de commande :</span>
-              <span className="text-white font-bold">{confirmedOrderId}</span>
+              <span className="text-text-primary font-bold">{confirmedOrderId}</span>
             </div>
             {tableParam && (
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-text-muted">
                 <span>Table :</span>
                 <span className="text-emerald-400 font-bold">{tableParam}</span>
               </div>
             )}
-            <div className="flex justify-between text-slate-400">
+            <div className="flex justify-between text-text-muted">
               <span>Statut :</span>
               <span className="text-amber-400 font-bold flex items-center gap-1">
                 <Clock className="w-3 h-3 animate-spin" /> En préparation
@@ -177,7 +177,7 @@ export default function OrderPage({ params }: OrderPageProps) {
 
           <button
             onClick={() => setConfirmedOrderId(null)}
-            className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all"
+            className="w-full bg-surface-glass hover:bg-surface-glass-hover text-text-primary font-semibold py-3 rounded-xl transition-all border border-border-default"
           >
             Passer une autre commande
           </button>
@@ -187,7 +187,7 @@ export default function OrderPage({ params }: OrderPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col pb-24">
+    <div className="min-h-screen bg-surface-bg text-text-primary flex flex-col pb-24">
       <OrderHeader
         tenantName={tenantId}
         tableNumber={tableParam}
@@ -204,11 +204,11 @@ export default function OrderPage({ params }: OrderPageProps) {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pulse">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-32 bg-white/5 rounded-2xl border border-white/5" />
+              <div key={i} className="h-32 bg-surface-glass rounded-2xl border border-border-default" />
             ))}
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center py-16 text-slate-400">
+          <div className="text-center py-16 text-text-muted">
             <Utensils className="w-10 h-10 mx-auto mb-2 opacity-30" />
             <p className="text-sm">Aucun produit disponible dans cette catégorie.</p>
           </div>

@@ -199,7 +199,7 @@ export function NonConformityForm({ onCountChange }: NonConformityFormProps) {
       {loading ? (
         <div className="text-sm text-text-muted animate-pulse p-4">Chargement...</div>
       ) : records.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-10 gap-2 text-text-muted bg-surface-sidebar rounded-xl border border-border">
+        <div className="flex flex-col items-center justify-center py-10 gap-2 text-text-muted bg-surface-card rounded-xl border border-border">
           <CheckCircle2 className="w-8 h-8 opacity-40" />
           <p className="text-sm">Aucune non-conformité enregistrée</p>
         </div>

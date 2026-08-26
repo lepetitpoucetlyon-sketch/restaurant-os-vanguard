@@ -7,7 +7,7 @@ import { PRICING } from "@/app/(client)/(public)/landing/constants";
 
 export function PricingSection() {
     return (
-        <section id="pricing" className="relative py-32 px-6 bg-surface-sidebar">
+        <section id="pricing" className="relative py-32 px-6 bg-surface-card">
             {/* Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-action-primary/5 rounded-full blur-[150px]" />
 

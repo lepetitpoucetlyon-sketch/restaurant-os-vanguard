@@ -222,7 +222,7 @@ function MCCDashboardInner() {
                     <AnimatePresence>
                         {showCloneModal && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => !provisioningStatus && setShowCloneModal(false)} className="absolute inset-0 bg-surface-sidebar/80 backdrop-blur-sm" />
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => !provisioningStatus && setShowCloneModal(false)} className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
                                 <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="relative w-full max-w-lg bg-surface-bg/90 backdrop-blur-xl border border-border-subtle rounded-3xl p-8 shadow-2xl overflow-hidden">
                                     <div className="flex items-center gap-4 mb-8">
                                         <div className="w-12 h-12 bg-action-primary/20 rounded-2xl flex items-center justify-center">

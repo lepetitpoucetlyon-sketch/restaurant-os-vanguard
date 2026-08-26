@@ -55,7 +55,7 @@ export function StrategyOracle() {
                             >
                                 <div className={`w-3 h-3 rounded-full blur-[1px] ${inst.metrics.healthScore > 90 ? 'bg-status-success shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-status-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]'}`} />
                                 <div className="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover/node:opacity-100 transition-all pointer-events-none whitespace-nowrap z-20">
-                                    <div className="bg-surface-sidebar/90 border border-subtle px-2 py-1 rounded text-nano font-bold text-text-primary uppercase tracking-tighter">
+                                    <div className="bg-surface-glass border border-border px-2 py-1 rounded text-nano font-bold text-text-primary uppercase tracking-tighter">
                                         {inst.name} • {inst.metrics.healthScore}%
                                     </div>
                                 </div>

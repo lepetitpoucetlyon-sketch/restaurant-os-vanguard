@@ -132,7 +132,7 @@ export function DLCTracker() {
                 <button
                     onClick={fetchExpiring}
                     disabled={loading}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-sidebar text-text-muted hover:text-text-primary text-xs transition-colors disabled:opacity-40"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-glass text-text-muted hover:text-text-primary text-xs transition-colors disabled:opacity-40"
                     title={`Dernière mise à jour : ${lastRefresh.toLocaleTimeString('fr-FR')}`}
                 >
                     <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -143,7 +143,7 @@ export function DLCTracker() {
             {loading ? (
                 <div className="text-sm text-text-muted animate-pulse p-4">Chargement des DLC...</div>
             ) : entries.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-10 gap-3 text-text-muted bg-surface-sidebar rounded-xl border border-border">
+                <div className="flex flex-col items-center justify-center py-10 gap-3 text-text-muted bg-surface-card rounded-xl border border-border">
                     <Package className="w-8 h-8 opacity-40" />
                     <p className="text-sm">Aucun article n&apos;expire dans les 7 prochains jours</p>
                     <p className="text-xs opacity-60">Dernière vérification : {lastRefresh.toLocaleTimeString('fr-FR')}</p>
@@ -152,7 +152,7 @@ export function DLCTracker() {
                 <div className="overflow-x-auto rounded-xl border border-border">
                     <table className="w-full text-sm border-collapse min-w-[640px]">
                         <thead>
-                            <tr className="bg-surface-sidebar text-xs text-text-muted">
+                            <tr className="bg-surface-glass text-xs text-text-muted">
                                 <th className="px-3 py-2.5 text-left font-medium border-b border-border">Ingrédient</th>
                                 <th className="px-3 py-2.5 text-left font-medium border-b border-border">N° Lot</th>
                                 <th className="px-3 py-2.5 text-left font-medium border-b border-border">Date d&apos;expiration</th>

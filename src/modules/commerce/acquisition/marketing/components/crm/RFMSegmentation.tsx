@@ -50,7 +50,7 @@ const SEGMENT_META: Record<Segment, { label: string; color: string; bg: string; 
     champion:  { label: 'Champions',    color: 'text-action-primary',  bg: 'bg-action-primary/10 border-yellow-500/30', icon: Crown,        desc: 'Clients récents, fréquents et dépensiers' },
     loyal:     { label: 'Fidèles',      color: 'text-blue-500',    bg: 'bg-status-info/10 border-blue-500/30',     icon: Star,         desc: 'Haute fréquence, bonne valeur' },
     at_risk:   { label: 'À risque',     color: 'text-orange-400',  bg: 'bg-orange-400/10 border-orange-400/30', icon: AlertTriangle, desc: 'Bonne valeur passée, absents récemment' },
-    dormant:   { label: 'Dormants',     color: 'text-text-muted',  bg: 'bg-surface-sidebar border-border',      icon: Moon,         desc: 'Inactifs depuis longtemps' },
+    dormant:   { label: 'Dormants',     color: 'text-text-muted',  bg: 'bg-surface-glass border-border',      icon: Moon,         desc: 'Inactifs depuis longtemps' },
     new:       { label: 'Nouveaux',     color: 'text-status-success', bg: 'bg-status-success/10 border-status-success/30', icon: Sparkles, desc: 'Récents, peu de visites' },
     regular:   { label: 'Réguliers',    color: 'text-action-primary', bg: 'bg-action-primary/10 border-action-primary/30', icon: Repeat,   desc: 'Profil équilibré' },
 };
@@ -161,7 +161,7 @@ export function RFMSegmentation({ customers }: Props) {
                         <div className="overflow-x-auto rounded-xl border border-border">
                             <table className="w-full text-xs min-w-[540px]">
                                 <thead>
-                                    <tr className="bg-surface-sidebar text-text-muted border-b border-border">
+                                    <tr className="bg-surface-glass text-text-muted border-b border-border">
                                         <th className="px-4 py-2 text-left font-medium">Client</th>
                                         <th className="px-3 py-2 text-center font-medium">
                                             <span className="flex items-center justify-center gap-1"><Clock className="w-3 h-3" /> Récence</span>
@@ -177,7 +177,7 @@ export function RFMSegmentation({ customers }: Props) {
                                 </thead>
                                 <tbody>
                                     {segRows.sort((a, b) => b.total - a.total).map(row => (
-                                        <tr key={row.customer.id} className="border-b border-border/50 hover:bg-surface-sidebar/50 transition-colors">
+                                        <tr key={row.customer.id} className="border-b border-border/50 hover:bg-surface-glass transition-colors">
                                             <td className="px-4 py-2 font-medium text-text-primary">
                                                 {row.customer.firstName} {row.customer.lastName}
                                                 {row.customer.email && (
@@ -196,7 +196,7 @@ export function RFMSegmentation({ customers }: Props) {
                                                     "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-black",
                                                     row.total >= 8 ? "bg-action-primary/20 text-action-primary" :
                                                     row.total >= 6 ? "bg-action-primary/20 text-action-primary" :
-                                                    "bg-surface-sidebar text-text-muted"
+                                                    "bg-surface-glass text-text-muted"
                                                 )}>
                                                     {row.total}
                                                 </span>

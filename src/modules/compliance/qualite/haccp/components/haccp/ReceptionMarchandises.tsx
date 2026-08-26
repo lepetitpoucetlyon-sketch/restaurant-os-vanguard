@@ -219,7 +219,7 @@ export function ReceptionMarchandises() {
                                             <span className="text-chip-label-sm">Photo du Bon / Étiquette</span>
                                         </>
                                     )}
-                                    {formData.imageUrl && <div className="absolute inset-0 bg-surface-sidebar/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
+                                    {formData.imageUrl && <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
                                 </button>
                             </div>
 

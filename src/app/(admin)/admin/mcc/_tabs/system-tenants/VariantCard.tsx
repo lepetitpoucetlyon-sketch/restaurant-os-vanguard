@@ -24,7 +24,7 @@ export function VariantCard({ variant, tierConfig }: {
                 {/* Header */}
                 <button
                     onClick={() => setCollapsed(c => !c)}
-                    className="w-full flex items-center justify-between px-5 py-4 bg-surface-sidebar hover:bg-surface-sidebar/80 transition-colors"
+                    className="w-full flex items-center justify-between px-5 py-4 bg-surface-card hover:bg-surface-glass transition-colors"
                 >
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">{meta.emoji}</span>

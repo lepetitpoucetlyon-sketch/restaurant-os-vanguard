@@ -90,10 +90,10 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated, tenantId }: Add
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-2xl bg-surface-card border border-border-default rounded-3xl p-6 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-start justify-between pb-4 border-b border-border-default">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-2xl">
               <Wrench className="w-6 h-6" />
@@ -102,14 +102,14 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated, tenantId }: Add
               <span className="text-xs font-semibold text-indigo-400 tracking-wide uppercase">
                 Inventaire & Parc Matériel
               </span>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-text-primary tracking-tight">
                 Ajouter un Équipement & Facture
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-text-muted hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-text-muted hover:text-text-primary rounded-xl hover:bg-surface-glass-hover transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -159,11 +159,11 @@ export function AddEquipmentModal({ onClose, onEquipmentCreated, tenantId }: Add
           />
 
           {/* Footer */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-border-default flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-text-secondary text-xs font-medium transition-colors"
+              className="px-4 py-2 rounded-xl bg-surface-glass-hover hover:bg-surface-glass text-text-secondary text-xs font-medium transition-colors"
             >
               Annuler
             </button>

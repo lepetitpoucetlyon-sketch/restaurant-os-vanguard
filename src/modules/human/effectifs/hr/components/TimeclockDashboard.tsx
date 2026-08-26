@@ -196,7 +196,7 @@ export function TimeclockDashboard() {
     ];
 
     return (
-        <div className="fixed inset-0 bg-surface-sidebar flex flex-col items-center justify-center text-text-primary overflow-hidden">
+        <div className="fixed inset-0 bg-surface-bg flex flex-col items-center justify-center text-text-primary overflow-hidden">
             {/* Ambient gradient */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]" />

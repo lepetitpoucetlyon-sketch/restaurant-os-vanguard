@@ -92,7 +92,7 @@ export const TemperatureGauge: React.FC<TemperatureGaugeProps> = ({
       </div>
 
       <div className="mt-4 flex flex-col gap-2 relative z-10">
-        <div className="h-2 w-full bg-surface-sidebar/5 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-surface-glass rounded-full overflow-hidden border border-border">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: currentValue !== undefined ? '100%' : '0%' }}

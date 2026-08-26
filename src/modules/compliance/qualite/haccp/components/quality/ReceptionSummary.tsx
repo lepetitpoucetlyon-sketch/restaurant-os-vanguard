@@ -87,7 +87,7 @@ export const ReceptionSummary: React.FC<ReceptionSummaryProps> = ({ control }) =
 
             {/* 📝 CRITICAL OBSERVATIONS */}
             {(stats.items_rejected > 0 || stats.visual_issues > 0) && (
-                <div className="p-8 rounded-[3rem] bg-surface-sidebar text-text-primary space-y-4">
+                <div className="p-8 rounded-[3rem] bg-surface-card border border-border text-text-primary space-y-4">
                     <h4 className="text-chip-label text-text-primary/40 flex items-center gap-2">
                         <AlertTriangle className="w-4 h-4 text-status-warning" />
                         Actions Correctives Requises

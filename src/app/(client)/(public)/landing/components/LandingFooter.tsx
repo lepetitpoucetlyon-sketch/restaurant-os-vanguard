@@ -3,7 +3,7 @@ import { ChefHat, Twitter, Linkedin, Instagram } from "lucide-react";
 
 export function LandingFooter() {
     return (
-        <footer className="relative py-20 px-6 bg-surface-sidebar border-t border-border-subtle">
+        <footer className="relative py-20 px-6 bg-surface-card border-t border-border">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}

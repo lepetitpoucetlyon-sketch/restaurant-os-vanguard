@@ -18,6 +18,7 @@ import { useIsMobile } from "@/shared/hooks";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { kpiContainerVariants, fadeInUp } from "@/shared/utils/motion";
 
+import { OnboardingChecklist } from "@/modules/system";
 import { LandingKpiCard } from "./dashboard/LandingKpiCard";
 import { LandingSmartAlert } from "./dashboard/LandingSmartAlert";
 import { LandingExecutiveHeader } from "./dashboard/LandingExecutiveHeader";
@@ -262,6 +263,11 @@ export function LandingDashboard() {
           </div>
         </motion.div>
       </div>
+
+      {/* Onboarding Checklist Guide */}
+      <motion.div variants={fadeInUp} className="mt-8">
+        <OnboardingChecklist tenantId={currentUser?.tenantId ?? 'default'} />
+      </motion.div>
     </motion.div>
   );
 }

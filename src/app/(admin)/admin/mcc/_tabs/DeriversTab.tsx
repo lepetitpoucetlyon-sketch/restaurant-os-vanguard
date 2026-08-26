@@ -37,15 +37,15 @@ export function DeriversTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-surface-card border border-border-default backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-bold uppercase tracking-wider">
               Forge Stack P2b/c/d • 11 Dérivateurs C.10
             </span>
           </div>
-          <h2 className="text-xl font-black text-white">Inspecteur des Dérivateurs Systémiques</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h2 className="text-xl font-black text-text-primary">Inspecteur des Dérivateurs Systémiques</h2>
+          <p className="text-xs text-text-muted mt-0.5">
             Génération déterministe des configurations de sécurité, juridique, matériel, RGPD, KPI et tarification.
           </p>
         </div>
@@ -65,19 +65,19 @@ export function DeriversTab() {
                 className={cn(
                   "w-full p-3.5 rounded-2xl text-left border transition-all flex items-center gap-3",
                   isSelected
-                    ? "bg-violet-600/10 border-violet-500/50 text-white shadow-md shadow-violet-500/5"
-                    : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
+                    ? "bg-violet-600/10 border-violet-500/50 text-text-primary shadow-md shadow-violet-500/5"
+                    : "bg-surface-glass border-border-default text-text-muted hover:text-text-primary hover:bg-surface-glass-hover"
                 )}
               >
                 <div className={cn(
                   "p-2 rounded-xl",
-                  isSelected ? "bg-violet-500/20 text-violet-400" : "bg-slate-800 text-slate-400"
+                  isSelected ? "bg-violet-500/20 text-violet-400" : "bg-surface-card text-text-muted"
                 )}>
                   <DIcon className="w-4 h-4" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-xs truncate">{d.name}</div>
-                  <div className="text-nano text-slate-500">{d.category}</div>
+                  <div className="text-nano text-text-muted">{d.category}</div>
                 </div>
               </button>
             );
@@ -85,15 +85,15 @@ export function DeriversTab() {
         </div>
 
         {/* Deriver Details */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="lg:col-span-2 p-6 rounded-3xl bg-surface-card border border-border-default space-y-6">
+          <div className="flex items-center justify-between border-b border-border-default pb-4">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-2xl bg-violet-500/10 text-violet-400">
                 <Icon className="w-6 h-6" />
               </div>
               <div>
                 <span className="text-nano uppercase font-bold text-violet-400">{activeDeriver.category}</span>
-                <h3 className="text-xl font-bold text-white mt-0.5">{activeDeriver.name}</h3>
+                <h3 className="text-xl font-bold text-text-primary mt-0.5">{activeDeriver.name}</h3>
               </div>
             </div>
             <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
@@ -102,15 +102,15 @@ export function DeriversTab() {
           </div>
 
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Description Métier</span>
-            <p className="text-xs text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 leading-relaxed">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block mb-2">Description Métier</span>
+            <p className="text-xs text-text-secondary bg-surface-glass p-4 rounded-2xl border border-border-default leading-relaxed">
               {activeDeriver.description}
             </p>
           </div>
 
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Sortie JSON Dérivée (Simulation Runtime)</span>
-            <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider block mb-2">Sortie JSON Dérivée (Simulation Runtime)</span>
+            <pre className="p-4 rounded-2xl bg-surface-glass border border-border-default font-mono text-xs text-emerald-400 overflow-x-auto">
               {JSON.stringify(activeDeriver.sampleOutput, null, 2)}
             </pre>
           </div>

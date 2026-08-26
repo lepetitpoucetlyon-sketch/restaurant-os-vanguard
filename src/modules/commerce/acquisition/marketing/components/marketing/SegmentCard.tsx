@@ -15,12 +15,12 @@ interface SegmentCardProps {
 
 export function SegmentCard({ segment }: SegmentCardProps) {
     return (
-        <div className="group bg-surface-card/40 dark:bg-surface-sidebar/40 backdrop-blur-xl border border-default dark:border-white/5 rounded-[2.5rem] p-8 hover:translate-y-[-4px] transition-all duration-300 shadow-sm hover:shadow-xl">
+        <div className="group bg-surface-card backdrop-blur-xl border border-border rounded-[2.5rem] p-8 hover:translate-y-[-4px] transition-all duration-300 shadow-sm hover:shadow-xl">
             <div className="flex items-start justify-between mb-8">
                 <div className="p-4 rounded-2xl shadow-lg" style={{ backgroundColor: segment.color, color: 'white' }}>
                     <Users size={24} strokeWidth={2} />
                 </div>
-                <Button size="icon" variant="ghost" className="rounded-full hover:bg-surface-sidebar/5">
+                <Button size="icon" variant="ghost" className="rounded-full hover:bg-surface-glass">
                     <MoreHorizontal size={20} className="text-text-muted" />
                 </Button>
             </div>
@@ -28,7 +28,7 @@ export function SegmentCard({ segment }: SegmentCardProps) {
             <div className="space-y-4">
                 <div>
                     <h3 className="text-3xl font-serif font-bold text-text-primary tracking-tight mb-2">{segment.name}</h3>
-                    <p className="text-sm font-medium text-text-muted p-3 bg-surface-card/50 rounded-xl border border-default inline-block">
+                    <p className="text-sm font-medium text-text-muted p-3 bg-surface-glass rounded-xl border border-border inline-block">
                         {typeof segment.criteria === 'string' ? segment.criteria : JSON.stringify(segment.criteria)}
                     </p>
                 </div>

@@ -14,10 +14,10 @@ interface ShiftEditHeaderProps {
 
 export function ShiftEditHeader({ user, date, isNew, onClose }: ShiftEditHeaderProps) {
     return (
-        <div className="bg-surface-sidebar p-10 text-text-primary relative overflow-hidden">
+        <div className="bg-surface-card p-10 text-text-primary border-b border-border relative overflow-hidden">
             <div className="flex items-center justify-between relative z-10">
                 <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 rounded-[2rem] bg-[--color-surface-primary]/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
+                    <div className="w-20 h-20 rounded-[2rem] bg-surface-glass border border-border flex items-center justify-center relative overflow-hidden shadow-2xl">
                         {user.avatar ? (
                             <img
                                 src={user.avatar}
@@ -34,16 +34,16 @@ export function ShiftEditHeader({ user, date, isNew, onClose }: ShiftEditHeaderP
                         <h2 className="text-3xl font-serif italic tracking-tight">
                             {isNew ? "Nouveau Protocole" : "Rectification Shift"}
                         </h2>
-                        <p className="text-nano font-black text-text-primary/30 uppercase tracking-[0.3em] mt-2">
+                        <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mt-2">
                             {user.name} • {format(date, "EEEE d MMMM", { locale: fr })}
                         </p>
                     </div>
                 </div>
                 <button
                     onClick={onClose}
-                    className="w-12 h-12 rounded-full bg-[--color-surface-primary]/5 hover:bg-[--color-surface-primary]/10 flex items-center justify-center transition-all"
+                    className="w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-card flex items-center justify-center transition-all"
                 >
-                    <X className="w-5 h-5 text-text-primary/50" />
+                    <X className="w-5 h-5 text-text-muted hover:text-text-primary" />
                 </button>
             </div>
         </div>

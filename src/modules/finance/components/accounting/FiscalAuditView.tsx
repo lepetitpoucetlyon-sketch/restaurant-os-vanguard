@@ -72,7 +72,7 @@ export const FiscalAuditView: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center bg-surface-sidebar/50 p-6 rounded-2xl border border-default backdrop-blur-sm">
+            <div className="flex justify-between items-center bg-surface-card p-6 rounded-2xl border border-border backdrop-blur-sm">
                 <div>
                     <h2 className="text-2xl font-bold text-text-primary flex items-center gap-3">
                         <ShieldCheck className="text-status-success w-8 h-8" />
@@ -83,7 +83,7 @@ export const FiscalAuditView: React.FC = () => {
                 <button 
                     onClick={runAudit}
                     disabled={isVerifying || seals.length === 0}
-                    className="px-6 py-3 bg-status-success hover:bg-status-success disabled:bg-surface-sidebar text-text-primary rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2"
+                    className="px-6 py-3 bg-status-success hover:bg-status-success/90 disabled:bg-surface-glass text-text-on-primary rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2"
                 >
                     {isVerifying ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white" />
@@ -116,7 +116,7 @@ export const FiscalAuditView: React.FC = () => {
                     placeholder="Rechercher par ID de transaction ou hash..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-surface-sidebar/50 border border-default rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                    className="w-full bg-surface-glass border border-border rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
                 />
             </div>
 
@@ -127,7 +127,7 @@ export const FiscalAuditView: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
-                        className="bg-surface-sidebar/30 border border-default p-5 rounded-xl hover:bg-surface-sidebar/50 transition-colors group relative overflow-hidden"
+                        className="bg-surface-card border border-border p-5 rounded-xl hover:bg-surface-glass transition-colors group relative overflow-hidden"
                     >
                         <div className="flex justify-between items-start">
                             <div className="space-y-2">
@@ -150,7 +150,7 @@ export const FiscalAuditView: React.FC = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                                <div className="px-3 py-1 bg-surface-sidebar text-muted rounded-lg text-xs font-bold border border-default">
+                                <div className="px-3 py-1 bg-surface-glass text-text-muted rounded-lg text-xs font-bold border border-border">
                                     {seal.signature ? 'CERTIFIED' : 'PENDING'}
                                 </div>
                             </div>
@@ -158,13 +158,13 @@ export const FiscalAuditView: React.FC = () => {
                         
                         {/* Connecting Line Visual for Chain */}
                         {index < filteredSeals.length - 1 && (
-                            <div className="absolute left-1/2 -bottom-2 w-px h-4 bg-surface-sidebar opacity-50" />
+                            <div className="absolute left-1/2 -bottom-2 w-px h-4 bg-border opacity-50" />
                         )}
                     </motion.div>
                 ))}
                 
                 {filteredSeals.length === 0 && (
-                    <div className="text-center py-20 bg-surface-sidebar/20 rounded-2xl border border-dashed border-default">
+                    <div className="text-center py-20 bg-surface-card/40 rounded-2xl border border-dashed border-border">
                         <Binary className="w-12 h-12 text-primary mx-auto mb-4" />
                         <p className="text-secondary">Aucun sceau fiscal trouvé. En attente de transactions...</p>
                     </div>

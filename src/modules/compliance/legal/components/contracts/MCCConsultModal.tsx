@@ -51,11 +51,11 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+            className="bg-surface-card border border-border-default rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
           >
-            <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/60">
+            <div className="p-6 border-b border-border-default flex items-center justify-between bg-surface-card/60">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
                   <FileText className="w-5 h-5 text-emerald-400" />
                   {selectedContract.document.title}
                 </h3>
@@ -65,7 +65,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-zinc-800 text-text-muted hover:text-white"
+                className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -101,11 +101,11 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
               )}
 
               {selectedContract.docusealSignedPdfUrl && (
-                <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-surface-glass border border-border-default flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Download className="w-5 h-5 text-indigo-400" />
                     <div>
-                      <h4 className="text-xs font-bold text-white">Document Signé PDF (DocuSeal)</h4>
+                      <h4 className="text-xs font-bold text-text-primary">Document Signé PDF (DocuSeal)</h4>
                       <p className="text-micro text-text-muted">PDF horodaté avec certificat et logs d&apos;audit</p>
                     </div>
                   </div>
@@ -120,12 +120,12 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                 </div>
               )}
 
-              <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800/80 whitespace-pre-wrap font-mono text-xs leading-relaxed text-text-secondary max-h-[45vh] overflow-y-auto">
+              <div className="p-6 rounded-2xl bg-surface-glass border border-border-default whitespace-pre-wrap font-mono text-xs leading-relaxed text-text-secondary max-h-[45vh] overflow-y-auto">
                 {selectedContract.document.fullTextContent}
               </div>
             </div>
 
-            <div className="p-4 border-t border-zinc-800 bg-zinc-950/60 flex items-center justify-between gap-3">
+            <div className="p-4 border-t border-border-default bg-surface-card/60 flex items-center justify-between gap-3">
               <div>
                 {selectedContract.status !== 'SIGNED' && (
                   <button
@@ -140,7 +140,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
               </div>
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-white hover:bg-zinc-700 transition"
+                className="px-4 py-2 rounded-xl bg-surface-glass text-xs font-semibold text-text-primary hover:bg-surface-glass-hover transition"
               >
                 Fermer
               </button>

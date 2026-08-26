@@ -16,7 +16,7 @@ export function EquipmentSupportSection({
   setSupportPhone,
 }: EquipmentSupportSectionProps) {
   return (
-    <div className="space-y-3 pt-3 border-t border-slate-800">
+    <div className="space-y-3 pt-3 border-t border-border-default">
       <h3 className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
         <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
         <span>Assistance & Contact SAV</span>
@@ -32,7 +32,7 @@ export function EquipmentSupportSection({
             value={supportCompany}
             onChange={(e) => setSupportCompany(e.target.value)}
             placeholder="Ex: Froid Froid Express SAV"
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-blue-500/50 text-sm"
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ export function EquipmentSupportSection({
             value={supportPhone}
             onChange={(e) => setSupportPhone(e.target.value)}
             placeholder="Ex: 01 44 00 00 00"
-            className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 text-sm"
+            className="w-full px-3 py-2 bg-surface-glass border border-border-default rounded-xl text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:border-blue-500/50 text-sm"
           />
         </div>
       </div>

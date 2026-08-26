@@ -39,7 +39,7 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                                 {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
                         </div>
-                        <Button className="h-11 px-8 bg-text-primary text-text-primary rounded-xl text-chip-label-sm hover:bg-surface-sidebar transition-colors">
+                        <Button className="h-11 px-8 bg-action-primary text-text-on-primary rounded-xl text-chip-label-sm hover:bg-action-primary-hover transition-colors">
                             Appliquer
                         </Button>
                     </div>

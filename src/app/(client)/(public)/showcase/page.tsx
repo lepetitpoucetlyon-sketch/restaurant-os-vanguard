@@ -5,7 +5,7 @@ import { Globe, ShieldCheck, Zap, Database, TrendingUp, Users, Cpu, ChevronRight
 import { useRouter } from 'next/navigation';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className="p-8 bg-surface-sidebar/40 border border-default rounded-3xl backdrop-blur-md hover:border-accent/40 transition-all group">
+  <div className="p-8 bg-surface-card border border-border rounded-3xl backdrop-blur-md hover:border-action-primary/40 transition-all group">
     <div className="w-14 h-14 bg-surface-bg border border-default rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
       <div className="text-brand">{icon}</div>
     </div>
@@ -28,7 +28,7 @@ function DemoLoginModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md mx-4 bg-surface-sidebar border border-default rounded-2xl p-8 shadow-2xl">
+      <div className="w-full max-w-md mx-4 bg-surface-card border border-border rounded-2xl p-8 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold uppercase tracking-widest text-text-primary flex items-center gap-2">
             <KeyRound size={18} className="text-brand" />
@@ -78,14 +78,14 @@ export default function ShowcasePage() {
   const [showDemoModal, setShowDemoModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-surface-sidebar text-text-primary font-sans selection:bg-accent selection:text-primary">
+    <div className="min-h-screen bg-surface-bg text-text-primary font-sans selection:bg-accent selection:text-primary">
       {/* GLOW OVERLAYS */}
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10" />
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10" />
 
       {/* HERO SECTION */}
       <section className="pt-32 pb-20 px-6 text-center max-w-5xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-sidebar/50 border border-default rounded-full text-sm text-brand mb-8 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-glass border border-border rounded-full text-sm text-brand mb-8 animate-fade-in">
           <Zap size={14} />
           <span>Restaurant OS v3.1 - Fleet Ready</span>
         </div>
@@ -105,7 +105,7 @@ export default function ShowcasePage() {
           </button>
           <button
             onClick={() => setShowDemoModal(true)}
-            className="px-10 py-5 bg-surface-sidebar border border-brand/40 text-brand font-bold rounded-2xl hover:border-brand transition-all text-lg flex items-center gap-3"
+            className="px-10 py-5 bg-surface-glass border border-brand/40 text-brand font-bold rounded-2xl hover:border-brand transition-all text-lg flex items-center gap-3"
           >
             <PlayCircle size={20} />
             Accéder à la démo

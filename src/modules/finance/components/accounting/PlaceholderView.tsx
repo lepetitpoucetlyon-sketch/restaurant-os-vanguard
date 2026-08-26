@@ -1,19 +1,20 @@
 
-"use client";
-
+import { useContext } from "react";
 import { motion } from "framer-motion";
 import { Plus, LucideIcon } from "lucide-react";
 import { Button } from "@ui/Button";
-import { useUI } from "@/shared/providers/NexusCoreContext";
+import { NexusCoreContext } from "@/shared/providers/NexusCoreContext";
 
 interface PlaceholderViewProps {
     title: string;
     description: string;
     icon: LucideIcon;
+    onConfigure?: () => void;
 }
 
-export function PlaceholderView({ title, description, icon: Icon }: PlaceholderViewProps) {
-    const { openDocumentation } = useUI();
+export function PlaceholderView({ title, description, icon: Icon, onConfigure }: PlaceholderViewProps) {
+    const coreCtx = useContext(NexusCoreContext);
+    const openDoc = coreCtx?.ui?.openDocumentation;
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -68,6 +69,13 @@ export function PlaceholderView({ title, description, icon: Icon }: PlaceholderV
                         <Button
                             size="lg"
                             className="h-14 px-10 bg-accent hover:bg-accent/90 text-text-primary rounded-2xl font-bold text-sm uppercase tracking-widest shadow-xl shadow-accent/30 transition-all hover:scale-105"
+                            onClick={() => {
+                                if (onConfigure) {
+                                    onConfigure();
+                                } else {
+                                    openDoc?.('accounting');
+                                }
+                            }}
                         >
                             <Plus className="w-5 h-5 mr-3" />
                             Configurer le Module
@@ -77,7 +85,7 @@ export function PlaceholderView({ title, description, icon: Icon }: PlaceholderV
                             size="lg"
                             className="h-14 px-8 rounded-2xl font-bold text-sm uppercase tracking-widest"
                             onClick={() => {
-                                openDocumentation('accounting');
+                                openDoc?.('accounting');
                             }}
                         >
                             Documentation

@@ -14,15 +14,15 @@ export function MCCStatsCards({ contracts, onOpenCreateModal }: MCCStatsCardsPro
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl">
+      <div className="p-5 rounded-2xl bg-surface-card border border-border-default backdrop-blur-xl">
         <div className="flex items-center justify-between text-text-muted mb-2">
           <span className="text-xs uppercase tracking-wider font-semibold">Total Contrats</span>
           <FileText className="w-4 h-4 text-emerald-400" />
         </div>
-        <p className="text-3xl font-bold text-white">{contracts.length}</p>
+        <p className="text-3xl font-bold text-text-primary">{contracts.length}</p>
       </div>
 
-      <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl">
+      <div className="p-5 rounded-2xl bg-surface-card border border-border-default backdrop-blur-xl">
         <div className="flex items-center justify-between text-text-muted mb-2">
           <span className="text-xs uppercase tracking-wider font-semibold">Signés & Actifs</span>
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -30,7 +30,7 @@ export function MCCStatsCards({ contracts, onOpenCreateModal }: MCCStatsCardsPro
         <p className="text-3xl font-bold text-emerald-400">{signedCount}</p>
       </div>
 
-      <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl">
+      <div className="p-5 rounded-2xl bg-surface-card border border-border-default backdrop-blur-xl">
         <div className="flex items-center justify-between text-text-muted mb-2">
           <span className="text-xs uppercase tracking-wider font-semibold">En Attente Signature</span>
           <Clock className="w-4 h-4 text-amber-400" />
@@ -38,7 +38,7 @@ export function MCCStatsCards({ contracts, onOpenCreateModal }: MCCStatsCardsPro
         <p className="text-3xl font-bold text-amber-400">{pendingCount}</p>
       </div>
 
-      <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl flex flex-col justify-center">
+      <div className="p-5 rounded-2xl bg-surface-card border border-border-default backdrop-blur-xl flex flex-col justify-center">
         <button
           onClick={onOpenCreateModal}
           className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-sm shadow-lg shadow-emerald-500/20 hover:brightness-110 active:scale-[0.98] transition flex items-center justify-center gap-2"

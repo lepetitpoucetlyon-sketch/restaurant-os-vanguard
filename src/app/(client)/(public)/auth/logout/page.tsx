@@ -46,12 +46,12 @@ export default function LogoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-surface-sidebar flex items-center justify-center p-6 text-text-primary font-mono">
+        <div className="min-h-screen bg-surface-bg flex items-center justify-center p-6 text-text-primary font-mono">
             <div className="max-w-xl w-full">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="border-2 border-red-900 bg-surface-bg p-8 rounded-xl shadow-[0_0_50px_rgba(153,0,0,0.2)]"
+                    className="border-2 border-status-danger/40 bg-surface-card p-8 rounded-xl shadow-2xl"
                 >
                     <div className="flex items-center gap-4 mb-8">
                         <div className="p-3 bg-status-danger/20 rounded-lg">
@@ -59,13 +59,13 @@ export default function LogoutPage() {
                         </div>
                         <div>
                             <h1 className="text-2xl font-bold tracking-tighter uppercase italic">Sovereignty_Barrier_Active</h1>
-                            <p className="text-secondary text-xs mt-1 font-sans">PROTOCOL_EXCALIBUR_RECOVERY_MODE</p>
+                            <p className="text-text-muted text-xs mt-1 font-sans">PROTOCOL_EXCALIBUR_RECOVERY_MODE</p>
                         </div>
                     </div>
 
                     <div className="space-y-6">
-                        <div className="p-4 bg-surface-sidebar/50 border border-default rounded-lg">
-                            <p className="text-sm text-muted leading-relaxed font-sans">
+                        <div className="p-4 bg-surface-glass border border-border rounded-lg">
+                            <p className="text-sm text-text-muted leading-relaxed font-sans">
                                 {reason === 'shadow_drift_block' 
                                     ? "Un écart de contexte a été détecté par le SovereignGuard. Par mesure de sécurité, toutes les sessions actives ont été terminées pour protéger l'intégrité de la structure Grade VI."
                                     : "Votre session a été fermée avec succès. L'accès sécurisé a été réinitialisé."}
@@ -78,7 +78,7 @@ export default function LogoutPage() {
                                     await handleHeal();
                                     handleReset();
                                 }}
-                                className="w-full h-14 bg-status-danger hover:bg-status-danger text-text-primary font-bold uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3 rounded-lg"
+                                className="w-full h-14 bg-status-danger hover:bg-status-danger/90 text-text-on-primary font-bold uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3 rounded-lg"
                             >
                                 <RefreshCcw className="w-5 h-5" />
                                 Réinitialiser le Système
@@ -86,7 +86,7 @@ export default function LogoutPage() {
                             
                             <button 
                                 onClick={() => router.push('/')}
-                                className="w-full h-14 border border-default hover:bg-surface-sidebar text-muted font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 rounded-lg"
+                                className="w-full h-14 border border-border hover:bg-surface-glass text-text-muted hover:text-text-primary font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 rounded-lg"
                             >
                                 <Home className="w-5 h-5" />
                                 Retour à l'accueil

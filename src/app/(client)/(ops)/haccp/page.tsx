@@ -124,7 +124,7 @@ function HaccpPage() {
                             {HACCP_TOOLS.map((tool: { id: string; label: string }) => {
                                 const Icon = TOOL_ICONS[tool.id] ?? AlertOctagon;
                                 return (
-                                    <button key={tool.id} onClick={() => setActiveTool(tool.id as Parameters<typeof setActiveTool>[0])} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${activeTool === tool.id ? "bg-action-primary text-text-primary" : "bg-surface-sidebar text-text-muted hover:text-text-primary"}`}>
+                                    <button key={tool.id} onClick={() => setActiveTool(tool.id as Parameters<typeof setActiveTool>[0])} className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${activeTool === tool.id ? "bg-action-primary text-text-on-primary" : "bg-surface-glass text-text-muted hover:text-text-primary"}`}>
                                         <Icon className="w-3.5 h-3.5" /> {tool.label}
                                     </button>
                                 );
@@ -166,11 +166,11 @@ function HaccpPage() {
                         <div className="bg-surface-base rounded-2xl border border-border p-5">
                             <div className="flex items-center gap-2 mb-4"><Search className="w-4 h-4 text-action-primary" /><span className="text-xs font-bold uppercase tracking-widest text-text-muted">Filtres lot</span></div>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                <input type="text" placeholder="Produit ou n° lot…" value={lotFilter.search} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, search: e.target.value }))} className="col-span-2 px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
-                                <input type="text" placeholder="Fournisseur…" value={lotFilter.supplierId} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, supplierId: e.target.value }))} className="px-3 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
+                                <input type="text" placeholder="Produit ou n° lot…" value={lotFilter.search} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, search: e.target.value }))} className="col-span-2 px-3 py-2 rounded-lg bg-surface-glass border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
+                                <input type="text" placeholder="Fournisseur…" value={lotFilter.supplierId} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, supplierId: e.target.value }))} className="px-3 py-2 rounded-lg bg-surface-glass border border-border text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-action-primary" />
                                 <div className="flex gap-2">
-                                    <input type="date" value={lotFilter.dateFrom} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateFrom: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception depuis" />
-                                    <input type="date" value={lotFilter.dateTo} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateTo: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-sidebar border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception jusqu'au" />
+                                    <input type="date" value={lotFilter.dateFrom} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateFrom: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-glass border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception depuis" />
+                                    <input type="date" value={lotFilter.dateTo} onChange={(e) => setLotFilter((f: LotFilter) => ({ ...f, dateTo: e.target.value }))} className="flex-1 px-2 py-2 rounded-lg bg-surface-glass border border-border text-sm text-text-primary focus:outline-none focus:border-action-primary" title="Date réception jusqu'au" />
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@ function HaccpPage() {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="border-b border-border bg-surface-sidebar">
+                                            <tr className="border-b border-border bg-surface-glass">
                                                 {["Produit", "N° Lot", "Date réception", "DLC", "Fournisseur", "Qté initiale", "Qté actuelle"].map((h) => (
                                                     <th key={h} className="px-4 py-2.5 text-left text-nano font-bold uppercase tracking-widest text-text-muted">{h}</th>
                                                 ))}
@@ -202,7 +202,7 @@ function HaccpPage() {
                                                     const dlcDate = item.dlc ?? item.expirationDate ?? "—";
                                                     const isExpired = dlcDate !== "—" && new Date(dlcDate) < new Date();
                                                     return (
-                                                        <tr key={item.id} className="border-b border-border last:border-0 hover:bg-surface-sidebar/50 transition-colors">
+                                                        <tr key={item.id} className="border-b border-border last:border-0 hover:bg-surface-glass transition-colors">
                                                             <td className="px-4 py-3 font-medium text-text-primary">{item.ingredientName}</td>
                                                             <td className="px-4 py-3 font-mono text-xs text-text-muted">{item.lotNumber ?? item.batchNumber ?? "—"}</td>
                                                             <td className="px-4 py-3 text-text-muted">{item.receptionDate ? new Date(item.receptionDate).toLocaleDateString("fr-FR") : "—"}</td>
