@@ -157,7 +157,7 @@ export const FloorPlanEditor = forwardRef<FloorPlanEditorRef, FloorPlanEditorPro
                                         name={table.id}
                                         x={Number(table.x) || 0}
                                         y={Number(table.y) || 0}
-                                        draggable
+                                        draggable={mode === 'select' && !isZonesLocked}
                                         onDragStart={handleDragStart}
                                         onDragEnd={(e) => handleDragEnd(e, table.id)}
                                         onClick={() => setSelectedId(table.id)}

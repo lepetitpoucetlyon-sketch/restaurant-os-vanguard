@@ -1,5 +1,6 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { FiscalSealer } from '@/modules/finance';
+import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
 
 export function registerOrderSealedNF525Handler(): () => void {
@@ -7,7 +8,7 @@ export function registerOrderSealedNF525Handler(): () => void {
     'finance.order_sealed',
     async ({ tenantId, orderId, totalInMicrounits, operatorId }) => {
       try {
-        const dataSnapshot = JSON.stringify({ orderId, totalInMicrounits, operatorId, sealedAt: new Date().toISOString() });
+        const dataSnapshot = CryptoService.canonicalStringify({ orderId, totalInMicrounits, operatorId, sealedAt: new Date().toISOString() });
         await FiscalSealer.sealDataAtomically(dataSnapshot, tenantId, false, {
           id: `order-${orderId}`,
           type: 'SALE',

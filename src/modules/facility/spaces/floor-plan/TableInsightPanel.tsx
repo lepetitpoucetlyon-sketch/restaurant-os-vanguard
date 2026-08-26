@@ -280,7 +280,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => onCheckout?.(SovereignMath.orderTotalMicrounits(activeOrder) / 1000000)}
+                                        onClick={() => onCheckout?.(SovereignMath.toCents(BigInt(SovereignMath.orderTotalMicrounits(activeOrder))))}
                                         className="h-14 px-8 rounded-2xl bg-accent hover:bg-surface-sidebar dark:hover:bg-surface-card text-bg-primary dark:text-bg-primary hover:text-text-primary dark:hover:text-primary text-chip-label transition-all shadow-lg shadow-amber-500/10 active:scale-95"
                                     >
                                         Encaisser
