@@ -491,5 +491,41 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  describe('INV-22 — Accessibilité & ActionGuard Explicite', () => {
+    it('ActionGuard supporte le mode disabledMode="disable" avec tooltip pour la transparence du staff', () => {
+      const guardSrc = fs.readFileSync(path.join(ROOT, 'src/shared/components/rbac/ActionGuard.tsx'), 'utf-8');
+      expect(guardSrc).toContain('disabledMode');
+      expect(guardSrc).toContain('aria-disabled');
+      expect(guardSrc).toContain('disabledReason');
+    });
+
+    it('GoldSwitch et AmbientAudio sont sémantiques (button / input accessible)', () => {
+      const switchSrc = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/GoldSwitch.tsx'), 'utf-8');
+      const audioSrc = fs.readFileSync(path.join(ROOT, 'src/shared/components/layout/AmbientAudio.tsx'), 'utf-8');
+      expect(switchSrc).toContain('<button');
+      expect(switchSrc).toContain('role="switch"');
+      expect(audioSrc).toContain('<button');
+    });
+  });
+
+  describe('INV-23 — Couverture des Frontières d\'Erreur (Route Groups)', () => {
+    it('chaque grand groupe de routes dispose de son error.tsx dédié', () => {
+      const requiredErrorBoundaries = [
+        'src/app/error.tsx',
+        'src/app/(admin)/error.tsx',
+        'src/app/(client)/(ops)/error.tsx',
+        'src/app/(client)/(ordering)/error.tsx',
+        'src/app/(client)/(public)/error.tsx',
+        'src/app/(marketing)/error.tsx',
+      ];
+
+      for (const relPath of requiredErrorBoundaries) {
+        const fullPath = path.join(ROOT, relPath);
+        expect(fs.existsSync(fullPath), `Frontière d'erreur manquante: ${relPath}`).toBe(true);
+      }
+    });
+  });
+
 });
+
 
