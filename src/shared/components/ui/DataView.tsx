@@ -8,6 +8,8 @@ import { AlertCircle, RotateCcw } from "lucide-react";
 import { Button } from "./Button";
 import { cn } from "@/lib/ui.foundations";
 
+export type DataViewState = "loading" | "error" | "empty" | "data";
+
 export interface DataViewProps<T = unknown> {
   data?: T[] | null;
   isLoading?: boolean;

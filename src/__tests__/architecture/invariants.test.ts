@@ -526,6 +526,16 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  describe('INV-24 — Méta-Garde Suite UI Auto-Adaptative', () => {
+    it('AdaptiveActionHub et AutoSafeLayout sont exportés dans le barrel UI', () => {
+      const uiIndex = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/index.ts'), 'utf-8');
+      expect(uiIndex).toContain('AdaptiveActionHub');
+      expect(uiIndex).toContain('AutoSafeLayout');
+    });
+  });
+
 });
+
+
 
 

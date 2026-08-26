@@ -61,5 +61,7 @@ export * from './RoleAwareView';
 export * from './FiscalReceiptSealZone';
 export * from './CelebrationParticles';
 export * from './DataView';
+export * from './AdaptiveActionHub';
+export * from './AutoSafeLayout';
 
 
