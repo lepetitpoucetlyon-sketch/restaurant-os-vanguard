@@ -78,7 +78,7 @@ function POSPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}
                 transition={{ duration: 0.4 * tokens.animationMultiplier, ease: [0.16, 1, 0.3, 1] }}
-                className={cn("h-full overflow-hidden transition-colors duration-700", isRushMode ? "bg-surface-sidebar" : "bg-bg-primary")}
+                className={cn("h-full overflow-hidden transition-colors duration-700", isRushMode ? "bg-surface-card" : "bg-surface-bg")}
             >
                 <TableSelector onSelectTable={setSelectedTableId} />
             </motion.div>
@@ -88,7 +88,7 @@ function POSPage() {
     return (
         <div className={cn(
             "flex flex-1 flex-col h-[calc(100vh-80px)] lg:h-[calc(100vh-100px)] -m-4 lg:-m-8 overflow-hidden relative pb-24 lg:pb-0 transition-colors duration-700",
-            isRushMode ? "bg-surface-sidebar" : "bg-bg-primary"
+            isRushMode ? "bg-surface-card" : "bg-surface-bg"
         )}>
             {/* Rush ribbon — 2px strip anchored to top instead of grayscale wash */}
             {isRushMode && (
@@ -140,12 +140,12 @@ function POSPage() {
                 }
                 desktop={
                     <div className="flex-1 flex flex-row overflow-hidden">
-                        <div className={cn("flex-1 overflow-auto p-ui lg:p-ui elegant-scrollbar transition-all", isRushMode ? "bg-surface-sidebar" : "bg-surface-bg")}>
+                        <div className={cn("flex-1 overflow-auto p-ui lg:p-ui elegant-scrollbar transition-all", isRushMode ? "bg-surface-card" : "bg-surface-bg")}>
                             <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
                         </div>
 
                         {isCartSidebar && (
-                            <div className={cn("h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/50 transition-colors overflow-hidden", isRushMode ? "bg-surface-sidebar" : "bg-surface-card")}>
+                            <div className="h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/50 transition-colors overflow-hidden bg-surface-card">
                                 <div className="flex items-center gap-6 px-5 pt-4 pb-0 border-b border-border/40 shrink-0">
                                     <button onClick={() => setIsCourseViewOpen(false)}
                                         aria-current={!isCourseViewOpen ? "page" : undefined}

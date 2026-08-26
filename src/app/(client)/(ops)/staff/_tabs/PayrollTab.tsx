@@ -28,13 +28,13 @@ export function PayrollTab({ isManager, payrollMonth, setPayrollMonth, payrollRo
                     type="month"
                     value={payrollMonth}
                     onChange={e => setPayrollMonth(e.target.value)}
-                    className="px-3 py-1.5 rounded-md border border-border bg-surface-sidebar text-sm focus:outline-none focus:ring-2 focus:ring-action-primary"
+                    className="px-3 py-1.5 rounded-md border border-border bg-surface-glass text-sm focus:outline-none focus:ring-2 focus:ring-action-primary"
                 />
             </div>
 
             <div className="rounded-lg border border-border overflow-hidden">
                 <table className="w-full text-sm">
-                    <thead className="bg-surface-sidebar text-text-muted text-left">
+                    <thead className="bg-surface-glass text-text-muted text-left">
                         <tr>
                             <th className="px-4 py-2.5 font-medium">Employé</th>
                             <th className="px-4 py-2.5 font-medium">Rôle</th>
@@ -74,7 +74,7 @@ export function PayrollTab({ isManager, payrollMonth, setPayrollMonth, payrollRo
                         )}
                     </tbody>
                     {payrollRows.length > 0 && (
-                        <tfoot className="bg-surface-sidebar border-t border-border">
+                        <tfoot className="bg-surface-glass border-t border-border">
                             <tr>
                                 <td colSpan={4} className="px-4 py-2.5 text-sm font-semibold text-text-muted">
                                     Total masse salariale brute

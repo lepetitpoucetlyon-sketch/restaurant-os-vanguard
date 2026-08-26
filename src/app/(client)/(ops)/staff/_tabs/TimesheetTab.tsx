@@ -29,7 +29,7 @@ export function TimesheetTab({ visibleShiftLogs, isManager, staffMembers }: Time
 
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                        <thead className="bg-surface-sidebar text-text-muted text-left">
+                        <thead className="bg-surface-glass text-text-muted text-left">
                             <tr>
                                 <th className="px-4 py-2.5 font-medium">Horodatage</th>
                                 <th className="px-4 py-2.5 font-medium">Action</th>

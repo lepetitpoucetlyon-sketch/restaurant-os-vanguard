@@ -33,13 +33,13 @@ export function OrderProductCard({
   return (
     <div
       className={cn(
-        'group relative bg-slate-900/60 hover:bg-slate-900/90 border border-white/10 hover:border-white/20 rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between backdrop-blur-sm',
+        'group relative bg-surface-card hover:bg-surface-glass-hover border border-border-default hover:border-border-focus rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between backdrop-blur-sm',
         !product.available && 'opacity-50 pointer-events-none'
       )}
     >
       <div>
         <div className="flex justify-between items-start gap-2 mb-1.5">
-          <h3 className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors">
+          <h3 className="text-sm font-semibold text-text-primary group-hover:text-amber-400 transition-colors">
             {product.name}
           </h3>
           <span className="text-sm font-bold text-amber-400 shrink-0 font-mono">
@@ -48,7 +48,7 @@ export function OrderProductCard({
         </div>
 
         {product.description && (
-          <p className="text-xs text-slate-400 line-clamp-2 mb-2 leading-relaxed">
+          <p className="text-xs text-text-secondary line-clamp-2 mb-2 leading-relaxed">
             {product.description}
           </p>
         )}
@@ -67,8 +67,8 @@ export function OrderProductCard({
         )}
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-white/5">
-        <span className="text-micro text-slate-500">
+      <div className="flex items-center justify-between pt-2 border-t border-border-default/40">
+        <span className="text-micro text-text-muted">
           {product.available ? 'En stock' : 'Épuisé'}
         </span>
 
@@ -94,7 +94,7 @@ export function OrderProductCard({
           <button
             onClick={() => onAddToCart(product)}
             disabled={!product.available}
-            className="flex items-center gap-1.5 bg-white/10 hover:bg-amber-500 hover:text-black text-white text-xs font-medium px-3 py-1.5 rounded-xl transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 bg-surface-glass hover:bg-amber-500 hover:text-black text-text-primary text-xs font-medium px-3 py-1.5 rounded-xl transition-all shadow-sm active:scale-95 border border-border-default"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Ajouter</span>

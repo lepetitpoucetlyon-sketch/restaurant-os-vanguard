@@ -42,7 +42,7 @@ export function SkillsTab({
                 <h2 className="text-lg font-serif font-semibold mb-4">Matrice de compétences</h2>
                 <div className="overflow-x-auto rounded-lg border border-border">
                     <table className="text-sm">
-                        <thead className="bg-surface-sidebar text-text-muted text-left">
+                        <thead className="bg-surface-glass text-text-muted text-left">
                             <tr>
                                 <th className="px-4 py-2.5 font-medium whitespace-nowrap">Employé</th>
                                 {KNOWN_SKILLS.map(skill => (
@@ -134,7 +134,7 @@ export function SkillsTab({
                                 </div>
 
                                 {docForm && (
-                                    <div className="p-4 rounded-lg border border-border bg-surface-sidebar space-y-3">
+                                    <div className="p-4 rounded-lg border border-border bg-surface-card space-y-3">
                                         <input
                                             type="text"
                                             placeholder="Nom du document (ex : CV 2026)"

@@ -137,7 +137,7 @@ export default function SimulatorPage() {
                                 </div>
 
                                 {/* Master Inflation Controller */}
-                                <div className="p-6 bg-surface-sidebar/5 dark:bg-surface-card/5 rounded-[2rem] border border-border backdrop-blur-xl">
+                                <div className="p-6 bg-surface-glass rounded-[2rem] border border-border backdrop-blur-xl">
                                     <div className="flex justify-between items-center mb-6">
                                         <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Master Inflation Simulation</h4>
                                         <div className="px-3 py-1 bg-accent-gold/20 rounded-full text-nano font-black text-accent-gold italic">
