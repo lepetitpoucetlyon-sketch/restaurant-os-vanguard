@@ -257,4 +257,40 @@ describe('buildBrandTokens — overlay bascule brandingMode custom', () => {
         expect(tokens.splashEnabled).toBe(true);
         expect(tokens.logoUrl).toBeNull();
     });
+
+    it('tier REFERENCE — imperméable aux overlays scrapés, reste default et gold neutre', () => {
+        const tokens = buildBrandTokens('_ref_restaurant', 'REFERENCE', {
+            tenantId: '_ref_restaurant',
+            name: 'Reference Template',
+            adminEmail: 'admin@ref.internal',
+            variant: 'restaurant',
+            brandingOverlay: {
+                primaryColor: '#FF0000',
+                logoUrl: 'https://client.example/logo.png',
+            },
+        });
+        expect(tokens.brandingMode).toBe('default');
+        expect(tokens.primaryColor).toBe('#C5A358');
+        expect(tokens.logoUrl).toBeNull();
+        expect(tokens.splashEnabled).toBe(false);
+        expect(tokens.brandName).toBe('Restaurant OS · Référence restaurant');
+        expect(tokens.tagline).toBe('Matrice de référence — lecture seule');
+    });
+
+    it('tier TEST — imperméable aux overlays scrapés, reste default et bleu dev', () => {
+        const tokens = buildBrandTokens('_test_restaurant', 'TEST', {
+            tenantId: '_test_restaurant',
+            name: 'Restaurant Dev',
+            adminEmail: 'admin@test.internal',
+            variant: 'restaurant',
+            brandingOverlay: {
+                primaryColor: '#FF0000',
+                logoUrl: 'https://client.example/logo.png',
+            },
+        });
+        expect(tokens.brandingMode).toBe('default');
+        expect(tokens.primaryColor).toBe('#3B82F6');
+        expect(tokens.logoUrl).toBeNull();
+        expect(tokens.splashEnabled).toBe(false);
+    });
 });

@@ -99,9 +99,13 @@ export const TenantSeeder = {
     const seededPaths: string[] = [];
     const baseDNA = resolveDNA(variant);
 
+    const tier = getSystemTenantTier(tenantId);
+    const isSystem = tier !== null;
+
     // Branding réel scrapé (P0, pré-calculé par le caller via tenantBrandingFromScrape).
+    // Pour les tenants système (DEMO, TEST, REFERENCE), les overlays externes sont ignorés.
     // TenantSeeder n'importe pas CompanyProfile → fan-out sentrux préservé.
-    const scrapedBranding = brandingOverlay ?? null;
+    const scrapedBranding = !isSystem ? (brandingOverlay ?? null) : null;
     const resolvedSiren = siren ?? '';
 
     logger.info(`[TenantSeeder] Seeding tenant ${tenantId} (variant=${variant})...`);
@@ -350,7 +354,19 @@ export function buildBrandTokens(
       logoUrl:      null,
     };
   }
-  // REFERENCE ou CLIENT — branding scrapé (P0) prioritaire s'il existe.
+  if (tier === 'REFERENCE') {
+    const variant = input.variant ?? 'restaurant';
+    return {
+      tenantId,
+      brandName:    `Restaurant OS · Référence ${variant}`,
+      tagline:      'Matrice de référence — lecture seule',
+      primaryColor: '#C5A358',
+      brandingMode: 'default',
+      splashEnabled: false,
+      logoUrl:      null,
+    };
+  }
+  // Tier CLIENT — branding scrapé (P0) prioritaire s'il existe.
   const scraped = input.brandingOverlay ?? null;
   return {
     tenantId,
