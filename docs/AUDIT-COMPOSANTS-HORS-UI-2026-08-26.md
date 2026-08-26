@@ -1,6 +1,10 @@
 # Audit — composants existants en code mais absents de l'interface client
 
 > Mesuré le 2026-08-26 (Loi 7 Zero-Claim).
+> **Révision 3** (2026-08-26, contrôle de fraîcheur) — chiffres re-mesurés : **88 composants /
+> 10 280 lignes, inchangés**. Constats re-testés un par un ; une erreur de la rév. 2
+> corrigée sur `PlaceholderView` (voir la section concernée).
+>
 > **Révision 2** — fusionne l'audit Claude Code (atteignabilité) et l'audit
 > Antigravity (inspection qualitative), après vérification indépendante de chaque
 > constat croisé. Corrige un défaut de méthode de la révision 1 (voir plus bas).
@@ -112,8 +116,11 @@ de livraison construit depuis un formulaire ou réhydraté depuis la base produi
 </Button>
 ```
 
-Aucun `onClick`. Le bouton principal de l'écran est inerte, et le second
-(`variant="outline"`, juste en dessous) l'est également.
+Aucun `onClick` : le bouton **principal** de l'écran est inerte.
+
+> Correction de la rév. 2, qui affirmait que le second bouton l'était aussi :
+> c'est **faux**. Le second (`variant="outline"`, l. 75) possède bien un
+> `onClick` en ligne 79. Seul le premier est mort.
 
 > ⚠️ Ne pas confondre avec `PlaceholderViews.tsx` (au pluriel), autre fichier,
 > qui exporte 14 vues comptables toutes mortes.
