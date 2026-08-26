@@ -361,4 +361,135 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  describe('INV-14 — Ratchet de surfaces sombres en dur (Thème Unifié)', () => {
+    it('le nombre de surfaces sombres en dur ne dépasse pas le ratchet mesuré du jour', () => {
+      const RATCHET_MAX = 125; // Mesuré à 121 le 2026-08-26 après migration Lots 0-3 complète (Loi 7 Zero-Claim)
+      const pattern = /(bg-black|bg-\[#0[0-9a-fA-F]{5}\]|bg-(gray|neutral|zinc|slate)-9(00|50)|bg-surface-sidebar)/g;
+      let count = 0;
+      for (const fp of getSrcFiles(['.tsx'])) {
+        if (fp.includes('.test.') || fp.includes('__tests__')) continue;
+        const content = fs.readFileSync(fp, 'utf-8');
+        const matches = content.match(pattern);
+        if (matches) count += matches.length;
+      }
+      expect(
+        count,
+        `Dette de surfaces sombres en dur augmentée : ${count} > ${RATCHET_MAX}`
+      ).toBeLessThanOrEqual(RATCHET_MAX);
+    });
+  });
+
+  describe('INV-15 — Souveraineté de globals.css sur les surfaces (Option B)', () => {
+    it('BrandingProvider n’injecte aucun token de surface neutre dans le style inline', () => {
+      const src = fs.readFileSync(path.join(ROOT, 'src/lib/BrandingProvider.tsx'), 'utf-8');
+      expect(src, 'BrandingProvider doit utiliser generateBrandCSSVariables').toContain('generateBrandCSSVariables');
+      expect(src, 'BrandingProvider ne doit pas appeler generateCSSVariables').not.toMatch(/generateCSSVariables\(/);
+      expect(src, 'BrandingProvider doit purger les variables neutres').toContain('NEUTRAL_CSS_VARS_TO_PURGE');
+    });
+
+    it('generateBrandCSSVariables n’émet aucun token de surface neutre ni de texte primaire', async () => {
+      const { generateBrandCSSVariables } = await import('@/shared/nexus/tokens/semantic');
+      const vars = generateBrandCSSVariables();
+      expect(vars['--surface-bg']).toBeUndefined();
+      expect(vars['--surface-card']).toBeUndefined();
+      expect(vars['--surface-modal']).toBeUndefined();
+      expect(vars['--surface-sidebar']).toBeUndefined();
+      expect(vars['--text-primary']).toBeUndefined();
+      expect(vars['--border-default']).toBeUndefined();
+      expect(vars['--action-primary']).toBeDefined();
+    });
+  });
+
+  describe('INV-16 — Cliquet zones tactiles (WCAG 2.5.5 / Apple HIG 44px min)', () => {
+    it('le nombre de cibles tactiles sous le seuil (32px) ne dépasse pas le ratchet mesuré', () => {
+      const RATCHET_MAX = 204; // Mesuré le 2026-08-26 (Loi 7 Zero-Claim)
+      const pattern = /\bw-8 h-8\b|\bh-8 w-8\b/g;
+      let count = 0;
+      for (const fp of getSrcFiles(['.tsx'])) {
+        if (fp.includes('.test.') || fp.includes('__tests__')) continue;
+        const content = fs.readFileSync(fp, 'utf-8');
+        const matches = content.match(pattern);
+        if (matches) count += matches.length;
+      }
+      expect(
+        count,
+        `Dette de zones tactiles sous 44px augmentée : ${count} > ${RATCHET_MAX}`
+      ).toBeLessThanOrEqual(RATCHET_MAX);
+    });
+  });
+
+  describe('INV-17 — Méta-garde PWA (Installation & Service Worker)', () => {
+    it('InstallPrompt est monté dans la coque applicative LayoutResolver', () => {
+      const src = fs.readFileSync(path.join(ROOT, 'src/shared/components/layout/LayoutResolver.tsx'), 'utf-8');
+      expect(src, 'InstallPrompt doit être importé et monté dans LayoutResolver').toContain('<InstallPrompt');
+    });
+
+    it('ServiceWorkerRegistration est monté dans le layout racine', () => {
+      const src = fs.readFileSync(path.join(ROOT, 'src/app/layout.tsx'), 'utf-8');
+      expect(src, 'ServiceWorkerRegistration doit être monté dans RootLayout').toContain('<ServiceWorkerRegistration');
+    });
+  });
+
+  describe('INV-18 — Safe-Area & Viewport Accessibilité (WCAG 1.4.4)', () => {
+    it('globals.css définit les utilitaires pb-safe, pt-safe et touch-target', () => {
+      const css = fs.readFileSync(path.join(ROOT, 'src/app/globals.css'), 'utf-8');
+      expect(css).toContain('pb-safe');
+      expect(css).toContain('pt-safe');
+      expect(css).toContain('touch-target');
+      expect(css).toContain('safe-area-inset-bottom');
+    });
+
+    it('les composants ancrés en bas supportent la safe-area iOS', () => {
+      const bottomSheet = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/BottomSheet.tsx'), 'utf-8');
+      const actionBar = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/ActionBar.tsx'), 'utf-8');
+      const modal = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/Modal.tsx'), 'utf-8');
+
+      expect(bottomSheet, 'BottomSheet doit supporter pb-safe').toContain('pb-safe');
+      expect(actionBar, 'ActionBar doit supporter safe-area-inset-bottom').toContain('safe-area-inset-bottom');
+      expect(modal, 'Modal doit supporter pb-safe').toContain('pb-safe');
+    });
+
+    it('RootLayout préserve viewportFit: "cover" et ne bloque jamais le zoom utilisateur', () => {
+      const layoutSrc = fs.readFileSync(path.join(ROOT, 'src/app/layout.tsx'), 'utf-8');
+      expect(layoutSrc).toContain('viewportFit: "cover"');
+      const strippedSrc = layoutSrc.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+      expect(strippedSrc, 'Interdiction de bloquer le zoom (WCAG 1.4.4)').not.toMatch(/maximumScale/);
+      expect(strippedSrc, 'Interdiction de userScalable: false (WCAG 1.4.4)').not.toMatch(/userScalable/);
+    });
+  });
+
+  describe('INV-19 — Méta-Garde DataView & EmptyState (Angles Morts)', () => {
+    it('DataView et EmptyState sont exportés dans le barrel UI', () => {
+      const uiIndex = fs.readFileSync(path.join(ROOT, 'src/shared/components/ui/index.ts'), 'utf-8');
+      expect(uiIndex).toContain('./DataView');
+      expect(uiIndex).toContain('./EmptyState');
+    });
+
+    it('ProductGrid POS et KdsTab intègrent la gestion des listes vides', () => {
+      const productGrid = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/pos/components/ProductGrid.tsx'), 'utf-8');
+      const kdsTab = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/pos/components/bar/KdsTab.tsx'), 'utf-8');
+
+      expect(productGrid).toContain('EmptyState');
+      expect(kdsTab).toContain('EmptyState');
+    });
+  });
+
+  describe('INV-20 — Méta-Garde Temporal & Fiscal Timezone', () => {
+    it('fiscalDate.ts existe et expose les fonctions canoniques de journée fiscale', () => {
+      const fiscalSrc = fs.readFileSync(path.join(ROOT, 'src/lib/temporal/fiscalDate.ts'), 'utf-8');
+      expect(fiscalSrc).toContain('export function fiscalNow');
+      expect(fiscalSrc).toContain('export function fiscalDayOf');
+      expect(fiscalSrc).toContain('export function isNightService');
+      expect(fiscalSrc).toContain('export function formatFiscalTimestamp');
+    });
+  });
+
+  describe('INV-21 — Garde Anti-Perte de Saisie', () => {
+    it('useUnsavedChanges est exporté dans le barrel shared/hooks', () => {
+      const hooksIndex = fs.readFileSync(path.join(ROOT, 'src/shared/hooks/index.ts'), 'utf-8');
+      expect(hooksIndex).toContain('useUnsavedChanges');
+    });
+  });
+
 });
+
