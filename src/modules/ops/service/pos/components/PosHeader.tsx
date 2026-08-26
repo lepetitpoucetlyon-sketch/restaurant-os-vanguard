@@ -225,7 +225,7 @@ export function PosHeader({
                         >
                             <Printer className="w-[15px] h-[15px]" />
                         </button>
-                        <ActionGuard page="pos" action="cash_count">
+                        <ActionGuard page="pos" action="cash_count" disabledMode="disable" disabledReason="Fond de caisse — réservé au responsable">
                             <button
                                 onClick={() => setIsCashDrawerOpen(true)}
                                 title="Fond de caisse"
@@ -234,7 +234,7 @@ export function PosHeader({
                                 <Wallet className="w-[15px] h-[15px]" />
                             </button>
                         </ActionGuard>
-                        <ActionGuard page="pos" action="void_line">
+                        <ActionGuard page="pos" action="void_line" disabledMode="disable" disabledReason="Annulation — réservée au gérant">
                             <button
                                 onClick={() => setIsVoidModalOpen(true)}
                                 title="Annuler / Rembourser"

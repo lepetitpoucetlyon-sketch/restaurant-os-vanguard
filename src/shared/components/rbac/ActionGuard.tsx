@@ -4,13 +4,24 @@ import React, { useState } from 'react';
 import { useActionAccess } from '@/shared/hooks/useActionAccess';
 import { useAuth } from '@/shared/providers/NexusCoreContext';
 import type { PageKey } from '@/shared/nexus/contracts/permissions.types';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 import { SecurityPinModal } from '@/shared/components/ui/SecurityPinModal';
 
+/**
+ * `disabledMode` controls what happens when the user lacks permission:
+ * - `'hide'`    (default) — children are replaced by `fallback` (backward compat).
+ * - `'disable'` — children are rendered but visually disabled with a tooltip
+ *   explaining why. The plan recommends this for POS actions so staff
+ *   understands why a button is unavailable instead of it disappearing.
+ */
 export interface ActionGuardProps {
   page: PageKey | string;
   action: string;
   fallback?: React.ReactNode;
+  /** @default 'hide' */
+  disabledMode?: 'hide' | 'disable';
+  /** Tooltip shown when disabledMode='disable' and user lacks permission. */
+  disabledReason?: string;
   requiresPin?: boolean;
   pinTitle?: string;
   pinDescription?: string;
@@ -22,6 +33,8 @@ export function ActionGuard({
   page,
   action,
   fallback = null,
+  disabledMode = 'hide',
+  disabledReason = 'Réservé au responsable',
   requiresPin = false,
   pinTitle = 'Autorisation Requise',
   pinDescription = 'Veuillez saisir votre code PIN pour valider cette action sensible.',
@@ -42,6 +55,25 @@ export function ActionGuard({
   }
 
   if (!hasAccess) {
+    if (disabledMode === 'disable') {
+      return (
+        <div
+          className="relative group/guard contents"
+          aria-disabled="true"
+          title={disabledReason}
+        >
+          {/* Visual disable wrapper — blocks clicks, reduces opacity */}
+          <div className="pointer-events-none opacity-40 select-none contents">
+            {children}
+          </div>
+          {/* Tooltip on hover */}
+          <div className="pointer-events-auto absolute -top-8 left-1/2 -translate-x-1/2 z-50 hidden group-hover/guard:flex items-center gap-1 px-2 py-1 rounded-md bg-bg-primary border border-border text-xs text-text-muted whitespace-nowrap shadow-lg">
+            <Lock className="w-3 h-3" />
+            {disabledReason}
+          </div>
+        </div>
+      );
+    }
     return <>{fallback}</>;
   }
 
