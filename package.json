@@ -31,7 +31,9 @@
     "verify:gates": "node scripts/verify-gate-integrity.mjs",
     "check:figma-guard": "node scripts/verify-figma-guardrails.mjs",
     "prepare": "node scripts/install-hooks.mjs",
-    "gate:fast": "tsc --noEmit && node scripts/verify-gate-integrity.mjs && vitest run --reporter=dot"
+    "gate:fast": "tsc --noEmit && node scripts/verify-gate-integrity.mjs && vitest run --reporter=dot",
+    "measure": "node scripts/measure.mjs",
+    "measure:detail": "node scripts/measure.mjs -- --detail"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1101.0",

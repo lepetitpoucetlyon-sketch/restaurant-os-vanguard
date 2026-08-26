@@ -191,10 +191,65 @@ Les décisions fondamentales du socle sont documentées dans `docs/adrs/` :
 ```bash
 npx tsc --noEmit          # Vérification types (0 erreur tolérée)
 npx vitest run            # Exécution des tests unitaires et d'intégration
+npm run measure           # 📐 Mesures du dépôt (~0,6 s) — À FAIRE AVANT D'ÉCRIRE UN CHIFFRE
+npm run measure:detail    # idem, avec le détail fichier par fichier
 npm run preflight         # Gate complète d'intégrité (TypeScript, tests, ESLint, sentrux, Next.js build)
 sentrux check .           # Gate architectural (cycles, god files, couches) — voir .sentrux/
 docker-compose up         # App + LightRAG sidecar
 ```
+
+## 📐 Mesurer, ne pas explorer (obligatoire)
+
+**Avant d'écrire le moindre chiffre sur l'état du dépôt, lance `npm run measure`.**
+Ne refais pas l'exploration à coups de `grep` : elle est déjà encodée, avec ses pièges.
+
+Onze mesures permanentes couvrent : composants sans consommateur, réglages
+déclarés non lus, clés i18n manquantes, parité des locales, risques responsive,
+props handler inertes, doublons de noms, erreurs avalées, scellements non
+canoniques, métriques codées en dur, empreinte disque.
+
+- `.measures/latest.json` — état courant (gitignoré)
+- `.measures/history.jsonl` — **versionné** : la dette devient visible dans le temps
+  (« 88 orphelins » ne dit rien ; « 88 le 26/08, 78 le 27/08 » dit que ça descend)
+
+**Pourquoi c'est une obligation et pas un confort** : les pièges de mesure sont
+encodés dans `scripts/measure/measures.mjs`. Un `grep` naïf les rate.
+Exemples réellement commis lors de l'audit du 2026-08-26 :
+- `h-screen` (hauteur imposée, dangereuse) confondu avec `min-h-screen`
+  (plancher, bénin) → problème surestimé de 9 à 69 ;
+- un ré-export de barrel pris pour un usage → 58 orphelins annoncés au lieu de 88 ;
+- une sonde de débordement qui ne testait que le bord droit → rognage à gauche raté.
+
+## ⛓️ Loi 8 — Bout-en-bout (cf. `AGENTS.md`)
+
+Une fonctionnalité **écrite** n'est pas une fonctionnalité **livrée**. `tsc`,
+`vitest` et `next build` valident une forme, jamais une destination.
+
+Avant de déclarer quoi que ce soit livré, les quatre points doivent être vrais :
+
+1. **Rendu** — le composant est monté quelque part d'atteignable depuis une route
+2. **Réglage** — s'il expose un réglage, ce réglage est LU par du code
+3. **Libellés** — ses clés `t()` existent dans `fr.ts` (sinon la clé s'affiche brute)
+4. **Handlers** — ses props `onX` sont réellement invoquées (jamais `_onX`)
+
+La **Gate 6** (`scripts/gate-last-mile.mjs`) le vérifie au commit via des cliquets
+déclarés dans `preflight.sh`. Ils ne bloquent pas la dette existante : ils
+l'empêchent de croître. **Ne jamais relever un seuil** — `verify-gate-integrity.mjs`
+le refuse (Loi 2). Un composant écrit avant son écran se marque `@wip` avec
+propriétaire et échéance.
+
+## Convention de nommage des scripts
+
+Un `ls scripts/` doit suffire à savoir ce qui est permanent.
+
+| Préfixe | Cycle de vie | Exemple |
+|---|---|---|
+| `measure-` / `measure.mjs` | permanent, **pur**, rapide | `measure.mjs` |
+| `gate-` | permanent, **décide** (exit ≠ 0) | `gate-last-mile.mjs` |
+| `generate-` | permanent, écrit un artefact | `generate-architecture-map.mjs` |
+| `oneshot-` | **jetable**, à supprimer après exécution | migrations |
+
+Une mesure qui écrit dans `src/` n'est plus une mesure, c'est une migration.
 
 ## Stack
 

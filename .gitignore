@@ -158,3 +158,6 @@ scratch/
 __pycache__/
 *.pyc
 .impeccable/config.local.json
+
+# Mesures : l'etat courant est jetable, l'historique est versionne (dette visible dans le temps)
+.measures/latest.json

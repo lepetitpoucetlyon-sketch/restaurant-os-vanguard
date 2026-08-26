@@ -318,15 +318,15 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
 
   describe('INV-12 — La Gate 6 ne peut pas disparaître', () => {
     it('le contrôle du dernier kilomètre est branché dans le hook et dans preflight', () => {
-      expect(fs.existsSync(path.join(ROOT, 'scripts/check-last-mile.mjs')),
-        'scripts/check-last-mile.mjs a été supprimé').toBe(true);
+      expect(fs.existsSync(path.join(ROOT, 'scripts/gate-last-mile.mjs')),
+        'scripts/gate-last-mile.mjs a été supprimé').toBe(true);
       const hook = fs.readFileSync(path.join(ROOT, '.githooks/pre-commit'), 'utf-8');
-      expect(hook, 'Gate 6 retirée du hook pre-commit').toContain('check-last-mile.mjs');
+      expect(hook, 'Gate 6 retirée du hook pre-commit').toContain('gate-last-mile.mjs');
       const pf = fs.readFileSync(path.join(ROOT, 'scripts/preflight.sh'), 'utf-8');
-      expect(pf, 'Gate 6 retirée de preflight.sh').toContain('check-last-mile.mjs');
+      expect(pf, 'Gate 6 retirée de preflight.sh').toContain('gate-last-mile.mjs');
       for (const seuil of ['ORPHAN_COMPONENTS_MAX', 'UNREAD_SETTINGS_MAX',
                            'MISSING_I18N_KEYS_MAX', 'INERT_HANDLER_PROPS_MAX',
-                           'NON_CANONICAL_SEAL_MAX']) {
+                           'NON_CANONICAL_SEAL_MAX', 'FAKE_METRICS_MAX']) {
         expect(pf, `Ratchet ${seuil} supprimé de preflight.sh`).toContain(seuil);
       }
     });

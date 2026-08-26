@@ -104,6 +104,39 @@ son en-tête, avec **propriétaire et échéance** :
 Un `@wip` est exclu du compteur. Sans `@wip`, un composant sans consommateur fait
 échouer le commit. **L'intention doit être explicite, jamais devinée.**
 
+### Mesurer, ne pas explorer
+
+**`npm run measure` avant d'écrire un chiffre.** Onze mesures permanentes (~0,6 s)
+remplacent l'exploration au `grep`. Les artefacts :
+
+- `.measures/latest.json` — état courant (gitignoré)
+- `.measures/history.jsonl` — **versionné** : la dette devient visible dans le temps
+
+Ce n'est pas un confort mais une obligation, parce que **les pièges de mesure sont
+encodés dans le script**. Trois erreurs réellement commises lors de l'audit du
+2026-08-26, et désormais impossibles à refaire :
+
+| Piège | Conséquence de l'erreur |
+|---|---|
+| `h-screen` confondu avec `min-h-screen` | problème surestimé de 9 à 69 |
+| Ré-export de barrel pris pour un usage | 58 orphelins annoncés au lieu de 88 |
+| Sonde de débordement testant un seul bord | rognage à gauche non détecté |
+
+Un script de mesure n'est pas un raccourci : c'est **de la connaissance figée**.
+
+### Convention de nommage des scripts (Loi 8)
+
+| Préfixe | Cycle de vie | Sortie |
+|---|---|---|
+| `measure.mjs`, `measure/` | permanent, **pur** (ne modifie jamais `src/`) | JSON + résumé |
+| `gate-` | permanent, **décide** (exit ≠ 0) | verdict |
+| `generate-` | permanent, écrit un artefact | fichier |
+| `ops-` | permanent, effets de bord assumés | — |
+| `oneshot-` | **jetable** — à supprimer après exécution | — |
+
+Un `oneshot-` de plus de trois mois se supprime, il ne s'archive pas : git garde
+l'historique. Une mesure qui écrit dans `src/` n'est plus une mesure.
+
 ---
 
 ## Installation des gardes (une fois, par la personne humaine de préférence)

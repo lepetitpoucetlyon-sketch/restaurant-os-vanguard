@@ -39,6 +39,7 @@ function fingerprint() {
     missingI18n: num(/MISSING_I18N_KEYS_MAX\s*=\s*(\d+)/),
     inertProps: num(/INERT_HANDLER_PROPS_MAX\s*=\s*(\d+)/),
     nonCanonicalSeal: num(/NON_CANONICAL_SEAL_MAX\s*=\s*(\d+)/),
+    fakeMetrics: num(/FAKE_METRICS_MAX\s*=\s*(\d+)/),
   };
 
   const hash = createHash('sha256').update(JSON.stringify({ globs, off, ratchets })).digest('hex').slice(0, 16);
@@ -72,7 +73,7 @@ const errs = [];
 if (fp.globCount > base.globCount) errs.push(`Exemptions eslint élargies : ${fp.globCount} globs > baseline ${base.globCount}. Une gate barrel a été desserrée.`);
 if (fp.off > base.off) errs.push(`Barrel Contract désactivé sur plus de zones : ${fp.off} > ${base.off}.`);
 for (const k of ['cycles', 'barrel', 'interModule', 'bundle',
-                 'orphans', 'unreadSettings', 'missingI18n', 'inertProps', 'nonCanonicalSeal']) {
+                 'orphans', 'unreadSettings', 'missingI18n', 'inertProps', 'nonCanonicalSeal', 'fakeMetrics']) {
   const cur = fp.ratchets[k], b = base.ratchets?.[k];
   if (cur != null && b != null && cur > b) errs.push(`Ratchet '${k}' relevé : ${cur} > baseline ${b}.`);
 }

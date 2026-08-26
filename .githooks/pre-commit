@@ -34,7 +34,7 @@ echo "🎨 [5/6] Design guard (patterns bannis retires du plan v3.1)…"
 bash scripts/design-guard-diff.sh || fail "Design guard : pattern banni introduit — cf. CLAUDE-VIBE.md."
 
 echo "🔗 [6/6] Dernier kilomètre (ce qui est écrit est-il atteint ?)…"
-node scripts/check-last-mile.mjs || fail "Dernier kilomètre : un compteur a augmenté — cf. AGENTS.md Loi 8."
+node scripts/gate-last-mile.mjs || fail "Dernier kilomètre : un compteur a augmenté — cf. AGENTS.md Loi 8."
 
 echo "🗺️  Régénération de la carte d'architecture (auto)…"
 node scripts/generate-architecture-map.mjs >/dev/null 2>&1 && git add docs/ARCHITECTURE-MAP.md docs/architecture-map.json 2>/dev/null || true

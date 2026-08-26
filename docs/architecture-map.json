@@ -1,17 +1,17 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3593,
-    "loc": 333470,
+    "files": 3609,
+    "loc": 335663,
     "pages": 84,
     "apiRoutes": 210
   },
   "layers": {
     "kernel": 25,
-    "lib": 234,
-    "shared": 702,
-    "modules": 1599,
-    "app": 443,
+    "lib": 235,
+    "shared": 706,
+    "modules": 1596,
+    "app": 447,
     "verticals": 245,
     "infrastructure": 46,
     "store": 24,
@@ -22,14 +22,14 @@
   },
   "sharedSubfolders": {
     "atoms": 2,
-    "components": 185,
+    "components": 188,
     "connector-manifest": 12,
     "constants": 1,
     "contexts": 10,
     "custom-fields": 3,
     "domain": 1,
     "eventBus": 225,
-    "hooks": 49,
+    "hooks": 50,
     "layout-builder": 3,
     "nexus": 128,
     "plugins": 9,
@@ -77,19 +77,19 @@
       "barrel": true
     },
     "human": {
-      "files": 135,
+      "files": 133,
       "barrel": true
     },
     "intelligence": {
-      "files": 166,
+      "files": 165,
       "barrel": true
     },
     "logistics": {
-      "files": 147,
+      "files": 148,
       "barrel": true
     },
     "ops": {
-      "files": 311,
+      "files": 310,
       "barrel": true
     },
     "system": {
@@ -169,12 +169,12 @@
       "loc": 566
     },
     {
-      "file": "src/__tests__/anglemorts/anglemorts-batch7.test.ts",
-      "loc": 531
+      "file": "src/__tests__/architecture/invariants.test.ts",
+      "loc": 542
     },
     {
-      "file": "src/config/navConfig.ts",
-      "loc": 527
+      "file": "src/__tests__/anglemorts/anglemorts-batch7.test.ts",
+      "loc": 531
     }
   ]
 }
