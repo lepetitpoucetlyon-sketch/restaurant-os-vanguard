@@ -31,6 +31,14 @@ function fingerprint() {
     barrel: num(/BARREL_DEBT_MAX\s*=\s*(\d+)/),
     interModule: num(/INTER_MODULE_MAX\s*=\s*(\d+)/),
     bundle: num(/BUNDLE_MAX_KB:-?(\d+)/),
+    // Ratchets « dernier kilomètre » (Gate 6 / Loi 8) — surveillés au même titre
+    // que les autres : personne ne doit pouvoir rebrancher un composant en
+    // relevant le seuil plutôt qu'en le câblant.
+    orphans: num(/ORPHAN_COMPONENTS_MAX\s*=\s*(\d+)/),
+    unreadSettings: num(/UNREAD_SETTINGS_MAX\s*=\s*(\d+)/),
+    missingI18n: num(/MISSING_I18N_KEYS_MAX\s*=\s*(\d+)/),
+    inertProps: num(/INERT_HANDLER_PROPS_MAX\s*=\s*(\d+)/),
+    nonCanonicalSeal: num(/NON_CANONICAL_SEAL_MAX\s*=\s*(\d+)/),
   };
 
   const hash = createHash('sha256').update(JSON.stringify({ globs, off, ratchets })).digest('hex').slice(0, 16);
@@ -63,7 +71,8 @@ const base = JSON.parse(read(BASE_PATH));
 const errs = [];
 if (fp.globCount > base.globCount) errs.push(`Exemptions eslint élargies : ${fp.globCount} globs > baseline ${base.globCount}. Une gate barrel a été desserrée.`);
 if (fp.off > base.off) errs.push(`Barrel Contract désactivé sur plus de zones : ${fp.off} > ${base.off}.`);
-for (const k of ['cycles', 'barrel', 'interModule', 'bundle']) {
+for (const k of ['cycles', 'barrel', 'interModule', 'bundle',
+                 'orphans', 'unreadSettings', 'missingI18n', 'inertProps', 'nonCanonicalSeal']) {
   const cur = fp.ratchets[k], b = base.ratchets?.[k];
   if (cur != null && b != null && cur > b) errs.push(`Ratchet '${k}' relevé : ${cur} > baseline ${b}.`);
 }

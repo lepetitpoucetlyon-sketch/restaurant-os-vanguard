@@ -284,4 +284,81 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  // ────────────────────────────────────────────────────────────────────────
+  // INV-11 / 12 / 13 — Le dernier kilomètre (AGENTS.md Loi 8)
+  //
+  // Les gates historiques valident la FORME du code. Ces trois-là valident sa
+  // DESTINATION : un scellement reproductible, une gate qu'on ne peut pas
+  // retirer, et des tableaux de bord qui ne racontent pas d'histoires.
+  // ────────────────────────────────────────────────────────────────────────
+  describe('INV-11 — Scellement déterministe', () => {
+    it('aucun JSON.stringify ne précède un sign() ou un hash()', () => {
+      // JSON.stringify conserve l'ordre d'insertion des clés : deux objets
+      // logiquement identiques peuvent produire deux hashes différents, et une
+      // signature archivée en WORM ne se revérifie plus.
+      // CryptoService.canonicalStringify est la convention (18 sites).
+      const MAX = 1; // ProcurementBridge.ts — corrigé au lot 1 du plan, puis 0.
+      const coupables: string[] = [];
+      for (const fp of getSrcFiles(['.ts', '.tsx'])) {
+        if (fp.includes('.test.')) continue;
+        const lignes = fs.readFileSync(fp, 'utf-8').split('\n');
+        lignes.forEach((l, i) => {
+          if (!/JSON\.stringify/.test(l)) return;
+          if (/\.(sign|hash)\s*\(/.test(lignes.slice(i, i + 4).join('\n'))) {
+            coupables.push(`${path.relative(ROOT, fp)}:${i + 1}`);
+          }
+        });
+      }
+      expect(
+        coupables.length,
+        `Scellement non déterministe — utiliser CryptoService.canonicalStringify :\n${coupables.join('\n')}`,
+      ).toBeLessThanOrEqual(MAX);
+    });
+  });
+
+  describe('INV-12 — La Gate 6 ne peut pas disparaître', () => {
+    it('le contrôle du dernier kilomètre est branché dans le hook et dans preflight', () => {
+      expect(fs.existsSync(path.join(ROOT, 'scripts/check-last-mile.mjs')),
+        'scripts/check-last-mile.mjs a été supprimé').toBe(true);
+      const hook = fs.readFileSync(path.join(ROOT, '.githooks/pre-commit'), 'utf-8');
+      expect(hook, 'Gate 6 retirée du hook pre-commit').toContain('check-last-mile.mjs');
+      const pf = fs.readFileSync(path.join(ROOT, 'scripts/preflight.sh'), 'utf-8');
+      expect(pf, 'Gate 6 retirée de preflight.sh').toContain('check-last-mile.mjs');
+      for (const seuil of ['ORPHAN_COMPONENTS_MAX', 'UNREAD_SETTINGS_MAX',
+                           'MISSING_I18N_KEYS_MAX', 'INERT_HANDLER_PROPS_MAX',
+                           'NON_CANONICAL_SEAL_MAX']) {
+        expect(pf, `Ratchet ${seuil} supprimé de preflight.sh`).toContain(seuil);
+      }
+    });
+  });
+
+  describe('INV-13 — Pas de métrique fabriquée à l’écran', () => {
+    it('aucune valeur chiffrée avec unité n’est codée en dur dans un composant', () => {
+      // Ce que ça attrape : value="14.5" (solde de congés), value="€ 142.50"
+      // (pourboires), value="+1.4%" (marge). L'utilisateur ne peut pas
+      // distinguer une donnée calculée d'une donnée inventée.
+      // Exclus : <option> (valeurs de formulaire, ex. taux de TVA) et la vitrine
+      // du design system (données de démonstration assumées).
+      const MAX = 10; // mesuré le 2026-08-26 — ne doit que descendre
+      const coupables: string[] = [];
+      for (const fp of getSrcFiles(['.tsx'])) {
+        if (fp.includes('.test.') || fp.includes('design-system')) continue;
+        const lignes = fs.readFileSync(fp, 'utf-8').split('\n');
+        lignes.forEach((l, i) => {
+          if (/<[Oo]ption/.test(l)) return;
+          for (const m of l.matchAll(/value="([^"{]*\d[^"{]*)"/g)) {
+            const v = m[1];
+            if (/[%€$]|\bh\b|salari|couvert/.test(v) || /^\d+[.,]\d+$/.test(v)) {
+              coupables.push(`${path.relative(ROOT, fp)}:${i + 1} → "${v}"`);
+            }
+          }
+        });
+      }
+      expect(
+        coupables.length,
+        `Métriques codées en dur (brancher sur les vraies données) :\n${coupables.join('\n')}`,
+      ).toBeLessThanOrEqual(MAX);
+    });
+  });
+
 });

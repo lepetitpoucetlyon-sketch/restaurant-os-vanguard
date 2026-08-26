@@ -566,15 +566,64 @@ mortes, c'est autant de code qui ressemble à de la fonctionnalité sans en êtr
    **et** droit (ma première sonde ne testait que le droit).
 5. `pre-commit` vert, sans `--no-verify`.
 
-## Invariants à ajouter
+## Garde-fous — LIVRÉS (2026-08-26)
 
-| Invariant | Ce qu'il empêche |
-|---|---|
-| `INV-11` | Un `JSON.stringify` avant un `.sign()` / `.hash()` — scellement non déterministe |
-| `INV-12` | Un composant exporté par un barrel sans aucun consommateur (le trou de méthode de la rév. 1) |
-| `INV-13` | Une valeur numérique en dur dans un composant de tableau de bord (les `value="14.5"`) |
+Le fil rouge de cet audit n'est pas une liste de 12 lots : c'est une **habitude**.
+L'infrastructure est systématiquement construite plus vite que son branchement.
+Corriger les lots sans traiter l'habitude reproduirait le même état.
 
-`INV-10` (props handler inertes) existe déjà depuis le commit `105c24184`.
+Mesure qui a décidé de la réponse : **184 réglages déclarés dans l'écran
+Paramètres, 7 réellement lus par du code. 177 ne pilotent rien.**
+`split_bill_enabled` n'était pas un cas isolé — c'était 96 % de l'écran.
+
+### Loi 8 — Bout-en-bout (`AGENTS.md`)
+
+Une fonctionnalité n'est livrée que si elle est **atteignable**. Quatre points :
+rendu quelque part · réglage lu · clés `t()` existantes · handlers invoqués.
+Travail en cours assumé via `@wip` avec propriétaire et échéance.
+
+### Gate 6 — « dernier kilomètre » (`scripts/check-last-mile.mjs`)
+
+Les 5 gates historiques valident des propriétés du code **écrit** (types, barrel,
+cycles, patterns). **Aucune ne vérifiait que ce qui est écrit est atteint.**
+
+| Cliquet | Valeur gelée | Ce qu'il empêche |
+|---|---:|---|
+| `ORPHAN_COMPONENTS_MAX` | 88 | Un composant de plus sans consommateur |
+| `UNREAD_SETTINGS_MAX` | 177 | Un réglage de plus qui ne pilote rien |
+| `MISSING_I18N_KEYS_MAX` | 0 | Une clé affichée en clair à l'écran |
+| `INERT_HANDLER_PROPS_MAX` | 1 | Un handler de plus rendu inerte |
+| `NON_CANONICAL_SEAL_MAX` | 1 | Un scellement de plus non déterministe |
+
+**Le cliquet ne bloque pas la dette existante — il l'empêche de croître.** C'est
+l'idiome déjà en place (`MADGE_CYCLES_MAX`, `BARREL_DEBT_MAX`). Les seuils vivent
+dans `preflight.sh` et sont surveillés par `verify-gate-integrity.mjs` :
+**vérifié en session**, relever `ORPHAN_COMPONENTS_MAX` de 88 à 95 est refusé.
+
+Branché dans le hook `pre-commit` ([6/6]) **et** dans `preflight.sh` ([11/11]).
+Coût mesuré : **0,9 s**.
+
+### Invariants `INV-11` / `INV-12` / `INV-13`
+
+- **INV-11** — aucun `JSON.stringify` avant un `sign()`/`hash()`.
+- **INV-12** — méta-garde : la Gate 6 ne peut pas être retirée du hook, de
+  `preflight.sh`, ni ses 5 seuils supprimés.
+- **INV-13** — aucune métrique chiffrée codée en dur dans un composant. Calibré à
+  10, avec exclusion des `<option>` (taux de TVA) et de la vitrine design system :
+  **0 faux positif**.
+
+### Ce que les garde-fous ont trouvé en étant écrits
+
+- `INV-10` (écrit ce matin) a immédiatement attrapé `onClearCart`, que la lecture
+  manuelle avait manqué.
+- `INV-13` a révélé **un bug vivant non repéré par les deux audits** :
+  `InventoryReceptionDashboard.tsx:315` affiche `<LogItem label="Marge Calculée"
+  value="+1.4%" />` — une marge **inventée** sur un écran monté et atteignable
+  (`/admin/inventory/reception`, via « Réception Marchandises »).
+
+Vérifié : tsc 0 · **2 382 tests / 0 échec** · Gate 6 verte · anti-triche testé.
+
+---
 
 ## Risque transverse
 

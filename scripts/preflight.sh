@@ -76,6 +76,17 @@ step "🧹 [3/10] ESLint — vérification complète (barrel-debt + totaux réel
 # Baseline réelle audit 2026-08-19 : 0 violation (dette entièrement résolue).
 # Ne jamais augmenter ce seuil — 0 violation permanente.
 BARREL_DEBT_MAX=0
+
+# ── Ratchets « dernier kilomètre » (Gate 6 / AGENTS.md Loi 8) ────────────────
+# Les gates 1-5 vérifient des propriétés du code ÉCRIT ; aucune ne vérifie que
+# ce qui est écrit est ATTEINT. Ces 5 compteurs comblent cet angle mort.
+# Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
+# verify-gate-integrity.mjs refuse toute hausse (Loi 2).
+ORPHAN_COMPONENTS_MAX=88      # composants exportés sans aucun consommateur
+UNREAD_SETTINGS_MAX=177       # réglages déclarés dans l'écran Paramètres, lus par personne
+MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
+INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
+NON_CANONICAL_SEAL_MAX=1      # JSON.stringify avant sign()/hash() (1 = ProcurementBridge)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
@@ -245,6 +256,13 @@ ok "Intégrité des gates : aucune gate desserrée vs baseline"
 # Si un chiffre est faux ici, c'est que la capture est cassée, pas qu'on ment.
 echo ""
 echo -e "${GREEN}${BOLD}✅ Preflight complet — prêt pour merge/deploy${RESET}"
+step "🔗 [11/11] Dernier kilomètre — ce qui est écrit est-il atteint ?"
+if node scripts/check-last-mile.mjs; then
+  ok "Dernier kilomètre : aucun compteur en hausse."
+else
+  fail "Dernier kilomètre : un compteur a augmenté (composant non branché, réglage mort, clé i18n absente…)."
+fi
+
 echo ""
 echo "  Métriques RÉELLES de cette exécution :"
 echo "   1. TypeScript     — $TSC_ERRORS erreur(s)"

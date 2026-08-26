@@ -50,6 +50,62 @@ Toute métrique dynamique projet doit être GÉNÉRÉE (`docs/HEALTH.md`) ou TES
 
 ---
 
+## Loi 8 — Bout-en-bout : une fonctionnalité écrite n'est pas une fonctionnalité livrée
+
+Les Lois 1 à 7 protègent la **qualité de ce qui est écrit**. La Loi 8 protège le
+**dernier kilomètre** : ce qui est écrit doit être ATTEIGNABLE.
+
+`tsc`, `vitest` et `next build` valident une **forme**, jamais une **destination**.
+Un composant que personne ne monte, un handler jamais appelé, un réglage jamais
+lu, une clé de traduction absente : tout cela est syntaxiquement parfait et
+passe toutes les gates historiques. C'est ainsi que ce dépôt a produit —
+constaté et mesuré le 2026-08-26 :
+
+- `Map3DOverlay` jamais monté, avec `setIsMap3DOpen={() => {}}` : clic sans effet ;
+- `onSplitBill: _onSplitBill` : partage d'addition **inatteignable**, alors que
+  l'écran de répartition ET un réglage « Addition divisée » existaient ;
+- 31 libellés de navigation affichés en clair (« nav.crm », « nav.timeclock ») ;
+- **177 réglages sur 184** déclarés dans l'écran Paramètres et lus par personne ;
+- **88 composants / 10 280 lignes** jamais rendus dans l'interface.
+
+### La règle
+
+Avant de déclarer une fonctionnalité livrée, les **quatre** points doivent être vrais :
+
+1. **Rendu** — le composant est monté quelque part d'atteignable depuis une route.
+2. **Réglage** — s'il expose un réglage, ce réglage est LU par du code.
+3. **Libellés** — ses clés `t()` existent dans `fr.ts` (sinon la clé s'affiche brute).
+4. **Handlers** — ses props `onX` sont réellement invoquées (jamais `_onX`).
+
+### La mécanique
+
+Gate 6 (`scripts/check-last-mile.mjs`, hook `pre-commit` et `preflight.sh`)
+mesure ces quatre points plus le scellement canonique, sous forme de **cliquets**
+déclarés dans `preflight.sh` :
+
+```
+ORPHAN_COMPONENTS_MAX      UNREAD_SETTINGS_MAX      MISSING_I18N_KEYS_MAX
+INERT_HANDLER_PROPS_MAX    NON_CANONICAL_SEAL_MAX
+```
+
+Ils **ne bloquent pas la dette existante** — elle est gelée à son niveau du jour.
+Ils rendent impossible de l'**augmenter**. `verify-gate-integrity.mjs` les
+surveille : les relever déclenche la Loi 2.
+
+### Travail en cours assumé
+
+Un composant écrit avant son écran est légitime. Il doit alors porter `@wip` dans
+son en-tête, avec **propriétaire et échéance** :
+
+```tsx
+/** @wip mohammed — écran cible /operations, échéance 2026-09-15 */
+```
+
+Un `@wip` est exclu du compteur. Sans `@wip`, un composant sans consommateur fait
+échouer le commit. **L'intention doit être explicite, jamais devinée.**
+
+---
+
 ## Installation des gardes (une fois, par la personne humaine de préférence)
 ```bash
 git config core.hooksPath .githooks
