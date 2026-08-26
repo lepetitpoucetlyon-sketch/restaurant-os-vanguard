@@ -16,6 +16,7 @@ import { useAtomValue } from "jotai";
 import { recipesAtom } from "@/store/pillars/logistics";
 import { Recipe } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
+import { EmptyState, Button } from "@/shared/components/ui";
 
 interface BarOrderItem {
   name: string;
@@ -120,184 +121,198 @@ export const KdsTab: React.FC<KdsTabProps> = ({
             </div>
         </div>
 
-        <div 
-            className="grid gap-8 overflow-y-auto pb-32 pr-2 custom-scrollbar"
-            style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` }}
-        >
-            {orders.filter(o => o.status !== 'delivered' && (searchQueryKDS === '' || o.table.toLowerCase().includes(searchQueryKDS.toLowerCase()))).map((ticket) => {
-                const elapsed = ticket.elapsed;
-                const isReady = ticket.status === 'ready';
-                const isUrgent = !isReady && (ticket.priority === 'rush' || elapsed >= 15);
-                const isWarning = !isReady && (elapsed >= 8 && elapsed < 15);
+        {(() => {
+            const filteredOrders = orders.filter(o => o.status !== 'delivered' && (searchQueryKDS === '' || o.table.toLowerCase().includes(searchQueryKDS.toLowerCase())));
 
+            if (filteredOrders.length === 0) {
                 return (
-                    <motion.div
-                        key={ticket.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className={cn(
-                            "flex flex-col rounded-[2.5rem] overflow-hidden border transition-all duration-500 h-fit",
-                            "bg-surface-card dark:bg-bg-secondary",
-                            isReady 
-                                ? "border-border bg-bg-secondary/30 grayscale-[0.5]" 
-                                : isUrgent 
-                                    ? "border-red-500 shadow-[0_20px_50px_-15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/20" 
-                                    : isWarning
-                                        ? "border-action-primary shadow-xl shadow-amber-500/5"
-                                        : "border-black dark:border-subtle shadow-2xl shadow-neutral-200/50 dark:shadow-none"
-                        )}
-                    >
-                        {/* Ticket Header - Serif Style */}
-                        <div className={cn(
-                            "p-6 border-b transition-colors duration-500 relative",
-                            isUrgent ? "bg-status-danger/5" : "bg-bg-tertiary/50"
-                        )}>
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-gold/30 to-transparent" />
-                            
-                            <div className="flex justify-between items-center">
-                                <div className="flex flex-col">
-                                    <div className="flex items-center gap-3">
-                                        <h3 className="font-serif font-black tracking-tight italic text-text-primary text-4xl">
-                                            {ticket.table}
-                                        </h3>
-                                        {(isUrgent || rushMode) && (
-                                            <span className="relative flex h-2.5 w-2.5">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-danger opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-danger"></span>
-                                            </span>
-                                        )}
-                                    </div>
-                                    <span className="text-nano font-black uppercase tracking-[0.25em] text-text-muted mt-2">
-                                        {ticket.serverName}
-                                    </span>
-                                </div>
-
-                                <div className={cn(
-                                    "px-3 py-2 rounded-xl font-mono text-sm font-black border flex items-center gap-2 shadow-sm transition-all",
-                                    isUrgent ? "bg-status-danger text-text-primary border-red-500" :
-                                    isWarning ? "bg-status-warning text-text-primary border-action-primary" :
-                                    "bg-surface-card dark:bg-bg-tertiary text-text-primary border-border"
-                                )}>
-                                    <Clock className={cn("w-3.5 h-3.5", (isUrgent || rushMode) && "animate-spin-slow")} />
-                                    {elapsed}<span className="text-nano opacity-70 ml-0.5">MIN</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Ticket Items - Splitting Logic */}
-                        <div className="flex-1 p-6 flex flex-col gap-5">
-                            {ticket.items.flatMap(item => {
-                                if ((item.modifiers?.length || item.notes) && item.qty > 1) {
-                                    return Array(item.qty).fill(null).map(() => ({ ...item, qty: 1 }));
-                                }
-                                return [item];
-                            }).map((item, i) => {
-                                const product = recipes.find(p => p.name === item.name);
-                                const hasMods = (item.modifiers && item.modifiers.length > 0) || item.notes;
-
-                                return (
-                                    <div key={i} className={cn(
-                                        "group/item relative flex flex-col overflow-hidden rounded-[24px] bg-surface-card dark:bg-bg-primary border transition-all duration-500",
-                                        hasMods ? "border-action-primary/50 shadow-lg shadow-amber-500/5" : "border-border shadow-sm"
-                                    )}>
-                                        <div className="relative aspect-[16/9] w-full overflow-hidden">
-                                            {item.image ? (
-                                                <img src={item.image} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-700 opacity-90" />
-                                            ) : (
-                                                <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
-                                                    <Martini className="w-8 h-8 text-text-muted/30" />
-                                                </div>
-                                            )}
-                                            
-                                            <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-action-primary text-text-primary text-nano font-black tracking-widest shadow-lg">
-                                                {item.station}
-                                            </div>
-                                            
-                                            <div className="absolute top-3 right-3 w-9 h-9 rounded-xl bg-accent-gold text-bg-primary flex items-center justify-center font-black text-sm shadow-xl border border-black/10">
-                                                {item.qty}
-                                            </div>
-
-                                            <button 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setSelectedRecipe(product as import("@nexus/contracts").Recipe ?? null);
-                                                }}
-                                                className="absolute bottom-3 right-3 w-9 h-9 rounded-xl bg-surface-sidebar/40 hover:bg-surface-sidebar/60 backdrop-blur-xl border border-default flex items-center justify-center text-text-primary transition-all scale-0 group-hover/item:scale-100"
-                                            >
-                                                <BookOpen className="w-4 h-4" />
-                                            </button>
-                                        </div>
-
-                                        <div className="p-4">
-                                            <h4 className="font-serif text-lg font-bold text-text-primary tracking-tight leading-none mb-2">
-                                                {item.name}
-                                            </h4>
-                                            
-                                            {item.modifiers && item.modifiers.length > 0 && (
-                                                <div className="flex flex-col gap-1 mt-3">
-                                                    {item.modifiers.map((m: string | { name: string }, mi: number) => (
-                                                        <span key={mi} className="text-xs font-bold text-status-warning flex items-center gap-2">
-                                                            <span className="w-1 h-1 rounded-full bg-status-warning" />
-                                                            {typeof m === 'string' ? m : m.name}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-
-                                            {item.notes && (
-                                                <div className="mt-3 p-2 rounded-xl bg-status-warning dark:bg-status-warning/10 border border-amber-200 dark:border-action-primary/20 text-xs font-bold text-status-warning italic">
-                                                    "{ item.notes }"
-                                                </div>
-                                            )}
-
-                                            <div className="mt-4 pt-3 border-t border-dashed border-border flex items-center justify-between text-chip-label-sm text-text-muted">
-                                                <div className="flex items-center gap-1.5">
-                                                    <GlassWater className="w-3 h-3" />
-                                                    <span>{item.details?.glass || 'VERRE STD'}</span>
-                                                </div>
-                                                <span>{item.details?.method || 'SERVICE'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* Action Footer - High Fidelity */}
-                        <div className="p-6 pt-0 mt-auto">
-                            <div className="h-px w-full bg-border/50 mb-6" />
-                            {ticket.status === 'new' && (
-                                <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-surface-sidebar dark:bg-surface-card text-text-primary dark:text-primary hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
-                                    onClick={() => updateOrderStatus(ticket.id, 'preparing')}
-                                >
-                                    <Flame className="w-4 h-4 text-status-warning fill-current" />
-                                    LANCER PRODUCTION
-                                </button>
-                            )}
-                            {ticket.status === 'preparing' && (
-                                <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-status-success text-text-primary hover:bg-status-success hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
-                                    onClick={() => updateOrderStatus(ticket.id, 'ready')}
-                                >
-                                    MARQUER PRÊT <ArrowRight className="w-4 h-4" />
-                                </button>
-                            )}
-                            {ticket.status === 'ready' && (
-                                <button
-                                    className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-surface-bg dark:hover:bg-surface-sidebar flex items-center justify-center gap-3"
-                                    onClick={() => updateOrderStatus(ticket.id, 'delivered')}
-                                >
-                                    <CheckCircle2 className="w-4 h-4 text-status-success" />
-                                    CLÔTURER BON
-                                </button>
-                            )}
-                        </div>
-                    </motion.div>
+                    <div className="py-20 flex justify-center">
+                        <EmptyState
+                            icon={CheckCircle2}
+                            title={searchQueryKDS ? "Aucun bon trouvé" : "Production Bar à Jour"}
+                            description={searchQueryKDS ? `Aucun bon ne correspond à "${searchQueryKDS}".` : "Toutes les boissons ont été envoyées. En attente de nouvelles commandes..."}
+                            action={searchQueryKDS ? (
+                                <Button size="sm" variant="default" onClick={() => setSearchQueryKDS('')} className="text-xs">
+                                    Effacer la recherche
+                                </Button>
+                            ) : undefined}
+                        />
+                    </div>
                 );
-            })}
-        </div>
+            }
+
+            return (
+                <div 
+                    className="grid gap-8 overflow-y-auto pb-32 pr-2 custom-scrollbar"
+                    style={{ gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` }}
+                >
+                    {filteredOrders.map((ticket) => {
+                        const elapsed = ticket.elapsed;
+                        const isReady = ticket.status === 'ready';
+                        const isUrgent = !isReady && (ticket.priority === 'rush' || elapsed >= 15);
+                        const isWarning = !isReady && (elapsed >= 8 && elapsed < 15);
+
+                        return (
+                            <motion.div
+                                key={ticket.id}
+                                layout
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className={cn(
+                                    "flex flex-col rounded-[2.5rem] overflow-hidden border transition-all duration-500 h-fit",
+                                    "bg-surface-card dark:bg-bg-secondary",
+                                    isReady 
+                                        ? "border-border bg-bg-secondary/30 grayscale-[0.5]" 
+                                        : isUrgent 
+                                            ? "border-red-500 shadow-[0_20px_50px_-15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/20" 
+                                            : isWarning
+                                                ? "border-action-primary shadow-xl shadow-amber-500/5"
+                                                : "border-black dark:border-subtle shadow-2xl shadow-neutral-200/50 dark:shadow-none"
+                                )}
+                            >
+                                {/* Ticket Header - Serif Style */}
+                                <div className={cn(
+                                    "p-6 border-b transition-colors duration-500 relative",
+                                    isUrgent ? "bg-status-danger/5" : "bg-bg-tertiary/50"
+                                )}>
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-gold/30 to-transparent" />
+                                    
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex flex-col">
+                                            <div className="flex items-center gap-3">
+                                                <h3 className="font-serif font-black tracking-tight italic text-text-primary text-4xl">
+                                                    {ticket.table}
+                                                </h3>
+                                                {(isUrgent || rushMode) && (
+                                                    <span className="relative flex h-2.5 w-2.5">
+                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-danger opacity-75"></span>
+                                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-danger"></span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span className="text-nano font-black uppercase tracking-[0.25em] text-text-muted mt-2">
+                                                {ticket.serverName}
+                                            </span>
+                                        </div>
+
+                                        <div className={cn(
+                                            "px-3 py-2 rounded-xl font-mono text-sm font-black border flex items-center gap-2 shadow-sm transition-all",
+                                            isUrgent ? "bg-status-danger text-text-primary border-red-500" :
+                                            isWarning ? "bg-status-warning text-text-primary border-action-primary" :
+                                            "bg-surface-card dark:bg-bg-tertiary text-text-primary border-border"
+                                        )}>
+                                            <Clock className="w-3.5 h-3.5" />
+                                            <span>{elapsed}m</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Items Deck */}
+                                <div className="p-6 space-y-4 flex-1">
+                                    {ticket.items.map((item, itemIdx) => {
+                                        return (
+                                            <div
+                                                key={itemIdx}
+                                                className={cn(
+                                                    "p-4 rounded-2xl border transition-all relative overflow-hidden",
+                                                    "bg-bg-tertiary/30 border-border"
+                                                )}
+                                            >
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={cn(
+                                                            "w-8 h-8 rounded-xl font-mono font-black flex items-center justify-center text-sm shadow-sm",
+                                                            "bg-action-primary text-text-on-primary"
+                                                        )}>
+                                                            {item.qty}
+                                                        </div>
+                                                        <span className="font-bold text-text-primary text-base tracking-tight">
+                                                            {item.name}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Recipe Direct Action */}
+                                                {recipes && recipes.some(r => r.name.toLowerCase() === item.name.toLowerCase()) && (
+                                                    <button
+                                                        onClick={() => {
+                                                            const match = recipes.find(r => r.name.toLowerCase() === item.name.toLowerCase());
+                                                            if (match) setSelectedRecipe(match);
+                                                        }}
+                                                        className="mt-3 w-full py-1.5 px-3 rounded-xl bg-accent-gold/10 hover:bg-accent-gold/20 text-accent-gold border border-accent-gold/30 text-nano font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all"
+                                                    >
+                                                        <BookOpen className="w-3 h-3" /> Fiche Recette
+                                                    </button>
+                                                )}
+
+                                                {/* Modifiers / Notes */}
+                                                {item.modifiers && item.modifiers.length > 0 && (
+                                                    <div className="flex flex-wrap gap-1.5 mt-3">
+                                                        {item.modifiers.map((mod, modIdx) => (
+                                                            <span
+                                                                key={modIdx}
+                                                                className="px-2 py-0.5 rounded-lg text-micro font-bold bg-surface-card border border-border text-text-secondary"
+                                                            >
+                                                                {mod}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {item.notes && (
+                                                    <div className="mt-2 text-micro italic text-status-danger font-medium">
+                                                        "{ item.notes }"
+                                                    </div>
+                                                )}
+
+                                                <div className="mt-4 pt-3 border-t border-dashed border-border flex items-center justify-between text-chip-label-sm text-text-muted">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <GlassWater className="w-3 h-3" />
+                                                        <span>{item.details?.glass || 'VERRE STD'}</span>
+                                                    </div>
+                                                    <span>{item.details?.method || 'SERVICE'}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Action Footer - High Fidelity */}
+                                <div className="p-6 pt-0 mt-auto">
+                                    <div className="h-px w-full bg-border/50 mb-6" />
+                                    {ticket.status === 'new' && (
+                                        <button
+                                            className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-action-primary hover:bg-action-primary-hover text-text-on-primary hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3"
+                                            onClick={() => updateOrderStatus(ticket.id, 'preparing')}
+                                        >
+                                            <Flame className="w-4 h-4 text-status-warning fill-current" />
+                                            LANCER PRODUCTION
+                                        </button>
+                                    )}
+                                    {ticket.status === 'preparing' && (
+                                        <button
+                                            className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-status-success text-text-primary hover:bg-status-success hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3"
+                                            onClick={() => updateOrderStatus(ticket.id, 'ready')}
+                                        >
+                                            MARQUER PRÊT <ArrowRight className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                    {ticket.status === 'ready' && (
+                                        <button
+                                            className="w-full h-16 rounded-[20px] font-black uppercase tracking-[0.3em] text-nano transition-all bg-bg-tertiary border-2 border-border text-text-primary hover:bg-surface-glass flex items-center justify-center gap-3"
+                                            onClick={() => updateOrderStatus(ticket.id, 'delivered')}
+                                        >
+                                            <CheckCircle2 className="w-4 h-4 text-status-success" />
+                                            CLÔTURER BON
+                                        </button>
+                                    )}
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            );
+        })()}
     </div>
   );
 };

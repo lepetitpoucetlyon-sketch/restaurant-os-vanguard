@@ -60,5 +60,6 @@ export * from './ResponsiveShell';
 export * from './RoleAwareView';
 export * from './FiscalReceiptSealZone';
 export * from './CelebrationParticles';
+export * from './DataView';
 
 

@@ -3,9 +3,10 @@
 import { useMemo, useCallback, memo } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, AlertTriangle, Clock } from "lucide-react";
+import { Plus, Search, AlertTriangle, Clock, Package } from "lucide-react";
 import { Product, Option } from "@nexus/contracts";
 import { cn } from "@/lib/ui.foundations";
+import { EmptyState, Button, SkeletonList } from "@/shared/components/ui";
 import { posSearchQueryAtom, posSelectedProductAtom, posProductDetailsOpenAtom } from '../store/posAtoms';
 import { performanceModeAtom } from "@/store/pillars/sovereign";
 import { quarantinedProductsAtom } from "@/store/pillars/compliance";
@@ -42,118 +43,98 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
     return (
     <motion.div
         layout={performanceMode ? false : "position"}
-        initial={performanceMode ? false : { opacity: 0, y: 30 }}
+        initial={performanceMode ? false : { opacity: 0, y: 15 }}
         animate={performanceMode ? false : { opacity: 1, y: 0 }}
         transition={performanceMode ? { duration: 0 } : { 
-            delay: idx * 0.02, 
-            duration: 0.8, 
+            delay: idx * 0.015, 
+            duration: 0.35, 
             ease: [0.16, 1, 0.3, 1] 
         }}
-        exit={performanceMode ? { opacity: 0 } : { opacity: 0, scale: 0.9, transition: { duration: 0.4 } }}
+        exit={performanceMode ? { opacity: 0 } : { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
         onClick={() => !isDisabled && onClick(product)}
         className={cn(
-            "group rounded-[42px] border border-border/40 overflow-hidden transition-all relative flex flex-col h-full",
-            performanceMode ? "duration-0" : "duration-700",
-            !performanceMode && "backdrop-blur-xl",
+            "group rounded-2xl border transition-all duration-200 relative flex flex-col h-full overflow-hidden p-3",
             isDisabled 
-                ? "bg-surface-sidebar/5 grayscale cursor-not-allowed border-red-500/20 shadow-none opacity-60" 
-                : "bg-surface-card dark:bg-surface-card/[0.02] cursor-pointer hover:border-accent-gold/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] active:scale-[0.98]"
+                ? "bg-surface-glass grayscale cursor-not-allowed border-red-500/20 opacity-50" 
+                : "bg-surface-card dark:bg-bg-secondary border-border/70 dark:border-white/10 cursor-pointer hover:border-action-primary/60 hover:shadow-lg active:scale-[0.99]"
         )}
     >
         {/* Compliance Overlays */}
         <AnimatePresence>
             {isDisabled && (
                 <motion.div 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-surface-sidebar/40 backdrop-blur-sm p-6 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-center"
                 >
-                    <div className="w-16 h-16 rounded-full bg-status-danger/20 flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-full bg-status-danger/20 flex items-center justify-center mb-2">
                         {disabledReason === 'expired' || disabledReason === 'quarantine' ? (
-                            <Clock className="w-8 h-8 text-status-danger animate-pulse" />
+                            <Clock className="w-5 h-5 text-status-danger animate-pulse" />
                         ) : (
-                            <AlertTriangle className="w-8 h-8 text-status-danger" />
+                            <AlertTriangle className="w-5 h-5 text-status-danger" />
                         )}
                     </div>
-                    <span className="text-text-primary font-serif italic text-xl font-bold uppercase tracking-widest drop-shadow-lg text-center">
-                        {disabledReason === 'expired' ? 'DLC CRITIQUE' : disabledReason === 'quarantine' ? 'QUARANTAINE HACCP' : 'RUPTURE STOCK'}
+                    <span className="text-white text-xs font-bold uppercase tracking-wider">
+                        {disabledReason === 'expired' ? 'DLC Critique' : disabledReason === 'quarantine' ? 'Quarantaine HACCP' : 'Rupture'}
                     </span>
-                    <p className="text-text-primary/70 text-sm mt-2 font-medium text-center px-4">
-                        {disabledReason === 'expired' 
-                            ? "Produit retiré par mesure d'hygiène" 
-                            : disabledReason === 'quarantine'
-                            ? "Produit isolé (Alerte Capteur)"
-                            : "Ingrédients manquants pour ce plat"}
-                    </p>
                 </motion.div>
             )}
         </AnimatePresence>
-        {/* Categorical Glow Aura */}
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-        {/* Product Image Holder - Museum Frame */}
-        <div className="h-60 md:h-72 bg-bg-tertiary relative overflow-hidden m-4 rounded-[32px] border border-black/5 dark:border-white/5">
-            {showImages && product.image ? (
-                <div className="absolute inset-0 transition-transform duration-1000 group-hover:scale-110">
-                    <img
-                        src={`/images/${product.image}.png`}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
-                        }}
-                    />
-                </div>
-            ) : (
-                <div className={cn("absolute inset-0 flex items-center justify-center opacity-40 bg-gradient-to-br from-bg-tertiary to-border")}>
-                    <Plus strokeWidth={0.5} className="w-20 h-20 text-text-muted opacity-20" />
-                </div>
-            )}
+        {/* Product Image Holder */}
+        {showImages && (
+            <div className="h-40 md:h-44 bg-bg-tertiary relative overflow-hidden rounded-xl border border-border/40 mb-3">
+                {product.image ? (
+                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+                        <img
+                            src={`/images/${product.image}.png`}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-30 bg-bg-secondary">
+                        <Plus className="w-10 h-10 text-text-muted" />
+                    </div>
+                )}
+            </div>
+        )}
 
-            {/* Aesthetic Spotlight Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-        </div>
+        <div className="flex flex-col flex-1 justify-between px-1">
+            <div>
+                <h3 className="text-sm md:text-base font-semibold text-text-primary group-hover:text-action-primary transition-colors line-clamp-1 leading-snug">
+                    {product.name}
+                </h3>
+                {product.description && (
+                    <p className="text-xs text-text-muted line-clamp-2 mt-1 leading-relaxed">
+                        {product.description}
+                    </p>
+                )}
+            </div>
 
-        <div className="px-8 pb-8 flex flex-col flex-1">
-            <h3 className="text-2xl md:text-2xl font-serif font-black text-text-primary mb-3 group-hover:text-accent-gold transition-colors leading-tight italic decoration-accent-gold/20 decoration-2 underline-offset-8 group-hover:underline">
-                {product.name}
-            </h3>
-
-            <p className="text-[12px] md:text-[13px] text-text-muted/80 leading-relaxed flex-1 font-medium font-sans mb-8">
-                {product.description || t('pos.fallback_description')}
-            </p>
-
-            <div className="flex items-center justify-between border-t border-border/30 pt-6">
-                <div className="flex items-center gap-4">
-                    <span className="text-3xl md:text-3xl font-serif font-black text-text-primary mb-3 group-hover:text-accent-gold transition-colors leading-tight italic decoration-accent-gold/20 decoration-2 underline-offset-8 group-hover:underline">
-                        {finalPrice.toFixed(2)}€
+            <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-border/40">
+                <div className="flex items-baseline gap-2">
+                    <span className="text-base md:text-lg font-bold font-mono text-text-primary tracking-tight tabular-nums">
+                        {finalPrice.toFixed(2)} €
                     </span>
                     {multiplier !== 1 && (
-                        <span className="text-xs text-text-muted line-through opacity-50">
-                            {(product.priceInMicrounits / 1_000_000).toFixed(2)}€
+                        <span className="text-xs text-text-muted line-through font-mono opacity-50">
+                            {(product.priceInMicrounits / 1_000_000).toFixed(2)} €
                         </span>
                     )}
-                    <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
-                        <motion.div
-                            whileHover={{ scale: 1.1, rotate: 90 }}
-                            whileTap={{ scale: 0.9 }}
-                            className={cn(
-                                "rounded-full bg-text-primary text-text-primary dark:bg-surface-card dark:text-primary flex items-center justify-center shadow-premium hover:bg-accent-gold hover:text-text-primary transition-all duration-500",
-                                buttonSize === 'small' ? 'w-10 h-10' :
-                                buttonSize === 'large' ? 'w-14 h-14' : 'w-12 h-12'
-                            )}
-                        >
-                            <Plus strokeWidth={2.5} className={cn(
-                                buttonSize === 'small' ? 'w-4 h-4' :
-                                buttonSize === 'large' ? 'w-6 h-6' : 'w-5 h-5'
-                            )} />
-                        </motion.div>
-                    </div>
+                </div>
+
+                <div className="w-8 h-8 rounded-lg bg-bg-secondary dark:bg-white/5 border border-border group-hover:border-action-primary group-hover:bg-action-primary group-hover:text-text-on-primary flex items-center justify-center transition-all">
+                    <Plus className="w-4 h-4" />
                 </div>
             </div>
         </div>
     </motion.div>
-)});
+    );
+});
 
 ProductCard.displayName = "ProductCard";
 
@@ -272,8 +253,8 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-10 md:gap-14">
                     <AnimatePresence mode="wait">
                         {isLoading ? (
-                            <div className="col-span-full flex items-center justify-center py-20">
-                                <div className="w-12 h-12 border-4 border-accent-gold/20 border-t-accent-gold rounded-full animate-spin" />
+                            <div className="col-span-full py-10">
+                                <SkeletonList count={6} variant="card" />
                             </div>
                         ) : filteredProductsWithStatus.length > 0 ? (
                             filteredProductsWithStatus.map((p, idx) => (
@@ -292,8 +273,28 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
                                 />
                             ))
                         ) : (
-                            <div className="col-span-full text-center py-20">
-                                <p className="text-text-muted font-serif italic">Aucun produit trouvé dans cette catégorie</p>
+                            <div className="col-span-full py-12">
+                                <EmptyState
+                                    icon={searchQuery ? Search : Package}
+                                    title={searchQuery ? "Aucun produit trouvé" : "Catégorie vide"}
+                                    description={
+                                        searchQuery 
+                                            ? `Aucun article ne correspond à "${searchQuery}".` 
+                                            : "Aucun produit n'est configuré dans cette catégorie."
+                                    }
+                                    action={
+                                        searchQuery ? (
+                                            <Button 
+                                                size="sm" 
+                                                variant="default" 
+                                                onClick={() => setSearchQuery('')}
+                                                className="text-xs"
+                                            >
+                                                Effacer la recherche
+                                            </Button>
+                                        ) : undefined
+                                    }
+                                />
                             </div>
                         )}
                     </AnimatePresence>
