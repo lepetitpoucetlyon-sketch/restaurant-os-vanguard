@@ -65,6 +65,12 @@
         ],
         "createdAt": "2026-08-24T19:22:06.658Z",
         "reason": "Option du font-picker tenant (le client choisit sa police brand), pas la police que l'app utilise. Legitime showcase."
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-26T11:56:32.281Z",
+        "reason": "design system: --font-ui is Inter in src/app/globals.css; matching the app's real UI font"
       }
     ]
   }

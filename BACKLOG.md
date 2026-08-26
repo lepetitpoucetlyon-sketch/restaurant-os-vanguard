@@ -33,7 +33,7 @@
 | P1 | 🔧 | H1 | M | Terminal de paiement (Stripe Terminal / SumUp / Ingenico) | `src/lib/adapters/StripeTerminalAdapter.ts` | Stripe câblé sandbox — SumUp/Ingenico ⬜ |
 | P1 | ✅ | H1 | — | Mode hors-ligne POS avec sync auto au retour réseau | `src/lib/sync/offlineQueue.ts`, `src/lib/offline/sync-manager.ts` | File d'attente Dexie (`OfflineQueueService`) + `SyncManager` de ré-émission automatique |
 | P1 | 🔧 | H1 | S | Impression tickets thermiques ESC/POS (Epson, Star) | `src/lib/printers/EscPosDriver.ts` | Fonctionne ; auto-discovery imprimantes ⬜ |
-| P1 | ⬜ | H2 | S | Scanner code-barres / QR articles en caisse | `src/modules/ops/service/pos/` | — |
+| P1 | ✅ | H1 | — | Scanner code-barres / QR articles en caisse | `src/app/(client)/(ops)/pos/_hooks/usePosPage.ts` | Détection douchette/clavier, matching SKU/EAN/ID et ajout direct au panier |
 | P1 | ✅ | H1 | S | Alerte allergènes sur commandes & Check-In client KDS | `src/modules/facility/spaces/floor-plan/TableInsightPanel.tsx`, `ResaAllergenCheckHandler.ts` | Émission `reservation.matched` & notification urgente cuisine validées |
 | P1 | ✅ | H1 | — | Séquençage des plats (entrée → plat → dessert par table) | `src/modules/ops/production/kds/services/KDSCourseSequencingEngine.ts` | Validé : initialisation FIRED/HOLD, demande suite & tir en cuisine |
 | P1 | ✅ | H1 | — | Routage KDS multi-station (chaud / froid / pâtisserie) | `src/modules/ops/production/kds/KdsEngine.ts` | — |
