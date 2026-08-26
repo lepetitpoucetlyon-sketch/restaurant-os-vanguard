@@ -3,6 +3,7 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProductGrid, Cart, TableSelector, usePOSController } from '@/modules/ops';
 import { useAuth, useTenant } from '@/shared/providers/NexusCoreProvider';
@@ -11,6 +12,14 @@ import { cn } from '@/lib/ui.foundations';
 import { formatCurrency } from '@/lib/formatters';
 import { useStockAlerts } from '../pos/useStockAlerts';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
+
+// Même dialogue et même chemin de paiement que le POS de bureau : `usePOSController`
+// expose déjà isSplitOpen / handlePaySplit / handleSplitComplete. Le POS mobile
+// passait `onSplitBill={() => {}}` — le partage d'addition y était donc mort.
+const SplitBillDialog = dynamic(
+    () => import('@/modules/ops/service/pos/components/SplitBillDialog').then(m => m.SplitBillDialog),
+    { ssr: false }
+);
 
 function POSMobilePage() {
     const { currentUser } = useAuth();
@@ -25,6 +34,7 @@ function POSMobilePage() {
         currentTable, cartTotal, cartCount,
         handleAddToCart, handleUpdateQuantity, handleClearCart,
         handleSendToKitchen, handleCheckout,
+        isSplitOpen, setIsSplitOpen, handlePaySplit, handleSplitComplete,
     } = usePOSController();
 
     const [isCartOpen, setIsCartOpen] = useState(false);
@@ -163,7 +173,7 @@ function POSMobilePage() {
                                 onClearCart={handleClearCart}
                                 onCheckout={() => { setIsCartOpen(false); handleCheckout(); }}
                                 onSendToKitchen={() => { setIsCartOpen(false); handleSendToKitchen(); }}
-                                onSplitBill={() => {}}
+                                onSplitBill={() => { setIsCartOpen(false); setIsSplitOpen(true); }}
                                 tableNumber={currentTable?.number}
                                 guestCount={currentTable?.seats}
                                 showClose={false}
@@ -172,6 +182,16 @@ function POSMobilePage() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <SplitBillDialog
+                isOpen={isSplitOpen}
+                items={cartItems}
+                total={cartTotal}
+                coverCount={currentTable?.seats || 1}
+                onClose={() => setIsSplitOpen(false)}
+                onPaySplit={(amountInCents: number, guestIndex: number) => handlePaySplit(amountInCents, guestIndex)}
+                onSplitComplete={handleSplitComplete}
+            />
         </div>
     );
 }

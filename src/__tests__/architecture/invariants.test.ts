@@ -212,4 +212,76 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
   });
 
+  // ────────────────────────────────────────────────────────────────────────
+  // INV-10 — Handlers déclarés mais inertes
+  //
+  // Classe de bug indétectable par tsc, vitest et next build : du code
+  // parfaitement valide qui ne fait rien. Constatée trois fois sur ce dépôt :
+  //   - `setIsMap3DOpen={() => {}}` dans DesktopSidebar → « Cartographie 3D »
+  //     sans effet, et Map3DOverlay jamais monté ;
+  //   - `onSplitBill: _onSplitBill` dans Cart → partage d'addition
+  //     inatteignable, alors que SplitBillDialog et un réglage « Addition
+  //     divisée » existaient ;
+  //   - `_splitBillEnabled` : réglage lu puis ignoré.
+  //
+  // Le préfixe `_` signale un paramètre volontairement inutilisé. L'appliquer à
+  // une prop de type handler revient à débrancher silencieusement une
+  // fonctionnalité tout en gardant l'API intacte.
+  // ────────────────────────────────────────────────────────────────────────
+  describe('INV-10 — Aucun handler déclaré puis rendu inerte', () => {
+
+    /**
+     * Exceptions connues et ASSUMÉES — chacune doit porter une raison et une issue.
+     * Ce n'est pas une échappatoire : une entrée ici est une dette visible, testée,
+     * qui échouera dès que quelqu'un la retire du code sans la retirer d'ici.
+     */
+    const EXCEPTIONS_ASSUMEES: Record<string, string> = {
+      'src/modules/ops/service/pos/components/Cart.tsx:onClearCart':
+        'Vider un panier détruit une commande en cours : le geste attendu ' +
+        '(confirmation ? validation manager ? passage par VoidModal ?) est un ' +
+        'arbitrage produit non tranché. Le libellé "clear_cart" et le handler ' +
+        'handleClearCart existent déjà ; seul le bouton reste à décider. ' +
+        'handleClearCart est par ailleurs bien appelé en interne après encaissement ' +
+        '(usePos.ts), donc le panier se vide en fin de vente.',
+    };
+
+    it('aucune prop `on<Action>` n’est déstructurée en `_on<Action>` (handler débranché)', () => {
+      const coupables: string[] = [];
+      for (const fp of getSrcFiles(['.tsx'])) {
+        if (fp.includes('.test.')) continue;
+        const src = fs.readFileSync(fp, 'utf-8');
+        for (const m of src.matchAll(/\bon([A-Z]\w*)\s*:\s*_on\1\b/g)) {
+          const cle = `${path.relative(ROOT, fp)}:on${m[1]}`;
+          if (cle in EXCEPTIONS_ASSUMEES) continue;
+          coupables.push(`${path.relative(ROOT, fp)} → on${m[1]} déstructuré en _on${m[1]}`);
+        }
+      }
+      expect(
+        coupables,
+        'Prop handler déclarée dans l’interface puis marquée inutilisée : le parent ' +
+        'croit brancher une action, l’enfant ne l’appelle jamais. Soit on câble le ' +
+        'handler, soit on retire la prop de l’interface — mais pas d’entre-deux ' +
+        'silencieux.\n' + coupables.join('\n'),
+      ).toEqual([]);
+    });
+
+    it('le partage d’addition reste câblé de bout en bout (POS bureau et mobile)', () => {
+      const cart = fs.readFileSync(
+        path.join(ROOT, 'src/modules/ops/service/pos/components/Cart.tsx'), 'utf-8');
+      expect(cart, 'Cart doit invoquer onSplitBill, sinon SplitBillDialog est inatteignable')
+        .toMatch(/onClick=\{onSplitBill\}/);
+      expect(cart, 'le réglage split_bill_enabled doit piloter l’affichage du bouton')
+        .toMatch(/splitBillEnabled\s*&&/);
+
+      for (const page of ['src/app/(client)/(ops)/pos/page.tsx',
+                          'src/app/(client)/(ops)/pos-mobile/page.tsx']) {
+        const src = fs.readFileSync(path.join(ROOT, page), 'utf-8');
+        expect(src, `${page} doit passer un vrai handler à onSplitBill`)
+          .toMatch(/onSplitBill=\{\(\)\s*=>\s*\{[^}]*setIsSplitOpen\(true\)/);
+        expect(src, `${page} doit monter SplitBillDialog`)
+          .toMatch(/<SplitBillDialog/);
+      }
+    });
+  });
+
 });

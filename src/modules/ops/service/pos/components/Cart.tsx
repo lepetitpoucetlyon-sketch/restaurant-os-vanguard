@@ -124,15 +124,21 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
 };
 
 
-export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill: _onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
+export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
-    const _splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
+    // ⚠️ `onSplitBill` et ce réglage étaient tous deux préfixés `_` (convention
+    // « paramètre inutilisé ») : le panier n'affichait AUCUN bouton de partage,
+    // `setIsSplitOpen(true)` n'était jamais appelé, et `SplitBillDialog` ne
+    // pouvait donc jamais s'ouvrir — alors que l'écran de répartition existe et
+    // que les paramètres proposaient au gérant un interrupteur « Addition
+    // divisée » (config-registry.ts) qui ne pilotait rien.
+    const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
     const { data: config } = useIntelligence();
     const globalInflationRate = config?.globalInflationRate || 0;
     const { priceMultiplier } = useNexusFleet();
 
-    const { totalInMicrounits, htInMicrounits, totalInCents, htInCents } = useMemo(() => {
+    const { totalInMicrounits, htInMicrounits } = useMemo(() => {
         let totalMicro = BigInt(0);
         let htMicro = BigInt(0);
 
@@ -152,9 +158,6 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
         return {
             totalInMicrounits: Number(totalMicro),
             htInMicrounits: Number(htMicro),
-            // Parity mirrors kept for legacy callers (POSService.getProjectedMargin)
-            totalInCents: SovereignMath.toCents(totalMicro),
-            htInCents: SovereignMath.toCents(htMicro),
         };
     }, [items, priceMultiplier]);
 
@@ -227,7 +230,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                                 {totalInMicrounits > 0 && (
                                     <div className="flex items-center gap-1.5 px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/20">
                                         <Sparkles className="w-3 h-3 text-accent-gold" />
-                                        <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInCents / 100, globalInflationRate).toFixed(1)}%</span>
+                                        <span className="text-accent-gold font-black">MARGE PROJETÉE : {POSService.getProjectedMargin(totalInMicrounits / 1_000_000, globalInflationRate).toFixed(1)}%</span>
                                     </div>
                                 )}
                             </div>
@@ -244,6 +247,19 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         </div>
                     </div>
                 </FiscalReceiptSealZone>
+
+                {splitBillEnabled && (
+                    <button
+                        onClick={onSplitBill}
+                        disabled={items.length === 0}
+                        className="w-full h-12 mb-4 flex items-center justify-center gap-2.5 bg-bg-tertiary/60 text-text-muted hover:text-text-primary hover:bg-bg-tertiary border border-border/50 rounded-[2rem] disabled:opacity-30 disabled:hover:text-text-muted transition-colors"
+                    >
+                        <Users className="w-4 h-4" />
+                        <span className="text-nano font-black uppercase tracking-[0.2em]">
+                            {t('pos.split_bill', "Partager l'addition")}
+                        </span>
+                    </button>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                     <button

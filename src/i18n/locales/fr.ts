@@ -1,6 +1,19 @@
 import { SovereignData } from '@/shared/nexus-contract';
 
 const fr: SovereignData = {
+    "crm": {
+        "contact_info": "Infos contact",
+        "new_profile": "Nouveau profil",
+        "search_placeholder": "Rechercher un client…",
+        "add_crm": "Ajouter un client",
+        "global_portfolio": "Portefeuille global",
+        "book_reservation": "Réserver maintenant",
+        "full_name": "Nom complet",
+        "phone": "Téléphone",
+        "notes": "Commentaires",
+        "approve_profile": "Homologuer le profil",
+        "no_results": "Aucun client trouvé",
+    },
     "nav": {
         "main": "Principal",
         "dashboard": "Tableau de bord",
@@ -347,6 +360,8 @@ const fr: SovereignData = {
         },
         "split": {
             "title": "Partage de l'Archive",
+            "assign_items": "Attribuer les articles",
+            "custom_amounts": "Montants libres",
             "subtitle": "Protocoles de Division",
             "signatures": "SIGNATURES",
             "convive_signature_title": "Signature de Haute Excellence",

@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3587,
-    "loc": 332630,
+    "loc": 332698,
     "pages": 84,
     "apiRoutes": 210
   },
@@ -158,7 +158,7 @@
     },
     {
       "file": "src/i18n/locales/fr.ts",
-      "loc": 597
+      "loc": 596
     },
     {
       "file": "src/__tests__/anglemorts/anglemorts-batch5.test.ts",
