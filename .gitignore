@@ -161,3 +161,4 @@ __pycache__/
 
 # Mesures : l'etat courant est jetable, l'historique est versionne (dette visible dans le temps)
 .measures/latest.json
+.measures/runtime.json

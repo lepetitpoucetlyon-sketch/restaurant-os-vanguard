@@ -9,6 +9,8 @@ interface ProductEditModalProps {
     editingProduct: Product | null;
     editForm: MenuBuilderEditForm;
     saving: boolean;
+    /** Vrai quand l'éditeur porte un plat qui n'existe pas encore en base. */
+    isCreating?: boolean;
     onClose: () => void;
     onFormChange: (updater: (prev: MenuBuilderEditForm) => MenuBuilderEditForm) => void;
     onToggleAllergen: (id: string) => void;
@@ -19,6 +21,7 @@ export function ProductEditModal({
     editingProduct,
     editForm,
     saving,
+    isCreating = false,
     onClose,
     onFormChange,
     onToggleAllergen,
@@ -38,7 +41,9 @@ export function ProductEditModal({
                         className="w-full max-w-2xl bg-bg-secondary rounded-[2.5rem] shadow-2xl border border-border overflow-hidden max-h-[90vh] flex flex-col"
                     >
                         <div className="p-6 border-b border-border flex items-center justify-between bg-bg-tertiary">
-                            <h2 className="text-2xl font-black text-text-primary">Éditer le produit</h2>
+                            <h2 className="text-2xl font-black text-text-primary">
+                                {isCreating ? 'Nouveau produit' : 'Éditer le produit'}
+                            </h2>
                             <button
                                 onClick={onClose}
                                 className="px-4 py-2 bg-bg-primary rounded-xl font-bold hover:bg-border transition-colors border border-border"

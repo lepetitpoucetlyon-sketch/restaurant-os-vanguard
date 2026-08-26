@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/shared/hooks";
 import { ROLE_LABELS } from "@/lib/AccessPolicyManager";
 import { useUI } from "@/shared/hooks";
-import { Delete, LogIn, Fingerprint, ShieldCheck, ChevronLeft, RefreshCw } from "lucide-react";
+import { Delete, LogIn, ShieldCheck, ChevronLeft, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 export function PinLogin() {
     const { login, users, isAuthLoading } = useAuth();
@@ -201,10 +201,15 @@ export function PinLogin() {
                         <span className="text-nano font-bold text-text-muted uppercase tracking-[0.2em]">Sécurité Chiffrée</span>
                     </div>
 
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-text-muted hover:text-text-primary transition-colors group">
-                        <Fingerprint className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        <span className="text-nano font-bold uppercase tracking-wider">Accès Biométrique</span>
-                    </button>
+                    {/* Pas de bouton « Accès Biométrique » ici : l'authentification par
+                        passkey exige un enrôlement et une vérification d'assertion côté
+                        serveur (route d'attestation + stockage de la clé publique) qui
+                        n'existent pas encore. Un `navigator.credentials.get()` sans
+                        vérification serveur afficherait le capteur sans rien authentifier —
+                        promesse de sécurité non tenue sur un socle NF525.
+                        La biométrie reste branchée là où elle est réellement adossée à une
+                        session déjà établie : `PasskeyStepUpModal` (step-up sur action
+                        sensible). */}
 
                     <p className="text-nano font-black text-text-muted/40 text-center mt-4">
                         Chaque compte exige désormais son propre code PIN chiffré.

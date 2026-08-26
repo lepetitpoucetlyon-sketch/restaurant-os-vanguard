@@ -15,6 +15,7 @@ interface ProductCardGridProps {
     searchQuery: string;
     onSearchChange: (q: string) => void;
     onOpenEditor: (product: Product) => void;
+    onCreateProduct: () => void;
 }
 
 export function ProductCardGrid({
@@ -22,6 +23,7 @@ export function ProductCardGrid({
     searchQuery,
     onSearchChange,
     onOpenEditor,
+    onCreateProduct,
 }: ProductCardGridProps) {
     return (
         <div className="flex-1 flex flex-col bg-bg-secondary rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
@@ -35,7 +37,11 @@ export function ProductCardGrid({
                             placeholder="Rechercher un plat..."
                         />
                     </div>
-                    <button className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-text-primary rounded-2xl font-bold hover:bg-brand-primary/90 transition-all">
+                    <button
+                        type="button"
+                        onClick={onCreateProduct}
+                        className="flex items-center gap-2 px-6 py-3 bg-brand-primary text-text-primary rounded-2xl font-bold hover:bg-brand-primary/90 transition-all"
+                    >
                         <Plus className="w-5 h-5" />
                         Ajouter
                     </button>

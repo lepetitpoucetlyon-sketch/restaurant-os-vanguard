@@ -98,7 +98,7 @@ export function AuthGate({ children }: AuthGateProps) {
             )}>
                 <main className={cn(
                     "flex-1 overflow-y-auto",
-                    !isFullWidth ? "p-4 pb-32 md:p-8" : "p-0"
+                    "p-0"
                 )}>
                     {children}
                 </main>

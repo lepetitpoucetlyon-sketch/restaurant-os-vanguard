@@ -5,12 +5,13 @@ import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
 import { useTenant } from '@/shared/hooks';
 import { useToast } from '@ui/Toast';
-import { 
-    CheckCircle2, 
-    Lock, 
-    FileText, 
+import {
+    CheckCircle2,
+    Lock,
+    FileText,
     AlertCircle,
-    Loader2
+    Loader2,
+    Download
 } from 'lucide-react';
 
 /**
@@ -18,11 +19,81 @@ import {
  * Final validation step for NF525 and HACCP.
  * Closes the day, generates the Z-Report and seals the ledger.
  */
+/** Rapport Z tel que renvoyé par `FinanceCore.generateZReport` (montants en microunits). */
+interface ZReportSnapshot {
+    id: string;
+    date: string;
+    tenantId: string;
+    ordersCount: number;
+    totalInMicrounits: number;
+    taxBreakdown: { total: number; ht: number; totalTax: number; rates: Record<number, number> };
+    timestamp: number;
+    _fiscalSeal?: { hash: string; [k: string]: unknown };
+}
+
+const eur = (microunits: number) =>
+    (microunits / 1_000_000).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/**
+ * Met en forme le ticket Z archivable. Le rapport Z est une pièce présentable à
+ * l'administration fiscale : il porte la ventilation par taux de TVA et l'empreinte
+ * de scellement qui permet d'en vérifier l'intégrité.
+ */
+function formatZReceipt(z: ZReportSnapshot): string {
+    const sep = '='.repeat(44);
+    const lines: string[] = [
+        sep,
+        '           RAPPORT Z - CLOTURE DE JOURNEE',
+        sep,
+        `Etablissement : ${z.tenantId}`,
+        `Journee       : ${z.date}`,
+        `Edite le      : ${new Date(z.timestamp).toLocaleString('fr-FR')}`,
+        `Reference     : ${z.id}`,
+        '',
+        '-'.repeat(44),
+        `Tickets encaisses            ${String(z.ordersCount).padStart(14)}`,
+        '-'.repeat(44),
+        `Total TTC                    ${(eur(z.totalInMicrounits) + ' EUR').padStart(14)}`,
+        `Total HT                     ${(eur(z.taxBreakdown.ht) + ' EUR').padStart(14)}`,
+        `Total TVA                    ${(eur(z.taxBreakdown.totalTax) + ' EUR').padStart(14)}`,
+        '',
+        'VENTILATION PAR TAUX DE TVA',
+        '-'.repeat(44),
+    ];
+
+    const rates = Object.entries(z.taxBreakdown.rates).sort((a, b) => Number(a[0]) - Number(b[0]));
+    if (rates.length === 0) {
+        lines.push('  (aucune vente sur la journee)');
+    } else {
+        for (const [rateKey, tvaMicrounits] of rates) {
+            lines.push(`  TVA ${String(rateKey).padStart(2)} %                    ${(eur(Number(tvaMicrounits)) + ' EUR').padStart(14)}`);
+        }
+    }
+
+    lines.push(
+        '',
+        sep,
+        'SCELLEMENT FISCAL NF525',
+        z._fiscalSeal?.hash
+            ? `Empreinte : ${z._fiscalSeal.hash}`
+            : 'NON SCELLE - rapport non opposable, contactez le support.',
+        sep,
+        'Document genere par Restaurant OS - conforme NF525.',
+        'Toute alteration invalide l empreinte ci-dessus.',
+        '',
+    );
+
+    return lines.join('\n');
+}
+
 export const EndOfDayWizard: React.FC = () => {
     const { activeTenantId } = useTenant();
     const { showToast } = useToast();
     const [isClosing, setIsClosing] = useState(false);
     const [isClosed, setIsClosed] = useState(false);
+    // Le rapport scellé est conservé : sans lui, le bouton de téléchargement de
+    // l'écran de confirmation n'aurait rien à remettre au gérant.
+    const [zReport, setZReport] = useState<ZReportSnapshot | null>(null);
 
     const revenue = useAtomValue(dashboardRevenueSelector);
     const activeTables = useAtomValue(dashboardActiveTablesSelector);
@@ -38,20 +109,40 @@ export const EndOfDayWizard: React.FC = () => {
         try {
             // 📡 Industrial Call to FinanceCore (Grade VI)
             const { FinanceCore } = await import('@/modules/finance');
-            const zReport = await FinanceCore.generateZReport(activeTenantId);
-            const signature = zReport._fiscalSeal;
-            
+            const report = await FinanceCore.generateZReport(activeTenantId) as unknown as ZReportSnapshot;
+            const signature = report._fiscalSeal;
+
+            setZReport(report);
+
             if (signature) {
                 showToast(`Journée Clôturée. Z-Report Scellé : ${signature.hash.substring(0, 10)}`, "success");
             } else {
                 showToast("Journée Clôturée mais le scellage fiscal a échoué.", "warning");
             }
             setIsClosed(true);
-        } catch (_error) {
-            showToast("Erreur lors de la clôture fiscale", "error");
+        } catch (error) {
+            // La raison est remontée telle quelle : la cause la plus fréquente est
+            // l'absence de FISCAL_SIGNING_SECRET, que « Erreur lors de la clôture »
+            // seul ne permet pas de diagnostiquer.
+            const reason = error instanceof Error ? error.message : String(error);
+            showToast(`Clôture fiscale impossible : ${reason}`, "error");
         } finally {
             setIsClosing(false);
         }
+    };
+
+    const handleDownloadZ = () => {
+        if (!zReport) return;
+        const blob = new Blob([formatZReceipt(zReport)], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `rapport-Z-${zReport.date}-${zReport.tenantId}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("Rapport Z téléchargé. Conservez-le : il est opposable à l'administration.", "success");
     };
 
     if (isClosed) {
@@ -62,7 +153,13 @@ export const EndOfDayWizard: React.FC = () => {
                 <p className="text-status-success/70 text-sm mb-6">
                     Tous les registres fiscaux ont été scellés et archivés (NF525).
                 </p>
-                <button className="px-6 py-2 bg-status-success text-text-primary rounded-xl font-bold hover:bg-status-success transition-colors">
+                <button
+                    type="button"
+                    onClick={handleDownloadZ}
+                    disabled={!zReport}
+                    className="px-6 py-2 bg-status-success text-text-primary rounded-xl font-bold hover:bg-status-success transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"
+                >
+                    <Download size={16} />
                     Télécharger le Rapport Z
                 </button>
             </div>

@@ -23,6 +23,8 @@ function MenuBuilderPage() {
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [editForm, setEditForm] = useState<MenuBuilderEditForm>({ name: '', priceEuros: '', taxRate: '0.10', allergens: [], recipeId: '' });
     const [saving, setSaving] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
+    const [feedback, setFeedback] = useState<string | null>(null);
 
     const activeCategory = selectedCategory || categories[0]?.id || '';
 
@@ -55,27 +57,92 @@ function MenuBuilderPage() {
         }));
     }, []);
 
+    /**
+     * Ouvre l'éditeur sur un produit neuf. Le brouillon porte déjà son id et sa
+     * catégorie : `saveProduct` distingue création et édition sur `isCreating`,
+     * car `update` sur un chemin inexistant échouerait.
+     */
+    const createProduct = useCallback(() => {
+        if (!activeCategory) {
+            setFeedback("Créez d'abord une catégorie : un plat doit être rangé quelque part.");
+            return;
+        }
+        const draft = {
+            id: `prod_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+            name: '',
+            priceInMicrounits: 0,
+            categoryId: activeCategory,
+        } as unknown as Product;
+
+        setIsCreating(true);
+        setEditingProduct(draft);
+        setEditForm({ name: '', priceEuros: '', taxRate: '0.10', allergens: [], recipeId: '' });
+    }, [activeCategory]);
+
+    const createCategory = useCallback(async (name: string) => {
+        const label = name.trim();
+        if (!label) return;
+        setFeedback(null);
+        try {
+            const id = `cat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+            await Nexus.adapter.set(Nexus.getTenantPath(`categories/${id}`), {
+                id,
+                name: label,
+                order: categories.length,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+            });
+            setSelectedCategory(id);
+        } catch (err) {
+            setFeedback(`Création de la catégorie impossible : ${err instanceof Error ? err.message : String(err)}`);
+        }
+    }, [categories.length]);
+
     const saveProduct = useCallback(async () => {
         if (!editingProduct) return;
+        if (!editForm.name.trim()) {
+            setFeedback('Donnez un nom au plat avant d\'enregistrer.');
+            return;
+        }
         setSaving(true);
+        setFeedback(null);
         try {
             const priceInMicrounits = toMicrounits(parseFloat(editForm.priceEuros) || 0);
             const path = Nexus.getTenantPath(`products/${editingProduct.id}`);
-            await Nexus.adapter.update(path, {
-                name: editForm.name,
+            const payload = {
+                name: editForm.name.trim(),
                 priceInMicrounits,
                 taxRate: editForm.taxRate,
                 allergens: editForm.allergens,
                 recipeId: editForm.recipeId || null,
                 updatedAt: Date.now(),
-            });
+            };
+
+            if (isCreating) {
+                await Nexus.adapter.set(path, {
+                    ...payload,
+                    id: editingProduct.id,
+                    categoryId: editingProduct.categoryId,
+                    createdAt: Date.now(),
+                });
+            } else {
+                await Nexus.adapter.update(path, payload);
+            }
             setEditingProduct(null);
+            setIsCreating(false);
         } catch (err) {
-            console.error('[MenuBuilder] Save failed', err);
+            // Sans ce retour, l'enregistrement échouait en silence : le gérant
+            // refermait l'éditeur en croyant son plat enregistré.
+            setFeedback(`Enregistrement impossible : ${err instanceof Error ? err.message : String(err)}`);
         } finally {
             setSaving(false);
         }
-    }, [editingProduct, editForm]);
+    }, [editingProduct, editForm, isCreating]);
+
+    const closeEditor = useCallback(() => {
+        setEditingProduct(null);
+        setIsCreating(false);
+    }, []);
 
     const isLoading = productsLoading || categoriesLoading;
 
@@ -102,11 +169,18 @@ function MenuBuilderPage() {
             icon={ChefHat}
             breadcrumbs={[{ label: "Opérations" }, { label: "Menu Builder" }]}
         >
+            {feedback && (
+                <div role="alert" className="mx-6 mt-6 px-4 py-3 rounded-2xl bg-status-danger/10 border border-status-danger/20 text-status-danger text-sm font-medium">
+                    {feedback}
+                </div>
+            )}
+
             <div className="flex flex-1 overflow-hidden gap-6 p-6">
                 <CategorySidebar
                     categories={categories}
                     activeCategory={activeCategory}
                     onSelectCategory={setSelectedCategory}
+                    onCreateCategory={createCategory}
                 />
 
                 <ProductCardGrid
@@ -114,6 +188,7 @@ function MenuBuilderPage() {
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     onOpenEditor={openEditor}
+                    onCreateProduct={createProduct}
                 />
             </div>
 
@@ -121,7 +196,8 @@ function MenuBuilderPage() {
                 editingProduct={editingProduct}
                 editForm={editForm}
                 saving={saving}
-                onClose={() => setEditingProduct(null)}
+                isCreating={isCreating}
+                onClose={closeEditor}
                 onFormChange={setEditForm}
                 onToggleAllergen={toggleAllergen}
                 onSave={saveProduct}
