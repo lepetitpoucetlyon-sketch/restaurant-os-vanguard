@@ -183,7 +183,11 @@ export function SupportDraftsPanel() {
               animate={{ opacity: 1, y: 0 }}
               className="p-3 bg-bg-primary/30 border border-border-subtle rounded-xl"
             >
-              <div className="flex items-start justify-between gap-2 cursor-pointer" onClick={() => toggleExpand(ticket)}>
+              <button 
+                type="button" 
+                className="flex items-start justify-between gap-2 cursor-pointer w-full text-left bg-transparent border-0 p-0" 
+                onClick={() => toggleExpand(ticket)}
+              >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className={cn('px-1.5 py-0.5 rounded text-nano font-black uppercase tracking-wider border', meta.color)}>
@@ -204,7 +208,7 @@ export function SupportDraftsPanel() {
                   )}
                 </div>
                 <ChevronDown className={cn('w-3.5 h-3.5 text-secondary shrink-0 mt-1 transition-transform', isOpen && 'rotate-180')} />
-              </div>
+              </button>
 
               {isOpen && draft && edit && (
                 <div className="mt-3 pt-3 border-t border-border-subtle space-y-3" onClick={e => e.stopPropagation()}>

@@ -20,7 +20,15 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
     disabled = false
 }) => {
     return (
-        <div className="flex items-center justify-between group cursor-pointer" onClick={() => !disabled && onChange(!checked)}>
+        <button
+            type="button"
+            role="switch"
+            aria-checked={checked}
+            aria-disabled={disabled}
+            disabled={disabled}
+            onClick={() => !disabled && onChange(!checked)}
+            className="flex items-center justify-between group cursor-pointer w-full text-left bg-transparent border-0 p-0"
+        >
             {(label || description) && (
                 <div className="flex flex-col mr-4">
                     {label && <span className="text-sm font-medium text-muted group-hover:text-status-warning transition-colors">{label}</span>}
@@ -29,8 +37,8 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
             )}
             
             <div className={cn(
-                "relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out",
-                checked ? "bg-status-warning/20 ring-1 ring-action-primary/50" : "bg-surface-sidebar ring-1 ring-default",
+                "relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out shrink-0",
+                checked ? "bg-action-primary/20 ring-1 ring-action-primary/50" : "bg-surface-glass ring-1 ring-border",
                 disabled && "opacity-50 cursor-not-allowed"
             )}>
                 <motion.div
@@ -42,6 +50,6 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
                     className="absolute top-[2px] w-5 h-5 rounded-full shadow-lg border border-subtle"
                 />
             </div>
-        </div>
+        </button>
     );
 };

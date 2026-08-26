@@ -63,7 +63,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                                     : "bg-bg-secondary border-border hover:border-accent/40 shadow-sm hover:shadow-xl dark:shadow-none font-medium"
                             )}
                         >
-                            <div className="flex items-center gap-6" onClick={async (e) => { e.stopPropagation(); await togglePrepTask(task.id); }}>
+                            <button type="button" className="flex items-center gap-6 text-left bg-transparent border-0 p-0 cursor-pointer" onClick={async (e) => { e.stopPropagation(); await togglePrepTask(task.id); }}>
                                 <motion.div
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
@@ -86,7 +86,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </button>
                             <motion.button
                                 whileHover={{ scale: 1.1, x: 5 }}
                                 whileTap={{ scale: 0.9 }}

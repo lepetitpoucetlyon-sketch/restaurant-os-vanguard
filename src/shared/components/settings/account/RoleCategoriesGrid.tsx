@@ -57,8 +57,14 @@ export function RoleCategoriesGrid({
                                         const isFeatureEnabled = categories.includes(feature.id);
                                         return (
                                             <label key={feature.id} className="flex items-start gap-2 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    className="sr-only"
+                                                    checked={isFeatureEnabled}
+                                                    onChange={() => onToggleCategory(role, feature.id)}
+                                                />
                                                 <div
-                                                    onClick={() => onToggleCategory(role, feature.id)}
+                                                    aria-hidden="true"
                                                     className={cn(
                                                         "w-4 h-4 mt-0.5 rounded flex items-center justify-center shrink-0 transition-colors border",
                                                         isFeatureEnabled
@@ -68,7 +74,7 @@ export function RoleCategoriesGrid({
                                                 >
                                                     {isFeatureEnabled && <Check className="w-3 h-3" />}
                                                 </div>
-                                                <div className="flex flex-col flex-1 min-w-0" onClick={() => onToggleCategory(role, feature.id)}>
+                                                <div className="flex flex-col flex-1 min-w-0">
                                                     <span className={cn(
                                                         "text-xs font-semibold truncate",
                                                         isFeatureEnabled ? "text-text-primary" : "text-text-muted"

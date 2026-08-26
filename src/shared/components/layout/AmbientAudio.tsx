@@ -118,7 +118,12 @@ export const AmbientAudio: React.FC = () => {
     }, []);
 
     return (
-        <div className="flex items-center gap-2 bg-surface-card border border-border-subtle px-4 py-2.5 rounded-xl cursor-pointer hover:bg-surface-hover transition-all group" onClick={togglePlayback}>
+        <button 
+            type="button" 
+            aria-label="Toggle ambient soundtrack" 
+            className="flex items-center gap-2 bg-surface-card border border-border-subtle px-4 py-2.5 rounded-xl cursor-pointer hover:bg-surface-hover transition-all group text-left" 
+            onClick={togglePlayback}
+        >
             <div className={`relative flex items-center justify-center w-5 h-5 rounded-full transition-colors ${isPlaying ? 'text-brand' : 'text-secondary'}`}>
                 {isPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                 
@@ -157,6 +162,6 @@ export const AmbientAudio: React.FC = () => {
                     {isPlaying ? 'Playing • Empire Drone' : 'Muted'}
                 </span>
             </div>
-        </div>
+        </button>
     );
 };
