@@ -26,9 +26,9 @@ export function ActionBar({
       className={cn(
         "flex flex-wrap items-center justify-between gap-3 transition-all",
         isFloating &&
-          "fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-surface-card/90 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-2xl px-5 py-3 max-w-[90vw]",
+          "fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 z-40 bg-surface-card/90 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-2xl px-5 py-3 max-w-[90vw]",
         isStickyBottom &&
-          "sticky bottom-0 z-30 bg-surface-card/95 backdrop-blur-xl border-t border-border-default px-6 py-4 -mx-6 -mb-6 mt-6",
+          "sticky bottom-0 z-30 bg-surface-card/95 backdrop-blur-xl border-t border-border-default px-6 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] -mx-6 -mb-6 mt-6",
         variant === "default" &&
           "bg-surface-card/50 border border-border-default rounded-xl px-4 py-3",
         variant === "inline" && "p-0 bg-transparent border-0",

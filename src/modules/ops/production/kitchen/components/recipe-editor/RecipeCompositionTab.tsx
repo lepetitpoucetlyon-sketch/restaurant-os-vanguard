@@ -25,8 +25,8 @@ export function RecipeCompositionTab({
         <div className="space-y-10">
             <div className="bg-bg-tertiary p-8 rounded-[3rem] border-2 border-dashed border-border">
                 <h3 className="font-serif font-black text-xl mb-6">Ajouter un Élement</h3>
-                <div className="grid grid-cols-12 gap-4">
-                    <div className="col-span-8">
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div className="sm:col-span-12 md:col-span-8">
                         <input
                             type="text"
                             placeholder="Nom du composant..."
@@ -35,7 +35,7 @@ export function RecipeCompositionTab({
                             className="w-full h-14 px-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-6 md:col-span-2">
                         <input
                             type="number"
                             placeholder="Qté"
@@ -44,14 +44,14 @@ export function RecipeCompositionTab({
                             className="w-full h-14 px-6 bg-surface-card rounded-2xl border-2 border-transparent focus:border-accent font-bold outline-none"
                         />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-6 md:col-span-2">
                         <PremiumSelect
                             value={newIngredient.unit || 'g'}
                             onChange={(val) => setNewIngredient((prev: Partial<RecipeIngredient>) => ({ ...prev, unit: val }))}
                             options={['g', 'kg', 'L', 'cl', 'ml', 'pièces'].map(u => ({ value: u, label: u }))}
                         />
                     </div>
-                    <div className="col-span-4">
+                    <div className="sm:col-span-6 md:col-span-4">
                         <div className="relative">
                             <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                             <input
@@ -63,8 +63,8 @@ export function RecipeCompositionTab({
                             />
                         </div>
                     </div>
-                    <div className="col-span-8">
-                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-text-primary hover:bg-surface-sidebar text-text-primary rounded-2xl font-black uppercase text-nano tracking-widest transition-all">
+                    <div className="sm:col-span-6 md:col-span-8">
+                        <Button onClick={handleAddIngredient} className="w-full h-14 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-2xl font-black uppercase text-nano tracking-widest transition-all">
                             <Plus className="w-4 h-4 mr-2" /> Valider l'Ingrédient
                         </Button>
                     </div>

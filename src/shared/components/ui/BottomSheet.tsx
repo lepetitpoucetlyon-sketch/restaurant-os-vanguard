@@ -75,7 +75,7 @@ export function BottomSheet({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
-                        className="absolute inset-0 bg-surface-sidebar/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md"
                     />
 
                     {/* Sheet */}
@@ -91,7 +91,7 @@ export function BottomSheet({
                         dragElastic={{ top: 0, bottom: 0.6 }}
                         onDragEnd={handleDragEnd}
                         className={cn(
-                            "relative w-full bg-surface-card dark:bg-bg-secondary rounded-t-[3.5rem] shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden border-t border-subtle",
+                            "relative w-full bg-surface-card rounded-t-[3.5rem] shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden border-t border-border-subtle",
                             sizeClasses[size],
                             className
                         )}
@@ -102,7 +102,7 @@ export function BottomSheet({
                                 className="flex justify-center pt-5 pb-2 cursor-grab active:cursor-grabbing"
                                 onPointerDown={(e) => dragControls.start(e)}
                             >
-                                <div className="w-16 h-1.5 bg-border dark:bg-surface-sidebar rounded-full" />
+                                <div className="w-16 h-1.5 bg-border rounded-full" />
                             </div>
                         )}
 
@@ -131,7 +131,7 @@ export function BottomSheet({
                         )}
 
                         {/* Content */}
-                        <div className="px-8 pb-10 overflow-auto elegant-scrollbar" style={{ maxHeight: "calc(100% - 120px)" }}>
+                        <div className="px-8 pb-10 pb-safe overflow-auto elegant-scrollbar" style={{ maxHeight: "calc(100% - 120px)" }}>
                             {children}
                         </div>
                     </motion.div>

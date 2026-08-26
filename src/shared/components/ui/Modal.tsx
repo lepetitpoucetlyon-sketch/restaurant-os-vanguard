@@ -109,7 +109,7 @@ export function Modal({
                             animate="visible"
                             exit="exit"
                             onClick={onClose}
-                            className="absolute inset-0 bg-surface-sidebar/50 backdrop-blur-sm"
+                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
                         />
 
                         {/* Sheet */}
@@ -129,7 +129,7 @@ export function Modal({
                             dragElastic={{ top: 0, bottom: 0.5 }}
                             onDragEnd={handleDragEnd}
                             className={cn(
-                                "relative w-full bg-bg-primary rounded-t-[2rem] shadow-2xl overflow-hidden focus:outline-none",
+                                "relative w-full bg-surface-card rounded-t-[2rem] shadow-2xl overflow-hidden focus:outline-none",
                                 mobileSizeClasses[size],
                                 className
                             )}
@@ -161,7 +161,7 @@ export function Modal({
                             )}
 
                             {/* Content */}
-                            <div className={cn("overflow-auto elegant-scrollbar", !noPadding && "p-6")} style={{ maxHeight: "calc(100% - 80px)" }}>
+                            <div className={cn("overflow-auto elegant-scrollbar pb-safe", !noPadding && "p-6")} style={{ maxHeight: "calc(100% - 80px)" }}>
                                 {children}
                             </div>
                         </motion.div>
@@ -186,7 +186,7 @@ export function Modal({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
-                        className="absolute inset-0 bg-surface-sidebar/40 backdrop-blur-xl"
+                        className="absolute inset-0 bg-black/50 backdrop-blur-xl"
                     />
 
                     {/* Modal Content */}
@@ -204,8 +204,8 @@ export function Modal({
                             "relative w-full rounded-[2.5rem] shadow-[0_32px_128px_rgba(0,0,0,0.3)] overflow-hidden focus:outline-none",
                             "border border-border/10",
                             variant === "premium"
-                                ? "bg-bg-secondary/90 backdrop-blur-2xl"
-                                : "bg-bg-secondary",
+                                ? "bg-surface-card/90 backdrop-blur-2xl"
+                                : "bg-surface-card",
                             sizeClasses[size],
                             className
                         )}
@@ -247,7 +247,7 @@ export function Modal({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5, duration: 0.5 }}
-                            className={cn(!noPadding && "p-10")}
+                            className={cn(!noPadding && "p-10", "pb-safe")}
                         >
                             {children}
                         </motion.div>

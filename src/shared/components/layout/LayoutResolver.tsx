@@ -15,6 +15,7 @@ import { APP_MODE } from "@/config/instance";
 import { useUI } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { ConnectivityBanner } from "@components/layout/ConnectivityBanner";
+import { InstallPrompt } from "@/shared/components/InstallPrompt";
 import { tenantVariantAtom } from '@/store/pillars/sovereign';
 import { VerticalUIRegistry } from '@/shared/plugins/VerticalUIRegistry';
 
@@ -65,6 +66,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                             <Header />
                             <MobileHeader />
                             <ConnectivityBanner />
+                            <InstallPrompt />
                             <main className={cn("flex-1 overflow-auto relative scroll-smooth", "pb-24 lg:pb-0")}>
                                 {children}
                             </main>
@@ -84,6 +86,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                         </div>
                         <MobileHeader />
                         <ConnectivityBanner />
+                        <InstallPrompt />
                         <main className={cn("relative", "pb-24 lg:pb-0 lg:pt-20")}>
                             {children}
                         </main>
@@ -122,6 +125,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
                             {/* Mobile Header (Hidden on Desktop via lg:hidden internally) */}
                             <MobileHeader />
                             <ConnectivityBanner />
+                            <InstallPrompt />
 
                             <main className={cn(
                                 "flex-1 overflow-auto relative scroll-smooth",

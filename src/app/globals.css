@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Variant `dark:` aligné sur le système de tokens.
+   Par défaut, Tailwind v4 déclenche `dark:` sur prefers-color-scheme
+   (le réglage de l'OS) — un signal DIFFÉRENT de `data-theme` (le toggle
+   applicatif posé par ThemeApplicator). D'où le mélange dark/light
+   observé quand l'OS et l'app divergent.
+   On rebranche `dark:` sur EXACTEMENT la même condition que les tokens
+   ci-dessous : explicitement [data-theme="dark"], OU (OS sombre ET pas
+   [data-theme="light"]).
+   ============================================================ */
+@custom-variant dark {
+  &:where(:root[data-theme="dark"] *) { @slot; }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) { @slot; }
+  }
+}
+
 @theme {
   /* ── ACTIONS ── */
   --color-action-primary: var(--action-primary, #C5A059);
@@ -122,6 +139,34 @@
 
 .shadow-glow-accent {
   box-shadow: var(--shadow-glow-accent);
+}
+
+/* ── SAFE AREA UTILITIES (iOS Notch & Home Bar) ── */
+@utility pb-safe {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+@utility pt-safe {
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+}
+
+@utility pl-safe {
+  padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+}
+
+@utility pr-safe {
+  padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+}
+
+@utility px-safe {
+  padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+}
+
+/* ── TOUCH TARGET UTILITY (WCAG 2.5.5 / Apple HIG 44px min) ── */
+@utility touch-target {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 /* ============================================
