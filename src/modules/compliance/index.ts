@@ -33,6 +33,10 @@ export * from './services';
 
 export { useHaccpPage, HACCP_TOOLS, type TempAlert, type LotFilter } from './qualite/haccp/hooks/useHaccpPage';
 export { CleaningPlan } from './qualite/haccp/components/CleaningPlan';
+// Auto-audit NF525 : interroge les sceaux fiscaux et produit le PDF d'audit.
+// N'était exporté par aucun barrel ni monté nulle part — donc inatteignable,
+// alors que c'est précisément le document qu'on sort lors d'un contrôle.
+export { default as NF525SelfAudit } from './qualite/haccp/components/NF525SelfAudit';
 export { NonConformityForm } from './qualite/haccp/components/NonConformityForm';
 export { ComplianceCalendar } from './qualite/calendar/ComplianceCalendar';
 export { DLCTracker } from './qualite/haccp/components/DLCTracker';
