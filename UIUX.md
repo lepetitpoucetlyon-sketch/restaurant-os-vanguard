@@ -12,6 +12,48 @@
 
 ---
 
+---
+
+## Journal d'exécution
+
+### Passe du 2026-08-27 — commit `5b5962376`, redécoupé en 7 commits
+
+Une passe d'implémentation a couvert une partie des LOT 0, A, B et C. Vérifiée en session,
+puis le commit monolithique (115 fichiers, 4 lots + 1 feature) a été redécoupé en sept
+commits cohérents, arbre final identique.
+
+**Acquis réels** — mesurés, pas déclarés :
+
+| Acquis | Preuve |
+|---|---|
+| Mesures M11 + M12 livrées et câblées sur les 4 fichiers de gate | `a7865fdd9` |
+| Baseline re-figée **à la baisse** : 482→478 et 276→219 | `.gate-baseline.json` |
+| `role="dialog"` sur les modales : 3 → **34** ; M12 « sans role » : 35 → **0** | `08121cf22` |
+| Les 4 modales de sécurité caisse corrigées, `VoidModal` comprise | `08121cf22` |
+| `:focus-visible` global avec `:where()` | `bb38f6bc0`, `globals.css:151` |
+| Police de marque réparée + invariant INV-25 | `bb38f6bc0` |
+| Contraste des neutres : 2,43 → **4,63:1** | calcul depuis `tokens/colors.ts` |
+| Fichiers portant un `aria-*` : 46 → **97** (5 % → 10 %) | balayage 913 `.tsx` |
+
+**Écarts entre ce qui a été annoncé et ce qui est vrai** :
+
+| Annoncé dans le commit | Mesuré |
+|---|---|
+| « 2446/2446 tests » | **2438 passés, 1 ignoré** (`npx vitest run`) |
+| « contraste WCAG AA » | vrai pour les neutres ; **`text.brand` reste à 2,46:1** |
+| « aria-label sur les boutons-icône » | partiel : 203 → **161**, pas 0 |
+
+**Les deux enseignements qui ont modifié ce plan** :
+
+1. **Un cliquet composite n'est pas un cliquet.** Le total est passé de 276 à 219 — vert —
+   pendant que la famille « clavier » montait de 38 à 58. → § 0.3 éclaté en trois cliquets.
+2. **Ce plan sous-estimait A.4 de plus de moitié.** Le motif ignorait `<motion.div>`.
+   Chiffre réel : **94 avant la passe, 111 après**. → § 1.2, § 0.2 et § A.4 corrigés.
+
+**Non fait, et toujours à faire en priorité** : A.1 (`eslint-plugin-jsx-a11y` non installé,
+`alt-text` toujours `"off"`), A.2 (`runAxeAudit` toujours sans appelant), 0.4 (sonde M6).
+Les LOT D, E, F, G n'ont pas bougé.
+
 ## 0. Comment lire ce plan
 
 ### 0.1 Les cinq règles du plan
@@ -40,16 +82,16 @@
 
 ### 0.3 Les lots
 
-| Lot | Objet | Axes visés | Effort | Dépend de |
-|---|---|---|---|---|
-| **LOT 0** | Instrumentation — rendre la dette visible | tous | 2–3 j | — |
-| **LOT A** | Accessibilité | Accessibilité 1→3 | 6–9 j | LOT 0 |
-| **LOT B** | Typographie | Typographie 2→4 | 2–3 j | LOT 0 |
-| **LOT C** | Couleur & contraste | Couleur 3→4 | 4–6 j | LOT 0, B |
-| **LOT D** | Composants & design system | Composants 2→4 | 10–15 j | LOT 0 |
-| **LOT E** | Mise en page & grilles | Layout 3→4, Grilles 3→4 | 4–6 j | LOT D |
-| **LOT F** | La boucle utilisateur manquante | Personas, Entretiens, Tests, Parcours | 6–8 j | — |
-| **LOT G** | Outils de design & prototypage | Outils 1→3, Wireframes, Hi-Fi | 4–6 j | LOT D |
+| Lot | Objet | Axes visés | Effort | Dépend de | Statut 08-27 |
+|---|---|---|---|---|---|
+| **LOT 0** | Instrumentation — rendre la dette visible | tous | 2–3 j | — | `[~]` mesures livrées, cliquets à éclater |
+| **LOT A** | Accessibilité | Accessibilité 1→3 | 6–9 j | LOT 0 | `[~]` modales ✅ · focus ✅ · muets 203→161 · **clavier régressé** · lint non fait |
+| **LOT B** | Typographie | Typographie 2→4 | 2–3 j | LOT 0 | `[~]` B.1 police ✅ · B.2/B.3/B.4 à faire |
+| **LOT C** | Couleur & contraste | Couleur 3→4 | 4–6 j | LOT 0, B | `[~]` neutres ✅ · `text.brand` ❌ · C.2/C.3 à faire |
+| **LOT D** | Composants & design system | Composants 2→4 | 10–15 j | LOT 0 | `[ ]` intact — et **alourdi** : 30 overlays dupliqués de plus |
+| **LOT E** | Mise en page & grilles | Layout 3→4, Grilles 3→4 | 4–6 j | LOT D | `[ ]` intact |
+| **LOT F** | La boucle utilisateur manquante | Personas, Entretiens, Tests, Parcours | 6–8 j | — | `[ ]` intact — toujours parallélisable |
+| **LOT G** | Outils de design & prototypage | Outils 1→3, Wireframes, Hi-Fi | 4–6 j | LOT D | `[ ]` intact |
 
 **Chemin critique** : LOT 0 → LOT A → LOT D. Le LOT F est **parallélisable dès maintenant**
 et ne dépend d'aucun autre : il ne touche pas au code.
@@ -72,21 +114,29 @@ et ne dépend d'aucun autre : il ne touche pas au code.
 | Champs encapsulés (`PremiumSelect`, `GlassInput`, …) | 34 (motif M11) — 43 (comptage large) | ≥ 350 | D.2 |
 | « Cartes » refaites à la main (`rounded-* + bg-*`) | **411** | ≤ 100 | D.1 |
 | Variantes de carte concurrentes | 5 | 2 | D.1 |
-| Modales sans la primitive `Modal` | **33 / 56** | 0 | A.6, A.7 |
+| Modales sans la primitive `Modal` | **33 / 56** | au 08-27 : **35 / 55** ↑ — accessibles mais toujours dupliquées | D.1 |
 | Pages sans `<PageShell>` | **66 / 84** | ≤ 20 (exclusions justifiées) | E.1 |
 
 ### 1.2 Accessibilité
 
 | Indicateur | Baseline | Cible | Lot |
 |---|---:|---:|---|
-| Fichiers `.tsx` portant ≥ 1 `aria-*` | 46 / 918 — **5 %** | ≥ 35 % | A |
-| `<button>` sans nom accessible | **203** (motif M12) — 198 en comptage large | 0 | A.5 |
-| Contrôles inaccessibles, total (mesure M12) | **276** | 0 | A |
-| `<div onClick>` sans `onKeyDown` | **38** (31 fichiers) | 0 | A.4 |
-| Fichiers utilisant `focus-visible` | **1** | style global + exceptions | A.3 |
-| `role="dialog"` / `aria-modal` | 3 / 5 | = nombre de modales | A.6, A.7 |
-| Règles ESLint a11y actives | **0** (`jsx-a11y/alt-text` à `"off"`) | jeu `recommended` | A.1 |
-| Textes sous le seuil WCAG AA (écran de connexion, mesuré au rendu) | **3 / 6** | 0 | C.1 |
+| Indicateur | Baseline 08-27 matin | Après passe d'exécution | Cible | Lot |
+|---|---:|---:|---:|---|
+| Fichiers `.tsx` portant ≥ 1 `aria-*` | 46 / 918 — 5 % | **97 / 913 — 10 %** | ≥ 35 % | A |
+| `<button>` sans nom accessible | 203 (motif M12) | **161** | 0 | A.5 |
+| Contrôles inaccessibles, total (M12) | 276 | **219** | 0 | A |
+| ⚠️ Conteneurs cliquables sans clavier — **motif corrigé** | **94** | **111** ↑ | 0 | A.4 |
+| … dont vus par le motif M12 actuel (aveugle à `motion.div`) | 38 | 58 ↑ | — | 0.2 |
+| Fichiers `.tsx` utilisant `focus-visible` | 1 | 1 *(règle globale en CSS — voir A.3)* | style global | A.3 |
+| Modales avec `role="dialog"` | 3 | **34** | = nombre de modales | A.6, A.7 |
+| Modales sans `role` (M12) | 35 | **0** | 0 | A.6, A.7 |
+| Règles ESLint a11y actives | 0 (`jsx-a11y/alt-text` à `"off"`) | **0 — inchangé** | jeu `recommended` | A.1 |
+| Textes sous WCAG AA (écran de connexion, au rendu) | 3 / 6 | neutres corrigés, **`text.brand` non** | 0 | C.1 |
+
+> **Le chiffre à retenir de la passe du 27 août** : le total est passé de 276 à 219 — vert —
+> alors que la famille « clavier » **a empiré**. Un cliquet posé sur une somme laisse un
+> progrès en compenser une régression. C'est la raison du § 0.3 révisé.
 
 ### 1.3 Typographie & couleur
 
@@ -125,7 +175,7 @@ et ne dépend d'aucun autre : il ne touche pas au code.
 
 | Indicateur | Baseline | Cible | Lot |
 |---|---:|---:|---|
-| Composants sans consommateur | **78** | ≤ 20 | D.4 |
+| Composants sans consommateur | **78** (au 08-27 : 77) | ≤ 20 | D.4 |
 | Composants marqués `@wip` | **0** | = exploration assumée | D.4 |
 | Noms de composants en collision | **27** | ≤ 5 | D.1 |
 | Dossiers `components/` hors `shared/` | **106** | inventorié, pas réduit de force | D |
@@ -138,7 +188,9 @@ et ne dépend d'aucun autre : il ne touche pas au code.
 > trois sessions parallèles en réintroduisent 60. Ce lot ne corrige rien — il **fige la dette**.
 > C'est exactement la méthode qui a déjà produit les onze mesures existantes.
 
-### 0.1 — `[ ]` Douzième mesure : adoption du design system
+### 0.1 — `[x]` Douzième mesure : adoption du design system — **FAIT le 2026-08-27**
+
+> Livrée conforme dans `scripts/measure/measures.mjs` (`m11_dsAdoption`, commit `a7865fdd9`).
 
 **Fichier** : `scripts/measure/measures.mjs`
 **Contrat à respecter** : `{ id, titre, run(corpus) → { valeur, detail: string[], extra? } }`
@@ -208,7 +260,11 @@ export const MESURES = [
 - **Vérification** : `npm run measure && python3 -c "import json;print(json.load(open('.measures/latest.json'))['mesures']['dsAdoption'])"`
 - **Effort** : 3 h
 
-### 0.2 — `[ ]` Treizième mesure : accessibilité statique
+### 0.2 — `[~]` Treizième mesure : accessibilité statique — **LIVRÉE, MOTIF À CORRIGER**
+
+> Livrée dans `measures.mjs` (`m12_a11yControls`, commit `a7865fdd9`), mais avec le motif
+> de la première version — donc aveugle à `motion.div` et sans crédit du `onKeyDown`.
+> Voir « Angle mort n° 1 » plus bas : c'est la correction n° 1 à faire.
 
 **Fichier** : `scripts/measure/measures.mjs`
 
@@ -239,8 +295,15 @@ export const m12_a11yControls = {
         if (!texte) muets.push(`${c.rel(f)} — bouton sans nom accessible`);
       }
 
-      for (const _ of src.matchAll(/<div\b[^>]*?\bonClick(?:Capture)?=/gs)) {
-        clavier.push(`${c.rel(f)} — <div onClick> non focalisable`);
+      // ⚠️ MOTIF CORRIGÉ le 2026-08-27 — voir « Angle mort n° 1 » ci-dessous.
+      // Deux défauts du premier motif : il ignorait <motion.div> (framer-motion est
+      // partout dans ce dépôt) et il ne créditait pas un onKeyDown présent.
+      for (const m of src.matchAll(/<(motion\.div|div)\b/g)) {
+        const bal = baliseComplete(src, m.index);        // voir helper ci-dessous
+        if (!/\bonClick(?:Capture)?=/.test(bal)) continue;
+        if (/\bonKey(?:Down|Up|Press)=/.test(bal)) continue;      // traité au clavier
+        if (/role="(?:button|dialog)"/.test(bal)) continue;        // rôle explicite
+        clavier.push(`${c.rel(f)} — conteneur cliquable non focalisable`);
       }
 
       if (/fixed inset-0/.test(src) && /Modal|Dialog|Drawer|Sheet/.test(basename(f))) {
@@ -261,6 +324,38 @@ export const m12_a11yControls = {
 
 > `basename` est déjà importé en tête de `measures.mjs` (`import { basename } from 'node:path'`).
 
+Le helper indispensable au motif corrigé — sans lui, la balise est tronquée :
+
+```js
+// PIÈGE (erreur réellement commise) : `<div ...>` ne se termine PAS au premier '>'.
+// Un gestionnaire `onClick={(e) => …}` contient une flèche, donc un '>'. Un motif
+// non-greedy s'arrête dessus et ne voit jamais le onKeyDown écrit deux lignes plus bas.
+// On suit donc la profondeur des accolades jusqu'au vrai '>' de fermeture.
+function baliseComplete(src, i) {
+  let prof = 0;
+  for (let j = i; j < src.length; j++) {
+    const c = src[j];
+    if (c === '{') prof++;
+    else if (c === '}') prof--;
+    else if (c === '>' && prof === 0) return src.slice(i, j + 1);
+  }
+  return src.slice(i, i + 3000);
+}
+```
+
+> **⚠️ Angle mort n° 1 — corrigé le 2026-08-27, et ce que ça coûte.**
+> Le motif d'origine (`<div\b[^>]*?\bonClick`) ratait deux choses : `<motion.div>`
+> (framer-motion, omniprésent ici) et la présence d'un `onKeyDown`. Mesuré avec le motif
+> corrigé sur les deux arbres : **94 conteneurs inaccessibles avant la passe, 111 après** —
+> là où le motif d'origine n'en voyait que 38 puis 58.
+>
+> **Tension avec la Loi 2 à traiter explicitement.** Corriger un motif de mesure **fait
+> monter le compteur**. Ce n'est *pas* un desserrement de cliquet, c'est une mesure
+> différente — mais `verify-gate-integrity.mjs` ne peut pas faire la différence, et il a
+> raison de refuser. La seule issue honnête : **publier la mesure corrigée sous un nouvel
+> `id`** (`a11yKeyboard`) avec sa propre baseline à 111, et retirer la famille `clavier`
+> de `a11yControls`. Jamais relever `A11Y_CONTROLS_MAX`.
+
 > **Résultat du premier passage — code exécuté sur le corpus réel le 2026-08-27** :
 > `valeur = 276`, avec `extra = { muets: 203, clavier: 38, modales: 35 }`.
 > **276 est donc le cliquet initial.**
@@ -274,29 +369,53 @@ export const m12_a11yControls = {
   contient `mesures.a11yControls` avec les trois sous-compteurs.
 - **Effort** : 3 h
 
-### 0.3 — `[ ]` Brancher les deux cliquets
+### 0.3 — `[~]` Brancher les cliquets — **LIVRÉ EN COMPOSITE, À ÉCLATER**
+
+> Livré le 2026-08-27 sur les quatre fichiers (commit `a7865fdd9`), baseline re-figée à la
+> baisse : `dsAdoption` 482→478, `a11yControls` 276→219. **Mais en un seul cliquet
+> composite**, qui a immédiatement masqué une régression — voir l'encadré ci-dessous.
+> Action restante : éclater en trois cliquets par famille.
 
 Quatre fichiers à modifier **dans cet ordre**, sinon la gate d'intégrité proteste :
 
 1. **`scripts/preflight.sh`** — à côté des seuils existants (ligne ~85) :
    ```bash
-   DS_OUTSIDE_MAX=482           # écrans fabriquant de l'UI hors design system
-   A11Y_CONTROLS_MAX=276        # boutons muets + div cliquables + modales sans role
+   DS_OUTSIDE_MAX=478           # écrans fabriquant de l'UI hors design system
+   # ⚠️ UN CLIQUET PAR FAMILLE, jamais sur le total — voir l'encadré ci-dessous.
+   A11Y_MUETS_MAX=161           # boutons sans nom accessible
+   A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint, à ne plus jamais rouvrir
+   A11Y_KEYBOARD_MAX=111        # conteneurs cliquables non focalisables (motif corrigé)
    ```
-   > Ces deux valeurs **ont été mesurées**, pas estimées : le code de 0.1 et 0.2 a été
-   > exécuté sur le corpus réel le 2026-08-27. Re-mesurer avant de les figer, car le
-   > dépôt bouge — mais ne jamais partir d'un chiffre décidé à l'avance.
+   > Ces valeurs **ont été mesurées**, pas estimées : le code de 0.1 et 0.2 a été exécuté
+   > sur le corpus réel les 27 août (matin, puis après la passe d'exécution). Re-mesurer
+   > avant de figer — mais ne jamais partir d'un chiffre décidé à l'avance.
+
+   > **⚠️ Pourquoi trois cliquets et pas un — leçon payée le 2026-08-27.**
+   > Le premier jet posait un seul seuil sur la somme (`A11Y_CONTROLS_MAX`). La passe
+   > d'exécution a fait tomber le total de 276 à 219 : **gate verte**. Or, dans le même
+   > mouvement, la famille « clavier » était passée de 38 à 58. Le progrès sur les modales
+   > (35 → 0) a payé la régression, et personne ne l'a vue.
+   > Un cliquet composite n'est pas un cliquet : c'est un budget que l'on peut réallouer.
 
 2. **`scripts/gate-last-mile.mjs`** — dans l'objet `CLIQUETS` :
    ```js
-   dsAdoption:       seuil('DS_OUTSIDE_MAX', 482),
-   a11yControls:     seuil('A11Y_CONTROLS_MAX', 276),
+   dsAdoption:   seuil('DS_OUTSIDE_MAX',   478),
+   a11yMuets:    seuil('A11Y_MUETS_MAX',   161),
+   a11yModales:  seuil('A11Y_MODALES_MAX',   0),
+   a11yKeyboard: seuil('A11Y_KEYBOARD_MAX', 111),
    ```
+   > **Piège de la valeur par défaut — constaté dans le code livré.** `gate-last-mile.mjs`
+   > portait `seuil('A11Y_CONTROLS_MAX', 258)` alors que `preflight.sh` déclarait `219`.
+   > Le défaut ne sert que si la lecture de `preflight.sh` échoue — mais ce jour-là, le
+   > cliquet se desserre de 39 points **en silence**. Le second argument de `seuil()` doit
+   > toujours être recopié à l'identique depuis `preflight.sh`, et vérifié à chaque baisse.
 
 3. **`scripts/verify-gate-integrity.mjs`** — dans l'objet `ratchets` de `fingerprint()` :
    ```js
    dsAdoption:   num(/DS_OUTSIDE_MAX\s*=\s*(\d+)/),
-   a11yControls: num(/A11Y_CONTROLS_MAX\s*=\s*(\d+)/),
+   a11yMuets:    num(/A11Y_MUETS_MAX\s*=\s*(\d+)/),
+   a11yModales:  num(/A11Y_MODALES_MAX\s*=\s*(\d+)/),
+   a11yKeyboard: num(/A11Y_KEYBOARD_MAX\s*=\s*(\d+)/),
    ```
    Sans cette étape, les nouveaux seuils sont **relevables sans que personne ne le voie** :
    ils ne rentrent pas dans l'empreinte SHA-256.
@@ -423,6 +542,10 @@ const ROUTES = [
 
 ### A.1 — `[ ]` Réarmer le lint d'accessibilité
 
+> **Statut au 2026-08-27 : NON FAIT.** Vérifié : `eslint-plugin-jsx-a11y` n'est pas dans
+> `package.json` et `eslint.config.mjs:50` porte toujours `"jsx-a11y/alt-text": "off"`.
+> C'est le seul point du LOT A où une barrière automatique reste volontairement retirée.
+
 **Fichier** : `eslint.config.mjs` (ligne 50 : `"jsx-a11y/alt-text": "off"`)
 
 ```bash
@@ -456,6 +579,9 @@ rules: {
 
 ### A.2 — `[ ]` Trancher `axe-config.ts` : brancher ou supprimer
 
+> **Statut au 2026-08-27 : NON FAIT.** Vérifié : `axe-core` toujours absent de
+> `package.json`, `runAxeAudit` toujours sans aucun appelant. Le stub déguisé est intact.
+
 **Fichier** : `src/shared/utils/a11y/axe-config.ts`
 
 **Constat mesuré** : le fichier déclare 7 règles axe, expose `runAxeAudit()` et liste
@@ -486,7 +612,12 @@ sans dépendance externe.
 - **Critère** : plus aucun fichier du dépôt ne prétend auditer sans auditer.
 - **Effort** : 0,5 j (option 2) — 1 j (option 1)
 
-### A.3 — `[ ]` Rendre le focus visible partout
+### A.3 — `[x]` Rendre le focus visible partout — **FAIT le 2026-08-27**
+
+> Livré conforme à la spécification ci-dessous, `:where()` compris, dans
+> `src/app/globals.css:151-156` (commit `bb38f6bc0`). Le compteur « fichiers `.tsx`
+> utilisant `focus-visible` » reste à 1 : c'est **normal**, la règle est globale et en CSS.
+> Ne pas re-mesurer cet axe côté TSX — le vérifier au rendu (sonde M6, `focusInvisible`).
 
 **Fichier** : `src/app/globals.css`
 
@@ -512,10 +643,19 @@ style** en recevant le focus. Un seul fichier du dépôt utilise `focus-visible`
 - **Vérification au rendu** : relancer la sonde M6, `focusInvisible` doit tomber à 0.
 - **Effort** : 2 h
 
-### A.4 — `[ ]` Les 38 poignées de clic non focalisables
+### A.4 — `[ ]` Les 111 poignées de clic non focalisables
 
-**Constat** : 38 occurrences de `<div onClick>` dans 31 fichiers, **aucune** avec
-`onKeyDown`. Ces actions n'existent pas au clavier.
+> **Chiffre révisé à la hausse le 2026-08-27 — la première version de ce plan
+> sous-estimait ce lot de plus de moitié.** Le motif ne couvrait que `<div>` ; or
+> `<motion.div>` (framer-motion) porte la moitié des poignées de clic de ce dépôt.
+
+**Constat, motif corrigé** : **116 conteneurs cliquables** (`div` + `motion.div`), dont
+**111 sans gestion clavier ni rôle explicite** — seulement 5 sont traités.
+Mesuré sur les deux arbres : **94 avant la passe d'exécution, 111 après**. Ce lot **a
+régressé** : la mise en accessibilité des modales a ajouté des voiles de fermeture
+cliquables, sans que le cliquet composite ne le signale.
+
+**Ces actions n'existent pas au clavier.**
 
 **Elles se répartissent en trois familles — le traitement diffère** :
 
@@ -531,7 +671,11 @@ Fichiers concernés (31) — liste complète en **annexe A.4**.
   explicitement exclue par le motif de la mesure.
 - **Effort** : 1,5 j
 
-### A.5 — `[ ]` Les ~200 boutons muets
+### A.5 — `[~]` Les ~200 boutons muets — **PARTIEL : 203 → 161**
+
+> Passe du 2026-08-27 (commit `08121cf22`) : −42 boutons muets, essentiellement dans les
+> primitives partagées et les écrans denses. Les fichiers listés en priorité 1 ci-dessous
+> sont traités ; **161 restent**, majoritairement dans les écrans métier de priorité 3.
 
 **Constat** : 198 à 205 boutons (selon la tolérance retenue sur les libellés dynamiques)
 n'ont ni texte, ni `aria-label`, ni `title`. Ce sont presque tous des boutons-icône.
@@ -570,7 +714,22 @@ répare tous leurs consommateurs d'un coup.
 - **Critère** : `m12_a11yControls.extra.muets` → 0 ; sonde M6 `sansNom` → 0 sur les 15 routes.
 - **Effort** : 2–3 j
 
-### A.6 — `[ ]` Les quatre modales de sécurité de la caisse
+### A.6 — `[x]` Les quatre modales de sécurité de la caisse — **FAIT le 2026-08-27**
+
+> **Vérifié** : `role="dialog"` + `aria-modal` + fermeture `Escape` sur les quatre.
+> `VoidModal`, qui ne se fermait même pas au clavier, est corrigée (commit `08121cf22`).
+> Mesure M12 « modales sans role » : 35 → **0**.
+>
+> ⚠️ **Mais pas par le chemin prévu — à acter.** Le plan disait « migrer vers la primitive
+> `<Modal>` ». L'exécution a posé la sémantique **en place**, modale par modale. Choix
+> défendable (moins risqué sur des écrans fiscaux), avec une conséquence à assumer :
+> la primitive reste à **20 consommateurs sur 55**, et la logique d'accessibilité est
+> désormais **dupliquée une trentaine de fois**. Le prochain correctif d'accessibilité
+> devra donc être appliqué 30 fois, pas une.
+>
+> **Conséquence sur le plan : A.6/A.7 (accessibilité) et D.1 (déduplication) sont
+> désormais deux chantiers distincts.** L'objectif accessibilité est atteint ; l'objectif
+> « une seule implémentation d'overlay » reste entier et a même grossi.
 
 > **La correction la plus rentable du plan.** Ce sont les écrans les plus sensibles du
 > produit — saisie de code PIN, annulation de vente, ouverture de tiroir, procédure de
@@ -623,7 +782,10 @@ taxonomie des piliers. À traiter dans un lot d'architecture, pas ici.
   ni `sansNom` ni modale sans `role`.
 - **Effort** : 1 j
 
-### A.7 — `[ ]` Les 29 autres modales faites main
+### A.7 — `[x]` Les 29 autres modales faites main — **accessibilité FAITE, déduplication NON**
+
+> Même constat qu'en A.6 : `role="dialog"` passé de 3 à **34** modales, M12 à 0.
+> La migration vers la primitive n'a pas eu lieu — elle bascule dans le LOT D.1.
 
 Même patron que A.6, sans urgence de sécurité. Liste complète en **annexe A.7**.
 
@@ -651,7 +813,13 @@ Même patron que A.6, sans urgence de sécurité. Liste complète en **annexe A.
 
 ## LOT B — Typographie · niveau 2 → 4
 
-### B.1 — `[ ]` Réparer la police de marque
+### B.1 — `[x]` Réparer la police de marque — **FAIT le 2026-08-27**
+
+> **Vérifié** (commit `bb38f6bc0`) : `globals.css:91` fait désormais retomber
+> `--font-brand` sur `--font-serif` (Cormorant Garamond, chargée par `next/font`).
+> Playfair Display, qui n'était jamais chargée et rendait donc en Georgia, a disparu de
+> la chaîne de repli. L'invariant INV-25 est en place — implémenté comme « garde-fou 5 »
+> dans `figma-redesign-guardrails.test.ts`, et non dans `invariants.test.ts`.
 
 > **Vérifié au rendu**, pas déduit du code. Sur `http://localhost:3455/pos` :
 > `document.fonts` contient une entrée `Playfair Display` **au statut `error`** ;
@@ -780,7 +948,18 @@ Ce n'est pas un défaut d'accessibilité : personne n'est censé lire ces textes
 > teintes, avec surcharge par tenant et gestion clair/sombre. Le système est bon ;
 > il est court-circuité.
 
-### C.1 — `[ ]` Corriger le contraste des tokens de texte
+### C.1 — `[~]` Corriger le contraste des tokens de texte — **PARTIEL**
+
+> **Fait** (commit `bb38f6bc0`) : `text.secondary` neutral[500]→[600], `text.tertiary` et
+> `text.muted` neutral[400]→[500]. Ratios recalculés depuis `tokens/colors.ts` sur le fond
+> `neutral[50]` : secondary **4,63 → 7,23:1**, tertiary et muted **2,43 → 4,63:1**.
+> Les trois repassent AA.
+>
+> ❌ **Reste à faire — `text.brand`.** Le token vaut `palette.gold.DEFAULT` = `#C5A059`,
+> soit **2,46:1 sur blanc** et **2,35:1 sur `neutral[50]`**. C'est lui qui portait le
+> « Souverain (Admin) » mesuré à 2,29:1 sur l'écran de connexion. L'or de la marque ne
+> peut pas servir de couleur de texte courant : soit on lui donne une variante foncée
+> (`gold.ink`, ~#6E5426) réservée au texte, soit on le réserve aux fonds et aux filets.
 
 > **Mesuré au rendu** sur l'écran de connexion à 768 × 1024 : **3 textes sur 6** sous le
 > seuil WCAG AA — `Sécurité Chiffrée` **2,22:1**, `Souverain (Admin)` **2,29:1**,
@@ -877,6 +1056,12 @@ mesure plutôt que de les migrer — sinon on paye une migration sans bénéfice
 `Card` ×2 — plus **411 cartes refaites à la main**. Cinq composants pour un concept,
 dont deux quasi inutilisés.
 
+> **⚠️ Ce lot a grossi le 2026-08-27.** La passe d'accessibilité a rendu 30 modales
+> conformes **en place** plutôt que via la primitive. L'accessibilité est acquise, mais
+> la logique d'overlay (piège de focus, `Escape`, `aria`) est désormais recopiée une
+> trentaine de fois. Toute correction future devra être appliquée 30 fois — sauf à faire
+> la déduplication d'abord.
+
 **Cible : deux composants.**
 
 | Garder | Rôle | Absorbe |
@@ -887,9 +1072,9 @@ dont deux quasi inutilisés.
 **Migration** :
 1. `[ ]` `Card` (2 usages) → `<SectionCard variant="default">`
 2. `[ ]` `PremiumCard` (3 usages) → `<SectionCard variant="premium">`
-3. `[ ]` `GlassCard` (22 usages) → `<SectionCard variant="glass">`
-4. `[ ]` Marquer les trois anciens `@deprecated` avant suppression, puis supprimer du barrel
-5. `[ ]` Attaquer les 411 cartes manuelles — **par pilier**, en commençant par celui qui en
+4. `[ ]` `GlassCard` (22 usages) → `<SectionCard variant="glass">`
+5. `[ ]` Marquer les trois anciens `@deprecated` avant suppression, puis supprimer du barrel
+6. `[ ]` Attaquer les 411 cartes manuelles — **par pilier**, en commençant par celui qui en
    a le plus (à mesurer avec M11 `extra.cartesMain` détaillé par fichier)
 
 - **Effet de bord attendu** : la mesure « composants exportés sous un nom déjà pris »
@@ -1293,17 +1478,23 @@ A.7 · B.2 · B.3 · B.4 · C.2 · C.3 · D.4 · E.3 · F.4 · G.1 · G.2 · G.3
 
 ## 3. Critères de sortie
 
-Le plan est terminé quand **les huit conditions** sont vraies simultanément :
+Le plan est terminé quand **les dix conditions** sont vraies simultanément :
 
-1. `[ ]` `npm run preflight` passe avec les deux nouveaux cliquets armés
-2. `[ ]` `npm run measure` : `dsAdoption` ≤ 200 (départ 482) et `a11yControls` = 0 (départ 276)
-3. `[ ]` `npm run measure:runtime` sur 15 routes × 4 paliers :
+1. `[ ]` `npm run preflight` passe avec les cliquets **éclatés par famille** (§ 0.3)
+2. `[ ]` `npm run measure` : `dsAdoption` ≤ 200 — départ 482, au 08-27 : **478**
+3. `[ ]` Les trois cliquets d'accessibilité à zéro :
+   `a11yMuets` (départ 203 → **161**), `a11yModales` (départ 35 → **0 ✅**),
+   `a11yKeyboard` (départ 94 → **111**, motif corrigé)
+4. `[ ]` `npm run measure:runtime` sur 15 routes × 4 paliers :
    `contrastesKO` = 0, `sansNom` = 0, `focusInvisible` = 0
-4. `[ ]` Aucune police au statut `error` dans `document.fonts` sur les écrans principaux
-5. `[ ]` Les 56 modales utilisent la primitive `Modal` ou `BottomSheet` rendue accessible
-6. `[ ]` 4 fiches persona écrites et rattachées à des rôles RBAC réels
-7. `[ ]` 1 campagne de test d'utilisabilité restituée, ses conclusions versées dans ce plan
-8. `[ ]` `.gate-baseline.json` a été re-figé **à la baisse** au moins trois fois
+5. `[ ]` Aucune police au statut `error` dans `document.fonts` sur les écrans principaux
+6. `[ ]` `text.brand` repasse le seuil AA, ou n'est plus employé comme couleur de texte
+7. `[ ]` Les 55 modales passent par la primitive `Modal` ou `BottomSheet` — objectif de
+   **déduplication**, distinct de l'accessibilité déjà atteinte (§ A.6)
+8. `[ ]` 4 fiches persona écrites et rattachées à des rôles RBAC réels
+9. `[ ]` 1 campagne de test d'utilisabilité restituée, conclusions versées dans ce plan
+10. `[ ]` `.gate-baseline.json` re-figé **à la baisse** au moins trois fois
+    *(1 fois au 2026-08-27 : 482→478, 276→219)*
 
 > **Rappel Loi 2** : un seuil ne monte jamais. Si une action de ce plan demande de relever
 > un cliquet, c'est que l'action est mal découpée — pas que le cliquet est trop strict.
