@@ -363,7 +363,7 @@ export const m11_dsAdoption = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// M12 — Contrôles inaccessibles
+// M12 — Contrôles inaccessibles (3 familles étanches)
 // ─────────────────────────────────────────────────────────────────────────────
 function analyzeButtonAccessibleName(f, src, rel, muets) {
   for (const m of src.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)) {
@@ -375,14 +375,29 @@ function analyzeButtonAccessibleName(f, src, rel, muets) {
   }
 }
 
-function analyzeA11yFile(f, src, rel, muets, clavier, modales) {
-  if (!f.endsWith('.tsx')) return;
-  analyzeButtonAccessibleName(f, src, rel, muets);
-
-  for (const _ of src.matchAll(/<div\b[^>]*?\bonClick(?:Capture)?=/gs)) {
-    clavier.push(`${rel(f)} — <div onClick> non focalisable`);
+function baliseComplete(src, i) {
+  let prof = 0;
+  for (let j = i; j < src.length; j++) {
+    const c = src[j];
+    if (c === '{') prof++;
+    else if (c === '}') prof--;
+    else if (c === '>' && prof === 0) return src.slice(i, j + 1);
   }
+  return src.slice(i, i + 3000);
+}
 
+function analyzeKeyboardAccessibility(f, src, rel, clavier) {
+  for (const m of src.matchAll(/<(motion\.div|div)\b/g)) {
+    const bal = baliseComplete(src, m.index);
+    if (!/\bonClick(?:Capture)?=/.test(bal)) continue;
+    if (/\bonKey(?:Down|Up|Press)=/.test(bal)) continue;
+    if (/aria-hidden="true"/.test(bal)) continue;
+    if (/role="(?:button|dialog|alertdialog|switch|tab|menuitem|link|option)"/.test(bal)) continue;
+    clavier.push(`${rel(f)} — conteneur cliquable non focalisable`);
+  }
+}
+
+function analyzeModalsSemantic(f, src, rel, modales) {
   if (/fixed inset-0/.test(src) && /Modal|Dialog|Drawer|Sheet/.test(basename(f))) {
     if (!/role="dialog"|role="alertdialog"/.test(src)) {
       modales.push(`${rel(f)} — overlay sans role dialog`);
@@ -390,25 +405,48 @@ function analyzeA11yFile(f, src, rel, muets, clavier, modales) {
   }
 }
 
-export const m12_a11yControls = {
-  id: 'a11yControls',
-  titre: 'Contrôles inaccessibles',
+export const m12a_a11yMuets = {
+  id: 'a11yMuets',
+  titre: 'Boutons sans nom accessible',
   run(c) {
-    const muets = [], clavier = [], modales = [];
+    const muets = [];
     for (const [f, src] of c.contenu) {
-      analyzeA11yFile(f, src, c.rel, muets, clavier, modales);
+      if (!f.endsWith('.tsx')) continue;
+      analyzeButtonAccessibleName(f, src, c.rel, muets);
     }
-    const detail = [...muets, ...clavier, ...modales];
-    return {
-      valeur: detail.length,
-      detail,
-      extra: { muets: muets.length, clavier: clavier.length, modales: modales.length },
-    };
+    return { valeur: muets.length, detail: muets.sort() };
+  },
+};
+
+export const m12b_a11yModales = {
+  id: 'a11yModales',
+  titre: 'Modales sans rôle sémantique',
+  run(c) {
+    const modales = [];
+    for (const [f, src] of c.contenu) {
+      if (!f.endsWith('.tsx')) continue;
+      analyzeModalsSemantic(f, src, c.rel, modales);
+    }
+    return { valeur: modales.length, detail: modales.sort() };
+  },
+};
+
+export const m12c_a11yKeyboard = {
+  id: 'a11yKeyboard',
+  titre: 'Conteneurs cliquables sans clavier',
+  run(c) {
+    const clavier = [];
+    for (const [f, src] of c.contenu) {
+      if (!f.endsWith('.tsx')) continue;
+      analyzeKeyboardAccessibility(f, src, c.rel, clavier);
+    }
+    return { valeur: clavier.length, detail: clavier.sort() };
   },
 };
 
 export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
-  m11_dsAdoption, m12_a11yControls,
+  m11_dsAdoption, m12a_a11yMuets, m12b_a11yModales, m12c_a11yKeyboard,
 ];
+

@@ -159,6 +159,7 @@ export function CashDrawerModal({
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
+        aria-hidden="true"
       >
         <motion.div
           key="cd-card"

@@ -55,6 +55,7 @@ export function PromotionModal({
         <div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+            aria-hidden="true"
         >
             <motion.div
                 role="dialog"
@@ -69,7 +70,7 @@ export function PromotionModal({
                     <h3 className="text-lg font-bold uppercase tracking-widest text-text-primary">
                         Promouvoir TEST → REFERENCE
                     </h3>
-                    <button onClick={onClose} className="text-muted hover:text-text-primary transition-colors">
+                    <button onClick={onClose} aria-label="Fermer la boîte de dialogue" className="text-muted hover:text-text-primary transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>

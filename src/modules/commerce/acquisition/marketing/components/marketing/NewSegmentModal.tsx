@@ -65,6 +65,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     <motion.div
@@ -87,7 +88,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Audience CRM</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
+                            <button onClick={onClose} aria-label="Fermer la boîte de dialogue" className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
                                 <X size={20} />
                             </button>
                         </div>

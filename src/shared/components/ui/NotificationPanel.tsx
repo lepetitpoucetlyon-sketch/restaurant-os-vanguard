@@ -92,12 +92,16 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                aria-hidden="true"
                 className="fixed inset-0 z-[150] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
                 onClick={onClose}
             />
 
             {/* Executive Archive Panel */}
             <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-label="Archive des Alertes"
                 initial={{ x: 400, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
@@ -279,10 +283,19 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
     return (
         <motion.div
             layout
+            role="button"
+            tabIndex={0}
+            aria-label={notification.title}
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -20, opacity: 0 }}
             onClick={onClick}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
             className={cn(
                 "group/item relative p-5 rounded-2xl cursor-pointer transition-all duration-500 border overflow-hidden",
                 !notification.read

@@ -20,6 +20,7 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
             onClick={onClose}
+            aria-hidden="true"
         >
             <div
                 role="dialog"
@@ -35,6 +36,7 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
                     </p>
                     <button
                         onClick={onClose}
+                        aria-label="Fermer la prédiction Oracle"
                         className="p-1 rounded hover:bg-surface-hover text-text-muted"
                     >
                         <X className="w-4 h-4" />

@@ -82,6 +82,7 @@ export function OrderCartDrawer({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={onClose}
+              aria-hidden="true"
               className="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity"
             />
 
@@ -114,6 +115,7 @@ export function OrderCartDrawer({
 
                   <button
                     onClick={onClose}
+                    aria-label="Fermer le panier"
                     className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-glass-hover transition-colors"
                   >
                     <X className="w-5 h-5" />

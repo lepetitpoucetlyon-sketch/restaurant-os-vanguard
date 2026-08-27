@@ -41,14 +41,16 @@ const seuil = (nom, defaut) => {
 
 /** Mesures sous cliquet. Les autres sont informatives : suivies, jamais bloquantes. */
 const CLIQUETS = {
-  orphans:          seuil('ORPHAN_COMPONENTS_MAX', 78),
+  orphans:          seuil('ORPHAN_COMPONENTS_MAX', 77),
   unreadSettings:   seuil('UNREAD_SETTINGS_MAX', 177),
   missingI18n:      seuil('MISSING_I18N_KEYS_MAX', 0),
   inertProps:       seuil('INERT_HANDLER_PROPS_MAX', 1),
   nonCanonicalSeal: seuil('NON_CANONICAL_SEAL_MAX', 0),
   fakeMetrics:      seuil('FAKE_METRICS_MAX', 7),
   dsAdoption:       seuil('DS_OUTSIDE_MAX', 478),
-  a11yControls:     seuil('A11Y_CONTROLS_MAX', 258),
+  a11yMuets:        seuil('A11Y_MUETS_MAX', 150),
+  a11yModales:      seuil('A11Y_MODALES_MAX', 0),
+  a11yKeyboard:     seuil('A11Y_KEYBOARD_MAX', 67),
 };
 
 const corpus = chargerCorpus('src');

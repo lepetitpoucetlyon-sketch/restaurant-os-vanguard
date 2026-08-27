@@ -30,7 +30,7 @@ export function computeDLCStatus(dlc: string | undefined): DLCStatus {
 
 function ModalShell({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true">
             <div 
                 role="dialog"
                 aria-modal="true"

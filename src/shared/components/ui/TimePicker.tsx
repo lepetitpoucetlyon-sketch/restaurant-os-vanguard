@@ -134,16 +134,18 @@ export function TimePicker({
                                 }}
                             >
                                 {hoursList.map((h) => (
-                                    <div 
+                                    <button 
+                                        type="button"
                                         key={h}
                                         onClick={() => scrollToValue(hoursRef, h)}
+                                        aria-label={`${h.toString().padStart(2, '0')} heures`}
                                         className={cn(
-                                            "h-12 flex items-center justify-center snap-center cursor-pointer transition-all duration-300",
+                                            "w-full h-12 flex items-center justify-center snap-center cursor-pointer transition-all duration-300 bg-transparent border-0 p-0",
                                             hours === h ? "text-2xl font-black text-text-primary scale-110" : "text-lg font-medium text-text-muted opacity-30"
                                         )}
                                     >
                                         <span className="font-mono">{h.toString().padStart(2, '0')}</span>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
 
@@ -160,16 +162,18 @@ export function TimePicker({
                                 }}
                             >
                                 {minutesList.map((m) => (
-                                    <div 
+                                    <button 
+                                        type="button"
                                         key={m}
                                         onClick={() => scrollToValue(minutesRef, m)}
+                                        aria-label={`${m.toString().padStart(2, '0')} minutes`}
                                         className={cn(
-                                            "h-12 flex items-center justify-center snap-center cursor-pointer transition-all duration-300",
+                                            "w-full h-12 flex items-center justify-center snap-center cursor-pointer transition-all duration-300 bg-transparent border-0 p-0",
                                             minutes === m ? "text-2xl font-black text-text-primary scale-110" : "text-lg font-medium text-text-muted opacity-30"
                                         )}
                                     >
                                         <span className="font-mono">{m.toString().padStart(2, '0')}</span>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>

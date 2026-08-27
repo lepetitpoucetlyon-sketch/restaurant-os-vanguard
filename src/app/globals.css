@@ -47,7 +47,7 @@
   --color-text-primary: var(--text-primary, #111827);
   --color-text-secondary: var(--text-secondary, #4b5563);
   --color-text-muted: var(--text-muted, #6b7280);
-  --color-text-brand: var(--text-brand, #C5A059);
+  --color-text-brand: var(--text-brand, #6E5426);
   /* Alias 'brand' → couleur primaire du tenant. Génère les utilitaires
      text-brand / bg-brand / border-brand. Sans lui, 'text-brand' (utilisé
      215× dans le produit) ne résolvait vers RIEN en Tailwind v4 — le texte de

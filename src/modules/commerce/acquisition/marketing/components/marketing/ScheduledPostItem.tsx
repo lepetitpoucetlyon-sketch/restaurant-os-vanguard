@@ -45,10 +45,10 @@ export function ScheduledPostItem({ post, socialAccounts }: ScheduledPostItemPro
                     </div>
 
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                        <button className="p-2 hover:bg-surface-glass rounded-xl transition-colors">
+                        <button type="button" aria-label="Modifier la publication" className="p-2 hover:bg-surface-glass rounded-xl transition-colors">
                             <Edit3 size={16} className="text-text-secondary" />
                         </button>
-                        <button className="p-2 hover:bg-status-danger/10 hover:text-status-danger rounded-xl transition-colors">
+                        <button type="button" aria-label="Supprimer la publication" className="p-2 hover:bg-status-danger/10 hover:text-status-danger rounded-xl transition-colors">
                             <Trash2 size={16} />
                         </button>
                     </div>

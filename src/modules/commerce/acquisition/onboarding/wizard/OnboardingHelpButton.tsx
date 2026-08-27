@@ -56,14 +56,17 @@ export function OnboardingHelpButton({ currentStep, category, errorContext }: On
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setOpen(false)} aria-hidden="true">
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Demander de l'aide"
             className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md mx-4 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 text-lg">Demander de l&apos;aide</h3>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
+              <button onClick={() => setOpen(false)} aria-label="Fermer" className="text-gray-400 hover:text-gray-600 text-xl">×</button>
             </div>
 
             {sent ? (

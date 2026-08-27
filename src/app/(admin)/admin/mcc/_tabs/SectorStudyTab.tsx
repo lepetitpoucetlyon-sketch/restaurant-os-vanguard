@@ -71,11 +71,13 @@ export function SectorStudyTab() {
           {filtered.map((item) => {
             const isSelected = item.slug === selectedSlug;
             return (
-              <div
+              <button
+                type="button"
                 key={item.slug}
                 onClick={() => setSelectedSlug(item.slug)}
+                aria-label={`Étude ${item.name}`}
                 className={cn(
-                  "p-4 rounded-2xl border cursor-pointer transition-all space-y-2",
+                  "w-full text-left p-4 rounded-2xl border cursor-pointer transition-all space-y-2",
                   isSelected
                     ? "bg-blue-600/10 border-blue-500/50 shadow-lg shadow-blue-500/5"
                     : "bg-surface-glass border-border-default hover:bg-surface-glass-hover"
@@ -96,7 +98,7 @@ export function SectorStudyTab() {
                   <span>•</span>
                   <span>{item.capabilitiesCount} capabilities</span>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

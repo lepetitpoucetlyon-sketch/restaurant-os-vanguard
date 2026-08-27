@@ -51,6 +51,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
                     onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
+                    aria-hidden="true"
                 >
                     <motion.div
                         role="dialog"

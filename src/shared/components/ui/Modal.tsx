@@ -109,6 +109,7 @@ export function Modal({
                             animate="visible"
                             exit="exit"
                             onClick={onClose}
+                            aria-hidden="true"
                             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
                         />
 
@@ -186,6 +187,7 @@ export function Modal({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/50 backdrop-blur-xl"
                     />
 

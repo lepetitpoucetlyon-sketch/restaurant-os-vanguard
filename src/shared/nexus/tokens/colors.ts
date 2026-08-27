@@ -79,6 +79,7 @@ export const palette = {
   gold: {
     DEFAULT: '#C5A059',
     soft: 'rgba(197, 160, 89, 0.3)',
+    ink: '#6E5426', // WCAG AA compliant text color on light surfaces (> 6.7:1 contrast)
   }
 } as const;
 

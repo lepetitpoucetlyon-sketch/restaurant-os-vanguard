@@ -56,6 +56,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     <motion.div
@@ -77,7 +78,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                     <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Créez votre contenu</p>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
+                            <button onClick={onClose} aria-label="Fermer la boîte de dialogue" className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
                                 <Trash2 size={20} />
                             </button>
                         </div>
@@ -126,10 +127,10 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                         placeholder="Écrivez une légende captivante..."
                                     />
                                     <div className="absolute bottom-4 left-4 flex gap-2">
-                                        <button className="p-2 rounded-xl hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
+                                        <button type="button" aria-label="Ajouter une image" className="p-2 rounded-xl hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
                                             <ImageIcon size={20} />
                                         </button>
-                                        <button className="p-2 rounded-xl hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
+                                        <button type="button" aria-label="Paramètres de publication" className="p-2 rounded-xl hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
                                             <Settings size={20} />
                                         </button>
                                     </div>

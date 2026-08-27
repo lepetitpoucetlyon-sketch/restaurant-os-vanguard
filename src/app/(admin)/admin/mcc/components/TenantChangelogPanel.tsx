@@ -187,6 +187,15 @@ export function TenantChangelogPanel() {
               <div className="absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-border-subtle bg-surface-bg" />
 
               <div
+                role="button"
+                tabIndex={0}
+                aria-label={`Détails du log ${entry.description}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setExpanded(isOpen ? null : entry.id);
+                  }
+                }}
                 className="ml-2 p-3 bg-bg-primary/30 border border-border-subtle rounded-xl cursor-pointer hover:border-border-subtle transition-all"
                 onClick={() => setExpanded(isOpen ? null : entry.id)}
               >

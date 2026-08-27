@@ -319,8 +319,8 @@ export function TrustedDevicePanel() {
 
             {/* Modal d'édition de rôle */}
             {editingDevice && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setEditingDevice(null)}>
-                    <div className="bg-surface-card border border-border-subtle rounded-2xl p-6 w-80 space-y-4" onClick={e => e.stopPropagation()}>
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setEditingDevice(null)} aria-hidden="true">
+                    <div role="dialog" aria-modal="true" aria-label="Modifier le rôle" className="bg-surface-card border border-border-subtle rounded-2xl p-6 w-80 space-y-4" onClick={e => e.stopPropagation()}>
                         <p className="text-sm font-bold text-text-primary">Modifier le rôle</p>
                         <p className="text-xs text-text-secondary">{editingDevice.name}</p>
                         <select

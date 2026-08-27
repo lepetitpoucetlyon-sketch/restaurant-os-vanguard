@@ -147,10 +147,13 @@ export function FleetUpgradePanel() {
       </div>
 
       {/* Breaking change warning */}
-      <div
+      <button
+        type="button"
+        role="switch"
+        aria-checked={breaking}
         onClick={() => setBreaking(b => !b)}
         className={cn(
-          'flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all',
+          'w-full text-left flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all',
           breaking
             ? 'bg-status-danger/10 border-red-500/30'
             : 'bg-bg-primary/30 border-border-subtle hover:border-border-subtle'
@@ -164,12 +167,12 @@ export function FleetUpgradePanel() {
           <p className="text-nano text-secondary">Déclenche une alerte critique dans l'audit</p>
         </div>
         <div className={cn(
-          'w-4 h-4 rounded border-2 flex items-center justify-center transition-all',
+          'w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors',
           breaking ? 'bg-status-danger border-red-400' : 'border-border-default'
         )}>
-          {breaking && <span className="text-text-primary text-nano">✓</span>}
+          {breaking && <span className="text-nano text-text-primary">✓</span>}
         </div>
-      </div>
+      </button>
 
       {/* Scope selector */}
       <div>

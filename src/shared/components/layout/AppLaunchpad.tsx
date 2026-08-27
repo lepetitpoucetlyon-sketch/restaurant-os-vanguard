@@ -58,6 +58,9 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Launchpad des applications"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -112,6 +115,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                             />
                                             <button
                                                 onClick={() => { setIsSearchActive(false); setSearchQuery(""); }}
+                                                aria-label="Fermer la recherche"
                                                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-text-primary hover:text-accent-gold transition-all group/close"
                                             >
                                                 <X className="w-6 h-6 group-hover/close:rotate-90 transition-transform duration-500" />
@@ -153,28 +157,24 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                             onClick={() => setIsSearchActive(true)}
                                             onMouseEnter={() => setHoveredIndex(-1)}
                                             onMouseLeave={() => setHoveredIndex(null)}
+                                            aria-label="Rechercher une application"
                                             className="group flex flex-col items-center gap-6 transition-all duration-700 active:scale-95"
                                         >
                                             <div className="relative w-14 h-14 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-700">
                                                 <div className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-surface-glass border-2 transition-all duration-700"
                                                     style={{
-                                                        borderColor: hoveredIndex === -1 ? 'var(--color-accent-gold)' : 'rgba(0,0,0,0.05)',
+                                                        borderColor: hoveredIndex === -1 ? '#C5A059' : '#C5A05940',
                                                         boxShadow: hoveredIndex === -1
-                                                            ? '0 15px 45px -10px rgba(197,160,89,0.5), inset 0 0 20px rgba(197,160,89,0.1)'
-                                                            : 'none'
+                                                            ? '0 15px 45px -10px rgba(197, 160, 89, 0.5), inset 0 0 20px rgba(197, 160, 89, 0.2)'
+                                                            : '0 5px 25px -5px rgba(197, 160, 89, 0.15)'
                                                     }}
                                                 />
-                                                <div className="absolute inset-[3px] rounded-[1.8rem] md:rounded-[2.2rem] bg-transparent border border-black/5" />
-                                                <Search
-                                                    className={cn("relative z-10 w-6 h-6 md:w-7 md:h-7 transition-all duration-700", hoveredIndex === -1 ? "text-accent-gold rotate-12 scale-110" : "text-text-muted")}
-                                                    strokeWidth={1.5}
-                                                />
+                                                <Search className="w-6 h-6 md:w-7 md:h-7 text-accent-gold group-hover:scale-110 transition-transform duration-700" />
                                             </div>
-                                            <div className="flex flex-col items-center text-center">
-                                                <span className="font-black text-micro md:text-[13px] uppercase tracking-[0.2em] group-hover:text-accent-gold transition-colors duration-500 text-text-primary/60">
-                                                    {t('common.search')}
+                                            <div className="flex flex-col items-center gap-1.5 pointer-events-none">
+                                                <span className="text-sm md:text-base font-serif font-black italic tracking-wide text-accent-gold transition-colors duration-500">
+                                                    Recherche
                                                 </span>
-                                                <div className="w-0 group-hover:w-10 h-0.5 bg-accent-gold transition-all duration-700 mt-2 rounded-full" />
                                             </div>
                                         </motion.button>
                                     )}
@@ -183,28 +183,38 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                     {filteredItems.map((item, idx) => {
                                         const Icon = item.icon;
                                         const actualIdx = idx + (isSearchActive ? 0 : 1);
+                                        const triggerItemAction = () => {
+                                            if (item.key === 'system_map') {
+                                                setIsMap3DOpen(true);
+                                                onClose();
+                                            } else if (item.href.startsWith('http')) {
+                                                window.open(item.href, '_blank');
+                                                onClose();
+                                            } else {
+                                                onClose();
+                                                router.push(item.href);
+                                            }
+                                        };
                                         return (
-                                            <motion.div
+                                            <motion.button
                                                 key={item.href}
                                                 initial={{ opacity: 0, scale: 0.5, y: 20 }}
                                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                                 transition={{ delay: Math.min(idx * 0.01, 0.2), type: "spring", stiffness: 200, damping: 25 }}
-                                                className="group flex flex-col items-center gap-6 transition-all duration-300 active:scale-95 cursor-pointer"
+                                                className="group flex flex-col items-center gap-6 transition-all duration-300 active:scale-95 cursor-pointer bg-transparent border-0 p-0"
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // Stop bubbling to prevent immediate overlay closure mismatch
-                                                    if (item.key === 'system_map') {
-                                                        setIsMap3DOpen(true);
-                                                        onClose();
-                                                    } else if (item.href.startsWith('http')) {
-                                                        window.open(item.href, '_blank');
-                                                        onClose();
-                                                    } else {
-                                                        onClose();
-                                                        router.push(item.href);
+                                                    e.stopPropagation();
+                                                    triggerItemAction();
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' || e.key === ' ') {
+                                                        e.preventDefault();
+                                                        triggerItemAction();
                                                     }
                                                 }}
                                                 onMouseEnter={() => setHoveredIndex(actualIdx)}
                                                 onMouseLeave={() => setHoveredIndex(null)}
+                                                aria-label={item.label}
                                             >
                                                 <div
                                                     className="relative w-14 h-14 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-300"
@@ -258,7 +268,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                         className="h-[3px] bg-gradient-to-r from-transparent via-accent-gold to-transparent mt-3 rounded-full shadow-[0_0_10px_rgba(197,160,89,0.5)]"
                                                     />
                                                 </div>
-                                            </motion.div>
+                                            </motion.button>
                                         );
                                     })}
                                 </div>

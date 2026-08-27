@@ -257,7 +257,7 @@ export function SettingsDashboard() {
     return (
         <div className="flex h-[calc(100vh-80px)] md:h-[calc(100vh-100px)] -m-4 md:-m-8 bg-bg-primary overflow-hidden">
             {isMobile && !isNavCollapsed && (
-                <div className="fixed inset-0 bg-surface-bg backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} />
+                <div className="fixed inset-0 bg-surface-bg backdrop-blur-sm z-20" onClick={() => setIsNavCollapsed(true)} aria-hidden="true" />
             )}
 
             <main className="flex-1 flex overflow-hidden">
@@ -277,7 +277,7 @@ export function SettingsDashboard() {
                                 </motion.div>
                             )}
                         </AnimatePresence>
-                        <button onClick={() => setIsNavCollapsed(!isNavCollapsed)} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary">
+                        <button onClick={() => setIsNavCollapsed(!isNavCollapsed)} aria-label={isNavCollapsed ? "Déplier la navigation" : "Replier la navigation"} className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary">
                             <ChevronRight className={cn("w-4 h-4 transition-transform", isNavCollapsed ? "" : "rotate-180")} />
                         </button>
                     </div>

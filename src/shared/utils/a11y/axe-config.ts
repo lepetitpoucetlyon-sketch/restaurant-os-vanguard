@@ -1,3 +1,5 @@
+import type { AxeResults, RunOptions, RuleObject } from 'axe-core';
+
 export const AXE_CORE_CONFIG = {
     rules: {
         'color-contrast': { enabled: true },
@@ -7,7 +9,7 @@ export const AXE_CORE_CONFIG = {
         'link-name': { enabled: true },
         'aria-roles': { enabled: true },
         'aria-required-attr': { enabled: true },
-    } as Record<string, { enabled: boolean }>,
+    } as RuleObject,
     criticalPaths: [
         '/pos',
         '/kds',
@@ -15,15 +17,14 @@ export const AXE_CORE_CONFIG = {
     ],
 };
 
-export async function runAxeAudit(container?: HTMLElement): Promise<unknown> {
+export async function runAxeAudit(container?: HTMLElement): Promise<AxeResults | null> {
     if (typeof window === 'undefined') return null;
-    try {
-        const axe = await import('axe-core');
-        const results = await axe.default.run(container ?? document.body, {
-            rules: AXE_CORE_CONFIG.rules,
-        });
-        return results;
-    } catch {
-        return null;
-    }
+    const axeModule = await import('axe-core');
+    const axe = (axeModule.default || axeModule) as typeof import('axe-core');
+    const target = container ?? document.body;
+    const options: RunOptions = {
+        rules: AXE_CORE_CONFIG.rules,
+    };
+    return axe.run(target, options);
 }
+

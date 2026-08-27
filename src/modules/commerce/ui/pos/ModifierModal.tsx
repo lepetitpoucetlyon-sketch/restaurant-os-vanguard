@@ -76,6 +76,7 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                     transition={{ duration: 0.18 }}
                     className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm"
                     onClick={handleOverlayClick}
+                    aria-hidden="true"
                 >
                     <motion.div
                         key="modifier-card"

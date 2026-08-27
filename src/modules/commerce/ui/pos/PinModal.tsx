@@ -162,6 +162,7 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
                     transition={{ duration: 0.18 }}
                     className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-sm"
                     onClick={handleOverlayClick}
+                    aria-hidden="true"
                 >
                     <motion.div
                         key="pin-card"

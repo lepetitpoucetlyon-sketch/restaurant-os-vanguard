@@ -42,9 +42,11 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                 isExpanded ? "ring-2 ring-border shadow-2xl" : "hover:bg-bg-tertiary/50"
             )}
         >
-            <div
-                className="p-10 cursor-pointer flex items-center justify-between"
+            <button
+                type="button"
+                className="w-full text-left p-10 cursor-pointer flex items-center justify-between bg-transparent border-0"
                 onClick={onToggle}
+                aria-label={section.title}
             >
                 <div className="flex items-center gap-10">
                     <div
@@ -65,7 +67,7 @@ const CinematicCard = ({ section, isExpanded, onToggle }: { section: AuditSectio
                 >
                     <ChevronDown className="w-6 h-6 text-text-muted/30" />
                 </motion.div>
-            </div>
+            </button>
 
             <AnimatePresence>
                 {isExpanded && (

@@ -42,6 +42,9 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
         <motion.div
             initial={isPage ? {} : { opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
+            role={isPage ? undefined : "dialog"}
+            aria-modal={isPage ? undefined : "true"}
+            aria-label={doc.title}
             exit={isPage ? {} : { opacity: 0, scale: 0.95, y: 20 }}
             className={cn(
                 "relative w-full bg-surface-card overflow-hidden",
@@ -73,7 +76,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                             </div>
                         </div>
                         {!isPage && (
-                            <button onClick={closeDocumentation} className="w-10 h-10 rounded-full hover:bg-surface-glass-hover flex items-center justify-center transition-colors">
+                            <button onClick={closeDocumentation} aria-label="Fermer la documentation" className="w-10 h-10 rounded-full hover:bg-surface-glass-hover flex items-center justify-center transition-colors">
                                 <X className="w-5 h-5 text-text-muted" />
                             </button>
                         )}
@@ -109,8 +112,9 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
 
                                                         return (
                                                             <div key={pidx} className="rounded-2xl border border-border shadow-sm overflow-hidden">
-                                                                <div
-                                                                    className="flex items-center gap-4 px-5 py-4 bg-surface-card border-b border-border text-text-primary cursor-pointer hover:bg-surface-glass transition-colors group/banner"
+                                                                <button
+                                                                    type="button"
+                                                                    className="w-full text-left flex items-center gap-4 px-5 py-4 bg-surface-card border-b border-border text-text-primary cursor-pointer hover:bg-surface-glass transition-colors group/banner"
                                                                     onClick={() => {
                                                                         const tutorialSection: import('@nexus/contracts/nexus.types').NexusTutorialSection = {
                                                                             id: activeCategory as string,
@@ -153,7 +157,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                                                                     </div>
                                                                     <span className="text-sm font-bold uppercase tracking-wider">{actionTitle}</span>
                                                                     <Zap className="ml-auto w-4 h-4 text-accent-gold opacity-0 group-hover/banner:opacity-100 transition-all" />
-                                                                </div>
+                                                                </button>
 
                                                                 {steps.length > 0 && (
                                                                     <div className="p-5 space-y-3 bg-surface-glass">
@@ -266,6 +270,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeDocumentation}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     {content}

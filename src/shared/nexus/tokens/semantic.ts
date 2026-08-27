@@ -76,7 +76,7 @@ export const semanticTokens = {
     tertiary:         palette.neutral[500],
     muted:            palette.neutral[500],
     inverse:          palette.neutral[0],
-    brand:            palette.gold.DEFAULT,
+    brand:            palette.gold.ink,
     danger:           palette.red[600],
     success:          palette.emerald[600],
     warning:          palette.amber[600],

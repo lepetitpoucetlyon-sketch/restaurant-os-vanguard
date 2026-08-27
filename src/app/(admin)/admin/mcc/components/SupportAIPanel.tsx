@@ -189,10 +189,12 @@ export function SupportAIPanel() {
 
           <div className="space-y-2 max-h-48 overflow-y-auto elegant-scrollbar pr-1">
             {incomingTickets.map(t => (
-              <div
+              <button
+                type="button"
                 key={t.id}
                 onClick={() => handleSelectIncoming(t)}
-                className="p-3 rounded-xl bg-surface-card border border-border/50 hover:border-red-500/40 cursor-pointer flex items-center justify-between gap-3 transition-all"
+                aria-label={`Charger ticket ${t.tenantId}`}
+                className="w-full text-left p-3 rounded-xl bg-surface-card border border-border/50 hover:border-red-500/40 cursor-pointer flex items-center justify-between gap-3 transition-all"
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
@@ -205,10 +207,10 @@ export function SupportAIPanel() {
                   <p className="text-xs text-text-muted truncate mt-0.5">{t.description}</p>
                 </div>
 
-                <button className="px-2.5 py-1 text-nano font-black uppercase tracking-wider rounded-lg bg-action-primary/10 text-brand border border-focus/20 shrink-0">
+                <span className="px-2.5 py-1 text-nano font-black uppercase tracking-wider rounded-lg bg-action-primary/10 text-brand border border-focus/20 shrink-0">
                   Charger
-                </button>
-              </div>
+                </span>
+              </button>
             ))}
           </div>
         </div>

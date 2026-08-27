@@ -58,12 +58,14 @@ export function CRMList() {
     return (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
             {filteredCRMs.map((crm, i) => (
-                <motion.div
+                <motion.button
+                    type="button"
                     key={crm.id}
                     initial={{ opacity: 0, scale: 0.98, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ delay: i * 0.03, duration: 0.3 }}
-                    className="bg-surface-card dark:bg-bg-secondary p-4 md:p-6 rounded-[2rem] md:rounded-[3rem] flex items-center justify-between group cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all border border-subtle dark:border-border/50 h-28 md:h-36 relative overflow-hidden"
+                    aria-label={`Client ${getFirstName(crm)} ${getLastName(crm)}`}
+                    className="w-full text-left bg-surface-card dark:bg-bg-secondary p-4 md:p-6 rounded-[2rem] md:rounded-[3rem] flex items-center justify-between group cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all border border-subtle dark:border-border/50 h-28 md:h-36 relative overflow-hidden"
                     onClick={() => setSelectedCRM(crm)}
                 >
                     {/* Subtle aesthetic backdrop */}
@@ -100,7 +102,7 @@ export function CRMList() {
                             </p>
                         </div>
                     </div>
-                </motion.div>
+                </motion.button>
             ))}
         </div>
     );

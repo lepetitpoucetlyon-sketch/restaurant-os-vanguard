@@ -293,8 +293,8 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
 
     {pendingDelivery && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => !confirming && setPendingDelivery(null)} />
-        <div className="relative w-full max-w-sm bg-surface-bg border border-border-subtle rounded-2xl p-6 shadow-2xl">
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => !confirming && setPendingDelivery(null)} aria-hidden="true" />
+        <div role="dialog" aria-modal="true" aria-label="Confirmer la livraison" className="relative w-full max-w-sm bg-surface-bg border border-border-subtle rounded-2xl p-6 shadow-2xl">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-status-success/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
               <Truck className="w-5 h-5 text-status-success" />

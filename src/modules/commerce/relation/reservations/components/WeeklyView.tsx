@@ -50,6 +50,15 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
                                     : "border-border hover:border-border/80",
                                 "bg-bg-secondary"
                             )}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Voir réservations pour ${format(day, 'EEEE d MMMM', { locale: fr })}`}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    onDateClick(day);
+                                }
+                            }}
                             onClick={() => onDateClick(day)}
                         >
                             {/* Day header */}
