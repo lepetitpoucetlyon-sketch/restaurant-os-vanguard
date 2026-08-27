@@ -328,7 +328,87 @@ export const m10_footprint = {
   },
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// M11 — Adoption du design system
+// ─────────────────────────────────────────────────────────────────────────────
+const IMPORT_DS = /from\s+['"](@ui\/|@ui['"]|@\/shared\/components\/ui|@components\/ui)/;
+
+function analyzeDsFile(f, src, c, state) {
+  if (!f.endsWith('.tsx') || f.includes('/shared/components/ui/') || c.estBarrel(f)) return;
+
+  state.boutonsBruts     += (src.match(/<button\b/g) || []).length;
+  state.boutonsPrimitive += (src.match(/<Button\b/g) || []).length;
+  state.champsBruts      += (src.match(/<input\b/g) || []).length;
+  state.champsPrimitive  += (src.match(/<(?:Glass|Search|Premium)?(?:Input|Select|TimePicker)\b/g) || []).length;
+  state.cartesMain       += (src.match(/className="[^"]*\brounded-(?:xl|2xl|lg)\b[^"]*\bbg-(?:white|surface)/g) || []).length;
+
+  const fabrique = /<button\b|<input\b|rounded-(?:xl|2xl)/.test(src);
+  if (fabrique && !IMPORT_DS.test(src)) state.detail.push(c.rel(f));
+}
+
+export const m11_dsAdoption = {
+  id: 'dsAdoption',
+  titre: 'Écrans hors du design system',
+  run(c) {
+    const state = { detail: [], boutonsBruts: 0, boutonsPrimitive: 0, champsBruts: 0, champsPrimitive: 0, cartesMain: 0 };
+    for (const [f, src] of c.contenu) {
+      analyzeDsFile(f, src, c, state);
+    }
+    return {
+      valeur: state.detail.length,
+      detail: state.detail.sort(),
+      extra: state,
+    };
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// M12 — Contrôles inaccessibles
+// ─────────────────────────────────────────────────────────────────────────────
+function analyzeButtonAccessibleName(f, src, rel, muets) {
+  for (const m of src.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)) {
+    const [, attrs, inner] = m;
+    if (/aria-label|aria-labelledby|title=/.test(attrs)) continue;
+    if (/\{t\(|\{\s*label|children/.test(inner)) continue;
+    const texte = inner.replace(/<[^>]+>/g, '').replace(/\{[^{}]*\}/g, '').trim();
+    if (!texte) muets.push(`${rel(f)} — bouton sans nom accessible`);
+  }
+}
+
+function analyzeA11yFile(f, src, rel, muets, clavier, modales) {
+  if (!f.endsWith('.tsx')) return;
+  analyzeButtonAccessibleName(f, src, rel, muets);
+
+  for (const _ of src.matchAll(/<div\b[^>]*?\bonClick(?:Capture)?=/gs)) {
+    clavier.push(`${rel(f)} — <div onClick> non focalisable`);
+  }
+
+  if (/fixed inset-0/.test(src) && /Modal|Dialog|Drawer|Sheet/.test(basename(f))) {
+    if (!/role="dialog"|role="alertdialog"/.test(src)) {
+      modales.push(`${rel(f)} — overlay sans role dialog`);
+    }
+  }
+}
+
+export const m12_a11yControls = {
+  id: 'a11yControls',
+  titre: 'Contrôles inaccessibles',
+  run(c) {
+    const muets = [], clavier = [], modales = [];
+    for (const [f, src] of c.contenu) {
+      analyzeA11yFile(f, src, c.rel, muets, clavier, modales);
+    }
+    const detail = [...muets, ...clavier, ...modales];
+    return {
+      valeur: detail.length,
+      detail,
+      extra: { muets: muets.length, clavier: clavier.length, modales: modales.length },
+    };
+  },
+};
+
 export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
+  m11_dsAdoption, m12_a11yControls,
 ];

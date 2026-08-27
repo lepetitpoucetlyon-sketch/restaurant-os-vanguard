@@ -87,7 +87,9 @@ UNREAD_SETTINGS_MAX=177       # réglages déclarés dans l'écran Paramètres, 
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
-FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran      # JSON.stringify avant sign()/hash() (1 = ProcurementBridge)
+FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
+DS_OUTSIDE_MAX=478           # écrans fabriquant de l'UI hors design system
+A11Y_CONTROLS_MAX=219        # boutons muets + div cliquables + modales sans role (abaissé après Lot A)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux

@@ -1,8 +1,8 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3610,
-    "loc": 336230,
+    "files": 3607,
+    "loc": 338444,
     "pages": 84,
     "apiRoutes": 211
   },
@@ -10,7 +10,7 @@
     "kernel": 25,
     "lib": 235,
     "shared": 706,
-    "modules": 1596,
+    "modules": 1593,
     "app": 448,
     "verticals": 245,
     "infrastructure": 46,
@@ -61,7 +61,7 @@
   },
   "piliers": {
     "commerce": {
-      "files": 355,
+      "files": 350,
       "barrel": true
     },
     "compliance": {
@@ -77,7 +77,7 @@
       "barrel": true
     },
     "human": {
-      "files": 133,
+      "files": 134,
       "barrel": true
     },
     "intelligence": {
@@ -85,7 +85,7 @@
       "barrel": true
     },
     "logistics": {
-      "files": 148,
+      "files": 149,
       "barrel": true
     },
     "ops": {
