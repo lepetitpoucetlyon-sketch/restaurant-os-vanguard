@@ -54,6 +54,10 @@ export const COLLECTIONS = {
   stockMovements:   'stockMovements',
   suppliers:        'suppliers',
   purchaseOrders:   'purchaseOrders',
+  supplierOrders:   'supplierOrders',
+  supplierDisputes: 'supplierDisputes',
+  supplierPrices:   'supplierPrices',
+  supplierRebates:  'supplierRebates',
 
   // ── Compliance ────────────────────────────────────────────────────────────
   haccpChecks:      'haccpChecks',

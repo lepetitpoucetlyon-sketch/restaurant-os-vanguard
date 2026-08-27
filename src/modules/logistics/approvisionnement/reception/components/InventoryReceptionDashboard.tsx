@@ -242,10 +242,24 @@ export function InventoryReceptionDashboard() {
                                                     <p className="text-nano text-status-success font-bold">€{item.price.toFixed(2)}</p>
                                                 </div>
                                                 <div className="flex gap-2">
-                                                    <button className={`p-2 rounded-lg transition-all ${item.forceScan ? 'bg-status-warning text-status-warning' : 'bg-surface-card text-text-secondary hover:text-text-primary'}`}>
+                                                    <button 
+                                                        onClick={() => {
+                                                            setScanResult(prev => prev ? prev.map(it => it.id === item.id ? { ...it, forceScan: !it.forceScan } : it) : null);
+                                                        }}
+                                                        title="Forcer le scan"
+                                                        aria-label="Forcer le scan"
+                                                        className={`p-2 rounded-lg transition-all ${item.forceScan ? 'bg-status-warning text-status-warning' : 'bg-surface-card text-text-secondary hover:text-text-primary'}`}
+                                                    >
                                                         <ShieldAlert className="w-5 h-5" />
                                                     </button>
-                                                    <button className="p-2 bg-status-success text-status-success rounded-lg">
+                                                    <button 
+                                                        onClick={() => {
+                                                            setScanResult(prev => prev ? prev.map(it => it.id === item.id ? { ...it, validated: it.validated === false ? true : !(it.validated ?? true) } : it) : null);
+                                                        }}
+                                                        title={item.validated === false ? "Ligne non validée" : "Ligne validée"}
+                                                        aria-label="Valider la ligne"
+                                                        className={`p-2 rounded-lg transition-all ${item.validated === false ? 'bg-surface-card text-text-muted hover:text-status-success' : 'bg-status-success text-status-success'}`}
+                                                    >
                                                         <CheckCircle2 className="w-5 h-5" />
                                                     </button>
                                                 </div>

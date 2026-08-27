@@ -17,6 +17,7 @@ export interface ScannedItem {
     price: number;
     dlc: string;
     forceScan: boolean;
+    validated?: boolean;
     ingredient?: Ingredient;
 }
 

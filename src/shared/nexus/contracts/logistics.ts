@@ -139,6 +139,92 @@ export interface SupplierOrder {
     deliveryDate?: string;
 }
 
+// ── Hub fournisseurs ────────────────────────────────────────────────────────
+// Modèles introduits pour remplacer les onglets du SupplierHub qui affichaient
+// des données codées en dur (litiges, mercuriales, RFA) : rien n'était persisté,
+// et aucune des actions proposées n'aboutissait.
+
+export type SupplierDisputeStatus =
+    | 'declared'      // non-conformité constatée à réception
+    | 'claimed'       // avoir réclamé au fournisseur
+    | 'credited'      // avoir reçu, en attente d'imputation
+    | 'settled'       // avoir déduit d'un règlement
+    | 'rejected';     // refusé par le fournisseur
+
+export type SupplierDisputeReason =
+    | 'missing'       // colis manquant
+    | 'damaged'       // marchandise abîmée
+    | 'non_conforme'  // produit non conforme à la commande
+    | 'temperature'   // rupture de chaîne du froid
+    | 'price_gap'     // écart entre BL et tarif convenu
+    | 'expired';      // DLC/DLUO insuffisante
+
+/** Litige de réception ouvert sur un bon de livraison fournisseur. */
+export interface SupplierDispute {
+    id: string;
+    /** Référence lisible, ex. LIT-202608-0015. */
+    reference: string;
+    supplierId: string;
+    supplierName: string;
+    /** Numéro du bon de livraison contesté. */
+    blNumber: string;
+    reason: SupplierDisputeReason;
+    /** Description libre saisie par celui qui constate. */
+    details?: string;
+    /** Montant réclamé, TTC, en microunits. */
+    claimedAmountInMicrounits: number;
+    status: SupplierDisputeStatus;
+    /** Numéro d'avoir communiqué par le fournisseur, une fois émis. */
+    creditNoteNumber?: string;
+    /** Montant réellement accordé, TTC, en microunits. */
+    creditedAmountInMicrounits?: number;
+    declaredBy: string;
+    declaredAt: string;
+    settledAt?: string;
+    /** Référence du règlement sur lequel l'avoir a été déduit. */
+    settlementReference?: string;
+}
+
+/** Ligne de mercuriale : prix d'un ingrédient chez un fournisseur donné. */
+export interface SupplierPriceEntry {
+    id: string;
+    supplierId: string;
+    supplierName: string;
+    ingredientId?: string;
+    ingredientName: string;
+    /** Prix ramené à l'unité de comparaison (kg, L, pièce), en microunits. */
+    pricePerUnitInMicrounits: number;
+    unit: IngredientUnit;
+    /** Conditionnement commercial, ex. « Carton 10x1kg ». */
+    packaging?: string;
+    /** Prix du conditionnement complet, en microunits. */
+    packPriceInMicrounits?: number;
+    validFrom: string;
+    validUntil?: string;
+    updatedAt: string;
+}
+
+/** Palier de remise de fin d'année. */
+export interface SupplierRebateTier {
+    /** Seuil d'achats annuels HT à franchir, en microunits. */
+    thresholdInMicrounits: number;
+    /** Taux de remise appliqué au-delà du seuil, en pourcentage (ex. 2.5). */
+    ratePercent: number;
+}
+
+/** Barème de RFA négocié avec un fournisseur pour un exercice. */
+export interface SupplierRebateScheme {
+    id: string;
+    supplierId: string;
+    supplierName: string;
+    /** Exercice concerné, ex. 2026. */
+    year: number;
+    tiers: SupplierRebateTier[];
+    /** Cumul d'achats HT sur l'exercice, en microunits. */
+    purchasedToDateInMicrounits: number;
+    updatedAt: string;
+}
+
 export type InventoryMovementType = 'reception' | 'transfer' | 'consumption' | 'waste' | 'adjustment' | 'sale';
 
 export interface InventoryMovement {
