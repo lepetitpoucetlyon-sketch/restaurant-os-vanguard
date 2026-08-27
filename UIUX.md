@@ -54,6 +54,34 @@ commits cohérents, arbre final identique.
 `alt-text` toujours `"off"`), A.2 (`runAxeAudit` toujours sans appelant), 0.4 (sonde M6).
 Les LOT D, E, F, G n'ont pas bougé.
 
+### Passe du 2026-08-27 (2) — Sprint 1, commit `dbffb65db`
+
+Exécutée par la session `uiux-sprint1-lota-execution` (Antigravity), qui s'est clôturée
+sans committer — le travail a été récupéré et commité séparément.
+
+**Vérifié en session, action par action** :
+
+| Action | Verdict |
+|---|---|
+| **A.1** lint a11y | ✅ `eslint-plugin-jsx-a11y@6.10.2` installé, `alt-text` repassé à `error`, 3 règles en `warn` — exactement la spécification du plan |
+| **A.2** `axe-config.ts` | 🟡 `axe-core@4.13.0` déclaré, `catch` muet supprimé, typage réel — **mais toujours aucun appelant**. N'est plus un stub déguisé ; reste du code mort |
+| **0.2** motif M12 | ✅ corrigé, et **meilleur que ma spécification** — voir encadré ci-dessous |
+| **0.3** cliquets | ✅ éclatés en trois, câblés sur les 4 fichiers, **sans dérive de valeur par défaut** cette fois |
+| **C.1** `text.brand` | ✅ bascule sur `palette.gold.ink` `#6E5426` — **7,1:1 sur blanc**, 6,62:1 sur le fond crème |
+| **A.4** clavier | ✅ 111 → **67** |
+| **A.5** boutons muets | 🟡 161 → **150** |
+
+> **Leur motif M12 est meilleur que celui que ce plan spécifiait.** Il exclut en plus
+> `aria-hidden="true"` et une liste de rôles élargie (`switch`, `tab`, `menuitem`, `link`,
+> `option`). Contre-vérification indépendante : **convergence exacte à 67**. Les 29 d'écart
+> avec mon comptage brut sont des voiles de fermeture correctement marqués `aria-hidden` —
+> c'est-à-dire précisément le traitement que le § A.4 prescrit. La spécification de ce plan
+> a été alignée sur la leur.
+
+> **Aucun écart entre l'annoncé et le mesuré cette fois** — contrairement à la passe 1.
+> Seule nuance : le contraste annoncé « > 6,7:1 » vaut 7,1:1 sur blanc et 6,62:1 sur le
+> fond crème `#F8F7F2`. Les deux passent AA.
+
 ## 0. Comment lire ce plan
 
 ### 0.1 Les cinq règles du plan
@@ -84,10 +112,10 @@ Les LOT D, E, F, G n'ont pas bougé.
 
 | Lot | Objet | Axes visés | Effort | Dépend de | Statut 08-27 |
 |---|---|---|---|---|---|
-| **LOT 0** | Instrumentation — rendre la dette visible | tous | 2–3 j | — | `[~]` mesures livrées, cliquets à éclater |
-| **LOT A** | Accessibilité | Accessibilité 1→3 | 6–9 j | LOT 0 | `[~]` modales ✅ · focus ✅ · muets 203→161 · **clavier régressé** · lint non fait |
+| **LOT 0** | Instrumentation — rendre la dette visible | tous | 2–3 j | — | `[~]` mesures ✅ · cliquets éclatés ✅ · **reste 0.4 sonde M6** |
+| **LOT A** | Accessibilité | Accessibilité 1→3 | 6–9 j | LOT 0 | `[~]` modales ✅ · focus ✅ · lint ✅ · clavier 111→67 · muets 203→150 · A.2 à trancher |
 | **LOT B** | Typographie | Typographie 2→4 | 2–3 j | LOT 0 | `[~]` B.1 police ✅ · B.2/B.3/B.4 à faire |
-| **LOT C** | Couleur & contraste | Couleur 3→4 | 4–6 j | LOT 0, B | `[~]` neutres ✅ · `text.brand` ❌ · C.2/C.3 à faire |
+| **LOT C** | Couleur & contraste | Couleur 3→4 | 4–6 j | LOT 0, B | `[~]` neutres ✅ · `text.brand` ✅ · C.2/C.3 à faire |
 | **LOT D** | Composants & design system | Composants 2→4 | 10–15 j | LOT 0 | `[ ]` intact — et **alourdi** : 30 overlays dupliqués de plus |
 | **LOT E** | Mise en page & grilles | Layout 3→4, Grilles 3→4 | 4–6 j | LOT D | `[ ]` intact |
 | **LOT F** | La boucle utilisateur manquante | Personas, Entretiens, Tests, Parcours | 6–8 j | — | `[ ]` intact — toujours parallélisable |
@@ -119,20 +147,16 @@ et ne dépend d'aucun autre : il ne touche pas au code.
 
 ### 1.2 Accessibilité
 
-| Indicateur | Baseline | Cible | Lot |
-|---|---:|---:|---|
-| Indicateur | Baseline 08-27 matin | Après passe d'exécution | Cible | Lot |
-|---|---:|---:|---:|---|
-| Fichiers `.tsx` portant ≥ 1 `aria-*` | 46 / 918 — 5 % | **97 / 913 — 10 %** | ≥ 35 % | A |
-| `<button>` sans nom accessible | 203 (motif M12) | **161** | 0 | A.5 |
-| Contrôles inaccessibles, total (M12) | 276 | **219** | 0 | A |
-| ⚠️ Conteneurs cliquables sans clavier — **motif corrigé** | **94** | **111** ↑ | 0 | A.4 |
-| … dont vus par le motif M12 actuel (aveugle à `motion.div`) | 38 | 58 ↑ | — | 0.2 |
-| Fichiers `.tsx` utilisant `focus-visible` | 1 | 1 *(règle globale en CSS — voir A.3)* | style global | A.3 |
-| Modales avec `role="dialog"` | 3 | **34** | = nombre de modales | A.6, A.7 |
-| Modales sans `role` (M12) | 35 | **0** | 0 | A.6, A.7 |
-| Règles ESLint a11y actives | 0 (`jsx-a11y/alt-text` à `"off"`) | **0 — inchangé** | jeu `recommended` | A.1 |
-| Textes sous WCAG AA (écran de connexion, au rendu) | 3 / 6 | neutres corrigés, **`text.brand` non** | 0 | C.1 |
+| Indicateur | Départ | Passe 1 | **Sprint 1** | Cible | Lot |
+|---|---:|---:|---:|---:|---|
+| Fichiers `.tsx` portant ≥ 1 `aria-*` | 46 / 918 — 5 % | 97 / 913 — 10 % | — | ≥ 35 % | A |
+| `<button>` sans nom accessible | 203 | 161 | **150** | 0 | A.5 |
+| Conteneurs cliquables sans clavier | 94 | 111 ↑ | **67** ✅ | 0 | A.4 |
+| Modales sans `role` | 35 | **0** ✅ | 0 | 0 | A.6, A.7 |
+| Modales avec `role="dialog"` | 3 | 34 | 34 | = nb de modales | A.6, A.7 |
+| Règles ESLint a11y actives | 0 | 0 | **4** ✅ | jeu `recommended` | A.1 |
+| `text.brand` — contraste sur blanc | 2,46:1 | 2,46:1 | **7,1:1** ✅ | ≥ 4,5:1 | C.1 |
+| Réglages déclarés non lus | 177 | 177 | 177 | ≤ 20 | *→ `CABLAGE.md`* |
 
 > **Le chiffre à retenir de la passe du 27 août** : le total est passé de 276 à 219 — vert —
 > alors que la famille « clavier » **a empiré**. Un cliquet posé sur une somme laisse un
@@ -260,7 +284,7 @@ export const MESURES = [
 - **Vérification** : `npm run measure && python3 -c "import json;print(json.load(open('.measures/latest.json'))['mesures']['dsAdoption'])"`
 - **Effort** : 3 h
 
-### 0.2 — `[~]` Treizième mesure : accessibilité statique — **LIVRÉE, MOTIF À CORRIGER**
+### 0.2 — `[x]` Treizième mesure : accessibilité statique — **MOTIF CORRIGÉ le 2026-08-27**
 
 > Livrée dans `measures.mjs` (`m12_a11yControls`, commit `a7865fdd9`), mais avec le motif
 > de la première version — donc aveugle à `motion.div` et sans crédit du `onKeyDown`.
@@ -369,7 +393,7 @@ function baliseComplete(src, i) {
   contient `mesures.a11yControls` avec les trois sous-compteurs.
 - **Effort** : 3 h
 
-### 0.3 — `[~]` Brancher les cliquets — **LIVRÉ EN COMPOSITE, À ÉCLATER**
+### 0.3 — `[x]` Brancher les cliquets — **ÉCLATÉS EN TROIS le 2026-08-27**
 
 > Livré le 2026-08-27 sur les quatre fichiers (commit `a7865fdd9`), baseline re-figée à la
 > baisse : `dsAdoption` 482→478, `a11yControls` 276→219. **Mais en un seul cliquet
@@ -540,11 +564,12 @@ const ROUTES = [
 > à 80 × 85 px, bien au-delà des 44 px requis) ; c'est l'**accès non tactile** — clavier,
 > lecteur d'écran, faible vision — qui est absent.
 
-### A.1 — `[ ]` Réarmer le lint d'accessibilité
+### A.1 — `[x]` Réarmer le lint d'accessibilité — **FAIT le 2026-08-27**
 
-> **Statut au 2026-08-27 : NON FAIT.** Vérifié : `eslint-plugin-jsx-a11y` n'est pas dans
-> `package.json` et `eslint.config.mjs:50` porte toujours `"jsx-a11y/alt-text": "off"`.
-> C'est le seul point du LOT A où une barrière automatique reste volontairement retirée.
+> **FAIT.** Vérifié : `eslint-plugin-jsx-a11y@6.10.2` déclaré, `eslint.config.mjs:50` porte
+> désormais `"jsx-a11y/alt-text": "error"` (0 violation), et les trois règles de dette sont
+> en `warn` — exactement le découpage que cette section prescrivait.
+> **La seule barrière volontairement retirée du dépôt est rearmée.**
 
 **Fichier** : `eslint.config.mjs` (ligne 50 : `"jsx-a11y/alt-text": "off"`)
 
@@ -577,10 +602,16 @@ rules: {
   la réactivation d'`alt-text` ne modifie donc pas l'empreinte de la baseline.
 - **Effort** : 0,5 j
 
-### A.2 — `[ ]` Trancher `axe-config.ts` : brancher ou supprimer
+### A.2 — `[~]` Trancher `axe-config.ts` — **À MI-CHEMIN**
 
-> **Statut au 2026-08-27 : NON FAIT.** Vérifié : `axe-core` toujours absent de
-> `package.json`, `runAxeAudit` toujours sans aucun appelant. Le stub déguisé est intact.
+> **À mi-chemin — la moitié qui compte est faite, l'autre reste.** Vérifié :
+> `axe-core@4.13.0` est déclaré, le `catch` silencieux a disparu, `runAxeAudit` est
+> correctement typé (`AxeResults`, `RunOptions`). **Ce n'est plus un stub déguisé.**
+>
+> Mais `runAxeAudit` **n'a toujours aucun appelant** : le fichier reste du code mort, et
+> les trois `criticalPaths` (`/pos`, `/kds`, `/reservations`) ne sont audités par personne.
+> Le plan laissait deux issues ; ni l'une ni l'autre n'est close. **Trancher** : le brancher
+> dans la sonde M6 (§ 0.4), ou le supprimer.
 
 **Fichier** : `src/shared/utils/a11y/axe-config.ts`
 
@@ -643,7 +674,7 @@ style** en recevant le focus. Un seul fichier du dépôt utilise `focus-visible`
 - **Vérification au rendu** : relancer la sonde M6, `focusInvisible` doit tomber à 0.
 - **Effort** : 2 h
 
-### A.4 — `[ ]` Les 111 poignées de clic non focalisables
+### A.4 — `[~]` Les poignées de clic non focalisables — **111 → 67**
 
 > **Chiffre révisé à la hausse le 2026-08-27 — la première version de ce plan
 > sous-estimait ce lot de plus de moitié.** Le motif ne couvrait que `<div>` ; or
@@ -671,7 +702,7 @@ Fichiers concernés (31) — liste complète en **annexe A.4**.
   explicitement exclue par le motif de la mesure.
 - **Effort** : 1,5 j
 
-### A.5 — `[~]` Les ~200 boutons muets — **PARTIEL : 203 → 161**
+### A.5 — `[~]` Les boutons muets — **203 → 161 → 150**
 
 > Passe du 2026-08-27 (commit `08121cf22`) : −42 boutons muets, essentiellement dans les
 > primitives partagées et les écrans denses. Les fichiers listés en priorité 1 ci-dessous
@@ -948,18 +979,20 @@ Ce n'est pas un défaut d'accessibilité : personne n'est censé lire ces textes
 > teintes, avec surcharge par tenant et gestion clair/sombre. Le système est bon ;
 > il est court-circuité.
 
-### C.1 — `[~]` Corriger le contraste des tokens de texte — **PARTIEL**
+### C.1 — `[x]` Corriger le contraste des tokens de texte — **TERMINÉ le 2026-08-27**
 
 > **Fait** (commit `bb38f6bc0`) : `text.secondary` neutral[500]→[600], `text.tertiary` et
 > `text.muted` neutral[400]→[500]. Ratios recalculés depuis `tokens/colors.ts` sur le fond
 > `neutral[50]` : secondary **4,63 → 7,23:1**, tertiary et muted **2,43 → 4,63:1**.
 > Les trois repassent AA.
 >
-> ❌ **Reste à faire — `text.brand`.** Le token vaut `palette.gold.DEFAULT` = `#C5A059`,
-> soit **2,46:1 sur blanc** et **2,35:1 sur `neutral[50]`**. C'est lui qui portait le
-> « Souverain (Admin) » mesuré à 2,29:1 sur l'écran de connexion. L'or de la marque ne
-> peut pas servir de couleur de texte courant : soit on lui donne une variante foncée
-> (`gold.ink`, ~#6E5426) réservée au texte, soit on le réserve aux fonds et aux filets.
+> ✅ **`text.brand` corrigé le 2026-08-27.** Le token bascule sur `palette.gold.ink`
+> = `#6E5426` — la variante foncée que cette section proposait, à la valeur près.
+> Ratios recalculés en session : **7,1:1 sur blanc**, **6,62:1 sur `#F8F7F2`**.
+> Les deux passent AA, le premier passe même AAA.
+>
+> Reste à confirmer **au rendu** (sonde M6, § 0.4) : le calcul porte sur le couple
+> token/fond, pas sur ce que le navigateur compose réellement écran par écran.
 
 > **Mesuré au rendu** sur l'écran de connexion à 768 × 1024 : **3 textes sur 6** sous le
 > seuil WCAG AA — `Sécurité Chiffrée` **2,22:1**, `Souverain (Admin)` **2,29:1**,
@@ -1483,18 +1516,18 @@ Le plan est terminé quand **les dix conditions** sont vraies simultanément :
 1. `[ ]` `npm run preflight` passe avec les cliquets **éclatés par famille** (§ 0.3)
 2. `[ ]` `npm run measure` : `dsAdoption` ≤ 200 — départ 482, au 08-27 : **478**
 3. `[ ]` Les trois cliquets d'accessibilité à zéro :
-   `a11yMuets` (départ 203 → **161**), `a11yModales` (départ 35 → **0 ✅**),
-   `a11yKeyboard` (départ 94 → **111**, motif corrigé)
+   `a11yMuets` (203 → 161 → **150**), `a11yModales` (35 → **0 ✅**),
+   `a11yKeyboard` (94 → 111 → **67**)
 4. `[ ]` `npm run measure:runtime` sur 15 routes × 4 paliers :
    `contrastesKO` = 0, `sansNom` = 0, `focusInvisible` = 0
 5. `[ ]` Aucune police au statut `error` dans `document.fonts` sur les écrans principaux
-6. `[ ]` `text.brand` repasse le seuil AA, ou n'est plus employé comme couleur de texte
+6. `[x]` `text.brand` repasse le seuil AA — `#6E5426`, 7,1:1 sur blanc ✅
 7. `[ ]` Les 55 modales passent par la primitive `Modal` ou `BottomSheet` — objectif de
    **déduplication**, distinct de l'accessibilité déjà atteinte (§ A.6)
 8. `[ ]` 4 fiches persona écrites et rattachées à des rôles RBAC réels
 9. `[ ]` 1 campagne de test d'utilisabilité restituée, conclusions versées dans ce plan
 10. `[ ]` `.gate-baseline.json` re-figé **à la baisse** au moins trois fois
-    *(1 fois au 2026-08-27 : 482→478, 276→219)*
+    *(2 fois au 2026-08-27 : 482→478 et 276→219, puis éclatement en 150 / 0 / 67)*
 
 > **Rappel Loi 2** : un seuil ne monte jamais. Si une action de ce plan demande de relever
 > un cliquet, c'est que l'action est mal découpée — pas que le cliquet est trop strict.
