@@ -45,8 +45,8 @@
 
   /* ── TEXT ── */
   --color-text-primary: var(--text-primary, #111827);
-  --color-text-secondary: var(--text-secondary, #6b7280);
-  --color-text-muted: var(--text-muted, #9ca3af);
+  --color-text-secondary: var(--text-secondary, #4b5563);
+  --color-text-muted: var(--text-muted, #6b7280);
   --color-text-brand: var(--text-brand, #C5A059);
   /* Alias 'brand' → couleur primaire du tenant. Génère les utilitaires
      text-brand / bg-brand / border-brand. Sans lui, 'text-brand' (utilisé
@@ -85,11 +85,17 @@
   --color-border: var(--border-default, #E5E4DA);
 
   /* ── FONTS ── */
-  --font-sans: var(--font-ui, 'Inter', system-ui, sans-serif);
-  --font-serif: var(--font-brand, 'Playfair Display', Georgia, serif);
+  --font-sans: var(--font-inter, 'Inter', system-ui, sans-serif);
+  --font-serif: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
   --font-mono: var(--font-mono, monospace);
-  --font-brand: var(--font-brand, 'Playfair Display', Georgia, serif);
-  --font-ui: var(--font-ui, 'Inter', system-ui, sans-serif);
+  --font-brand: var(--font-brand, var(--font-serif, 'Cormorant Garamond', Georgia, serif));
+  --font-ui: var(--font-inter, 'Inter', system-ui, sans-serif);
+
+  /* ── TYPOGRAPHY SCALE ── */
+  --text-micro: 0.6875rem;   /* 11px */
+  --text-caption: 0.75rem;   /* 12px */
+  --text-body-s: 0.8125rem;  /* 13px */
+  --text-body: 0.875rem;     /* 14px */
 
   /* ── RADIUS ── */
   --radius-sm: 6px;
@@ -139,6 +145,14 @@
 
 .shadow-glow-accent {
   box-shadow: var(--shadow-glow-accent);
+}
+
+/* ── ACCESSIBILITÉ / FOCUS VISIBLE UNIVERSEL (WCAG 2.4.7) ── */
+@layer base {
+  :where(button, a[href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--color-focus, #C5A059);
+    outline-offset: 2px;
+  }
 }
 
 /* ── SAFE AREA UTILITIES (iOS Notch & Home Bar) ── */

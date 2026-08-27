@@ -47,4 +47,12 @@ describe('V3-GUARD-01: Figma Redesign & UI Invariants (4 Garde-fous)', () => {
     expect(css).toContain('--color-status-success');
     expect(css).toContain('--font-serif');
   });
+
+  it('Garde-fou 5 (INV-25): toute police de marque a un repli effectivement chargé dans layout.tsx', () => {
+    const css = readFileSync(join(root, 'src/app/globals.css'), 'utf-8');
+    const layout = readFileSync(join(root, 'src/app/layout.tsx'), 'utf-8');
+    for (const m of css.matchAll(/--font-(\w+):\s*var\(--font-\1,\s*'([^']+)'/g)) {
+      expect(layout, `police ${m[2]} référencée en repli mais jamais chargée`).toContain(m[2].split(' ')[0]);
+    }
+  });
 });

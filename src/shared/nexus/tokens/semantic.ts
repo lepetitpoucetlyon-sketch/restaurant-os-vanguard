@@ -72,9 +72,9 @@ export const semanticTokens = {
   // ── Typographie ───────────────────────────────────────────────────────────
   text: {
     primary:          palette.neutral[900],
-    secondary:        palette.neutral[500],
-    tertiary:         palette.neutral[400],
-    muted:            palette.neutral[400],
+    secondary:        palette.neutral[600],
+    tertiary:         palette.neutral[500],
+    muted:            palette.neutral[500],
     inverse:          palette.neutral[0],
     brand:            palette.gold.DEFAULT,
     danger:           palette.red[600],
