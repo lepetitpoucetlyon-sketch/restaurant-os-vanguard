@@ -98,7 +98,14 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
             <p className="text-xs text-gray-400 mt-1">PDF, image (JPG/PNG), CSV ou Excel — max 10 Mo</p>
           </div>
           {!fileName && (
-            <button className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                inputRef.current?.click();
+              }}
+              className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer"
+            >
               Parcourir
             </button>
           )}

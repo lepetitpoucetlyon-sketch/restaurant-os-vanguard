@@ -43,8 +43,16 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
     .every(f => !!fields[f.key]?.trim());
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-surface-base border border-border rounded-2xl w-full max-w-md shadow-xl">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Configuration connecteur ${manifest.displayName}`}
+        className="bg-surface-base border border-border rounded-2xl w-full max-w-md shadow-xl"
+      >
 
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-border">

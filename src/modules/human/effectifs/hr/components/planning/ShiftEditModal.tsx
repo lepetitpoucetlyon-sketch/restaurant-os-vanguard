@@ -98,8 +98,14 @@ export function ShiftEditModal({
     if (!user || !date) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
+        <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500"
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
             <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-label={isNew ? "Planifier un shift" : "Modifier le shift"}
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 className="bg-surface-card rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.5)] w-full max-w-lg overflow-hidden border border-border"

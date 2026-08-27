@@ -52,6 +52,8 @@ export default function TablesSettings() {
         else if (activeTab === 'floors') setIsEditingFloor(true);
     };
 
+    const [selectedFloorId, setSelectedFloorId] = useState<string | undefined>(undefined);
+
     return (
         <div className="space-y-12 pb-20">
             <TablesToolbar 
@@ -62,6 +64,10 @@ export default function TablesSettings() {
                 onSave={handleSave}
                 isSaving={isSaving}
                 floors={floors}
+                activeFloorId={selectedFloorId || floors[0]?.id}
+                onSelectFloor={setSelectedFloorId}
+                totalTablesCount={tablesCount}
+                totalPaxCount={totalSeats}
             />
 
             {/* Quick Context Stats */}

@@ -38,6 +38,61 @@ export function RecipeTechnicalSheet({
     allergens,
     onClose
 }: RecipeProps) {
+    const handleDownloadPdf = () => {
+        const printWindow = window.open('', '_blank', 'width=900,height=700');
+        if (!printWindow) {
+            window.print();
+            return;
+        }
+        const ingredientRows = (ingredients || []).map(ing => `
+            <tr>
+              <td style="font-weight:bold; width:30%; padding:6px 10px; border-bottom:1px solid #eee;">${ing.quantity}</td>
+              <td style="padding:6px 10px; border-bottom:1px solid #eee;">${ing.name}</td>
+            </tr>
+        `).join('');
+        const stepRows = (steps || []).map(s => `
+            <li style="margin-bottom: 12px;"><strong>Étape ${s.order} (${s.time}):</strong> ${s.instruction}</li>
+        `).join('');
+        const allergenBadges = allergens && allergens.length > 0 
+            ? allergens.map(a => `<span style="display:inline-block; padding:3px 8px; background:#fee2e2; color:#b91c1c; border-radius:12px; margin-right:6px; font-size:11px;">${a}</span>`).join('') 
+            : '<span style="color:#059669; font-weight:bold;">Aucun</span>';
+
+        printWindow.document.write(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fiche Technique — ${name}</title>
+  <style>
+    body { font-family: Georgia, serif; color: #1a1a1a; padding: 32px; font-size: 13px; line-height: 1.6; }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; margin: 20px 0 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; color:#555; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    th { background: #f5f5f5; text-align: left; padding: 6px 10px; font-size: 11px; }
+    @media print { .no-print { display: none; } }
+  </style>
+</head>
+<body>
+  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px;">
+    <div>
+      <h1>${name}</h1>
+      <p style="color:#666; font-size:12px;">${description || ''} • Temps: ${prepTime} • Difficulté: ${difficulty}</p>
+    </div>
+    <button class="no-print" onclick="window.print()" style="padding:8px 16px; background:#1a1a1a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Imprimer / PDF</button>
+  </div>
+  <h2>Ingrédients</h2>
+  <table>
+    <thead><tr><th>Quantité</th><th>Ingrédient</th></tr></thead>
+    <tbody>${ingredientRows}</tbody>
+  </table>
+  <h2>Allergènes</h2>
+  <div style="margin-bottom: 16px;">${allergenBadges}</div>
+  <h2>Étapes de Préparation</h2>
+  <ol style="padding-left: 20px;">${stepRows}</ol>
+</body>
+</html>`);
+        printWindow.document.close();
+    };
+
     return (
         <div className="flex h-full w-full overflow-hidden">
             {/* Left Side: Recipe Summary & Ingredients */}
@@ -105,7 +160,10 @@ export function RecipeTechnicalSheet({
 
                 {/* Footer Action */}
                 <div className="sticky bottom-0 p-8 bg-gradient-to-t from-[#fdfdfa] dark:from-bg-secondary via-[#fdfdfa] dark:via-bg-secondary to-transparent pt-12">
-                    <button className="w-full h-14 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-full text-nano font-black uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-4 group">
+                    <button 
+                        onClick={handleDownloadPdf}
+                        className="w-full h-14 bg-action-primary hover:bg-action-primary-hover text-text-on-primary rounded-full text-nano font-black uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-4 group"
+                    >
                         <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
                         Télécharger Fiche PDF
                     </button>

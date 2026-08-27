@@ -61,6 +61,17 @@ export default function GoalsSettings() {
     const [draftGoals, setDraftGoals] = useState<typeof initialGoals | null>(null);
     const goals = draftGoals ?? initialGoals;
 
+    const [thresholdAlerts, setThresholdAlerts] = useState([
+        { id: 'fiscal-zenith', label: 'Fiscal Zenith Attained', status: true, color: 'text-accent' },
+        { id: 'material-overrun', label: 'Material Overrun Detection', status: true, color: 'text-status-danger' },
+        { id: 'saturation-limit', label: 'Saturation Limit (>90%)', status: false, color: 'text-status-warning' },
+        { id: 'semantic-criticality', label: 'Semantic Criticality Alert', status: true, color: 'text-brand' }
+    ]);
+
+    const toggleThresholdAlert = (index: number) => {
+        setThresholdAlerts(prev => prev.map((item, i) => i === index ? { ...item, status: !item.status } : item));
+    };
+
     const handleSave = async () => {
         await updateGoals(goals);
         setDraftGoals(null);
@@ -231,21 +242,21 @@ export default function GoalsSettings() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                        { label: 'Fiscal Zenith Attained', status: true, color: 'text-accent' },
-                        { label: 'Material Overrun Detection', status: true, color: 'text-status-danger' },
-                        { label: 'Saturation Limit (>90%)', status: false, color: 'text-status-warning' },
-                        { label: 'Semantic Criticality Alert', status: true, color: 'text-brand' }
-                    ].map((alert, i) => (
-                        <div key={i} className="flex items-center justify-between p-6 bg-bg-primary rounded-[1.5rem] border border-border hover:border-accent/40 transition-all group">
+                    {thresholdAlerts.map((alert, i) => (
+                        <div key={alert.id} className="flex items-center justify-between p-6 bg-bg-primary rounded-[1.5rem] border border-border hover:border-accent/40 transition-all group">
                             <div className="flex items-center gap-4">
                                 <div className={cn("w-2 h-2 rounded-full", alert.status ? "bg-accent" : "bg-bg-tertiary")} />
                                 <span className="text-xs font-bold text-text-primary uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">{alert.label}</span>
                             </div>
-                            <button className={cn(
-                                "w-12 h-6 rounded-full relative transition-all duration-300",
-                                alert.status ? "bg-accent" : "bg-bg-tertiary border border-border shadow-inner"
-                            )}>
+                            <button 
+                                type="button"
+                                onClick={() => toggleThresholdAlert(i)}
+                                aria-label={`Basculer ${alert.label}`}
+                                className={cn(
+                                    "w-12 h-6 rounded-full relative transition-all duration-300 cursor-pointer",
+                                    alert.status ? "bg-accent" : "bg-bg-tertiary border border-border shadow-inner"
+                                )}
+                            >
                                 <div className={cn(
                                     "absolute top-1 w-4 h-4 bg-surface-card rounded-full shadow-sm transition-all",
                                     alert.status ? "right-1" : "left-1"

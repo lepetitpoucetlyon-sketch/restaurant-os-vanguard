@@ -38,13 +38,15 @@ export function LandingNavbar() {
 
                     {/* CTA */}
                     <div className="hidden md:flex items-center gap-4">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="px-6 py-2.5 bg-action-primary text-action-primary-fg font-bold text-sm rounded-xl shadow-lg shadow-action-primary/30 hover:shadow-xl hover:shadow-action-primary/40 transition-all"
-                        >
-                            Démonstration
-                        </motion.button>
+                        <Link href="/onboarding">
+                            <motion.span
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="inline-block px-6 py-2.5 bg-action-primary text-action-primary-fg font-bold text-sm rounded-xl shadow-lg shadow-action-primary/30 hover:shadow-xl hover:shadow-action-primary/40 transition-all cursor-pointer"
+                            >
+                                Démonstration
+                            </motion.span>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -65,9 +67,9 @@ export function LandingNavbar() {
                             <Link href="#pricing" className="text-text-primary/80 text-lg font-medium">Tarifs</Link>
                             <Link href="#testimonials" className="text-text-primary/80 text-lg font-medium">Témoignages</Link>
                             <Link href="/login" className="text-text-primary/80 text-lg font-medium">Connexion</Link>
-                            <button className="mt-4 w-full py-3 bg-action-primary text-action-primary-fg font-bold rounded-xl">
+                            <Link href="/onboarding" className="mt-4 w-full py-3 bg-action-primary text-action-primary-fg font-bold rounded-xl text-center block">
                                 Démonstration
-                            </button>
+                            </Link>
                         </div>
                     </motion.div>
                 )}

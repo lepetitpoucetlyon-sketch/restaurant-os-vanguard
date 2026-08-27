@@ -177,14 +177,23 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             </div>
 
             {isCameraOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4">
-                    <div className="w-full max-w-2xl bg-surface-card rounded-[2.5rem] overflow-hidden border border-border relative shadow-2xl">
+                <div 
+                    className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+                    onClick={(e) => { if (e.target === e.currentTarget) setIsCameraOpen(false); }}
+                >
+                    <div 
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Prise de vue du CV"
+                        className="w-full max-w-2xl bg-surface-card rounded-[2.5rem] overflow-hidden border border-border relative shadow-2xl"
+                    >
                         <CameraCapture onCapture={handleCapture} />
                         <button 
                             onClick={() => setIsCameraOpen(false)}
-                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-card text-text-primary flex items-center justify-center transition-all backdrop-blur-md z-10"
+                            aria-label="Fermer la caméra"
+                            className="absolute top-8 right-8 w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-card text-text-primary flex items-center justify-center transition-all backdrop-blur-md z-10 cursor-pointer"
                         >
-                            <X className="w-6 h-6" />
+                            <X className="w-6 h-6" aria-hidden="true" />
                         </button>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Fingerprint, ScanFace, Lock, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
+import { ShieldCheck, Lock, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import { Modal } from '@ui/Modal';
 import { useAuth } from '@/shared/providers/NexusCoreProvider';
 
@@ -24,67 +24,11 @@ export function PasskeyStepUpModal({
   severity = 'sensitive',
 }: PasskeyStepUpModalProps) {
   const { verifyPin } = useAuth();
-  const [method, setMethod] = useState<'biometric' | 'pin'>('biometric');
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [hasWebAuthn, setHasWebAuthn] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.PublicKeyCredential) {
-      window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
-        .then((available) => setHasWebAuthn(available))
-        .catch(() => setHasWebAuthn(false));
-    }
-  }, []);
-
-  const handleBiometricChallenge = useCallback(async () => {
-    setIsVerifying(true);
-    setPinError(false);
-
-    try {
-      if (typeof window !== 'undefined' && window.PublicKeyCredential) {
-        // Déclenche le prompt natif FaceID / TouchID / Empreinte
-        const challenge = new Uint8Array(32);
-        window.crypto.getRandomValues(challenge);
-
-        const credential = await navigator.credentials.get({
-          publicKey: {
-            challenge,
-            timeout: 60000,
-            userVerification: 'required',
-            rpId: window.location.hostname,
-          },
-        });
-
-        if (credential) {
-          setIsSuccess(true);
-          setTimeout(() => {
-            setIsSuccess(false);
-            setIsVerifying(false);
-            onSuccess();
-          }, 800);
-          return;
-        }
-      }
-    } catch {
-      // Annulation ou capteur absent : basculer élégamment vers PIN
-      setMethod('pin');
-    } finally {
-      setIsVerifying(false);
-    }
-  }, [onSuccess]);
-
-  // Auto-déclenchement au chargement si biométrie disponible
-  useEffect(() => {
-    if (open && hasWebAuthn && method === 'biometric') {
-      const timer = setTimeout(() => {
-        void handleBiometricChallenge();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [open, hasWebAuthn, method, handleBiometricChallenge]);
+  const hasWebAuthn = false; // Désactivé jusqu'au déploiement du backend d'assertion WebAuthn / API auth
 
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,8 +74,6 @@ export function PasskeyStepUpModal({
           >
             {isSuccess ? (
               <CheckCircle2 className="w-8 h-8 animate-bounce" />
-            ) : method === 'biometric' ? (
-              <ScanFace className="w-8 h-8 animate-pulse" />
             ) : (
               <Lock className="w-8 h-8" />
             )}
@@ -150,42 +92,7 @@ export function PasskeyStepUpModal({
 
         {/* Step-up Body */}
         <AnimatePresence mode="wait">
-          {method === 'biometric' && !isSuccess ? (
-            <motion.div
-              key="biometric"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-4 pt-2"
-            >
-              <button
-                type="button"
-                onClick={handleBiometricChallenge}
-                disabled={isVerifying}
-                className="w-full py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-text-primary font-bold text-sm flex items-center justify-center gap-3 transition-all active:scale-98 shadow-lg shadow-amber-500/20"
-              >
-                {isVerifying ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Scan FaceID / TouchID…</span>
-                  </>
-                ) : (
-                  <>
-                    <Fingerprint className="w-5 h-5" />
-                    <span>Déverrouiller par biométrie</span>
-                  </>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMethod('pin')}
-                className="text-xs text-text-muted hover:text-text-primary transition-colors underline"
-              >
-                Utiliser mon code PIN à la place
-              </button>
-            </motion.div>
-          ) : !isSuccess ? (
+          {!isSuccess ? (
             <motion.form
               key="pin"
               initial={{ opacity: 0, y: 10 }}
@@ -213,16 +120,6 @@ export function PasskeyStepUpModal({
               </div>
 
               <div className="flex gap-2">
-                {hasWebAuthn && (
-                  <button
-                    type="button"
-                    onClick={() => setMethod('biometric')}
-                    className="py-3 px-4 rounded-xl border border-border text-xs text-text-secondary hover:bg-surface-card transition-colors flex items-center gap-1.5"
-                  >
-                    <Fingerprint className="w-4 h-4" />
-                    Biométrie
-                  </button>
-                )}
                 <button
                   type="submit"
                   disabled={pin.length < 4 || isVerifying}

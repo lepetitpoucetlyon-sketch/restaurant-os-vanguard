@@ -5,12 +5,35 @@ import { useEffect, useRef } from 'react';
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+function handleTabCycle(event: KeyboardEvent, container: HTMLElement) {
+  if (event.key !== 'Tab') return;
+
+  const elements = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
+  if (elements.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const firstElement = elements[0];
+  const lastElement = elements[elements.length - 1];
+  const active = document.activeElement;
+  const isOutside = !container.contains(active);
+
+  if (event.shiftKey) {
+    if (active === firstElement || isOutside) {
+      event.preventDefault();
+      lastElement.focus();
+    }
+  } else {
+    if (active === lastElement || isOutside) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  }
+}
+
 /**
  * 🔒 useFocusTrap — Hook d'accessibilité ARIA (WAI-ARIA Dialog Pattern)
- * 
- * - Capture et cycle le focus au sein du container (Tab / Shift+Tab)
- * - Mémorise et restaure le focus sur l'élément déclencheur à la fermeture
- * - Initialise le focus sur le premier élément interactif
  */
 export function useFocusTrap(
   isActive: boolean,
@@ -21,13 +44,10 @@ export function useFocusTrap(
   useEffect(() => {
     if (!isActive) return;
 
-    // Mémoriser l'élément ayant le focus avant ouverture
     previousActiveElementRef.current = document.activeElement as HTMLElement | null;
-
     const container = containerRef.current;
     if (!container) return;
 
-    // Focus sur le premier élément focusable ou sur le container
     const focusableElements = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     if (focusableElements.length > 0) {
       focusableElements[0].focus();
@@ -35,41 +55,12 @@ export function useFocusTrap(
       container.focus();
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      const elements = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-      if (elements.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const firstElement = elements[0];
-      const lastElement = elements[elements.length - 1];
-
-      if (event.shiftKey) {
-        // Shift + Tab : si focus sur premier élément, reboucler sur le dernier
-        if (document.activeElement === firstElement || !container.contains(document.activeElement)) {
-          event.preventDefault();
-          lastElement.focus();
-        }
-      } else {
-        // Tab : si focus sur dernier élément, reboucler sur le premier
-        if (document.activeElement === lastElement || !container.contains(document.activeElement)) {
-          event.preventDefault();
-          firstElement.focus();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
+    const onKeyDown = (e: KeyboardEvent) => handleTabCycle(e, container);
+    window.addEventListener('keydown', onKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      // Restaurer le focus à la fermeture
-      if (previousActiveElementRef.current && typeof previousActiveElementRef.current.focus === 'function') {
-        previousActiveElementRef.current.focus();
-      }
+      window.removeEventListener('keydown', onKeyDown);
+      previousActiveElementRef.current?.focus?.();
     };
   }, [isActive, containerRef]);
 }

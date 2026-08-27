@@ -13,6 +13,8 @@ const GROUP_STATUS_MAP: Record<string, { status: BadgeStatus; label: string }> =
     Cancelled: { status: "error",   label: "Annulé" },
 };
 
+import { toast } from "sonner";
+
 export function EventCard({ group }: { group: Group }) {
     return (
         <motion.div
@@ -62,7 +64,14 @@ export function EventCard({ group }: { group: Group }) {
                             {tag}
                         </span>
                     ))}
-                    <button className="w-14 h-14 rounded-full bg-bg-tertiary border border-border flex items-center justify-center hover:bg-action-primary hover:text-text-primary transition-all duration-500 group/btn">
+                    <button 
+                        onClick={() => {
+                            toast.info(`Groupe : ${group.name} • ${group.pax || 0} personnes • Budget : ${group.budget || 'Non spécifié'}`);
+                        }}
+                        title={`Voir les détails de ${group.name}`}
+                        aria-label={`Voir les détails de ${group.name}`}
+                        className="w-14 h-14 rounded-full bg-bg-tertiary border border-border flex items-center justify-center hover:bg-action-primary hover:text-text-primary transition-all duration-500 group/btn cursor-pointer"
+                    >
                         <ArrowUpRight className="w-6 h-6 group-hover:scale-110 transition-transform" />
                     </button>
                 </div>

@@ -26,7 +26,9 @@ export const PagesTab = () => {
                     <PageCard
                         key={page.id}
                         page={page as React.ComponentProps<typeof PageCard>['page']}
-                        onEdit={() => { }}
+                        onEdit={() => {
+                            window.location.hash = `edit-${page.id}`;
+                        }}
                         id={idx === 0 ? "seo-edit-page-0" : undefined}
                     />
                 ))}

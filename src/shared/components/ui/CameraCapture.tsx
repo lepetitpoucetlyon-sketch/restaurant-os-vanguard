@@ -101,8 +101,12 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
                     {title && <p className="text-micro font-black uppercase tracking-[0.2em] text-text-secondary">{title}</p>}
                     {onClose && (
-                        <button onClick={onClose} className="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-glass text-text-muted transition-colors">
-                            <X className="w-4 h-4" />
+                        <button 
+                            onClick={onClose} 
+                            aria-label="Fermer la caméra"
+                            className="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-glass text-text-muted transition-colors cursor-pointer"
+                        >
+                            <X className="w-4 h-4" aria-hidden="true" />
                         </button>
                     )}
                 </div>
@@ -124,14 +128,16 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
                     <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-12">
                         <button 
                             onClick={toggleFacingMode}
-                            className="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all backdrop-blur-md"
+                            aria-label="Changer de caméra (avant/arrière)"
+                            className="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all backdrop-blur-md cursor-pointer"
                         >
-                            <SwitchCamera className="w-6 h-6" />
+                            <SwitchCamera className="w-6 h-6" aria-hidden="true" />
                         </button>
                         
                         <button 
                             onClick={takePhoto}
-                            className="w-20 h-20 rounded-full bg-white flex items-center justify-center group active:scale-95 transition-all shadow-2xl relative"
+                            aria-label="Prendre la photo"
+                            className="w-20 h-20 rounded-full bg-white flex items-center justify-center group active:scale-95 transition-all shadow-2xl relative cursor-pointer"
                         >
                             <div className="w-16 h-16 rounded-full border-2 border-black/10 flex items-center justify-center">
                                 <div className="w-12 h-12 rounded-full bg-action-primary group-hover:bg-action-primary-hover transition-colors" />
@@ -141,12 +147,13 @@ export const CameraCapture = ({ onCapture, onClose, title }: CameraCaptureProps)
 
                         <button 
                             onClick={() => setIsMirror(!isMirror)}
+                            aria-label={isMirror ? "Désactiver le mode miroir" : "Activer le mode miroir"}
                             className={cn(
-                                "w-14 h-14 rounded-full flex items-center justify-center transition-all backdrop-blur-md",
+                                "w-14 h-14 rounded-full flex items-center justify-center transition-all backdrop-blur-md cursor-pointer",
                                 isMirror ? "bg-action-primary text-text-on-primary" : "bg-white/10 text-white hover:bg-white/20"
                             )}
                         >
-                            <RefreshCcw className="w-6 h-6" />
+                            <RefreshCcw className="w-6 h-6" aria-hidden="true" />
                         </button>
                     </div>
 

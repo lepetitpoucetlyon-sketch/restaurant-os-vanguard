@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@ui/Button';
+import { toast } from 'sonner';
 // Suture Nexus
 
 // Extracted Components (Sutured for Grade X Stability)
@@ -77,16 +78,20 @@ export default function GroupsPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-action-primary text-text-primary hover:bg-action-primary rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3"
+                        onClick={() => toast.info("Création de groupe : formulaire disponible via Réservations → Nouveau")}
+                        className="h-12 px-8 bg-action-primary text-text-primary hover:bg-action-primary rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(168,85,247,0.25)] transition-all flex items-center gap-3 cursor-pointer"
                         id="groups-create-button"
                     >
                         <Plus className="w-4 h-4" />
                         Nouveau Groupe
                     </Button>
-                    <Link href="/dashboard">
-                        <button className="w-12 h-12 rounded-2xl bg-bg-tertiary border border-border flex items-center justify-center hover:bg-bg-secondary transition-all group">
-                            <X className="w-5 h-5 text-text-muted group-hover:text-text-primary" />
-                        </button>
+                    <Link 
+                        href="/dashboard"
+                        title="Retour au tableau de bord"
+                        aria-label="Fermer"
+                        className="w-12 h-12 rounded-2xl bg-bg-tertiary border border-border flex items-center justify-center hover:bg-bg-secondary transition-all group"
+                    >
+                        <X className="w-5 h-5 text-text-muted group-hover:text-text-primary" />
                     </Link>
                 </div>
             </div>

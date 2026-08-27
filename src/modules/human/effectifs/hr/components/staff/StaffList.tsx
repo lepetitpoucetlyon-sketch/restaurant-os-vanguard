@@ -20,6 +20,24 @@ interface StaffCardProps {
     onClick?: () => void;
 }
 
+/** Le schéma User autorise des champs libres : le téléphone n'y est pas déclaré. */
+const phoneOf = (user: User): string | undefined => {
+    const raw = (user as unknown as { phone?: unknown }).phone;
+    return typeof raw === 'string' && raw.trim() ? raw.trim() : undefined;
+};
+
+const formatLastActive = (ts?: number): string => {
+    if (!ts) return 'Jamais connecté';
+    const d = new Date(ts);
+    const today = new Date();
+    const sameDay = d.toDateString() === today.toDateString();
+    const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    if (sameDay) return `Aujourd'hui, ${time}`;
+    const yesterday = new Date(today.getTime() - 86_400_000);
+    if (d.toDateString() === yesterday.toDateString()) return `Hier, ${time}`;
+    return `${d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}, ${time}`;
+};
+
 export const StaffCard = ({ user, onClick }: StaffCardProps) => (
     <motion.div
         variants={staggerItem}
@@ -49,7 +67,12 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                         </p>
                     </div>
                 </div>
-                <button className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary transition-all shadow-sm">
+                <button
+                    type="button"
+                    onClick={onClick}
+                    aria-label={`Ouvrir la fiche de ${user.name}`}
+                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary transition-all shadow-sm"
+                >
                     <ChevronRight strokeWidth={1.5} className="w-5 h-5" />
                 </button>
             </div>
@@ -57,13 +80,23 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
             <div className="grid grid-cols-2 gap-4 border-t border-border pt-6 mt-2">
                 <div className="space-y-1.5">
                     <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Dernier Service</p>
-                    <p className="text-[12px] font-medium text-text-primary font-mono tracking-tighter">Aujourd&apos;hui, 12:45</p>
+                    <p className="text-[12px] font-medium text-text-primary font-mono tracking-tighter">
+                        {formatLastActive(user.lastActive)}
+                    </p>
                 </div>
                 <div className="space-y-1.5">
                     <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Performance</p>
                     <div className="flex items-center gap-1.5">
-                        <Star strokeWidth={1.5} className="w-3.5 h-3.5 text-warning fill-warning/20" />
-                        <span className="text-[12px] font-bold text-text-primary font-mono">4.9</span>
+                        {typeof user.performanceScore === 'number' ? (
+                            <>
+                                <Star strokeWidth={1.5} className="w-3.5 h-3.5 text-warning fill-warning/20" />
+                                <span className="text-[12px] font-bold text-text-primary font-mono">
+                                    {(user.performanceScore / 20).toFixed(1)}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-[12px] font-medium text-text-muted font-mono">Non évalué</span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -75,12 +108,31 @@ export const StaffCard = ({ user, onClick }: StaffCardProps) => (
                 <span className="text-nano font-bold text-text-primary uppercase tracking-[0.2em]">En Service</span>
             </div>
             <div className="flex gap-2">
-                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm">
-                    <Mail strokeWidth={1.5} className="w-4 h-4" />
-                </button>
-                <button className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm">
-                    <Phone strokeWidth={1.5} className="w-4 h-4" />
-                </button>
+                {/* stopPropagation obligatoire : la carte entière est cliquable, donc
+                    sans lui le clic remontait et ouvrait la fiche au lieu d'écrire
+                    ou d'appeler. Les contacts absents ne sont pas proposés du tout. */}
+                {user.email && (
+                    <a
+                        href={`mailto:${user.email}`}
+                        onClick={(e) => e.stopPropagation()}
+                        title={`Écrire à ${user.email}`}
+                        aria-label={`Écrire à ${user.name}`}
+                        className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm"
+                    >
+                        <Mail strokeWidth={1.5} className="w-4 h-4" />
+                    </a>
+                )}
+                {phoneOf(user) && (
+                    <a
+                        href={`tel:${phoneOf(user)}`}
+                        onClick={(e) => e.stopPropagation()}
+                        title={`Appeler ${phoneOf(user)}`}
+                        aria-label={`Appeler ${user.name}`}
+                        className="w-9 h-9 rounded-lg bg-[--color-surface-primary] dark:bg-bg-tertiary border border-border flex items-center justify-center text-text-muted hover:bg-accent hover:text-text-primary hover:border-accent transition-all shadow-sm"
+                    >
+                        <Phone strokeWidth={1.5} className="w-4 h-4" />
+                    </a>
+                )}
                 {/* Bulletin de paie — désactivé volontairement.
                     Le générateur PDF actuel est un démo hardcodé (même salaire pour
                     tous les employés). Utiliser un générateur non-conforme expose

@@ -129,6 +129,16 @@ export function VoidModal({
         setReason("");
     }, [prefill]);
 
+    // Escape key handling
+    useState(() => {
+        if (typeof window === "undefined") return;
+    });
+    
+    // Keydown listener for Escape
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+    }, [onClose]);
+
     if (!isOpen) return null;
 
     return (
@@ -141,9 +151,13 @@ export function VoidModal({
                 transition={{ duration: 0.15 }}
                 className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm px-4 pb-8 sm:pb-0"
                 onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+                onKeyDown={(e) => { if (e.key === "Escape") onClose(); }}
             >
                 <motion.div
                     key="void-card"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Annulation ou remboursement NF525"
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 40 }}
@@ -167,9 +181,10 @@ export function VoidModal({
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                            aria-label="Fermer"
+                            className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                         >
-                            <X className="w-4 h-4" />
+                            <X className="w-4 h-4" aria-hidden="true" />
                         </button>
                     </div>
 

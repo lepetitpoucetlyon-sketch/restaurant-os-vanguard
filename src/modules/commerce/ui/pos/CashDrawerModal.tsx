@@ -135,6 +135,16 @@ export function CashDrawerModal({
     }
   }, [session, actualInput, collectedInMicrounits, changeGivenInMicrounits, tenantId]);
 
+  useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -152,6 +162,9 @@ export function CashDrawerModal({
       >
         <motion.div
           key="cd-card"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Gestion du fond de caisse"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
@@ -175,9 +188,10 @@ export function CashDrawerModal({
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+              aria-label="Fermer"
+              className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
 

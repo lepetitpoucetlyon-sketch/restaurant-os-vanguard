@@ -6,5 +6,6 @@
 
 export * from './LeaveBalanceCard';
 export * from './LeaveRequestCard';
+export * from './LeaveRequestDetailModal';
 export * from './NewRequestModal';
 export * from './TeamCalendar';

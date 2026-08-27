@@ -115,7 +115,19 @@ export function SanitaryComplianceSection() {
                                         <><AlertTriangle className="w-4 h-4" /> Attention</>
                                     )}
                                 </div>
-                                <button className="text-chip-label text-accent hover:underline decoration-2 underline-offset-4">Voir le document</button>
+                                <button 
+                                    onClick={() => {
+                                        const url = (s.doc as { url?: string } | undefined)?.url;
+                                        if (url) {
+                                            window.open(url, '_blank');
+                                        } else {
+                                            alert(`Document Sanitaire : ${s.title}\nNom : ${s.doc?.name || 'Document scellé'}\nStatut : ${s.doc?.status === 'valid' ? 'Conforme' : 'Attention'}\nÉchéance : ${String(s.doc?.validUntil || 'N/A')}`);
+                                        }
+                                    }}
+                                    className="text-chip-label text-accent hover:underline decoration-2 underline-offset-4 cursor-pointer"
+                                >
+                                    Voir le document
+                                </button>
                             </div>
                         </div>
                     </div>

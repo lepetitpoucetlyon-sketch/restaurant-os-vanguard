@@ -128,9 +128,10 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                     <div className="flex flex-col gap-2">
                         <button
                             onClick={onClose}
-                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-surface-bg dark:bg-surface-card/5 border border-subtle dark:border-subtle flex items-center justify-center text-muted dark:text-text-primary/40 hover:text-primary dark:hover:text-text-primary hover:bg-surface-bg dark:hover:bg-surface-card/10 hover:rotate-90 transition-all duration-500"
+                            aria-label="Fermer les notifications"
+                            className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-surface-bg dark:bg-surface-card/5 border border-subtle dark:border-subtle flex items-center justify-center text-muted dark:text-text-primary/40 hover:text-primary dark:hover:text-text-primary hover:bg-surface-bg dark:hover:bg-surface-card/10 hover:rotate-90 transition-all duration-500 cursor-pointer"
                         >
-                            <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
+                            <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} aria-hidden="true" />
                         </button>
                     </div>
                 </div>
@@ -257,9 +258,23 @@ function NotificationCategory({
 }
 
 function NotificationItem({ notification, onClick, onRemove }: { notification: Notification, onClick: () => void, onRemove: (id: string) => void }) {
+    const router = useRouter();
     const config = TYPE_CONFIG[notification.type] || TYPE_CONFIG.info;
     const Icon = config.icon;
     const timeAgo = formatDistanceToNow(notification.timestamp, { addSuffix: true, locale: fr });
+
+    const handleActionClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onClick();
+        const act = notification.action as { href?: string; action?: () => void; onClick?: () => void } | undefined;
+        if (act?.href) {
+            router.push(act.href);
+        } else if (typeof act?.action === 'function') {
+            act.action();
+        } else if (typeof act?.onClick === 'function') {
+            act.onClick();
+        }
+    };
 
     return (
         <motion.div
@@ -278,9 +293,9 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
             {/* Hover Glow */}
             <div className="absolute inset-0 bg-surface-bg dark:bg-accent-gold/5 opacity-0 group-hover/item:opacity-100 transition-opacity" />
 
-            <div className="flex gap-5 relative z-10">
+            <div className="flex items-start gap-4 relative z-10">
                 <div className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-700 group-hover/item:scale-110 group-hover/item:rotate-6",
+                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-inner",
                     config.bgColor,
                     "border border-subtle dark:border-white/5"
                 )}>
@@ -301,10 +316,14 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
                     </p>
 
                     {notification.action && (
-                        <button className={cn(
-                            "mt-4 text-nano font-black uppercase tracking-[0.3em] flex items-center gap-2 group/btn",
-                            "text-primary dark:text-accent-gold"
-                        )}>
+                        <button 
+                            type="button"
+                            onClick={handleActionClick}
+                            className={cn(
+                                "mt-4 text-nano font-black uppercase tracking-[0.3em] flex items-center gap-2 group/btn cursor-pointer",
+                                "text-primary dark:text-accent-gold hover:opacity-80"
+                            )}
+                        >
                             {notification.action.label}
                             <Zap className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-2" />
                         </button>
@@ -316,9 +335,10 @@ function NotificationItem({ notification, onClick, onRemove }: { notification: N
                             e.stopPropagation();
                             onRemove(notification.id);
                         }}
-                        className="w-8 h-8 rounded-lg bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-text-primary transition-all shadow-sm"
+                        aria-label="Supprimer la notification"
+                        className="w-8 h-8 rounded-lg bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center text-status-danger hover:bg-status-danger hover:text-text-primary transition-all shadow-sm cursor-pointer"
                     >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                     </button>
                 </div>
             </div>

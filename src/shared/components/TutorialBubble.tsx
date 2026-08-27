@@ -150,7 +150,7 @@ export function TutorialBubble() {
                     )`
                 } : {}}
             >
-                <div className="absolute inset-0" onClick={stopTutorial} />
+                <div className="absolute inset-0" onClick={stopTutorial} aria-hidden="true" />
             </motion.div>
 
             {/* Glowing Border - only show if target found */}
@@ -174,6 +174,9 @@ export function TutorialBubble() {
             {/* The Tutorial Card */}
             <motion.div
                 ref={bubbleRef}
+                role="dialog"
+                aria-modal="false"
+                aria-label={currentPoint.label || "Tutoriel"}
                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
                 animate={{
                     opacity: 1,
@@ -213,9 +216,10 @@ export function TutorialBubble() {
                     </div>
                     <button
                         onClick={stopTutorial}
-                        className="p-2 hover:bg-surface-glass rounded-full transition-colors group"
+                        aria-label="Fermer le tutoriel"
+                        className="p-2 hover:bg-surface-glass rounded-full transition-colors group cursor-pointer"
                     >
-                        <X className="w-4 h-4 text-text-muted group-hover:text-text-primary" />
+                        <X className="w-4 h-4 text-text-muted group-hover:text-text-primary" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -234,10 +238,10 @@ export function TutorialBubble() {
                     {/* We prioritize Next button visibility as per screenshot style */}
                     <button
                         onClick={nextStep}
-                        className="h-12 px-8 bg-accent-gold hover:bg-accent-gold/90 text-white rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
+                        className="h-12 px-8 bg-accent-gold hover:bg-accent-gold/90 text-white rounded-full font-black text-nano uppercase tracking-widest transition-all flex items-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 cursor-pointer"
                     >
                         {isLastStep ? "Terminer" : "Suivant"}
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3 h-3" aria-hidden="true" />
                     </button>
                 </div>
             </motion.div>

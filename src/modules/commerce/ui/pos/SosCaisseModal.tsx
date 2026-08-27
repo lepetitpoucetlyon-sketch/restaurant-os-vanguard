@@ -126,8 +126,15 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+            <div 
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+                onClick={(e) => { if (e.target === e.currentTarget) handleReset(); }}
+                onKeyDown={(e) => { if (e.key === 'Escape') handleReset(); }}
+            >
                 <motion.div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="SOS Caisse • Urgence Service"
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -159,9 +166,10 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
 
                         <button
                             onClick={handleReset}
-                            className="w-9 h-9 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
+                            aria-label="Fermer"
+                            className="w-9 h-9 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                         >
-                            <X className="w-4 h-4" />
+                            <X className="w-4 h-4" aria-hidden="true" />
                         </button>
                     </div>
 

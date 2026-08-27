@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Shield } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -9,16 +10,22 @@ interface StaffRecentActivityProps {
 }
 
 export const StaffRecentActivity = ({ logs }: StaffRecentActivityProps) => {
+    const [showAllLogs, setShowAllLogs] = useState(false);
+    const displayedLogs = showAllLogs ? logs : logs.slice(0, 3);
+
     return (
         <div className="bg-[--color-surface-primary] dark:bg-bg-secondary rounded-xl p-8 border border-border shadow-sm">
             <div className="flex items-center justify-between mb-8">
                 <h3 className="text-xl font-serif font-semibold text-text-primary tracking-tight">Activité Récente de l&apos;Équipe</h3>
-                <button className="text-micro font-bold text-accent uppercase tracking-widest border-b border-accent/30 hover:border-accent transition-all">
-                    Historique Complet
+                <button 
+                    onClick={() => setShowAllLogs(!showAllLogs)}
+                    className="text-micro font-bold text-accent uppercase tracking-widest border-b border-accent/30 hover:border-accent transition-all cursor-pointer"
+                >
+                    {showAllLogs ? "Réduire" : `Historique Complet (${logs.length})`}
                 </button>
             </div>
             <div className="space-y-6">
-                {logs.slice(0, 3).map((log, i) => (
+                {displayedLogs.map((log, i) => (
                     <div key={i} className="flex items-center justify-between border-b border-border/50 pb-5 last:border-0 last:pb-0">
                         <div className="flex items-center gap-5">
                             <div className="w-10 h-10 rounded-lg bg-bg-tertiary flex items-center justify-center text-text-muted border border-border/50">

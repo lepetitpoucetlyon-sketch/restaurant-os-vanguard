@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Globe, ShieldCheck, Zap, Database, TrendingUp, Users, Cpu, ChevronRight, PlayCircle, KeyRound, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="p-8 bg-surface-card border border-border rounded-3xl backdrop-blur-md hover:border-action-primary/40 transition-all group">
@@ -100,12 +101,12 @@ export default function ShowcasePage() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">
-          <button className="px-10 py-5 bg-accent text-primary font-bold rounded-2xl hover:bg-accent transition-all flex items-center gap-3 text-lg shadow-[0_10px_30px_rgba(197,163,88,0.2)]">
+          <Link href="/onboarding" className="px-10 py-5 bg-accent text-primary font-bold rounded-2xl hover:bg-accent transition-all flex items-center gap-3 text-lg shadow-[0_10px_30px_rgba(197,163,88,0.2)] cursor-pointer">
             Déployer la Flotte <ChevronRight size={20} />
-          </button>
+          </Link>
           <button
             onClick={() => setShowDemoModal(true)}
-            className="px-10 py-5 bg-surface-glass border border-brand/40 text-brand font-bold rounded-2xl hover:border-brand transition-all text-lg flex items-center gap-3"
+            className="px-10 py-5 bg-surface-glass border border-brand/40 text-brand font-bold rounded-2xl hover:border-brand transition-all text-lg flex items-center gap-3 cursor-pointer"
           >
             <PlayCircle size={20} />
             Accéder à la démo

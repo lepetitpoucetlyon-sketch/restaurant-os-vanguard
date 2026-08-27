@@ -29,8 +29,14 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
     return (
         <AnimatePresence>
             {area && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-10 bg-black/60 backdrop-blur-sm">
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center p-10 bg-black/60 backdrop-blur-sm"
+                    onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+                >
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={`Espace opérationnel ${area.number}`}
                         initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
                         animate={{ opacity: 1, scale: 1, rotate: 0 }}
                         exit={{ opacity: 0, scale: 0.9, rotate: 2 }}

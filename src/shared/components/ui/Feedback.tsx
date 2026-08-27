@@ -98,12 +98,13 @@ export function FeedbackBanner({
             {dismissible && onDismiss && (
                 <button
                     onClick={onDismiss}
+                    aria-label="Masquer la notification"
                     className={cn(
-                        "p-1 rounded-lg hover:bg-bg-tertiary transition-colors shrink-0",
+                        "p-1 rounded-lg hover:bg-bg-tertiary transition-colors shrink-0 cursor-pointer",
                         config.iconColor
                     )}
                 >
-                    <X className="w-4 h-4" />
+                    <X className="w-4 h-4" aria-hidden="true" />
                 </button>
             )}
         </motion.div>
@@ -189,12 +190,16 @@ export function ConfirmationDialog({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                         onClick={onCancel}
                     />
 
                     {/* Dialog */}
                     <motion.div
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-label={title}
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}

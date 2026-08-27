@@ -89,21 +89,22 @@ export default function CustomDomainPanel() {
           <button
             onClick={remove}
             disabled={loading}
-            className="p-2.5 rounded-xl border border-border/50 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-300 transition-colors"
+            aria-label="Supprimer le domaine personnalisé"
+            className="p-2.5 rounded-xl border border-border/50 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-300 transition-colors cursor-pointer"
           >
-            <Trash2 className="w-4 h-4 text-text-secondary" />
+            <Trash2 className="w-4 h-4 text-text-secondary" aria-hidden="true" />
           </button>
         )}
       </div>
 
       {error && (
         <div className="flex items-center gap-2 text-sm text-status-danger bg-red-50 dark:bg-red-950/20 rounded-xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 shrink-0" /> {error}
+          <AlertTriangle className="w-4 h-4 shrink-0" aria-hidden="true" /> {error}
         </div>
       )}
       {success && (
         <div className="flex items-center gap-2 text-sm text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl px-4 py-3">
-          <CheckCircle2 className="w-4 h-4 shrink-0" /> {success}
+          <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" /> {success}
         </div>
       )}
 
@@ -115,8 +116,12 @@ export default function CustomDomainPanel() {
             <code className="flex-1 text-sm font-mono text-text-primary">
               CNAME → <span className="text-accent">{status.cnameTarget}</span>
             </code>
-            <button onClick={copyTarget} className="shrink-0">
-              {copied ? <CheckCircle2 className="w-4 h-4 text-status-success" /> : <Copy className="w-4 h-4 text-text-secondary hover:text-text-primary transition-colors" />}
+            <button 
+              onClick={copyTarget} 
+              aria-label="Copier la cible CNAME"
+              className="shrink-0 cursor-pointer"
+            >
+              {copied ? <CheckCircle2 className="w-4 h-4 text-status-success" aria-hidden="true" /> : <Copy className="w-4 h-4 text-text-secondary hover:text-text-primary transition-colors" aria-hidden="true" />}
             </button>
           </div>
           <p className="text-xs text-text-secondary">{status.instructions}</p>

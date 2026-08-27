@@ -31,7 +31,13 @@ export function computeDLCStatus(dlc: string | undefined): DLCStatus {
 function ModalShell({ onClose, children }: { onClose: () => void; children: React.ReactNode }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-            <div className="bg-surface-base rounded-2xl border border-border shadow-xl p-5 sm:p-6 w-[calc(100vw-2rem)] sm:w-96 max-w-md" onClick={(e) => e.stopPropagation()}>
+            <div 
+                role="dialog"
+                aria-modal="true"
+                aria-label="Modal stock"
+                className="bg-surface-base rounded-2xl border border-border shadow-xl p-5 sm:p-6 w-[calc(100vw-2rem)] sm:w-96 max-w-md" 
+                onClick={(e) => e.stopPropagation()}
+            >
                 {children}
             </div>
         </div>

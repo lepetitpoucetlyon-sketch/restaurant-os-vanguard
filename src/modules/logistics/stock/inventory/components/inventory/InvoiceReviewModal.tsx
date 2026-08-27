@@ -47,8 +47,14 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
     };
 
     return (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6">
+        <div 
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
             <motion.div 
+                role="dialog"
+                aria-modal="true"
+                aria-label="Revue Facture & Rapprochement Stock"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="w-full max-w-5xl bg-surface-card border border-border rounded-2xl sm:rounded-[3rem] flex flex-col max-h-[90vh] overflow-hidden shadow-2xl"

@@ -1,5 +1,4 @@
-'use client';
-
+import { useEffect } from 'react';
 import { Lock } from 'lucide-react';
 import type { PinDialogState } from './cleaningPlanConstants';
 
@@ -22,9 +21,25 @@ export function CleaningPinDialog({
     setPinInput,
     onSign,
 }: CleaningPinDialogProps) {
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [onClose]);
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="bg-surface-base rounded-2xl border border-border shadow-2xl p-6 w-full max-w-sm mx-4">
+        <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <div 
+                role="dialog"
+                aria-modal="true"
+                aria-label="Signature numérique de tâche HACCP"
+                className="bg-surface-base rounded-2xl border border-border shadow-2xl p-6 w-full max-w-sm mx-4"
+            >
                 <div className="flex items-center gap-2 mb-4">
                     <Lock className="w-5 h-5 text-action-primary" />
                     <h3 className="font-bold text-text-primary">Signature numérique</h3>

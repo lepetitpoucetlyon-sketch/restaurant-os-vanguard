@@ -218,7 +218,15 @@ export function OperationsDashboard() {
                                                     <p className="text-nano text-muted font-sans font-bold uppercase tracking-widest mb-1 italic">Tarif / Service</p>
                                                     <p className="text-xl font-sans font-black">€{area.price}</p>
                                                 </div>
-                                                <button className="w-10 h-10 rounded-2xl bg-action-primary text-text-on-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg">
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toast.info(`Détail Unité No. ${area.number} (${area.type}) - Statut: ${area.status}`);
+                                                    }}
+                                                    title={`Voir l'unité ${area.number}`}
+                                                    aria-label={`Voir l'unité ${area.number}`}
+                                                    className="w-10 h-10 rounded-2xl bg-action-primary text-text-on-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 shadow-lg cursor-pointer"
+                                                >
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
                                             </div>

@@ -35,8 +35,12 @@ export function ProductEditModal({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                    onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
                 >
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={isCreating ? 'Nouveau produit' : 'Éditer le produit'}
                         layoutId={editingProduct.id}
                         className="w-full max-w-2xl bg-bg-secondary rounded-[2.5rem] shadow-2xl border border-border overflow-hidden max-h-[90vh] flex flex-col"
                     >

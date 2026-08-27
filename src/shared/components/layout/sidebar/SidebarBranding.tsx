@@ -50,13 +50,15 @@ export function SidebarBranding({
             {isMobileMenuOpen && (
                 <button
                     onClick={closeMobileMenu}
-                    className="lg:hidden p-2 -ml-2 text-text-muted hover:text-text-primary transition-colors outline-none"
+                    aria-label="Fermer le menu mobile"
+                    className="lg:hidden p-2 -ml-2 text-text-muted hover:text-text-primary transition-colors outline-none cursor-pointer"
                 >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5" aria-hidden="true" />
                 </button>
             )}
             <motion.button
                 variants={navItemReveal}
+                aria-label={isSidebarCollapsed ? "Déplier le menu latéral" : "Replier le menu latéral"}
                 onMouseDown={onMouseDown}
                 onMouseUp={onMouseUp}
                 onMouseLeave={onMouseLeave}
@@ -137,9 +139,10 @@ export function SidebarBranding({
             {isMobileMenuOpen && (
                 <button
                     onClick={closeMobileMenu}
-                    className="lg:hidden p-2 text-text-muted hover:text-text-primary hover:bg-bg-tertiary rounded-lg transition-all ml-4 outline-none"
+                    aria-label="Fermer le menu mobile"
+                    className="lg:hidden p-2 text-text-muted hover:text-text-primary hover:bg-bg-tertiary rounded-lg transition-all ml-4 outline-none cursor-pointer"
                 >
-                    <X strokeWidth={1.5} className="w-5 h-5" />
+                    <X strokeWidth={1.5} className="w-5 h-5" aria-hidden="true" />
                 </button>
             )}
         </div>

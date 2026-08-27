@@ -298,6 +298,9 @@ export function RecruitmentBoard({ onHireCandidate }: RecruitmentBoardProps) {
                 </div>
 
                 <DragOverlay>
+                    {/* Aperçu fantôme suivant le curseur pendant le glisser-déposer :
+                        il n'est pas interactif, d'où le gestionnaire vide — la carte
+                        réelle (plus haut) reçoit le vrai `onEdit`. */}
                     {activeCandidate ? (
                         <CandidateCard
                             candidate={activeCandidate}

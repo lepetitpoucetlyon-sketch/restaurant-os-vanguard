@@ -13,6 +13,9 @@ interface RecipeSidebarHeroProps {
     onClose: () => void;
 }
 
+import { useState } from "react";
+import { toast } from "sonner";
+
 export function RecipeSidebarHero({
     recipe,
     basePortions,
@@ -22,6 +25,42 @@ export function RecipeSidebarHero({
     onClose,
 }: RecipeSidebarHeroProps) {
     const isScaled = currentPortions !== basePortions;
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const handleShare = async () => {
+        const shareData = {
+            title: `Recette : ${recipe.name}`,
+            text: `Fiche technique de ${recipe.name} sur Restaurant OS`,
+            url: typeof window !== 'undefined' ? window.location.href : '',
+        };
+
+        if (typeof navigator !== 'undefined' && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+            try {
+                await navigator.share(shareData);
+            } catch {
+                // Annulé par l'utilisateur
+            }
+        } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                toast.success("Lien de la fiche technique copié !");
+            } catch {
+                toast.error("Impossible de copier le lien");
+            }
+        }
+    };
+
+    const toggleFavorite = () => {
+        setIsFavorite(prev => {
+            const next = !prev;
+            if (next) {
+                toast.success(`${recipe.name} ajouté aux favoris`);
+            } else {
+                toast.info(`${recipe.name} retiré des favoris`);
+            }
+            return next;
+        });
+    };
 
     return (
         <>
@@ -46,10 +85,20 @@ export function RecipeSidebarHero({
 
                 <div className="absolute bottom-6 left-8 right-8 flex justify-between items-center z-10">
                     <div className="flex gap-2">
-                        <button className="w-10 h-10 rounded-full backdrop-blur-md flex items-center justify-center text-error hover:scale-110 transition-all shadow-lg border bg-surface-card/60 border-black/10">
-                            <Heart className="w-5 h-5 fill-error" />
+                        <button 
+                            onClick={toggleFavorite}
+                            title={isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+                            aria-label="Favori"
+                            className="w-10 h-10 rounded-full backdrop-blur-md flex items-center justify-center text-error hover:scale-110 transition-all shadow-lg border bg-surface-card/60 border-black/10 cursor-pointer"
+                        >
+                            <Heart className={`w-5 h-5 ${isFavorite ? 'fill-error text-error' : 'text-text-muted hover:text-error'}`} />
                         </button>
-                        <button className="w-10 h-10 rounded-full backdrop-blur-md flex items-center justify-center hover:scale-110 transition-all shadow-lg border bg-surface-card/60 text-primary border-black/10">
+                        <button 
+                            onClick={handleShare}
+                            title="Partager la fiche technique"
+                            aria-label="Partager"
+                            className="w-10 h-10 rounded-full backdrop-blur-md flex items-center justify-center hover:scale-110 transition-all shadow-lg border bg-surface-card/60 text-primary border-black/10 cursor-pointer"
+                        >
                             <Share2 className="w-5 h-5" />
                         </button>
                     </div>

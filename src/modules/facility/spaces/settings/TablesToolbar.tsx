@@ -23,7 +23,13 @@ interface TablesToolbarProps {
     onSave: () => void;
     isSaving: boolean;
     floors: Floor[];
+    activeFloorId?: string;
+    onSelectFloor?: (floorId: string) => void;
+    totalTablesCount?: number;
+    totalPaxCount?: number;
 }
+
+import { useState } from "react";
 
 export function TablesToolbar({
     activeTab,
@@ -32,30 +38,73 @@ export function TablesToolbar({
     onAdd,
     onSave,
     isSaving,
-    floors
+    floors,
+    activeFloorId,
+    onSelectFloor,
+    totalTablesCount,
+    totalPaxCount,
 }: TablesToolbarProps) {
+    const [isFloorMenuOpen, setIsFloorMenuOpen] = useState(false);
+    const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
+    const [isSnapGridActive, setIsSnapGridActive] = useState(true);
+    const [isOptimized, setIsOptimized] = useState(false);
+
+    const selectedFloor = floors.find(f => f.id === activeFloorId) || floors[0];
+    const floorLabel = selectedFloor?.name || "REZ-DE-CHAUSSÉE";
+    const units = totalTablesCount !== undefined ? totalTablesCount : 8;
+    const pax = totalPaxCount !== undefined ? totalPaxCount : 30;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full bg-bg-secondary p-3 rounded-[2rem] shadow-premium border border-border flex flex-col xl:flex-row items-center gap-6 xl:gap-0 relative z-20 overflow-hidden"
+            className="w-full bg-bg-secondary p-3 rounded-[2rem] shadow-premium border border-border flex flex-col xl:flex-row items-center gap-6 xl:gap-0 relative z-20"
         >
-            {/* 1. Left: Zone Selector */}
+            {/* 1. Left: Zone / Floor Selector */}
             <div className="relative z-10 flex items-center gap-6 xl:pr-8 xl:border-r border-border w-full xl:w-auto justify-between xl:justify-start">
-                <button className="flex items-center gap-4 bg-bg-primary hover:bg-bg-tertiary transition-colors rounded-[1.5rem] pl-2 pr-6 py-2 group border border-border">
-                    <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border text-accent">
-                        <Home className="w-6 h-6" />
-                    </div>
-                    <div className="text-left">
-                        <div className="flex items-center gap-3">
-                            <span className="text-text-primary font-bold text-xs tracking-[0.2em] group-hover:text-text-secondary transition-colors uppercase">
-                                {floors[0]?.name || "REZ-DE-CHAUSSÉE"}
-                            </span>
-                            <ChevronDown className="w-3 h-3 text-text-muted" />
+                <div className="relative">
+                    <button 
+                        onClick={() => setIsFloorMenuOpen(prev => !prev)}
+                        className="flex items-center gap-4 bg-bg-primary hover:bg-bg-tertiary transition-colors rounded-[1.5rem] pl-2 pr-6 py-2 group border border-border"
+                    >
+                        <div className="w-12 h-12 rounded-2xl bg-bg-tertiary flex items-center justify-center border border-border text-accent">
+                            <Home className="w-6 h-6" />
                         </div>
-                        <p className="text-nano text-text-muted font-bold tracking-wider mt-0.5">8 UNITÉS • 30 PAX</p>
-                    </div>
-                </button>
+                        <div className="text-left">
+                            <div className="flex items-center gap-3">
+                                <span className="text-text-primary font-bold text-xs tracking-[0.2em] group-hover:text-text-secondary transition-colors uppercase">
+                                    {floorLabel}
+                                </span>
+                                <ChevronDown className={cn("w-3 h-3 text-text-muted transition-transform", isFloorMenuOpen && "rotate-180")} />
+                            </div>
+                            <p className="text-nano text-text-muted font-bold tracking-wider mt-0.5">
+                                {units} {units > 1 ? 'UNITÉS' : 'UNITÉ'} • {pax} PAX
+                            </p>
+                        </div>
+                    </button>
+
+                    {isFloorMenuOpen && floors.length > 0 && (
+                        <div className="absolute top-full left-0 mt-2 w-56 bg-bg-secondary border border-border rounded-2xl p-2 shadow-2xl z-50">
+                            {floors.map(floor => (
+                                <button
+                                    key={floor.id}
+                                    onClick={() => {
+                                        if (onSelectFloor) onSelectFloor(floor.id);
+                                        setIsFloorMenuOpen(false);
+                                    }}
+                                    className={cn(
+                                        "w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all",
+                                        floor.id === selectedFloor?.id
+                                            ? "bg-accent/20 text-accent font-black"
+                                            : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary"
+                                    )}
+                                >
+                                    {floor.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 <div className="xl:hidden flex flex-col items-end">
                     <h2 className="font-serif italic text-xl text-text-primary">Config.</h2>
@@ -102,14 +151,40 @@ export function TablesToolbar({
                 </div>
 
                 <div className="flex items-center gap-3 w-full md:w-auto justify-center">
-                    <button className="px-5 py-3 bg-bg-primary hover:bg-bg-tertiary text-text-primary border border-border rounded-full flex items-center gap-2 transition-all">
+                    <button 
+                        onClick={() => setIsOptimized(prev => !prev)}
+                        className={cn(
+                            "px-5 py-3 border border-border rounded-full flex items-center gap-2 transition-all",
+                            isOptimized
+                                ? "bg-accent/20 border-accent/40 text-accent"
+                                : "bg-bg-primary hover:bg-bg-tertiary text-text-primary"
+                        )}
+                    >
                         <Sparkles className="w-3 h-3 text-accent" />
-                        <span className="text-nano font-bold tracking-widest uppercase">VUE OPTIMISÉE</span>
+                        <span className="text-nano font-bold tracking-widest uppercase">
+                            {isOptimized ? "VUE DENSE" : "VUE OPTIMISÉE"}
+                        </span>
                     </button>
 
                     <div className="flex items-center p-1 bg-bg-primary rounded-full border border-border relative">
-                        <button className="px-4 py-2 bg-text-primary rounded-full text-bg-primary text-nano font-bold z-10">2D</button>
-                        <button className="px-4 py-2 text-text-muted text-nano font-bold hover:text-text-primary transition-colors z-10">3D</button>
+                        <button 
+                            onClick={() => setViewMode('2d')}
+                            className={cn(
+                                "px-4 py-2 rounded-full text-nano font-bold z-10 transition-all",
+                                viewMode === '2d' ? "bg-text-primary text-bg-primary" : "text-text-muted hover:text-text-primary"
+                            )}
+                        >
+                            2D
+                        </button>
+                        <button 
+                            onClick={() => setViewMode('3d')}
+                            className={cn(
+                                "px-4 py-2 rounded-full text-nano font-bold z-10 transition-all",
+                                viewMode === '3d' ? "bg-text-primary text-bg-primary" : "text-text-muted hover:text-text-primary"
+                            )}
+                        >
+                            3D
+                        </button>
                     </div>
                 </div>
 
@@ -121,7 +196,17 @@ export function TablesToolbar({
                         <span className="text-nano font-bold text-status-success tracking-wider uppercase">SYNC ACTIVE</span>
                     </div>
 
-                    <button className="w-10 h-10 rounded-full bg-bg-primary border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-all">
+                    <button 
+                        onClick={() => setIsSnapGridActive(prev => !prev)}
+                        title={isSnapGridActive ? "Grille magnétique activée" : "Grille magnétique désactivée"}
+                        aria-label="Bascule grille magnétique"
+                        className={cn(
+                            "w-10 h-10 rounded-full border border-border flex items-center justify-center transition-all",
+                            isSnapGridActive 
+                                ? "bg-accent/20 text-accent border-accent/40" 
+                                : "bg-bg-primary text-text-muted hover:text-text-primary hover:bg-bg-tertiary"
+                        )}
+                    >
                         <Grid className="w-4 h-4" />
                     </button>
 

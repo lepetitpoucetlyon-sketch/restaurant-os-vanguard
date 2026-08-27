@@ -44,8 +44,8 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
                 };
             case 'eating':
                 return {
-                    container: "bg-status-warning/5 border-orange-500 shadow-inner",
-                    circle: "bg-status-warning/20 text-status-warning border-orange-500/30",
+                    container: "bg-status-warning/5 border-status-warning shadow-inner",
+                    circle: "bg-status-warning/20 text-status-warning border-status-warning/30",
                     icon: "text-status-warning",
                     indicator: "bg-status-warning",
                     bar: "bg-status-warning",
@@ -53,8 +53,8 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
                 };
             case 'paying':
                 return {
-                    container: "bg-status-success/5 border-emerald-500 shadow-inner animate-pulse-subtle",
-                    circle: "bg-status-success/20 text-status-success border-emerald-500/30",
+                    container: "bg-status-success/5 border-status-success shadow-inner animate-pulse-subtle",
+                    circle: "bg-status-success/20 text-status-success border-status-success/30",
                     icon: "text-status-success",
                     indicator: "bg-status-success",
                     bar: "bg-status-success",
@@ -71,12 +71,12 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
                 };
             case 'dirty':
                 return {
-                    container: "bg-action-primary/5 border-action-primary/30 hover:border-amber-400/60 hover:-translate-y-2 backdrop-blur-xl shadow-inner",
+                    container: "bg-action-primary/5 border-action-primary/30 hover:border-status-warning/60 hover:-translate-y-2 backdrop-blur-xl shadow-inner",
                     circle: "bg-action-primary/10 text-action-primary border-action-primary/30",
                     icon: "text-action-primary",
                     indicator: "bg-action-primary",
                     bar: "bg-action-primary",
-                    spotlight: "bg-gradient-to-br from-amber-500/8 to-transparent"
+                    spotlight: "bg-gradient-to-br from-status-warning/10 to-transparent"
                 };
             default:
                 return {
@@ -98,9 +98,9 @@ export function TableButton({ table, index, onSelectTable }: TableButtonProps) {
             onClick={() => onSelectTable(table.id)}
             data-tutorial={index === 0 ? "pos-0-0-0" : undefined}
             className={cn(
-                "group relative flex flex-col justify-between p-5 min-h-[140px] rounded-2xl border transition-all duration-200 text-left overflow-hidden",
+                "group relative flex flex-col justify-between p-5 min-h-[140px] rounded-2xl border transition-all duration-200 text-left overflow-hidden cursor-pointer",
                 "bg-surface-card dark:bg-bg-secondary border-border/70 dark:border-white/10 hover:border-action-primary/60 hover:shadow-lg active:scale-[0.98]",
-                table.status === 'paying' && "ring-2 ring-emerald-500/40 border-emerald-500",
+                table.status === 'paying' && "ring-2 ring-status-success/40 border-status-success",
                 table.status === 'seated' && "ring-1 ring-accent/30"
             )}
         >

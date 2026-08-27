@@ -70,7 +70,10 @@ export const OverviewTab = () => {
                         <PageCard
                             key={page.id}
                             page={page as React.ComponentProps<typeof PageCard>['page']}
-                            onEdit={() => { }}
+                            onEdit={() => {
+                                // Notification ou redirection vers l'éditeur de page
+                                window.location.hash = `edit-${page.id}`;
+                            }}
                             id={idx === 0 ? "seo-page-to-optimize-0" : undefined}
                         />
                     ))}

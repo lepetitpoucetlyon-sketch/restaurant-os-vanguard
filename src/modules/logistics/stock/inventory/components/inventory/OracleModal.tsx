@@ -22,6 +22,9 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
             onClick={onClose}
         >
             <div
+                role="dialog"
+                aria-modal="true"
+                aria-label={`Prédiction Oracle — ${itemName}`}
                 className="w-full max-w-md"
                 onClick={(e) => e.stopPropagation()}
             >

@@ -87,6 +87,9 @@ export function OrderCartDrawer({
 
             <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
               <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mon Panier"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}

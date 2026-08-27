@@ -110,7 +110,8 @@ export function AutoSafeLayout({
                     <button
                       type="button"
                       onClick={empty.action.onClick}
-                      className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-semibold hover:opacity-90 shadow-sm"
+                      aria-label={empty.action.label}
+                      className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-semibold hover:opacity-90 shadow-sm cursor-pointer"
                     >
                       {empty.action.label}
                     </button>
@@ -138,7 +139,8 @@ export function AutoSafeLayout({
                   <button
                     type="button"
                     onClick={empty.action.onClick}
-                    className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-semibold hover:opacity-90 shadow-sm"
+                    aria-label={empty.action.label}
+                    className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-semibold hover:opacity-90 shadow-sm cursor-pointer"
                   >
                     {empty.action.label}
                   </button>

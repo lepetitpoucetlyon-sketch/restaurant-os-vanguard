@@ -53,6 +53,9 @@ export function OracleChatDrawer({
             className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
           />
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Oracle AI Assistant Analytique"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}

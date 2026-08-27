@@ -41,13 +41,20 @@ export function BottomSheet({
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") {
+                    onClose();
+                }
+            };
+            window.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.body.style.overflow = "unset";
+                window.removeEventListener("keydown", handleKeyDown);
+            };
         } else {
             document.body.style.overflow = "unset";
         }
-        return () => {
-            document.body.style.overflow = "unset";
-        };
-    }, [isOpen]);
+    }, [isOpen, onClose]);
 
     const handleDragEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
 
@@ -75,12 +82,16 @@ export function BottomSheet({
                         animate="visible"
                         exit="exit"
                         onClick={onClose}
+                        aria-hidden="true"
                         className="absolute inset-0 bg-black/60 backdrop-blur-md"
                     />
 
                     {/* Sheet */}
                     <motion.div
                         ref={sheetRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={title || "Panneau inférieur"}
                         variants={drawerVariants}
                         initial="hidden"
                         animate="visible"
@@ -123,9 +134,10 @@ export function BottomSheet({
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted"
+                                    aria-label="Fermer"
+                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <X className="w-5 h-5" aria-hidden="true" />
                                 </button>
                             </div>
                         )}

@@ -81,8 +81,16 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-bg-primary rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col lg:flex-row overflow-hidden border border-border max-h-[90vh]">
+    <div 
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-label="Comptage Tiroir Caisse"
+        className="bg-bg-primary rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col lg:flex-row overflow-hidden border border-border max-h-[90vh]"
+      >
         
         {/* Colonne Dénominations */}
         <div className="flex-1 p-6 flex flex-col overflow-y-auto">

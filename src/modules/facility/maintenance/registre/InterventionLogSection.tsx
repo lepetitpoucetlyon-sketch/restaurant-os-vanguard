@@ -88,10 +88,33 @@ export function InterventionLogSection() {
                                     {int.date}
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <button className="p-3 rounded-xl bg-bg-tertiary hover:bg-accent/10 hover:text-accent transition-all border border-border">
+                                    <button 
+                                        onClick={() => {
+                                            const csvContent = `ID,Prestataire,Type,Date,Description,Statut\n"${int.id}","${int.prestataire}","${int.type}","${int.date}","${int.description}","${int.status}"`;
+                                            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                                            const url = URL.createObjectURL(blob);
+                                            const link = document.createElement('a');
+                                            link.setAttribute('href', url);
+                                            link.setAttribute('download', `intervention-${int.id}.csv`);
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+                                            URL.revokeObjectURL(url);
+                                        }}
+                                        title="Exporter le bon en CSV"
+                                        aria-label="Exporter le bon d'intervention"
+                                        className="p-3 rounded-xl bg-bg-tertiary hover:bg-accent/10 hover:text-accent transition-all border border-border cursor-pointer"
+                                    >
                                         <Download className="w-4 h-4" />
                                     </button>
-                                    <button className="p-3 rounded-xl bg-bg-tertiary hover:bg-accent/10 hover:text-accent transition-all border border-border">
+                                    <button 
+                                        onClick={() => {
+                                            alert(`Fiche d'intervention\n\nPrestataire : ${int.prestataire}\nType : ${int.type}\nDate : ${int.date}\nDescription : ${int.description}\nStatut : ${int.status}`);
+                                        }}
+                                        title="Voir la fiche d'intervention"
+                                        aria-label="Voir la fiche d'intervention"
+                                        className="p-3 rounded-xl bg-bg-tertiary hover:bg-accent/10 hover:text-accent transition-all border border-border cursor-pointer"
+                                    >
                                         <FileText className="w-4 h-4" />
                                     </button>
                                 </div>

@@ -65,9 +65,10 @@ export function PinLogin() {
                 <div className="text-center mb-12">
                     <button
                         onClick={toggleTheme}
+                        aria-label="Changer de thème (clair/sombre)"
                         className="w-16 h-16 bg-bg-tertiary rounded-2xl flex items-center justify-center mx-auto mb-6 border border-border shadow-2xl backdrop-blur-md cursor-pointer hover:bg-bg-tertiary/80 transition-all group"
                     >
-                        <div className="w-4 h-4 rounded-full bg-accent animate-pulse shadow-[0_0_20px_#C5A059_80]" />
+                        <div className="w-4 h-4 rounded-full bg-accent animate-pulse shadow-[0_0_20px_#C5A059_80]" aria-hidden="true" />
                     </button>
                     <h1 className="text-4xl font-black text-text-primary tracking-tighter mb-2 font-serif italic">Accès Exécutif</h1>
                 </div>
@@ -161,14 +162,16 @@ export function PinLogin() {
                                         <button
                                             key={i}
                                             onClick={handleDelete}
-                                            className="h-20 w-full rounded-[2rem] bg-transparent border border-border text-text-muted flex items-center justify-center hover:bg-bg-tertiary hover:text-text-primary hover:border-border active:scale-95 transition-all group"
+                                            aria-label="Effacer le dernier chiffre"
+                                            className="h-20 w-full rounded-[2rem] bg-transparent border border-border text-text-muted flex items-center justify-center hover:bg-bg-tertiary hover:text-text-primary hover:border-border active:scale-95 transition-all group cursor-pointer"
                                         >
-                                            <Delete className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                                            <Delete className="w-6 h-6 group-hover:scale-110 transition-transform" aria-hidden="true" />
                                         </button>
                                     ) : digit === "submit" ? (
                                         <button
                                             key={i}
                                             onClick={handleSubmit}
+                                            aria-label="Valider le code PIN"
                                             disabled={pin.length !== 4}
                                             className={cn(
                                                 "h-20 w-full rounded-[2rem] flex items-center justify-center transition-all duration-300 border",
@@ -177,13 +180,13 @@ export function PinLogin() {
                                                     : "bg-transparent border-border text-text-muted/20 cursor-not-allowed"
                                             )}
                                         >
-                                            <LogIn className="w-6 h-6" />
+                                            <LogIn className="w-6 h-6" aria-hidden="true" />
                                         </button>
                                     ) : (
                                         <button
                                             key={i}
                                             onClick={() => handleDigit(digit)}
-                                            className="h-20 w-full rounded-[2rem] bg-bg-tertiary border border-border text-text-primary text-3xl font-bold hover:bg-bg-secondary hover:border-accent/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center shadow-sm"
+                                            className="h-20 w-full rounded-[2rem] bg-bg-tertiary border border-border text-text-primary text-3xl font-bold hover:bg-bg-secondary hover:border-accent/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center shadow-sm cursor-pointer"
                                         >
                                             {digit}
                                         </button>

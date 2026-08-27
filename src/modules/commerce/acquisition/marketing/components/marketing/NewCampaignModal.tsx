@@ -66,6 +66,9 @@ export function NewCampaignModal({ isOpen, onClose }: NewCampaignModalProps) {
                         className="absolute inset-0 bg-black/50 backdrop-blur-md"
                     />
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Nouvelle Campagne"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}

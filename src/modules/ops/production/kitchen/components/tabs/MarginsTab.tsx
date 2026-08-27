@@ -7,11 +7,28 @@ import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
+import { useState, useMemo } from "react";
+
 interface MarginsTabProps {
     recipes: import('@nexus/contracts').Recipe[];
 }
 
 export function MarginsTab({ recipes }: MarginsTabProps) {
+    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+
+    const sortedRecipes = useMemo(() => {
+        return [...recipes].sort((a, b) => {
+            const sellA = a.sellingPriceInMicrounits ?? (a.sellingPriceInCents ?? 0) * 10_000;
+            const costA = a.costPriceInMicrounits ?? (a.costPriceInCents ?? 0) * 10_000;
+            const marginA = sellA > 0 ? (sellA - costA) / sellA : 0;
+
+            const sellB = b.sellingPriceInMicrounits ?? (b.sellingPriceInCents ?? 0) * 10_000;
+            const costB = b.costPriceInMicrounits ?? (b.costPriceInCents ?? 0) * 10_000;
+            const marginB = sellB > 0 ? (sellB - costB) / sellB : 0;
+
+            return sortOrder === 'desc' ? marginB - marginA : marginA - marginB;
+        });
+    }, [recipes, sortOrder]);
     return (
         <motion.div
             variants={cinematicContainer}
@@ -105,7 +122,12 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                     <h3 className="text-2xl font-serif font-black text-text-primary tracking-tight">Performance par Recette</h3>
                     <div className="flex items-center gap-4">
                         <span className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">TRIER PAR :</span>
-                        <button className="text-nano font-black text-text-primary uppercase tracking-[0.2em] border-b-2 border-text-primary pb-1">MARGE DÉCROISSANTE</button>
+                        <button 
+                            onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+                            className="text-nano font-black text-text-primary uppercase tracking-[0.2em] border-b-2 border-text-primary pb-1 hover:text-accent hover:border-accent transition-colors cursor-pointer"
+                        >
+                            {sortOrder === 'desc' ? 'MARGE DÉCROISSANTE ↓' : 'MARGE CROISSANTE ↑'}
+                        </button>
                     </div>
                 </div>
                 <div className="overflow-x-auto">
@@ -121,7 +143,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/30">
-                            {recipes.map((recipe, idx) => {
+                            {sortedRecipes.map((recipe, idx) => {
                                 const sellMu = recipe.sellingPriceInMicrounits ?? (recipe.sellingPriceInCents ?? 0) * 10_000;
                                 const costMu = recipe.costPriceInMicrounits ?? (recipe.costPriceInCents ?? 0) * 10_000;
                                 const marginMu = sellMu - costMu;

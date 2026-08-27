@@ -20,7 +20,7 @@ import type {
 
 
 // Modular Components
-import { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar, useHumanResources } from '@/modules/human';
+import { LeaveBalanceCard, LeaveRequestCard, LeaveRequestDetailModal, NewRequestModal, TeamCalendar, useHumanResources } from '@/modules/human';
 
 import { useAuth } from '@/shared/hooks';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
@@ -38,6 +38,7 @@ function LeavesPage() {
 
     const [activeTab, setActiveTab] = useState<'my_requests' | 'team_calendar' | 'to_approve'>('my_requests');
     const [isNewRequestOpen, setIsNewRequestOpen] = useState(false);
+    const [viewedRequest, setViewedRequest] = useState<LeaveRequest | null>(null);
     const [statusFilter, setStatusFilter] = useState<LeaveRequestStatus | 'all'>('all');
 
     const isManager = currentUser?.role === 'manager' || currentUser?.role === 'admin' || (currentUser?.role as string) === 'owner';
@@ -198,7 +199,7 @@ function LeavesPage() {
                                             >
                                                 <LeaveRequestCard
                                                     request={request}
-                                                    onView={() => { }}
+                                                    onView={() => setViewedRequest(request)}
                                                 />
                                             </motion.div>
                                         ))}
@@ -260,7 +261,7 @@ function LeavesPage() {
                                                 <LeaveRequestCard
                                                     request={request}
                                                     isManager={true}
-                                                    onView={() => { }}
+                                                    onView={() => setViewedRequest(request)}
                                                     onApprove={() => handleApprove(request.id)}
                                                     onReject={() => handleReject(request.id)}
                                                 />
@@ -280,6 +281,16 @@ function LeavesPage() {
                 onClose={() => setIsNewRequestOpen(false)}
                 balances={myBalances}
                 onSubmit={handleSubmitRequest}
+            />
+
+            {/* Détail d'une demande — le manager y retrouve le motif, la couverture
+                d'équipe et l'historique de décision avant de trancher. */}
+            <LeaveRequestDetailModal
+                request={viewedRequest}
+                onClose={() => setViewedRequest(null)}
+                isManager={activeTab === 'to_approve'}
+                onApprove={viewedRequest ? () => handleApprove(viewedRequest.id) : undefined}
+                onReject={viewedRequest ? () => handleReject(viewedRequest.id) : undefined}
             />
 
         </div>

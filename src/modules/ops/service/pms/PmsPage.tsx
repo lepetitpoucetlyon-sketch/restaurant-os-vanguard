@@ -6,6 +6,7 @@ import { PageShell } from "@/shared/components/ui/PageShell";
 import { StatGrid, StatCard } from "@/shared/components/ui";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";
+import { toast } from "sonner";
 
 interface RoomFolio {
   roomNumber: string;
@@ -27,17 +28,35 @@ const SAMPLE_ROOMS: RoomFolio[] = [
 ];
 
 export function PmsPage() {
+  const [rooms, setRooms] = useState<RoomFolio[]>(SAMPLE_ROOMS);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
-  const filteredRooms = SAMPLE_ROOMS.filter((r) => {
+  const filteredRooms = rooms.filter((r) => {
     const matchSearch = r.roomNumber.includes(search) || r.guestName.toLowerCase().includes(search.toLowerCase());
     const matchStatus = filterStatus === "all" || r.status === filterStatus;
     return matchSearch && matchStatus;
   });
 
-  const totalOccupied = SAMPLE_ROOMS.filter((r) => r.status === "occupied").length;
-  const totalBalanceCents = SAMPLE_ROOMS.reduce((sum, r) => sum + r.balanceCents, 0);
+  const totalOccupied = rooms.filter((r) => r.status === "occupied").length;
+  const totalBalanceCents = rooms.reduce((sum, r) => sum + r.balanceCents, 0);
+
+  const handleChargeRoom = (room: RoomFolio) => {
+    if (room.status !== 'occupied') {
+      toast.error(`La chambre ${room.roomNumber} n'est pas occupée`);
+      return;
+    }
+    const input = window.prompt(`Imputer une note sur la chambre ${room.roomNumber} (${room.guestName})\nMontant en euros (€) :`, "25.00");
+    if (!input) return;
+    const amount = parseFloat(input.replace(',', '.'));
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Montant invalide");
+      return;
+    }
+    const chargeCents = Math.round(amount * 100);
+    setRooms(prev => prev.map(r => r.roomNumber === room.roomNumber ? { ...r, balanceCents: r.balanceCents + chargeCents } : r));
+    toast.success(`Note de ${amount.toFixed(2)}€ imputée sur la chambre ${room.roomNumber}`);
+  };
 
   return (
     <PageShell
@@ -49,7 +68,7 @@ export function PmsPage() {
     >
       <div className="p-6 space-y-6">
         <StatGrid columns={3}>
-          <StatCard label="Taux d'Occupation Chambres" value={`${Math.round((totalOccupied / SAMPLE_ROOMS.length) * 100)}%`} />
+          <StatCard label="Taux d'Occupation Chambres" value={`${Math.round((totalOccupied / rooms.length) * 100)}%`} />
           <StatCard label="Encours Room Service & Repas" value={formatCurrency(totalBalanceCents / 100)} />
           <StatCard label="Connecteur PMS Actif" value="Mews PMS (Connecté)" />
         </StatGrid>
@@ -74,7 +93,7 @@ export function PmsPage() {
                 key={st}
                 onClick={() => setFilterStatus(st)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all",
+                  "px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all cursor-pointer",
                   filterStatus === st
                     ? "bg-action-primary text-text-on-primary shadow-sm"
                     : "bg-surface-card border border-border-default text-text-muted hover:text-text-primary"
@@ -116,7 +135,10 @@ export function PmsPage() {
                   <span className="text-nano text-text-muted uppercase font-bold">Encours Folio</span>
                   <p className="text-base font-mono font-bold text-text-primary mt-0.5">{formatCurrency(room.balanceCents / 100)}</p>
                 </div>
-                <button className="px-3 py-1.5 rounded-xl bg-surface-bg border border-border-default text-xs font-bold text-text-primary hover:border-action-primary transition-all">
+                <button 
+                  onClick={() => handleChargeRoom(room)}
+                  className="px-3 py-1.5 rounded-xl bg-surface-bg border border-border-default text-xs font-bold text-text-primary hover:border-action-primary transition-all cursor-pointer"
+                >
                   Imputer une note
                 </button>
               </div>

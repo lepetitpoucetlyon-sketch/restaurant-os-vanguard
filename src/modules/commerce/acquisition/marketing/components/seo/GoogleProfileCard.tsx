@@ -16,7 +16,9 @@ export function GoogleProfileCard() {
         );
     }
 
-    if (!profile) {
+    const isLinked = profile?.integrations?.googleBusinessProfile?.linked === true;
+
+    if (!profile || !isLinked) {
         return (
             <div className="p-6 rounded-[2rem] bg-bg-secondary border border-border">
                 <div className="flex flex-col items-center gap-4 text-center py-8">
@@ -27,9 +29,16 @@ export function GoogleProfileCard() {
                         <h3 className="font-bold text-text-primary">Profil non connecté</h3>
                         <p className="text-xs text-text-muted mt-1">Liez votre compte Google Business pour activer le suivi SEO.</p>
                     </div>
-                    <button className="h-10 px-6 rounded-xl bg-bg-tertiary text-text-primary text-chip-label border border-border hover:bg-bg-primary transition-all">
-                        Connecter
-                    </button>
+                    <div className="flex flex-col items-center gap-2">
+                        <button 
+                            disabled 
+                            title="Intégration OAuth en cours de déploiement"
+                            className="h-10 px-6 rounded-xl bg-bg-tertiary text-text-muted text-chip-label border border-border cursor-not-allowed opacity-60"
+                        >
+                            Connecter
+                        </button>
+                        <span className="text-[11px] text-text-muted italic">Intégration en cours de déploiement</span>
+                    </div>
                 </div>
             </div>
         );
@@ -50,33 +59,44 @@ export function GoogleProfileCard() {
                         ? "bg-teal/10 text-teal border-teal/20"
                         : "bg-warning/10 text-warning border-warning/20"
                 )}>
-                    {profile.isVerified ? 'Vérifié' : 'En attente'}
+                    {profile.isVerified ? 'Vérifié' : 'Non vérifié'}
                 </span>
             </div>
-
 
             <div className="space-y-4">
                 <div className="flex items-center justify-between py-3 border-b border-border">
                     <span className="text-chip-label text-text-muted">Établissement</span>
-                    <span className="text-sm font-bold text-text-primary">{profile.name}</span>
+                    <span className="text-sm font-bold text-text-primary">{profile.name || '—'}</span>
                 </div>
                 <div className="flex items-center justify-between py-3 border-b border-border">
                     <span className="text-chip-label text-text-muted">Note moyenne</span>
-                    <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-action-primary fill-amber-500" />
-                        <span className="text-sm font-bold text-text-primary">{profile.rating}</span>
-                        <span className="text-nano text-text-muted">({profile.reviewCount})</span>
-                    </div>
+                    {typeof profile.rating === 'number' ? (
+                        <div className="flex items-center gap-2">
+                            <Star className="w-4 h-4 text-action-primary fill-amber-500" />
+                            <span className="text-sm font-bold text-text-primary">{profile.rating}</span>
+                            {profile.reviewCount !== undefined && (
+                                <span className="text-nano text-text-muted">({profile.reviewCount})</span>
+                            )}
+                        </div>
+                    ) : (
+                        <span className="text-sm text-text-muted italic">Non disponible</span>
+                    )}
                 </div>
                 <div className="flex items-center justify-between py-3">
                     <span className="text-chip-label text-text-muted">Dernière sync</span>
                     <span className="text-sm text-text-muted">
-                        {profile.lastSync ? new Date(profile.lastSync).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—'}
+                        {profile.lastSync ? new Date(profile.lastSync).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Jamais synchronisé'}
                     </span>
                 </div>
             </div>
 
-            <button className="w-full mt-6 h-12 rounded-xl bg-teal text-text-primary hover:bg-teal transition-colors text-chip-label flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]">
+            <button 
+                onClick={() => {
+                    // Feedback explicite si pas encore synchronisé
+                    alert('Synchronisation Google Business : connecteur en cours de déploiement.');
+                }}
+                className="w-full mt-6 h-12 rounded-xl bg-teal text-text-primary hover:bg-teal transition-colors text-chip-label flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,217,166,0.25)]"
+            >
                 <RefreshCw className="w-4 h-4" />
                 Synchroniser maintenant
             </button>

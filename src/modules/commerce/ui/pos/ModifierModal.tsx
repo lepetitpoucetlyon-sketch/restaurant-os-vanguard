@@ -79,6 +79,9 @@ export function ModifierModal({ isOpen, productName, onSave, onClose }: Modifier
                 >
                     <motion.div
                         key="modifier-card"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={`Modifications pour ${productName}`}
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 40 }}

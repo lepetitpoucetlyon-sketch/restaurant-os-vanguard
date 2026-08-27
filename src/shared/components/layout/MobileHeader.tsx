@@ -1,19 +1,18 @@
-"use client";
-
+import { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserCircle, Search } from "lucide-react";
-;
 import { useAuth } from "@/shared/hooks";
 import { PageHeaderWithDocs } from "@ui/PageHeaderWithDocs";
+import { CommandModal } from "@ui/CommandModal";
 import { ProfileSwitcher } from "./ProfileSwitcher";
 import type { PageKey } from "@nexus/contracts/permissions.types";
-import { useState } from "react";
 
 export function MobileHeader() {
     const pathname = usePathname();
     const { currentUser } = useAuth();
     const [isProfileSwitcherOpen, setIsProfileSwitcherOpen] = useState(false);
+    const [isCommandOpen, setIsCommandOpen] = useState(false);
 
     const getTitle = (path: string | null) => {
         const segment = ((path || "").split("/").filter(Boolean)[0] || "Dashboard").trim();
@@ -70,8 +69,13 @@ export function MobileHeader() {
             </div>
 
             <div className="flex items-center gap-4">
-                <button className="w-9 h-9 rounded-full bg-bg-tertiary flex items-center justify-center border border-border">
-                    <Search className="w-4 h-4 text-text-muted" />
+                <button 
+                    onClick={() => setIsCommandOpen(true)}
+                    title="Recherche rapide"
+                    aria-label="Recherche rapide"
+                    className="w-9 h-9 rounded-full bg-bg-tertiary flex items-center justify-center border border-border cursor-pointer hover:bg-accent/10 hover:text-accent transition-colors"
+                >
+                    <Search className="w-4 h-4 text-text-muted hover:text-accent" />
                 </button>
                 <button 
                     onClick={() => setIsProfileSwitcherOpen(true)}
@@ -85,6 +89,7 @@ export function MobileHeader() {
                 </button>
             </div>
             <ProfileSwitcher isOpen={isProfileSwitcherOpen} onClose={() => setIsProfileSwitcherOpen(false)} />
+            <CommandModal isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />
         </header>
     );
 }

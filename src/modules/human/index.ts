@@ -6,7 +6,7 @@ export { useStaffAudit } from './effectifs/hr/hooks/useStaffAudit';
 export { RecruitmentDashboard } from './effectifs/hr/components/RecruitmentDashboard';
 export { TimeclockDashboard } from './effectifs/hr/components/TimeclockDashboard';
 export { PlanningDashboard } from './effectifs/hr/components/PlanningDashboard';
-export { LeaveBalanceCard, LeaveRequestCard, NewRequestModal, TeamCalendar } from './effectifs/hr/components/leaves';
+export { LeaveBalanceCard, LeaveRequestCard, LeaveRequestDetailModal, NewRequestModal, TeamCalendar } from './effectifs/hr/components/leaves';
 
 // Domaine : remuneration (payroll, DSN, paie)
 export * from './remuneration/payroll';

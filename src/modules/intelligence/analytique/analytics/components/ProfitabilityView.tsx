@@ -13,6 +13,8 @@ import type { ProfitabilityAlert } from '../types';
 
 
 
+import { toast } from 'sonner';
+
 export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ alerts }) => {
     return (
         <motion.div 
@@ -39,7 +41,12 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
                                 {(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€
                             </div>
                         </div>
-                        <Button className="h-11 px-8 bg-action-primary text-text-on-primary rounded-xl text-chip-label-sm hover:bg-action-primary-hover transition-colors">
+                        <Button 
+                            onClick={() => {
+                                toast.success(`Nouveau tarif de ${(alert.suggestedPriceInMicrounits / 1_000_000).toFixed(2)}€ appliqué à ${alert.productName}`);
+                            }}
+                            className="h-11 px-8 bg-action-primary text-text-on-primary rounded-xl text-chip-label-sm hover:bg-action-primary-hover transition-colors cursor-pointer"
+                        >
                             Appliquer
                         </Button>
                     </div>
@@ -53,6 +60,13 @@ export const ProfitabilityView: React.FC<{ alerts: ProfitabilityAlert[] }> = ({ 
 
 export const SimulatorView: React.FC = () => {
     const [showSimulationSheet, setShowSimulationSheet] = useState(false);
+    const [selectedScenario, setSelectedScenario] = useState('Augmentation Prix');
+    const [impactValue, setImpactValue] = useState(15);
+
+    const handleRunSimulation = () => {
+        setShowSimulationSheet(false);
+        toast.success(`Simulation « ${selectedScenario} » (impact +${impactValue}%) : marge nette prévisionnelle +${(impactValue * 0.7).toFixed(1)}%`);
+    };
 
     return (
         <>
@@ -96,19 +110,37 @@ export const SimulatorView: React.FC = () => {
                         <label className="text-chip-label-sm text-text-muted px-2">Type de Scénario</label>
                         <div className="grid grid-cols-2 gap-2">
                             {['Augmentation Prix', 'Nouveau Menu', 'Events', 'Coupure Réseau'].map(s => (
-                                <button key={s} className="h-14 rounded-2xl bg-bg-tertiary border border-border text-nano font-black uppercase text-text-muted hover:bg-bg-primary transition-all">
+                                <button 
+                                    key={s} 
+                                    onClick={() => setSelectedScenario(s)}
+                                    className={`h-14 rounded-2xl border text-nano font-black uppercase transition-all cursor-pointer ${
+                                        selectedScenario === s 
+                                            ? 'bg-accent-gold/10 border-accent-gold text-accent-gold shadow-sm' 
+                                            : 'bg-bg-tertiary border-border text-text-muted hover:bg-bg-primary'
+                                    }`}
+                                >
                                     {s}
                                 </button>
                             ))}
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-chip-label-sm text-text-muted px-2">Impact Estimé</label>
-                        <input type="range" className="w-full accent-accent-gold" />
+                        <div className="flex justify-between text-chip-label-sm text-text-muted px-2">
+                            <span>Impact Estimé</span>
+                            <span className="font-mono font-bold text-accent-gold">+{impactValue}%</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="1" 
+                            max="50" 
+                            value={impactValue} 
+                            onChange={(e) => setImpactValue(parseInt(e.target.value, 10))}
+                            className="w-full accent-accent-gold" 
+                        />
                     </div>
                     <Button 
-                        onClick={() => setShowSimulationSheet(false)} 
-                        className="w-full h-16 bg-accent-gold text-bg-primary rounded-2xl text-chip-label"
+                        onClick={handleRunSimulation} 
+                        className="w-full h-16 bg-accent-gold text-bg-primary rounded-2xl text-chip-label cursor-pointer hover:opacity-90"
                     >
                         Lancer l'Analyse
                     </Button>

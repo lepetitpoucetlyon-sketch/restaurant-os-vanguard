@@ -31,6 +31,15 @@ function SEOPage() {
         { id: 'settings', label: 'Paramètres', icon: Settings }
     ];
 
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+    const handleAnalyzeSite = () => {
+        setIsAnalyzing(true);
+        setTimeout(() => {
+            setIsAnalyzing(false);
+        }, 1200);
+    };
+
     return (
         <div className="flex h-screen -m-4 md:-m-8 flex-col bg-bg-primary overflow-hidden relative font-sans">
             {/* Cinematic Background */}
@@ -58,11 +67,13 @@ function SEOPage() {
 
                 <div className="flex items-center gap-4">
                     <Button
-                        className="h-12 px-8 bg-teal text-text-primary hover:bg-teal rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3"
+                        onClick={handleAnalyzeSite}
+                        disabled={isAnalyzing}
+                        className="h-12 px-8 bg-teal text-text-primary hover:bg-teal rounded-2xl font-black text-nano uppercase tracking-widest shadow-[0_8px_24px_rgba(0,217,166,0.25)] transition-all flex items-center gap-3 disabled:opacity-50"
                         id="seo-analyze-button"
                     >
-                        <RefreshCw className="w-4 h-4" />
-                        Analyser le site
+                        <RefreshCw className={cn("w-4 h-4", isAnalyzing && "animate-spin")} />
+                        {isAnalyzing ? "Analyse en cours…" : "Analyser le site"}
                     </Button>
                     <Link href="/dashboard">
                         <button className="w-12 h-12 rounded-2xl bg-bg-tertiary border border-border flex items-center justify-center hover:bg-bg-secondary transition-all group">
