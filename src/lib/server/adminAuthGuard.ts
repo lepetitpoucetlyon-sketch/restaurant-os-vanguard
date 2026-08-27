@@ -219,21 +219,40 @@ async function checkFleetAdminMFA(
     }
 }
 
-async function verifyCaller(request: Request): Promise<AdminCaller | NextResponse | null> {
-  const authHeader = request.headers.get('authorization');
-  const deviceId = request.headers.get('x-device-id');
-
-  if (deviceId) {
-    const isRevoked = await DeviceFleetManager.isDeviceRevoked(deviceId);
-    if (isRevoked) {
-      logger.warn(`[adminAuth] Accès bloqué : appareil ${deviceId} révoqué`);
-      return new NextResponse(
-        JSON.stringify({ error: 'DEVICE_REVOKED', message: 'Cet appareil a été révoqué.' }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+async function checkDeviceRevocation(deviceId: string | null): Promise<NextResponse | null> {
+  if (!deviceId) return null;
+  const isRevoked = await DeviceFleetManager.isDeviceRevoked(deviceId);
+  if (isRevoked) {
+    logger.warn(`[adminAuth] Accès bloqué : appareil ${deviceId} révoqué`);
+    return new NextResponse(
+      JSON.stringify({ error: 'DEVICE_REVOKED', message: 'Cet appareil a été révoqué.' }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } }
+    );
   }
+  return null;
+}
 
+async function isTenantReadOnly(tenantId?: string): Promise<boolean> {
+  if (!tenantId) return false;
+  try {
+    const billingRef = await Nexus.adapter.query<{ isReadOnly: boolean; readOnlyEffectiveAt: string }>('billing/status', {
+      where: [{ field: 'tenantId', operator: '==', value: tenantId }]
+    });
+    const billingStatus = billingRef[0];
+    if (billingStatus?.isReadOnly && new Date(billingStatus.readOnlyEffectiveAt).getTime() <= Date.now()) {
+      return true;
+    }
+  } catch (err) {
+    logger.warn(`[adminAuth] Failed to fetch billing status for tenant ${tenantId}`, toError(err).message);
+  }
+  return false;
+}
+
+async function verifyCaller(request: Request): Promise<AdminCaller | NextResponse | null> {
+  const deviceCheck = await checkDeviceRevocation(request.headers.get('x-device-id'));
+  if (deviceCheck) return deviceCheck;
+
+  const authHeader = request.headers.get('authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
 
   // Dev bypass tenant (NODE_ENV=development uniquement — jamais en production)
@@ -253,31 +272,14 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
     const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
       : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
 
-    let isReadOnly = false;
-    if (tenantId) {
-      try {
-        const billingRef = await Nexus.adapter.query<{ isReadOnly: boolean; readOnlyEffectiveAt: string }>('billing/status', {
-           where: [{ field: 'tenantId', operator: '==', value: tenantId }]
-        });
-        const billingStatus = billingRef[0];
-        if (billingStatus && billingStatus.isReadOnly) {
-            // verifier que la date effective est passée
-            if (new Date(billingStatus.readOnlyEffectiveAt).getTime() <= Date.now()) {
-                isReadOnly = true;
-            }
-        }
-      } catch (err) {
-        logger.warn(`[adminAuth] Failed to fetch billing status for tenant ${tenantId}`, toError(err).message);
-      }
-    }
-
+    const readOnly = await isTenantReadOnly(tenantId);
     // Blocage Runtime (P09-K) : si la route est une mutation (POST/PUT/DELETE) et que le tenant est readOnly
-    if (isReadOnly && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-        logger.warn('[adminAuth] Blocked mutation for read-only tenant');
-        return new NextResponse(
-            JSON.stringify({ error: 'Tenant is in read-only mode due to expired subscription' }),
-            { status: 403, headers: { 'Content-Type': 'application/json' } }
-        );
+    if (readOnly && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
+      logger.warn('[adminAuth] Blocked mutation for read-only tenant');
+      return new NextResponse(
+        JSON.stringify({ error: 'Tenant is in read-only mode due to expired subscription' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
     }
 
     return {

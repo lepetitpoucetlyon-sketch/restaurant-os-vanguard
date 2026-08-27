@@ -16,6 +16,28 @@ interface LoginWithPinResponse {
     user: User;
 }
 
+function readInitialSessionUserId(): string | null {
+    if (typeof window === 'undefined') return null;
+    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!raw) return null;
+    try {
+        return (JSON.parse(raw) as PersistedSession).userId;
+    } catch (_e) {
+        return null;
+    }
+}
+
+function resolveDevBypassUserId(): string | null {
+    if (!isDevBypassActive() || typeof window === 'undefined') return null;
+    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!raw) return null;
+    try {
+        return (JSON.parse(raw) as PersistedSession).userId;
+    } catch (_e) {
+        return null;
+    }
+}
+
 export function useAuthSession() {
     // 🛡️ Safe initialization for SSR
     const firebaseFunctions = typeof window !== 'undefined' ? getFunctions(firebaseApp) : null;
@@ -27,17 +49,7 @@ export function useAuthSession() {
     const [firebaseUserId, setFirebaseUserId] = useState<string | null>(null);
     const [isFirebaseAuthReady, setIsFirebaseAuthReady] = useState(false);
     const [isTwoFactorVerified, setIsTwoFactorVerified] = useState(false);
-    const [sessionUserId, setSessionUserId] = useState<string | null>(() => {
-        if (typeof window !== 'undefined') {
-            const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
-            if (raw) {
-                try {
-                    return (JSON.parse(raw) as PersistedSession).userId;
-                } catch (_e) {}
-            }
-        }
-        return null;
-    });
+    const [sessionUserId, setSessionUserId] = useState<string | null>(readInitialSessionUserId);
     const sessionUserIdRef = useRef<string | null>(sessionUserId);
 
     // Initialization
@@ -56,19 +68,11 @@ export function useAuthSession() {
             setIsFirebaseAuthReady(true);
 
             if (!firebaseUser) {
-                // Dev-mode bypass: preserve the local session when the dev PIN
-                // flow (attemptDevLogin) stamped an active flag. Otherwise the
-                // Firebase-null callback would wipe every dev login within ms.
-                if (isDevBypassActive()) {
-                    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
-                    if (raw) {
-                        try {
-                            const persisted = (JSON.parse(raw) as PersistedSession).userId;
-                            sessionUserIdRef.current = persisted;
-                            setSessionUserId(persisted);
-                            return;
-                        } catch (_e) {}
-                    }
+                const devBypassUserId = resolveDevBypassUserId();
+                if (devBypassUserId) {
+                    sessionUserIdRef.current = devBypassUserId;
+                    setSessionUserId(devBypassUserId);
+                    return;
                 }
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem(SESSION_STORAGE_KEY);

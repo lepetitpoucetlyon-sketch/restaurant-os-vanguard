@@ -15,6 +15,24 @@ export interface CustomRole {
     label: string;
 }
 
+function parsePermissionsPayload(data: Record<string, unknown> | null | undefined): {
+    rolePermissions: RolePermissions;
+    customRoles: CustomRole[];
+} {
+    if (!data) {
+        return {
+            rolePermissions: AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS, DEFAULT_ROLE_PERMISSIONS),
+            customRoles: [],
+        };
+    }
+    const perms = AccessPolicyManager.sanitizeRolePermissions(
+        (data.permissions ?? data) as import("@shared/nexus-contract").SovereignData,
+        DEFAULT_ROLE_PERMISSIONS
+    );
+    const custom = Array.isArray(data.customRoles) ? (data.customRoles as CustomRole[]) : [];
+    return { rolePermissions: perms, customRoles: custom };
+}
+
 export function useAuthAccess(currentUser: User | null, firebaseUserId: string | null) {
     const [rolePermissions, setRolePermissions] = useState<RolePermissions>(DEFAULT_ROLE_PERMISSIONS);
     const [customRoles, setCustomRoles] = useState<CustomRole[]>([]);
@@ -36,19 +54,10 @@ export function useAuthAccess(currentUser: User | null, firebaseUserId: string |
 
         const unsubscribePermissions = Nexus.adapter.onSnapshot(
             permissionsPath,
-            async (data) => {
-                if (data) {
-                    setRolePermissions(AccessPolicyManager.sanitizeRolePermissions((data.permissions ?? data) as import("@shared/nexus-contract").SovereignData, DEFAULT_ROLE_PERMISSIONS));
-                    if (data.customRoles) {
-                        setCustomRoles(data.customRoles as CustomRole[]);
-                    } else {
-                        setCustomRoles([]);
-                    }
-                } else {
-                    const seededPermissions = AccessPolicyManager.sanitizeRolePermissions(DEFAULT_ROLE_PERMISSIONS, DEFAULT_ROLE_PERMISSIONS);
-                    setRolePermissions(seededPermissions);
-                    setCustomRoles([]);
-                }
+            (data) => {
+                const parsed = parsePermissionsPayload(data as Record<string, unknown>);
+                setRolePermissions(parsed.rolePermissions);
+                setCustomRoles(parsed.customRoles);
                 if (isActive) setIsPermissionsLoaded(true);
             },
             {
