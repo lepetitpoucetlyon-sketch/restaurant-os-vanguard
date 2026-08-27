@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Search, Filter, Clock, Users, MoreHorizontal, UserCheck } from "lucide-react";
-import { cn } from "@/lib/ui.foundations";;
+import { useState, useMemo } from "react";
+import { Search, Filter, Clock, Users, MoreHorizontal, UserCheck, Trash2, Edit } from "lucide-react";
+import { cn } from "@/lib/ui.foundations";
 import { ScrollArea } from "@ui/ScrollArea";
 import { Reservation } from "@nexus/contracts";
 import { fadeInUp, easing } from "@/shared/utils/motion";
@@ -32,13 +33,46 @@ interface ReservationSidebarProps {
     isVisible: boolean;
     reservations: Reservation[];
     onMarkArrived?: (reservationId: string) => void;
+    onSelectReservation?: (reservation: Reservation) => void;
+    onCancelReservation?: (reservationId: string) => void;
 }
 
 export function ReservationSidebar({
     isVisible,
     reservations,
     onMarkArrived,
+    onSelectReservation,
+    onCancelReservation,
 }: ReservationSidebarProps) {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [sortBy, setSortBy] = useState<'time' | 'covers' | 'name'>('time');
+    const [activeActionId, setActiveActionId] = useState<string | null>(null);
+
+    const filteredAndSortedReservations = useMemo(() => {
+        return reservations
+            .filter((res) => {
+                if (!searchQuery.trim()) return true;
+                const q = searchQuery.toLowerCase();
+                return (
+                    (res.customerName && res.customerName.toLowerCase().includes(q)) ||
+                    (res.tableId && res.tableId.toLowerCase().includes(q)) ||
+                    (res.time && res.time.includes(q))
+                );
+            })
+            .sort((a, b) => {
+                if (sortBy === 'time') return (a.time || '').localeCompare(b.time || '');
+                if (sortBy === 'covers') return (b.covers || 0) - (a.covers || 0);
+                if (sortBy === 'name') return (a.customerName || '').localeCompare(b.customerName || '');
+                return 0;
+            });
+    }, [reservations, searchQuery, sortBy]);
+
+    const cycleSort = () => {
+        if (sortBy === 'time') setSortBy('covers');
+        else if (sortBy === 'covers') setSortBy('name');
+        else setSortBy('time');
+    };
+
     return (
         <motion.div
             initial={{ width: 0, opacity: 0, x: -50 }}
@@ -61,6 +95,8 @@ export function ReservationSidebar({
                     <input
                         type="text"
                         placeholder="IDENTIFICATION NOMINATIVE..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-bg-primary border border-border rounded-full pl-14 pr-6 py-4 text-nano font-black uppercase tracking-[0.2em] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-all"
                     />
                 </div>
@@ -69,12 +105,16 @@ export function ReservationSidebar({
                         <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                         <span className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">
                             MANIFESTE{" "}
-                            <span className="text-accent">{reservations.length}</span>
+                            <span className="text-accent">{filteredAndSortedReservations.length}</span>
                         </span>
                     </div>
-                    <button className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2 hover:text-accent transition-colors">
+                    <button 
+                        onClick={cycleSort}
+                        title={`Tri actuel : ${sortBy === 'time' ? 'Heure' : sortBy === 'covers' ? 'Couverts' : 'Nom'}`}
+                        className="text-nano font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2 hover:text-accent transition-colors cursor-pointer"
+                    >
                         <Filter strokeWidth={1.5} className="w-3.5 h-3.5" />
-                        TRIER
+                        {sortBy === 'time' ? 'HEURE' : sortBy === 'covers' ? 'COUVERTS' : 'NOM'}
                     </button>
                 </div>
             </div>
@@ -87,7 +127,7 @@ export function ReservationSidebar({
                     animate="visible"
                     className="p-8 space-y-6"
                 >
-                    {reservations.length === 0 ? (
+                    {filteredAndSortedReservations.length === 0 ? (
                         <motion.div
                             variants={fadeInUp}
                             className="flex flex-col items-center justify-center py-24 text-center"
@@ -101,11 +141,12 @@ export function ReservationSidebar({
                         </motion.div>
                     ) : (
                         <AnimatePresence mode="popLayout">
-                            {reservations.map((res) => (
+                            {filteredAndSortedReservations.map((res) => (
                                 <motion.div
                                     key={res.id}
                                     variants={cinematicItem}
                                     whileHover={{ y: -5, transition: { duration: 0.3 } }}
+                                    onClick={() => onSelectReservation?.(res)}
                                     data-tutorial="reservations-0-1-0"
                                     className="bg-bg-tertiary rounded-[2.5rem] p-6 border border-border hover:border-accent/40 hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 cursor-pointer group relative overflow-hidden"
                                 >
@@ -135,19 +176,59 @@ export function ReservationSidebar({
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
+                                        <div className="flex items-center gap-1 relative">
                                             {onMarkArrived && res.status !== 'seated' && res.status !== 'arrived' && (
                                                 <button
                                                     title="Marquer arrivée"
                                                     onClick={(e) => { e.stopPropagation(); onMarkArrived(res.id); }}
-                                                    className="p-2 text-muted hover:text-status-success transition-all"
+                                                    className="p-2 text-muted hover:text-status-success transition-all cursor-pointer"
                                                 >
                                                     <UserCheck strokeWidth={1.5} className="w-4 h-4" />
                                                 </button>
                                             )}
-                                            <button className="p-2 text-muted hover:text-accent transition-all">
+                                            <button 
+                                                title="Options de réservation"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveActionId(activeActionId === res.id ? null : res.id);
+                                                }}
+                                                className="p-2 text-muted hover:text-accent transition-all cursor-pointer"
+                                            >
                                                 <MoreHorizontal strokeWidth={1.5} className="w-4 h-4" />
                                             </button>
+
+                                            {/* Dropdown contextuel */}
+                                            {activeActionId === res.id && (
+                                                <div 
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="absolute right-0 top-10 w-44 bg-surface-card border border-border rounded-xl shadow-xl p-1 z-30 space-y-1"
+                                                >
+                                                    <button
+                                                        onClick={() => {
+                                                            setActiveActionId(null);
+                                                            onSelectReservation?.(res);
+                                                        }}
+                                                        className="w-full text-left px-3 py-2 text-xs font-semibold rounded-lg hover:bg-bg-tertiary text-text-primary flex items-center gap-2"
+                                                    >
+                                                        <Edit className="w-3.5 h-3.5 text-accent" />
+                                                        Détails / Modifier
+                                                    </button>
+                                                    {onCancelReservation && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setActiveActionId(null);
+                                                                if (window.confirm(`Annuler la réservation de ${res.customerName} ?`)) {
+                                                                    onCancelReservation(res.id);
+                                                                }
+                                                            }}
+                                                            className="w-full text-left px-3 py-2 text-xs font-semibold rounded-lg hover:bg-error/10 text-error flex items-center gap-2"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                            Annuler
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 

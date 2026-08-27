@@ -53,6 +53,9 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                     onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
                 >
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Groupe / Privatisation"
                         initial={{ opacity: 0, scale: 0.92, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.92, y: 20 }}

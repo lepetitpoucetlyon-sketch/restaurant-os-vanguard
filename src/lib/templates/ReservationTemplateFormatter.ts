@@ -22,6 +22,48 @@ export const DEFAULT_RESERVATION_TEMPLATES = {
   waitlistSms: 'Bonne nouvelle {prenom} ! Une place pour {couverts} pers. vient de se libérer chez {restaurant} pour {heure}. Confirmez ici sous 15 min : {lien_modification}',
 };
 
+function buildReplacementsMap(ctx: ReservationTemplateContext): Record<string, string> {
+  const { firstName: extractedFirst, lastName: extractedLast } = ReservationTemplateFormatter.splitName(ctx.customerName);
+  const firstName = ctx.firstName ?? extractedFirst ?? 'Client';
+  const lastName = ctx.lastName ?? extractedLast ?? '';
+  const fullName = ctx.customerName ?? `${firstName} ${lastName}`.trim();
+  const formattedDate = ReservationTemplateFormatter.formatDateReadable(ctx.date);
+  const time = ctx.time ?? '';
+  const covers = String(ctx.covers ?? 2);
+  const restaurant = ctx.restaurantName ?? 'notre établissement';
+  const modifyLink = ctx.modifyLink ?? '';
+  const table = ctx.tableName ?? 'votre table';
+  const phone = ctx.restaurantPhone ?? '';
+  const cancellationPolicy = ctx.cancellationPolicy ?? '';
+
+  return {
+    '{prenom}': firstName,
+    '{firstName}': firstName,
+    '{nom}': lastName,
+    '{lastName}': lastName,
+    '{nom_complet}': fullName,
+    '{fullName}': fullName,
+    '{restaurant}': restaurant,
+    '{etablissement}': restaurant,
+    '{businessName}': restaurant,
+    '{date}': formattedDate,
+    '{date_courte}': ctx.date ?? '',
+    '{heure}': time,
+    '{time}': time,
+    '{couverts}': covers,
+    '{personnes}': covers,
+    '{covers}': covers,
+    '{guests}': covers,
+    '{table}': table,
+    '{tableName}': table,
+    '{lien_modification}': modifyLink,
+    '{modifyLink}': modifyLink,
+    '{telephone}': phone,
+    '{phone}': phone,
+    '{politique_annulation}': cancellationPolicy,
+  };
+}
+
 /**
  * 📝 ReservationTemplateFormatter
  * Formate et interpole dynamiquement toutes les variables de personnalisation
@@ -66,46 +108,7 @@ export class ReservationTemplateFormatter {
   static interpolate(template: string, ctx: ReservationTemplateContext): string {
     if (!template) return '';
 
-    const { firstName: extractedFirst, lastName: extractedLast } = this.splitName(ctx.customerName);
-    const firstName = ctx.firstName || extractedFirst || 'Client';
-    const lastName = ctx.lastName || extractedLast || '';
-    const fullName = ctx.customerName || `${firstName} ${lastName}`.trim();
-    const formattedDate = this.formatDateReadable(ctx.date);
-    const time = ctx.time || '';
-    const covers = String(ctx.covers || 2);
-    const restaurant = ctx.restaurantName || 'notre établissement';
-    const modifyLink = ctx.modifyLink || '';
-    const table = ctx.tableName || 'votre table';
-    const phone = ctx.restaurantPhone || '';
-    const cancellationPolicy = ctx.cancellationPolicy || '';
-
-    const replacements: Record<string, string> = {
-      '{prenom}': firstName,
-      '{firstName}': firstName,
-      '{nom}': lastName,
-      '{lastName}': lastName,
-      '{nom_complet}': fullName,
-      '{fullName}': fullName,
-      '{restaurant}': restaurant,
-      '{etablissement}': restaurant,
-      '{businessName}': restaurant,
-      '{date}': formattedDate,
-      '{date_courte}': ctx.date || '',
-      '{heure}': time,
-      '{time}': time,
-      '{couverts}': covers,
-      '{personnes}': covers,
-      '{covers}': covers,
-      '{guests}': covers,
-      '{table}': table,
-      '{tableName}': table,
-      '{lien_modification}': modifyLink,
-      '{modifyLink}': modifyLink,
-      '{telephone}': phone,
-      '{phone}': phone,
-      '{politique_annulation}': cancellationPolicy,
-    };
-
+    const replacements = buildReplacementsMap(ctx);
     let result = template;
     for (const [tag, val] of Object.entries(replacements)) {
       result = result.split(tag).join(val);

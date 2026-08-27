@@ -1,6 +1,6 @@
 // Barrel — manual (Grade X Smart Seal removed intentionally).
 
-export * from './NewReservationDialog';
+export * from './ReservationCreateDialog';
 export * from './ReservationSidebar';
 export * from './ReservationsHeader';
 export * from './TableGrid';

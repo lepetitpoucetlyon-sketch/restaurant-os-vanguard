@@ -1,6 +1,4 @@
-"use client";
-
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, UserPlus } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
 import type { Customer } from "@nexus/contracts";
@@ -20,6 +18,23 @@ export function ResaStepCustomer({
     selectedCustomer,
     onSelectCustomer,
 }: ResaStepCustomerProps) {
+    const handleQuickCreateCustomer = () => {
+        const parts = (searchQuery.trim() || 'Nouveau Client').split(' ');
+        const firstName = parts[0] || 'Client';
+        const lastName = parts.slice(1).join(' ') || 'Passager';
+        const newCustomer: Customer = {
+            id: `cust_${Date.now()}`,
+            firstName,
+            lastName,
+            phone: '06 00 00 00 00',
+            preferences: [],
+            tags: [],
+            visitCount: 1,
+            updatedAt: new Date().toISOString(),
+        };
+        onSelectCustomer(newCustomer);
+    };
+
     return (
         <motion.div
             key="step1"
@@ -54,7 +69,7 @@ export function ResaStepCustomer({
                         transition={{ delay: idx * 0.04 }}
                         onClick={() => onSelectCustomer(customer)}
                         className={cn(
-                            "w-full flex items-center justify-between p-5 rounded-[1.5rem] border transition-all duration-300",
+                            "w-full flex items-center justify-between p-5 rounded-[1.5rem] border transition-all duration-300 cursor-pointer",
                             selectedCustomer?.id === customer.id
                                 ? "bg-accent border-accent text-bg-primary shadow-xl shadow-amber-500/15"
                                 : "bg-bg-secondary border-border hover:border-accent/30 hover:shadow-lg hover:bg-bg-tertiary"
@@ -80,9 +95,19 @@ export function ResaStepCustomer({
                     </motion.button>
                 ))}
                 {filteredCustomers.length === 0 && (
-                    <p className="text-center text-micro text-text-muted uppercase tracking-widest py-8">
-                        Aucun client trouvé
-                    </p>
+                    <div className="text-center py-6 space-y-4">
+                        <p className="text-micro text-text-muted uppercase tracking-widest">
+                            Aucun client existant trouvé
+                        </p>
+                        <button
+                            type="button"
+                            onClick={handleQuickCreateCustomer}
+                            className="px-6 py-3 rounded-2xl bg-accent text-bg-primary font-black text-nano uppercase tracking-widest hover:opacity-90 inline-flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10"
+                        >
+                            <UserPlus className="w-4 h-4" />
+                            Créer la fiche &ldquo;{searchQuery.trim() || 'Nouveau Client'}&rdquo;
+                        </button>
+                    </div>
                 )}
             </div>
         </motion.div>
