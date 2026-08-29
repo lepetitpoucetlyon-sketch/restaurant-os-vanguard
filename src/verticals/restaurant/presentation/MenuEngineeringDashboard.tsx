@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { menuEngineeringService } from '@/modules/commerce';
 import type { IMenuEngineeringReport, MenuItemCategory } from '@/modules/commerce';
 import { useTenant } from '@/shared/hooks/useTenant';
-import { Sparkles, TrendingUp } from 'lucide-react';
+import { Sparkles, TrendingUp, Star, DollarSign, HelpCircle, AlertOctagon } from 'lucide-react';
+import { BentoGrid, BentoCell, StatCard } from '@/shared/components/ui';
 
 const CATEGORY_LABELS: Record<MenuItemCategory, string> = {
   star: '⭐ Star',
@@ -61,6 +62,42 @@ export function MenuEngineeringDashboard() {
           </p>
         </div>
       </div>
+
+      {/* BCG 4-Quadrant Bento Summary */}
+      <BentoGrid layout="asymmetric-4">
+        <BentoCell span={1}>
+          <StatCard
+            label="⭐ Stars"
+            value={String(report.items.filter(i => i.category === 'star').length)}
+            icon={<Star className="w-5 h-5" />}
+            intent="success"
+          />
+        </BentoCell>
+        <BentoCell span={1}>
+          <StatCard
+            label="🐴 Vaches à Lait"
+            value={String(report.items.filter(i => i.category === 'plow-horse').length)}
+            icon={<DollarSign className="w-5 h-5" />}
+            intent="brand"
+          />
+        </BentoCell>
+        <BentoCell span={1}>
+          <StatCard
+            label="🧩 Puzzles"
+            value={String(report.items.filter(i => i.category === 'puzzle').length)}
+            icon={<HelpCircle className="w-5 h-5" />}
+            intent="warning"
+          />
+        </BentoCell>
+        <BentoCell span={1}>
+          <StatCard
+            label="🐶 Poids Morts"
+            value={String(report.items.filter(i => i.category === 'dog').length)}
+            icon={<AlertOctagon className="w-5 h-5" />}
+            intent="danger"
+          />
+        </BentoCell>
+      </BentoGrid>
 
       <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border overflow-hidden shadow-sm">
         <div className="overflow-x-auto">

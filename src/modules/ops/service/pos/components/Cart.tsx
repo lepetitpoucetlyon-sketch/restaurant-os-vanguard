@@ -234,7 +234,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     <button
                         onClick={onSendToKitchen}
                         disabled={items.length === 0}
-                        className="py-3 flex items-center justify-center gap-2 bg-bg-tertiary hover:bg-border text-text-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-colors border border-border"
+                        className="min-h-[var(--density-min-target,44px)] py-3 flex items-center justify-center gap-2 bg-bg-tertiary hover:bg-border active:scale-[var(--motion-tap-scale,0.97)] text-text-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-all border border-border"
                     >
                         <ChefHat className="w-4 h-4" />
                         <span>Cuisine</span>
@@ -242,7 +242,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                     <button
                         onClick={onCheckout}
                         disabled={items.length === 0}
-                        className="py-3 flex items-center justify-center gap-2 bg-action-primary hover:opacity-95 text-text-on-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-all shadow-sm"
+                        className="min-h-[var(--density-min-target,44px)] py-3 flex items-center justify-center gap-2 bg-action-primary hover:opacity-95 active:scale-[var(--motion-tap-scale,0.97)] text-text-on-primary font-semibold text-xs rounded-xl disabled:opacity-40 transition-all shadow-sm"
                     >
                         <CreditCard className="w-4 h-4" />
                         <span>Encaisser</span>

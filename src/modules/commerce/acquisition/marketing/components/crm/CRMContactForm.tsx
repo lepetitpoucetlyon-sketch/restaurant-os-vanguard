@@ -1,4 +1,5 @@
 "use client";
+/** @wip mohammed — écran cible /crm, échéance 2026-09-15 */
 
 import React from 'react';
 import { useAtom } from 'jotai';

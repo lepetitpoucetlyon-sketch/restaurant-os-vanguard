@@ -33,6 +33,7 @@ import {
 import { SecurityPinModal } from "@components/ui";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { PageShell } from "@/shared/components/ui/PageShell";
+import { BentoGrid, BentoCell, StatCard } from "@/shared/components/ui";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { cn } from "@/lib/ui.foundations";
@@ -119,7 +120,28 @@ function InventoryPage() {
 
             <main>
                 {activeTab === "stock" && (
-                    <section>
+                    <section className="space-y-6">
+                        <BentoGrid layout="hero-2col">
+                            <BentoCell span={2}>
+                                <StatCard
+                                    label="État du Stock Actif"
+                                    value={String(stockItems.length)}
+                                    icon={<Package className="w-5 h-5" />}
+                                    intent={lowStockItems.length > 0 ? "warning" : "brand"}
+                                />
+                            </BentoCell>
+                            <BentoCell span={1}>
+                                <StatCard
+                                    label="Alertes DLC"
+                                    value={String(stockItems.filter(i => {
+                                        const st = computeDLCStatus(i.dlc as string | undefined);
+                                        return st.rank <= 2;
+                                    }).length)}
+                                    icon={<AlertTriangle className="w-5 h-5" />}
+                                    intent={stockItems.some(i => computeDLCStatus(i.dlc as string | undefined).rank === 0) ? "danger" : "warning"}
+                                />
+                            </BentoCell>
+                        </BentoGrid>
                         {lowStockItems.length > 0 && (
                             <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-md bg-action-primary/10 text-amber-600 text-sm">
                                 <AlertTriangle className="w-4 h-4" />

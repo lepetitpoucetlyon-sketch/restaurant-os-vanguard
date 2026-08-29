@@ -27,7 +27,7 @@ export default function WelcomePage() {
   const _yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-bg-primary font-sans overflow-x-hidden selection:bg-accent selection:text-text-primary">
+    <div ref={containerRef} className="min-min-h-[100dvh] bg-bg-primary font-sans overflow-x-hidden selection:bg-accent selection:text-text-primary">
       
       {/* NAVIGATION / HEADER */}
       <nav className="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference text-text-primary">

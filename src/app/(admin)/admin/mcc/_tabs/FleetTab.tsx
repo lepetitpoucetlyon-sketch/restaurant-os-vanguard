@@ -58,7 +58,7 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
                         <p className="text-sm font-bold text-text-secondary mb-1">Aucune instance dans la flotte</p>
                         <p className="text-xs text-secondary">Active l'instance démo pour tester toutes les fonctionnalités du MCC</p>
                     </div>
-                    <button
+                    <button aria-label="Action flotte"
                         onClick={activateDemo}
                         disabled={seeding}
                         className="flex items-center gap-2 px-5 py-2.5 bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors disabled:opacity-50"

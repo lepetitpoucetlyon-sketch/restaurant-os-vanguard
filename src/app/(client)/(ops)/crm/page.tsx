@@ -23,6 +23,7 @@ import {
 } from '@/modules/commerce';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { PageShell } from "@/shared/components/ui/PageShell";
+import { BentoGrid, BentoCell, StatCard } from "@/shared/components/ui";
 
 type CrmTab = "pipeline" | "customers" | "promos" | "emails" | "analytics" | "history" | "import" | "rfm" | "automations";
 
@@ -72,9 +73,28 @@ function CrmPage() {
                 </>
             }
         >
-            <main>
+            <main className="space-y-6">
                 {activeTab === "pipeline" && (
-                    <section className="flex gap-4 min-h-[60vh]">
+                    <>
+                        <BentoGrid layout="hero-2col">
+                            <BentoCell span={2}>
+                                <StatCard
+                                    label="Portefeuille Clients"
+                                    value={String(customers.length)}
+                                    icon={<Users className="w-5 h-5" />}
+                                    intent="brand"
+                                />
+                            </BentoCell>
+                            <BentoCell span={1}>
+                                <StatCard
+                                    label="Clients VIP / Fidèles"
+                                    value={String(customers.filter(c => ((c as Record<string, unknown>).ordersCount as number || 0) >= 3).length)}
+                                    icon={<TrendingUp className="w-5 h-5" />}
+                                    intent="success"
+                                />
+                            </BentoCell>
+                        </BentoGrid>
+                        <section className="flex gap-4 min-h-[60vh]">
                         <div className="w-56 shrink-0">
                             <CRMSidebar />
                         </div>
@@ -85,6 +105,7 @@ function CrmPage() {
                             <CRMDetailView />
                         </div>
                     </section>
+                    </>
                 )}
 
                 {activeTab === "customers" && (

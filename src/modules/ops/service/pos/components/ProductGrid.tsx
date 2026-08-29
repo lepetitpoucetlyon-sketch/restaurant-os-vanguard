@@ -56,7 +56,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
             "group rounded-2xl border transition-all duration-200 relative flex flex-col h-full overflow-hidden p-3",
             isDisabled 
                 ? "bg-surface-glass grayscale cursor-not-allowed border-red-500/20 opacity-50" 
-                : "bg-surface-card dark:bg-bg-secondary border-border/70 dark:border-white/10 cursor-pointer hover:border-action-primary/60 hover:shadow-lg active:scale-[0.99]"
+                : "bg-surface-card dark:bg-bg-secondary border-border/70 dark:border-white/10 cursor-pointer hover:border-action-primary/60 hover:shadow-lg active:scale-[var(--motion-tap-scale,0.97)] transition-all duration-[var(--motion-duration-fast,150ms)]"
         )}
     >
         {/* Compliance Overlays */}
@@ -250,7 +250,7 @@ export function ProductGrid({ categoryFilter, products, isLoading, onAddToCart, 
 
             {/* Product Grid - Exhibition Deck */}
             <div className="flex-1 p-6 md:p-12 overflow-y-auto scrollbar-hide relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-10 md:gap-14">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-[var(--density-gap-md,1rem)] lg:gap-[var(--density-gap-lg,1.25rem)]">
                     <AnimatePresence mode="wait">
                         {isLoading ? (
                             <div className="col-span-full py-10">

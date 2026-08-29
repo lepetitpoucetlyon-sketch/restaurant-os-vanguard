@@ -11,6 +11,8 @@ export const UXProfileTypeSchema = z.enum([
   'gastronomic',
   'bar_nightclub',
   'dark_kitchen',
+  'cocktail_bar',
+  'street_food',
   'custom',
 ]);
 

@@ -24,7 +24,7 @@ export default function OrderingError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-bg-primary antialiased">
+    <div className="min-min-h-[100dvh] flex items-center justify-center p-6 bg-bg-primary antialiased">
       <div className="max-w-md w-full bg-surface-card border border-border rounded-2xl p-6 shadow-xl text-center space-y-5">
         <div className="w-14 h-14 rounded-full bg-action-primary/10 border border-action-primary/20 text-action-primary flex items-center justify-center mx-auto">
           <Utensils className="w-6 h-6" />

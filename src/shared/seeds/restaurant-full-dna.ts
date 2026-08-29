@@ -14,6 +14,10 @@ export const RESTAURANT_FULL_DNA: TenantConfig = {
     'mod_pos': true,
     'mod_floor_plan': true,
     'mod_kds': true,
+    'mod_delivery': true,
+    'mod_dark_kitchen': true,
+    'mod_loyalty': true,
+    'mod_purchasing': true,
     
     // 3. Clients & Réservations (Customer)
     'mod_reservations': true,

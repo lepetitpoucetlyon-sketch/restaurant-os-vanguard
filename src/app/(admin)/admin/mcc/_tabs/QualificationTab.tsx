@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState } from 'react';
 import { Target, Sliders, Shield, Cpu, Sparkles, UserCheck, Scale } from 'lucide-react';

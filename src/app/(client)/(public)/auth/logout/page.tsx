@@ -46,7 +46,7 @@ export default function LogoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-surface-bg flex items-center justify-center p-6 text-text-primary font-mono">
+        <div className="min-min-h-[100dvh] bg-surface-bg flex items-center justify-center p-6 text-text-primary font-mono">
             <div className="max-w-xl w-full">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}

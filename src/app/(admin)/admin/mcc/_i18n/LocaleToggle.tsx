@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 
 import { useMCCLocale } from './LocaleContext';
 

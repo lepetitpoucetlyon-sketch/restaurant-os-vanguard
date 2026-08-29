@@ -156,7 +156,7 @@ export function SupportDraftsPanel() {
             </p>
           </div>
         </div>
-        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
+        <button aria-label="Recharger les tickets" onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
           <RefreshCw className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
         </button>
       </div>
@@ -185,6 +185,7 @@ export function SupportDraftsPanel() {
             >
               <button 
                 type="button" 
+                aria-label={`Détails du ticket ${ticket.id}`}
                 className="flex items-start justify-between gap-2 cursor-pointer w-full text-left bg-transparent border-0 p-0" 
                 onClick={() => toggleExpand(ticket)}
               >

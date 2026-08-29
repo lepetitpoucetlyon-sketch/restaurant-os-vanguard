@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState } from 'react';
 import { Network, Shield, Scale, Cpu, Lock, Globe, MessageSquare, Award, DollarSign, Database, CheckCircle2 } from 'lucide-react';
