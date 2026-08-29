@@ -50,69 +50,71 @@ export interface BackupDeriverInput {
 
 // ── Dérivation ──────────────────────────────────────────────────────────────────
 
+function deriveBackupFrequency(isHealth: boolean, scale: string, txPerDay: number): { freq: BackupFrequency; reason: string } {
+    let freq: BackupFrequency = 'daily';
+    if (isHealth || scale === 'eti') freq = 'hourly';
+    else if (txPerDay > 500 || scale === 'pme') freq = 'every_4h';
+    else if (txPerDay > 100) freq = 'every_12h';
+    return { freq, reason: `tx/day=${txPerDay}, scale=${scale}, isHealth=${isHealth} → ${freq}` };
+}
+
+function deriveEncryptionAtRest(isHealth: boolean, hasPos: boolean, txPerDay: number): { level: EncryptionLevel; reason: string } {
+    if (isHealth) return { level: 'AES256_HDS', reason: 'santé → HDS obligatoire' };
+    if (hasPos && txPerDay > 1000) return { level: 'AES256_PCI_DSS', reason: 'volume paiement élevé → PCI-DSS recommandé' };
+    return { level: 'AES256', reason: 'AES-256 standard' };
+}
+
+function deriveDrObjective(isHealth: boolean, scale: string): DrObjective {
+    if (isHealth) return { rtoMinutes: 60, rpoMinutes: 15, reasoning: 'Santé → PRA obligatoire (Décret 2018-137), RTO 1h/RPO 15min' };
+    if (scale === 'eti') return { rtoMinutes: 240, rpoMinutes: 60, reasoning: 'ETI → PCA formalisé, RTO 4h/RPO 1h' };
+    if (scale === 'pme') return { rtoMinutes: 480, rpoMinutes: 240, reasoning: 'PME → best-effort structuré' };
+    return { rtoMinutes: 1440, rpoMinutes: 1440, reasoning: 'TPE/solo → best-effort quotidien' };
+}
+
+function deriveDataResidency(isHealth: boolean, hasAi: boolean): { residency: string[]; reason: string } {
+    if (isHealth) return { residency: ['EU'], reason: 'santé → UE only (HDS)' };
+    if (hasAi) return { residency: ['EU', 'US'], reason: 'mod_ai → US partiel (Gemini) + UE principal' };
+    return { residency: ['EU'], reason: 'UE principal' };
+}
+
+function deriveArchivalStrategy(stockNature: string): { months: number; storage: 'hot' | 'warm' | 'cold_glacier'; reason: string } {
+    const isPerishable = stockNature === 'perishable';
+    return {
+        months: isPerishable ? 12 : 36,
+        storage: isPerishable ? 'warm' : 'cold_glacier',
+        reason: isPerishable ? 'périssable → archivage annuel' : 'standard → archivage triennal cold storage',
+    };
+}
+
 export function deriveBackup(input: BackupDeriverInput): DerivedBackup {
     const { answers, variant, effectiveCapabilities: caps, transactionsPerDay = 100 } = input;
     const derivedFrom: Record<string, string> = {};
 
     const isHealth = variant === 'clinic' || variant === 'veterinary';
-    const isBig = answers.axis1_scale === 'pme' || answers.axis1_scale === 'eti';
+    const scale = answers.axis1_scale;
 
-    // ── Fréquence backup selon volumétrie + criticité ────────────────────
-    let backupFrequency: BackupFrequency;
-    if (isHealth || answers.axis1_scale === 'eti') backupFrequency = 'hourly';
-    else if (transactionsPerDay > 500 || isBig) backupFrequency = 'every_4h';
-    else if (transactionsPerDay > 100) backupFrequency = 'every_12h';
-    else backupFrequency = 'daily';
-    derivedFrom['backupFrequency'] = `tx/day=${transactionsPerDay}, scale=${answers.axis1_scale}, isHealth=${isHealth} → ${backupFrequency}`;
+    const { freq, reason: freqReason } = deriveBackupFrequency(isHealth, scale, transactionsPerDay);
+    derivedFrom['backupFrequency'] = freqReason;
 
-    // ── Chiffrement at-rest ──────────────────────────────────────────────
-    let encryptionAtRest: EncryptionLevel = 'AES256';
-    if (isHealth) encryptionAtRest = 'AES256_HDS';
-    else if (caps['mod_pos'] && transactionsPerDay > 1000) encryptionAtRest = 'AES256_PCI_DSS';
-    derivedFrom['encryptionAtRest'] = isHealth
-        ? 'santé → HDS obligatoire'
-        : caps['mod_pos'] && transactionsPerDay > 1000
-            ? 'volume paiement élevé → PCI-DSS recommandé'
-            : 'AES-256 standard';
+    const { level, reason: encReason } = deriveEncryptionAtRest(isHealth, !!caps['mod_pos'], transactionsPerDay);
+    derivedFrom['encryptionAtRest'] = encReason;
 
-    // ── DR (RTO/RPO) ────────────────────────────────────────────────────
-    let dr: DrObjective;
-    if (isHealth) {
-        dr = { rtoMinutes: 60, rpoMinutes: 15, reasoning: 'Santé → PRA obligatoire (Décret 2018-137), RTO 1h/RPO 15min' };
-    } else if (answers.axis1_scale === 'eti') {
-        dr = { rtoMinutes: 240, rpoMinutes: 60, reasoning: 'ETI → PCA formalisé, RTO 4h/RPO 1h' };
-    } else if (isBig) {
-        dr = { rtoMinutes: 480, rpoMinutes: 240, reasoning: 'PME → best-effort structuré' };
-    } else {
-        dr = { rtoMinutes: 1440, rpoMinutes: 1440, reasoning: 'TPE/solo → best-effort quotidien' };
-    }
+    const dr = deriveDrObjective(isHealth, scale);
     derivedFrom['dr'] = dr.reasoning;
 
-    // ── Data residency ──────────────────────────────────────────────────
-    const dataResidency: string[] = ['EU'];
-    if (isHealth) {
-        // Santé : strictement UE (HDS). Ne pas ajouter US même si CDN.
-        derivedFrom['dataResidency'] = 'santé → UE only (HDS)';
-    } else if (caps['mod_ai']) {
-        // Google Gemini est aux US — donc traitement partiel aux US (documenté dans registre RGPD)
-        dataResidency.push('US');
-        derivedFrom['dataResidency'] = 'mod_ai → US partiel (Gemini) + UE principal';
-    } else {
-        derivedFrom['dataResidency'] = 'UE par défaut';
-    }
+    const { residency, reason: resReason } = deriveDataResidency(isHealth, !!caps['mod_ai']);
+    derivedFrom['dataResidency'] = resReason;
 
-    // ── Archivage cold storage après X mois ──────────────────────────────
-    const archivalAfterMonths = isHealth ? 60 : 36;
-    const archiveStorage: DerivedBackup['archiveStorage'] = isHealth ? 'cold_glacier' : isBig ? 'warm' : 'hot';
-    derivedFrom['archivalAfterMonths'] = `${archivalAfterMonths} mois, storage=${archiveStorage}`;
+    const { months, storage, reason: archReason } = deriveArchivalStrategy(answers.axis4_stockNature);
+    derivedFrom['archivalStrategy'] = archReason;
 
     return {
-        backupFrequency,
-        encryptionAtRest,
+        backupFrequency: freq,
+        encryptionAtRest: level,
         dr,
-        dataResidency,
-        archivalAfterMonths,
-        archiveStorage,
+        dataResidency: residency,
+        archivalAfterMonths: months,
+        archiveStorage: storage,
         derivedFrom,
     };
 }
