@@ -125,7 +125,45 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
             }
         });
 
-        return merged as T[];
+        // Post-merge filtering and ordering
+        let finalResults = merged;
+
+        if (options?.where && options.where.length > 0) {
+            for (const filter of options.where) {
+                const { field, operator: op, value: val } = filter;
+                finalResults = finalResults.filter(item => {
+                    const itemVal = (item as Record<string, unknown>)[field];
+                    if (op === '==') return itemVal === val;
+                    if (op === '!=') return itemVal !== val;
+                    if (op === '>') return Number(itemVal) > Number(val);
+                    if (op === '>=') return Number(itemVal) >= Number(val);
+                    if (op === '<') return Number(itemVal) < Number(val);
+                    if (op === '<=') return Number(itemVal) <= Number(val);
+                    if (op === 'in') return Array.isArray(val) && val.includes(itemVal);
+                    if (op === 'array-contains') return Array.isArray(itemVal) && (itemVal as unknown[]).includes(val);
+                    return true;
+                });
+            }
+        }
+
+        if (options?.orderBy) {
+            const field = options.orderBy.field;
+            const dir = options.orderBy.direction === 'desc' ? -1 : 1;
+            finalResults.sort((a, b) => {
+                const valA = (a as Record<string, unknown>)[field];
+                const valB = (b as Record<string, unknown>)[field];
+                if (valA === valB) return 0;
+                if (valA === undefined || valA === null) return 1;
+                if (valB === undefined || valB === null) return -1;
+                return valA > valB ? dir : -dir;
+            });
+        }
+
+        if (options?.limit && options.limit > 0) {
+            finalResults = finalResults.slice(0, options.limit);
+        }
+
+        return finalResults as T[];
     }
 
     onSnapshot<T = SovereignData>(

@@ -24,7 +24,7 @@ const DEFAULT_STEPS: OnboardingStep[] = [
     id: 'branding',
     title: 'Confirmer nom & identité visuelle',
     description: 'Vérifiez le nom de votre établissement et vos couleurs de marque.',
-    href: '/admin/settings',
+    href: '/settings',
     completed: false,
   },
   {

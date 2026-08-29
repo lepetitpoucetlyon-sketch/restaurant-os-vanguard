@@ -33,6 +33,11 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     // 4. LANGUAGE MODULE
     const [currentLanguage, setCurrentLanguage] = useState<Language>('fr');
     const [activeDictionary, setActiveDictionary] = useState<SovereignData | null>(null);
+    const [frDictionary, setFrDictionary] = useState<SovereignData | null>(null);
+
+    useEffect(() => {
+        loadTranslations('fr').then(dict => setFrDictionary(dict));
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -43,19 +48,28 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     }, [currentLanguage]);
 
     const t = useCallback((key: string, fallback?: string): string => {
-        // Clé absente → on préfère un libellé lisible fourni par l'appelant
-        // plutôt que d'afficher la clé brute à l'utilisateur.
-        const defaut = fallback ?? key;
-        if (!activeDictionary) return defaut;
-        const keys = key.split('.');
-        let val: SovereignValue | SovereignData = activeDictionary;
-        for (const k of keys) {
-            if (val && typeof val === 'object' && val !== null && k in val) {
-                val = (val as Record<string, SovereignValue | SovereignData>)[k];
-            } else return defaut;
-        }
-        return typeof val === 'string' ? val : defaut;
-    }, [activeDictionary]);
+        const getFromDict = (dict: SovereignData | null): string | null => {
+            if (!dict) return null;
+            const keys = key.split('.');
+            let val: SovereignValue | SovereignData = dict;
+            for (const k of keys) {
+                if (val && typeof val === 'object' && val !== null && k in val) {
+                    val = (val as Record<string, SovereignValue | SovereignData>)[k];
+                } else return null;
+            }
+            return typeof val === 'string' ? val : null;
+        };
+
+        const currentVal = getFromDict(activeDictionary);
+        if (currentVal !== null) return currentVal;
+
+        const frVal = getFromDict(frDictionary);
+        if (frVal !== null) return frVal;
+
+        return fallback ?? key;
+    }, [activeDictionary, frDictionary]);
+
+
 
     const langValue: NexusLangState = useMemo(() => ({
         t, currentLanguage, language: currentLanguage,
