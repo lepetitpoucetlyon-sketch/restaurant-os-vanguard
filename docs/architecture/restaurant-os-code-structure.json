@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Topologie Physique & Arbre d'Imports Réel (src/)",
+    "output": "restaurant-os-code-structure.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1220,
+      540
+    ],
+    "views": [
+      {
+        "id": "app-kernel",
+        "label": "1. App Router & Kernel (src/app, src/kernel)",
+        "focus": [
+          "app_admin",
+          "app_client",
+          "app_api",
+          "store_atoms",
+          "kernel_events",
+          "kernel_ai"
+        ],
+        "note": "Next.js App Router, routes API, state atoms réactifs et bus d'événements."
+      },
+      {
+        "id": "modules-pillars",
+        "label": "2. Les 8 Piliers (src/modules/)",
+        "focus": [
+          "store_atoms",
+          "mod_ops_commerce",
+          "mod_finance_comp",
+          "mod_hr_logistics"
+        ],
+        "note": "Logique métier universelle découpée en 8 modules étanches."
+      },
+      {
+        "id": "verticals-instances",
+        "label": "3. Blueprints & Instances (src/)",
+        "focus": [
+          "vert_blueprints",
+          "instances_matrix",
+          "lib_icm_router"
+        ],
+        "note": "12 dossiers de verticales métiers, matrice des 36 tenants et routeur ICM-Lite."
+      },
+      {
+        "id": "infra-storage",
+        "label": "4. Infrastructure & DB (src/)",
+        "focus": [
+          "infra_hardware",
+          "lib_sovereign_guard",
+          "storage_nexus_db"
+        ],
+        "note": "Drivers matériels, membrane SovereignGuard et partitionnement base de données."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "app_admin",
+      "type": "frontend",
+      "label": "src/app/(admin)",
+      "sublabel": "MCC Console & Studio",
+      "pos": [
+        35,
+        75
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "app_client",
+      "type": "frontend",
+      "label": "src/app/(client)",
+      "sublabel": "POS, KDS, Salle, RH",
+      "pos": [
+        35,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "app_api",
+      "type": "backend",
+      "label": "src/app/api",
+      "sublabel": "Webhooks, FEC, Sagas",
+      "pos": [
+        35,
+        325
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Next API"
+    },
+    {
+      "id": "store_atoms",
+      "type": "backend",
+      "label": "src/store/",
+      "sublabel": "Atoms & useNexusNode",
+      "pos": [
+        260,
+        75
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "State"
+    },
+    {
+      "id": "kernel_events",
+      "type": "messagebus",
+      "label": "src/kernel/events",
+      "sublabel": "NexusEventBus & Contrats",
+      "pos": [
+        260,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Event-Driven"
+    },
+    {
+      "id": "kernel_ai",
+      "type": "backend",
+      "label": "src/kernel/ai",
+      "sublabel": "Core, MCC & Tenant AI",
+      "pos": [
+        260,
+        325
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "IA Router"
+    },
+    {
+      "id": "mod_ops_commerce",
+      "type": "backend",
+      "label": "src/modules/ops & com",
+      "sublabel": "POS, KDS, Recettes, CRM",
+      "pos": [
+        485,
+        75
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_finance_comp",
+      "type": "backend",
+      "label": "src/modules/fin & comp",
+      "sublabel": "PCG, TVA, FEC, NF525",
+      "pos": [
+        485,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_hr_logistics",
+      "type": "backend",
+      "label": "src/modules/hr & log",
+      "sublabel": "Planning, OCR, Stocks",
+      "pos": [
+        485,
+        325
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_blueprints",
+      "type": "backend",
+      "label": "src/verticals/",
+      "sublabel": "12 Blueprints Métiers",
+      "pos": [
+        710,
+        75
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Blueprints"
+    },
+    {
+      "id": "instances_matrix",
+      "type": "backend",
+      "label": "src/instances/",
+      "sublabel": "36 Tenants Système",
+      "pos": [
+        710,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "3 Tiers"
+    },
+    {
+      "id": "lib_icm_router",
+      "type": "backend",
+      "label": "src/lib/icm",
+      "sublabel": "TaskContext Loader",
+      "pos": [
+        710,
+        325
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "infra_hardware",
+      "type": "backend",
+      "label": "src/infrastructure/",
+      "sublabel": "ESC/POS, Spout, Mosyle",
+      "pos": [
+        935,
+        75
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "IoT & MDM"
+    },
+    {
+      "id": "lib_sovereign_guard",
+      "type": "security",
+      "label": "src/lib/sovereign",
+      "sublabel": "Membrane Grade X & WORM",
+      "pos": [
+        935,
+        200
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "storage_nexus_db",
+      "type": "database",
+      "label": "src/infrastructure/db",
+      "sublabel": "Firestore & IndexedDB",
+      "pos": [
+        935,
+        325
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "Partitionné"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1. Surfaces Utilisateur & Routage (src/app)",
+      "wraps": [
+        "app_admin",
+        "app_client",
+        "app_api"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "2. État Réactif & Kernel (src/store, src/kernel)",
+      "wraps": [
+        "store_atoms",
+        "kernel_events",
+        "kernel_ai"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "3. Pôles Métier Canoniques (src/modules)",
+      "wraps": [
+        "mod_ops_commerce",
+        "mod_finance_comp",
+        "mod_hr_logistics"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "4. Spécialisations & Instances (src/verticals, src/instances)",
+      "wraps": [
+        "vert_blueprints",
+        "instances_matrix",
+        "lib_icm_router"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "5. Moteurs & Persistance (src/infrastructure, src/lib)",
+      "wraps": [
+        "infra_hardware",
+        "lib_sovereign_guard",
+        "storage_nexus_db"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "admin-store",
+      "from": "app_admin",
+      "to": "store_atoms"
+    },
+    {
+      "id": "client-store",
+      "from": "app_client",
+      "to": "store_atoms"
+    },
+    {
+      "id": "api-events",
+      "from": "app_api",
+      "to": "kernel_events"
+    },
+    {
+      "id": "store-ops",
+      "from": "store_atoms",
+      "to": "mod_ops_commerce"
+    },
+    {
+      "id": "events-fin",
+      "from": "kernel_events",
+      "to": "mod_finance_comp"
+    },
+    {
+      "id": "ai-hr",
+      "from": "kernel_ai",
+      "to": "mod_hr_logistics"
+    },
+    {
+      "id": "ops-vert",
+      "from": "mod_ops_commerce",
+      "to": "vert_blueprints"
+    },
+    {
+      "id": "fin-inst",
+      "from": "mod_finance_comp",
+      "to": "instances_matrix"
+    },
+    {
+      "id": "hr-icm",
+      "from": "mod_hr_logistics",
+      "to": "lib_icm_router"
+    },
+    {
+      "id": "vert-infra",
+      "from": "vert_blueprints",
+      "to": "infra_hardware"
+    },
+    {
+      "id": "inst-guard",
+      "from": "instances_matrix",
+      "to": "lib_sovereign_guard",
+      "variant": "security"
+    },
+    {
+      "id": "icm-db",
+      "from": "lib_icm_router",
+      "to": "storage_nexus_db"
+    },
+    {
+      "id": "guard-db",
+      "from": "lib_sovereign_guard",
+      "to": "storage_nexus_db",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Arborescence Physique Réelle",
+      "items": [
+        "src/app/ : App Router Next.js avec routes admin, client et api",
+        "src/kernel/ : Contrats stricts, AI provider router et NexusEventBus",
+        "src/store/ : État réactif découplé via atoms Jotai et useNexusNode"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Modules & Verticales",
+      "items": [
+        "src/modules/ : 8 piliers universels sans dépendance cyclique",
+        "src/verticals/ : 12 blueprints métiers alimentant le génome",
+        "src/instances/ : 36 tenants système et instances B2B partitionnées"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Infrastructure & Souveraineté",
+      "items": [
+        "src/infrastructure/ : Pilotes ESC/POS, SmartSpout et client Mosyle MDM",
+        "src/lib/sovereign/ : Membrane SovereignGuard de Grade X",
+        "src/infrastructure/database/ : Collections isolées par tenant"
+      ]
+    }
+  ]
+}

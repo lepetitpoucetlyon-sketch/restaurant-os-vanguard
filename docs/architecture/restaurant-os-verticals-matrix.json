@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Matrice des 12 Métiers & Morphogenèse Multi-Tenant",
+    "output": "restaurant-os-verticals-matrix.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      520
+    ],
+    "views": [
+      {
+        "id": "archetype-verticals",
+        "label": "Profils A-H & Blueprints Métiers",
+        "focus": [
+          "profile_food",
+          "profile_retail",
+          "profile_pms",
+          "profile_health",
+          "profile_hybrid",
+          "vert_resto_bar",
+          "vert_bakery_cafe",
+          "vert_fast_dark",
+          "vert_hotel_cater",
+          "vert_custom_forge"
+        ],
+        "note": "Héritage des 8 profils archétypaux vers les 12 verticales spécialisées."
+      },
+      {
+        "id": "system-tenants",
+        "label": "36 Tenants Système & SovereignGuard",
+        "focus": [
+          "tier_ref",
+          "tier_test",
+          "tier_demo",
+          "sovereign_guard",
+          "provisioning_saga"
+        ],
+        "note": "Cloisonnement des tiers _ref_, _test_, _demo_ sur les 12 verticales."
+      },
+      {
+        "id": "morphogenesis-flow",
+        "label": "Morphogenèse & Scraping ADN",
+        "focus": [
+          "vert_custom_forge",
+          "mcc_dna_crawler",
+          "icm_lite_router",
+          "tenant_runtime"
+        ],
+        "note": "Scraping d'enseignes et génération instantanée d'instance sans saisie manuelle."
+      },
+      {
+        "id": "runtime-fiscal",
+        "label": "Runtime B2B & Scellement NF525",
+        "focus": [
+          "provisioning_saga",
+          "tenant_runtime",
+          "storage_partition",
+          "nf525_seal"
+        ],
+        "note": "Chargement sélectif ICM-Lite et génération de la clé de signature WORM."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "profile_food",
+      "type": "backend",
+      "label": "Profil A : Food",
+      "sublabel": "Stock Culinaire & DLC",
+      "pos": [
+        30,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "profile_retail",
+      "type": "backend",
+      "label": "Profil D : Retail",
+      "sublabel": "Variantes & Codes EAN",
+      "pos": [
+        30,
+        150
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "profile_pms",
+      "type": "backend",
+      "label": "Profil E : PMS",
+      "sublabel": "Chambres & Séjour",
+      "pos": [
+        30,
+        240
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "profile_health",
+      "type": "backend",
+      "label": "Profil F : Santé",
+      "sublabel": "Dossiers & CCAM",
+      "pos": [
+        30,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "profile_hybrid",
+      "type": "backend",
+      "label": "Profil H : Hybride",
+      "sublabel": "Concept Stores Multi-Flux",
+      "pos": [
+        30,
+        420
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_resto_bar",
+      "type": "backend",
+      "label": "Resto & Bar/Nuit",
+      "sublabel": "KDS, SmartSpout, Salle",
+      "pos": [
+        255,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_bakery_cafe",
+      "type": "backend",
+      "label": "Boulangerie & Café",
+      "sublabel": "Cuissons, Pesée, DLC",
+      "pos": [
+        255,
+        150
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_fast_dark",
+      "type": "backend",
+      "label": "Fast-Food & Dark",
+      "sublabel": "Kiosks & Dispatch",
+      "pos": [
+        255,
+        240
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_hotel_cater",
+      "type": "backend",
+      "label": "Hôtel, Traiteur, Cave",
+      "sublabel": "Folios, Devis, Accises",
+      "pos": [
+        255,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "vert_custom_forge",
+      "type": "backend",
+      "label": "Verticale Custom",
+      "sublabel": "Morphogenèse instantanée",
+      "pos": [
+        255,
+        420
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Sur-Mesure"
+    },
+    {
+      "id": "tier_ref",
+      "type": "backend",
+      "label": "Tier REFERENCE",
+      "sublabel": "12 Matrices Neutres",
+      "pos": [
+        480,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Lecture Seule"
+    },
+    {
+      "id": "tier_test",
+      "type": "backend",
+      "label": "Tier TEST",
+      "sublabel": "12 Bacs à Sable Dev",
+      "pos": [
+        480,
+        170
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "tier_demo",
+      "type": "backend",
+      "label": "Tier DEMO",
+      "sublabel": "12 Vitrines Pré-Remplies",
+      "pos": [
+        480,
+        270
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard",
+      "sublabel": "Verrouillage Écritures",
+      "pos": [
+        480,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "provisioning_saga",
+      "type": "backend",
+      "label": "Saga Provisioning",
+      "sublabel": "Clonage & Seed Genesis",
+      "pos": [
+        705,
+        90
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Automatisé"
+    },
+    {
+      "id": "icm_lite_router",
+      "type": "backend",
+      "label": "ICM-Lite Router",
+      "sublabel": "Chargement Sélectif",
+      "pos": [
+        705,
+        230
+      ],
+      "size": [
+        155,
+        68
+      ]
+    },
+    {
+      "id": "mcc_dna_crawler",
+      "type": "frontend",
+      "label": "MCC DNA Crawler",
+      "sublabel": "Scraping & Extraction",
+      "pos": [
+        705,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "IA Crawler"
+    },
+    {
+      "id": "storage_partition",
+      "type": "database",
+      "label": "Nexus Storage",
+      "sublabel": "Collections Découpées",
+      "pos": [
+        930,
+        90
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Partitionné"
+    },
+    {
+      "id": "tenant_runtime",
+      "type": "backend",
+      "label": "Instances B2B Prod",
+      "sublabel": "Tenants Clients Isolés",
+      "pos": [
+        930,
+        230
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Production"
+    },
+    {
+      "id": "nf525_seal",
+      "type": "database",
+      "label": "Grand Livre NF525",
+      "sublabel": "Chaîne WORM DGFiP",
+      "pos": [
+        930,
+        370
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "Conforme DGFiP"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1. Les 8 Profils Archétypaux (A à H)",
+      "wraps": [
+        "profile_food",
+        "profile_retail",
+        "profile_pms",
+        "profile_health",
+        "profile_hybrid"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "2. Les 12 Blueprints de Verticales",
+      "wraps": [
+        "vert_resto_bar",
+        "vert_bakery_cafe",
+        "vert_fast_dark",
+        "vert_hotel_cater",
+        "vert_custom_forge"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "3. Les 36 Tenants Système & SovereignGuard",
+      "wraps": [
+        "tier_ref",
+        "tier_test",
+        "tier_demo",
+        "sovereign_guard"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "4. Saga de Morphogenèse & Déploiement",
+      "wraps": [
+        "provisioning_saga",
+        "icm_lite_router",
+        "mcc_dna_crawler"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "5. Runtime Client & Fiscalité NF525",
+      "wraps": [
+        "storage_partition",
+        "tenant_runtime",
+        "nf525_seal"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "food-resto",
+      "from": "profile_food",
+      "to": "vert_resto_bar"
+    },
+    {
+      "id": "retail-bakery",
+      "from": "profile_retail",
+      "to": "vert_bakery_cafe"
+    },
+    {
+      "id": "pms-fast",
+      "from": "profile_pms",
+      "to": "vert_fast_dark"
+    },
+    {
+      "id": "health-hotel",
+      "from": "profile_health",
+      "to": "vert_hotel_cater"
+    },
+    {
+      "id": "hybrid-custom",
+      "from": "profile_hybrid",
+      "to": "vert_custom_forge"
+    },
+    {
+      "id": "resto-ref",
+      "from": "vert_resto_bar",
+      "to": "tier_ref"
+    },
+    {
+      "id": "bakery-ref",
+      "from": "vert_bakery_cafe",
+      "to": "tier_ref"
+    },
+    {
+      "id": "fast-test",
+      "from": "vert_fast_dark",
+      "to": "tier_test"
+    },
+    {
+      "id": "hotel-demo",
+      "from": "vert_hotel_cater",
+      "to": "tier_demo"
+    },
+    {
+      "id": "custom-crawler",
+      "from": "vert_custom_forge",
+      "to": "mcc_dna_crawler"
+    },
+    {
+      "id": "ref-prov",
+      "from": "tier_ref",
+      "to": "provisioning_saga"
+    },
+    {
+      "id": "test-prov",
+      "from": "tier_test",
+      "to": "provisioning_saga"
+    },
+    {
+      "id": "guard-crawler",
+      "from": "sovereign_guard",
+      "to": "mcc_dna_crawler",
+      "variant": "security"
+    },
+    {
+      "id": "crawler-icm",
+      "from": "mcc_dna_crawler",
+      "to": "icm_lite_router"
+    },
+    {
+      "id": "prov-runtime",
+      "from": "provisioning_saga",
+      "to": "tenant_runtime"
+    },
+    {
+      "id": "icm-runtime",
+      "from": "icm_lite_router",
+      "to": "tenant_runtime"
+    },
+    {
+      "id": "runtime-storage",
+      "from": "tenant_runtime",
+      "to": "storage_partition"
+    },
+    {
+      "id": "runtime-seal",
+      "from": "tenant_runtime",
+      "to": "nf525_seal",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Morphogenèse & DNA Crawler",
+      "items": [
+        "Extraction automatique de carte/services via site web et Instagram",
+        "Composition dynamique des 35 capabilities sans modifier le code socle",
+        "Prise en charge native des 12 verticales et des profils hybrides H"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Les 36 Tenants Système",
+      "items": [
+        "12 verticales × 3 tiers (_ref_ or neutre, _test_ dev, _demo_ vitrine)",
+        "SovereignGuard empêche toute écriture directe sur les masters _ref_",
+        "Clonage déterministe lors du provisioning d'un nouveau tenant B2B"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Runtime B2B & Chaîne Fiscale",
+      "items": [
+        "ICM-Lite charge en mémoire uniquement les modules requis par la route",
+        "Clé cryptographique unique générée par tenant au provisioning",
+        "Scellement WORM de chaque transaction avec conformité DGFiP"
+      ]
+    }
+  ]
+}

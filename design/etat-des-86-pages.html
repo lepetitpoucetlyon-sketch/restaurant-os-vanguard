@@ -1,0 +1,480 @@
+<title>État des 86 pages</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Palette reprise du design system de l'application : or #C5A059, crème
+     #F8F7F2, encre #111827. Les neutres sont tirés vers le doré plutôt que gris.
+     Les trois couleurs de sévérité sont distinctes de l'or, qui reste l'accent
+     de structure et ne signifie jamais « attention ». */
+  :root {
+    --fond:        #F8F7F2;
+    --fond-creux:  #F1EEE4;
+    --carte:       #FFFFFF;
+    --trait:       #E2DCCB;
+    --trait-fort:  #CFC6AE;
+    --encre:       #17181C;
+    --encre-douce: #6B6455;
+    --encre-tenue: #918972;
+    --accent:      #8A6C2E;
+    --accent-vif:  #C5A059;
+    --accent-voile:rgba(197,160,89,0.13);
+    --ok:          #3F6B54;
+    --ok-voile:    rgba(63,107,84,0.11);
+    --note:        #4A5C93;
+    --note-voile:  rgba(74,92,147,0.11);
+    --alerte:      #9C4A21;
+    --alerte-voile:rgba(156,74,33,0.11);
+    --ombre:       0 1px 2px rgba(23,24,28,0.05), 0 8px 24px -12px rgba(23,24,28,0.14);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fond:        #0B0B0C;
+      --fond-creux:  #101116;
+      --carte:       #15161C;
+      --trait:       #24262F;
+      --trait-fort:  #383B48;
+      --encre:       #F3F1EA;
+      --encre-douce: #9A9384;
+      --encre-tenue: #6E6859;
+      --accent:      #C5A059;
+      --accent-vif:  #E0BE7A;
+      --accent-voile:rgba(197,160,89,0.14);
+      --ok:          #6FA98A;
+      --ok-voile:    rgba(111,169,138,0.13);
+      --note:        #8D9EDA;
+      --note-voile:  rgba(141,158,218,0.13);
+      --alerte:      #DE8A58;
+      --alerte-voile:rgba(222,138,88,0.13);
+      --ombre:       0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --fond:        #0B0B0C;
+    --fond-creux:  #101116;
+    --carte:       #15161C;
+    --trait:       #24262F;
+    --trait-fort:  #383B48;
+    --encre:       #F3F1EA;
+    --encre-douce: #9A9384;
+    --encre-tenue: #6E6859;
+    --accent:      #C5A059;
+    --accent-vif:  #E0BE7A;
+    --accent-voile:rgba(197,160,89,0.14);
+    --ok:          #6FA98A;
+    --ok-voile:    rgba(111,169,138,0.13);
+    --note:        #8D9EDA;
+    --note-voile:  rgba(141,158,218,0.13);
+    --alerte:      #DE8A58;
+    --alerte-voile:rgba(222,138,88,0.13);
+    --ombre:       0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fond);
+    color: var(--encre);
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; }
+  .mono  { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; border: none; background: none; text-align: left; }
+  :focus-visible { outline: 2px solid var(--accent-vif); outline-offset: 2px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  .cadre { max-width: 1400px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); }
+
+  /* ── En-tête ───────────────────────────────────────────────────────── */
+  header { border-bottom: 1px solid var(--trait); background: var(--fond); }
+  .chapeau { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 28px 0 20px; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin: 4px 0 0; font-size: clamp(30px, 4vw, 44px); font-weight: 600; font-style: italic; line-height: 1.05; text-wrap: balance; }
+  .datee { margin-top: 6px; font-size: 13px; color: var(--encre-tenue); }
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stat { min-width: 132px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); }
+  .stat b { display: block; font-size: 24px; font-weight: 600; line-height: 1.15; }
+  .stat span { font-size: 12px; color: var(--encre-douce); }
+  .stat.s-ok b { color: var(--ok); } .stat.s-ok { background: var(--ok-voile); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+  .stat.s-note b { color: var(--note); } .stat.s-note { background: var(--note-voile); border-color: color-mix(in srgb, var(--note) 30%, transparent); }
+  .stat.s-alerte b { color: var(--alerte); } .stat.s-alerte { background: var(--alerte-voile); border-color: color-mix(in srgb, var(--alerte) 30%, transparent); }
+
+  /* ── Filtres ───────────────────────────────────────────────────────── */
+  .filtres { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0 0 18px; }
+  .recherche { position: relative; flex: 1 1 260px; min-width: 220px; }
+  .recherche input {
+    width: 100%; height: 40px; padding: 0 14px 0 36px; border-radius: 10px;
+    border: 1px solid var(--trait); background: var(--carte); color: var(--encre);
+  }
+  .recherche input::placeholder { color: var(--encre-tenue); }
+  .recherche svg { position: absolute; left: 12px; top: 11px; color: var(--encre-tenue); }
+  .puce {
+    height: 40px; padding: 0 14px; border-radius: 10px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--trait); background: var(--carte); color: var(--encre-douce);
+    display: inline-flex; align-items: center; gap: 7px; transition: border-color .12s, color .12s;
+  }
+  .puce:hover { border-color: var(--trait-fort); color: var(--encre); }
+  .puce[aria-pressed="true"] { border-color: var(--accent-vif); background: var(--accent-voile); color: var(--accent); font-weight: 600; }
+  .puce em { font-style: normal; font-size: 12px; color: var(--encre-tenue); font-variant-numeric: tabular-nums; }
+  .puce[aria-pressed="true"] em { color: var(--accent); }
+  .sep { width: 1px; height: 24px; background: var(--trait); margin: 0 4px; }
+
+  /* ── Deux volets ───────────────────────────────────────────────────── */
+  .volets { display: grid; grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 22px 0 48px; }
+  @media (width < 1000px) { .volets { grid-template-columns: minmax(0, 1fr); } }
+
+  .liste { border: 1px solid var(--trait); border-radius: 14px; background: var(--carte); overflow: hidden; }
+  .liste-defile { max-height: min(70vh, 760px); overflow-y: auto; overscroll-behavior: contain; }
+  @media (width < 1000px) { .liste-defile { max-height: 380px; } }
+  .groupe-titre {
+    position: sticky; top: 0; z-index: 1;
+    padding: 8px 14px; font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--encre-tenue); background: var(--fond-creux); border-bottom: 1px solid var(--trait);
+  }
+  .rang {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 9px 14px 9px 0; border-bottom: 1px solid var(--trait);
+    transition: background .1s;
+  }
+  .rang:hover { background: var(--fond-creux); }
+  .rang[aria-current="true"] { background: var(--accent-voile); }
+  .bande { width: 3px; align-self: stretch; flex-shrink: 0; border-radius: 0 2px 2px 0; }
+  .b-ok { background: var(--ok); } .b-remarques { background: var(--note); } .b-attention { background: var(--alerte); }
+  .rang .r { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rang[aria-current="true"] .r { font-weight: 600; }
+  .rang .n { font-size: 11px; color: var(--encre-tenue); white-space: nowrap; }
+  .vide { padding: 40px 16px; text-align: center; color: var(--encre-tenue); font-size: 14px; }
+
+  /* ── Fiche ─────────────────────────────────────────────────────────── */
+  .fiche { border: 1px solid var(--trait); border-radius: 14px; background: var(--carte); box-shadow: var(--ombre); padding: clamp(20px, 3vw, 30px); }
+  .fiche h2 { margin: 6px 0 0; font-size: clamp(21px, 2.6vw, 29px); font-weight: 600; line-height: 1.2; word-break: break-word; }
+  .chaine { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; font-size: 12px; }
+  .chaine code { background: var(--fond-creux); border: 1px solid var(--trait); border-radius: 7px; padding: 4px 8px; word-break: break-all; }
+  .chaine .fleche { color: var(--encre-tenue); }
+  .chaine .quoi { color: var(--encre-tenue); }
+
+  .url { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; padding: 12px 14px; border-radius: 11px; background: var(--fond-creux); border: 1px solid var(--trait); }
+  .url code { flex: 1; min-width: 200px; font-size: 13px; word-break: break-all; user-select: all; }
+  .url button { height: 34px; padding: 0 13px; border-radius: 9px; font-size: 12px; font-weight: 600; border: 1px solid var(--accent-vif); color: var(--accent); background: var(--accent-voile); }
+
+  .faits { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 10px; margin-top: 20px; }
+  .fait { padding: 11px 13px; border-radius: 11px; background: var(--fond-creux); border: 1px solid var(--trait); }
+  .fait dt { font-size: 11px; color: var(--encre-tenue); letter-spacing: 0.04em; }
+  .fait dd { margin: 3px 0 0; font-size: 15px; font-weight: 600; }
+
+  .bloc { margin-top: 20px; border-radius: 12px; padding: 15px 17px; border: 1px solid var(--trait); background: var(--fond-creux); }
+  .bloc.grave { border-color: color-mix(in srgb, var(--alerte) 38%, transparent); background: var(--alerte-voile); }
+  .bloc.douce { border-color: color-mix(in srgb, var(--note) 34%, transparent); background: var(--note-voile); }
+  .bloc.saine { border-color: color-mix(in srgb, var(--ok) 34%, transparent); background: var(--ok-voile); }
+  .bloc h3 { margin: 0 0 4px; font-size: 13px; font-weight: 700; letter-spacing: 0.01em; }
+  .bloc .sous { margin: 0 0 10px; font-size: 12px; color: var(--encre-douce); }
+  .bloc ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .bloc li { display: flex; gap: 9px; font-size: 13.5px; line-height: 1.5; }
+  .bloc li::before { content: ""; flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; margin-top: 8px; background: currentColor; opacity: .55; }
+  .bloc.grave h3, .bloc.grave li { color: var(--alerte); }
+  .bloc.douce h3, .bloc.douce li { color: var(--note); }
+  .bloc.saine h3 { color: var(--ok); }
+
+  .jetons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .jeton { font-size: 12px; padding: 4px 9px; border-radius: 7px; background: var(--carte); border: 1px solid var(--trait); color: var(--encre-douce); }
+  .jeton.plus { border-style: dashed; color: var(--encre-tenue); }
+
+  footer { border-top: 1px solid var(--trait); padding: 24px 0 40px; }
+  .avert { max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--encre-douce); }
+  .avert strong { color: var(--encre); font-weight: 600; }
+  .avert code { font-size: 12.5px; background: var(--fond-creux); border: 1px solid var(--trait); border-radius: 6px; padding: 2px 6px; }
+</style>
+
+<header>
+  <div class="cadre">
+    <div class="chapeau">
+      <div>
+        <div class="eyebrow">Mesuré sur le code · <span class="mono" id="dateMesure"></span></div>
+        <h1 class="serif">État des 84 pages</h1>
+        <div class="datee">Chaque route de <code class="mono">src/app</code>, ce qu'elle monte, et ce que la mesure y relève.</div>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="filtres">
+      <div class="recherche">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>
+        <input id="q" type="search" placeholder="Filtrer : route, fichier, composant monté…" aria-label="Filtrer les pages">
+      </div>
+      <div class="sep" role="presentation"></div>
+      <div id="filtresVerdict" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <div class="sep" role="presentation"></div>
+      <div id="filtresGroupe" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    </div>
+  </div>
+</header>
+
+<main class="cadre">
+  <div class="volets">
+    <div class="liste">
+      <div class="liste-defile" id="liste" role="listbox" aria-label="Les 84 pages" tabindex="0"></div>
+    </div>
+    <div class="fiche" id="fiche" aria-live="polite"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="cadre">
+    <p class="avert">
+      <strong>Ce que ce tableau ne dit pas.</strong> Aucune de ces mesures n'exécute l'application : elles lisent le code
+      de la page, de l'écran qu'elle monte, et des composants que cet écran monte — un cran plus bas, pas davantage.
+      « Rien à signaler » veut donc dire <em>rien sur ces critères-là</em>, pas « la page fonctionne ».
+      C'est exactement la limite qui avait laissé passer un en-tête KDS débordant de 450 px : seule une sonde
+      d'exécution voit ce genre de défaut, et elle reste à écrire.
+      Régénérer&nbsp;: <code>node scripts/measure/pages.mjs --out design/pages.json</code>.
+    </p>
+  </div>
+</footer>
+
+<script>
+var PAGES = {"h":"2026-08-29","p":[{"r":"/account-settings","g":"(admin)","v":"ok","f":"src/app/(admin)/account-settings/page.tsx","e":"src/shared/components/settings/AccountSettingsDashboard.tsx","l":233,"rb":false,"o":0,"m":["AccountAccessDenied","Shield","PageHeaderWithDocs","AlertTriangle","Plus","RoleCard","Users"],"nm":7,"ne":2,"fr":true,"a":[],"s":[]},{"r":"/admin/agent","g":"(admin)","v":"remarques","f":"src/app/(admin)/admin/agent/page.tsx","e":null,"l":294,"rb":false,"o":0,"m":["PageHeader","RefreshCcw","GlassCard","Bot","ShieldAlert","Zap","Network","ShieldCheck","AlertTriangle","StatCard","Terminal","Map","FileCode","Cpu","Sparkles"],"nm":15,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran"],"s":[]},{"r":"/admin/dashboard","g":"(admin)","v":"remarques","f":"src/app/(admin)/admin/dashboard/page.tsx","e":null,"l":284,"rb":false,"o":0,"m":["Activity","ArrowUpRight","ArrowDownRight","Clock","Utensils"],"nm":5,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran"],"s":[]},{"r":"/admin/inventory/reception","g":"(admin)","v":"remarques","f":"src/app/(admin)/admin/inventory/reception/page.tsx","e":"src/modules/logistics/approvisionnement/reception/components/InventoryReceptionDashboard.tsx","l":341,"rb":false,"o":0,"m":["ScanLine","Camera","Save","Barcode","Search","ClipboardList","StepIndicator","AnimatePresence","ScanContent","FileText","ShieldAlert","CheckCircle2","ChevronRight","Thermometer","AlertCircle","AdviceSaveButton","LogItem"],"nm":17,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran"],"s":[]},{"r":"/admin/mcc","g":"(admin)","v":"remarques","f":"src/app/(admin)/admin/mcc/page.tsx","e":null,"l":437,"rb":false,"o":0,"m":["MCCLocaleProvider","MCCDashboardInner","LayoutGrid","Hammer","Palette","EyeOff","Target","Sliders","Database","ShieldCheck","BrainCircuit","Wallet","GitMerge","Puzzle","Activity","Network","BookOpen","MFAGate","Rocket","LocaleToggle","RefreshCw","AnimatePresence","FleetTab","ComplianceTab"],"nm":40,"ne":1,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran","2 zones cliquables inatteignables au clavier","overlay plein écran sans rôle de dialogue"],"s":[]},{"r":"/admin/mcc/dlq","g":"(admin)","v":"attention","f":"src/app/(admin)/admin/mcc/dlq/page.tsx","e":null,"l":186,"rb":false,"o":0,"m":["AlertTriangle","RefreshCw","Play"],"nm":3,"ne":0,"fr":true,"a":["table sans défilement horizontal — colonnes rognées sur tablette"],"s":[]},{"r":"/admin/prospecting","g":"(admin)","v":"ok","f":"src/app/(admin)/admin/prospecting/page.tsx","e":"src/modules/commerce/relation/crm/components/ProspectingDashboard.tsx","l":140,"rb":false,"o":0,"m":["Sparkles","ProspectingScannerInput","AnimatePresence","ProspectingTokensPreview","ProspectingSuccessCard"],"nm":5,"ne":3,"fr":true,"a":[],"s":[]},{"r":"/admin/simulation","g":"(admin)","v":"remarques","f":"src/app/(admin)/admin/simulation/page.tsx","e":"src/modules/intelligence/ia/simulator/components/SimulationDashboard.tsx","l":307,"rb":false,"o":0,"m":["Zap","Button","RotateCcw","Play","MetricCard","TrendingUp","ShieldCheck","Skull","Crown","Activity","Database","AnimatePresence","AlertTriangle","CheckCircle2","Lock"],"nm":15,"ne":0,"fr":true,"a":["overlay plein écran sans rôle de dialogue"],"s":[]},{"r":"/admin/studio","g":"(admin)","v":"attention","f":"src/app/(admin)/admin/studio/page.tsx","e":"src/shared/components/open-pencil/OpenPencilStudio.tsx","l":350,"rb":false,"o":0,"m":["Sparkles","Store","CheckCircle2","Undo","Redo","Save","Download","BookOpen","Layers","Plus","PageNavigator","LayersTree","ComponentsLibrary","SceneGraphCanvas","DesignAgentBar","ClientBrandingSelector","PropertyInspector","ExportImportModal"],"nm":18,"ne":8,"fr":true,"a":["1 hauteur d'écran imposée (h-screen strict)"],"s":["1 bouton sans nom accessible","1 zone cliquable inatteignable au clavier","2 grilles à colonnes figées"]},{"r":"/audit-portal","g":"(admin)","v":"ok","f":"src/app/(admin)/audit-portal/page.tsx","e":null,"l":123,"rb":false,"o":0,"m":["Sparkles","AuditPortalController"],"nm":2,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/blueprint","g":"(admin)","v":"remarques","f":"src/app/(admin)/blueprint/page.tsx","e":null,"l":93,"rb":false,"o":0,"m":["BlueprintHeader","Network","GlassCard","MindMapDependencies","Database","ActionImpactMap","Info","StructureOverview","Cpu","BrandPromptGuide"],"nm":10,"ne":0,"fr":true,"a":["overlay plein écran sans rôle de dialogue"],"s":[]},{"r":"/design-system","g":"(admin)","v":"ok","f":"src/app/(admin)/design-system/page.tsx","e":null,"l":377,"rb":true,"o":0,"m":["Card","CardHeader","CardTitle","CardContent","TokenRow","StatGrid","StatCard","DollarSign","Users","Clock","ShoppingCart","SectionCard","Button","Filter","Plus","ActionBar","EmptyState","SkeletonList","StatusBadge","Icon","PatternsShowcase","ComponentShowcase","RbacPreviewShowcase","PwaPreviewShowcase"],"nm":24,"ne":9,"fr":true,"a":[],"s":[]},{"r":"/settings","g":"(admin)","v":"ok","f":"src/app/(admin)/settings/page.tsx","e":"src/shared/components/rbac/PageGuard.tsx","l":41,"rb":true,"o":0,"m":["Loader2","AccessDenied","PageGuard"],"nm":3,"ne":1,"fr":true,"a":[],"s":[]},{"r":"/simulator","g":"(admin)","v":"ok","f":"src/app/(admin)/simulator/page.tsx","e":null,"l":169,"rb":false,"o":0,"m":["PageHeader","SectionTitle","SimulatorConsole","GlassCard","Button","RefreshCcw","Play","AnimatePresence","StatsGrid","StatCard","DollarSign","TrendingUp","Users","AlertTriangle"],"nm":14,"ne":1,"fr":true,"a":[],"s":[]},{"r":"/system-map","g":"(admin)","v":"ok","f":"src/app/(admin)/system-map/page.tsx","e":null,"l":15,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/accounting-portal","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/accounting-portal/page.tsx","e":null,"l":165,"rb":true,"o":0,"m":["Loader2","AccountingPortalHeader","MonthlyCloseHero","AccountingPortalTabs","AnimatePresence","SalesFiscalTab","VatDeclarationTab","PayrollSocialTab","ReconciliationPurchasesTab","AiAuditThemisTab"],"nm":10,"ne":8,"fr":true,"a":[],"s":["1 bouton sans nom accessible"]},{"r":"/aide","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/aide/page.tsx","e":null,"l":99,"rb":true,"o":0,"m":["PageShell","RefreshCw","Sparkles","HelpCircle","ShieldAlert","CheckCircle2","Clock","AlertTriangle"],"nm":8,"ne":1,"fr":true,"a":[],"s":[]},{"r":"/analytics","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/analytics/page.tsx","e":null,"l":231,"rb":true,"o":2,"m":["TrendingUp","TrendingDown","Icon","PageShell","KpiCard","MenuEngineeringMatrix","ProfitabilityView","ReputationView","ComplianceView","TabGuard","SectionHeader","Zap","ChevronRight","AlertCard"],"nm":14,"ne":6,"fr":true,"a":[],"s":[]},{"r":"/bar","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/bar/page.tsx","e":null,"l":214,"rb":true,"o":0,"m":["PageShell","BarSidebar","KdsTab","WineCellarTab","SommelierTab","CocktailTab","StocksTab","WineDetailPanel","RecipeDetailDialog","ProductFormModal"],"nm":10,"ne":10,"fr":true,"a":[],"s":["1 zone cliquable inatteignable au clavier"]},{"r":"/crm","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/crm/page.tsx","e":null,"l":197,"rb":true,"o":2,"m":["PageShell","PlusCircle","CRMSidebar","CRMList","CRMDetailView","CustomerCustomerView","CustomerDetailPanel","History","VisitHistory","CustomerImportPanel","PromoCodeManager","EmailCampaign","EmailAutomations","RFMSegmentation","BasketAnalysis","NewCustomerDialog"],"nm":16,"ne":14,"fr":true,"a":[],"s":["2 boutons sans nom accessible","3 zones cliquables inatteignables au clavier"]},{"r":"/facility","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/facility/page.tsx","e":null,"l":50,"rb":true,"o":0,"m":["PageShell","ShieldAlert","EquipmentHubView","DeviceFleetInventoryModal"],"nm":4,"ne":3,"fr":true,"a":[],"s":[]},{"r":"/finance","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/finance/page.tsx","e":"src/modules/finance/components/FinanceDashboard.tsx","l":254,"rb":true,"o":2,"m":["PageShell","ActionGuard","PlusCircle","BankModal","StatGrid","StatCard","ResponsiveShell","AccountingTab","BillingTab","BankTab","TabGuard","TreasuryTab","AuditTab","ExpenseClaimDialog"],"nm":14,"ne":13,"fr":true,"a":[],"s":["6 boutons sans nom accessible","3 zones cliquables inatteignables au clavier"]},{"r":"/floor-plan","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/floor-plan/page.tsx","e":null,"l":297,"rb":true,"o":0,"m":["FloorPlanHeader","ResponsiveShell","FloorPlanEditor","BottomSheet","ClipboardList","Users","CheckCircle2","Modal"],"nm":8,"ne":3,"fr":true,"a":["1 zone cliquable inatteignable au clavier"],"s":["1 bouton sans nom accessible"]},{"r":"/franchise","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/franchise/page.tsx","e":"src/modules/commerce/relation/franchise/components/FranchiseDashboard.tsx","l":111,"rb":true,"o":0,"m":["Building2","ArrowRightLeft","RefreshCw","FranchiseKPICards","SitesTable","TransfersTable","CatalogSyncPanel","NewTransferModal"],"nm":8,"ne":5,"fr":true,"a":[],"s":[]},{"r":"/haccp","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/haccp/page.tsx","e":null,"l":242,"rb":true,"o":2,"m":["PageShell","ActionGuard","Download","TabGuard","BellRing","Icon","ReleveTemperatures","GestionHuiles","PlanNettoyage","GestionAnomalies","ReceptionWizard","ProductControlList","SanitaryReport","CleaningPlan","PerishableAlertsTracker","PackageSearch","DLCTracker","AlertOctagon","NonConformityForm","Search","Package","RecallView"],"nm":22,"ne":15,"fr":true,"a":[],"s":["1 bouton sans nom accessible","2 zones cliquables inatteignables au clavier"]},{"r":"/hygiene","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/hygiene/page.tsx","e":"src/app/(client)/(ops)/haccp/page.tsx","l":242,"rb":true,"o":2,"m":["PageShell","ActionGuard","Download","TabGuard","BellRing","Icon","ReleveTemperatures","GestionHuiles","PlanNettoyage","GestionAnomalies","ReceptionWizard","ProductControlList","SanitaryReport","CleaningPlan","PerishableAlertsTracker","PackageSearch","DLCTracker","AlertOctagon","NonConformityForm","Search","Package","RecallView"],"nm":22,"ne":15,"fr":true,"a":[],"s":["1 bouton sans nom accessible","2 zones cliquables inatteignables au clavier"]},{"r":"/integrations","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/integrations/page.tsx","e":null,"l":7,"rb":true,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/intelligence","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/intelligence/page.tsx","e":null,"l":103,"rb":true,"o":0,"m":["PageShell","Icon","ArrowRight"],"nm":3,"ne":1,"fr":true,"a":[],"s":[]},{"r":"/inventory","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/inventory/page.tsx","e":null,"l":225,"rb":true,"o":6,"m":["PageShell","Wrench","ChefHat","ActionGuard","PlusCircle","TabGuard","AlertTriangle","ArrowLeftRight","Pencil","ClipboardCheck","SlidersHorizontal","Sparkles","Trash2","StorageMapBoard","RotatingCount","StockReceptionModal","CreatePreparationModal","StockTransferModal","ThresholdModal","PhysicalCountModal","AdjustStockModal","OracleModal","SecurityPinModal"],"nm":23,"ne":10,"fr":true,"a":[],"s":["8 boutons sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/kds","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/kds/page.tsx","e":"src/modules/ops/production/kds/components/KDSDashboard.tsx","l":252,"rb":true,"o":0,"m":["AnimatePresence","KDSHeader","KDSRecallSection","ResponsiveShell","KDSProductionGrid","KDSModalsLayer"],"nm":6,"ne":5,"fr":true,"a":[],"s":[]},{"r":"/kiosk","g":"(client)(ops)","v":"attention","f":"src/app/(client)/(ops)/kiosk/page.tsx","e":"src/modules/ops/service/kiosk/KioskPage.tsx","l":319,"rb":true,"o":0,"m":["Sparkles","Utensils","ShoppingBag","CheckCircle2","RotateCcw","Pizza","Minus","Plus","CreditCard"],"nm":9,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran","1 zone cliquable inatteignable au clavier","3 hauteurs d'écran imposées (h-screen strict)"],"s":[]},{"r":"/kitchen","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/kitchen/page.tsx","e":"src/modules/ops/production/kitchen/components/KitchenDashboard.tsx","l":326,"rb":true,"o":0,"m":["ChevronLeft","AnimatePresence","TabGuard","Icon","ChefHat","MiseEnPlaceTab","DailyPrepList","RecipesTab","IngredientsTab","WasteTab","MarginsTab","SuppliersTab","AllergensTab","CookingTimesTab","RecipeDetailDialog","PrepTaskDetailDialog","ProductFormModal","ExpertHub"],"nm":18,"ne":14,"fr":true,"a":[],"s":["2 boutons sans nom accessible","3 zones cliquables inatteignables au clavier"]},{"r":"/leaves","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/leaves/page.tsx","e":null,"l":301,"rb":true,"o":0,"m":["LeaveBalanceCard","Plus","Filter","AnimatePresence","FileText","LeaveRequestCard","TeamCalendar","AlertCircle","CheckCircle2","NewRequestModal","LeaveRequestDetailModal"],"nm":11,"ne":5,"fr":true,"a":[],"s":["1 bouton sans nom accessible","1 zone cliquable inatteignable au clavier","1 grille à colonnes figées"]},{"r":"/marketing","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/marketing/page.tsx","e":null,"l":196,"rb":true,"o":2,"m":["PageShell","FileSpreadsheet","PlusCircle","Megaphone","Instagram","Users","ExpertHub","Globe","NewCampaignModal","NewQuoteDialog"],"nm":10,"ne":4,"fr":true,"a":[],"s":["2 boutons sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/marketing/seo","g":"(client)(ops)","v":"attention","f":"src/app/(client)/(ops)/marketing/seo/page.tsx","e":null,"l":122,"rb":true,"o":0,"m":["Globe","Button","RefreshCw","AnimatePresence","OverviewTab","PagesTab","AnalyticsTab","SettingsTab"],"nm":8,"ne":4,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran","1 hauteur d'écran imposée (h-screen strict)"],"s":[]},{"r":"/menu-builder","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/menu-builder/page.tsx","e":null,"l":210,"rb":true,"o":0,"m":["PageShell","SkeletonList","CategorySidebar","ProductCardGrid","ProductEditModal"],"nm":5,"ne":5,"fr":true,"a":[],"s":["1 bouton sans nom accessible","2 zones cliquables inatteignables au clavier"]},{"r":"/menu-engineering","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/menu-engineering/page.tsx","e":"src/verticals/restaurant/presentation/MenuEngineeringDashboard.tsx","l":105,"rb":true,"o":0,"m":["TrendingUp"],"nm":1,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/migration","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/migration/page.tsx","e":null,"l":68,"rb":true,"o":0,"m":["PageShell","FileSpreadsheet","CalendarCheck","FECImportPanel","ReservationHistoryImportPanel"],"nm":5,"ne":3,"fr":true,"a":[],"s":["2 boutons sans nom accessible"]},{"r":"/mon-espace","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/mon-espace/page.tsx","e":null,"l":295,"rb":true,"o":2,"m":["PageShell","ShieldCheck","Download","FileCheck","FileText","CheckCircle2","ExternalLink","PasskeyStepUpModal"],"nm":8,"ne":2,"fr":true,"a":[],"s":[]},{"r":"/nf525","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/nf525/page.tsx","e":null,"l":51,"rb":true,"o":4,"m":["PageShell","FECExportPage","NF525SelfAudit"],"nm":3,"ne":3,"fr":true,"a":[],"s":["1 bouton sans nom accessible"]},{"r":"/onboarding","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/onboarding/page.tsx","e":"src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx","l":477,"rb":true,"o":0,"m":["ProgressStepper","SourceSystemSelector","ConnectorOAuthPanel","SubdomainSelectorStep","ImportCategoryPanel","SimpleFloorPlanEditor","OnboardingHelpButton"],"nm":7,"ne":7,"fr":true,"a":[],"s":["2 boutons sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/operations","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/operations/page.tsx","e":"src/modules/ops/workflow/engine/components/OperationsDashboard.tsx","l":361,"rb":true,"o":0,"m":["Book","Home","Layers","Lock","SketchLine","EmpireCockpit","HandDrawnBorder","PenTool","Cloud","Key","ArrowRight","Plus","MindMapNode","HandDrawnLegend","ExplanatoryCard","OperationsAreaModal","Modal","EndOfDayWizard"],"nm":18,"ne":5,"fr":true,"a":["1 zone cliquable inatteignable au clavier"],"s":["1 bouton sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/planning","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/planning/page.tsx","e":"src/modules/human/effectifs/hr/components/PlanningDashboard.tsx","l":379,"rb":true,"o":0,"m":["ActionGuard","Button","Bell","ResponsiveShell","AnimatePresence","Plus","UserIcon","TipPoolManager","BottomSheet","TimePicker","Trash2"],"nm":11,"ne":3,"fr":true,"a":["2 zones cliquables inatteignables au clavier","2 grilles à colonnes figées — se resserre mal sous 1024 px"],"s":["1 zone cliquable inatteignable au clavier"]},{"r":"/pms","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/pms/page.tsx","e":"src/modules/ops/service/pms/PmsPage.tsx","l":152,"rb":true,"o":0,"m":["PageShell","StatGrid","StatCard","Search"],"nm":4,"ne":3,"fr":true,"a":[],"s":[]},{"r":"/pos","g":"(client)(ops)","v":"attention","f":"src/app/(client)/(ops)/pos/page.tsx","e":null,"l":280,"rb":true,"o":0,"m":["TableSelector","PosHeader","ResponsiveShell","ProductGrid","Cart","CourseManager","AnimatePresence","Plus","BottomSheet","TipPanel","CartItemContextMenu","PaymentDialog","SplitBillDialog","PinModal","CashDrawerModal","VoidModal","SosCaisseModal"],"nm":17,"ne":13,"fr":true,"a":["1 zone cliquable inatteignable au clavier","overlay plein écran sans rôle de dialogue"],"s":["1 prop handler neutralisée (onClearCart)","5 boutons sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/pos-mobile","g":"(client)(ops)","v":"attention","f":"src/app/(client)/(ops)/pos-mobile/page.tsx","e":null,"l":200,"rb":true,"o":0,"m":["TableSelector","ArrowLeft","Send","ProductGrid","AnimatePresence","ShoppingCart","Cart","SplitBillDialog"],"nm":8,"ne":4,"fr":true,"a":["overlay plein écran sans rôle de dialogue"],"s":["1 prop handler neutralisée (onClearCart)","2 boutons sans nom accessible","1 zone cliquable inatteignable au clavier"]},{"r":"/recruitment","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/recruitment/page.tsx","e":"src/shared/components/ui/PageShell.tsx","l":729,"rb":true,"o":1,"m":["Icon","ChevronDown","AnimatePresence"],"nm":3,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/registre","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/registre/page.tsx","e":null,"l":247,"rb":true,"o":0,"m":["AnimatePresence","Icon","StatusBadge","Calendar","Clock","BadgeCheck","TabGuard","DUERPSection","IncendieSection","PrestatairesSection","PMRSection","SanitaryComplianceSection","InterventionLogSection","Modal","Cerfa13984Section"],"nm":15,"ne":8,"fr":true,"a":[],"s":["2 table sans défilement horizontal"]},{"r":"/reservations","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/reservations/page.tsx","e":null,"l":154,"rb":true,"o":0,"m":["ReservationsHeader","AnimatePresence","ReservationSidebar","DailyListView","TableGrid","WeeklyView","CustomerCustomerView","Users","Plus","CustomerDetailPanel","ReservationCreateDialog","GroupFormModal","EventQuoteModal","PinModal"],"nm":14,"ne":11,"fr":true,"a":[],"s":["6 boutons sans nom accessible","7 zones cliquables inatteignables au clavier","1 grille à colonnes figées"]},{"r":"/settings/branding","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/settings/branding/page.tsx","e":"src/shared/components/ui/PageShell.tsx","l":729,"rb":true,"o":1,"m":["Icon","ChevronDown","AnimatePresence"],"nm":3,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/settings/security","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/settings/security/page.tsx","e":null,"l":303,"rb":true,"o":0,"m":["PageShell","Loader2","Key","RefreshCw","AlertTriangle","CheckCircle2","Copy"],"nm":7,"ne":1,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran"],"s":[]},{"r":"/staff","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/staff/page.tsx","e":null,"l":161,"rb":true,"o":2,"m":["PageShell","Plus","StaffList","StaffRecentActivity","TeamCalendar","PlanningWeekView","TimesheetTab","TabGuard","PayrollTab","SkillsTab","LeavesTab","RecruitmentBoard","StaffMemberForm","NewRequestModal","QuickAddStaffModal","BadgeControl"],"nm":16,"ne":11,"fr":true,"a":[],"s":["4 boutons sans nom accessible","3 zones cliquables inatteignables au clavier","1 grille à colonnes figées"]},{"r":"/suppliers","g":"(client)(ops)","v":"ok","f":"src/app/(client)/(ops)/suppliers/page.tsx","e":"src/shared/components/ui/PageShell.tsx","l":729,"rb":true,"o":1,"m":["Icon","ChevronDown","AnimatePresence"],"nm":3,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/timeclock","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/timeclock/page.tsx","e":"src/modules/human/effectifs/hr/components/TimeclockDashboard.tsx","l":343,"rb":true,"o":0,"m":["AnimatePresence","Icon","RotateCcw","Clock"],"nm":4,"ne":0,"fr":true,"a":["overlay plein écran sans rôle de dialogue"],"s":[]},{"r":"/vanguard-simulator","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/vanguard-simulator/page.tsx","e":null,"l":320,"rb":false,"o":0,"m":["Button","Play","BarChart3","Zap","Cpu","TrendingUp","TrendingDown","Modal","DollarSign","Users"],"nm":10,"ne":0,"fr":true,"a":["aucun garde RBAC sur une route métier"],"s":[]},{"r":"/welcome-staff","g":"(client)(ops)","v":"remarques","f":"src/app/(client)/(ops)/welcome-staff/page.tsx","e":null,"l":286,"rb":true,"o":0,"m":["Icon","Lock","EyeOff","Eye","CheckCircle","ArrowRight","WelcomeStaffInner"],"nm":7,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran"],"s":[]},{"r":"/order/[tenantId]","g":"(client)(ordering)","v":"remarques","f":"src/app/(client)/(ordering)/order/[tenantId]/page.tsx","e":null,"l":247,"rb":false,"o":0,"m":["CheckCircle2","Clock","OrderHeader","Utensils","OrderProductCard","OrderCartDrawer"],"nm":6,"ne":3,"fr":true,"a":[],"s":["1 bouton sans nom accessible"]},{"r":"/auth/logout","g":"(client)(public)","v":"ok","f":"src/app/(client)/(public)/auth/logout/page.tsx","e":null,"l":126,"rb":false,"o":0,"m":["ShieldAlert","RefreshCcw","Home"],"nm":3,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/docs/[category]","g":"(client)(public)","v":"remarques","f":"src/app/(client)/(public)/docs/[category]/page.tsx","e":"src/app/(client)/(public)/docs/[category]/DocCategoryClient.tsx","l":61,"rb":false,"o":0,"m":["ChevronLeft","DocumentationPortal"],"nm":2,"ne":1,"fr":true,"a":[],"s":["1 zone cliquable inatteignable au clavier","1 hauteur d'écran imposée"]},{"r":"/groups","g":"(client)(public)","v":"attention","f":"src/app/(client)/(public)/groups/page.tsx","e":null,"l":147,"rb":false,"o":0,"m":["Users","Button","Plus","GroupStatCard","GroupFilters","AnimatePresence","EventCard"],"nm":7,"ne":2,"fr":true,"a":["1 hauteur d'écran imposée (h-screen strict)"],"s":[]},{"r":"/landing","g":"(client)(public)","v":"ok","f":"src/app/(client)/(public)/landing/page.tsx","e":null,"l":39,"rb":false,"o":0,"m":["LandingNavbar","HeroSection","FeaturesSection","PricingSection","TestimonialsSection","CTASection","LandingFooter"],"nm":7,"ne":7,"fr":true,"a":[],"s":[]},{"r":"/login","g":"(client)(public)","v":"remarques","f":"src/app/(client)/(public)/login/page.tsx","e":null,"l":38,"rb":false,"o":0,"m":["PinLogin"],"nm":1,"ne":1,"fr":true,"a":[],"s":["1 grille à colonnes figées"]},{"r":"/menu/[tenantId]/[tableId]","g":"(client)(public)","v":"ok","f":"src/app/(client)/(public)/menu/[tenantId]/[tableId]/page.tsx","e":null,"l":240,"rb":false,"o":0,"m":["Search","AlertTriangle","ChefHat","Beef","Leaf"],"nm":5,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/showcase","g":"(client)(public)","v":"remarques","f":"src/app/(client)/(public)/showcase/page.tsx","e":null,"l":163,"rb":false,"o":0,"m":["KeyRound","PlayCircle","Zap","ChevronRight","FeatureCard","Globe","ShieldCheck","Cpu","Database","Users","TrendingUp","DemoLoginModal"],"nm":12,"ne":0,"fr":true,"a":["1 bouton sans nom accessible — muet au lecteur d'écran","overlay plein écran sans rôle de dialogue"],"s":[]},{"r":"/studio","g":"(client)(public)","v":"attention","f":"src/app/(client)/(public)/studio/page.tsx","e":"src/shared/components/open-pencil/OpenPencilStudio.tsx","l":350,"rb":false,"o":0,"m":["Sparkles","Store","CheckCircle2","Undo","Redo","Save","Download","BookOpen","Layers","Plus","PageNavigator","LayersTree","ComponentsLibrary","SceneGraphCanvas","DesignAgentBar","ClientBrandingSelector","PropertyInspector","ExportImportModal"],"nm":18,"ne":8,"fr":true,"a":["1 hauteur d'écran imposée (h-screen strict)"],"s":["1 bouton sans nom accessible","1 zone cliquable inatteignable au clavier","2 grilles à colonnes figées"]},{"r":"/welcome","g":"(client)(public)","v":"ok","f":"src/app/(client)/(public)/welcome/page.tsx","e":null,"l":286,"rb":false,"o":0,"m":["Box","Button","ChevronDown","CheckCircle2","ArrowRight","ChefHat","FileText","Database","Smartphone","Laptop","PlayCircle"],"nm":11,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/","g":"(marketing)","v":"ok","f":"src/app/(marketing)/page.tsx","e":"src/app/(marketing)/components/PublicAccessClosed.tsx","l":48,"rb":false,"o":0,"m":["Lock","ArrowRight"],"nm":2,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/legal/dpa","g":"(marketing)","v":"attention","f":"src/app/(marketing)/legal/dpa/page.tsx","e":null,"l":83,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":["table sans défilement horizontal — colonnes rognées sur tablette"],"s":[]},{"r":"/legal/nf525","g":"(marketing)","v":"ok","f":"src/app/(marketing)/legal/nf525/page.tsx","e":null,"l":90,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/legal/security","g":"(marketing)","v":"attention","f":"src/app/(marketing)/legal/security/page.tsx","e":null,"l":88,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":["table sans défilement horizontal — colonnes rognées sur tablette"],"s":[]},{"r":"/pricing","g":"(marketing)","v":"ok","f":"src/app/(marketing)/pricing/page.tsx","e":null,"l":140,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/pricing/roi-calculator","g":"(marketing)","v":"ok","f":"src/app/(marketing)/pricing/roi-calculator/page.tsx","e":null,"l":167,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/pricing/vs-lightspeed","g":"(marketing)","v":"attention","f":"src/app/(marketing)/pricing/vs-lightspeed/page.tsx","e":null,"l":83,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":["table sans défilement horizontal — colonnes rognées sur tablette"],"s":[]},{"r":"/pricing/vs-zelty","g":"(marketing)","v":"attention","f":"src/app/(marketing)/pricing/vs-zelty/page.tsx","e":null,"l":83,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":["table sans défilement horizontal — colonnes rognées sur tablette"],"s":[]},{"r":"/signup","g":"(marketing)","v":"ok","f":"src/app/(marketing)/signup/page.tsx","e":"src/app/(marketing)/components/PublicAccessClosed.tsx","l":48,"rb":false,"o":0,"m":["Lock","ArrowRight"],"nm":2,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/signup/success","g":"(marketing)","v":"ok","f":"src/app/(marketing)/signup/success/page.tsx","e":null,"l":74,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/verticales/[slug]","g":"(marketing)","v":"ok","f":"src/app/(marketing)/verticales/[slug]/page.tsx","e":null,"l":45,"rb":false,"o":0,"m":["VerticalLandingClient"],"nm":1,"ne":0,"fr":true,"a":[],"s":[]},{"r":"/demo","g":"(public)","v":"remarques","f":"src/app/(public)/demo/page.tsx","e":null,"l":11,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/legal/cgu","g":"(public)","v":"remarques","f":"src/app/(public)/legal/cgu/page.tsx","e":null,"l":267,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/legal/cgv","g":"(public)","v":"remarques","f":"src/app/(public)/legal/cgv/page.tsx","e":null,"l":222,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/legal/mentions","g":"(public)","v":"remarques","f":"src/app/(public)/legal/mentions/page.tsx","e":null,"l":214,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/legal/rgpd","g":"(public)","v":"remarques","f":"src/app/(public)/legal/rgpd/page.tsx","e":null,"l":441,"rb":false,"o":0,"m":[],"nm":0,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/status","g":"(public)","v":"remarques","f":"src/app/(public)/status/page.tsx","e":null,"l":142,"rb":false,"o":0,"m":["Activity","OverallIcon","Icon"],"nm":3,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/[slug]","g":"racine","v":"remarques","f":"src/app/[slug]/page.tsx","e":null,"l":197,"rb":false,"o":0,"m":["CalendarCheck","Clock","MapPin","Phone","Mail"],"nm":5,"ne":0,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/[slug]/reservations","g":"racine","v":"remarques","f":"src/app/[slug]/reservations/page.tsx","e":null,"l":82,"rb":false,"o":0,"m":["ReservationWidget"],"nm":1,"ne":1,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]},{"r":"/offline","g":"racine","v":"remarques","f":"src/app/offline/page.tsx","e":null,"l":69,"rb":false,"o":0,"m":["WifiOff","ShieldCheck","Button","RefreshCw","ShoppingCart","UtensilsCrossed"],"nm":6,"ne":1,"fr":false,"a":["aucune frontière d'erreur : une exception démonte l'arbre entier"],"s":[]}]};
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var LIB_GROUPE = {
+    '(client)(ops)': 'Exploitation',
+    '(client)(public)': 'Public du restaurant',
+    '(client)(ordering)': 'Commande en ligne',
+    '(admin)': 'Administration',
+    '(marketing)': 'Marketing',
+    '(public)': 'Plateforme',
+    'racine': 'Racine',
+  };
+  var ORDRE = ['(client)(ops)', '(admin)', '(marketing)', '(client)(public)', '(public)', '(client)(ordering)', 'racine'];
+  var LIB_VERDICT = { ok: 'Rien à signaler', remarques: 'Avec remarques', attention: 'À reprendre' };
+
+  var etat = { q: '', groupe: 'tout', verdict: 'tout', choisie: null };
+  try {
+    var sauve = JSON.parse(localStorage.getItem('etat-pages') || 'null');
+    if (sauve && typeof sauve === 'object') {
+      if (typeof sauve.groupe === 'string') etat.groupe = sauve.groupe;
+      if (typeof sauve.verdict === 'string') etat.verdict = sauve.verdict;
+    }
+  } catch (e) { /* stockage indisponible : on garde les valeurs par défaut */ }
+
+  function retenir() {
+    try { localStorage.setItem('etat-pages', JSON.stringify({ groupe: etat.groupe, verdict: etat.verdict })); }
+    catch (e) { /* sans effet si le navigateur refuse */ }
+  }
+
+  function ech(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function urlLocale(p) {
+    return 'http://localhost:3455' + p.r + (p.g.indexOf('(client)') === 0 ? '?simulacra=true' : '');
+  }
+
+  // L'exploitation d'abord : c'est là que vivent 41 des 84 pages, et c'est
+  // l'ordre des filtres. Le tri alphabétique de la mesure ferait remonter
+  // l'administration en tête, ce que personne ne cherche en premier.
+  var CLASSEES = PAGES.p.slice().sort(function (a, b) {
+    var d = ORDRE.indexOf(a.g) - ORDRE.indexOf(b.g);
+    return d !== 0 ? d : a.r.localeCompare(b.r);
+  });
+
+  function filtrer() {
+    var q = etat.q.trim().toLowerCase();
+    return CLASSEES.filter(function (p) {
+      if (etat.groupe !== 'tout' && p.g !== etat.groupe) return false;
+      if (etat.verdict !== 'tout' && p.v !== etat.verdict) return false;
+      if (!q) return true;
+      if (p.r.toLowerCase().indexOf(q) > -1) return true;
+      if (p.f.toLowerCase().indexOf(q) > -1) return true;
+      if (p.e && p.e.toLowerCase().indexOf(q) > -1) return true;
+      return p.m.some(function (n) { return n.toLowerCase().indexOf(q) > -1; });
+    });
+  }
+
+  // ── En-tête chiffré
+  function peindreStats() {
+    var n = { ok: 0, remarques: 0, attention: 0 };
+    PAGES.p.forEach(function (p) { n[p.v]++; });
+    document.getElementById('dateMesure').textContent = PAGES.h;
+    document.getElementById('stats').innerHTML =
+      ['ok', 'remarques', 'attention'].map(function (v) {
+        var cls = v === 'ok' ? 's-ok' : v === 'remarques' ? 's-note' : 's-alerte';
+        return '<div class="stat ' + cls + '"><b class="mono">' + n[v] + '</b><span>' + LIB_VERDICT[v] + '</span></div>';
+      }).join('');
+  }
+
+  function peindreFiltres() {
+    var nV = { ok: 0, remarques: 0, attention: 0 };
+    var nG = {};
+    PAGES.p.forEach(function (p) { nV[p.v]++; nG[p.g] = (nG[p.g] || 0) + 1; });
+
+    document.getElementById('filtresVerdict').innerHTML =
+      [['tout', 'Tous les verdicts', PAGES.p.length]]
+        .concat(['ok', 'remarques', 'attention'].map(function (v) { return [v, LIB_VERDICT[v], nV[v]]; }))
+        .map(function (x) {
+          return '<button class="puce" data-axe="verdict" data-val="' + x[0] + '" aria-pressed="' +
+            (etat.verdict === x[0]) + '">' + ech(x[1]) + ' <em>' + x[2] + '</em></button>';
+        }).join('');
+
+    var groupes = ORDRE.filter(function (g) { return nG[g]; });
+    document.getElementById('filtresGroupe').innerHTML =
+      [['tout', 'Toutes les sections', PAGES.p.length]]
+        .concat(groupes.map(function (g) { return [g, LIB_GROUPE[g] || g, nG[g]]; }))
+        .map(function (x) {
+          return '<button class="puce" data-axe="groupe" data-val="' + ech(x[0]) + '" aria-pressed="' +
+            (etat.groupe === x[0]) + '">' + ech(x[1]) + ' <em>' + x[2] + '</em></button>';
+        }).join('');
+  }
+
+  // ── Colonne de gauche
+  function peindreListe() {
+    var liste = filtrer();
+    var hote = document.getElementById('liste');
+    if (!liste.length) {
+      hote.innerHTML = '<p class="vide">Aucune page ne correspond à ce filtre.</p>';
+      return;
+    }
+    if (!liste.some(function (p) { return p.r === etat.choisie; })) etat.choisie = liste[0].r;
+
+    var html = '';
+    var groupeCourant = null;
+    liste.forEach(function (p) {
+      if (p.g !== groupeCourant) {
+        groupeCourant = p.g;
+        html += '<div class="groupe-titre">' + ech(LIB_GROUPE[p.g] || p.g) + '</div>';
+      }
+      var actif = p.r === etat.choisie;
+      html += '<button class="rang" role="option" aria-selected="' + actif + '" aria-current="' + actif +
+        '" data-route="' + ech(p.r) + '">' +
+        '<span class="bande b-' + p.v + '" aria-hidden="true"></span>' +
+        '<span class="r mono">' + ech(p.r) + '</span>' +
+        '<span class="n mono">' + (p.c ? 'coquille' : p.l + ' l.') + '</span></button>';
+    });
+    hote.innerHTML = html;
+  }
+
+  // ── Volet de droite
+  function peindreFiche() {
+    var p = PAGES.p.filter(function (x) { return x.r === etat.choisie; })[0];
+    var hote = document.getElementById('fiche');
+    if (!p) { hote.innerHTML = '<p class="vide">Choisissez une page dans la liste.</p>'; return; }
+
+    var chaine = '<div class="chaine"><span class="quoi">Page</span><code class="mono">' + ech(p.f) + '</code>';
+    if (p.e) {
+      chaine += '<span class="fleche" aria-hidden="true">→</span><span class="quoi">Écran</span><code class="mono">' +
+        ech(p.e) + '</code>';
+    }
+    chaine += '</div>';
+
+    var faits = [
+      ['Volume de l\'écran', p.l + ' lignes'],
+      ['Nature', p.c ? 'Coquille → écran' : 'Écran complet'],
+      ['Garde RBAC', p.rb ? 'Présent' : 'Absent'],
+      ['Onglets PageShell', p.o ? String(p.o) : '—'],
+      ['Composants montés', String(p.nm)],
+      ['Dont sondés d\'un cran', String(p.ne)],
+      ['Frontière d\'erreur', p.fr ? 'Présente' : 'Absente'],
+    ];
+
+    var html =
+      '<div class="eyebrow">' + ech(LIB_GROUPE[p.g] || p.g) + '</div>' +
+      '<h2 class="mono">' + ech(p.r) + '</h2>' +
+      chaine +
+      '<div class="url"><code class="mono" id="urlLocale">' + ech(urlLocale(p)) + '</code>' +
+      '<button type="button" id="copier">Copier l\'URL locale</button></div>' +
+      '<dl class="faits">' + faits.map(function (f) {
+        return '<div class="fait"><dt>' + ech(f[0]) + '</dt><dd>' + ech(f[1]) + '</dd></div>';
+      }).join('') + '</dl>';
+
+    if (p.a.length) {
+      html += '<section class="bloc grave"><h3>Sur la page elle-même</h3><ul>' +
+        p.a.map(function (t) { return '<li>' + ech(t) + '</li>'; }).join('') + '</ul></section>';
+    }
+    if (p.s.length) {
+      html += '<section class="bloc douce"><h3>Dans les ' + p.ne + ' composants qu\'elle monte</h3>' +
+        '<p class="sous">Mêmes critères, appliqués un cran plus bas. La page n\'en est pas la cause, mais le lecteur le voit à l\'écran.</p><ul>' +
+        p.s.map(function (t) { return '<li>' + ech(t) + '</li>'; }).join('') + '</ul></section>';
+    }
+    if (!p.a.length && !p.s.length) {
+      html += '<section class="bloc saine"><h3>Rien à signaler sur les critères mesurés</h3>' +
+        '<p class="sous" style="margin-bottom:0">Garde RBAC, frontière d\'erreur, grilles responsive, tables défilables, ' +
+        'noms accessibles, atteignabilité au clavier, props handler neutralisées.</p></section>';
+    }
+
+    if (p.m.length) {
+      html += '<section class="bloc"><h3>Ce que l\'écran monte</h3><div class="jetons">' +
+        p.m.map(function (n) { return '<span class="jeton mono">' + ech(n) + '</span>'; }).join('') +
+        (p.nm > p.m.length ? '<span class="jeton plus mono">+' + (p.nm - p.m.length) + '</span>' : '') +
+        '</div></section>';
+    }
+
+    hote.innerHTML = html;
+
+    var bouton = document.getElementById('copier');
+    if (bouton) {
+      bouton.addEventListener('click', function () {
+        var texte = urlLocale(p);
+        var fini = function () { bouton.textContent = 'Copiée'; setTimeout(function () { bouton.textContent = 'Copier l\'URL locale'; }, 1600); };
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(texte).then(fini, selectionner);
+            return;
+          }
+        } catch (e) { /* on retombe sur la sélection */ }
+        selectionner();
+      });
+    }
+    function selectionner() {
+      // Le presse-papier peut être refusé dans un cadre isolé : on sélectionne
+      // l'URL pour que le ⌘C de l'utilisateur fasse le travail.
+      var n = document.getElementById('urlLocale');
+      if (!n) return;
+      var r = document.createRange(); r.selectNodeContents(n);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      bouton.textContent = 'Sélectionnée — ⌘C';
+      setTimeout(function () { bouton.textContent = 'Copier l\'URL locale'; }, 2200);
+    }
+  }
+
+  function tout() { peindreListe(); peindreFiche(); }
+
+  // ── Interactions
+  document.getElementById('q').addEventListener('input', function (e) {
+    etat.q = e.target.value; tout();
+  });
+
+  document.querySelector('.filtres').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.puce') : null;
+    if (!b) return;
+    etat[b.dataset.axe] = b.dataset.val;
+    retenir(); peindreFiltres(); tout();
+  });
+
+  var liste = document.getElementById('liste');
+  liste.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.rang') : null;
+    if (!b) return;
+    etat.choisie = b.dataset.route; tout();
+  });
+
+  liste.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    var visibles = filtrer();
+    var i = visibles.findIndex(function (p) { return p.r === etat.choisie; });
+    var j = Math.max(0, Math.min(visibles.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)));
+    if (!visibles[j]) return;
+    etat.choisie = visibles[j].r; tout();
+    var actif = liste.querySelector('.rang[aria-current="true"]');
+    if (actif && actif.scrollIntoView) actif.scrollIntoView({ block: 'nearest' });
+  });
+
+  peindreStats(); peindreFiltres(); tout();
+})();
+
+</script>

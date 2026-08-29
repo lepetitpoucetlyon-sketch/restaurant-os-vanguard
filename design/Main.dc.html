@@ -7,171 +7,257 @@
 <body>
 <x-dc>
 <helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0B0B0C; color: #111827; -webkit-font-smoothing: antialiased; }
-    a { color: #C5A059; text-decoration: none; } a:hover { color: #a8853f; }
-    .micro { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 600; font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; }
-    .navbtn { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #6b7280; cursor: pointer; transition: all .2s; }
-    .navbtn:hover { color: #C5A059; background: rgba(197,160,89,.08); }
-    .navbtn.active { color: #0B0B0C; background: #C5A059; box-shadow: 0 6px 16px -8px rgba(11,11,12,.4); }
-    .cat { padding: 9px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; white-space: nowrap; border: 1px solid transparent; transition: all .2s; }
-    .cat:hover { color: #111827; background: #fff; }
-    .cat.on { color: #0B0B0C; background: #C5A059; border-color: #C5A059; box-shadow: 0 4px 10px -6px rgba(11,11,12,.25); }
-    .pcard { background: #fff; border-radius: 20px; overflow: hidden; border: 1px solid #EFEDE4; box-shadow: 0 1px 2px rgba(0,0,0,.03); cursor: pointer; transition: transform .25s cubic-bezier(0.16,1,0.3,1), box-shadow .25s; }
-    .pcard:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -18px rgba(0,0,0,.22); }
-    .thumb { height: 118px; display: flex; align-items: flex-end; padding: 12px; position: relative; }
-    .addbtn { width: 34px; height: 34px; border-radius: 12px; background: #0B0B0C; color: #C5A059; display: flex; align-items: center; justify-content: center; margin-left: auto; box-shadow: 0 6px 16px -6px rgba(0,0,0,.5); }
-    .line { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px dashed #E5E4DA; }
-    .qty { min-width: 26px; height: 26px; padding: 0 7px; border-radius: 8px; background: #F1EFE6; color: #111827; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; }
+    a { color: #C5A059; } a:hover { color: #E0BE7A; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #2A2A33; border-radius: 3px; }
   </style>
 </helmet>
 
-<div style="display:flex; height:900px; background:#F6F4EC;">
+<div style="width: 1024px; height: 768px; display: flex; flex-direction: column; background: #0B0B0C; color: #F3F4F6; overflow: hidden;">
 
-  <!-- Rail -->
-  <div style="width:80px; background:#0B0B0C; display:flex; flex-direction:column; align-items:center; padding:22px 0; gap:10px;">
-    <div style="width:44px; height:44px; border-radius:14px; background:linear-gradient(145deg,#D9B978,#B8924A); display:flex; align-items:center; justify-content:center; margin-bottom:18px; box-shadow:0 8px 18px -8px rgba(11,11,12,.45);">
-      <span style="font-family:'Playfair Display',serif; font-weight:700; font-style:italic; font-size:20px; color:#0B0B0C;">M</span>
+  <!-- ── Bandeau de service : tout ce qui compte en un coup d'œil ────────── -->
+  <div style="display: flex; align-items: center; gap: 20px; padding: 0 20px; height: 64px; background: #111827; border-bottom: 1px solid #1F2937; flex-shrink: 0;">
+    <div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;">
+      <span class="serif" style="font-size: 30px; font-weight: 700; font-style: italic; color: #F9FAFB; line-height: 1;">Table {{table.numero}}</span>
+      <span style="font-size: 13px; color: #9CA3AF; white-space: nowrap;">{{table.couverts}} couverts</span>
     </div>
-    <div class="navbtn active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
-    <div class="navbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16M4 11a8 8 0 0 1 16 0M12 11v8M8 19h8"/></svg></div>
-    <div class="navbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M6 7v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7M9 4h6"/></svg></div>
-    <div class="navbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v5H4zM4 13h7v7H4zM15 13h5v7h-5z"/></svg></div>
-    <div class="navbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M8 14l3-4 3 3 4-6"/></svg></div>
-    <div style="margin-top:auto;"></div>
-    <div style="width:44px; height:44px; border-radius:50%; background:#1f2937; border:2px solid #C5A059; display:flex; align-items:center; justify-content:center; color:#C5A059; font-weight:700; font-size:13px;">LC</div>
+
+    <div style="display: flex; gap: 6px; background: #0B0B0C; padding: 4px; border-radius: 12px;">
+      <sc-for list="{{modes}}" as="m" hint-placeholder-count="2">
+        <button onClick="{{m.choisir}}" style="height: 44px; padding: 0 18px; border-radius: 10px; font-size: 13px; font-weight: 600; background: {{m.fond}}; color: {{m.encre}};">{{m.nom}}</button>
+      </sc-for>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <div style="display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 36px; border-radius: 9px; background: {{service.fond}}; border: 1px solid {{service.bord}};">
+      <span style="width: 7px; height: 7px; border-radius: 50%; background: {{service.point}};"></span>
+      <span style="font-size: 12px; font-weight: 600; color: {{service.encre}}; letter-spacing: 0.04em;">{{service.libelle}}</span>
+    </div>
+
+    <button style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 12px; background: #1F2937; color: #E5E7EB; font-size: 13px; font-weight: 600;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      Rechercher
+    </button>
   </div>
 
-  <!-- Main -->
-  <div style="flex:1; display:flex; flex-direction:column; padding:28px 30px 24px; min-width:0;">
-    <!-- Header -->
-    <div style="display:flex; align-items:flex-end; gap:20px; margin-bottom:24px;">
-      <div>
-        <div class="micro" style="color:#9a8a6a; margin-bottom:4px;">Service · Soir</div>
-        <h1 style="margin:0; font-family:'Playfair Display',serif; font-weight:700; font-size:34px; color:#111827; letter-spacing:-.5px;">Le Comptoir</h1>
+  <!-- ── Corps : rail catégories · grille produits · addition ────────────── -->
+  <div style="display: flex; flex: 1; min-height: 0;">
+
+    <!-- Rail catégories : cibles tactiles de 68px, jamais tronquées -->
+    <div style="width: 108px; flex-shrink: 0; background: #111827; border-right: 1px solid #1F2937; padding: 12px 10px; display: flex; flex-direction: column; gap: 8px;">
+      <sc-for list="{{categories}}" as="c" hint-placeholder-count="4">
+        <button onClick="{{c.choisir}}" style="height: 68px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: {{c.fond}}; border: 1px solid {{c.bord}}; color: {{c.encre}};">
+          <span style="font-size: 19px; line-height: 1;">{{c.pictogramme}}</span>
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.02em;">{{c.nom}}</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <!-- Grille produits -->
+    <div style="flex: 1; min-width: 0; padding: 16px; overflow-y: auto;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px;">
+        <span class="serif" style="font-size: 22px; font-weight: 700; font-style: italic; color: #F9FAFB;">{{categorieActive.nom}}</span>
+        <span style="font-size: 12px; color: #6B7280;">{{categorieActive.compte}} articles</span>
       </div>
-      <div style="display:flex; align-items:center; gap:10px; padding:8px 8px 8px 16px; background:#0B0B0C; border-radius:16px; box-shadow:0 12px 30px -14px rgba(0,0,0,.6);">
-        <div><div class="micro" style="color:#C5A059; margin-bottom:2px;">Table</div><div style="color:#fff; font-weight:700; font-size:15px;">12 · Terrasse</div></div>
-        <div style="width:1px; height:26px; background:#2a2a2c;"></div>
-        <div style="display:flex; align-items:center; gap:6px; color:#d1d5db; font-size:13px; font-weight:600;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M15 8a3 3 0 1 0 0-.01M3 20a6 6 0 0 1 12 0M14 14a6 6 0 0 1 7 6"/></svg>
-          4 couverts
-        </div>
-        <div style="width:34px; height:34px; border-radius:12px; background:#1a1a1c; display:flex; align-items:center; justify-content:center; color:#C5A059;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
-      </div>
-      <div style="flex:1;"></div>
-      <div style="display:flex; align-items:center; gap:10px; height:44px; padding:0 16px; background:#fff; border:1px solid #EFEDE4; border-radius:14px; color:#9ca3af; font-size:14px; min-width:230px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-        Rechercher un plat…
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+        <sc-for list="{{produits}}" as="p" hint-placeholder-count="6">
+          <button onClick="{{p.ajouter}}" style="height: 104px; border-radius: 16px; background: #15161C; border: 1px solid #232530; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; text-align: left;">
+            <span style="font-size: 14px; font-weight: 600; color: #F3F4F6; line-height: 1.3;">{{p.nom}}</span>
+            <div style="display: flex; align-items: baseline; justify-content: space-between;">
+              <span class="mono" style="font-size: 15px; font-weight: 600; color: #C5A059;">{{p.prix}}</span>
+              <span style="font-size: 12px; color: {{p.stockEncre}};">{{p.stock}}</span>
+            </div>
+          </button>
+        </sc-for>
       </div>
     </div>
 
-    <!-- Category tabs -->
-    <div style="display:flex; gap:9px; margin-bottom:22px; overflow:hidden;">
-      <div class="cat on">Tout</div>
-      <div class="cat">Entrées</div>
-      <div class="cat">Plats</div>
-      <div class="cat">Desserts</div>
-      <div class="cat">Vins</div>
-      <div class="cat">Cocktails</div>
-      <div class="cat">Sans alcool</div>
-    </div>
+    <!-- Addition : largeur FIXE de 320px, jamais rognée ─────────────────── -->
+    <div style="width: 320px; flex-shrink: 0; background: #111827; border-left: 1px solid #1F2937; display: flex; flex-direction: column;">
 
-    <!-- Product grid -->
-    <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:18px; align-content:start; overflow:hidden;">
-      <!-- card -->
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#F3E7CE,#E4C98E);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700; letter-spacing:.06em;">ENTRÉE</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div style="padding: 16px 18px 12px; border-bottom: 1px solid #1F2937;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: #C5A059;">ADDITION</div>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-top: 4px;">
+          <span class="serif" style="font-size: 20px; font-weight: 700; color: #F9FAFB;">{{panier.compte}}</span>
+          <button style="height: 44px; padding: 0 12px; margin-right: -12px; border-radius: 10px; font-size: 12px; color: #9CA3AF;">Vider</button>
         </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Carpaccio de bœuf</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">16,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
       </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#EAD9C0,#D6B486);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">PLAT</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Filet de bar rôti</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">28,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#E7C9C0,#C98F82);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">PLAT</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Côte de bœuf 1kg</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">62,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard" style="opacity:.55;">
-        <div class="thumb" style="background:linear-gradient(150deg,#E5E3DB,#C9C6BB);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:#dc2626; color:#fff; font-size:10px; font-weight:700;">ÉPUISÉ</span>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#6b7280; margin-bottom:6px;">Risotto aux cèpes</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#9ca3af;">24,00</span><span style="color:#c4c4c4; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#F0E4D0,#DEBE8C);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">DESSERT</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Fondant chocolat</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">11,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#D9C4B0,#7C3B2E);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">VIN</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Côtes-du-Rhône</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">34,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#EFDFC7,#C79A5C);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">COCKTAIL</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Negroni maison</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">13,00</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-      <div class="pcard">
-        <div class="thumb" style="background:linear-gradient(150deg,#E6EDDF,#A9C08E);">
-          <span style="position:absolute; top:12px; left:12px; padding:4px 9px; border-radius:999px; background:rgba(11,11,12,.82); color:#C5A059; font-size:10px; font-weight:700;">SANS ALCOOL</span>
-          <div class="addbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div>
-        <div style="padding:14px 15px 16px;"><div style="font-weight:600; font-size:15px; color:#111827; margin-bottom:6px;">Limonade basilic</div><div style="display:flex; align-items:baseline; gap:6px;"><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:19px; color:#111827;">6,50</span><span style="color:#9ca3af; font-size:13px;">€</span></div></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Cart -->
-  <div style="width:372px; background:#fff; border-left:1px solid #ECEAE0; display:flex; flex-direction:column; padding:26px 24px 22px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-      <div><div class="micro" style="color:#9a8a6a; margin-bottom:3px;">Addition</div><h2 style="margin:0; font-family:'Playfair Display',serif; font-weight:700; font-size:24px; color:#111827;">Table 12</h2></div>
-      <div style="width:40px; height:40px; border-radius:13px; background:#F6F4EC; display:flex; align-items:center; justify-content:center; color:#6b7280;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
-    </div>
-
-    <div style="flex:1; overflow:hidden;">
-      <div class="line"><div class="qty">2×</div><div style="flex:1;"><div style="font-weight:600; font-size:14px; color:#111827;">Carpaccio de bœuf</div><div style="font-size:12px; color:#9ca3af;">Entrée</div></div><div style="font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:#111827;">32,00</div></div>
-      <div class="line"><div class="qty">1×</div><div style="flex:1;"><div style="font-weight:600; font-size:14px; color:#111827;">Côte de bœuf 1kg</div><div style="font-size:12px; color:#C5A059; font-weight:600;">Cuisson bleue · sans sel</div></div><div style="font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:#111827;">62,00</div></div>
-      <div class="line"><div class="qty">1×</div><div style="flex:1;"><div style="font-weight:600; font-size:14px; color:#111827;">Filet de bar rôti</div><div style="font-size:12px; color:#9ca3af;">Plat</div></div><div style="font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:#111827;">28,00</div></div>
-      <div class="line"><div class="qty">1×</div><div style="flex:1;"><div style="font-weight:600; font-size:14px; color:#111827;">Côtes-du-Rhône</div><div style="font-size:12px; color:#9ca3af;">Vin · 75cl</div></div><div style="font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:#111827;">34,00</div></div>
-    </div>
-
-    <div style="padding:16px 0 6px; border-top:1px solid #ECEAE0; margin-top:8px;">
-      <div style="display:flex; justify-content:space-between; font-size:13px; color:#6b7280; margin-bottom:7px;"><span>Total HT</span><span>142,73 €</span></div>
-      <div style="display:flex; justify-content:space-between; font-size:13px; color:#6b7280; margin-bottom:12px;"><span>TVA (10 %)</span><span>13,27 €</span></div>
-      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px;"><span style="font-weight:700; font-size:15px; color:#111827;">Total TTC</span><span style="font-family:'Playfair Display',serif; font-weight:700; font-size:30px; color:#111827;">156,00 €</span></div>
-    </div>
-
-    <div style="display:flex; gap:10px;">
-      <div style="flex:1; height:52px; border-radius:15px; border:1px solid #E5E4DA; display:flex; align-items:center; justify-content:center; gap:8px; color:#111827; font-weight:600; font-size:14px;">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Partager
+      <div style="flex: 1; overflow-y: auto; padding: 10px 12px;">
+        <sc-if value="{{panier.vide}}" hint-placeholder-val="{{false}}">
+          <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 30px 20px; text-align: center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="1.5" stroke-linecap="round"><path d="M4 6h16l-1.5 11.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+            <span style="font-size: 13px; color: #6B7280; line-height: 1.5;">Touchez un article<br>pour commencer</span>
+          </div>
+        </sc-if>
+        <sc-for list="{{lignes}}" as="l" hint-placeholder-count="3">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; background: #15161C; margin-bottom: 8px;">
+            <span class="mono" style="width: 26px; height: 26px; flex-shrink: 0; border-radius: 8px; background: rgba(197,160,89,0.14); color: #C5A059; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center;">{{l.quantite}}</span>
+            <span style="flex: 1; min-width: 0; font-size: 13px; color: #E5E7EB; line-height: 1.3;">{{l.nom}}</span>
+            <span class="mono" style="font-size: 13px; font-weight: 600; color: #F3F4F6;">{{l.total}}</span>
+            <button onClick="{{l.retirer}}" style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; background: #1F2937; color: #9CA3AF; font-size: 18px; line-height: 1;">−</button>
+          </div>
+        </sc-for>
       </div>
-      <div style="flex:2; height:52px; border-radius:15px; background:#0B0B0C; display:flex; align-items:center; justify-content:center; gap:9px; color:#C5A059; font-weight:700; font-size:15px; box-shadow:0 14px 30px -12px rgba(0,0,0,.55);">
-        Encaisser
-        <span style="font-family:'Playfair Display',serif; color:#fff;">156,00 €</span>
+
+      <div style="padding: 14px 18px 16px; border-top: 1px solid #1F2937; background: #0F1117;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #6B7280; margin-bottom: 5px;">
+          <span>Total HT</span><span class="mono">{{panier.ht}}</span>
+        </div>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px;">
+          <span class="serif" style="font-size: 15px; font-weight: 700; font-style: italic; color: #C5A059;">Total TTC</span>
+          <span class="mono" style="font-size: 26px; font-weight: 600; color: #F9FAFB;">{{panier.ttc}}</span>
+        </div>
+
+        <!-- Les trois actions tiennent DANS le panneau — c'est le défaut mesuré
+             sur l'interface actuelle : à 1024px elles débordaient de 113px. -->
+        <button style="width: 100%; height: 44px; border-radius: 14px; background: #1F2937; color: #D1D5DB; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 6.5a3 3 0 0 1 0 5.4"/><path d="M18.5 20a5.6 5.6 0 0 0-2.2-4.4"/></svg>
+          Partager l'addition
+        </button>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+          <button style="height: 52px; border-radius: 14px; background: #1F2937; color: #D1D5DB; font-size: 13px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 21h10"/><path d="M12 21v-4"/><path d="M5 9a7 7 0 0 1 14 0v4a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3Z"/></svg>
+            Cuisine
+          </button>
+          <button style="height: 52px; border-radius: 14px; background: #C5A059; color: #16130B; font-size: 13px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/></svg>
+            Encaisser
+          </button>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
 </x-dc>
+
+<script data-dc-script data-props='{
+  "accent": {"editor": "color", "default": "#C5A059", "options": ["#C5A059", "#6366F1", "#059669", "#DC2626"], "section": "Marque"},
+  "densite": {"editor": "enum", "options": ["Confort", "Compact"], "default": "Confort", "section": "Salle"}
+}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { categorie: 'plats', mode: 'place', panier: {} };
+  }
+
+  catalogue() {
+    return {
+      entrees: { nom: 'Entrées', pictogramme: '🥗', articles: [
+        { id: 'e1', nom: 'Velouté de potimarron', prix: 9.5, stock: '' },
+        { id: 'e2', nom: 'Œuf parfait, girolles', prix: 14, stock: '' },
+        { id: 'e3', nom: 'Tartare de daurade', prix: 16, stock: '3 restants' },
+      ]},
+      plats: { nom: 'Plats', pictogramme: '🍽️', articles: [
+        { id: 'p1', nom: 'Suprême de volaille', prix: 26, stock: '' },
+        { id: 'p2', nom: 'Bar de ligne, fenouil', prix: 32, stock: '2 restants' },
+        { id: 'p3', nom: 'Côte de bœuf, 2 pers.', prix: 68, stock: '' },
+        { id: 'p4', nom: 'Risotto aux cèpes', prix: 24, stock: '' },
+        { id: 'p5', nom: 'Agneau de sept heures', prix: 29, stock: '' },
+        { id: 'p6', nom: 'Ravioles de ricotta', prix: 22, stock: '' },
+      ]},
+      desserts: { nom: 'Desserts', pictogramme: '🍰', articles: [
+        { id: 'd1', nom: 'Paris-Brest', prix: 11 },
+        { id: 'd2', nom: 'Tarte au citron', prix: 10 },
+        { id: 'd3', nom: 'Baba au rhum', prix: 12 },
+      ]},
+      boissons: { nom: 'Cave', pictogramme: '🍷', articles: [
+        { id: 'b1', nom: 'Sancerre, verre', prix: 8.5 },
+        { id: 'b2', nom: 'Côtes-du-Rhône, btl', prix: 34 },
+        { id: 'b3', nom: 'Eau plate 75cl', prix: 5 },
+        { id: 'b4', nom: 'Café', prix: 3.5 },
+      ]},
+    };
+  }
+
+  euro(v) { return v.toFixed(2).replace('.', ',') + ' €'; }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#C5A059';
+    const cat = this.catalogue();
+    const actif = this.state.categorie;
+
+    const categories = Object.keys(cat).map((cle) => {
+      const on = cle === actif;
+      return {
+        nom: cat[cle].nom,
+        pictogramme: cat[cle].pictogramme,
+        fond: on ? 'rgba(197,160,89,0.14)' : 'transparent',
+        bord: on ? accent : 'transparent',
+        encre: on ? accent : '#9CA3AF',
+        choisir: () => this.setState({ categorie: cle }),
+      };
+    });
+
+    const produits = cat[actif].articles.map((a) => ({
+      nom: a.nom,
+      prix: this.euro(a.prix),
+      stock: a.stock || '',
+      stockEncre: a.stock ? '#F59E0B' : '#4B5563',
+      ajouter: () => {
+        const p = { ...this.state.panier };
+        p[a.id] = { nom: a.nom, prix: a.prix, quantite: (p[a.id]?.quantite ?? 0) + 1 };
+        this.setState({ panier: p });
+      },
+    }));
+
+    const lignes = Object.keys(this.state.panier).map((id) => {
+      const l = this.state.panier[id];
+      return {
+        nom: l.nom,
+        quantite: l.quantite,
+        total: this.euro(l.prix * l.quantite),
+        retirer: () => {
+          const p = { ...this.state.panier };
+          if (p[id].quantite > 1) p[id] = { ...p[id], quantite: p[id].quantite - 1 };
+          else delete p[id];
+          this.setState({ panier: p });
+        },
+      };
+    });
+
+    const ttc = Object.keys(this.state.panier)
+      .reduce((s, id) => s + this.state.panier[id].prix * this.state.panier[id].quantite, 0);
+    const nb = Object.keys(this.state.panier)
+      .reduce((s, id) => s + this.state.panier[id].quantite, 0);
+
+    const modes = [
+      { cle: 'place', nom: 'Sur place' },
+      { cle: 'emporter', nom: 'À emporter' },
+    ].map((m) => {
+      const on = m.cle === this.state.mode;
+      return {
+        nom: m.nom,
+        fond: on ? accent : 'transparent',
+        encre: on ? '#16130B' : '#9CA3AF',
+        choisir: () => this.setState({ mode: m.cle }),
+      };
+    });
+
+    return {
+      table: { numero: '5', couverts: 2 },
+      service: { libelle: 'SERVICE DU SOIR', fond: 'rgba(5,150,105,0.12)', bord: 'rgba(5,150,105,0.3)', point: '#059669', encre: '#34D399' },
+      modes,
+      categories,
+      categorieActive: { nom: cat[actif].nom, compte: cat[actif].articles.length },
+      produits,
+      lignes,
+      panier: {
+        vide: nb === 0,
+        compte: nb === 0 ? 'Panier vide' : (nb + (nb > 1 ? ' articles' : ' article')),
+        ht: this.euro(ttc / 1.1),
+        ttc: this.euro(ttc),
+      },
+    };
+  }
+}
+</script>
 </body>
 </html>

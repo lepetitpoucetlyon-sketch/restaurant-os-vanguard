@@ -1,0 +1,460 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Architecture Universelle Complète (12 Verticales)",
+    "output": "restaurant-os-universal-architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1260,
+      520
+    ],
+    "views": [
+      {
+        "id": "morphogenesis-flow",
+        "label": "Morphogenèse & 12 Verticales Métiers",
+        "focus": [
+          "forge_studio",
+          "genome_engine",
+          "archetype_profiles",
+          "vertical_blueprints",
+          "provisioning_saga"
+        ],
+        "note": "Génération instantanée et adaptation des 12 verticales (Restaurant, Bar, Boulangerie, Hôtel, Clinique, Custom...)."
+      },
+      {
+        "id": "pillars-orchestration",
+        "label": "8 Piliers Universels & EventBus",
+        "focus": [
+          "client_tenants",
+          "core_pillars",
+          "hermes_eventbus",
+          "hermes_oracle_ai"
+        ],
+        "note": "Logique métier universelle (Ops, Finance, RH, Logistics...) et bus événementiel distribué."
+      },
+      {
+        "id": "fleet-hardware",
+        "label": "Gouvernance MCC & Flotte IoT",
+        "focus": [
+          "mcc_console",
+          "switchboard_mcc",
+          "hardware_fleet",
+          "client_tenants"
+        ],
+        "note": "Contrôle de flotte, télémétrie SmartSpout, imprimantes ESC/POS et terminaux TPE."
+      },
+      {
+        "id": "sovereignty-fiscal",
+        "label": "Souveraineté Grade X & Fiscalité NF525",
+        "focus": [
+          "sovereign_guard",
+          "ref_matrix",
+          "nexus_storage",
+          "nf525_ledger"
+        ],
+        "note": "Protection WORM inaltérable, partitionnement tenant étanche et conformité DGFiP."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "mcc_console",
+      "type": "frontend",
+      "label": "Console MCC SuperAdmin",
+      "sublabel": "Gouvernance Plateforme",
+      "pos": [
+        35,
+        70
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "forge_studio",
+      "type": "frontend",
+      "label": "Forge Studio & DNA",
+      "sublabel": "Morphogenèse & Crawler",
+      "pos": [
+        35,
+        165
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "Instant Onboarding"
+    },
+    {
+      "id": "switchboard_mcc",
+      "type": "frontend",
+      "label": "Switchboard Modules",
+      "sublabel": "Activation 35 Modules",
+      "pos": [
+        35,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "hardware_fleet",
+      "type": "backend",
+      "label": "Flotte Hardware & IoT",
+      "sublabel": "ESC/POS, TPE, Spout",
+      "pos": [
+        35,
+        355
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "IoT Outbox"
+    },
+    {
+      "id": "genome_engine",
+      "type": "backend",
+      "label": "Génome & 35 Citoyens",
+      "sublabel": "Contrats Canoniques",
+      "pos": [
+        265,
+        115
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Standard Core"
+    },
+    {
+      "id": "archetype_profiles",
+      "type": "backend",
+      "label": "8 Profils Archétypaux",
+      "sublabel": "Food, Retail, PMS, Gym...",
+      "pos": [
+        265,
+        310
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Profils A à H"
+    },
+    {
+      "id": "vertical_blueprints",
+      "type": "backend",
+      "label": "12 Blueprints Verticales",
+      "sublabel": "Resto, Bar, Hôtel, Custom",
+      "pos": [
+        495,
+        70
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "tag": "Multi-Verticale"
+    },
+    {
+      "id": "ref_matrix",
+      "type": "backend",
+      "label": "36 Tenants Système",
+      "sublabel": "_ref_, _test_, _demo_ × 12",
+      "pos": [
+        495,
+        165
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "tag": "3 Tiers Isolés"
+    },
+    {
+      "id": "provisioning_saga",
+      "type": "backend",
+      "label": "Saga Provisioning",
+      "sublabel": "Deep Clone & Sceau Genesis",
+      "pos": [
+        495,
+        260
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "tag": "Automatisé"
+    },
+    {
+      "id": "client_tenants",
+      "type": "backend",
+      "label": "Instances B2B Prod",
+      "sublabel": "Tenants Clients Isolés",
+      "pos": [
+        495,
+        355
+      ],
+      "size": [
+        165,
+        64
+      ],
+      "tag": "Production"
+    },
+    {
+      "id": "core_pillars",
+      "type": "backend",
+      "label": "8 Piliers Universels",
+      "sublabel": "Ops, Finance, RH, Logistics",
+      "pos": [
+        735,
+        80
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Logique Métier"
+    },
+    {
+      "id": "hermes_eventbus",
+      "type": "messagebus",
+      "label": "Nexus EventBus",
+      "sublabel": "Routage Événements Sagas",
+      "pos": [
+        735,
+        215
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Event-Driven"
+    },
+    {
+      "id": "hermes_oracle_ai",
+      "type": "backend",
+      "label": "Hermes IA & Oracle BI",
+      "sublabel": "LightRAG & Prédictions",
+      "pos": [
+        735,
+        350
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Intelligence"
+    },
+    {
+      "id": "sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard & RBAC",
+      "sublabel": "Membrane d'Étanchéité",
+      "pos": [
+        975,
+        80
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "nexus_storage",
+      "type": "database",
+      "label": "Nexus Storage",
+      "sublabel": "Partitionnement Tenant",
+      "pos": [
+        975,
+        215
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Collections Découpées"
+    },
+    {
+      "id": "nf525_ledger",
+      "type": "database",
+      "label": "Grand Livre NF525",
+      "sublabel": "Chaîne de Sceaux WORM",
+      "pos": [
+        975,
+        350
+      ],
+      "size": [
+        165,
+        68
+      ],
+      "tag": "Conforme DGFiP"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Gouvernance MCC & Morphogenèse",
+      "wraps": [
+        "mcc_console",
+        "forge_studio",
+        "switchboard_mcc",
+        "hardware_fleet"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Génome, Profils & 12 Verticales (Multi-Tenant)",
+      "wraps": [
+        "genome_engine",
+        "archetype_profiles",
+        "vertical_blueprints",
+        "ref_matrix",
+        "provisioning_saga",
+        "client_tenants"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "8 Piliers Universels & Moteurs IA",
+      "wraps": [
+        "core_pillars",
+        "hermes_eventbus",
+        "hermes_oracle_ai"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Souveraineté, Persistance & Fiscalité NF525",
+      "wraps": [
+        "sovereign_guard",
+        "nexus_storage",
+        "nf525_ledger"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "mcc-forge",
+      "from": "mcc_console",
+      "to": "forge_studio"
+    },
+    {
+      "id": "forge-switch",
+      "from": "forge_studio",
+      "to": "switchboard_mcc"
+    },
+    {
+      "id": "switch-hw",
+      "from": "switchboard_mcc",
+      "to": "hardware_fleet"
+    },
+    {
+      "id": "forge-genome",
+      "from": "forge_studio",
+      "to": "genome_engine"
+    },
+    {
+      "id": "switch-arch",
+      "from": "switchboard_mcc",
+      "to": "archetype_profiles"
+    },
+    {
+      "id": "genome-vert",
+      "from": "genome_engine",
+      "to": "vertical_blueprints"
+    },
+    {
+      "id": "arch-vert",
+      "from": "archetype_profiles",
+      "to": "vertical_blueprints"
+    },
+    {
+      "id": "vert-ref",
+      "from": "vertical_blueprints",
+      "to": "ref_matrix"
+    },
+    {
+      "id": "ref-prov",
+      "from": "ref_matrix",
+      "to": "provisioning_saga"
+    },
+    {
+      "id": "prov-client",
+      "from": "provisioning_saga",
+      "to": "client_tenants"
+    },
+    {
+      "id": "client-pillars",
+      "from": "client_tenants",
+      "to": "core_pillars"
+    },
+    {
+      "id": "client-bus",
+      "from": "client_tenants",
+      "to": "hermes_eventbus"
+    },
+    {
+      "id": "pillars-bus",
+      "from": "core_pillars",
+      "to": "hermes_eventbus"
+    },
+    {
+      "id": "bus-ai",
+      "from": "hermes_eventbus",
+      "to": "hermes_oracle_ai"
+    },
+    {
+      "id": "pillars-guard",
+      "from": "core_pillars",
+      "to": "sovereign_guard",
+      "variant": "security"
+    },
+    {
+      "id": "bus-store",
+      "from": "hermes_eventbus",
+      "to": "nexus_storage"
+    },
+    {
+      "id": "bus-fiscal",
+      "from": "hermes_eventbus",
+      "to": "nf525_ledger",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Morphogenèse des 12 Verticales",
+      "items": [
+        "12 verticales métiers (Restaurant, Bar, Boulangerie, Hôtel, Clinique, Custom...)",
+        "8 profils archétypaux A-H et 35 modules configurables par Switchboard",
+        "Provisioning instantané avec clonage de matrice de référence étanche"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "8 Piliers Universels & IA",
+      "items": [
+        "Ops, Commerce, Finance, Compliance, Human, Logistics, Facility, Intelligence",
+        "NexusEventBus distribue les commandes, alertes et clôtures en temps réel",
+        "HermesEngine (LightRAG multi-agents) & OracleEngine (BI & Forecast)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Souveraineté Grade X & Fiscalité",
+      "items": [
+        "Grand Livre NF525 scellé en WORM (Art. 286-I-3° bis CGI, conformité DGFiP)",
+        "36 tenants système sous SovereignGuard et isolation totale des instances B2B",
+        "Contrôle de flotte matériel IoT (imprimantes ESC/POS, TPE, SmartSpout)"
+      ]
+    }
+  ]
+}

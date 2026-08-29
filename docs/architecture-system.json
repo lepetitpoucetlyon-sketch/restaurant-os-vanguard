@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core — Architecture Globale du Système",
+    "quality_profile": "showcase",
+    "output": "architecture-system.html",
+    "views": [
+      {
+        "id": "full-overview",
+        "label": "Architecture Globale",
+        "focus": ["pos_kds_pwa", "next_app_core", "business_pillars", "sovereign_guard", "nexus_gateway", "cloud_firestore"],
+        "note": "Vue d'ensemble complète du flux applicatif, de la caisse à la persistance sécurisée."
+      },
+      {
+        "id": "fiscal-nf525",
+        "label": "Chaîne Fiscale NF525",
+        "focus": ["pos_kds_pwa", "business_pillars", "fiscal_engine", "nexus_gateway", "cloud_firestore"],
+        "note": "Flux de scellement cryptographique immuable (SHA-256) et journalisation DGFiP."
+      },
+      {
+        "id": "sovereignty-nexus",
+        "label": "Bouclier Nexus & Souveraineté",
+        "focus": ["next_app_core", "sovereign_guard", "nexus_gateway", "cloud_firestore"],
+        "note": "Isolation stricte multi-tenant tenant/{id}/... et intercepteur d'accès unifié."
+      },
+      {
+        "id": "ai-hermes-rag",
+        "label": "Pôle Intelligence & RAG",
+        "focus": ["hermes_ai", "lightrag_kg", "nexus_gateway", "cloud_firestore"],
+        "note": "Orchestration multi-agents Hermes, LLM Gateway et Knowledge Graph LightRAG."
+      },
+      {
+        "id": "iot-hardware",
+        "label": "Matériel & Flotte IoT",
+        "focus": ["smartspout_iot", "pos_kds_pwa", "business_pillars"],
+        "note": "Télémétrie des tireuses SmartSpout et impression thermique ESC/POS en cuisine."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pos_kds_pwa",
+      "type": "frontend",
+      "label": "Terminaux PWA",
+      "sublabel": "POS, KDS & Mobile App",
+      "brand": "react",
+      "tag": "Local-First / Dexie",
+      "pos": [40, 240],
+      "size": [150, 68]
+    },
+    {
+      "id": "smartspout_iot",
+      "type": "external",
+      "label": "Matériel IoT",
+      "sublabel": "SmartSpout & ESC/POS",
+      "tag": "Télémétrie / Print",
+      "pos": [40, 460],
+      "size": [150, 68]
+    },
+    {
+      "id": "next_app_core",
+      "type": "backend",
+      "label": "Next.js Core Engine",
+      "sublabel": "App Router & ICM-lite",
+      "brand": "next-js",
+      "tag": "Task Context",
+      "pos": [270, 240],
+      "size": [160, 68]
+    },
+    {
+      "id": "business_pillars",
+      "type": "backend",
+      "label": "8 Piliers Métiers",
+      "sublabel": "Ops, Finance, HACCP, HR...",
+      "tag": "Domaines Étanches",
+      "pos": [270, 460],
+      "size": [160, 68]
+    },
+    {
+      "id": "sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard",
+      "sublabel": "Isolation Multi-Tenant",
+      "tag": "Anti-Breach Filter",
+      "pos": [510, 240],
+      "size": [160, 68]
+    },
+    {
+      "id": "nexus_gateway",
+      "type": "backend",
+      "label": "Nexus Data Gateway",
+      "sublabel": "Intercepteur & Adapters",
+      "tag": "Firestore / Simulacra",
+      "pos": [510, 460],
+      "size": [160, 68]
+    },
+    {
+      "id": "fiscal_engine",
+      "type": "security",
+      "label": "Moteur Fiscal NF525",
+      "sublabel": "Scellement Cryptographique",
+      "tag": "SHA-256 / DGFiP",
+      "pos": [510, 660],
+      "size": [160, 68]
+    },
+    {
+      "id": "hermes_ai",
+      "type": "cloud",
+      "label": "Hermes Multi-Agent",
+      "sublabel": "Gemini 2.5 & OpenAI",
+      "brand": "google-gemini",
+      "tag": "Orchestrateur IA",
+      "pos": [750, 240],
+      "size": [160, 68]
+    },
+    {
+      "id": "lightrag_kg",
+      "type": "backend",
+      "label": "LightRAG Engine",
+      "sublabel": "Sidecar Python :9621",
+      "brand": "python",
+      "tag": "Knowledge Graph",
+      "pos": [750, 460],
+      "size": [160, 68]
+    },
+    {
+      "id": "sentry_axiom",
+      "type": "cloud",
+      "label": "Sentrux & Sentry",
+      "sublabel": "Observabilité & Traces",
+      "brand": "sentry",
+      "tag": "Télémétrie",
+      "pos": [990, 100],
+      "size": [150, 68]
+    },
+    {
+      "id": "cloud_firestore",
+      "type": "database",
+      "label": "Firebase Firestore",
+      "sublabel": "Stockage Multi-Tenant",
+      "brand": "firebase",
+      "tag": "NoSQL / Signé",
+      "pos": [990, 460],
+      "size": [150, 68]
+    },
+    {
+      "id": "stripe_billing",
+      "type": "external",
+      "label": "Stripe Payments",
+      "sublabel": "Abonnements & Hooks",
+      "brand": "stripe",
+      "tag": "PCI-DSS",
+      "pos": [990, 660],
+      "size": [150, 68]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Frontières PWA & Périphériques Locaux",
+      "wraps": ["pos_kds_pwa", "smartspout_iot"]
+    },
+    {
+      "kind": "region",
+      "label": "Plateforme Centrale Restaurant OS Core",
+      "wraps": ["next_app_core", "business_pillars", "sovereign_guard", "nexus_gateway", "fiscal_engine"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Pôle Intelligence & Agentic RAG",
+      "wraps": ["hermes_ai", "lightrag_kg"]
+    },
+    {
+      "kind": "region",
+      "label": "Services Cloud & Partenaires Externes",
+      "wraps": ["cloud_firestore", "stripe_billing", "sentry_axiom"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "pwa-to-core",
+      "from": "pos_kds_pwa",
+      "to": "next_app_core",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "iot-to-pillars",
+      "from": "smartspout_iot",
+      "to": "business_pillars",
+      "label": "WebSocket",
+      "variant": "dashed"
+    },
+    {
+      "id": "core-to-pillars",
+      "from": "next_app_core",
+      "to": "business_pillars",
+      "label": "ICM-lite",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [350, 370]
+    },
+    {
+      "id": "core-to-guard",
+      "from": "next_app_core",
+      "to": "sovereign_guard",
+      "label": "Tenant Context",
+      "variant": "security"
+    },
+    {
+      "id": "guard-to-nexus",
+      "from": "sovereign_guard",
+      "to": "nexus_gateway",
+      "label": "Guard Check",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [590, 370]
+    },
+    {
+      "id": "pillars-to-nexus",
+      "from": "business_pillars",
+      "to": "nexus_gateway",
+      "label": "NexusBridge",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pillars-to-fiscal",
+      "from": "business_pillars",
+      "to": "fiscal_engine",
+      "label": "Panier POS",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "fiscal-to-nexus",
+      "from": "fiscal_engine",
+      "to": "nexus_gateway",
+      "label": "Registre Scellé",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelAt": [590, 590]
+    },
+    {
+      "id": "hermes-to-rag",
+      "from": "hermes_ai",
+      "to": "lightrag_kg",
+      "label": "REST :9621",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [830, 370]
+    },
+    {
+      "id": "rag-to-nexus",
+      "from": "lightrag_kg",
+      "to": "nexus_gateway",
+      "label": "KG Sync",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "nexus-to-firestore",
+      "from": "nexus_gateway",
+      "to": "cloud_firestore",
+      "label": "tenants/{id}",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [[590, 560], [1065, 560]],
+      "labelAt": [830, 560]
+    },
+    {
+      "id": "core-to-sentry",
+      "from": "next_app_core",
+      "to": "sentry_axiom",
+      "label": "Telemetry",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "fiscal-to-stripe",
+      "from": "fiscal_engine",
+      "to": "stripe_billing",
+      "label": "Billing Events",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Front-End & PWA",
+      "items": [
+        "Architecture Local-First avec cache IndexedDB (Dexie)",
+        "Terminaux tactiles POS caisse, affichage KDS et plan de salle Konva",
+        "Outbox offline avec réconciliation asynchrone automatique"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Piliers Métiers & Souveraineté",
+      "items": [
+        "8 piliers étanches (Ops, Finance, HACCP, HR, Logistics...)",
+        "SovereignGuard vérifiant l'isolation stricte des chemins tenants/{id}",
+        "Chargement sélectif ICM-lite par route pour optimiser la mémoire"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Conformité Fiscale NF525",
+      "items": [
+        "Chaîne cryptographique inaltérable (SHA-256 des signatures fiscales)",
+        "Collections Firestore immuables (interdiction stricte d'UPDATE/DELETE)",
+        "Export réglementaire FEC et traçabilité complète DGFiP"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "IA & Sidecar LightRAG",
+      "items": [
+        "Orchestrateur multi-agents Hermes (Copilotes & automatisation)",
+        "Sidecar Python LightRAG pour le Knowledge Graph vectoriel",
+        "Isolation contextuelle des embeddings par tenant"
+      ]
+    }
+  ]
+}

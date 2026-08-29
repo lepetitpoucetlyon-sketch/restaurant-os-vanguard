@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <style>
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; }
+    a { color: #C5A059; } a:hover { color: #E0BE7A; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  </style>
+</helmet>
+
+<div style="width: 1024px; height: 768px; display: flex; flex-direction: column; background: #0B0B0C; color: #F3F4F6; overflow: hidden;">
+
+  <!-- En-tête : l'information de pilotage, pas la décoration -->
+  <div style="padding: 20px 24px 16px; border-bottom: 1px solid #1F2937; flex-shrink: 0;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;">
+      <div>
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.2em; color: #C5A059; margin-bottom: 4px;">SERVICE DU SOIR · 19:42</div>
+        <div class="serif" style="font-size: 34px; font-weight: 700; font-style: italic; line-height: 1; color: #F9FAFB;">Plan de salle</div>
+      </div>
+
+      <!-- Trois chiffres qui pilotent réellement un service -->
+      <div style="display: flex; gap: 10px;">
+        <div style="min-width: 104px; padding: 10px 14px; border-radius: 14px; background: #15161C; border: 1px solid #232530;">
+          <div class="mono" style="font-size: 22px; font-weight: 600; color: #F9FAFB; line-height: 1.1;">4/8</div>
+          <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">tables occupées</div>
+        </div>
+        <div style="min-width: 104px; padding: 10px 14px; border-radius: 14px; background: #15161C; border: 1px solid #232530;">
+          <div class="mono" style="font-size: 22px; font-weight: 600; color: #F9FAFB; line-height: 1.1;">18</div>
+          <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">couverts servis</div>
+        </div>
+        <div style="min-width: 104px; padding: 10px 14px; border-radius: 14px; background: rgba(197,160,89,0.1); border: 1px solid rgba(197,160,89,0.28);">
+          <div class="mono" style="font-size: 22px; font-weight: 600; color: #C5A059; line-height: 1.1;">642 €</div>
+          <div style="font-size: 12px; color: #A98C50; margin-top: 2px;">encaissé ce soir</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Légende resserrée : 3 familles au lieu de 7 pastilles à décoder -->
+    <div style="display: flex; align-items: center; gap: 18px; margin-top: 16px;">
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <span style="width: 9px; height: 9px; border-radius: 3px; background: #374151;"></span>
+        <span style="font-size: 12px; color: #9CA3AF;">Libre</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <span style="width: 9px; height: 9px; border-radius: 3px; background: #6366F1;"></span>
+        <span style="font-size: 12px; color: #9CA3AF;">En cours de service</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 7px;">
+        <span style="width: 9px; height: 9px; border-radius: 3px; background: #C5A059;"></span>
+        <span style="font-size: 12px; color: #9CA3AF;">Demande une action</span>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="display: flex; gap: 6px; background: #111827; padding: 4px; border-radius: 11px;">
+        <button style="height: 44px; padding: 0 18px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #C5A059; color: #16130B;">Grille</button>
+        <button style="height: 44px; padding: 0 18px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #9CA3AF;">Zones</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Les tables — l'or ne marque QUE ce qui réclame le serveur -->
+  <div style="flex: 1; padding: 18px 24px; overflow-y: auto;">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+
+      <!-- Libre -->
+      <div style="height: 132px; border-radius: 18px; background: #101116; border: 1px solid #1F2128; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #4B5563; line-height: 1;">1</span>
+          <span style="font-size: 12px; color: #4B5563;">2 places</span>
+        </div>
+        <span style="font-size: 12px; color: #4B5563;">Libre</span>
+      </div>
+
+      <!-- En cours -->
+      <div style="height: 132px; border-radius: 18px; background: #15161C; border: 1px solid #232530; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #F9FAFB; line-height: 1;">2</span>
+          <span style="font-size: 12px; color: #9CA3AF;">4 couverts</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 6px;">
+            <span style="width: 7px; height: 7px; border-radius: 2px; background: #6366F1;"></span>
+            <span style="font-size: 12px; color: #A5B4FC;">Plats servis</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="mono" style="font-size: 12px; color: #6B7280;">32 min</span>
+            <span class="mono" style="font-size: 14px; font-weight: 600; color: #E5E7EB;">148,00 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action : addition demandée -->
+      <div style="height: 132px; border-radius: 18px; background: #1A160E; border: 1px solid #C5A059; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #F9FAFB; line-height: 1;">3</span>
+          <span style="font-size: 12px; color: #A98C50;">4 couverts</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 6px;">
+            <span style="width: 7px; height: 7px; border-radius: 2px; background: #C5A059;"></span>
+            <span style="font-size: 12px; font-weight: 600; color: #E0BE7A;">Addition demandée</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="mono" style="font-size: 12px; color: #A98C50;">1 h 04</span>
+            <span class="mono" style="font-size: 14px; font-weight: 600; color: #F9FAFB;">216,50 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- En cours -->
+      <div style="height: 132px; border-radius: 18px; background: #15161C; border: 1px solid #232530; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #F9FAFB; line-height: 1;">4</span>
+          <span style="font-size: 12px; color: #9CA3AF;">6 couverts</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 6px;">
+            <span style="width: 7px; height: 7px; border-radius: 2px; background: #6366F1;"></span>
+            <span style="font-size: 12px; color: #A5B4FC;">Entrées en cours</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="mono" style="font-size: 12px; color: #6B7280;">14 min</span>
+            <span class="mono" style="font-size: 14px; font-weight: 600; color: #E5E7EB;">94,00 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action : attente longue -->
+      <div style="height: 132px; border-radius: 18px; background: #1A160E; border: 1px solid #C5A059; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #F9FAFB; line-height: 1;">5</span>
+          <span style="font-size: 12px; color: #A98C50;">2 couverts</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 6px;">
+            <span style="width: 7px; height: 7px; border-radius: 2px; background: #C5A059;"></span>
+            <span style="font-size: 12px; font-weight: 600; color: #E0BE7A;">Sans plat depuis 22 min</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="mono" style="font-size: 12px; color: #A98C50;">46 min</span>
+            <span class="mono" style="font-size: 14px; font-weight: 600; color: #F9FAFB;">38,00 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Libre -->
+      <div style="height: 132px; border-radius: 18px; background: #101116; border: 1px solid #1F2128; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #4B5563; line-height: 1;">6</span>
+          <span style="font-size: 12px; color: #4B5563;">8 places</span>
+        </div>
+        <span style="font-size: 12px; color: #4B5563;">Libre</span>
+      </div>
+
+      <!-- Action : à débarrasser -->
+      <div style="height: 132px; border-radius: 18px; background: #1A160E; border: 1px solid #C5A059; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #F9FAFB; line-height: 1;">7</span>
+          <span style="font-size: 12px; color: #A98C50;">4 places</span>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 7px;">
+            <span style="width: 7px; height: 7px; border-radius: 2px; background: #C5A059;"></span>
+            <span style="font-size: 12px; font-weight: 600; color: #E0BE7A;">À débarrasser</span>
+          </div>
+          <div class="mono" style="font-size: 12px; color: #A98C50; margin-top: 6px;">libérée il y a 6 min</div>
+        </div>
+      </div>
+
+      <!-- Réservée -->
+      <div style="height: 132px; border-radius: 18px; background: #101116; border: 1px solid #1F2128; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="serif" style="font-size: 30px; font-weight: 700; color: #9CA3AF; line-height: 1;">8</span>
+          <span style="font-size: 12px; color: #6B7280;">2 places</span>
+        </div>
+        <div>
+          <div style="font-size: 12px; color: #9CA3AF;">Réservée 20:15</div>
+          <div style="font-size: 12px; color: #4B5563; margin-top: 4px;">M. Lambert · 2 pers.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview": {"width": 1024, "height": 768}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
