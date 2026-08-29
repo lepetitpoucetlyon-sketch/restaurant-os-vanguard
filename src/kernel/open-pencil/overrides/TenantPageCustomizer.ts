@@ -105,37 +105,44 @@ export class TenantPageCustomizer {
     /**
      * Applique récursivement une charte graphique client sur tous les nœuds d'un PageDocument
      */
+private static applyBrandFills(node: SceneNode, primaryRgba: ReturnType<typeof hexToRgba>): void {
+        if (!node.fills || !Array.isArray(node.fills)) return;
+        for (const fill of node.fills) {
+            if (fill.tokenReference?.includes('gold') || fill.tokenReference?.includes('brand')) {
+                fill.color = primaryRgba;
+            }
+        }
+    }
+
+    private static applyBrandTypography(node: SceneNode, brand: ClientBrandDna): void {
+        if (node.type !== 'TEXT' || !('style' in node) || !node.style) return;
+        if (brand.fontFamilyBrand && (node.style.fontSize >= 24 || node.style.fontFamily?.includes('Cormorant'))) {
+            node.style.fontFamily = brand.fontFamilyBrand;
+        } else if (brand.fontFamilyBody) {
+            node.style.fontFamily = brand.fontFamilyBody;
+        }
+    }
+
+    private static applyBrandTitle(node: SceneNode, brand: ClientBrandDna): void {
+        if (node.id.startsWith('title-') && node.type === 'TEXT' && 'characters' in node) {
+            if (brand.restaurantName && !node.characters.includes(brand.restaurantName)) {
+                node.characters = `${node.characters} · ${brand.restaurantName}`;
+            }
+        }
+    }
+
+    /**
+     * Applique récursivement une charte graphique client sur tous les nœuds d'un PageDocument
+     */
     public static applyBrandDna(page: PageDocument, brand: ClientBrandDna): PageDocument {
         const clonedPage: PageDocument = JSON.parse(JSON.stringify(page));
         const primaryRgba = hexToRgba(brand.primaryColor);
 
         const mutateNodes = (node: SceneNode): void => {
-            // Mettre à jour les fills de marque
-            if (node.fills && Array.isArray(node.fills)) {
-                for (const fill of node.fills) {
-                    if (fill.tokenReference?.includes('gold') || fill.tokenReference?.includes('brand')) {
-                        fill.color = primaryRgba;
-                    }
-                }
-            }
+            this.applyBrandFills(node, primaryRgba);
+            this.applyBrandTypography(node, brand);
+            this.applyBrandTitle(node, brand);
 
-            // Mettre à jour les polices
-            if (node.type === 'TEXT' && 'style' in node && node.style) {
-                if (brand.fontFamilyBrand && (node.style.fontSize >= 24 || node.style.fontFamily?.includes('Cormorant'))) {
-                    node.style.fontFamily = brand.fontFamilyBrand;
-                } else if (brand.fontFamilyBody) {
-                    node.style.fontFamily = brand.fontFamilyBody;
-                }
-            }
-
-            // Mettre à jour le titre du header si présent
-            if (node.id.startsWith('title-') && node.type === 'TEXT' && 'characters' in node) {
-                if (brand.restaurantName && !node.characters.includes(brand.restaurantName)) {
-                    node.characters = `${node.characters} · ${brand.restaurantName}`;
-                }
-            }
-
-            // Parcourir les enfants
             if ('children' in node && Array.isArray(node.children)) {
                 for (const child of node.children) {
                     mutateNodes(child);
