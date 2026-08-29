@@ -6,7 +6,7 @@ import type { Table } from '../../domain/schemas/ops';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';
-import { guardedAction, sanitizeToSovereign } from '../opsCore';
+import { guardedAction, sanitizeToSovereign } from '../_internal/opsCore';
 
 import { tablesNodeAtom, floorsAtom, zonesAtom, zonesLockedAtom, currentFloorIdAtom } from '@/store/pillars/ops';
 import { reservationsNodeAtom } from '@/store/pillars/commerce';

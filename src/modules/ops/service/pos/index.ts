@@ -4,7 +4,6 @@ export * from './store';
 export * from './hooks';
 
 // Infrastructure hardware (cash drawer, payment terminal) — exposée pour settings + ui commerce
-export * from './infrastructure/cash-drawer/CashDrawerService';
 export { terminalService } from './infrastructure/payment-terminal/PaymentTerminalService';
 export type {
   TerminalDevice,

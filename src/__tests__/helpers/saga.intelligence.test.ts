@@ -7,7 +7,14 @@ import {
   registerDeliveryDriverUnlockHandler,
   registerDeliveryRushModeHandler,
   registerAntiCorruptionLayerHandler,
-  registerIntelligenceHandler
+  registerIntelligenceHandler,
+  FleetOutboxHandler,
+  FleetStratBriefingHandler,
+  OracleQueryAuditHandler,
+  PinLockoutNotifierHandler,
+  WeeklyReportHandler,
+  GracePeriodHandler,
+  StripePaymentRetryHandler
 } from '@/shared/eventBus/handlers';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
@@ -75,16 +82,9 @@ vi.mock('@/domain/schemas/supportTicket', () => ({
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { FleetOutboxHandler } from '@/shared/eventBus/handlers/FleetOutboxHandler';
-import { FleetStratBriefingHandler } from '@/shared/eventBus/handlers/FleetStratBriefingHandler';
-import { OracleQueryAuditHandler } from '@/shared/eventBus/handlers/OracleQueryAuditHandler';
 
-import { PinLockoutNotifierHandler } from '@/shared/eventBus/handlers/PinLockoutNotifierHandler';
 
-import { WeeklyReportHandler } from '@/shared/eventBus/handlers/WeeklyReportHandler';
 
-import { GracePeriodHandler } from '@/shared/eventBus/handlers/GracePeriodHandler';
-import { StripePaymentRetryHandler } from '@/shared/eventBus/handlers/StripePaymentRetryHandler';
 
 const T = 'tenant-intel';
 

@@ -1,3 +1,5 @@
+export * from './service/pos/infrastructure/cash-drawer/CashDrawerService';
+export * from './providers/hooks';
 // Hooks souverains (ADR-010 Phase 2) — orders, tables, reservations
 export * from './hooks';
 
@@ -55,7 +57,7 @@ export type { BarTab, Wine, Cocktail, WineRegion } from './types/bar';
 export { winesAtom } from './service/bar/store/barAtoms';
 export { cocktailsAtom } from './service/bar/store/barAtoms';
 export { wineRegionsAtom } from './service/bar/store/barAtoms';
-export { useTables } from './providers';
+export { useTables } from './providers/hooks';
 // DeliveryProviderFactory et ReservationProviderFactory sont server-only :
 // les importer directement dans les routes API, jamais via ce barrel.
 export type { CartItem, SovereignProduct } from './workflow/engine/types';
@@ -63,17 +65,17 @@ export type { GroupEvent } from './workflow/engine/groups.types';
 export { KDSCourseSequencingEngine } from './production/kds/services/KDSCourseSequencingEngine';
 export { registerCashDrawerAnomalyHandler } from './service/pos/handlers/CashDrawerAnomalyHandler';
 export { OpsSyncService } from './workflow/engine/ops.sync';
-export { useOrders } from './providers';
-export { useInventory } from './providers';
-export { useMarketing } from './providers';
-export { useQuotes } from './providers';
-export { useCRM } from './providers';
-export { useFiscal } from './providers';
-export { useRecipes } from './providers';
-export { useKitchen } from './providers';
-export { useIntelligence } from './providers';
-export { useProducts } from './providers';
-export { useCategories } from './providers';
+export { useOrders } from './providers/hooks';
+export { useInventory } from './providers/hooks';
+export { useMarketing } from './providers/hooks';
+export { useQuotes } from './providers/hooks';
+export { useCRM } from './providers/hooks';
+export { useFiscal } from './providers/hooks';
+export { useRecipes } from './providers/hooks';
+export { useKitchen } from './providers/hooks';
+export { useIntelligence } from './providers/hooks';
+export { useProducts } from './providers/hooks';
+export { useCategories } from './providers/hooks';
 export { ordersAtom } from './service/pos/store/orderAtoms';
 
 // 🏛️ Domaine Schemas

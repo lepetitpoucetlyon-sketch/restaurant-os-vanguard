@@ -3,7 +3,7 @@ import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
 import { Quote, Campaign, toReservation, toCampaign, toCustomer, toGroup, toQuote } from '@nexus/contracts/nexus-internal-mapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { guardedAction, createSovereignHook } from '../opsCore';
+import { guardedAction, createSovereignHook } from '../_internal/opsCore';
 
 import { reservationsNodeAtom, groupsNodeAtom, quotesNodeAtom } from '@/store/pillars/commerce';
 import { marketingCampaignsNodeAtom, crmsNodeAtom, selectedCRMAtom } from '@/store/pillars/commerce';

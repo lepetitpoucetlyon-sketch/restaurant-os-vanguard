@@ -5,7 +5,8 @@ import { Order, Recipe, toOrder, toRecipe } from '@nexus/contracts/nexus-interna
 import type { OrderItem } from '@nexus/contracts';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../opsCore';
+// eslint-disable-next-line no-restricted-imports -- breaking barrel cycle
+import { guardedAction, sanitizeToSovereign, createSovereignHook } from '../_internal/opsCore';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 import { ordersNodeAtom } from '@/store/pillars/ops';
