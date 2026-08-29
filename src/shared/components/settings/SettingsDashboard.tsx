@@ -12,13 +12,13 @@ import { SettingsLoading } from "./_SettingsLoading";
 import { BrandScraper } from "./BrandScraper";
 import { BrandUploader } from "./BrandUploader";
 import {
-    ProfileSettings, ExpertGovernanceHub, NexusSettings, HoursSettings,
-    ReservationSettingsComponent, StaffSettings, MenuSettings, GoalsSettings,
+    LazyProfileSettings, LazyExpertGovernanceHub, LazyNexusSettings, LazyHoursSettings,
+    LazyReservationSettingsComponent, LazyStaffSettings, LazyMenuSettings, LazyGoalsSettings,
 } from "./panelsCore";
 import {
-    IntegrationSettings, ReviewsSettings, TablesSettings, MigrationHub,
-    PrinterSettings, PaymentTerminalSettings, CashDrawerSettings, PayrollIntegrationPanel, ApiKeysPanel, CustomDomainPanel, OnboardingChecklistPanel, MaintenanceSettingsPanel,
-    DLQDiagnosticPanel, RBACTenantMatrix,
+    LazyIntegrationSettings, LazyReviewsSettings, LazyTablesSettings, LazyMigrationHub,
+    LazyPrinterSettings, LazyPaymentTerminalSettings, LazyCashDrawerSettings, LazyPayrollIntegrationPanel, LazyApiKeysPanel, LazyCustomDomainPanel, LazyOnboardingChecklistPanel, LazyMaintenanceSettingsPanel,
+    LazyDLQDiagnosticPanel, LazyRBACTenantMatrix,
 } from "./panelsSystem";
 
 // Nexus-Sync Schema Orchestration
@@ -162,10 +162,10 @@ export function SettingsDashboard() {
 
     const settingsContent = useMemo(() => {
         switch (activeCategory) {
-            case 'onboarding-checklist': return <OnboardingChecklistPanel />;
-            case 'maintenance': return <MaintenanceSettingsPanel />;
-            case 'profile': return <ProfileSettings />;
-            case 'governance': return <ExpertGovernanceHub />;
+            case 'onboarding-checklist': return <LazyOnboardingChecklistPanel />;
+            case 'maintenance': return <LazyMaintenanceSettingsPanel />;
+            case 'profile': return <LazyProfileSettings />;
+            case 'governance': return <LazyExpertGovernanceHub />;
             case 'identity': return (
                 <div className="space-y-12">
                     <StandardSettingsEngine schema={IDENTITY_SCHEMA} />
@@ -173,18 +173,18 @@ export function SettingsDashboard() {
                     <StandardSettingsEngine schema={SOCIAL_SCHEMA} />
                 </div>
             );
-            case 'nexus': return <NexusSettings />;
+            case 'nexus': return <LazyNexusSettings />;
 
             case 'hours': return (
                 <div className="space-y-12">
-                    <HoursSettings />
+                    <LazyHoursSettings />
                     <StandardSettingsEngine schema={SERVICE_SCHEMA} />
                 </div>
             );
             case 'pos': return <StandardSettingsEngine schema={POS_SCHEMA} />;
             case 'reservations': return (
                 <div className="space-y-12">
-                    <ReservationSettingsComponent />
+                    <LazyReservationSettingsComponent />
                     <StandardSettingsEngine schema={RESERVATIONS_CONFIG_SCHEMA} />
                 </div>
             );
@@ -212,44 +212,44 @@ export function SettingsDashboard() {
                 </div>
             );
             case 'notifications': return <StandardSettingsEngine schema={NOTIFICATIONS_SCHEMA} />;
-            case 'goals': return <GoalsSettings />; // Goals has complex UI, keeping it for now
+            case 'goals': return <LazyGoalsSettings />; // Goals has complex UI, keeping it for now
             case 'security': return (
                 <div className="space-y-8">
-                    <RBACTenantMatrix />
+                    <LazyRBACTenantMatrix />
                     <StandardSettingsEngine schema={SECURITY_SCHEMA} />
                 </div>
             );
-            case 'dlq-diagnostics': return <DLQDiagnosticPanel />;
+            case 'dlq-diagnostics': return <LazyDLQDiagnosticPanel />;
             case 'staff': return (
                 <div className="space-y-12">
-                    <StaffSettings />
+                    <LazyStaffSettings />
                     <StandardSettingsEngine schema={STAFF_CONFIG_SCHEMA} />
                     <div className="p-6 rounded-2xl bg-surface-card border border-border">
-                        <PayrollIntegrationPanel />
+                        <LazyPayrollIntegrationPanel />
                     </div>
                 </div>
             );
             case 'customer': return <StandardSettingsEngine schema={Customer_SCHEMA} />;
             case 'integrations': return (
                 <div className="space-y-12">
-                    <IntegrationSettings />
-                    <CustomDomainPanel />
-                    <ApiKeysPanel />
+                    <LazyIntegrationSettings />
+                    <LazyCustomDomainPanel />
+                    <LazyApiKeysPanel />
                 </div>
             );
-            case 'reviews': return <ReviewsSettings />;
+            case 'reviews': return <LazyReviewsSettings />;
             case 'legal': return <StandardSettingsEngine schema={LEGAL_SCHEMA} />;
-            case 'menu': return <MenuSettings />;
+            case 'menu': return <LazyMenuSettings />;
             case 'inventory': return <StandardSettingsEngine schema={INVENTORY_SCHEMA} />;
             case 'planning': return <SettingsPlaceholder category={activeConfig} />;
             case 'accounting': return <StandardSettingsEngine schema={ACCOUNTING_SCHEMA} />;
             case 'recipes': return <SettingsPlaceholder category={activeConfig} />;
             case 'haccp': return <StandardSettingsEngine schema={HACCP_SCHEMA} />;
-            case 'migration': return <MigrationHub />;
-            case 'tables': return <TablesSettings />;
-            case 'printer': return <PrinterSettings />;
-            case 'tpe': return <PaymentTerminalSettings />;
-            case 'cash-drawer': return <CashDrawerSettings />;
+            case 'migration': return <LazyMigrationHub />;
+            case 'tables': return <LazyTablesSettings />;
+            case 'printer': return <LazyPrinterSettings />;
+            case 'tpe': return <LazyPaymentTerminalSettings />;
+            case 'cash-drawer': return <LazyCashDrawerSettings />;
             default: return <SettingsPlaceholder category={activeConfig} />;
         }
     }, [activeCategory, activeConfig]);

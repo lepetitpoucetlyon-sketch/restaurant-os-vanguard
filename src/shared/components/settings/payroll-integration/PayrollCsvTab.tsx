@@ -1,7 +1,7 @@
 'use client';
 
 import { Download, Loader2 } from 'lucide-react';
-import { StatusBadge } from './PayrollStatusBadge';
+import { PayrollStatusBadge } from './PayrollStatusBadge';
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -28,7 +28,7 @@ export function PayrollCsvTab({ periode, syncStatus, onExport }: PayrollCsvTabPr
                     : <Download className="w-4 h-4" />}
                 Télécharger prepaie-{periode}.csv
             </button>
-            <StatusBadge status={syncStatus} />
+            <PayrollStatusBadge status={syncStatus} />
         </div>
     );
 }

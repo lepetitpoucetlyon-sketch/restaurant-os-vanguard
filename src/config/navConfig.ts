@@ -328,6 +328,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'both',
         items: [
             { label: "Réglages", key: "settings", href: "/settings", icon: Settings, category: "settings" },
+            { label: "Studio OpenPencil (84p)", key: "open_pencil_studio", href: "/admin/studio", icon: Sparkles, category: "admin", minLevel: 90, badge: "DESIGN" },
             { label: "Mon Espace", key: "mon_espace", href: "/mon-espace", icon: UserCog, category: "settings" },
             { label: "Checklist Mise en Service", key: "onboarding_checklist", href: "/settings?tab=onboarding-checklist", icon: ClipboardCheck, category: "settings", minLevel: 70 },
             { label: "Intégrations & API", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings", minLevel: 70 },
@@ -363,7 +364,7 @@ export function filterByCapabilities(
             ...section,
             items: section.items.filter(item => {
                 if (!item.requiredCapability) return true;
-                return capabilities[item.requiredCapability] !== false;
+                return capabilities[item.requiredCapability] === true;
             }),
         }))
         .filter(section => section.items.length > 0);

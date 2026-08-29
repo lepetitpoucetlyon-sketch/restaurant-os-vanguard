@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { HardwareProvisioningService } from '@/modules/facility';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const tenantId = searchParams.get('tenantId');
-
-  if (!tenantId) {
-    return NextResponse.json({ error: 'tenantId manquant' }, { status: 400 });
-  }
-
   try {
+    const caller = await requireTenantRole(req, 'manager');
+    if (isDenied(caller)) return caller;
+
+    const tenantId = caller.tenantId;
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant non spécifié dans le jeton d\'authentification' }, { status: 403 });
+    }
+
     const reports = await HardwareProvisioningService.getReports(tenantId);
     return NextResponse.json({ tenantId, reports, count: reports.length });
   } catch (err) {
@@ -21,17 +23,20 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const caller = await requireTenantRole(req, 'manager');
+    if (isDenied(caller)) return caller;
+
+    const tenantId = caller.tenantId;
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant non spécifié dans le jeton d\'authentification' }, { status: 403 });
+    }
+
     const body = await req.json();
     const {
-      tenantId,
       siteName = 'Établissement Principal',
       technicianName = 'Technicien Déploiement',
       managerName = 'Directeur d Établissement',
-    } = body;
-
-    if (!tenantId) {
-      return NextResponse.json({ error: 'tenantId manquant' }, { status: 400 });
-    }
+    } = body || {};
 
     const report = await HardwareProvisioningService.runFullHardwareDiagnostic(
       tenantId,

@@ -150,6 +150,8 @@ export class FiscalSealer {
 
         tx.set(sealPath, {
           id: sealId, hash, signature, previousHash,
+          dataSnapshot,
+          transactionId: journalEntry?.id ?? sealId,
           timestamp,
           serverRecordedAt,
           isTrainingMode: false,

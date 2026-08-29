@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SovereignSignatureEngine, type ContractDraftInput } from '@/modules/compliance';
+import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const caller = await requireMccLevel(req, 'mcc_support');
+    if (isDenied(caller)) return caller;
+
     const contracts = await SovereignSignatureEngine.getAllFleetContracts();
     return NextResponse.json({
       contracts,
@@ -19,6 +23,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const caller = await requireMccLevel(req, 'mcc_super_admin');
+    if (isDenied(caller)) return caller;
+
     const body = (await req.json()) as ContractDraftInput;
 
     if (!body.tenantId || !body.vertical || !body.client || !body.pricing) {

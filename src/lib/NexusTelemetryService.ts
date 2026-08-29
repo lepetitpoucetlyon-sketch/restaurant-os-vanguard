@@ -131,7 +131,7 @@ class TelemetryService {
           supported: true
         };
       }
-    } catch (_e) {}
+    } catch { /* Battery API non supportée ou refusée */ }
 
     return {
       level: 1,

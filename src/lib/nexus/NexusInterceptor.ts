@@ -194,9 +194,24 @@ export class NexusInterceptor implements INexusAdapter {
         return this.adapter.runTransaction(async (rawTx) => {
             const guardedTx: INexusTransaction = {
                 get: (path) => rawTx.get(this.scopePath(path, ctx.vassalId)),
-                set: (path, data) => rawTx.set(this.scopePath(path, ctx.vassalId), data),
-                update: (path, data) => rawTx.update(this.scopePath(path, ctx.vassalId), data),
-                delete: (path) => rawTx.delete(this.scopePath(path, ctx.vassalId)),
+                set: (path, data) => {
+                    const scoped = this.scopePath(path, ctx.vassalId);
+                    return rawTx.set(scoped, data);
+                },
+                update: (path, data) => {
+                    const scoped = this.scopePath(path, ctx.vassalId);
+                    if (!this.guard.canUpdate(scoped)) {
+                        throw new NexusError(NexusErrorCode.NF525_VIOLATION, `Cannot update immutable/sealed document in transaction: ${scoped}`);
+                    }
+                    return rawTx.update(scoped, data);
+                },
+                delete: (path) => {
+                    const scoped = this.scopePath(path, ctx.vassalId);
+                    if (!this.guard.canDelete(scoped)) {
+                        throw new NexusError(NexusErrorCode.NF525_VIOLATION, `Cannot delete immutable/sealed document in transaction: ${scoped}`);
+                    }
+                    return rawTx.delete(scoped);
+                },
             };
             return callback(guardedTx);
         });

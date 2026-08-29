@@ -27,12 +27,16 @@ async function deductStockForLines(
   lines: { stockItemId: string; quantity: number }[],
 ): Promise<void> {
   const deductedItems: string[] = [];
-  await Promise.allSettled(
+  const results = await Promise.allSettled(
     lines.map(async (line) => {
       await _deductStock(tenantId, line.stockItemId, line.quantity, line.stockItemId);
       deductedItems.push(`${line.stockItemId} ×${line.quantity}`);
     })
   );
+  const failures = results.filter((r) => r.status === 'rejected');
+  if (failures.length > 0) {
+    throw new Error(`[StockDeductionHandler] ${failures.length}/${lines.length} déductions ont échoué`);
+  }
   if (deductedItems.length === 0) return;
   empireAudit.log({
     module: 'inventory',

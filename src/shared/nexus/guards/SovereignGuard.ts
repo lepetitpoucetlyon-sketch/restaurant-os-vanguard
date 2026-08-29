@@ -371,7 +371,7 @@ export const SovereignGuard = {
                 path: fullPath,
                 message: errorMsg,
             });
-        } catch (_e) {}
+        } catch { /* BroadcastChannel / WebWorker indisponible */ }
 
         if (typeof window !== 'undefined') {
             import('@/shared/services/SovereignStorage').then(({ SovereignStorage }) => {

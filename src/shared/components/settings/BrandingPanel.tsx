@@ -51,6 +51,8 @@ const GOOGLE_FONTS_PRESETS = [
   { label: 'Outfit (Contemporain)', name: 'Outfit', url: 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap' },
   { label: 'Plus Jakarta Sans (Tech)', name: 'Plus Jakarta Sans', url: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap' },
   { label: 'JetBrains Mono (Précision)', name: 'JetBrains Mono', url: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap' },
+  { label: 'Syne (Street & Énergie)', name: 'Syne', url: 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap' },
+  { label: 'Lora (Bistro Terroir)', name: 'Lora', url: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap' },
 ];
 
 export function BrandingPanel() {

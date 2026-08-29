@@ -26,7 +26,7 @@ export const CONNECTION_LABELS: Record<TerminalConnectionType, string> = {
     qr_link:   "QR / Lien de paiement",
 };
 
-export const CONN_ICON: Record<TerminalConnectionType, React.ReactNode> = {
+export const TERMINAL_CONN_ICON: Record<TerminalConnectionType, React.ReactNode> = {
     bluetooth: <Bluetooth className="w-4 h-4" />,
     lan:       <Wifi className="w-4 h-4" />,
     cloud:     <Cloud className="w-4 h-4" />,
