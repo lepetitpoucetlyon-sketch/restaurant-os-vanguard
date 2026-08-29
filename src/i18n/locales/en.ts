@@ -1,6 +1,19 @@
 import { SovereignData } from '@/shared/nexus-contract';
 
 const en: SovereignData = {
+    "crm": {
+        "contact_info": "Infos contact",
+        "new_profile": "Nouveau profil",
+        "search_placeholder": "Rechercher un client…",
+        "add_crm": "Ajouter un client",
+        "global_portfolio": "Portefeuille global",
+        "book_reservation": "Réserver maintenant",
+        "full_name": "Nom complet",
+        "phone": "Téléphone",
+        "notes": "Commentaires",
+        "approve_profile": "Homologuer le profil",
+        "no_results": "Aucun client trouvé",
+    },
     "nav": {
         "main": "Main",
         "dashboard": "Dashboard",
@@ -48,7 +61,6 @@ const en: SovereignData = {
         "registre": "Legal Registers",
         "franchise": "Franchise & Network",
         "franchise_network": "Multi-Sites & Network",
-
         "accounting_portal": "Accounting Portal",
         "aide": "Help & Support",
         "bank_reconciliation": "Bank Reconciliation",
@@ -73,13 +85,14 @@ const en: SovereignData = {
         "nf525": "NF525 Compliance",
         "notifications": "Notifications & Alerts",
         "onboarding_checklist": "Go-Live Checklist",
+        "open_pencil_studio": "OpenPencil Studio (84p)",
         "pos_mobile": "Mobile POS",
         "profitability": "Profitability Analysis",
         "purchasing": "Purchasing & Stock",
         "registre_legal": "Legal Registers",
         "reputation": "E-Reputation",
         "simulator": "Performance Dashboard",
-        "timeclock": "Real-Time Timeclock"
+        "timeclock": "Real-Time Timeclock",
     },
     "header": {
         "search_placeholder": "Search or type a command...",
@@ -89,17 +102,17 @@ const en: SovereignData = {
         "theme_light": "Light mode",
         "theme_dark": "Dark mode",
         "language": "Change language",
-        "profile": "Profile"
+        "profile": "Profile",
     },
     "sidebar": {
         "expense_claim": "Expense Claim",
         "logout": "Logout",
         "admin_fallback": "ADMINISTRATOR",
         "resto": "Resto",
-        "os": "OS"
+        "os": "OS",
     },
     "settings": {
-        "title": "Contextual Settings",
+        "title": "POS Archive",
         "tab_logic": "Configuration",
         "tab_style": "Kustomization",
         "aura_title": "Visual Aura (Master)",
@@ -117,23 +130,23 @@ const en: SovereignData = {
         "modes": {
             "light": {
                 "label": "Spectre",
-                "desc": "Light"
+                "desc": "Clair",
             },
             "dark": {
-                "label": "Obsidian",
-                "desc": "Dark"
+                "label": "Obsidienne",
+                "desc": "Sombre",
             },
             "auto": {
-                "label": "Dynamic",
-                "desc": "System"
-            }
+                "label": "Dynamique",
+                "desc": "Système",
+            },
         },
         "radius": {
-            "none": "Sharp",
+            "none": "Vif",
             "small": "Min",
             "medium": "Std",
-            "large": "Premium"
-        }
+            "large": "Premium",
+        },
     },
     "common": {
         "loading": "Loading...",
@@ -152,7 +165,7 @@ const en: SovereignData = {
         "covers": "Cvt",
         "enabled": "Enabled",
         "disabled": "Disabled",
-        "success": "successful"
+        "success": "successful",
     },
     "allergens": {
         "gluten": "Gluten",
@@ -168,7 +181,7 @@ const en: SovereignData = {
         "sesame": "Sesame",
         "sulfites": "Sulfites",
         "lupin": "Lupin",
-        "molluscs": "Molluscs"
+        "molluscs": "Molluscs",
     },
     "dashboard": {
         "service_midi": "Lunch Service",
@@ -178,45 +191,45 @@ const en: SovereignData = {
         "status_text": "Operational Excellence",
         "export_report": "Export Report",
         "actions": {
-            "new_order": "New Order",
-            "reservation": "Reservation",
-            "inventory": "Inventory",
-            "analytics": "Analytics"
+            "new_order": "Nouvelle Commande",
+            "reservation": "Réservation",
+            "inventory": "Inventaire",
+            "analytics": "Analyses",
         },
         "kpi": {
-            "daily_revenue": "Daily Revenue (real)",
-            "tickets": "Cashed Tickets",
-            "low_stock": "Low Stock Items",
-            "alerts": "Alert(s)",
-            "occupancy": "Occupancy Rate",
-            "vs_7_days": "vs last 7 days"
+            "daily_revenue": "CA Journalier (réel)",
+            "tickets": "Tickets Encaissés",
+            "low_stock": "Articles Bas Stock",
+            "alerts": "Alerte(s)",
+            "occupancy": "Taux d'Occupation",
+            "vs_7_days": "vs 7 derniers jours",
         },
         "chart": {
-            "title": "Predictive Cash-Flow",
-            "subtitle": "ANALYSIS BASED ON 90 DAYS OF DATA",
-            "real": "Real",
-            "forecast": "Forecast"
+            "title": "Cash-Flow Prédictif",
+            "subtitle": "ANALYSE BASÉE SUR 90 JOURS DE DONNÉES",
+            "real": "Réel",
+            "forecast": "Prévision",
         },
         "intelligence": {
             "title": "Intelligence",
-            "active": "ACTIVE",
-            "risk_stock": "Stock Risk",
-            "risk_stock_msg": "Mozzarella stockout predicted in 48h.",
-            "personnel": "Staff",
-            "personnel_msg": "+25% covers expected on Friday.",
+            "active": "ACTIFS",
+            "risk_stock": "Risque Stock",
+            "risk_stock_msg": "Rupture Mozzarella prévue sous 48h.",
+            "personnel": "Personnel",
+            "personnel_msg": "+25% de couverts prévus vendredi.",
             "performance": "Performance",
-            "performance_msg": "Risotto sales +15% this week.",
+            "performance_msg": "Ventes Risotto +15% cette semaine.",
             "actions": {
-                "order": "ORDER",
-                "review": "REVIEW",
-                "view": "VIEW"
-            }
+                "order": "COMMANDER",
+                "review": "RÉVISER",
+                "view": "VOIR",
+            },
         },
         "cta": {
             "title": "Service Imminent",
-            "subtitle": "All systems ready",
-            "button": "Launch POS"
-        }
+            "subtitle": "Tous les systèmes prêts",
+            "button": "Lancer la Caisse",
+        },
     },
     "planning": {
         "title": "Staff Scheduling",
@@ -241,26 +254,26 @@ const en: SovereignData = {
         "summary_soir": "Dinner Service",
         "summary_total": "Total Volume",
         "zones": {
-            "main": "Main Hall",
-            "terrace": "Terrace",
-            "vip": "VIP Area",
-            "bar": "Bar Counter"
+            "main": "Salle Principale",
+            "terrace": "Terrasse",
+            "vip": "Carré VIP",
+            "bar": "Comptoir Bar",
         },
-        "filter_all": "All",
-        "filter_server": "Service",
-        "filter_kitchen": "Kitchen",
-        "unassigned": "Unassigned",
+        "filter_all": "Tous",
+        "filter_server": "Salle",
+        "filter_kitchen": "Cuisine",
+        "unassigned": "Non assigné",
         "roles": {
-            "admin": "Administrator",
-            "manager": "Manager",
-            "floor_manager": "Floor Manager",
-            "server": "Server",
-            "bartender": "Bartender",
+            "admin": "Administrateur",
+            "manager": "Directeur",
+            "floor_manager": "Responsable Salle",
+            "server": "Serveur",
+            "bartender": "Barman",
             "kitchen_chef": "Chef",
-            "kitchen_line": "Line Cook",
-            "host": "Host",
-            "cashier": "Cashier"
-        }
+            "kitchen_line": "Cuisinier",
+            "host": "Hôte",
+            "cashier": "Caissier",
+        },
     },
     "pos": {
         "title": "Point of Sale",
@@ -279,262 +292,264 @@ const en: SovereignData = {
         "items_count": "Items",
         "total": "Total",
         "details": {
-            "selection": "Master Selection",
-            "required": "Required",
-            "single_choice": "Single Choice",
-            "max_selection": "Max Selection",
-            "allergens": "Exclusions & Allergens",
-            "add_custom_allergen": "Add specific exclusion",
-            "notes": "Preparation Notes",
-            "notes_placeholder": "Specify your particular culinary requirements here...",
-            "allergen_placeholder": "Allergen name...",
-            "add_to": "Add to",
-            "archive": "The Archive"
+            "selection": "Maître Sélection",
+            "required": "Obligatoire",
+            "single_choice": "Choix Unique",
+            "max_selection": "Sélection Max",
+            "allergens": "Exclusions & Allergènes",
+            "add_custom_allergen": "Ajouter une exclusion spécifique",
+            "notes": "Notes de Préparation",
+            "notes_placeholder": "Précisez ici vos exigences culinaires particulières...",
+            "allergen_placeholder": "Nom de l'allergène...",
+            "add_to": "Ajouter à",
+            "archive": "L'Archive",
         },
         "cart": {
-            "empty": "Empty Cart",
-            "empty_desc": "NO SELECTION IN THE CURRENT MANIFEST",
-            "subtotal": "Subtotal",
-            "tax": "Tax",
-            "total": "TOTAL",
-            "kitchen": "KITCHEN",
-            "split": "SPLIT",
-            "checkout": "CHECKOUT",
+            "empty": "Panier Vacant",
+            "empty_desc": "AUCUNE SÉLECTION DANS LE MANIFESTE ACTUEL",
+            "subtotal": "Sous-total HT",
+            "tax": "TVA",
+            "total": "TOTAL TTC",
+            "kitchen": "CUISINE",
+            "split": "PARTAGE",
+            "checkout": "ENCAISSER",
             "standards": "Standards",
-            "edit": "Edit",
-            "view": "VIEW"
+            "edit": "Modifier",
+            "view": "VOIR",
         },
         "categories": {
             "antipasti": "Antipasti",
             "pizzas": "Pizzas",
-            "pasta": "Pasta",
-            "viandes": "Meat",
+            "pasta": "Pâtes",
+            "viandes": "Viandes",
             "cocktails": "Cocktails",
-            "desserts": "Desserts"
+            "desserts": "Desserts",
         },
         "options": {
-            "opt_cooking": "Cooking Info",
-            "cook_bleu": "Rare (Bleu)",
-            "cook_saignant": "Medium Rare",
-            "cook_apoint": "Medium",
-            "cook_biencuit": "Well Done",
-            "opt_supplements": "Supplements",
-            "supp_truffle": "Fresh Truffle",
+            "opt_cooking": "Cuisson",
+            "cook_bleu": "Bleu",
+            "cook_saignant": "Saignant",
+            "cook_apoint": "À point",
+            "cook_biencuit": "Bien cuit",
+            "opt_supplements": "Suppléments",
+            "supp_truffle": "Truffes Fraîches",
             "supp_mozzarella": "Extra Mozzarella",
-            "supp_jambon": "Parma Ham"
+            "supp_jambon": "Jambon de Parme",
         },
         "payment": {
-            "title": "Settlement",
-            "subtitle": "Final Step",
-            "transaction_success": "Transaction Honored",
-            "archive_updated": "The Archive has been successfully updated.",
-            "generating_receipt": "Generating official receipt...",
-            "total_exhibition": "Exhibition Total",
-            "fees_included": "Fees Included",
+            "title": "Règlement",
+            "subtitle": "Étape Finale",
+            "transaction_success": "Transaction Honorée",
+            "archive_updated": "L'Archive a été mise à jour avec succès.",
+            "generating_receipt": "Génération du reçu officiel...",
+            "total_exhibition": "Total de l'Exposition",
+            "fees_included": "Frais Inclus",
             "methods": {
-                "card": "Card",
-                "cash": "Cash",
-                "mobile": "Apple Pay"
+                "card": "Carte",
+                "cash": "Espèces",
+                "mobile": "Apple Pay",
             },
-            "processing": "Authenticity Verification...",
-            "confirm_seal": "Confirm the Seal",
-            "security_seal": "RestaurantOS Security Seal",
-            "encryption_protocol": "Master encryption protocol v4.2"
+            "processing": "Vérification de l'Authenticité...",
+            "confirm_seal": "Confirmer le Sceau",
+            "security_seal": "Sceau de Sécurité RestaurantOS",
+            "encryption_protocol": "Protocole de cryptage maître v4.2",
         },
         "split": {
-            "title": "Archive Splitting",
-            "subtitle": "Division Protocols",
+            "title": "Partage de l'Archive",
+            "assign_items": "Attribuer les articles",
+            "custom_amounts": "Montants libres",
+            "subtitle": "Protocoles de Division",
             "signatures": "SIGNATURES",
-            "convive_signature_title": "High Excellence Signature",
+            "convive_signature_title": "Signature de Haute Excellence",
             "convive": "Convive",
             "methods": {
-                "card": "EXECUTIVE CARD",
-                "cash": "ARCHIVE CASH",
-                "mobile": "PREMIUM MOBILE"
+                "card": "CARTE EXECUTIVE",
+                "cash": "ESPÈCES ARCHIVE",
+                "mobile": "PREMIUM MOBILE",
             },
-            "back": "BACK",
-            "seal_transaction": "SEAL TRANSACTION",
+            "back": "RETOUR",
+            "seal_transaction": "SCELLER LA TRANSACTION",
             "modes": {
-                "equal": "EQUAL PARTS",
-                "by_item": "BY ARTEFACT",
-                "custom": "FREE MEASURE"
+                "equal": "PARTS ÉGALES",
+                "by_item": "PAR ARTEFACT",
+                "custom": "MESURE LIBRE",
             },
-            "seats_control": "SEATS CONTROL",
-            "convive_count": "Convive Count",
-            "investment_per_seat": "INVESTMENT PER SEAT",
-            "convive_spirit": "CONVIVE SPIRIT",
-            "master": "Master",
-            "honored": "HONORED",
-            "collect": "CHECKOUT",
+            "seats_control": "CONTRÔLE DES SIÈGES",
+            "convive_count": "Nombre de Convives",
+            "investment_per_seat": "INVESTISSEMENT PAR SIÈGE",
+            "convive_spirit": "CONVIVE ESPRIT",
+            "master": "Maître",
+            "honored": "HONORÉ",
+            "collect": "ENCAISSER",
             "signature": "SIGNATURE",
-            "remaining": "REMAINING TO PERCEIVE",
-            "close_archive": "CLOSE ARCHIVE",
-            "protocol_in_progress": "PROTOCOL IN PROGRESS",
-            "waiting_seals": "WAITING FOR SEALS",
-            "paid_msg": "paid"
+            "remaining": "RESTE À PERCEVOIR",
+            "close_archive": "CLÔTURER L'ARCHIVE",
+            "protocol_in_progress": "PROTOCOLE EN COURS",
+            "waiting_seals": "EN ATTENTE DE SCELLÉS",
+            "paid_msg": "a payé",
         },
         "settings": {
-            "title": "POS Archive",
+            "title": "L'Archive POS",
             "intel_hub": "Intelligence Hub",
-            "arch_section": "Archive Section",
+            "arch_section": "Section d'Archive",
             "tabs": {
                 "interface": "Interface",
-                "hardware": "Hardware",
-                "sales": "Sales",
-                "system": "System"
+                "hardware": "Matériel",
+                "sales": "Ventes",
+                "system": "Système",
             },
             "grid": {
-                "title": "Grid Architecture",
-                "subtitle": "Dynamic Visual Optimization",
-                "auto": "ADAPTIVE",
+                "title": "Architecture de Grille",
+                "subtitle": "Optimisation visuelle dynamique",
+                "auto": "ADAPTATIF",
                 "auto_desc": "Auto Layout",
                 "compact": "COMPACT",
                 "compact_desc": "6 Col Grid",
-                "relaxed": "RELAXED",
-                "relaxed_desc": "4 Col Grid"
+                "relaxed": "AÉRÉ",
+                "relaxed_desc": "4 Col Grid",
             },
             "render": {
-                "title": "Rendering Protocols",
+                "title": "Protocoles de Rendu",
                 "visual": "Visual Intelligence",
-                "visual_desc": "Load product miniatures",
+                "visual_desc": "Charger les miniatures des produits",
                 "neural": "Neural Density",
-                "neural_desc": "High density touch interface",
+                "neural_desc": "Interface tactile haute densité",
                 "acoustic": "Acoustic Feedback",
-                "acoustic_desc": "POS action sounds"
+                "acoustic_desc": "Sons lors des actions POS",
             },
             "hardware": {
-                "title": "Network Peripherals",
-                "scan": "Relaunch Analysis",
-                "testing": "Neural scan in progress : EPSON & STAR Hardware Nodes"
+                "title": "Périphériques Réseau",
+                "scan": "Relancer l'Analyse",
+                "testing": "Neural scan in progress : EPSON & STAR Hardware Nodes",
             },
             "sales": {
-                "title": "Operational Protocols",
-                "logistics": "Ticket Logistics",
-                "logistics_desc": "Auto print after settlement",
-                "speed": "Speed Mode",
-                "speed_desc": "Skip non-critical selections",
-                "kitchen": "Kitchen Validation",
-                "kitchen_desc": "Confirm order sending",
-                "cart_security": "Cart Security",
-                "cart_security_desc": "Confirm item deletion"
+                "title": "Protocoles Opérationnels",
+                "logistics": "Logistique Ticket",
+                "logistics_desc": "Impression auto après règlement",
+                "speed": "Mode Vitesse",
+                "speed_desc": "Sauter les sélections non-critiques",
+                "kitchen": "Validation Cuisine",
+                "kitchen_desc": "Confirmer l'envoi des bons",
+                "cart_security": "Sécurité Panier",
+                "cart_security_desc": "Confirmer la suppression d'article",
             },
             "system": {
                 "kernel": "Kernel Engine",
                 "uptime": "Exhibition Uptime",
                 "latency": "Telemetry Latency",
-                "archive_sync": "Archive Status"
+                "archive_sync": "Archive Status",
             },
             "actions": {
-                "save_success": "Protocols successfully memorized",
+                "save_success": "Protocoles mémorisés avec succès",
                 "reset": "Reset Logic",
-                "abandon": "Abandon",
-                "save": "Homologate Protocols",
-                "saving": "Neural Sync..."
-            }
-        }
+                "abandon": "Abandonner",
+                "save": "Homologuer Protocoles",
+                "saving": "Neural Sync...",
+            },
+        },
     },
     "inventory": {
         "title": "Inventory & Stock",
         "stats": {
-            "value": "Inventory Value",
-            "items_in_stock": "items in stock",
-            "low_stock": "Low Stock Alerts",
-            "low_stock_desc": "Ingredients below threshold",
-            "expiring": "Near Expiry",
-            "expiring_desc": "Items to monitor",
-            "active_preps": "Active Preparations",
-            "active_preps_desc": "Mise en place"
+            "value": "Valeur Inventaire",
+            "items_in_stock": "articles en stock",
+            "low_stock": "Alertes Stock Bas",
+            "low_stock_desc": "Ingrédients sous seuil",
+            "expiring": "Péremptions Proches",
+            "expiring_desc": "Articles à surveiller",
+            "active_preps": "Préparations Actives",
+            "active_preps_desc": "Mises en place",
         },
         "tabs": {
             "archive": "ARCHIVE",
-            "kitchen": "KITCHEN",
-            "logistics": "LOGISTICS"
+            "kitchen": "CUISINE",
+            "logistics": "LOGISTIQUE",
         },
         "actions": {
-            "transfer": "Transfer",
-            "reception": "Reception",
-            "new_prep": "NEW PREPARATION"
+            "transfer": "Transfert",
+            "reception": "Réception",
+            "new_prep": "NOUVELLE PRÉPARATION",
         },
         "search": {
-            "archive": "SEARCH IN ARCHIVE...",
-            "kitchen": "SEARCH IN LABORATORY..."
+            "archive": "RECHERCHER DANS L'ARCHIVE...",
+            "kitchen": "RECHERCHER DANS LE LABORATOIRE...",
         },
         "table": {
             "article": "ARTICLE",
-            "location": "LOC",
+            "location": "SITU",
             "quantity": "QUANTUM",
-            "dlc": "EXP",
+            "dlc": "DLC",
             "protocol": "PROTOCOL",
             "action": "ACTION",
-            "empty": "Silence in Archive",
-            "expires": "EXPIRES"
+            "empty": "Silences dans l'Archive",
+            "expires": "EXPIRES",
         },
         "prep": {
-            "empty": "Kitchen on Break",
-            "immediate": "IMMEDIATE",
-            "executive": "EXECUTIVE"
+            "empty": "Cuisine en Pause",
+            "immediate": "IMMÉDIAT",
+            "executive": "EXÉCUTIF",
         },
         "orders": {
-            "title": "Convoy Protocols.",
-            "subtitle": "Culinary Logistics & Supply",
-            "active_count": "Active Orders",
-            "empty": "No Convoy En Route",
-            "receive": "RECEIVE",
-            "sealed": "SEALING",
-            "arrival": "ARRIVAL"
+            "title": "Protocoles de Convoi.",
+            "subtitle": "Logistique Culinaire & Approvisionnement",
+            "active_count": "Commandes En Cours",
+            "empty": "Aucun Convoi en Route",
+            "receive": "RÉCEPTIONNER",
+            "sealed": "SCÈLLEMENT",
+            "arrival": "ARRIVÉE",
         },
         "status": {
-            "draft": "Draft",
-            "pending": "Pending",
-            "confirmed": "Confirmed",
-            "shipped": "Shipped",
-            "delivered": "Delivered",
-            "cancelled": "Cancelled"
-        }
+            "draft": "Brouillon",
+            "pending": "En attente",
+            "confirmed": "Confirmée",
+            "shipped": "Expédiée",
+            "delivered": "Livrée",
+            "cancelled": "Annulée",
+        },
     },
     "reservations": {
         "sidebar": {
-            "manifest": "Daily Manifest",
-            "search_placeholder": "NOMINATIVE IDENTIFICATION...",
-            "manifest_count": "MANIFEST",
-            "sort": "SORT",
-            "empty": "Vacant Agenda",
-            "expected": "Expected",
-            "seated": "In Kitchen",
-            "unit": "Unit",
-            "total_covers": "ENGAGED SERVICES"
+            "manifest": "Manifeste Quotidien",
+            "search_placeholder": "IDENTIFICATION NOMINATIVE...",
+            "manifest_count": "MANIFESTE",
+            "sort": "TRIER",
+            "empty": "Agenda Vacant",
+            "expected": "Attendu",
+            "seated": "En Cuisine",
+            "unit": "Unité",
+            "total_covers": "SERVICES ENGAGÉS",
         },
         "tabs": {
             "plan": "PLAN",
-            "list": "LIST",
-            "day": "DAY",
-            "week": "WEEK"
+            "list": "LISTE",
+            "day": "JOUR",
+            "week": "SEMAINE",
         },
         "actions": {
-            "reserve": "RESERVE"
+            "reserve": "RÉSERVER",
         },
         "zones": {
-            "zone": "ZONE"
+            "zone": "ZONE",
         },
         "list": {
-            "search_placeholder": "SEARCH A CONVIVE...",
-            "registry": "REGISTRY",
-            "profiles": "PROFILES",
+            "search_placeholder": "RECHERCHER UN CONVIVE...",
+            "registry": "REGISTRE",
+            "profiles": "PROFILS",
             "services": "Services",
-            "value": "Value"
+            "value": "Valeur",
         },
         "customer": {
-            "executive_intelligence": "Executive Intelligence",
-            "total_spent": "Total Spent",
-            "visits": "Number of Visits",
-            "last_visit": "Last Visit",
-            "contact": "Contact Information",
-            "preferences": "Preferences & Habits",
-            "close": "Close Profile",
-            "new_table": "Assign to Table",
-            "add_success": "Gastronomic Profile Registered",
-            "reserve_success": "Table Assignment Confirmed"
-        }
+            "executive_intelligence": "Intelligence Exécutive",
+            "total_spent": "Total Dépensé",
+            "visits": "Nombre de Visites",
+            "last_visit": "Dernière Visite",
+            "contact": "Informations de Contact",
+            "preferences": "Préférences & Habitudes",
+            "close": "Fermer le Profil",
+            "new_table": "Affecter à une Table",
+            "add_success": "Profil Gastronomique Enregistré",
+            "reserve_success": "Affectation Table Confirmée",
+        },
     },
     "customer": {
         "database_title": "Database",
@@ -566,34 +581,11 @@ const en: SovereignData = {
         "save_profile": "Save Profile",
         "segments": {
             "vip": "VIP",
-            "regular": "Regular",
-            "new": "New",
-            "lost": "To Reactivate"
-        }
-    },
-    "recruitment": {
-        "title": "Recruitment Pipeline",
-        "subtitle": "GDPR Talent Management",
-        "new_candidate": "New Candidate",
-        "search_placeholder": "Search for a candidate...",
-        "gdpr_compliant": "GDPR: Compliant",
-        "columns": {
-            "new": "New",
-            "interview": "Interview",
-            "trial": "Trial",
-            "refused": "Refused",
-            "hired": "Hired"
+            "regular": "Régulier",
+            "new": "Nouveau",
+            "lost": "À réactiver",
         },
-        "modal": {
-            "title": "Application Entry",
-            "step_1": "Information",
-            "step_2": "Consent & CV",
-            "scan_cv": "Scan Paper CV",
-            "upload_pdf": "Upload PDF",
-            "gdpr_notice": "I confirm that I have received the candidate's consent to store their data.",
-            "finish": "Finish Application"
-        }
-    }
+    },
 };
 
 export default en;
