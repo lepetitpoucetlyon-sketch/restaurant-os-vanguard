@@ -34,24 +34,21 @@ export type OutboxPriorityTier = typeof OutboxPriority[keyof typeof OutboxPriori
  * Mapping automatique collection → priorité si non fourni explicitement.
  * Basé sur des tokens présents dans le path de collection.
  */
+const LEGAL_KEYWORDS = ['legal', 'dgfip', 'urssaf', 'inspection', '/rpi', 'personnelinstant'] as const;
+const SANITAIRE_KEYWORDS = ['haccp', 'chilling', 'refroidiss', 'recall', 'rappelconso', 'tiac', 'sanitaire', 'foodalert', 'biohazard'] as const;
+const FISCAL_KEYWORDS = ['fiscal', 'journal', 'seal', 'ticketz', 'grandtotal', 'fec'] as const;
+
+const matchesAny = (str: string, keywords: readonly string[]) => keywords.some(k => str.includes(k));
+
+/**
+ * Mapping automatique collection → priorité si non fourni explicitement.
+ * Basé sur des tokens présents dans le path de collection.
+ */
 export function resolvePriority(collection: string): OutboxPriorityTier {
     const c = collection.toLowerCase();
-    // LEGAL — inspection fiscale / RPI URSSAF / audit DGFiP
-    if (c.includes('legal') || c.includes('dgfip') || c.includes('urssaf') || c.includes('inspection')
-        || c.includes('/rpi') || c.includes('personnelinstant')) {
-        return OutboxPriority.LEGAL;
-    }
-    // SANITAIRE — HACCP, refroidissement, rappels, incidents ARS/DDPP
-    if (c.includes('haccp') || c.includes('chilling') || c.includes('refroidiss')
-        || c.includes('recall') || c.includes('rappelconso') || c.includes('tiac')
-        || c.includes('sanitaire') || c.includes('foodalert') || c.includes('biohazard')) {
-        return OutboxPriority.SANITAIRE;
-    }
-    // FISCAL — NF525, journalEntry, sceaux, TVA, ticket Z
-    if (c.includes('fiscal') || c.includes('journal') || c.includes('seal')
-        || c.includes('ticketz') || c.includes('grandtotal') || c.includes('fec')) {
-        return OutboxPriority.FISCAL;
-    }
+    if (matchesAny(c, LEGAL_KEYWORDS)) return OutboxPriority.LEGAL;
+    if (matchesAny(c, SANITAIRE_KEYWORDS)) return OutboxPriority.SANITAIRE;
+    if (matchesAny(c, FISCAL_KEYWORDS)) return OutboxPriority.FISCAL;
     return OutboxPriority.NORMAL;
 }
 

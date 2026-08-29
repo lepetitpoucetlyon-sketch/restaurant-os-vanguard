@@ -156,6 +156,78 @@ export function microunitsToCurrency(microunits: number): number {
  * Valide une valeur de champ personnalisé contre sa définition.
  * Retourne `true` si la valeur est valide, une chaîne d'erreur sinon.
  */
+function validateStringField(def: CustomFieldDef, value: unknown): true | string {
+    if (typeof value !== 'string') return `"${def.label}" doit être du texte`;
+    if (def.constraints?.maxLength && value.length > def.constraints.maxLength) {
+        return `"${def.label}" ne doit pas dépasser ${def.constraints.maxLength} caractères`;
+    }
+    if (def.constraints?.pattern) {
+        const regex = new RegExp(def.constraints.pattern);
+        if (!regex.test(value)) return `"${def.label}" ne correspond pas au format attendu`;
+    }
+    return true;
+}
+
+function validateNumericField(def: CustomFieldDef, value: unknown): true | string {
+    if (typeof value !== 'number') return `"${def.label}" doit être un nombre`;
+    if (def.type === 'currency' && !Number.isInteger(value)) {
+        return `"${def.label}" doit être un entier (centimes)`;
+    }
+    if (def.constraints?.min !== undefined && value < def.constraints.min) {
+        return `"${def.label}" doit être ≥ ${def.constraints.min}`;
+    }
+    if (def.constraints?.max !== undefined && value > def.constraints.max) {
+        return `"${def.label}" doit être ≤ ${def.constraints.max}`;
+    }
+    if (def.type === 'rating' && (value < 1 || value > 5 || !Number.isInteger(value))) {
+        return `"${def.label}" doit être entre 1 et 5 étoiles`;
+    }
+    return true;
+}
+
+function validateDateField(def: CustomFieldDef, value: unknown): true | string {
+    if (typeof value !== 'string') return `"${def.label}" doit être une date`;
+    if (isNaN(Date.parse(value))) return `"${def.label}" : date invalide`;
+    return true;
+}
+
+function validateSelectField(def: CustomFieldDef, value: unknown): true | string {
+    if (typeof value !== 'string') return `"${def.label}" doit être une option`;
+    if (def.constraints?.options && !def.constraints.options.includes(value)) {
+        return `"${def.label}" : option invalide`;
+    }
+    return true;
+}
+
+function validateMultiSelectField(def: CustomFieldDef, value: unknown): true | string {
+    if (!Array.isArray(value)) return `"${def.label}" doit être un tableau d'options`;
+    if (def.constraints?.options) {
+        const invalid = value.filter(v => !def.constraints!.options!.includes(v));
+        if (invalid.length > 0) return `"${def.label}" : options invalides : ${invalid.join(', ')}`;
+    }
+    return true;
+}
+
+const FIELD_TYPE_VALIDATORS: Record<string, (def: CustomFieldDef, val: unknown) => true | string> = {
+    text: validateStringField,
+    url: validateStringField,
+    email: validateStringField,
+    phone: validateStringField,
+    color: validateStringField,
+    number: validateNumericField,
+    currency: validateNumericField,
+    rating: validateNumericField,
+    boolean: (def, val) => typeof val === 'boolean' ? true : `"${def.label}" doit être vrai/faux`,
+    date: validateDateField,
+    datetime: validateDateField,
+    select: validateSelectField,
+    multiselect: validateMultiSelectField,
+};
+
+/**
+ * Valide une valeur de champ personnalisé contre sa définition.
+ * Retourne `true` si la valeur est valide, une chaîne d'erreur sinon.
+ */
 export function validateCustomFieldValue(
     def: CustomFieldDef,
     value: CustomFieldValue,
@@ -163,67 +235,6 @@ export function validateCustomFieldValue(
     if (value === null || value === undefined || value === '') {
         return def.required ? `Le champ "${def.label}" est obligatoire` : true;
     }
-
-    switch (def.type) {
-        case 'text':
-        case 'url':
-        case 'email':
-        case 'phone':
-        case 'color':
-            if (typeof value !== 'string') return `"${def.label}" doit être du texte`;
-            if (def.constraints?.maxLength && value.length > def.constraints.maxLength) {
-                return `"${def.label}" ne doit pas dépasser ${def.constraints.maxLength} caractères`;
-            }
-            if (def.constraints?.pattern) {
-                const regex = new RegExp(def.constraints.pattern);
-                if (!regex.test(value)) return `"${def.label}" ne correspond pas au format attendu`;
-            }
-            return true;
-
-        case 'number':
-        case 'currency':
-        case 'rating':
-            if (typeof value !== 'number') return `"${def.label}" doit être un nombre`;
-            if (def.type === 'currency' && !Number.isInteger(value)) {
-                return `"${def.label}" doit être un entier (centimes)`;
-            }
-            if (def.constraints?.min !== undefined && value < def.constraints.min) {
-                return `"${def.label}" doit être ≥ ${def.constraints.min}`;
-            }
-            if (def.constraints?.max !== undefined && value > def.constraints.max) {
-                return `"${def.label}" doit être ≤ ${def.constraints.max}`;
-            }
-            if (def.type === 'rating' && (value < 1 || value > 5 || !Number.isInteger(value))) {
-                return `"${def.label}" doit être entre 1 et 5 étoiles`;
-            }
-            return true;
-
-        case 'boolean':
-            if (typeof value !== 'boolean') return `"${def.label}" doit être vrai/faux`;
-            return true;
-
-        case 'date':
-        case 'datetime':
-            if (typeof value !== 'string') return `"${def.label}" doit être une date`;
-            if (isNaN(Date.parse(value))) return `"${def.label}" : date invalide`;
-            return true;
-
-        case 'select':
-            if (typeof value !== 'string') return `"${def.label}" doit être une option`;
-            if (def.constraints?.options && !def.constraints.options.includes(value)) {
-                return `"${def.label}" : option invalide`;
-            }
-            return true;
-
-        case 'multiselect':
-            if (!Array.isArray(value)) return `"${def.label}" doit être un tableau d'options`;
-            if (def.constraints?.options) {
-                const invalid = value.filter(v => !def.constraints!.options!.includes(v));
-                if (invalid.length > 0) return `"${def.label}" : options invalides : ${invalid.join(', ')}`;
-            }
-            return true;
-
-        default:
-            return true;
-    }
+    const validator = FIELD_TYPE_VALIDATORS[def.type];
+    return validator ? validator(def, value) : true;
 }

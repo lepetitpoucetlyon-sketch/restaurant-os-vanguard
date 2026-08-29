@@ -121,76 +121,57 @@ ${indent}</div>`;
     /**
      * Génère les classes Tailwind CSS pour un conteneur Frame
      */
+private static extractLayoutModeClasses(node: FrameNode | RectangleNode, classes: string[]): void {
+        if (!('layoutMode' in node)) return;
+        const isHoriz = node.layoutMode === 'HORIZONTAL';
+        classes.push(isHoriz ? 'flex flex-row' : 'flex flex-col');
+        if (node.counterAxisAlign === 'CENTER') classes.push('items-center');
+        if (node.primaryAxisAlign === 'SPACE_BETWEEN') classes.push('justify-between');
+        if (isHoriz && node.primaryAxisAlign === 'CENTER') classes.push('justify-center');
+    }
+
+    private static extractFillClasses(node: FrameNode | RectangleNode, classes: string[]): void {
+        if (!node.fills || node.fills.length === 0) {
+            classes.push('bg-bg-primary text-text-primary');
+            return;
+        }
+        const fill = node.fills[0];
+        const ref = fill.tokenReference || '';
+        if (ref.includes('bg.primary')) classes.push('bg-bg-primary');
+        else if (ref.includes('bg.secondary')) classes.push('bg-bg-secondary/80 backdrop-blur-md');
+        else if (ref.includes('brand.gold')) classes.push('bg-action-primary text-text-primary');
+        else if (fill.color) classes.push('backdrop-blur-sm');
+    }
+
+    private static extractRadiusClasses(node: FrameNode | RectangleNode, classes: string[]): void {
+        if (!node.cornerRadius) return;
+        const rad = typeof node.cornerRadius === 'number' ? node.cornerRadius : node.cornerRadius[0];
+        if (rad >= 24) classes.push('rounded-3xl');
+        else if (rad >= 16) classes.push('rounded-2xl');
+        else if (rad >= 8) classes.push('rounded-xl');
+        else if (rad > 0) classes.push('rounded-lg');
+    }
+
+    /**
+     * Génère les classes Tailwind CSS pour un conteneur Frame
+     */
     private static extractTailwindClasses(node: FrameNode | RectangleNode): string {
         const classes: string[] = ['relative'];
+        this.extractLayoutModeClasses(node, classes);
 
-        // Layout Mode
-        if ('layoutMode' in node) {
-            if (node.layoutMode === 'HORIZONTAL') {
-                classes.push('flex flex-row');
-                if (node.counterAxisAlign === 'CENTER') classes.push('items-center');
-                if (node.primaryAxisAlign === 'SPACE_BETWEEN') classes.push('justify-between');
-                if (node.primaryAxisAlign === 'CENTER') classes.push('justify-center');
-            } else if (node.layoutMode === 'VERTICAL') {
-                classes.push('flex flex-col');
-                if (node.counterAxisAlign === 'CENTER') classes.push('items-center');
-                if (node.primaryAxisAlign === 'SPACE_BETWEEN') classes.push('justify-between');
-            }
-        }
+        if ('itemSpacing' in node && node.itemSpacing) classes.push(`gap-${Math.round(node.itemSpacing / 4)}`);
+        if ('paddingTop' in node && node.paddingTop) classes.push(`p-${Math.round(node.paddingTop / 4)}`);
 
-        // Spacing & Padding
-        if ('itemSpacing' in node && node.itemSpacing) {
-            classes.push(`gap-${Math.round(node.itemSpacing / 4)}`);
-        }
-        if ('paddingTop' in node && node.paddingTop) {
-            classes.push(`p-${Math.round(node.paddingTop / 4)}`);
-        }
+        this.extractFillClasses(node, classes);
+        this.extractRadiusClasses(node, classes);
 
-        // Fills & Background
-        if (node.fills && node.fills.length > 0) {
-            const fill = node.fills[0];
-            if (fill.tokenReference?.includes('bg.primary')) {
-                classes.push('bg-bg-primary');
-            } else if (fill.tokenReference?.includes('bg.secondary')) {
-                classes.push('bg-bg-secondary/80 backdrop-blur-md');
-            } else if (fill.tokenReference?.includes('brand.gold')) {
-                classes.push('bg-action-primary text-text-primary');
-            } else if (fill.color) {
-                // Utiliser la couleur rgba
-                classes.push('backdrop-blur-sm');
-            }
-        } else {
-            classes.push('bg-bg-primary text-text-primary');
-        }
-
-        // Corner radius
-        if (node.cornerRadius) {
-            const rad = typeof node.cornerRadius === 'number' ? node.cornerRadius : node.cornerRadius[0];
-            if (rad >= 24) classes.push('rounded-3xl');
-            else if (rad >= 16) classes.push('rounded-2xl');
-            else if (rad >= 8) classes.push('rounded-xl');
-            else if (rad > 0) classes.push('rounded-lg');
-        }
-
-        // Strokes & Borders
-        if (node.strokes && node.strokes.length > 0) {
-            classes.push('border border-border/40');
-        }
-
-        // Sizing
-        if (node.layoutSizingHorizontal === 'FILL') {
-            classes.push('w-full');
-        }
-        if (node.layoutSizingVertical === 'FILL') {
-            classes.push('h-full flex-1');
-        }
+        if (node.strokes && node.strokes.length > 0) classes.push('border border-border/40');
+        if (node.layoutSizingHorizontal === 'FILL') classes.push('w-full');
+        if (node.layoutSizingVertical === 'FILL') classes.push('h-full flex-1');
 
         return classes.join(' ');
     }
 
-    /**
-     * Génère les classes Tailwind pour un nœud Text
-     */
     private static extractTextClasses(node: TextNode): string {
         const classes: string[] = [];
         const style = node.style;

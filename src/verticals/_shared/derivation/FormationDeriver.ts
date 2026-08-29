@@ -51,171 +51,64 @@ export interface FormationDeriverInput {
 
 // ── Dérivation ──────────────────────────────────────────────────────────────────
 
-export function deriveFormation(input: FormationDeriverInput): DerivedFormation {
-    const { variant, tier, effectiveCapabilities: caps } = input;
-    const steps: OnboardingStepSpec[] = [];
-
-    // ── Socle universel ────────────────────────────────────────────────────
-    steps.push({
-        id: 'onb.welcome',
-        label: 'Bienvenue et présentation générale',
-        kind: 'video',
-        durationMinutes: 3,
-        required: true,
-        derivedFrom: 'socle universel',
-    });
+function buildCoreSteps(caps: CapabilitySet): OnboardingStepSpec[] {
+    const steps: OnboardingStepSpec[] = [
+        { id: 'onb.welcome', label: 'Bienvenue et présentation générale', kind: 'video', durationMinutes: 3, required: true, derivedFrom: 'socle universel' }
+    ];
     if (caps['mod_pos']) {
-        steps.push({
-            id: 'onb.pos',
-            label: 'Prendre une commande et encaisser',
-            kind: 'tutorial',
-            durationMinutes: 10,
-            required: true,
-            derivedFrom: 'mod_pos = true',
-        });
+        steps.push({ id: 'onb.pos', label: 'Prendre une commande et encaisser', kind: 'tutorial', durationMinutes: 10, required: true, derivedFrom: 'mod_pos = true' });
     }
     if (caps['mod_reservations']) {
-        steps.push({
-            id: 'onb.reservations',
-            label: 'Gérer les réservations et rendez-vous',
-            kind: 'tutorial',
-            durationMinutes: 8,
-            required: true,
-            derivedFrom: 'mod_reservations = true',
-        });
+        steps.push({ id: 'onb.reservations', label: 'Gérer les réservations et rendez-vous', kind: 'tutorial', durationMinutes: 8, required: true, derivedFrom: 'mod_reservations = true' });
+    }
+    return steps;
+}
+
+function buildTierSteps(tier: PrecisionTier, caps: CapabilitySet): OnboardingStepSpec[] {
+    const steps: OnboardingStepSpec[] = [];
+    const isL1Plus = tier === 'L1' || tier === 'L2' || tier === 'L3';
+    const isL2Plus = tier === 'L2' || tier === 'L3';
+
+    if (isL1Plus) {
+        if (caps['mod_inventory']) steps.push({ id: 'onb.inventory', label: 'Gestion des stocks et entrées produits', kind: 'tutorial', durationMinutes: 12, required: true, derivedFrom: `tier=${tier} + mod_inventory` });
+        if (caps['mod_hr']) steps.push({ id: 'onb.hr', label: 'Créer et gérer les fiches salariés', kind: 'tutorial', durationMinutes: 15, required: true, forRole: 'rh_manager', derivedFrom: `tier=${tier} + mod_hr` });
     }
 
-    // ── L1+ ajoute des tutos supplémentaires ──────────────────────────────
-    if (tier === 'L1' || tier === 'L2' || tier === 'L3') {
-        if (caps['mod_inventory']) {
-            steps.push({
-                id: 'onb.inventory',
-                label: 'Gestion des stocks et entrées produits',
-                kind: 'tutorial',
-                durationMinutes: 12,
-                required: true,
-                derivedFrom: `tier=${tier} + mod_inventory`,
-            });
-        }
-        if (caps['mod_hr']) {
-            steps.push({
-                id: 'onb.hr',
-                label: 'Créer et gérer les fiches salariés',
-                kind: 'tutorial',
-                durationMinutes: 15,
-                required: true,
-                forRole: 'rh_manager',
-                derivedFrom: `tier=${tier} + mod_hr`,
-            });
-        }
+    if (isL2Plus) {
+        if (caps['mod_haccp']) steps.push({ id: 'onb.haccp', label: 'Relevés HACCP et alertes température', kind: 'tutorial', durationMinutes: 20, required: true, forRole: 'responsable_hygiene', derivedFrom: `tier=${tier} + mod_haccp` });
+        if (caps['mod_accounting_management']) steps.push({ id: 'onb.accounting', label: 'Comptabilité et exports FEC', kind: 'video', durationMinutes: 25, required: true, forRole: 'comptable', derivedFrom: `tier=${tier} + mod_accounting` });
+        if (caps['mod_analytics']) steps.push({ id: 'onb.analytics', label: 'Lecture des dashboards et rapports', kind: 'doc', durationMinutes: 10, required: false, forRole: 'direction', derivedFrom: `tier=${tier} + mod_analytics` });
     }
 
-    // ── L2 : docs contextuelles + tutos avancés ────────────────────────────
-    if (tier === 'L2' || tier === 'L3') {
-        if (caps['mod_haccp']) {
-            steps.push({
-                id: 'onb.haccp',
-                label: 'Relevés HACCP et alertes température',
-                kind: 'tutorial',
-                durationMinutes: 20,
-                required: true,
-                forRole: 'responsable_hygiene',
-                derivedFrom: `tier=${tier} + mod_haccp`,
-            });
-        }
-        if (caps['mod_accounting_management']) {
-            steps.push({
-                id: 'onb.accounting',
-                label: 'Comptabilité et exports FEC',
-                kind: 'video',
-                durationMinutes: 25,
-                required: true,
-                forRole: 'comptable',
-                derivedFrom: `tier=${tier} + mod_accounting`,
-            });
-        }
-        if (caps['mod_analytics']) {
-            steps.push({
-                id: 'onb.analytics',
-                label: 'Lecture des dashboards et rapports',
-                kind: 'video',
-                durationMinutes: 15,
-                required: false,
-                forRole: 'manager',
-                derivedFrom: `tier=${tier} + mod_analytics`,
-            });
-        }
-    }
-
-    // ── L3 : session live + plan étalé ─────────────────────────────────────
     if (tier === 'L3') {
-        steps.push({
-            id: 'onb.live_kickoff',
-            label: 'Session live d\'onboarding avec un expert',
-            kind: 'live_session',
-            durationMinutes: 60,
-            required: true,
-            derivedFrom: 'tier=L3 → accompagnement premium',
-        });
-        if (caps['mod_fleet_management']) {
-            steps.push({
-                id: 'onb.fleet',
-                label: 'Supervision multi-établissements (MCC)',
-                kind: 'video',
-                durationMinutes: 30,
-                required: true,
-                forRole: 'direction',
-                derivedFrom: 'tier=L3 + mod_fleet',
-            });
-        }
+        steps.push({ id: 'onb.fleet', label: 'Supervision multi-établissements (MCC)', kind: 'live_session', durationMinutes: 45, required: true, forRole: 'administrateur_reseau', derivedFrom: 'tier=L3 (franchise/groupe)' });
     }
+    return steps;
+}
 
-    // ── Certifications obligatoires ────────────────────────────────────────
-    const certifications: CertificationRequirement[] = [];
-    if (variant === 'restaurant' || variant === 'bakery') {
-        certifications.push({
-            id: 'cert.haccp',
-            label: 'Formation hygiène alimentaire (14h HACCP)',
-            required: true,
-            renewalMonths: 60,
-            rationale: 'Décret 2011-731 : au moins 1 salarié formé HACCP par établissement',
-        });
+function buildCertifications(tier: PrecisionTier, caps: CapabilitySet, variant: PlatformVariant): CertificationRequirement[] {
+    const certs: CertificationRequirement[] = [];
+    if (caps['mod_haccp']) {
+        certs.push({ id: 'cert.haccp', label: 'Hygiène alimentaire et protocole HACCP', required: tier === 'L2' || tier === 'L3', renewalMonths: 36, rationale: 'Réglementation paquet hygiène européen CE 852/2004' });
     }
-    if (variant === 'clinic' || variant === 'veterinary') {
-        certifications.push({
-            id: 'cert.dpc',
-            label: 'Développement Professionnel Continu (DPC)',
-            required: true,
-            renewalMonths: 36,
-            rationale: 'Obligation triennale pour professionnels de santé',
-        });
+    if (variant === 'clinic' || caps['mod_rgpd']) {
+        certs.push({ id: 'cert.rgpd_health', label: 'Secret professionnel et RGPD données de santé', required: true, renewalMonths: 12, rationale: 'Hébergement de Données de Santé (HDS) + secret pro' });
     }
-    if (variant === 'garage') {
-        certifications.push({
-            id: 'cert.fluides',
-            label: 'Attestation de capacité fluides frigorigènes',
-            required: false,
-            renewalMonths: 60,
-            rationale: 'Si intervention clim automobile (R134a/R1234yf)',
-        });
-    }
-    if (variant === 'gym') {
-        certifications.push({
-            id: 'cert.bpjeps',
-            label: 'BPJEPS ou équivalent pour coach',
-            required: true,
-            renewalMonths: 0, // sans expiration
-            rationale: 'Diplôme d\'État obligatoire pour encadrement contre rémunération',
-        });
-    }
+    return certs;
+}
 
-    const totalOnboardingMinutes = steps.reduce((sum, s) => sum + s.durationMinutes, 0);
-    const contextualDocsCount = Math.floor(Object.values(caps).filter(v => v === true).length * 1.5);
+export function deriveFormation(input: FormationDeriverInput): DerivedFormation {
+    const { variant, tier, effectiveCapabilities: caps } = input;
+    const steps = [...buildCoreSteps(caps), ...buildTierSteps(tier, caps)];
+    const certs = buildCertifications(tier, caps, variant);
+
+    const totalMinutes = steps.reduce((sum, s) => sum + s.durationMinutes, 0);
+    const contextualDocsCount = steps.filter(s => s.kind === 'doc').length + (tier === 'L3' ? 8 : tier === 'L2' ? 5 : 2);
 
     return {
         onboardingPath: steps,
-        certificationsRequired: certifications,
-        totalOnboardingMinutes,
+        certificationsRequired: certs,
+        totalOnboardingMinutes: totalMinutes,
         contextualDocsCount,
     };
 }
