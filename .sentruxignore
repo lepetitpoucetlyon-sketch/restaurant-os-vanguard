@@ -31,14 +31,25 @@ dist/
 .firebase/
 
 # Tests (mocks, fixtures, benchmarks) — leur couplage est volontairement large
-# Note : sentrux `no_god_files` scanne toujours ces fichiers (pas de filtre pour cette règle),
-# mais preflight.sh filtre `no_god_files` comme non-bloquant. Les 6 saga.*.test.ts sont donc
-# des god-files "tolérés" (tests d'intégration cross-pilier par design).
+__tests__
+__tests__/**
+**/__tests__/**
+**/tests/**
+**/e2e/**
 src/tests/
-src/**/*.test.ts
-src/**/*.test.tsx
-src/**/*.spec.ts
-src/**/*.spec.tsx
+src/tests/**
+src/__tests__/
+src/__tests__/**
+tests/
+tests/**
+src/e2e/
+src/e2e/**
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+*.test.ts
+*.test.tsx
 
 # Scripts de maintenance — pas du code applicatif
 scripts/

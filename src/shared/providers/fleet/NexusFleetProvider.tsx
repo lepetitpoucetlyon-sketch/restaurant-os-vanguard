@@ -4,13 +4,9 @@ import React, { createContext, useContext, useState, useMemo, ReactNode, useEffe
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { fleetSnapshotAtom } from '@/store/pillars/sovereign';
-import { fleetTelemetry } from './FleetTelemetryService';
-import { FleetComplianceService } from './FleetComplianceService';
- 
-import { HACCPTelemetryBridge } from '@/modules/compliance/qualite/haccp/services/HACCPTelemetryBridge';
-import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
+import { FleetAggregator } from './fleetAggregator';
+const { fleetTelemetry, FleetComplianceService, HACCPTelemetryBridge, NexusTelemetryService, fleetEngine } = FleetAggregator;
 import type { TenantID } from '@/shared/types/brands';
-import { fleetEngine } from '@/modules/intelligence/ia/fleet/FleetAdapter';
 import { EmpireInstance, EmpireGlobalMetrics } from '@nexus/contracts';
 import type { FleetInsight } from '@nexus/contracts/fleet.types';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';

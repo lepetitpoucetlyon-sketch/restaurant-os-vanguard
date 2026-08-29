@@ -9,21 +9,14 @@ import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { PageShell } from "@/shared/components/ui/PageShell";
 import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
-import { StatGrid, StatCard } from "@/shared/components/ui";
+import { FinanceKPIBanner } from "./FinanceKPIBanner";
 import { ExpenseClaimDialog } from './accounting';
 import { useTenant } from "@/shared/hooks/useTenant";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { useSovereignCollection } from "@/kernel/hooks/useSovereignCollection";
-import { Landmark, PlusCircle, BookOpen, Receipt, ShieldCheck, Wallet } from "lucide-react";
 import type { Order, JournalEntry } from "@nexus/contracts";
-
-import {
-    type FinanceTab,
-    type BankTransaction,
-    computeTVABreakdown,
-} from "./financeUtils";
-
+import { type FinanceTab, type BankTransaction, computeTVABreakdown } from "./financeUtils";
 import {
     BankModal,
     filterPaidOrders,
@@ -31,12 +24,19 @@ import {
     useFinancialExports,
     useZClosure,
 } from "./dashboard";
-
-const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
-const BillingTab = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));
-const AuditTab = dynamic(() => import("./_tabs/AuditTab").then(m => m.AuditTab));
-const TreasuryTab = dynamic(() => import("./_tabs/TreasuryTab").then(m => m.TreasuryTab));
-const BankTab = dynamic(() => import("./_tabs/BankTab").then(m => m.BankTab));
+import {
+    AccountingTab,
+    BillingTab,
+    AuditTab,
+    TreasuryTab,
+    BankTab,
+    BookOpen,
+    Receipt,
+    Landmark,
+    Wallet,
+    ShieldCheck,
+    PlusCircle,
+} from "./FinanceTabRegistry";
 
 const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "treasury", "audit"];
 
@@ -127,11 +127,7 @@ export function FinanceDashboard() {
 
             <div className="p-6 space-y-6">
                 {/* Financial KPI Summary */}
-                <StatGrid columns={3}>
-                    <StatCard label="Chiffre d'Affaires" value={totalCA} />
-                    <StatCard label="TVA Collectée" value={totalTVA} />
-                    <StatCard label="Écritures au Grand Livre" value={totalEcritures} />
-                </StatGrid>
+                <FinanceKPIBanner totalCA={totalCA} totalTVA={totalTVA} totalEcritures={totalEcritures} />
 
                 <ResponsiveShell
                     mobile={
