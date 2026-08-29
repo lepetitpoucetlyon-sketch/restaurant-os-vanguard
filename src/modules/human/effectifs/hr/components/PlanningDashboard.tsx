@@ -22,6 +22,7 @@ import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 import { BottomSheet } from "@components/ui/BottomSheet";
 import { TimePicker } from "@components/ui/TimePicker";
+import { BentoGrid, BentoCell, StatCard } from "@/shared/components/ui";
 import { TipPoolManager } from "./TipPoolManager";
 
 type Shift = ContextShift;

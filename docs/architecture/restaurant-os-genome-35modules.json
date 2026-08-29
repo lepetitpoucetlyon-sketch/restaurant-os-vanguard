@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Matrice Exhaustive des 35 Modules du Génome",
+    "output": "restaurant-os-genome-35modules.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      520
+    ],
+    "views": [
+      {
+        "id": "frontends-production",
+        "label": "1. Expérience & Production (14 Modules)",
+        "focus": [
+          "mod_pos_kiosk",
+          "mod_kds_bar",
+          "mod_crm_loyalty",
+          "mod_recipes_cost",
+          "mod_stock_haccp",
+          "mod_hardware_spout"
+        ],
+        "note": "POS, KDS, CRM, fiches recettes, inventaire OCR et tirage SmartSpout."
+      },
+      {
+        "id": "finance-rh-pms",
+        "label": "2. Gestion, RH & Hôtellerie (8 Modules)",
+        "focus": [
+          "mod_finance_fec",
+          "mod_hr_planning",
+          "mod_pms_hotel",
+          "mod_worm_nf525"
+        ],
+        "note": "Plan comptable PCG, export FEC, planning staff et passerelle PMS."
+      },
+      {
+        "id": "ai-morphogenesis",
+        "label": "3. Intelligence & Morphogenèse (6 Modules)",
+        "focus": [
+          "mod_hermes_rag",
+          "mod_oracle_bi",
+          "mod_dna_forge"
+        ],
+        "note": "Hermes multi-agents, RAG vectoriel et onboarding instantané par scraping."
+      },
+      {
+        "id": "sovereignty-offline",
+        "label": "4. Souveraineté & Offline (7 Modules)",
+        "focus": [
+          "mod_sovereign_guard",
+          "mod_edge_simulacra",
+          "mod_worm_nf525"
+        ],
+        "note": "Cloisonnement 36 tenants, base locale Simulacra et scellement WORM."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "mod_pos_kiosk",
+      "type": "frontend",
+      "label": "POS, Kiosk & Ordering",
+      "sublabel": "POS, Kiosk, DeliveryHub",
+      "pos": [
+        30,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_kds_bar",
+      "type": "frontend",
+      "label": "KDS Cuisine & Bar",
+      "sublabel": "KDS, Coursing, Bar Speed",
+      "pos": [
+        30,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_crm_loyalty",
+      "type": "frontend",
+      "label": "CRM, VIP & Fidélité",
+      "sublabel": "CRM, LoyaltyPass, Devis",
+      "pos": [
+        30,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_recipes_cost",
+      "type": "backend",
+      "label": "Recettes & Food Cost",
+      "sublabel": "RecipesCosting, Pertes",
+      "pos": [
+        255,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_stock_haccp",
+      "type": "backend",
+      "label": "Stocks, DLC & HACCP",
+      "sublabel": "InventoryOCR, Températures",
+      "pos": [
+        255,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_hardware_spout",
+      "type": "backend",
+      "label": "Hardware & Spout IoT",
+      "sublabel": "SmartSpout, ESC/POS, TPE",
+      "pos": [
+        255,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "IoT Outbox"
+    },
+    {
+      "id": "mod_finance_fec",
+      "type": "backend",
+      "label": "Finance, TVA & FEC",
+      "sublabel": "Treasury, TaxCalc, FEC",
+      "pos": [
+        480,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_hr_planning",
+      "type": "backend",
+      "label": "RH & Planning Staff",
+      "sublabel": "Planning, Timeclock, RBAC",
+      "pos": [
+        480,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_pms_hotel",
+      "type": "backend",
+      "label": "PMS Bridge & Chambres",
+      "sublabel": "PMSBridge, RoomService",
+      "pos": [
+        480,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mod_hermes_rag",
+      "type": "backend",
+      "label": "Hermes IA & LightRAG",
+      "sublabel": "HermesCopilot, Multi-Agents",
+      "pos": [
+        705,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "IA Métier"
+    },
+    {
+      "id": "mod_oracle_bi",
+      "type": "backend",
+      "label": "Oracle BI & Forecast",
+      "sublabel": "OracleForecast, Marges",
+      "pos": [
+        705,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Prédictif"
+    },
+    {
+      "id": "mod_dna_forge",
+      "type": "frontend",
+      "label": "DNA Forge & Crawler",
+      "sublabel": "DNACrawler, Switchboard",
+      "pos": [
+        705,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Onboarding"
+    },
+    {
+      "id": "mod_sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard Membrane",
+      "sublabel": "36 Tenants, Seeder",
+      "pos": [
+        930,
+        70
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "mod_edge_simulacra",
+      "type": "backend",
+      "label": "Offline & Edge Sync",
+      "sublabel": "Simulacra, EdgeSync, ICM",
+      "pos": [
+        930,
+        200
+      ],
+      "size": [
+        160,
+        68
+      ]
+    },
+    {
+      "id": "mod_worm_nf525",
+      "type": "database",
+      "label": "Grand Livre WORM NF525",
+      "sublabel": "WORMLedger, CryptoVault",
+      "pos": [
+        930,
+        330
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "Conforme DGFiP"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1. Canaux & Expérience Opérateur",
+      "wraps": [
+        "mod_pos_kiosk",
+        "mod_kds_bar",
+        "mod_crm_loyalty"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "2. Production & Équipements",
+      "wraps": [
+        "mod_recipes_cost",
+        "mod_stock_haccp",
+        "mod_hardware_spout"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "3. Finance, RH & Hôtellerie",
+      "wraps": [
+        "mod_finance_fec",
+        "mod_hr_planning",
+        "mod_pms_hotel"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "4. IA & Morphogenèse",
+      "wraps": [
+        "mod_hermes_rag",
+        "mod_oracle_bi",
+        "mod_dna_forge"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "5. Souveraineté & Persistance WORM",
+      "wraps": [
+        "mod_sovereign_guard",
+        "mod_edge_simulacra",
+        "mod_worm_nf525"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "pos-recipes",
+      "from": "mod_pos_kiosk",
+      "to": "mod_recipes_cost"
+    },
+    {
+      "id": "kds-stock",
+      "from": "mod_kds_bar",
+      "to": "mod_stock_haccp"
+    },
+    {
+      "id": "crm-hw",
+      "from": "mod_crm_loyalty",
+      "to": "mod_hardware_spout"
+    },
+    {
+      "id": "recipes-fin",
+      "from": "mod_recipes_cost",
+      "to": "mod_finance_fec"
+    },
+    {
+      "id": "stock-hr",
+      "from": "mod_stock_haccp",
+      "to": "mod_hr_planning"
+    },
+    {
+      "id": "hw-pms",
+      "from": "mod_hardware_spout",
+      "to": "mod_pms_hotel"
+    },
+    {
+      "id": "fin-hermes",
+      "from": "mod_finance_fec",
+      "to": "mod_hermes_rag"
+    },
+    {
+      "id": "hr-oracle",
+      "from": "mod_hr_planning",
+      "to": "mod_oracle_bi"
+    },
+    {
+      "id": "pms-forge",
+      "from": "mod_pms_hotel",
+      "to": "mod_dna_forge"
+    },
+    {
+      "id": "hermes-guard",
+      "from": "mod_hermes_rag",
+      "to": "mod_sovereign_guard",
+      "variant": "security"
+    },
+    {
+      "id": "guard-sync",
+      "from": "mod_sovereign_guard",
+      "to": "mod_edge_simulacra"
+    },
+    {
+      "id": "oracle-sync",
+      "from": "mod_oracle_bi",
+      "to": "mod_edge_simulacra"
+    },
+    {
+      "id": "forge-sync",
+      "from": "mod_dna_forge",
+      "to": "mod_edge_simulacra"
+    },
+    {
+      "id": "sync-worm",
+      "from": "mod_edge_simulacra",
+      "to": "mod_worm_nf525",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "35 Modules Métier Actifs",
+      "items": [
+        "Chaque module est un citoyen autonome typé dans genome.types.ts",
+        "Activation sélective via le Switchboard MCC sans duplication de code",
+        "Prise en charge intégrale des flux Food, Retail, PMS et Santé"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Intelligence & Morphogenèse",
+      "items": [
+        "HermesEngine orchestre les tâches d'assistance staff et de SAV",
+        "OracleEngine calcule les projections de vente et de marge brute",
+        "DNA Crawler extrait automatiquement le menu et la charte graphique"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Souveraineté & Conformité WORM",
+      "items": [
+        "SovereignGuard isole strictement les 36 tenants système des bases B2B",
+        "Stockage local Simulacra et synchronisation bi-directionnelle résiliente",
+        "Grand livre scellé NF525 conforme aux exigences DGFiP"
+      ]
+    }
+  ]
+}

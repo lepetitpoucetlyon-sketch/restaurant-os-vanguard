@@ -116,7 +116,7 @@ interface SpinnerProps {
     className?: string;
 }
 
-export function Spinner({ size = "md", color = "accent", className }: SpinnerProps) {
+function InlineSpinner({ size = "md", color = "accent", className }: SpinnerProps) {
     const sizeClasses = {
         sm: "w-4 h-4",
         md: "w-6 h-6",

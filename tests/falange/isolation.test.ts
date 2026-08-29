@@ -27,10 +27,19 @@ describe('🛡️ FALANGE - COHORTE ISOLATION (9 TESTS)', () => {
         expect(store.get(tenantIdAtom)).toBe('restaurant-os');
     });
 
-    it('2. SovereignGuard ne lève pas en mode test sur accès cross-tenant (skip isolation)', async () => {
+    it('2. SovereignGuard lève en mode test strict sur accès cross-tenant (fail-safe)', async () => {
         store.set(tenantIdAtom, 'vassal-1');
-        // En NODE_ENV=test (sans STRICT_ISOLATION_TEST), validateAccess retourne sans déclencher le fail-safe.
-        await expect(SovereignGuard.validateAccess('tenants/vassal-2/orders', 'vassal-1')).resolves.toBeUndefined();
+        const prev = process.env.STRICT_ISOLATION_TEST;
+        process.env.STRICT_ISOLATION_TEST = '1';
+        try {
+            await expect(SovereignGuard.validateAccess('tenants/vassal-2/orders', 'vassal-1')).rejects.toThrow();
+        } finally {
+            if (prev === undefined) {
+                delete process.env.STRICT_ISOLATION_TEST;
+            } else {
+                process.env.STRICT_ISOLATION_TEST = prev;
+            }
+        }
     });
 
     it('3. L\'admin "restaurant-os" devrait accéder à tout', () => {

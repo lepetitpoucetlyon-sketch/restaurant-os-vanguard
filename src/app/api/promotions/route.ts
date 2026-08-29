@@ -2,14 +2,23 @@ import { NextResponse } from 'next/server';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { tenantId, promoId, name, discountPercent, applicableProductIds, expiresAt } = body;
+    const caller = await requireTenantRole(req, 'manager');
+    if (isDenied(caller)) return caller;
 
-    if (!tenantId || !promoId || !discountPercent) {
-      return NextResponse.json({ error: 'Missing required parameters (tenantId, promoId, discountPercent)' }, { status: 400 });
+    const tenantId = caller.tenantId;
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant non spécifié dans le jeton d\'authentification' }, { status: 403 });
+    }
+
+    const body = await req.json();
+    const { promoId, name, discountPercent, applicableProductIds, expiresAt } = body;
+
+    if (!promoId || !discountPercent) {
+      return NextResponse.json({ error: 'Champs obligatoires manquants (promoId, discountPercent)' }, { status: 400 });
     }
 
     const promoPath = `tenants/${tenantId}/promotions/${promoId}`;
@@ -34,7 +43,7 @@ export async function POST(req: Request) {
       productIds: applicableProductIds ?? [],
     });
 
-    logger.info(`[PromotionsAPI] Promotion ${promoId} activée et émise sur NexusEventBus`);
+    logger.info(`[PromotionsAPI] Promotion ${promoId} activée pour le tenant ${tenantId}`);
 
     return NextResponse.json({ success: true, promotion: promoData });
   } catch (err) {

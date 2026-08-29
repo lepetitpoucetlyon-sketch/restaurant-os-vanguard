@@ -58,7 +58,7 @@ export function Map3DOverlay() {
                                     <RefreshCw className="w-5 h-5" />
                                 </button>
                                 <a
-                                    href="/blueprint/index.html"
+                                    href="/blueprint"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="p-3 text-text-secondary hover:text-text-primary hover:bg-surface-glass rounded-xl transition-all"
@@ -80,7 +80,7 @@ export function Map3DOverlay() {
                         <div className="flex-1 bg-surface-bg relative">
                             <iframe
                                 id="map-3d-iframe"
-                                src="/blueprint/index.html"
+                                src="/blueprint"
                                 className="w-full h-full border-none"
                                 title="Cartographie 3D"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

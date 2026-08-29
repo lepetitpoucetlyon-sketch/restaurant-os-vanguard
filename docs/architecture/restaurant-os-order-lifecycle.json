@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Cycle de Vie Opérationnel & Fiscal End-to-End",
+    "output": "restaurant-os-order-lifecycle.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      500
+    ],
+    "views": [
+      {
+        "id": "order-to-production",
+        "label": "1. Prise de Commande & Production",
+        "focus": [
+          "client_order",
+          "order_validation",
+          "smartspout_iot",
+          "stock_deduction"
+        ],
+        "note": "Saisie POS/Kiosk, cadençage KDS, tirage connecté SmartSpout et déstockage."
+      },
+      {
+        "id": "payment-eventbus",
+        "label": "2. Encaissement & Nexus EventBus",
+        "focus": [
+          "stock_deduction",
+          "payment_split",
+          "eventbus_publish"
+        ],
+        "note": "Règlement TPE/Split-bill et publication de l'événement transactionnel."
+      },
+      {
+        "id": "fiscal-accounting",
+        "label": "3. Scellement NF525 & Écriture PCG",
+        "focus": [
+          "eventbus_publish",
+          "nf525_hash_seal",
+          "journal_pcg",
+          "cloture_z"
+        ],
+        "note": "Signature cryptographique SHA-256/HMAC, ventilation TVA et clôture Z."
+      },
+      {
+        "id": "bi-insights",
+        "label": "4. Clôture Z & Oracle Analytics BI",
+        "focus": [
+          "cloture_z",
+          "hermes_oracle_bi"
+        ],
+        "note": "Calcul des marges réelles, export FEC officiel et analyse prédictive."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client_order",
+      "type": "frontend",
+      "label": "1. Prise de Commande",
+      "sublabel": "POS, Kiosk, QR, Plan 3D",
+      "pos": [
+        30,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "order_validation",
+      "type": "frontend",
+      "label": "2. Cadençage KDS",
+      "sublabel": "Postes Cuisine & Bar",
+      "pos": [
+        265,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "smartspout_iot",
+      "type": "backend",
+      "label": "3. Distribution & IoT",
+      "sublabel": "Tireuse Spout & Print",
+      "pos": [
+        500,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "IoT"
+    },
+    {
+      "id": "stock_deduction",
+      "type": "backend",
+      "label": "4. Déstockage Auto",
+      "sublabel": "Fiches Recettes & DLC",
+      "pos": [
+        735,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "payment_split",
+      "type": "frontend",
+      "label": "5. Encaissement",
+      "sublabel": "TPE, Split Bill, Espèces",
+      "pos": [
+        970,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "eventbus_publish",
+      "type": "messagebus",
+      "label": "6. EventBus Publish",
+      "sublabel": "ORDER_COMPLETED",
+      "pos": [
+        970,
+        310
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "Event"
+    },
+    {
+      "id": "nf525_hash_seal",
+      "type": "database",
+      "label": "7. Sceau WORM NF525",
+      "sublabel": "Signature SHA-256/HMAC",
+      "pos": [
+        735,
+        310
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "DGFiP"
+    },
+    {
+      "id": "journal_pcg",
+      "type": "backend",
+      "label": "8. Écriture PCG",
+      "sublabel": "Comptabilité & TVA",
+      "pos": [
+        500,
+        310
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "cloture_z",
+      "type": "database",
+      "label": "9. Clôture Z & FEC",
+      "sublabel": "Grand Livre Journalier",
+      "pos": [
+        265,
+        310
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "Fiscal"
+    },
+    {
+      "id": "hermes_oracle_bi",
+      "type": "backend",
+      "label": "10. Oracle BI & RAG",
+      "sublabel": "Marges & Food Cost",
+      "pos": [
+        30,
+        310
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "IA"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Phase 1 : Saisie & Production Opérationnelle",
+      "wraps": [
+        "client_order",
+        "order_validation",
+        "smartspout_iot",
+        "stock_deduction"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Phase 2 : Encaissement & Nexus EventBus",
+      "wraps": [
+        "payment_split",
+        "eventbus_publish"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Phase 3 : Scellement WORM NF525, PCG & BI",
+      "wraps": [
+        "nf525_hash_seal",
+        "journal_pcg",
+        "cloture_z",
+        "hermes_oracle_bi"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "t1",
+      "from": "client_order",
+      "to": "order_validation"
+    },
+    {
+      "id": "t2",
+      "from": "order_validation",
+      "to": "smartspout_iot"
+    },
+    {
+      "id": "t3",
+      "from": "smartspout_iot",
+      "to": "stock_deduction"
+    },
+    {
+      "id": "t4",
+      "from": "stock_deduction",
+      "to": "payment_split"
+    },
+    {
+      "id": "t5",
+      "from": "payment_split",
+      "to": "eventbus_publish"
+    },
+    {
+      "id": "t6",
+      "from": "eventbus_publish",
+      "to": "nf525_hash_seal",
+      "variant": "security"
+    },
+    {
+      "id": "t7",
+      "from": "nf525_hash_seal",
+      "to": "journal_pcg"
+    },
+    {
+      "id": "t8",
+      "from": "journal_pcg",
+      "to": "cloture_z"
+    },
+    {
+      "id": "t9",
+      "from": "cloture_z",
+      "to": "hermes_oracle_bi"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Phase Opérationnelle (1 à 5)",
+      "items": [
+        "Prise de commande multi-canale et transmission instantanée au KDS",
+        "Télémétrie en temps réel des tirages SmartSpout et impression cuisine",
+        "Calcul des fiches techniques, déstockage et encaissement multi-moyens"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Phase Fiscale & Comptable (6 à 9)",
+      "items": [
+        "Publication de l'événement transactionnel sur le NexusEventBus",
+        "Scellement cryptographique inaltérable WORM (Art. 286-I-3° bis CGI)",
+        "Ventilation automatique des comptes PCG 6/7 et clôture de caisse Z"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Phase Décisionnelle & IA (10)",
+      "items": [
+        "Oracle Analytics met à jour le coût matière réel et les marges brutes",
+        "LightRAG intègre les tendances de consommation dans la mémoire métier",
+        "HermesEngine alerte le directeur en cas d'anomalie ou de rupture de stock"
+      ]
+    }
+  ]
+}

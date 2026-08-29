@@ -85,7 +85,7 @@ export async function requireAnyAuth(req: NextRequest | Request): Promise<AuthCo
         ? decoded.tenantId
         : typeof decoded.clientId === 'string'
         ? decoded.clientId
-        : 'default';
+        : (decoded.role === 'fleet_admin' ? 'root' : (() => { throw new NextResponse(JSON.stringify({ error: 'UNAUTHORIZED_NO_TENANT', message: 'Aucun établissement associé au jeton' }), { status: 401, headers: { 'Content-Type': 'application/json' } }); })());
 
     const role = typeof decoded.role === 'string' ? decoded.role : 'staff';
 
@@ -103,4 +103,14 @@ export async function requireAnyAuth(req: NextRequest | Request): Promise<AuthCo
       { status: 401, headers: { 'Content-Type': 'application/json' } }
     );
   }
+}
+
+export function assertTenant(auth: AuthContext, requestedTenantId?: string | null): string {
+  if (requestedTenantId && requestedTenantId !== auth.tenantId && auth.role !== 'fleet_admin' && auth.role !== 'super_admin') {
+    throw new NextResponse(
+      JSON.stringify({ error: 'FORBIDDEN_CROSS_TENANT', message: 'Accès cross-tenant refusé.' }),
+      { status: 403, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+  return auth.tenantId;
 }

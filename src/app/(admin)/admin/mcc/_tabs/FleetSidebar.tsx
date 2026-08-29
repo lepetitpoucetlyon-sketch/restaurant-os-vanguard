@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 import dynamic from 'next/dynamic';
 import { Cpu, Zap } from 'lucide-react';
 import { StatusItem, SwitchboardItem, MCCWidgetSkeleton } from '../components';

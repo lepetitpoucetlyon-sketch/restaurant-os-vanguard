@@ -30,7 +30,7 @@ export default function LoginPage() {
     }, [isAuthenticated, checked, router]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+        <div className="min-min-h-[100dvh] flex items-center justify-center bg-bg-primary">
             <PinLogin />
         </div>
     );

@@ -6,9 +6,11 @@ import { empireAudit } from '@/lib/audit';
 
 export async function POST(request: NextRequest) {
   try {
+    const webhookSecret = process.env.THEFORK_WEBHOOK_SECRET;
     const apiKey = request.headers.get('x-thefork-key');
-    if (process.env.THEFORK_WEBHOOK_SECRET && apiKey !== process.env.THEFORK_WEBHOOK_SECRET) {
-      return NextResponse.json({ error: 'Signature Webhook invalide' }, { status: 401 });
+    if (!webhookSecret || !apiKey || apiKey !== webhookSecret) {
+      logger.warn('[TheForkWebhook] Requête rejetée : secret absent ou clé invalide');
+      return NextResponse.json({ error: 'Signature Webhook invalide ou service non configuré' }, { status: 401 });
     }
 
     const payload = await request.json();

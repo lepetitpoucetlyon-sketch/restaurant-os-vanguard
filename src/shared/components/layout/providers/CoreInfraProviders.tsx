@@ -7,6 +7,8 @@ import { ToastProvider } from "@ui/Toast";
 import { ContextualSettingsProvider } from "@/shared/components/settings/ContextualSettings";
 import { InstanceGuardGate } from "@nexus/guards";
 import { BrandingProvider } from "@/lib/BrandingProvider";
+import { DensityProvider } from "@/shared/providers/DensityProvider";
+import { MotionProvider } from "@/shared/providers/MotionProvider";
 import { NexusPulseOrchestrator } from "@/shared/providers/NexusPulseOrchestrator";
 import { SovereignLockout } from "@components/layout/SovereignLockout";
 
@@ -19,6 +21,8 @@ export function CoreInfraProviders({ children }: { children: React.ReactNode }) 
   return (
     <NexusCoreProvider>
       <InstanceGuardGate>
+        <DensityProvider>
+          <MotionProvider>
         <ToastProvider>
           <BrandingProvider />
           <NexusPulseOrchestrator />
@@ -29,6 +33,8 @@ export function CoreInfraProviders({ children }: { children: React.ReactNode }) 
             </NexusGuardProvider>
           </ContextualSettingsProvider>
         </ToastProvider>
+          </MotionProvider>
+        </DensityProvider>
       </InstanceGuardGate>
     </NexusCoreProvider>
   );

@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState, useMemo } from 'react';
 import { EyeOff, AlertOctagon, AlertTriangle, ShieldCheck, CheckCircle2, Wrench, Search } from 'lucide-react';

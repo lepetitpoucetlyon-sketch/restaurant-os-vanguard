@@ -80,7 +80,7 @@ export default function AgentIntelligencePage() {
           subtitle="Agentic Mission Control & Fleet Orchestration"
           emoji="🛰️"
         />
-        <button 
+        <button aria-label="Action agent" 
           onClick={fetchReport}
           className="flex items-center gap-2 px-4 py-2 bg-bg-secondary border border-border rounded-full text-chip-label hover:bg-action-primary transition-colors"
         >

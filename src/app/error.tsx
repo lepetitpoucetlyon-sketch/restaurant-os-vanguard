@@ -25,7 +25,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-bg-primary antialiased">
+    <div className="min-min-h-[100dvh] flex items-center justify-center p-6 bg-bg-primary antialiased">
       <div className="max-w-lg w-full bg-surface-card border border-border rounded-2xl p-8 shadow-2xl text-center space-y-6">
         <div className="w-16 h-16 rounded-full bg-status-warning/10 border border-status-warning/20 text-status-warning flex items-center justify-center mx-auto text-2xl font-bold">
           <AlertTriangle className="w-7 h-7" />

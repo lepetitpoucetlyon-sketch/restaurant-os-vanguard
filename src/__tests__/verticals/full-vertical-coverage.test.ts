@@ -1,28 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ICoreContext } from '@/shared/plugins/IVerticalPlugin';
-import { RetailVertical } from '@/verticals/retail/RetailVertical';
-import { SalonVertical } from '@/verticals/salon/SalonVertical';
-import { HotelVertical } from '@/verticals/hotel/HotelVertical';
-import { VeterinaryVertical } from '@/verticals/veterinary/VeterinaryVertical';
-import { BakeryVertical } from '@/verticals/bakery/BakeryVertical';
-import { GymVertical } from '@/verticals/gym/GymVertical';
-import { CoworkingVertical } from '@/verticals/coworking/CoworkingVertical';
-import { FloristVertical } from '@/verticals/florist/FloristVertical';
-import { AutoVertical } from '@/verticals/garage/AutoVertical';
-import { HealthVertical } from '@/verticals/clinic/HealthVertical';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-
-// Blueprints
-import { RETAIL_BLUEPRINT } from '@/verticals/retail/retail.blueprint';
-import { SALON_BLUEPRINT } from '@/verticals/salon/salon.blueprint';
-import { HOTEL_BLUEPRINT } from '@/verticals/hotel/hotel.blueprint';
-import { VETERINARY_BLUEPRINT } from '@/verticals/veterinary/veterinary.blueprint';
-import { BAKERY_BLUEPRINT } from '@/verticals/bakery/bakery.blueprint';
-import { GYM_BLUEPRINT } from '@/verticals/gym/gym.blueprint';
-import { COWORKING_BLUEPRINT } from '@/verticals/coworking/coworking.blueprint';
-import { FLORIST_BLUEPRINT } from '@/verticals/florist/florist.blueprint';
-import { GARAGE_BLUEPRINT } from '@/verticals/garage/garage.blueprint';
-import { CLINIC_BLUEPRINT } from '@/verticals/clinic/clinic.blueprint';
+import {
+  RetailVertical,
+  SalonVertical,
+  HotelVertical,
+  VeterinaryVertical,
+  BakeryVertical,
+  GymVertical,
+  CoworkingVertical,
+  FloristVertical,
+  AutoVertical,
+  HealthVertical,
+  RETAIL_BLUEPRINT,
+  SALON_BLUEPRINT,
+  HOTEL_BLUEPRINT,
+  VETERINARY_BLUEPRINT,
+  BAKERY_BLUEPRINT,
+  GYM_BLUEPRINT,
+  COWORKING_BLUEPRINT,
+  FLORIST_BLUEPRINT,
+  GARAGE_BLUEPRINT,
+  CLINIC_BLUEPRINT,
+} from '@/verticals';
 
 describe('🏛️ Multi-Verticales — Couverture 100% Architecturale & Blueprints', () => {
   let mockContext: ICoreContext;

@@ -125,7 +125,7 @@ function WelcomeStaffInner() {
     };
 
     return (
-        <div className="min-h-screen bg-bg-primary flex items-center justify-center p-6">
+        <div className="min-min-h-[100dvh] bg-bg-primary flex items-center justify-center p-6">
             <div className="w-full max-w-md">
                 <motion.div
                     initial={{ opacity: 0, y: 24 }}
@@ -273,7 +273,7 @@ function WelcomeStaffInner() {
 function WelcomeStaffPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen bg-bg-primary flex items-center justify-center">
+            <div className="min-min-h-[100dvh] bg-bg-primary flex items-center justify-center">
                 <div className="w-8 h-8 border-2 border-accent-gold/30 border-t-accent-gold rounded-full animate-spin" />
             </div>
         }>

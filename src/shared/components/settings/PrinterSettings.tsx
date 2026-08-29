@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { printerService } from "@/modules/ops";
 import type { PrinterDevice, PrinterRole, PrinterConnection, TicketStyle, ReceiptConfig } from "@/modules/ops";
-import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS, CONN_ICON, AddPrinterWizard } from "@/modules/ops";
+import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS, PRINTER_CONN_ICON, AddPrinterWizard } from "@/modules/ops";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
@@ -335,7 +335,7 @@ function PrinterCard({
     <div className={`rounded-2xl border p-5 transition-all ${printer.enabled ? "border-border bg-bg-secondary" : "border-border/50 bg-bg-secondary/50 opacity-60"}`}>
       <div className="flex items-start gap-4">
         <div className={`w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center shrink-0 ${ROLE_COLORS[printer.role]}`}>
-          {CONN_ICON[printer.connection.type]}
+          {PRINTER_CONN_ICON[printer.connection.type]}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">

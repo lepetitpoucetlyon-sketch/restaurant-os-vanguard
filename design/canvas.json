@@ -1,12 +1,769 @@
 {
   "artboards": [
-    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 900, "title": "POS · Caisse" },
-    { "file": "Dashboard.dc.html", "x": 1560, "y": 0, "w": 1440, "h": 900, "title": "Opérations · Dashboard" },
-    { "file": "KDS.dc.html", "x": 0, "y": 1020, "w": 1440, "h": 900, "title": "Cuisine · KDS" },
-    { "file": "Components.dc.html", "x": 1560, "y": 1020, "w": 1200, "h": 1180, "title": "Design system" }
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1024,
+      "h": 768,
+      "title": "Prise de commande — cliquable",
+      "is_interactive": true
+    },
+    {
+      "file": "PlanDeSalle.dc.html",
+      "x": 1124,
+      "y": 0,
+      "w": 1024,
+      "h": 768,
+      "title": "Plan de salle"
+    },
+    {
+      "file": "Encaissement.dc.html",
+      "x": 2248,
+      "y": 0,
+      "w": 1024,
+      "h": 768,
+      "title": "Encaissement & partage"
+    },
+    {
+      "file": "PgAccountingPortal.dc.html",
+      "x": 0,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/accounting-portal"
+    },
+    {
+      "file": "PgAide.dc.html",
+      "x": 520,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/aide"
+    },
+    {
+      "file": "PgAnalytics.dc.html",
+      "x": 1040,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/analytics"
+    },
+    {
+      "file": "PgBar.dc.html",
+      "x": 1560,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/bar"
+    },
+    {
+      "file": "PgCrm.dc.html",
+      "x": 2080,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/crm"
+    },
+    {
+      "file": "PgFacility.dc.html",
+      "x": 2600,
+      "y": 1310,
+      "w": 430,
+      "h": 268,
+      "title": "/facility"
+    },
+    {
+      "file": "PgFinance.dc.html",
+      "x": 0,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/finance"
+    },
+    {
+      "file": "PgFloorPlan.dc.html",
+      "x": 520,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/floor-plan"
+    },
+    {
+      "file": "PgFranchise.dc.html",
+      "x": 1040,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/franchise"
+    },
+    {
+      "file": "PgHaccp.dc.html",
+      "x": 1560,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/haccp"
+    },
+    {
+      "file": "PgHygiene.dc.html",
+      "x": 2080,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/hygiene"
+    },
+    {
+      "file": "PgIntegrations.dc.html",
+      "x": 2600,
+      "y": 1708,
+      "w": 430,
+      "h": 268,
+      "title": "/integrations"
+    },
+    {
+      "file": "PgIntelligence.dc.html",
+      "x": 0,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/intelligence"
+    },
+    {
+      "file": "PgInventory.dc.html",
+      "x": 520,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/inventory"
+    },
+    {
+      "file": "PgKds.dc.html",
+      "x": 1040,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/kds"
+    },
+    {
+      "file": "PgKiosk.dc.html",
+      "x": 1560,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/kiosk"
+    },
+    {
+      "file": "PgKitchen.dc.html",
+      "x": 2080,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/kitchen"
+    },
+    {
+      "file": "PgLeaves.dc.html",
+      "x": 2600,
+      "y": 2106,
+      "w": 430,
+      "h": 268,
+      "title": "/leaves"
+    },
+    {
+      "file": "PgMarketing.dc.html",
+      "x": 0,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/marketing"
+    },
+    {
+      "file": "PgMarketingSeo.dc.html",
+      "x": 520,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/marketing/seo"
+    },
+    {
+      "file": "PgMenuBuilder.dc.html",
+      "x": 1040,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/menu-builder"
+    },
+    {
+      "file": "PgMenuEngineering.dc.html",
+      "x": 1560,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/menu-engineering"
+    },
+    {
+      "file": "PgMigration.dc.html",
+      "x": 2080,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/migration"
+    },
+    {
+      "file": "PgMonEspace.dc.html",
+      "x": 2600,
+      "y": 2504,
+      "w": 430,
+      "h": 268,
+      "title": "/mon-espace"
+    },
+    {
+      "file": "PgNf525.dc.html",
+      "x": 0,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/nf525"
+    },
+    {
+      "file": "PgOnboarding.dc.html",
+      "x": 520,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/onboarding"
+    },
+    {
+      "file": "PgOperations.dc.html",
+      "x": 1040,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/operations"
+    },
+    {
+      "file": "PgPlanning.dc.html",
+      "x": 1560,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/planning"
+    },
+    {
+      "file": "PgPms.dc.html",
+      "x": 2080,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/pms"
+    },
+    {
+      "file": "PgPos.dc.html",
+      "x": 2600,
+      "y": 2902,
+      "w": 430,
+      "h": 268,
+      "title": "/pos"
+    },
+    {
+      "file": "PgPosMobile.dc.html",
+      "x": 0,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/pos-mobile"
+    },
+    {
+      "file": "PgRecruitment.dc.html",
+      "x": 520,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/recruitment"
+    },
+    {
+      "file": "PgRegistre.dc.html",
+      "x": 1040,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/registre"
+    },
+    {
+      "file": "PgReservations.dc.html",
+      "x": 1560,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/reservations"
+    },
+    {
+      "file": "PgSettingsBranding.dc.html",
+      "x": 2080,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/settings/branding"
+    },
+    {
+      "file": "PgSettingsSecurity.dc.html",
+      "x": 2600,
+      "y": 3300,
+      "w": 430,
+      "h": 268,
+      "title": "/settings/security"
+    },
+    {
+      "file": "PgStaff.dc.html",
+      "x": 0,
+      "y": 3698,
+      "w": 430,
+      "h": 268,
+      "title": "/staff"
+    },
+    {
+      "file": "PgSuppliers.dc.html",
+      "x": 520,
+      "y": 3698,
+      "w": 430,
+      "h": 268,
+      "title": "/suppliers"
+    },
+    {
+      "file": "PgTimeclock.dc.html",
+      "x": 1040,
+      "y": 3698,
+      "w": 430,
+      "h": 268,
+      "title": "/timeclock"
+    },
+    {
+      "file": "PgVanguardSimulator.dc.html",
+      "x": 1560,
+      "y": 3698,
+      "w": 430,
+      "h": 268,
+      "title": "/vanguard-simulator"
+    },
+    {
+      "file": "PgWelcomeStaff.dc.html",
+      "x": 2080,
+      "y": 3698,
+      "w": 430,
+      "h": 268,
+      "title": "/welcome-staff"
+    },
+    {
+      "file": "PgAccountSettings.dc.html",
+      "x": 0,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/account-settings"
+    },
+    {
+      "file": "PgAdminAgent.dc.html",
+      "x": 520,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/agent"
+    },
+    {
+      "file": "PgAdminDashboard.dc.html",
+      "x": 1040,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/dashboard"
+    },
+    {
+      "file": "PgAdminInventoryReception.dc.html",
+      "x": 1560,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/inventory/reception"
+    },
+    {
+      "file": "PgAdminMcc.dc.html",
+      "x": 2080,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/mcc"
+    },
+    {
+      "file": "PgAdminMccDlq.dc.html",
+      "x": 2600,
+      "y": 4286,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/mcc/dlq"
+    },
+    {
+      "file": "PgAdminProspecting.dc.html",
+      "x": 0,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/prospecting"
+    },
+    {
+      "file": "PgAdminSimulation.dc.html",
+      "x": 520,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/admin/simulation"
+    },
+    {
+      "file": "PgAuditPortal.dc.html",
+      "x": 1040,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/audit-portal"
+    },
+    {
+      "file": "PgBlueprint.dc.html",
+      "x": 1560,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/blueprint"
+    },
+    {
+      "file": "PgDesignSystem.dc.html",
+      "x": 2080,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/design-system"
+    },
+    {
+      "file": "PgSettings.dc.html",
+      "x": 2600,
+      "y": 4684,
+      "w": 430,
+      "h": 268,
+      "title": "/settings"
+    },
+    {
+      "file": "PgSimulator.dc.html",
+      "x": 0,
+      "y": 5082,
+      "w": 430,
+      "h": 268,
+      "title": "/simulator"
+    },
+    {
+      "file": "PgSystemMap.dc.html",
+      "x": 520,
+      "y": 5082,
+      "w": 430,
+      "h": 268,
+      "title": "/system-map"
+    },
+    {
+      "file": "PgAccueil.dc.html",
+      "x": 0,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/"
+    },
+    {
+      "file": "PgLegalDpa.dc.html",
+      "x": 520,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/dpa"
+    },
+    {
+      "file": "PgLegalNf525.dc.html",
+      "x": 1040,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/nf525"
+    },
+    {
+      "file": "PgLegalSecurity.dc.html",
+      "x": 1560,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/security"
+    },
+    {
+      "file": "PgPricing.dc.html",
+      "x": 2080,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/pricing"
+    },
+    {
+      "file": "PgPricingRoiCalculator.dc.html",
+      "x": 2600,
+      "y": 5670,
+      "w": 430,
+      "h": 268,
+      "title": "/pricing/roi-calculator"
+    },
+    {
+      "file": "PgPricingVsLightspeed.dc.html",
+      "x": 0,
+      "y": 6068,
+      "w": 430,
+      "h": 268,
+      "title": "/pricing/vs-lightspeed"
+    },
+    {
+      "file": "PgPricingVsZelty.dc.html",
+      "x": 520,
+      "y": 6068,
+      "w": 430,
+      "h": 268,
+      "title": "/pricing/vs-zelty"
+    },
+    {
+      "file": "PgSignup.dc.html",
+      "x": 1040,
+      "y": 6068,
+      "w": 430,
+      "h": 268,
+      "title": "/signup"
+    },
+    {
+      "file": "PgSignupSuccess.dc.html",
+      "x": 1560,
+      "y": 6068,
+      "w": 430,
+      "h": 268,
+      "title": "/signup/success"
+    },
+    {
+      "file": "PgVerticalesSlug.dc.html",
+      "x": 2080,
+      "y": 6068,
+      "w": 430,
+      "h": 268,
+      "title": "/verticales/[slug]"
+    },
+    {
+      "file": "PgAuthLogout.dc.html",
+      "x": 0,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/auth/logout"
+    },
+    {
+      "file": "PgDocsCategory.dc.html",
+      "x": 520,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/docs/[category]"
+    },
+    {
+      "file": "PgGroups.dc.html",
+      "x": 1040,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/groups"
+    },
+    {
+      "file": "PgLanding.dc.html",
+      "x": 1560,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/landing"
+    },
+    {
+      "file": "PgLogin.dc.html",
+      "x": 2080,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/login"
+    },
+    {
+      "file": "PgMenuTenantidTableid.dc.html",
+      "x": 2600,
+      "y": 6656,
+      "w": 430,
+      "h": 268,
+      "title": "/menu/[tenantId]/[tableId]"
+    },
+    {
+      "file": "PgShowcase.dc.html",
+      "x": 0,
+      "y": 7054,
+      "w": 430,
+      "h": 268,
+      "title": "/showcase"
+    },
+    {
+      "file": "PgWelcome.dc.html",
+      "x": 520,
+      "y": 7054,
+      "w": 430,
+      "h": 268,
+      "title": "/welcome"
+    },
+    {
+      "file": "PgDemo.dc.html",
+      "x": 0,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/demo"
+    },
+    {
+      "file": "PgLegalCgu.dc.html",
+      "x": 520,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/cgu"
+    },
+    {
+      "file": "PgLegalCgv.dc.html",
+      "x": 1040,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/cgv"
+    },
+    {
+      "file": "PgLegalMentions.dc.html",
+      "x": 1560,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/mentions"
+    },
+    {
+      "file": "PgLegalRgpd.dc.html",
+      "x": 2080,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/legal/rgpd"
+    },
+    {
+      "file": "PgStatus.dc.html",
+      "x": 2600,
+      "y": 7642,
+      "w": 430,
+      "h": 268,
+      "title": "/status"
+    },
+    {
+      "file": "PgOrderTenantid.dc.html",
+      "x": 0,
+      "y": 8230,
+      "w": 430,
+      "h": 268,
+      "title": "/order/[tenantId]"
+    },
+    {
+      "file": "PgSlug.dc.html",
+      "x": 0,
+      "y": 8818,
+      "w": 430,
+      "h": 268,
+      "title": "/[slug]"
+    },
+    {
+      "file": "PgSlugReservations.dc.html",
+      "x": 520,
+      "y": 8818,
+      "w": 430,
+      "h": 268,
+      "title": "/[slug]/reservations"
+    },
+    {
+      "file": "PgOffline.dc.html",
+      "x": 1040,
+      "y": 8818,
+      "w": 430,
+      "h": 268,
+      "title": "/offline"
+    }
   ],
   "annotations": [
-    { "id": "intro", "x": 0, "y": -150, "w": 700, "text": "Refonte UI — verticale restaurant · Direction : encre & or, éditoriale (Playfair + Inter)\nLes 4 archétypes ci-dessous gouvernent les 84 écrans. Le POS est l'écran de référence." }
+    {
+      "id": "note-refonte",
+      "x": 0,
+      "y": 840,
+      "w": 620,
+      "text": "La refonte des trois écrans du restaurateur.\n\nCadrée à 1024 × 768 px, le palier que votre design system nomme « iPad landscape, tablette KDS chef ».\n\nSystème repris du code : Cormorant Garamond, Inter, JetBrains Mono, or #C5A059, rayons 6→24 px. Cibles tactiles ≥ 44 px, texte ≥ 12 px — les deux règles appliquées à l'app.\n\nLes plats et les prix sont des exemples, pas votre carte."
+    },
+    {
+      "id": "note-defaut",
+      "x": 1124,
+      "y": 840,
+      "w": 520,
+      "text": "Le défaut mesuré, corrigé dans la refonte.\n\nSur l'interface actuelle à 1024 px, le panneau d'addition déborde de 113 px : « Encaisser » et « Partager l'addition » sont hors écran.\n\nIci : rail 108 + grille 596 + addition 320 = 1024 pile. Rien ne peut déborder."
+    },
+    {
+      "id": "sec-clientops",
+      "x": 0,
+      "y": 1180,
+      "w": 520,
+      "text": "Exploitation — 41 pages\n\n4 à reprendre · 24 avec remarques · 13 sans remarque"
+    },
+    {
+      "id": "sec-admin",
+      "x": 0,
+      "y": 4156,
+      "w": 520,
+      "text": "Administration — 14 pages\n\n1 à reprendre · 6 avec remarques · 7 sans remarque"
+    },
+    {
+      "id": "sec-marketing",
+      "x": 0,
+      "y": 5540,
+      "w": 520,
+      "text": "Marketing — 11 pages\n\n4 à reprendre · 0 avec remarques · 7 sans remarque"
+    },
+    {
+      "id": "sec-clientpublic",
+      "x": 0,
+      "y": 6526,
+      "w": 520,
+      "text": "Public du restaurant — 8 pages\n\n1 à reprendre · 3 avec remarques · 4 sans remarque"
+    },
+    {
+      "id": "sec-public",
+      "x": 0,
+      "y": 7512,
+      "w": 520,
+      "text": "Plateforme — 6 pages\n\n0 à reprendre · 6 avec remarques · 0 sans remarque"
+    },
+    {
+      "id": "sec-clientordering",
+      "x": 0,
+      "y": 8100,
+      "w": 520,
+      "text": "Commande en ligne — 1 page\n\n0 à reprendre · 1 avec remarques · 0 sans remarque"
+    },
+    {
+      "id": "sec-racine",
+      "x": 0,
+      "y": 8688,
+      "w": 520,
+      "text": "Racine — 3 pages\n\n0 à reprendre · 3 avec remarques · 0 sans remarque"
+    }
   ],
-  "launch": { "view": "focused", "file": "Main.dc.html" }
+  "launch": {
+    "view": "canvas"
+  }
 }

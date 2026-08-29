@@ -54,7 +54,7 @@ export function KDSProductionGrid({
     return (
         <motion.div
             layout
-            className="grid gap-6 md:gap-10 relative z-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+            className="grid gap-[var(--density-gap-md,1rem)] lg:gap-[var(--density-gap-lg,1.5rem)] relative z-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
             style={{
                 gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, max(280px, calc((100% - ${(gridColumns - 1) * 24}px) / ${gridColumns}))), 1fr))`
             }}

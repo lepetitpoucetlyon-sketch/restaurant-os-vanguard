@@ -3,7 +3,7 @@
 import { Link2, Loader2, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ProviderCatalogEntry } from '@/modules/human';
-import { StatusBadge } from './PayrollStatusBadge';
+import { PayrollStatusBadge } from './PayrollStatusBadge';
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -74,10 +74,10 @@ export function PayrollProviderTab({
                             Tester et connecter
                         </button>
                         {connectStatus === 'success' && (
-                            <StatusBadge status="success" label={`${currentEntry.label} connecté${connectInfo ? ` — ${connectInfo}` : ''}`} />
+                            <PayrollStatusBadge status="success" label={`${currentEntry.label} connecté${connectInfo ? ` — ${connectInfo}` : ''}`} />
                         )}
                         {connectStatus === 'error' && (
-                            <StatusBadge status="error" label="Connexion échouée — vérifiez vos identifiants" />
+                            <PayrollStatusBadge status="error" label="Connexion échouée — vérifiez vos identifiants" />
                         )}
                     </>
                 )}
@@ -99,7 +99,7 @@ export function PayrollProviderTab({
                             Connecter via {currentEntry.label}
                         </button>
                         {syncStatus === 'success' && (
-                            <StatusBadge status="success" label={`${currentEntry.label} connecté`} />
+                            <PayrollStatusBadge status="success" label={`${currentEntry.label} connecté`} />
                         )}
                     </>
                 )}
@@ -123,7 +123,7 @@ export function PayrollProviderTab({
                     Connectez d&apos;abord {currentEntry.label} pour pouvoir synchroniser.
                 </p>
             )}
-            <StatusBadge status={syncStatus} />
+            <PayrollStatusBadge status={syncStatus} />
         </div>
     );
 }

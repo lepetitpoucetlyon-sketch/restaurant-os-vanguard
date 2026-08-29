@@ -11,6 +11,7 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { useTabAccess } from "@/shared/hooks/useTabAccess";
 import { PageShell } from "@/shared/components/ui/PageShell";
+import { BentoGrid, BentoCell } from "@/shared/components/ui";
 import {
     ProfitabilityView, ReputationView, ComplianceView, MenuEngineeringMatrix,
 } from "@/modules/intelligence";
@@ -113,11 +114,17 @@ function AnalyticsPage() {
                 </>
             }
         >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                <KpiCard label="CA Aujourd'hui" value={fmt(todayCA)} change={percentChange(todayCA, yesterdayCA)} up={todayCA >= yesterdayCA} />
-                <KpiCard label="CA Cette Semaine" value={fmt(weekCA)} change={percentChange(weekCA, prevWeekCA)} up={weekCA >= prevWeekCA} />
-                <KpiCard label="CA Ce Mois" value={fmt(monthCA)} change={percentChange(monthCA, prevMonthCA)} up={monthCA >= prevMonthCA} />
-            </div>
+            <BentoGrid layout="hero-2col" className="mb-8">
+                <BentoCell span={2}>
+                    <KpiCard label="CA Aujourd'hui" value={fmt(todayCA)} change={percentChange(todayCA, yesterdayCA)} up={todayCA >= yesterdayCA} />
+                </BentoCell>
+                <BentoCell span={1}>
+                    <div className="grid grid-cols-1 gap-4">
+                        <KpiCard label="CA Cette Semaine" value={fmt(weekCA)} change={percentChange(weekCA, prevWeekCA)} up={weekCA >= prevWeekCA} />
+                        <KpiCard label="CA Ce Mois" value={fmt(monthCA)} change={percentChange(monthCA, prevMonthCA)} up={monthCA >= prevMonthCA} />
+                    </div>
+                </BentoCell>
+            </BentoGrid>
 
             <main>
                 {activeTab === "profitability" && <div className="space-y-8"><MenuEngineeringMatrix /><ProfitabilityView alerts={[]} /></div>}

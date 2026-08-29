@@ -47,7 +47,7 @@ const STEPS: Step[] = [
     title: 'Glisser-Deposer dans Migration',
     description:
       'Ouvrez la page Migration, selectionnez la categorie dans le menu de gauche (ex. "8. Reservations passees"), puis faites glisser votre fichier dans la zone de depot.',
-    cta: { label: 'Ouvrir Migration', href: '/admin/settings?tab=migration' },
+    cta: { label: 'Ouvrir Migration', href: '/settings?tab=migration' },
     iconBg: 'bg-amber-50 dark:bg-amber-950/40',
     iconColor: 'text-action-primary',
   },
@@ -66,7 +66,7 @@ const STEPS: Step[] = [
     title: 'Activation',
     description:
       'Une fois vos donnees importees, activez le widget de reservation en ligne depuis l\'onglet Widget. Vos clients pourront immediatement reserver depuis votre site web.',
-    cta: { label: 'Parametres widget', href: '/admin/settings?tab=reservations' },
+    cta: { label: 'Parametres widget', href: '/settings?tab=reservations' },
     iconBg: 'bg-orange-50 dark:bg-orange-950/40',
     iconColor: 'text-orange-500',
   },

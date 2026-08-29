@@ -4,6 +4,8 @@ import { POST as createOrderHandler } from '@/app/api/v1/orders/route';
 import { GET as getMenuHandler } from '@/app/api/v1/menu/route';
 import { NextRequest } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { getDefaultStore } from 'jotai';
+import { tenantIdAtom } from '@/shared/nexus/state/SovereignGenome';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 vi.mock('@/lib/server/adminAuthGuard', () => ({
@@ -16,6 +18,8 @@ describe('Socle API REST v1 OpenAPI & Orders / Menu (H2.2)', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    getDefaultStore().set(tenantIdAtom, tenantId);
+    Nexus.tenantOverride = tenantId;
   });
 
   it('devrait générer une spécification OpenAPI 3.0 valide et complète', () => {

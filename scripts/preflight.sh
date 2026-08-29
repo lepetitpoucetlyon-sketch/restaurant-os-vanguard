@@ -259,14 +259,16 @@ ok "Intégrité des gates : aucune gate desserrée vs baseline"
 # RÉCAPITULATIF — MÉTRIQUES RÉELLES (jamais hardcodées)
 # Ce bloc affiche les variables capturées pendant l'exécution.
 # Si un chiffre est faux ici, c'est que la capture est cassée, pas qu'on ment.
-echo ""
-echo -e "${GREEN}${BOLD}✅ Preflight complet — prêt pour merge/deploy${RESET}"
 step "🔗 [11/11] Dernier kilomètre — ce qui est écrit est-il atteint ?"
 if node scripts/gate-last-mile.mjs; then
   ok "Dernier kilomètre : aucun compteur en hausse."
 else
   fail "Dernier kilomètre : un compteur a augmenté (composant non branché, réglage mort, clé i18n absente…)."
+  exit 1
 fi
+
+echo ""
+echo -e "${GREEN}${BOLD}✅ Preflight complet — prêt pour merge/deploy${RESET}"
 
 echo ""
 echo "  Métriques RÉELLES de cette exécution :"

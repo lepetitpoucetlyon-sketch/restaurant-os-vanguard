@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export function StatusBadge({ status, label }: { status: AsyncStatus; label?: string }) {
+export function PayrollStatusBadge({ status, label }: { status: AsyncStatus; label?: string }) {
     if (status === 'idle' || status === 'loading') return null;
     return (
         <div className={cn(

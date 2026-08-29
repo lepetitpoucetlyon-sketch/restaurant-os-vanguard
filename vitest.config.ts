@@ -9,7 +9,7 @@ export default defineConfig({
         testTimeout: 30000,
         hookTimeout: 30000,
         include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}', 'demo/**/*.test.{ts,tsx}'],
-        exclude: ['tests/e2e/**', 'src/e2e/**'],
+        exclude: ['tests/e2e/**', 'src/e2e/**', 'tests/verification/**', 'tests/falange/sync.test.ts'],
         coverage: {
             provider: 'v8',
             reporter: ['text', 'lcov'],

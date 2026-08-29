@@ -33,7 +33,7 @@ export function SimulatorConsole() {
                 const data = await Nexus.adapter.get(Nexus.getTenantPath('settings/global')) as import('@nexus/contracts').GlobalSettings;
                 if (data?.planningConfig?.staffToCoversRatio) setStaffRatio(data.planningConfig.staffToCoversRatio);
                 if (data?.accountingConfig?.complexityMode) setAccountingMode(data.accountingConfig.complexityMode);
-            } catch (_e) {}
+            } catch { /* Payload non JSON */ }
         };
         loadSettings();
     }, []);

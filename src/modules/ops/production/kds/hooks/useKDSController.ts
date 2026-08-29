@@ -75,7 +75,7 @@ export const useKDSController = () => {
     const setActiveStation = (s: KitchenStation) => {
         if (lockedStation) return; // Ignore si verrouillé
         _setActiveStation(s);
-        try { localStorage.setItem('kds-active-station', s); } catch {}
+        try { localStorage.setItem('kds-active-station', s); } catch { /* LocalStorage non disponible */ }
     };
 
     const [rushMode, setRushMode] = useState(false);

@@ -312,7 +312,7 @@ export function TimeclockDashboard() {
                                         key={key}
                                         onClick={() => handlePinKey(key)}
                                         disabled={isLooking}
-                                        className={`h-16 rounded-2xl font-mono text-xl font-bold transition-all active:scale-95 disabled:opacity-30 ${
+                                        className={`min-h-[var(--density-min-target,48px)] h-16 rounded-2xl font-mono text-xl font-bold transition-all active:scale-[var(--motion-tap-scale,0.97)] disabled:opacity-30 ${
                                             isSpecial
                                                 ? "bg-white/5 text-text-primary/40 hover:bg-white/10 text-sm"
                                                 : "bg-white/10 text-text-primary hover:bg-white/20"

@@ -58,7 +58,7 @@ export class BlockchainLedgerService {
      */
     static async sealWithChain(entryId: string, entryData: FiscalizableRecord, isTrainingMode: boolean = false): Promise<FiscalSeal> {
         // We chain the next seal to the previous one to avoid concurrency forks
-        this.sealQueue = this.sealQueue.then(async () => {
+        this.sealQueue = this.sealQueue.catch(() => {}).then(async () => {
             const lastSeal = await this.getLastSeal();
             const newSeal = await FiscalEngine.sealEntry(entryId, entryData, { 
                 lastSeal, 

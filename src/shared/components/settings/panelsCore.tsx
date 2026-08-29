@@ -11,11 +11,11 @@ import { SettingsLoading } from "./_SettingsLoading";
 const lazyPanel = <P extends object>(loader: () => Promise<{ default: React.ComponentType<P> }>) =>
     dynamic(loader, { loading: () => <SettingsLoading />, ssr: false });
 
-export const ProfileSettings = lazyPanel(() => import("@/shared/components/settings/ProfileSettings"));
-export const ExpertGovernanceHub = lazyPanel(() => import("@/shared/components/settings/ExpertGovernanceHub"));
-export const NexusSettings = lazyPanel(() => import("@/shared/components/settings/NexusSettings"));
-export const HoursSettings = lazyPanel(() => import("@/shared/components/settings/HoursSettings"));
-export const ReservationSettingsComponent = lazyPanel(() => import("@/shared/components/settings/ReservationSettings"));
-export const StaffSettings = lazyPanel(() => import("@/shared/components/settings/StaffSettings"));
-export const MenuSettings = lazyPanel(() => import("@/shared/components/settings/MenuSettings"));
-export const GoalsSettings = lazyPanel(() => import("@/shared/components/settings/GoalsSettings"));
+export const LazyProfileSettings = lazyPanel(() => import("@/shared/components/settings/ProfileSettings"));
+export const LazyExpertGovernanceHub = lazyPanel(() => import("@/shared/components/settings/ExpertGovernanceHub"));
+export const LazyNexusSettings = lazyPanel(() => import("@/shared/components/settings/NexusSettings"));
+export const LazyHoursSettings = lazyPanel(() => import("@/shared/components/settings/HoursSettings"));
+export const LazyReservationSettingsComponent = lazyPanel(() => import("@/shared/components/settings/ReservationSettings"));
+export const LazyStaffSettings = lazyPanel(() => import("@/shared/components/settings/StaffSettings"));
+export const LazyMenuSettings = lazyPanel(() => import("@/shared/components/settings/MenuSettings"));
+export const LazyGoalsSettings = lazyPanel(() => import("@/shared/components/settings/GoalsSettings"));

@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Noyau Kernel, Résilience Offline, IoT & Cryptographie",
+    "output": "restaurant-os-kernel-infrastructure.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      520
+    ],
+    "views": [
+      {
+        "id": "edge-offline",
+        "label": "1. Résilience Edge & Offline-First",
+        "focus": [
+          "open_pencil_engine",
+          "edge_offline_engine",
+          "hardware_iot_bridge",
+          "nexus_event_sagas"
+        ],
+        "note": "Fonctionnement 100% hors-ligne, réplication Simulacra/IndexedDB et gestion de flotte MDM."
+      },
+      {
+        "id": "ai-tripole",
+        "label": "2. Tri-Pôle IA & Orchestration",
+        "focus": [
+          "nexus_event_sagas",
+          "kernel_ai_core",
+          "mcc_ai_engine",
+          "tenant_ai_hermes"
+        ],
+        "note": "Séparation stricte entre Kernel AI, MCC AI et Tenant AI avec RAG étanche."
+      },
+      {
+        "id": "crypto-sovereignty",
+        "label": "3. Souveraineté & Cryptographie ZK",
+        "focus": [
+          "crypto_quantum_zk",
+          "sovereign_guard",
+          "multi_tenant_storage",
+          "nf525_fiscal_vault"
+        ],
+        "note": "Preuves Zero-Knowledge, chiffrement quantique et membrane d'isolation Grade X."
+      },
+      {
+        "id": "telemetry-selfhealing",
+        "label": "4. Télémétrie & Auto-Guérison",
+        "focus": [
+          "hardware_iot_bridge",
+          "telemetry_health",
+          "mcc_ai_engine",
+          "sovereign_guard"
+        ],
+        "note": "Surveillance continue des fuites de types, métriques IoT et résilience automatique."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "open_pencil_engine",
+      "type": "frontend",
+      "label": "Moteur OpenPencil",
+      "sublabel": "Design Tokens & Rendu",
+      "pos": [
+        30,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "edge_offline_engine",
+      "type": "backend",
+      "label": "Offline Mastery",
+      "sublabel": "Simulacra & Sync CRDT",
+      "pos": [
+        30,
+        200
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Offline-First"
+    },
+    {
+      "id": "hardware_iot_bridge",
+      "type": "backend",
+      "label": "Pont IoT & Flotte",
+      "sublabel": "ESC/POS, Spout, Mosyle",
+      "pos": [
+        30,
+        340
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Hardware"
+    },
+    {
+      "id": "nexus_event_sagas",
+      "type": "messagebus",
+      "label": "Nexus EventBus",
+      "sublabel": "Sagas & Outbox Pattern",
+      "pos": [
+        255,
+        110
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Event-Driven"
+    },
+    {
+      "id": "telemetry_health",
+      "type": "backend",
+      "label": "Télémétrie & Santé",
+      "sublabel": "SelfHealing & Audits",
+      "pos": [
+        255,
+        270
+      ],
+      "size": [
+        155,
+        68
+      ]
+    },
+    {
+      "id": "kernel_ai_core",
+      "type": "backend",
+      "label": "Kernel AI Router",
+      "sublabel": "Passerelle Multi-LLM",
+      "pos": [
+        480,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Socle IA"
+    },
+    {
+      "id": "mcc_ai_engine",
+      "type": "backend",
+      "label": "MCC SuperAdmin AI",
+      "sublabel": "Gouvernance de Flotte",
+      "pos": [
+        480,
+        200
+      ],
+      "size": [
+        155,
+        68
+      ]
+    },
+    {
+      "id": "tenant_ai_hermes",
+      "type": "backend",
+      "label": "Tenant AI Hermes",
+      "sublabel": "LightRAG & Métier",
+      "pos": [
+        480,
+        340
+      ],
+      "size": [
+        155,
+        68
+      ]
+    },
+    {
+      "id": "crypto_quantum_zk",
+      "type": "security",
+      "label": "Crypto & ZK Engine",
+      "sublabel": "Zero-Knowledge & HMAC",
+      "pos": [
+        705,
+        110
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Cryptographie"
+    },
+    {
+      "id": "sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard",
+      "sublabel": "Membrane Grade X",
+      "pos": [
+        705,
+        270
+      ],
+      "size": [
+        155,
+        68
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "multi_tenant_storage",
+      "type": "database",
+      "label": "Nexus Storage",
+      "sublabel": "Partitionnement Tenant",
+      "pos": [
+        930,
+        110
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Partitionné"
+    },
+    {
+      "id": "nf525_fiscal_vault",
+      "type": "database",
+      "label": "Coffre WORM NF525",
+      "sublabel": "Scellement DGFiP Légal",
+      "pos": [
+        930,
+        270
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "Conforme DGFiP"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1. Runtime Edge, Offline & IoT",
+      "wraps": [
+        "open_pencil_engine",
+        "edge_offline_engine",
+        "hardware_iot_bridge"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "2. Orchestration & Résilience",
+      "wraps": [
+        "nexus_event_sagas",
+        "telemetry_health"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "3. Tri-Pôle Intelligence IA",
+      "wraps": [
+        "kernel_ai_core",
+        "mcc_ai_engine",
+        "tenant_ai_hermes"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "4. Sécurité & Souveraineté Grade X",
+      "wraps": [
+        "crypto_quantum_zk",
+        "sovereign_guard"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "5. Persistance Durable & Grand Livre",
+      "wraps": [
+        "multi_tenant_storage",
+        "nf525_fiscal_vault"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "pencil-event",
+      "from": "open_pencil_engine",
+      "to": "nexus_event_sagas"
+    },
+    {
+      "id": "offline-event",
+      "from": "edge_offline_engine",
+      "to": "nexus_event_sagas"
+    },
+    {
+      "id": "hw-telemetry",
+      "from": "hardware_iot_bridge",
+      "to": "telemetry_health"
+    },
+    {
+      "id": "event-ai",
+      "from": "nexus_event_sagas",
+      "to": "kernel_ai_core"
+    },
+    {
+      "id": "telemetry-mcc",
+      "from": "telemetry_health",
+      "to": "mcc_ai_engine"
+    },
+    {
+      "id": "hw-hermes",
+      "from": "hardware_iot_bridge",
+      "to": "tenant_ai_hermes"
+    },
+    {
+      "id": "ai-crypto",
+      "from": "kernel_ai_core",
+      "to": "crypto_quantum_zk"
+    },
+    {
+      "id": "mcc-guard",
+      "from": "mcc_ai_engine",
+      "to": "sovereign_guard"
+    },
+    {
+      "id": "hermes-guard",
+      "from": "tenant_ai_hermes",
+      "to": "sovereign_guard"
+    },
+    {
+      "id": "crypto-store",
+      "from": "crypto_quantum_zk",
+      "to": "multi_tenant_storage"
+    },
+    {
+      "id": "guard-store",
+      "from": "sovereign_guard",
+      "to": "multi_tenant_storage"
+    },
+    {
+      "id": "guard-fiscal",
+      "from": "sovereign_guard",
+      "to": "nf525_fiscal_vault",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Résilience Edge & Offline",
+      "items": [
+        "OfflineMasteryEngine assure 100% des fonctions sans connexion internet",
+        "Base locale Simulacra (IndexedDB) avec réconciliation automatique LWW/CRDT",
+        "Gestionnaire de flotte Apple Mosyle MDM et outbox matériel résiliente"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Tri-Pôle IA Découplé",
+      "items": [
+        "Kernel AI Core : routeur multi-fournisseurs (Gemini, Claude, Ollama local)",
+        "MCC AI : co-pilote superadmin pour l'analyse de flotte et la morphogenèse",
+        "Tenant AI Hermes : co-pilote métier avec RAG vectoriel LightRAG isolé"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Souveraineté & Fiscalité WORM",
+      "items": [
+        "SovereignGuard applique une étanchéité absolue entre les 36 tenants et clients",
+        "QuantumCrypto & ZKBenchmarkEngine pour les preuves d'intégrité",
+        "Coffre fiscal NF525 scellé conformément à l'Art. 286-I-3° bis CGI"
+      ]
+    }
+  ]
+}

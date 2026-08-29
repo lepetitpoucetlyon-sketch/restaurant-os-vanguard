@@ -1,3 +1,15 @@
+import {
+  registerFridgeTempAlertHandler,
+  registerDLCExpiryHandler,
+  registerComplianceCalendarHandler,
+  registerHaccpCheckArchiverHandler,
+  registerIotOfflineAlertHandler,
+  registerQuarantineHandler,
+  registerNonConformActionHandler,
+  registerTrainingComplianceAlertHandler,
+  registerRecallPOSBlockerHandler,
+  registerWasteValidatedHandler
+} from '@/shared/eventBus/handlers';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
@@ -37,17 +49,6 @@ vi.mock('@/store/pillars/compliance', async (importOriginal) => {
 });
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
-
-import { registerFridgeTempAlertHandler } from '@/shared/eventBus/handlers/FridgeTempAlertHandler';
-import { registerDLCExpiryHandler } from '@/shared/eventBus/handlers/DLCExpiryHandler';
-import { registerComplianceCalendarHandler } from '@/shared/eventBus/handlers/ComplianceCalendarHandler';
-import { registerHaccpCheckArchiverHandler } from '@/shared/eventBus/handlers/HaccpCheckArchiverHandler';
-import { registerIotOfflineAlertHandler } from '@/shared/eventBus/handlers/IotOfflineAlertHandler';
-import { registerQuarantineHandler } from '@/shared/eventBus/handlers/QuarantineHandler';
-import { registerNonConformActionHandler } from '@/shared/eventBus/handlers/NonConformActionHandler';
-import { registerTrainingComplianceAlertHandler } from '@/shared/eventBus/handlers/TrainingComplianceAlertHandler';
-import { registerRecallPOSBlockerHandler } from '@/shared/eventBus/handlers/RecallPOSBlockerHandler';
-import { registerWasteValidatedHandler } from '@/shared/eventBus/handlers/WasteValidatedHandler';
 
 const T = 'tenant-comp';
 

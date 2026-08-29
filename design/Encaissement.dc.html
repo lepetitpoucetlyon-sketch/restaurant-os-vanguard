@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <style>
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; }
+    a { color: #C5A059; } a:hover { color: #E0BE7A; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  </style>
+</helmet>
+
+<div style="width: 1024px; height: 768px; display: flex; flex-direction: column; background: #0B0B0C; color: #F3F4F6; overflow: hidden;">
+
+  <div style="display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 66px; border-bottom: 1px solid #1F2937; flex-shrink: 0;">
+    <button style="width: 44px; height: 44px; border-radius: 12px; background: #1F2937; color: #D1D5DB; display: flex; align-items: center; justify-content: center;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <div>
+      <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: #C5A059;">ENCAISSEMENT</div>
+      <div class="serif" style="font-size: 22px; font-weight: 700; font-style: italic; color: #F9FAFB; line-height: 1.15;">Table 3 · 4 couverts</div>
+    </div>
+    <div style="flex: 1;"></div>
+    <div style="text-align: right;">
+      <div style="font-size: 12px; color: #6B7280;">Reste à régler</div>
+      <div class="mono" style="font-size: 28px; font-weight: 600; color: #F9FAFB; line-height: 1.1;">108,25 €</div>
+    </div>
+  </div>
+
+  <!-- Mode de partage : le choix d'abord, l'écran s'adapte ensuite -->
+  <div style="padding: 16px 24px 0; flex-shrink: 0;">
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+      <div style="height: 62px; border-radius: 14px; background: rgba(197,160,89,0.12); border: 1px solid #C5A059; padding: 0 16px; display: flex; align-items: center; gap: 12px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 6.5a3 3 0 0 1 0 5.4"/><path d="M18.5 20a5.6 5.6 0 0 0-2.2-4.4"/></svg>
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: #E0BE7A;">Par convive</div>
+          <div style="font-size: 12px; color: #A98C50;">chacun ses articles</div>
+        </div>
+      </div>
+      <div style="height: 62px; border-radius: 14px; background: #15161C; border: 1px solid #232530; padding: 0 16px; display: flex; align-items: center; gap: 12px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h9"/></svg>
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: #E5E7EB;">Parts égales</div>
+          <div style="font-size: 12px; color: #6B7280;">27,06 € × 4</div>
+        </div>
+      </div>
+      <div style="height: 62px; border-radius: 14px; background: #15161C; border: 1px solid #232530; padding: 0 16px; display: flex; align-items: center; gap: 12px;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round"><path d="M12 4v16"/><path d="M17 8.5c0-1.7-2.2-2.5-5-2.5s-5 .8-5 2.5 2.2 2.3 5 2.9 5 1.2 5 2.9-2.2 2.7-5 2.7-5-1-5-2.7"/></svg>
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: #E5E7EB;">Montants libres</div>
+          <div style="font-size: 12px; color: #6B7280;">saisie manuelle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Les convives -->
+  <div style="flex: 1; padding: 22px 24px 16px; overflow-y: auto; min-height: 0;">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+
+      <!-- Réglé -->
+      <div style="border-radius: 18px; background: #0F1614; border: 1px solid rgba(5,150,105,0.35); padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="mono" style="width: 30px; height: 30px; border-radius: 10px; background: rgba(5,150,105,0.18); color: #34D399; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center;">1</span>
+            <span style="font-size: 14px; font-weight: 600; color: #E5E7EB;">Convive 1</span>
+          </div>
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #34D399;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            Réglé · CB
+          </span>
+        </div>
+        <div style="font-size: 12px; color: #6B7280; line-height: 1.7;">Œuf parfait · Bar de ligne · Sancerre</div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; padding-top: 14px; border-top: 1px solid #1A2420;">
+          <span style="font-size: 12px; color: #6B7280;">Part réglée</span>
+          <span class="mono" style="font-size: 17px; font-weight: 600; color: #34D399;">54,50 €</span>
+        </div>
+      </div>
+
+      <!-- En attente -->
+      <div style="border-radius: 18px; background: #15161C; border: 1px solid #232530; padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="mono" style="width: 30px; height: 30px; border-radius: 10px; background: #1F2937; color: #9CA3AF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center;">2</span>
+            <span style="font-size: 14px; font-weight: 600; color: #E5E7EB;">Convive 2</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280;">En attente</span>
+        </div>
+        <div style="font-size: 12px; color: #6B7280; line-height: 1.7;">Velouté de potimarron · Risotto aux cèpes</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid #232530;">
+          <span class="mono" style="font-size: 17px; font-weight: 600; color: #F3F4F6;">33,50 €</span>
+          <button style="height: 44px; padding: 0 20px; border-radius: 12px; background: #C5A059; color: #16130B; font-size: 13px; font-weight: 700;">Encaisser</button>
+        </div>
+      </div>
+
+      <!-- En attente -->
+      <div style="border-radius: 18px; background: #15161C; border: 1px solid #232530; padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="mono" style="width: 30px; height: 30px; border-radius: 10px; background: #1F2937; color: #9CA3AF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center;">3</span>
+            <span style="font-size: 14px; font-weight: 600; color: #E5E7EB;">Convive 3</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280;">En attente</span>
+        </div>
+        <div style="font-size: 12px; color: #6B7280; line-height: 1.7;">Côte de bœuf (½) · Côtes-du-Rhône (½)</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid #232530;">
+          <span class="mono" style="font-size: 17px; font-weight: 600; color: #F3F4F6;">51,00 €</span>
+          <button style="height: 44px; padding: 0 20px; border-radius: 12px; background: #C5A059; color: #16130B; font-size: 13px; font-weight: 700;">Encaisser</button>
+        </div>
+      </div>
+
+      <!-- Articles non attribués : le cas que les caisses oublient -->
+      <div style="border-radius: 18px; background: #1A160E; border: 1px dashed #C5A059; padding: 18px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.9" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><circle cx="12" cy="12" r="9"/></svg>
+          <span style="font-size: 14px; font-weight: 600; color: #E0BE7A;">3 articles non attribués</span>
+        </div>
+        <div style="font-size: 12px; color: #A98C50; line-height: 1.7;">Paris-Brest · Tarte au citron · 2 cafés</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(197,160,89,0.25);">
+          <span class="mono" style="font-size: 17px; font-weight: 600; color: #F9FAFB;">28,00 €</span>
+          <button style="height: 44px; padding: 0 20px; border-radius: 12px; background: #1F2937; color: #E0BE7A; font-size: 13px; font-weight: 600;">Répartir</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pied : l'état du règlement, toujours visible -->
+  <div style="padding: 14px 24px 18px; border-top: 1px solid #1F2937; background: #0F1117; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+      <div style="flex: 1; height: 7px; border-radius: 4px; background: #1F2937; overflow: hidden;">
+        <div style="width: 33%; height: 100%; background: #059669; border-radius: 4px;"></div>
+      </div>
+      <span class="mono" style="font-size: 12px; color: #9CA3AF; white-space: nowrap;">54,50 € / 162,75 €</span>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button style="flex: 1; height: 48px; border-radius: 14px; background: #1F2937; color: #D1D5DB; font-size: 13px; font-weight: 600;">Imprimer les additions</button>
+      <button style="flex: 1; height: 48px; border-radius: 14px; background: #1F2937; color: #D1D5DB; font-size: 13px; font-weight: 600;">Ajouter un pourboire</button>
+      <button style="flex: 1.4; height: 48px; border-radius: 14px; background: #C5A059; color: #16130B; font-size: 13px; font-weight: 700;">Tout encaisser · 108,25 €</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview": {"width": 1024, "height": 768}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

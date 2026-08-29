@@ -1,4 +1,5 @@
 "use client";
+import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState, useMemo } from "react";
 import { motion, Variants } from "framer-motion";
@@ -198,7 +199,7 @@ export default function VibecodingDashboard() {
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-medium text-text-primary/90">Commandes Récentes</h2>
-              <button className="text-sm text-brand hover:text-brand transition-colors">Voir tout</button>
+              <button aria-label="Action tableau de bord" className="text-sm text-brand hover:text-brand transition-colors">Voir tout</button>
             </div>
             
             <div className="space-y-4">

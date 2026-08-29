@@ -82,6 +82,12 @@ function createPoller<T>(
 
   const poll = async () => {
     if (stopped) return;
+    // Mise en veille automatique si l'onglet est en arrière-plan (Page Visibility API)
+    if (typeof document !== 'undefined' && document.hidden) {
+      schedule();
+      return;
+    }
+
     try {
       const data = await fetcher();
       consecutiveErrors = 0; // rétabli : on repasse à la cadence nominale
@@ -92,9 +98,6 @@ function createPoller<T>(
       }
     } catch (err) {
       consecutiveErrors += 1;
-      // On ne remonte que les premières occurrences : au-delà, l'information est
-      // acquise et chaque appel supplémentaire ne fait que polluer la console et,
-      // en production, brûler du quota de reporting.
       if (consecutiveErrors <= MAX_REPORTED_ERRORS) {
         options?.onError?.(err instanceof Error ? err : new Error(String(err)));
       }
@@ -103,12 +106,26 @@ function createPoller<T>(
     }
   };
 
+  const onVisibilityChange = () => {
+    if (typeof document !== 'undefined' && !document.hidden && !stopped) {
+      if (timer !== null) clearTimeout(timer);
+      void poll();
+    }
+  };
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', onVisibilityChange);
+  }
+
   // Premier appel immédiat pour peupler le state sans attendre le 1er intervalle
   void poll();
 
   return () => {
     stopped = true;
     if (timer !== null) clearTimeout(timer);
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    }
   };
 }
 

@@ -390,7 +390,7 @@ function MCCDashboardInner() {
                                                         <p className="text-nano text-muted mt-1">PNG / SVG recommandé · fond transparent</p>
                                                     </div>
                                                     <label className="flex items-center gap-3 cursor-pointer select-none">
-                                                        <div className={`w-9 h-5 rounded-full transition-colors relative ${newCloneSplashEnabled ? 'bg-action-primary' : 'bg-border-subtle'}`}
+                                                        <div role="switch" aria-checked={newCloneSplashEnabled} tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setNewCloneSplashEnabled(v => !v); } }} className={`w-9 h-5 rounded-full transition-colors relative ${newCloneSplashEnabled ? 'bg-action-primary' : 'bg-border-subtle'}`}
                                                             onClick={() => setNewCloneSplashEnabled(v => !v)}>
                                                             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${newCloneSplashEnabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
                                                         </div>

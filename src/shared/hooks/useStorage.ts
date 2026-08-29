@@ -75,7 +75,7 @@ export function useSessionStorage<T>(
                 if (typeof window !== "undefined") {
                     window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
                 }
-            } catch (_error) {}
+            } catch { /* Storage quota exceeded ou indisponible */ }
         },
         [key, storedValue]
     );

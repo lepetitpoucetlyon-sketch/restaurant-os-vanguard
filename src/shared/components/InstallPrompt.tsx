@@ -12,6 +12,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const DISMISS_KEY = 'nexus_pwa_install_dismissed';
 
+function checkDismissedRecently(): boolean {
+  if (typeof window === 'undefined') return false;
+  const dismissedAt = localStorage.getItem(DISMISS_KEY);
+  if (!dismissedAt) return false;
+  const diffDays = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
+  return diffDays < 30;
+}
+
 export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -21,23 +29,13 @@ export function InstallPrompt() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Check if already installed as standalone
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-    if (isStandalone) return;
+    if (isStandalone || checkDismissedRecently()) return;
 
-    // Check if user dismissed recently (30 days)
-    const dismissedAt = localStorage.getItem(DISMISS_KEY);
-    if (dismissedAt) {
-      const diffDays = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
-      if (diffDays < 30) return;
-    }
-
-    // Detect iOS
     const ua = window.navigator.userAgent.toLowerCase();
     const isApple = /iphone|ipad|ipod/.test(ua);
     setIsIos(isApple);
 
-    // Chrome/Android listener
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -46,7 +44,6 @@ export function InstallPrompt() {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // If iOS Safari and not standalone, show after 5s delay
     if (isApple && !isStandalone) {
       const timer = setTimeout(() => setShowPrompt(true), 5000);
       return () => clearTimeout(timer);
@@ -62,13 +59,10 @@ export function InstallPrompt() {
       setShowIosGuide(true);
       return;
     }
-
     if (!deferredPrompt) return;
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setShowPrompt(false);
-    }
+    if (outcome === 'accepted') setShowPrompt(false);
     setDeferredPrompt(null);
   };
 
@@ -108,54 +102,50 @@ export function InstallPrompt() {
 
               <button
                 onClick={handleDismiss}
-                className="text-text-muted hover:text-text-primary p-1 rounded-lg transition-colors"
-                aria-label="Fermer"
+                className="text-text-muted hover:text-text-primary p-1 transition-colors"
+                aria-label="Fermer la suggestion"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="mt-3 flex items-center gap-2">
-              <Button size="sm" variant="default" className="flex-1 text-xs" onClick={handleInstallClick}>
-                Installer l'Application
-              </Button>
-              <Button size="sm" variant="ghost" className="text-xs" onClick={handleDismiss}>
+            <div className="mt-3.5 flex items-center justify-end gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleDismiss}
+                className="text-micro h-7 px-2.5 text-text-secondary hover:text-text-primary"
+              >
                 Plus tard
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                aria-label="Installer l'Application"
+                onClick={handleInstallClick}
+                className="text-micro h-7 px-3 bg-action-primary text-black font-semibold rounded-lg shadow-sm hover:brightness-110"
+              >
+                Installer
               </Button>
             </div>
           </motion.aside>
         )}
       </AnimatePresence>
 
-      {/* iOS Installation Guide BottomSheet */}
       <BottomSheet
         isOpen={showIosGuide}
         onClose={() => setShowIosGuide(false)}
-        title="Installer sur iPad & iPhone"
+        title="Installer sur iOS"
       >
-        <div className="p-6 space-y-4">
-          <p className="text-xs text-text-secondary leading-relaxed">
-            Pour installer l'application sur votre écran d'accueil iOS :
-          </p>
-
-          <ol className="space-y-3 text-xs text-text-primary font-medium">
-            <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">1</span>
-              <span>Appuyez sur le bouton <strong>Partager</strong> <Share className="w-4 h-4 inline text-action-primary ml-1" /> dans Safari</span>
-            </li>
-            <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">2</span>
-              <span>Sélectionnez <strong>Sur l'écran d'accueil</strong> <PlusSquare className="w-4 h-4 inline text-action-primary ml-1" /></span>
-            </li>
-            <li className="flex items-center gap-3 p-3 rounded-xl bg-surface-bg border border-border-default">
-              <span className="w-6 h-6 rounded-full bg-action-primary/10 text-action-primary font-bold flex items-center justify-center text-nano">3</span>
-              <span>Touchez <strong>Ajouter</strong> en haut à droite</span>
-            </li>
-          </ol>
-
-          <Button variant="default" className="w-full mt-4" onClick={() => setShowIosGuide(false)}>
-            J'ai compris
-          </Button>
+        <div className="p-4 space-y-4 text-xs text-text-primary">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-muted border border-border-light/10">
+            <Share className="w-5 h-5 text-action-primary shrink-0" />
+            <p>1. Appuyez sur le bouton <strong>Partager</strong> dans Safari.</p>
+          </div>
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-muted border border-border-light/10">
+            <PlusSquare className="w-5 h-5 text-action-primary shrink-0" />
+            <p>2. Faites défiler et sélectionnez <strong>Sur l'écran d'accueil</strong>.</p>
+          </div>
         </div>
       </BottomSheet>
     </>

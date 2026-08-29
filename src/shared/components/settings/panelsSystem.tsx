@@ -11,28 +11,28 @@ import { SettingsLoading } from "./_SettingsLoading";
 const lazyPanel = <P extends object>(loader: () => Promise<{ default: React.ComponentType<P> }>) =>
     dynamic(loader, { loading: () => <SettingsLoading />, ssr: false });
 
-export const IntegrationSettings = lazyPanel(() => import("@/shared/components/settings/IntegrationSettings"));
-export const ReviewsSettings = lazyPanel(() => import("@/shared/components/settings/ReviewsSettings"));
-export const TablesSettings = lazyPanel(() => import("@/shared/components/settings/TablesSettings"));
-export const MigrationHub = lazyPanel(() => import("@/shared/components/settings/MigrationHub"));
-export const PrinterSettings = lazyPanel(() => import("@/shared/components/settings/PrinterSettings"));
-export const PaymentTerminalSettings = lazyPanel(() => import("@/shared/components/settings/PaymentTerminalSettings"));
-export const CashDrawerSettings = lazyPanel(() => import("@/shared/components/settings/CashDrawerSettings"));
-export const PayrollIntegrationPanel = lazyPanel(() =>
+export const LazyIntegrationSettings = lazyPanel(() => import("@/shared/components/settings/IntegrationSettings"));
+export const LazyReviewsSettings = lazyPanel(() => import("@/shared/components/settings/ReviewsSettings"));
+export const LazyTablesSettings = lazyPanel(() => import("@/shared/components/settings/TablesSettings"));
+export const LazyMigrationHub = lazyPanel(() => import("@/shared/components/settings/MigrationHub"));
+export const LazyPrinterSettings = lazyPanel(() => import("@/shared/components/settings/PrinterSettings"));
+export const LazyPaymentTerminalSettings = lazyPanel(() => import("@/shared/components/settings/PaymentTerminalSettings"));
+export const LazyCashDrawerSettings = lazyPanel(() => import("@/shared/components/settings/CashDrawerSettings"));
+export const LazyPayrollIntegrationPanel = lazyPanel(() =>
     import("@/shared/components/settings/PayrollIntegrationPanel").then(m => ({ default: m.PayrollIntegrationPanel })),
 );
-export const ApiKeysPanel = lazyPanel(() => import("@/shared/components/settings/ApiKeysPanel"));
-export const CustomDomainPanel = lazyPanel(() => import("@/shared/components/settings/CustomDomainPanel"));
-export const OnboardingChecklistPanel = lazyPanel(() =>
+export const LazyApiKeysPanel = lazyPanel(() => import("@/shared/components/settings/ApiKeysPanel"));
+export const LazyCustomDomainPanel = lazyPanel(() => import("@/shared/components/settings/CustomDomainPanel"));
+export const LazyOnboardingChecklistPanel = lazyPanel(() =>
     import("@/shared/components/settings/panels/OnboardingChecklistSettingsPanel").then(m => ({ default: m.OnboardingChecklistSettingsPanel })),
 );
-export const MaintenanceSettingsPanel = lazyPanel(() =>
+export const LazyMaintenanceSettingsPanel = lazyPanel(() =>
     import("@/shared/components/settings/panels/MaintenanceSettingsPanel").then(m => ({ default: m.MaintenanceSettingsPanel })),
 );
-export const DLQDiagnosticPanel = lazyPanel(() =>
+export const LazyDLQDiagnosticPanel = lazyPanel(() =>
     import("@/shared/components/settings/DLQDiagnosticPanel").then(m => ({ default: m.DLQDiagnosticPanel })),
 );
-export const RBACTenantMatrix = lazyPanel(() =>
+export const LazyRBACTenantMatrix = lazyPanel(() =>
     import("@/shared/components/settings/RBACTenantMatrix").then(m => ({ default: m.RBACTenantMatrix })),
 );
 

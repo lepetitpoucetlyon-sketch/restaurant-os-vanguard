@@ -90,6 +90,7 @@ const fr: SovereignData = {
         "nf525": "Conformité NF525",
         "notifications": "Notifications & Alertes",
         "onboarding_checklist": "Checklist Mise en Service",
+        "open_pencil_studio": "Studio OpenPencil (84p)",
         "pos_mobile": "POS Mobile",
         "profitability": "Analyse Rentabilité",
         "purchasing": "Achats & Économat",

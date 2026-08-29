@@ -12,7 +12,7 @@ import type {
 import { BRAND_LABELS, ROLE_LABELS, CONNECTION_LABELS } from "../../hardware/types";
 import { ConfigureStep } from "./ConfigureStep";
 
-export const CONN_ICON: Record<PrinterConnectionType, React.ReactNode> = {
+export const PRINTER_CONN_ICON: Record<PrinterConnectionType, React.ReactNode> = {
   network:   <Wifi className="w-4 h-4" />,
   bluetooth: <Bluetooth className="w-4 h-4" />,
   usb:       <Usb className="w-4 h-4" />,
@@ -164,7 +164,7 @@ function ConnectionStep({ onNext }: { onNext(t: PrinterConnectionType): void; br
           className={`w-full flex items-center gap-4 p-4 rounded-2xl border transition-all group text-left
             ${available ? "border-border hover:border-action-primary hover:bg-action-primary/5" : "border-border/30 opacity-40 cursor-not-allowed"}`}>
           <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center text-text-muted">
-            {CONN_ICON[type]}
+            {PRINTER_CONN_ICON[type]}
           </div>
           <div>
             <div className="text-sm font-semibold text-text-primary">{CONNECTION_LABELS[type]}</div>

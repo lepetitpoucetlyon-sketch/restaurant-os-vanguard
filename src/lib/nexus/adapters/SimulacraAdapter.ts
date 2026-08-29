@@ -26,6 +26,48 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         logger.info(`[Simulacra] Air-Gap Interface active for fork: ${forkId}`);
     }
 
+    // ── Coupe-circuit sur la source cloud ────────────────────────────────────
+    // Simulacra est une « Air-Gap Interface » : elle doit fonctionner SANS le
+    // cloud. Or `get()`/`query()` interrogeaient le vrai adapter à CHAQUE appel,
+    // y compris après des centaines d'échecs — et le polling (2 s × 10
+    // collections) transformait ça en trafic permanent.
+    //
+    // Mesuré le 2026-08-26 en local, application au repos :
+    //   54 requêtes vers firestore.googleapis.com en 37 s (1,5/s),
+    //   toutes en `permission-denied`.
+    // Chacune part sur le réseau, attend le rejet, et le SDK Firebase retente
+    // derrière — d'où une interface poussive (navigation entre catégories).
+    //
+    // L'état est STATIQUE : les 10 pollers partagent le même verdict. Si
+    // Firestore refuse une collection faute d'auth, il les refuse toutes ;
+    // les faire échouer chacune de leur côté multiplierait le coût par dix.
+    private static echecsCloud = 0;
+    private static cloudCoupeJusqua = 0;
+    /** Trois échecs d'affilée suffisent : une panne d'auth n'est pas intermittente. */
+    private static readonly SEUIL_COUPURE = 3;
+    /** On re-sonde périodiquement : le backend peut revenir (login, réseau rétabli). */
+    private static readonly REPOS_MS = 60_000;
+
+    private cloudJoignable(): boolean {
+        return Date.now() >= SimulacraAdapter.cloudCoupeJusqua;
+    }
+
+    private noterEchecCloud(quoi: string, err: unknown): void {
+        SimulacraAdapter.echecsCloud += 1;
+        if (SimulacraAdapter.echecsCloud >= SimulacraAdapter.SEUIL_COUPURE) {
+            SimulacraAdapter.cloudCoupeJusqua = Date.now() + SimulacraAdapter.REPOS_MS;
+            SimulacraAdapter.echecsCloud = 0;
+            logger.warn(
+                `[Simulacra] Source cloud coupée ${SimulacraAdapter.REPOS_MS / 1000}s après ${SimulacraAdapter.SEUIL_COUPURE} échecs — lecture 100% locale.`,
+                `dernier: ${quoi} — ${(err as Error)?.message ?? err}`,
+            );
+        }
+    }
+
+    private noterSuccesCloud(): void {
+        SimulacraAdapter.echecsCloud = 0;
+    }
+
     async get<T = SovereignData>(path: string, _context?: NexusContext): Promise<T | null> {
         // 1. Check Virtual Store first
         const virtual = await simulatorDb.virtualStore.get(path);
@@ -40,10 +82,13 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         // source cloud peut échouer (permission-denied). On ne fait pas planter la
         // lecture : on retombe sur « document absent » pour laisser vivre les
         // données seedées localement.
+        if (!this.cloudJoignable()) return null;   // coupe-circuit : on n'appelle même pas
         try {
-            return await this.realAdapter.get<T>(path);
+            const r = await this.realAdapter.get<T>(path);
+            this.noterSuccesCloud();
+            return r;
         } catch (e) {
-            logger.warn(`[Simulacra] Source cloud indisponible pour ${path}, lecture locale seule`, (e as Error).message);
+            this.noterEchecCloud(path, e);
             return null;
         }
     }
@@ -53,10 +98,13 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         // (permission-denied hors ligne), on sert uniquement les données locales
         // au lieu de laisser l'exception tuer toute la lecture.
         let realResults: T[] = [];
-        try {
-            realResults = await this.realAdapter.query<T>(collectionPath, options);
-        } catch (e) {
-            logger.warn(`[Simulacra] Source cloud indisponible pour ${collectionPath}, lecture locale seule`, (e as Error).message);
+        if (this.cloudJoignable()) {           // coupe-circuit : sinon on n'appelle même pas
+            try {
+                realResults = await this.realAdapter.query<T>(collectionPath, options);
+                this.noterSuccesCloud();
+            } catch (e) {
+                this.noterEchecCloud(collectionPath, e);
+            }
         }
         const virtualResults = await simulatorDb.virtualStore
             .where('forkId').equals(this.forkId)
@@ -77,7 +125,45 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
             }
         });
 
-        return merged as T[];
+        // Post-merge filtering and ordering
+        let finalResults = merged;
+
+        if (options?.where && options.where.length > 0) {
+            for (const filter of options.where) {
+                const { field, operator: op, value: val } = filter;
+                finalResults = finalResults.filter(item => {
+                    const itemVal = (item as Record<string, unknown>)[field];
+                    if (op === '==') return itemVal === val;
+                    if (op === '!=') return itemVal !== val;
+                    if (op === '>') return Number(itemVal) > Number(val);
+                    if (op === '>=') return Number(itemVal) >= Number(val);
+                    if (op === '<') return Number(itemVal) < Number(val);
+                    if (op === '<=') return Number(itemVal) <= Number(val);
+                    if (op === 'in') return Array.isArray(val) && val.includes(itemVal);
+                    if (op === 'array-contains') return Array.isArray(itemVal) && (itemVal as unknown[]).includes(val);
+                    return true;
+                });
+            }
+        }
+
+        if (options?.orderBy) {
+            const field = options.orderBy.field;
+            const dir = options.orderBy.direction === 'desc' ? -1 : 1;
+            finalResults.sort((a, b) => {
+                const valA = (a as Record<string, unknown>)[field];
+                const valB = (b as Record<string, unknown>)[field];
+                if (valA === valB) return 0;
+                if (valA === undefined || valA === null) return 1;
+                if (valB === undefined || valB === null) return -1;
+                return valA > valB ? dir : -dir;
+            });
+        }
+
+        if (options?.limit && options.limit > 0) {
+            finalResults = finalResults.slice(0, options.limit);
+        }
+
+        return finalResults as T[];
     }
 
     onSnapshot<T = SovereignData>(

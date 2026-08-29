@@ -67,7 +67,7 @@ export const m2_settings = {
     const lus = new Set();
     for (const src of c.contenu.values()) {
       for (const m of src.matchAll(/usePageSetting\(\s*['"][^'"]+['"]\s*,\s*['"]([a-z0-9_]+)['"]/g)) lus.add(m[1]);
-      for (const m of src.matchAll(/getSetting\(\s*['"]([a-z0-9_]+)['"]/g)) lus.add(m[1]);
+      for (const m of src.matchAll(/(?:SettingsReader\.)?getSetting(?:<[^>]+>)?\(\s*['"][^'"]+['"]\s*,\s*['"]([a-z0-9_]+)['"]/g)) lus.add(m[1]);
     }
     const detail = [...declares].filter(k => !lus.has(k)).sort();
     return { valeur: detail.length, detail, extra: { declares: declares.size, lus: [...lus].filter(k => declares.has(k)).length } };

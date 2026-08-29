@@ -1,19 +1,69 @@
 "use client";
 
-import React, { useState } from "react";
-import { AlertTriangle, Clock, ShieldCheck, Trash2, ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Clock, AlertTriangle, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import type { IPerishableItem, IPerishableAlert } from "../../../domain/schemas/haccp";
-
-const SAMPLE_PERISHABLES: IPerishableItem[] = [
-  { id: "per_1", productId: "prod_creme", name: "Crème Fraîche Épaisse 35%", lotNumber: "LOT-CR-8921", receivedAt: "2026-08-20", expiresAt: "2026-08-24", quantityUnits: 6, unitLabel: "L", status: "expiring-soon" },
-  { id: "per_2", productId: "prod_saumon", name: "Pavé de Saumon Frais Label Rouge", lotNumber: "LOT-SA-4412", receivedAt: "2026-08-21", expiresAt: "2026-08-25", quantityUnits: 4.5, unitLabel: "kg", status: "expiring-soon" },
-  { id: "per_3", productId: "prod_oeufs", name: "Œufs Bio Plein Air", lotNumber: "LOT-OE-1039", receivedAt: "2026-08-15", expiresAt: "2026-08-30", quantityUnits: 120, unitLabel: "pièces", status: "ok" },
-  { id: "per_4", productId: "prod_beurre", name: "Beurre AOP Charentes-Poitou", lotNumber: "LOT-BU-7711", receivedAt: "2026-08-10", expiresAt: "2026-08-22", quantityUnits: 2, unitLabel: "kg", status: "expired" },
-];
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import type { IPerishableItem } from "../../../domain/schemas/haccp";
 
 export function PerishableAlertsTracker() {
-  const [items, setItems] = useState<IPerishableItem[]>(SAMPLE_PERISHABLES);
+  const [items, setItems] = useState<IPerishableItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadPerishables() {
+      try {
+        const stock = await Nexus.adapter.query<{
+          id: string;
+          name: string;
+          lotNumber?: string;
+          expiresAt?: string;
+          quantity?: number;
+          unit?: string;
+        }>("stockItems");
+
+        if (!isMounted) return;
+
+        const now = Date.now();
+        const perishables: IPerishableItem[] = (stock || [])
+          .filter((s) => s.expiresAt)
+          .map((s) => {
+            const expTime = new Date(s.expiresAt!).getTime();
+            let status: IPerishableItem["status"] = "ok";
+            if (expTime < now) {
+              status = "expired";
+            } else if (expTime < now + 3 * 86400000) {
+              status = "expiring-soon";
+            }
+
+            return {
+              id: s.id,
+              productId: s.id,
+              name: s.name,
+              lotNumber: s.lotNumber ?? "LOT-AUTO",
+              receivedAt: new Date(now - 7 * 86400000).toISOString().split("T")[0],
+              expiresAt: s.expiresAt!,
+              quantityUnits: s.quantity ?? 1,
+              unitLabel: s.unit ?? "unités",
+              status,
+            };
+          });
+
+        setItems(perishables);
+      } catch {
+        // Fallback vide propre
+        if (isMounted) setItems([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadPerishables();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const expiringCount = items.filter((i) => i.status === "expiring-soon").length;
   const expiredCount = items.filter((i) => i.status === "expired").length;
@@ -27,7 +77,7 @@ export function PerishableAlertsTracker() {
           </div>
           <div>
             <h3 className="font-bold text-base text-text-primary">Suivi des DLC Courtes & Denrées Périssables</h3>
-            <p className="text-xs text-text-muted">Contrôle sanitaire HACCP, déclassement en cuisine et anti-gaspillage.</p>
+            <p className="text-xs text-text-muted">Contrôle sanitaire HACCP temps réel basé sur les stocks enregistrés.</p>
           </div>
         </div>
 
@@ -42,37 +92,53 @@ export function PerishableAlertsTracker() {
               {expiredCount} périmé(s)
             </span>
           )}
+          {expiringCount === 0 && expiredCount === 0 && !loading && (
+            <span className="px-3 py-1 rounded-full bg-status-success/10 border border-status-success/20 text-status-success text-xs font-bold flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Stocks conformes
+            </span>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="p-4 rounded-2xl bg-surface-bg border border-border-default space-y-3 flex flex-col justify-between"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <h4 className="font-bold text-sm text-text-primary">{item.name}</h4>
-                <span className="text-nano font-mono text-text-muted">Lot : {item.lotNumber}</span>
+      {loading ? (
+        <div className="py-8 text-center text-text-muted text-xs">Chargement des données sanitaires...</div>
+      ) : items.length === 0 ? (
+        <div className="py-8 text-center text-text-muted text-xs bg-surface-bg/50 border border-dashed border-border-default rounded-2xl">
+          Aucun lot à DLC courte ou expiré détecté dans l'économat.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="p-4 rounded-2xl bg-surface-bg border border-border-default space-y-3 flex flex-col justify-between"
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-bold text-sm text-text-primary">{item.name}</h4>
+                  <span className="text-nano font-mono text-text-muted">Lot : {item.lotNumber}</span>
+                </div>
+                <span
+                  className={cn(
+                    "px-2.5 py-0.5 rounded-full text-nano font-bold uppercase",
+                    item.status === "expired"
+                      ? "bg-status-danger/20 text-status-danger border border-status-danger/30"
+                      : item.status === "expiring-soon"
+                      ? "bg-status-warning/20 text-status-warning border border-status-warning/30"
+                      : "bg-status-success/20 text-status-success border border-status-success/30"
+                  )}
+                >
+                  {item.status === "expired" ? "Périmé" : item.status === "expiring-soon" ? "DLC Courte" : "Conforme"}
+                </span>
               </div>
-              <span className={cn(
-                "px-2.5 py-0.5 rounded-full text-nano font-bold uppercase",
-                item.status === 'ok' ? "bg-status-success/10 text-status-success" :
-                item.status === 'expiring-soon' ? "bg-status-warning/10 text-status-warning" :
-                "bg-status-danger/10 text-status-danger"
-              )}>
-                {item.status === 'ok' ? 'Conforme' : item.status === 'expiring-soon' ? 'DLC Proche' : 'Périmé'}
-              </span>
+              <div className="text-xs text-text-secondary flex justify-between">
+                <span>Quantité : {item.quantityUnits} {item.unitLabel}</span>
+                <span>DLC : {item.expiresAt}</span>
+              </div>
             </div>
-
-            <div className="flex items-center justify-between text-xs pt-2 border-t border-border-default">
-              <span className="text-text-muted">DLC : <strong className="text-text-primary font-mono">{item.expiresAt}</strong></span>
-              <span className="font-bold text-text-primary">{item.quantityUnits} {item.unitLabel}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

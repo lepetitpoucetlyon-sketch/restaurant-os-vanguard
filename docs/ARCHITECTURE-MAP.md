@@ -5,19 +5,19 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3607** · LOC : **338 533**
-- Pages : **84** · Routes API : **211**
+- Fichiers `.ts/.tsx` : **3658** · LOC : **345 396**
+- Pages : **86** · Routes API : **211**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1593 |
-| `src/shared/` | 706 |
-| `src/app/` | 448 |
-| `src/verticals/` | 245 |
+| `src/shared/` | 725 |
+| `src/app/` | 452 |
+| `src/verticals/` | 246 |
 | `src/lib/` | 235 |
 | `src/infrastructure/` | 46 |
-| `src/kernel/` | 25 |
+| `src/kernel/` | 38 |
 | `src/store/` | 24 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
@@ -35,11 +35,11 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 225 |
-| `shared/components/` | 188 |
-| `shared/nexus/` | 128 |
+| `shared/eventBus/` | 226 |
+| `shared/components/` | 201 |
+| `shared/nexus/` | 130 |
 | `shared/hooks/` | 50 |
-| `shared/providers/` | 28 |
+| `shared/providers/` | 31 |
 | `shared/seeds/` | 15 |
 | `shared/connector-manifest/` | 12 |
 | `shared/contexts/` | 10 |
@@ -61,9 +61,9 @@
 ## Piliers métier (`src/modules/`)
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
-| `commerce` | 350 | ✅ |
+| `commerce` | 348 | ✅ |
 | `ops` | 310 | ✅ |
-| `finance` | 222 | ✅ |
+| `finance` | 224 | ✅ |
 | `compliance` | 183 | ✅ |
 | `intelligence` | 165 | ✅ |
 | `logistics` | 149 | ✅ |
@@ -79,18 +79,18 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/__tests__/handlers/saga-handlers.test.ts` | 731 |
 | `src/shared/components/ui/PageShell.tsx` | 729 |
-| `src/__tests__/anglemorts/anglemorts-batch2.test.ts` | 668 |
-| `src/__tests__/anglemorts/anglemorts-batch6.test.ts` | 648 |
-| `src/shared/components/settings/BrandingPanel.tsx` | 615 |
-| `src/__tests__/anglemorts/anglemorts-batch4.test.ts` | 612 |
+| `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
+| `src/shared/components/settings/BrandingPanel.tsx` | 617 |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 608 |
-| `src/__tests__/anglemorts/anglemorts-batch3.test.ts` | 600 |
-| `src/i18n/locales/en.ts` | 600 |
-| `src/__tests__/helpers/saga.intelligence.test.ts` | 597 |
-| `src/i18n/locales/fr.ts` | 596 |
-| `src/__tests__/anglemorts/anglemorts-batch5.test.ts` | 595 |
-| `src/__tests__/helpers/saga.finance2.test.ts` | 566 |
+| `src/__tests__/helpers/saga.intelligence.test.ts` | 602 |
+| `src/i18n/locales/fr.ts` | 597 |
+| `src/i18n/locales/en.ts` | 592 |
+| `src/i18n/locales/es.ts` | 592 |
+| `src/i18n/locales/ja.ts` | 592 |
+| `src/i18n/locales/pt.ts` | 592 |
+| `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/__tests__/architecture/invariants.test.ts` | 542 |
-| `src/__tests__/anglemorts/anglemorts-batch7.test.ts` | 531 |
+| `src/config/navConfig.ts` | 528 |
+| `src/shared/eventBus/events/ops.events.ts` | 488 |
+| `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 477 |

@@ -12,6 +12,7 @@ import {
   Award,
 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
+import { BentoGrid, BentoCell, StatCard } from '@/shared/components/ui';
 
 import { AutoProcurementWizard } from './AutoProcurementWizard';
 import { sampleSuppliers, sampleStockItems, sampleMercuriales } from './supplier-hub/sampleData';

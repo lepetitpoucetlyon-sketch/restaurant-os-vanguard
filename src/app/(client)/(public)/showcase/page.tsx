@@ -79,7 +79,7 @@ export default function ShowcasePage() {
   const [showDemoModal, setShowDemoModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-surface-bg text-text-primary font-sans selection:bg-accent selection:text-primary">
+    <div className="min-min-h-[100dvh] bg-surface-bg text-text-primary font-sans selection:bg-accent selection:text-primary">
       {/* GLOW OVERLAYS */}
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10" />
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10" />

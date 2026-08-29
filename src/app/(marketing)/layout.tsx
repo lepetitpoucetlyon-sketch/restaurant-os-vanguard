@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white font-sans antialiased">
+    <div className="min-min-h-[100dvh] bg-[#0A0A0F] text-white font-sans antialiased">
       <Suspense fallback={null}>
         <AnalyticsProvider>
           <MarketingHeader />

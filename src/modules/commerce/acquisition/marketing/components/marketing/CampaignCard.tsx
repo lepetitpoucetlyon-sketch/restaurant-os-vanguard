@@ -1,4 +1,5 @@
 "use client";
+/** @wip mohammed — écran cible /marketing, échéance 2026-09-15 */
 
 import { Mail, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

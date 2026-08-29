@@ -1,0 +1,503 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Restaurant OS Core · Cartographie Fonctionnelle Complète (8 Piliers & Moteurs)",
+    "output": "restaurant-os-master-features.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      520
+    ],
+    "views": [
+      {
+        "id": "ops-commerce",
+        "label": "Ops, POS & Production KDS",
+        "focus": [
+          "pos_workstation",
+          "kds_kitchen_bar",
+          "floor_crm_app",
+          "ops_production",
+          "commerce_relation",
+          "finance_pcg"
+        ],
+        "note": "Prise de commande, coursing cuisine, split d'addition, réservations et encaissement."
+      },
+      {
+        "id": "compliance-finance",
+        "label": "Comptabilité, HACCP & Fiscalité NF525",
+        "focus": [
+          "finance_pcg",
+          "compliance_haccp",
+          "nexus_eventbus",
+          "nf525_worm_ledger",
+          "nexus_storage"
+        ],
+        "note": "Plan comptable PCG, TVA multi-taux, export FEC, traçabilité HACCP et grand livre WORM."
+      },
+      {
+        "id": "ai-intelligence",
+        "label": "Hermes IA, LightRAG & Oracle BI",
+        "focus": [
+          "hermes_multiagent",
+          "lightrag_knowledge",
+          "oracle_bi_forecast",
+          "nexus_eventbus",
+          "nexus_storage"
+        ],
+        "note": "Co-pilote staff Hermes, RAG vectoriel LightRAG et prédictions financières Oracle."
+      },
+      {
+        "id": "sovereignty-mcc",
+        "label": "Souveraineté Grade X & Flotte MCC",
+        "focus": [
+          "mcc_superadmin",
+          "hardware_fleet",
+          "sovereign_guard",
+          "nexus_storage"
+        ],
+        "note": "Gouvernance de flotte, morphogenèse instantanée et membrane d'étanchéité multi-tenant."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "pos_workstation",
+      "type": "frontend",
+      "label": "POS & Caisse Tactile",
+      "sublabel": "One-Tap, Split, Offline",
+      "pos": [
+        30,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "kds_kitchen_bar",
+      "type": "frontend",
+      "label": "KDS Cuisine & Bar",
+      "sublabel": "Cadençage 3 Services",
+      "pos": [
+        30,
+        170
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "floor_crm_app",
+      "type": "frontend",
+      "label": "Plan Salle 3D & CRM",
+      "sublabel": "Résas, VIP, No-Show",
+      "pos": [
+        30,
+        270
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "mcc_superadmin",
+      "type": "frontend",
+      "label": "MCC & Forge Studio",
+      "sublabel": "Morphogenèse & ADN",
+      "pos": [
+        30,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "ops_production",
+      "type": "backend",
+      "label": "Ops & Production",
+      "sublabel": "Recettes, Food Cost",
+      "pos": [
+        255,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "commerce_relation",
+      "type": "backend",
+      "label": "Commerce & Relations",
+      "sublabel": "Fidélité, Devis, QR",
+      "pos": [
+        255,
+        170
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "logistics_stock",
+      "type": "backend",
+      "label": "Logistique & Stocks",
+      "sublabel": "Inventaire OCR & Réassort",
+      "pos": [
+        255,
+        270
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "hardware_fleet",
+      "type": "backend",
+      "label": "Flotte Hardware & IoT",
+      "sublabel": "ESC/POS, TPE, Spout",
+      "pos": [
+        255,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "IoT Outbox"
+    },
+    {
+      "id": "finance_pcg",
+      "type": "backend",
+      "label": "Finance & Comptabilité",
+      "sublabel": "PCG 6/7, TVA, FEC, Z",
+      "pos": [
+        480,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "compliance_haccp",
+      "type": "backend",
+      "label": "Compliance & HACCP",
+      "sublabel": "Températures, DLC, RGPD",
+      "pos": [
+        480,
+        170
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "human_hr",
+      "type": "backend",
+      "label": "RH & Planning Staff",
+      "sublabel": "Shifts, Pointage, RBAC",
+      "pos": [
+        480,
+        270
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "facility_iot",
+      "type": "backend",
+      "label": "Facility & Espaces",
+      "sublabel": "Maintenance & Cuves",
+      "pos": [
+        480,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ]
+    },
+    {
+      "id": "hermes_multiagent",
+      "type": "backend",
+      "label": "Hermes Multi-Agents",
+      "sublabel": "Co-Pilote Staff & SAV",
+      "pos": [
+        705,
+        70
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Agents IA"
+    },
+    {
+      "id": "lightrag_knowledge",
+      "type": "backend",
+      "label": "LightRAG Knowledge",
+      "sublabel": "Graphe RAG Multi-Tenant",
+      "pos": [
+        705,
+        170
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Vector RAG"
+    },
+    {
+      "id": "oracle_bi_forecast",
+      "type": "backend",
+      "label": "Oracle Analytics BI",
+      "sublabel": "Marges, Pertes & Forecast",
+      "pos": [
+        705,
+        270
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Prédictif"
+    },
+    {
+      "id": "nexus_eventbus",
+      "type": "messagebus",
+      "label": "Nexus EventBus",
+      "sublabel": "Routage Sagas Asynchrones",
+      "pos": [
+        705,
+        370
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "tag": "Event-Driven"
+    },
+    {
+      "id": "sovereign_guard",
+      "type": "security",
+      "label": "SovereignGuard & RBAC",
+      "sublabel": "Membrane Grade X",
+      "pos": [
+        930,
+        110
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Grade X"
+    },
+    {
+      "id": "nexus_storage",
+      "type": "database",
+      "label": "Nexus Storage",
+      "sublabel": "Collections Partitionnées",
+      "pos": [
+        930,
+        240
+      ],
+      "size": [
+        160,
+        68
+      ],
+      "tag": "Partitionné"
+    },
+    {
+      "id": "nf525_worm_ledger",
+      "type": "database",
+      "label": "Grand Livre NF525",
+      "sublabel": "Chaîne WORM DGFiP",
+      "pos": [
+        930,
+        370
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "Conforme DGFiP"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1. Canaux & Expérience Opérateur",
+      "wraps": [
+        "pos_workstation",
+        "kds_kitchen_bar",
+        "floor_crm_app",
+        "mcc_superadmin"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "2. Production, Commerce & Flotte",
+      "wraps": [
+        "ops_production",
+        "commerce_relation",
+        "logistics_stock",
+        "hardware_fleet"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "3. Finance, Compliance, RH & Espaces",
+      "wraps": [
+        "finance_pcg",
+        "compliance_haccp",
+        "human_hr",
+        "facility_iot"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "4. Intelligence Hermes & EventBus",
+      "wraps": [
+        "hermes_multiagent",
+        "lightrag_knowledge",
+        "oracle_bi_forecast",
+        "nexus_eventbus"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "5. Souveraineté & Grand Livre NF525",
+      "wraps": [
+        "sovereign_guard",
+        "nexus_storage",
+        "nf525_worm_ledger"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "pos-ops",
+      "from": "pos_workstation",
+      "to": "ops_production"
+    },
+    {
+      "id": "kds-ops",
+      "from": "kds_kitchen_bar",
+      "to": "ops_production"
+    },
+    {
+      "id": "floor-commerce",
+      "from": "floor_crm_app",
+      "to": "commerce_relation"
+    },
+    {
+      "id": "mcc-hw",
+      "from": "mcc_superadmin",
+      "to": "hardware_fleet"
+    },
+    {
+      "id": "ops-finance",
+      "from": "ops_production",
+      "to": "finance_pcg"
+    },
+    {
+      "id": "commerce-finance",
+      "from": "commerce_relation",
+      "to": "finance_pcg"
+    },
+    {
+      "id": "stock-haccp",
+      "from": "logistics_stock",
+      "to": "compliance_haccp"
+    },
+    {
+      "id": "hw-facility",
+      "from": "hardware_fleet",
+      "to": "facility_iot"
+    },
+    {
+      "id": "finance-ai",
+      "from": "finance_pcg",
+      "to": "hermes_multiagent"
+    },
+    {
+      "id": "haccp-rag",
+      "from": "compliance_haccp",
+      "to": "lightrag_knowledge"
+    },
+    {
+      "id": "hr-oracle",
+      "from": "human_hr",
+      "to": "oracle_bi_forecast"
+    },
+    {
+      "id": "facility-bus",
+      "from": "facility_iot",
+      "to": "nexus_eventbus"
+    },
+    {
+      "id": "ai-guard",
+      "from": "hermes_multiagent",
+      "to": "sovereign_guard",
+      "variant": "security"
+    },
+    {
+      "id": "rag-store",
+      "from": "lightrag_knowledge",
+      "to": "nexus_storage"
+    },
+    {
+      "id": "oracle-store",
+      "from": "oracle_bi_forecast",
+      "to": "nexus_storage"
+    },
+    {
+      "id": "bus-fiscal",
+      "from": "nexus_eventbus",
+      "to": "nf525_worm_ledger",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Ops, Caisse & Logistique",
+      "items": [
+        "POS tactile PWA offline-first (One-tap, multi-panier, split bill)",
+        "KDS cuisine & bar avec cadençage 3 services et alertes de surchauffe",
+        "Gestion des stocks par inventaire OCR et réassort automatique"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Intelligence Hermes & Oracle BI",
+      "items": [
+        "Hermes Multi-Agents avec LightRAG pour co-piloter le personnel",
+        "Oracle Analytics BI calcule les marges réelles et prédit l'affluence",
+        "NexusEventBus orchestre les sagas et la résilience hors-ligne"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Comptabilité & Scellement NF525",
+      "items": [
+        "Plan comptable PCG 6/7, TVA multi-taux et export FEC légal",
+        "Grand livre inaltérable WORM scellé SHA-256 + HMAC Genesis",
+        "Passerelle matérielle ESC/POS, TPE et tireuses SmartSpout"
+      ]
+    }
+  ]
+}

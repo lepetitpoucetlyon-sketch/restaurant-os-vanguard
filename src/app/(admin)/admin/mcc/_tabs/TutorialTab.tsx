@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/shared/components/ui/Button';
 import { useState } from 'react';
 import { Check, Copy, Terminal, BookOpen, Zap, Shield, Activity, Rocket } from 'lucide-react';
 

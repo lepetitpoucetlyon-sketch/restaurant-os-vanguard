@@ -33,7 +33,7 @@ export { KDSDashboard } from './production/kds/components/KDSDashboard';
 export { KitchenDashboard } from './production/kitchen/components/KitchenDashboard';
 export { RecipeDetailDialog } from './production/kitchen/components/RecipeDetailDialog';
 export { RecipeTechnicalSheet } from './production/kitchen/components/RecipeTechnicalSheet';
-export { AddPrinterWizard, CONN_ICON } from './service/printers/components/settings/AddPrinterWizard';
+export { AddPrinterWizard, PRINTER_CONN_ICON, PRINTER_CONN_ICON as CONN_ICON } from './service/printers/components/settings/AddPrinterWizard';
 
 // Domaine : menu-builder (composition catalogue)
 export * from './menu-builder';

@@ -20,6 +20,10 @@ export const VERTICAL_STYLE_PRESETS: Record<PlatformVariant, StylePreset[]> = {
     { id: 'bistro',    label: 'Bistro',    primaryColor: '#8B4513', accentColor: '#A0522D', appearance: 'light', fontBrand: 'Lora',             fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap' },
     { id: 'moderne',   label: 'Moderne',   primaryColor: '#1a1a2e', accentColor: '#16213e', appearance: 'dark' },
     { id: 'brasserie', label: 'Brasserie', primaryColor: '#B8860B', accentColor: '#DAA520', appearance: 'dark',  fontBrand: 'Libre Baskerville', fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital@0;1&display=swap' },
+    { id: 'cocktail_bar',  label: 'Bar & Cocktails',  primaryColor: '#7C3AED', accentColor: '#06B6D4', appearance: 'dark',  fontBrand: 'Outfit',              fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap' },
+    { id: 'gastronomique', label: 'Gastronomique',     primaryColor: '#92845A', accentColor: '#6B5D3E', appearance: 'dark',  fontBrand: 'Cormorant Garamond',  fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap' },
+    { id: 'street_food',   label: 'Street & Fast',     primaryColor: '#F97316', accentColor: '#EA580C', appearance: 'light', fontBrand: 'Syne',                fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&display=swap' },
+    { id: 'dark_kitchen',  label: 'Dark Kitchen',      primaryColor: '#52525B', accentColor: '#3F3F46', appearance: 'dark' },
   ],
   hotel: [
     { id: 'palace',    label: 'Palace',    primaryColor: '#1E3A5F', accentColor: '#2D5F8A', appearance: 'dark',  fontBrand: 'Cormorant Garamond', fontBrandUrl: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap' },

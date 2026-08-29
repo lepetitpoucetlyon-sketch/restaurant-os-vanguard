@@ -36,6 +36,10 @@ export function checkFallbackWebhookSecret(headers: Headers, providerId: string)
     }
     return true;
   }
-  const auth = headers.get('authorization');
-  return auth === `Bearer ${CONNECTORS_WEBHOOK_SECRET}`;
+  const auth = headers.get('authorization') ?? '';
+  const expected = `Bearer ${CONNECTORS_WEBHOOK_SECRET}`;
+  const bufA = Buffer.from(auth);
+  const bufB = Buffer.from(expected);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
 }

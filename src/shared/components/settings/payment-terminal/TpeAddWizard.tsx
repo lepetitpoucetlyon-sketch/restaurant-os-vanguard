@@ -2,7 +2,7 @@
 
 import type { TerminalAdapterType, TerminalConnectionType } from "@/modules/ops";
 import {
-    ADAPTER_LABELS, CONNECTION_LABELS, CONN_ICON,
+    ADAPTER_LABELS, CONNECTION_LABELS, TERMINAL_CONN_ICON,
     adapterNeedsAddress, adapterNeedsMerchantRef,
     type FormData, type WizardStep,
 } from "./terminalConstants";
@@ -60,7 +60,7 @@ export function TpeAddWizard({ step, setStep, form, setForm, onSave, onCancel }:
                                 onClick={() => { setForm(f => ({ ...f, connection: c })); setStep("configure"); }}
                                 className="h-12 rounded-2xl border border-border bg-surface-card px-4 flex items-center gap-2 hover:border-accent-gold/40 transition-colors"
                             >
-                                <span className="text-text-muted">{CONN_ICON[c]}</span>
+                                <span className="text-text-muted">{TERMINAL_CONN_ICON[c]}</span>
                                 <span className="text-micro font-black text-text-primary">{CONNECTION_LABELS[c]}</span>
                             </button>
                         ))}

@@ -48,11 +48,10 @@ export async function bootstrapNexusSync(
   TelemetryService.start(tenantId);
 
   bootSyncManager();
-  await replayPendingEvents();
-
   const { registerNexusHandlers } = await import('@/shared/eventBus/registerHandlers');
   registerNexusHandlers();
   startDLQRetryService();
+  await replayPendingEvents();
 
   const zcpoState = await readZcpoState();
   const icmDegraded = { ...icm, importance: degradeImportanceMap(icm.importance, zcpoState) };
