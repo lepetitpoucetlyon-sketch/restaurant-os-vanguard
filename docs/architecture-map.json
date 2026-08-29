@@ -1,18 +1,18 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3650,
-    "loc": 344930,
+    "files": 3658,
+    "loc": 345396,
     "pages": 86,
     "apiRoutes": 211
   },
   "layers": {
     "kernel": 38,
     "lib": 235,
-    "shared": 724,
+    "shared": 725,
     "modules": 1593,
     "app": 452,
-    "verticals": 245,
+    "verticals": 246,
     "infrastructure": 46,
     "store": 24,
     "config": 9,
@@ -28,7 +28,7 @@
     "contexts": 10,
     "custom-fields": 3,
     "domain": 1,
-    "eventBus": 225,
+    "eventBus": 226,
     "hooks": 50,
     "layout-builder": 3,
     "nexus": 130,
@@ -117,48 +117,28 @@
   ],
   "godFiles": [
     {
-      "file": "src/__tests__/handlers/saga-handlers.test.ts",
-      "loc": 731
-    },
-    {
       "file": "src/shared/components/ui/PageShell.tsx",
       "loc": 729
     },
     {
-      "file": "src/__tests__/anglemorts/anglemorts-batch2.test.ts",
-      "loc": 668
-    },
-    {
-      "file": "src/__tests__/anglemorts/anglemorts-batch6.test.ts",
-      "loc": 648
+      "file": "src/__tests__/handlers/saga-handlers.test.ts",
+      "loc": 675
     },
     {
       "file": "src/shared/components/settings/BrandingPanel.tsx",
       "loc": 617
     },
     {
-      "file": "src/__tests__/anglemorts/anglemorts-batch4.test.ts",
-      "loc": 612
-    },
-    {
       "file": "src/__tests__/helpers/saga.ops2.test.ts",
       "loc": 608
     },
     {
-      "file": "src/__tests__/anglemorts/anglemorts-batch3.test.ts",
-      "loc": 600
-    },
-    {
       "file": "src/__tests__/helpers/saga.intelligence.test.ts",
-      "loc": 597
+      "loc": 602
     },
     {
       "file": "src/i18n/locales/fr.ts",
       "loc": 597
-    },
-    {
-      "file": "src/__tests__/anglemorts/anglemorts-batch5.test.ts",
-      "loc": 595
     },
     {
       "file": "src/i18n/locales/en.ts",
@@ -175,6 +155,26 @@
     {
       "file": "src/i18n/locales/pt.ts",
       "loc": 592
+    },
+    {
+      "file": "src/__tests__/helpers/saga.finance2.test.ts",
+      "loc": 571
+    },
+    {
+      "file": "src/__tests__/architecture/invariants.test.ts",
+      "loc": 542
+    },
+    {
+      "file": "src/config/navConfig.ts",
+      "loc": 528
+    },
+    {
+      "file": "src/shared/eventBus/events/ops.events.ts",
+      "loc": 488
+    },
+    {
+      "file": "src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx",
+      "loc": 477
     }
   ]
 }

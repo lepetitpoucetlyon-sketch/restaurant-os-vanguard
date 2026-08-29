@@ -121,6 +121,7 @@ export function InstallPrompt() {
               <Button
                 variant="default"
                 size="sm"
+                aria-label="Installer l'Application"
                 onClick={handleInstallClick}
                 className="text-micro h-7 px-3 bg-action-primary text-black font-semibold rounded-lg shadow-sm hover:brightness-110"
               >

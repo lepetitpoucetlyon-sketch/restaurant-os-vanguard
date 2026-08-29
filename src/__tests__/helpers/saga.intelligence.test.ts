@@ -1,3 +1,14 @@
+import {
+  registerLLMFallbackHandler,
+  registerSovereignBreachHandler,
+  registerPrivacyConsentHandler,
+  registerReportRetryHandler,
+  registerSupportTicketAnalysisHandler,
+  registerDeliveryDriverUnlockHandler,
+  registerDeliveryRushModeHandler,
+  registerAntiCorruptionLayerHandler,
+  registerIntelligenceHandler
+} from '@/shared/eventBus/handlers';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
@@ -64,22 +75,16 @@ vi.mock('@/domain/schemas/supportTicket', () => ({
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerLLMFallbackHandler } from '@/shared/eventBus/handlers/LLMFallbackHandler';
 import { FleetOutboxHandler } from '@/shared/eventBus/handlers/FleetOutboxHandler';
 import { FleetStratBriefingHandler } from '@/shared/eventBus/handlers/FleetStratBriefingHandler';
 import { OracleQueryAuditHandler } from '@/shared/eventBus/handlers/OracleQueryAuditHandler';
-import { registerSovereignBreachHandler } from '@/shared/eventBus/handlers/SovereignBreachHandler';
+
 import { PinLockoutNotifierHandler } from '@/shared/eventBus/handlers/PinLockoutNotifierHandler';
-import { registerPrivacyConsentHandler } from '@/shared/eventBus/handlers/PrivacyConsentHandler';
-import { registerReportRetryHandler } from '@/shared/eventBus/handlers/ReportRetryHandler';
+
 import { WeeklyReportHandler } from '@/shared/eventBus/handlers/WeeklyReportHandler';
-import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers/SupportTicketAnalysisHandler';
+
 import { GracePeriodHandler } from '@/shared/eventBus/handlers/GracePeriodHandler';
 import { StripePaymentRetryHandler } from '@/shared/eventBus/handlers/StripePaymentRetryHandler';
-import { registerDeliveryDriverUnlockHandler } from '@/shared/eventBus/handlers/DeliveryDriverUnlockHandler';
-import { registerDeliveryRushModeHandler } from '@/shared/eventBus/handlers/DeliveryRushModeHandler';
-import { registerAntiCorruptionLayerHandler } from '@/shared/eventBus/handlers/AntiCorruptionLayerHandler';
-import { registerIntelligenceHandler } from '@/shared/eventBus/handlers/IntelligenceHandler';
 
 const T = 'tenant-intel';
 

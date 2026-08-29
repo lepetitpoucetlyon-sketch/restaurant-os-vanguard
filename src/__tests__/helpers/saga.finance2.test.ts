@@ -1,3 +1,17 @@
+import {
+  registerMonthlyFECExportHandler,
+  registerBankSyncAuditHandler,
+  registerSepaExportHandler,
+  registerOverdueInvoiceHandler,
+  registerSplitPaymentHandler,
+  registerRefundExtourneHandler,
+  registerReconciliationEngineHandler,
+  registerSupplierInvoiceLedgerHandler,
+  registerTechAuditLedgerHandler,
+  registerTicketZArchiveHandler,
+  registerCryptoIntegrityCheckHandler,
+  registerCertExpiryHandler
+} from '@/shared/eventBus/handlers';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // ─── Hoisted mocks ─────────────────────────────────────────────────────────────
@@ -25,22 +39,13 @@ vi.mock('@/lib/logger', () => ({ logger: { info: vi.fn(), warn: vi.fn(), error: 
 
 // ─── Imports après mocks ───────────────────────────────────────────────────────
 
-import { registerMonthlyFECExportHandler } from '@/shared/eventBus/handlers/MonthlyFECExportHandler';
 import { BankConnectionExpiredHandler } from '@/shared/eventBus/handlers/BankConnectionExpiredHandler';
-import { registerBankSyncAuditHandler } from '@/shared/eventBus/handlers/BankSyncAuditHandler';
+
 import { CashflowForecastHandler } from '@/shared/eventBus/handlers/CashflowForecastHandler';
-import { registerSepaExportHandler } from '@/shared/eventBus/handlers/SepaExportHandler';
-import { registerOverdueInvoiceHandler } from '@/shared/eventBus/handlers/OverdueInvoiceHandler';
-import { registerSplitPaymentHandler } from '@/shared/eventBus/handlers/SplitPaymentHandler';
-import { registerRefundExtourneHandler } from '@/shared/eventBus/handlers/RefundExtourneHandler';
-import { registerReconciliationEngineHandler } from '@/shared/eventBus/handlers/ReconciliationEngineHandler';
-import { registerSupplierInvoiceLedgerHandler } from '@/shared/eventBus/handlers/SupplierInvoiceLedgerHandler';
-import { registerTechAuditLedgerHandler } from '@/shared/eventBus/handlers/TechAuditLedgerHandler';
+
 import { PeriodLockGuardHandler } from '@/shared/eventBus/handlers/PeriodLockGuardHandler';
-import { registerTicketZArchiveHandler } from '@/shared/eventBus/handlers/TicketZArchiveHandler';
-import { registerCryptoIntegrityCheckHandler } from '@/shared/eventBus/handlers/CryptoIntegrityCheckHandler';
+
 import { AutoIndexationHandler } from '@/shared/eventBus/handlers/AutoIndexationHandler';
-import { registerCertExpiryHandler } from '@/shared/eventBus/handlers/CertExpiryHandler';
 
 const T = 'tenant-fin';
 
