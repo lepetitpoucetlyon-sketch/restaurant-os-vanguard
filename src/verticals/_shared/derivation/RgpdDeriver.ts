@@ -1,17 +1,5 @@
 /**
  * 🔒 RgpdDeriver — dérive la configuration RGPD complète du tenant (§C.10 P2b).
- *
- * Produit :
- *  - registerOfProcessing : registre des traitements auto-généré depuis les
- *    capabilities activées (chaque module = un traitement + ses catégories +
- *    sa base légale + sa durée de conservation).
- *  - piaRequired : analyse d'impact obligatoire si données sensibles Art. 9 RGPD
- *    (santé, biométrie) OU géolocalisation salariés OU décision automatisée.
- *  - dpoRequired : DPO obligatoire si > 250 salariés OU traitements sensibles
- *    réguliers (santé, données à grande échelle).
- *  - retentionByCategory : durées de conservation légales par nature de donnée.
- *  - cookieBanner : bannière requise si mod_analytics OU mod_marketing.
- *  - subProcessors : registre article 28 auto-listant les intégrations utilisées.
  */
 
 import type { PlatformVariant } from '@/modules/system';
@@ -56,50 +44,32 @@ export interface RgpdDeriverInput {
 
 // ── Dérivation ──────────────────────────────────────────────────────────────────
 
-export function deriveRgpd(input: RgpdDeriverInput): DerivedRgpd {
-    const { answers, variant, effectiveCapabilities: caps, estimatedStaff } = input;
+function derivePiaReasons(isHealth: boolean, answers: QualificationAnswers, register: readonly ProcessingRecord[]): string[] {
+    const reasons: string[] = [];
+    if (isHealth) reasons.push('Secteur santé — données sensibles Art. 9 RGPD systématiques');
+    if (answers.axis3_timeTracking === 'biometric_geo') reasons.push('Pointage biométrique/géolocalisé — Art. 35 RGPD');
+    if (answers.axis6_regulations.includes('rgpd_sensitive')) reasons.push('Régulation "rgpd_sensitive" cochée dans axis6');
+    if (register.some(p => p.isSensitive)) reasons.push('Au moins un traitement inclut des données sensibles');
+    return reasons;
+}
 
-    // ── Registre des traitements (dérivé des capabilities) ─────────────────
-    const register = buildProcessingRegister(caps, variant);
+function deriveDpoReasons(isHealth: boolean, estimatedStaff: number | undefined, answers: QualificationAnswers): string[] {
+    const reasons: string[] = [];
+    if ((estimatedStaff ?? 0) > 250) reasons.push(`Effectif > 250 (${estimatedStaff}) — recommandé WP243 CEPD`);
+    if (isHealth) reasons.push('Santé — traitement à grande échelle de données sensibles → DPO obligatoire (Art. 37)');
+    if (answers.axis1_topology === 'franchise') reasons.push('Franchise — traitements à grande échelle');
+    return reasons;
+}
 
-    // ── PIA (Analyse d'impact) obligatoire ? ───────────────────────────────
-    const piaReasons: string[] = [];
-    const isHealth = variant === 'clinic' || variant === 'veterinary';
-    if (isHealth) piaReasons.push('Secteur santé — données sensibles Art. 9 RGPD systématiques');
-    if (answers.axis3_timeTracking === 'biometric_geo') piaReasons.push('Pointage biométrique/géolocalisé — Art. 35 RGPD');
-    if (answers.axis6_regulations.includes('rgpd_sensitive')) piaReasons.push('Régulation "rgpd_sensitive" cochée dans axis6');
-    if (register.some(p => p.isSensitive)) piaReasons.push('Au moins un traitement inclut des données sensibles');
-
-    // ── DPO obligatoire ? ──────────────────────────────────────────────────
-    const dpoReasons: string[] = [];
-    if ((estimatedStaff ?? 0) > 250) dpoReasons.push(`Effectif > 250 (${estimatedStaff}) — recommandé WP243 CEPD`);
-    if (isHealth) dpoReasons.push('Santé — traitement à grande échelle de données sensibles → DPO obligatoire (Art. 37)');
-    if (answers.axis1_topology === 'franchise') dpoReasons.push('Franchise — traitements à grande échelle');
-
-    // ── Rétentions par catégorie ───────────────────────────────────────────
-    const retentionByCategory: Record<string, number> = {
-        transactions_comptables: 120,       // 10 ans obligatoire (NF525 + Code de commerce)
-        contrats_travail: 60,               // 5 ans post-sortie
-        candidatures: 24,                   // 2 ans post-décision
-        clients_prospects: 36,              // 3 ans post-dernier contact
-        clients_marketing: 36,              // 3 ans consentement
-        video_surveillance: 1,              // 1 mois max sauf incident
-        badge_pointage: 60,                 // 5 ans preuve
-        cookies_analytics: 13,              // 13 mois max CNIL
-    };
-    if (isHealth) retentionByCategory['dossiers_patients'] = 240;  // 20 ans (Code de la santé publique)
-    if (answers.axis4_traceability === 'iot_cold_chain' || answers.axis4_traceability === 'recall_fanout') {
-        retentionByCategory['iot_temperatures'] = 60;
-    }
-
-    // ── Cookie banner ──────────────────────────────────────────────────────
+function deriveCookieBanner(caps: CapabilitySet): { required: boolean; categories: string[] } {
     const cookieCats: string[] = [];
     if (caps['mod_google_analytics']) cookieCats.push('analytics');
     if (caps['mod_marketing'] || caps['mod_social_marketing']) cookieCats.push('marketing');
     if (caps['mod_ai']) cookieCats.push('personalization');
-    const cookieBanner = { required: cookieCats.length > 0, categories: cookieCats };
+    return { required: cookieCats.length > 0, categories: cookieCats };
+}
 
-    // ── Sous-traitants (Art. 28) ───────────────────────────────────────────
+function deriveSubProcessors(caps: CapabilitySet): Array<{ name: string; purpose: string; country: string }> {
     const subProcessors: Array<{ name: string; purpose: string; country: string }> = [];
     if (caps['mod_ai'] || caps['mod_oracle']) {
         subProcessors.push({ name: 'Google Gemini API', purpose: 'Génération IA', country: 'US' });
@@ -107,8 +77,38 @@ export function deriveRgpd(input: RgpdDeriverInput): DerivedRgpd {
     if (caps['mod_google_analytics']) {
         subProcessors.push({ name: 'Google Analytics', purpose: 'Analytics audience', country: 'US' });
     }
-    // La plateforme elle-même est un sous-traitant du tenant — toujours listée
     subProcessors.push({ name: 'RESTAURANT-OS-CORE', purpose: 'Hébergement + traitement métier', country: 'FR' });
+    return subProcessors;
+}
+
+function deriveRetentionPolicies(isHealth: boolean, answers: QualificationAnswers): Record<string, number> {
+    const retention: Record<string, number> = {
+        transactions_comptables: 120,
+        contrats_travail: 60,
+        candidatures: 24,
+        clients_prospects: 36,
+        clients_marketing: 36,
+        video_surveillance: 1,
+        badge_pointage: 60,
+        cookies_analytics: 13,
+    };
+    if (isHealth) retention['dossiers_patients'] = 240;
+    if (answers.axis4_traceability === 'iot_cold_chain' || answers.axis4_traceability === 'recall_fanout') {
+        retention['iot_temperatures'] = 60;
+    }
+    return retention;
+}
+
+export function deriveRgpd(input: RgpdDeriverInput): DerivedRgpd {
+    const { answers, variant, effectiveCapabilities: caps, estimatedStaff } = input;
+    const isHealth = variant === 'clinic' || variant === 'veterinary';
+    const register = buildProcessingRegister(caps, variant);
+
+    const piaReasons = derivePiaReasons(isHealth, answers, register);
+    const dpoReasons = deriveDpoReasons(isHealth, estimatedStaff, answers);
+    const retentionByCategory = deriveRetentionPolicies(isHealth, answers);
+    const cookieBanner = deriveCookieBanner(caps);
+    const subProcessors = deriveSubProcessors(caps);
 
     return {
         registerOfProcessing: register,
@@ -126,7 +126,6 @@ export function deriveRgpd(input: RgpdDeriverInput): DerivedRgpd {
 
 function buildProcessingRegister(caps: CapabilitySet, variant: PlatformVariant): ProcessingRecord[] {
     const records: ProcessingRecord[] = [];
-
     const isHealth = variant === 'clinic' || variant === 'veterinary';
 
     if (caps['mod_pos']) {
@@ -149,7 +148,7 @@ function buildProcessingRegister(caps: CapabilitySet, variant: PlatformVariant):
             dataCategories: ['identité', 'contact', 'préférences'],
             legalBasis: 'contract',
             retentionMonths: 36,
-            isSensitive: isHealth,   // Un client de clinic devient un patient (sensible)
+            isSensitive: isHealth,
             derivedFrom: `mod_customer = true (variant=${variant})`,
         });
     }
@@ -158,83 +157,35 @@ function buildProcessingRegister(caps: CapabilitySet, variant: PlatformVariant):
             id: 'proc.reservations',
             capability: 'mod_reservations',
             purpose: 'Gestion des rendez-vous et créneaux',
-            dataCategories: ['identité', 'contact', 'préférences horaires'],
+            dataCategories: ['identité', 'contact', 'date_heure'],
             legalBasis: 'contract',
-            retentionMonths: isHealth ? 240 : 36,
+            retentionMonths: 36,
             isSensitive: isHealth,
-            derivedFrom: `mod_reservations = true (variant=${variant})`,
-        });
-    }
-    if (caps['mod_crm']) {
-        records.push({
-            id: 'proc.crm',
-            capability: 'mod_crm',
-            purpose: 'Segmentation RFM et cycle de vie client',
-            dataCategories: ['identité', 'contact', 'historique achats', 'scoring'],
-            legalBasis: 'legitimate_interest',
-            retentionMonths: 36,
-            isSensitive: false,
-            derivedFrom: 'mod_crm = true',
-        });
-    }
-    if (caps['mod_marketing']) {
-        records.push({
-            id: 'proc.marketing',
-            capability: 'mod_marketing',
-            purpose: 'Campagnes marketing (email/SMS)',
-            dataCategories: ['identité', 'contact', 'opt-in commercial'],
-            legalBasis: 'consent',
-            retentionMonths: 36,
-            isSensitive: false,
-            derivedFrom: 'mod_marketing = true',
+            derivedFrom: 'mod_reservations = true',
         });
     }
     if (caps['mod_hr']) {
         records.push({
             id: 'proc.hr',
             capability: 'mod_hr',
-            purpose: 'Gestion des dossiers salariés',
-            dataCategories: ['identité', 'contact', 'contrat', 'poste', 'rémunération'],
+            purpose: 'Dossier salarié, paie et registre unique du personnel (RUP)',
+            dataCategories: ['identité', 'NIR/sécurité sociale', 'coordonnées bancaires', 'contrat', 'heures'],
             legalBasis: 'legal_obligation',
             retentionMonths: 60,
             isSensitive: false,
             derivedFrom: 'mod_hr = true',
         });
     }
-    if (caps['mod_timeclock']) {
+    if (caps['mod_marketing']) {
         records.push({
-            id: 'proc.timeclock',
-            capability: 'mod_timeclock',
-            purpose: 'Pointage entrées/sorties',
-            dataCategories: ['identité salarié', 'horodatage'],
-            legalBasis: 'legal_obligation',
-            retentionMonths: 60,
+            id: 'proc.marketing',
+            capability: 'mod_marketing',
+            purpose: 'Campagnes email/SMS et programmes fidélité',
+            dataCategories: ['contact', 'historique achats', 'segments'],
+            legalBasis: 'consent',
+            retentionMonths: 36,
             isSensitive: false,
-            derivedFrom: 'mod_timeclock = true',
-        });
-    }
-    if (isHealth && (caps['mod_customer'] || caps['mod_reservations'])) {
-        records.push({
-            id: 'proc.patient_records',
-            capability: 'mod_customer',
-            purpose: 'Dossiers patients / carnets de santé',
-            dataCategories: ['identité', 'données de santé', 'antécédents médicaux'],
-            legalBasis: 'legal_obligation',
-            retentionMonths: 240,
-            isSensitive: true,
-            derivedFrom: `variant=${variant} → dossiers médicaux sont sensibles Art. 9 RGPD`,
-        });
-    }
-    if (caps['mod_ai']) {
-        records.push({
-            id: 'proc.ai',
-            capability: 'mod_ai',
-            purpose: 'Assistance IA (Gemini) — génération de contenu, prédictions',
-            dataCategories: ['prompts utilisateur', 'contexte métier anonymisé'],
-            legalBasis: 'legitimate_interest',
-            retentionMonths: 6,
-            isSensitive: false,
-            derivedFrom: 'mod_ai = true → sous-traitance Google Gemini',
+            derivedFrom: 'mod_marketing = true → base légale = consentement',
         });
     }
 
