@@ -1,5 +1,5 @@
 import type { PlatformVariant } from '@/modules/system';
-import type { TenantConfig } from '@/shared/nexus-contract';
+import type { TenantConfig } from "@/shared/nexus/contracts";
 import type {
   IConnectorManifest,
   ConnectorPerm,

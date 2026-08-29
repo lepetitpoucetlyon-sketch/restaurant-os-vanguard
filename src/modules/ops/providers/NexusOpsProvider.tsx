@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from "@/shared/nexus/contracts";
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import { TelemetryHook } from '@/lib/telemetry';
 import { logger } from '@/lib/logger';

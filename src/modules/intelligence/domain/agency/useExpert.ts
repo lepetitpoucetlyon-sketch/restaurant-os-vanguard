@@ -33,7 +33,7 @@ export function useExpert(domain: AgentDomain) {
     const isAuthorized = rolePower[userRole] >= rolePower[(expertConfig?.minRole as AgentRole) || 'admin'];
     const modelId = expertConfig?.modelId || slmConfig?.modelId || AI_MODELS.fast;
 
-    const queryExpert = useCallback(async (prompt: string, contextData?: import("@/shared/nexus-contract").SovereignField): Promise<AgentResponse> => {
+    const queryExpert = useCallback(async (prompt: string, contextData?: import("@/shared/nexus/contracts").SovereignField): Promise<AgentResponse> => {
         if (!slmConfig?.apiKey || !slmConfig?.endpoint) {
             throw new Error('Erreur Système : Services d\'expertise non configurés.');
         }

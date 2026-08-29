@@ -11,6 +11,7 @@ export { useRegistre } from './workflow/engine/hooks/useRegistre';
 
 // Domaine : service (POS, bar, frontdesk, printers)
 export * from './service/pos';
+export type { TicketStyle, ReceiptConfig, PrinterConnection } from './service/printers/hardware/types';
 export { usePOSController } from './service/pos/hooks/usePos';
 export {
   BarSidebar,

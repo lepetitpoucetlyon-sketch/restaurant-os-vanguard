@@ -11,7 +11,7 @@ export class GroupService {
      * Prepares a group/event payload for persistence.
      * Could include deposit calculation or room allotment logic in the future.
      */
-    static prepareGroup(data: Record<string, import("@/shared/nexus-contract").SovereignValue>, generatedId: string): Record<string, import("@/shared/nexus-contract").SovereignValue> {
+    static prepareGroup(data: Record<string, import("@/shared/nexus/contracts").SovereignValue>, generatedId: string): Record<string, import("@/shared/nexus/contracts").SovereignValue> {
         return {
             ...data,
             id: generatedId,

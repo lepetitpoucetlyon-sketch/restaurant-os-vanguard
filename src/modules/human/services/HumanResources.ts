@@ -1,6 +1,6 @@
 import { ShiftEntry, PayrollPeriodSchema } from "../domain/schemas/hr";
 import { format, addDays, isSameDay } from 'date-fns';
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@/shared/nexus/contracts";
 
 export interface HumanPayrollCalculation {
     totalHours: number;

@@ -43,7 +43,7 @@ export const HACCPTelemetryBridge = {
       const { fleetTelemetry } = await import('@/shared/providers/fleet/FleetTelemetryService');
       await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
         healthScore,
-        complianceScore: (receptions as import("@/shared/nexus-contract").SovereignValue[]).length > 0 ? 100 : 50, // Penalty for missing audits
+        complianceScore: (receptions as import("@/shared/nexus/contracts").SovereignValue[]).length > 0 ? 100 : 50, // Penalty for missing audits
       });
 
       // 🚨 Trigger SOS if health is critical

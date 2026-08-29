@@ -193,7 +193,7 @@ export function renderDna(bp: VerticalBlueprint): GeneratedFile {
     };
 
     const constName = `${bp.slug.toUpperCase()}_FULL_DNA`;
-    const content = `import { TenantConfig } from "@shared/nexus-contract";
+    const content = `import { TenantConfig } from "@/shared/nexus/contracts";
 
 export const ${constName}: TenantConfig = {
   id: '${bp.slug}_golden_seed_complete',

@@ -12,7 +12,7 @@ import { NexusTelemetryEngine } from '@shared/nexus/engines/NexusTelemetryEngine
 import { tenantConfigAtom } from '@/store/pillars/sovereign';
 import { fetchRbacConfigAtom } from '@/store/pillars/rbac';
 
-import type { TenantConfig } from '@/shared/nexus-contract';
+import type { TenantConfig } from "@/shared/nexus/contracts";
 import type { NexusTenantState } from '@nexus/contracts/nexus.types';
 
 /**

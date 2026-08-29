@@ -1,4 +1,4 @@
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from "./sovereign.types";
 import type { Table, Order, Reservation, Floor, Zone } from './ops.types';
 import type { Product, Quote, Group } from './commerce.types';
 import type { Campaign } from './marketing.types';

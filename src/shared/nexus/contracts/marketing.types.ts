@@ -1,4 +1,4 @@
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from "./sovereign.types";
 
 export interface SEOScore {
     [key: string]: import('@/shared/nexus-contract').SovereignField | undefined;

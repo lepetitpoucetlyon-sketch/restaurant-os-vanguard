@@ -29,7 +29,7 @@ type TelemetryEventType =
 interface TelemetryEvent {
     moduleId: string;
     eventType: TelemetryEventType;
-    payload?: import('@/shared/nexus-contract').SovereignData;
+    payload?: import("@/shared/nexus/contracts").SovereignData;
     timestamp: string;
     tenantId: string;
 }
@@ -65,7 +65,7 @@ class TelemetryHookService {
      * Emit a telemetry event. Silent NOOP if not opted-in.
      * Non-blocking, zero performance overhead.
      */
-    emit(moduleId: string, eventType: TelemetryEventType, payload?: import('@/shared/nexus-contract').SovereignData): void {
+    emit(moduleId: string, eventType: TelemetryEventType, payload?: import("@/shared/nexus/contracts").SovereignData): void {
         if (!this._optedIn) return; // Silent discard
 
         const event: TelemetryEvent = {

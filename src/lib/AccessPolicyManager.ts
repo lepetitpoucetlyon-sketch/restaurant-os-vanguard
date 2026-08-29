@@ -15,7 +15,7 @@ export const ALL_CATEGORIES = [
 export type CategoryKey = string; // Generic string for dynamic injection
 export type RolePermissions = Record<UserRole | string, CategoryKey[]>;
 
-import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+import { SovereignValue, SovereignData } from "@/shared/nexus/contracts";
 
 /**
  * AccessPolicyManager

@@ -17,14 +17,14 @@ async function executeMutationOp(op: SyncOperation): Promise<void> {
     } else if (op.action === 'SET') {
         await Nexus.adapter.set(fullPath, op.payload);
     } else if (op.action === 'UPDATE') {
-        await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+        await Nexus.adapter.update(fullPath, op.payload as Partial<import("@/shared/nexus/contracts").SovereignData>);
     }
 }
 
 async function executeFallbackOp(op: SyncOperation): Promise<void> {
     const fullPath = `${op.collection}/${op.targetId}`;
     if (op.action === 'SET') await Nexus.adapter.set(fullPath, op.payload);
-    if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import('@/shared/nexus-contract').SovereignData>);
+    if (op.action === 'UPDATE') await Nexus.adapter.update(fullPath, op.payload as Partial<import("@/shared/nexus/contracts").SovereignData>);
 }
 
 export class SyncManager {
@@ -135,7 +135,7 @@ export class SyncManager {
      */
     private static async executeOperation(op: SyncOperation) {
         if (op.type === 'NF525_PAYMENT') {
-            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import('@/shared/nexus-contract').SovereignData }> };
+            const payload = op.payload as { instructions: Array<{ method: string; path: string; data: import("@/shared/nexus/contracts").SovereignData }> };
             const instructions = payload.instructions;
 
             // Idempotence : si le JournalEntry existe déjà (écriture partielle avant
@@ -174,7 +174,7 @@ export class SyncManager {
                 }
             }
         } else if (op.type === 'NF525_JET') {
-            const payload = op.payload as import('@/shared/nexus-contract').SovereignData;
+            const payload = op.payload as import("@/shared/nexus/contracts").SovereignData;
             const tenantId = op.collection.split('/')[1] || 'default';
             
             const response = await fetch('/api/finance/jet/sync', {

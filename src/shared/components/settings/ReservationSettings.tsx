@@ -28,7 +28,7 @@ export default function ReservationSettingsComponent() {
     }, [settings]);
 
     const handleSave = async () => {
-        if (config) await updateReservationConfig?.(config as unknown as import('@/shared/nexus-contract').SovereignMap);
+        if (config) await updateReservationConfig?.(config as unknown as import("@/shared/nexus/contracts").SovereignMap);
         if (slots)  await updateReservationSlots?.(slots);
     };
 

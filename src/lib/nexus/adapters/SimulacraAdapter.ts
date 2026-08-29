@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
 import { INexusAdapter, INexusBatch, INexusTransaction, NexusContext } from "@/lib/nexus/types";
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from "@/shared/nexus/contracts";
  
 import { simulatorDb } from '@/modules/intelligence/ia/simulator/SimulatorDB';
 import { logger } from '@/lib/logger';

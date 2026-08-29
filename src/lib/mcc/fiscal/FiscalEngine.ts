@@ -24,11 +24,11 @@ export const FiscalEngine = {
    */
   async sealEntry(
     transactionId: string, 
-    data: Record<string, import("@/shared/nexus-contract").SovereignValue>, 
+    data: Record<string, import("@/shared/nexus/contracts").SovereignValue>, 
     options: { lastSeal?: FiscalSeal, isTrainingMode?: boolean, instanceId?: string } = {}
   ): Promise<FiscalSeal> {
     const timestamp = new Date().toISOString();
-    const dataSnapshot = CryptoService.canonicalStringify(data as import('@/shared/nexus-contract').SovereignData); 
+    const dataSnapshot = CryptoService.canonicalStringify(data as import("@/shared/nexus/contracts").SovereignData); 
     const id = SharedKernel.generateId('SEAL');
 
     const previousHash = options.lastSeal ? options.lastSeal.hash : FISCAL_CONSTANTS.GENESIS_ROOT;

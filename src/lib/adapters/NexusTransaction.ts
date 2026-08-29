@@ -20,7 +20,7 @@ export class NexusTransaction {
    * @param schemas Map of validation contexts to their respective Zod schemas and data.
    * @param fn The batch callback.
    */
-  static async run<T extends Record<string, { schema: z.ZodSchema<import('@/shared/nexus-contract').SovereignValue>, data: import('@/shared/nexus-contract').SovereignData }>, R>(
+  static async run<T extends Record<string, { schema: z.ZodSchema<import("@/shared/nexus/contracts").SovereignValue>, data: import("@/shared/nexus/contracts").SovereignData }>, R>(
 
     schemas: T,
     fn: (transaction: INexusBatch) => Promise<R>

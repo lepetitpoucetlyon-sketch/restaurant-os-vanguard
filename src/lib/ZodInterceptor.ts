@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
-import { SovereignValue, SovereignData } from '@/shared/nexus-contract';
+import { SovereignValue, SovereignData } from "@/shared/nexus/contracts";
 
 /**
  * 🛡️ ZodInterceptor - The "Great Wall" of Restaurant OS

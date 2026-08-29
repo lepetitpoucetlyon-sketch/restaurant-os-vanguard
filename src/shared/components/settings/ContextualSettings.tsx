@@ -15,7 +15,7 @@ import { LogicTab } from "./panels/LogicTab";
 import { StyleTab } from "./panels/StyleTab";
 import type { PageSettingConfig, PageKey } from "@nexus/contracts/permissions.types";
 import { logger } from "@/lib/axiom";
-import { SovereignData, SovereignValue } from "@shared/nexus-contract";
+import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 import { SovereignStorage } from "@/shared/services/SovereignStorage";
 import { PageSettingsSchema } from "@/shared/schemas/ui";
 

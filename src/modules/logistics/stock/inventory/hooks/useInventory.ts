@@ -10,7 +10,7 @@ import {
 } from "../store/inventoryAtoms";
 import { wasteLogsNodeAtom } from '@/store/pillars/compliance';
 import { useVisibilityPurge } from "@/shared/hooks/useVisibilityPurge";
-import { SovereignNode, SovereignData, OperationalIdentity } from "@shared/nexus-contract";
+import { SovereignNode, SovereignData, OperationalIdentity } from "@/shared/nexus/contracts";
 import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { DomainRegistry } from "@shared/nexus/engines/DomainRegistry";
 import { Nexus } from "@/lib/nexus/NexusAdapter";

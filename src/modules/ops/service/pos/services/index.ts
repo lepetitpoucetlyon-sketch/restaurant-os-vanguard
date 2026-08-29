@@ -1,3 +1,3 @@
-export * from './ReservationService';
-export * from './PrinterFailoverManager';
-export * from './PrintJobQueueService';
+export * from "./ReservationService";
+export { PrinterFailoverManager } from "./PrinterFailoverManager";
+export * from "./PrintJobQueueService";

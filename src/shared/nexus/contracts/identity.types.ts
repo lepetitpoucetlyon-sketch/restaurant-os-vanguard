@@ -1,0 +1,23 @@
+/**
+ * 🏛️ OperationalIdentity — Abstract Domain Identifiers
+ */
+export enum OperationalIdentity {
+  CORE = "STX_CORE",
+  FINANCE = "STX_FINANCE",
+  OPS = "STX_OPS",
+  HR = "STX_HR",
+  CRM = "STX_CRM",
+  LOGISTICS = "STX_LOGISTICS",
+  INTELLIGENCE = "STX_INTELLIGENCE",
+  NODES = "STX_ALPHA",
+  ALLOCATIONS = "STX_BETA",
+  FLOWS = "STX_GAMMA",
+  RESOURCES = "STX_DELTA",
+  PROTOCOLS = "STX_EPSILON",
+  COMPLIANCE = "STX_ZETA",
+  RELATIONS = "STX_ETA",
+  STRUCTURES = "STX_THETA",
+  ZONES = "STX_IOTA",
+  STAFF = "STX_KAPPA",
+  LEDGER = "STX_LAMBDA"
+}

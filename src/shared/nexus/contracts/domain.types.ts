@@ -4,7 +4,7 @@
  */
 
 import type { TransactionCategory, AccountSide } from '@nexus/contracts';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "./sovereign.types";
 
 
 export interface ExpenseData {

@@ -3,7 +3,7 @@
 export { GeminiLiveService } from './realtime/GeminiLiveService';
 export type { IRealtimeVoiceService, RealtimeVoiceConfig, RealtimeVoiceCallbacks } from './realtime/IRealtimeVoiceService';
 
-import type { SovereignData } from '@shared/nexus-contract';
+import type { SovereignData } from "@/shared/nexus/contracts";
 
 export type GeminiLiveEvent =
     | { type: 'audio'; data: Int16Array }

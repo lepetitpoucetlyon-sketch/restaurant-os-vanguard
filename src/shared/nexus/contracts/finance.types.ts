@@ -1,4 +1,4 @@
-import { SovereignMap, SovereignNode } from '@/shared/nexus-contract';
+import { SovereignMap, SovereignNode } from "./sovereign.types";
 
 export type TransactionCategory =
   | 'revenue' | 'expense' | 'purchases' | 'fixed' | 'payroll' | 'bank' | 'tax' | 'other' | 'loss' | 'sales';

@@ -1,6 +1,8 @@
 import { User, UserRole, CategoryKey, RolePermissions } from './auth.types';
 import { IntelligenceConfig } from './common.types';
-import { TenantConfig, SovereignData, SovereignNode } from '@/shared/nexus-contract';
+import type { TenantConfig } from "@/modules/system/domain/schemas/tenant";
+import type { SovereignData, SovereignField, SovereignNode, SovereignSchemaField, SovereignValue, SovereignMap } from "./sovereign.types";
+export type { SovereignData, SovereignField, SovereignNode, SovereignSchemaField, SovereignValue, SovereignMap };
 
 import { GlobalSettings, PerformanceGoals } from './settings';
 import type { Language } from '@/i18n/translations';

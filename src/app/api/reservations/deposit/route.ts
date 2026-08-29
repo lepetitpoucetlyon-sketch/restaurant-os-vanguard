@@ -140,7 +140,7 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
     );
     const seal = await FiscalEngine.sealEntry(
       jeId,
-      journalEntry as unknown as Record<string, import('@/shared/nexus-contract').SovereignValue>,
+      journalEntry as unknown as Record<string, import("@/shared/nexus/contracts").SovereignValue>,
       { lastSeal }
     );
 

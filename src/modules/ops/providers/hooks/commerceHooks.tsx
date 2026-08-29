@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { OperationalIdentity, SovereignNode } from '@/shared/nexus-contract';
+import { OperationalIdentity, SovereignNode } from "@/shared/nexus/contracts";
 import { Quote, Campaign, toReservation, toCampaign, toCustomer, toGroup, toQuote } from '@nexus/contracts/nexus-internal-mapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
@@ -83,7 +83,7 @@ export const useCRM = () => {
 
 export const useManagement = () => ({
   quotes: createSovereignHook(quotesNodeAtom, OperationalIdentity.RELATIONS)(),
-  reports: [] as import('@/shared/nexus-contract').SovereignValue[]
+  reports: [] as import("@/shared/nexus/contracts").SovereignValue[]
 });
 
 export const useQuotes = () => {

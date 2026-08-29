@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { FiscalEngine, type FiscalSeal } from '../fiscalite/FiscalAdapter';
 import type { Order, StockItem, Recipe } from '@nexus/contracts';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
-import { OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from "@/shared/nexus/contracts";
 import { SovereignMath } from '@/shared/services/SovereignMath';
 
 /**

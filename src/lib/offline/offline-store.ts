@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { Order, StockItem, InventoryMovement, JournalEntry, FiscalSeal, Recipe } from '@nexus/contracts';
-import type { TenantConfig, SovereignField } from '@/shared/nexus-contract';
+import type { TenantConfig, SovereignField } from "@/shared/nexus/contracts";
 import type { ImmunityLogEntry } from '@shared/genome.types';
 
 /**

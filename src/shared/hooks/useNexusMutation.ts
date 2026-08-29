@@ -43,7 +43,7 @@ function applyNodeMutation<T extends { id: string }>(
  * et diffusion de Pulses réactifs.
  * GRADE X: Suture RBAC active.
  */
-export function useNexusMutation<T extends { id: string } & import("@shared/nexus-contract").SovereignMap>(
+export function useNexusMutation<T extends { id: string } & import("@/shared/nexus/contracts").SovereignMap>(
     nodeAtom: WritableAtom<NexusNode<T>, [NexusNode<T> | ((prev: NexusNode<T>) => NexusNode<T>)], void>, 
     key: string, 
     moduleId: string = 'CORE'
@@ -72,7 +72,7 @@ export function useNexusMutation<T extends { id: string } & import("@shared/nexu
 
         // 🧬 1. VALIDATION GÉNOMIQUE
         if (!options.skipValidation && (action === 'SET' || action === 'UPDATE')) {
-            const validation = validateMutation(moduleId, key, (payload || {}) as import("@shared/nexus-contract").SovereignData);
+            const validation = validateMutation(moduleId, key, (payload || {}) as import("@/shared/nexus/contracts").SovereignData);
             if (!validation.success) {
                 const errorMsg = `[FORGE v3] VALIDATION ERROR in ${moduleId}:${key}: ${validation.errors?.join(', ')}`;
                 logger.error(errorMsg);

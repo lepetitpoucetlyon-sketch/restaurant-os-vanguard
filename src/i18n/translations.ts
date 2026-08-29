@@ -16,7 +16,7 @@
 export type Language = 'fr' | 'en' | 'ja' | 'pt' | 'es';
 
 // Async lazy loading function
-export async function loadTranslations(lang: Language): Promise<import('@/shared/nexus-contract').SovereignData> {
+export async function loadTranslations(lang: Language): Promise<import("@/shared/nexus/contracts").SovereignData> {
     try {
         const langModule = await import(`./locales/${lang}`);
         return langModule.default;

@@ -286,7 +286,7 @@ export const MacroBrain = {
      */
     async getOracleAudit(
         prompt: string,
-        context: Record<string, import("@/shared/nexus-contract").SovereignValue>,
+        context: Record<string, import("@/shared/nexus/contracts").SovereignValue>,
         tenantId: string,
     ): Promise<string> {
         logger.info(`[MacroBrain] Requesting Oracle Audit for prompt: ${prompt.substring(0, 50)}...`);

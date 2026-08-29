@@ -44,7 +44,7 @@ export async function processRefundOperation(payload: RefundPayload): Promise<Br
       timestamp: now,
       reason,
       extourneFor: original.id,
-    } as import('@/shared/nexus-contract').SovereignData);
+    } as import("@/shared/nexus/contracts").SovereignData);
 
   const buildEntryBase = (pieceNumber: string, status: string) => ({
     id: entryId,

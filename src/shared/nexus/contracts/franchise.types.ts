@@ -4,7 +4,7 @@
  * Conçu pour les propriétaires et gérants de groupes multi-restaurants (Espace Restaurant).
  */
 
-import { SovereignNode, SovereignField } from '@/shared/nexus-contract';
+import { SovereignNode, SovereignField } from "./sovereign.types";
 
 export interface FranchiseGroup extends SovereignNode {
     id: string;

@@ -74,7 +74,7 @@ export function VoidModal({
                 operatorId,
                 amountInMicrounits: negativeAmountInMicrounits,
                 timestamp: now,
-            } as import("@/shared/nexus-contract").SovereignData);
+            } as import("@/shared/nexus/contracts").SovereignData);
 
             const { FiscalSealer } = await import('@/modules/finance');
             const { hash, signature, sealId, previousHash } =

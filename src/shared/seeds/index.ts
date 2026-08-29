@@ -1,4 +1,4 @@
-import type { TenantConfig } from '@shared/nexus-contract';
+import type { TenantConfig } from "@/shared/nexus/contracts";
 import type { PlatformVariant } from '@/modules/system';
 import { RESTAURANT_FULL_DNA } from './restaurant-full-dna';
 import { HOTEL_FULL_DNA } from './hotel-full-dna';

@@ -1,11 +1,16 @@
- 
 /**
  * 🏛️ NEXUS SHARED CONTRACTS - Universal SaaS Registry
  * Version Grade X - Sovereign Alignment
  */
 
-export type { SovereignField, SovereignNode } from '../../nexus-contract';
-export * from '../../genome.types';
+// --- 🏛️ SOVEREIGN PRIMITIVES & GENOME ---
+export * from "./sovereign.types";
+export * from "./identity.types";
+export * from "./nf525.types";
+export * from "./settings/business-laws";
+export * from "./infrastructure/telemetry.types";
+export * from "./infrastructure/firebase.types";
+export * from "../../genome.types";
 
 // --- 🏛️ DOMAIN AUTHORITIES ---
 
@@ -18,7 +23,7 @@ export type {
     RolePermissions,
     AuthCredentials,
     AuthResponse
-} from './auth.types';
+} from "./auth.types";
 
 // 2. Physical Models (Neutral Ground)
 export type {
@@ -31,7 +36,7 @@ export type {
     OrderStatus,
     GroupEventStatus,
     TableShape
-} from './ops.types';
+} from "./ops.types";
 
 export type {
     Product,
@@ -43,30 +48,29 @@ export type {
     Zone,
     Quote,
     Order as LegacyOrder
-} from './nexus-internal-mapper';
+} from "./nexus-internal-mapper";
 
-export { NexusInternalMapper, canAccessModule } from './nexus-internal-mapper';
+export { NexusInternalMapper, canAccessModule } from "./nexus-internal-mapper";
 
 // 3. Specialized Domains
-export * from './fleet.types';
-export * from './finance.types';
-export * from './hr.types';
-export * from './logistics';
-export * from './oracle.types';
-export * from './customer.types';
-export * from './settings';
-export * from './ops.types';
-export * from './recruitment';
-export * from './registre.types';
-export * from './compliance.types';
-export * from './commerce.types';
-export * from './permissions.types';
-export * from './franchise.types';
-
+export * from "./fleet.types";
+export * from "./finance.types";
+export * from "./hr.types";
+export * from "./logistics";
+export * from "./oracle.types";
+export * from "./customer.types";
+export * from "./settings";
+export * from "./ops.types";
+export * from "./recruitment";
+export * from "./registre.types";
+export * from "./compliance.types";
+export * from "./commerce.types";
+export * from "./permissions.types";
+export * from "./franchise.types";
 
 // 4. Operations Bridge (POS & Groups)
-export type { CartItem } from '@/modules/ops/domain/schemas/pos';
-export type { GroupEvent } from './ops.types';
+export type { CartItem } from "@/modules/ops/domain/schemas/pos";
+export type { GroupEvent } from "./ops.types";
 
 // --- 🛠️ UTILITIES & UI (Selective Export) ---
 export type { 
@@ -93,10 +97,10 @@ export type {
     ProfitabilityAlert,
     SimulationScenario,
     DocCategory
-} from './common.types';
+} from "./common.types";
 
 // --- 🌿 HYGIENE & COMPLIANCE (HACCP) ---
-export * from './settings/haccp';
+export * from "./settings/haccp";
 export type {
     CleaningTask,
     ZoneConfig,
@@ -112,34 +116,33 @@ export type {
     SensorReading,
     HACCPChecklistItem,
     HACCPContextType,
-} from '@/modules/compliance/qualite/haccp/types/domain';
+} from "@/modules/compliance/qualite/haccp/types/domain";
 
 // --- ⚙️ SETTINGS REGISTRY ---
-export * from './settings/accounting';
-export * from './settings/catalog';
-export * from './settings/delivery';
-export * from './settings/hr';
-export * from './settings/identity';
-export * from './settings/integrations';
-export * from './settings/inventory';
-export * from './settings/nexus';
-export * from './settings/notifications';
-export * from './settings/performance';
-export * from './settings/pos';
-export * from './settings/recipes';
-export * from './settings/reservations';
-export * from './settings/schedule';
-export * from './settings/security';
-export * from './settings/theme';
+export * from "./settings/accounting";
+export * from "./settings/catalog";
+export * from "./settings/delivery";
+export * from "./settings/hr";
+export * from "./settings/identity";
+export * from "./settings/integrations";
+export * from "./settings/inventory";
+export * from "./settings/nexus";
+export * from "./settings/notifications";
+export * from "./settings/performance";
+export * from "./settings/pos";
+export * from "./settings/recipes";
+export * from "./settings/reservations";
+export * from "./settings/schedule";
+export * from "./settings/security";
+export * from "./settings/theme";
 
 // --- 🏁 FINAL RESOLUTIONS ---
-export type { ThemeMode, AccentColor, UIDensity, BorderRadius } from './theme.types';
-export { defaultSettings } from './settings.defaults';
-export * from './nexus.types';
-export * from './errors.types';
-export type { GlobalSettings } from './settings';
-export type { SovereignData } from '@/shared/nexus-contract';
-export type { TenantConfig, OrchestratorSignal, TenantTheme, PlatformVariant } from '@/modules/system/domain/schemas/tenant';
-export type { InventoryMovement } from './logistics';
-export * from './marketing.types';
-export type { Delivery, DeliveryItem } from '@/modules/logistics/domain/types/delivery';
+export type { ThemeMode, AccentColor, UIDensity, BorderRadius } from "./theme.types";
+export { defaultSettings } from "./settings.defaults";
+export * from "./nexus.types";
+export * from "./errors.types";
+export type { GlobalSettings } from "./settings";
+export type { TenantConfig, OrchestratorSignal, TenantTheme, PlatformVariant } from "@/modules/system/domain/schemas/tenant";
+export type { InventoryMovement } from "./logistics";
+export * from "./marketing.types";
+export type { Delivery, DeliveryItem } from "@/modules/logistics/domain/types/delivery";

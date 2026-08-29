@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { GlobalSettings, defaultSettings } from '@nexus/contracts';
 import { tenantScopedJSONStorage } from '@/lib/storage/tenantScopedKey';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 import { SettingsManager } from '@/lib/SettingsManager';
 
 /**

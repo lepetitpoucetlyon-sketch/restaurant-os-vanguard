@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { getDefaultStore } from 'jotai';
  
 import { fiscalLedgerAtom } from '@/store/pillars/compliance';
-import type { TelemetryPulse } from '@/shared/nexus-contract';
+import type { TelemetryPulse } from "@/shared/nexus/contracts";
 import { logger } from '@/lib/logger';
 
 interface BatteryManager {

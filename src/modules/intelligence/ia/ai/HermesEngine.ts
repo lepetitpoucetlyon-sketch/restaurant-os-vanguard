@@ -148,7 +148,7 @@ export class HermesEngine {
      * 🔱 Delegate
      * Routes a specific problem to the correct Vanguard Agent.
      */
-    static async delegate(domain: AgentDomain, prompt: string, context?: import('@/shared/nexus-contract').SovereignValue): Promise<import('@/modules/intelligence/domain/agency/types').AgentResponse> {
+    static async delegate(domain: AgentDomain, prompt: string, context?: import("@/shared/nexus/contracts").SovereignValue): Promise<import('@/modules/intelligence/domain/agency/types').AgentResponse> {
 
         const agent = this.manifest.activeAgents.find(a => a.domain === domain) || this.manifest.activeAgents[0];
         

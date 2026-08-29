@@ -9,7 +9,7 @@ import { Button } from '@ui/Button';
 
 interface ProvisioningWizardProps {
     onClose: () => void;
-    onSuccess: (newInstance: import('@/shared/nexus-contract').SovereignData) => void;
+    onSuccess: (newInstance: import("@/shared/nexus/contracts").SovereignData) => void;
 }
 
 

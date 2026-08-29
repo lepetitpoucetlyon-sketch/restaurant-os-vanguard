@@ -1,7 +1,7 @@
 import './mocks'; 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createStore } from 'jotai';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 import { 
     createNexusNode, 
     updateNexusNode, 

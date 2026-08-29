@@ -5,7 +5,7 @@ import { TimeSync } from '@/lib/TimeSync';
 import { SelfHealingEngine } from '@shared/services/SelfHealingEngine';
 import { ordersNodeAtom } from '@/store/pillars';
 import { getDefaultStore } from 'jotai';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from "@/shared/nexus/contracts";
 
 
 // Mocking browser-specifics for the Vitest Node environment

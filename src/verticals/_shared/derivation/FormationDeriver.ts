@@ -88,11 +88,17 @@ function buildTierSteps(tier: PrecisionTier, caps: CapabilitySet): OnboardingSte
 
 function buildCertifications(tier: PrecisionTier, caps: CapabilitySet, variant: PlatformVariant): CertificationRequirement[] {
     const certs: CertificationRequirement[] = [];
-    if (caps['mod_haccp']) {
-        certs.push({ id: 'cert.haccp', label: 'Hygiène alimentaire et protocole HACCP', required: tier === 'L2' || tier === 'L3', renewalMonths: 36, rationale: 'Réglementation paquet hygiène européen CE 852/2004' });
+    if (caps["mod_haccp"] || variant === "restaurant") {
+        certs.push({ id: "cert.haccp", label: "Hygiène alimentaire et protocole HACCP", required: true, renewalMonths: 60, rationale: "Réglementation paquet hygiène européen CE 852/2004" });
     }
-    if (variant === 'clinic' || caps['mod_rgpd']) {
-        certs.push({ id: 'cert.rgpd_health', label: 'Secret professionnel et RGPD données de santé', required: true, renewalMonths: 12, rationale: 'Hébergement de Données de Santé (HDS) + secret pro' });
+    if (variant === "clinic") {
+        certs.push({ id: "cert.dpc", label: "Développement Professionnel Continu (DPC)", required: true, renewalMonths: 36, rationale: "Obligation triennale DPC professionnels de santé" });
+    }
+    if (variant === "gym") {
+        certs.push({ id: "cert.bpjeps", label: "Brevet Professionnel JEPS / CQP Fitness", required: true, renewalMonths: 0, rationale: "Encadrement sportif contre rémunération (Art. L.212-1 Code du Sport)" });
+    }
+    if (variant === "clinic" || caps["mod_rgpd"]) {
+        certs.push({ id: "cert.rgpd_health", label: "Secret professionnel et RGPD données de santé", required: true, renewalMonths: 12, rationale: "Hébergement de Données de Santé (HDS) + secret pro" });
     }
     return certs;
 }

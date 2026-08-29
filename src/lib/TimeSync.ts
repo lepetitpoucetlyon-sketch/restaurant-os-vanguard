@@ -10,7 +10,7 @@ function parseHeartbeatDate(h: unknown): Date | null {
     return null;
 }
 
-function applyTimeSyncData(ts: { offset: number; isSynced: boolean }, data: import('@/shared/nexus-contract').SovereignData): void {
+function applyTimeSyncData(ts: { offset: number; isSynced: boolean }, data: import("@/shared/nexus/contracts").SovereignData): void {
     if (!data?.heartbeat) return;
     const serverDate = parseHeartbeatDate(data.heartbeat as unknown);
     if (!serverDate) return;
@@ -55,7 +55,7 @@ export const TimeSync = {
         }
     };
 
-    this.private_unsub = Nexus.adapter.onSnapshot<import('@/shared/nexus-contract').SovereignData>(syncPath, (data) => {
+    this.private_unsub = Nexus.adapter.onSnapshot<import("@/shared/nexus/contracts").SovereignData>(syncPath, (data) => {
         applyTimeSyncData(this, data);
     });
 

@@ -6,7 +6,7 @@ import { db } from '@/lib/offline/offline-store';
 import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
 import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
  
-import { TenantConfig, DEFAULT_TENANT_CONFIG } from '@/shared/nexus-contract';
+import { TenantConfig, DEFAULT_TENANT_CONFIG } from "@/shared/nexus/contracts";
 import { RESTAURANT_FULL_DNA } from '@shared/seeds/restaurant-full-dna';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";

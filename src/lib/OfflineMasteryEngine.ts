@@ -46,7 +46,7 @@ export const OfflineMasteryEngine = {
             receiptNumber,
             timestamp,
             instanceId: this.getInstanceId(),
-        } as import("@/shared/nexus-contract").SovereignData);
+        } as import("@/shared/nexus/contracts").SovereignData);
 
         const hash = await CryptoService.generateHash(dataSnapshot, this._lastOfflineHash);
 
@@ -67,7 +67,7 @@ export const OfflineMasteryEngine = {
             action: 'SET',
             collection: 'offlineSeals',
             targetId: seal.id,
-            payload: seal as unknown as import('@/shared/nexus-contract').SovereignField,
+            payload: seal as unknown as import("@/shared/nexus/contracts").SovereignField,
             status: 'pending',
             timestamp: timestamp,
             priority: 1,

@@ -1,4 +1,4 @@
-import type { SovereignData } from '@shared/nexus-contract';
+import type { SovereignData } from "@/shared/nexus/contracts";
 
 export interface RealtimeVoiceCallbacks {
     onTranscript?: (text: string, isUser: boolean) => void;

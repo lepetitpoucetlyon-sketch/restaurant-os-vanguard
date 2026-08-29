@@ -50,7 +50,7 @@ export class ProcurementBridge {
 
         // 1. Signature cryptographique NF525 déterministe
         const { CryptoService } = await import('@/lib/CryptoService');
-        const payload = CryptoService.canonicalStringify(deliveryNote as unknown as import('@/shared/nexus-contract').SovereignData);
+        const payload = CryptoService.canonicalStringify(deliveryNote as unknown as import("@/shared/nexus/contracts").SovereignData);
         const signatureHash = await QuantumCrypto.sign(payload);
         
         // 2. Archivage WORM

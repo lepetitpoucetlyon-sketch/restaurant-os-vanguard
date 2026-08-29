@@ -28,7 +28,7 @@ function toHexString(buffer: ArrayBuffer, uppercase: boolean = false): string {
 /**
  * Deterministic JSON Stringification.
  */
-export const canonicalStringify = (obj: import('@/shared/nexus-contract').SovereignData): string => {
+export const canonicalStringify = (obj: import("@/shared/nexus/contracts").SovereignData): string => {
 
   const allKeys: string[] = [];
   JSON.stringify(obj, (key, value) => {

@@ -1,4 +1,4 @@
-import { SovereignNode } from '@/shared/nexus-contract';
+import { SovereignNode } from "./sovereign.types";
 
 import type { Product } from '@/modules/commerce/domain/schemas/commerce';
 export type { Product };

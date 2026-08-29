@@ -2,7 +2,7 @@ import { AccessPolicyManager, CategoryKey, RolePermissions } from '@/lib/AccessP
 import type { User } from '@nexus/contracts';
 import { AGENT_TOOLS } from '../../domain/agent/tools';
 import type { ToolDefinition } from '../../domain/agent/tools/types';
-import { SovereignData, SovereignValue } from '@shared/nexus-contract';
+import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 import { ShieldedContext } from '../ai/ShieldedContext';
 import { logger } from '@/lib/logger';
 import type { IRealtimeVoiceService, RealtimeVoiceCallbacks, RealtimeVoiceConfig } from './IRealtimeVoiceService';

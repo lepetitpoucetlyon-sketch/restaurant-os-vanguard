@@ -51,7 +51,7 @@ export class FleetTelemetryService {
     });
   }
 
-  public async broadcastConfiguration(config: Record<string, import("@/shared/nexus-contract").SovereignValue>, targetTenantIds: string[]): Promise<void> {
+  public async broadcastConfiguration(config: Record<string, import("@/shared/nexus/contracts").SovereignValue>, targetTenantIds: string[]): Promise<void> {
     targetTenantIds.forEach(tid => {
         this.stream.emit({
             type: 'BROADCAST',

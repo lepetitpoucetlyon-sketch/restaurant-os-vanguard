@@ -109,7 +109,7 @@ export function deepClone<T>(obj: T): T {
 /**
  * Vérifie si un objet est vide.
  */
-export function isEmpty(obj: import('@/shared/nexus-contract').SovereignData): boolean {
+export function isEmpty(obj: import("@/shared/nexus/contracts").SovereignData): boolean {
     return Object.keys(obj).length === 0;
 }
 
@@ -120,7 +120,7 @@ export function isEmpty(obj: import('@/shared/nexus-contract').SovereignData): b
  * @example
  * omit({ a: 1, b: 2, c: 3 }, ['b']) // { a: 1, c: 3 }
  */
-export function omit<T extends import('@/shared/nexus-contract').SovereignData, K extends keyof T>(
+export function omit<T extends import("@/shared/nexus/contracts").SovereignData, K extends keyof T>(
     obj: T,
     keys: K[]
 ): Omit<T, K> {
@@ -136,7 +136,7 @@ export function omit<T extends import('@/shared/nexus-contract').SovereignData, 
  * @example
  * pick({ a: 1, b: 2, c: 3 }, ['a', 'c']) // { a: 1, c: 3 }
  */
-export function pick<T extends import('@/shared/nexus-contract').SovereignData, K extends keyof T>(
+export function pick<T extends import("@/shared/nexus/contracts").SovereignData, K extends keyof T>(
     obj: T,
     keys: K[]
 ): Pick<T, K> {

@@ -9,7 +9,7 @@ import { useLanguage } from "@/shared/hooks";
 import { PageSettingConfig } from "@nexus/contracts/permissions.types";
 import { PremiumSelect } from "@/shared/components/ui";
 import { PremiumNumberInput } from "@/shared/components/settings/ui/PremiumNumberInput";
-import { SovereignData, SovereignField } from "@shared/nexus-contract";
+import { SovereignData, SovereignField } from "@/shared/nexus/contracts";
 import { SharedKernel } from "@/lib/shared-kernel";
 
 

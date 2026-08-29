@@ -1,7 +1,7 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { GlobalSettings } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
-import type { SovereignData } from '@/shared/nexus-contract';
+import type { SovereignData } from "@/shared/nexus/contracts";
 
 export class SettingsManager {
     static async saveSettings(newSettings: GlobalSettings): Promise<Date> {

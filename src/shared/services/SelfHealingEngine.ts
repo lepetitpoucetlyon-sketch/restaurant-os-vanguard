@@ -78,7 +78,7 @@ export const SelfHealingEngine = {
     
     // 🧬 CRC CALCULATION
     // as unknown as: T est un generic atom — calculateCRC attend SovereignData, frontière runtime légitime
-    const currentHash = this.calculateCRC(currentState as unknown as import('@/shared/nexus-contract').SovereignData);
+    const currentHash = this.calculateCRC(currentState as unknown as import("@/shared/nexus/contracts").SovereignData);
 
     if (currentHash === expectedHash && expectedHash !== 'FORCE_SYNC') return;
 
@@ -136,7 +136,7 @@ export const SelfHealingEngine = {
   /**
    * Polynomial CRC / Merkle Calculation for the state heap.
    */
-  calculateCRC(data: import('@/shared/nexus-contract').SovereignData | import('@/shared/nexus-contract').SovereignValue): string {
+  calculateCRC(data: import("@/shared/nexus/contracts").SovereignData | import("@/shared/nexus/contracts").SovereignValue): string {
     return this.calculateMerkleTree(data).root;
   },
 

@@ -6,7 +6,7 @@
  */
 import { getDefaultStore } from 'jotai';
 import { pageSettingsAtom } from '@/store/settingsAtoms';
-import { SovereignValue } from '@/shared/nexus-contract';
+import { SovereignValue } from "@/shared/nexus/contracts";
 
 export class SettingsReader {
     /**

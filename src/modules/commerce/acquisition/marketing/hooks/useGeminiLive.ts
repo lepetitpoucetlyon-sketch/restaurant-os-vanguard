@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/shared/hooks';
 import type { IRealtimeVoiceService } from '@/modules/intelligence';
 import { useSettings } from '@/shared/contexts/SettingsContext';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 
 declare global {
     interface Window {

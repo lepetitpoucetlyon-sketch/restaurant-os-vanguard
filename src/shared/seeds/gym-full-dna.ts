@@ -1,4 +1,4 @@
-import { TenantConfig } from '@shared/nexus-contract';
+import { TenantConfig } from "@/shared/nexus/contracts";
 
 export const GYM_FULL_DNA: TenantConfig = {
   id: 'gym_golden_seed_complete',

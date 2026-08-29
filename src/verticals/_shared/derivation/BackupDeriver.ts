@@ -77,12 +77,19 @@ function deriveDataResidency(isHealth: boolean, hasAi: boolean): { residency: st
     return { residency: ['EU'], reason: 'UE principal' };
 }
 
-function deriveArchivalStrategy(stockNature: string): { months: number; storage: 'hot' | 'warm' | 'cold_glacier'; reason: string } {
-    const isPerishable = stockNature === 'perishable';
+function deriveArchivalStrategy(stockNature: string, isHealth: boolean): { months: number; storage: "hot" | "warm" | "cold_glacier"; reason: string } {
+    if (isHealth) {
+        return {
+            months: 60,
+            storage: "cold_glacier",
+            reason: "santé → archivage légal dossier médical 5 ans cold glacier",
+        };
+    }
+    const isPerishable = stockNature === "perishable";
     return {
         months: isPerishable ? 12 : 36,
-        storage: isPerishable ? 'warm' : 'cold_glacier',
-        reason: isPerishable ? 'périssable → archivage annuel' : 'standard → archivage triennal cold storage',
+        storage: isPerishable ? "warm" : "cold_glacier",
+        reason: isPerishable ? "périssable → archivage annuel" : "standard → archivage triennal cold storage",
     };
 }
 
@@ -105,7 +112,7 @@ export function deriveBackup(input: BackupDeriverInput): DerivedBackup {
     const { residency, reason: resReason } = deriveDataResidency(isHealth, !!caps['mod_ai']);
     derivedFrom['dataResidency'] = resReason;
 
-    const { months, storage, reason: archReason } = deriveArchivalStrategy(answers.axis4_stockNature);
+    const { months, storage, reason: archReason } = deriveArchivalStrategy(answers.axis4_stockNature, isHealth);
     derivedFrom['archivalStrategy'] = archReason;
 
     return {

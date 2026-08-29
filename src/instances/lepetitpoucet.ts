@@ -1,5 +1,5 @@
  
-import type { TenantConfig } from '@/shared/nexus-contract';
+import type { TenantConfig } from "@/shared/nexus/contracts";
 
 // NOTE: on n'importe PAS AI_MODELS ici — les configs d'instances sont des données statiques.
 // AI_MODELS crée un cycle circulaire (@/instances → @/modules/intelligence → @/instances)

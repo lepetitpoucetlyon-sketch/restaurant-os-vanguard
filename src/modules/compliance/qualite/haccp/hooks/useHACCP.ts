@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 import {
     hygieneLabelsAtom,
     hygieneLogsAtom,

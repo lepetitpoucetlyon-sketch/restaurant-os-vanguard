@@ -26,7 +26,7 @@ function parsePermissionsPayload(data: Record<string, unknown> | null | undefine
         };
     }
     const perms = AccessPolicyManager.sanitizeRolePermissions(
-        (data.permissions ?? data) as import("@shared/nexus-contract").SovereignData,
+        (data.permissions ?? data) as import("@/shared/nexus/contracts").SovereignData,
         DEFAULT_ROLE_PERMISSIONS
     );
     const custom = Array.isArray(data.customRoles) ? (data.customRoles as CustomRole[]) : [];

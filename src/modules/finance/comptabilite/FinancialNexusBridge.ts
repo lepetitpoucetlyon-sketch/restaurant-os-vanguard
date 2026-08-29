@@ -58,7 +58,7 @@ export const FinancialNexusBridge = {
         totalTTCInMicrounits,
         tvaBreakdown,
         timestamp: now,
-      } as import('@/shared/nexus-contract').SovereignData);
+      } as import("@/shared/nexus/contracts").SovereignData);
 
     const buildEntryBase = (pieceNumber: string, status: JournalEntryStatus) => ({
       id: entryId,

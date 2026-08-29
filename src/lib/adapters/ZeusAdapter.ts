@@ -147,7 +147,7 @@ export class ZeusEngine {
     static async delegate(
         domain: AgentDomain,
         prompt: string,
-        context?: import('@/shared/nexus-contract').SovereignValue,
+        context?: import("@/shared/nexus/contracts").SovereignValue,
     ): Promise<import('@/modules/intelligence').AgentResponse> {
         const agent =
             this.manifest.activeAgents.find((a) => a.domain === domain) ||

@@ -30,7 +30,7 @@ describe('E2E Scénario 1 : Résilience Réseau & Synchronisation NF525 Multi-Ca
         offlineLoggedAt: Date.now() + i * 1000,
       };
 
-      const dataSnapshot = CryptoService.canonicalStringify(ticketData as unknown as import('@/shared/nexus-contract').SovereignData);
+      const dataSnapshot = CryptoService.canonicalStringify(ticketData as unknown as import("@/shared/nexus/contracts").SovereignData);
       const hash = await CryptoService.generateHash(dataSnapshot, prevHash1);
 
       caisse1Seals.push({
@@ -60,7 +60,7 @@ describe('E2E Scénario 1 : Résilience Réseau & Synchronisation NF525 Multi-Ca
         offlineLoggedAt: Date.now() + j * 1000,
       };
 
-      const dataSnapshot = CryptoService.canonicalStringify(ticketData as unknown as import('@/shared/nexus-contract').SovereignData);
+      const dataSnapshot = CryptoService.canonicalStringify(ticketData as unknown as import("@/shared/nexus/contracts").SovereignData);
       const hash = await CryptoService.generateHash(dataSnapshot, prevHash2);
 
       caisse2Seals.push({

@@ -20,7 +20,7 @@ const registry = new Map<string, RegisteredAtom<unknown>>();
  * 🧛 Orphan Registry (Grade VI)
  * Uses WeakRef to track temporary nodes that should not block GC.
  */
-const orphanNodesRegistry = new Map<string, WeakRef<import('@/shared/nexus-contract').SovereignData>>();
+const orphanNodesRegistry = new Map<string, WeakRef<import("@/shared/nexus/contracts").SovereignData>>();
 
 const cleanupRegistry = new FinalizationRegistry((id: string) => {
     logger.debug(`[Registry] GC collected orphan node: ${id}`);
@@ -49,7 +49,7 @@ export const GlobalRegistryService = {
      * 🛰️ Orphan Registration (WeakRef)
      * Tracks temporary atoms for manual GC monitoring or leak detection.
      */
-    registerOrphan(id: string, atom: import('@/shared/nexus-contract').SovereignData) {
+    registerOrphan(id: string, atom: import("@/shared/nexus/contracts").SovereignData) {
 
         if (!orphanNodesRegistry.has(id)) {
             orphanNodesRegistry.set(id, new WeakRef(atom));

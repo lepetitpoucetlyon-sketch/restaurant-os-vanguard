@@ -4,7 +4,7 @@ import { NexusCoreContext, useNexusCore } from './NexusCoreContext';
 import { loadTranslations, Language } from '@/i18n/translations';
 import { LANGUAGES } from '@/config/languages';
 import { useAtomValue } from 'jotai';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 import { unreadNotificationsCountAtom } from '@nexus/state/SovereignGenome';
 import type {
     NexusCoreState,

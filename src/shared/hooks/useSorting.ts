@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "@/shared/nexus/contracts";
 
 type SortDirection = "asc" | "desc";
 

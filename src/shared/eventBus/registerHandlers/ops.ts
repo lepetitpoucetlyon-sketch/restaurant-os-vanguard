@@ -1,15 +1,21 @@
-import { registerOpsTableHandlers } from './ops-tables';
-import { registerOpsReservationHandlers } from './ops-reservations';
-import { registerOpsServiceHandlers } from './ops-service';
-import { registerOpsKdsHandlers } from './ops-kds';
-import { registerOpsDeliveryHandlers } from './ops-delivery';
+import { registerOpsKdsHandlers } from "./ops-kds";
+import { registerOpsServiceHandlers } from "./ops-service";
+import { registerOpsTableHandlers } from "./ops-tables";
+import { registerOpsReservationHandlers } from "./ops-reservations";
+import { registerOpsDeliveryHandlers } from "./ops-delivery";
+import { registerOpsBarHandlers } from "./ops-bar";
+import { registerOpsPrintHandlers } from "./ops-print";
+import { registerOpsTpeHandlers } from "./ops-tpe";
 
 export function registerOpsHandlers(): Array<() => void> {
   return [
+    ...registerOpsKdsHandlers(),
+    ...registerOpsServiceHandlers(),
     ...registerOpsTableHandlers(),
     ...registerOpsReservationHandlers(),
-    ...registerOpsServiceHandlers(),
-    ...registerOpsKdsHandlers(),
     ...registerOpsDeliveryHandlers(),
+    ...registerOpsBarHandlers(),
+    ...registerOpsPrintHandlers(),
+    ...registerOpsTpeHandlers(),
   ];
 }

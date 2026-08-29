@@ -7,7 +7,7 @@ export interface DeliveryItem {
   price?: number;
 }
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 
 export interface Delivery {
   id: string;

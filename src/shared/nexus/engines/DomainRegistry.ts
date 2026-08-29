@@ -1,4 +1,4 @@
-import { OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from "@/shared/nexus/contracts";
 
 export interface DomainMetadata {
     path: string;

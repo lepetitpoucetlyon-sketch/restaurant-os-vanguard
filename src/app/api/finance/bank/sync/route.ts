@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 const dataSnapshot = CryptoService.canonicalStringify(
                     journalEntry
                 );
-                const seal = await FiscalEngine.sealEntry(jeId, journalEntry as unknown as Record<string, import('@/shared/nexus-contract').SovereignValue>, { lastSeal });
+                const seal = await FiscalEngine.sealEntry(jeId, journalEntry as unknown as Record<string, import("@/shared/nexus/contracts").SovereignValue>, { lastSeal });
                 batch.set(`tenants/${tenantId}/fiscalSeals/${seal.id}`, {
                     ...seal, dataSnapshot,
                 });

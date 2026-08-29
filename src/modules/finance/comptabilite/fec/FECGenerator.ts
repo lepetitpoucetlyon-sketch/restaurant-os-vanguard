@@ -1,26 +1,23 @@
-
-import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
-import { FECMapper } from './FECMapper';
-import type { FECExportResult, FECLine } from './types';
-import { CryptoService } from '@/lib/CryptoService';
-import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
+import { JournalEntry } from "@/shared/nexus/contracts/finance.types";
+import { FECMapper } from "./FECMapper";
+import type { FECExportResult, FECLine } from "./types";
+import { CryptoService } from "@/lib/CryptoService";
+import { NexusTelemetryService } from "@/lib/NexusTelemetryService";
 
 /**
  * 🏛️ FECGenerator - Grade X+++
- * Génération et scellage cryptographique NF525 des exports comptables.
+ * Génération et scellage cryptographique NF525 des exports comptables DGFiP (Art. L.47 A-I).
  */
 export class FECGenerator {
     /**
      * Génère un fichier FEC complet et le scelle
      */
-    static async generate(entries: JournalEntry[], siren: string, yearMonth: string): Promise<FECExportResult> {
-        // Filtrer uniquement les écritures validées
-        const validatedEntries = entries.filter(e => e.status === 'validated');
+    static async generate(entries: JournalEntry[], siren: string = "000000000", yearMonth: string = new Date().toISOString().slice(0, 7).replace("-", "")): Promise<FECExportResult> {
+        const validatedEntries = entries.filter(e => !e.status || e.status === "validated");
         
-        let previousHash = '';
+        let previousHash = "";
         const fecLines: FECLine[] = [];
 
-        // Trier par date d'écriture puis numéro de pièce
         validatedEntries.sort((a, b) => {
             const dateA = new Date(a.date).getTime();
             const dateB = new Date(b.date).getTime();
@@ -31,12 +28,7 @@ export class FECGenerator {
         for (const entry of validatedEntries) {
             for (const line of entry.lines) {
                 const partialFecLine = FECMapper.mapLine(entry, line);
-                
-                // Préparer les données pour le scellement
-                const lineDataString = Object.values(partialFecLine).join('|');
-                
-                // Hash NF525 réel : SHA-256 chaîné (EcritureHash_n = SHA256(ligne_n + hash_{n-1})).
-                // Remplace l'ancienne "signature Lattice" simulée (non cryptographique).
+                const lineDataString = Object.values(partialFecLine).join("|");
                 const currentHash = await CryptoService.generateHash(lineDataString, previousHash);
                 
                 const completeFecLine: FECLine = {
@@ -45,20 +37,18 @@ export class FECGenerator {
                 };
                 
                 fecLines.push(completeFecLine);
-                previousHash = currentHash; // Chainage cryptographique NF525
+                previousHash = currentHash;
             }
         }
 
-        // Construire le contenu du fichier
         const headers = [
-            'JournalCode', 'JournalLib', 'EcritureNum', 'EcritureDate', 'CompteNum', 'CompteLib',
-            'CompAuxNum', 'CompAuxLib', 'PieceRef', 'PieceDate', 'EcritureLib', 'Debit', 'Credit',
-            'EcritureLet', 'DateLet', 'ValidDate', 'Montantdevise', 'Idevise', 'EcritureHash'
+            "JournalCode", "JournalLib", "EcritureNum", "EcritureDate", "CompteNum", "CompteLib",
+            "CompAuxNum", "CompAuxLib", "PieceRef", "PieceDate", "EcritureLib", "Debit", "Credit",
+            "EcritureLet", "DateLet", "ValidDate", "Montantdevise", "Idevise", "EcritureHash"
         ];
 
-        const rows = fecLines.map(line => headers.map(h => line[h as keyof FECLine]).join('|'));
-        const content = [headers.join('|'), ...rows].join('\r\n') + '\r\n';
-
+        const rows = fecLines.map(line => headers.map(h => line[h as keyof FECLine] ?? "").join("|"));
+        const content = [headers.join("|"), ...rows].join("\r\n") + "\r\n";
         const filename = `FEC_${siren}_${yearMonth}.txt`;
 
         const result = {
@@ -67,7 +57,33 @@ export class FECGenerator {
             lineCount: fecLines.length,
             finalHash: previousHash
         };
-        NexusTelemetryService.emitAuditPulse('FINANCE', 'FEC_GENERATION_SUCCESS', { siren, yearMonth, lineCount: fecLines.length });
+        NexusTelemetryService.emitAuditPulse("FINANCE", "FEC_GENERATION_SUCCESS", { siren, yearMonth, lineCount: fecLines.length });
+        return result;
+    }
+
+    /**
+     * Déclenche le téléchargement du fichier FEC dans le navigateur
+     */
+    static downloadFEC(result: FECExportResult): void {
+        if (typeof window === "undefined") return;
+        const blob = new Blob([result.content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", result.filename);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    /**
+     * Helper combiné : génère et télécharge le FEC directement
+     */
+    static async generateAndDownload(entries: JournalEntry[], siren?: string, yearMonth?: string): Promise<FECExportResult> {
+        const result = await this.generate(entries, siren, yearMonth);
+        this.downloadFEC(result);
         return result;
     }
 }

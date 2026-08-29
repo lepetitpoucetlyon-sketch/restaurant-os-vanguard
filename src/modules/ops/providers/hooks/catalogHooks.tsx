@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { OperationalIdentity } from '@/shared/nexus-contract';
+import { OperationalIdentity } from "@/shared/nexus/contracts";
 import { toProduct, toCategory, toJournalEntry } from '@nexus/contracts/nexus-internal-mapper';
 import { createSovereignHook } from '../_internal/opsCore';
 import { productsNodeAtom, categoriesNodeAtom, stockItemsNodeAtom } from '@/store/pillars/logistics';

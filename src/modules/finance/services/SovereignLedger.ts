@@ -15,7 +15,7 @@ interface GlobalSettings {
     };
 }
 
-import { SovereignData } from '@/shared/nexus-contract';
+import { SovereignData } from "@/shared/nexus/contracts";
 
 /**
  * 📢 Nexus Extension for internal communications

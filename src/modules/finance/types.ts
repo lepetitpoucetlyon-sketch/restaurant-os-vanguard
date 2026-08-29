@@ -82,7 +82,7 @@ import type {
     ExpenseClaim,
     AccountingContextData
 } from './domain/schemas/finance';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 
 export interface AccountingContextType extends AccountingContextData {
     // Actions

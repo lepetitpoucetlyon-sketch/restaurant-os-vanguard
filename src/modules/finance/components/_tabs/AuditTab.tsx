@@ -2,23 +2,19 @@
 
 import { useCallback } from "react";
 import { Download } from "lucide-react";
-import { FiscalAuditView } from '../accounting/FiscalAuditView';
-import { FECExporter } from '../../comptabilite/accounting/domain/FECExporter';
-import { ActionGuard } from '@/shared/components/rbac/ActionGuard';
-import type { JournalEntry } from "@nexus/contracts";
+import { FiscalAuditView } from "../accounting/FiscalAuditView";
+import { FECGenerator } from "../../comptabilite/fec/FECGenerator";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
+import type { JournalEntry } from "@/shared/nexus/contracts";
 
-/**
- * Onglet « Audit fiscal » de la page Finance — extrait de page.tsx (dette-4).
- */
 export interface AuditTabProps {
-    /** nombre d'écritures de journal (désactive l'export si 0) */
     entriesCount: number;
     journalEntries: unknown[];
 }
 
 export function AuditTab({ entriesCount, journalEntries }: AuditTabProps) {
-    const handleFECExport = useCallback(() => {
-        FECExporter.downloadFEC(journalEntries as unknown as JournalEntry[]);
+    const handleFECExport = useCallback(async () => {
+        await FECGenerator.generateAndDownload(journalEntries as unknown as JournalEntry[]);
     }, [journalEntries]);
 
     return (

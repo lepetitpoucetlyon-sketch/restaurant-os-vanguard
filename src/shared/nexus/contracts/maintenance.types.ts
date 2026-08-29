@@ -1,5 +1,5 @@
 import type { PageKey } from "./permissions.types";
-import { SovereignData } from "@shared/nexus-contract";
+import { SovereignData } from "./sovereign.types";
 
 /**
  * 🛡️ MaintenanceTicket - Restaurant OS

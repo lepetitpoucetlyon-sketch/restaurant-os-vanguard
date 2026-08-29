@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { User } from '@nexus/contracts';
-import { SovereignData, SovereignValue } from '@/shared/nexus-contract';
+import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 
 /**
  * 🏛️ AGENT TOOL DEFINITION - Grade X Contract
