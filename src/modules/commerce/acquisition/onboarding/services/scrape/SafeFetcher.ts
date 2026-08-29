@@ -74,36 +74,32 @@ function checkIsIp(ip: string): 0 | 4 | 6 {
 }
 
 /** True si l'IP (v4 ou v6) appartient à un range privé/loopback/link-local. */
-export function isPrivateIp(ip: string): boolean {
-    const version = checkIsIp(ip);
-    if (version === 4) {
-        const parts = ip.split('.').map(n => parseInt(n, 10));
-        if (parts.some(n => Number.isNaN(n))) return true;
-        const [a, b] = parts as [number, number, number, number];
-        if (a === 10 || a === 127 || a === 0) return true;
-        if (a === 172 && b >= 16 && b <= 31) return true;
-        if (a === 192 && b === 168) return true;
-        if (a === 169 && b === 254) return true;
-        return false;
-    }
-    if (version === 6) {
-        const lower = ip.toLowerCase();
-        if (lower === '::1' || lower === '::') return true;
-        if (lower.startsWith('fc') || lower.startsWith('fd')) return true;
-        if (lower.startsWith('fe80:')) return true;
-        return false;
-    }
+function isPrivateIpv4(ip: string): boolean {
+    const parts = ip.split('.').map(n => parseInt(n, 10));
+    if (parts.some(n => Number.isNaN(n))) return true;
+    const [a, b] = parts as [number, number, number, number];
+    if (a === 10 || a === 127 || a === 0) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 169 && b === 254) return true;
     return false;
 }
 
-/**
- * Fetch une URL en respectant la frontière de sécurité :
- *  - vérifie SSRF avant chaque hop,
- *  - timeout 8 s,
- *  - limite body à 2 Mo,
- *  - `redirect: manual` + suivi manuel (max 3) avec re-vérif SSRF,
- *  - retourne toujours un `FetchResult` (jette sur violation, jamais silencieux).
- */
+function isPrivateIpv6(ip: string): boolean {
+    const lower = ip.toLowerCase();
+    if (lower === '::1' || lower === '::') return true;
+    if (lower.startsWith('fc') || lower.startsWith('fd') || lower.startsWith('fe80:')) return true;
+    return false;
+}
+
+/** True si l'IP (v4 ou v6) appartient à un range privé/loopback/link-local. */
+export function isPrivateIp(ip: string): boolean {
+    const version = checkIsIp(ip);
+    if (version === 4) return isPrivateIpv4(ip);
+    if (version === 6) return isPrivateIpv6(ip);
+    return false;
+}
+
 export async function fetchSandboxed(url: string): Promise<FetchResult> {
     let current = await assertUrlIsPublic(url);
     let hops = 0;

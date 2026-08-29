@@ -18,6 +18,24 @@ import { pollingSnapshot, pollingQuerySnapshot } from './PollingSnapshotMixin';
  * The Copy-on-Write Isolation Layer.
  * Reads from Real Adapter + Virtual Store. Writes ONLY to Virtual Store.
  */
+const OP_MATCHERS: Record<string, (a: unknown, b: unknown) => boolean> = {
+    '==': (a, b) => a === b,
+    '!=': (a, b) => a !== b,
+    '>': (a, b) => Number(a) > Number(b),
+    '>=': (a, b) => Number(a) >= Number(b),
+    '<': (a, b) => Number(a) < Number(b),
+    '<=': (a, b) => Number(a) <= Number(b),
+    'array-contains': (a, b) => Array.isArray(a) && (a as unknown[]).includes(b),
+    'in': (a, b) => Array.isArray(b) && (b as unknown[]).includes(a),
+    'not-in': (a, b) => Array.isArray(b) && !(b as unknown[]).includes(a),
+    'array-contains-any': (a, b) => Array.isArray(a) && Array.isArray(b) && (a as unknown[]).some(x => (b as unknown[]).includes(x)),
+};
+
+function matchFilter(itemVal: unknown, op: string, val: unknown): boolean {
+    const matcher = OP_MATCHERS[op];
+    return matcher ? matcher(itemVal, val) : true;
+}
+
 export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEngine, IRealtimeSubscriber {
     constructor(
         private realAdapter: INexusAdapter,
@@ -93,12 +111,37 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
         }
     }
 
+private sortResults<T>(results: T[], orderBy: NonNullable<IQueryOptions['orderBy']>): void {
+        const field = orderBy.field;
+        const dir = orderBy.direction === 'desc' ? -1 : 1;
+        results.sort((a, b) => {
+            const valA = (a as Record<string, unknown>)[field];
+            const valB = (b as Record<string, unknown>)[field];
+            if (valA === valB) return 0;
+            if (valA === undefined || valA === null) return 1;
+            if (valB === undefined || valB === null) return -1;
+            return valA > valB ? dir : -dir;
+        });
+    }
+
+    private mergeVirtualRecords<T>(realResults: T[], virtualResults: Array<{ isDeleted?: boolean; data?: unknown }>): Array<T & { id?: string }> {
+        const merged = [...realResults] as Array<T & { id?: string }>;
+        for (const v of virtualResults) {
+            const virtualData = v.data as T & { id?: string };
+            const index = merged.findIndex(m => m.id === virtualData.id);
+            if (v.isDeleted) {
+                if (index !== -1) merged.splice(index, 1);
+            } else {
+                if (index !== -1) merged[index] = virtualData;
+                else merged.push(virtualData);
+            }
+        }
+        return merged;
+    }
+
     async query<T = SovereignData>(collectionPath: string, options?: IQueryOptions, _context?: NexusContext): Promise<T[]> {
-        // La source cloud est optionnelle en mode local : si elle échoue
-        // (permission-denied hors ligne), on sert uniquement les données locales
-        // au lieu de laisser l'exception tuer toute la lecture.
         let realResults: T[] = [];
-        if (this.cloudJoignable()) {           // coupe-circuit : sinon on n'appelle même pas
+        if (this.cloudJoignable()) {
             try {
                 realResults = await this.realAdapter.query<T>(collectionPath, options);
                 this.noterSuccesCloud();
@@ -111,52 +154,19 @@ export class SimulacraAdapter implements INexusAdapter, IDocumentStore, IQueryEn
             .filter(doc => doc.path.startsWith(collectionPath))
             .toArray();
 
-        // Merge logic: Virtual data overrides or filters out real data
-        const merged = [...realResults] as Array<T & { id?: string }>;
-        
-        virtualResults.forEach(v => {
-            const virtualData = v.data as T & { id?: string };
-            const index = merged.findIndex(m => m.id === virtualData.id);
-            if (v.isDeleted) {
-                if (index !== -1) merged.splice(index, 1);
-            } else {
-                if (index !== -1) merged[index] = virtualData;
-                else merged.push(virtualData);
-            }
-        });
-
-        // Post-merge filtering and ordering
-        let finalResults = merged;
+        let finalResults = this.mergeVirtualRecords<T>(realResults, virtualResults);
 
         if (options?.where && options.where.length > 0) {
-            for (const filter of options.where) {
-                const { field, operator: op, value: val } = filter;
+            for (const { field, operator: op, value: val } of options.where) {
                 finalResults = finalResults.filter(item => {
                     const itemVal = (item as Record<string, unknown>)[field];
-                    if (op === '==') return itemVal === val;
-                    if (op === '!=') return itemVal !== val;
-                    if (op === '>') return Number(itemVal) > Number(val);
-                    if (op === '>=') return Number(itemVal) >= Number(val);
-                    if (op === '<') return Number(itemVal) < Number(val);
-                    if (op === '<=') return Number(itemVal) <= Number(val);
-                    if (op === 'in') return Array.isArray(val) && val.includes(itemVal);
-                    if (op === 'array-contains') return Array.isArray(itemVal) && (itemVal as unknown[]).includes(val);
-                    return true;
+                    return matchFilter(itemVal, op, val);
                 });
             }
         }
 
         if (options?.orderBy) {
-            const field = options.orderBy.field;
-            const dir = options.orderBy.direction === 'desc' ? -1 : 1;
-            finalResults.sort((a, b) => {
-                const valA = (a as Record<string, unknown>)[field];
-                const valB = (b as Record<string, unknown>)[field];
-                if (valA === valB) return 0;
-                if (valA === undefined || valA === null) return 1;
-                if (valB === undefined || valB === null) return -1;
-                return valA > valB ? dir : -dir;
-            });
+            this.sortResults(finalResults, options.orderBy);
         }
 
         if (options?.limit && options.limit > 0) {

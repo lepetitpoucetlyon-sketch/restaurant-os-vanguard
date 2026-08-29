@@ -3,7 +3,7 @@
  * Produit du code TSX propre, typé et optimisé pour Restaurant OS Core
  */
 
-import { PenDocument, PageDocument, SceneNode, FrameNode, TextNode, RectangleNode, VectorNode, WidgetNode } from '../schema/PenDocument';
+import { PenDocument, PageDocument, SceneNode, FrameNode, TextNode, RectangleNode, VectorNode, WidgetNode, Paint } from '../schema/PenDocument';
 import { rgbaToCss } from '../schema/StyleTokens';
 
 export class PageSceneGraphCompiler {
@@ -172,46 +172,46 @@ private static extractLayoutModeClasses(node: FrameNode | RectangleNode, classes
         return classes.join(' ');
     }
 
+private static extractFontSizeClass(fontSize?: number): string {
+        if (!fontSize) return 'text-xs';
+        if (fontSize >= 36) return 'text-4xl';
+        if (fontSize >= 28) return 'text-3xl font-bold';
+        if (fontSize >= 24) return 'text-2xl font-semibold';
+        if (fontSize >= 20) return 'text-xl font-medium';
+        if (fontSize >= 16) return 'text-base';
+        if (fontSize >= 14) return 'text-sm';
+        return 'text-xs';
+    }
+
+    private static extractTextColorClass(fills?: Paint[]): string {
+        if (!fills || !fills[0]?.tokenReference) return 'text-text-primary';
+        const ref = fills[0].tokenReference;
+        if (ref.includes('gold')) return 'text-action-primary';
+        if (ref.includes('secondary')) return 'text-text-secondary';
+        if (ref.includes('muted')) return 'text-text-muted';
+        return 'text-text-primary';
+    }
+
+    /**
+     * Génère les classes Tailwind pour un nœud Text
+     */
     private static extractTextClasses(node: TextNode): string {
         const classes: string[] = [];
         const style = node.style;
 
         if (!style) return 'text-text-primary text-sm';
 
-        // Font family
-        if (style.fontFamily?.includes('Cormorant')) {
-            classes.push('font-brand');
-        } else if (style.fontFamily?.includes('Mono')) {
-            classes.push('font-mono');
-        } else {
-            classes.push('font-sans');
-        }
+        if (style.fontFamily?.includes('Cormorant')) classes.push('font-brand');
+        else if (style.fontFamily?.includes('Mono')) classes.push('font-mono');
+        else classes.push('font-sans');
 
-        // Font size
-        if (style.fontSize >= 36) classes.push('text-4xl');
-        else if (style.fontSize >= 28) classes.push('text-3xl font-bold');
-        else if (style.fontSize >= 24) classes.push('text-2xl font-semibold');
-        else if (style.fontSize >= 20) classes.push('text-xl font-medium');
-        else if (style.fontSize >= 16) classes.push('text-base');
-        else if (style.fontSize >= 14) classes.push('text-sm');
-        else classes.push('text-xs');
+        classes.push(this.extractFontSizeClass(style.fontSize));
 
-        // Font weight
         if (style.fontWeight >= 700) classes.push('font-bold');
         else if (style.fontWeight >= 600) classes.push('font-semibold');
         else if (style.fontWeight >= 500) classes.push('font-medium');
 
-        // Colors
-        if (node.fills && node.fills[0]?.tokenReference?.includes('gold')) {
-            classes.push('text-action-primary');
-        } else if (node.fills && node.fills[0]?.tokenReference?.includes('secondary')) {
-            classes.push('text-text-secondary');
-        } else if (node.fills && node.fills[0]?.tokenReference?.includes('muted')) {
-            classes.push('text-text-muted');
-        } else {
-            classes.push('text-text-primary');
-        }
-
+        classes.push(this.extractTextColorClass(node.fills));
         return classes.join(' ');
     }
 
