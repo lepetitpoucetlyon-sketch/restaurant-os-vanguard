@@ -196,9 +196,6 @@ export class NexusInterceptor implements INexusAdapter {
                 get: (path) => rawTx.get(this.scopePath(path, ctx.vassalId)),
                 set: (path, data) => {
                     const scoped = this.scopePath(path, ctx.vassalId);
-                    if (!this.guard.canUpdate(scoped)) {
-                        throw new NexusError(NexusErrorCode.NF525_VIOLATION, `Cannot overwrite immutable/sealed document in transaction: ${scoped}`);
-                    }
                     return rawTx.set(scoped, data);
                 },
                 update: (path, data) => {
