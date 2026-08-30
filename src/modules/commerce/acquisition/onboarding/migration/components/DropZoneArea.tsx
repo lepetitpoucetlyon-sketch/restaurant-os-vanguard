@@ -4,17 +4,18 @@ import { useRef, useState, useCallback, type DragEvent } from 'react';
 import { Upload, Loader2 } from 'lucide-react';
 import type { ImportCategory } from '../types';
 import { CATEGORY_CONFIGS } from '../types';
+import { Button } from "@/shared/components/ui/Button";
 
 export function PasteZone({ onText }: { onText: (t: string) => void }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
   if (!open) return (
-    <button
+    <Button variant="ghost"
       onClick={() => setOpen(true)}
       className="w-full rounded-lg border border-dashed border-border py-2 text-xs text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
     >
       Ou coller du texte directement (carte, liste…)
-    </button>
+    </Button>
   );
   return (
     <div className="space-y-2">
@@ -27,14 +28,14 @@ export function PasteZone({ onText }: { onText: (t: string) => void }) {
         onChange={e => setText(e.target.value)}
       />
       <div className="flex gap-2">
-        <button onClick={() => { setOpen(false); setText(''); }} className="text-xs text-muted-foreground hover:text-foreground">Annuler</button>
-        <button
+        <Button variant="ghost" onClick={() => { setOpen(false); setText(''); }} className="text-xs text-muted-foreground hover:text-foreground">Annuler</Button>
+        <Button variant="ghost"
           disabled={!text.trim()}
           onClick={() => onText(text)}
           className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-40"
         >
           Analyser avec l'IA →
-        </button>
+        </Button>
       </div>
     </div>
   );

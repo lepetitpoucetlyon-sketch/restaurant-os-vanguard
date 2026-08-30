@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { Button } from "@/shared/components/ui/Button";
 
 export interface WizardStep {
   id: string;
@@ -24,7 +25,7 @@ export function ProgressStepper({ steps, currentStep, completedSteps, onStepClic
 
         return (
           <React.Fragment key={step.id}>
-            <button
+            <Button variant="ghost"
               onClick={() => onStepClick?.(step.id)}
               className={[
                 'flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all text-xs font-medium min-w-[72px]',
@@ -44,7 +45,7 @@ export function ProgressStepper({ steps, currentStep, completedSteps, onStepClic
                 {isDone ? '✓' : (step.icon ?? String(i + 1))}
               </span>
               <span className="hidden sm:block leading-tight text-center">{step.label}</span>
-            </button>
+            </Button>
             {!isLast && (
               <div className={[
                 'flex-1 h-0.5 mx-1',

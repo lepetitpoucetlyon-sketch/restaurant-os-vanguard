@@ -7,6 +7,7 @@
 import React, { useState } from 'react';
 import { Sparkles, ArrowUpRight, Bot, Loader2, CheckCircle2 } from 'lucide-react';
 import { PageDocument } from '@/kernel/open-pencil/schema/PenDocument';
+import { Button } from "@/shared/components/ui/Button";
 
 interface DesignAgentBarProps {
     page: PageDocument;
@@ -56,13 +57,13 @@ export const DesignAgentBar: React.FC<DesignAgentBarProps> = ({
                         IA Prompt :
                     </span>
                     {QUICK_PROMPTS.map((qp, idx) => (
-                        <button
+                        <Button variant="ghost"
                             key={idx}
                             onClick={() => setPrompt(qp)}
                             className="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-text-muted hover:text-white border border-white/5 whitespace-nowrap transition-colors"
                         >
                             {qp}
-                        </button>
+                        </Button>
                     ))}
                 </div>
 

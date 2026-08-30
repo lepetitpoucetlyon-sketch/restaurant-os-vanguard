@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { logger } from '@/lib/logger';
 import { Sentry } from '@/lib/sentry';
 import Link from 'next/link';
+import { Button } from "@/shared/components/ui/Button";
 
 export default function AdminError({
   error,
@@ -53,12 +54,12 @@ export default function AdminError({
         )}
 
         <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-          <button
+          <Button variant="ghost"
             onClick={() => reset()}
             className="px-6 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 font-semibold text-sm transition-all"
           >
             Réessayer la vue
-          </button>
+          </Button>
           <Link
             href="/admin"
             className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-all border border-white/10"

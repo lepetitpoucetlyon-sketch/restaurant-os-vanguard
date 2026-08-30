@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import type { StockItem } from '../../types';
 import { useStockPrediction } from '../../../../hooks/useStockPrediction';
 import dynamic from 'next/dynamic';
+import { Button } from "@/shared/components/ui/Button";
 const OraclePredictor = dynamic(() => import('@/modules/intelligence').then(m => m.OraclePredictor), { ssr: false });
 
 interface OracleModalProps {
@@ -34,13 +35,13 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
                     <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                         {itemName} · {item.quantity} {item.unit}
                     </p>
-                    <button
+                    <Button variant="ghost"
                         onClick={onClose}
                         aria-label="Fermer la prédiction Oracle"
                         className="p-1 rounded hover:bg-surface-hover text-text-muted"
                     >
                         <X className="w-4 h-4" />
-                    </button>
+                    </Button>
                 </div>
 
                 {loading && (

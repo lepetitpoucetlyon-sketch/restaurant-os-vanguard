@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckCircle, RotateCcw, Loader2 } from 'lucide-react';
+import { Button } from "@/shared/components/ui/Button";
 
 export function ImportProgress({ progress }: { progress: number }) {
   return (
@@ -76,13 +77,13 @@ export function ImportReport({
           </div>
         </div>
       )}
-      <button
+      <Button variant="ghost"
         onClick={onReset}
         className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <RotateCcw className="w-3.5 h-3.5" />
         Nouvel import
-      </button>
+      </Button>
     </div>
   );
 }

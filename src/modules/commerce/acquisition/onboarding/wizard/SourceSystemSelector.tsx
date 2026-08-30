@@ -2,6 +2,7 @@
 import React from 'react';
 import type { ConnectorId } from '../migration/connectors/types';
 import { ConnectorRegistry } from '../migration/connectors';
+import { Button } from "@/shared/components/ui/Button";
 
 interface SourceSystemSelectorProps {
   selected: ConnectorId | null;
@@ -46,7 +47,7 @@ export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelecto
                 const { meta } = connector;
                 const isSelected = selected === meta.id;
                 return (
-                  <button
+                  <Button variant="ghost"
                     key={meta.id}
                     onClick={() => onSelect(meta.id)}
                     className={[
@@ -66,7 +67,7 @@ export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelecto
                     {isSelected && (
                       <div className="ml-auto text-indigo-500 text-sm font-bold">✓</div>
                     )}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -78,7 +79,7 @@ export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelecto
         <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">
           Autre / Import manuel
         </h4>
-        <button
+        <Button variant="ghost"
           onClick={() => onSelect('zelty')}
           className={[
             'w-full flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all',
@@ -90,7 +91,7 @@ export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelecto
             <div className="text-sm font-medium text-gray-700">CSV / Excel / PDF</div>
             <div className="text-xs text-gray-400">Import direct ou OCR si fichier scanné</div>
           </div>
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/ui.foundations";
+import { Button } from "@/shared/components/ui/Button";
 
 interface SmartAlertProps {
   type: string;
@@ -47,13 +48,13 @@ export const LandingSmartAlert = ({
           {message}
         </p>
         {action && (
-          <button
+          <Button variant="ghost"
             onClick={(e) => { e.stopPropagation(); onAction?.(); }}
             className="text-nano font-black uppercase tracking-[0.2em] text-accent-gold flex items-center gap-2"
           >
             {action}
             <div className="w-6 h-[1px] bg-accent-gold/30 group-hover:w-10 group-hover:bg-accent transition-all duration-300" />
-          </button>
+          </Button>
         )}
       </div>
     </div>

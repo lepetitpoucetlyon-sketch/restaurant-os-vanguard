@@ -4,6 +4,7 @@ import React from 'react';
 import { useNexusFleet } from '@/shared/providers/fleet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
+import { Button } from "@/shared/components/ui/Button";
 
 /**
  * 🛰️ OTABanner - Grade VI (Quantum Orchestrator)
@@ -38,12 +39,12 @@ export const OTABanner: React.FC = () => {
                         </div>
                         
                         <div className="flex items-center gap-2">
-                            <button
+                            <Button variant="ghost"
                                 onClick={handleUpdate}
                                 className="px-4 py-2 bg-primary text-secondary text-xs font-bold rounded-lg hover:bg-primary/90 transition-all uppercase tracking-wider"
                             >
                                 Mettre à jour
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </motion.div>

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { ConnectorId } from '../migration/connectors/types';
 import type { ImportCategory } from '../migration/types';
 import { getGuide, getGuidesForConnector } from './exportGuides';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ExportGuidePanelProps {
   connectorId: ConnectorId;
@@ -28,7 +29,7 @@ export function ExportGuidePanel({ connectorId, category }: ExportGuidePanelProp
       {guides.length > 1 && (
         <div className="flex flex-wrap gap-2">
           {guides.map((g, i) => g && (
-            <button
+            <Button variant="ghost"
               key={i}
               onClick={() => setOpenIdx(i)}
               className={[
@@ -37,7 +38,7 @@ export function ExportGuidePanel({ connectorId, category }: ExportGuidePanelProp
               ].join(' ')}
             >
               {g.title.replace(/Exporter .* depuis /, '')}
-            </button>
+            </Button>
           ))}
         </div>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Landmark, X } from "lucide-react";
+import { Button } from "@/shared/components/ui/Button";
 
 interface BankModalProps {
     open: boolean;
@@ -26,9 +27,9 @@ export function BankModal({ open, url, onClose }: BankModalProps) {
                         <Landmark className="w-4 h-4 text-action-primary" />
                         <span className="text-sm font-medium">Connexion bancaire sécurisée (PSD2)</span>
                     </div>
-                    <button onClick={onClose} className="p-1.5 rounded-md hover:bg-surface-base transition-colors cursor-pointer" aria-label="Fermer">
+                    <Button variant="ghost" onClick={onClose} className="p-1.5 rounded-md hover:bg-surface-base transition-colors cursor-pointer" aria-label="Fermer">
                         <X className="w-4 h-4" aria-hidden="true" />
-                    </button>
+                    </Button>
                 </div>
                 <iframe src={url} className="flex-1 w-full border-0" title="Connexion bancaire sécurisée Powens" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" />
             </div>

@@ -1,6 +1,7 @@
 // @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 import React from 'react';
 import { History, Search } from 'lucide-react';
+import { Input } from "@/shared/components/ui/Input";
 
 export const TraceabilityLog: React.FC = () => {
     return (
@@ -12,7 +13,7 @@ export const TraceabilityLog: React.FC = () => {
                 </h3>
                 <div className="relative">
                     <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-                    <input type="text" placeholder="Rechercher un lot..." className="pl-10 pr-4 py-2 bg-bg-tertiary border border-border rounded-xl text-xs focus:outline-none focus:border-accent-gold" />
+                    <Input type="text" placeholder="Rechercher un lot..." className="pl-10 pr-4 py-2 bg-bg-tertiary border border-border rounded-xl text-xs focus:outline-none focus:border-accent-gold" />
                 </div>
             </div>
             <div className="space-y-3">

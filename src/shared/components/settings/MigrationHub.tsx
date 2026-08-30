@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, BookOpen, Mail, LayoutGrid, FileDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { Button } from "@/shared/components/ui/Button";
 
 const MigrationSettings = dynamic(() => import('./MigrationSettings'), { ssr: false });
 const MigrationGuide = dynamic(() => import('./MigrationGuide'), { ssr: false });
@@ -32,7 +33,7 @@ export default function MigrationHub() {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
-            <button
+            <Button variant="ghost"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={[
@@ -44,7 +45,7 @@ export default function MigrationHub() {
             >
               <Icon className="w-4 h-4" />
               {tab.label}
-            </button>
+            </Button>
           );
         })}
       </div>

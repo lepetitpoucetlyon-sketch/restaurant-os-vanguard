@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from "@/shared/components/ui/Button";
 
 const NAV_LINKS = [
   { label: 'Fonctionnalités', href: '/#features' },
@@ -73,7 +74,7 @@ export function MarketingHeader() {
           </div>
 
           {/* Mobile hamburger */}
-          <button
+          <Button variant="ghost"
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden flex flex-col gap-1.5 p-2"
             aria-label="Menu"
@@ -81,7 +82,7 @@ export function MarketingHeader() {
             <span className={`block w-5 h-0.5 bg-white transition-transform ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
             <span className={`block w-5 h-0.5 bg-white transition-opacity ${mobileOpen ? 'opacity-0' : ''}`} />
             <span className={`block w-5 h-0.5 bg-white transition-transform ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-          </button>
+          </Button>
         </div>
       </div>
 

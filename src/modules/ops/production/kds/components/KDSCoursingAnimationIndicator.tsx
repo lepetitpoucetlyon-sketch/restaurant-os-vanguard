@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, BellRing, Sparkles } from 'lucide-react';
 import { KDSAudioHardwareService } from '../services/KDSAudioHardwareService';
+import { Button } from "@/shared/components/ui/Button";
 
 interface KDSCoursingAnimationIndicatorProps {
   orderId: string;
@@ -63,13 +64,13 @@ export function KDSCoursingAnimationIndicator({
             </div>
 
             {onAcknowledge && (
-              <button
+              <Button variant="ghost"
                 onClick={onAcknowledge}
                 className="flex items-center gap-1 rounded-lg bg-amber-500/20 px-3 py-1.5 text-nano font-black uppercase tracking-wider text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-text-primary transition-colors"
               >
                 <Sparkles className="h-3 w-3" />
                 Compris (Fire)
-              </button>
+              </Button>
             )}
           </div>
         </motion.div>

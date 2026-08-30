@@ -6,6 +6,7 @@ import { OCRUploadZone } from './OCRUploadZone';
 import { PreviewTable } from './PreviewTable';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
+import { Button } from "@/shared/components/ui/Button";
 
 interface ImportCategoryPanelProps {
   category: ImportCategory;
@@ -112,12 +113,12 @@ export function ImportCategoryPanel({
       {state === 'idle' && (
         <div className="space-y-4">
           {connectorId && connectorCredentials && (
-            <button
+            <Button variant="ghost"
               onClick={pullFromConnector}
               className="w-full py-3 px-4 bg-indigo-600 text-white rounded-xl font-medium text-sm hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
             >
               <span>🔗</span> Importer depuis le connecteur
-            </button>
+            </Button>
           )}
           <div className="relative">
             {connectorId && <div className="text-xs text-center text-gray-400 mb-3">— ou glissez un fichier —</div>}
@@ -152,18 +153,18 @@ export function ImportCategoryPanel({
           />
 
           <div className="flex gap-3">
-            <button
+            <Button variant="ghost"
               onClick={() => { setState('idle'); setPreview(null); }}
               className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-xl text-sm hover:bg-gray-50 transition-colors"
             >
               ← Recommencer
-            </button>
-            <button
+            </Button>
+            <Button variant="ghost"
               onClick={confirmImport}
               className="flex-1 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
             >
               ✓ Confirmer et importer
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -185,12 +186,12 @@ export function ImportCategoryPanel({
           <div className="text-2xl mb-1">✅</div>
           <p className="font-medium text-emerald-800">Import terminé</p>
           <p className="text-sm text-emerald-600 mt-1">{rows.length} enregistrements importés</p>
-          <button
+          <Button variant="ghost"
             onClick={() => setState('idle')}
             className="mt-3 text-xs text-emerald-700 underline"
           >
             Importer d&apos;autres données
-          </button>
+          </Button>
         </div>
       )}
 
@@ -198,12 +199,12 @@ export function ImportCategoryPanel({
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center space-y-3">
           <div className="text-2xl">❌</div>
           <p className="text-sm text-red-700">{errorMsg}</p>
-          <button
+          <Button variant="ghost"
             onClick={() => { setState('idle'); setErrorMsg(null); }}
             className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors"
           >
             Réessayer
-          </button>
+          </Button>
         </div>
       )}
     </div>

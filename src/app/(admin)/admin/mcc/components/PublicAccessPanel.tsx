@@ -15,6 +15,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Lock, Unlock, Save, RotateCcw, AlertCircle, CheckCircle2, Globe, UserPlus } from 'lucide-react';
 import { authedFetch } from '@/lib/client/authedFetch';
 import type { PublicAccessConfig } from '@/lib/mcc/PublicAccessConfig';
+import { Button } from "@/shared/components/ui/Button";
 
 const DEFAULTS: PublicAccessConfig = {
     landingEnabled: true,
@@ -143,20 +144,20 @@ export function PublicAccessPanel() {
 
                     {/* Actions */}
                     <div className="flex items-center justify-between gap-3">
-                        <button
+                        <Button variant="ghost"
                             onClick={reset}
                             disabled={!dirty || saving}
                             className="flex items-center gap-2 px-3 py-2 bg-surface border border-default rounded-lg text-sm text-secondary hover:text-primary disabled:opacity-50"
                         >
                             <RotateCcw className="w-4 h-4" /> Annuler
-                        </button>
-                        <button
+                        </Button>
+                        <Button variant="ghost"
                             onClick={() => void save()}
                             disabled={!dirty || saving}
                             className="flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent rounded-lg text-sm text-primary disabled:opacity-50"
                         >
                             <Save className="w-4 h-4" /> {saving ? 'Sauvegarde…' : 'Appliquer'}
-                        </button>
+                        </Button>
                     </div>
 
                     {result && (
@@ -207,7 +208,7 @@ function ToggleRow({ icon: Icon, title, subtitle, enabled, onChange }: ToggleRow
                 </div>
                 <p className="text-xs text-secondary mt-1">{subtitle}</p>
             </div>
-            <button
+            <Button variant="ghost"
                 onClick={() => onChange(!enabled)}
                 aria-pressed={enabled}
                 className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${
@@ -219,7 +220,7 @@ function ToggleRow({ icon: Icon, title, subtitle, enabled, onChange }: ToggleRow
                         enabled ? 'translate-x-5' : 'translate-x-0'
                     }`}
                 />
-            </button>
+            </Button>
         </div>
     );
 }

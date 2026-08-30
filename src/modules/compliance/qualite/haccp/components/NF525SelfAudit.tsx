@@ -18,6 +18,7 @@ import type { AuditCheck, CheckStatus } from './self-audit/selfAuditTypes';
 import { SelfAuditHeader } from './self-audit/SelfAuditHeader';
 import { SelfAuditChecklist } from './self-audit/SelfAuditChecklist';
 import { generateNF525AuditPDF } from './self-audit/selfAuditPdfGenerator';
+import { Button } from "@/shared/components/ui/Button";
 
 export default function NF525SelfAudit() {
   const { tenantId } = useTenant();
@@ -159,13 +160,13 @@ export default function NF525SelfAudit() {
       />
 
       <div className="flex justify-end">
-        <button
+        <Button variant="ghost"
           onClick={() => void generateNF525AuditPDF(checks)}
           className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-text-primary text-bg-primary font-bold text-sm hover:opacity-90 transition-opacity"
         >
           <Download className="w-4 h-4" />
           Générer l'attestation NF525 (PDF)
-        </button>
+        </Button>
       </div>
     </div>
   );

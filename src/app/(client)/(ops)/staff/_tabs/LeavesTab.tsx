@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import type { LeaveRequest } from "@nexus/contracts";
+import { Button } from "@/shared/components/ui/Button";
 import {
     LeaveBalanceCard,
     LeaveRequestCard,
@@ -33,13 +34,13 @@ export function LeavesTab({
                 <h2 className="text-lg font-serif font-semibold text-text-primary">
                     Congés &amp; Absences
                 </h2>
-                <button
+                <Button variant="ghost"
                     onClick={onRequestLeave}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-action-primary text-text-primary text-sm font-bold hover:opacity-90 transition-opacity shadow"
                 >
                     <Plus className="w-4 h-4" />
                     Demander un congé
-                </button>
+                </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { logger } from '@/lib/logger';
 import { Sentry } from '@/lib/sentry';
+import { Button } from "@/shared/components/ui/Button";
 
 export default function GlobalError({
   error,
@@ -46,18 +47,18 @@ export default function GlobalError({
           )}
 
           <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-            <button
+            <Button variant="ghost"
               onClick={() => reset()}
               className="px-6 py-2.5 rounded-xl bg-[#C5A059] hover:bg-[#d4af37] text-black font-semibold text-sm transition-all shadow-lg shadow-[#C5A059]/20"
             >
               Relancer l&apos;application
-            </button>
-            <button
+            </Button>
+            <Button variant="ghost"
               onClick={() => { window.location.href = '/'; }}
               className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-all border border-white/10"
             >
               Retour à l&apos;accueil
-            </button>
+            </Button>
           </div>
         </div>
       </body>

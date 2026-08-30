@@ -11,6 +11,7 @@ import React, { useMemo } from 'react';
 import { AlertTriangle, PackageCheck, Minus, Plus, Wifi, WifiOff, Loader2 } from 'lucide-react';
 import { useSovereignStocks } from '../hooks/useSovereignStocks';
 import type { StockItem } from '../domain/schemas/inventory';
+import { Button } from "@/shared/components/ui/Button";
 
 interface StockLowLevelBoardProps {
     tenantId: string;
@@ -55,11 +56,11 @@ export function StockLowLevelBoard({ tenantId, supplierId }: StockLowLevelBoardP
                             <WifiOff className="w-3 h-3" /> Cache
                         </span>
                     )}
-                    <button
+                    <Button variant="ghost"
                         onClick={() => void refresh()}
                         disabled={isLoading}
                         className="text-xs text-secondary hover:text-primary px-2 py-1"
-                    >↻</button>
+                    >↻</Button>
                 </div>
             </div>
 
@@ -95,27 +96,27 @@ export function StockLowLevelBoard({ tenantId, supplierId }: StockLowLevelBoardP
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <button
+                                    <Button variant="ghost"
                                         onClick={() => void adjustQuantity(item.id, -1, 'manual-decrement')}
                                         disabled={item.quantityInStock <= 0}
                                         className="p-1 hover:bg-red-500/10 rounded text-red-400 disabled:opacity-30"
                                         title="Retirer 1"
-                                    ><Minus className="w-4 h-4" /></button>
+                                    ><Minus className="w-4 h-4" /></Button>
                                     <span className="text-sm font-mono text-primary w-10 text-center">
                                         {item.quantityInStock}
                                     </span>
-                                    <button
+                                    <Button variant="ghost"
                                         onClick={() => void adjustQuantity(item.id, 1, 'manual-increment')}
                                         className="p-1 hover:bg-green-500/10 rounded text-green-400"
                                         title="Ajouter 1"
-                                    ><Plus className="w-4 h-4" /></button>
-                                    <button
+                                    ><Plus className="w-4 h-4" /></Button>
+                                    <Button variant="ghost"
                                         onClick={() => void stampAudit(item.id)}
                                         className="ml-2 text-xs px-2 py-1 bg-accent/10 border border-accent rounded text-primary"
                                         title="Marquer audité"
                                     >
                                         <Loader2 className="w-3 h-3 hidden" /> ✓ Audit
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         );

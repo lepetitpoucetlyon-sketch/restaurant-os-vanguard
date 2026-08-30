@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import { activeCartAtom } from '@/modules/ops';
 import { logger } from '@/lib/logger';
 import { Sentry } from '@/lib/sentry';
+import { Button } from "@/shared/components/ui/Button";
 
 export default function PosError({
   error,
@@ -82,18 +83,18 @@ export default function PosError({
 
         {/* Boutons d'action */}
         <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-          <button
+          <Button variant="ghost"
             onClick={() => reset()}
             className="px-8 py-3 rounded-xl bg-[#C5A059] hover:bg-[#d4af37] text-black font-bold text-sm transition-all shadow-lg shadow-[#C5A059]/25 flex items-center justify-center gap-2"
           >
             <span>🔄</span> Reprendre la commande
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost"
             onClick={() => { window.location.reload(); }}
             className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-all border border-white/10"
           >
             Recharger la caisse
-          </button>
+          </Button>
         </div>
       </div>
     </div>

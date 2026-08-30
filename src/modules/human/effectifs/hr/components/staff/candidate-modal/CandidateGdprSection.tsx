@@ -3,6 +3,7 @@
 import { ShieldCheck, CheckCircle2, Calendar } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import type { Candidate } from "@nexus/contracts";
+import { Button } from "@/shared/components/ui/Button";
 
 interface CandidateGdprSectionProps {
     formData: Partial<Candidate>;
@@ -34,7 +35,7 @@ export function CandidateGdprSection({
                         L'entreprise s'engage à ne pas céder ces données et à respecter le droit à l'effacement.
                     </p>
                     <div className="flex items-center gap-4 mt-6">
-                        <button
+                        <Button variant="ghost"
                             onClick={() => setFormDraft(p => {
                                 const next = p ?? initialFormData;
                                 return {
@@ -55,7 +56,7 @@ export function CandidateGdprSection({
                         >
                             {formData.gdpr?.consented ? <CheckCircle2 className="w-4 h-4" /> : null}
                             {formData.gdpr?.consented ? "Consentement Donné" : "Donner mon consentement"}
-                        </button>
+                        </Button>
                         {formData.gdpr?.consented && (
                             <span className="text-nano font-bold text-success flex items-center gap-2 italic">
                                 <Calendar className="w-3.5 h-3.5" /> Loggé le {new Date().toLocaleDateString('fr-FR')}

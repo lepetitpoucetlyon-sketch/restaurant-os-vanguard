@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { ConnectorId, ConnectorCredentials } from '../migration/connectors/types';
 import { ConnectorRegistry } from '../migration/connectors';
 import { ExportGuidePanel } from '../guides';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ConnectorOAuthPanelProps {
   connectorId: ConnectorId;
@@ -120,13 +121,13 @@ export function ConnectorOAuthPanel({ connectorId, onConnected }: ConnectorOAuth
       )}
 
       {meta.authMethod !== 'oauth2' && (
-        <button
+        <Button variant="ghost"
           onClick={handleTest}
           disabled={testing}
           className="w-full py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-60"
         >
           {testing ? 'Test en cours…' : 'Tester la connexion'}
-        </button>
+        </Button>
       )}
 
       <ExportGuidePanel connectorId={connectorId} />

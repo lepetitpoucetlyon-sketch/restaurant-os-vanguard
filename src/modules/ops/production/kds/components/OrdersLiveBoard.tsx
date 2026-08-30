@@ -16,6 +16,7 @@ import React, { useMemo } from 'react';
 import { ChefHat, Flame, CheckCircle2, Truck, Ban, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignOrders, type SovereignOrderStatus } from '../../../hooks/useSovereignOrders';
 import type { Order } from '../../../domain/schemas/orders';
+import { Button } from "@/shared/components/ui/Button";
 
 interface OrdersLiveBoardProps {
     tenantId: string;
@@ -104,13 +105,13 @@ export function OrdersLiveBoard({ tenantId, tableId }: OrdersLiveBoardProps) {
                             <WifiOff className="w-3 h-3" /> Cache
                         </span>
                     )}
-                    <button
+                    <Button variant="ghost"
                         onClick={() => void refresh()}
                         disabled={isLoading}
                         className="text-xs text-secondary hover:text-primary px-2 py-1 rounded"
                     >
                         ↻
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -166,20 +167,20 @@ export function OrdersLiveBoard({ tenantId, tableId }: OrdersLiveBoardProps) {
                                             </ul>
                                             <div className="flex gap-1">
                                                 {nextStatus && (
-                                                    <button
+                                                    <Button variant="ghost"
                                                         onClick={() => void setStatus(order.id, nextStatus)}
                                                         className="flex-1 px-2 py-1 text-xs bg-accent/10 border border-accent rounded text-primary hover:bg-accent/20"
                                                     >
                                                         → {nextStatus === 'paid' ? 'Encaisser' : nextStatus}
-                                                    </button>
+                                                    </Button>
                                                 )}
-                                                <button
+                                                <Button variant="ghost"
                                                     onClick={() => void cancel(order.id)}
                                                     title="Annuler"
                                                     className="p-1 text-xs text-red-400 hover:bg-red-500/10 rounded"
                                                 >
                                                     <Ban className="w-3 h-3" />
-                                                </button>
+                                                </Button>
                                             </div>
                                         </div>
                                     );

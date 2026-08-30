@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { VerticalLandingData } from '../data/verticals';
+import { Button } from "@/shared/components/ui/Button";
 
 export function VerticalFAQ({ vertical }: { vertical: VerticalLandingData }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -36,7 +37,7 @@ export function VerticalFAQ({ vertical }: { vertical: VerticalLandingData }) {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <button
+              <Button variant="ghost"
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full text-left px-6 py-5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all group"
               >
@@ -66,7 +67,7 @@ export function VerticalFAQ({ vertical }: { vertical: VerticalLandingData }) {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </button>
+              </Button>
             </motion.div>
           ))}
         </div>

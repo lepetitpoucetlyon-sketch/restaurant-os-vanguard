@@ -2,6 +2,7 @@
 
 import { AlertTriangle, XCircle, Info } from 'lucide-react';
 import type { ImportCategory, ImportWarning } from '../types';
+import { Button } from "@/shared/components/ui/Button";
 
 export function WarningBadge({ w }: { w: ImportWarning }) {
   const map = {
@@ -79,19 +80,19 @@ export function ImportPreviewTable({
       </div>
 
       <div className="flex gap-3">
-        <button
+        <Button variant="ghost"
           onClick={onBack}
           className="rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted/50 transition-colors"
         >
           Retour
-        </button>
-        <button
+        </Button>
+        <Button variant="ghost"
           onClick={onImport}
           disabled={hasErrors}
           className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 hover:opacity-90 transition-opacity"
         >
           {hasErrors ? 'Corriger les erreurs avant d\'importer' : `Importer ${rows.length} lignes →`}
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import { Palette, Loader2, AlertTriangle, CheckCircle2, XCircle, ExternalLink } 
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { Button } from "@/shared/components/ui/Button";
 
 // ── Types (miroir léger de la réponse API — évite les imports lourds) ─────────
 
@@ -182,7 +183,7 @@ export function ScrapeCharterPanel({
                         />
                     </div>
                 </div>
-                <button aria-label="Chargement"
+                <Button variant="ghost" aria-label="Chargement"
                     type="button"
                     onClick={handleScrape}
                     disabled={isLoading || !websiteUrl.trim()}
@@ -199,7 +200,7 @@ export function ScrapeCharterPanel({
                             Extraire la charte
                         </>
                     )}
-                </button>
+                </Button>
             </div>
 
             {/* ── Erreur ─────────────────────────────────────────────────────── */}
@@ -337,14 +338,14 @@ export function ScrapeCharterPanel({
                             {result.note}
                         </div>
                         {onCharterExtracted && (
-                            <button
+                            <Button variant="ghost"
                                 type="button"
                                 onClick={handleValidate}
                                 className="flex items-center gap-2 rounded-md bg-green-600 hover:bg-green-500 text-white font-semibold px-4 py-2 transition-colors"
                             >
                                 <CheckCircle2 className="w-4 h-4" />
                                 Valider et utiliser
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </div>

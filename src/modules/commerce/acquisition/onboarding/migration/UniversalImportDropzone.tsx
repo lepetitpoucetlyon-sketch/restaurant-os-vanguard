@@ -9,6 +9,7 @@ import { ColumnMapperUI } from './components/ColumnMapperUI';
 import { ImportPreviewTable, WarningBadge } from './components/ImportPreviewTable';
 import { ImportProgress, ImportReport } from './components/ImportReport';
 import { DropZoneArea, DetectingState } from './components/DropZoneArea';
+import { Button } from "@/shared/components/ui/Button";
 
 const SOURCE_LABELS: Record<string, string> = {
   zenchef: 'Zenchef', thefork: 'TheFork', laddition: "L'Addition",
@@ -57,9 +58,9 @@ export function UniversalImportDropzone({ category, onComplete, compact = false 
           )}
         </div>
         {state.stage !== 'idle' && state.stage !== 'done' && state.stage !== 'error' && (
-          <button onClick={reset} className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+          <Button variant="ghost" onClick={reset} className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
             <RotateCcw className="w-3 h-3" /> Recommencer
-          </button>
+          </Button>
         )}
       </div>
 
@@ -91,10 +92,10 @@ export function UniversalImportDropzone({ category, onComplete, compact = false 
               </div>
               {state.extraWarnings.map((w, i) => <WarningBadge key={i} w={w} />)}
               <div className="flex gap-3">
-                <button onClick={reset} className="rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground">Retour</button>
-                <button onClick={handleStartImport} className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity">
+                <Button variant="ghost" onClick={reset} className="rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground">Retour</Button>
+                <Button variant="ghost" onClick={handleStartImport} className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity">
                   Analyser avec l'IA →
-                </button>
+                </Button>
               </div>
             </div>
           )
@@ -129,12 +130,12 @@ export function UniversalImportDropzone({ category, onComplete, compact = false 
             <XCircle className="w-4 h-4 mt-0.5 shrink-0" />
             <span>{state.error ?? 'Erreur inconnue'}</span>
           </div>
-          <button
+          <Button variant="ghost"
             onClick={reset}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Réessayer
-          </button>
+          </Button>
         </div>
       )}
     </div>

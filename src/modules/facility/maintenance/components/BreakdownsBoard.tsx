@@ -10,6 +10,7 @@
 import React, { useMemo } from 'react';
 import { AlertOctagon, Wrench, PackageOpen, CheckCircle2, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignBreakdowns, type BreakdownStatus } from '../../hooks/useSovereignBreakdowns';
+import { Button } from "@/shared/components/ui/Button";
 
 const COLUMNS: { status: BreakdownStatus; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { status: 'OPEN', label: 'Ouvert', icon: AlertOctagon },
@@ -57,11 +58,11 @@ export function BreakdownsBoard({ tenantId, equipmentId }: BreakdownsBoardProps)
                             <WifiOff className="w-3 h-3" /> Cache
                         </span>
                     )}
-                    <button
+                    <Button variant="ghost"
                         onClick={() => void refresh()}
                         disabled={isLoading}
                         className="text-xs text-secondary hover:text-primary px-2 py-1"
-                    >↻</button>
+                    >↻</Button>
                 </div>
             </div>
 
@@ -95,28 +96,28 @@ export function BreakdownsBoard({ tenantId, equipmentId }: BreakdownsBoardProps)
                                             }`}>{b.severity}</span>
                                             <div className="flex gap-1">
                                                 {b.status === 'OPEN' && (
-                                                    <button
+                                                    <Button variant="ghost"
                                                         onClick={() => void startWork(b.id)}
                                                         className="text-blue-400 hover:underline"
-                                                    >→ Démarrer</button>
+                                                    >→ Démarrer</Button>
                                                 )}
                                                 {b.status === 'IN_PROGRESS' && (
                                                     <>
-                                                        <button
+                                                        <Button variant="ghost"
                                                             onClick={() => void setWaitingParts(b.id)}
                                                             className="text-yellow-400 hover:underline"
-                                                        >Pièces</button>
-                                                        <button
+                                                        >Pièces</Button>
+                                                        <Button variant="ghost"
                                                             onClick={() => void resolve(b.id)}
                                                             className="ml-2 text-green-400 hover:underline"
-                                                        >Résoudre</button>
+                                                        >Résoudre</Button>
                                                     </>
                                                 )}
                                                 {b.status === 'WAITING_PARTS' && (
-                                                    <button
+                                                    <Button variant="ghost"
                                                         onClick={() => void resolve(b.id)}
                                                         className="text-green-400 hover:underline"
-                                                    >Résoudre</button>
+                                                    >Résoudre</Button>
                                                 )}
                                             </div>
                                         </div>

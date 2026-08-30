@@ -13,6 +13,7 @@ import { Brain, Save, RotateCcw, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { authedFetch } from '@/lib/client/authedFetch';
 import { useNexusFleet } from '@/shared/providers/fleet';
 import type { AISettings } from '@/modules/system';
+import { Button } from "@/shared/components/ui/Button";
 
 const AI_MODES = ['cloud', 'souverain', 'mix'] as const;
 const PROVIDER_NAMES = ['gemini', 'anthropic', 'openai', 'mistral', 'sovereign', 'ollama'] as const;
@@ -168,7 +169,7 @@ export function TenantAIConfigPanel() {
                         <h3 className="text-sm font-medium text-primary mb-3">Mode</h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {AI_MODES.map(m => (
-                                <button
+                                <Button variant="ghost"
                                     key={m}
                                     onClick={() => updateMode(m)}
                                     className={`p-3 rounded-lg text-sm capitalize border ${
@@ -178,7 +179,7 @@ export function TenantAIConfigPanel() {
                                     }`}
                                 >
                                     {m}
-                                </button>
+                                </Button>
                             ))}
                         </div>
                         <p className="mt-3 text-xs text-secondary">
@@ -235,7 +236,7 @@ export function TenantAIConfigPanel() {
                                 const idx = (settings.fallbackChain ?? []).indexOf(p);
                                 const active = idx >= 0;
                                 return (
-                                    <button
+                                    <Button variant="ghost"
                                         key={p}
                                         onClick={() => toggleFallback(p)}
                                         className={`px-3 py-1.5 rounded-full text-xs capitalize border ${
@@ -246,7 +247,7 @@ export function TenantAIConfigPanel() {
                                     >
                                         {active && <span className="mr-1 text-accent">#{idx + 1}</span>}
                                         {p}
-                                    </button>
+                                    </Button>
                                 );
                             })}
                         </div>
@@ -258,22 +259,22 @@ export function TenantAIConfigPanel() {
 
                     {/* Actions */}
                     <div className="flex items-center justify-between gap-3">
-                        <button
+                        <Button variant="ghost"
                             onClick={handleReset}
                             disabled={!dirty || isSaving}
                             className="flex items-center gap-2 px-3 py-2 bg-surface border border-default rounded-lg text-sm text-secondary hover:text-primary disabled:opacity-50"
                         >
                             <RotateCcw className="w-4 h-4" />
                             Réinitialiser
-                        </button>
-                        <button
+                        </Button>
+                        <Button variant="ghost"
                             onClick={() => void handleSave()}
                             disabled={!dirty || isSaving}
                             className="flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent rounded-lg text-sm text-primary disabled:opacity-50"
                         >
                             <Save className="w-4 h-4" />
                             {isSaving ? 'Sauvegarde...' : 'Appliquer'}
-                        </button>
+                        </Button>
                     </div>
 
                     {result && (

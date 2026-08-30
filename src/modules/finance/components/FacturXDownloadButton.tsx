@@ -12,6 +12,7 @@ import { useState, useCallback } from "react";
 import { FileCode2 } from "lucide-react";
 import { toast } from "sonner";
 import { AccountingReportService } from '../services/AccountingReportService';
+import { Button } from "@/shared/components/ui/Button";
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ export function FacturXDownloadButton({
     }, [invoiceId, filename]);
 
     return (
-        <button
+        <Button variant="ghost"
             onClick={handleDownload}
             disabled={loading}
             title="Télécharger Factur-X (XML EN16931) — e-facturation B2B 2026"
@@ -74,6 +75,6 @@ export function FacturXDownloadButton({
         >
             <FileCode2 className="w-3.5 h-3.5 shrink-0" />
             {loading ? "Génération…" : "Factur-X (XML)"}
-        </button>
+        </Button>
     );
 }

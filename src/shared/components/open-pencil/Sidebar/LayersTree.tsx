@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { SceneNode, FrameNode } from '@/kernel/open-pencil/schema/PenDocument';
+import { Button } from "@/shared/components/ui/Button";
 import { 
     Layers, Type, Square, Sparkles, Eye, EyeOff, Trash2, ChevronDown, ChevronRight 
 } from 'lucide-react';
@@ -113,7 +114,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
             >
                 <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     {hasChildren ? (
-                        <button
+                        <Button variant="ghost"
                             onClick={e => {
                                 e.stopPropagation();
                                 setIsExpanded(!isExpanded);
@@ -126,7 +127,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
                             ) : (
                                 <ChevronRight className="w-3 h-3" />
                             )}
-                        </button>
+                        </Button>
                     ) : (
                         <div className="w-4" />
                     )}
@@ -136,7 +137,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
 
                 {/* Actions on hover */}
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
+                    <Button variant="ghost"
                         onClick={e => {
                             e.stopPropagation();
                             onUpdateNode(node.id, { visible: node.visible === false ? true : false });
@@ -150,8 +151,8 @@ const LayerItem: React.FC<LayerItemProps> = ({
                         ) : (
                             <Eye className="w-3 h-3" />
                         )}
-                    </button>
-                    <button
+                    </Button>
+                    <Button variant="ghost"
                         onClick={e => {
                             e.stopPropagation();
                             onDeleteNode(node.id);
@@ -161,7 +162,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
                         title="Supprimer"
                     >
                         <Trash2 className="w-3 h-3" />
-                    </button>
+                    </Button>
                 </div>
             </div>
 

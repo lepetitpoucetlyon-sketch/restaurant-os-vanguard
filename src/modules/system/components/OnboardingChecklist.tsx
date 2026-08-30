@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { Button } from "@/shared/components/ui/Button";
 
 export interface OnboardingStep {
   id: string;
@@ -131,12 +132,12 @@ export function OnboardingChecklist({ tenantId, variant = 'restaurant' }: Props)
               </div>
             </div>
 
-            <button
+            <Button variant="ghost"
               onClick={handleDismiss}
               className="text-xs text-white/40 hover:text-white/70 px-2 py-1 rounded transition-colors"
             >
               Masquer
-            </button>
+            </Button>
           </div>
 
           {/* Progress bar */}
@@ -161,7 +162,7 @@ export function OnboardingChecklist({ tenantId, variant = 'restaurant' }: Props)
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <button
+                  <Button variant="ghost"
                     onClick={() => toggleStep(step.id)}
                     className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${
                       step.completed
@@ -170,7 +171,7 @@ export function OnboardingChecklist({ tenantId, variant = 'restaurant' }: Props)
                     }`}
                   >
                     {step.completed && <span className="text-xs font-bold">✓</span>}
-                  </button>
+                  </Button>
                   <div>
                     <span
                       className={`text-sm font-medium ${

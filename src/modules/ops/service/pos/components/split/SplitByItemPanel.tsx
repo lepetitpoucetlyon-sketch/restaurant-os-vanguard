@@ -4,6 +4,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import type { CartItem } from '../../../../workflow/engine/types';
 import type { ConvivePayment } from './types';
+import { Button } from "@/shared/components/ui/Button";
 
 interface SplitByItemPanelProps {
     items: CartItem[];
@@ -38,7 +39,7 @@ export function SplitByItemPanel({
                             {convivePayments.map((_, idx) => {
                                 const isAssigned = (selectedItems[idx] || []).includes(item.cartId);
                                 return (
-                                    <button
+                                    <Button variant="ghost"
                                         key={idx}
                                         onClick={() => onToggleItem(idx, item.cartId)}
                                         className={cn(
@@ -49,7 +50,7 @@ export function SplitByItemPanel({
                                         )}
                                     >
                                         {idx + 1}
-                                    </button>
+                                    </Button>
                                 );
                             })}
                         </div>

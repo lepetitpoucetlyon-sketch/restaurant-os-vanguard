@@ -4,6 +4,7 @@ import React from 'react';
 import { Palette } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import type { TenantOverrides } from '@/modules/system';
+import { Button } from "@/shared/components/ui/Button";
 
 interface BrandingAccessSectionProps {
   form: TenantOverrides;
@@ -28,7 +29,7 @@ export function BrandingAccessSection({
           <p className="text-nano font-bold text-muted">mod_brand_basic</p>
           <p className="text-nano text-secondary mt-0.5">Logo · couleurs · favicon · splash</p>
         </div>
-        <button
+        <Button variant="ghost"
           onClick={() => onUpdateBrandCap('mod_brand_basic', !(form.capabilities?.['mod_brand_basic'] !== false))}
           className={cn(
             'w-10 h-5 rounded-full border transition-all relative shrink-0',
@@ -42,7 +43,7 @@ export function BrandingAccessSection({
             'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
             form.capabilities?.['mod_brand_basic'] !== false ? 'left-5' : 'left-0.5'
           )} />
-        </button>
+        </Button>
       </div>
 
       {/* mod_brand_plus */}
@@ -51,7 +52,7 @@ export function BrandingAccessSection({
           <p className="text-nano font-bold text-muted">mod_brand_plus</p>
           <p className="text-nano text-secondary mt-0.5">Configurateur avancé · AI · presets · polices</p>
         </div>
-        <button
+        <Button variant="ghost"
           onClick={() => onUpdateBrandCap('mod_brand_plus', !(form.capabilities?.['mod_brand_plus'] === true))}
           className={cn(
             'w-10 h-5 rounded-full border transition-all relative shrink-0',
@@ -65,7 +66,7 @@ export function BrandingAccessSection({
             'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
             form.capabilities?.['mod_brand_plus'] === true ? 'left-5' : 'left-0.5'
           )} />
-        </button>
+        </Button>
       </div>
 
       {/* Indicateur d'état actuel (Firestore) */}

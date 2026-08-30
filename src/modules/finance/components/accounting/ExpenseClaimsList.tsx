@@ -19,6 +19,7 @@ import React, { useMemo, useState } from 'react';
 import { CheckCircle2, XCircle, Coins, Trash2, Loader2, ReceiptEuro, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignExpenseClaims } from '../../hooks/useSovereignExpenseClaims';
 import type { ExpenseClaim } from '../../domain/schemas/finance';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ExpenseClaimsListProps {
     tenantId: string;
@@ -98,20 +99,20 @@ export function ExpenseClaimsList({ tenantId, approverId, initialFilter = 'all' 
                             <WifiOff className="w-3 h-3" /> Cache local
                         </span>
                     )}
-                    <button
+                    <Button variant="ghost"
                         onClick={() => void refresh()}
                         className="text-xs text-secondary hover:text-primary px-2 py-1 rounded"
                         disabled={isLoading}
                     >
                         ↻
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Filter tabs */}
             <div className="flex gap-2">
                 {(['all', 'pending', 'approved', 'rejected', 'reimbursed'] as const).map(f => (
-                    <button
+                    <Button variant="ghost"
                         key={f}
                         onClick={() => setStatusFilter(f)}
                         className={`px-3 py-1 text-xs rounded-full border ${
@@ -121,7 +122,7 @@ export function ExpenseClaimsList({ tenantId, approverId, initialFilter = 'all' 
                         }`}
                     >
                         {f === 'all' ? 'Toutes' : STATUS_LABEL[f]}
-                    </button>
+                    </Button>
                 ))}
             </div>
 
@@ -165,39 +166,39 @@ export function ExpenseClaimsList({ tenantId, approverId, initialFilter = 'all' 
                                     {isPending && <Loader2 className="w-4 h-4 animate-spin text-accent" />}
                                     {claim.status === 'pending' && !isPending && (
                                         <>
-                                            <button
+                                            <Button variant="ghost"
                                                 title="Approuver"
                                                 onClick={() => void runAction(claim.id, () => approve(claim.id, approverId))}
                                                 className="p-1.5 rounded hover:bg-green-500/10 text-green-400"
                                             >
                                                 <CheckCircle2 className="w-4 h-4" />
-                                            </button>
-                                            <button
+                                            </Button>
+                                            <Button variant="ghost"
                                                 title="Rejeter"
                                                 onClick={() => void runAction(claim.id, () => reject(claim.id, approverId))}
                                                 className="p-1.5 rounded hover:bg-red-500/10 text-red-400"
                                             >
                                                 <XCircle className="w-4 h-4" />
-                                            </button>
+                                            </Button>
                                         </>
                                     )}
                                     {claim.status === 'approved' && !isPending && (
-                                        <button
+                                        <Button variant="ghost"
                                             title="Marquer remboursée"
                                             onClick={() => void runAction(claim.id, () => reimburse(claim.id))}
                                             className="p-1.5 rounded hover:bg-blue-500/10 text-blue-400"
                                         >
                                             <Coins className="w-4 h-4" />
-                                        </button>
+                                        </Button>
                                     )}
                                     {claim.status === 'pending' && !isPending && (
-                                        <button
+                                        <Button variant="ghost"
                                             title="Supprimer"
                                             onClick={() => void runAction(claim.id, () => remove(claim.id))}
                                             className="p-1.5 rounded hover:bg-red-500/10 text-red-400"
                                         >
                                             <Trash2 className="w-4 h-4" />
-                                        </button>
+                                        </Button>
                                     )}
                                 </div>
                             </div>

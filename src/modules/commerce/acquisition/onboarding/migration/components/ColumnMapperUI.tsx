@@ -2,6 +2,7 @@
 
 import { ArrowRight, AlertTriangle } from 'lucide-react';
 import type { ColumnMapping, TargetField } from '../types';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ColumnMapperUIProps {
   mappings: ColumnMapping[];
@@ -55,13 +56,13 @@ export function ColumnMapperUI({
           Champs obligatoires non mappés : {missingRequired.map(f => f.label).join(', ')}
         </p>
       )}
-      <button
+      <Button variant="ghost"
         onClick={onConfirm}
         disabled={missingRequired.length > 0}
         className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 hover:opacity-90 transition-opacity"
       >
         Valider le mapping → Aperçu
-      </button>
+      </Button>
     </div>
   );
 }

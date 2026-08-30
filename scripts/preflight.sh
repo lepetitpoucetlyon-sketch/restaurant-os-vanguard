@@ -88,7 +88,7 @@ MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en c
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
-DS_OUTSIDE_MAX=87            # écrans fabriquant de l'UI hors design system — 485→87 : mesure enrichie 2026-08-30 (accepte imports @/shared/components/* et tokens sémantiques bg-surface-*/text-brand/text-status-*)
+DS_OUTSIDE_MAX=35            # écrans fabriquant de l'UI hors design system — 485→87 (mesure enrichie) → 35 (codemod <button>→<Button>) 2026-08-30. Reste 35 vraies fabrications custom
 A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 derniers switchs/pulse fixés à la main (SwitchboardItem role=switch, DebugModeSection role=switch, HermesDashboard aria-label)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=0          # conteneurs cliquables non focalisables — 67→0 : DraggableIngredient fixé via onKeyDown explicite après spread {...listeners} (merger dnd-kit + Enter/Space)

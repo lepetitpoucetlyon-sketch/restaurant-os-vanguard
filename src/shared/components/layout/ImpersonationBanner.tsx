@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, X, AlertTriangle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ImpersonationSession {
   sessionId: string;
@@ -52,13 +53,13 @@ export function ImpersonationBanner() {
         <AlertTriangle className="w-4 h-4" />
         <span>MODE IMPERSONATION — Session auditée · Opérateur MCC · Expire dans {expiresIn} min</span>
       </div>
-      <button
+      <Button variant="ghost"
         onClick={handleRevoke}
         className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest bg-black/20 hover:bg-black/30 px-3 py-1 rounded-lg transition-colors"
       >
         <X className="w-3.5 h-3.5" />
         Quitter
-      </button>
+      </Button>
     </div>
   );
 }

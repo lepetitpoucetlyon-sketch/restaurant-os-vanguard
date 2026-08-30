@@ -3,6 +3,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import type { ImportCategory } from '../migration/types';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
+import { Button } from "@/shared/components/ui/Button";
 
 interface OcrResult {
   rows: Record<string, string>[];
@@ -98,7 +99,7 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
             <p className="text-xs text-gray-400 mt-1">PDF, image (JPG/PNG), CSV ou Excel — max 10 Mo</p>
           </div>
           {!fileName && (
-            <button 
+            <Button variant="ghost" 
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
@@ -107,7 +108,7 @@ export function OCRUploadZone({ category, onResult, onError }: OCRUploadZoneProp
               className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer"
             >
               Parcourir
-            </button>
+            </Button>
           )}
         </div>
       )}

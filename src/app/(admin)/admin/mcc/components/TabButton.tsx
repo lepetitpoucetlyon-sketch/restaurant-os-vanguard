@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Button } from "@/shared/components/ui/Button";
 
 export function TabButton({ active, onClick, label, icon }: { active: boolean, onClick: () => void, label: string, icon: React.ReactNode }) {
   return (
-    <button
+    <Button variant="ghost"
       onClick={onClick}
       className={`pb-4 px-2 flex items-center gap-2 border-b-2 transition-all ${active ? 'border-focus text-text-primary' : 'border-transparent text-secondary hover:text-muted'}`}
     >
@@ -12,6 +13,6 @@ export function TabButton({ active, onClick, label, icon }: { active: boolean, o
       </div>
       <span className="text-xs font-bold uppercase tracking-widest">{label}</span>
       {active && <motion.div layoutId="activeTabDot" className="w-1 h-1 rounded-full bg-action-primary" />}
-    </button>
+    </Button>
   );
 }

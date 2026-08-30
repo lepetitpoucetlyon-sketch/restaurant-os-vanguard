@@ -3,6 +3,7 @@
 import type { RefObject } from 'react';
 import { Fingerprint, ShieldCheck, AlertCircle, ChevronLeft, Loader2 } from 'lucide-react';
 import type { CardImprintConfig } from './reservation-widget-types';
+import { Button } from "@/shared/components/ui/Button";
 
 interface Props {
   penalty: number;
@@ -67,16 +68,16 @@ export function CardImprintStep({
       />
 
       <div className="flex gap-3">
-        <button onClick={onBack} disabled={submitting} className={btnSecondary}>
+        <Button variant="ghost" onClick={onBack} disabled={submitting} className={btnSecondary}>
           <ChevronLeft className="w-4 h-4" /> Retour
-        </button>
-        <button className={btnPrimary} disabled={!stripeReady || submitting} onClick={() => void onConfirmCard()}>
+        </Button>
+        <Button variant="ghost" className={btnPrimary} disabled={!stripeReady || submitting} onClick={() => void onConfirmCard()}>
           {submitting ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Traitement…</>
           ) : (
             <><ShieldCheck className="w-4 h-4" /> Confirmer avec garantie</>
           )}
-        </button>
+        </Button>
       </div>
 
       <p className="text-center text-nano text-text-secondary">

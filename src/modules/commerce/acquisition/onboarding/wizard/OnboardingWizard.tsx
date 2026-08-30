@@ -13,6 +13,7 @@ import { ImportCategoryPanel } from './ImportCategoryPanel';
 import { SimpleFloorPlanEditor, type SimpleTable, type SimpleZone } from './SimpleFloorPlanEditor';
 import { OnboardingHelpButton } from './OnboardingHelpButton';
 import { SubdomainSelectorStep } from './SubdomainSelectorStep';
+import { Button } from "@/shared/components/ui/Button";
 
 interface ImportEntry {
   category: ImportCategory;
@@ -195,7 +196,7 @@ export function OnboardingWizard() {
               <h2 className="text-lg font-semibold text-gray-900">Comment souhaitez-vous démarrer ?</h2>
               <p className="text-sm text-gray-500">Votre choix détermine le parcours d&apos;installation</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <button
+                <Button variant="ghost"
                   onClick={() => handleModeSelect('from_zero')}
                   className="p-5 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 text-left transition-all group"
                 >
@@ -207,8 +208,8 @@ export function OnboardingWizard() {
                     <li>✓ Plan de salle à configurer</li>
                     <li>✓ Équipe à ajouter</li>
                   </ul>
-                </button>
-                <button
+                </Button>
+                <Button variant="ghost"
                   onClick={() => handleModeSelect('migration')}
                   className="p-5 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 text-left transition-all group"
                 >
@@ -220,7 +221,7 @@ export function OnboardingWizard() {
                     <li>✓ Clients & historique</li>
                     <li>✓ Comptabilité</li>
                   </ul>
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -235,13 +236,13 @@ export function OnboardingWizard() {
                 onSelect={handleSourceSelect}
               />
               <div className="pt-2 text-right">
-                <button
+                <Button variant="ghost"
                   type="button"
                   onClick={() => complete('source', 'domain')}
                   className="text-xs text-gray-500 hover:text-gray-700 underline"
                 >
                   Passer cette étape →
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -254,13 +255,13 @@ export function OnboardingWizard() {
                 onConnected={handleConnected}
               />
               <div className="pt-2 text-right">
-                <button
+                <Button variant="ghost"
                   type="button"
                   onClick={() => complete('connect', 'domain')}
                   className="text-xs text-gray-500 hover:text-gray-700 underline"
                 >
                   Passer cette étape →
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -297,7 +298,7 @@ export function OnboardingWizard() {
                   const done = importedCategories.includes(entry.category);
                   const active = activeCategory === entry.category;
                   return (
-                    <button
+                    <Button variant="ghost"
                       key={entry.category}
                       onClick={() => setActiveCategory(active ? null : entry.category)}
                       className={[
@@ -310,7 +311,7 @@ export function OnboardingWizard() {
                       <span>{entry.icon}</span>
                       <span>{entry.label}</span>
                       {done && <span className="text-xs">✓</span>}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -363,13 +364,13 @@ export function OnboardingWizard() {
                 <p className="text-xs text-gray-400">
                   Les catégories facultatives peuvent être complétées plus tard
                 </p>
-                <button
+                <Button variant="ghost"
                   onClick={handleDone}
                   disabled={!requiredDone && importedCategories.length === 0}
                   className="px-6 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Continuer →
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -416,44 +417,44 @@ export function OnboardingWizard() {
                       Signer en ligne →
                     </a>
                   ) : (
-                    <button
+                    <Button variant="ghost"
                       onClick={handleDone}
                       className="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors"
                     >
                       Générer le contrat
-                    </button>
+                    </Button>
                   )}
 
-                  <button
+                  <Button variant="ghost"
                     onClick={handleResendSms}
                     className="py-2 px-3 border border-slate-300 hover:bg-slate-100 text-text-muted/60 rounded-xl text-xs font-medium transition-colors"
                     title="Renvoyer le lien de signature par SMS"
                   >
                     📱 Renvoyer par SMS
-                  </button>
+                  </Button>
                 </div>
               </div>
 
               {/* Actions de lancement */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6 flex-wrap">
-                <button
+                <Button variant="ghost"
                   onClick={() => router.push('/settings?tab=onboarding-checklist')}
                   className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20"
                 >
                   📋 Audit J-0 (10 Piliers)
-                </button>
-                <button
+                </Button>
+                <Button variant="ghost"
                   onClick={() => router.push('/pos')}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-600/20"
                 >
                   Ouvrir la caisse
-                </button>
-                <button
+                </Button>
+                <Button variant="ghost"
                   onClick={() => router.push('/operations')}
                   className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
                 >
                   Tableau de bord Opérations
-                </button>
+                </Button>
               </div>
             </div>
           )}

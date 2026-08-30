@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useCallback, useRef } from 'react';
+import { Button } from "@/shared/components/ui/Button";
 
 export interface SimpleTable {
   id: string;
@@ -129,7 +130,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
           <p className="text-sm text-gray-600 mb-3">Choisissez un template de départ ou créez votre plan de zéro :</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {TEMPLATES.map((tpl, i) => (
-              <button
+              <Button variant="ghost"
                 key={i}
                 onClick={() => applyTemplate(tpl)}
                 className="p-3 border-2 border-gray-200 rounded-xl text-left hover:border-indigo-400 hover:bg-indigo-50 transition-all"
@@ -137,16 +138,16 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
                 <div className="text-lg mb-1">🪑</div>
                 <div className="text-xs font-medium text-gray-700">{tpl.name}</div>
                 <div className="text-xs text-gray-400">{tpl.tables.length} tables · {tpl.zones.length} zones</div>
-              </button>
+              </Button>
             ))}
-            <button
+            <Button variant="ghost"
               onClick={() => setTemplateApplied(true)}
               className="p-3 border-2 border-dashed border-gray-300 rounded-xl text-left hover:border-indigo-300 transition-all"
             >
               <div className="text-lg mb-1">✏️</div>
               <div className="text-xs font-medium text-gray-700">Plan personnalisé</div>
               <div className="text-xs text-gray-400">Partir de zéro</div>
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -154,18 +155,18 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
       {templateApplied && (
         <>
           <div className="flex items-center gap-3 flex-wrap">
-            <button onClick={addTable} className="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700 transition-colors">
+            <Button variant="ghost" onClick={addTable} className="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700 transition-colors">
               + Table
-            </button>
-            <button onClick={addZone} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs rounded-lg hover:bg-indigo-50 transition-colors">
+            </Button>
+            <Button variant="ghost" onClick={addZone} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs rounded-lg hover:bg-indigo-50 transition-colors">
               + Zone
-            </button>
-            <button
+            </Button>
+            <Button variant="ghost"
               onClick={() => { setTemplateApplied(false); setTables([]); setZones([{ id: 'z1', name: 'Salle', color: '#EFF6FF' }]); }}
               className="px-3 py-1.5 border border-gray-300 text-gray-500 text-xs rounded-lg hover:bg-gray-50 transition-colors"
             >
               Changer de template
-            </button>
+            </Button>
             <span className="text-xs text-gray-400 ml-auto">{tables.length} table{tables.length > 1 ? 's' : ''} · {tables.reduce((s, t) => s + t.capacity, 0)} couverts</span>
           </div>
 
@@ -278,22 +279,22 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
                   <option value="round">Ronde</option>
                 </select>
               </label>
-              <button
+              <Button variant="ghost"
                 onClick={() => removeTable(selectedTable.id)}
                 className="ml-auto px-2 py-1 bg-red-50 text-red-600 border border-red-200 rounded text-xs hover:bg-red-100 transition-colors"
               >
                 Supprimer
-              </button>
+              </Button>
             </div>
           )}
 
-          <button
+          <Button variant="ghost"
             onClick={() => onSave(tables, zones)}
             disabled={tables.length === 0}
             className="w-full py-2.5 bg-emerald-600 text-white rounded-xl font-medium text-sm hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ✓ Enregistrer le plan de salle ({tables.length} table{tables.length > 1 ? 's' : ''})
-          </button>
+          </Button>
         </>
       )}
     </div>

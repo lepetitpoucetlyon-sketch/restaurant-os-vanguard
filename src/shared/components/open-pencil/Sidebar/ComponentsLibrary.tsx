@@ -7,6 +7,7 @@
 import React from 'react';
 import { SceneNode, FrameNode, TextNode, WidgetNode } from '@/kernel/open-pencil/schema/PenDocument';
 import { createSolidPaint, OPEN_PENCIL_DEFAULT_TYPOGRAPHY } from '@/kernel/open-pencil/schema/StyleTokens';
+import { Button } from "@/shared/components/ui/Button";
 import { 
     Plus, Square, CreditCard, ShoppingCart, TrendingUp, Utensils 
 } from 'lucide-react';
@@ -138,57 +139,57 @@ export const ComponentsLibrary: React.FC<ComponentsLibraryProps> = ({
             <div className="space-y-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-500">Primitives</span>
                 
-                <button
+                <Button variant="ghost"
                     onClick={() => handleAddButton('primary')}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <Square className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
                     <span>Bouton Tactile Or</span>
-                </button>
+                </Button>
 
-                <button
+                <Button variant="ghost"
                     onClick={() => handleAddButton('secondary')}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <Square className="w-4 h-4 text-neutral-400 group-hover:scale-110 transition-transform" />
                     <span>Bouton Neutre</span>
-                </button>
+                </Button>
 
-                <button
+                <Button variant="ghost"
                     onClick={handleAddGlassCard}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <CreditCard className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
                     <span>Carte Glassmorphism</span>
-                </button>
+                </Button>
             </div>
 
             <div className="space-y-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-500">Widgets Métiers</span>
 
-                <button
+                <Button variant="ghost"
                     onClick={() => handleAddWidget('POS_CART', 'Panier d Addition')}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <ShoppingCart className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
                     <span>Panier d Addition POS</span>
-                </button>
+                </Button>
 
-                <button
+                <Button variant="ghost"
                     onClick={() => handleAddWidget('KDS_TICKETS_GRID', 'Ticket KDS')}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <Utensils className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
                     <span>Ticket KDS Cuisine</span>
-                </button>
+                </Button>
 
-                <button
+                <Button variant="ghost"
                     onClick={() => handleAddWidget('KPI_METRICS_SUMMARY', 'Statistiques KPI')}
                     className="w-full p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/10 border border-white/10 hover:border-amber-500/30 text-left flex items-center gap-2.5 text-xs text-neutral-200 transition-all group"
                 >
                     <TrendingUp className="w-4 h-4 text-sky-400 group-hover:scale-110 transition-transform" />
                     <span>Carte Indicateur KPI</span>
-                </button>
+                </Button>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
 
 import { Download, Loader2 } from 'lucide-react';
 import { PayrollStatusBadge } from './PayrollStatusBadge';
+import { Button } from "@/shared/components/ui/Button";
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -18,7 +19,7 @@ export function PayrollCsvTab({ periode, syncStatus, onExport }: PayrollCsvTabPr
                 Export UTF-8 (séparateur <code>;</code>, compatible Excel FR) — Matricule, Heures normales,
                 H.Sup +25%/+50%, Dimanche, Nuit, Fériés, Repas, Absences, CP, Taux, Brut estimé.
             </p>
-            <button
+            <Button variant="ghost"
                 onClick={onExport}
                 disabled={syncStatus === 'loading'}
                 className="flex items-center gap-2 px-4 py-2 bg-status-info hover:bg-blue-700 disabled:opacity-50 text-text-primary text-sm font-medium rounded-lg transition-colors"
@@ -27,7 +28,7 @@ export function PayrollCsvTab({ periode, syncStatus, onExport }: PayrollCsvTabPr
                     ? <Loader2 className="w-4 h-4 animate-spin" />
                     : <Download className="w-4 h-4" />}
                 Télécharger prepaie-{periode}.csv
-            </button>
+            </Button>
             <PayrollStatusBadge status={syncStatus} />
         </div>
     );

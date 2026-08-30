@@ -4,6 +4,7 @@ import { format, addDays, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import type { FormData, Step, TimeSlot } from './reservation-widget-types';
+import { Button } from "@/shared/components/ui/Button";
 
 interface Props {
   step: 1 | 2 | 3;
@@ -29,7 +30,7 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
           const label = format(d, 'EEE d MMM', { locale: fr });
           const selected = form.date === iso;
           return (
-            <button
+            <Button variant="ghost"
               key={iso}
               onClick={() => setField('date', iso)}
               className={`rounded-2xl border px-3 py-4 text-sm font-medium transition-all capitalize ${
@@ -39,13 +40,13 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
               }`}
             >
               {label}
-            </button>
+            </Button>
           );
         })}
       </div>
-      <button className={btnPrimary} disabled={!form.date} onClick={() => go(2)}>
+      <Button variant="ghost" className={btnPrimary} disabled={!form.date} onClick={() => go(2)}>
         Continuer <ChevronRight className="w-4 h-4" />
-      </button>
+      </Button>
     </div>
   );
 
@@ -56,13 +57,13 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
         {form.date ? format(parseISO(form.date), 'EEEE d MMMM', { locale: fr }) : ''}
       </p>
       <div className="flex items-center justify-center gap-6 py-6">
-        <button onClick={() => setField('covers', Math.max(1, form.covers - 1))} className="w-14 h-14 rounded-2xl border-2 border-gray-200 text-2xl font-bold text-gray-700 hover:border-amber-400 hover:bg-amber-50 transition flex items-center justify-center">−</button>
+        <Button variant="ghost" onClick={() => setField('covers', Math.max(1, form.covers - 1))} className="w-14 h-14 rounded-2xl border-2 border-gray-200 text-2xl font-bold text-gray-700 hover:border-amber-400 hover:bg-amber-50 transition flex items-center justify-center">−</Button>
         <span className="text-5xl font-serif font-bold text-gray-900 w-16 text-center">{form.covers}</span>
-        <button onClick={() => setField('covers', Math.min(20, form.covers + 1))} className="w-14 h-14 rounded-2xl border-2 border-gray-200 text-2xl font-bold text-gray-700 hover:border-amber-400 hover:bg-amber-50 transition flex items-center justify-center">+</button>
+        <Button variant="ghost" onClick={() => setField('covers', Math.min(20, form.covers + 1))} className="w-14 h-14 rounded-2xl border-2 border-gray-200 text-2xl font-bold text-gray-700 hover:border-amber-400 hover:bg-amber-50 transition flex items-center justify-center">+</Button>
       </div>
       <div className="flex gap-3">
-        <button onClick={() => go(1)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</button>
-        <button className={btnPrimary} onClick={() => { go(3); fetchSlots(); }}>Continuer <ChevronRight className="w-4 h-4" /></button>
+        <Button variant="ghost" onClick={() => go(1)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</Button>
+        <Button variant="ghost" className={btnPrimary} onClick={() => { go(3); fetchSlots(); }}>Continuer <ChevronRight className="w-4 h-4" /></Button>
       </div>
     </div>
   );
@@ -80,7 +81,7 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
           {slots.map((s) => (
-            <button
+            <Button variant="ghost"
               key={s.time}
               disabled={!s.available}
               onClick={() => setField('time', s.time)}
@@ -91,13 +92,13 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
               }`}
             >
               {s.time}
-            </button>
+            </Button>
           ))}
         </div>
       )}
       <div className="flex gap-3">
-        <button onClick={() => go(2)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</button>
-        <button className={btnPrimary} disabled={!form.time} onClick={() => go(4)}>Continuer <ChevronRight className="w-4 h-4" /></button>
+        <Button variant="ghost" onClick={() => go(2)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</Button>
+        <Button variant="ghost" className={btnPrimary} disabled={!form.time} onClick={() => go(4)}>Continuer <ChevronRight className="w-4 h-4" /></Button>
       </div>
     </div>
   );

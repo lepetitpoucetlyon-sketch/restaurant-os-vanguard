@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
+import { Button } from "@/shared/components/ui/Button";
 
 interface FreshnessRatingProps {
     value: number;
@@ -14,7 +15,7 @@ export const FreshnessRating: React.FC<FreshnessRatingProps> = ({ value, onChang
             <p className="text-nano font-black text-muted uppercase tracking-widest ml-1">Score Fraîcheur</p>
             <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
-                    <button
+                    <Button variant="ghost"
                         key={star}
                         onClick={() => onChange?.(star)}
                         className={cn(
@@ -23,7 +24,7 @@ export const FreshnessRating: React.FC<FreshnessRatingProps> = ({ value, onChang
                         )}
                     >
                         <Star className={cn("w-5 h-5", star <= value && "fill-amber-500")} />
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>

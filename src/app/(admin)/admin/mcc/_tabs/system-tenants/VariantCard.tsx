@@ -8,6 +8,7 @@ import { VERTICAL_META } from '@/modules/system';
 import { TierRow } from './TierRow';
 import { PromotionModal } from './PromotionModal';
 import type { TierInfo } from './TierRow';
+import { Button } from "@/shared/components/ui/Button";
 
 export function VariantCard({ variant, tierConfig }: {
     variant: PlatformVariant;
@@ -22,7 +23,7 @@ export function VariantCard({ variant, tierConfig }: {
         <>
             <div className="border border-default rounded-2xl overflow-hidden">
                 {/* Header */}
-                <button
+                <Button variant="ghost"
                     onClick={() => setCollapsed(c => !c)}
                     className="w-full flex items-center justify-between px-5 py-4 bg-surface-card hover:bg-surface-glass transition-colors"
                 >
@@ -37,7 +38,7 @@ export function VariantCard({ variant, tierConfig }: {
                         ? <ChevronDown className="w-4 h-4 text-muted" />
                         : <ChevronUp className="w-4 h-4 text-muted" />
                     }
-                </button>
+                </Button>
 
                 {/* Tier rows */}
                 {!collapsed && (
