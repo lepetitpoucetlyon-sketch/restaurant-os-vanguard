@@ -50,17 +50,17 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
     },
   },
   healthMetrics: { tablesActive: 'number', coversToday: 'number' },
-  routes: [
-    { path: '/pos', label: 'Caisse POS', componentPath: './ops/POSPage', componentExport: 'POSPage' },
-    { path: '/kds', label: 'KDS Cuisine', componentPath: './ops/KDSPage', componentExport: 'KDSPage' },
-    { path: '/floor-plan', label: 'Plan de Salle', componentPath: './facility/FloorPlanPage', componentExport: 'FloorPlanPage' },
-  ],
-  events: [
-    { name: 'restaurant.order_sent_to_kitchen', pillar: 'ops', durable: true },
-    { name: 'restaurant.table_status_changed', pillar: 'ops', durable: true },
-    { name: 'restaurant.course_next_fired', pillar: 'ops', durable: true },
-    { name: 'restaurant.bill_split_requested', pillar: 'ops' },
-  ],
+// PLAN LOGIQUE MÉTIER LOT H : la verticale restaurant est écrite à la main
+  // (référence produit), pas générée par la forge. Les vraies routes vivent
+  // dans RestaurantVertical.ts (componentLoader dynamique). Ce blueprint est
+  // conservé pour les métadonnées (tokens, healthMetrics, DNA overrides, IA)
+  // consommées par MCC/Sector Studio, mais routes[] est intentionnellement vide.
+  routes: [],
+// PLAN LOGIQUE MÉTIER LOT H : 4 événements 'restaurant.*' étaient déclarés
+  // mais jamais émis (0 émetteur mesuré). La chaîne réelle passe par les
+  // événements ops.* / order.* / reservation.* du bus canonique. Retiré pour
+  // éviter d'induire en erreur les générateurs (forge, sector-study, MCC).
+  events: [],
   hardware: ['receipt_printer', 'kitchen_printer', 'cash_drawer', 'card_terminal', 'barcode_scanner'],
   legalType: 'RESTAURANT',
   dnaOverrides: {
