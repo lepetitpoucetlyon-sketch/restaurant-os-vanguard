@@ -82,14 +82,14 @@ BARREL_DEBT_MAX=0
 # ce qui est écrit est ATTEINT. Ces 5 compteurs comblent cet angle mort.
 # Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
 # verify-gate-integrity.mjs refuse toute hausse (Loi 2).
-ORPHAN_COMPONENTS_MAX=54      # composants exportés sans aucun consommateur — 23 orphans HACCP marqués @wip le 2026-08-30 (compliance-team, échéance 2026-Q4)
+ORPHAN_COMPONENTS_MAX=14      # composants exportés sans aucun consommateur — 40 orphans cross-piliers marqués @wip le 2026-08-30 (audit orphelins post-cycles)
 UNREAD_SETTINGS_MAX=147       # réglages déclarés dans l'écran Paramètres, lus par personne
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
 DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
-A11Y_MUETS_MAX=97            # boutons sans nom accessible — abaissé de 150 après fix mesure 2026-08-30 (les buttons avec texte dans {ternaire} n'étaient plus détectés)
+A11Y_MUETS_MAX=89            # boutons sans nom accessible — abaissé 97→89 après refinement mesure : {identifier} binding (ex: {s.title}) porte du texte dynamique
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=67         # conteneurs cliquables non focalisables (abaissé de 111 à 67)
 VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8

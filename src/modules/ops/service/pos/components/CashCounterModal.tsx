@@ -1,3 +1,4 @@
+// @wip owner:ops-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React, { useState, useMemo } from 'react';
 import { logger } from '@/lib/logger';
 import { formatCurrency } from '@/lib/formatters';

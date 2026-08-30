@@ -1,3 +1,4 @@
+// @wip owner:intelligence-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React, { useEffect, useState } from 'react';
 import { DailyFlashReport, DailyConsolidationService } from '../services/DailyConsolidationService';
 import { useTenant } from '@/shared/providers/NexusCoreProvider';

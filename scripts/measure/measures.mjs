@@ -403,10 +403,11 @@ function analyzeButtonAccessibleName(f, src, rel, muets) {
     const [, attrs, inner] = m;
     if (/aria-label|aria-labelledby|title=/.test(attrs)) continue;
     if (/\{t\(|\{\s*label|children/.test(inner)) continue;
-    // PIÈGE : `{isXxx ? 'texte' : 'autre'}` contient du texte visible mais l'ancienne
-    // regex `\{[^{}]*\}` supprimait tout le bloc → faux positif muet. On préserve
-    // les string-literals visibles ('...' ou "...") AVANT de stripper les braces.
-    // On strip aussi les balises HTML pour révéler leur contenu texte.
+    // PIÈGE 1 : `{isXxx ? 'texte' : 'autre'}` → texte visible mais l'ancienne
+    // regex `\{[^{}]*\}` supprimait tout le bloc → faux positif. On extrait
+    // les string-literals avant de stripper les braces.
+    // PIÈGE 2 : `<span>{action}</span>` où `action` est une variable de .map()
+    // ou une prop porte du texte à runtime. Détecté par `{IDENTIFIER}` seul.
     let texte = inner.replace(/<[^>]+>/g, '');
     // Extraire toutes les string-literals ('...' ou "..." ou `...`) hors bindings
     const literals = [];
@@ -414,11 +415,18 @@ function analyzeButtonAccessibleName(f, src, rel, muets) {
       const val = lit[2].trim();
       if (val && !/^(px|em|rem|%|#[0-9a-f]+|https?:|\/[a-z])/i.test(val)) literals.push(val);
     }
+    // Détecter les bindings simples `{identifier}` ou `{obj.prop}` ou `{fn()}`
+    // qui portent du contenu textuel dynamique. Exclut les className/style patterns.
+    const bindings = [...texte.matchAll(/\{\s*([a-zA-Z_$][\w.$]*)\s*(\([^)]*\))?\s*\}/g)]
+      .map((mm) => mm[1])
+      .filter((id) => !/^(className|style|key|ref|onClick|onKeyDown|type|disabled|_)/i.test(id));
     // Strip braces (récursif — {a {b} c} → strip inner puis outer)
     let prev;
     do { prev = texte; texte = texte.replace(/\{[^{}]*\}/g, ''); } while (texte !== prev);
     texte = texte.trim();
-    if (!texte && literals.length === 0) muets.push(`${rel(f)} — bouton sans nom accessible`);
+    if (!texte && literals.length === 0 && bindings.length === 0) {
+      muets.push(`${rel(f)} — bouton sans nom accessible`);
+    }
   }
 }
 

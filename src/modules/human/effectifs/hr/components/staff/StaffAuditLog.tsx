@@ -1,3 +1,4 @@
+// @wip owner:hr-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { motion } from "framer-motion";
 import { Shield, User as UserIcon } from "lucide-react";
 import { format } from "date-fns";
