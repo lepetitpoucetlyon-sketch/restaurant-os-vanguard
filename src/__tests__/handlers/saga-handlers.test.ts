@@ -440,7 +440,7 @@ describe('C09 · SovereignBreachHandler (sovereign.breach → kill-switch)', () 
       message: 'Accès cross-tenant détecté',
       targetTenantId: 'ten2',
       anchoredTenantId: 'ten1',
-      path: 'tenants/ten2/orders',
+      path: 'tenants/ten2/ops_flows',
       isSimulation: false,
     });
 
@@ -654,7 +654,7 @@ describe('C15 · TableAutoReleaseHandler (table.cleared → libération si sessi
     await handler({ tenantId: 'ten1', tableId: 'T-12', sessionEnd: true });
 
     expect(Nexus.adapter.update).toHaveBeenCalledWith(
-      'tenants/ten1/tables/T-12',
+      'tenants/ten1/ops_nodes/T-12',
       expect.objectContaining({ status: 'available', seatedAt: null }),
     );
     expect(empireAudit.log).toHaveBeenCalledWith(

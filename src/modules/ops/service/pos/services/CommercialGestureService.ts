@@ -33,7 +33,7 @@ export class CommercialGestureService {
     const now = input.now ?? Date.now();
 
     const order = await Nexus.adapter.get<Record<string, unknown>>(
-      `tenants/${input.tenantId}/orders/${input.orderId}`,
+      `tenants/${input.tenantId}/ops_flows/${input.orderId}`,
     );
     if (!order) throw new Error(`Commande ${input.orderId} introuvable`);
 
@@ -52,7 +52,7 @@ export class CommercialGestureService {
       return i;
     });
 
-    await Nexus.adapter.set(`tenants/${input.tenantId}/orders/${input.orderId}`, { ...order, items });
+    await Nexus.adapter.set(`tenants/${input.tenantId}/ops_flows/${input.orderId}`, { ...order, items });
 
     const gestureRecord = {
       id: `gesture_${input.orderId}_${input.cartId}_${now}`,

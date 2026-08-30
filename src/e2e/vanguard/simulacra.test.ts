@@ -70,7 +70,7 @@ describe('SimulacraMode via NexusInterceptor', () => {
         it('un write en mode Simulacra ne doit PAS persister dans le RealAdapter', async () => {
             await Nexus.activateSimulacraMode('test-fork');
             
-            const testPath = 'tenants/tenant-A/orders/123';
+            const testPath = 'tenants/tenant-A/ops_flows/123';
             const testData = { id: '123', total: 100 };
             
             await Nexus.adapter.set(testPath, testData);
@@ -97,7 +97,7 @@ describe('SimulacraMode via NexusInterceptor', () => {
             await Nexus.activateSimulacraMode('test-fork');
             
             try {
-                await Nexus.adapter.get('tenants/tenant-B/orders/123');
+                await Nexus.adapter.get('tenants/tenant-B/ops_flows/123');
                 expect.fail('Should have thrown ACCESS_DENIED');
             } catch (error: any) {
                 expect(error.toString()).toContain('ACCESS_DENIED');

@@ -17,7 +17,7 @@ export function registerTableTransferHandler(): () => void {
 
       try {
         // 1. Mettre à jour l'ordre avec le nouveau tableId
-        const orderPath = `tenants/${tenantId}/orders/${orderId}`;
+        const orderPath = `tenants/${tenantId}/ops_flows/${orderId}`;
         const order = await Nexus.adapter.get<{ tableId?: string }>(orderPath);
         if (order) {
           await Nexus.adapter.update(orderPath, {

@@ -15,7 +15,7 @@ export function registerTableTurnoverAnalyzerHandler() {
     async (payload) => {
       const { tenantId, tableId, partySize } = payload;
       
-      await Nexus.adapter.set(`tenants/${tenantId}/tables/${tableId}/currentSession`, {
+      await Nexus.adapter.set(`tenants/${tenantId}/ops_nodes/${tableId}/currentSession`, {
         seatedAt: Date.now(),
         partySize
       });
@@ -37,7 +37,7 @@ export function registerTableTurnoverAnalyzerHandler() {
     async (payload) => {
       const { tenantId, tableId } = payload;
       
-      const sessionPath = `tenants/${tenantId}/tables/${tableId}/currentSession`;
+      const sessionPath = `tenants/${tenantId}/ops_nodes/${tableId}/currentSession`;
       const session = await Nexus.adapter.get<TableSession>(sessionPath);
       
       if (session && session.seatedAt) {
@@ -55,7 +55,7 @@ export function registerTableTurnoverAnalyzerHandler() {
         });
         
         // Nettoyage de la session courante
-        await Nexus.adapter.update(`tenants/${tenantId}/tables/${tableId}`, {
+        await Nexus.adapter.update(`tenants/${tenantId}/ops_nodes/${tableId}`, {
           currentSession: null
         });
       }

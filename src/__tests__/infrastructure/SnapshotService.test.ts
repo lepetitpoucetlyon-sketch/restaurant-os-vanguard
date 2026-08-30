@@ -28,7 +28,7 @@ async function seedTenant(adapter: MockAdapter, tenantId: string) {
         name: 'Salade César',
         priceInMicrounits: 8_500_000,
     });
-    await adapter.set(`tenants/${tenantId}/orders/o1`, {
+    await adapter.set(`tenants/${tenantId}/ops_flows/o1`, {
         id: 'o1',
         totalMu: 20_500_000,
         status: 'PAID',
@@ -55,7 +55,7 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
     const tenantId = 'tenant_snap_test';
     const collections = [
         'products',
-        'orders',
+        'ops_flows',
         'users',
         'journalEntries',
         'fiscalSeals',
@@ -71,7 +71,7 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
     it('sérialise puis restaure à l’identique les collections mutables', async () => {
         const before = {
             products: await adapter.query(`tenants/${tenantId}/products`),
-            orders: await adapter.query(`tenants/${tenantId}/orders`),
+            ops_flows: await adapter.query(`tenants/${tenantId}/ops_flows`),
             users: await adapter.query(`tenants/${tenantId}/users`),
         };
 
@@ -86,7 +86,7 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
         expect(snap.checksum).toMatch(/^[a-f0-9]{64}$/);
         expect(snap.payload.counts).toMatchObject({
             products: 2,
-            orders: 1,
+            ops_flows: 1,
             users: 1,
             journalEntries: 1,
             fiscalSeals: 1,
@@ -96,12 +96,12 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
         const allPaths = [
             `tenants/${tenantId}/products/p1`,
             `tenants/${tenantId}/products/p2`,
-            `tenants/${tenantId}/orders/o1`,
+            `tenants/${tenantId}/ops_flows/o1`,
             `tenants/${tenantId}/users/u1`,
         ];
         for (const p of allPaths) await adapter.delete(p);
         expect(await adapter.query(`tenants/${tenantId}/products`)).toHaveLength(0);
-        expect(await adapter.query(`tenants/${tenantId}/orders`)).toHaveLength(0);
+        expect(await adapter.query(`tenants/${tenantId}/ops_flows`)).toHaveLength(0);
 
         // 3) RESTORE
         const result = await restoreSnapshot(adapter, snap.buffer, {
@@ -112,7 +112,7 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
         expect(result.tenantId).toBe(tenantId);
         expect(result.restoredCollections).toEqual({
             products: 2,
-            orders: 1,
+            ops_flows: 1,
             users: 1,
         });
         // NF525 collections skippées
@@ -124,12 +124,12 @@ describe('SnapshotService — end-to-end backup + restore (provider-agnostic)', 
         // 4) ASSERT égalité byte-pour-byte des collections restaurées
         const after = {
             products: await adapter.query(`tenants/${tenantId}/products`),
-            orders: await adapter.query(`tenants/${tenantId}/orders`),
+            ops_flows: await adapter.query(`tenants/${tenantId}/ops_flows`),
             users: await adapter.query(`tenants/${tenantId}/users`),
         };
         expect(after.products).toEqual(expect.arrayContaining(before.products));
         expect(after.products).toHaveLength(before.products.length);
-        expect(after.orders).toEqual(before.orders);
+        expect(after.ops_flows).toEqual(before.ops_flows);
         expect(after.users).toEqual(before.users);
     });
 

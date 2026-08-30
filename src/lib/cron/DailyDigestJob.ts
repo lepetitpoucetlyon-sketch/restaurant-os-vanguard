@@ -22,7 +22,7 @@ export const DailyDigestJob = {
 
     try {
       // Récupérer les commandes du jour
-      const orders = await Nexus.adapter.query<OrderRecord>(`tenants/${tenantId}/orders`);
+      const orders = await Nexus.adapter.query<OrderRecord>(`tenants/${tenantId}/ops_flows`);
       const paidOrders = orders.filter((o: OrderRecord) => o.status === 'paid' || o.status === 'completed');
 
       const totalRevenueInMicrounits = paidOrders.reduce((acc: number, o: OrderRecord) => acc + (o.totalInMicrounits ?? 0), 0);

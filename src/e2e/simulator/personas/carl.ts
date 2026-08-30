@@ -9,7 +9,7 @@ export const carlPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<
 
   acts.push(await runAct('KDS: onSnapshot(orders) → receive ticket', 'KDS', async () => {
     const orders = await Nexus.adapter.query<{ id: string; status: string }>(
-      `tenants/${tenantId}/orders`
+      `tenants/${tenantId}/ops_flows`
     );
     const pending = orders.filter(o => o.status === 'pending');
     orderId = pending[0]?.id ?? '';
@@ -37,7 +37,7 @@ export const carlPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<
   }
 
   acts.push(await runAct('KDS: markPreparing()', 'KDS', async () => {
-    await Nexus.adapter.update(`tenants/${tenantId}/orders/${orderId}`, {
+    await Nexus.adapter.update(`tenants/${tenantId}/ops_flows/${orderId}`, {
       status: 'preparing',
       operatorId,
       preparingAt: new Date().toISOString(),
@@ -46,7 +46,7 @@ export const carlPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<
   }));
 
   acts.push(await runAct('KDS: completeTicket() → ORDER_SERVED', 'KDS', async () => {
-    await Nexus.adapter.update(`tenants/${tenantId}/orders/${orderId}`, {
+    await Nexus.adapter.update(`tenants/${tenantId}/ops_flows/${orderId}`, {
       status: 'served',
       servedAt: new Date().toISOString(),
     });
@@ -54,7 +54,7 @@ export const carlPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<
   }));
 
   const success = acts.every(a => a.success);
-  const finalOrder = await Nexus.adapter.get(`tenants/${tenantId}/orders/${orderId}`);
+  const finalOrder = await Nexus.adapter.get(`tenants/${tenantId}/ops_flows/${orderId}`);
 
   return {
     personaId: 'carl',

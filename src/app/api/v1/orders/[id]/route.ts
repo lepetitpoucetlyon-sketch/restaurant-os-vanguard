@@ -22,7 +22,7 @@ export async function GET(
     const tenantId = caller.tenantId;
 
     const order = (await Nexus.adapter.get(
-      `tenants/${tenantId}/orders/${id}`
+      `tenants/${tenantId}/ops_flows/${id}`
     )) as Order | null;
 
     if (!order) {

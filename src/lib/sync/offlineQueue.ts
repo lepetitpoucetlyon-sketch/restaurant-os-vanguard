@@ -34,7 +34,7 @@ export class OfflineQueueService {
             instructions: [
                 {
                     method: 'SET',
-                    path: `tenants/${tenantId}/orders/${order.id}`,
+                    path: `tenants/${tenantId}/ops_flows/${order.id}`,
                     data: order,
                 },
                 {
@@ -56,7 +56,7 @@ export class OfflineQueueService {
         const op: Omit<SyncOperation, 'status' | 'attempts' | 'timestamp'> = {
             type: 'NF525_PAYMENT',
             action: 'COMMIT_BATCH',
-            collection: `tenants/${tenantId}/orders`,
+            collection: `tenants/${tenantId}/ops_flows`,
             targetId: order.id,
             payload: syncPayload,
             priority: 1, // Priorité absolue NF525

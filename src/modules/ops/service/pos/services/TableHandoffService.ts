@@ -21,7 +21,7 @@ export class TableHandoffService {
         logger.info(`[Handoff] Demande de transfert order ${orderId} de ${fromOperatorId} à ${toOperatorId}`);
 
         // 1. Récupérer la commande
-        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/orders/${orderId}`);
+        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/ops_flows/${orderId}`);
         
         if (!order) {
             throw new Error(`Commande ${orderId} introuvable.`);
@@ -36,7 +36,7 @@ export class TableHandoffService {
         order.operatorId = toOperatorId;
         
         // On sauvegarde
-        await Nexus.adapter.set(`tenants/${tenantId}/orders/${orderId}`, order);
+        await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${orderId}`, order);
 
         // 3. Log Audit Inaltérable (Souveraineté)
         empireAudit.log({

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const tenantId = caller.tenantId;
-    const rawTables = (await Nexus.adapter.get(`tenants/${tenantId}/tables`)) as
+    const rawTables = (await Nexus.adapter.get(`tenants/${tenantId}/ops_nodes`)) as
       | Record<string, Table>
       | Table[]
       | null;

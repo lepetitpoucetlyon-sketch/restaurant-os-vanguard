@@ -95,7 +95,7 @@ export function useSovereignOrders(
         update,
         delete: del,
         refresh,
-    } = useSovereignCollection<Order>('orders', {
+    } = useSovereignCollection<Order>('ops_flows', {
         tenantId,
         autoSync,
         filter,

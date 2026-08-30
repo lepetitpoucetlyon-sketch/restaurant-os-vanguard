@@ -26,7 +26,7 @@ describe('OutboxService', () => {
         it('enfile une opération avec status pending et timestamp', async () => {
             const id = await OutboxService.enqueue({
                 action: 'SET',
-                collection: 'tenants/t1/orders',
+                collection: 'tenants/t1/ops_flows',
                 targetId: 'o1',
                 payload: { total: 100 },
             });
@@ -75,7 +75,7 @@ describe('OutboxService', () => {
         it('propage un eventId explicite dans payload._eventId (idempotence)', async () => {
             await OutboxService.enqueue({
                 action: 'SET',
-                collection: 'tenants/t1/orders',
+                collection: 'tenants/t1/ops_flows',
                 targetId: 'o1',
                 payload: { total: 100 },
                 eventId: 'evt-custom-123',
@@ -87,7 +87,7 @@ describe('OutboxService', () => {
         it('génère un eventId auto si absent', async () => {
             await OutboxService.enqueue({
                 action: 'SET',
-                collection: 'tenants/t1/orders',
+                collection: 'tenants/t1/ops_flows',
                 targetId: 'o1',
                 payload: { total: 100 },
             });
@@ -110,7 +110,7 @@ describe('OutboxService', () => {
         it('drain SET → écrit dans le storage cible et supprime l’entrée', async () => {
             await OutboxService.enqueue({
                 action: 'SET',
-                collection: 'tenants/t1/orders',
+                collection: 'tenants/t1/ops_flows',
                 targetId: 'o1',
                 payload: { total: 100 },
             });
@@ -119,7 +119,7 @@ describe('OutboxService', () => {
             expect(res.remaining).toBe(0);
 
             // Vérif par résultat : le doc est visible via Nexus (path scopé par tenant)
-            const stored = (await Nexus.adapter.get('tenants/t1/orders/o1')) as Record<string, unknown> | null;
+            const stored = (await Nexus.adapter.get('tenants/t1/ops_flows/o1')) as Record<string, unknown> | null;
             expect(stored).toBeTruthy();
             expect(stored?.total).toBe(100);
             expect(await db.syncQueue.count()).toBe(0);
@@ -127,18 +127,18 @@ describe('OutboxService', () => {
 
         it('drain DELETE → retire le doc du storage', async () => {
             // Semer un doc préalable
-            await Nexus.adapter.set('tenants/t1/orders/o1', { id: 'o1', total: 100 });
-            expect(await Nexus.adapter.get('tenants/t1/orders/o1')).toBeTruthy();
+            await Nexus.adapter.set('tenants/t1/ops_flows/o1', { id: 'o1', total: 100 });
+            expect(await Nexus.adapter.get('tenants/t1/ops_flows/o1')).toBeTruthy();
 
             await OutboxService.enqueue({
                 action: 'DELETE',
-                collection: 'tenants/t1/orders',
+                collection: 'tenants/t1/ops_flows',
                 targetId: 'o1',
                 payload: { id: 'o1' },
             });
             const res = await OutboxService.drain();
             expect(res.succeeded).toBe(1);
-            expect(await Nexus.adapter.get('tenants/t1/orders/o1')).toBeNull();
+            expect(await Nexus.adapter.get('tenants/t1/ops_flows/o1')).toBeNull();
         });
 
         it('drain traite les entrées priority=1 AVANT priority=0', async () => {

@@ -95,7 +95,7 @@ export function useSovereignTables(
         update,
         delete: del,
         refresh,
-    } = useSovereignCollection<Table>('tables', {
+    } = useSovereignCollection<Table>('ops_nodes', {
         tenantId,
         autoSync,
         filter,

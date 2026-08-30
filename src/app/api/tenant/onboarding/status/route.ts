@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
 
         // Vérification live des readyChecks
         const [tables, products] = await Promise.all([
-            Nexus.adapter.query(`tenants/${caller.tenantId}/tables`).then(r => r.length > 0),
+            Nexus.adapter.query(`tenants/${caller.tenantId}/ops_nodes`).then(r => r.length > 0),
             Nexus.adapter.query(`tenants/${caller.tenantId}/products`).then(r => r.length > 0),
         ]);
 

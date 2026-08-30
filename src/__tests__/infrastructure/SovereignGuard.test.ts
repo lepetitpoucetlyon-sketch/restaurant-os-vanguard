@@ -25,7 +25,7 @@ describe('SovereignGuard', () => {
     });
 
     it('allows deletion of normal collections', () => {
-      expect(SovereignGuard.canDelete('tenants/123/orders/doc')).toBe(true);
+      expect(SovereignGuard.canDelete('tenants/123/ops_flows/doc')).toBe(true);
       expect(SovereignGuard.canDelete('tenants/123/products/doc')).toBe(true);
     });
   });
@@ -39,7 +39,7 @@ describe('SovereignGuard', () => {
     });
 
     it('allows update of mutable business collections', () => {
-      expect(SovereignGuard.canUpdate('tenants/123/orders/doc')).toBe(true);
+      expect(SovereignGuard.canUpdate('tenants/123/ops_flows/doc')).toBe(true);
       expect(SovereignGuard.canUpdate('tenants/123/products/doc')).toBe(true);
       expect(SovereignGuard.canUpdate('tenants/123/stockItems/doc')).toBe(true);
     });
@@ -66,11 +66,11 @@ describe('SovereignGuard', () => {
 
   describe('extractCollectionName', () => {
     it('extracts from document path (even length)', () => {
-      expect(SovereignGuard.extractCollectionName('tenants/123/orders/456')).toBe('orders');
+      expect(SovereignGuard.extractCollectionName('tenants/123/ops_flows/456')).toBe('ops_flows');
     });
 
     it('extracts from collection path (odd length)', () => {
-      expect(SovereignGuard.extractCollectionName('tenants/123/orders')).toBe('orders');
+      expect(SovereignGuard.extractCollectionName('tenants/123/ops_flows')).toBe('ops_flows');
     });
 
     it('returns empty string for empty path', () => {
@@ -85,13 +85,13 @@ describe('SovereignGuard', () => {
     });
 
     it('identifies unsealed paths', async () => {
-      expect(await SovereignGuard.isFiscallySealed('tenants/1/orders/2', { vassalId: '1' })).toBe(false);
+      expect(await SovereignGuard.isFiscallySealed('tenants/1/ops_flows/2', { vassalId: '1' })).toBe(false);
     });
   });
 
   describe('resolveTenantForPath', () => {
     it('extracts tenant from scoped path', () => {
-      expect(SovereignGuard.resolveTenantForPath('tenants/tenant_a/orders', 'tenant_b')).toBe('tenant_a');
+      expect(SovereignGuard.resolveTenantForPath('tenants/tenant_a/ops_flows', 'tenant_b')).toBe('tenant_a');
     });
 
     it('uses anchored tenant for root paths', () => {
@@ -104,7 +104,7 @@ describe('SovereignGuard', () => {
       expect(SovereignGuard.requiresSignedWrite('tenants/123/fiscalSeals/doc')).toBe(true);
       expect(SovereignGuard.requiresSignedWrite('tenants/123/journalEntries/doc')).toBe(true);
       expect(SovereignGuard.requiresSignedWrite('tenants/123/fiscalLedger/doc')).toBe(true);
-      expect(SovereignGuard.requiresSignedWrite('tenants/123/orders/doc')).toBe(true);
+      expect(SovereignGuard.requiresSignedWrite('tenants/123/ops_flows/doc')).toBe(true);
       expect(SovereignGuard.requiresSignedWrite('tenants/123/wasteLogs/doc')).toBe(true);
     });
 

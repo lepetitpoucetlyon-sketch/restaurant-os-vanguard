@@ -42,7 +42,7 @@ export function registerStockRestitutionHandler(): () => void {
       const { tenantId, orderId, operatorId, reason } = payload;
       
       // 1. Lire la commande annulée pour récupérer ses items (orders POS direct, flows de service, ou deliveryOrders)
-      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/orders/${orderId}`)
+      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/ops_flows/${orderId}`)
                  || await Nexus.adapter.get<Order>(`tenants/${tenantId}/flows/${orderId}`) 
                  || await Nexus.adapter.get<Order>(`tenants/${tenantId}/deliveryOrders/${orderId}`);
       

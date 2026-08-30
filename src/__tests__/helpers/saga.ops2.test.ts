@@ -552,7 +552,7 @@ describe('TableTurnoverAnalyzerHandler', () => {
     await capturedHandlers['table.assigned']({ tenantId: T, tableId: 'tbl-1', partySize: 3 });
 
     expect(mockSet).toHaveBeenCalledWith(
-      `tenants/${T}/tables/tbl-1/currentSession`,
+      `tenants/${T}/ops_nodes/tbl-1/currentSession`,
       expect.objectContaining({ partySize: 3 }),
     );
   });

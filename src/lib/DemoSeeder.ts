@@ -48,7 +48,7 @@ export class DemoSeeder {
         ];
 
         for (const t of tables) {
-            await Nexus.adapter.set(`tenants/${tenantId}/tables/${t.id}`, t);
+            await Nexus.adapter.set(`tenants/${tenantId}/ops_nodes/${t.id}`, t);
         }
 
         // 4. Identities (HR) - Fake Employees
@@ -78,7 +78,7 @@ export class DemoSeeder {
         ];
 
         for (const o of orders) {
-            await Nexus.adapter.set(`tenants/${tenantId}/orders/${o.id}`, o);
+            await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${o.id}`, o);
         }
 
         logger.info(`[DemoSeeder] Provisioning Complete. Welcome to Le Petit Poucet.`);

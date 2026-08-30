@@ -88,7 +88,7 @@ export class FinanceCore {
         const { Nexus } = await import('@/lib/nexus/NexusAdapter');
         
         // 1. Fetch all paid orders for the day
-        const ordersPath = `tenants/${tenantId}/orders`;
+        const ordersPath = `tenants/${tenantId}/ops_flows`;
         // In production, use range queries for efficiency.
         const dayOrders = await Nexus.adapter.query(ordersPath, {
             where: [

@@ -49,7 +49,7 @@ export class AgecCarafeService {
     const line = this.buildLine(input.couverts, now);
 
     await Nexus.adapter.set(
-      `tenants/${input.tenantId}/orders/${input.orderId}/agec_carafe`,
+      `tenants/${input.tenantId}/ops_flows/${input.orderId}/agec_carafe`,
       { ...line, orderId: input.orderId, attachedBy: input.operatorId },
     );
 

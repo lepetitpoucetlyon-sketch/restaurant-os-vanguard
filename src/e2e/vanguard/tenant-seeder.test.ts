@@ -69,7 +69,7 @@ describe('TenantSeeder', () => {
       expect.objectContaining({ name: 'Salle principale', level: 0 })
     );
     const tableCalls = mockSet.mock.calls.filter(
-      (c: unknown[]) => typeof c[0] === 'string' && (c[0] as string).startsWith('tenants/test-resto/tables/')
+      (c: unknown[]) => typeof c[0] === 'string' && (c[0] as string).startsWith('tenants/test-resto/ops_nodes/')
     );
     expect(tableCalls.length).toBe(10);
   });

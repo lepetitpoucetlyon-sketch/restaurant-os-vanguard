@@ -220,7 +220,7 @@ describe('🎭 Vanguard Simulator — 4 personas · Simulacra engine', () => {
   describe('SovereignGuard — isolation cross-tenant', () => {
     it("bloque l'accès aux données d'un autre tenant", async () => {
       await expect(
-        Nexus.adapter.get('tenants/tenant-PIRATE/orders/123')
+        Nexus.adapter.get('tenants/tenant-PIRATE/ops_flows/123')
       ).rejects.toThrow(/ACCESS_DENIED/);
     });
 

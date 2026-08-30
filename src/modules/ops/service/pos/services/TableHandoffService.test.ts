@@ -23,7 +23,7 @@ describe('🤝 TableHandoffService — Transfert de Propriété de Table', () =>
     await TableHandoffService.transferOwnership('tenant_lyon_01', 'ord_123', 'srv_lucas', 'srv_camille');
 
     expect(spySet).toHaveBeenCalledWith(
-      'tenants/tenant_lyon_01/orders/ord_123',
+      'tenants/tenant_lyon_01/ops_flows/ord_123',
       expect.objectContaining({
         operatorId: 'srv_camille',
       })
@@ -60,7 +60,7 @@ describe('🤝 TableHandoffService — Transfert de Propriété de Table', () =>
     );
 
     expect(spySet).toHaveBeenCalledWith(
-      'tenants/tenant_lyon_01/orders/ord_456',
+      'tenants/tenant_lyon_01/ops_flows/ord_456',
       expect.objectContaining({
         operatorId: 'srv_camille',
       })

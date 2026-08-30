@@ -240,9 +240,9 @@ export const TenantSeeder = {
         updatedAt: now,
       }));
       await Promise.all(
-        tables.map((t) => Nexus.adapter.set(`tenants/${tenantId}/tables/${t.id}`, t))
+        tables.map((t) => Nexus.adapter.set(`tenants/${tenantId}/ops_nodes/${t.id}`, t))
       );
-      seededPaths.push(`tenants/${tenantId}/tables (10)`);
+      seededPaths.push(`tenants/${tenantId}/ops_nodes (10)`);
 
       // 5b. Menu démo — catégories + produits de base pour les verticals food
       if (['restaurant', 'bakery', 'hotel'].includes(variant)) {

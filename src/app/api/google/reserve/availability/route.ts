@@ -41,7 +41,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const dateStr = startDate.toISOString().split('T')[0];
 
   const [tables, reservations] = await Promise.all([
-    Nexus.adapter.query(`tenants/${merchantId}/tables`, { limit: 200 }) as Promise<Table[]>,
+    Nexus.adapter.query(`tenants/${merchantId}/ops_nodes`, { limit: 200 }) as Promise<Table[]>,
     Nexus.adapter.query(`tenants/${merchantId}/reservations`, {
       where: [{ field: 'date', operator: '==', value: dateStr }, { field: 'status', operator: '!=', value: 'cancelled' }],
       limit: 500,

@@ -36,7 +36,7 @@ export async function buildWeeklyReportHTML(
   const startISO = new Date(startDate).toISOString().split('T')[0];
   const endISO = new Date(endDate).toISOString().split('T')[0];
 
-  const ordersPath = tenantId ? `tenants/${tenantId}/orders` : Nexus.getTenantPath('orders');
+  const ordersPath = tenantId ? `tenants/${tenantId}/ops_flows` : Nexus.getTenantPath('orders');
   const resPath = tenantId ? `tenants/${tenantId}/reservations` : Nexus.getTenantPath('reservations');
 
   const [orders, reservations] = await Promise.all([

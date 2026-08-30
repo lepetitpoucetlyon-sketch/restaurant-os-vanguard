@@ -31,7 +31,7 @@ export function registerTicketZHandler(): () => void {
       
       // P11-D, P11-E, P11-I : Libérer la table et la marquer à nettoyer (avec optimistic locking via tx)
       if (tableId) {
-        const tablePath = `tenants/${tenantId}/tables/${tableId}`;
+        const tablePath = `tenants/${tenantId}/ops_nodes/${tableId}`;
         await Nexus.adapter.runTransaction(async (tx) => {
           const table = await tx.get<{ status: string; cleaningRequired: boolean; version?: number }>(tablePath);
           if (table && table.status !== 'available') {

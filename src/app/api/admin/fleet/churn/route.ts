@@ -60,7 +60,7 @@ async function getChurnForTenant(tenantId: string): Promise<{
 }> {
   const [config, orders, tickets] = await Promise.allSettled([
     Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`),
-    Nexus.adapter.query(`tenants/${tenantId}/orders`),
+    Nexus.adapter.query(`tenants/${tenantId}/ops_flows`),
     Nexus.adapter.query(`tenants/${tenantId}/supportTickets`),
   ]);
 

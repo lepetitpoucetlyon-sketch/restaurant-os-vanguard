@@ -49,7 +49,7 @@ export const RecallService = {
         const recipeProductIds = new Set(affectedRecipes.map(r => r.id));
 
         const orders = await Nexus.adapter.query<OrderDoc>(
-            `tenants/${tenantId}/orders`
+            `tenants/${tenantId}/ops_flows`
         );
 
         const orderLines: RecallImpact['orderLines'] = [];

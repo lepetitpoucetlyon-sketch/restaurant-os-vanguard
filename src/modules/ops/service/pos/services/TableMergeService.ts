@@ -30,8 +30,8 @@ export class TableMergeService {
     const now = input.now ?? Date.now();
 
     const [primary, secondary] = await Promise.all([
-      Nexus.adapter.get<Record<string, unknown>>(`tenants/${input.tenantId}/orders/${input.primaryOrderId}`),
-      Nexus.adapter.get<Record<string, unknown>>(`tenants/${input.tenantId}/orders/${input.secondaryOrderId}`),
+      Nexus.adapter.get<Record<string, unknown>>(`tenants/${input.tenantId}/ops_flows/${input.primaryOrderId}`),
+      Nexus.adapter.get<Record<string, unknown>>(`tenants/${input.tenantId}/ops_flows/${input.secondaryOrderId}`),
     ]);
 
     if (!primary) return { success: false, reason: 'primary_order_not_found' };
@@ -42,20 +42,20 @@ export class TableMergeService {
     const mergedItems = [...primaryItems, ...secondaryItems];
 
     await Promise.all([
-      Nexus.adapter.set(`tenants/${input.tenantId}/orders/${input.primaryOrderId}`, {
+      Nexus.adapter.set(`tenants/${input.tenantId}/ops_flows/${input.primaryOrderId}`, {
         ...primary,
         items: mergedItems,
         mergedFromOrderId: input.secondaryOrderId,
         mergedAt: now,
         tableIds: [input.primaryTableId, input.secondaryTableId],
       }),
-      Nexus.adapter.set(`tenants/${input.tenantId}/orders/${input.secondaryOrderId}`, {
+      Nexus.adapter.set(`tenants/${input.tenantId}/ops_flows/${input.secondaryOrderId}`, {
         ...secondary,
         status: 'merged_into',
         mergedIntoOrderId: input.primaryOrderId,
         mergedAt: now,
       }),
-      Nexus.adapter.set(`tenants/${input.tenantId}/tables/${input.secondaryTableId}`, {
+      Nexus.adapter.set(`tenants/${input.tenantId}/ops_nodes/${input.secondaryTableId}`, {
         activeOrderId: null,
         status: 'available',
         mergedIntoTableId: input.primaryTableId,

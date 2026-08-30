@@ -22,7 +22,7 @@ export function registerCRMVipHandler(): () => void {
       
       try {
         // 1. Récupérer l'ordre pour voir s'il y a un customerId associé
-        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/orders/${orderId}`);
+        const order = await Nexus.adapter.get<Record<string, unknown>>(`tenants/${tenantId}/ops_flows/${orderId}`);
         if (!order || !order.customerId) return;
         
         const customerId = order.customerId as string;

@@ -32,7 +32,7 @@ export const PrepForecastService = {
                 items: Array<{ productId: string; quantity: number }>;
                 createdAt: string;
             }>(
-                `tenants/${tenantId}/orders`,
+                `tenants/${tenantId}/ops_flows`,
                 {
                     where: [
                         { field: 'createdAt', operator: '>=', value: lookbackStart.toISOString() },

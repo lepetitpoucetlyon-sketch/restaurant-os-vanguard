@@ -9,7 +9,7 @@ export function registerKdsCoursePassedHandler(): () => void {
     async ({ tenantId, orderId, courseId }) => {
       try {
         await Nexus.adapter.update(
-          `tenants/${tenantId}/orders/${orderId}/courses/${courseId}`,
+          `tenants/${tenantId}/ops_flows/${orderId}/courses/${courseId}`,
           { passedAt: new Date().toISOString(), status: 'passed' },
         );
         logger.info(`[KdsCoursePassedHandler] Cours ${courseId} passé pour commande ${orderId}`);

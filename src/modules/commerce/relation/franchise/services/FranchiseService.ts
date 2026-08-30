@@ -55,7 +55,7 @@ export const FranchiseService = {
                 try {
                     // Lecture sécurisée des commandes du jour pour ce tenant
                     const orders: OrderDoc[] = await Nexus.adapter.query<OrderDoc>(
-                        `tenants/${tenantId}/orders`
+                        `tenants/${tenantId}/ops_flows`
                     ).catch(() => []);
 
                     todayRevenueInCents = orders

@@ -10,7 +10,7 @@ export function startSelfHealingInterval(tenantId: string): NodeJS.Timeout {
         SelfHealingEngine.auditAndHeal(
             ordersNodeAtom,
             'legacy_audit',
-            `tenants/${tenantId}/orders`,
+            `tenants/${tenantId}/ops_flows`,
         ).catch(() => {});
     }, 60_000);
 }

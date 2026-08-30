@@ -23,7 +23,7 @@ export function registerOrderCancelRestockHandler() {
     async (payload) => {
       const { tenantId, orderId } = payload;
       
-      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/orders/${orderId}`);
+      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/ops_flows/${orderId}`);
       if (!order || !order.items) return;
       
       // Si la commande n'était pas encore lancée en cuisine, on peut restituer le stock

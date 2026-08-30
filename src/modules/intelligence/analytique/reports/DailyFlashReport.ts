@@ -35,7 +35,7 @@ export const DailyFlashReport = {
                 covers?: number;
                 createdAt: string;
             }>(
-                `tenants/${tenantId}/orders`,
+                `tenants/${tenantId}/ops_flows`,
                 {
                     where: [
                         { field: 'createdAt', operator: '>=', value: dayStart },

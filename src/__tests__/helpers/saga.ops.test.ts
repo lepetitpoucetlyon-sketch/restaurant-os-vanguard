@@ -193,7 +193,7 @@ describe('TableAutoReleaseHandler', () => {
     await capturedHandlers['table.cleared']({ tenantId: 'T', tableId: 'tbl-A', sessionEnd: true });
 
     expect(mockUpdate).toHaveBeenCalledWith(
-      'tenants/T/tables/tbl-A',
+      'tenants/T/ops_nodes/tbl-A',
       expect.objectContaining({ status: 'available', seatedAt: null }),
     );
   });
@@ -231,7 +231,7 @@ describe('NoShowTableReleaseHandler', () => {
     await capturedHandlers['reservation.no_show']({ tenantId: 'T', reservationId: 'resa-1' });
 
     expect(mockUpdate).toHaveBeenCalledWith(
-      'tenants/T/tables/tbl-1',
+      'tenants/T/ops_nodes/tbl-1',
       expect.objectContaining({ status: 'available', reservationId: null }),
     );
   });

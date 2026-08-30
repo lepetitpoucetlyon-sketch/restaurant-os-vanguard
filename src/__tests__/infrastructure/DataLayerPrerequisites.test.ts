@@ -59,7 +59,7 @@ describe('Vague 4 — Prérequis Data Layer Unifié', () => {
         it('enfile une mutation et la draine vers Nexus', async () => {
             await OutboxService.enqueue({
                 action: 'SET',
-                collection: 'tenants/resto-1/orders',
+                collection: 'tenants/resto-1/ops_flows',
                 targetId: 'ord-100',
                 payload: { totalMu: 12_000_000, status: 'PAID' },
                 priority: 1,
@@ -72,7 +72,7 @@ describe('Vague 4 — Prérequis Data Layer Unifié', () => {
             expect(drainResult.succeeded).toBe(1);
             expect(drainResult.remaining).toBe(0);
 
-            const saved = await mockAdapter.get('tenants/resto-1/orders/ord-100');
+            const saved = await mockAdapter.get('tenants/resto-1/ops_flows/ord-100');
             expect(saved).toBeDefined();
             expect((saved as any).totalMu).toBe(12_000_000);
         });

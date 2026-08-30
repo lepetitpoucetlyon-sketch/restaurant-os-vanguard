@@ -22,7 +22,7 @@ export const GuestRecognition = {
             totalAmountInCents?: number;
             createdAt: string;
         }>(
-            `tenants/${tenantId}/orders`,
+            `tenants/${tenantId}/ops_flows`,
             { where: [{ field: 'subjectId', operator: '==', value: subjectId }] }
         );
 

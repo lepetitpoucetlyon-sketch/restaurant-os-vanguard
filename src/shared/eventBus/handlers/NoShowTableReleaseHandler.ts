@@ -22,7 +22,7 @@ export function registerNoShowTableReleaseHandler(): () => void {
       const tableId = reservation?.tableId;
 
       if (tableId) {
-        await Nexus.adapter.update(`tenants/${tenantId}/tables/${tableId}`, {
+        await Nexus.adapter.update(`tenants/${tenantId}/ops_nodes/${tableId}`, {
           status: 'available',
           reservationId: null,
           updatedAt: new Date().toISOString(),

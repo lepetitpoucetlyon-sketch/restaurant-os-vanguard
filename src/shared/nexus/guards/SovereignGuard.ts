@@ -18,7 +18,7 @@ export { isFleetVisible };
  */
 export const SovereignGuard = {
     SIGNED_WRITE_COLLECTIONS: new Set([
-        'orders',
+        'ops_flows',
         'stockItems',
         'inventoryMovements',
         'journalEntries',

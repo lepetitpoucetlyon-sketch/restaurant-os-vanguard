@@ -36,7 +36,7 @@ describe('OutboxPriority — resolvePriority()', () => {
     });
 
     it('NORMAL (0) pour tout le reste', () => {
-        expect(resolvePriority('tenants/x/orders')).toBe(OutboxPriority.NORMAL);
+        expect(resolvePriority('tenants/x/ops_flows')).toBe(OutboxPriority.NORMAL);
         expect(resolvePriority('tenants/x/customers')).toBe(OutboxPriority.NORMAL);
         expect(resolvePriority('tenants/x/stocks')).toBe(OutboxPriority.NORMAL);
         expect(resolvePriority('tenants/x/reservations')).toBe(OutboxPriority.NORMAL);

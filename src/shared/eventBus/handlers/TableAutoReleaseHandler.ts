@@ -18,7 +18,7 @@ export function registerTableAutoReleaseHandler(): () => void {
         return;
       }
 
-      await Nexus.adapter.update(`tenants/${tenantId}/tables/${tableId}`, {
+      await Nexus.adapter.update(`tenants/${tenantId}/ops_nodes/${tableId}`, {
         status: 'available',
         seatedAt: null,
         updatedAt: new Date().toISOString(),

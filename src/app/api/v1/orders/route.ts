@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     };
 
     // 1. Persistance
-    await Nexus.adapter.set(`tenants/${tenantId}/orders/${orderId}`, orderRecord);
+    await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${orderId}`, orderRecord);
 
     // 2. Initialisation cadençage KDS
     await KDSCourseSequencingEngine.initializeOrderCourses(tenantId, orderId, tableId, cartItems);

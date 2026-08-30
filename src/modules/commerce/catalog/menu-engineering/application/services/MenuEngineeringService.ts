@@ -47,7 +47,7 @@ function classifyItem(
 class MenuEngineeringService {
   async computeReport({ tenantId, periodStart, periodEnd }: ComputeParams): Promise<IMenuEngineeringReport> {
     const [orders, products] = await Promise.all([
-      Nexus.adapter.query<Record<string, unknown>>(`tenants/${tenantId}/orders`),
+      Nexus.adapter.query<Record<string, unknown>>(`tenants/${tenantId}/ops_flows`),
       Nexus.adapter.query<Record<string, unknown>>(`tenants/${tenantId}/products`),
     ]);
 

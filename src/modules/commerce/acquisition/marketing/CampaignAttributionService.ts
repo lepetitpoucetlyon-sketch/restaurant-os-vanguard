@@ -51,7 +51,7 @@ export const CampaignAttributionService = {
                 totalInMicrounits?: number;
                 totalAmountInCents?: number;
             }>(
-                `tenants/${tenantId}/orders`,
+                `tenants/${tenantId}/ops_flows`,
                 { where: [{ field: 'id', operator: 'in', value: chunk }] }
             );
             for (const o of orders) orderMap.set(o.id, o);

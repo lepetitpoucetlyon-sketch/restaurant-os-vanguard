@@ -111,11 +111,11 @@ describe('useSovereignTables — Adapter ops (plan de salle)', () => {
     });
 
     it('zoneId filter isole les zones', async () => {
-        await mockAdapter.set(`tenants/${TENANT}/tables/tA`, {
+        await mockAdapter.set(`tenants/${TENANT}/ops_nodes/tA`, {
             id: 'tA', type: 'table', number: '1', seats: 2, status: 'free',
             x: 0, y: 0, zoneId: ZONE_A, shape: 'rect', schemaVersion: 2, updatedAt: Date.now(),
         });
-        await mockAdapter.set(`tenants/${TENANT}/tables/tB`, {
+        await mockAdapter.set(`tenants/${TENANT}/ops_nodes/tB`, {
             id: 'tB', type: 'table', number: '2', seats: 4, status: 'free',
             x: 0, y: 0, zoneId: ZONE_B, shape: 'rect', schemaVersion: 2, updatedAt: Date.now(),
         });

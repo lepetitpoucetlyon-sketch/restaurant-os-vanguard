@@ -24,11 +24,11 @@ export interface TableTransferResult {
 
 export class TableTransferService {
   private static orderPath(tenantId: string, orderId: string): string {
-    return `tenants/${tenantId}/orders/${orderId}`;
+    return `tenants/${tenantId}/ops_flows/${orderId}`;
   }
 
   private static tablePath(tenantId: string, tableId: string): string {
-    return `tenants/${tenantId}/tables/${tableId}`;
+    return `tenants/${tenantId}/ops_nodes/${tableId}`;
   }
 
   static async transfer(input: {

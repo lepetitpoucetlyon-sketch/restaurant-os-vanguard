@@ -9,12 +9,12 @@
  *
  * Format des chemins relatifs (sans préfixe tenant) :
  *   COLLECTIONS.orders → "orders"
- *   chemin complet     → `tenants/${tenantId}/orders`
+ *   chemin complet     → `tenants/${tenantId}/ops_flows`
  */
 export const COLLECTIONS = {
   // ── Ops ──────────────────────────────────────────────────────────────────
-  orders:           'orders',
-  tables:           'tables',
+  orders:           'ops_flows',
+  tables:           'ops_nodes',
   tableGroups:      'tableGroups',
   tableZones:       'tableZones',
   tableFloors:      'tableFloors',

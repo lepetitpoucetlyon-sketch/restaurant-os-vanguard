@@ -45,7 +45,7 @@ export const FleetBenchmark = {
                     covers?: number;
                     createdAt: string;
                 }>(
-                    `tenants/${tid}/orders`,
+                    `tenants/${tid}/ops_flows`,
                     {
                         where: [
                             { field: 'createdAt', operator: '>=', value: `${period}-01T00:00:00Z` },

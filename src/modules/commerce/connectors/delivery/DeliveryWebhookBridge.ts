@@ -86,7 +86,7 @@ export class DeliveryWebhookBridge {
     };
 
     // 1. Persistance canonique
-    await Nexus.adapter.set(`tenants/${tenantId}/orders/${orderId}`, {
+    await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${orderId}`, {
       ...normalizedOrder,
       id: orderId,
       totalInCents: payload.totalAmountInCents,

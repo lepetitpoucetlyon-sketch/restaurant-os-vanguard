@@ -42,7 +42,7 @@ export const bobPersona: PersonaFn = async ({ tenantId, operatorId }): Promise<P
   const orderId = `order-bob-sim-${Date.now()}`;
 
   acts.push(await runAct('POS: addItems() × 2 → checkout()', 'POS', async () => {
-    await Nexus.adapter.set(`tenants/${tenantId}/orders/${orderId}`, {
+    await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${orderId}`, {
       id: orderId,
       items: BOB_CART,
       totalInMicrounits: BOB_CART_TOTAL_MICROUNITS,

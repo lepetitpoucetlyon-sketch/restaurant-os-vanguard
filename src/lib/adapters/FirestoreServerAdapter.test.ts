@@ -55,12 +55,12 @@ describe('🛰️ FirestoreServerAdapter — traduction Admin SDK', () => {
 
   it('get() lit le doc et fusionne id + data (null si absent)', async () => {
     docApi.get.mockResolvedValueOnce({ exists: true, id: 'x1', data: () => ({ name: 'A' }) });
-    const r = await adapter.get('tenants/t1/orders/x1');
-    expect(dbApi.doc).toHaveBeenCalledWith('tenants/t1/orders/x1');
+    const r = await adapter.get('tenants/t1/ops_flows/x1');
+    expect(dbApi.doc).toHaveBeenCalledWith('tenants/t1/ops_flows/x1');
     expect(r).toEqual({ id: 'x1', name: 'A' });
 
     docApi.get.mockResolvedValueOnce({ exists: false });
-    expect(await adapter.get('tenants/t1/orders/none')).toBeNull();
+    expect(await adapter.get('tenants/t1/ops_flows/none')).toBeNull();
   });
 
   it('set() applique merge quand demandé', async () => {
@@ -97,7 +97,7 @@ describe('🛰️ FirestoreServerAdapter — traduction Admin SDK', () => {
   });
 
   it('generateId() renvoie un id de doc neuf', () => {
-    expect(adapter.generateId('tenants/t1/orders')).toBe('generated-id');
+    expect(adapter.generateId('tenants/t1/ops_flows')).toBe('generated-id');
   });
 
   it('runTransaction() expose un tx get/set/delete sur des doc refs', async () => {

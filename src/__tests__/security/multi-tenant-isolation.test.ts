@@ -75,7 +75,7 @@ describe('🛡️ Multi-Tenant Isolation & DNA Injector Audit Suite', () => {
 
     describe('4. SovereignGuard & Scoping de Données', () => {
         it('devrait extraire le bon nom de collection pour les chemins tenant', () => {
-            expect(SovereignGuard.extractCollectionName('tenants/resto_1/orders/ord_123')).toBe('orders');
+            expect(SovereignGuard.extractCollectionName('tenants/resto_1/ops_flows/ord_123')).toBe('ops_flows');
             expect(SovereignGuard.extractCollectionName('tenants/resto_1/stockItems')).toBe('stockItems');
         });
 

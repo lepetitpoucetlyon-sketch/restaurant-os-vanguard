@@ -34,7 +34,7 @@ async function computeHealthScore(tenantId: string): Promise<{
   const weekMs     = 7 * 86400_000;
 
   const [orders, syncMeta, haccpAlerts, tickets] = await Promise.allSettled([
-    Nexus.adapter.query(`tenants/${tenantId}/orders`),
+    Nexus.adapter.query(`tenants/${tenantId}/ops_flows`),
     Nexus.adapter.get(`tenants/${tenantId}/syncMeta`),
     Nexus.adapter.query(`tenants/${tenantId}/haccpAlerts`),
     Nexus.adapter.query(`tenants/${tenantId}/supportTickets`),

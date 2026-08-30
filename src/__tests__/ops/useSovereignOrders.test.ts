@@ -140,12 +140,12 @@ describe('useSovereignOrders — Adapter ops (orders)', () => {
     });
 
     it('filtre par tableId ne retourne que les commandes de cette table', async () => {
-        await mockAdapter.set(`tenants/${TENANT}/orders/o1`, {
+        await mockAdapter.set(`tenants/${TENANT}/ops_flows/o1`, {
             id: 'o1', status: 'pending', tableId: 'tbl_A',
             items: [sampleItem()], type: 'order', consumptionMode: 'dine_in',
             createdAt: Date.now(), updatedAt: Date.now(), schemaVersion: 2,
         });
-        await mockAdapter.set(`tenants/${TENANT}/orders/o2`, {
+        await mockAdapter.set(`tenants/${TENANT}/ops_flows/o2`, {
             id: 'o2', status: 'pending', tableId: 'tbl_B',
             items: [sampleItem()], type: 'order', consumptionMode: 'dine_in',
             createdAt: Date.now(), updatedAt: Date.now(), schemaVersion: 2,

@@ -59,10 +59,10 @@ describe('NexusInterceptor', () => {
     it('scopes path and protects write', async () => {
       mockGuard.validateAccessGradeX.mockResolvedValue({ granted: true });
 
-      await interceptor.set('orders/1', { total: 100 }, undefined, ctx);
+      await interceptor.set('ops_flows/1', { total: 100 }, undefined, ctx);
 
-      expect(mockGuard.protectWrite).toHaveBeenCalledWith('tenants/tenant_1/orders/1', { total: 100 }, 'tenant_1');
-      expect(mockAdapter.set).toHaveBeenCalledWith('tenants/tenant_1/orders/1', { total: 100 }, undefined);
+      expect(mockGuard.protectWrite).toHaveBeenCalledWith('tenants/tenant_1/ops_flows/1', { total: 100 }, 'tenant_1');
+      expect(mockAdapter.set).toHaveBeenCalledWith('tenants/tenant_1/ops_flows/1', { total: 100 }, undefined);
     });
   });
 
@@ -79,9 +79,9 @@ describe('NexusInterceptor', () => {
       mockGuard.validateAccessGradeX.mockResolvedValue({ granted: true });
       mockGuard.isFiscallySealed.mockResolvedValue(false); // Not sealed
 
-      await interceptor.delete('orders/1', ctx);
+      await interceptor.delete('ops_flows/1', ctx);
       
-      expect(mockAdapter.delete).toHaveBeenCalledWith('tenants/tenant_1/orders/1');
+      expect(mockAdapter.delete).toHaveBeenCalledWith('tenants/tenant_1/ops_flows/1');
     });
   });
 

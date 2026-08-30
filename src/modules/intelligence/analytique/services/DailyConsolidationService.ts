@@ -41,7 +41,7 @@ export class DailyConsolidationService {
 
             // 2. Récupération des commandes (pour les couverts et les produits phares)
             const orders = await Nexus.adapter.get<Record<string, { items: Array<{id: string; quantity: number}> }>>(
-                `tenants/${tenantId}/orders`
+                `tenants/${tenantId}/ops_flows`
             ) || {};
             
             let totalCovers = Object.keys(orders).length * 2.5; // Heuristique basique

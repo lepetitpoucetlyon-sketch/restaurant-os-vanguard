@@ -49,7 +49,7 @@ describe('Hub Connecteurs Livraison : Webhook Bridge (UberEats / Deliveroo)', ()
 
     // Vérification de la persistance Nexus
     const savedOrder = await Nexus.adapter.get<{ id: string; channel: string }>(
-      `tenants/${tenantId}/orders/${normalized.orderId}`
+      `tenants/${tenantId}/ops_flows/${normalized.orderId}`
     );
     expect(savedOrder).not.toBeNull();
     expect(savedOrder?.id).toBe(normalized.orderId);
