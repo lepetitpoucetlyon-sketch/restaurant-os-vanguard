@@ -83,7 +83,7 @@ BARREL_DEBT_MAX=0
 # Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
 # verify-gate-integrity.mjs refuse toute hausse (Loi 2).
 ORPHAN_COMPONENTS_MAX=14      # composants exportés sans aucun consommateur — 40 orphans cross-piliers marqués @wip le 2026-08-30 (audit orphelins post-cycles)
-UNREAD_SETTINGS_MAX=147       # réglages déclarés dans l'écran Paramètres, lus par personne
+UNREAD_SETTINGS_MAX=0         # réglages déclarés dans l'écran Paramètres, lus par personne — 147→0 : purge des faux réglages 2026-08-30
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
