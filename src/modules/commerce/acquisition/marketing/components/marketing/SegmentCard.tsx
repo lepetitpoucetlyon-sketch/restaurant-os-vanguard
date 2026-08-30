@@ -1,6 +1,6 @@
-// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { Users, MoreHorizontal } from "lucide-react";
 import { Button } from "@ui/Button";
 

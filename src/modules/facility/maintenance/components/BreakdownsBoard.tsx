@@ -1,6 +1,6 @@
-// @wip owner:facility-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:facility-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 /**
  * BreakdownsBoard — Composant preuve de useSovereignBreakdowns (ADR-013).
  * Kanban 4 colonnes OPEN → IN_PROGRESS → WAITING_PARTS → RESOLVED.

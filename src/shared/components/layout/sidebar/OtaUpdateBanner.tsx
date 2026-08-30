@@ -1,6 +1,6 @@
-// @wip owner:design-system-team échéance:2026-Q4 — primitive UI shared à adopter (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:design-system-team échéance:2026-Q4 — primitive UI shared à adopter (audit orphelins 2026-08-30)
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, ArrowUpCircle } from 'lucide-react';

@@ -1,6 +1,6 @@
-// @wip owner:design-system-team échéance:2026-Q4 — primitive UI shared à adopter (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:design-system-team échéance:2026-Q4 — primitive UI shared à adopter (audit orphelins 2026-08-30)
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/shared/contexts/SettingsContext";

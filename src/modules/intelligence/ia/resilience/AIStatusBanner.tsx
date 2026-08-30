@@ -1,6 +1,6 @@
-// @wip owner:intelligence-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:intelligence-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { useState, useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { lightragBreaker, geminiBreaker } from './CircuitBreaker';

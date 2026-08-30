@@ -1,6 +1,6 @@
-// @wip owner:facility-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:facility-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/shared/providers/NexusCoreProvider";
 import { Loader2, Save } from "lucide-react";

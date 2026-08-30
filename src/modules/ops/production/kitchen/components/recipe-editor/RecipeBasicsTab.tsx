@@ -1,6 +1,6 @@
-// @wip owner:ops-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:ops-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { Clock, Timer, Users } from "lucide-react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { cn } from "@/lib/ui.foundations";

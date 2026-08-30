@@ -1,6 +1,6 @@
-// @wip owner:ops-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:ops-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Clock, Timer, AlertTriangle } from "lucide-react";
 import { Button } from "@ui/Button";

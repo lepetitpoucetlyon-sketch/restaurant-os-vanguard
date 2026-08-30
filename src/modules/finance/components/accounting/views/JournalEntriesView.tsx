@@ -1,6 +1,6 @@
-// @wip owner:finance-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:finance-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { useState, useMemo } from "react";
 import { CheckCircle2, Clock, Eye } from "lucide-react";
 import { Button } from "@ui/Button";

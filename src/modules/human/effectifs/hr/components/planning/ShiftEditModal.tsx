@@ -1,6 +1,6 @@
-// @wip owner:hr-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:hr-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Save, Trash2 } from "lucide-react";

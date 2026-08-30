@@ -1,6 +1,6 @@
-// @wip owner:logistics-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:logistics-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 /**
  * StockLowLevelBoard — Composant preuve de useSovereignStocks (ADR-011).
  * Affiche les articles sous le seuil d'alerte avec ajustement inline.

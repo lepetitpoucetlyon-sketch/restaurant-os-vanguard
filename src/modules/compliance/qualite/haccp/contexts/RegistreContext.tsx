@@ -1,5 +1,6 @@
-// @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 "use client";
+
+// @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 import React, { createContext, useContext, useReducer } from 'react';
 import type { RegistreContextValue, RegistreState, RegistreAction } from '@/shared/nexus/contracts/context/registre.contracts';
 import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';

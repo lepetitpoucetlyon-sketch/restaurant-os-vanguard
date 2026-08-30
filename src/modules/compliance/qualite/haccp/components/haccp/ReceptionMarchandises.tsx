@@ -1,6 +1,6 @@
-// @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 

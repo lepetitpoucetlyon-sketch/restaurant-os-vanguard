@@ -1,6 +1,6 @@
-// @wip owner:intelligence-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:intelligence-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React, { useState } from "react";
 import { ActionProposal } from "../services/AssistantActionDispatcher";
 import { Zap, CheckCircle2, XCircle, Shield, ArrowRight, Loader2 } from "lucide-react";

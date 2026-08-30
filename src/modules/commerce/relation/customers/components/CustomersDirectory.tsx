@@ -1,6 +1,6 @@
-// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 /**
  * CustomersDirectory — Composant preuve de useSovereignCustomers (ADR-012).
  * Annuaire CRM avec recherche + segments + tags inline.

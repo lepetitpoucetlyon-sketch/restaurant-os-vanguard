@@ -1,6 +1,6 @@
-// @wip owner:finance-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:finance-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import { useMemo } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { useAccounting } from "../../../hooks/useAccounting";

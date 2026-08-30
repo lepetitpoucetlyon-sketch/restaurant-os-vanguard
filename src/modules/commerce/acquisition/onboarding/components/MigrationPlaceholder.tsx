@@ -1,6 +1,6 @@
-// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
 
+// @wip owner:commerce-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Construction, ArrowLeft, Cpu } from 'lucide-react';

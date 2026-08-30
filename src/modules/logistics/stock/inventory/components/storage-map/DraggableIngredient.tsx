@@ -1,7 +1,7 @@
+"use client";
+
 import type React from "react";
 // @wip owner:logistics-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
-
-"use client";
 
 import { useDraggable } from "@dnd-kit/core";
 import { GripVertical } from "lucide-react";

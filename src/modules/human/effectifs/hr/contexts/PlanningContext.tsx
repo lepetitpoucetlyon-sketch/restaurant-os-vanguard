@@ -1,5 +1,6 @@
-// @wip owner:hr-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 "use client";
+
+// @wip owner:hr-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 import React, { createContext, useContext, useReducer } from 'react';
 import type { PlanningContextValue, PlanningState, PlanningAction } from '@/shared/nexus/contracts/context/planning.contracts';
 import { CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
