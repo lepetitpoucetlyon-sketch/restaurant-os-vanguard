@@ -82,16 +82,18 @@ BARREL_DEBT_MAX=0
 # ce qui est écrit est ATTEINT. Ces 5 compteurs comblent cet angle mort.
 # Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
 # verify-gate-integrity.mjs refuse toute hausse (Loi 2).
-ORPHAN_COMPONENTS_MAX=77      # composants exportés sans aucun consommateur (abaissé à 77)
-UNREAD_SETTINGS_MAX=177       # réglages déclarés dans l'écran Paramètres, lus par personne
+ORPHAN_COMPONENTS_MAX=76      # composants exportés sans aucun consommateur (abaissé à 77)
+UNREAD_SETTINGS_MAX=147       # réglages déclarés dans l'écran Paramètres, lus par personne
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
-DS_OUTSIDE_MAX=478           # écrans fabriquant de l'UI hors design system
+DS_OUTSIDE_MAX=472           # écrans fabriquant de l'UI hors design system
 A11Y_MUETS_MAX=150           # boutons sans nom accessible (abaissé de 161 à 150)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=67         # conteneurs cliquables non focalisables (abaissé de 111 à 67)
+VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8
+FR_HARDCODED_MAX=943         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
@@ -169,7 +171,12 @@ ok "Build de production réussi"
 # ────────────────────────────────────────────────────────────────
 step "🏛️  [7/10] sentrux check — règles architecturales (frontières + contraintes)"
 if ! command -v sentrux >/dev/null 2>&1; then
-  warn "sentrux non installé — étape sautée."
+  if [ -n "$CI" ] || [ "$SENTRUX_REQUIRED" = "1" ]; then
+    fail "sentrux non installé — en CI l'étape architecturale est obligatoire."
+    fail "Installe-le : brew install sentrux/tap/sentrux (voir .sentrux/README.md)"
+    exit 1
+  fi
+  warn "sentrux non installé — étape sautée (local uniquement)."
   warn "Installe-le : brew install sentrux/tap/sentrux (voir .sentrux/README.md)"
 else
   # Capture la sortie complète pour analyse sélective
@@ -183,9 +190,30 @@ else
   CC_VIOLATIONS=$(echo "$CHECK_OUT" | grep "max_cc" || true)
 
   if [ -n "$CC_VIOLATIONS" ]; then
-    warn "max_cc : dette pre-existante (sidecar Python + fonctions TS legacy — non-bloquant)"
-    echo "$CHECK_OUT" | grep "cc=" | while IFS= read -r line; do echo "    $line"; done
-    echo "  → Créer un chantier dédié pour réduire la complexité cyclomatique."
+    # Ratchet complex_fn_count : la dette existante ne bloque pas, mais ne peut que descendre.
+    COMPLEX_FN_MAX=${COMPLEX_FN_MAX:-1518}   # baseline 2026-08-30 — abaisser lors des refactos
+    COMPLEX_FN_CURRENT=$(echo "$CHECK_OUT" | grep -oE "max_cc: [0-9]+ function" | grep -oE "[0-9]+" | head -1)
+    if [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -gt "$COMPLEX_FN_MAX" ]; then
+      fail "RÉGRESSION complexité : $COMPLEX_FN_CURRENT fonctions > cc12 (seuil ratchet $COMPLEX_FN_MAX)"
+      echo "$CHECK_OUT" | grep "cc=" | head -20 | while IFS= read -r line; do echo "    $line"; done
+      exit 1
+    elif [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -lt "$COMPLEX_FN_MAX" ]; then
+      ok "Complexité en baisse : $COMPLEX_FN_CURRENT / $COMPLEX_FN_MAX — baisse COMPLEX_FN_MAX dans preflight.sh"
+    else
+      warn "max_cc : $COMPLEX_FN_CURRENT fonctions au seuil ($COMPLEX_FN_MAX) — dette gelée"
+    fi
+    echo "  → Réduire la complexité cyclomatique quand tu touches à ces fichiers."
+  fi
+
+  # Cliquet cycles : peut descendre, jamais monter. sentrux compte hors src/ aussi.
+  CYCLE_COUNT=$(echo "$CHECK_OUT" | grep -oE "Found [0-9]+ circular" | grep -oE "[0-9]+" | head -1)
+  SENTRUX_CYCLES_MAX=${SENTRUX_CYCLES_MAX:-2}   # baseline 2026-08-30 — cible: 0
+  if [ -n "$CYCLE_COUNT" ] && [ "$CYCLE_COUNT" -gt "$SENTRUX_CYCLES_MAX" ]; then
+    fail "RÉGRESSION cycles : $CYCLE_COUNT cycles > seuil ratchet $SENTRUX_CYCLES_MAX"
+    echo "$CHECK_OUT" | grep -A2 "max_cycles" | head -20
+    exit 1
+  elif [ -n "$CYCLE_COUNT" ] && [ "$CYCLE_COUNT" -lt "$SENTRUX_CYCLES_MAX" ]; then
+    ok "Cycles en baisse : $CYCLE_COUNT / $SENTRUX_CYCLES_MAX — baisse SENTRUX_CYCLES_MAX dans preflight.sh"
   fi
 
   if [ -n "$BOUNDARY_VIOLATIONS" ]; then
@@ -282,3 +310,25 @@ echo "   7. sentrux check  — frontières architecturales"
 echo "   8. sentrux gate   — anti-régression vs baseline"
 echo "   9. Bundle size    — ${JS_SIZE:-n/a} KB / ${BUNDLE_MAX_KB} KB"
 echo "  10. Gate integrity — baseline anti-desserrement vérifiée"
+
+# ────────────────────────────────────────────────────────────────
+# Cliquet : la liste `exclude` de vitest.config.ts ne peut que descendre.
+# Un test exclu = un test qui ne tourne pas. Ne pas laisser cette liste grandir.
+step "🚧 [12/12] Vitest exclude — cliquet anti-croissance"
+VITEST_EXCLUDE_MAX=${VITEST_EXCLUDE_MAX:-4}    # baseline 2026-08-30
+VITEST_EXCLUDE_CURRENT=$(node -e "
+  const fs=require('fs');
+  const s=fs.readFileSync('vitest.config.ts','utf8');
+  const m=s.match(/exclude:\s*\[([^\]]+)\]/);
+  if(!m){console.log(0);process.exit(0)}
+  console.log((m[1].match(/'[^']+'/g)||[]).length);
+")
+if [ "$VITEST_EXCLUDE_CURRENT" -gt "$VITEST_EXCLUDE_MAX" ]; then
+  fail "vitest.config.ts exclude a grossi : $VITEST_EXCLUDE_CURRENT entrées > $VITEST_EXCLUDE_MAX"
+  echo "  → Un test exclu ne tourne pas. Retire l'exclusion ou baisse le cliquet à la source."
+  exit 1
+elif [ "$VITEST_EXCLUDE_CURRENT" -lt "$VITEST_EXCLUDE_MAX" ]; then
+  ok "vitest.config.ts exclude en baisse : $VITEST_EXCLUDE_CURRENT / $VITEST_EXCLUDE_MAX — baisse VITEST_EXCLUDE_MAX"
+else
+  ok "vitest.config.ts exclude stable : $VITEST_EXCLUDE_CURRENT / $VITEST_EXCLUDE_MAX"
+fi

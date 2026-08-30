@@ -444,9 +444,55 @@ export const m12c_a11yKeyboard = {
   },
 };
 
+export const m13_verticalStubs = {
+  id: 'verticalStubs',
+  titre: 'Écrans de verticale rendus par VerticalPageStub',
+  // Détecte les composants sous src/verticals/ (hors _shared) dont le rendu
+  // n'est qu'un appel à VerticalPageStub. Une route déclarée dans un blueprint
+  // qui résout vers un stub = promesse affichée sans mécanisme (Loi 8).
+  run(c) {
+    const stubs = [];
+    for (const [f, src] of c.contenu) {
+      const rel = c.rel(f);
+      if (!rel.startsWith('src/verticals/')) continue;
+      if (rel.includes('/_shared/')) continue;
+      if (!rel.endsWith('.tsx')) continue;
+      // Match : le fichier importe VerticalPageStub ET son export principal l'invoque
+      if (!/from ['"][^'"]*VerticalPageStub['"]/.test(src)) continue;
+      if (!/VerticalPageStub\s*\(/.test(src)) continue;
+      stubs.push(rel);
+    }
+    return { valeur: stubs.length, detail: stubs.sort() };
+  },
+};
+
+export const m14_frHardcoded = {
+  id: 'frHardcoded',
+  titre: 'Chaînes françaises en dur dans le JSX (hors legal & verticals)',
+  // Compte les nœuds texte JSX contenant un accent français dans les fichiers .tsx
+  // client, hors src/verticals (couvert par m13), hors legal/rgpd/cgv/cgu/dpa
+  // (obligation réglementaire de rester en FR), hors design-system (galerie interne).
+  // Chaque occurrence est un candidat à t() → maintenir descendant en priorité
+  // sur l'onboarding et les écrans opérationnels.
+  run(c) {
+    const skip = /(?:src\/verticals\/|\/legal\/|\/rgpd\/|\/cgv\/|\/cgu\/|\/mentions\/|\/dpa\/|\/design-system\/|WidgetSamples|VerticalPageStub)/;
+    const re = />[^<>{}\n]*[éèêàçùôûîïâœÉÈÊÀÇ][^<>{}\n]*</g;
+    const hits = [];
+    for (const [f, src] of c.contenu) {
+      const rel = c.rel(f);
+      if (!rel.endsWith('.tsx')) continue;
+      if (skip.test(rel)) continue;
+      const n = (src.match(re) || []).length;
+      if (n > 0) hits.push(rel + ' (' + n + ')');
+    }
+    return { valeur: hits.reduce((s, h) => s + Number(h.match(/\((\d+)\)$/)?.[1] || 0), 0), detail: hits.sort() };
+  },
+};
+
 export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
   m11_dsAdoption, m12a_a11yMuets, m12b_a11yModales, m12c_a11yKeyboard,
+  m13_verticalStubs, m14_frHardcoded,
 ];
 

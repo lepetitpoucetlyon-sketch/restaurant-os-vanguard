@@ -51,24 +51,38 @@ const CLIQUETS = {
   a11yMuets:        seuil('A11Y_MUETS_MAX', 150),
   a11yModales:      seuil('A11Y_MODALES_MAX', 0),
   a11yKeyboard:     seuil('A11Y_KEYBOARD_MAX', 67),
+  verticalStubs:    seuil('VERTICAL_STUBS_MAX', 12),
+  frHardcoded:      seuil('FR_HARDCODED_MAX', 941),
 };
 
 const corpus = chargerCorpus('src');
 let echec = false;
 
 console.log('🔗 Gate 6 — dernier kilomètre (ce qui est écrit est-il atteint ?)');
+const lachesDetectes = [];
 for (const m of MESURES) {
   if (!(m.id in CLIQUETS)) continue;
   const { valeur, detail = [] } = m.run(corpus);
   const max = CLIQUETS[m.id];
   const ok = valeur <= max;
+  const lache = ok && valeur < max;
   if (!ok) echec = true;
-  console.log(`   ${ok ? '✅' : '❌'} ${m.titre.padEnd(42)} ${String(valeur).padStart(4)} / ${max}`);
+  if (lache) lachesDetectes.push({ id: m.id, valeur, max });
+  const marker = ok ? (lache ? '🟢' : '✅') : '❌';
+  console.log(`   ${marker} ${m.titre.padEnd(42)} ${String(valeur).padStart(4)} / ${max}${lache ? '  ← baisse le seuil (Loi 2)' : ''}`);
   if ((REPORT || !ok) && detail.length) {
     const n = REPORT ? 40 : 15;
     for (const d of detail.slice(0, n)) console.log(`        · ${d}`);
     if (detail.length > n) console.log(`        … et ${detail.length - n} autres`);
   }
+}
+
+if (lachesDetectes.length && !REPORT) {
+  console.log(`\n🟢 ${lachesDetectes.length} cliquet(s) lâche(s) — resserre à la source dans preflight.sh :`);
+  for (const l of lachesDetectes) {
+    console.log(`   ${l.id.padEnd(20)} ${l.valeur} → propose ${l.max} → recalibrer à ${l.valeur}`);
+  }
+  console.log("   (Non bloquant, mais chaque cliquet lâche est une régression silencieuse en puissance.)");
 }
 
 if (REPORT) process.exit(0);
