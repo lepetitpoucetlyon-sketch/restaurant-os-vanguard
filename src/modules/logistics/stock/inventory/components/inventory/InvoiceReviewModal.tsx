@@ -47,7 +47,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
     };
 
     return (
-        <div 
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
             className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >

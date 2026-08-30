@@ -186,7 +186,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
           )}
 
           {/* Canvas */}
-          <div
+          <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
             ref={canvasRef}
             className="relative rounded-xl border-2 border-gray-200 bg-gray-50 overflow-hidden cursor-crosshair select-none"
             style={{ height: 420 }}

@@ -60,7 +60,7 @@ export function TableGrid({ tables, onTableClick }: TableGridProps) {
                             data-tutorial="reservations-1-1-1"
                         >
                             {tableList.map((table) => (
-                                <motion.div
+                                <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                     key={table.id}
                                     layout
                                     variants={cinematicItem}

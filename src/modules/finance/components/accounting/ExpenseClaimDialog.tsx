@@ -218,7 +218,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                     <img src={formData.receiptImage} className="w-full h-full object-contain rounded-2xl" alt="Justificatif" />
                                 </motion.div>
                             ) : (
-                                <div
+                                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                     onClick={() => fileInputRef.current?.click()}
                                     className="aspect-[21/9] rounded-[3rem] border-2 border-dashed border-subtle flex flex-col items-center justify-center gap-6 hover:border-accent hover:bg-accent/5 transition-all cursor-pointer group bg-bg-tertiary/20"
                                 >

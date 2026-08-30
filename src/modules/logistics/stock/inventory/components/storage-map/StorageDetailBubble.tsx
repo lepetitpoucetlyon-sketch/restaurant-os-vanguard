@@ -38,7 +38,7 @@ export function StorageDetailBubble({
     return (
         <>
             {/* Backdrop */}
-            <motion.div
+            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}

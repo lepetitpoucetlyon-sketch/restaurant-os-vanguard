@@ -83,7 +83,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
                                 const styles = getStatusStyles();
 
                                 return (
-                                    <motion.div
+                                    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                         key={table.id}
                                         variants={cinematicItem}
                                         onClick={() => setSelectedTable(table)}

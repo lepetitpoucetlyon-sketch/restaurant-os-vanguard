@@ -17,7 +17,7 @@ export const ProductControlCard: React.FC<ProductControlCardProps> = ({
   const isHealthy = !item.is_rejected && item.checks.temperature.status === 'pass' && item.checks.visual.status === 'pass';
 
   return (
-    <div 
+    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
       onClick={onClick}
       className={`group relative p-4 rounded-2xl border-2 transition-all cursor-pointer ${
         item.is_rejected 

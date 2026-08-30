@@ -86,7 +86,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
     };
 
     return (
-        <div 
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
             className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[200] flex items-center justify-center p-6"
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >

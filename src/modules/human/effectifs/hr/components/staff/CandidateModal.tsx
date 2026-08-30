@@ -177,7 +177,7 @@ export const CandidateModal = ({ isOpen, onClose, candidate }: CandidateModalPro
             </div>
 
             {isCameraOpen && (
-                <div 
+                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
                     className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
                     onClick={(e) => { if (e.target === e.currentTarget) setIsCameraOpen(false); }}
                 >

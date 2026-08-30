@@ -26,7 +26,7 @@ export function ProcurementSupplierList({
           const progressPct = Math.min(100, Math.round((basket.basketTotalHtCts / basket.francoCts) * 100));
 
           return (
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
               key={basket.supplierId}
               onClick={() => setActiveSupplierId(basket.supplierId)}
               className={cn(

@@ -109,7 +109,7 @@ export function CustomerCustomerView({ customers, onCustomerClick, isLoading }: 
                             </div>
                         ))
                     ) : visible.map((customer) => (
-                        <motion.div
+                        <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                             key={customer.id}
                             variants={cinematicItem}
                             onClick={() => onCustomerClick(customer)}

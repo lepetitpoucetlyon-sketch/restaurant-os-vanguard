@@ -230,7 +230,7 @@ function POSPage() {
             {/* Tip panel */}
             <AnimatePresence>
                 {isTipPanelOpen && (
-                    <motion.div key="tip-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm px-4 pb-8 sm:pb-0" onClick={(e) => { if (e.target === e.currentTarget) handleTipSkipped(); }}>
+                    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} key="tip-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm px-4 pb-8 sm:pb-0" onClick={(e) => { if (e.target === e.currentTarget) handleTipSkipped(); }}>
                         <motion.div key="tip-card" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ type: "spring", stiffness: 380, damping: 34 }} className="w-full sm:w-[420px]">
                             <TipPanel totalInMicrounits={cartTotal} onTipSelect={handleTipConfirmed} />
                             <button onClick={handleTipSkipped} className="mt-4 w-full h-12 rounded-full border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:border-border/80 bg-surface-card/80 transition-colors">Passer — Sans pourboire</button>

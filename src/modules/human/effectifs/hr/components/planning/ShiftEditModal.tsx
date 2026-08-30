@@ -99,7 +99,7 @@ export function ShiftEditModal({
     if (!user || !date) return null;
 
     return (
-        <div 
+        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
             className="fixed inset-0 bg-black/50 backdrop-blur-xl z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500"
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >

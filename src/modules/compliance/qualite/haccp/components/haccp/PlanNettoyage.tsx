@@ -158,7 +158,7 @@ export function PlanNettoyage() {
                         const hasIncident = todaysLogs.some(l => l.type === 'incident' && l.item === task.label && l.zone === selectedZoneId);
 
                         return (
-                            <motion.div
+                            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                 key={task.id}
                                 whileHover={{ scale: 1.01, x: 5 }}
                                 onClick={() => handleToggleTask(task, selectedZoneId)}

@@ -28,7 +28,7 @@ export function DroppableStorageCard({ location, stockCount, prepCount, expiring
     const Icon = config.icon;
 
     return (
-        <motion.div
+        <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
             ref={setNodeRef}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

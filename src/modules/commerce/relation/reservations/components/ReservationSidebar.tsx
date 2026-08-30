@@ -142,7 +142,7 @@ export function ReservationSidebar({
                     ) : (
                         <AnimatePresence mode="popLayout">
                             {filteredAndSortedReservations.map((res) => (
-                                <motion.div
+                                <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                     key={res.id}
                                     variants={cinematicItem}
                                     whileHover={{ y: -5, transition: { duration: 0.3 } }}
@@ -199,7 +199,7 @@ export function ReservationSidebar({
 
                                             {/* Dropdown contextuel */}
                                             {activeActionId === res.id && (
-                                                <div 
+                                                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
                                                     onClick={(e) => e.stopPropagation()}
                                                     className="absolute right-0 top-10 w-44 bg-surface-card border border-border rounded-xl shadow-xl p-1 z-30 space-y-1"
                                                 >

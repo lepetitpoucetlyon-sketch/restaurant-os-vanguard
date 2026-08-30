@@ -135,7 +135,7 @@ function FloorPlanPage() {
                             {(tablesOnCurrentFloor as Table[]).map((t) => {
                                 const isOccupied = t.status === 'seated' || t.status === 'ordered' || t.status === 'eating' || t.status === 'paying' || (t.status as string) === 'occupied';
                                 return (
-                                    <div
+                                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                         key={t.id}
                                         onClick={() => setSelectedTableId(t.id)}
                                         className={cn(

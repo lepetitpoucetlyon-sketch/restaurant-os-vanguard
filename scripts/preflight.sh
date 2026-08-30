@@ -91,7 +91,7 @@ FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
 DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
 A11Y_MUETS_MAX=3             # boutons sans nom accessible — 89→3 après passe automatique aria-label sur icônes Lucide (2026-08-30)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
-A11Y_KEYBOARD_MAX=67         # conteneurs cliquables non focalisables (abaissé de 111 à 67)
+A11Y_KEYBOARD_MAX=28         # conteneurs cliquables non focalisables — 67→28 après injection auto role/tabIndex/onKeyDown (2026-08-30)
 VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8
 FR_HARDCODED_MAX=943         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète

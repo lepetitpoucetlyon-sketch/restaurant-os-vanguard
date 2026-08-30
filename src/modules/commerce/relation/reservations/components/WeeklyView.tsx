@@ -96,7 +96,7 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
                                     </div>
                                 ) : (
                                     dayRes.map((res) => (
-                                        <div
+                                        <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                             key={res.id}
                                             className="bg-bg-tertiary rounded-xl p-2 border border-border/50 hover:border-accent/30 transition-all group"
                                             onClick={(e) => e.stopPropagation()}

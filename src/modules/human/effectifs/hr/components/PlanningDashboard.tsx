@@ -179,7 +179,7 @@ export function PlanningDashboard() {
                                     {users.map(user => {
                                         const shift = dayShifts.find(s => s.userId === user.id);
                                         return (
-                                            <motion.div
+                                            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                                 key={user.id}
                                                 onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
                                                 className={cn(
@@ -238,7 +238,7 @@ export function PlanningDashboard() {
                                     {users.map(user => {
                                         const shift = dayShifts.find(s => s.userId === user.id);
                                         return (
-                                            <motion.div
+                                            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                                 key={user.id}
                                                 onClick={() => shift ? handleEditShift(shift) : handleCreateShift(user)}
                                                 className={cn(

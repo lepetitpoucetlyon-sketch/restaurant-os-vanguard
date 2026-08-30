@@ -39,7 +39,7 @@ const formatLastActive = (ts?: number): string => {
 };
 
 export const StaffCard = ({ user, onClick }: StaffCardProps) => (
-    <motion.div
+    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
         variants={staggerItem}
         whileHover={{ scale: 1.02, y: -4 }}
         whileTap={{ scale: 0.98 }}

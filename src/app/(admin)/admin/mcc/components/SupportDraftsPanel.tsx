@@ -212,7 +212,7 @@ export function SupportDraftsPanel() {
               </button>
 
               {isOpen && draft && edit && (
-                <div className="mt-3 pt-3 border-t border-border-subtle space-y-3" onClick={e => e.stopPropagation()}>
+                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} className="mt-3 pt-3 border-t border-border-subtle space-y-3" onClick={e => e.stopPropagation()}>
                   <p className="text-nano text-secondary">
                     <span className="text-text-primary/30">Requête originale : </span>{ticket.description}
                   </p>

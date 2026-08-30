@@ -86,7 +86,7 @@ export function ReservationCalendarPopup({
                             const isOtherMonth = !isSameMonth(day, calendarMonth);
                             
                             return (
-                                <motion.div
+                                <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                     key={i}
                                     whileHover={{ scale: 1.1 }}
                                     onClick={() => {

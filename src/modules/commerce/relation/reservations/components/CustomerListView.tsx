@@ -48,7 +48,7 @@ export function CustomerListView({
                 </div>
                 <motion.div variants={cinematicContainer} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
                     {visible.map(customer => (
-                        <motion.div 
+                        <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
                             key={customer.id} 
                             variants={cinematicItem} 
                             onClick={() => setSelectedCustomer(customer)} 
