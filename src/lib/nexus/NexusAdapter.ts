@@ -99,20 +99,16 @@ export class NexusManager {
 
     get activeTenant(): string | null {
         if (this._tenantOverride) return this._tenantOverride;
-        if (typeof process !== "undefined" && process.versions?.node) {
-            try {
-                // Dynamically access ServerTenantStorage in server context.
-                // require() sync est indispensable : ce getter est synchrone (activeTenant),
-                // les mutations tenant du serveur sont posées via AsyncLocalStorage à chaque requête.
-                // Un import statique embarquerait node:async_hooks dans le bundle client.
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
-                const { ServerTenantStorage } = require("@/lib/server/ServerTenantStorage");
-                const store = ServerTenantStorage.getStore();
-                if (store?.tenantId) return store.tenantId;
-            } catch {
-                // Ignore in browser/edge context
-            }
-        }
+        // Lot 5 nouveau plan — on lit une variable globale POSÉE par runWithServerTenant
+        // (server-only module). Le NexusAdapter n'importe PAS node:async_hooks ni
+        // ServerTenantStorage : Turbopack bundlait sinon async_hooks dans les
+        // chunks client (échec build /_not-found/page — chunking context does
+        // not support external module node:async_hooks). Côté client la clé est
+        // toujours undefined ; côté serveur runWithServerTenant la synchronise
+        // avec l'AsyncLocalStorage.
+        const g = globalThis as unknown as { __nexusServerTenant?: { tenantId?: string } };
+        const tenantId = g.__nexusServerTenant?.tenantId;
+        if (typeof tenantId === "string" && tenantId.length > 0) return tenantId;
         return null;
     }
 
