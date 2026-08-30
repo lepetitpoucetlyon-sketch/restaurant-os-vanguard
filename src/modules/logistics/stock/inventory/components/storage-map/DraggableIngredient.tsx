@@ -1,3 +1,4 @@
+import type React from "react";
 // @wip owner:logistics-team échéance:2026-Q4 — composant orphelin à intégrer ou supprimer (audit orphelins 2026-08-30)
 
 "use client";
@@ -46,7 +47,13 @@ export function DraggableIngredient({ ingredient, stockCount, highlightQuery, on
             style={style}
             {...listeners}
             {...attributes}
+            role="button"
+            tabIndex={0}
             onClick={onClick}
+            onKeyDown={(e) => {
+                listeners?.onKeyDown?.(e as unknown as React.KeyboardEvent<HTMLElement>);
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); }
+            }}
             className={cn(
                 "flex items-center gap-4 p-4 rounded-xl border transition-all group relative overflow-hidden",
                 isDragging

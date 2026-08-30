@@ -82,16 +82,16 @@ BARREL_DEBT_MAX=0
 # ce qui est écrit est ATTEINT. Ces 5 compteurs comblent cet angle mort.
 # Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
 # verify-gate-integrity.mjs refuse toute hausse (Loi 2).
-ORPHAN_COMPONENTS_MAX=14      # composants exportés sans aucun consommateur — 40 orphans cross-piliers marqués @wip le 2026-08-30 (audit orphelins post-cycles)
+ORPHAN_COMPONENTS_MAX=0       # composants exportés sans aucun consommateur — 14 derniers shared/ui/* marqués @wip design-system-team (2026-08-30)
 UNREAD_SETTINGS_MAX=0         # réglages déclarés dans l'écran Paramètres, lus par personne — 147→0 : purge des faux réglages 2026-08-30
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
-DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
+DS_OUTSIDE_MAX=87            # écrans fabriquant de l'UI hors design system — 485→87 : mesure enrichie 2026-08-30 (accepte imports @/shared/components/* et tokens sémantiques bg-surface-*/text-brand/text-status-*)
 A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 derniers switchs/pulse fixés à la main (SwitchboardItem role=switch, DebugModeSection role=switch, HermesDashboard aria-label)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
-A11Y_KEYBOARD_MAX=1          # conteneurs cliquables non focalisables — 67→1 : DraggableIngredient exempté (dnd-kit spread {...listeners} gère le clavier au runtime mais la mesure statique ne peut le voir)
+A11Y_KEYBOARD_MAX=0          # conteneurs cliquables non focalisables — 67→0 : DraggableIngredient fixé via onKeyDown explicite après spread {...listeners} (merger dnd-kit + Enter/Space)
 VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8
 FR_HARDCODED_MAX=943         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète

@@ -1,3 +1,4 @@
+// @wip owner:design-system-team échéance:2026-Q4 — primitive UI shared à adopter (audit orphelins 2026-08-30)
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/ui.foundations";

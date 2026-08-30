@@ -343,7 +343,13 @@ export const m10_footprint = {
 // ─────────────────────────────────────────────────────────────────────────────
 // M11 — Adoption du design system
 // ─────────────────────────────────────────────────────────────────────────────
-const IMPORT_DS_LINE = /^\s*import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"](?:@ui\/[^'"]*|@ui|@\/shared\/components\/ui[^'"]*|@components\/ui[^'"]*)['"];?\s*$/gm;
+// PIÈGE : la 1re version ne reconnaissait que `@ui/*` et `@/shared/components/ui`,
+// alors que la moitié du design system vit dans `@/shared/components/*` (PageShell,
+// GlassCard, Modal, layout/*, dynamic/*, blueprint/*, etc.). Une page qui utilise
+// PageShell + tokens `bg-surface-card` a une vraie adoption DS même sans importer
+// depuis `ui/`. Reste flagué : une page qui fabrique du raw `<button>` sans importer
+// aucune primitive shared/ (le vrai signe qu'elle rompt avec le design system).
+const IMPORT_DS_LINE = /^\s*import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"](?:@ui\/[^'"]*|@ui|@\/shared\/components(?:\/[^'"]*)?|@components(?:\/[^'"]*)?)['"];?\s*$/gm;
 
 /** Un import de DS ne prouve l'adoption QUE si au moins un symbole importé
  *  est effectivement référencé dans le corps du fichier. Un `import { Button }`
@@ -351,6 +357,7 @@ const IMPORT_DS_LINE = /^\s*import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"](?:@ui
  *  test, puis cherche les symboles. Sinon `npx eslint --fix` masque la dette
  *  en supprimant les imports morts qui gonflaient artificiellement l'adoption. */
 function adopteVraimentDs(src) {
+  // Voie 1 : import + usage effectif d'une primitive shared/components/*
   const importedSymbols = new Set();
   for (const m of src.matchAll(IMPORT_DS_LINE)) {
     for (const raw of m[1].split(',')) {
@@ -358,11 +365,18 @@ function adopteVraimentDs(src) {
       if (name) importedSymbols.add(name);
     }
   }
-  if (!importedSymbols.size) return false;
-  const body = src.replace(IMPORT_DS_LINE, '');
-  for (const sym of importedSymbols) {
-    if (new RegExp(`\\b${sym}\\b`).test(body)) return true;
+  if (importedSymbols.size > 0) {
+    const body = src.replace(IMPORT_DS_LINE, '');
+    for (const sym of importedSymbols) {
+      if (new RegExp(`\\b${sym}\\b`).test(body)) return true;
+    }
   }
+  // Voie 2 : usage massif de tokens sémantiques (bg-surface-*, text-brand-*,
+  // border-border-*, text-status-*, etc.) — c'est de la conformité DS par tokens
+  // sans importer de primitive. Seuil : ≥ 5 occurrences → adoption prouvée.
+  const tokenPattern = /\b(?:bg-surface-[\w-]+|bg-action-[\w-]+|text-brand[\w-]*|text-text-[\w-]+|text-status-[\w-]+|border-border-[\w-]+|text-on-[\w-]+|bg-status-[\w-]+|ring-focus[\w-]*|ring-accent[\w-]*)\b/g;
+  const tokenHits = (src.match(tokenPattern) || []).length;
+  if (tokenHits >= 5) return true;
   return false;
 }
 
