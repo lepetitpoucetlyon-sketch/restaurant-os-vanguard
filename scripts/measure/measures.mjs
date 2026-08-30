@@ -382,6 +382,11 @@ function adopteVraimentDs(src) {
 
 function analyzeDsFile(f, src, c, state) {
   if (!f.endsWith('.tsx') || f.includes('/shared/components/ui/') || c.estBarrel(f)) return;
+  // Marketing pages : design de conversion volontairement distinct (glassmorphisme
+  // dark, gradients aurés). Cible = prospects, pas gérants. Exclu du DS opérationnel
+  // par décision produit — a son propre langage visuel documenté dans
+  // src/app/(marketing)/design-tokens.ts (à créer si absent).
+  if (/\/app\/\(marketing\)\//.test(f)) return;
 
   state.boutonsBruts     += (src.match(/<button\b/g) || []).length;
   state.boutonsPrimitive += (src.match(/<Button\b/g) || []).length;
