@@ -1,3 +1,4 @@
+// @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 import React from 'react';
 import { AlertCircle, CheckCircle2, ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';

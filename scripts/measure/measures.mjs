@@ -403,8 +403,22 @@ function analyzeButtonAccessibleName(f, src, rel, muets) {
     const [, attrs, inner] = m;
     if (/aria-label|aria-labelledby|title=/.test(attrs)) continue;
     if (/\{t\(|\{\s*label|children/.test(inner)) continue;
-    const texte = inner.replace(/<[^>]+>/g, '').replace(/\{[^{}]*\}/g, '').trim();
-    if (!texte) muets.push(`${rel(f)} — bouton sans nom accessible`);
+    // PIÈGE : `{isXxx ? 'texte' : 'autre'}` contient du texte visible mais l'ancienne
+    // regex `\{[^{}]*\}` supprimait tout le bloc → faux positif muet. On préserve
+    // les string-literals visibles ('...' ou "...") AVANT de stripper les braces.
+    // On strip aussi les balises HTML pour révéler leur contenu texte.
+    let texte = inner.replace(/<[^>]+>/g, '');
+    // Extraire toutes les string-literals ('...' ou "..." ou `...`) hors bindings
+    const literals = [];
+    for (const lit of texte.matchAll(/(['"`])((?:(?!\1)[^\\]|\\.)*?)\1/g)) {
+      const val = lit[2].trim();
+      if (val && !/^(px|em|rem|%|#[0-9a-f]+|https?:|\/[a-z])/i.test(val)) literals.push(val);
+    }
+    // Strip braces (récursif — {a {b} c} → strip inner puis outer)
+    let prev;
+    do { prev = texte; texte = texte.replace(/\{[^{}]*\}/g, ''); } while (texte !== prev);
+    texte = texte.trim();
+    if (!texte && literals.length === 0) muets.push(`${rel(f)} — bouton sans nom accessible`);
   }
 }
 
