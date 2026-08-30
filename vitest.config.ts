@@ -18,7 +18,8 @@ export default defineConfig({
             exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/e2e/**'],
         },
         env: {
-            NEXUS_TENANT_SECRET: 'test-secret-for-vitest'
+            NEXUS_TENANT_SECRET: 'test-secret-for-vitest',
+            STRICT_ISOLATION_TEST: '1'
         }
     },
     resolve: {

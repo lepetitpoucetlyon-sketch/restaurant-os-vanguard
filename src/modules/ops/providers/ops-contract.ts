@@ -1,3 +1,4 @@
+import type { PlatformVariant } from '@/modules/system';
 /*
  * 🛰️ NEXUS SHARED GENOME - Universal SaaS Edition
  * Version Grade X - Sovereign Alignment
@@ -116,6 +117,8 @@ export interface TenantConfig {
   id: string;
   name?: string; 
   tier?: string; 
+  variant?: PlatformVariant;
+  platformVariant?: PlatformVariant; 
   billing?: {
     status: string;
     plan: string;

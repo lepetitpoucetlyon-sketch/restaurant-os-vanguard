@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MonthlyAccountingPackService } from '@/modules/finance';
-import { requireAnyAuth } from '@/lib/server/requireAnyAuth';
+import { requireAnyAuth, assertTenant } from '@/lib/server/requireAnyAuth';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = await requireAnyAuth(request);
     const { searchParams } = new URL(request.url);
-    const tenantId = searchParams.get('tenantId') || auth.tenantId;
+    const tenantId = assertTenant(auth, searchParams.get('tenantId'));
     const now = new Date();
     const defaultPeriod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const period = searchParams.get('period') || defaultPeriod;

@@ -20,7 +20,7 @@ import {
 
 export function useLexicon(): IVerticalLexicon {
   const tenantState = useTenant();
-  const variant = tenantState?.activeTenantConfig?.platformVariant ?? 'restaurant';
+  const variant = tenantState?.activeTenantConfig?.variant ?? tenantState?.activeTenantConfig?.platformVariant ?? 'restaurant';
 
   return useMemo(() => {
     switch (variant) {
