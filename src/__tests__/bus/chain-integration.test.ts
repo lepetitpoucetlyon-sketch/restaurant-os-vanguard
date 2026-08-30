@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
-import { registerKDSOrderHandler } from '@/shared/eventBus/handlers/KDSOrderHandler';
 import { registerCashCountReconciliationHandler } from '@/shared/eventBus/handlers/CashCountReconciliationHandler';
 import { registerHaccpCorrectiveActionHandler } from '@/shared/eventBus/handlers/HaccpCorrectiveActionHandler';
 import { registerShiftStartedHandler } from '@/shared/eventBus/handlers/ShiftStartedHandler';
@@ -12,7 +11,6 @@ describe('NexusEventBus Chain Integration Tests', () => {
   });
 
   it('P0-1.1: order.placed triggers KDSOrderHandler immediately on order placement', async () => {
-    const unsub = registerKDSOrderHandler();
     let handled = false;
 
     // Listen to set flag
@@ -30,7 +28,6 @@ describe('NexusEventBus Chain Integration Tests', () => {
     });
 
     expect(handled).toBe(true);
-    unsub();
   });
 
   it('P0-1.2: notification.urgent triggers NotificationUrgentDispatchHandler', async () => {

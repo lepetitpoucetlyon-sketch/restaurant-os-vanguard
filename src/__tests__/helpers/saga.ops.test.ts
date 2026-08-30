@@ -32,7 +32,6 @@ vi.mock('@/lib/shared-kernel', () => ({
 
 // ─── Imports ───────────────────────────────────────────────────────────────────
 
-import { registerKDSOrderHandler } from '@/shared/eventBus/handlers/KDSOrderHandler';
 import { registerPaymentLedgerHandler } from '@/shared/eventBus/handlers/PaymentLedgerHandler';
 import { registerTableAutoReleaseHandler } from '@/shared/eventBus/handlers/TableAutoReleaseHandler';
 import { registerNoShowTableReleaseHandler } from '@/shared/eventBus/handlers/NoShowTableReleaseHandler';
@@ -70,50 +69,6 @@ beforeEach(() => {
   vi.spyOn(Nexus.adapter, 'update').mockImplementation(mockUpdate as typeof Nexus.adapter.update);
   // browserPush — same module isolation issue, use vi.spyOn
   vi.spyOn(browserPush, 'sendToRole').mockImplementation(mockSendToRole as typeof browserPush.sendToRole);
-});
-
-describe('KDSOrderHandler', () => {
-  beforeEach(() => {
-    mockGet.mockClear();
-    mockSet.mockClear();
-    mockUpdate.mockClear();
-    mockEmit.mockClear();
-    mockSendToRole.mockClear();
-    registerKDSOrderHandler();
-  });
-
-  it('crée un kdsOrder avec status pending lors d\'order.paid', async () => {
-    mockSet.mockResolvedValue(undefined);
-
-    await capturedHandlers['order.placed'](baseOrderPaid);
-
-    expect(mockSet).toHaveBeenCalledWith(
-      'tenants/T/kdsOrders/ord-1',
-      expect.objectContaining({ orderId: 'ord-1', tableId: 'tbl-1', status: 'pending' }),
-    );
-  });
-
-  it('inclut tous les items avec status pending', async () => {
-    mockSet.mockResolvedValue(undefined);
-
-    await capturedHandlers['order.placed']({
-      ...baseOrderPaid,
-      items: [
-        { productId: 'p1', name: 'Pizza', quantity: 1, unitPriceInMicrounits: 1000000, priceInMicrounits: 1000000 },
-        { productId: 'p2', name: 'Salade', quantity: 1, unitPriceInMicrounits: 800000, priceInMicrounits: 800000 },
-      ],
-    });
-
-    const kdsOrder = mockSet.mock.calls[0][1];
-    expect(kdsOrder.items).toHaveLength(2);
-    expect(kdsOrder.items.every((i: { status: string }) => i.status === 'pending')).toBe(true);
-  });
-
-  it('ne crée pas de kdsOrder si items vide', async () => {
-    await capturedHandlers['order.placed']({ ...baseOrderPaid, items: [] });
-
-    expect(mockSet).not.toHaveBeenCalled();
-  });
 });
 
 // ─── PaymentLedgerHandler ─────────────────────────────────────────────────────

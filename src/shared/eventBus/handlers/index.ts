@@ -59,7 +59,6 @@ export * from './HardwareFaultHandler';
 export * from './InactiveCustomerHandler';
 export * from './IntelligenceHandler';
 export * from './IotOfflineAlertHandler';
-export * from './KDSOrderHandler';
 export * from './KDSReadyHandler';
 export * from './KDSRushAlertNotifier';
 export * from './KDSTicketDoneNotifier';
