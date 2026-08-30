@@ -25,7 +25,7 @@ describe('⚖️ NF525 Fiscal Guard & Cryptographic Sealing — Inaltérabilité
       instanceId: TENANT_ID,
     });
 
-    expect(seal1.id).toMatch(/^SEAL_/);
+    expect(seal1.id).toMatch(/^(SEAL_|seal_)/i);
     expect(seal1.transactionId).toBe('tx_sale_101');
     expect(seal1.previousHash).toBe(FISCAL_CONSTANTS.GENESIS_ROOT);
     expect(seal1.hash).toBeDefined();
@@ -85,11 +85,12 @@ describe('⚖️ NF525 Fiscal Guard & Cryptographic Sealing — Inaltérabilité
   });
 
   it('3. Détecte immédiatement toute tentative de falsification ou modification de montant (Anti-Fraude)', async () => {
-    const seal1 = await FiscalEngine.sealEntry('tx_001', {
+    // IDs uniques par test — la garde B.3 (Lot correctif) refuse de ré-écrire un journalEntry existant
+    const seal1 = await FiscalEngine.sealEntry('tx_fraud_101', {
       amountCts: 10000,
     }, { instanceId: TENANT_ID });
 
-    const seal2 = await FiscalEngine.sealEntry('tx_002', {
+    const seal2 = await FiscalEngine.sealEntry('tx_fraud_102', {
       amountCts: 20000,
     }, { lastSeal: seal1, instanceId: TENANT_ID });
 

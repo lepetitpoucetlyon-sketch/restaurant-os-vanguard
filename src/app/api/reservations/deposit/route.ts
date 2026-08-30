@@ -1,3 +1,4 @@
+import { FiscalSealer } from "@/modules/finance";
 /**
  * Acompte privatisation/groupe — res-14
  *
@@ -17,11 +18,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/modules/finance';
 import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
-import type { FiscalSeal } from '@nexus/contracts';
 import { toError } from "@/lib/toError";
 
 const MICROUNITS_PER_CENT = 10; // 1 microunit = 0.000001€, 1 cent = 0.01€ = 10 000 µ
@@ -130,31 +129,40 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
       createdAt:       new Date().toISOString(),
     };
 
-    const existingSeals = await Nexus.adapter.query<FiscalSeal>(`tenants/${tenantId}/fiscalSeals`);
-    const lastSeal = existingSeals.sort((a, b) =>
-      new Date(b.timestamp ?? 0).getTime() - new Date(a.timestamp ?? 0).getTime()
-    )[0];
+    // 🛡️ Idempotence Stripe : vérification préalable
+    const stripeEventDoc = await Nexus.adapter.get(`tenants/${tenantId}/stripeEvents/${event.id}`);
+    if (stripeEventDoc) {
+      logger.info(`[Deposit] Événement Stripe ${event.id} déjà traité (idempotent)`);
+      return NextResponse.json({ received: true, idempotent: true });
+    }
 
     const dataSnapshot = CryptoService.canonicalStringify(
       journalEntry
     );
-    const seal = await FiscalEngine.sealEntry(
-      jeId,
-      journalEntry as unknown as Record<string, import("@/shared/nexus/contracts").SovereignValue>,
-      { lastSeal }
+
+    const seal = await FiscalSealer.sealDataAtomically(
+      dataSnapshot,
+      tenantId,
+      false,
+      journalEntry,
+      (tx, sealId) => {
+        tx.set(`tenants/${tenantId}/stripeEvents/${event.id}`, {
+          eventId: event.id,
+          sessionId: session.id,
+          reservationId,
+          journalEntryId: jeId,
+          sealId,
+          processedAt: new Date().toISOString(),
+        });
+        tx.update(`tenants/${tenantId}/reservations/${reservationId}`, {
+          depositStatus:   'paid',
+          depositPaidAt:   new Date().toISOString(),
+          depositJournalEntryId: jeId,
+        });
+      }
     );
 
-    const batch = Nexus.adapter.batch();
-    batch.set(`tenants/${tenantId}/journalEntries/${jeId}`, journalEntry);
-    batch.set(`tenants/${tenantId}/fiscalSeals/${seal.id}`, { ...seal, dataSnapshot });
-    batch.set(`tenants/${tenantId}/reservations/${reservationId}`, {
-      depositStatus:   'paid',
-      depositPaidAt:   new Date().toISOString(),
-      depositJournalEntryId: jeId,
-    });
-    await batch.commit();
-
-    logger.info(`[Deposit] Acompte encaissé → JournalEntry ${jeId} + FiscalSeal ${seal.id}`);
+    logger.info(`[Deposit] Acompte encaissé → JournalEntry ${jeId} + FiscalSeal ${seal.sealId}`);
   }
 
   return NextResponse.json({ received: true });

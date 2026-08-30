@@ -14,6 +14,11 @@ import { isSuzerainTenant } from './utils/tenantPath';
  * Encapsulates SovereignGuard, Tenant Scoping, and NF525 Fiscal Compliance.
  * Shields raw adapters from complex business logic.
  */
+// Lot B.3 — Whitelist des collections FISCALES strictement immuables
+// (source: NF525_IMMUTABLE_COLLECTIONS de SnapshotService — NE PAS inclure tenantConfig,
+// haccpLogs, iotHistory : ces collections sont append-only fonctionnelles, pas fiscales).
+const NF525_STRICT_TX = /(?:^|\/)(journalEntries|fiscalSeals|fiscalLedger|wormArchives|fiscalArchives|grandTotals)(?:\/|$)/;
+
 export class NexusInterceptor implements INexusAdapter {
     constructor(
         private readonly adapter: INexusAdapter,
@@ -194,8 +199,16 @@ export class NexusInterceptor implements INexusAdapter {
         return this.adapter.runTransaction(async (rawTx) => {
             const guardedTx: INexusTransaction = {
                 get: (path) => rawTx.get(this.scopePath(path, ctx.vassalId)),
-                set: (path, data) => {
+                set: async (path, data) => {
                     const scoped = this.scopePath(path, ctx.vassalId);
+                    // Lot B.3 — même règle : set() ne doit pas écraser une pièce fiscale scellée existante
+                    if (NF525_STRICT_TX.test(scoped)) {
+                        let existing: unknown = null;
+                        try { existing = await rawTx.get(scoped); } catch { /* absence = OK */ }
+                        if (existing) {
+                            throw new NexusError(NexusErrorCode.NF525_VIOLATION, `Cannot overwrite existing sealed document via tx.set(): ${scoped}`);
+                        }
+                    }
                     return rawTx.set(scoped, data);
                 },
                 update: (path, data) => {
@@ -294,6 +307,26 @@ export class NexusInterceptor implements INexusAdapter {
                     timestamp: new Date().toISOString(),
                 });
                 throw new NexusError(NexusErrorCode.NF525_VIOLATION, 'Cannot update a fiscally sealed document');
+            }
+        }
+
+        // Lot B.3 — WRITE sur une collection FISCALE STRICTE qui écrase un doc existant.
+        // Un set() sans merge sur une pièce scellée = violation NF525.
+        // Périmètre : NF525_STRICT_TX (fiscal only) — voir constante en tête de fichier.
+        if (operation === 'WRITE' && NF525_STRICT_TX.test(path)) {
+            const scoped = this.scopePath(path, context.vassalId);
+            let existing: unknown = null;
+            try { existing = await this.adapter.get(scoped); } catch { /* absence = OK */ }
+            if (existing) {
+                await NexusTelemetryService.emit({
+                    pulse: AuditPulseType.ILLEGAL_WRITE_ATTEMPT,
+                    vassalId: context.vassalId,
+                    actorId: context.actorId,
+                    payload: { path: this.sanitizePath(path), reason: 'overwrite_immutable' },
+                    severity: 'CRITICAL',
+                    timestamp: new Date().toISOString(),
+                });
+                throw new NexusError(NexusErrorCode.NF525_VIOLATION, `Cannot overwrite existing sealed document via set(): ${this.sanitizePath(path)}`);
             }
         }
 

@@ -24,15 +24,26 @@ export function registerCryptoIntegrityCheckHandler() {
         return;
       }
 
+      const dateKey = (v: unknown): string | number => {
+        if (typeof v === 'string' || typeof v === 'number') return v;
+        return 0;
+      };
       const sorted = [...seals].sort(
-        (a, b) => new Date(a.timestamp ?? 0).getTime() - new Date(b.timestamp ?? 0).getTime()
+        (a, b) => new Date(dateKey(a.serverRecordedAt ?? a.timestamp)).getTime() - new Date(dateKey(b.serverRecordedAt ?? b.timestamp)).getTime()
       );
 
       let brokenAt: string | null = null;
 
-      for (const seal of sorted) {
+      for (let i = 0; i < sorted.length; i++) {
+        const seal = sorted[i];
         if (seal.hash === 'TRAINING_MODE_UNSIGNED_HASH') continue;
         if (!seal.dataSnapshot) continue;
+
+        // Contrôle de continuité de la chaîne
+        if (i > 0 && seal.previousHash !== sorted[i - 1].hash) {
+          brokenAt = seal.id ?? 'unknown';
+          break;
+        }
 
         const recomputed = await CryptoService.generateHash(seal.dataSnapshot, seal.previousHash);
         if (recomputed !== seal.hash) {

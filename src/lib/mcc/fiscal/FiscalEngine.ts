@@ -1,3 +1,4 @@
+import { FiscalSealer } from "@/modules/finance";
 import { FiscalSeal } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
@@ -22,39 +23,63 @@ export const FiscalEngine = {
   /**
    * Seals a journal entry by creating a fiscal chain link
    */
-  async sealEntry(
+    async sealEntry(
     transactionId: string, 
     data: Record<string, import("@/shared/nexus/contracts").SovereignValue>, 
     options: { lastSeal?: FiscalSeal, isTrainingMode?: boolean, instanceId?: string } = {}
   ): Promise<FiscalSeal> {
-    const timestamp = new Date().toISOString();
-    const dataSnapshot = CryptoService.canonicalStringify(data as import("@/shared/nexus/contracts").SovereignData); 
-    const id = SharedKernel.generateId('SEAL');
+    const tenantId = options.instanceId || "main";
+    const isTraining = Boolean(options.isTrainingMode);
+    const dataSnapshot = CryptoService.canonicalStringify(data as import("@/shared/nexus/contracts").SovereignData);
 
-    const previousHash = options.lastSeal ? options.lastSeal.hash : FISCAL_CONSTANTS.GENESIS_ROOT;
-
-    if (options.isTrainingMode) {
-        return {
-                id, transactionId, timestamp, dataSnapshot,
-                hash: FISCAL_CONSTANTS.TRAINING_MODE_HASH,
-                previousHash,
-                signature: 'VTC_SCHOOL_TRAINING_SIGNATURE',
-                updatedAt: new Date().toISOString()
-        };
+    if (options.lastSeal) {
+      const id = SharedKernel.generateId("SEAL");
+      const timestamp = new Date().toISOString();
+      const previousHash = options.lastSeal.hash;
+      let hash: string;
+      let signature: string;
+      if (isTraining) {
+        hash = FISCAL_CONSTANTS.TRAINING_MODE_HASH;
+        signature = "VTC_SCHOOL_TRAINING_SIGNATURE";
+      } else {
+        hash = await CryptoService.generateHash(dataSnapshot, previousHash);
+        signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(tenantId));
+      }
+      const seal: FiscalSeal = { id, transactionId, previousHash, hash, dataSnapshot, timestamp, signature, updatedAt: new Date().toISOString() };
+      empireAudit.log({
+        module: "accounting",
+        action: "TRANSACTION_SEALED",
+        details: { sealId: id, hash: hash.substring(0, 8), transactionId },
+        severity: "low",
+        timestamp: new Date()
+      });
+      return seal;
     }
 
-    const hash = await CryptoService.generateHash(dataSnapshot, previousHash);
-    // instanceId = index de lookup de la clé provisionnée — jamais le secret lui-même.
-    const signature = await CryptoService.signFiscalData(hash, FiscalKeyService.requireKey(options.instanceId));
+    const res = await FiscalSealer.sealDataAtomically(
+      dataSnapshot,
+      tenantId,
+      isTraining,
+      { id: transactionId, ...data }
+    );
 
-    const seal: FiscalSeal = { id, transactionId, previousHash, hash, dataSnapshot, timestamp, signature, updatedAt: new Date().toISOString() };
+    const seal: FiscalSeal = {
+      id: res.sealId,
+      transactionId,
+      previousHash: res.previousHash,
+      hash: res.hash,
+      dataSnapshot,
+      timestamp: new Date().toISOString(),
+      signature: res.signature,
+      updatedAt: new Date().toISOString(),
+    };
 
     empireAudit.log({
-        module: 'accounting',
-        action: 'TRANSACTION_SEALED',
-        details: { sealId: id, hash: hash.substring(0, 8), transactionId },
-        severity: 'low',
-        timestamp: new Date()
+      module: "accounting",
+      action: "TRANSACTION_SEALED",
+      details: { sealId: res.sealId, hash: res.hash.substring(0, 8), transactionId },
+      severity: "low",
+      timestamp: new Date()
     });
 
     return seal;
