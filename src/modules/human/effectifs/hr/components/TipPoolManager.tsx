@@ -7,11 +7,19 @@ import { cn } from "@/lib/ui.foundations";
 import { TipDistributionService } from "../services/tipDistribution";
 import { toMicrounits } from "@/shared/schemas/primitives";
 import { toast } from "sonner";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { useTenant } from "@/shared/hooks/useTenant";
+import { SharedKernel } from "@/lib/shared-kernel";
+import { logger } from "@/lib/logger";
 
 export function TipPoolManager() {
+  const tenant = useTenant();
+  const tenantId = tenant?.activeTenantId ?? null;
   const [totalTipsEur, setTotalTipsEur] = useState<number>(130);
   const [rule, setRule] = useState<'hours_worked' | 'equal' | 'rank_weighted'>('hours_worked');
   const [isDistributed, setIsDistributed] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const staff = [
     { userId: "emp_1", role: "server", hoursWorked: 7.5 },
@@ -22,9 +30,44 @@ export function TipPoolManager() {
   const totalMicrounits = toMicrounits(totalTipsEur);
   const shares = TipDistributionService.distribute(totalMicrounits, staff, rule);
 
-  const handleCloture = () => {
-    setIsDistributed(true);
-    toast.success("Pourboires répartis et enregistrés selon la convention HCR");
+  const handleCloture = async () => {
+    if (!tenantId) {
+      toast.error("Contexte tenant absent : impossible d'enregistrer la répartition.");
+      return;
+    }
+    setIsSaving(true);
+    const poolId = SharedKernel.generateId("TIP-POOL");
+    const now = Date.now();
+    const periodLabel = new Date(now).toISOString().slice(0, 10);
+    try {
+      // Persistance dans une collection dédiée (non immuable — les corrections restent possibles avant clôture Z)
+      await Nexus.adapter.set(`tenants/${tenantId}/tipDistributions/${poolId}`, {
+        id: poolId,
+        periodLabel,
+        rule,
+        totalInMicrounits: totalMicrounits,
+        shares: shares.map(s => ({ userId: s.userId, amountInMicrounits: s.amountInMicrounits, percent: s.percent })),
+        employeeCount: shares.length,
+        createdAt: new Date(now).toISOString(),
+      });
+      // Cascade : la cible en aval (ledger, préparation paie) écoute cet event
+      await NexusEventBus.emit("hr.tip_redistribution_processed", {
+        v: 1,
+        tenantId,
+        poolId,
+        periodLabel,
+        totalInMicrounits: totalMicrounits,
+        employeeCount: shares.length,
+        processedAt: now,
+      });
+      setIsDistributed(true);
+      toast.success(`Pourboires clôturés et comptabilisés (${shares.length} bénéficiaires)`);
+    } catch (err) {
+      logger.error("[TipPoolManager] Échec de la clôture des pourboires", err);
+      toast.error("Impossible d'enregistrer la répartition — réessaie ou contacte le support.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -92,7 +135,7 @@ export function TipPoolManager() {
           <div className="pt-3">
             <button
               onClick={handleCloture} aria-label="Valider la répartition des pourboires et générer l'écriture"
-              disabled={isDistributed}
+              disabled={isDistributed || isSaving}
               className={cn(
                 "w-full py-3 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2",
                 isDistributed
@@ -104,6 +147,8 @@ export function TipPoolManager() {
                 <>
                   <CheckCircle2 className="w-4 h-4" /> Pourboires Clôturés & Comptabilisés
                 </>
+              ) : isSaving ? (
+                "Enregistrement en cours…"
               ) : (
                 "Valider la Répartition & Générer l'Écriture"
               )}

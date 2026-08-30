@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { BedDouble, KeyRound, UserCheck, CreditCard, RefreshCw, CheckCircle2, Search, Filter } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { BedDouble, Search } from "lucide-react";
 import { PageShell } from "@/shared/components/ui/PageShell";
 import { StatGrid, StatCard } from "@/shared/components/ui";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";
 import { toast } from "sonner";
+import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { useTenant } from "@/shared/hooks/useTenant";
+import { toMicrounits } from "@/shared/schemas/primitives";
+import { SharedKernel } from "@/lib/shared-kernel";
+import { logger } from "@/lib/logger";
 
 interface RoomFolio {
   roomNumber: string;
@@ -14,23 +20,45 @@ interface RoomFolio {
   checkIn: string;
   checkOut: string;
   status: 'occupied' | 'reserved' | 'cleaning' | 'available';
-  balanceCents: number;
+  balanceInMicrounits: number;
   pmsSyncStatus: 'synced' | 'pending' | 'error';
 }
 
 const SAMPLE_ROOMS: RoomFolio[] = [
-  { roomNumber: "101", guestName: "M. Jean Dupont", checkIn: "2026-08-20", checkOut: "2026-08-25", status: "occupied", balanceCents: 14500, pmsSyncStatus: "synced" },
-  { roomNumber: "102", guestName: "Mme Claire Martin", checkIn: "2026-08-22", checkOut: "2026-08-24", status: "occupied", balanceCents: 4200, pmsSyncStatus: "synced" },
-  { roomNumber: "103", guestName: "—", checkIn: "—", checkOut: "—", status: "available", balanceCents: 0, pmsSyncStatus: "synced" },
-  { roomNumber: "201", guestName: "M. Thomas Miller", checkIn: "2026-08-21", checkOut: "2026-08-26", status: "occupied", balanceCents: 32000, pmsSyncStatus: "synced" },
-  { roomNumber: "202", guestName: "Mme Sophie Bernard", checkIn: "2026-08-23", checkOut: "2026-08-24", status: "occupied", balanceCents: 8500, pmsSyncStatus: "pending" },
-  { roomNumber: "203", guestName: "—", checkIn: "—", checkOut: "—", status: "cleaning", balanceCents: 0, pmsSyncStatus: "synced" },
+  { roomNumber: "101", guestName: "M. Jean Dupont", checkIn: "2026-08-20", checkOut: "2026-08-25", status: "occupied", balanceInMicrounits: toMicrounits(145.0), pmsSyncStatus: "synced" },
+  { roomNumber: "102", guestName: "Mme Claire Martin", checkIn: "2026-08-22", checkOut: "2026-08-24", status: "occupied", balanceInMicrounits: toMicrounits(42.0), pmsSyncStatus: "synced" },
+  { roomNumber: "103", guestName: "—", checkIn: "—", checkOut: "—", status: "available", balanceInMicrounits: toMicrounits(0.0), pmsSyncStatus: "synced" },
+  { roomNumber: "201", guestName: "M. Thomas Miller", checkIn: "2026-08-21", checkOut: "2026-08-26", status: "occupied", balanceInMicrounits: toMicrounits(320.0), pmsSyncStatus: "synced" },
+  { roomNumber: "202", guestName: "Mme Sophie Bernard", checkIn: "2026-08-23", checkOut: "2026-08-24", status: "occupied", balanceInMicrounits: toMicrounits(85.0), pmsSyncStatus: "pending" },
+  { roomNumber: "203", guestName: "—", checkIn: "—", checkOut: "—", status: "cleaning", balanceInMicrounits: toMicrounits(0.0), pmsSyncStatus: "synced" },
 ];
 
 export function PmsPage() {
+  const tenant = useTenant();
+  const tenantId = tenant?.activeTenantId ?? null;
   const [rooms, setRooms] = useState<RoomFolio[]>(SAMPLE_ROOMS);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!tenantId) return;
+    let cancelled = false;
+    setIsLoading(true);
+    Nexus.adapter.query<RoomFolio & { id: string }>(`tenants/${tenantId}/rooms`)
+      .then((docs) => {
+        if (cancelled) return;
+        if (Array.isArray(docs) && docs.length > 0) {
+          setRooms(docs as unknown as RoomFolio[]);
+        }
+        // Sinon on garde SAMPLE_ROOMS comme fallback demo (tenant vierge)
+      })
+      .catch((err) => {
+        logger.warn("[PMS] Chargement rooms échoué, fallback demo", err);
+      })
+      .finally(() => { if (!cancelled) setIsLoading(false); });
+    return () => { cancelled = true; };
+  }, [tenantId]);
 
   const filteredRooms = rooms.filter((r) => {
     const matchSearch = r.roomNumber.includes(search) || r.guestName.toLowerCase().includes(search.toLowerCase());
@@ -39,11 +67,15 @@ export function PmsPage() {
   });
 
   const totalOccupied = rooms.filter((r) => r.status === "occupied").length;
-  const totalBalanceCents = rooms.reduce((sum, r) => sum + r.balanceCents, 0);
+  const totalBalanceMu = rooms.reduce((sum, r) => sum + r.balanceInMicrounits, 0);
 
-  const handleChargeRoom = (room: RoomFolio) => {
+  const handleChargeRoom = async (room: RoomFolio) => {
     if (room.status !== 'occupied') {
       toast.error(`La chambre ${room.roomNumber} n'est pas occupée`);
+      return;
+    }
+    if (!tenantId) {
+      toast.error("Contexte tenant absent : impossible d'imputer.");
       return;
     }
     const input = window.prompt(`Imputer une note sur la chambre ${room.roomNumber} (${room.guestName})\nMontant en euros (€) :`, "25.00");
@@ -53,9 +85,40 @@ export function PmsPage() {
       toast.error("Montant invalide");
       return;
     }
-    const chargeCents = Math.round(amount * 100);
-    setRooms(prev => prev.map(r => r.roomNumber === room.roomNumber ? { ...r, balanceCents: r.balanceCents + chargeCents } : r));
-    toast.success(`Note de ${amount.toFixed(2)}€ imputée sur la chambre ${room.roomNumber}`);
+    const chargeMu = toMicrounits(amount);
+    const nextBalanceMu = room.balanceInMicrounits + chargeMu;
+    const chargeId = SharedKernel.generateId("FOLIO-CHARGE");
+    try {
+      const now = new Date().toISOString();
+      // 1) Ligne de folio persistée (append-only pour audit)
+      await Nexus.adapter.set(`tenants/${tenantId}/folios/${room.roomNumber}/charges/${chargeId}`, {
+        id: chargeId,
+        roomNumber: room.roomNumber,
+        guestName: room.guestName,
+        description: "Room service",
+        amountInMicrounits: chargeMu,
+        chargedAt: now,
+      });
+      // 2) Mise à jour du solde du folio
+      await Nexus.adapter.set(`tenants/${tenantId}/rooms/${room.roomNumber}`, {
+        ...room,
+        balanceInMicrounits: nextBalanceMu,
+        updatedAt: now,
+      });
+      // 3) Cascade métier — le sceau NF525 intervient au check-out, pas à l'imputation
+      await NexusEventBus.emit("hotel.folio_charged", {
+        tenantId,
+        guestId: room.guestName || room.roomNumber,
+        reservationId: room.roomNumber,
+        amountInMicrounits: chargeMu,
+        description: `Room service — chambre ${room.roomNumber}`,
+      });
+      setRooms(prev => prev.map(r => r.roomNumber === room.roomNumber ? { ...r, balanceInMicrounits: nextBalanceMu } : r));
+      toast.success(`Note de ${amount.toFixed(2)}€ imputée sur la chambre ${room.roomNumber}`);
+    } catch (err) {
+      logger.error("[PMS] Imputation folio échouée", err);
+      toast.error("Impossible d'enregistrer l'imputation — réessaie.");
+    }
   };
 
   return (
@@ -69,7 +132,7 @@ export function PmsPage() {
       <div className="p-6 space-y-6">
         <StatGrid columns={3}>
           <StatCard label="Taux d'Occupation Chambres" value={`${Math.round((totalOccupied / rooms.length) * 100)}%`} />
-          <StatCard label="Encours Room Service & Repas" value={formatCurrency(totalBalanceCents / 100)} />
+          <StatCard label="Encours Room Service & Repas" value={formatCurrency(totalBalanceMu / 1_000_000)} />
           <StatCard label="Connecteur PMS Actif" value="Mews PMS (Connecté)" />
         </StatGrid>
 
@@ -133,7 +196,7 @@ export function PmsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-nano text-text-muted uppercase font-bold">Encours Folio</span>
-                  <p className="text-base font-mono font-bold text-text-primary mt-0.5">{formatCurrency(room.balanceCents / 100)}</p>
+                  <p className="text-base font-mono font-bold text-text-primary mt-0.5">{formatCurrency(room.balanceInMicrounits / 1_000_000)}</p>
                 </div>
                 <button 
                   onClick={() => handleChargeRoom(room)}
