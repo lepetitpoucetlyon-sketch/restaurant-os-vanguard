@@ -41,7 +41,6 @@ import { TIACEmergencyWorkflowService } from '@/modules/compliance/qualite/haccp
 import { KDSItemDeltaModificationService } from '@/modules/ops/production/kds/services/KDSItemDeltaModificationService';
 import { LotAllergenMatrixService } from '@/modules/ops/production/kds/services/LotAllergenMatrixService';
 import { KDSMicroSequencingService } from '@/modules/ops/production/kds/services/KDSMicroSequencingService';
-import { KDSVisualDelayWarningService } from '@/modules/ops/production/kds/services/KDSVisualDelayWarningService';
 describe('anglemorts-batch5a (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 

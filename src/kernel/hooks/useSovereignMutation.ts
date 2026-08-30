@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { OutboxService } from '@/lib/offline/OutboxService';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { NF525_IMMUTABLE_COLLECTIONS } from '@/infrastructure/services/backup/SnapshotService';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';

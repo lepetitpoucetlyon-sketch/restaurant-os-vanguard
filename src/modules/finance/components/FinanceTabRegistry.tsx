@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { BookOpen, Receipt, Landmark, Wallet, ShieldCheck, PlusCircle } from "lucide-react";
-import type { FinanceTab } from "./financeUtils";
 
 export const AccountingTab = dynamic(() => import("./_tabs/AccountingTab").then(m => m.AccountingTab));
 export const BillingTab = dynamic(() => import("./_tabs/BillingTab").then(m => m.BillingTab));

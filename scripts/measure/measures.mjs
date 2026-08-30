@@ -19,6 +19,14 @@ import { join } from 'node:path';
 // ─────────────────────────────────────────────────────────────────────────────
 // M1 — Composants exportés sans aucun consommateur
 // ─────────────────────────────────────────────────────────────────────────────
+/** Retire les lignes `import ... from ...` (et le corps des blocs `import {}`
+ *  sur plusieurs lignes) avant l'analyse d'usage : un import inutilisé n'est
+ *  PAS un consommateur du symbole. C'est le piège inverse du ré-export barrel
+ *  (voir m1). Sans ce filtre, `npx eslint --fix` sur unused-imports fait chuter
+ *  artificiellement le compteur (mesuré le 2026-08-30 : -14 sur dsAdoption). */
+function stripImports(src) {
+  return src.replace(/^\s*import\s+(?:type\s+)?[\s\S]*?\bfrom\s+['"][^'"]+['"];?\s*$/gm, '');
+}
 export const m1_reachability = {
   id: 'orphans',
   titre: 'Composants sans consommateur',
@@ -26,10 +34,14 @@ export const m1_reachability = {
     // PIÈGE : un ré-export de barrel (`export * from './X'`) N'EST PAS un usage.
     // La 1re version de cet audit traversait les barrels et annonçait 58 orphelins
     // au lieu de 88 — une sous-évaluation de 52 %.
+    // PIÈGE 2 : un import inutilisé (`import { Button } from '@ui'` sans usage)
+    // n'est PAS un consommateur non plus. `stripImports` retire les import lines
+    // avant scan. Sinon la mesure devient fausse à chaque `npx eslint --fix`.
     const usagesParNom = new Map();
     for (const [f, src] of c.contenu) {
       if (c.estBarrel(f)) continue;
-      for (const m of src.matchAll(/\b([A-Z]\w+)\b/g)) {
+      const body = stripImports(src);
+      for (const m of body.matchAll(/\b([A-Z]\w+)\b/g)) {
         if (!usagesParNom.has(m[1])) usagesParNom.set(m[1], new Set());
         usagesParNom.get(m[1]).add(f);
       }
@@ -331,7 +343,28 @@ export const m10_footprint = {
 // ─────────────────────────────────────────────────────────────────────────────
 // M11 — Adoption du design system
 // ─────────────────────────────────────────────────────────────────────────────
-const IMPORT_DS = /from\s+['"](@ui\/|@ui['"]|@\/shared\/components\/ui|@components\/ui)/;
+const IMPORT_DS_LINE = /^\s*import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"](?:@ui\/[^'"]*|@ui|@\/shared\/components\/ui[^'"]*|@components\/ui[^'"]*)['"];?\s*$/gm;
+
+/** Un import de DS ne prouve l'adoption QUE si au moins un symbole importé
+ *  est effectivement référencé dans le corps du fichier. Un `import { Button }`
+ *  jamais utilisé = mensonge d'adoption. Retire les lignes d'import avant
+ *  test, puis cherche les symboles. Sinon `npx eslint --fix` masque la dette
+ *  en supprimant les imports morts qui gonflaient artificiellement l'adoption. */
+function adopteVraimentDs(src) {
+  const importedSymbols = new Set();
+  for (const m of src.matchAll(IMPORT_DS_LINE)) {
+    for (const raw of m[1].split(',')) {
+      const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/i).pop().trim();
+      if (name) importedSymbols.add(name);
+    }
+  }
+  if (!importedSymbols.size) return false;
+  const body = src.replace(IMPORT_DS_LINE, '');
+  for (const sym of importedSymbols) {
+    if (new RegExp(`\\b${sym}\\b`).test(body)) return true;
+  }
+  return false;
+}
 
 function analyzeDsFile(f, src, c, state) {
   if (!f.endsWith('.tsx') || f.includes('/shared/components/ui/') || c.estBarrel(f)) return;
@@ -343,7 +376,7 @@ function analyzeDsFile(f, src, c, state) {
   state.cartesMain       += (src.match(/className="[^"]*\brounded-(?:xl|2xl|lg)\b[^"]*\bbg-(?:white|surface)/g) || []).length;
 
   const fabrique = /<button\b|<input\b|rounded-(?:xl|2xl)/.test(src);
-  if (fabrique && !IMPORT_DS.test(src)) state.detail.push(c.rel(f));
+  if (fabrique && !adopteVraimentDs(src)) state.detail.push(c.rel(f));
 }
 
 export const m11_dsAdoption = {

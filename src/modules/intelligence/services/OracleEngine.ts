@@ -1,7 +1,7 @@
 import type { InventoryMovement as StockEvent } from '@nexus/contracts';
 import type { Quantity } from '@/lib/branding/brands';
 import { logger } from '@/lib/logger';
-import { StockOracleRegistry, type IStockOracle, type OraclePrediction } from '@/kernel/contracts';
+import { StockOracleRegistry, type OraclePrediction } from '@/kernel/contracts';
 
 export type { OraclePrediction };
 

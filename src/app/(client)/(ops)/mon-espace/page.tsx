@@ -6,8 +6,8 @@ import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { cn } from "@/lib/ui.foundations";
 import {
     Calendar, Clock, Gift, FileText, GraduationCap,
-    CreditCard, User, ShieldCheck, Download, Lock, CheckCircle2,
-    FileCheck, ExternalLink, Fingerprint
+    CreditCard, User, ShieldCheck, Download, CheckCircle2,
+    FileCheck, ExternalLink
 } from "lucide-react";
 import { TipDistributionService, DigitalEmployeeVault, type EmployeeDocument } from "@/modules/human";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";

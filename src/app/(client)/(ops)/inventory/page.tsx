@@ -36,7 +36,6 @@ import { PageShell } from "@/shared/components/ui/PageShell";
 import { BentoGrid, BentoCell, StatCard } from "@/shared/components/ui";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
-import { cn } from "@/lib/ui.foundations";
 import type { JsonObject } from "@/shared/types/json";
 
 function InventoryPage() {

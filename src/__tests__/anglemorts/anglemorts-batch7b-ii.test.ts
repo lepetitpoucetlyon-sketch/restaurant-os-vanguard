@@ -30,7 +30,6 @@ vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { TurnoverPredictionService, type MenuProfile } from '@/modules/commerce/relation/reservations/services/TurnoverPredictionService';
 import { DynamicPricingSurgeEngineService } from '@/modules/commerce/relation/crm/services/DynamicPricingSurgeEngineService';
 import { SommelierPairingEngineService } from '@/modules/commerce/relation/crm/services/SommelierPairingEngineService';
 import { VipGuestPreferenceMemoryService } from '@/modules/commerce/relation/crm/services/VipGuestPreferenceMemoryService';

@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-imports -- infrastructure/aggregator: deep path required */
+ 
 "use client";
 import React, { createContext, useContext, useState, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { MCC_DEV_MODE_CLIENT } from '@/lib/mcc/devMode';

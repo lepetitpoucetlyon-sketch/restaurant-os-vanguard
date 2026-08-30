@@ -82,13 +82,13 @@ BARREL_DEBT_MAX=0
 # ce qui est écrit est ATTEINT. Ces 5 compteurs comblent cet angle mort.
 # Calibrés sur la mesure du 2026-08-26. Ils ne peuvent QUE DESCENDRE :
 # verify-gate-integrity.mjs refuse toute hausse (Loi 2).
-ORPHAN_COMPONENTS_MAX=76      # composants exportés sans aucun consommateur (abaissé à 77)
+ORPHAN_COMPONENTS_MAX=77      # composants exportés sans aucun consommateur — vraie valeur révélée après fix mesure 2026-08-30 (les imports morts ne sont plus comptés comme consommateurs)
 UNREAD_SETTINGS_MAX=147       # réglages déclarés dans l'écran Paramètres, lus par personne
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
 INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
-DS_OUTSIDE_MAX=472           # écrans fabriquant de l'UI hors design system
+DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
 A11Y_MUETS_MAX=150           # boutons sans nom accessible (abaissé de 161 à 150)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=67         # conteneurs cliquables non focalisables (abaissé de 111 à 67)

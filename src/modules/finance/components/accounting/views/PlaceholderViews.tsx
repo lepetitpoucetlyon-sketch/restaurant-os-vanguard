@@ -1,25 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
-  Truck,
   Users,
-  BadgeEuro,
-  CreditCard,
-  ClipboardCheck,
-  TrendingUp,
-  Receipt,
-  Building2,
-  FileCheck,
-  ArrowUpRight,
-  BarChart3,
-  Calendar,
-  Package,
-  CheckCircle2,
-  AlertCircle,
-  Download,
-  Filter,
-  Plus
+  CheckCircle2
 } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { StatGrid, StatCard } from "@/shared/components/ui";

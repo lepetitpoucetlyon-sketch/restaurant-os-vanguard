@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Zap } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import dynamic from "next/dynamic";
 import { ProductGrid, Cart, TableSelector, PosHeader } from "@/modules/ops";
@@ -24,7 +24,6 @@ import { SovereignMath } from "@/shared/services/SovereignMath";
 import { CartItemContextMenu } from "./_posSlices";
 import { usePosPage } from "./_hooks/usePosPage";
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
-import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 
 function POSPage() {

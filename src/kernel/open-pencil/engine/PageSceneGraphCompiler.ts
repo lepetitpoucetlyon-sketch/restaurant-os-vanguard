@@ -4,7 +4,6 @@
  */
 
 import { PenDocument, PageDocument, SceneNode, FrameNode, TextNode, RectangleNode, VectorNode, WidgetNode, Paint } from '../schema/PenDocument';
-import { rgbaToCss } from '../schema/StyleTokens';
 
 export class PageSceneGraphCompiler {
     /**

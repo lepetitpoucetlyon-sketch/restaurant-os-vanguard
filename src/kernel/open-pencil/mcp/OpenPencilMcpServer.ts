@@ -8,7 +8,6 @@ import { PageCatalogRegistry } from '../catalog/PageCatalogRegistry';
 import { TenantPageCustomizer, ClientBrandDna } from '../overrides/TenantPageCustomizer';
 import { PageSceneGraphCompiler } from '../engine/PageSceneGraphCompiler';
 import { SceneGraphManager } from '../engine/SceneGraphManager';
-import { findNodeById } from '../schema/LayoutConstraints';
 
 export class OpenPencilMcpServer {
     public static getTools(): OpenPencilToolDef[] {

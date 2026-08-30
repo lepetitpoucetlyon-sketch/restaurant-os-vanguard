@@ -9,7 +9,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { SceneGraphManager } from '@/kernel/open-pencil/engine/SceneGraphManager';
 import { PageCatalogRegistry } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
 import { TenantPageCustomizer, ClientBrandDna } from '@/kernel/open-pencil/overrides/TenantPageCustomizer';
-import { SceneNode, FrameNode, PageDocument, PenDocument } from '@/kernel/open-pencil/schema/PenDocument';
+import { SceneNode, PenDocument } from '@/kernel/open-pencil/schema/PenDocument';
 import { findNodeById } from '@/kernel/open-pencil/schema/LayoutConstraints';
 
 import { SceneGraphCanvas } from './Canvas/SceneGraphCanvas';

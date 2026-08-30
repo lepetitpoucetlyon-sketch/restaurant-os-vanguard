@@ -1,5 +1,4 @@
 "use client";
-import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState, useMemo } from "react";
 import { motion, Variants } from "framer-motion";

@@ -4,7 +4,6 @@ import { pageSettingsAtom } from '@/store/settingsAtoms';
 import {
     HACCPTemperatureCascadeService,
     LEGAL_MAX_TEMP_CEILING,
-    CATEGORY_TEMP_DEFAULTS,
 } from '@/modules/compliance/qualite/haccp/services/HACCPTemperatureCascadeService';
 
 describe('HACCPTemperatureCascadeService — Cascade N3 -> N0 & Plafonds Légaux (DF-E1)', () => {

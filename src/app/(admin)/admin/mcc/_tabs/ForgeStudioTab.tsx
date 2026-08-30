@@ -1,8 +1,7 @@
 'use client';
-import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState } from 'react';
-import { Hammer, Sparkles, Layers, Cpu, Radio, ShieldCheck, ArrowRight, Code } from 'lucide-react';
+import { Sparkles, Layers } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { compileStudyToBlueprintProposal } from '@/verticals/_shared/forge/StudyToBlueprintCompiler';
 import type { SectorStudy } from '@/verticals/_shared/blueprint/SectorStudy';

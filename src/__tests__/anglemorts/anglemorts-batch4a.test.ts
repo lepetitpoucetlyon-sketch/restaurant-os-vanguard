@@ -52,7 +52,6 @@ import { UniversalPrinterBridgeService } from '@/modules/ops/service/pos/service
 import { CashDrawerTriggerService } from '@/modules/ops/service/pos/services/CashDrawerTriggerService';
 import { CustomerFacingDisplayService } from '@/modules/ops/service/pos/services/CustomerFacingDisplayService';
 import { BarcodeScannerInputService } from '@/modules/ops/service/pos/services/BarcodeScannerInputService';
-import { FlashAlcoholInventoryService } from '@/modules/ops/service/pos/services/FlashAlcoholInventoryService';
 
 
 describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {

@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { ClientBrandDna } from '@/kernel/open-pencil/overrides/TenantPageCustomizer';
-import { Store, Sparkles, Check, RefreshCw } from 'lucide-react';
+import { Store, Check, RefreshCw } from 'lucide-react';
 
 const PRESET_CLIENTS: ClientBrandDna[] = [
     {

@@ -10,14 +10,12 @@ import dynamic from "next/dynamic";
 import {
     useHaccpPage,
     HACCP_TOOLS,
-    type TempAlert,
     type LotFilter,
 } from '@/modules/compliance';
 import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { PageShell } from "@/shared/components/ui/PageShell";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
-import { cn } from "@/lib/ui.foundations";
 
 const ReleveTemperatures = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.ReleveTemperatures), { ssr: false });
 const GestionHuiles = dynamic(() => import('@/modules/compliance/qualite/haccp/components/haccp').then(m => m.GestionHuiles), { ssr: false });

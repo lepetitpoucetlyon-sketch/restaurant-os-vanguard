@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, ComponentType } from 'react';
-import { Loader2, AlertTriangle, Sparkles } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 export interface DynamicIslandProps<T extends object> {
   islandName: string;

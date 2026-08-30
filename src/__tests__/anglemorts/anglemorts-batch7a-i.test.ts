@@ -35,7 +35,6 @@ import { CrossTenantBenchmarkService } from '@/lib/mcc/fleet/services/CrossTenan
 import { GlobalComplianceAuditMatrixService } from '@/modules/compliance/securite/GlobalComplianceAuditMatrixService';
 import { RemoteConfigKillSwitchService } from '@/lib/mcc/fleet/services/RemoteConfigKillSwitchService';
 import { GlobalAlertEscalationMatrixService } from '@/lib/mcc/fleet/services/GlobalAlertEscalationMatrixService';
-import { TurnoverPredictionService, type MenuProfile } from '@/modules/commerce/relation/reservations/services/TurnoverPredictionService';
 
 
 

@@ -13,13 +13,10 @@ import {
   CardHeader,
   CardTitle,
   Button,
-  GlassCard,
-  PageShell,
   SectionCard,
   ActionBar,
   EmptyState,
   SkeletonList,
-  RoleAwareView,
 } from '@/shared/components/ui';
 import type { PlatformVariant } from '@/modules/system';
 import { cn } from '@/lib/ui.foundations';
@@ -27,19 +24,14 @@ import {
   Users,
   ShoppingCart,
   DollarSign,
-  Star,
   Clock,
   Package,
-  Heart,
   Layers,
   Shield,
   Smartphone,
-  Sparkles,
   Layout,
   Plus,
   Filter,
-  Download,
-  AlertCircle,
 } from 'lucide-react';
 
 // ── Vertical switcher ────────────────────────────────────────────────────────

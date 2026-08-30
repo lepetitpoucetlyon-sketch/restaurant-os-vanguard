@@ -1,8 +1,7 @@
 'use client';
-import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState } from 'react';
-import { BookOpen, Search, Filter, Layers, CheckCircle2, FileText, Sparkles, RefreshCw } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 
 interface StudyItem {

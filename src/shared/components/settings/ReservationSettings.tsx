@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { useSettings } from "@/shared/contexts/SettingsContext";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
-import { Save, Loader2, Calendar, MessageSquare, Globe, Calculator, Code } from "lucide-react";
+import { Save, Loader2, Calendar, MessageSquare } from "lucide-react";
 import {
     ReservationCapacitySection,
     ReservationVerificationSection,

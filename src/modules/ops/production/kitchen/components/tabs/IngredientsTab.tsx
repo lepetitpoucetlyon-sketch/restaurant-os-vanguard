@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Plus, Edit2, Trash2, Package, Tag, Truck, Save, X } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Package, Tag, Truck, Save } from "lucide-react";
 import { formatMu } from "@/lib/formatters";
 import { cn } from "@/lib/ui.foundations";
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";

@@ -4,12 +4,12 @@
 
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { PageDocument } from '@/kernel/open-pencil/schema/PenDocument';
 import { NodeRenderer } from './NodeRenderer';
 import { 
     ZoomIn, ZoomOut, Maximize2, Tablet, Monitor, Smartphone, 
-    Layers, Grid, RefreshCw, Sparkles 
+    Layers, Grid 
 } from 'lucide-react';
 
 interface SceneGraphCanvasProps {

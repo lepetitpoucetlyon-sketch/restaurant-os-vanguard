@@ -1,8 +1,7 @@
 'use client';
-import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState, useMemo } from 'react';
-import { EyeOff, AlertOctagon, AlertTriangle, ShieldCheck, CheckCircle2, Wrench, Search } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { runBlindSpotRules, DEFAULT_RULES, type BlindSpot } from '@/verticals/_shared/blind-spot';
 import { resolveBlueprintCapabilities } from '@/verticals/_shared/blueprint/VerticalBlueprint';

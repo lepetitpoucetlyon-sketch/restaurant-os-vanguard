@@ -4,7 +4,7 @@
  */
 
 import { PageDocument, PenDocument } from '../schema/PenDocument';
-import { ReactToPenTransformer, PageBlueprintSpec } from '../engine/ReactToPenTransformer';
+import { ReactToPenTransformer } from '../engine/ReactToPenTransformer';
 
 export interface RegisteredPageMeta {
     id: string;

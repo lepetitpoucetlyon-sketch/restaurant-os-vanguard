@@ -4,7 +4,7 @@ import React from 'react';
 import { PageShell } from '@/shared/components/ui/PageShell';
 import { BrandingPanel } from '@/shared/components/settings/BrandingPanel';
 import { withPageGuard } from '@/shared/components/rbac/PageGuard';
-import { Sparkles, Palette } from 'lucide-react';
+import { Palette } from 'lucide-react';
 
 function BrandingSettingsPage() {
   return (

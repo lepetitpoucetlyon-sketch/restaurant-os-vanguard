@@ -12,7 +12,6 @@ import {
   SpeculativeToolEngine,
   StreamingPrefixParser,
   SovereignToolMembrane,
-  ShadowExecutionContext,
 } from '@/modules/intelligence';
 
 // Simule un exécuteur de données d'établissement avec latences réseau/BDD réalistes

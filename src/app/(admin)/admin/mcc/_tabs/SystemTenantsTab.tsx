@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/shared/components/ui/Button';
 
 /**
  * 🏛️ SystemTenantsTab — Panneau MCC de gestion des 24 tenants système

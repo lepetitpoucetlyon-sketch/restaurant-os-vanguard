@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import dynamic from "next/dynamic";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";

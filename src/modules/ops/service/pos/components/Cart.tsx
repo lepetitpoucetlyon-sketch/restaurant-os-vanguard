@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Minus, Plus, ChefHat, CreditCard, Users, Sparkles, X, MoreHorizontal, Trash2, Percent } from "lucide-react";
+import { Minus, Plus, ChefHat, CreditCard, Users, X, MoreHorizontal } from "lucide-react";
 import { ScrollArea } from "@ui/ScrollArea";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,7 +12,6 @@ import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
 import { formatMu } from "@/lib/formatters";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
-import { POSService } from "@/lib/adapters/POSAdapter";
 import { CartItem } from '../../../workflow/engine/types';
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import { FiscalReceiptSealZone } from "@/shared/components/ui/FiscalReceiptSealZone";

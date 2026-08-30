@@ -31,7 +31,6 @@ vi.mock('@/lib/offline/OutboxService', () => ({
   OutboxPriority: { FISCAL: 1, SANITAIRE: 2, LEGAL: 3, NORMAL: 0 },
 }));
 
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
 import { MeatRestingTimerService } from '@/modules/ops/production/kds/services/MeatRestingTimerService';

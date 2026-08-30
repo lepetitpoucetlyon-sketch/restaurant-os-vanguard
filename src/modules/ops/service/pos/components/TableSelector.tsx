@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useTables } from '../../../providers/hooks/floorHooks';
 import { motion } from "framer-motion";
 import type { Table } from "@nexus/contracts";

@@ -19,7 +19,6 @@
  * onboarding. Aucun cycle possible.
  */
 
-import type { CapabilitySet, HardwareKind } from '../catalog/CapabilityCatalog';
 import type { VerticalBlueprint } from '../blueprint/VerticalBlueprint';
 import type { SectorStudy } from '../blueprint/SectorStudy';
 import type { CompanyProfile } from '@/modules/commerce';
@@ -28,13 +27,10 @@ import { DEFAULT_RULES } from './rules';
 
 import type {
     Severity,
-    BlindSpotFamily,
-    SuggestedFix,
     BlindSpot,
     BlindSpotReport,
     VerticalContext,
     TenantContext,
-    RuleScope,
     RuleOutput,
     BlindSpotRule,
 } from './types';

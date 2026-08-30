@@ -27,7 +27,6 @@ vi.mock('@/modules/compliance/securite/AuditLogger', () => ({
   AuditLogger: { logAction: vi.fn().mockResolvedValue({ id: 'AUD-1', hash: 'HASH-1' }) },
 }));
 
-import { AuditLogger } from '@/lib/audit';
 
 import { InTransitDeliveryCancelHandler } from '@/modules/commerce/relation/delivery/services/InTransitDeliveryCancelHandler';
 import { DeliveryAddressScoringService } from '@/modules/commerce/relation/delivery/services/DeliveryAddressScoringService';

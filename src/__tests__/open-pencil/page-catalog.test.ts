@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PageCatalogRegistry, RESTAURANT_OS_PAGES_META } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
+import { PageCatalogRegistry } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
 
 describe('📚 OpenPencil — 84 Pages Catalog Registry', () => {
     it('indexe exactement 84 pages pour Restaurant OS Core', () => {

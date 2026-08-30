@@ -9,7 +9,6 @@ import {
   Tablet,
   Laptop,
   ShieldAlert,
-  ShieldCheck,
   RefreshCw,
   Trash2,
   Wifi,

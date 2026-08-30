@@ -7,7 +7,6 @@
 
 import { StreamingPrefixParser, ParsedToolIntent } from './StreamingPrefixParser';
 import { ShadowExecutionContext, ToolExecutorFunction, SpeculativeExecutionResult } from './ShadowExecutionContext';
-import { SovereignToolMembrane } from './SovereignToolMembrane';
 
 export interface SpeculativeMetrics {
   totalE2ELatencyMs: number;

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
-import { LayoutTemplate, Users, ClipboardList, CheckCircle2 } from "lucide-react";
+import { Users, ClipboardList, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useToast } from "@ui/Toast";
 import { Modal } from "@ui/Modal";

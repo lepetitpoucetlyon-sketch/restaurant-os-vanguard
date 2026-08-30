@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { menuEngineeringService } from '@/modules/commerce';
 import type { IMenuEngineeringReport, MenuItemCategory } from '@/modules/commerce';
 import { useTenant } from '@/shared/hooks/useTenant';
-import { Sparkles, TrendingUp, Star, DollarSign, HelpCircle, AlertOctagon } from 'lucide-react';
+import { TrendingUp, Star, DollarSign, HelpCircle, AlertOctagon } from 'lucide-react';
 import { BentoGrid, BentoCell, StatCard } from '@/shared/components/ui';
 
 const CATEGORY_LABELS: Record<MenuItemCategory, string> = {

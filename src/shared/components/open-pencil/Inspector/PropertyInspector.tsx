@@ -8,8 +8,7 @@ import React from 'react';
 import { SceneNode, FrameNode, TextNode } from '@/kernel/open-pencil/schema/PenDocument';
 import { rgbaToCss, hexToRgba, OPEN_PENCIL_DEFAULT_COLORS } from '@/kernel/open-pencil/schema/StyleTokens';
 import { 
-    Sliders, Type, Square, AlignLeft, AlignCenter, 
-    AlignRight, Maximize, Lock, Eye, Sparkles 
+    Sliders 
 } from 'lucide-react';
 
 interface PropertyInspectorProps {

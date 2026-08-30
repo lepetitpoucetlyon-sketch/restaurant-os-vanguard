@@ -5,10 +5,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import { PageCatalogRegistry, RegisteredPageMeta } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
+import { PageCatalogRegistry } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
 import { 
     Search, LayoutDashboard, ShoppingCart, Users, Gauge, 
-    Sparkles, Globe, Filter, CheckCircle2 
+    Sparkles, Globe, CheckCircle2 
 } from 'lucide-react';
 
 interface PageNavigatorProps {

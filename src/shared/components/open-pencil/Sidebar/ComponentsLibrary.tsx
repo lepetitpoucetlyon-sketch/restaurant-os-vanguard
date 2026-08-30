@@ -8,8 +8,7 @@ import React from 'react';
 import { SceneNode, FrameNode, TextNode, WidgetNode } from '@/kernel/open-pencil/schema/PenDocument';
 import { createSolidPaint, OPEN_PENCIL_DEFAULT_TYPOGRAPHY } from '@/kernel/open-pencil/schema/StyleTokens';
 import { 
-    Plus, Square, Type, CreditCard, ShoppingCart, 
-    Layers, TrendingUp, Sparkles, Utensils 
+    Plus, Square, CreditCard, ShoppingCart, TrendingUp, Utensils 
 } from 'lucide-react';
 
 interface ComponentsLibraryProps {

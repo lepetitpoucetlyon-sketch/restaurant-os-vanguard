@@ -3,7 +3,7 @@
  * Permet de charger, surcharger et appliquer l'ADN de marque d'un client restaurateur sur n'importe quelle page
  */
 
-import { PageDocument, SceneNode, Paint } from '../schema/PenDocument';
+import { PageDocument, SceneNode } from '../schema/PenDocument';
 import { hexToRgba } from '../schema/StyleTokens';
 import { PageCatalogRegistry } from '../catalog/PageCatalogRegistry';
 import { ReactToPenTransformer } from '../engine/ReactToPenTransformer';

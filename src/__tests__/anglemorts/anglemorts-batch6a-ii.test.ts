@@ -37,7 +37,6 @@ import { DeliveryCommissionPnLService } from '@/modules/commerce/relation/delive
 import { DeliveryStorePauseService } from '@/modules/commerce/relation/delivery/services/DeliveryStorePauseService';
 import { VariableWeightStockService } from '@/modules/logistics/stock/inventory/services/VariableWeightStockService';
 import { DoublePassOcrService } from '@/modules/logistics/approvisionnement/procurement/services/DoublePassOcrService';
-import { SkuSubstitutionAlertService } from '@/modules/logistics/approvisionnement/procurement/services/SkuSubstitutionAlertService';
 describe('anglemorts-batch6a (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 

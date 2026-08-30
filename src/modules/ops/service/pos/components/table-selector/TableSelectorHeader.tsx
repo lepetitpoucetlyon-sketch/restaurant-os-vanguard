@@ -2,7 +2,6 @@
 
 import { LayoutGrid, Layers } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
-import { motion } from "framer-motion";
 import { useLexicon } from "@/shared/hooks/useLexicon";
 import type { Table } from "@nexus/contracts";
 

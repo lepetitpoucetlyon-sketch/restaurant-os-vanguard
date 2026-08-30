@@ -37,8 +37,6 @@ import { GdprDataAnonymizerService } from '@/modules/compliance/securite/GdprDat
 import { SecurityIncidentLockdownService } from '@/modules/compliance/securite/SecurityIncidentLockdownService';
 import { NoShowPenaltyShieldService } from '@/modules/commerce/relation/crm/services/NoShowPenaltyShieldService';
 import { GuestAllergenSafetyProfileService } from '@/modules/commerce/relation/crm/services/GuestAllergenSafetyProfileService';
-import { AutomaticReviewBoosterService } from '@/modules/commerce/relation/crm/services/AutomaticReviewBoosterService';
-import { TurnoverPredictionService, type MenuProfile } from '@/modules/commerce/relation/reservations/services/TurnoverPredictionService';
 describe('anglemorts-batch7a (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 

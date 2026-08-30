@@ -22,7 +22,7 @@ import {
     renderVerticalTest,
     renderVerticalHeaders,
 } from './templates';
-import type { GeneratedFile, WiringPatch, ForgeOutput } from './types';
+import type { GeneratedFile, ForgeOutput } from './types';
 import { renderWiring } from './wiringPatcher';
 import {
     renderAdapters,

@@ -1,8 +1,7 @@
 'use client';
-import { Button } from '@/shared/components/ui/Button';
 
 import React, { useState } from 'react';
-import { Network, Shield, Scale, Cpu, Lock, Globe, MessageSquare, Award, DollarSign, Database, CheckCircle2 } from 'lucide-react';
+import { Network, Shield, Scale, Cpu, Lock, Globe, MessageSquare, Award, DollarSign, Database } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 
 interface DeriverSpec {

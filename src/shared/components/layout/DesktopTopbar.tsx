@@ -8,7 +8,7 @@ import { APP_MODE } from "@/config/instance";
 import Link from "next/link";
 import { cn } from "@/lib/ui.foundations";
 import { useNexusCore, useUI } from "@/shared/hooks";
-import { LayoutGrid, Sparkles } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 import { DisplayDepthToggle } from "@/shared/components/layout/DisplayDepthToggle";
 
 export function DesktopTopbar() {

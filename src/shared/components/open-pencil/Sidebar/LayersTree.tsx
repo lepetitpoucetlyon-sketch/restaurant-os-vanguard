@@ -7,8 +7,7 @@
 import React from 'react';
 import { SceneNode, FrameNode } from '@/kernel/open-pencil/schema/PenDocument';
 import { 
-    Layers, Type, Square, Sparkles, Eye, EyeOff, 
-    Lock, Unlock, Trash2, ChevronDown, ChevronRight 
+    Layers, Type, Square, Sparkles, Eye, EyeOff, Trash2, ChevronDown, ChevronRight 
 } from 'lucide-react';
 
 interface LayersTreeProps {

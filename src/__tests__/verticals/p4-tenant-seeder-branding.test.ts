@@ -139,7 +139,7 @@ describe('tenantBrandingFromScrape — helper standalone', () => {
 
 describe('TenantSeeder.seed — brandingOverlay', () => {
     beforeEach(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         (Nexus as unknown as { __store: Map<string, unknown> }).__store.clear();
         vi.clearAllMocks();
     });

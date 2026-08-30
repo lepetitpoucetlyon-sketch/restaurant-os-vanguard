@@ -1,20 +1,17 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Utensils, 
   ShoppingBag, 
-  ArrowRight, 
   CheckCircle2, 
   Plus, 
   Minus, 
   Sparkles, 
   CreditCard,
   RotateCcw,
-  Coffee,
-  Pizza,
-  Wine
+  Pizza
 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useProducts, useCategories } from "@/modules/logistics";
