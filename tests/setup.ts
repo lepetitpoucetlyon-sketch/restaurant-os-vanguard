@@ -12,6 +12,24 @@ import { MockAdapter } from '@/lib/adapters/MockAdapter';
 // Initialisation immédiate du Mock pour les tests
 Nexus.adapter = new MockAdapter();
 
+// 🧪 STRICT_ISOLATION_TEST bypass global via Suzerain
+// -----------------------------------------------------------------------------
+// Les tests unitaires manipulent plusieurs tenants par fichier (mockAdapter.set
+// sur `tenants/ten1/...` puis `tenants/ten2/...`). NexusInterceptor.ensureContext
+// résout vassalId depuis `globalThis.__nexusServerTenant.tenantId` — que la prod
+// pose via runWithServerTenant() dans le middleware d'auth.
+//
+// En test on n'a ni middleware ni JWT : on pose donc 'restaurant-os' (Suzerain)
+// qui a un bypass complet dans SovereignGuard.validateAccess. Les mocks
+// peuvent alors écrire librement sur n'importe quel `tenants/X/...` sans BREACH.
+//
+// SÉCURITÉ : ce sentinel n'existe qu'en NODE_ENV='test'. La prod utilise
+// l'auth réelle et pose le vrai tenantId depuis le JWT via runWithServerTenant.
+// Les tests e2e qui VEULENT tester l'isolation réelle réinitialisent le global
+// dans leur beforeEach (voir src/e2e/vanguard/simulacra.test.ts).
+(globalThis as unknown as { __nexusServerTenant?: { tenantId: string } })
+    .__nexusServerTenant = { tenantId: 'restaurant-os' };
+
 // 1. Mock de Firebase (Tous les services)
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(), getApps: vi.fn(() => []), getApp: vi.fn() }));
 vi.mock('firebase/auth', () => ({ getAuth: vi.fn(() => ({})), onAuthStateChanged: vi.fn() }));
