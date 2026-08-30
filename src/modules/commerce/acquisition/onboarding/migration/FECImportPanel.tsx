@@ -12,7 +12,8 @@ import { FECDoneSection } from './fec-import/FECDoneSection';
 
 export function FECImportPanel() {
   const { activeTenantId } = useTenant();
-  const tenantId = activeTenantId ?? 'default';
+  const tenantId = activeTenantId;
+  if (!tenantId) return <div className="p-4 text-status-warning">Contexte tenant requis — reconnectez-vous.</div>;
   const [state, setState] = useState<PanelState>({ phase: "idle" });
   const [exercice, setExercice] = useState<string>(String(CURRENT_YEAR - 1));
   const [isDragOver, setIsDragOver] = useState(false);

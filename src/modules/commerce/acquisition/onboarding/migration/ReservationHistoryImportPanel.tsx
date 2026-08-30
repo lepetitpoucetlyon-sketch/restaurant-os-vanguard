@@ -48,7 +48,8 @@ type Source = (typeof SOURCE_OPTIONS)[number]["value"];
 
 export function ReservationHistoryImportPanel() {
   const { activeTenantId } = useTenant();
-  const tenantId = activeTenantId ?? 'default';
+  const tenantId = activeTenantId;
+  if (!tenantId) return <div className="p-4 text-status-warning">Contexte tenant requis — reconnectez-vous.</div>;
   const [state, setState] = useState<PanelState>({ phase: "idle" });
   const [source, setSource] = useState<Source>("zenchef");
   const [isDragOver, setIsDragOver] = useState(false);

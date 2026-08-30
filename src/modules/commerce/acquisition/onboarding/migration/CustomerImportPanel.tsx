@@ -14,7 +14,8 @@ import { CustomerImportDone } from './customer-import/CustomerImportDone';
 
 export function CustomerImportPanel() {
   const { activeTenantId } = useTenant();
-  const tenantId = activeTenantId ?? "default";
+  const tenantId = activeTenantId;
+  if (!tenantId) return <div className="p-4 text-status-warning">Contexte tenant requis — reconnectez-vous.</div>;
   const [state, setState] = useState<PanelPhase>({ phase: "idle" });
   const [isDragOver, setIsDragOver] = useState(false);
 

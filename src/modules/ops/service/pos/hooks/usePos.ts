@@ -150,6 +150,12 @@ export function usePOSController() {
 
     const handleSendToKitchen = useCallback(async () => {
         if (cartItems.length === 0 || !currentTable) return;
+        // 🛡️ LOT F fail-closed : refuser l'envoi cuisine sans tenant ancré.
+        // Écrire dans 'default' scellerait dans un tenant fantôme (P1-11).
+        if (!activeTenantId) {
+            showToast("Envoi impossible : contexte tenant absent. Reconnectez-vous.", "error");
+            return;
+        }
         try {
             await submitKitchenOrder(
                 {
@@ -158,7 +164,7 @@ export function usePOSController() {
                     serverName: resolveServerName(currentUser),
                     items: POSService.formatForKitchen(cartItems) as OrderItem[],
                 },
-                addOrder, updateTable, selectedTableId, activeTenantId ?? 'default'
+                addOrder, updateTable, selectedTableId, activeTenantId
             );
             showToast(`Table ${currentTable.number} : Commande envoyée`, "success");
             setCartItems([]);
@@ -169,13 +175,19 @@ export function usePOSController() {
 
     const finalizePayment = useCallback(async (opts?: { split?: boolean }) => {
         if (!currentTable) return;
+        // 🛡️ LOT F fail-closed : refuser l'encaissement/sceau NF525 sans tenant.
+        // Sceller dans 'restaurant-os' fabrique un ticket fiscal orphelin (P1-11).
+        if (!activeTenantId) {
+            showToast("Encaissement impossible : contexte tenant absent. Reconnectez-vous.", "error");
+            return;
+        }
         try {
             const { label, partials } = getSplitInfo(opts, partialPayments);
             await processPayment({
                 cartItems,
                 operatorId: currentUser?.id ?? "unknown",
                 tableId: selectedTableId,
-                tenantId: activeTenantId ?? "restaurant-os",
+                tenantId: activeTenantId,
                 consumptionMode,
                 partialPayments: partials,
             });
@@ -214,12 +226,17 @@ export function usePOSController() {
      * Envoie un service en cuisine (pos-3).
      * Seuls les articles du service non encore envoyés (sentAt absent) partent.
      */
-    const handleSendCourse = useCallback((course: CourseType) =>
-        handleSendCourseImpl(
+    const handleSendCourse = useCallback((course: CourseType) => {
+        if (!activeTenantId) {
+            showToast("Envoi cours impossible : contexte tenant absent.", "error");
+            return Promise.resolve();
+        }
+        return handleSendCourseImpl(
             course, cartItems, currentTable, currentUser,
             addOrder, updateTable, selectedTableId,
-            setCartItems, showToast as never, activeTenantId ?? 'default'
-        ),
+            setCartItems, showToast as never, activeTenantId!
+        );
+    },
         [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast, activeTenantId]
     );
 

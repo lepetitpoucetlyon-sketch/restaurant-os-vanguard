@@ -33,9 +33,10 @@ export function SupplierHubDashboard() {
     <div className="space-y-6">
       {/* Auto Procurement Wizard Modal */}
       <AutoProcurementWizard
-        isOpen={isAutoProcurementOpen}
+        isOpen={isAutoProcurementOpen && !!activeTenantId}
         onClose={() => setIsAutoProcurementOpen(false)}
         tenantId={activeTenantId ?? ''}
+        // isOpen guard = fail-closed : la modale ne s'ouvre pas sans tenant
         stockItems={sampleStockItems}
         mercurialeItems={sampleMercuriales}
         suppliers={sampleSuppliers}
