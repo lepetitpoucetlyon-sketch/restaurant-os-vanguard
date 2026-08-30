@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Coins } from "lucide-react";
+import { Input } from "@/shared/components/ui/Input";
 
 interface EventQuoteTariffSectionProps {
   montantHT: number;
@@ -36,7 +37,7 @@ export function EventQuoteTariffSection({
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <Field label="Montant Total HT (€) *">
-          <input
+          <Input
             type="number"
             min={0}
             step={50}

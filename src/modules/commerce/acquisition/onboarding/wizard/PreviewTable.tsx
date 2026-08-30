@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { Input } from "@/shared/components/ui/Input";
 
 interface PreviewTableProps {
   rows: Record<string, string>[];
@@ -64,7 +65,7 @@ export function PreviewTable({ rows, onRowChange, maxRows = 50, readOnly = false
                     onDoubleClick={() => startEdit(rowIdx, col, row[col] ?? '')}
                   >
                     {isEditing ? (
-                      <input
+                      <Input
                         autoFocus
                         className="w-full border border-indigo-400 rounded px-1 py-0.5 text-xs"
                         value={editValue}

@@ -4,6 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { searchMetroProducts } from './MetroCatalog';
 import { searchPomonaProducts } from './PomonaCatalog';
 import type { SupplierProduct } from './MetroCatalog';
+import { Input } from "@/shared/components/ui/Input";
 
 type CatalogSource = 'metro' | 'pomona' | 'all';
 
@@ -57,7 +58,7 @@ export function SupplierProductAutocomplete({
 
   return (
     <div className="relative">
-      <input
+      <Input
         ref={inputRef}
         type="text"
         value={query}

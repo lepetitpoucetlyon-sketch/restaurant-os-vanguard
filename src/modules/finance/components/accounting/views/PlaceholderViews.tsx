@@ -87,7 +87,7 @@ export function EmployeesView() {
       <StatGrid columns={3}>
         <StatCard label="Masse Salariale Brute (641)" value={formatCurrency(14850)} />
         <StatCard label="Charges Sociales Patronales (645)" value={formatCurrency(6240)} />
-        <StatCard label="Effectif Rémunéré" value="8 salariés" />
+        <StatCard label="Effectif Rémunéré" value="—" />
       </StatGrid>
       <div className="p-4 bg-surface-card border border-border-default rounded-2xl flex items-center justify-between">
         <div>
@@ -118,7 +118,7 @@ export function ReconciliationView() {
   return (
     <div className="space-y-6">
       <StatGrid columns={3}>
-        <StatCard label="Taux de Rapprochement" value="98.4%" />
+        <StatCard label="Taux de Rapprochement" value="—" />
         <StatCard label="Écritures Rapprochées" value="412 / 418" />
         <StatCard label="Écart Résiduel" value={formatCurrency(0)} />
       </StatGrid>
@@ -206,10 +206,10 @@ export function AnalyticsView() {
   return (
     <div className="space-y-6">
       <StatGrid columns={4}>
-        <StatCard label="Food Cost Ratio" value="28.4%" trend="-1.2%" />
-        <StatCard label="Labor Cost Ratio" value="32.1%" />
-        <StatCard label="Prime Cost" value="60.5%" trend="Optimal" />
-        <StatCard label="Marge Brute" value="71.6%" />
+        <StatCard label="Food Cost Ratio" value="—" trend="-1.2%" />
+        <StatCard label="Labor Cost Ratio" value="—" />
+        <StatCard label="Prime Cost" value="—" trend="Optimal" />
+        <StatCard label="Marge Brute" value="—" />
       </StatGrid>
     </div>
   );
@@ -253,7 +253,7 @@ export function InventoryView() {
     <div className="space-y-6">
       <StatGrid columns={3}>
         <StatCard label="Valeur Stock Actuel" value={formatCurrency(12480)} />
-        <StatCard label="Écart Inventaire / Théorique" value="-1.4%" />
+        <StatCard label="Écart Inventaire / Théorique" value="—" />
         <StatCard label="Dernier Inventaire Physique" value="31 Juillet 2026" />
       </StatGrid>
     </div>

@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Input } from "@/shared/components/ui/Input";
 
 export default function RoiCalculatorPage() {
   const [ticketAverage, setTicketAverage] = useState<number>(25);
@@ -57,7 +58,7 @@ export default function RoiCalculatorPage() {
                 <span className="text-white/70">Ticket moyen (€)</span>
                 <span className="font-semibold text-amber-400">{ticketAverage} €</span>
               </div>
-              <input
+              <Input
                 type="range"
                 min="5"
                 max="150"
@@ -73,7 +74,7 @@ export default function RoiCalculatorPage() {
                 <span className="text-white/70">Couverts / clients par jour</span>
                 <span className="font-semibold text-amber-400">{dailyCovers}</span>
               </div>
-              <input
+              <Input
                 type="range"
                 min="10"
                 max="500"
@@ -89,7 +90,7 @@ export default function RoiCalculatorPage() {
                 <span className="text-white/70">Jours d&apos;ouverture par mois</span>
                 <span className="font-semibold text-amber-400">{openingDaysPerMonth} j</span>
               </div>
-              <input
+              <Input
                 type="range"
                 min="15"
                 max="31"
@@ -105,7 +106,7 @@ export default function RoiCalculatorPage() {
                 <span className="text-white/70">Coût mensuel logiciel actuel (€)</span>
                 <span className="font-semibold text-amber-400">{currentSoftwareCost} €</span>
               </div>
-              <input
+              <Input
                 type="range"
                 min="0"
                 max="300"

@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { VERTICALS_LANDING } from '../data/verticals';
+import { Input } from "@/shared/components/ui/Input";
 
 interface FormState {
   email: string;
@@ -113,7 +114,7 @@ export function SignupPage() {
             <label htmlFor="signup-email" className="block text-sm font-medium text-white/70 mb-1.5">
               Email professionnel
             </label>
-            <input
+            <Input
               id="signup-email"
               type="email"
               required
@@ -129,7 +130,7 @@ export function SignupPage() {
             <label htmlFor="signup-password" className="block text-sm font-medium text-white/70 mb-1.5">
               Mot de passe
             </label>
-            <input
+            <Input
               id="signup-password"
               type="password"
               required
@@ -146,7 +147,7 @@ export function SignupPage() {
             <label htmlFor="signup-business" className="block text-sm font-medium text-white/70 mb-1.5">
               Nom de l&apos;établissement
             </label>
-            <input
+            <Input
               id="signup-business"
               type="text"
               required
@@ -181,7 +182,7 @@ export function SignupPage() {
             <label htmlFor="signup-website" className="block text-sm font-medium text-white/70 mb-1.5">
               Site web <span className="text-white/30">(optionnel — on en extrait votre branding)</span>
             </label>
-            <input
+            <Input
               id="signup-website"
               type="url"
               value={form.websiteUrl}

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Input } from "@/shared/components/ui/Input";
 
 interface EventQuoteClientSectionProps {
   clientPrenom: string;
@@ -40,7 +41,7 @@ export function EventQuoteClientSection({
       </p>
       <div className="grid grid-cols-2 gap-4">
         <Field label="Prénom *">
-          <input
+          <Input
             type="text"
             value={clientPrenom}
             onChange={(e) => onChange("clientPrenom", e.target.value)}
@@ -49,7 +50,7 @@ export function EventQuoteClientSection({
           />
         </Field>
         <Field label="Nom *">
-          <input
+          <Input
             type="text"
             value={clientNom}
             onChange={(e) => onChange("clientNom", e.target.value)}
@@ -58,7 +59,7 @@ export function EventQuoteClientSection({
           />
         </Field>
         <Field label="Email *">
-          <input
+          <Input
             type="email"
             value={clientEmail}
             onChange={(e) => onChange("clientEmail", e.target.value)}
@@ -67,7 +68,7 @@ export function EventQuoteClientSection({
           />
         </Field>
         <Field label="Téléphone">
-          <input
+          <Input
             type="tel"
             value={clientTelephone}
             onChange={(e) => onChange("clientTelephone", e.target.value)}

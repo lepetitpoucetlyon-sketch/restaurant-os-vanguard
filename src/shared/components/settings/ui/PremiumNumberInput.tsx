@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
+import { Input } from "@/shared/components/ui/Input";
 
 interface PremiumNumberInputProps {
     value: number;
@@ -45,7 +46,7 @@ export function PremiumNumberInput({ value, onChange, min = 0, max = 100, step =
 
             {/* Value Display */}
             <div className="flex-1 relative">
-                <input
+                <Input
                     type="number"
                     value={value}
                     onChange={(e) => {

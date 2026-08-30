@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import type { ConvivePayment } from './types';
+import { Input } from "@/shared/components/ui/Input";
 
 interface SplitCustomPanelProps {
     convivePayments: ConvivePayment[];
@@ -28,7 +29,7 @@ export function SplitCustomPanel({
                             {t('pos.split.master')} {idx + 1}
                         </span>
                         <div className="flex items-center gap-2">
-                            <input
+                            <Input
                                 type="number"
                                 min={0}
                                 step={0.01}
