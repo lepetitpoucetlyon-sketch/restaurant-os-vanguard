@@ -50,9 +50,9 @@ export class NexusManager {
      * logout, MessageChannel) n'a aucun sens hors navigateur — on ne l'applique donc pas.
      */
     registerServerAdapter(adapter: INexusAdapter) {
-        this._adapter = adapter;
+        this._adapter = new NexusInterceptor(adapter, SovereignGuard, () => this.activeTenant);
         this._realAdapter = adapter;
-        logger.info(`[Nexus] Server adapter registered (raw, no interceptor): ${adapter.constructor.name}`);
+        logger.info(`[Nexus] Server adapter registered and shielded: ${adapter.constructor.name}`);
     }
 
     /**
@@ -98,7 +98,22 @@ export class NexusManager {
     }
 
     get activeTenant(): string | null {
-        return this._tenantOverride;
+        if (this._tenantOverride) return this._tenantOverride;
+        if (typeof process !== "undefined" && process.versions?.node) {
+            try {
+                // Dynamically access ServerTenantStorage in server context.
+                // require() sync est indispensable : ce getter est synchrone (activeTenant),
+                // les mutations tenant du serveur sont posées via AsyncLocalStorage à chaque requête.
+                // Un import statique embarquerait node:async_hooks dans le bundle client.
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const { ServerTenantStorage } = require("@/lib/server/ServerTenantStorage");
+                const store = ServerTenantStorage.getStore();
+                if (store?.tenantId) return store.tenantId;
+            } catch {
+                // Ignore in browser/edge context
+            }
+        }
+        return null;
     }
 
     /**

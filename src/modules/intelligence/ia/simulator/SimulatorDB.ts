@@ -29,6 +29,14 @@ export class SimulatorDB extends Dexie {
     async clearFork(forkId: string) {
         await this.virtualStore.where('forkId').equals(forkId).delete();
     }
+
+    async purgeAll() {
+        try {
+            await this.virtualStore.clear();
+        } catch {
+            try { await this.delete(); } catch { /* ignore */ }
+        }
+    }
 }
 
 export const simulatorDb = new SimulatorDB();

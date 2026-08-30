@@ -109,6 +109,14 @@ export function useNexusAuthLogic(
     const logout = useCallback(async () => {
         await session.logoutFirebase();
         session.clearPersistedSession();
+        if (typeof window !== "undefined") {
+            try {
+                const { simulatorDb } = await import("@/modules/intelligence/ia/simulator/SimulatorDB");
+                await simulatorDb.purgeAll();
+            } catch (err) {
+                logger.warn("[AuthLogic] simulatorDb purge error on logout", err);
+            }
+        }
     }, [session]);
 
     return useMemo(() => ({

@@ -22,6 +22,16 @@ export function registerSovereignBreachHandler(): () => void {
   return NexusEventBus.on(
     'sovereign.breach',
     async (payload) => {
+      // Purge Sandbox / SimulatorDB on breach
+      if (typeof window !== "undefined") {
+        try {
+          const { simulatorDb } = await import("@/modules/intelligence/ia/simulator/SimulatorDB");
+          await simulatorDb.purgeAll();
+        } catch (err) {
+          logger.warn("[SovereignBreach] simulatorDb purge error on breach", err);
+        }
+      }
+
       // Simulation flag is ignored for critical security events, or we handle it gracefully
       const { message, targetTenantId, anchoredTenantId, path } = payload;
       logger.error(
