@@ -3,6 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from "@/shared/nexus/contracts";
 import { toTable, toFloor, toZone, toReservation } from '@/shared/nexus/contracts/nexus-internal-mapper';
 import type { Table } from '../../domain/schemas/ops';
+import { assertTableTransition, type TableStatus } from '@/modules/facility';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DomainRegistry } from '@shared/nexus/engines/DomainRegistry';
 import { logger } from '@/lib/logger';
@@ -40,13 +41,36 @@ export const useOperationalNodes = () => {
   }, [tenantId]);
 
   const updateNode = useCallback(async (id: string, data: Partial<SovereignNode>) => {
+    // PLAN LOGIQUE MÉTIER LOT D — garde état-machine de table :
+    // si la mutation contient un changement de status, valider la transition
+    // depuis l'état courant avant écriture. Un status illégal (ex. free → paying)
+    // lève une TableTransitionError et bloque l'écriture Nexus.
+    if (data && typeof (data as { status?: string }).status === 'string') {
+      const nextStatus = (data as { status: TableStatus }).status;
+      const currentNode = nodes.find(n => n.id === id);
+      if (currentNode?.status) {
+        assertTableTransition(currentNode.status as TableStatus, nextStatus);
+      }
+    }
     await guardedAction('FLOOR_PLAN', 'SYNC_STATE', async () => {
       await Nexus.adapter.update(`tenants/${tenantId}/${DomainRegistry.resolve(OperationalIdentity.NODES)}/${id}`, {
         ...data,
         updatedAt: new Date().toISOString()
       });
     });
-  }, [tenantId]);
+  }, [tenantId, nodes]);
+
+  /**
+   * PLAN LOGIQUE MÉTIER LOT D — action métier « table nettoyée ».
+   * dirty → cleaning → free en une opération : passe cleaning intermédiaire
+   * (audité), puis free avec émission table.released. La state machine
+   * refuse dirty → free direct (transition manquante) — cette hélper est
+   * le SEUL chemin canonique pour clore une rotation.
+   */
+  const markTableCleaned = useCallback(async (id: string) => {
+    await updateNode(id, { status: 'cleaning' } as Partial<SovereignNode>);
+    await updateNode(id, { status: 'free' } as Partial<SovereignNode>);
+  }, [updateNode]);
 
   const addNode = useCallback(async (data: Partial<SovereignNode>) => {
     const sanitized = sanitizeToSovereign(data);
@@ -155,6 +179,7 @@ export const useOperationalNodes = () => {
     updateTablePosition,
     addNode,
     addTable: addNode,
+    markTableCleaned,
     updateTable: updateNode,
     updateNodeStatus: updateNode,
     updateZone,

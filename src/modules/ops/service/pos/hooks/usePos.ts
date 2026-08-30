@@ -1,3 +1,4 @@
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
@@ -197,7 +198,16 @@ export function usePOSController() {
             setIsPaymentOpen(false);
             setIsSplitOpen(false);
             if (opts?.split) setPartialPayments([]);
+            // PLAN LOGIQUE MÉTIER LOT D — cycle de vie table :
+            // paying → dirty (paiement finalisé) + émission table.released
+            // pour que TableTurnoverAnalyzerHandler ferme le chronomètre
+            // de rotation démarré à table.assigned (arrivée client).
             await updateTable(currentTable.id, { status: "dirty" });
+            await NexusEventBus.emitDurable('table.released', {
+                v: 1,
+                tenantId: activeTenantId,
+                tableId: currentTable.id,
+            });
         } catch (_error) {
             showToast("Transaction Échouée", "error");
         }

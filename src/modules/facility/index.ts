@@ -42,3 +42,6 @@ export {
   SanitaryComplianceSection,
   InterventionLogSection,
 } from './maintenance/registre';
+
+export type { TableStatus } from './spaces/types';
+export { assertTableTransition, isTableTransitionAllowed, getAllowedTransitions, TableTransitionError, TABLE_LIFECYCLE_TRANSITIONS } from './spaces/domain/tableLifecycle';
