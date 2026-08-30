@@ -52,8 +52,10 @@ async function processRetryQueue(): Promise<void> {
         entry.payload as JsonObject
       );
       // skipDLQWrite : on gère l'état DLQ ici, pas dans le bus
-      await NexusEventBus.emit(
+      // Lot D.2 : Rejeu ciblé vers l'unique handler défaillant
+      await NexusEventBus.emitToHandler(
         entry.eventName as NexusEventName,
+        entry.handlerId,
         migratedPayload,
         { skipDLQWrite: true }
       );

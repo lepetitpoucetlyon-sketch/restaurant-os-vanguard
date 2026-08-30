@@ -92,7 +92,8 @@ class NexusEventBusClass {
     // V3-BUS-05: Normalisation de l'eventId obligatoire (ADR-001) sans mutation destructive
     const rawPayload = (payload || {}) as Record<string, unknown>;
     const hasExplicitEventId = Boolean(rawPayload.eventId);
-    const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
+    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
+    const eventId = String(rawPayload.eventId || (businessId ? (event + ":" + businessId) : crypto.randomUUID()));
     const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
       ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
       : payload;
@@ -258,6 +259,42 @@ class NexusEventBusClass {
     } finally {
       this.callStackDepth = Math.max(0, this.callStackDepth - 1);
       this.inFlight.delete(emissionKey);
+    }
+  }
+
+  /**
+   * Lot D.2 — Rejeu ciblé vers UN handler donné (utilisé par DLQRetryService).
+   * Contrairement à emit(), n'invoque QUE le handler dont l'id correspond, sans
+   * rejouer les autres handlers de l'événement. Aucun rejeu DLQ ici (le service
+   * appelant gère lui-même l'état DLQ).
+   */
+  async emitToHandler<E extends NexusEventName>(
+    event: E,
+    handlerId: string,
+    payload: NexusEventPayload<E>,
+    _options?: { skipDLQWrite?: boolean }
+  ): Promise<void> {
+    const rawPayload = (payload || {}) as Record<string, unknown>;
+    const hasExplicitEventId = Boolean(rawPayload.eventId);
+    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
+    const eventId = String(rawPayload.eventId || (businessId ? (event + ":" + businessId) : crypto.randomUUID()));
+    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
+      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
+      : payload;
+
+    const all = this.handlers.get(event) ?? [];
+    const target = all.find(h => h.id === handlerId);
+    if (!target) {
+      logger.warn(`[EventBus] emitToHandler: handler "${handlerId}" introuvable sur "${event}"`);
+      return;
+    }
+
+    try {
+      await target.handler(effectivePayload);
+    } catch (err) {
+      // Le rejeu est délégué au caller (DLQRetryService) — on re-throw pour qu'il puisse compter l'échec
+      logger.error(`[EventBus][RETRY] ${event}#${handlerId} failed on retry`, err);
+      throw err;
     }
   }
 
