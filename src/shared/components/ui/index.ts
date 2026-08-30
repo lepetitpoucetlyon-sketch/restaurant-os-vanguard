@@ -66,3 +66,5 @@ export * from './AutoSafeLayout';
 
 
 export { BentoGrid, BentoCell, type BentoLayout, type BentoGridProps, type BentoCellProps } from './BentoGrid';
+export * from "./Textarea";
+export * from "./Combobox";

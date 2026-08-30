@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import { murDeChinePlugin } from "./eslint-plugins/mur-de-chine.mjs";
+import { noRawControlsPlugin } from "./eslint-plugins/no-raw-controls.mjs";
 import unusedImports from "eslint-plugin-unused-imports";
 
 const eslintConfig = defineConfig([
@@ -10,11 +11,18 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       "vanguard": murDeChinePlugin,
+      "ds": noRawControlsPlugin,
       "unused-imports": unusedImports,
     },
     rules: {
       "vanguard/no-cross-imports": "error",
       "vanguard/no-inter-module-imports": "error",
+      // Anti-régression DS : bloque les contrôles bruts en niveau `warn` pour
+      // ne pas casser le code hérité mais visibiliser les nouvelles régressions.
+      // Exemptions : primitives DS elles-mêmes + marketing (cf. overrides plus bas).
+      "ds/no-raw-button": "warn",
+      "ds/no-raw-input": "warn",
+      "ds/no-raw-textarea": "warn",
       // Barrel Contract — bloque tout import plus profond que '@/modules/<pilier>'.
       // 239 violations pré-existantes (barrel-debt) — non bloquantes aujourd'hui via le ratchet
       // du preflight (voir scripts/preflight.sh § ESLint). Seuil à descendre à chaque PR.
@@ -88,6 +96,20 @@ const eslintConfig = defineConfig([
     ],
     rules: {
       "no-restricted-imports": "off",
+    },
+  },
+  {
+    // Exemption ds/no-raw-* : primitives DS elles-mêmes (elles fabriquent les
+    // <button>/<input>/<textarea> canoniques) + pages marketing (design distinct
+    // documenté dans AUDIT-DS-2026-08-30.md).
+    files: [
+      "src/shared/components/ui/**",
+      "src/app/(marketing)/**",
+    ],
+    rules: {
+      "ds/no-raw-button": "off",
+      "ds/no-raw-input": "off",
+      "ds/no-raw-textarea": "off",
     },
   },
   // Override default ignores of eslint-config-next.
