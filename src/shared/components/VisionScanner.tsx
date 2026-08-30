@@ -63,7 +63,7 @@ export function VisionScanner({ onAnalysisComplete, label = "Scanner une Facture
                 accept="image/*"
             />
 
-            <motion.div
+            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => fileInputRef.current?.click()}

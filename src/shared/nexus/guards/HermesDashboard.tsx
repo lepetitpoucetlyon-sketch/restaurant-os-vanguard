@@ -56,6 +56,7 @@ export function HermesDashboard({ tenantId }: { tenantId: string }) {
                 </div>
 
                 <button 
+                    aria-label="Déclencher pulsation Hermes"
                     onClick={triggerPulse}
                     disabled={isPulsing}
                     className="group relative px-6 py-3 bg-surface-glass border border-white/5 rounded-xl flex items-center gap-3 hover:bg-surface-glass-active transition-all active:scale-95 disabled:opacity-50 overflow-hidden"

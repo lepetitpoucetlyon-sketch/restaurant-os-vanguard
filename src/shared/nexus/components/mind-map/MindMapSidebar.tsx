@@ -68,7 +68,7 @@ export function MindMapSidebar({ selectedNode, onClose, onSelectNode }: MindMapS
                                 const otherId = src === selectedNode.id ? tgt : src;
 
                                 return (
-                                    <div 
+                                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
                                         key={i} 
                                         onClick={() => onSelectNode?.(otherId)}
                                         className="bg-bg-tertiary p-4 rounded-2xl border border-border/50 flex justify-between items-center hover:border-accent/30 cursor-pointer"

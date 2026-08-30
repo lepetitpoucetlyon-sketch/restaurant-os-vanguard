@@ -176,7 +176,7 @@ export const SceneGraphCanvas: React.FC<SceneGraphCanvasProps> = ({
             </div>
 
             {/* Canvas Viewport */}
-            <div
+            <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                 id="canvas-viewport"
                 onWheel={handleWheel}
                 onMouseDown={handleMouseDown}

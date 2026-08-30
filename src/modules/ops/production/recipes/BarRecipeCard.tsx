@@ -63,7 +63,7 @@ export function BarRecipeCard({ recipe, onClick, className }: BarRecipeCardProps
   const categoryLabel = recipe.category?.toUpperCase() ?? 'BAR';
 
   return (
-    <motion.div
+    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
       variants={cinematicItem}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       onClick={onClick}

@@ -37,7 +37,7 @@ export function TutorialOverlay({ categoryId, isOpen, onClose }: TutorialOverlay
             {isOpen && (
                 <div className="fixed inset-0 z-[100] flex justify-end">
                     {/* Backdrop */}
-                    <motion.div
+                    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}

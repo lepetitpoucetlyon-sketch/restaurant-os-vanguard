@@ -56,7 +56,7 @@ export function ProductCardGrid({
                     {products.map(product => {
                         const allergens: string[] = (product as JsonObject).allergens as string[] || [];
                         return (
-                            <motion.div
+                            <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                 key={product.id}
                                 layoutId={product.id}
                                 className="flex items-center justify-between p-4 bg-bg-tertiary border border-border/50 rounded-2xl hover:border-brand-primary/50 transition-all cursor-pointer group"

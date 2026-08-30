@@ -41,7 +41,7 @@ const ProductCard = memo(({ product, idx, showImages, buttonSize, isDisabled, di
     const finalPrice = (product.priceInMicrounits / 1_000_000 * multiplier);
 
     return (
-    <motion.div
+    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
         layout={performanceMode ? false : "position"}
         initial={performanceMode ? false : { opacity: 0, y: 15 }}
         animate={performanceMode ? false : { opacity: 1, y: 0 }}

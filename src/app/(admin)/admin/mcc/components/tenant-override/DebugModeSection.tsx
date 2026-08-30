@@ -28,6 +28,9 @@ export function DebugModeSection({
           <span className="text-chip-label text-action-primary">Debug Mode</span>
         </div>
         <button
+          role="switch"
+          aria-checked={!!form.debug?.enabled}
+          aria-label="Activer mode debug"
           onClick={onToggleDebug}
           className={cn(
             'w-10 h-5 rounded-full border transition-all relative',
@@ -48,6 +51,7 @@ export function DebugModeSection({
           {(['info', 'verbose', 'trace'] as const).map(l => (
             <button
               key={l}
+              aria-label={`Niveau debug ${l}`}
               onClick={() => onSetDebugLevel(l)}
               className={cn(
                 'flex-1 py-1.5 text-nano font-black uppercase tracking-wider rounded-lg border transition-all',

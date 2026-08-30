@@ -82,7 +82,7 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} 
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >

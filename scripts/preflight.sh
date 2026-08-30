@@ -89,9 +89,9 @@ INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart doc
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
 DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
-A11Y_MUETS_MAX=3             # boutons sans nom accessible — 89→3 après passe automatique aria-label sur icônes Lucide (2026-08-30)
+A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 derniers switchs/pulse fixés à la main (SwitchboardItem role=switch, DebugModeSection role=switch, HermesDashboard aria-label)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
-A11Y_KEYBOARD_MAX=28         # conteneurs cliquables non focalisables — 67→28 après injection auto role/tabIndex/onKeyDown (2026-08-30)
+A11Y_KEYBOARD_MAX=1          # conteneurs cliquables non focalisables — 67→1 : DraggableIngredient exempté (dnd-kit spread {...listeners} gère le clavier au runtime mais la mesure statique ne peut le voir)
 VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8
 FR_HARDCODED_MAX=943         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète

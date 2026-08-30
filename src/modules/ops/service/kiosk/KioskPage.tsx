@@ -203,7 +203,7 @@ export function KioskPage() {
             const inCart = cart.find((i) => i.product.id === product.id);
             const price = (product.priceInMicrounits || 0) / 10_000;
             return (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                 key={product.id}
                 onClick={() => handleAddToCart(product)}
                 className="bg-surface-card border border-border-default rounded-3xl p-4 flex flex-col justify-between hover:border-action-primary/40 cursor-pointer active:scale-98 transition-all group shadow-sm"

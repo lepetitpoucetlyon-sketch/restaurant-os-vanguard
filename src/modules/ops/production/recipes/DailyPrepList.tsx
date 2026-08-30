@@ -271,7 +271,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
               const isChecked = checkedKeys.has(item.key);
 
               return (
-                <motion.div
+                <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                   key={item.key}
                   variants={cinematicItem}
                   layout

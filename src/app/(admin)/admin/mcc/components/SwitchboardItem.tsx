@@ -9,6 +9,9 @@ export function SwitchboardItem({ label, active, onToggle }: { label: string, ac
           {active ? 'EN LIGNE' : 'HORS LIGNE'}
         </span>
         <button
+          role="switch"
+          aria-checked={active}
+          aria-label={active ? "Désactiver" : "Activer"}
           onClick={onToggle}
           className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${active ? 'bg-status-success/20 border border-emerald-500/50' : 'bg-status-danger/20 border border-red-500/50'}`}
         >

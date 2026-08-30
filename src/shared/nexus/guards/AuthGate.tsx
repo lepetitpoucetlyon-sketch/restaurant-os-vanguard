@@ -83,7 +83,7 @@ export function AuthGate({ children }: AuthGateProps) {
         <div className="flex min-h-screen bg-bg-primary transition-colors duration-500 overflow-x-hidden">
             <AnimatePresence>
                 {!isFullWidth && isMobileMenuOpen && (
-                    <motion.div
+                    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}

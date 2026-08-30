@@ -39,10 +39,10 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
     const CategoryIcon = doc.icon;
 
     const content = (
-        <motion.div
+        <motion.div tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
             initial={isPage ? {} : { opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            role={isPage ? undefined : "dialog"}
+            role={isPage ? "button" : "dialog"}
             aria-modal={isPage ? undefined : "true"}
             aria-label={doc.title}
             exit={isPage ? {} : { opacity: 0, scale: 0.95, y: 20 }}

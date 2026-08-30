@@ -74,7 +74,7 @@ export function BrandUploader({ slot, label, currentUrl, hint }: BrandUploaderPr
         )}
       </div>
 
-      <div
+      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
         onClick={() => inputRef.current?.click()}
         onDrop={onDrop}
         onDragOver={e => { e.preventDefault(); setIsDragging(true); }}

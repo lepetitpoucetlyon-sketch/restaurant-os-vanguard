@@ -300,7 +300,7 @@ function StyleOptionCard({
   onClick(): void;
 }) {
   return (
-    <div
+    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
       onClick={onClick}
       className={`p-4 rounded-2xl border cursor-pointer transition-all ${
         selected

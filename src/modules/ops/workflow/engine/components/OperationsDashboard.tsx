@@ -183,7 +183,7 @@ export function OperationsDashboard() {
                         {view === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {(areas as unknown as OperationalArea[])?.map((area: OperationalArea, idx: number) => (
-                                    <motion.div
+                                    <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                         key={area.id}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}

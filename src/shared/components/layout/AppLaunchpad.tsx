@@ -94,7 +94,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                     className="absolute top-0 left-0 right-0 flex justify-center z-[130] pointer-events-none"
                                 >
-                                    <div
+                                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                                         className="relative w-full max-w-2xl px-6 pointer-events-auto mt-4"
                                         onClick={e => e.stopPropagation()}
                                     >
@@ -142,7 +142,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                 className="w-full flex flex-col items-center"
                             >
                                 {/* Status Hub - Now in Flow */}
-                                <div className="w-full flex justify-center mb-0 pointer-events-auto" onClick={e => e.stopPropagation()}>
+                                <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} className="w-full flex justify-center mb-0 pointer-events-auto" onClick={e => e.stopPropagation()}>
                                     <LaunchpadStatusHub onClose={onClose} />
                                 </div>
 

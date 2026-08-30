@@ -144,7 +144,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                         }
 
                         return (
-                        <motion.div
+                        <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                             key={recipe.id}
                             variants={cinematicItem}
                             whileHover={{ y: -5 }}

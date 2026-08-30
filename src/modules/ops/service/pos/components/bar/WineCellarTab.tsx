@@ -94,7 +94,7 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
                 const region = regions.find(r => r.id === wine.region);
                 const isLowStock = wine.stock <= wine.minStock;
                 return (
-                    <div
+                    <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }}
                         key={wine.id}
                         className="bg-bg-secondary rounded-2xl p-6 border border-border shadow-sm hover:shadow-lg transition-all cursor-pointer relative overflow-hidden"
                         onClick={() => setSelectedWine(wine)}
