@@ -2,7 +2,7 @@
 
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { formatCurrency } from "@/lib/formatters";
+import { formatMu } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 
 interface SplitSummaryFooterProps {
@@ -28,7 +28,7 @@ export function SplitSummaryFooter({
                 </span>
                 <div className="flex items-end gap-3">
                     <span className="text-5xl font-serif font-black italic text-text-primary leading-none tracking-tighter">
-                        {formatCurrency(SovereignMath.toCents(BigInt(Math.round(remainingAmount))))}
+                        {formatMu(remainingAmount)}
                     </span>
                     <span className="text-xs font-black text-text-primary/20 uppercase tracking-widest mb-1 pb-1">
                         Restant
@@ -50,7 +50,7 @@ export function SplitSummaryFooter({
                         À encaisser maintenant
                     </span>
                     <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">
-                        {formatCurrency(SovereignMath.toCents(BigInt(Math.round(remainingAmount))))}
+                        {formatMu(remainingAmount)}
                     </p>
                 </div>
             )}

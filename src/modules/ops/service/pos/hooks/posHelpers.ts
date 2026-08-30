@@ -127,12 +127,12 @@ export function resolveServerName(user: { name?: string } | null | undefined): s
 
 export interface SplitInfo {
     label: string;
-    partials: { amount: number; guest: number; method?: string }[] | undefined;
+    partials: { amountInMicrounits: number; guest: number; method?: string }[] | undefined;
 }
 
 export function getSplitInfo(
     opts: { split?: boolean } | undefined,
-    payments: { amount: number; guest: number; method?: string }[]
+    payments: { amountInMicrounits: number; guest: number; method?: string }[]
 ): SplitInfo {
     return {
         label: opts?.split ? "Paiement fractionné validé" : "Paiement validé",

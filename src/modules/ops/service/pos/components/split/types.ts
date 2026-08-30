@@ -7,17 +7,17 @@ export type PaymentMethod = 'card' | 'cash' | 'mobile';
 
 export interface ConvivePayment {
     paid: boolean;
-    amount: number;
+    amountInMicrounits: number;
     method?: PaymentMethod;
 }
 
 export interface SplitBillDialogProps {
     isOpen: boolean;
     items: CartItem[];
-    total: number;
+    totalInMicrounits: number;
     coverCount: number;
     onClose: () => void;
-    onPaySplit: (amount: number, conviveIndex: number) => void;
+    onPaySplit: (amountInMicrounits: number, conviveIndex: number) => void;
     /** Appelé quand toutes les parts sont réglées → scelle la vente (NF525). */
     onSplitComplete?: () => void;
 }

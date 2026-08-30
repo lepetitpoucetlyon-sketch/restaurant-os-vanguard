@@ -18,7 +18,7 @@ export interface BridgePayload {
   paymentMode?: PaymentMode;
   covers?: number;
   isTrainingMode?: boolean;
-  partialPayments?: { amount: number; guest: number; method?: string }[];
+  partialPayments?: { amountInMicrounits: number; guest: number; method?: string }[];
 }
 
 import type { JournalEntry, FiscalSeal } from '@nexus/contracts';

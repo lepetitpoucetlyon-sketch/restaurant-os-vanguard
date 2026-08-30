@@ -32,7 +32,7 @@ export function emitPaymentEvents(
       tenantId,
       operatorId,
       totalInMicrounits: totalTTCInMicrounits,
-      payments: payload.partialPayments.map(p => ({ amount: p.amount, guest: p.guest, method: p.method ?? 'card' })),
+      payments: payload.partialPayments.map(p => ({ amountInMicrounits: p.amountInMicrounits, guest: p.guest, method: p.method ?? 'card' })),
     }).catch((err) => {
       logger.error('[FinancialNexusEvents] order.split emit failed', { err, orderId: entryId, tenantId });
     });

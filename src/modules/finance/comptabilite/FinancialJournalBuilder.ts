@@ -117,7 +117,7 @@ export function buildJournalLines(
           acct.code,
           acct.name,
           'debit',
-          p.amount,
+          microToCents(p.amountInMicrounits),
           `Paiement partiel (${modeKey}) — Convive ${p.guest}`,
           pieceNumber,
           now
@@ -138,6 +138,15 @@ export function buildJournalLines(
         now
       )
     );
+  }
+
+
+  // 🛡️ Contrôle d'équilibre NF525 (LOT B INV-28) : Σ débits === Σ crédits.
+  // Un split partiel ou une conversion foireuse produirait une écriture
+  // déséquilibrée qui serait ensuite scellée immuablement. Refuser AVANT sceau.
+  const totalDebitCents = debits.reduce((sum, d) => sum + (d.debitInCents ?? 0), 0);
+  if (totalDebitCents !== totalCreditCents) {
+    throw new Error(`JOURNAL_UNBALANCED: débits (${totalDebitCents}c) ≠ crédits (${totalCreditCents}c) — pièce ${pieceNumber} ne peut être scellée.`);
   }
 
   return [...debits, ...credits];

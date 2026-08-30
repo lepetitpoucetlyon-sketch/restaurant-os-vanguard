@@ -183,13 +183,12 @@ function POSMobilePage() {
                 )}
             </AnimatePresence>
 
-            <SplitBillDialog
-                isOpen={isSplitOpen}
+            <SplitBillDialog isOpen={isSplitOpen}
                 items={cartItems}
-                total={cartTotal}
+                totalInMicrounits={cartTotal}
                 coverCount={currentTable?.seats || 1}
                 onClose={() => setIsSplitOpen(false)}
-                onPaySplit={(amountInCents: number, guestIndex: number) => handlePaySplit(amountInCents, guestIndex)}
+                onPaySplit={(amountInMicrounits: number, guestIndex: number) => handlePaySplit(amountInMicrounits, guestIndex)}
                 onSplitComplete={handleSplitComplete}
             />
         </div>

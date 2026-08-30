@@ -23,7 +23,7 @@ export interface PaymentContext {
     tableId: string | null;
     tenantId: string;
     consumptionMode: ConsumptionMode;
-    partialPayments?: { amount: number; guest: number; method?: string }[];
+    partialPayments?: { amountInMicrounits: number; guest: number; method?: string }[];
 }
 
 export async function processPayment(ctx: PaymentContext): Promise<void> {

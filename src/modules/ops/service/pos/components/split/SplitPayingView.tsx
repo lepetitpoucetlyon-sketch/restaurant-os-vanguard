@@ -3,7 +3,7 @@
 import { User, CreditCard, Banknote, Smartphone, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { formatCurrency } from "@/lib/formatters";
+import { formatMu } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import type { PaymentMethod } from './types';
 
@@ -46,7 +46,7 @@ export function SplitPayingView({
                 </h2>
                 <div className="relative">
                     <p className="text-7xl font-serif font-black text-accent-gold italic drop-shadow-glow">
-                        {formatCurrency(SovereignMath.toCents(BigInt(payingAmount)))}
+                        {formatMu(payingAmount)}
                     </p>
                     <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-accent-gold/20 rounded-full blur-sm" />
                 </div>

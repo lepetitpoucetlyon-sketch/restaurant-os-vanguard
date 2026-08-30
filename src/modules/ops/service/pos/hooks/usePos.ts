@@ -59,7 +59,7 @@ export function usePOSController() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [tipInMicrounits, setTipInMicrounits] = useState<number>(0);
     const [consumptionMode, setConsumptionMode] = useState<ConsumptionMode>('dine_in');
-    const [partialPayments, setPartialPayments] = useState<{ amount: number; guest: number; method?: string }[]>([]);
+    const [partialPayments, setPartialPayments] = useState<{ amountInMicrounits: number; guest: number; method?: string }[]>([]);
 
     const isLoading = productsLoading || categoriesLoading;
     const resolvedTables = tables ?? [];
@@ -198,9 +198,9 @@ export function usePOSController() {
         setIsPaymentOpen(true);
     }, [cartItems]);
 
-    const handlePaySplit = useCallback((amountInCents: number, guestIndex: number) => {
-        setPartialPayments(prev => [...prev, { amount: amountInCents, guest: guestIndex }]);
-        showToast(`Client ${guestIndex + 1} : ${amountInCents / 100}€ réglés et persistés`, "success");
+    const handlePaySplit = useCallback((amountInMicrounits: number, guestIndex: number) => {
+        setPartialPayments(prev => [...prev, { amountInMicrounits, guest: guestIndex }]);
+        showToast(`Client ${guestIndex + 1} : ${(amountInMicrounits / 1_000_000).toFixed(2)}€ réglés et persistés`, "success");
     }, [showToast]);
 
     const handleSplitComplete = useCallback(() => finalizePayment({ split: true }), [finalizePayment]);

@@ -4,7 +4,7 @@ import { Check, ArrowRight, CreditCard, Banknote, Smartphone } from "lucide-reac
 import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { formatCurrency } from "@/lib/formatters";
+import { formatCurrency, formatMu } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 import type { ConvivePayment } from './types';
 
@@ -35,7 +35,7 @@ export function SplitConviveCard({
         >
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2 text-text-primary/60 font-mono text-xs">
-                    {(SovereignMath.toCents(BigInt(totalAmount)) / 100).toFixed(2)}€
+                    {formatMu(totalAmount)}
                 </div>
                 <div className={cn(
                     "w-12 h-12 rounded-[20px] flex items-center justify-center font-serif font-black italic text-xl shadow-sm transition-all duration-700",
@@ -54,7 +54,7 @@ export function SplitConviveCard({
             </div>
 
             <div className="text-4xl font-serif font-black italic text-text-primary mb-8 transition-colors group-hover/card:text-accent-gold group-hover/card:translate-x-2 duration-500">
-                {formatCurrency(SovereignMath.toCents(BigInt(totalAmount)))}
+                {formatMu(totalAmount)}
             </div>
 
             {!convive.paid && (

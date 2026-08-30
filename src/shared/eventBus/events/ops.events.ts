@@ -54,7 +54,7 @@ export interface OPSEvents {
     tenantId: string;
     operatorId: string;
     totalInMicrounits: number;
-    payments: Array<{ amount: number; guest: number; method: string }>;
+    payments: Array<{ amountInMicrounits: number; guest: number; method: string }>;
   };
 
   'order.refunded': {

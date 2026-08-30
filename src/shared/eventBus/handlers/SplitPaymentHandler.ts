@@ -11,7 +11,7 @@ export function registerSplitPaymentHandler() {
         return {
           id,
           orderId: payload.orderId,
-          amountInMicrounits: p.amount * 10_000,
+          amountInMicrounits: p.amountInMicrounits,
           method: p.method,
           guest: p.guest,
           type: 'split',

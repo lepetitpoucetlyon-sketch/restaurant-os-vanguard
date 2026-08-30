@@ -6,7 +6,7 @@ import { printerService } from "../../../printers";
 import type { PaymentMethod } from "./types";
 
 interface UseSplitPaymentExecutionProps {
-    onPaySplit: (amountInCents: number, conviveIndex: number) => void;
+    onPaySplit: (amountInMicrounits: number, conviveIndex: number) => void;
 }
 
 export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutionProps) {
@@ -14,7 +14,7 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
     const [terminalState, setTerminalState] = useState<'idle' | 'pending' | 'manual_wait' | 'error'>('idle');
     const [terminalError, setTerminalError] = useState<string | null>(null);
 
-    const executeCardPayment = async (amountInCents: number, conviveIndex: number): Promise<boolean> => {
+    const executeCardPayment = async (amountInMicrounits: number, conviveIndex: number): Promise<boolean> => {
         setIsProcessing(true);
         setTerminalState('pending');
         setTerminalError(null);
@@ -29,7 +29,7 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
             }
 
             const result = await terminalService.charge({
-                amountInMicrounits: amountInCents * 10000,
+                amountInMicrounits,
                 orderId: `SPLIT_${Date.now()}_C${conviveIndex}`,
                 description: `Split Table`,
             });
@@ -50,12 +50,12 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
     };
 
     const executePayment = async (
-        amountInCents: number,
+        amountInMicrounits: number,
         conviveIndex: number,
         method: PaymentMethod
     ): Promise<boolean> => {
         if (method === 'card') {
-            const success = await executeCardPayment(amountInCents, conviveIndex);
+            const success = await executeCardPayment(amountInMicrounits, conviveIndex);
             if (!success) return false;
         } else if (method === 'cash') {
             printerService.openCashDrawer();
@@ -63,7 +63,7 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
 
         setIsProcessing(false);
         setTerminalState('idle');
-        onPaySplit(amountInCents, conviveIndex);
+        onPaySplit(amountInMicrounits, conviveIndex);
         return true;
     };
 

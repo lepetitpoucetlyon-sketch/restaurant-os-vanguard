@@ -5,7 +5,7 @@ import { X, Users, DivideCircle, CreditCard } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { Modal } from "@ui/Modal";
 import { useLanguage } from "@/shared/hooks/useLanguage";
-import { formatCurrency } from "@/lib/formatters";
+import { formatMu } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 
 import { SplitEqualPanel } from "./split/SplitEqualPanel";
@@ -19,15 +19,15 @@ import type { SplitBillDialogProps, SplitMode, PaymentMethod, ConvivePayment, Sp
 
 export type { SplitCartItem, SplitMode, PaymentMethod, ConvivePayment, SplitBillDialogProps };
 
-function createEqualPayments(count: number, total: number): ConvivePayment[] {
-    const parts = SovereignMath.splitRemainder(total, Math.max(1, count));
-    return parts.map(amount => ({ paid: false, amount }));
+function createEqualPayments(count: number, totalInMicrounits: number): ConvivePayment[] {
+    const parts = SovereignMath.splitRemainder(totalInMicrounits, Math.max(1, count));
+    return parts.map(amountInMicrounits => ({ paid: false, amountInMicrounits }));
 }
 
 export function SplitBillDialog({
     isOpen,
     items,
-    total,
+    totalInMicrounits,
     coverCount,
     onClose,
     onPaySplit,
@@ -35,9 +35,9 @@ export function SplitBillDialog({
 }: SplitBillDialogProps) {
     const [mode, setMode] = useState<SplitMode>('equal');
     const [splitCount, setSplitCount] = useState(coverCount || 2);
-    const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => createEqualPayments(coverCount || 2, total));
+    const [convivePayments, setConvivePayments] = useState<ConvivePayment[]>(() => createEqualPayments(coverCount || 2, totalInMicrounits));
     const [selectedItems, setSelectedItems] = useState<Record<number, string[]>>({});
-    const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(total / (coverCount || 2)));
+    const [customAmounts, setCustomAmounts] = useState<number[]>(() => Array(coverCount || 2).fill(totalInMicrounits / (coverCount || 2)));
     const [payingConvive, setPayingConvive] = useState<number | null>(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod | null>(null);
     const { t } = useLanguage();
@@ -52,8 +52,8 @@ export function SplitBillDialog({
 
     const syncSplitState = (nextSplitCount: number) => {
         setSplitCount(nextSplitCount);
-        setConvivePayments(createEqualPayments(nextSplitCount, total));
-        setCustomAmounts(Array(nextSplitCount).fill(total / nextSplitCount));
+        setConvivePayments(createEqualPayments(nextSplitCount, totalInMicrounits));
+        setCustomAmounts(Array(nextSplitCount).fill(totalInMicrounits / nextSplitCount));
         setSelectedItems({});
         setPayingConvive(null);
         setSelectedPaymentMethod(null);
@@ -68,12 +68,12 @@ export function SplitBillDialog({
 
     if (!isOpen) return null;
 
-    const amountPerPerson = total / splitCount;
+    const amountPerPerson = totalInMicrounits / splitCount;
     const paidCount = convivePayments.filter(g => g.paid).length;
-    const remainingAmount = total - convivePayments.filter(g => g.paid).reduce((sum, g) => sum + g.amount, 0);
+    const remainingAmountInMicrounits = totalInMicrounits - convivePayments.filter(g => g.paid).reduce((sum, g) => sum + g.amountInMicrounits, 0);
 
-    const getConviveTotal = (conviveIndex: number): number => {
-        if (mode === 'equal') return convivePayments[conviveIndex]?.amount ?? amountPerPerson;
+    const getConviveTotalInMicrounits = (conviveIndex: number): number => {
+        if (mode === 'equal') return convivePayments[conviveIndex]?.amountInMicrounits ?? amountPerPerson;
         if (mode === 'custom') return customAmounts[conviveIndex] || 0;
         const conviveItems = selectedItems[conviveIndex] || [];
         return items
@@ -83,8 +83,8 @@ export function SplitBillDialog({
 
     const handleConfirmPayment = async () => {
         if (payingConvive === null || !selectedPaymentMethod) return;
-        const amountInCents = getConviveTotal(payingConvive);
-        const success = await executePayment(amountInCents, payingConvive, selectedPaymentMethod);
+        const amountInMicrounits = getConviveTotalInMicrounits(payingConvive);
+        const success = await executePayment(amountInMicrounits, payingConvive, selectedPaymentMethod);
         if (success) {
             setConvivePayments(prev => prev.map((g, i) =>
                 i === payingConvive ? { ...g, paid: true, method: selectedPaymentMethod } : g
@@ -115,7 +115,7 @@ export function SplitBillDialog({
                             <h1 className="text-4xl font-serif font-black text-text-primary italic tracking-tight leading-none">{t('pos.split.title')}</h1>
                             <p className="text-micro font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
                                 <span className="text-nano font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
-                                Total TTC: <span className="text-text-primary">{formatCurrency(SovereignMath.toCents(BigInt(total)))}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
+                                Total TTC: <span className="text-text-primary">{formatMu(totalInMicrounits)}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
                             </p>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ export function SplitBillDialog({
                 {payingConvive !== null ? (
                     <SplitPayingView
                         payingConvive={payingConvive}
-                        payingAmount={getConviveTotal(payingConvive || 0)}
+                        payingAmount={getConviveTotalInMicrounits(payingConvive || 0)}
                         selectedPaymentMethod={selectedPaymentMethod}
                         onSelectPaymentMethod={setSelectedPaymentMethod}
                         terminalState={terminalState}
@@ -211,7 +211,7 @@ export function SplitBillDialog({
                                             key={index}
                                             index={index}
                                             convive={convive}
-                                            totalAmount={getConviveTotal(index)}
+                                            totalAmount={getConviveTotalInMicrounits(index)}
                                             onPay={setPayingConvive}
                                         />
                                     ))}
@@ -220,7 +220,7 @@ export function SplitBillDialog({
                         </div>
 
                         <SplitSummaryFooter
-                            remainingAmount={remainingAmount}
+                            remainingAmount={remainingAmountInMicrounits}
                             allPaid={allPaid}
                             onComplete={() => { if (onSplitComplete) onSplitComplete(); else onClose(); }}
                         />
