@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
 import { MCCWidgetSkeleton } from '../components/MCCWidgetSkeleton';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ComponentType<any> volontaire : chaque tab a sa propre signature de props
 export const MCC_CORE_TABS: Record<string, ComponentType<any>> = {
   fleet:         dynamic(() => import('./FleetTab').then(m => m.FleetTab), { loading: () => <MCCWidgetSkeleton /> }),
   fleetSidebar:  dynamic(() => import('./FleetSidebar').then(m => m.FleetSidebar)),

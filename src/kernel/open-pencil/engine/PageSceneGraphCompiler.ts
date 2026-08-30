@@ -114,7 +114,7 @@ ${indent}</div>`;
             }
 
             default:
-                return `${indent}<div data-node-id="${(node as any)?.id || ''}" />`;
+                return `${indent}<div data-node-id="${(node as { id?: string })?.id || ''}" />`;
         }
     }
 

@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3689,
-    "loc": 346332,
+    "loc": 346343,
     "pages": 86,
     "apiRoutes": 211
   },

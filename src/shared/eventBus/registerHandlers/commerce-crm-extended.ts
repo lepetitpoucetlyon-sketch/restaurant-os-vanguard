@@ -6,8 +6,8 @@ export function registerCommerceCrmExtendedHandlers(): Array<() => void> {
     NexusEventBus.on("crm.birthday_approaching", async (payload) => {
       try {
         const { VipGuestPreferenceMemoryService } = await import("@/modules/commerce/relation/crm/services/VipGuestPreferenceMemoryService");
-        if (typeof (VipGuestPreferenceMemoryService as any).initGuest === "function") {
-          await (VipGuestPreferenceMemoryService as any).initGuest(payload);
+        if (typeof (VipGuestPreferenceMemoryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).initGuest === "function") {
+          await (VipGuestPreferenceMemoryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).initGuest(payload);
         }
       } catch (err) {
         logger.error("[crm.birthday_approaching] Vip preference error:", err);

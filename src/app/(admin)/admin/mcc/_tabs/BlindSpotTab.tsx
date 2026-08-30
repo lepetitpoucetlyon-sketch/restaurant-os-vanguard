@@ -14,6 +14,7 @@ import { VETERINARY_BLUEPRINT } from '@/verticals/veterinary/veterinary.blueprin
 import { HOTEL_BLUEPRINT } from '@/verticals/hotel/hotel.blueprint';
 import type { SectorStudy } from '@/verticals/_shared/blueprint/SectorStudy';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- blueprints hétérogènes (chaque vertical a un shape distinct)
 const BLUEPRINTS: Record<string, any> = {
   restaurant: RESTAURANT_BLUEPRINT,
   bakery: BAKERY_BLUEPRINT,

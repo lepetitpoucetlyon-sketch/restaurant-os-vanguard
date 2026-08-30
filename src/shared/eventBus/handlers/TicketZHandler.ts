@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 import { toSovereignData } from "@/lib/toSovereignData";
+import type { INexusTransaction } from '@/lib/nexus/types';
 
 type TicketZDoc = {
   id: string;
@@ -159,7 +160,7 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
     tenantId,
     false,
     journalEntryBase,
-    (tx: any, sealId: string) => tx.update(ticketPath, {
+    (tx: INexusTransaction, sealId: string) => tx.update(ticketPath, {
       closed: true,
       closedAt,
       fiscalSealId: sealId,

@@ -6,8 +6,8 @@ export function registerOpsTpeHandlers(): Array<() => void> {
     NexusEventBus.on("pos.tpe_simulation_completed", async (payload) => {
       try {
         const { TpeReconciliationService } = await import("@/modules/ops/service/pos/services/TpeReconciliationService");
-        if (typeof (TpeReconciliationService as any).reconcilePayment === "function") {
-          await (TpeReconciliationService as any).reconcilePayment(payload);
+        if (typeof (TpeReconciliationService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).reconcilePayment === "function") {
+          await (TpeReconciliationService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).reconcilePayment(payload);
         }
       } catch (err) {
         logger.error("[pos.tpe_simulation_completed] Tpe reconciliation error:", err);

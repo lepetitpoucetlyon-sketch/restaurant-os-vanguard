@@ -65,10 +65,13 @@ const eslintConfig = defineConfig([
   {
     // Test files legitimately use `any` for mocks/fixtures/stubs — not shipped code.
     // Deep barrel imports allowed for mocking specific sub-paths (CLAUDE.md § Barrel rule).
+    // React.createElement(Comp, { children }) est requis dans les .test.ts (pas de JSX)
+    // pour typer les composants dont `children` est prop obligatoire.
     files: ["**/*.test.{ts,tsx}", "tests/**", "src/e2e/**", "src/__tests__/**"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "no-restricted-imports": "off",
+      "react/no-children-prop": "off",
     },
   },
   {

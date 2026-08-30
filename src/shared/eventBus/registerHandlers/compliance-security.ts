@@ -6,12 +6,12 @@ export function registerComplianceSecurityHandlers(): Array<() => void> {
     NexusEventBus.on("security.pin_locked", async (payload) => {
       try {
         const { EmergencyExitOpeningChecklistService } = await import("@/modules/compliance/qualite/haccp/services/EmergencyExitOpeningChecklistService");
-        if (typeof (EmergencyExitOpeningChecklistService as any).triggerDailyCheck === "function") {
-          await (EmergencyExitOpeningChecklistService as any).triggerDailyCheck(payload);
+        if (typeof (EmergencyExitOpeningChecklistService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).triggerDailyCheck === "function") {
+          await (EmergencyExitOpeningChecklistService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).triggerDailyCheck(payload);
         }
         const { GdprDataAnonymizerService } = await import("@/modules/compliance/securite/GdprDataAnonymizerService");
-        if (typeof (GdprDataAnonymizerService as any).anonymize === "function") {
-          await (GdprDataAnonymizerService as any).anonymize(payload);
+        if (typeof (GdprDataAnonymizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).anonymize === "function") {
+          await (GdprDataAnonymizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).anonymize(payload);
         }
       } catch (err) {
         logger.error("[security.pin_locked] Security handler error:", err);

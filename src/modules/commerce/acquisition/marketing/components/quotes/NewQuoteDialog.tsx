@@ -98,7 +98,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
 
         setIsSaving(true);
         try {
-            await createQuote(buildQuotePayload(lines, crmName, subject, undefined, totals) as any);
+            await createQuote(buildQuotePayload(lines, crmName, subject, undefined, totals) as Parameters<typeof createQuote>[0]);
             toast.success("Le devis a été généré et persisté avec succès.");
             handleClose();
         } catch (error) {

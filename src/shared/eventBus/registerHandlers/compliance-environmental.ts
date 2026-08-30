@@ -6,8 +6,8 @@ export function registerComplianceEnvironmentalHandlers(): Array<() => void> {
     NexusEventBus.on("haccp.nonconform", async (payload) => {
       try {
         const { BiodechetsRegistryService } = await import("@/modules/compliance/qualite/biodechets/BiodechetsRegistryService");
-        if (typeof (BiodechetsRegistryService as any).recordWaste === "function") {
-          await (BiodechetsRegistryService as any).recordWaste(payload);
+        if (typeof (BiodechetsRegistryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordWaste === "function") {
+          await (BiodechetsRegistryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordWaste(payload);
         }
       } catch (err) {
         logger.error("[haccp.nonconform] Biodechets handler error:", err);
@@ -16,8 +16,8 @@ export function registerComplianceEnvironmentalHandlers(): Array<() => void> {
     NexusEventBus.on("compliance.deadline_approaching", async (payload) => {
       try {
         const { BsddWasteOilService } = await import("@/modules/compliance/qualite/biodechets/BsddWasteOilService");
-        if (typeof (BsddWasteOilService as any).recordOilCheck === "function") {
-          await (BsddWasteOilService as any).recordOilCheck(payload);
+        if (typeof (BsddWasteOilService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordOilCheck === "function") {
+          await (BsddWasteOilService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordOilCheck(payload);
         }
       } catch (err) {
         logger.error("[compliance.deadline_approaching] Bsdd handler error:", err);

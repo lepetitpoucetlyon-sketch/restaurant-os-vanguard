@@ -18,7 +18,7 @@ interface InvoiceReviewModalProps {
 export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceReviewModalProps) {
     const { ingredients, addStockItem } = useInventory();
     const [matches, _setMatches] = useState<VisionMatchResult[]>(() => 
-        data.items.map((item: any) => InventoryVisionService.findBestMatch(item, ingredients as import("@nexus/contracts").Ingredient[]))
+        data.items.map((/* eslint-disable @typescript-eslint/no-explicit-any */ item: any /* eslint-enable @typescript-eslint/no-explicit-any */) => InventoryVisionService.findBestMatch(item, ingredients as import("@nexus/contracts").Ingredient[]))
     );
 
     const handleSave = async () => {

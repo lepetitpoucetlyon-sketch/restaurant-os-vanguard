@@ -16,7 +16,7 @@ import { toError } from "@/lib/toError";
  * Manages fleet-wide strategy and autonomous action execution.
  */
 export function useStrategicOracle() {
-    const rawInstances = useAtomValue(fleetSnapshotAtom) as any;
+    const rawInstances = useAtomValue(fleetSnapshotAtom) as unknown;
     const instances = Array.isArray(rawInstances) ? rawInstances : [];
     const agent = useGeminiAgent();
     const notifiedInsightIds = useRef<Set<string>>(new Set());

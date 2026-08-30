@@ -6,8 +6,8 @@ export function registerFinanceTreasuryHandlers(): Array<() => void> {
     NexusEventBus.on("finance.cash_pool_balanced", async (payload) => {
       try {
         const { CrossTenantCashPoolTreasuryService } = await import("@/modules/finance/tresorerie/CrossTenantCashPoolTreasuryService");
-        if (typeof (CrossTenantCashPoolTreasuryService as any).balancePool === "function") {
-          await (CrossTenantCashPoolTreasuryService as any).balancePool(payload);
+        if (typeof (CrossTenantCashPoolTreasuryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).balancePool === "function") {
+          await (CrossTenantCashPoolTreasuryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).balancePool(payload);
         }
       } catch (err) {
         logger.error("[finance.cash_pool_balanced] Cash pool error:", err);

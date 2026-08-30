@@ -27,4 +27,5 @@ export type MccTabId =
 export const MCC_TABS_REGISTRY: Record<MccTabId, ComponentType<any>> = {
   ...MCC_CORE_TABS,
   ...MCC_FORGE_TABS,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- coercion vers signature homogène de tabs hétérogènes
 } as Record<MccTabId, ComponentType<any>>;

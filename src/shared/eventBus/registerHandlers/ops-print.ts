@@ -6,8 +6,8 @@ export function registerOpsPrintHandlers(): Array<() => void> {
     NexusEventBus.on("pos.printer_failover", async (payload) => {
       try {
         const { UniversalPrinterBridgeService } = await import("@/modules/ops/service/pos/services/UniversalPrinterBridgeService");
-        if (typeof (UniversalPrinterBridgeService as any).handlePrintRequest === "function") {
-          await (UniversalPrinterBridgeService as any).handlePrintRequest(payload);
+        if (typeof (UniversalPrinterBridgeService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).handlePrintRequest === "function") {
+          await (UniversalPrinterBridgeService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).handlePrintRequest(payload);
         }
       } catch (err) {
         logger.error("[pos.printer_failover] Print bridge error:", err);

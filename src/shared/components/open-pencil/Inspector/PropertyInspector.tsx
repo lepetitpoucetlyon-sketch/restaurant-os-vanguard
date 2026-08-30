@@ -93,7 +93,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                             <label className="text-[11px] text-text-secondary">Contenu du Texte</label>
                             <textarea
                                 value={(node as TextNode).characters || ''}
-                                onChange={e => onUpdateNode(node.id, { characters: e.target.value } as any)}
+                                onChange={e => onUpdateNode(node.id, { characters: e.target.value } as Partial<SceneNode>)}
                                 className="w-full h-20 p-2 rounded-xl bg-bg-tertiary/40 border border-white/10 text-xs text-text-primary placeholder-neutral-500 focus:outline-none focus:border-amber-400/50 resize-none"
                             />
                         </div>
@@ -105,10 +105,10 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                                     type="number"
                                     value={(node as TextNode).style?.fontSize || 14}
                                     onChange={e => {
-                                        const current = (node as TextNode).style || ({} as any);
+                                        const current = (node as TextNode).style || ({} as Partial<SceneNode>);
                                         onUpdateNode(node.id, {
                                             style: { ...current, fontSize: Number(e.target.value) },
-                                        } as any);
+                                        } as Partial<SceneNode>);
                                     }}
                                     className="w-12 bg-transparent text-right text-text-primary focus:outline-none font-mono"
                                 />
@@ -117,10 +117,10 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                             <select
                                 value={(node as TextNode).style?.fontFamily || 'Inter, sans-serif'}
                                 onChange={e => {
-                                    const current = (node as TextNode).style || ({} as any);
+                                    const current = (node as TextNode).style || ({} as Partial<SceneNode>);
                                     onUpdateNode(node.id, {
                                         style: { ...current, fontFamily: e.target.value },
-                                    } as any);
+                                    } as Partial<SceneNode>);
                                 }}
                                 className="bg-bg-tertiary/40 border border-white/10 rounded-xl px-2 py-1 text-xs text-text-primary focus:outline-none"
                             >
@@ -139,7 +139,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
 
                         <div className="grid grid-cols-3 gap-1 bg-bg-tertiary/40 p-1 rounded-xl border border-white/5">
                             <button
-                                onClick={() => onUpdateNode(node.id, { layoutMode: 'NONE' } as any)}
+                                onClick={() => onUpdateNode(node.id, { layoutMode: 'NONE' } as Partial<SceneNode>)}
                                 className={`py-1 rounded text-[11px] font-medium transition-all ${
                                     !(node as FrameNode).layoutMode || (node as FrameNode).layoutMode === 'NONE'
                                         ? 'bg-amber-500/20 text-amber-300'
@@ -149,7 +149,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                                 Libre
                             </button>
                             <button
-                                onClick={() => onUpdateNode(node.id, { layoutMode: 'HORIZONTAL' } as any)}
+                                onClick={() => onUpdateNode(node.id, { layoutMode: 'HORIZONTAL' } as Partial<SceneNode>)}
                                 className={`py-1 rounded text-[11px] font-medium transition-all ${
                                     (node as FrameNode).layoutMode === 'HORIZONTAL'
                                         ? 'bg-amber-500/20 text-amber-300'
@@ -159,7 +159,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                                 Ligne (Row)
                             </button>
                             <button
-                                onClick={() => onUpdateNode(node.id, { layoutMode: 'VERTICAL' } as any)}
+                                onClick={() => onUpdateNode(node.id, { layoutMode: 'VERTICAL' } as Partial<SceneNode>)}
                                 className={`py-1 rounded text-[11px] font-medium transition-all ${
                                     (node as FrameNode).layoutMode === 'VERTICAL'
                                         ? 'bg-amber-500/20 text-amber-300'
@@ -177,7 +177,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                                     <input
                                         type="number"
                                         value={(node as FrameNode).itemSpacing || 0}
-                                        onChange={e => onUpdateNode(node.id, { itemSpacing: Number(e.target.value) } as any)}
+                                        onChange={e => onUpdateNode(node.id, { itemSpacing: Number(e.target.value) } as Partial<SceneNode>)}
                                         className="w-12 bg-transparent text-right text-text-primary focus:outline-none font-mono"
                                     />
                                 </div>
@@ -193,7 +193,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                                                 paddingRight: p,
                                                 paddingTop: p,
                                                 paddingBottom: p,
-                                            } as any);
+                                            } as Partial<SceneNode>);
                                         }}
                                         className="w-12 bg-transparent text-right text-text-primary focus:outline-none font-mono"
                                     />

@@ -19,6 +19,7 @@ export interface ExtractedInvoiceItem {
     batchNumber?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON brut du modèle vision, normalisé ligne par ligne
 function mapInvoiceItem(item: any): ExtractedInvoiceItem {
     const rawPrice = item.unitPrice ?? item.unitPriceHT ?? (item.unit_price_cents ? item.unit_price_cents / 100 : 0);
     const rawTotal = item.totalPrice ?? item.totalHT ?? (item.line_total_excl_tax_cents ? item.line_total_excl_tax_cents / 100 : 0);
@@ -38,7 +39,9 @@ function mapInvoiceItem(item: any): ExtractedInvoiceItem {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- payload legacy potentiellement de shapes divers
 export function toLegacyInvoice(data: any): ExtractedInvoice {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- items JSON hétérogènes
     const rawItems: any[] = Array.isArray(data.items) ? data.items : (Array.isArray(data.line_items) ? data.line_items : []);
     const meta = data.invoice_metadata;
     const totals = data.totals;

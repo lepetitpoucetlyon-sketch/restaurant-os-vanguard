@@ -18,6 +18,7 @@ export class OpenPencilMcpServer {
     /**
      * Exécute un appel d'outil MCP OpenPencil
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- MCP tool args are dynamic JSON per protocol
     public static async executeTool(toolName: string, args: Record<string, any>): Promise<{ content: Array<{ type: 'text'; text: string }>; isError?: boolean }> {
         try {
             switch (toolName) {
@@ -150,6 +151,7 @@ export class OpenPencilMcpServer {
                     const issues: string[] = [];
 
                     // Parcours pour vérifier l'a11y et le dimensionnement
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- traversée récursive de SceneNode polymorphe
                     const checkNode = (n: any) => {
                         if (n.type === 'FRAME' && n.id.includes('btn') && (n.width < 44 || n.height < 44)) {
                             issues.push(`Zone tactile sous 44px sur le bouton "${n.name}" (${n.width}x${n.height}px) - WCAG 2.5.5.`);

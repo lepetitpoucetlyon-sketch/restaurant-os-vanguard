@@ -5,6 +5,7 @@ import { cn } from "@/lib/ui.foundations";
 import { DataView, type DataViewState } from "./DataView";
 import { AdaptiveActionHub, type ActionHubItem, type ActionHubVariant } from "./AdaptiveActionHub";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
+import type { LucideIcon } from "lucide-react";
 
 export type LayoutSkin = "default" | "apple-glass" | "cyber-gold" | "bistro-warm" | "compact-pro";
 
@@ -103,7 +104,7 @@ export function AutoSafeLayout({
                 error={dataState === "error" ? (error?.message || "Erreur de chargement") : null}
                 onRetry={error?.onRetry}
                 empty={empty ? {
-                  icon: empty.icon as any,
+                  icon: empty.icon as unknown as LucideIcon,
                   title: empty.title || "Aucun élément",
                   description: empty.description,
                   action: empty.action ? (
@@ -132,7 +133,7 @@ export function AutoSafeLayout({
               error={dataState === "error" ? (error?.message || "Erreur de chargement") : null}
               onRetry={error?.onRetry}
               empty={empty ? {
-                icon: empty.icon as any,
+                icon: empty.icon as unknown as LucideIcon,
                 title: empty.title || "Aucun élément",
                 description: empty.description,
                 action: empty.action ? (
