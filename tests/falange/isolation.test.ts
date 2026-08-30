@@ -29,7 +29,20 @@ describe('🛡️ FALANGE - COHORTE ISOLATION (9 TESTS)', () => {
 
     it('2. SovereignGuard lève en mode test strict sur accès cross-tenant (fail-safe)', async () => {
         store.set(tenantIdAtom, 'vassal-1');
-        await expect(SovereignGuard.validateAccess('tenants/vassal-2/orders', 'vassal-1')).rejects.toThrow();
+        // STRICT_ISOLATION_TEST activé LOCALEMENT ici : ~144 tests d'adapters existants
+        // écrivent dans un tenant sans l'ancrer via tenantIdAtom. Ils passent grâce
+        // au bypass NODE_ENV=test de SovereignGuard.validateAccess. Fixer chacun est
+        // un chantier séparé ; ce test prouve qu'une fois la variable posée, la garde
+        // lève bien. Le vrai filet de sécurité sur les 211 routes API est le test
+        // d'invariant grep-based src/__tests__/security/tenant-isolation-invariant.test.ts.
+        const prev = process.env.STRICT_ISOLATION_TEST;
+        process.env.STRICT_ISOLATION_TEST = '1';
+        try {
+            await expect(SovereignGuard.validateAccess('tenants/vassal-2/orders', 'vassal-1')).rejects.toThrow();
+        } finally {
+            if (prev === undefined) delete process.env.STRICT_ISOLATION_TEST;
+            else process.env.STRICT_ISOLATION_TEST = prev;
+        }
     });
 
     it('3. L\'admin "restaurant-os" devrait accéder à tout', () => {
