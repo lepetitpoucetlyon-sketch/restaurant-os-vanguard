@@ -83,11 +83,17 @@ export class RestaurantVertical implements IVerticalPlugin {
       context.registerRoute(route.path, React.lazy(route.componentLoader));
     }
 
-    // Ops — commande → sceau fiscal + déduction stock
-    context.registerEventHandler<{ tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number }>(
-      'ops.order_notification',
-      ({ tenantId, orderId, totalInMicrounits }) => {
-        RestaurantFinanceAdapter.emitOrderFiscalSeal({ tenantId, orderId, totalInMicrounits, operatorId: 'system' });
+    // PLAN LOGIQUE MÉTIER LOT C : brancher sur les vrais événements POS.
+    // AVANT : écoutait 'ops.order_notification' émis uniquement par
+    // RestaurantOpsAdapter (0 appelant hors tests). La verticale n'entendait
+    // donc pas le POS réel.
+    // MAINTENANT : écoute 'order.paid' émis par posOrderSubmit à chaque
+    // encaissement. Le sceau fiscal et la sync intelligence partent avec
+    // le vrai flux ventes POS.
+    context.registerEventHandler<{ tenantId: string; orderId: string; tableId: string | null; totalInMicrounits: number; operatorId: string }>(
+      'order.paid',
+      ({ tenantId, orderId, totalInMicrounits, operatorId }) => {
+        RestaurantFinanceAdapter.emitOrderFiscalSeal({ tenantId, orderId, totalInMicrounits, operatorId });
         RestaurantIntelligenceAdapter.emitSalesDataReady({
           tenantId,
           periodStart: new Date().toISOString(),

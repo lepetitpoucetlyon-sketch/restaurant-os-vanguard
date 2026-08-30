@@ -138,6 +138,22 @@ export function useReservationsPage() {
                 hasDeposit: false,
             });
 
+            // PLAN LOGIQUE MÉTIER LOT C.2 (P1-9) : le parcours interne considère
+            // une réservation créée comme immédiatement confirmée (pas de workflow
+            // d'approbation). AVANT, seul AntiCorruptionLayerHandler (canaux
+            // externes type TheFork) émettait reservation.confirmed — la
+            // notification cuisine ne partait donc que pour les réservations
+            // externes. Corrigé : émission systématique après création.
+            await NexusEventBus.emitDurable('reservation.confirmed', {
+                v: 1,
+                tenantId,
+                reservationId: newResId,
+                customerName: resData.customerName ?? 'Client Inconnu',
+                covers: resData.covers ?? 1,
+                date: resData.date ?? new Date().toISOString().slice(0, 10),
+                time: resData.time ?? '',
+            });
+
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
 
             const covers = resData.covers ?? 0;
@@ -192,21 +208,37 @@ export function useReservationsPage() {
 
     const handleMarkArrived = useCallback(async (id: string) => {
         try {
-            await markArrived(id);
             const res = reservations.find((r: Reservation) => r.id === id);
             const customer = customers.find((c: Customer) => c.id === res?.customerId);
-
+            // PLAN LOGIQUE MÉTIER LOT C.4 (P1-10) : fail-closed sans tableId réel.
+            // AVANT : `tableId: res?.tableId ?? 'table_default'` fabriquait un
+            // identifiant fantôme → handlers avals (allergènes) recevaient une
+            // table qui n'existe pas.
+            if (!res?.tableId) {
+                toast.error("Cette réservation n'a pas de table assignée — assigner une table avant l'arrivée.");
+                return;
+            }
+            await markArrived(id);
             await NexusEventBus.emitDurable('reservation.matched', {
                 v: 1,
                 tenantId,
                 reservationId: id,
                 customerId: res?.customerId,
-                tableId: res?.tableId ?? 'table_default',
+                tableId: res.tableId,
                 allergens: customer ? ((customer as Record<string, unknown>).allergens as string[] ?? []) : [],
                 covers: res?.covers ?? 2,
                 matchedAt: Date.now(),
             });
-
+            // PLAN LOGIQUE MÉTIER LOT C.3 (P1-7) : émettre table.assigned à
+            // l'assignation ferme pour que TableTurnoverAnalyzerHandler mesure
+            // le début de rotation.
+            await NexusEventBus.emitDurable('table.assigned', {
+                v: 1,
+                tenantId,
+                tableId: res.tableId,
+                partySize: res?.covers ?? 2,
+                reservationId: id,
+            });
             toast.success("Client accueilli à la table");
         } catch { toast.error("Erreur lors de la validation d'arrivée"); }
     }, [markArrived, reservations, customers, tenantId]);

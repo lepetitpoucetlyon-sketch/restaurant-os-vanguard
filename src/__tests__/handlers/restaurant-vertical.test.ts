@@ -146,7 +146,7 @@ describe('RestaurantVertical — initialisation', () => {
 
   it('enregistre les handlers pour tous les events critiques', () => {
     const events = Object.keys(registeredHandlers);
-    expect(events).toContain('ops.order_notification');
+    expect(events).toContain('order.paid');
     expect(events).toContain('table.released');
     expect(events).toContain('reservation.confirmed');
     expect(events).toContain('reservation.no_show');
@@ -157,13 +157,13 @@ describe('RestaurantVertical — initialisation', () => {
   });
 });
 
-describe('RestaurantVertical — ops.order_notification', () => {
+describe('RestaurantVertical — order.paid', () => {
   it('émet le seal fiscal et les données sales', async () => {
-    await fireEvent('ops.order_notification', {
-      tenantId: 'tenant-1', orderId: 'ord-1', totalInMicrounits: 10_000_000,
+    await fireEvent('order.paid', {
+      tenantId: 'tenant-1', orderId: 'ord-1', totalInMicrounits: 10_000_000, operatorId: 'op-1', tableId: 'tbl-1',
     });
     expect(mocks.emitOrderFiscalSeal).toHaveBeenCalledWith(
-      expect.objectContaining({ tenantId: 'tenant-1', orderId: 'ord-1', totalInMicrounits: 10_000_000 }),
+      expect.objectContaining({ tenantId: 'tenant-1', orderId: 'ord-1', totalInMicrounits: 10_000_000, operatorId: 'op-1' }),
     );
     expect(mocks.emitSalesDataReady).toHaveBeenCalled();
   });
