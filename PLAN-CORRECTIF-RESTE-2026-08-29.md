@@ -143,6 +143,25 @@ grep -rn "FiscalEngine.sealEntry(" src --include="*.ts" | grep -vE "\.test\.|e2e
 grep -n "chainHead" src/lib/mcc/fiscal/FiscalEngine.ts                                      # → vide
 ```
 
+⚠️ **Correction apportée par le graphe de code** — ce ne sont pas deux protocoles mais
+**trois chemins**, dont deux portent le même nom :
+
+```
+impact({target:'sealEntry', direction:'upstream'})  → 3 symboles distincts
+  Method  src/lib/mcc/fiscal/FiscalEngine.ts:25          12 impactés · 7 directs · MEDIUM
+  Method  src/modules/finance/fiscalite/FiscalAdapter.ts:29  3 impactés · 2 directs · LOW
+  Function src/modules/compliance/services/LegalArchiveService.ts:12  (ré-export)
+```
+
+`FiscalEngine.sealEntry` existe **en deux implémentations complètes et dupliquées** —
+`lib/mcc/fiscal/FiscalEngine.ts:25` et `modules/finance/fiscalite/FiscalAdapter.ts:29` —
+chacune avec son propre `FISCAL_CONSTANTS`, le même `GENESIS_ROOT` et la même construction
+de sceau. `CLAUDE.md` désigne la seconde comme le moteur canonique. Un `grep` sur
+`FiscalEngine.sealEntry(` compte les sites d'appel sans pouvoir dire lequel des deux moteurs
+chacun résout : **les deux copies peuvent diverger sans qu'aucun contrôle ne le voie.**
+
+Le dédoublonnage est donc un préalable à l'unification, pas une conséquence.
+
 Onze appelants de production passent toujours par `FiscalEngine.sealEntry`, qui déduit
 `previousHash` d'un `query(orderBy timestamp desc, limit 1)` **hors transaction** et
 n'écrit **jamais** `chainHead` :
@@ -208,6 +227,39 @@ barrière — ni garde (retirée), ni règles (contournées), ni middleware (mat
 
 C'est le mécanisme qui a produit les quatre routes ouvertes du plan initial. Les fermer une
 par une traite les symptômes ; ce lot traite la cause.
+
+### C.1.1 — La portée exacte : tout le processus serveur, depuis le démarrage
+
+L'échange est court et il ferme le sujet. `src/instrumentation.ts` — le hook de démarrage
+Next.js, exécuté **une fois, avant tout traitement de requête** :
+
+```ts
+export async function register(): Promise<void> {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const { ensureServerNexus } = await import('@/lib/nexus/serverNexus');
+    ensureServerNexus();          // → Nexus.registerServerAdapter(new FirestoreServerAdapter())
+  }
+}
+```
+
+Son propre docstring énonce la portée : *« pour que les ~75 routes API qui appellent
+`Nexus.adapter` disposent d'un adapter fonctionnel »*.
+
+**Ce n'est donc pas « une route pourrait contourner la garde ».** C'est : au démarrage du
+serveur, le singleton `Nexus` voit son adapter remplacé par l'Admin SDK **brut**, et
+**toutes** les écritures serveur du processus — ~75 routes — passent ensuite hors
+`NexusInterceptor` et hors `SovereignGuard`, par construction.
+
+**Bonne nouvelle pour le correctif** : le point d'entrée est unique.
+`grep -rn "registerServerAdapter" src scripts` → **un seul appelant**,
+`serverNexus.ts:31`. Envelopper l'adapter à cet endroit couvre les ~75 routes d'un coup.
+
+> ⚠️ **Piège de mesure rencontré** — `impact({target:'registerServerAdapter'})` a rendu
+> `impactedCount: 14`, `epistemic: "exact"`, et listé 4 routes. La bonne réponse est ~75.
+> Le graphe n'a pas vu `instrumentation.ts`, dont l'appel passe par un
+> `await import()` dynamique — une classe de référence qu'il n'indexe pas. Il a pourtant
+> affirmé l'exactitude. **Sur ce dépôt, ne jamais conclure d'un `epistemic: "exact"` sans
+> une contre-vérification textuelle** : elle a pris vingt secondes et a changé la conclusion.
 
 **Correctif** : envelopper l'adapter serveur d'un intercepteur, avec une variante serveur du
 garde qui lit un tenant **ancré par requête** (`AsyncLocalStorage` alimenté par le guard
