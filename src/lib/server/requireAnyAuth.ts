@@ -105,8 +105,20 @@ export async function requireAnyAuth(req: NextRequest | Request): Promise<AuthCo
   }
 }
 
-export function assertTenant(auth: AuthContext, requestedTenantId?: string | null): string {
-  if (requestedTenantId && requestedTenantId !== auth.tenantId && auth.role !== 'fleet_admin' && auth.role !== 'super_admin') {
+/**
+ * Type minimal accepté par assertTenant : n'importe quel caller authentifié qui expose
+ * un tenantId + un role. Compatible AuthContext (requireAnyAuth) et
+ * AdminCaller & { tenantId: string } (requireTenantRole, requireTenantAdmin,
+ * requireMccLevel avec claim tenant).
+ */
+export interface TenantScopedCaller {
+  tenantId: string;
+  role?: string;
+}
+
+export function assertTenant(auth: TenantScopedCaller, requestedTenantId?: string | null): string {
+  const role = auth.role ?? '';
+  if (requestedTenantId && requestedTenantId !== auth.tenantId && role !== 'fleet_admin' && role !== 'super_admin' && !role.startsWith('mcc_')) {
     throw new NextResponse(
       JSON.stringify({ error: 'FORBIDDEN_CROSS_TENANT', message: 'Accès cross-tenant refusé.' }),
       { status: 403, headers: { 'Content-Type': 'application/json' } }

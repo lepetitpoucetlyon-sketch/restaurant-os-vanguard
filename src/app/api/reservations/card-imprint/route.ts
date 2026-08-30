@@ -5,6 +5,8 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { JsonObject } from "@/shared/types/json";
+import { FiscalSealer } from "@/modules/finance";
+import { CryptoService } from "@/lib/CryptoService";
 
 const ActionSetupSchema = z.object({
   action: z.literal('setup'),
@@ -153,8 +155,11 @@ export async function POST(request: NextRequest) {
       const chargedAmountInMicrounits = penaltyEur * 1_000_000;
       const entryId = `JOURNAL-NOSHOW-${reservationId}`;
 
-      // Écriture comptable NF525 sur Compte 75 (Produits divers d'exploitation)
-      await Nexus.adapter.set(`tenants/${tenantId}/journalEntries/${entryId}`, {
+      // Lot 3 nouveau plan — Écriture comptable NF525 SCELLÉE via le sceau atomique.
+      // Auparavant : Nexus.adapter.set direct sur journalEntries + update séparé (2 pièces,
+      // pas de sceau, pas de chain-continuité). Maintenant : une seule transaction qui
+      // pose la pièce + le sceau chaîné + met à jour la réservation.
+      const journalEntry = {
         id: entryId,
         tenantId,
         type: 'NF525_NO_SHOW_PENALTY',
@@ -163,15 +168,26 @@ export async function POST(request: NextRequest) {
         referenceId: reservationId,
         description: `Pénalité No-Show réservataire ${reservation.customerName || reservationId}`,
         createdAt: new Date().toISOString(),
-      });
-
-      await Nexus.adapter.update(resPath, {
-        cardImprintStatus: 'charged',
-        stripePaymentIntentId: paymentIntent.id,
-        chargedAmountInMicrounits,
-        chargedAt: new Date().toISOString(),
-        nf525EntryId: entryId,
-      });
+      };
+      const dataSnapshot = CryptoService.canonicalStringify(journalEntry);
+      const seal = await FiscalSealer.sealDataAtomically(
+        dataSnapshot,
+        tenantId,
+        false,
+        journalEntry,
+        (tx) => {
+          tx.set(resPath, {
+            cardImprintStatus: 'charged',
+            stripePaymentIntentId: paymentIntent.id,
+            chargedAmountInMicrounits,
+            chargedAt: new Date().toISOString(),
+            nf525EntryId: entryId,
+            nf525SealId: null, // sera renseigné après commit
+          });
+        }
+      );
+      // Second update : lier le sealId à la réservation (idempotent)
+      await Nexus.adapter.update(resPath, { nf525SealId: seal.sealId });
 
       empireAudit.log({
         module: 'finance',

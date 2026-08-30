@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SovereignSignatureEngine, type SignatureSubmissionInput } from '@/modules/compliance';
+import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { assertTenant } from '@/lib/server/requireAnyAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,10 +11,15 @@ export async function POST(
 ) {
   const { contractId } = await context.params;
 
+  // Signature d'un contrat souverain : réservée à un rôle 'manager' du tenant concerné.
+  // tenantId du body est validé contre le tenant du jeton (assertTenant lève 403 sinon).
+  const caller = await requireTenantRole(req, 'manager');
+  if (isDenied(caller)) return caller;
+
   try {
     const body = await req.json();
+    const tenantId = assertTenant(caller, body?.tenantId);
     const {
-      tenantId,
       signerName,
       signerRole,
       signerEmail,
