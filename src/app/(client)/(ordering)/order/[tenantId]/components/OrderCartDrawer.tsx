@@ -175,7 +175,7 @@ export function OrderCartDrawer({
                       </span>
                     </div>
 
-                    <button
+                    <button aria-label="Chargement"
                       onClick={onSubmitOrder}
                       disabled={isSubmitting}
                       className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 text-black font-bold py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"

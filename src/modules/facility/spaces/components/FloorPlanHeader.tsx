@@ -220,7 +220,7 @@ export function FloorPlanHeader({
                             </button>
                         </>
                     ) : (
-                        <button
+                        <button aria-label="Calques"
                             onClick={toggleZonesLock}
                             aria-pressed={isZonesLocked}
                             className={cn(

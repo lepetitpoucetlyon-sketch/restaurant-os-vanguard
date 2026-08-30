@@ -84,7 +84,7 @@ export function TenantChangelogPanel() {
             <p className="text-nano font-bold text-secondary uppercase tracking-tighter">Changelog auto-catégorisé</p>
           </div>
         </div>
-        <button onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
+        <button aria-label="Rafraîchir" onClick={load} disabled={isLoading} className="p-2 rounded-lg bg-bg-primary/30 border border-border-subtle text-secondary hover:text-muted transition-all">
           <RefreshCw className={cn('w-3.5 h-3.5', isLoading && 'animate-spin')} />
         </button>
       </div>

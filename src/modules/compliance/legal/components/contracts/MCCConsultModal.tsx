@@ -70,7 +70,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
                   Réf : {selectedContract.id} — Statut : {selectedContract.status}
                 </p>
               </div>
-              <button
+              <button aria-label="Fermer"
                 onClick={onClose}
                 className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
               >
@@ -135,7 +135,7 @@ export function MCCConsultModal({ selectedContract, onClose }: MCCConsultModalPr
             <div className="p-4 border-t border-border-default bg-surface-card/60 flex items-center justify-between gap-3">
               <div>
                 {selectedContract.status !== 'SIGNED' && (
-                  <button
+                  <button aria-label="Envoyer"
                     onClick={handleSendReminder}
                     disabled={isSendingSms}
                     className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-xs font-semibold text-white inline-flex items-center gap-1.5 transition shadow-sm"

@@ -69,7 +69,7 @@ export function TerminalStatePanel({
                     <p className="text-micro font-black uppercase tracking-wider text-status-error">Paiement refusé</p>
                     <p className="text-nano text-text-muted mt-0.5">{terminalError ?? "Réessayez ou changez de mode"}</p>
                 </div>
-                <button
+                <button aria-label="Fermer"
                     onClick={onErrorDismiss}
                     className="ml-auto text-text-muted hover:text-text-primary"
                 >

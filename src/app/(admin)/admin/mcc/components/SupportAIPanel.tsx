@@ -251,7 +251,7 @@ export function SupportAIPanel() {
           />
         )}
 
-        <button
+        <button aria-label="Chargement"
           onClick={handleDiagnose}
           disabled={!tenantId.trim() || !description.trim() || isLoading}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-action-primary/20 text-brand border border-focus/30 text-chip-label disabled:opacity-40 transition-all hover:bg-action-primary/30 active:scale-[0.98]"

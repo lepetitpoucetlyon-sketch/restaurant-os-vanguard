@@ -154,7 +154,7 @@ export function StockReceptionModal({ isOpen, onClose }: StockReceptionModalProp
                                 <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-1 sm:mt-2">Scellement de nouvelles ressources</p>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={onClose}
                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-surface-card/60 hover:bg-surface-card flex items-center justify-center transition-all border border-border/40 hover:rotate-90 hover:scale-110 shadow-soft shrink-0"
                         >

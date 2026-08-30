@@ -70,7 +70,7 @@ export function GroupFilters({
                     ))}
                 </div>
 
-                <button className="w-12 h-12 rounded-2xl bg-bg-secondary border border-border flex items-center justify-center hover:bg-bg-tertiary transition-all">
+                <button aria-label="Filtrer" className="w-12 h-12 rounded-2xl bg-bg-secondary border border-border flex items-center justify-center hover:bg-bg-tertiary transition-all">
                     <SlidersHorizontal className="w-5 h-5 text-text-muted" />
                 </button>
             </div>

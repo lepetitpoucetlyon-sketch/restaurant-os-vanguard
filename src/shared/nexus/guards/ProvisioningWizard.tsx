@@ -63,7 +63,7 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                 className="w-full max-w-2xl bg-surface-card border border-border rounded-[3rem] p-12 relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
-                <button onClick={onClose} className="absolute top-8 right-8 text-text-muted hover:text-text-primary transition-colors">
+                <button aria-label="Fermer" onClick={onClose} className="absolute top-8 right-8 text-text-muted hover:text-text-primary transition-colors">
                     <X size={24} />
                 </button>
 

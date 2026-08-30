@@ -26,7 +26,7 @@ function CodeBlock({ code, comment }: CodeBlockProps) {
         <span className="text-brand mt-0.5 select-none font-mono text-sm">$</span>
         <pre className="font-mono text-sm text-text-primary whitespace-pre-wrap break-all flex-1">{code}</pre>
       </div>
-      <button
+      <button aria-label="Copié"
         onClick={copy}
         className="absolute top-3 right-3 p-1.5 rounded-lg bg-surface-card border border-border-subtle opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface-hover"
       >

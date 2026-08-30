@@ -99,7 +99,7 @@ export function CreateNCSection({
           {formPhoto && (
             <div className="relative mt-2 w-20 h-20">
               <img src={formPhoto} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-border" />
-              <button
+              <button aria-label="Fermer"
                 onClick={onRemovePhoto}
                 className="absolute -top-1 -right-1 w-5 h-5 bg-status-danger text-text-primary rounded-full flex items-center justify-center"
               >

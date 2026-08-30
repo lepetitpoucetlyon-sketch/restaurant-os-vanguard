@@ -78,7 +78,7 @@ export function FiscalArchiveExportPanel() {
                     </p>
                 </div>
 
-                <button
+                <button aria-label="Chargement"
                     onClick={handleExport}
                     disabled={exporting || !selectedInstanceId}
                     className="flex items-center gap-2 px-5 py-2.5 bg-action-primary hover:bg-action-primary/90 text-text-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-indigo-600/20 whitespace-nowrap"

@@ -178,7 +178,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
           <Tablet className="w-5 h-5 text-brand" />
           <h3 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Inventaire Matériel Flotte</h3>
         </div>
-        <button onClick={load} className="p-1.5 rounded-lg hover:bg-surface-card transition-all">
+        <button aria-label="Rafraîchir" onClick={load} className="p-1.5 rounded-lg hover:bg-surface-card transition-all">
           <RefreshCw className="w-4 h-4 text-secondary" />
         </button>
       </div>
@@ -238,7 +238,7 @@ export function FleetDeviceInventory({ instances }: { instances: TenantRow[] }) 
                         <button onClick={() => toggleKillSwitch(row.tenantId, device)} className={`p-2 rounded-lg transition-all border ${device.status === 'LOCKED' ? 'bg-status-danger text-white border-red-600 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-surface-card text-status-danger hover:bg-status-danger/10 border-red-500/20'}`} title="Kill Switch (Verrouillage MDM)">
                           <PowerOff className="w-4 h-4" />
                         </button>
-                        <button onClick={() => removeDevice(row.tenantId, device.serialNumber)} className="p-2 bg-surface-card text-muted rounded-lg hover:text-status-danger hover:bg-status-danger/10 transition-all">
+                        <button aria-label="Supprimer" onClick={() => removeDevice(row.tenantId, device.serialNumber)} className="p-2 bg-surface-card text-muted rounded-lg hover:text-status-danger hover:bg-status-danger/10 transition-all">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

@@ -78,7 +78,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                                 <p className="text-nano font-black text-accent-gold uppercase tracking-[0.4em] mt-2 sm:mt-3 opacity-60">Logistique & Déplacement d&apos;Archive</p>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={onClose}
                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-bg-tertiary/50 hover:bg-surface-card flex items-center justify-center transition-all border border-border/50 hover:rotate-90 hover:text-error duration-500 shrink-0"
                         >
@@ -181,7 +181,7 @@ export function StockTransferModal({ isOpen, onClose, stockItem }: StockTransfer
                         >
                             ANNULER
                         </button>
-                        <button
+                        <button aria-label="Rafraîchir"
                             onClick={handleSubmit}
                             disabled={!selectedItem || !targetLocation || isSubmitting}
                             className={cn(

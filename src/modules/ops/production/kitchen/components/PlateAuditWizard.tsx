@@ -67,7 +67,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                     <p className="text-nano font-black text-status-warning uppercase tracking-[0.5em]">{recipeName}</p>
                 </div>
 
-                <button onClick={onClose} className="absolute top-8 right-8 z-50 p-3 rounded-full bg-surface-card/5 text-muted hover:text-text-primary transition-all">
+                <button aria-label="Fermer" onClick={onClose} className="absolute top-8 right-8 z-50 p-3 rounded-full bg-surface-card/5 text-muted hover:text-text-primary transition-all">
                     <X size={20} />
                 </button>
 

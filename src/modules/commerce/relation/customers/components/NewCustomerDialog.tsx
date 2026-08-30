@@ -120,7 +120,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                 </div>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={onClose}
                             className="w-12 h-12 rounded-2xl bg-bg-tertiary hover:bg-bg-primary border border-border flex items-center justify-center transition-all group"
                         >
@@ -253,7 +253,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                                 className="px-6 py-3 bg-accent text-bg-primary rounded-2xl text-chip-label flex items-center gap-4 relative z-10 shadow-lg shadow-amber-500/20"
                                             >
                                                 {tag}
-                                                <button type="button" onClick={() => setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }))} className="hover:text-bg-primary transition-colors">
+                                                <button aria-label="Fermer" type="button" onClick={() => setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }))} className="hover:text-bg-primary transition-colors">
                                                     <X className="w-4 h-4" />
                                                 </button>
                                             </motion.span>

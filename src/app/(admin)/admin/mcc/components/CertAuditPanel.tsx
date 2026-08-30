@@ -134,7 +134,7 @@ export function CertAuditPanel({ selectedInstanceId, auditStatus, auditReport, i
       </motion.div>
 
       <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="space-y-4 pt-4">
-        <button
+        <button aria-label="Récompense"
           onClick={onGenerate}
           disabled={!selectedInstanceId || isGenerating || auditStatus !== 'valid'}
           className={`w-full py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-nano flex items-center justify-center gap-4 transition-all duration-500 ${

@@ -45,7 +45,7 @@ export function ResaStepDetails({
             className="space-y-10"
         >
             <div className="flex items-center gap-5">
-                <button
+                <button aria-label="Précédent"
                     onClick={onBack}
                     className="w-10 h-10 rounded-xl bg-bg-secondary hover:bg-bg-tertiary flex items-center justify-center border border-border transition-all"
                 >

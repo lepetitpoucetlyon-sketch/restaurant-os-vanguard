@@ -86,7 +86,7 @@ export function RecallView() {
                         className="flex-1 bg-transparent text-[12px] text-text-primary placeholder:text-text-muted/50 focus:outline-none"
                     />
                 </div>
-                <button
+                <button aria-label="Rechercher"
                     onClick={handleTrace}
                     disabled={loading || !lotId.trim()}
                     className="h-11 px-5 rounded-xl bg-status-error text-text-primary text-chip-label hover:bg-status-error/90 transition-colors disabled:opacity-30"

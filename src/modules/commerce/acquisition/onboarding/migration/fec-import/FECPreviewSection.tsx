@@ -41,7 +41,7 @@ export function FECPreviewSection({
             <AlertTriangle className="w-3 h-3" /> Format invalide
           </span>
         )}
-        <button
+        <button aria-label="Fermer"
           onClick={onReset}
           className="p-1 rounded-md text-text-muted hover:text-status-danger hover:bg-status-danger/10 transition"
         >

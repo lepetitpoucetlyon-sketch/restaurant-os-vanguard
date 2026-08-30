@@ -35,7 +35,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                 <div className="relative p-10 overflow-hidden transition-colors duration-500 bg-gradient-to-br from-[#F1F0EA] via-white to-[#F1F0EA]">
                     <div className="absolute inset-0 opacity-[0.05] transition-opacity" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")` }} />
 
-                    <button
+                    <button aria-label="Fermer"
                         type="button"
                         onClick={onClose}
                         className="absolute top-8 right-8 w-12 h-12 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-300 z-10 border cursor-pointer bg-surface-glass hover:bg-surface-glass-hover text-text-primary border-border"

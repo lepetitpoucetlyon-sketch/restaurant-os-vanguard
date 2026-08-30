@@ -46,13 +46,13 @@ export const TemperatureCard: React.FC<TemperatureCardProps> = ({
                         
                         {editable && (
                             <div className="flex flex-col gap-1">
-                                <button 
+                                <button aria-label="Réduire" 
                                     onClick={handleIncrement}
                                     className="p-1 hover:bg-surface-tertiary rounded-lg text-muted hover:text-primary transition-colors"
                                 >
                                     <ChevronUp className="w-4 h-4" />
                                 </button>
-                                <button 
+                                <button aria-label="Développer" 
                                     onClick={handleDecrement}
                                     className="p-1 hover:bg-surface-tertiary rounded-lg text-muted hover:text-primary transition-colors"
                                 >

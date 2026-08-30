@@ -84,7 +84,7 @@ export function ReservationStepsDEFG({ step, form, bookingRef, businessName, sub
       )}
       <div className="flex gap-3">
         <button onClick={() => go(5)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</button>
-        <button className={btnPrimary} disabled={submitting} onClick={handleProceedFromNotes}>
+        <button aria-label="Chargement" className={btnPrimary} disabled={submitting} onClick={handleProceedFromNotes}>
           {submitting ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Réservation en cours…</>
           ) : imprintRequired(cardImprintConfig, form.covers) ? (

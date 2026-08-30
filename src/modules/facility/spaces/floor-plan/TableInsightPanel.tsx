@@ -108,7 +108,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
             >
                 {/* Header with Close Button */}
                 <div className="p-8 pb-4 flex items-start justify-between relative z-10">
-                    <button
+                    <button aria-label="Suivant"
                         onClick={onClose}
                         className="w-12 h-12 rounded-2xl bg-surface-glass border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-glass-hover transition-all active:scale-95 shadow-lg shrink-0"
                     >
@@ -303,7 +303,7 @@ export function TableInsightPanel({ selectedTable, onClose, onCheckout }: TableI
                                     </div>
                                 </div>
 
-                                <button
+                                <button aria-label="Chargement"
                                     onClick={handleWelcomeGuest}
                                     disabled={welcoming}
                                     className="w-full h-12 rounded-2xl bg-accent hover:bg-accent/90 text-bg-primary font-black text-micro uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"

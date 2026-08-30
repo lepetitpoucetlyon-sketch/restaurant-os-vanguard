@@ -60,7 +60,7 @@ export function ProductHeaderBackdrop({
             {((product.priceInMicrounits / 1_000_000) * priceMultiplier).toFixed(2)}€
           </span>
           <div className="flex items-center gap-3 bg-surface-card/5 rounded-full p-1 border border-subtle">
-            <button
+            <button aria-label="Fermer"
               onClick={onClose}
               className="w-12 h-12 bg-surface-glass hover:bg-accent-gold hover:text-text-primary backdrop-blur-xl rounded-2xl flex items-center justify-center text-text-primary transition-all border border-border shadow-premium group"
             >

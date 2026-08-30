@@ -76,7 +76,7 @@ export function RecipeSidebarHero({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent transition-colors from-surface-bg" />
 
-                <button
+                <button aria-label="Fermer"
                     onClick={onClose}
                     className="absolute top-8 left-8 w-12 h-12 backdrop-blur-xl rounded-2xl flex items-center justify-center transition-all duration-300 shadow-2xl z-20 group border bg-surface-card/40 hover:bg-surface-card/60 text-primary border-black/10"
                 >
@@ -163,7 +163,7 @@ export function RecipeSidebarHero({
                     )}
                 </div>
                 <div className="flex items-center gap-4">
-                    <button
+                    <button aria-label="Retirer"
                         onClick={() => handlePortionChange(-1)}
                         disabled={currentPortions <= 1}
                         className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-text-primary hover:border-accent transition-all disabled:opacity-30 disabled:cursor-not-allowed text-primary"
@@ -173,7 +173,7 @@ export function RecipeSidebarHero({
                     <span className="text-2xl font-serif font-black text-primary min-w-[2rem] text-center">
                         {currentPortions}
                     </span>
-                    <button
+                    <button aria-label="Ajouter"
                         onClick={() => handlePortionChange(1)}
                         className="w-9 h-9 rounded-xl border border-black/10 bg-surface-card flex items-center justify-center hover:bg-accent hover:text-text-primary hover:border-accent transition-all text-primary"
                     >

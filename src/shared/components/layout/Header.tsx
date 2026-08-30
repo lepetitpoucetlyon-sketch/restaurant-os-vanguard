@@ -100,7 +100,7 @@ export function Header() {
                 <div className="absolute top-0 left-1/4 w-[30%] h-full bg-accent/5 blur-[80px] pointer-events-none opacity-30" />
 
                 <div className="flex items-center gap-10 relative z-10">
-                    <button
+                    <button aria-label="Menu"
                         onClick={toggleMobileMenu}
                         className="hidden lg:hidden p-3 text-text-primary hover:bg-bg-tertiary rounded-2xl transition-all border border-transparent hover:border-border/50 shadow-soft"
                     >

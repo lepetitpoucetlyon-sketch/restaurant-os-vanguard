@@ -190,7 +190,7 @@ function ContextualSettingsPanelContent({
                                 </p>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={closeSettings}
                             className="w-10 h-10 rounded-xl bg-surface-glass-hover hover:bg-status-danger/10 hover:text-status-danger flex items-center justify-center transition-all"
                         >

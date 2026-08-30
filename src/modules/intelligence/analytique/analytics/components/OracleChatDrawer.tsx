@@ -86,7 +86,7 @@ export function OracleChatDrawer({
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <button
+                <button aria-label="Fermer"
                   onClick={onClose}
                   className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors text-text-muted"
                 >
@@ -201,7 +201,7 @@ export function OracleChatDrawer({
                   disabled={isProcessing}
                   className="flex-1 bg-bg-primary border border-border rounded-xl px-4 py-2.5 text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
                 />
-                <button
+                <button aria-label="Envoyer"
                   type="submit"
                   disabled={!input.trim() || isProcessing}
                   className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"

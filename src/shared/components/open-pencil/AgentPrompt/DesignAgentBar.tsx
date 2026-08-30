@@ -88,7 +88,7 @@ export const DesignAgentBar: React.FC<DesignAgentBarProps> = ({
                                 <span>{lastSuccess}</span>
                             </div>
                         )}
-                        <button
+                        <button aria-label="Chargement"
                             type="submit"
                             disabled={!prompt.trim() || isLoading}
                             className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs flex items-center gap-1.5 disabled:opacity-30 transition-all shadow-md shadow-amber-950/40"

@@ -82,7 +82,7 @@ export function MCCCreateContractModal({
                 <Send className="w-5 h-5 text-emerald-400" />
                 Émettre un Contrat B2B & DPA RGPD
               </h3>
-              <button
+              <button aria-label="Fermer"
                 onClick={onClose}
                 className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
               >

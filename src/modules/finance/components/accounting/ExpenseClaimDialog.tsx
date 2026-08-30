@@ -135,7 +135,7 @@ export function ExpenseClaimDialog({ isOpen, onClose }: ExpenseClaimDialogProps)
                                 </div>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={onClose}
                             className="w-12 h-12 rounded-2xl bg-[--color-surface-primary]/10 hover:bg-[--color-surface-primary]/20 border border-subtle flex items-center justify-center transition-all"
                         >

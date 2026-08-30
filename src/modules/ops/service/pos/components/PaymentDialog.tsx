@@ -166,7 +166,7 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                 <h1 className="text-4xl md:text-5xl font-serif font-black text-text-primary tracking-tighter italic">{t('pos.payment.title')}</h1>
                             </div>
                             {!isTerminalBusy && (
-                                <button
+                                <button aria-label="Fermer"
                                     onClick={onClose}
                                     className="w-12 h-12 md:w-14 md:h-14 bg-bg-tertiary/50 hover:bg-accent-gold hover:text-text-primary rounded-2xl flex items-center justify-center text-text-muted transition-all border border-border/50 group"
                                 >

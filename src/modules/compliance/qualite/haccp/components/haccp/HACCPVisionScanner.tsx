@@ -61,7 +61,7 @@ export function HACCPVisionScanner({ taskId, taskName, onClose }: HACCPVisionSca
                 className="w-full max-w-lg bg-surface-card border border-border rounded-[3rem] p-10 text-center relative overflow-hidden shadow-2xl"
             >
                 {/* Close Button */}
-                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-text-primary transition-colors">
+                <button aria-label="Fermer" onClick={onClose} className="absolute top-6 right-6 p-2 text-secondary hover:text-text-primary transition-colors">
                     <X size={20} />
                 </button>
 

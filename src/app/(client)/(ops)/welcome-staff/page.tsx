@@ -186,7 +186,7 @@ function WelcomeStaffInner() {
                                             placeholder="••••"
                                             className="flex-1 bg-transparent font-mono text-lg text-text-primary placeholder:text-text-muted/50 focus:outline-none tracking-widest"
                                         />
-                                        <button
+                                        <button aria-label="Masquer"
                                             type="button"
                                             onClick={() => setShowNew(v => !v)}
                                             className="text-text-muted hover:text-text-primary transition-colors"
@@ -212,7 +212,7 @@ function WelcomeStaffInner() {
                                             placeholder="••••"
                                             className="flex-1 bg-transparent font-mono text-lg text-text-primary placeholder:text-text-muted/50 focus:outline-none tracking-widest"
                                         />
-                                        <button
+                                        <button aria-label="Masquer"
                                             type="button"
                                             onClick={() => setShowConfirm(v => !v)}
                                             className="text-text-muted hover:text-text-primary transition-colors"
@@ -225,7 +225,7 @@ function WelcomeStaffInner() {
                                     )}
                                 </div>
 
-                                <button
+                                <button aria-label="Verrouiller"
                                     onClick={handleSave}
                                     disabled={!isValid || isSaving}
                                     className="w-full h-12 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 transition-all disabled:opacity-40"

@@ -241,7 +241,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                                     </p>
                                 </div>
 
-                                <button
+                                <button aria-label="Fermer"
                                     onClick={onClose}
                                     className="w-10 h-10 rounded-full bg-surface-bg dark:bg-surface-card/10 flex items-center justify-center text-secondary hover:bg-surface-bg dark:hover:bg-surface-card/20 transition-all active:scale-95"
                                 >

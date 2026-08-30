@@ -37,7 +37,7 @@ export function CashDrawerOpenSection({
         </div>
       </div>
 
-      <button
+      <button aria-label="Portefeuille"
         onClick={onOpen}
         disabled={isOpening || !openingInput.trim()}
         className="w-full h-14 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"

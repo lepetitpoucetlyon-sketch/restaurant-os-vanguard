@@ -80,7 +80,7 @@ export function AutoProcurementWizard({
               </p>
             </div>
           </div>
-          <button
+          <button aria-label="Fermer"
             onClick={onClose}
             className="p-2 text-text-muted hover:text-text-primary rounded-xl bg-surface-glass hover:bg-surface-glass-hover transition"
           >

@@ -119,7 +119,7 @@ export function SplitBillDialog({
                             </p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-text-primary/40 hover:text-text-primary transition-all duration-500 border border-subtle group">
+                    <button aria-label="Fermer" onClick={onClose} className="w-14 h-14 bg-surface-card/5 hover:bg-surface-card/10 hover:rotate-90 rounded-2xl flex items-center justify-center text-text-primary/40 hover:text-text-primary transition-all duration-500 border border-subtle group">
                         <X className="w-6 h-6" />
                     </button>
                 </div>

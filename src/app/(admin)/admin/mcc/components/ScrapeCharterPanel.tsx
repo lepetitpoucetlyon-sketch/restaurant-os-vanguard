@@ -182,7 +182,7 @@ export function ScrapeCharterPanel({
                         />
                     </div>
                 </div>
-                <button
+                <button aria-label="Chargement"
                     type="button"
                     onClick={handleScrape}
                     disabled={isLoading || !websiteUrl.trim()}

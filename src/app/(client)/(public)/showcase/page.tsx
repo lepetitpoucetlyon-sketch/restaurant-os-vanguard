@@ -35,7 +35,7 @@ function DemoLoginModal({ onClose }: { onClose: () => void }) {
             <KeyRound size={18} className="text-brand" />
             Accès Démo
           </h3>
-          <button onClick={onClose} className="text-muted hover:text-text-primary transition-colors">
+          <button aria-label="Fermer" onClick={onClose} className="text-muted hover:text-text-primary transition-colors">
             <X size={20} />
           </button>
         </div>

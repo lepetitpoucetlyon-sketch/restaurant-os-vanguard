@@ -165,7 +165,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                 <div className="flex items-center gap-2">
                     <SettingsGearButton pageKey="pos" className="h-9 w-9 shrink-0" />
                     {showClose && isMobile && (
-                        <button onClick={onClose} className="w-9 h-9 rounded-lg bg-bg-tertiary flex items-center justify-center">
+                        <button aria-label="Fermer" onClick={onClose} className="w-9 h-9 rounded-lg bg-bg-tertiary flex items-center justify-center">
                             <X className="w-4 h-4 text-text-muted" />
                         </button>
                     )}

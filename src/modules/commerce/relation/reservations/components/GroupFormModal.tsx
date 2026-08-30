@@ -78,7 +78,7 @@ export function GroupFormModal({ isOpen, onClose, onSave }: GroupFormModalProps)
                                     </p>
                                 </div>
                             </div>
-                            <button
+                            <button aria-label="Fermer"
                                 onClick={handleClose}
                                 className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
                             >

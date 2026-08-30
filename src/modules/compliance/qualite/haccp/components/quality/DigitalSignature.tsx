@@ -113,7 +113,7 @@ export const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave, defa
                     </h3>
                     <p className="text-nano font-bold text-muted uppercase tracking-tighter mt-1">Certification HACCP • Nexus-Darwin 5</p>
                 </div>
-                <button 
+                <button aria-label="Rafraîchir" 
                     onClick={clear}
                     className="p-3 rounded-full hover:bg-surface-bg text-muted hover:text-status-danger transition-all active:rotate-180 duration-500"
                 >

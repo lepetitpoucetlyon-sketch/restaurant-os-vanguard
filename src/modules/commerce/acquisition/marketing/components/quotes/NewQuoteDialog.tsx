@@ -130,7 +130,7 @@ export function NewQuoteDialog({ isOpen, onClose }: NewQuoteDialogProps) {
                         </div>
                         <h2 className="text-5xl font-serif font-black text-text-primary italic tracking-tighter leading-none">Nouveau Devis</h2>
                     </div>
-                    <button
+                    <button aria-label="Fermer"
                         onClick={onClose}
                         className="w-14 h-14 rounded-full bg-bg-secondary border border-border flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-all"
                     >

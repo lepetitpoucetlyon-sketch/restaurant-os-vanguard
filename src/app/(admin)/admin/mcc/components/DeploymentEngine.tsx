@@ -274,7 +274,7 @@ export function DeploymentEngine() {
                             <RotateCcw className={cn("w-3.5 h-3.5", isRagIndexing && "animate-spin")} />
                             Réindexer flotte
                         </button>
-                        <button
+                        <button aria-label="Action rapide"
                             onClick={fetchRagHealth}
                             className="p-3 rounded-xl bg-surface-card border border-border-subtle text-muted hover:text-text-primary transition-all"
                         >

@@ -97,7 +97,7 @@ export function NewRequestModal({
                             </div>
                             <h2 className="text-2xl font-serif italic text-text-primary">Nouvelle Requête</h2>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={onClose}
                             className="w-10 h-10 rounded-full bg-[--color-surface-primary] border border-border hover:bg-bg-secondary transition-colors flex items-center justify-center text-text-primary shadow-sm"
                         >
@@ -180,7 +180,7 @@ export function NewRequestModal({
                                 <ChevronRight className="w-4 h-4" />
                             </button>
                         ) : (
-                            <button
+                            <button aria-label="Envoyer"
                                 onClick={async () => {
                                     setIsSubmitting(true);
                                     try {

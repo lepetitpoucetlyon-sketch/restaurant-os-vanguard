@@ -74,7 +74,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                     <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight uppercase">Centre d'Expertise</h2>
                                     <p className="text-nano font-black uppercase tracking-[0.3em] text-accent-gold mt-1">Diagnostic Système Intégré</p>
                                 </div>
-                                <button 
+                                <button aria-label="Fermer" 
                                     onClick={() => setIsOpen(false)}
                                     className="w-10 h-10 rounded-full bg-surface-glass-hover flex items-center justify-center hover:bg-status-danger/10 hover:text-status-danger transition-colors"
                                 >
@@ -99,7 +99,7 @@ export const ExpertHub: React.FC<ExpertHubProps> = ({ domain }) => {
                                             placeholder={`Lancer un diagnostic sur ${domain}...`}
                                             className="w-full h-32 p-6 bg-surface-glass rounded-[2rem] border border-border-default text-[12px] font-medium leading-relaxed outline-none resize-none focus:ring-2 ring-accent-gold/20 text-text-primary placeholder:text-text-muted/60 transition-all"
                                         />
-                                        <button 
+                                        <button aria-label="Éclair" 
                                             onClick={handleRun}
                                             disabled={!prompt || isAnalyzing || !isConfigured}
                                             className="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-accent-gold text-white flex items-center justify-center shadow-lg disabled:opacity-30 transition-all hover:scale-105 active:scale-95"

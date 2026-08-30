@@ -141,7 +141,7 @@ export function CashDrawerCloseSection({
       </button>
 
       {/* Close button */}
-      <button
+      <button aria-label="Suivant"
         onClick={onCloseSession}
         disabled={isClosing || !actualInput.trim()}
         className="w-full h-14 rounded-2xl bg-text-primary text-bg-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 active:scale-98 transition-all disabled:opacity-40 dark:bg-accent-gold dark:text-text-primary"

@@ -107,7 +107,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                         </div>
                         <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Saisie du Dossier</h2>
                     </div>
-                    <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-bg-secondary border border-border flex items-center justify-center">
+                    <button aria-label="Supprimer" onClick={onClose} className="w-12 h-12 rounded-2xl bg-bg-secondary border border-border flex items-center justify-center">
                         <Trash2 className="w-5 h-5 text-text-muted" />
                     </button>
                 </div>
@@ -258,7 +258,7 @@ export function AddCandidateModal({ isOpen, onClose, onAdd }: AddCandidateModalP
                     >
                         {step === 1 ? 'Annuler' : 'Précédent'}
                     </button>
-                    <button 
+                    <button aria-label="Suivant" 
                         className="h-16 px-12 bg-text-primary text-text-primary rounded-2xl font-black text-micro uppercase tracking-[0.3em] hover:bg-black transition-all shadow-2xl flex items-center gap-3"
                         onClick={() => step === 1 ? setStep(2) : handleSubmit()}
                     >

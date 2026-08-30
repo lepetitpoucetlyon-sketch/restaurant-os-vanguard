@@ -76,7 +76,7 @@ function SEOPage() {
                         {isAnalyzing ? "Analyse en cours…" : "Analyser le site"}
                     </Button>
                     <Link href="/dashboard">
-                        <button className="w-12 h-12 rounded-2xl bg-bg-tertiary border border-border flex items-center justify-center hover:bg-bg-secondary transition-all group">
+                        <button aria-label="Fermer" className="w-12 h-12 rounded-2xl bg-bg-tertiary border border-border flex items-center justify-center hover:bg-bg-secondary transition-all group">
                             <X className="w-5 h-5 text-text-muted group-hover:text-text-primary" />
                         </button>
                     </Link>

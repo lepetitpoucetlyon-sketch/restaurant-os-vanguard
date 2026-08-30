@@ -28,7 +28,7 @@ export function ProductFooterBar({
 
       {/* Quality Selective Counter */}
       <div className="flex items-center gap-6 bg-surface-card dark:bg-surface-card/5 px-6 py-2.5 rounded-full border border-border/40 shadow-sm">
-        <button
+        <button aria-label="Retirer"
           onClick={onDecrement}
           className="w-10 h-10 flex items-center justify-center text-text-muted hover:text-accent-gold transition-all"
         >
@@ -37,7 +37,7 @@ export function ProductFooterBar({
         <span className="text-2xl font-serif italic font-black text-text-primary min-w-[30px] text-center">
           {quantity}
         </span>
-        <button
+        <button aria-label="Ajouter"
           onClick={onIncrement}
           className="w-10 h-10 flex items-center justify-center text-text-muted hover:text-accent-gold transition-all"
         >

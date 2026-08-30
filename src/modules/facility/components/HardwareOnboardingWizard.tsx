@@ -101,7 +101,7 @@ export function HardwareOnboardingWizard({ tenantId, siteName }: HardwareOnboard
           </div>
 
           <div className="flex items-center gap-3">
-            <button
+            <button aria-label="Rafraîchir"
               onClick={handleRunDiagnostic}
               disabled={isRunning}
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs shadow-lg shadow-emerald-500/20 hover:brightness-110 active:scale-95 disabled:opacity-50 transition flex items-center gap-2"

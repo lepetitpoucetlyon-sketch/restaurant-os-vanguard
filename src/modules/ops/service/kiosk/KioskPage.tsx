@@ -165,7 +165,7 @@ export function KioskPage() {
             <span className="text-xs font-bold text-text-primary uppercase tracking-wider">
               {diningOption === 'dine-in' ? '🍽️ Sur Place' : '🛍️ À Emporter'}
             </span>
-            <button onClick={handleReset} className="text-text-muted hover:text-text-primary p-1">
+            <button aria-label="Rafraîchir" onClick={handleReset} className="text-text-muted hover:text-text-primary p-1">
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
@@ -222,14 +222,14 @@ export function KioskPage() {
                   </span>
                   {inCart ? (
                     <div className="flex items-center gap-2 bg-action-primary/10 rounded-xl p-1 text-action-primary">
-                      <button
+                      <button aria-label="Retirer"
                         onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(product.id, -1); }}
                         className="p-1 hover:bg-action-primary/20 rounded-lg"
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
                       <span className="font-bold text-xs px-1">{inCart.quantity}</span>
-                      <button
+                      <button aria-label="Ajouter"
                         onClick={(e) => { e.stopPropagation(); handleUpdateQuantity(product.id, 1); }}
                         className="p-1 hover:bg-action-primary/20 rounded-lg"
                       >
@@ -268,14 +268,14 @@ export function KioskPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <button
+                  <button aria-label="Retirer"
                     onClick={() => handleUpdateQuantity(item.product.id, -1)}
                     className="w-6 h-6 rounded-lg bg-surface-card border border-border-default flex items-center justify-center text-text-muted"
                   >
                     <Minus className="w-3 h-3" />
                   </button>
                   <span className="font-bold text-xs px-1">{item.quantity}</span>
-                  <button
+                  <button aria-label="Ajouter"
                     onClick={() => handleUpdateQuantity(item.product.id, 1)}
                     className="w-6 h-6 rounded-lg bg-surface-card border border-border-default flex items-center justify-center text-text-muted"
                   >

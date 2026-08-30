@@ -80,7 +80,7 @@ export function ActionProposalCard({ proposal, onExecute, onDismiss }: ActionPro
             {/* Status / Buttons */}
             {status === 'proposed' && (
                 <div className="flex items-center gap-2 pt-1">
-                    <button
+                    <button aria-label="Chargement"
                         onClick={handleExecute}
                         disabled={isExecuting}
                         className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-accent hover:bg-accent/90 text-bg-primary font-bold text-xs transition-colors shadow-sm disabled:opacity-50"

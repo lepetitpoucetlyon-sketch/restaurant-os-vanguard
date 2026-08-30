@@ -72,7 +72,7 @@ export function ProductAllergensSection({
             className="flex-1 px-5 py-3.5 bg-bg-tertiary border border-border rounded-2xl text-sm text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent-gold/50 transition-all"
             autoFocus
           />
-          <button
+          <button aria-label="Ajouter"
             onClick={onAddCustomAllergen}
             disabled={!customAllergen.trim()}
             className="p-3.5 bg-accent-gold text-text-primary rounded-2xl transition-all shadow-premium disabled:opacity-30"

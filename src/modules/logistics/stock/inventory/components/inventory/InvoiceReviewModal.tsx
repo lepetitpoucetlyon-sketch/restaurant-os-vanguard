@@ -75,7 +75,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                             <h2 className="text-xl sm:text-2xl lg:text-4xl font-serif italic text-text-primary uppercase tracking-tighter truncate">Revue de Facture : {data.supplierName}</h2>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-3 sm:p-4 hover:bg-surface-card/5 rounded-full transition-colors text-secondary hover:text-text-primary shrink-0">
+                    <button aria-label="Fermer" onClick={onClose} className="p-3 sm:p-4 hover:bg-surface-card/5 rounded-full transition-colors text-secondary hover:text-text-primary shrink-0">
                         <X className="w-5 h-5 sm:w-6 sm:h-6" />
                     </button>
                 </div>

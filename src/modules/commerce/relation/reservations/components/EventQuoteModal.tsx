@@ -194,7 +194,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                                     </p>
                                 </div>
                             </div>
-                            <button
+                            <button aria-label="Fermer"
                                 onClick={handleClose}
                                 className="w-9 h-9 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
                             >
@@ -251,7 +251,7 @@ export function EventQuoteModal({ isOpen, onClose, tenantId }: EventQuoteModalPr
                                 >
                                     {saving ? "Enregistrement…" : "Enregistrer brouillon"}
                                 </button>
-                                <button
+                                <button aria-label="Document"
                                     type="button"
                                     onClick={handleGenerateContract}
                                     disabled={!isValid || generating}

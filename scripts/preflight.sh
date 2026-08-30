@@ -89,7 +89,7 @@ INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart doc
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=7            # métriques chiffrées codées en dur à l'écran
 DS_OUTSIDE_MAX=485           # écrans fabriquant de l'UI hors design system — vraie valeur révélée après fix mesure 2026-08-30 (les imports DS morts ne prouvent plus l'adoption)
-A11Y_MUETS_MAX=89            # boutons sans nom accessible — abaissé 97→89 après refinement mesure : {identifier} binding (ex: {s.title}) porte du texte dynamique
+A11Y_MUETS_MAX=3             # boutons sans nom accessible — 89→3 après passe automatique aria-label sur icônes Lucide (2026-08-30)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=67         # conteneurs cliquables non focalisables (abaissé de 111 à 67)
 VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8

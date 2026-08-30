@@ -63,7 +63,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
               <p className="text-xs text-text-muted capitalize">{manifest.category.replace('-', ' ')}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
+          <button aria-label="Fermer" onClick={onClose} className="p-1.5 rounded-lg hover:bg-surface-glass text-text-muted hover:text-text-primary transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -91,7 +91,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
                   className="w-full px-3 py-2 pr-10 rounded-xl border border-border bg-surface-glass text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 transition"
                 />
                 {field.type === 'password' && (
-                  <button
+                  <button aria-label="Masquer"
                     type="button"
                     onClick={() => toggleVisible(field.key)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
@@ -123,7 +123,7 @@ export function ConnectorConfigModal({ manifest, onSave, onTest, onClose, isSavi
               Connecter via {manifest.displayName}
             </a>
           ) : (
-            <button
+            <button aria-label="Chargement"
               onClick={handleSave}
               disabled={!hasRequired || isSaving || phase === 'testing'}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-brand-primary text-white hover:opacity-90 disabled:opacity-40 transition-opacity"

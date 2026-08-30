@@ -39,7 +39,7 @@ export function ShiftEditHeader({ user, date, isNew, onClose }: ShiftEditHeaderP
                         </p>
                     </div>
                 </div>
-                <button
+                <button aria-label="Fermer"
                     onClick={onClose}
                     className="w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-card flex items-center justify-center transition-all"
                 >

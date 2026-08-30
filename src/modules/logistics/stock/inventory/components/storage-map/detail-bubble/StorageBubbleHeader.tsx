@@ -45,7 +45,7 @@ export function StorageBubbleHeader({
                             </div>
                         </div>
                     </div>
-                    <button
+                    <button aria-label="Fermer"
                         onClick={onClose}
                         className="w-10 h-10 rounded-xl bg-surface-glass backdrop-blur hover:bg-surface-card flex items-center justify-center transition-all hover:scale-110 border border-border"
                     >

@@ -232,7 +232,7 @@ export function SosCaisseModal({ isOpen, onClose, tableId }: SosCaisseModalProps
                             </div>
 
                             {/* Submit SOS Button */}
-                            <button
+                            <button aria-label="Chargement"
                                 onClick={handleSubmitSos}
                                 disabled={isSubmitting}
                                 className="w-full h-14 rounded-2xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-xl shadow-red-600/20 transition-all active:scale-98 disabled:opacity-50"

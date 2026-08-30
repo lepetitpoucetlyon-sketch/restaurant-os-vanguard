@@ -170,7 +170,7 @@ export function CustomerImportPanel() {
             <p className="text-sm font-medium text-status-danger">Erreur d'import</p>
             <p className="text-xs text-text-muted mt-1 font-mono break-words">{state.message}</p>
           </div>
-          <button
+          <button aria-label="Fermer"
             onClick={reset}
             className="p-1 rounded-md text-text-muted hover:text-status-danger transition"
           >

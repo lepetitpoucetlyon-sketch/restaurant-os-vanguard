@@ -172,7 +172,7 @@ export function RecipeTechnicalSheet({
 
             {/* Right Side: Execution Steps */}
             <div className="flex-1 bg-surface-card dark:bg-bg-tertiary p-14 overflow-y-auto elegant-scrollbar relative">
-                <button
+                <button aria-label="Fermer"
                     onClick={onClose}
                     className="absolute top-10 right-10 w-12 h-12 rounded-full bg-surface-glass hover:bg-surface-glass-hover flex items-center justify-center transition-all z-20 group border border-border"
                 >

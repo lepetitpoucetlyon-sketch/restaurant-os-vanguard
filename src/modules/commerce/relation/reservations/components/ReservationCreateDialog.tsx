@@ -143,7 +143,7 @@ export function ReservationCreateDialog({
                                 </div>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={handleClose}
                             className="w-11 h-11 rounded-2xl bg-bg-tertiary hover:bg-bg-primary border border-border flex items-center justify-center transition-all"
                         >

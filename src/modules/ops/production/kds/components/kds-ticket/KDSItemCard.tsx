@@ -92,7 +92,7 @@ export function KDSItemCard({ item, recipeByName, setSelectedRecipe }: KDSItemCa
                         {stationLabel}
                     </div>
 
-                    <button
+                    <button aria-label="Livre"
                         onClick={handleRecipeClick}
                         className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-surface-sidebar/40 hover:bg-surface-sidebar/60 backdrop-blur-md border border-white/30 flex items-center justify-center text-text-primary transition-all group-hover:scale-110 z-20 shadow-lg"
                     >

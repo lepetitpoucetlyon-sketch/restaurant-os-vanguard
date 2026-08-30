@@ -90,7 +90,7 @@ export function CartItemContextMenu({
                                     {contextMenuItem.name}
                                 </p>
                             </div>
-                            <button
+                            <button aria-label="Fermer"
                                 onClick={onClose}
                                 className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
                             >
@@ -266,7 +266,7 @@ export function CartItemContextMenu({
 
                         {/* RBAC actions */}
                         <div className="space-y-2">
-                            <button
+                            <button aria-label="Cadeau"
                                 onClick={() => onProtectedAction({ type: "offer", cartId: contextMenuItem.cartId })}
                                 disabled={contextMenuItem.isOffer}
                                 className={cn(

@@ -73,7 +73,7 @@ export function OperationsAreaModal({ area, onClose, onArrival, onMaintenance }:
                                         <p className="text-xs text-muted font-sans font-bold uppercase tracking-widest">{area.type} Premium</p>
                                     </div>
                                 </div>
-                                <button
+                                <button aria-label="Suivant"
                                     onClick={onClose}
                                     className="w-12 h-12 rounded-2xl bg-surface-card border border-subtle flex items-center justify-center text-muted hover:text-primary hover:shadow-lg transition-all"
                                 >

@@ -64,7 +64,7 @@ export function PageCard({ page, onEdit, id }: { page: PageSEO; onEdit: () => vo
                     <div className={cn("text-2xl font-serif italic font-black px-4 py-2 rounded-xl border", getScoreColor(page.score.overall), getScoreBg(page.score.overall))}>
                         {page.score.overall}
                     </div>
-                    <button
+                    <button aria-label="Modifier"
                         onClick={onEdit}
                         className="p-3 rounded-xl bg-bg-tertiary text-text-muted hover:bg-teal/10 hover:text-teal transition-all opacity-0 group-hover:opacity-100"
                     >

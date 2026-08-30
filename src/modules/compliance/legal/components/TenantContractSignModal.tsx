@@ -176,7 +176,7 @@ export function TenantContractSignModal({
               </p>
             </div>
           </div>
-          <button
+          <button aria-label="Fermer"
             onClick={onClose}
             className="p-2 rounded-xl bg-surface-glass text-text-muted hover:text-text-primary"
           >
@@ -313,7 +313,7 @@ export function TenantContractSignModal({
             >
               Annuler
             </button>
-            <button
+            <button aria-label="Valider"
               onClick={handleSignSubmit}
               disabled={isSubmitting || !consentConfirmed || !hasDrawn}
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold shadow-lg shadow-emerald-500/20 hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-2"

@@ -121,7 +121,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                 </p>
                             </div>
                         </div>
-                        <button
+                        <button aria-label="Fermer"
                             onClick={handleClose}
                             className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors"
                         >
@@ -170,7 +170,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                 Un PIN à 4 chiffres sera généré automatiquement. Vous pourrez le transmettre au collaborateur à l&apos;étape suivante.
                             </p>
 
-                            <button
+                            <button aria-label="Ajouter utilisateur"
                                 onClick={handleCreate}
                                 disabled={isSaving || !name.trim()}
                                 className="w-full h-12 rounded-2xl bg-accent-gold text-text-primary text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-accent-gold/90 active:scale-98 transition-all disabled:opacity-40"
@@ -202,7 +202,7 @@ export function QuickAddStaffModal({ isOpen, onClose }: QuickAddStaffModalProps)
                                         </div>
                                     ))}
                                 </div>
-                                <button
+                                <button aria-label="Copié"
                                     onClick={copyPin}
                                     className={cn(
                                         "flex items-center gap-2 mx-auto px-4 h-8 rounded-full text-nano font-black uppercase tracking-wider transition-all",

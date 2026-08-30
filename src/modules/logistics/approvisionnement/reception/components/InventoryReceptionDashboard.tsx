@@ -53,7 +53,7 @@ function ScanContent({ isScanning, onScan }: { isScanning: boolean; onScan: () =
 
 function AdviceSaveButton({ isSaving, onSave }: { isSaving: boolean; onSave: () => void }) {
     return (
-        <button onClick={onSave} disabled={isSaving} className="w-full bg-accent-gold text-[#0B0B0C] py-4 rounded-2xl font-medium text-sm tracking-tight flex items-center justify-center gap-3 active:scale-[0.99] transition-colors disabled:opacity-50 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
+        <button aria-label="Enregistrer" onClick={onSave} disabled={isSaving} className="w-full bg-accent-gold text-[#0B0B0C] py-4 rounded-2xl font-medium text-sm tracking-tight flex items-center justify-center gap-3 active:scale-[0.99] transition-colors disabled:opacity-50 shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]">
             {isSaving ? (
                 <span className="animate-pulse">Synchronisation...</span>
             ) : (

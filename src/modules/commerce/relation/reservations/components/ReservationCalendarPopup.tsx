@@ -60,13 +60,13 @@ export function ReservationCalendarPopup({
                     className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[350px] bg-bg-secondary backdrop-blur-2xl border border-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-6 z-[60] overflow-hidden"
                 >
                     <div className="flex items-center justify-between mb-6">
-                        <button onClick={handlePrevMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
+                        <button aria-label="Précédent" onClick={handlePrevMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                         <h4 className="text-micro font-serif font-bold italic text-text-primary uppercase tracking-[0.2em]">
                             {format(calendarMonth, 'MMMM yyyy', { locale: language === 'fr' ? fr : undefined })}
                         </h4>
-                        <button onClick={handleNextMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
+                        <button aria-label="Suivant" onClick={handleNextMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
