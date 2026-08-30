@@ -1,3 +1,4 @@
+import { AutomaticAssigner } from './AutomaticAssigner';
 import { GlobalSettings } from '@nexus/contracts';
 import { Reservation, Table } from '@nexus/contracts';
 import { format, parse, addMinutes, isBefore, areIntervalsOverlapping } from 'date-fns';
@@ -145,7 +146,16 @@ export class AvailabilityEngine {
       }
     }
 
-    // Check if there is AT LEAST one table that can take this group or a combo of tables
-    return true; 
+    // PLAN LOGIQUE MÉTIER LOT G (P2) — vraie vérification d'assignation :
+    // chercher AU MOINS une table libre du bon calibre à ce créneau (via
+    // AutomaticAssigner). Si aucune table simple ne convient, tenter une
+    // combinaison de tables jusqu'à 3 (même zone).
+    // AVANT : return true systématique, permettait d'accepter un groupe de
+    // 8 dans un restaurant de 40 couverts n'ayant que des tables de 2.
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const singleTableId = AutomaticAssigner.findBestTable(covers, dateStr, time, tables, existingReservations);
+    if (singleTableId) return true;
+    const combo = AutomaticAssigner.findTableCombo(covers, dateStr, time, tables, existingReservations);
+    return combo !== null;
   }
 }
