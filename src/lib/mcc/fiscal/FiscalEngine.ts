@@ -1,18 +1,15 @@
-import { FiscalSealer } from "@/modules/finance";
+import { FiscalSealer } from "./FiscalSealer";
 import { FiscalSeal } from '@nexus/contracts';
 import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 import { FiscalKeyService } from './FiscalKeyService';
 import { SharedKernel } from '@/lib/shared-kernel';
+import { FISCAL_CONSTANTS } from "./constants";
+export { FISCAL_CONSTANTS } from "./constants";
 
 /**
  * ⚖️ Fiscal Domain Constants (LNE / NF525 Standards)
  */
-export const FISCAL_CONSTANTS = {
-  GENESIS_ROOT: 'GENESIS_ROOT_0000000000000000',
-  TRAINING_MODE_HASH: 'TRAINING_MODE_UNSIGNED_HASH',
-  SIGNATURE_PREFIX: 'EMP_NF525_',
-} as const;
 
 /**
  * 🏛️ FiscalEngine - Grade X "Industrial Titan"
