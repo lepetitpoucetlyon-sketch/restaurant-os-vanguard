@@ -100,7 +100,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                                 />
                             ) : (
                                 <div
-                                    className="relative z-10 w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl border border-white/20"
+                                    className="relative z-10 w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl border border-border-subtle"
                                     style={{
                                         background: `linear-gradient(135deg, ${primary} 0%, ${adjustBrightness(primary, -40)} 100%)`,
                                     }}
@@ -151,7 +151,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
 
                             <div className="flex items-center justify-between text-nano text-white/40 font-mono mt-1">
                                 <span className="flex items-center gap-1">
-                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                    <ShieldCheck className="w-3 h-3 text-status-success" />
                                     <span>Nexus Node Sovereign</span>
                                 </span>
                                 <span>{progress}%</span>

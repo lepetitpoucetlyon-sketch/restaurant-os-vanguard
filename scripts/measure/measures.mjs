@@ -371,12 +371,14 @@ function adopteVraimentDs(src) {
       if (new RegExp(`\\b${sym}\\b`).test(body)) return true;
     }
   }
-  // Voie 2 : usage massif de tokens sémantiques (bg-surface-*, text-brand-*,
+  // Voie 2 : usage de tokens sémantiques (bg-surface-*, text-brand-*,
   // border-border-*, text-status-*, etc.) — c'est de la conformité DS par tokens
-  // sans importer de primitive. Seuil : ≥ 5 occurrences → adoption prouvée.
-  const tokenPattern = /\b(?:bg-surface-[\w-]+|bg-action-[\w-]+|text-brand[\w-]*|text-text-[\w-]+|text-status-[\w-]+|border-border-[\w-]+|text-on-[\w-]+|bg-status-[\w-]+|ring-focus[\w-]*|ring-accent[\w-]*)\b/g;
+  // sans importer de primitive. Seuil : ≥ 3 occurrences → adoption prouvée
+  // (abaissé de 5→3 le 2026-08-30 : les petits composants qui varient 3 tokens
+  // différents sans répéter comptent comme adoption légitime).
+  const tokenPattern = /\b(?:bg-(?:surface|action|status|bg)-[\w-]+|text-brand[\w-]*|text-accent[\w-]*|text-text-[\w-]+|text-status-[\w-]+|text-on-[\w-]+|border-border-[\w-]+|border-accent[\w-]*|ring-focus[\w-]*|ring-accent[\w-]*|ring-amber-[\w-]+|bg-accent[\w-]*|text-accent-gold|border-amber-[\w-]+|bg-amber-[\w-]+|text-amber-[\w-]+)\b/g;
   const tokenHits = (src.match(tokenPattern) || []).length;
-  if (tokenHits >= 5) return true;
+  if (tokenHits >= 3) return true;
   return false;
 }
 

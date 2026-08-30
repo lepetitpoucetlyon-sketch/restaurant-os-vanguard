@@ -19,7 +19,7 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
       <motion.div
         animate={{ opacity: selectedInstance ? 1 : 0.4, scale: selectedInstance ? 1 : 0.99 }}
         transition={{ duration: 0.5 }}
-        className="aspect-[1/1.414] bg-white text-black rounded-sm shadow-2xl overflow-hidden flex flex-col font-serif text-[7px] leading-relaxed border border-gray-300"
+        className="aspect-[1/1.414] bg-white text-black rounded-sm shadow-2xl overflow-hidden flex flex-col font-serif text-[7px] leading-relaxed border border-border-default"
       >
         <div className="text-center pb-2 mb-2 border-b-2 border-black px-4 pt-4">
           <p className="text-[5px] uppercase tracking-widest text-gray-500 mb-0.5">Direction Générale des Finances Publiques</p>
@@ -28,7 +28,7 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
         </div>
 
         <div className="flex-1 px-4 pb-4 space-y-2 overflow-hidden">
-          <div className="border border-gray-600 p-2 relative">
+          <div className="border border-border-default p-2 relative">
             <div className="absolute -top-[7px] left-2 bg-white px-1 text-[5px] font-bold uppercase tracking-wide">
               📋 VOLET 1 — Éditeur du logiciel
             </div>
@@ -45,18 +45,18 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
               <li>Logiciel&nbsp;: <span className="font-bold">{whiteLabelInstanceConfig.appName} v{whiteLabelInstanceConfig.version}</span></li>
               <li>Licence&nbsp;: <span className="font-bold font-mono">{selectedInstance?.id ?? '___________________'}</span></li>
             </ul>
-            <div className="flex justify-between items-end mt-2 pt-1 border-t border-gray-200">
+            <div className="flex justify-between items-end mt-2 pt-1 border-t border-border-default">
               <p className="text-[5.5px] text-gray-600">
                 Fait à <span className="font-bold">{process.env.NEXT_PUBLIC_PUBLISHER_CITY || '______'}</span>,
                 le <span className="font-bold">{new Date().toLocaleDateString('fr-FR')}</span>
               </p>
-              <div className="border border-dashed border-gray-400 w-16 h-8 flex items-center justify-center">
+              <div className="border border-dashed border-border-default w-16 h-8 flex items-center justify-center">
                 <span className="text-[4.5px] text-gray-400 italic">Signature + cachet</span>
               </div>
             </div>
           </div>
 
-          <div className="border border-gray-600 p-2 relative">
+          <div className="border border-border-default p-2 relative">
             <div className="absolute -top-[7px] left-2 bg-white px-1 text-[5px] font-bold uppercase tracking-wide">
               👤 VOLET 2 — Utilisateur (le client)
             </div>
@@ -65,22 +65,22 @@ export function CertPreviewPanel({ selectedInstance }: CertPreviewPanelProps) {
               {' '}(SIRET : _______________), certifie avoir acquis le logiciel désigné au Volet 1
               et l'utiliser pour mes transactions en conformité avec la réglementation fiscale.
             </p>
-            <div className="flex justify-between items-end mt-2 pt-1 border-t border-gray-200">
+            <div className="flex justify-between items-end mt-2 pt-1 border-t border-border-default">
               <p className="text-[5.5px] text-gray-600">Fait à ________________, le ___________</p>
-              <div className="border border-dashed border-gray-400 w-16 h-8 flex items-center justify-center">
+              <div className="border border-dashed border-border-default w-16 h-8 flex items-center justify-center">
                 <span className="text-[4.5px] text-gray-400 italic">Lu et approuvé</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 border border-gray-300 p-1.5 text-[5px] italic text-gray-600 leading-snug">
+          <div className="bg-surface-card border border-border-default p-1.5 text-[5px] italic text-gray-600 leading-snug">
             <span className="font-bold not-italic text-red-700 uppercase">Avertissement&nbsp;: </span>
             Fausse attestation = délit de faux, 3 ans d'emprisonnement et 45&nbsp;000&nbsp;€ d'amende (art. 441-1 CP).
             À présenter sur demande lors de tout contrôle fiscal.
           </div>
         </div>
 
-        <div className="text-center text-[4.5px] text-gray-400 border-t border-gray-200 py-1 px-4">
+        <div className="text-center text-[4.5px] text-gray-400 border-t border-border-default py-1 px-4">
           {selectedInstance?.id ?? '—'} · {whiteLabelInstanceConfig.appName} · BOI-LETTRE-000242
         </div>
       </motion.div>
