@@ -1,15 +1,15 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3690,
-    "loc": 346603,
+    "files": 3689,
+    "loc": 346574,
     "pages": 86,
     "apiRoutes": 211
   },
   "layers": {
     "kernel": 38,
     "lib": 238,
-    "shared": 742,
+    "shared": 741,
     "modules": 1593,
     "app": 454,
     "verticals": 245,
@@ -28,7 +28,7 @@
     "contexts": 10,
     "custom-fields": 3,
     "domain": 2,
-    "eventBus": 234,
+    "eventBus": 233,
     "hooks": 51,
     "layout-builder": 3,
     "nexus": 136,
@@ -129,10 +129,6 @@
       "loc": 617
     },
     {
-      "file": "src/__tests__/helpers/saga.ops2.test.ts",
-      "loc": 608
-    },
-    {
       "file": "src/__tests__/helpers/saga.intelligence.test.ts",
       "loc": 602
     },
@@ -155,6 +151,10 @@
     {
       "file": "src/i18n/locales/pt.ts",
       "loc": 592
+    },
+    {
+      "file": "src/__tests__/helpers/saga.ops2.test.ts",
+      "loc": 586
     },
     {
       "file": "src/__tests__/helpers/saga.finance2.test.ts",

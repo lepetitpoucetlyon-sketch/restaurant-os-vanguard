@@ -12,7 +12,6 @@ import {
   registerBigGroupAlertHandler,
   registerGroupPrepTasksHandler,
   registerResaKitchenTaskHandler,
-  registerResaReminderHandler,
   registerReservationNotifierHandler,
   registerNoShowPenaltyHandler,
   registerFloorPlanCapacityHandler,
@@ -426,30 +425,9 @@ describe('ResaKitchenTaskHandler', () => {
 });
 
 // ─── ResaReminderHandler ──────────────────────────────────────────────────────
-
-describe('ResaReminderHandler', () => {
-  beforeEach(() => {
-    mockGet.mockClear();
-    mockSet.mockClear();
-    mockUpdate.mockClear();
-    mockQuery.mockClear();
-    mockEmit.mockClear();
-    mockEmitDurable.mockClear(); registerResaReminderHandler(); });
-
-  it('envoie le rappel et appelle NotificationGateway', async () => {
-    mockGet
-      .mockResolvedValueOnce({ email: 'test@ex.com', time: '19:30' })
-      .mockResolvedValueOnce({ name: 'Le Bistrot' });
-    mockSet.mockResolvedValue(undefined);
-    const { NotificationGateway } = await import('@/lib/adapters/NotificationGateway');
-
-    await capturedHandlers['resa.j1']({
-      tenantId: T, reservationId: 'res-1', customerId: 'cust-1', date: '2026-09-02', covers: 2, time: '19:30',
-    });
-
-    expect(NotificationGateway.send).toHaveBeenCalled();
-  });
-});
+// Handler supprimé (audit LM 2026-08-30 P1-E) : doublonnait l'email du
+// ReservationReminderJob qui envoie le rappel J-1 en direct puis émet resa.j1
+// uniquement pour ResaKitchenTaskHandler (crée les tâches cuisine).
 
 // ─── ReservationNotifierHandler ───────────────────────────────────────────────
 

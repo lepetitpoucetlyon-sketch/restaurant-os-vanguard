@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { terminalService } from "../../infrastructure/payment-terminal/PaymentTerminalService";
 import { printerService } from "../../../printers";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { useTenant } from "@/shared/hooks/useTenant";
 import type { PaymentMethod } from "./types";
 
 interface UseSplitPaymentExecutionProps {
@@ -14,12 +16,15 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
     const [terminalState, setTerminalState] = useState<'idle' | 'pending' | 'manual_wait' | 'error'>('idle');
     const [terminalError, setTerminalError] = useState<string | null>(null);
 
+    const { activeTenantId } = useTenant();
+
     const executeCardPayment = async (amountInMicrounits: number, conviveIndex: number): Promise<boolean> => {
         setIsProcessing(true);
         setTerminalState('pending');
         setTerminalError(null);
 
         const defaultDevice = terminalService.getDefault();
+        const orderId = `SPLIT_${Date.now()}_C${conviveIndex}`;
         try {
             if (defaultDevice?.adapter === "manual") {
                 setTerminalState("manual_wait");
@@ -30,7 +35,7 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
 
             const result = await terminalService.charge({
                 amountInMicrounits,
-                orderId: `SPLIT_${Date.now()}_C${conviveIndex}`,
+                orderId,
                 description: `Split Table`,
             });
 
@@ -38,6 +43,18 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
                 setTerminalState(result.status === "cancelled" ? "idle" : "error");
                 if (result.status === "error") setTerminalError(result.error ?? "Paiement refusé");
                 setIsProcessing(false);
+                // AUDIT LM 2026-08-30 P1-D : réveiller PaymentRejectAuditHandler
+                // (audit local des refus TPE côté POS — distinct de Stripe
+                // webhook qui émet finance.payment_failed pour les online).
+                if (activeTenantId && result.status !== "cancelled") {
+                    NexusEventBus.emit('payment.rejected', {
+                        v: 1,
+                        tenantId: activeTenantId,
+                        orderId,
+                        reason: result.error ?? result.status,
+                        amountInMicrounits,
+                    }).catch(() => { /* non-bloquant */ });
+                }
                 return false;
             }
             return true;
@@ -45,6 +62,15 @@ export function useSplitPaymentExecution({ onPaySplit }: UseSplitPaymentExecutio
             setTerminalState("error");
             setTerminalError(err instanceof Error ? err.message : "Erreur terminal");
             setIsProcessing(false);
+            if (activeTenantId) {
+                NexusEventBus.emit('payment.rejected', {
+                    v: 1,
+                    tenantId: activeTenantId,
+                    orderId,
+                    reason: err instanceof Error ? err.message : "Erreur terminal",
+                    amountInMicrounits,
+                }).catch(() => { /* non-bloquant */ });
+            }
             return false;
         }
     };

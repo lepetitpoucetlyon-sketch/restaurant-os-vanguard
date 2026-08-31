@@ -162,6 +162,30 @@ export function useReservationsPage() {
             toast.success(`Réservation confirmée pour ${resData.customerName}`);
 
             const covers = resData.covers ?? 0;
+
+            // AUDIT LM 2026-08-30 P1-E : réveiller les handlers grand groupe.
+            // GroupPrepTasksHandler crée la tâche de mise en place cuisine.
+            // BigGroupAlertHandler pousse une WebPush au manager (avec son
+            // propre seuil bigGroupThreshold côté settings, défaut 12).
+            if (covers >= 8) {
+                const datetime = `${resData.date ?? new Date().toISOString().slice(0,10)}T${resData.time ?? '00:00'}`;
+                await NexusEventBus.emitDurable('reservation.large_group', {
+                    v: 1,
+                    tenantId,
+                    reservationId: newResId,
+                    covers,
+                    datetime,
+                });
+                await NexusEventBus.emitDurable('biggroup.confirmed', {
+                    v: 1,
+                    tenantId,
+                    reservationId: newResId,
+                    covers,
+                    date: resData.date ?? new Date().toISOString().slice(0,10),
+                    customerId: resData.customerId,
+                });
+            }
+
             if (covers >= 1) {
                 authedFetch('/api/reservations/card-imprint', {
                     method: 'POST',

@@ -1,5 +1,6 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NotificationGateway } from '@/lib/adapters/NotificationGateway';
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { parse, differenceInHours, differenceInMinutes } from 'date-fns';
 import type { JsonObject } from "@/shared/types/json";
@@ -88,6 +89,20 @@ export class ReservationReminderJob {
 
             await Nexus.adapter.update(`tenants/${tenantId}/reservations/${res.id}`, {
               reminderEmailSentAt: now.toISOString(),
+            });
+
+            // AUDIT LM 2026-08-30 P1-E : émettre resa.j1 pour réveiller
+            // ResaKitchenTaskHandler (crée les tâches cuisine J-1 16h pour
+            // groupes > 8). ResaReminderHandler écoutait aussi mais dupliquait
+            // l'email envoyé juste au-dessus — supprimé.
+            await NexusEventBus.emitDurable('resa.j1', {
+              v: 1,
+              tenantId,
+              reservationId: res.id,
+              customerId: res.customerEmail ?? res.customerPhone ?? res.id,
+              date: res.date,
+              time: res.time,
+              covers: res.covers ?? 0,
             });
           }
 

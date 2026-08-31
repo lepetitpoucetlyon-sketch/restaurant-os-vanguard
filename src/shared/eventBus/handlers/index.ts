@@ -125,7 +125,6 @@ export * from './RefundJournalHandler';
 export * from './ReportRetryHandler';
 export * from './ResaAllergenCheckHandler';
 export * from './ResaKitchenTaskHandler';
-export * from './ResaReminderHandler';
 export * from './ReservationNotifierHandler';
 export * from './RushModeIntegrationHandler';
 export * from './SaaSInvoicePersistHandler';

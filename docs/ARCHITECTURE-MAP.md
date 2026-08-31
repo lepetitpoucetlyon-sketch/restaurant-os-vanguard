@@ -5,14 +5,14 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3690** · LOC : **346 603**
+- Fichiers `.ts/.tsx` : **3689** · LOC : **346 574**
 - Pages : **86** · Routes API : **211**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1593 |
-| `src/shared/` | 742 |
+| `src/shared/` | 741 |
 | `src/app/` | 454 |
 | `src/verticals/` | 245 |
 | `src/lib/` | 238 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 234 |
+| `shared/eventBus/` | 233 |
 | `shared/components/` | 203 |
 | `shared/nexus/` | 136 |
 | `shared/hooks/` | 51 |
@@ -82,13 +82,13 @@
 | `src/shared/components/ui/PageShell.tsx` | 729 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
 | `src/shared/components/settings/BrandingPanel.tsx` | 617 |
-| `src/__tests__/helpers/saga.ops2.test.ts` | 608 |
 | `src/__tests__/helpers/saga.intelligence.test.ts` | 602 |
 | `src/i18n/locales/fr.ts` | 597 |
 | `src/i18n/locales/en.ts` | 592 |
 | `src/i18n/locales/es.ts` | 592 |
 | `src/i18n/locales/ja.ts` | 592 |
 | `src/i18n/locales/pt.ts` | 592 |
+| `src/__tests__/helpers/saga.ops2.test.ts` | 586 |
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/__tests__/architecture/invariants.test.ts` | 542 |
 | `src/config/navConfig.ts` | 528 |
