@@ -1,5 +1,6 @@
 import 'server-only';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { dispatchServerEvent } from '@/shared/eventBus/ServerEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
@@ -7,13 +8,43 @@ import { logger } from '@/lib/logger';
 
 const CLOCK_DEBOUNCE_MS = 60_000;
 
+// Rôles autorisés à pointer POUR un autre employé (mode kiosk PIN partagé ou
+// badge staff). En dehors de ces rôles, le pointage n'est autorisé que pour
+// soi-même (caller.uid === userId).
+const KIOSK_ROLES = new Set(['admin', 'directeur', 'manager']);
+
+const ClockInSchema = z.object({
+  userId: z.string().min(1).max(120),
+  timestamp: z.number().int().positive().optional(),
+});
+
 export async function POST(req: Request) {
   const caller = await requireTenantUser(req);
   if (isDenied(caller)) return caller;
 
-  const body = await req.json();
-  const { userId, timestamp } = body;
+  const json = await req.json().catch(() => null);
+  const parsed = ClockInSchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { success: false, error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
+  }
+  const { userId, timestamp } = parsed.data;
   const clockTime = timestamp ?? Date.now();
+
+  // Anti-spoofing (audit sécurité API 2026-08-31) : un employé authentifié
+  // ne peut pointer que pour lui-même, sauf s'il a un rôle kiosk-authorisé
+  // (mode borne partagée type PIN pad, badge staff, etc.).
+  if (caller.uid !== userId && !KIOSK_ROLES.has(caller.role ?? '')) {
+    logger.warn(
+      `[ClockInAPI] Spoofing bloqué : uid=${caller.uid} role=${caller.role} tentait de pointer pour userId=${userId}`,
+    );
+    return NextResponse.json(
+      { success: false, error: 'Vous ne pouvez pas pointer pour un autre employé.' },
+      { status: 403 },
+    );
+  }
 
   // Anti-rebond 60s — Invariant #4 concurrence pointeuse
   const recentEntries = await Nexus.adapter.query<{ createdAt: string }>(

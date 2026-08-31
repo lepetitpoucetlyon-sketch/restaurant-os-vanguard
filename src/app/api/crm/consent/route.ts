@@ -17,13 +17,20 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
-type Channel = 'email' | 'sms' | 'whatsapp';
+const ChannelSchema = z.enum(['email', 'sms', 'whatsapp']);
+type Channel = z.infer<typeof ChannelSchema>;
 
-const VALID_CHANNELS: Channel[] = ['email', 'sms', 'whatsapp'];
+const ConsentPostSchema = z.object({
+  customerId: z.string().min(1).max(120),
+  channel: ChannelSchema,
+  granted: z.boolean(),
+  source: z.string().max(80).optional(),
+});
 
 interface ConsentRecord {
   granted:    boolean;
@@ -51,21 +58,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  let body: { customerId: string; channel: Channel; granted: boolean; source?: string };
-  try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  const parsed = ConsentPostSchema.safeParse(await req.json().catch(() => ({})));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
-
-  const { customerId, channel, granted, source = 'backoffice' } = body;
-  if (!customerId || !channel) {
-    return NextResponse.json({ error: 'customerId et channel requis' }, { status: 400 });
-  }
-
-  if (!VALID_CHANNELS.includes(channel)) {
-    return NextResponse.json({ error: `Canal invalide: ${VALID_CHANNELS.join(', ')}` }, { status: 400 });
-  }
+  const { customerId, channel, granted, source = 'backoffice' } = parsed.data;
 
   const now = new Date().toISOString();
   const record: ConsentRecord = granted
@@ -87,15 +87,13 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
   const { tenantId } = caller as { tenantId: string };
 
   const customerId = req.nextUrl.searchParams.get('customerId');
-  const channel    = req.nextUrl.searchParams.get('channel') as Channel | null;
-
-  if (!customerId || !channel) {
-    return NextResponse.json({ error: 'customerId et channel requis' }, { status: 400 });
+  const channelRaw = req.nextUrl.searchParams.get('channel');
+  if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
+  const channelParse = ChannelSchema.safeParse(channelRaw);
+  if (!channelParse.success) {
+    return NextResponse.json({ error: `Canal invalide: email, sms, whatsapp` }, { status: 400 });
   }
-
-  if (!VALID_CHANNELS.includes(channel)) {
-    return NextResponse.json({ error: `Canal invalide: ${VALID_CHANNELS.join(', ')}` }, { status: 400 });
-  }
+  const channel: Channel = channelParse.data;
 
   await Nexus.adapter.set(`tenants/${tenantId}/customerConsents/${customerId}`, {
     [channel]: { granted: false, revokedAt: new Date().toISOString(), source: 'revocation' },

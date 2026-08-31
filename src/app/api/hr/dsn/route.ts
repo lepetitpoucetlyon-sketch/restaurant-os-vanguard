@@ -13,23 +13,29 @@
  * ENV : URSSAF_API_KEY (optionnel — sans clé, mode simulation)
  */
 import 'server-only';
-import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { DSNBuilder } from '@/modules/human';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+
+const DsnPostSchema = z.object({
+  period: z.string().regex(/^\d{4}-\d{2}$/, 'period requis au format YYYY-MM'),
+});
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const caller = await requireTenantAdmin(req);
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const body = await req.json() as { period?: string };
-  const period = body.period?.trim();
-
-  if (!period || !/^\d{4}-\d{2}$/.test(period)) {
-    return NextResponse.json({ error: 'period requis au format YYYY-MM' }, { status: 400 });
+  const parsed = DsnPostSchema.safeParse(await req.json().catch(() => ({})));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
+  const period = parsed.data.period;
 
   // Vérifier qu'une DSN n'a pas déjà été soumise pour cette période
   const existing = await Nexus.adapter.get(`tenants/${tenantId}/dsn/${period}`) as { submittedAt?: number } | null;

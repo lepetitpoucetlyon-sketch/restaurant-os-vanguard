@@ -14,8 +14,8 @@
  *   bistro.com → CNAME → {slug}.restaurantos.app
  */
 import 'server-only';
-import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -26,6 +26,14 @@ const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
 function encodeDomainKey(domain: string) {
   return domain.replace(/\./g, '__');
 }
+
+const DomainSchema = z.object({
+  customDomain: z
+    .string()
+    .min(4)
+    .max(253)
+    .regex(/^([a-z0-9-]+\.)+[a-z]{2,}$/i, 'Format de domaine invalide'),
+});
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireTenantAdmin(req);
@@ -51,17 +59,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const body = await req.json() as { customDomain?: string };
-  const domain = (body.customDomain ?? '').trim().toLowerCase();
-
-  if (!domain) {
-    return NextResponse.json({ error: 'customDomain requis' }, { status: 400 });
+  const parsed = DomainSchema.safeParse(await req.json().catch(() => ({})));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
-
-  // Validation format domain
-  if (!/^([a-z0-9-]+\.)+[a-z]{2,}$/.test(domain)) {
-    return NextResponse.json({ error: 'Format de domaine invalide' }, { status: 400 });
-  }
+  const domain = parsed.data.customDomain.trim().toLowerCase();
 
   // Bloquer les sous-domaines de l'app (éviter les conflits avec les slugs)
   if (domain.endsWith(`.${APP_DOMAIN}`) || domain === APP_DOMAIN) {

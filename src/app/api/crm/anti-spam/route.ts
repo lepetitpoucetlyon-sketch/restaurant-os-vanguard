@@ -17,11 +17,18 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
-type Channel = 'email' | 'sms' | 'whatsapp';
+const ChannelSchema = z.enum(['email', 'sms', 'whatsapp']);
+type Channel = z.infer<typeof ChannelSchema>;
+
+const FilterSchema = z.object({
+  customerIds: z.array(z.string().min(1).max(120)).min(1).max(10_000),
+  channel: ChannelSchema,
+});
 
 const COOLDOWN_MS     = 7 * 24 * 3600_000; // 7 jours
 const MONTHLY_QUOTA   = 4;
@@ -69,17 +76,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  let body: { customerIds: string[]; channel: Channel };
-  try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  const parsed = FilterSchema.safeParse(await req.json().catch(() => ({})));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
-
-  const { customerIds, channel } = body;
-  if (!customerIds?.length || !channel) {
-    return NextResponse.json({ error: 'customerIds et channel requis' }, { status: 400 });
-  }
+  const { customerIds, channel } = parsed.data;
 
   const results = await Promise.all(
     customerIds.map(id => checkCustomer(tenantId, id, channel))
@@ -98,11 +102,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const { tenantId } = caller as { tenantId: string };
 
   const customerId = req.nextUrl.searchParams.get('customerId');
-  const channel    = req.nextUrl.searchParams.get('channel') as Channel | null;
-
-  if (!customerId || !channel) {
-    return NextResponse.json({ error: 'customerId et channel requis' }, { status: 400 });
+  if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
+  const channelParse = ChannelSchema.safeParse(req.nextUrl.searchParams.get('channel'));
+  if (!channelParse.success) {
+    return NextResponse.json({ error: 'channel invalide (email|sms|whatsapp)' }, { status: 400 });
   }
+  const channel = channelParse.data;
 
   const result = await checkCustomer(tenantId, customerId, channel);
   return NextResponse.json(result);
