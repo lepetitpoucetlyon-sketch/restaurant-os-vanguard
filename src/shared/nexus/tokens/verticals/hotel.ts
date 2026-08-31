@@ -9,9 +9,9 @@ export const hotelDefaultTokens: Partial<BrandConfig> = {
   glassBlur:        'sm',
   glassOpacity:     'high',
   // brand = Cormorant Garamond (luxe, titres) | ui = Inter (système) | mono = JetBrains Mono (factures)
-  fontBrand:        'Cormorant Garamond',
+  fontBrand:        'Instrument Serif',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap',
-  fontUI:           'Inter',
+  fontUI:           'Outfit',
   fontMono:         'JetBrains Mono',
   fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };

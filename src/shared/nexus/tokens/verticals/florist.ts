@@ -10,7 +10,7 @@ export const floristDefaultTokens: Partial<BrandConfig> = {
   glassOpacity:     'medium',
   fontBrand:        'Playfair Display',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap',
-  fontUI:           'Inter',
+  fontUI:           'Outfit',
   fontMono:         'JetBrains Mono',
   fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };

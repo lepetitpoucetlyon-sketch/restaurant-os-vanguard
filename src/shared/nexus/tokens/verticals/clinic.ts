@@ -10,7 +10,7 @@ export const clinicDefaultTokens: Partial<BrandConfig> = {
   glassOpacity:     'low',
   // brand = Inter (clarté médicale, pas de serif) | ui = DM Sans (clean médical) | mono = IBM Plex Mono (codes patients)
   // fontBrand intentionnellement sans serif : lisibilité critique en contexte médical
-  fontBrand:        'Inter',
+  fontBrand:        'Outfit',
   // pas de fontBrandUrl : Inter système
   fontUI:           'DM Sans',
   fontUIUrl:        'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap',

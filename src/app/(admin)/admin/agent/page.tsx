@@ -132,7 +132,7 @@ export default function AgentIntelligencePage() {
               </div>
               <div className="w-full h-1 bg-border/30 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full transition-all duration-1000 ease-in-out ${
+                  className={`h-full transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     displayStability < 50 ? 'bg-status-danger' : 'bg-action-primary'
                   }`} 
                   style={{ width: `${displayStability}%` }} 

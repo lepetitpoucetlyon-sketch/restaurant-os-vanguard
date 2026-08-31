@@ -26,8 +26,8 @@ export const COWORKING_BLUEPRINT: VerticalBlueprint = {
   tokens: {
     appearance: 'dark',
     defaultTokens: {
-      primaryColor: '#6366F1',
-      primaryHover: '#4F46E5',
+      primaryColor: '#0EA5E9',
+      primaryHover: '#0284C7',
       accentColor: '#A855F7',
       borderRadiusCard: 'lg',
       borderRadiusBtn: 'lg',
@@ -39,7 +39,7 @@ export const COWORKING_BLUEPRINT: VerticalBlueprint = {
     },
     verticalTokens: {
       '--desk-available': '#10B981',
-      '--desk-reserved': '#6366F1',
+      '--desk-reserved': '#0EA5E9',
       '--meeting-room-occupied': '#EF4444',
     },
   },

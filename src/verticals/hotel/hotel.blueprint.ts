@@ -43,7 +43,7 @@ export const HOTEL_BLUEPRINT: VerticalBlueprint = {
       '--room-occupied': '#0EA5E9',
       '--room-cleaning': '#F59E0B',
       '--room-maintenance': '#EF4444',
-      '--checkin-due': '#8B5CF6',
+      '--checkin-due': '#0EA5E9',
     },
   },
   healthMetrics: { occupancyRate: 'number', roomsCheckedIn: 'number' },

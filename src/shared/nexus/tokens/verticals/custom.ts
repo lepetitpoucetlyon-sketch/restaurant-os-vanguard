@@ -1,17 +1,23 @@
 import type { BrandConfig } from '../brand';
 
+// taste-skill compliant : palette neutre zinc/graphite pour le canevas vierge —
+// le "AI Purple" indigo/violet est le pattern le plus banni. Le tenant configure
+// sa charte via BrandingService (Branding Plus) dès l'onboarding ; ce défaut
+// reste sobre et premium pour tout démarrage sans config.
+// Fonts alignées sur restaurant (Outfit + Instrument Serif) pour cohérence
+// inter-verticales.
 export const customDefaultTokens: Partial<BrandConfig> = {
-  primaryColor:     '#6366f1',
-  primaryHover:     '#4F46E5',
-  accentColor:      '#8B5CF6',
+  primaryColor:     '#18181B',
+  primaryHover:     '#27272A',
+  accentColor:      '#3F3F46',
   borderRadiusCard: 'lg',
   borderRadiusBtn:  'md',
   glassBlur:        'md',
   glassOpacity:     'medium',
-  // brand = Inter (neutre, remplacé par le configurateur) | ui = Inter (système) | mono = JetBrains Mono
-  fontBrand:        'Inter',
-  fontUI:           'Inter',
-  // pas d'URL : Inter système, dedup automatique si le tenant garde les deux à Inter
+  fontBrand:        'Instrument Serif',
+  fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap',
+  fontUI:           'Outfit',
+  fontUIUrl:        'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
   fontMono:         'JetBrains Mono',
   fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };
@@ -19,5 +25,5 @@ export const customDefaultTokens: Partial<BrandConfig> = {
 export const customDefaultAppearance = 'auto' as const;
 
 export const customVerticalTokens: Record<string, string> = {
-  '--vertical-accent-muted': 'rgba(99, 102, 241, 0.12)',
+  '--vertical-accent-muted': 'rgba(24, 24, 27, 0.08)',
 };

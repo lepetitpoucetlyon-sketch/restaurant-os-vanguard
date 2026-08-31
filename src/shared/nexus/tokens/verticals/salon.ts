@@ -9,7 +9,7 @@ export const salonDefaultTokens: Partial<BrandConfig> = {
   glassBlur:        'lg',
   glassOpacity:     'medium',
   // brand = Cormorant Garamond (élégant, titres) | ui = DM Sans (clean, moderne) | mono = DM Mono (codes RDV)
-  fontBrand:        'Cormorant Garamond',
+  fontBrand:        'Instrument Serif',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap',
   fontUI:           'DM Sans',
   fontUIUrl:        'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap',

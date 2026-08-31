@@ -10,7 +10,7 @@ export const gymDefaultTokens: Partial<BrandConfig> = {
   glassOpacity:     'medium',
   fontBrand:        'Rajdhani',
   fontBrandUrl:     'https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap',
-  fontUI:           'Inter',
+  fontUI:           'Outfit',
   fontMono:         'JetBrains Mono',
   fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };

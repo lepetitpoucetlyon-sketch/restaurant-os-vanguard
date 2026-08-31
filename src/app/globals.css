@@ -243,7 +243,7 @@
   --status-success:  #10b981;
   --status-warning:  #f59e0b;
   --status-danger:   #ef4444;
-  --status-info:     #818cf8;
+  --status-info:     #38bdf8;
   /* Glass surfaces inversées en dark : teinte blanche subtile */
   --color-surface-glass:        rgba(255, 255, 255, 0.03);
   --color-surface-glass-hover:  rgba(255, 255, 255, 0.05);

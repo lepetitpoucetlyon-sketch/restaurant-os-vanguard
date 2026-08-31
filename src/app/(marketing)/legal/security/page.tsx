@@ -61,9 +61,9 @@ export default function SecurityPage() {
 
         <h2>Conformité</h2>
         <ul>
-          <li>✅ <strong>NF525</strong> — Certification logiciel de caisse</li>
-          <li>✅ <strong>RGPD</strong> — Traitement conforme, DPA disponible</li>
-          <li>✅ <strong>HACCP</strong> — Module traçabilité alimentaire intégré</li>
+          <li><strong>NF525</strong> — Certification logiciel de caisse</li>
+          <li><strong>RGPD</strong> — Traitement conforme, DPA disponible</li>
+          <li><strong>HACCP</strong> — Module traçabilité alimentaire intégré</li>
           <li><strong>ISO 27001</strong> — Certification en cours de planification</li>
         </ul>
 

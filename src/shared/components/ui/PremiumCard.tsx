@@ -60,19 +60,20 @@ export const PremiumCard = forwardRef<HTMLDivElement, PremiumCardProps>(
             roundedClasses[rounded]
         );
 
+        // taste-skill : ombres teintées or à la place des shadow-lg/2xl génériques
         const variantClasses = {
             default: cn(
-                "bg-bg-secondary border border-border shadow-lg",
-                hoverEffect && "hover:shadow-2xl hover:-translate-y-1",
+                "bg-bg-secondary border border-border shadow-[0_8px_24px_-14px_rgba(197,160,89,0.15)]",
+                hoverEffect && "hover:shadow-[0_20px_40px_-16px_rgba(197,160,89,0.22)] hover:-translate-y-[1px]",
                 glowClasses[glowColor]
             ),
             glass: cn(
-                "bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-xl border border-white/50 dark:border-subtle shadow-lg",
-                hoverEffect && "hover:shadow-2xl hover:-translate-y-1"
+                "bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-xl border border-white/50 dark:border-subtle shadow-[0_8px_24px_-14px_rgba(197,160,89,0.12)]",
+                hoverEffect && "hover:shadow-[0_20px_40px_-16px_rgba(197,160,89,0.20)] hover:-translate-y-[1px]"
             ),
             elevated: cn(
-                "bg-bg-secondary border border-border shadow-2xl",
-                hoverEffect && "hover:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] hover:-translate-y-2",
+                "bg-bg-secondary border border-border shadow-[0_20px_50px_-20px_rgba(197,160,89,0.22)]",
+                hoverEffect && "hover:shadow-[0_32px_64px_-20px_rgba(197,160,89,0.28)] hover:-translate-y-[2px]",
                 glowClasses[glowColor]
             ),
             minimal: cn(

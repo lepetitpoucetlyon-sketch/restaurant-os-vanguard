@@ -37,7 +37,7 @@ export const GoldSwitch: React.FC<GoldSwitchProps> = ({
             )}
             
             <div className={cn(
-                "relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out shrink-0",
+                "relative w-11 h-6 rounded-full transition-colors duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0",
                 checked ? "bg-action-primary/20 ring-1 ring-action-primary/50" : "bg-surface-glass ring-1 ring-border",
                 disabled && "opacity-50 cursor-not-allowed"
             )}>

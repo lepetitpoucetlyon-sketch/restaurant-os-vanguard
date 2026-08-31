@@ -9,7 +9,8 @@ import { withVerticalOverride } from "@/shared/hooks/useVerticalComponent";
 
 // ── StatCard CVA ──────────────────────────────────────────────────────────────
 const statCardVariants = cva(
-  "bg-bg-secondary border border-border rounded-[2rem] transition-all duration-300 hover:shadow-lg group",
+  // taste-skill : ombre teintée or (18% max) + micro lift -1px au hover, pas de shadow-lg générique
+  "bg-bg-secondary border border-border rounded-[2rem] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:shadow-[0_16px_32px_-16px_rgba(197,160,89,0.18)] hover:-translate-y-[1px] group",
   {
     variants: {
       size: {

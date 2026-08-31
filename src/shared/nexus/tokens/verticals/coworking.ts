@@ -8,8 +8,8 @@ export const coworkingDefaultTokens: Partial<BrandConfig> = {
   borderRadiusBtn:  'md',
   glassBlur:        'md',
   glassOpacity:     'medium',
-  fontBrand:        'Inter',
-  fontUI:           'Inter',
+  fontBrand:        'Outfit',
+  fontUI:           'Outfit',
   fontMono:         'JetBrains Mono',
   fontMonoUrl:      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap',
 };
