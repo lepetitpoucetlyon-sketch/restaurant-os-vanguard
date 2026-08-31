@@ -9,15 +9,16 @@ events × émetteurs × écouteurs, wiring UI → bus.
 
 ## Verdict en 3 lignes
 
-Les 6 verticales scaffoldées (hotel, garage, clinic, bakery, salon, retail) ont
-chacune ~9 adapters × ~17 méthodes d'émission = **~106 fonctions d'émission par
-verticale, 0 caller externe**. Le seul flux existant est intra-`XxxVertical.ts`
-(register → adapter → register). Aucun composant UI, aucune couche domaine
-n'appelle l'adapter — la scaffolding est architecturalement morte.
+Ce qu'on mesure ici est **l'état attendu du plan-profondeur (ADR-016)** :
+verticales à différents stades (L1 blueprint, L2 adapters + XxxVertical monté,
+L3 UI câblée). Restaurant est à L3, les 6 verticales scaffoldées (hotel,
+garage, clinic, bakery, salon, retail) sont à L2, les 4 dernières (coworking,
+florist, gym, veterinary) sont à L1 avec un défaut d'enregistrement qui les
+fait tomber silencieusement sur le fallback `custom`.
 
-Les 4 verticales restantes (coworking, florist, gym, veterinary) n'ont même
-pas de fichier `XxxVertical.ts` enregistré dans `VerticalRegistry` : elles
-tombent silencieusement sur le fallback `custom`.
+Rien à supprimer. Deux chantiers concrets ressortent : signaler le stade dans
+l'UI (personne ne sait aujourd'hui si sa verticale est mature) et enregistrer
+les 4 verticales manquantes dans `VerticalRegistry`.
 
 ## Mesures (session 2026-08-30, `rg` sur `src/`)
 
@@ -69,65 +70,55 @@ Exemple canonique — `hotel.guest_checked_in` :
 ## 4. Modèle mental
 
 C'est la conséquence attendue de l'ADR-016 (profondeur build-time L0-L3).
-Les verticales scaffoldées sont à **L1 (blueprint + adapters)** ou **L2
-(vertical mounted)**, jamais à **L3 (UI câblée)**. Le plan-profondeur
-(cf. mémoire `project_plan_profondeur_state.md`) documente que 4 verticales
-ont reçu de la vraie logique métier ; les 6 autres restent au stade infra.
+Les verticales sont à des stades différents — c'est la trajectoire produit,
+pas de la dette :
+- **L1** — blueprint uniquement (coworking, florist, gym, veterinary)
+- **L2** — adapters + `XxxVertical` monté (hotel, garage, clinic, bakery,
+  salon, retail)
+- **L3** — UI câblée sur adapter (restaurant seulement)
+
+Le passage L2 → L3 est du travail feature (câbler chaque écran métier sur
+les adapters existants), pas du nettoyage.
 
 ## 5. Ce qui n'est PAS un problème
 
-- **Le typage ne pollue pas le runtime** : ces events ne sont jamais émis, donc
-  jamais journalisés, jamais persistés en DLQ.
+- **Le typage ne pollue pas le runtime** : ces events ne sont jamais émis,
+  donc jamais journalisés, jamais persistés en DLQ.
 - **Aucun test ne se fie à un event vertical** : la suite passe à 2 472/2 472
   sans toucher à ces types.
-- **`VerticalRegistry.resolve` a un fallback propre** vers `custom` pour les
-  4 non enregistrées — le tenant provisionne quand même.
+- **L'écart 0-caller par adapter est attendu à L2** : c'est ce que L3 doit
+  résoudre en câblant la vraie UI.
 
-## 6. Ce qui EST un problème
+## 6. Ce qui EST un problème actionnable
 
-### P2-A — Fausse promesse dans la surface de types
-82 `NexusEventName` vertical-scoped exposées dans `NexusEventName` peuvent
-laisser croire qu'un handler pilote la verticale. Un dev qui `emit('hotel.
-guest_checked_in')` depuis une nouvelle UI verra le typage passer mais rien
-d'autre ne bougera — pas de sceau fiscal, pas de tâche housekeeping réelle.
-
-### P2-B — 6 fichiers `XxxVertical.ts` chargés à chaque bootstrap
-Les 6 imports dynamiques de `VerticalRegistry.ts:44-49` s'exécutent au démarrage,
-enregistrent 6 × (18 à 20) event handlers dormants. Chaque tenant paie
-l'initialisation même s'il utilise `variant=restaurant`.
-
-### P2-C — 4 verticales silencieuses au fallback custom
+### P2-C — 4 verticales silencieuses au fallback custom (P1)
 Un tenant provisionné avec `variant=gym` tombe sur `CustomVertical` sans
-avertissement UI. Seul `logger.warn` trace ce fallback (côté serveur).
-L'utilisateur croit avoir Gym OS, il a Custom.
+signal UI. Seul `logger.warn` trace ce fallback côté serveur. Les fichiers
+`XxxVertical.ts` correspondants existent pour ces 4 verticales (cf. mémoire
+plan-profondeur) mais ne sont pas registered dans `VerticalRegistry.ts:42-50`.
+Correctif : ajouter les 4 imports. Volume : 1 fichier, ~5 lignes.
 
-### P2-D — L'audit LOGIQUE MÉTIER restaurant ne s'applique pas
-Le golden path RBAC / événements / réglages testé LOT A-I sur `restaurant`
-n'a **aucun équivalent** dans les 6 autres verticales scaffoldées. Aucune
-verticale au-delà de restaurant n'est en mesure d'être auditée pour la même
-promesse « bout-en-bout ».
+### P2-B — Aucun signal UI du stage L1/L2/L3 (P2)
+Un utilisateur qui provisionne `variant=hotel` reçoit un Hotel OS à L2
+sans savoir qu'il manque le câblage L3 (folio, housekeeping, yield). Aucun
+badge, aucune bannière. Correctif : `readonly stage: 'L1'|'L2'|'L3'` sur
+`IVerticalPlugin`, badge « pré-alpha / β / stable » en UI quand stage < L3.
+Volume : ~5 fichiers, réversible.
 
-## 7. Options (non exécutées)
+## 7. Ce qui NE devrait pas être touché
 
-Trois options mutuellement exclusives, à trancher hors P2 :
+- **Ne pas supprimer les 82 events vertical-scoped** : ils sont la surface
+  contractuelle que L3 devra consommer. La supprimer casse le plan-profondeur.
+- **Ne pas retirer les 6 XxxVertical.ts scaffoldés** : mêmes raisons.
+- **Ne pas relever un cliquet pour cacher l'écart 0-caller** : c'est un
+  indicateur légitime de progression L2 → L3, à laisser visible.
 
-**Option A — Purge** : supprimer les 6 XxxVertical.ts + adapters + 82 events.
-Volume : ~110 fichiers, gain immédiat sur `NexusEventName`. Perte : le travail
-plan-profondeur scaffoldé. Non recommandé sans arbitrage.
+## 8. Recommandation
 
-**Option B — Marquage explicite** : ajouter `readonly stage: 'L1' | 'L2' | 'L3'`
-dans `IVerticalPlugin`, exposer un badge « β » ou « pré-alpha » en UI quand
-le stage < L3, et logger un `warn` visible pour les 4 non enregistrées.
-Volume : ~5 fichiers. Réversible.
-
-**Option C — Câblage minimal par verticale** : sur chaque XxxVertical, ajouter
-un émetteur UI-driven pour l'event pivot (ex. `hotel.guest_checked_in` depuis
-un `/pms/check-in`). Volume : plusieurs jours par verticale. Aligne la
-promesse sur restaurant.
-
-Recommandation implicite : **Option B** (marquage) le temps d'un arbitrage
-produit, sans casser le plan-profondeur. La Purge peut suivre si le produit
-décide de retirer une verticale du roadmap.
+Exécuter **P2-C** immédiatement (bug d'enregistrement, coût nul) et **P2-B**
+dans un sprint dédié (transparence stage). Le passage L2 → L3 des 6
+verticales reste du travail feature planifié séparément, hors périmètre de
+l'audit LOGIQUE MÉTIER.
 
 ## Ground truth
 
