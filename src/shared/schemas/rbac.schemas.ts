@@ -60,6 +60,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     settings: ['admin', 'directeur', 'manager'],
     facility: ['admin', 'directeur', 'manager'],
     franchise: ['admin', 'directeur'],
+    automations: ['admin', 'directeur'],
 };
 
 export const DEFAULT_TAB_ACCESS: Record<string, Record<string, PermissionRole[]>> = {
@@ -87,6 +88,11 @@ export const DEFAULT_TAB_ACCESS: Record<string, Record<string, PermissionRole[]>
 };
 
 export const DEFAULT_ACTION_ACCESS: Record<string, Record<string, PermissionRole[]>> = {
+    automations: {
+        create_automation: ['admin', 'directeur'],
+        toggle_automation: ['admin', 'directeur', 'manager'],
+        delete_automation: ['admin', 'directeur'],
+    },
     reservations: {
         cancel_reservation: ['admin', 'directeur', 'manager', 'chef_rang', 'hotesse'],
         mark_no_show: ['admin', 'directeur', 'manager', 'chef_rang', 'hotesse'],

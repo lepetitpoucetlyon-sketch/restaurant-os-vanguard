@@ -1,6 +1,7 @@
 import type { PageKey, PageSettingConfig } from "@nexus/contracts/permissions.types";
 
 export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSettingConfig[] }> = {
+    automations: { title: "Paramètres Automatisations", settings: [] },
     dashboard: {
         title: "Paramètres du Tableau de Bord",
         settings: [

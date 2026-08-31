@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
-import { Inter, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
+import { Outfit, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { whiteLabelInstanceConfig } from "@/config/instance";
@@ -10,12 +10,21 @@ import { ImpersonationBanner } from "@components/layout/ImpersonationBanner";
 import { ServiceWorkerRegistration } from "@components/ServiceWorkerRegistration";
 import { ThemeApplicator } from "@/shared/components/ThemeApplicator";
 
-// Fonts
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const cormorant = Cormorant_Garamond({
-  variable: "--font-serif",
+// Fonts — taste-skill compliant.
+// Outfit remplace Inter (bannie). Instrument Serif remplace Cormorant Garamond
+// et n'est utilisée que pour kickers / hero / KPI éditoriaux, jamais body dashboard.
+// L'alias CSS --font-inter reste défini (Outfit derrière) pour ne pas casser
+// les consommateurs pendant la migration progressive.
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
 });
 const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
@@ -62,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
+    <html lang="fr" suppressHydrationWarning className={`${outfit.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans`}>
       <head>
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <Script

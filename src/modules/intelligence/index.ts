@@ -75,3 +75,7 @@ export type { ActionProposal, AssistantToolDefinition } from './services/Assista
 export { VisionService, type ExtractedInvoice, type PlateAuditResult } from './services/VisionService';
 export * from './ia/ai/speculative';
 
+
+export { AutomationsPanel } from "./automations/components/AutomationsPanel";
+export { AutomationBuilder } from "./automations/components/AutomationBuilder";
+export { registerAutomationRunner } from "./automations/engine/AutomationRunner";

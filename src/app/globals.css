@@ -18,9 +18,11 @@
 }
 
 @theme {
-  /* ── ACTIONS ── */
+  /* ── ACTIONS ──
+     taste-skill : #000000 pur banni ; on utilise un off-black tinté charbon.
+     Le hover reste sombre pour marquer le contraste avec le doré primaire. */
   --color-action-primary: var(--action-primary, #C5A059);
-  --color-action-primary-hover: var(--action-primary-hover, #000000);
+  --color-action-primary-hover: var(--action-primary-hover, #1a1a1a);
   --color-action-primary-fg: var(--text-on-primary, #FFFFFF);
   --color-action-danger: var(--action-danger, #ef4444);
   --color-action-accent: var(--action-accent, #C5A059);
@@ -32,15 +34,20 @@
   --color-surface-modal-dark: var(--surface-modal-dark, #0B0B0C);
   --color-surface-sidebar: var(--surface-sidebar, #111827);
 
-  /* ── STATUS ── */
+  /* ── STATUS ──
+     taste-skill : le bleu-violet #6366f1 (indigo-500) est le pattern "AI Purple"
+     le plus banni. On le remplace par un bleu clair calibré (#0ea5e9 sky-500)
+     pour l'info neutre — pas de teinte violette, cohérent avec la palette dorée. */
   --color-status-success: var(--status-success, #059669);
   --color-status-warning: var(--status-warning, #f59e0b);
   --color-status-danger: var(--status-danger, #dc2626);
-  --color-status-info: var(--status-info, #6366f1);
+  --color-status-info: var(--status-info, #0ea5e9);
 
-  /* ── TABLES / FLOOR PLAN ── */
+  /* ── TABLES / FLOOR PLAN ──
+     Table occupée : passe de l'indigo AI-purple au bleu-nuit tenant (#1e293b),
+     qui contraste avec le doré primaire des tables réservées/disponibles. */
   --color-table-available: var(--status-table-available, #e5e7eb);
-  --color-table-occupied: var(--status-table-occupied, #6366f1);
+  --color-table-occupied: var(--status-table-occupied, #1e293b);
   --color-table-reserved: var(--status-table-reserved, #fbbf24);
 
   /* ── TEXT ── */
@@ -84,12 +91,17 @@
   --color-accent: var(--action-primary, #C5A059);
   --color-border: var(--border-default, #E5E4DA);
 
-  /* ── FONTS ── */
-  --font-sans: var(--font-inter, 'Inter', system-ui, sans-serif);
-  --font-serif: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
-  --font-mono: var(--font-mono, monospace);
-  --font-brand: var(--font-brand, var(--font-serif, 'Cormorant Garamond', Georgia, serif));
-  --font-ui: var(--font-inter, 'Inter', system-ui, sans-serif);
+  /* ── FONTS ──
+     taste-skill : Inter et Cormorant Garamond bannies pour dashboards premium.
+     - --font-sans / --font-ui  → Outfit (chargée dans layout.tsx via next/font/google)
+     - --font-serif             → Instrument Serif (kickers & hero éditoriaux uniquement)
+     - --font-mono              → JetBrains Mono (tickets NF525, tabular-nums)
+     L'alias --font-inter est conservé pour compat : il pointe vers Outfit. */
+  --font-sans: var(--font-outfit, var(--font-inter, 'Outfit', system-ui, sans-serif));
+  --font-serif: var(--font-serif, 'Instrument Serif', Georgia, serif);
+  --font-mono: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  --font-brand: var(--font-brand, var(--font-serif, 'Instrument Serif', Georgia, serif));
+  --font-ui: var(--font-outfit, var(--font-inter, 'Outfit', system-ui, sans-serif));
 
   /* ── TYPOGRAPHY SCALE ── */
   --text-micro: 0.6875rem;   /* 11px */
@@ -208,7 +220,7 @@
     --status-success:  #10b981;
     --status-warning:  #f59e0b;
     --status-danger:   #ef4444;
-    --status-info:     #818cf8;
+    --status-info:     #38bdf8;
     /* Glass surfaces inversées en dark : teinte blanche subtile */
     --color-surface-glass:        rgba(255, 255, 255, 0.03);
     --color-surface-glass-hover:  rgba(255, 255, 255, 0.05);
@@ -640,9 +652,9 @@
   }
 
   .btn-elegant-primary:hover {
-    background-color: #000000;
+    background-color: #1a1a1a;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 25px -5px rgba(197, 160, 89, 0.18);
   }
 
 

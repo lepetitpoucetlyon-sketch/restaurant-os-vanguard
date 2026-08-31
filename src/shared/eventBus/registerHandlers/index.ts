@@ -10,6 +10,7 @@ import { registerCrmHandlers } from './crm';
 import { registerMccHandlers } from './mcc';
 import { registerNotificationHandlers } from './notifications';
 import { registerFacilityHandlers } from './facility';
+import { registerAutomationHandlers } from './automations';
 
 let clientInitialized = false;
 let serverInitialized = false;
@@ -42,7 +43,8 @@ export function registerNexusHandlers(): void {
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
     ...registerNotificationHandlers(),
-    ...registerFacilityHandlers()
+    ...registerFacilityHandlers(),
+    ...registerAutomationHandlers()
   );
 }
 
@@ -61,7 +63,8 @@ export function registerServerNexusHandlers(): void {
     ...registerCrmHandlers(),
     ...registerMccHandlers(),
     ...registerNotificationHandlers(),
-    ...registerFacilityHandlers()
+    ...registerFacilityHandlers(),
+    ...registerAutomationHandlers()
   );
 }
 

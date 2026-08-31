@@ -42,7 +42,8 @@ export type PageKey =
     | 'workshop'
     | 'consultations'
     | 'vault'
-    | 'franchise';
+    | 'franchise'
+    | 'automations';
 
 
 // ============ ACTION DEFINITIONS PER PAGE ============
