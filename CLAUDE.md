@@ -185,6 +185,9 @@ Les décisions fondamentales du socle sont documentées dans `docs/adrs/` :
 - `ADR-015` : Loi des Couches & Canaux de Communication Inter-Modules
 - `ADR-016` : Profondeur des verticales — build-time (L0-L3) vs runtime (essential/manager/enterprise)
 - `ADR-017` : Headers éditoriaux des verticales — primitives universelles PageShell.* + scaffolding forge
+- `ADR-018` : Séparation `ops/service/core` (générique) vs `ops/service/<verticale>` — charte en 3 tests
+- `ADR-019` : RBAC — le kernel connaît les niveaux, les verticales nomment les rôles
+- `ADR-020` : Localisation des handlers — un handler vit à côté du module qui possède la réaction
 
 ## Commandes
 
