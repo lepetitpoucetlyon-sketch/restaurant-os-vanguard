@@ -236,6 +236,16 @@ export interface FINANCEEvents {
 
   'finance.smart_tip_distributed': { v:1; tenantId: string; periodLabel: string; totalPoolInMicrounits: number; beneficiaryCount: number; distributedAt: number };
 
+  // ── Facturation légale (§7.4/7.7 extrait antigravity) ────────────────────
+  'finance.invoice_generated': {
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalInMicrounits: number;
+    sourceJournalEntryId: string;
+    customerName?: string;
+  };
+
   // ── E-facturation Factur-X (obligation FR sept. 2026) ─────────────────────
   // Extraits de agent/antigravity-exec §7.3, câblés sur main 2026-08-31.
 

@@ -62,6 +62,16 @@ export type { IAccountingProvider, LedgerEntry, ExpenseEntry, AccountingBalance,
 
 // E-facturation Factur-X (obligation FR sept. 2026) — extrait antigravity §7.3
 export * from './comptabilite/einvoicing';
+
+// Facturation multi-verticale — extrait antigravity §7.8
+export type { BillingUnit, InvoiceLineInput, VerticalTaxRule, IVerticalInvoicingAdapter } from './comptabilite/billing/domain/IVerticalInvoicingAdapter';
+export { resolveInvoicingAdapter, RestaurantInvoicingAdapter, HotelInvoicingAdapter, GarageInvoicingAdapter, ClinicInvoicingAdapter, BakeryInvoicingAdapter, SalonInvoicingAdapter, RetailInvoicingAdapter } from './comptabilite/billing/domain/IVerticalInvoicingAdapter';
+
+// Facturation légale — avoirs, acomptes, ticket→facture — extrait antigravity §7.4/7.7
+export { InvoiceService } from './comptabilite/billing/domain/InvoiceService';
+export type { GeneratedInvoice, InvoiceFromTicketParams, InvoiceType } from './comptabilite/billing/domain/InvoiceService';
+export { generateCreditNote } from './comptabilite/billing/domain/CreditNoteBuilder';
+export { generateDeposit, convertQuoteToInvoice } from './comptabilite/billing/domain/DepositInvoiceBuilder';
 export { getAmountInMu, buildEntryAmountInCents } from './hooks/useAccounting';
 export { generatePrivatisationContract, type PrivatisationData, type PrivatisationFormule } from './comptabilite/documents/PrivatisationContract';
 export { TreasuryEngine } from './services/TreasuryEngine';

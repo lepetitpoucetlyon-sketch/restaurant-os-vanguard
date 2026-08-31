@@ -11,8 +11,7 @@
  */
 import type { Microunits } from '@/shared/schemas/primitives';
 import type { ServiceSubject } from '@nexus/contracts';
-// BillingUnit — inlined depuis §7.8 IVerticalInvoicingAdapter (non extrait dans ce lot)
-type BillingUnit = 'per_cover' | 'per_night' | 'parts_labor' | 'per_act' | 'per_item' | 'per_session' | 'per_service';
+import type { BillingUnit } from '@/modules/finance';
 
 // ── Machine à états ────────────────────────────────────────────────────────────
 

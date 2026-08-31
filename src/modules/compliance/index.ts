@@ -24,6 +24,7 @@ export { ImmunityAuditLogger } from './securite/ImmunityAuditLogger';
 
 // Domaine : reglementaire (RGPD, Contrats Légaux & Signatures)
 export { ErasureService } from './reglementaire/rgpd/ErasureService';
+export { RgpdRegisterService } from './reglementaire/rgpd/RgpdRegisterService';
 export * from './legal';
 
 // Infrastructure pilier (connectors, services, types)
