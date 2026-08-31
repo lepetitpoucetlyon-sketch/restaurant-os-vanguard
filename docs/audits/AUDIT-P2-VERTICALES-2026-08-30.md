@@ -13,12 +13,14 @@ Ce qu'on mesure ici est **l'état attendu du plan-profondeur (ADR-016)** :
 verticales à différents stades (L1 blueprint, L2 adapters + XxxVertical monté,
 L3 UI câblée). Restaurant est à L3, les 6 verticales scaffoldées (hotel,
 garage, clinic, bakery, salon, retail) sont à L2, les 4 dernières (coworking,
-florist, gym, veterinary) sont à L1 avec un défaut d'enregistrement qui les
-fait tomber silencieusement sur le fallback `custom`.
+florist, gym, veterinary) sont à L1 avec fallback silencieux sur `custom`.
 
-Rien à supprimer. Deux chantiers concrets ressortent : signaler le stade dans
-l'UI (personne ne sait aujourd'hui si sa verticale est mature) et enregistrer
-les 4 verticales manquantes dans `VerticalRegistry`.
+**Le provisioning tenant est MCC-only** (pas de self-provisioning depuis une
+landing publique). L'opérateur MCC connaît l'état de chaque verticale et
+choisit ce qu'il ouvre en connaissance de cause — le fallback silencieux
+n'expose donc personne à une mauvaise surprise. Rien à supprimer. Un seul
+chantier retenu : afficher le stade L1/L2/L3 dans l'écran MCC pour éviter
+d'aller relire trois fichiers avant chaque décision.
 
 ## Mesures (session 2026-08-30, `rg` sur `src/`)
 
@@ -89,23 +91,39 @@ les adapters existants), pas du nettoyage.
 - **L'écart 0-caller par adapter est attendu à L2** : c'est ce que L3 doit
   résoudre en câblant la vraie UI.
 
-## 6. Ce qui EST un problème actionnable
+## 6. Contexte de provisioning — MCC-only
 
-### P2-C — 4 verticales silencieuses au fallback custom (P1)
-Un tenant provisionné avec `variant=gym` tombe sur `CustomVertical` sans
-signal UI. Seul `logger.warn` trace ce fallback côté serveur. Les fichiers
-`XxxVertical.ts` correspondants existent pour ces 4 verticales (cf. mémoire
-plan-profondeur) mais ne sont pas registered dans `VerticalRegistry.ts:42-50`.
-Correctif : ajouter les 4 imports. Volume : 1 fichier, ~5 lignes.
+**Toute création de tenant passe par le MCC** (cf. mémoires
+`project_mcc_reseller_model.md`, `project_mcc_structure.md`). Il n'existe pas
+de canal de self-provisioning depuis une landing publique. L'opérateur MCC
+= la personne qui connaît l'état L1/L2/L3 de chaque verticale et choisit
+donc en connaissance de cause ce qu'il ouvre à quel client.
 
-### P2-B — Aucun signal UI du stage L1/L2/L3 (P2)
-Un utilisateur qui provisionne `variant=hotel` reçoit un Hotel OS à L2
-sans savoir qu'il manque le câblage L3 (folio, housekeeping, yield). Aucun
-badge, aucune bannière. Correctif : `readonly stage: 'L1'|'L2'|'L3'` sur
-`IVerticalPlugin`, badge « pré-alpha / β / stable » en UI quand stage < L3.
-Volume : ~5 fichiers, réversible.
+Ce cadrage change la priorité des trouvailles ci-dessous.
 
-## 7. Ce qui NE devrait pas être touché
+## 7. Trouvailles
+
+### P2-B — Signal UI du stage L1/L2/L3 côté MCC (P2, retenu)
+Utile pour l'opérateur MCC : voir en un coup d'œil, dans l'écran de
+provisioning, quelle verticale est à quel stade. Aujourd'hui il faut aller
+lire `VerticalRegistry.ts` + `IVerticalPlugin` + la mémoire plan-profondeur
+pour le savoir. Correctif : `readonly stage: 'L1'|'L2'|'L3'` sur
+`IVerticalPlugin`, badge « pré-alpha / β / stable » dans le sélecteur de
+verticale MCC. Volume : ~5 fichiers, réversible.
+
+### P2-C — 4 verticales non enregistrées dans `VerticalRegistry` (dormant)
+`coworking`, `florist`, `gym`, `veterinary` tombent sur `CustomVertical`
+via le fallback. Les fichiers `XxxVertical.ts` existent (cf. mémoire
+plan-profondeur) mais l'import est absent de `VerticalRegistry.ts:42-50`.
+
+**Sans effet aujourd'hui** : le provisioning MCC-only garantit que
+l'opérateur ne choisira pas `variant=gym` tant que Gym n'est pas prêt. À
+ré-ouvrir uniquement si un jour :
+- un canal de self-provisioning externe (landing tenant, revendeur autonome)
+  est ajouté ;
+- ou une de ces 4 verticales atteint L3 et devient sélectionnable côté MCC.
+
+## 8. Ce qui NE devrait pas être touché
 
 - **Ne pas supprimer les 82 events vertical-scoped** : ils sont la surface
   contractuelle que L3 devra consommer. La supprimer casse le plan-profondeur.
@@ -113,12 +131,12 @@ Volume : ~5 fichiers, réversible.
 - **Ne pas relever un cliquet pour cacher l'écart 0-caller** : c'est un
   indicateur légitime de progression L2 → L3, à laisser visible.
 
-## 8. Recommandation
+## 9. Recommandation
 
-Exécuter **P2-C** immédiatement (bug d'enregistrement, coût nul) et **P2-B**
-dans un sprint dédié (transparence stage). Le passage L2 → L3 des 6
-verticales reste du travail feature planifié séparément, hors périmètre de
-l'audit LOGIQUE MÉTIER.
+**P2-B** dans un sprint MCC dédié (transparence stage pour l'opérateur).
+**P2-C** en veille — à réveiller si le modèle de provisioning change.
+Le passage L2 → L3 des 6 verticales reste du travail feature planifié
+séparément, hors périmètre de l'audit LOGIQUE MÉTIER.
 
 ## Ground truth
 
