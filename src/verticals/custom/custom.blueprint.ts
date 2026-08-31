@@ -34,18 +34,24 @@ export const CUSTOM_BLUEPRINT: VerticalBlueprint = {
         mod_settings: true,
         mod_brand_basic: true,
     },
+    // Custom = canevas vierge : palette NEUTRE zinc/graphite (pas d'AI purple
+    // #6366F1 / #8B5CF6 comme avant). Le tenant configure sa charte via
+    // BrandingService (Branding Plus) dès l'onboarding, mais un démarrage sans
+    // config reste sobre et premium — pas "encore un SaaS violet générique".
+    // Fonts : Outfit + Instrument Serif = mêmes défauts que la verticale
+    // restaurant (référence) pour cohérence visuelle inter-verticales.
     tokens: {
         appearance: 'dark',
         defaultTokens: {
-            primaryColor: '#6366F1',
-            primaryHover: '#4F46E5',
-            accentColor: '#8B5CF6',
+            primaryColor: '#18181B',
+            primaryHover: '#27272A',
+            accentColor: '#3F3F46',
             borderRadiusCard: 'md',
             borderRadiusBtn: 'md',
             glassBlur: 'md',
             glassOpacity: 'medium',
-            fontBrand: 'Inter',
-            fontUI: 'Inter',
+            fontBrand: 'Instrument Serif',
+            fontUI: 'Outfit',
             fontMono: 'JetBrains Mono',
         },
         verticalTokens: {},

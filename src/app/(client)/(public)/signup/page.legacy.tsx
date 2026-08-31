@@ -60,7 +60,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4">
+    <div className="min-h-[100dvh] bg-bg-primary flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-bg-secondary rounded-2xl p-8 shadow-xl border border-border">
         <h1 className="text-2xl font-bold text-text-primary mb-2">Créer votre restaurant</h1>
         <p className="text-text-secondary text-sm mb-8">

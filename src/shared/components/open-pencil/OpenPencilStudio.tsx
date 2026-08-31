@@ -158,7 +158,7 @@ export const OpenPencilStudio: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-screen flex flex-col bg-bg-primary text-text-primary select-none overflow-hidden">
+        <div className="w-full h-[100dvh] flex flex-col bg-bg-primary text-text-primary select-none overflow-hidden">
             {/* Top Navigation Bar */}
             <header className="h-14 border-b border-white/10 bg-bg-secondary px-6 flex items-center justify-between z-40">
                 {/* Logo & Title */}

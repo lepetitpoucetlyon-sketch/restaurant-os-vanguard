@@ -11,7 +11,7 @@ export default function SignupSuccessPage() {
   const sessionId = searchParams.get('session_id');
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 py-20 relative">
+    <section className="min-h-[100dvh] flex items-center justify-center px-4 py-20 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(16,185,129,0.06),transparent)]" />
 
       <motion.div
@@ -40,8 +40,8 @@ export default function SignupSuccessPage() {
           </motion.svg>
         </div>
 
-        <h1 className="text-3xl font-bold tracking-tight mb-4">
-          🎉 Bienvenue !
+        <h1 className="font-serif text-4xl tracking-tight text-white mb-4">
+          Bienvenue.
         </h1>
         <p className="text-lg text-white/50 mb-8 max-w-sm mx-auto">
           Votre espace est en cours de provisionnement. Vous recevrez un email de bienvenue dans quelques secondes.
@@ -56,9 +56,9 @@ export default function SignupSuccessPage() {
         <div className="space-y-3">
           <Link
             href="/pos"
-            className="block w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-semibold text-base hover:from-amber-400 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25"
+            className="block w-full py-4 rounded-full bg-[#C5A059] text-[#0B0B0C] font-medium text-base hover:bg-[#B08D48] transition-colors duration-300 active:scale-[0.98]"
           >
-            Accéder à mon espace →
+            Accéder à mon espace
           </Link>
           <Link
             href="/"

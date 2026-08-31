@@ -53,7 +53,7 @@ export default function GroupsPage() {
     }, [groups, searchQuery, selectedType, selectedStatus]);
 
     return (
-        <div className="flex h-screen -m-4 md:-m-8 flex-col bg-bg-primary overflow-hidden relative font-sans">
+        <div className="flex h-[100dvh] -m-4 md:-m-8 flex-col bg-bg-primary overflow-hidden relative font-sans">
             {/* Cinematic Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-action-primary/5 blur-[120px] rounded-full" />

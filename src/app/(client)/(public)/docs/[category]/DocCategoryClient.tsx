@@ -14,7 +14,7 @@ export default function DocCategoryClient() {
 
     if (!CATEGORY_DOCS[category]) {
         return (
-            <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center p-6 text-center">
+            <div className="min-h-[100dvh] bg-bg-primary flex flex-col items-center justify-center p-6 text-center">
                 <div className="w-20 h-20 rounded-3xl bg-surface-bg dark:bg-status-danger/10 flex items-center justify-center mb-8">
                     <span className="text-4xl">⚠️</span>
                 </div>

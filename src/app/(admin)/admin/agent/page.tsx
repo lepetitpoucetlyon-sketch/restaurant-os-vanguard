@@ -73,7 +73,7 @@ export default function AgentIntelligencePage() {
   const displayStability = Math.max(0, Math.min(100, stability));
 
   return (
-    <div className="min-h-screen bg-bg-primary p-6 lg:p-12 space-y-8">
+    <div className="min-h-[100dvh] bg-bg-primary p-6 lg:p-12 space-y-8">
       <div className="flex items-center justify-between">
         <PageHeader
           title="Antigravity Intelligence"

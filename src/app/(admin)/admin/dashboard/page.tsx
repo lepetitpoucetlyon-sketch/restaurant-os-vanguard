@@ -120,7 +120,7 @@ export default function VibecodingDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-bg text-text-primary p-8 font-sans selection:bg-action-primary/30">
+    <div className="min-h-[100dvh] bg-surface-bg text-text-primary p-8 font-sans selection:bg-action-primary/30">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header Section */}

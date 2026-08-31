@@ -5,7 +5,7 @@ import { OpenPencilStudio } from '@/shared/components/open-pencil';
 
 export default function PublicStudioPage() {
     return (
-        <main className="w-full h-screen bg-bg-primary">
+        <main className="w-full h-[100dvh] bg-bg-primary">
             <OpenPencilStudio />
         </main>
     );

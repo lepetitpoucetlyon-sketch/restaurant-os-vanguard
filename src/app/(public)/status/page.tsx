@@ -87,7 +87,7 @@ export default async function StatusPage() {
   const checkedAt = new Date().toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' });
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans antialiased">
+    <div className="min-h-[100dvh] bg-gray-50 font-sans antialiased">
       <div className="max-w-2xl mx-auto px-6 py-16 space-y-10">
         {/* Header */}
         <div className="flex items-center gap-4">

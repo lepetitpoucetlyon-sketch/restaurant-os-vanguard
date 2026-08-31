@@ -98,14 +98,14 @@ export default function PublicMenuPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+            <div className="min-h-[100dvh] flex items-center justify-center bg-bg-primary">
                 <div className="w-6 h-6 border-2 border-accent-gold/30 border-t-accent-gold rounded-full animate-spin" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-bg-primary pb-8">
+        <div className="min-h-[100dvh] bg-bg-primary pb-8">
             {/* Header */}
             <div className="sticky top-0 z-40 bg-surface-card/90 backdrop-blur-xl border-b border-border/50 px-4 py-4">
                 <h1 className="text-lg font-black font-serif italic text-text-primary tracking-tight">

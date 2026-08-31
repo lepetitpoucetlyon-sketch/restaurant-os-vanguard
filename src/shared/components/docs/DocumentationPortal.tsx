@@ -258,7 +258,7 @@ export function DocumentationPortal({ isPage = false, categoryOverride }: { isPa
     );
 
     if (isPage) {
-        return <div className="h-screen w-full bg-surface-bg overflow-hidden flex flex-col">{content}</div>;
+        return <div className="h-[100dvh] w-full bg-surface-bg overflow-hidden flex flex-col">{content}</div>;
     }
 
     return (

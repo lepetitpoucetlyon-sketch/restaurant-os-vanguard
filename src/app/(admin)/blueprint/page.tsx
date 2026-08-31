@@ -12,7 +12,7 @@ import { Database, Network, Cpu, Info } from "lucide-react";
 
 export default function BlueprintPage() {
     return (
-        <div className="min-h-screen bg-bg-primary text-text-primary overflow-x-hidden selection:bg-action-primary selection:text-action-primary">
+        <div className="min-h-[100dvh] bg-bg-primary text-text-primary overflow-x-hidden selection:bg-action-primary selection:text-action-primary">
             {/* Background Decorative Elements */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-action-primary blur-[150px] rounded-full animate-pulse" />

@@ -25,7 +25,7 @@ export default function GlobalError({
 
   return (
     <html lang="fr" className="dark">
-      <body className="min-h-screen bg-[#0a0a0c] text-white flex items-center justify-center p-6 font-sans antialiased">
+      <body className="min-h-[100dvh] bg-[#0a0a0c] text-white flex items-center justify-center p-6 font-sans antialiased">
         <div className="max-w-md w-full bg-[#13141a]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl text-center space-y-6">
           <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto text-2xl font-bold">
             ⚠️

@@ -9,7 +9,7 @@ export default function SecurityPage() {
   return (
     <section className="pt-32 pb-24 sm:pt-40 sm:pb-32">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-invert prose-amber max-w-none">
-        <h1>🔐 Sécurité &amp; Confiance</h1>
+        <h1>Sécurité &amp; Confiance</h1>
         <p className="lead">
           La sécurité de vos données est notre priorité absolue.
           Voici comment nous protégeons votre établissement.
@@ -64,7 +64,7 @@ export default function SecurityPage() {
           <li>✅ <strong>NF525</strong> — Certification logiciel de caisse</li>
           <li>✅ <strong>RGPD</strong> — Traitement conforme, DPA disponible</li>
           <li>✅ <strong>HACCP</strong> — Module traçabilité alimentaire intégré</li>
-          <li>🔜 <strong>ISO 27001</strong> — Certification en cours de planification</li>
+          <li><strong>ISO 27001</strong> — Certification en cours de planification</li>
         </ul>
 
         <h2>Tests de sécurité</h2>

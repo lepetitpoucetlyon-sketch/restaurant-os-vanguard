@@ -60,7 +60,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
         case 'sidebar':
             return (
                 <>
-                    <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                    <div className="flex min-h-[100dvh] bg-bg-primary selection:bg-accent-gold/30">
                         <div className="hidden lg:block">
                             <DesktopSidebar />
                         </div>
@@ -82,7 +82,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
         case 'topbar':
             return (
                 <>
-                    <div className="min-h-screen bg-bg-primary">
+                    <div className="min-h-[100dvh] bg-bg-primary">
                         <div className="hidden lg:block">
                             <DesktopTopbar />
                         </div>
@@ -100,7 +100,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
 
         case 'kiosk':
             return (
-                <div className="h-screen w-screen overflow-hidden bg-surface-sidebar text-text-primary p-12 flex flex-col">
+                <div className="h-[100dvh] w-screen overflow-hidden bg-surface-sidebar text-text-primary p-12 flex flex-col">
                      <div className="flex justify-between items-center mb-12">
                         <div className="text-4xl font-serif italic font-black">TERMINAL <span className="text-accent-gold not-italic">OS</span></div>
                         <div className="px-6 py-2 rounded-full border border-default text-nano font-black tracking-widest animate-pulse">KIOSK MODE ACTIVE</div>
@@ -115,7 +115,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
         default:
             return (
                 <>
-                    <div className="flex min-h-screen bg-bg-primary selection:bg-accent-gold/30">
+                    <div className="flex min-h-[100dvh] bg-bg-primary selection:bg-accent-gold/30">
                         {/* Desktop Sidebar (Only visible on Desktop) */}
                         <div className="hidden lg:block">
                             <DesktopSidebar />

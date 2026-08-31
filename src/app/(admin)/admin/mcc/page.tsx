@@ -86,7 +86,7 @@ function MCCDashboardInner() {
 
     return (
         <MFAGate>
-            <div className="min-h-screen bg-surface-bg text-text-primary font-sans selection:bg-action-primary/30 relative overflow-hidden">
+            <div className="min-h-[100dvh] bg-surface-bg text-text-primary font-sans selection:bg-action-primary/30 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none" />
                 <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none" />
                 <div className="relative z-10 p-8">

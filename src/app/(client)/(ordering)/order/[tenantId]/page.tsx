@@ -141,7 +141,7 @@ export default function OrderPage({ params }: OrderPageProps) {
 
   if (confirmedOrderId) {
     return (
-      <div className="min-h-screen bg-surface-bg text-text-primary flex items-center justify-center p-4">
+      <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -187,7 +187,7 @@ export default function OrderPage({ params }: OrderPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-surface-bg text-text-primary flex flex-col pb-24">
+    <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex flex-col pb-24">
       <OrderHeader
         tenantName={tenantId}
         tableNumber={tableParam}

@@ -82,11 +82,11 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className="min-h-screen bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
+      <body className="min-h-[100dvh] bg-surface-bg font-sans antialiased selection:bg-action-primary/20 text-text-primary transition-colors duration-500">
         <ServiceWorkerRegistration />
         <ErrorBoundary>
           <Suspense fallback={
-            <div className="flex flex-col h-screen items-center justify-center bg-[#070709] text-white select-none">
+            <div className="flex flex-col h-[100dvh] items-center justify-center bg-[#070709] text-white select-none">
               <div className="w-12 h-12 rounded-2xl bg-[#C5A059]/10 border border-[#C5A059]/30 flex items-center justify-center text-[#C5A059] mb-4 animate-pulse">
                 <span className="font-serif font-black text-xl text-[#C5A059]">R</span>
               </div>

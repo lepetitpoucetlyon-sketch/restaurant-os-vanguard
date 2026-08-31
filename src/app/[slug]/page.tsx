@@ -66,7 +66,7 @@ export default async function RestaurantLandingPage({ params }: PageProps) {
   const heroImageUrl = landing?.heroImageUrl;
 
   return (
-    <div className="min-h-screen bg-white font-sans antialiased">
+    <div className="min-h-[100dvh] bg-white font-sans antialiased">
       {/* Hero */}
       <section className="relative min-h-[65vh] flex flex-col items-center justify-center overflow-hidden px-6 py-20"
         style={{ background: 'linear-gradient(160deg, #1A2350 0%, #0d1428 100%)' }}

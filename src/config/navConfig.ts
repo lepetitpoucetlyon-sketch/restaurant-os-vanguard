@@ -56,6 +56,7 @@ import {
     Newspaper,
     Lock,
     MonitorSmartphone,
+    Zap,
 } from "lucide-react";
 
 export type NavMode = 'tenant' | 'mcc' | 'both';
@@ -119,6 +120,7 @@ export const NAV_SECTIONS: NavSection[] = [
         mode: 'both',
         items: [
             { label: "Hub Intelligence", key: "intelligence_hub", href: "/intelligence", icon: Sparkles, category: "analytics", minLevel: 70 },
+            { label: "Automatisations", key: "automations", href: "/automations", icon: Zap, category: "analytics", minLevel: 90 },
             { label: "Intelligence Exécutive", key: "executive_intelligence", href: "/admin/agent", icon: Bot, category: "analytics", minLevel: 90 },
             { label: "Cartographie 3D", key: "system_map", href: "/system-map", icon: Map, category: "analytics", minLevel: 70 },
         ]

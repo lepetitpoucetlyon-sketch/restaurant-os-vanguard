@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function LegalLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
+    <div className="min-h-[100dvh] bg-white text-gray-900 font-sans">
       {/* Navigation minimale */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">

@@ -24,7 +24,7 @@ export default async function ReservationWidgetLayout({ children, params }: Layo
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans antialiased">
+    <div className="min-h-[100dvh] bg-gray-50 font-sans antialiased">
       <div className="flex flex-col items-center justify-start py-8 px-4">
         {children}
       </div>

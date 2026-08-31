@@ -27,25 +27,30 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
     mod_pms: false,
   },
   tokens: {
+    // Aligné sur restaurantDefaultTokens (shared/nexus/tokens/verticals/restaurant.ts) —
+    // le blueprint déclarait auparavant une palette indigo/violet #6366f1 / #8b5cf6
+    // (pattern "AI Purple" banni par taste-skill) alors que le vrai brand est or.
+    // Les valeurs ci-dessous sont canoniques : le tenant peut les surcharger via
+    // BrandingService, mais aucun démarrage restaurant ne doit jamais montrer d'indigo.
     appearance: 'dark',
     defaultTokens: {
-      primaryColor: '#6366f1',
-      primaryHover: '#4f46e5',
-      accentColor: '#8b5cf6',
+      primaryColor: '#C5A059',
+      primaryHover: '#B08D48',
+      accentColor: '#C5A059',
       borderRadiusCard: 'lg',
-      borderRadiusBtn: 'lg',
-      glassBlur: 'lg',
-      glassOpacity: 'medium',
-      fontBrand: 'Inter',
-      fontUI: 'Inter',
+      borderRadiusBtn: 'md',
+      glassBlur: 'md',
+      glassOpacity: 'high',
+      fontBrand: 'Instrument Serif',
+      fontUI: 'Outfit',
       fontMono: 'JetBrains Mono',
     },
     verticalTokens: {
-      '--table-available': '#10b981',
-      '--table-occupied': '#6366f1',
-      '--table-reserved': '#f59e0b',
-      '--table-bill-printed': '#3b82f6',
-      '--course-order-sent': '#8b5cf6',
+      '--table-available': '#e5e7eb',
+      '--table-occupied': '#1e293b',
+      '--table-reserved': '#fbbf24',
+      '--table-bill-printed': '#0ea5e9',
+      '--course-order-sent': '#C5A059',
       '--course-next-fired': '#ec4899',
     },
   },

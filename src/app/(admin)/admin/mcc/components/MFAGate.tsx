@@ -104,7 +104,7 @@ function MFAGateImpl({ role = 'mcc_super_admin', children }: MFAGateProps) {
 
     if (status === 'checking') {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-black">
+            <div className="flex items-center justify-center min-h-[100dvh] bg-black">
                 <Loader2 className="animate-spin text-orange-500" size={32} />
             </div>
         );

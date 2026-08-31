@@ -10,7 +10,7 @@ export function HeroSection() {
     const brandBanner = useBrandAsset('banner');
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-20 px-6">
+        <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-24 pb-20 px-6">
             {/* Background Effects */}
             <div className="absolute inset-0 bg-surface-bg" />
             

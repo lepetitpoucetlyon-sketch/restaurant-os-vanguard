@@ -25,7 +25,7 @@ export default function NF525Page() {
 
         <h2>Les 4 piliers de conformité</h2>
 
-        <h3>🔒 1. Inaltérabilité</h3>
+        <h3>1. Inaltérabilité</h3>
         <p>
           Chaque opération de caisse est <strong>scellée cryptographiquement</strong> (SHA-256)
           dans une chaîne de hachage WORM (Write Once, Read Many). Toute tentative de modification
@@ -33,21 +33,21 @@ export default function NF525Page() {
           <code>SovereignGuard</code> qui refuse toute mutation.
         </p>
 
-        <h3>🛡️ 2. Sécurisation</h3>
+        <h3>2. Sécurisation</h3>
         <p>
           Authentification forte (Firebase Auth + MFA pour les administrateurs),
           isolation par tenant, chiffrement AES-256 en transit et au repos.
           Les clés de scellement sont stockées en HSM (Hardware Security Module).
         </p>
 
-        <h3>💾 3. Conservation</h3>
+        <h3>3. Conservation</h3>
         <p>
           Toutes les données de caisse sont conservées pendant <strong>6 ans minimum</strong>
           (obligation fiscale) et <strong>10 ans</strong> pour les documents comptables.
           Les sauvegardes automatiques quotidiennes garantissent la pérennité.
         </p>
 
-        <h3>📦 4. Archivage</h3>
+        <h3>4. Archivage</h3>
         <p>
           Les archives fiscales sont signées et horodatées. Le ticket Z de clôture
           est généré automatiquement à chaque fermeture de service avec le total
@@ -79,7 +79,7 @@ export default function NF525Page() {
 
         <div className="mt-8 p-6 rounded-xl bg-amber-500/10 border border-amber-500/20">
           <p className="text-amber-400 font-medium m-0">
-            💡 En cas de contrôle fiscal, Restaurant OS génère automatiquement
+            En cas de contrôle fiscal, Restaurant OS génère automatiquement
             tous les documents requis en 1 clic depuis le portail comptable.
           </p>
         </div>

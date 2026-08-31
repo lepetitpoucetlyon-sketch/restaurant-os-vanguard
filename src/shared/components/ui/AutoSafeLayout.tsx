@@ -79,7 +79,7 @@ export function AutoSafeLayout({
   return (
     <div
       className={cn(
-        "min-h-screen flex flex-col bg-bg-primary text-text-primary pt-safe pb-safe transition-colors duration-200",
+        "min-h-[100dvh] flex flex-col bg-bg-primary text-text-primary pt-safe pb-safe transition-colors duration-200",
         skinClasses,
         className
       )}

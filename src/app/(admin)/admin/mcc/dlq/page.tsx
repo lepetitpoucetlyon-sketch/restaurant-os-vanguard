@@ -73,7 +73,7 @@ export default function DLQDashboard() {
   const alertLevel = entries.length > 100 ? 'critical' : entries.length > 10 ? 'warning' : 'ok';
 
   return (
-    <div className="p-8 min-h-screen bg-surface-bg text-text-primary">
+    <div className="p-8 min-h-[100dvh] bg-surface-bg text-text-primary">
       <header className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold uppercase tracking-tight flex items-center gap-3">

@@ -287,11 +287,11 @@ export const defaultSettings: GlobalSettings = {
     theme: {
         primaryColor: "#C5A059",
         secondaryColor: "#111111",
-        backgroundColor: "#000000",
+        backgroundColor: "#0B0B0C",
         textColor: "#FFFFFF",
         mode: "light",
-        fontPrimary: "Inter",
-        fontHeadings: "Outfit",
+        fontPrimary: "Outfit",
+        fontHeadings: "Instrument Serif",
         borderRadius: "medium",
         buttonStyle: "flat",
         animationsEnabled: true

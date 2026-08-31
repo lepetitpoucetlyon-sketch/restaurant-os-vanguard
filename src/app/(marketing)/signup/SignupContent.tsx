@@ -70,7 +70,7 @@ export function SignupPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 py-20 relative">
+    <section className="min-h-[100dvh] flex items-center justify-center px-4 py-20 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_30%,rgba(197,160,89,0.08),transparent)]" />
 
       <motion.div
