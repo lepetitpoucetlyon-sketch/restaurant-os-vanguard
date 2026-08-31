@@ -11,11 +11,10 @@
 ## 0. Verdict
 
 > **⏱️ MISE À JOUR 2026-08-30 après-midi** — session `plan-correctif-suite-cycles`.
-> Sur les 9 lots (B, A, C, D, E, F, G, H, I), **6 sont livrés** : B (P0 split
+> Sur les 9 lots (B, A, C, D, E, F, G, H, I), **9/9 livrés** : B (P0 split
 > bill), A (P0 source vérité unique), F (P1 fail-closed tenant), E (P1 KDS
-> projection unique), H (P2 blueprint), C (P1 chaîne événements). Reste **D**
-> (cycle vie table), **G** (capacité réservations), **I** (test E2E + invariants).
-> Vérité terrain : `npx tsc --noEmit` 0 erreur, `npx vitest run` 2474/2474.
+> projection unique), H (P2 blueprint), C (P1 chaîne événements), D (P1 cycle vie table), G (P2 capacité réservations), I (P1 test E2E + invariants INV-26 à INV-30). **PLAN CLÔTURÉ.**
+> Vérité terrain : `npx tsc --noEmit` 0 erreur, `npx vitest run` 2477/2477 (+3 golden path + 5 invariants).
 
 ## 0.a Verdict initial
 
@@ -355,3 +354,6 @@ Ce qui **n'a pas** été vérifié et reste à instruire avant de considérer la
 | 2026-08-30 | LOT E (P1) | Claude Code | KDSOrderHandler supprimé (kdsOrders projection fantôme), kdsTickets seule projection retenue. `vitest run` 2474/2474. commit 81e60c4ad |
 | 2026-08-30 | LOT H (P2) | Claude Code | `restaurant.blueprint.ts` : routes/events fictifs retirés (les 3 componentPath n'existent pas, les 4 events restaurant.* jamais émis). `vitest run` 2474/2474. commit efcd02cb8 |
 | 2026-08-30 | LOT C (P1) | Claude Code | RestaurantVertical écoute `order.paid` au lieu de `ops.order_notification`. `useReservationsPage` émet `reservation.confirmed` à la création interne + `table.assigned` à l'arrivée + fail-closed sans tableId réel. `vitest run` 2474/2474. commit c9ff9342d |
+| 2026-08-30 | LOT D (P1) | Claude Code | State machine `shared/domain/tableLifecycle.ts` (transitions autorisées explicites) + garde `assertTableTransition` dans `floorHooks.updateNode` + `markTableCleaned` (dirty→cleaning→free) + POS émet `table.released` à finalizePayment. `vitest run` 2474/2474. commit b02fc5e36 + 78d770238 |
+| 2026-08-30 | LOT G (P2) | Claude Code | `AvailabilityEngine.canAccommodate` branché sur `AutomaticAssigner.findBestTable` + `findTableCombo` (jusqu'à 3 tables même zone). `vitest run` 2474/2474. commit a173aadc6 |
+| 2026-08-30 | LOT I (P1) | Claude Code | Test E2E `src/__tests__/restaurant/golden-path.test.ts` (3 tests) + invariants INV-26 (source vérité unique), INV-27 (bus cohérent), INV-28 (équilibre journal), INV-29 (fail-closed tenant), INV-30 (state machine table) ajoutés à invariants.test.ts (30/30 verts). `vitest run` 2477/2477. commit 3e98ae698 |
