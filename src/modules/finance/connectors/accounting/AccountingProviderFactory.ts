@@ -1,14 +1,21 @@
 import type { IAccountingProvider } from './types';
 import { PennylaneProvider } from './providers/PennylaneProvider';
 
-const PROVIDER_REGISTRY: Record<string, () => IAccountingProvider> = {
-    pennylane: () => new PennylaneProvider(),
+const PROVIDER_REGISTRY: Record<string, (credentials?: Record<string, string>) => IAccountingProvider> = {
+    pennylane: (creds) => new PennylaneProvider(creds),
 };
 
 export const DEFAULT_ACCOUNTING_PROVIDER = 'pennylane';
 
 export class AccountingProviderFactory {
-    static get(providerId?: string | null): IAccountingProvider {
+    /**
+     * Retourne une instance provider liée aux credentials du tenant.
+     *
+     * @param providerId  identifiant provider ('pennylane', ...)
+     * @param credentials credentials déchiffrés du tenant (api_token, etc.)
+     *                    — si absents, le provider tombera sur env vars pour compat.
+     */
+    static get(providerId?: string | null, credentials?: Record<string, string>): IAccountingProvider {
         const id = (
             providerId ??
             process.env.ACCOUNTING_DEFAULT_PROVIDER ??
@@ -20,7 +27,7 @@ export class AccountingProviderFactory {
                 `Provider comptabilité inconnu : "${id}". Disponibles : ${Object.keys(PROVIDER_REGISTRY).join(', ')}`
             );
         }
-        return factory();
+        return factory(credentials);
     }
 
     static list(): string[] {

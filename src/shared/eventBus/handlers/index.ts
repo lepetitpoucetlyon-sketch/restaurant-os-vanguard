@@ -1,5 +1,6 @@
 // Barrel exports for all NexusEventBus handlers
 export * from './AbsenceUnderstaffingHandler';
+export * from './AccountingSyncHandler';
 export * from './AggregatorMenuSyncHandler';
 export * from './AggregatorStockSyncHandler';
 export * from './AnomalyDetectedHandler';

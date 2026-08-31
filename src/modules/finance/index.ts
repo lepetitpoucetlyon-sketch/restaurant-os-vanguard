@@ -57,6 +57,8 @@ export type { CRM_Record, Customer } from '@nexus/contracts/nexus-internal-mappe
 export * from './types';
 export { FinanceDashboard } from './components/FinanceDashboard';
 export { CollectionService } from './tresorerie/collection/CollectionService';
+export { AccountingProviderFactory } from './connectors/accounting';
+export type { IAccountingProvider, LedgerEntry, ExpenseEntry, AccountingBalance, SyncResult } from './connectors/accounting';
 export { getAmountInMu, buildEntryAmountInCents } from './hooks/useAccounting';
 export { generatePrivatisationContract, type PrivatisationData, type PrivatisationFormule } from './comptabilite/documents/PrivatisationContract';
 export { TreasuryEngine } from './services/TreasuryEngine';

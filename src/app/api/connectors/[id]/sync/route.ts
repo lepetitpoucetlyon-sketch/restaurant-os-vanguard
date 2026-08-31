@@ -32,6 +32,18 @@ const SYNC_HANDLERS: Record<string, (tenantId: string, credentials: Record<strin
     const items = await provider.listPendingOrders(tenantId);
     return items.length;
   },
+  accounting: async (tenantId, credentials) => {
+    // Sync manuel comptable : rapatrie la balance du mois en cours depuis le
+    // provider externe (Pennylane pour l'instant). Le push temps réel est fait
+    // en parallèle par AccountingSyncHandler sur chaque order.paid /
+    // supplier.invoice_processed.
+    const { AccountingProviderFactory } = await import('@/modules/finance');
+    const provider = AccountingProviderFactory.get(credentials._providerId, credentials);
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), 1);
+    const result = await provider.syncPeriod(tenantId, from, now);
+    return result.pushed + result.pulled;
+  },
 };
 
 /**

@@ -1,3 +1,4 @@
+import { registerAccountingSyncHandler } from '../handlers/AccountingSyncHandler';
 import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
 import { registerCompMealHandler } from '../handlers/CompMealHandler';
 import { registerCashCountReconciliationHandler } from '../handlers/CashCountReconciliationHandler';
@@ -12,6 +13,7 @@ import { registerCriticalWasteFiscalHandler } from '../handlers/CriticalWasteFis
 
 export function registerFinanceLedgerHandlers(): Array<() => void> {
   return [
+    registerAccountingSyncHandler(),
     registerPaymentLedgerHandler(),
     registerCompMealHandler(),
     registerCashCountReconciliationHandler(),

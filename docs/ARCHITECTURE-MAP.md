@@ -5,14 +5,14 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3696** · LOC : **347 370**
+- Fichiers `.ts/.tsx` : **3697** · LOC : **347 543**
 - Pages : **87** · Routes API : **211**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1598 |
-| `src/shared/` | 742 |
+| `src/shared/` | 743 |
 | `src/app/` | 455 |
 | `src/verticals/` | 245 |
 | `src/lib/` | 238 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 234 |
+| `shared/eventBus/` | 235 |
 | `shared/components/` | 203 |
 | `shared/nexus/` | 136 |
 | `shared/hooks/` | 51 |
