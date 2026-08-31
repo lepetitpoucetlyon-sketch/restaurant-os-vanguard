@@ -2,6 +2,7 @@
  * POST /api/admin/mcc/system-tenants/reset-demo
  * Réinitialise un tenant DEMO : purge données mutables + re-seed.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

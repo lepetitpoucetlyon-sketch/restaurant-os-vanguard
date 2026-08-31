@@ -71,6 +71,12 @@
         "value": "inter",
         "createdAt": "2026-08-26T11:56:32.281Z",
         "reason": "design system: --font-ui is Inter in src/app/globals.css; matching the app's real UI font"
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-08-31T14:48:56.601Z",
+        "reason": "choix taste-skill : listé explicitement dans soft-skill et redesign-skill comme distinctive modern serif (par opposition à Cormorant Garamond bannie) ; utilisée uniquement pour kickers/hero éditoriaux, jamais body dashboard"
       }
     ]
   }

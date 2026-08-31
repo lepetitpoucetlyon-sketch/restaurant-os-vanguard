@@ -9,6 +9,7 @@
  *
  * Protégé : super_admin minimum.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
  

@@ -1,3 +1,7 @@
+import 'server-only';
+// PUBLIC ROUTE — no auth by design (B2C signup flow).
+// Protection: rate-limit + Zod validation (voir handler POST).
+// Contradiction MCC-only à vérifier périodiquement selon décision produit.
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';

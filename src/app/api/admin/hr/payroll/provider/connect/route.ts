@@ -9,6 +9,7 @@
  * - Persiste dans tenants/{id}/settings/payroll si ok
  */
 import 'server-only';
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { PayrollConnectorFactory } from '@/modules/human';

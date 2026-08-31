@@ -6,6 +6,7 @@
  * Réutilise la logique de /api/widget/availability (même source Nexus : tables + reservations).
  */
 import 'server-only';
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 

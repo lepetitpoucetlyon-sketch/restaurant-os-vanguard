@@ -16,6 +16,7 @@
  *   L'IA ne fait jamais que proposer — seul un opérateur mcc_support décide.
  *   Protégé : mcc_support.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

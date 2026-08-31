@@ -17,6 +17,7 @@
  *
  * Protégé : mcc_super_admin.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

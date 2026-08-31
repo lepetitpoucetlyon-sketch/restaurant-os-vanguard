@@ -1,3 +1,4 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

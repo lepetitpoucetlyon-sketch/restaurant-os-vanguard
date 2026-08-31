@@ -9,6 +9,7 @@
  * Filtre les sites de la flotte où tenantId/key correspond aux tenants
  * dont tenantConfig.metadata.ownerId === ownerId.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

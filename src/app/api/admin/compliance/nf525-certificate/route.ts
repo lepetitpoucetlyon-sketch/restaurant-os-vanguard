@@ -16,6 +16,7 @@
  *
  * Protégé : mcc_support minimum.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

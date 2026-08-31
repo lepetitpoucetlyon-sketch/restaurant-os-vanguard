@@ -13,6 +13,7 @@
  *
  * Protégé : requireTenantAdmin pour GET, requireTenantUser pour POST (pixel tracking).
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

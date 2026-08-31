@@ -9,6 +9,7 @@
  *   step 2 → 3 (J+14) : verrouillage, billing.status = 'LOCKED', licenceStatus = 'LOCKED'
  */
 import 'server-only';
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';

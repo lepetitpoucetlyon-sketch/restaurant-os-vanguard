@@ -1,3 +1,4 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { ReviewProviderFactory } from '@/modules/commerce';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

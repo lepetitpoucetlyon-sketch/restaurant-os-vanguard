@@ -7,6 +7,7 @@
  * Protégé : admin/manager du tenant uniquement (claims Firebase).
  * Le tenantId vient exclusivement du token — jamais du body.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';

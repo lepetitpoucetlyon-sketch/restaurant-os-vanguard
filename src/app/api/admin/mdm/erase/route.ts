@@ -6,6 +6,7 @@
  *
  * La confirmation textuelle côté serveur empêche les appels accidentels/automatisés.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient } from '@/lib/MosyleClient';

@@ -6,6 +6,7 @@
  * Protégé : manager / directeur minimum.
  */
 import 'server-only';
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { MergePayrollClient } from '@/modules/human';

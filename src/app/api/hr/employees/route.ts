@@ -15,6 +15,7 @@
  *
  * Protégé : requireTenantAdmin.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';

@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-imports -- server-only factory */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { ReservationProviderFactory } from '@/modules/ops/connectors/reservations';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

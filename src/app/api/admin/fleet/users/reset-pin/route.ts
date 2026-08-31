@@ -8,6 +8,7 @@
  * Protégé : super_admin / super_admin uniquement.
  * Le nouveau PIN temporaire (6 chiffres) est hashé avant écriture — jamais stocké en clair.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

@@ -13,6 +13,7 @@
  * ADR-014 chantier 4 — Export forensique.
  */
 import 'server-only';
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

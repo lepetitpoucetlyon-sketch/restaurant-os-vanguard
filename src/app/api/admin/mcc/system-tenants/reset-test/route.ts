@@ -2,6 +2,7 @@
  * POST /api/admin/mcc/system-tenants/reset-test
  * Réinitialise un tenant TEST : purge toutes collections + re-seed depuis DNA REFERENCE.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

@@ -7,6 +7,7 @@
  * Protégé : super_admin / super_admin uniquement.
  * Met à jour Firestore ET les Custom Claims Firebase Auth.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

@@ -14,6 +14,7 @@
  * Returns : { url: string }
  * Errors  : 503 si STRIPE_SECRET_KEY absent ou si le tenant n'a pas de client Stripe.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';

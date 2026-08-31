@@ -14,6 +14,7 @@
  * IMPORTANT NF525 : journalEntries et fiscalSeals ne sont JAMAIS purgés.
  * Protégé : super_admin.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

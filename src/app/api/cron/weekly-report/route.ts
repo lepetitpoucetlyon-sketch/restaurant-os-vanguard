@@ -1,3 +1,4 @@
+import 'server-only';
 // Vercel Cron: schedule: "0 8 * * 1" (chaque lundi à 8h)
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';

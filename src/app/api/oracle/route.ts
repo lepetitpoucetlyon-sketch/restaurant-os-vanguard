@@ -1,7 +1,9 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { LLMManager, AI_MODELS } from '@/modules/intelligence';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { ensureServerNexus } from '@/lib/nexus/serverNexus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { sovereignQuery } from '@/modules/intelligence';
@@ -47,6 +49,14 @@ export async function POST(req: NextRequest) {
     // Le RBAC granulaire est délégué au Sovereign RAG + niveau numérique universel.
     const caller = await requireTenantUser(req);
     if (isDenied(caller)) return caller;
+
+    // P1-B (audit sécurité API 2026-08-31) : rate-limit anti-flood LLM.
+    // 60 req/min/utilisateur — protège la facture Gemini/Claude d'un
+    // employé authentifié qui aurait un script en boucle.
+    const rl = await getRateLimiter().check(`oracle:${caller.tenantId}:${caller.uid}`, 60, 60_000);
+    if (!rl.allowed) {
+        return NextResponse.json({ error: 'Trop de requêtes — réessayez dans 1 min.' }, { status: 429 });
+    }
 
     // Employé suspendu/inactif : JWT valide mais accès révoqué dans Nexus.
     const active = await isEmployeeActive(caller.tenantId, caller.uid);

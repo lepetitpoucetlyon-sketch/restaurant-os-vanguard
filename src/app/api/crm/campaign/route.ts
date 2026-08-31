@@ -1,7 +1,9 @@
+import 'server-only';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
 import { requireTenantAdmin, isDenied } from "@/lib/server/adminAuthGuard";
+import { getRateLimiter } from "@/infrastructure/services/rate-limiter";
 import { logger } from "@/lib/logger";
 
 // NOTE: Set RESEND_API_KEY and RESEND_FROM_EMAIL in .env.local to enable real sends.
@@ -59,6 +61,13 @@ async function getCustomersForSegment(
 export async function POST(request: NextRequest) {
   const caller = await requireTenantAdmin(request);
   if (isDenied(caller)) return caller;
+
+  // P1-B : rate-limit anti-spam email (envoi masse via Resend, coûteux + réputation).
+  // 5 campagnes/heure/tenant — un admin qui triple-clique n'envoie pas 3 campagnes.
+  const rl = await getRateLimiter().check(`crm-campaign:${caller.tenantId}`, 5, 60 * 60 * 1000);
+  if (!rl.allowed) {
+    return NextResponse.json({ success: false, message: "Trop de campagnes envoyées — réessayez dans 1h." }, { status: 429 });
+  }
 
   try {
     const json = await request.json();

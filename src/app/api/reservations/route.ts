@@ -17,6 +17,7 @@
  *   - jamais de cross-tenant : tenantId TOUJOURS depuis le token
  *   - statuts valides : 'pending' | 'confirmed' | 'arrived' | 'completed' | 'cancelled' | 'no_show'
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';

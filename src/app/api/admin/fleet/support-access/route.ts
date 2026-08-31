@@ -13,6 +13,7 @@
  *
  * Protégé : super_admin / super_admin pour request/revoke/status.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

@@ -14,6 +14,7 @@
  * Les toggles sont stockés dans tenants/{tenantId}/tenantConfig.aiModules.{key} = boolean
  * Protégé : mcc_support pour GET, super_admin pour POST.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

@@ -1,3 +1,4 @@
+import 'server-only';
 import { NextResponse } from "next/server";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { TenantRBACConfigSchema } from "@/modules/human";

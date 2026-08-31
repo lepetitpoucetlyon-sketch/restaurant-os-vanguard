@@ -3,6 +3,7 @@
  * Promotion TEST → REFERENCE pour une verticale donnée.
  * Server-only : lit depuis _test_*, écrit vers _ref_*.
  */
+import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';

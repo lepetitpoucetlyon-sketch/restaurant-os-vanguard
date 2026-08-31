@@ -1,3 +1,4 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';

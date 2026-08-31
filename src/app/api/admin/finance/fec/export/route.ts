@@ -1,3 +1,4 @@
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { FECGenerator } from '@/modules/finance';
 import { DocumentVault } from '@/lib/vault';

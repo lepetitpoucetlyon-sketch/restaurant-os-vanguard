@@ -4,6 +4,7 @@
  * Auth : super_admin minimum.
  * Fallback : retourne des appareils mock si MOSYLE_API_KEY est absent.
  */
+import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { MosyleClient, type MosyleDevice } from '@/lib/MosyleClient';

@@ -1,3 +1,4 @@
+import 'server-only';
 import { FiscalSealer } from "@/modules/finance";
 /**
  * Acompte privatisation/groupe — res-14

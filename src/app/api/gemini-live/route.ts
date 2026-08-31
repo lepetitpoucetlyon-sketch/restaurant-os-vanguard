@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 
 /**
  * POST /api/gemini-live
@@ -10,6 +11,13 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 export async function POST(req: NextRequest) {
     const caller = await requireTenantAdmin(req);
     if (isDenied(caller)) return caller;
+
+    // P1-B (audit sécurité API 2026-08-31) : rate-limit sessions Gemini Live.
+    // 10 sessions/heure/utilisateur — protège la facture WebRTC LLM.
+    const rl = await getRateLimiter().check(`gemini-live:${caller.tenantId}:${caller.uid}`, 10, 60 * 60 * 1000);
+    if (!rl.allowed) {
+        return NextResponse.json({ error: 'Trop de sessions — réessayez dans 1h.' }, { status: 429 });
+    }
 
     const body = await req.json().catch(() => ({}));
     const user = body.user ?? {};

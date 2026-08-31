@@ -2,6 +2,7 @@
  * GET & POST /api/tenant/franchise/transfers
  * Gestion et exécution des transferts de stock inter-sites.
  */
+import 'server-only';
 
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';

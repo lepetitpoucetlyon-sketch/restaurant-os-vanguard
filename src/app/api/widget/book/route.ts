@@ -1,3 +1,6 @@
+import 'server-only';
+// PUBLIC ROUTE — no auth by design (widget de réservation client).
+// Protection: rate-limit 10/h/IP + Zod strict + tenantId contrôlé côté widget.
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
