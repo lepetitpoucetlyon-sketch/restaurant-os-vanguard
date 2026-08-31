@@ -10,15 +10,16 @@
 import 'server-only';
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 
-interface ApproveRequest {
-    requestId: string;
-    decision: 'APPROVE' | 'DENY';
-}
+const SupportAccessSchema = z.object({
+    requestId: z.string().min(1).max(120),
+    decision: z.enum(['APPROVE', 'DENY']),
+});
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
     const caller = await requireTenantAdmin(req);
@@ -26,17 +27,14 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 
     const { tenantId } = caller;
 
-    let body: ApproveRequest;
-    try {
-        body = await req.json() as ApproveRequest;
-    } catch {
-        return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    const parsed = SupportAccessSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+        return NextResponse.json(
+            { error: 'Payload invalide', details: parsed.error.flatten() },
+            { status: 400 },
+        );
     }
-
-    const { requestId, decision } = body;
-    if (!requestId || !decision) {
-        return NextResponse.json({ error: 'requestId et decision sont requis' }, { status: 400 });
-    }
+    const { requestId, decision } = parsed.data;
 
     const reqPath = `tenants/${tenantId}/supportRequests/${requestId}`;
     const supportReq = await Nexus.adapter.get(reqPath) as {

@@ -1,10 +1,16 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { createHash } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
+
+const CreateKeySchema = z.object({
+  name: z.string().min(1).max(120),
+  permissions: z.array(z.string().max(80)).max(40).optional(),
+});
 
 interface StoredApiKey {
   id: string;
@@ -54,10 +60,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller;
 
-  const body = await req.json().catch(() => null) as { name?: string; permissions?: string[] } | null;
-  if (!body?.name?.trim()) {
-    return NextResponse.json({ error: 'name requis' }, { status: 400 });
+  const parsed = CreateKeySchema.safeParse(await req.json().catch(() => ({})));
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Payload invalide', details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
+  const { name, permissions = [] } = parsed.data;
 
   const key = generateApiKey(tenantId);
   const keyHash = hashKey(key);
@@ -69,8 +79,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     id,
     keyHash,
     keyPrefix,
-    name: body.name.trim(),
-    permissions: body.permissions ?? [],
+    name: name.trim(),
+    permissions,
     createdAt: now,
     createdBy: caller.uid,
     revokedAt: null,
@@ -80,7 +90,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   logger.info(`[api-keys] Created ${id} for tenant ${tenantId} by ${caller.uid}`);
 
   return NextResponse.json(
-    { key, keyPrefix, id, name: body.name.trim(), permissions: body.permissions ?? [], createdAt: now },
+    { key, keyPrefix, id, name: name.trim(), permissions, createdAt: now },
     { status: 201 },
   );
 }
