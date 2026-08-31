@@ -5,6 +5,45 @@
 > Scope : verticale `restaurant` (référence produit) + verticale `custom` (canevas vierge)
 > Cibles : mobile (PWA), tablette (POS/KDS), desktop (back-office), kiosk
 
+## 🟢 Statut exécution (session 2026-08-31)
+
+**Phases livrées** — commits `d41bded56` (43 fichiers, 321+/224-) + `56c1b624a` (17 fichiers, 49+/38-).
+
+| Phase | Statut | Détail |
+|---|---|---|
+| **1. Typographie** | ✅ | Inter → Outfit (next/font/google, aucun `npm install`) ; Cormorant Garamond → Instrument Serif ; propagé aux 9 verticales + settings.defaults ; alias `--font-inter` conservé pour compat |
+| **2. Palette AI-purple purge** | ✅ | `#000000` → `#1a1a1a` ; `#6366f1` status-info → `#0ea5e9` ; `#818cf8` dark → `#38bdf8` ; tables/orders/desks/checkin AI-purple purgés dans blueprints restaurant, custom, coworking, hotel ; ombres teintées or |
+| **3. `h-screen` → `min-h-[100dvh]`** | ✅ | 33 fichiers migrés (sidebar sticky légitime conservée) |
+| **4a. Emojis marketing/legal** | ✅ | HomeContent, signup success, legal/nf525, legal/security purgés (0 emoji) — pages MCC internes intactes |
+| **4b. Icônes Phosphor** | ⏸ Différée | Lucide gardé (87 fichiers) — migration Phosphor = chantier séparé, refusé sans install |
+| **4c. Spinner** | ⏸ Différée | Skeleton.tsx (192 l.) déjà existant, non-remplacement pour éviter régressions |
+| **5. Layout marketing** | ✅ | HomeContent réécrite : hero split asymétrique + kicker + device mockup doppelrand + KPI tabular ; features bento asymétrique 5-7/4-4-4/12 ; verticales grille sobre numérotée ; pricing plat off-black ; final CTA italique |
+| **6. Motion** | ✅ partiel | `ease-in-out` purgé de shared/components + app/(admin) (0 résiduel) ; cubic-bezier(0.16,1,0.3,1) systématisé sur Card/StatCard/PremiumCard/GoldSwitch |
+
+**Ground truth Loi 7 (mesuré en session)** :
+
+```
+npx tsc --noEmit                    → 0 erreur
+h-screen restants                   → 1 (DesktopSidebar sticky top-0)
+Inter en tokens (code)              → 0
+Cormorant Garamond en tokens (code) → 3 (presets optionnels gastronomique/palace/zen — non défauts)
+#6366f1 / #6366F1 en code           → 0
+#8B5CF6 en code                     → 2 (presets.ts optionnels premium/indigo — non défauts)
+#000000 en code                     → 0
+Emojis dans 4 pages marketing/legal → 0
+ease-in-out dans src/app + src/shared → 0
+```
+
+**Verticale custom** : palette neutre zinc/graphite `#18181B` / `#27272A` / `#3F3F46` — le canevas vierge démarre sobre premium, prêt à recevoir la charte tenant via Branding Plus sans imposer aucune couleur "générique SaaS". Fonts alignées sur restaurant pour cohérence inter-verticales.
+
+**Reste à faire (hors périmètre de cette session)** :
+- Phase 4b : migration Lucide → Phosphor (87 fichiers, requiert install `@phosphor-icons/react`)
+- Phase 4c : purge Spinner circulaire → skeleton dans LoadingState/AdaptiveActionHub
+- Phase 5.6 : POS 7 modals → slide-over panels (chantier UX dédié, non-trivial)
+- Grain/noise overlay optionnel (`layout.tsx` composant `GrainOverlay`)
+- `tabular-nums` systématique sur composants numériques
+- `text-wrap: balance` sur PageShell (le style inline est fait sur HomeContent)
+
 ---
 
 ## 1. Diagnostic — État actuel vs critères taste-skill
