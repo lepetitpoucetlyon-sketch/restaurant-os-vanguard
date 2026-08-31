@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePageSetting, SettingsGearButton } from "@/shared/components/settings/ContextualSettings";
 import { useIntelligence } from '../../../providers/hooks/catalogHooks';
 import { useNexusFleet } from "@/shared/providers/fleet/NexusFleetProvider";
+import { ActionGuard } from '@/shared/components/rbac/ActionGuard';
 import { formatMu } from "@/lib/formatters";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { useIsMobile } from "@/shared/hooks/useIsMobile";
@@ -219,6 +220,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                 </FiscalReceiptSealZone>
 
                 {splitBillEnabled && (
+                    <ActionGuard page="pos" action="split_payment" disabledMode="disable" disabledReason="Split — réservé au serveur ou plus">
                     <button
                         onClick={onSplitBill}
                         disabled={items.length === 0}
@@ -227,6 +229,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                         <Users className="w-3.5 h-3.5" />
                         <span>{t('pos.split_bill', "Partager l'addition")}</span>
                     </button>
+                    </ActionGuard>
                 )}
 
                 <div className="grid grid-cols-2 gap-2.5 pt-1">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useActionAccess } from '@/shared/hooks/useActionAccess';
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { format } from "date-fns";
@@ -106,12 +107,16 @@ export function useReservationsPage() {
     }, [terraceClosed, tenantId]);
 
     const handleMarkNoShow = useCallback(async (id: string) => {
+        if (!canMarkNoShow) { toast.error("Marquer no-show — rôle insuffisant"); return; }
         try {
             await recordNoShow(id, reservations, customers, tenantId, updateReservation);
             toast.success("No-show enregistré");
         } catch { toast.error("Erreur lors de l'enregistrement du no-show"); }
     }, [reservations, customers, tenantId, updateReservation]);
 
+    const canCancelResa = useActionAccess('reservations', 'cancel_reservation');
+    const canMarkNoShow = useActionAccess('reservations', 'mark_no_show');
+    const canCreateGroup = useActionAccess('reservations', 'create_group');
     const handleCancelReservation = useCallback(async (id: string) => {
         if (!cancelResPerm.allowed) { toast.error("Permission insuffisante pour annuler une réservation"); return; }
         if (cancelResPerm.requiresPin) {
@@ -197,6 +202,7 @@ export function useReservationsPage() {
     }, [updateReservation, tenantId]);
 
     const handleCreateGroup = useCallback(async (formData: GroupFormData) => {
+        if (!canCreateGroup) { toast.error("Création de groupe — réservée au manager+"); return; }
         try {
             const arr = new Uint32Array(1);
             crypto.getRandomValues(arr);

@@ -5,16 +5,16 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3694** · LOC : **346 793**
+- Fichiers `.ts/.tsx` : **3690** · LOC : **346 603**
 - Pages : **86** · Routes API : **211**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1593 |
-| `src/shared/` | 745 |
+| `src/shared/` | 742 |
 | `src/app/` | 454 |
-| `src/verticals/` | 246 |
+| `src/verticals/` | 245 |
 | `src/lib/` | 238 |
 | `src/infrastructure/` | 46 |
 | `src/kernel/` | 38 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 237 |
+| `shared/eventBus/` | 234 |
 | `shared/components/` | 203 |
 | `shared/nexus/` | 136 |
 | `shared/hooks/` | 51 |
@@ -92,5 +92,5 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/__tests__/architecture/invariants.test.ts` | 542 |
 | `src/config/navConfig.ts` | 528 |
-| `src/shared/eventBus/events/ops.events.ts` | 488 |
+| `src/shared/eventBus/events/ops.events.ts` | 482 |
 | `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 478 |

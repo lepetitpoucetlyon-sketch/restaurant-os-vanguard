@@ -35,7 +35,6 @@ vi.mock('@/lib/shared-kernel', () => ({
 import { registerPaymentLedgerHandler } from '@/shared/eventBus/handlers/PaymentLedgerHandler';
 import { registerTableAutoReleaseHandler } from '@/shared/eventBus/handlers/TableAutoReleaseHandler';
 import { registerNoShowTableReleaseHandler } from '@/shared/eventBus/handlers/NoShowTableReleaseHandler';
-import { registerKDSReadyHandler } from '@/shared/eventBus/handlers/KDSReadyHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -215,27 +214,5 @@ describe('NoShowTableReleaseHandler', () => {
 });
 
 // ─── KDSReadyHandler ──────────────────────────────────────────────────────────
-
-describe('KDSReadyHandler', () => {
-  beforeEach(() => {
-    mockGet.mockClear();
-    mockSet.mockClear();
-    mockUpdate.mockClear();
-    mockEmit.mockClear();
-    mockSendToRole.mockClear();
-    registerKDSReadyHandler();
-    mockEmit.mockResolvedValue(undefined);
-  });
-
-  it('émet notification.created lors de kds.item_done', async () => {
-    await capturedHandlers['kds.item_done']({ tenantId: 'T', orderId: 'ord-1', itemId: 'item-1' });
-
-    expect(mockEmit).toHaveBeenCalledWith(
-      'notification.created',
-      expect.objectContaining({
-        tenantId: 'T',
-        title: expect.stringMatching(/prêt/i),
-      }),
-    );
-  });
-});
+// Handler supprimé (audit LOGIQUE MÉTIER 2026-08-30 P1) : kds.item_done
+// n'était jamais émis, ce handler était mort. Tests retirés en même temps.

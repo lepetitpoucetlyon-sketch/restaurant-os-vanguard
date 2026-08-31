@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import {
-  RestaurantOpsAdapter,
   RestaurantFinanceAdapter,
   RestaurantLogisticsAdapter,
   RestaurantComplianceAdapter,
@@ -17,18 +16,7 @@ describe('Restaurant Vertical Adapters (9 Adapters)', () => {
     vi.restoreAllMocks();
   });
 
-  it('RestaurantOpsAdapter emits ops events correctly', () => {
-    const emitSpy = vi.spyOn(NexusEventBus, 'emit').mockImplementation(async () => {});
-    const emitDurableSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(async () => {});
-
-    RestaurantOpsAdapter.emitOrderPlaced({ tenantId: 't1', orderId: 'o1', totalInMicrounits: 1000 });
-    expect(emitDurableSpy).toHaveBeenCalledWith('ops.order_notification', { tenantId: 't1', orderId: 'o1', totalInMicrounits: 1000 });
-
-    RestaurantOpsAdapter.emitTableReleased({ tenantId: 't1', tableId: 'tbl1' });
-    expect(emitSpy).toHaveBeenCalledWith('table.released', { v: 1, tenantId: 't1', tableId: 'tbl1' });
-  });
-
-  it('RestaurantFinanceAdapter emits finance events correctly', () => {
+    it('RestaurantFinanceAdapter emits finance events correctly', () => {
     const emitDurableSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(async () => {});
 
     RestaurantFinanceAdapter.emitOrderFiscalSeal({ tenantId: 't1', orderId: 'o1', totalInMicrounits: 5000, operatorId: 'op1' });

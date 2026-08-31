@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { motion, AnimatePresence } from "framer-motion";
 import { Percent, Tag, Gift, Trash2, X, Check, MessageSquare, Store, ShoppingBag, PackageOpen } from "lucide-react";
 import type { ConsumptionMode } from "@/modules/ops";
@@ -99,6 +100,7 @@ export function CartItemContextMenu({
                         </div>
 
                         {/* Discount */}
+                        <ActionGuard page="pos" action="apply_discount" disabledMode="disable" disabledReason="Remise — réservé au chef de rang ou plus">
                         <div className="mb-5">
                             <p className="text-chip-label-sm text-text-muted mb-3 flex items-center gap-2">
                                 <Percent className="w-3 h-3" />
@@ -154,6 +156,7 @@ export function CartItemContextMenu({
                                 </button>
                             )}
                         </div>
+                        </ActionGuard>
 
                         {/* Note */}
                         <div className="mb-5">

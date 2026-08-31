@@ -33,7 +33,6 @@ vi.mock('@/lib/audit', () => ({
 import { registerStockDeductionHandler } from '@/shared/eventBus/handlers/StockDeductionHandler';
 import { registerStockAlertHandler } from '@/shared/eventBus/handlers/StockAlertHandler';
 import { registerStockReceptionHandler } from '@/shared/eventBus/handlers/StockReceptionHandler';
-import { registerStockTransferHandler } from '@/shared/eventBus/handlers/StockTransferHandler';
 import { registerStockZeroBlockerHandler } from '@/shared/eventBus/handlers/StockZeroBlockerHandler';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -306,53 +305,8 @@ describe('StockReceptionHandler', () => {
 });
 
 // ─── StockTransferHandler ─────────────────────────────────────────────────────
-// Événement réel : 'stock.transferred' (handler utilise fromLocationId/toLocationId comme tenantIds)
-
-describe('StockTransferHandler', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    registerStockTransferHandler();
-    mockUpdate.mockResolvedValue(undefined);
-  });
-
-  it('transfère la quantité de la source vers la destination', async () => {
-    mockGet
-      .mockResolvedValueOnce({ quantity: 100 })
-      .mockResolvedValueOnce({ quantity: 20 });
-
-    await capturedHandlers['stock.transfer']({
-      tenantId: 'tenant-d', transferId: 'tr-1',
-      fromLocationId: 'loc-A', toLocationId: 'loc-B',
-      itemId: 'ing-1', quantity: 30, itemName: 'Vin rouge',
-    });
-
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-A'),
-      expect.objectContaining({ quantity: 70 }),
-    );
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-B'),
-      expect.objectContaining({ quantity: 50 }),
-    );
-  });
-
-  it('ne descend pas sous 0 pour la source', async () => {
-    mockGet
-      .mockResolvedValueOnce({ quantity: 5 })
-      .mockResolvedValueOnce({ quantity: 0 });
-
-    await capturedHandlers['stock.transfer']({
-      tenantId: 'tenant-d', transferId: 'tr-2',
-      fromLocationId: 'loc-A', toLocationId: 'loc-B',
-      itemId: 'ing-2', quantity: 20, itemName: 'Huile',
-    });
-
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.stringContaining('loc-A'),
-      expect.objectContaining({ quantity: 0 }),
-    );
-  });
-});
+// Handler supprimé (audit LOGIQUE MÉTIER 2026-08-30 P1) : stock.transfer
+// n'était jamais émis, ce handler était mort. Tests retirés.
 
 // ─── StockZeroBlockerHandler ──────────────────────────────────────────────────
 // ProductAvailabilityService.flagUnavailable appelle Nexus.adapter.get + update (déjà mockés)

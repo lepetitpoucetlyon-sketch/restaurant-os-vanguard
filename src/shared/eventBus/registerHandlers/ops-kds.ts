@@ -3,7 +3,6 @@ import { registerKdsCourseManagerHandler } from '../handlers/KdsCourseManagerHan
 import { registerKdsPrepTimeAnalyzerHandler } from '../handlers/KdsPrepTimeAnalyzerHandler';
 import { registerKdsPassNotifierHandler } from '../handlers/KdsPassNotifierHandler';
 import { registerKdsPrintFallbackHandler } from '../handlers/KdsPrintFallbackHandler';
-import { registerKDSReadyHandler } from '../handlers/KDSReadyHandler';
 import { registerGroupPrepTasksHandler } from '../handlers/GroupPrepTasksHandler';
 import { registerRecipeChangeKDSHandler } from '../handlers/RecipeChangeKDSHandler';
 import { registerKdsPrepDelayAlertHandler } from '../handlers/KdsPrepDelayAlertHandler';
@@ -19,7 +18,6 @@ export function registerOpsKdsHandlers(): Array<() => void> {
     registerKdsPrepTimeAnalyzerHandler(),
     registerKdsPassNotifierHandler(),
     registerKdsPrintFallbackHandler(),
-    registerKDSReadyHandler(),
     registerGroupPrepTasksHandler(),
     registerRecipeChangeKDSHandler(),
     registerKdsPrepDelayAlertHandler(),

@@ -129,17 +129,6 @@ export interface OPSEvents {
     itemName: string;
   };
 
-  'stock.transfer': {
-    v: 1;
-    isSimulation?: boolean;
-    tenantId: string;
-    fromLocationId: string;
-    toLocationId: string;
-    itemId: string;
-    quantity: number;
-    operatorId: string;
-  };
-
   'inventory.physical': {
     v: 1;
     isSimulation?: boolean;
@@ -173,6 +162,13 @@ export interface OPSEvents {
     orderId: string;
     itemId: string;
     operatorId?: string;
+  };
+
+  'table.cleaned': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    tableId: string;
   };
 
   'kds.item_done': {
@@ -235,8 +231,6 @@ export interface OPSEvents {
   'inventory.deducted': { tenantId: string; orderId: string; lines: { stockItemId: string; quantity: number }[] };
 
   // ── Notifications ops ─────────────────────────────────────────────────────
-  'ops.order_notification': { tenantId: string; orderId: string; tableId?: string; totalInMicrounits: number };
-
   // ── KDS enrichi ───────────────────────────────────────────────────────────
   'kds.course_passed': { tenantId: string; orderId: string; courseId: string };
 

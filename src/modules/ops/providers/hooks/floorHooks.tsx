@@ -1,3 +1,4 @@
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { useCallback, useMemo } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { OperationalIdentity, SovereignNode, SovereignField } from "@/shared/nexus/contracts";
@@ -71,7 +72,15 @@ export const useOperationalNodes = () => {
   const markTableCleaned = useCallback(async (id: string) => {
     await updateNode(id, { status: 'cleaning' } as Partial<SovereignNode>);
     await updateNode(id, { status: 'free' } as Partial<SovereignNode>);
-  }, [updateNode]);
+    // AUDIT P1-A (2026-08-30) : émettre table.cleaned pour signaler la fin
+    // de rotation aux consommateurs analytics/frontdesk (chronomètre net
+    // de nettoyage vs table.released qui borne le service payant).
+    await NexusEventBus.emitDurable('table.cleaned', {
+      v: 1,
+      tenantId,
+      tableId: id,
+    });
+  }, [updateNode, tenantId]);
 
   const addNode = useCallback(async (data: Partial<SovereignNode>) => {
     const sanitized = sanitizeToSovereign(data);

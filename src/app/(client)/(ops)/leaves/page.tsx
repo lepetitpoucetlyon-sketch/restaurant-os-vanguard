@@ -1,5 +1,6 @@
 'use client';
 
+import { useActionAccess } from '@/shared/hooks/useActionAccess';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -67,7 +68,9 @@ function LeavesPage() {
         );
     }
 
+    const canApproveLeaves = useActionAccess('staff', 'approve_leaves');
     const handleApprove = async (id: string) => {
+        if (!canApproveLeaves) { console.warn('[RBAC] approve_leaves refused for current role'); return; }
         try {
             await approveLeaveRequest(id);
         } catch (error) {

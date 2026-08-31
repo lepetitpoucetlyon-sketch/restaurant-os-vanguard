@@ -18,6 +18,8 @@ import { logger } from "@/lib/axiom";
 import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 import { SovereignStorage } from "@/shared/services/SovereignStorage";
 import { PageSettingsSchema } from "@/shared/schemas/ui";
+import { useAuth } from "@/shared/providers/NexusCoreContext";
+import type { PermissionRole } from "@nexus/contracts/permissions.types";
 
 
 // ============ CONTEXT & PROVIDER ============
@@ -37,6 +39,7 @@ interface ContextualSettingsContextType {
 const ContextualSettingsContext = createContext<ContextualSettingsContextType | undefined>(undefined);
 
 export function ContextualSettingsProvider({ children }: { children: ReactNode }) {
+    const { currentUser } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState<PageKey | null>(null);
     const [allSettings, setAllSettings] = useState<Record<string, SovereignData>>(() => {
@@ -72,9 +75,19 @@ export function ContextualSettingsProvider({ children }: { children: ReactNode }
         return PAGE_SETTINGS[page];
     };
 
-    const canAccessSetting = (_setting: PageSettingConfig) => {
-        // Simplified for now - in a real app, check user permissions
-        return true;
+    // P0-α FIX (audit LOGIQUE MÉTIER 2026-08-30) : le champ `roles:` de chaque
+    // PageSettingConfig doit être ENFORCÉ. AVANT : return true toujours →
+    // n'importe quel utilisateur pouvait voir/modifier des réglages
+    // `roles: ['admin']` (ca_target, split_bill_enabled, etc.).
+    // MAINTENANT : lecture du rôle courant via useAuth. Un setting sans
+    // `roles` déclaré reste ouvert (défaut permissif). admin et
+    // mcc_super_admin ont bypass, comme dans usePageAccess.
+    const canAccessSetting = (setting: PageSettingConfig) => {
+        if (!currentUser) return false;
+        if (currentUser.role === 'admin' || currentUser.role === 'mcc_super_admin') return true;
+        const declaredRoles = (setting as { roles?: PermissionRole[] }).roles;
+        if (!declaredRoles || declaredRoles.length === 0) return true;
+        return declaredRoles.includes(currentUser.role as PermissionRole);
     };
 
     return (
