@@ -59,6 +59,9 @@ export { FinanceDashboard } from './components/FinanceDashboard';
 export { CollectionService } from './tresorerie/collection/CollectionService';
 export { AccountingProviderFactory } from './connectors/accounting';
 export type { IAccountingProvider, LedgerEntry, ExpenseEntry, AccountingBalance, SyncResult } from './connectors/accounting';
+
+// E-facturation Factur-X (obligation FR sept. 2026) — extrait antigravity §7.3
+export * from './comptabilite/einvoicing';
 export { getAmountInMu, buildEntryAmountInCents } from './hooks/useAccounting';
 export { generatePrivatisationContract, type PrivatisationData, type PrivatisationFormule } from './comptabilite/documents/PrivatisationContract';
 export { TreasuryEngine } from './services/TreasuryEngine';

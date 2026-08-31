@@ -235,4 +235,92 @@ export interface FINANCEEvents {
   'finance.cash_pool_balanced': { v:1; groupTenantId: string; fromTenantId: string; toTenantId: string; transferAmountInMicrounits: number; balancedAt: number };
 
   'finance.smart_tip_distributed': { v:1; tenantId: string; periodLabel: string; totalPoolInMicrounits: number; beneficiaryCount: number; distributedAt: number };
+
+  // ── E-facturation Factur-X (obligation FR sept. 2026) ─────────────────────
+  // Extraits de agent/antigravity-exec §7.3, câblés sur main 2026-08-31.
+
+  'einvoice.outbound_emitted': {
+    v: 1;
+    tenantId: string;
+    internalRef: string;
+    providerInvoiceId: string;
+    invoiceNumber: string;
+    buyerSiret: string;
+    totalHTInMicrounits: number;
+    totalTTCInMicrounits: number;
+    clientType?: string;
+  };
+
+  'einvoice.outbound_status_updated': {
+    v: 1;
+    tenantId: string;
+    internalRef: string;
+    providerInvoiceId: string;
+    invoiceNumber: string;
+    newStatus: string;
+    totalTTCInMicrounits: number;
+  };
+
+  'einvoice.validated': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    validatedBy: string;
+  };
+
+  'einvoice.approved': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalHTInMicrounits: number;
+    totalTTCInMicrounits: number;
+    dueDate?: string;
+    supplierId?: string;
+    supplierName?: string;
+    approvedBy?: string;
+  };
+
+  'einvoice.rejected': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    dueDate?: string;
+    supplierId?: string;
+    supplierName?: string;
+    reason?: string;
+    rejectionReason?: string;
+    rejectedBy?: string;
+  };
+
+  'einvoice.paid': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    invoiceNumber: string;
+    totalTTCInMicrounits: number;
+    supplierId: string;
+    paidBy: string;
+    paymentReference: string;
+  };
+
+  'einvoice.goods_received': {
+    v: 1;
+    tenantId: string;
+    invoiceId: string;
+    deliveryNoteId: string;
+    receivedBy: string;
+    items: Array<{
+      productId: string;
+      quantityReceived: number;
+      quantityExpected: number;
+      accepted: boolean;
+      rejectionReason?: string;
+    }>;
+    allAccepted: boolean;
+  };
 }

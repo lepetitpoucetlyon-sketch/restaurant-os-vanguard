@@ -1,17 +1,17 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3697,
-    "loc": 347468,
+    "files": 3716,
+    "loc": 350212,
     "pages": 87,
-    "apiRoutes": 211
+    "apiRoutes": 215
   },
   "layers": {
     "kernel": 38,
     "lib": 238,
-    "shared": 743,
-    "modules": 1598,
-    "app": 455,
+    "shared": 745,
+    "modules": 1610,
+    "app": 460,
     "verticals": 245,
     "infrastructure": 46,
     "store": 24,
@@ -28,10 +28,10 @@
     "contexts": 10,
     "custom-fields": 3,
     "domain": 2,
-    "eventBus": 235,
+    "eventBus": 236,
     "hooks": 51,
     "layout-builder": 3,
-    "nexus": 136,
+    "nexus": 137,
     "plugins": 9,
     "providers": 31,
     "schemas": 7,
@@ -73,7 +73,7 @@
       "barrel": true
     },
     "finance": {
-      "files": 224,
+      "files": 235,
       "barrel": true
     },
     "human": {
@@ -89,7 +89,7 @@
       "barrel": true
     },
     "ops": {
-      "files": 310,
+      "files": 311,
       "barrel": true
     },
     "system": {
@@ -170,7 +170,7 @@
     },
     {
       "file": "src/shared/eventBus/events/ops.events.ts",
-      "loc": 482
+      "loc": 514
     },
     {
       "file": "src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx",

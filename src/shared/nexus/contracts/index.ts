@@ -146,3 +146,4 @@ export type { TenantConfig, OrchestratorSignal, TenantTheme, PlatformVariant } f
 export type { InventoryMovement } from "./logistics";
 export * from "./marketing.types";
 export type { Delivery, DeliveryItem } from "@/modules/logistics/domain/types/delivery";
+export type { ServiceSubject } from "./ServiceSubject";

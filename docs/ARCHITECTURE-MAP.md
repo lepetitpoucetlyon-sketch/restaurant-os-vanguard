@@ -5,15 +5,15 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3697** · LOC : **347 468**
-- Pages : **87** · Routes API : **211**
+- Fichiers `.ts/.tsx` : **3716** · LOC : **350 212**
+- Pages : **87** · Routes API : **215**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1598 |
-| `src/shared/` | 743 |
-| `src/app/` | 455 |
+| `src/modules/` | 1610 |
+| `src/shared/` | 745 |
+| `src/app/` | 460 |
 | `src/verticals/` | 245 |
 | `src/lib/` | 238 |
 | `src/infrastructure/` | 46 |
@@ -35,9 +35,9 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 235 |
+| `shared/eventBus/` | 236 |
 | `shared/components/` | 203 |
-| `shared/nexus/` | 136 |
+| `shared/nexus/` | 137 |
 | `shared/hooks/` | 51 |
 | `shared/providers/` | 31 |
 | `shared/seeds/` | 15 |
@@ -62,8 +62,8 @@
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 348 | ✅ |
-| `ops` | 310 | ✅ |
-| `finance` | 224 | ✅ |
+| `ops` | 311 | ✅ |
+| `finance` | 235 | ✅ |
 | `compliance` | 183 | ✅ |
 | `intelligence` | 170 | ✅ |
 | `logistics` | 149 | ✅ |
@@ -92,5 +92,5 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/__tests__/architecture/invariants.test.ts` | 542 |
 | `src/config/navConfig.ts` | 530 |
-| `src/shared/eventBus/events/ops.events.ts` | 482 |
+| `src/shared/eventBus/events/ops.events.ts` | 514 |
 | `src/modules/commerce/acquisition/onboarding/wizard/OnboardingWizard.tsx` | 478 |

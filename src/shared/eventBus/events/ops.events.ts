@@ -478,4 +478,36 @@ export interface OPSEvents {
   'production.meat_resting_completed': { v:1; tenantId: string; orderId: string; cutName: string; targetRestSeconds: number; completedAt: number };
 
   'ops.rain_plan_switch_executed': { v:1; tenantId: string; activeTerraceTablesCount: number; reassignedToIndoorCount: number; packedTakeawayCount: number; executedAt: number };
+
+  // ── ServiceTicket lifecycle (abstraction multi-verticale §8.1/8.2) ────────
+  // Extraits de agent/antigravity-exec, câblés sur main 2026-08-31.
+
+  'ops.service_ticket_opened': {
+    v: 1;
+    tenantId: string;
+    ticketId: string;
+    resourceId: string | null;
+  };
+
+  'ops.service_ticket_working': {
+    v: 1;
+    tenantId: string;
+    ticketId: string;
+  };
+
+  'ops.service_ticket_closed': {
+    v: 1;
+    tenantId: string;
+    ticketId: string;
+    resourceId: string | null;
+    journalEntryId?: string;
+    totalTTCInMicrounits: number;
+  };
+
+  'ops.service_ticket_cancelled': {
+    v: 1;
+    tenantId: string;
+    ticketId: string;
+    reason: string;
+  };
 }
