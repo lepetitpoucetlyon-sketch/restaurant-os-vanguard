@@ -53,6 +53,7 @@ export const murDeChinePlugin = {
         },
         messages: {
           interModuleImport: "Mur de Chine : Le module '{{source}}' n'a pas le droit d'importer directement depuis le module '{{target}}'. Utilisez le domain/ ou le NexusEventBus.",
+          libToModules: "Loi des couches (ADR-015) : src/lib/ ne dépend pas du métier — import vers '{{target}}' interdit. Sorties : `import type`, contrat neutre kernel/contracts/, ou NexusEventBus. Compteur dédié LIB_TO_MODULES (preflight.sh).",
         },
       },
       create(context) {
@@ -71,6 +72,14 @@ export const murDeChinePlugin = {
           const normalizedFile = currentFile.replace(/\\/g, '/');
 
           if (node.importKind === "type") return;
+          // `import { type A, type B } from '...'` : aucune dépendance à l'exécution.
+          if (
+            node.specifiers &&
+            node.specifiers.length > 0 &&
+            node.specifiers.every((sp) => sp.importKind === "type")
+          ) {
+            return;
+          }
           if (normalizedFile.includes(".test.") || normalizedFile.includes(".spec.")) return;
 
           // Vecteur 1 : inter-module profond (src/modules/A → @/modules/B/deep/path)
@@ -84,6 +93,35 @@ export const murDeChinePlugin = {
                 node,
                 messageId: "interModuleImport",
                 data: { source: currentModule, target: deepMatch[1] },
+              });
+            }
+            return;
+          }
+
+          // Vecteur 3 : ADR-015 — src/lib/ ne dépend pas de src/modules/.
+          //
+          // Avant ce vecteur, aucun fichier de src/lib/ n'était examiné : ni le vecteur 1
+          // (qui exige /src/modules/) ni le vecteur 2 (qui exige /src/shared/hooks/) ne
+          // matchait. La gate affichait 0 parce qu'elle ne regardait pas.
+          //
+          // La règle est stricte — le barrel racine `@/modules/<pilier>` est INTERDIT lui
+          // aussi, y compris en import dynamique. Mesuré le 2026-08-31 : router ces imports
+          // vers les barrels fait passer les cycles madge de 2 à 100 (95 pour les imports
+          // statiques, 3 pour les dynamiques). Les piliers importent lib/ ; lib/ qui importe
+          // un barrel de pilier ferme la boucle. Les chemins profonds actuels ne sont donc
+          // pas de la négligence : ils sont porteurs, ils contournent le barrel.
+          //
+          // La sortie n'est pas une réécriture d'import mais un déplacement de
+          // responsabilité : `import type`, contrat neutre kernel/contracts/, NexusEventBus,
+          // ou relocalisation du composition root (cas de la chaîne NexusSyncService →
+          // NexusSyncBootstrap → pillarSyncRegistry, entièrement logée dans lib/).
+          if (/\/src\/lib\//.test(normalizedFile)) {
+            const libMatch = importPath.match(/^@\/?modules\/([^\/]+)/);
+            if (libMatch) {
+              context.report({
+                node,
+                messageId: "libToModules",
+                data: { target: libMatch[1] },
               });
             }
             return;

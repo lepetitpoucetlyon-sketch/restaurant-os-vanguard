@@ -83,40 +83,63 @@ Principaux fichiers : `sync/pillarSyncRegistry.ts` (6) · `sovereign/firestoreHy
 `ProvisioningEngine.ts` (3) · `nexus/NexusBridge.ts` (2) · `mcc/SystemTenantRegistry.ts` (2) ·
 `cron/ThemisCollectorJob.ts` (2) · `BrandingService.ts` (2).
 
+### Correction 2026-09-01 — la sortie « barrel » n'existe pas
+
+L'amendement de la veille laissait entendre qu'une part de la dette se réglerait en
+routant les imports profonds vers le barrel racine du pilier. **Mesuré, c'est faux, et
+spectaculairement :**
+
+| Arbre | Cycles madge |
+|---|---|
+| baseline (imports profonds actuels) | **2** |
+| les 15 imports profonds routés vers les barrels | **100** (73 cross-piliers, 98 via barrels) |
+| en ne gardant que les réécritures **dynamiques** (`await import(...)`) | **5** |
+| en ne gardant que l'ajout d'un export au barrel | **2** |
+
+Les piliers importent `lib/`. Un fichier de `lib/` qui importe le barrel d'un pilier
+ferme la boucle — **en statique (95 cycles) comme en dynamique (3 cycles)**.
+
+Conséquence directe : le commentaire
+`/* eslint-disable no-restricted-imports -- aggregator: must use deep paths for cycle prevention */`
+en tête de `src/lib/sync/pillarSyncRegistry.ts` **n'est pas de la négligence, c'est de
+l'ingénierie correcte**. Les chemins profonds sont porteurs précisément parce qu'ils
+contournent le barrel. Les « corriger » en surface casse le dépôt.
+
+La règle du vecteur 3 est donc **stricte** : `lib/` n'importe `@/modules/…` à aucune
+profondeur, barrel compris.
+
 ### Décision — quatre sorties, dans cet ordre de préférence
 
-Pour chaque import `lib/ → modules/`, appliquer la première sortie applicable :
+Aucune n'est une réécriture de chemin d'import. Toutes déplacent une responsabilité :
 
-1. **`import type`** — si seul le type est utilisé. Aucun couplage à l'exécution,
-   aucune arête dans le graphe de dépendances. Couvre les 11 déjà convertis et
-   une part du reste. **C'est la sortie par défaut, à tenter en premier.**
-2. **Contrat neutre dans `kernel/contracts/`** — si `lib/` a besoin d'un
-   *comportement* du module. Le module s'enregistre (`StockOracleRegistry`,
-   `IStockOracle`…), `lib/` consomme l'interface. Sortie des registres :
-   `pillarSyncRegistry` doit recevoir ses `*.sync` par inscription, pas les
-   importer nommément.
-3. **NexusEventBus** — si la relation est un effet de bord et non une requête
-   avec retour. `ThemisCollectorJob`, les étapes de provisioning : émettre, ne pas appeler.
-4. **Descendre le service dans `modules/`** — si le fichier de `lib/` est en réalité
-   du métier déguisé. Dernier recours : il déplace le problème plutôt que de le
-   supprimer, et se heurte au hook de collision de session.
+1. **`import type`** — si seul le type est utilisé. Aucune arête à l'exécution, aucun
+   cycle. Déjà appliqué sur 11 imports.
+2. **Contrat neutre dans `kernel/contracts/`** — si `lib/` a besoin d'un *comportement*.
+   Le module s'enregistre, `lib/` consomme l'interface.
+3. **NexusEventBus** — si la relation est un effet de bord sans valeur de retour.
+4. **Relocaliser le composition root** — quand le fichier de `lib/` est un assembleur
+   qui doit légitimement connaître les piliers. C'est le cas de la chaîne
+   `NexusSyncService` → `NexusSyncBootstrap` → `pillarSyncRegistry`, **entièrement logée
+   dans `lib/`** : elle n'a pas sa place sous la loi des couches et doit remonter dans un
+   composition root assumé. C'est un chantier de déplacement, pas une passe de correction.
 
-**Jamais retenu** : exempter `lib/` de la règle, ou élargir `COMPOSITION_ROOT_PATTERNS`.
-Ce serait desserrer une gate — interdit par le §2 ci-dessus.
+**Jamais retenu** : exempter `lib/` de la règle, élargir `COMPOSITION_ROOT_PATTERNS`, ou
+router vers les barrels (cf. la mesure ci-dessus).
 
-### Enforcement à poser
+### Enforcement — posé le 2026-09-01
 
-Avant de faire descendre le compteur, **réparer l'instrument** — sinon on corrige
-à l'aveugle et rien ne garde l'acquis :
+L'instrument est réparé et la dette est instrumentée, sans qu'aucun cliquet existant ne
+bouge :
 
-1. Ajouter au plugin un **vecteur 3** : fichier sous `/src/lib/` important
-   `@/modules/…` (hors `importKind === "type"`) → `error`.
-2. Poser le ratchet à la valeur **mesurée le jour où le vecteur 3 est activé**
-   (attendue autour de 36 = 47 − 11 type-only), puis le faire descendre.
-3. Quand le compteur atteint 0 : rendre la règle bloquante dans `preflight.sh` et
-   re-figer `scripts/verify-gate-integrity.mjs`.
+1. **Vecteur 3 ajouté** au plugin (`eslint-plugins/mur-de-chine.mjs`) : un fichier sous
+   `/src/lib/` important `@/modules/…` (hors `import type`, et hors import dont *tous*
+   les specifiers sont `type`) est une erreur.
+2. **`messageId` distinct** (`libToModules`) : cette dette a son **propre compteur**.
+   `INTER_MODULE_MAX` continue de ne compter que les violations module↔module et **reste
+   à 0**. Instrumenter une dette jamais mesurée n'est pas relever un cliquet — c'est
+   l'inverse, c'est cesser de la cacher.
+3. **`LIB_TO_MODULES_MAX=46`** dans `preflight.sh`, baseline = la valeur mesurée le jour
+   de l'activation. Elle ne peut que descendre ; le script signale explicitement quand il
+   faut l'abaisser.
 
-Le vecteur 3 et la correction sont **deux commits séparés** : le premier fait
-rougir la gate en révélant la dette, le second la résorbe. Poser le ratchet à la
-valeur mesurée entre les deux est la seule manière honnête de ne pas mentir sur
-l'état de départ.
+Quand ce compteur atteint 0, les deux compteurs fusionnent et la règle redevient unique.

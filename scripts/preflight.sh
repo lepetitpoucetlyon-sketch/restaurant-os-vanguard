@@ -98,7 +98,11 @@ FR_HARDCODED_MAX=943         # chaînes FR en dur hors legal & verticals — à 
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
 BARREL_COUNT=$(echo "$ESLINT_FULL" | grep -c "error.*Barrel Contract" || true)
-INTER_MODULE_COUNT=$(echo "$ESLINT_FULL" | grep -c "error.*no-inter-module-imports" || true)
+INTER_MODULE_COUNT=$(echo "$ESLINT_FULL" | grep "no-inter-module-imports" | grep -c "Mur de Chine : Le module" || true)
+# Vecteur 3 (ADR-015) : dette lib/ -> modules/, révélée le 2026-08-31. Compteur DISTINCT :
+# elle n'a jamais été mesurée auparavant (la règle ne regardait pas src/lib/), donc elle
+# ne peut pas remonter le cliquet historique, qui reste à 0 sur son propre périmètre.
+LIB_TO_MODULES_COUNT=$(echo "$ESLINT_FULL" | grep -c "Loi des couches (ADR-015)" || true)
 ESLINT_TOTAL_ERRORS=$(echo "$ESLINT_FULL" | grep "✖" | sed -E 's/.*\(([0-9]+) error.*/\1/' || echo "0")
 ESLINT_TOTAL_WARNINGS=$(echo "$ESLINT_FULL" | grep "✖" | sed -E 's/.*, ([0-9]+) warning.*/\1/' || echo "0")
 
@@ -122,6 +126,21 @@ if [ "$INTER_MODULE_COUNT" -gt "$INTER_MODULE_MAX" ]; then
   exit 1
 else
   ok "ESLint no-inter-module-imports : $INTER_MODULE_COUNT / $INTER_MODULE_MAX — 0 violation"
+fi
+
+# Gate bloquante : lib/ -> modules/ (ADR-015, vecteur 3). Baseline = valeur mesurée le
+# jour de l'activation du vecteur, jamais relevée. Se résorbe par `import type`, contrat
+# neutre kernel/contracts/, NexusEventBus, ou relocalisation du composition root.
+# NE PAS corriger en routant vers les barrels : mesuré, ça fait passer les cycles de 2 a 100.
+LIB_TO_MODULES_MAX=46
+if [ "$LIB_TO_MODULES_COUNT" -gt "$LIB_TO_MODULES_MAX" ]; then
+  fail "ESLint lib->modules : $LIB_TO_MODULES_COUNT > seuil ratchet ($LIB_TO_MODULES_MAX)."
+  echo "$ESLINT_FULL" | grep "Loi des couches (ADR-015)" | head -20
+  exit 1
+elif [ "$LIB_TO_MODULES_COUNT" -lt "$LIB_TO_MODULES_MAX" ]; then
+  ok "ESLint lib->modules : $LIB_TO_MODULES_COUNT < seuil ($LIB_TO_MODULES_MAX) — baisse LIB_TO_MODULES_MAX dans preflight.sh !"
+else
+  ok "ESLint lib->modules : $LIB_TO_MODULES_COUNT / $LIB_TO_MODULES_MAX — stable"
 fi
 
 # Gate bloquante : ratchet microunits (le compteur InCents ne doit jamais remonter)
@@ -302,7 +321,7 @@ echo ""
 echo "  Métriques RÉELLES de cette exécution :"
 echo "   1. TypeScript     — $TSC_ERRORS erreur(s)"
 echo "   2. fetch() nu     — 0 appel non authentifié"
-echo "   3. ESLint         — ${ESLINT_TOTAL_ERRORS:-?} erreurs, ${ESLINT_TOTAL_WARNINGS:-?} warnings (barrel=$BARREL_COUNT/$BARREL_DEBT_MAX, inter-module=$INTER_MODULE_COUNT)"
+echo "   3. ESLint         — ${ESLINT_TOTAL_ERRORS:-?} erreurs, ${ESLINT_TOTAL_WARNINGS:-?} warnings (barrel=$BARREL_COUNT/$BARREL_DEBT_MAX, inter-module=$INTER_MODULE_COUNT, lib->modules=$LIB_TO_MODULES_COUNT/$LIB_TO_MODULES_MAX)"
 echo "   4. Vitest         — $VITEST_PASSED passés, $VITEST_SKIPPED skippés, $VITEST_UNHANDLED unhandled errors"
 echo "   5. Madge          — $MADGE_CYCLES_REAL cycles réels (dont $MADGE_CROSS_PILIER cross-piliers, seuil=$MADGE_CYCLES_MAX)"
 echo "   6. Build prod     — OK"
