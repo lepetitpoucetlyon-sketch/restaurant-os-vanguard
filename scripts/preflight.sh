@@ -92,7 +92,7 @@ DS_OUTSIDE_MAX=0             # écrans fabriquant de l'UI hors design system —
 A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 derniers switchs/pulse fixés à la main (SwitchboardItem role=switch, DebugModeSection role=switch, HermesDashboard aria-label)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=0          # conteneurs cliquables non focalisables — 67→0 : DraggableIngredient fixé via onKeyDown explicite après spread {...listeners} (merger dnd-kit + Enter/Space)
-VERTICAL_STUBS_MAX=21        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8 (mesuré sur .tsx + .ts)
+VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub — 21→0 : tous les 21 écrans métiers implémentés (2026-09-01)
 FR_HARDCODED_MAX=893         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)

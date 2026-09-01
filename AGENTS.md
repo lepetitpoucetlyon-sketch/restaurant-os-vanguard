@@ -139,9 +139,26 @@ l'historique. Une mesure qui écrit dans `src/` n'est plus une mesure.
 
 ---
 
+## Loi 9 — Vitesse d'Itération & Pré-validation ciblée (Fast Dev Loop)
+
+La rigueur des 10 Gates protège le dépôt, mais l'efficacité de développement exige une **boucle de feedback rapide (< 5 s)** pendant les modifications.
+
+### 1. En cours de développement (Interdit d'exécuter la suite complète à chaque modif)
+Pour ne pas saturer le CPU et attendre 100s à chaque micro-édition :
+- **Typecheck rapide** : `npx tsc --noEmit` (~7 s).
+- **Test unitaire ciblé** : `npx vitest run <chemin/test.ts>` (~1-2 s) ou `npx vitest related --changed` (~3 s).
+- **Mesure Last-Mile ciblée** : `node scripts/gate-last-mile.mjs` (~1 s).
+- **Architecture / Graphe** : `sentrux check` (< 1 s) ou `oxlint` (Rust) quand applicable.
+
+### 2. Clôture de lot / Commit / Push (Preflight complet 10/10)
+- Le script lourd `./scripts/preflight.sh` (qui exécute les 2 499 tests Vitest, Madge, et le build Next.js) s'exécute **uniquement avant le `git commit` ou `git push` final**, afin de sceller la preuve légale `.git/preflight-proof` requise par la Loi 3.
+
+---
+
 ## Installation des gardes (une fois, par la personne humaine de préférence)
 ```bash
 git config core.hooksPath .githooks
 chmod +x .githooks/pre-commit
 node scripts/verify-gate-integrity.mjs --freeze   # fige la baseline anti-desserrement
 ```
+
