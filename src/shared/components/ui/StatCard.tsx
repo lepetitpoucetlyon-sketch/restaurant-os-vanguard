@@ -54,7 +54,7 @@ const iconInnerVariants = cva(
 );
 
 const valueVariants = cva(
-  "font-serif font-medium text-text-primary tracking-tight italic group-hover:text-accent transition-colors",
+  "font-serif font-medium text-text-primary tracking-tight italic tabular-nums group-hover:text-accent transition-colors",
   {
     variants: {
       size: {
@@ -69,14 +69,14 @@ const valueVariants = cva(
 );
 
 const labelVariants = cva(
-  "font-black text-text-muted uppercase tracking-[0.2em] mt-1",
+  "font-mono text-[10px] font-medium text-text-muted uppercase tracking-[0.20em] mt-1",
   {
     variants: {
       size: {
-        compact: "text-nano",
-        default: "text-nano",
-        large:   "text-nano",
-        minimal: "text-nano",
+        compact: "text-[9px]",
+        default: "text-[10px]",
+        large:   "text-xs",
+        minimal: "text-[9px]",
       },
     },
     defaultVariants: { size: "default" },

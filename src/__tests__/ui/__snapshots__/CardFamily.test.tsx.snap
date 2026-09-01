@@ -127,12 +127,12 @@ exports[`Card Family — Baseline Snapshot & Rendering Tests > renders StatCard 
   </div>
   <div>
     <p
-      class="font-serif font-medium text-text-primary tracking-tight italic group-hover:text-accent transition-colors text-3xl"
+      class="font-serif font-medium text-text-primary tracking-tight italic tabular-nums group-hover:text-accent transition-colors text-3xl"
     >
       14 500 €
     </p>
     <p
-      class="font-black text-text-muted uppercase tracking-[0.2em] mt-1 text-nano"
+      class="font-mono text-[10px] font-medium text-text-muted uppercase tracking-[0.20em] mt-1 text-[10px]"
     >
       Chiffre d'affaires
     </p>

@@ -66,7 +66,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ y: -4, boxShadow: "0 40px 80px rgba(0,0,0,0.15)" }}
+          whileHover={{ y: -4, boxShadow: "var(--shadow-glow-accent, 0 40px 80px rgba(0,0,0,0.15))" }}
           {...props}
         >
           {children}
