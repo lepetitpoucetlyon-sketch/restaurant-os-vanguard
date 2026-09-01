@@ -21,7 +21,11 @@ echo "🔍 [1/6] TypeScript (sortie brute, sans RTK)…"
 ./node_modules/.bin/tsc --noEmit || fail "TypeScript : erreurs de type."
 
 echo "🧹 [2/6] Barrel Contract (0 toléré)…"
-BARREL=$(./node_modules/.bin/eslint src --format stylish --max-warnings 99999 2>/dev/null | grep -c "Barrel Contract" || true)
+# --cache : contrôle identique, ~36 s → ~3 s à chaud (seuls les fichiers modifiés
+# sont re-lintés). --cache-strategy content : invalidation par hash, pas par mtime
+# (aucun faux cache-hit). Pas de swap vers sentrux : son `no_barrel_violations`
+# délègue les imports profonds inter-modules à ESLint (.sentrux/rules.toml:214).
+BARREL=$(./node_modules/.bin/eslint src --cache --cache-location .eslintcache --cache-strategy content --format stylish --max-warnings 99999 2>/dev/null | grep -c "Barrel Contract" || true)
 [ "${BARREL:-0}" -gt 0 ] && fail "Barrel Contract : ${BARREL} violation(s)."
 
 echo "🔒 [3/6] Intégrité des gates (anti-triche : personne ne desserre une gate)…"

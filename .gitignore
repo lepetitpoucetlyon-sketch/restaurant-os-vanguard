@@ -44,6 +44,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# eslint — cache local (--cache-strategy content), accélère hook + preflight
+.eslintcache
+
 # stitch exports & artifacts
 /exports-stitch/
 *.zip

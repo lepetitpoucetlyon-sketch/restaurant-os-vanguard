@@ -103,8 +103,11 @@ HARDCODED_HEX_MAX=958        # couleurs #hex ET rgba()/rgb() en dur (DESIGNUP Lo
                              # etaient invisibles, et purger l'or des primitives ne bougeait pas le
                              # compteur (797 sur trois releves consecutifs). Motif desormais importe
                              # du lint color-guard (source unique). 958 est la premiere valeur VRAIE.
-# Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
-ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
+# Exécuter eslint UNE SEULE FOIS et capturer la sortie complète.
+# --cache : la sortie est identique (le cache ne saute que la ré-analyse des
+# fichiers inchangés), donc BARREL_COUNT / INTER_MODULE_COUNT / totaux restent
+# exacts. --cache-strategy content = invalidation par hash de contenu.
+ESLINT_FULL=$(npx eslint src/ --cache --cache-location .eslintcache --cache-strategy content --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
 BARREL_COUNT=$(echo "$ESLINT_FULL" | grep -c "error.*Barrel Contract" || true)
 INTER_MODULE_COUNT=$(echo "$ESLINT_FULL" | grep "no-inter-module-imports" | grep -c "Mur de Chine : Le module" || true)
