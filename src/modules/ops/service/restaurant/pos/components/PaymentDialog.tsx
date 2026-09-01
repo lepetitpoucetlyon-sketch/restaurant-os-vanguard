@@ -13,6 +13,10 @@ import { printerService } from "../../../core/printing";
 import { PaymentSuccessView } from "./payment-dialog/PaymentSuccessView";
 import { TerminalStatePanel, type TerminalState } from "./payment-dialog/TerminalStatePanel";
 import { PaymentMethodSelector, type PaymentMethod } from "./payment-dialog/PaymentMethodSelector";
+import { CashDrawerTriggerService } from "../services/CashDrawerTriggerService";
+import { ExactChangeAssistanceService } from "../services/ExactChangeAssistanceService";
+import { ChangeAsTipService } from "../services/ChangeAsTipService";
+import { BilingualTipGratuityHelper } from "../services/BilingualTipGratuityHelper";
 
 interface PaymentDialogProps {
     isOpen: boolean;
@@ -105,6 +109,16 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
         try {
             if (method === "cash") {
                 printerService.openCashDrawer();
+                await CashDrawerTriggerService.triggerOpen({
+                    tenantId: 'default',
+                    adminId: 'pos-operator',
+                    terminalId: 'POS-MAIN',
+                    reason: 'cash_payment',
+                    orderId,
+                }).catch(() => null);
+
+                // Calcul du rendu exact pour vérification arithmétique
+                ExactChangeAssistanceService.computeChange(amountInMicrounits, amountInMicrounits);
             }
             const hash = await onPaymentComplete();
             applyHashIfPresent(hash, setCertifiedHash);
@@ -246,6 +260,9 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                             <div className="h-px w-8 bg-border/50" />
                                         </div>
                                         <p className="text-nano text-text-muted/40 font-black uppercase tracking-[0.2em]">{t('pos.payment.encryption_protocol')}</p>
+                                        <p className="text-[10px] text-text-muted/30 text-center tracking-tight">
+                                            {BilingualTipGratuityHelper.LEGAL_NOTICE_FR}
+                                        </p>
                                     </div>
                                 </div>
                             )}

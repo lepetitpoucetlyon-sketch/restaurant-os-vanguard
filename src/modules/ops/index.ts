@@ -25,6 +25,7 @@ export {
 export { ProductFormModal } from './service/restaurant/pos/components/ProductFormModal';
 export { PaymentDialog } from './service/restaurant/pos/components/PaymentDialog';
 export { SplitBillDialog } from './service/restaurant/pos/components/SplitBillDialog';
+export { CashCounterModal } from './service/restaurant/pos/components/CashCounterModal';
 export { ProductGrid } from './service/restaurant/pos/components/ProductGrid';
 export { Cart } from './service/restaurant/pos/components/Cart';
 export { TableSelector } from './service/restaurant/pos/components/TableSelector';

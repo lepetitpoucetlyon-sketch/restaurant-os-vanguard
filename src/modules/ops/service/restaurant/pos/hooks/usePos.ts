@@ -2,7 +2,7 @@
 
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { useSetAtom } from "jotai";
 import { activeCartAtom } from "../store/orderAtoms";
 import { useOrders } from '../../../../providers/hooks/kitchenHooks';
@@ -16,6 +16,8 @@ import { CartItem, CourseType, SovereignProduct } from "../../../../workflow/eng
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import type { ConsumptionMode } from "../../../../workflow/engine/types";
 import { POSService } from "../domain";
+import { PosIdempotencyGuard } from "../services/PosIdempotencyGuard";
+import { HardenedTouchUiHelper } from "../services/HardenedTouchUiHelper";
 
 // Pure helpers (zéro effets de bord)
 import {
@@ -62,6 +64,7 @@ export function usePOSController() {
     const [tipInMicrounits, setTipInMicrounits] = useState<number>(0);
     const [consumptionMode, setConsumptionMode] = useState<ConsumptionMode>('dine_in');
     const [partialPayments, setPartialPayments] = useState<{ amountInMicrounits: number; guest: number; method?: string }[]>([]);
+    const lastTapRef = useRef<number>(0);
 
     const isLoading = productsLoading || categoriesLoading;
     const resolvedTables = tables ?? [];
@@ -101,6 +104,8 @@ export function usePOSController() {
     }, [showToast]);
 
     const handleUpdateQuantity = useCallback((cartId: string, delta: number) => {
+        if (!HardenedTouchUiHelper.isDebounceAllowed(lastTapRef.current, 150)) return;
+        lastTapRef.current = Date.now();
         setCartItems((prev) => updateItemQuantity(prev, cartId, delta));
     }, []);
 
@@ -159,6 +164,18 @@ export function usePOSController() {
             return;
         }
         try {
+            const cartFingerprint = cartItems.map(i => `${i.productId}:${i.quantity}`).sort().join(',');
+            const idemp = await PosIdempotencyGuard.check({
+                tenantId: activeTenantId,
+                tableId: currentTable.id,
+                operatorId: currentUser?.id ?? "unknown",
+                cartFingerprint,
+            });
+            if (idemp.isDuplicate) {
+                showToast("Commande déjà transmise en cuisine (anti double-envoi)", "error");
+                return;
+            }
+
             await submitKitchenOrder(
                 {
                     tableId: currentTable.id,

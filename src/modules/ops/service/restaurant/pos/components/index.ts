@@ -5,6 +5,7 @@
  */
 
 export * from './Cart';
+export * from './CashCounterModal';
 export * from './PaymentDialog';
 export * from './PosHeader';
 export * from './ProductDetailsDialog';
@@ -13,3 +14,4 @@ export * from './ProductGrid';
 export * from './SplitBillDialog';
 export * from './TableSelector';
 export * from './bar';
+

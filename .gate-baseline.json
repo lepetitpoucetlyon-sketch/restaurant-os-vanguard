@@ -1,6 +1,6 @@
 {
   "_note": "Baseline anti-desserrement (ADR-015 / AGENTS.md). N'AUGMENTE jamais globCount/off ni les ratchets. Re-freeze uniquement en DIMINUANT après avoir corrigé le code.",
-  "hash": "58300a7e0edee3d8",
+  "hash": "3c58076b9a4ce4cc",
   "globCount": 17,
   "off": 2,
   "ratchets": {
@@ -20,6 +20,6 @@
     "a11yKeyboard": 0,
     "verticalStubs": 0,
     "verticalScreensUnwired": 0,
-    "verticalServicesUnwired": 148
+    "verticalServicesUnwired": 145
   }
 }

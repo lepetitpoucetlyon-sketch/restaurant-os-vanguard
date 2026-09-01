@@ -1,5 +1,6 @@
 // components removed from barrel: internal to POS UI pages/panels
 export * from './domain';
+export * from './services';
 export * from './store';
 export * from './hooks';
 

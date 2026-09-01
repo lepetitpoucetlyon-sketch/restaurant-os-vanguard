@@ -10,6 +10,12 @@ import type { CashDrawerSession } from "./cash-drawer/cashDrawerTypes";
 import { parseEuros, eurosToMicrounits } from "./cash-drawer/cashDrawerTypes";
 import { CashDrawerOpenSection } from "./cash-drawer/CashDrawerOpenSection";
 import { CashDrawerCloseSection } from "./cash-drawer/CashDrawerCloseSection";
+import {
+  CashDrawerReconciliationService,
+  BlindCashCloseService,
+  CashDrawerTriggerService,
+  CashCounterModal,
+} from "@/modules/ops";
 
 export type { CashDrawerSession };
 
@@ -39,6 +45,7 @@ export function CashDrawerModal({
   const [actualInput, setActualInput] = useState("");
   const [isClosing, setIsClosing] = useState(false);
   const [closed, setClosed] = useState(false);
+  const [isCounterOpen, setIsCounterOpen] = useState(false);
 
   const loadActiveSession = useCallback(async () => {
     setIsFetchingSession(true);
@@ -89,6 +96,12 @@ export function CashDrawerModal({
       setSession(newSession);
       const { cashDrawerService } = await import('@/modules/ops');
       void cashDrawerService.kick();
+      await CashDrawerTriggerService.triggerOpen({
+        tenantId,
+        adminId: userId,
+        terminalId: 'POS-MAIN',
+        reason: 'manual_open',
+      }).catch(() => null);
       toast.success(`Caisse ouverte — Fond : ${euros.toFixed(2)} €`);
     } catch {
       toast.error("Impossible d'ouvrir la caisse");
@@ -121,10 +134,31 @@ export function CashDrawerModal({
       });
       await batch.commit();
 
+      // Réconciliation mathématique et audit NF525
+      const recon = await CashDrawerReconciliationService.reconcile({
+        tenantId,
+        adminId: userId,
+        sessionDateIso: new Date().toISOString().split('T')[0],
+        openingFloatInMicrounits: session.openingInMicrounits,
+        cashSalesInMicrounits: collectedInMicrounits,
+        cashRefundsInMicrounits: changeGivenInMicrounits,
+        countedDenominations: [{ denominationInMicrounits: actualMu, count: 1 }],
+      }).catch(() => null);
+
+      BlindCashCloseService.processBlindClose({
+        sessionId: session.id,
+        tenantId,
+        operatorId: userId,
+        totalCountedCts: Math.round(actualMu / 10_000),
+        theoreticalCashCts: Math.round(theoreticalMu / 10_000),
+        openingFloatCts: Math.round(session.openingInMicrounits / 10_000),
+      });
+
       const diffMu = actualMu - theoreticalMu;
       const sign = diffMu >= 0 ? "+" : "";
+      const statusLabel = recon?.varianceStatus === 'balanced' ? 'Conforme' : recon?.varianceStatus === 'surplus' ? 'Excédent' : 'Déficit';
       toast.success(
-        `Caisse clôturée — Écart : ${sign}${(diffMu / 1_000_000).toFixed(2)} €`
+        `Caisse clôturée (${statusLabel}) — Écart : ${sign}${(diffMu / 1_000_000).toFixed(2)} €`
       );
       setClosed(true);
       setSession(null);
@@ -236,6 +270,18 @@ export function CashDrawerModal({
           )}
         </motion.div>
       </motion.div>
+      {isCounterOpen && (
+        <CashCounterModal
+          isOpen={isCounterOpen}
+          onClose={() => setIsCounterOpen(false)}
+          expectedAmountInMicrounits={session?.openingInMicrounits ?? 0}
+          onValidate={async (countedAmountInMicrounits) => {
+            setActualInput((countedAmountInMicrounits / 1_000_000).toFixed(2));
+            setIsCounterOpen(false);
+          }}
+          type="EOD_CLOSE"
+        />
+      )}
     </AnimatePresence>
   );
 }
