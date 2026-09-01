@@ -554,8 +554,14 @@ export const m15_verticalScreensUnwired = {
   //   - useSovereign*          hooks de collection souveraine
   //   - NexusEventBus / emit   effets de bord
   //   - un adapter de sa verticale (<Vertical><Pilier>Adapter)
+  //   - un service de domaine de sa verticale (`../domain/XxxService`), qui porte
+  //     lui-même l'accès Nexus — délégation légitime, pas un contournement
   //
   // `useTenant()` NE COMPTE PAS : c'est un contexte, pas une source de données.
+  //
+  // ⚠️ La 1re version de cette mesure ignorait la délégation à un service de domaine
+  // et rendait 8 faux positifs (coworking, florist, gym, veterinary — tous corrects).
+  // Une mesure qui accuse du code sain est aussi nuisible qu'une mesure aveugle.
   run(c) {
     const nonCables = [];
     for (const [f, src] of c.contenu) {
@@ -565,7 +571,13 @@ export const m15_verticalScreensUnwired = {
       if (!rel.endsWith('.tsx')) continue;
       // Un écran = un composant qui rend du JSX et porte de l'état ou une interaction.
       if (!/useState\s*[<(]|onClick=|onSubmit=/.test(src)) continue;
-      const cable = /Nexus\.adapter|useSovereign[A-Z]|NexusEventBus|emitDurable\s*\(|[A-Z][a-zA-Z]*(?:Ops|Finance|Commerce|Logistics|Human|Compliance|Facility|Intelligence|Mcc)Adapter\b/.test(src);
+      const cable =
+        /Nexus\.adapter|useSovereign[A-Z]|NexusEventBus|emitDurable\s*\(/.test(src)
+        || /[A-Z][a-zA-Z]*(?:Ops|Finance|Commerce|Logistics|Human|Compliance|Facility|Intelligence|Mcc)Adapter\b/.test(src)
+        || /from ['"]\.\.?\/[^'"]*domain\/[A-Z][a-zA-Z]*Service['"]/.test(src)
+        // Un service de pilier consommé par le barrel (`menuEngineeringService` depuis
+        // @/modules/commerce) porte lui aussi l'accès Nexus : c'est le canal ADR-015.
+        || /\b[a-z][a-zA-Z]*Service\s*\n?\s*\.\s*\w|\b[A-Z][a-zA-Z]*Service\.\w/.test(src);
       if (!cable) nonCables.push(rel);
     }
     return { valeur: nonCables.length, detail: nonCables.sort() };

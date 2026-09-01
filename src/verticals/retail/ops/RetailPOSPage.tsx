@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { Barcode, ShoppingCart, CreditCard, Trash2, Plus, Minus, Search, CheckCircle2, Tag } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import { RetailOpsAdapter } from '@/verticals/retail/adapters';
 
 interface RetailProduct {
   id: string;
@@ -18,16 +20,16 @@ interface CartItem extends RetailProduct {
   quantity: number;
 }
 
-const CATALOG: RetailProduct[] = [
-  { id: 'ret-1', ean: '3700123456789', name: 'T-Shirt Coton Bio Premium', category: 'Textile', variant: 'Noir / M', priceInMicrounits: 29_000_000, stock: 18 },
-  { id: 'ret-2', ean: '3700123456796', name: 'T-Shirt Coton Bio Premium', category: 'Textile', variant: 'Blanc / L', priceInMicrounits: 29_000_000, stock: 12 },
-  { id: 'ret-3', ean: '3700123456802', name: 'Jean Brut Selvedge 14oz', category: 'Textile', variant: 'Brut / 32-34', priceInMicrounits: 120_000_000, stock: 8 },
-  { id: 'ret-4', ean: '3700123456819', name: 'Sneakers Cuir Minimalistes', category: 'Chaussures', variant: 'Blanc / 42', priceInMicrounits: 145_000_000, stock: 5 },
-  { id: 'ret-5', ean: '3700123456826', name: 'Casquette Visière Broderie', category: 'Accessoires', variant: 'Navy / TU', priceInMicrounits: 35_000_000, stock: 14 },
-];
+
 
 export function RetailPOSPage() {
   const { activeTenantId } = useTenant();
+  // Le catalogue est souverain ; le panier reste un état d'écran (il n'existe
+  // qu'entre le scan et l'encaissement).
+  const {
+    data: catalog,
+    isLoading,
+  } = useSovereignCollection<RetailProduct>('retailCatalog', { tenantId: activeTenantId ?? undefined });
   const [cart, setCart] = useState<CartItem[]>([]);
   const [scanInput, setScanInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,7 +38,7 @@ export function RetailPOSPage() {
   const handleScan = (e: React.FormEvent) => {
     e.preventDefault();
     if (!scanInput) return;
-    const found = CATALOG.find(p => p.ean === scanInput || p.id === scanInput);
+    const found = catalog.find(p => p.ean === scanInput || p.id === scanInput);
     if (found) {
       addToCart(found);
       setScanInput('');
@@ -69,12 +71,28 @@ export function RetailPOSPage() {
   const tvaEur = ((totalAmountMu * 0.20) / 1_200_000).toFixed(2);
 
   const handleCheckout = () => {
-    if (cart.length === 0) return;
+    if (cart.length === 0 || !activeTenantId) return;
+    // La vente part sur le bus : la comptabilité, le stock et la fidélité y réagissent.
+    RetailOpsAdapter.emitSaleCompleted({
+      tenantId: activeTenantId,
+      saleId: `sale_${Date.now()}`,
+      lines: cart.map(it => ({
+        productId: it.id,
+        quantity: it.quantity,
+        unitPriceInMicrounits: it.priceInMicrounits,
+      })),
+      totalInMicrounits: totalAmountMu,
+      paymentMethod: 'card',
+    });
     setPaidSuccess(true);
     setCart([]);
   };
 
-  const filteredCatalog = CATALOG.filter(p =>
+  if (isLoading) {
+    return <div className="p-6 text-sm text-text-muted">{"Chargement du catalogue…"}</div>;
+  }
+
+  const filteredCatalog = catalog.filter(p =>
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     p.variant.toLowerCase().includes(searchQuery.toLowerCase()) ||
     p.ean.includes(searchQuery)
