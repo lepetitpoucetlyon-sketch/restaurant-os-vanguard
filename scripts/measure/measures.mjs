@@ -638,10 +638,103 @@ export const m16_hardcodedHex = {
   },
 };
 
+export const m17_verticalServicesUnwired = {
+  id: 'verticalServicesUnwired',
+  titre: 'Services de verticale non câblés (sans consommateur applicatif)',
+  // Angle mort de Loi 8 : un service doté d'un X.test.ts dédié passe toutes les gates
+  // (tsc, vitest, madge, build) même s'il n'a AUCUN appelant applicatif réel.
+  // Détecte les services morts, îlots, et non-câblés dans verticals/ et ops/service|production.
+  run(c) {
+    const targetPrefixes = [
+      'src/verticals/',
+      'src/modules/ops/service/',
+      'src/modules/ops/production/',
+      'src/modules/ops/services/',
+    ];
+
+    function exportsOf(src) {
+      const names = new Set();
+      for (const m of src.matchAll(/export\s+(?:async\s+)?(?:class|function|const|let|var)\s+([A-Za-z0-9_]+)/g)) names.add(m[1]);
+      for (const m of src.matchAll(/export\s+(?:interface|type|enum)\s+([A-Za-z0-9_]+)/g)) names.add(m[1]);
+      for (const m of src.matchAll(/export\s*\{([^}]+)\}/g)) {
+        for (let part of m[1].split(',')) {
+          part = part.trim().replace(/^type\s+/, '');
+          const as = part.split(/\s+as\s+/);
+          const n = (as[1] || as[0]).trim();
+          if (n && /^[A-Za-z0-9_]+$/.test(n)) names.add(n);
+        }
+      }
+      return [...names];
+    }
+
+    const appFiles = [];
+    const appBodies = new Map();
+    for (const [f, src] of c.contenu) {
+      if (c.estBarrel(f)) continue;
+      appFiles.push(f);
+      appBodies.set(f, src);
+    }
+
+    const registerFiles = appFiles
+      .filter(p => /registerHandlers|register.*Handler|eventBus\/register|Vertical\.ts$|CoreInfraProviders|bootstrap/i.test(p));
+    const registerBlob = registerFiles.map(p => appBodies.get(p)).join('\n');
+
+    const unwired = [];
+    for (const [f, src] of c.contenu) {
+      const rel = c.rel(f);
+      if (!targetPrefixes.some(d => rel.startsWith(d))) continue;
+      if (c.estBarrel(f)) continue;
+      if (rel.endsWith('.d.ts')) continue;
+      if (/@wip\b/.test(src)) continue;
+
+      const isComponent = rel.endsWith('.tsx') && /export\s+(default\s+)?function\s+[A-Z]/.test(src);
+      if (isComponent) continue;
+
+      const names = exportsOf(src).filter(n => n.length >= 3);
+      if (!names.length) continue;
+
+      const bn = basename(f);
+      const isHandler = /Handler|Notifier/.test(bn);
+      if (isHandler) {
+        const registered = names.some(n => new RegExp('\\b' + n + '\\b').test(registerBlob)) ||
+          new RegExp('\\b' + basename(f, '.ts') + '\\b').test(registerBlob);
+        if (registered) continue;
+      }
+
+      const callers = new Set();
+      for (const name of names) {
+        const rx = new RegExp('\\b' + name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&') + '\\b');
+        for (const af of appFiles) {
+          if (af === f) continue;
+          const body = appBodies.get(af);
+          if (rx.test(body)) {
+            const relCaller = c.rel(af);
+            if (basename(af) === 'index.ts') continue;
+            callers.add(relCaller);
+          }
+        }
+      }
+
+      if (callers.size === 0) {
+        unwired.push(rel);
+      } else if (callers.size === 1) {
+        const onlyCaller = [...callers][0];
+        if (targetPrefixes.some(d => onlyCaller.startsWith(d))) {
+          unwired.push(rel);
+        }
+      }
+    }
+
+    return { valeur: unwired.length, detail: unwired.sort() };
+  },
+};
+
 export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
   m11_dsAdoption, m12a_a11yMuets, m12b_a11yModales, m12c_a11yKeyboard,
   m13_verticalStubs, m14_frHardcoded, m15_verticalScreensUnwired, m16_hardcodedHex,
+  m17_verticalServicesUnwired,
 ];
+
 
