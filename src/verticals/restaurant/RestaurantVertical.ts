@@ -11,6 +11,10 @@ import {
   RestaurantFacilityAdapter,
   RestaurantIntelligenceAdapter,
   RestaurantMccAdapter,
+  RestaurantCommerceAdapter,
+  RestaurantComplianceAdapter,
+  RestaurantHumanAdapter,
+  RestaurantLogisticsAdapter,
 } from './adapters';
 import { toError } from "@/lib/toError";
 
@@ -90,9 +94,9 @@ export class RestaurantVertical implements IVerticalPlugin {
     // MAINTENANT : écoute 'order.paid' émis par posOrderSubmit à chaque
     // encaissement. Le sceau fiscal et la sync intelligence partent avec
     // le vrai flux ventes POS.
-    context.registerEventHandler<{ tenantId: string; orderId: string; tableId: string | null; totalInMicrounits: number; operatorId: string }>(
+    context.registerEventHandler<{ tenantId: string; orderId: string; tableId: string | null; totalInMicrounits: number; operatorId: string; tipInMicrounits?: number }>(
       'order.paid',
-      ({ tenantId, orderId, totalInMicrounits, operatorId }) => {
+      ({ tenantId, orderId, totalInMicrounits, operatorId, tipInMicrounits }) => {
         RestaurantFinanceAdapter.emitOrderFiscalSeal({ tenantId, orderId, totalInMicrounits, operatorId });
         RestaurantIntelligenceAdapter.emitSalesDataReady({
           tenantId,
@@ -101,6 +105,19 @@ export class RestaurantVertical implements IVerticalPlugin {
           totalInMicrounits,
           covers: 1,
         });
+        RestaurantLogisticsAdapter.emitStockDeducted({
+          tenantId,
+          orderId,
+          lines: [],
+        });
+        if (tipInMicrounits && tipInMicrounits > 0) {
+          RestaurantHumanAdapter.emitTipDistributed({
+            tenantId,
+            orderId,
+            tipInMicrounits,
+            staffIds: [operatorId],
+          });
+        }
       },
     );
 
@@ -137,9 +154,10 @@ export class RestaurantVertical implements IVerticalPlugin {
     // No-show → CRM RFM trigger
     context.registerEventHandler<{ tenantId: string; reservationId: string; customerId?: string }>(
       'reservation.no_show',
-      ({ tenantId, customerId }) => {
+      ({ tenantId, reservationId, customerId }) => {
+        RestaurantCommerceAdapter.emitNoShow({ tenantId, reservationId, customerId });
         if (customerId) {
-          NexusEventBus.emit('crm.rfm_trigger', { tenantId, customerId });
+          RestaurantCommerceAdapter.emitCustomerRFMTrigger({ tenantId, customerId });
         }
       },
     );
@@ -151,6 +169,7 @@ export class RestaurantVertical implements IVerticalPlugin {
     context.registerEventHandler<{ v: 1; tenantId: string; sensorId: string; temperature: number; durationInMinutes: number }>(
       'sensor.temperature_anomaly',
       ({ tenantId, sensorId, temperature, durationInMinutes }) => {
+        RestaurantComplianceAdapter.emitTemperatureAnomaly({ tenantId, sensorId, temperature, durationInMinutes });
         NexusEventBus.emit('haccp.alert', {
           v: 1,
           tenantId,
@@ -166,12 +185,21 @@ export class RestaurantVertical implements IVerticalPlugin {
       },
     );
 
+    // Compliance — contrôle HACCP enregistré
+    context.registerEventHandler<{ v: 1; tenantId: string; checkId: string; operatorId: string; timestamp: number }>(
+      'haccp.check.saved',
+      ({ tenantId, checkId, operatorId, timestamp }) => {
+        RestaurantComplianceAdapter.emitHaccpCheckSaved({ tenantId, checkId, operatorId, timestamp });
+      },
+    );
+
     // Human — shift démarré : pas de coordination cross-domaine nécessaire (boucle supprimée)
 
-    // Logistics — DLC expiré → notif cuisine (event différent)
+    // Logistics — DLC expiré → notif cuisine + logistique
     context.registerEventHandler<{ v: 1; tenantId: string; itemId: string; quantity: number; batchNumber: string }>(
       'dlc.expired',
-      ({ tenantId, itemId, quantity }) => {
+      ({ tenantId, itemId, quantity, batchNumber }) => {
+        RestaurantLogisticsAdapter.emitDlcExpiry({ tenantId, itemId, quantity, batchNumber });
         NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId,
