@@ -10,7 +10,9 @@ export const VisualIdentityExtractor = {
             throw new Error("VisualIdentityExtractor is server-only and cannot be executed on the client side.");
         }
 
-        const { chromium } = await import('playwright');
+        // Prevent Turbopack from bundling playwright internal fonts in client graph
+        const playwrightModule = await (eval('import("playwright")') as Promise<typeof import('playwright')>);
+        const chromium = playwrightModule.chromium;
         
         logger.info(`[Nexus Vision] Launching capture for: ${url}`);
         

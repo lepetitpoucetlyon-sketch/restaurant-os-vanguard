@@ -104,7 +104,7 @@ export function OperationsDashboard() {
                                 transition={{ delay: 0.5 }}
                                 className="text-secondary text-sm tracking-[0.2em] uppercase font-sans font-bold ml-16"
                             >
-                                Sovereign Operations Management System v2.0
+                                Système de Gestion Opérationnelle Souverain v2.0
                             </motion.p>
                         </div>
 
@@ -212,8 +212,12 @@ export function OperationsDashboard() {
                                                             area.status === 'maintenance' ? "bg-status-danger" : "bg-status-warning"
                                                 )} />
                                             </div>
-                                            <h3 className="text-2xl font-black text-primary mb-1 capitalize group-hover:italic transition-all">{area.type}</h3>
-                                            <p className="text-xs text-muted font-sans font-bold uppercase tracking-wider mb-6">{area?.status}</p>
+                                            <h3 className="text-2xl font-black text-primary mb-1 capitalize group-hover:italic transition-all">
+                                                {area.type === 'suite' ? 'Salon VIP' : area.type === 'room' ? 'Chambre' : area.type === 'seat' ? 'Place' : 'Table'}
+                                            </h3>
+                                            <p className="text-xs text-muted font-sans font-bold uppercase tracking-wider mb-6">
+                                                {area?.status === 'vacant' ? 'Disponible' : area?.status === 'busy' ? 'Occupé' : area?.status === 'maintenance' ? 'Maintenance' : 'À nettoyer'}
+                                            </p>
 
                                             <div className="flex items-end justify-between">
                                                 <div>

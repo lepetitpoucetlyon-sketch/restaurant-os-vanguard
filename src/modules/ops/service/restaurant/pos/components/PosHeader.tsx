@@ -156,7 +156,7 @@ export function PosHeader({
                                 <span className="absolute inset-0 rounded-full bg-status-danger/60 animate-ping" />
                                 <span className="relative rounded-full w-2 h-2 bg-status-danger" />
                             </span>
-                            <span className="font-serif italic text-micro tracking-[0.24em] uppercase text-status-danger/90">Rush</span>
+                            <span className="font-serif italic text-micro tracking-[0.24em] uppercase text-status-danger/90">Coup de Feu</span>
                         </span>
                     )}
 

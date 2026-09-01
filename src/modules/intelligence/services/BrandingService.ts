@@ -1,4 +1,3 @@
-import 'server-only';
 import type { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';

@@ -76,11 +76,16 @@ export function Header() {
     const hasAccessToSettings = pageSettings ? (pageSettings.settings || []).some(canAccessSetting) : false;
 
     const pathSegments = (pathname || "").split("/").filter(Boolean);
+    const rawSegment = pathSegments[0] || "";
+    const navKey = `nav.${rawSegment.replace(/-/g, '_')}`;
+    const translated = t(navKey);
     const pageTitle = pathSegments.length === 0
         ? t('nav.dashboard')
         : pathSegments[0] === 'pms' && pathSegments.length > 1
             ? (pathSegments[1] || '').trim().charAt(0).toUpperCase() + (pathSegments[1] || '').trim().slice(1).replace("-", " ")
-            : (pathSegments[0] || '').trim().charAt(0).toUpperCase() + (pathSegments[0] || '').trim().slice(1).replace("-", " ");
+            : translated !== navKey
+                ? translated
+                : rawSegment.charAt(0).toUpperCase() + rawSegment.slice(1).replace(/-/g, " ");
     const selectedLanguage = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
     const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 

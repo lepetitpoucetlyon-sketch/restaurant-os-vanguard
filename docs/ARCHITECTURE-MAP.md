@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3751** · LOC : **358 263**
+- Fichiers `.ts/.tsx` : **3751** · LOC : **358 338**
 - Pages : **87** · Routes API : **216**
 
 ## Couches
@@ -80,12 +80,12 @@
 | Fichier | LOC |
 |---|---:|
 | `src/shared/components/ui/PageShell.tsx` | 734 |
-| `src/i18n/locales/fr.ts` | 679 |
+| `src/i18n/locales/fr.ts` | 692 |
+| `src/i18n/locales/en.ts` | 687 |
+| `src/i18n/locales/es.ts` | 687 |
+| `src/i18n/locales/ja.ts` | 687 |
+| `src/i18n/locales/pt.ts` | 687 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
-| `src/i18n/locales/en.ts` | 674 |
-| `src/i18n/locales/es.ts` | 674 |
-| `src/i18n/locales/ja.ts` | 674 |
-| `src/i18n/locales/pt.ts` | 674 |
 | `src/shared/components/settings/BrandingPanel.tsx` | 617 |
 | `src/__tests__/architecture/invariants.test.ts` | 602 |
 | `src/__tests__/helpers/saga.intelligence.test.ts` | 602 |
