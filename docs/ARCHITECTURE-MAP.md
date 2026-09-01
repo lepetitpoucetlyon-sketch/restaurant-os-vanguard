@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3746** · LOC : **358 123**
+- Fichiers `.ts/.tsx` : **3747** · LOC : **358 275**
 - Pages : **87** · Routes API : **216**
 
 ## Couches
@@ -79,7 +79,7 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/shared/components/ui/PageShell.tsx` | 729 |
+| `src/shared/components/ui/PageShell.tsx` | 734 |
 | `src/i18n/locales/fr.ts` | 679 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
 | `src/i18n/locales/en.ts` | 674 |

@@ -186,6 +186,56 @@ function PatternsShowcase() {
           <SkeletonList count={3} variant="list" />
         </div>
       </SectionCard>
+
+      <SectionCard title="5. Charte Typographique par Script (DESIGNUP §4.4)" subtitle="Polices sémantiques adaptées au script latin et neutralisation automatique pour CJK / japonais" variant="glass">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-5 rounded-2xl bg-surface-card border border-border-default space-y-3">
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted">{"Script Latin (fr, en, es, pt)"}</span>
+            <h3 className="font-serif italic text-3xl text-text-primary tracking-tight leading-[1.02]">
+              {"L'Art de la Haute Table & Gastronomie"}
+            </h3>
+            <p className="text-sm text-text-secondary leading-relaxed font-sans max-w-[50ch]">
+              {"Typographie Outfit fluide, accents dorés dynamiques dérivables au runtime et tabular-nums JetBrains Mono."}
+            </p>
+            <div className="font-mono text-xs text-accent-gold tabular-nums pt-2 border-t border-border-subtle">
+              {"TOTAL ENCAISSÉ : 14 892,50 € • TICKETS : 142"}
+            </div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-surface-card border border-border-default space-y-3">
+            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-text-muted">{"Script CJK / 日本語 (:root:lang(ja))"}</span>
+            <h3 className="font-sans font-semibold text-2xl text-text-primary leading-[1.4] tracking-normal">
+              {"至高の美食体験と店舗オペレーション"}
+            </h3>
+            <p className="text-sm text-text-secondary leading-[1.8] font-sans max-w-[50ch]">
+              {"日本語ローカライズではイタリックを自動無効化し、読みやすさとグリッドの整列を最優先します。"}
+            </p>
+            <div className="font-mono text-xs text-accent-gold tabular-nums pt-2 border-t border-border-subtle">
+              {"売上合計 : ¥ 2,450,000 • 注文数 : 142"}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="6. Personnalisation Tenant MCC (DESIGNUP §1)" subtitle="Garantie zéro or résiduel lors de l'application d'une charte sur-mesure" variant="default">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-5 rounded-2xl bg-surface-card border border-border-default space-y-2">
+            <span className="text-xs font-bold text-text-primary">{"1. Charte Défaut (Or)"}</span>
+            <div className="h-2 w-full rounded-full bg-accent-gold" />
+            <p className="text-xs text-text-muted">{"--action-primary: var(--brand-primary), ombres teintées ambrées."}</p>
+          </div>
+          <div className="p-5 rounded-2xl bg-surface-card border border-border-default space-y-2">
+            <span className="text-xs font-bold text-text-primary">{"2. Charte Custom (Bleu Océan)"}</span>
+            <div className="h-2 w-full rounded-full bg-sky-600" />
+            <p className="text-xs text-text-muted">{"--action-primary: var(--brand-primary), ombres dynamiques sans fuite d'or."}</p>
+          </div>
+          <div className="p-5 rounded-2xl bg-surface-card border border-border-default space-y-2">
+            <span className="text-xs font-bold text-text-primary">{"3. Charte Custom (Zinc Neutre)"}</span>
+            <div className="h-2 w-full rounded-full bg-zinc-500" />
+            <p className="text-xs text-text-muted">{"--action-primary: var(--brand-primary), ombres neutres élégantes."}</p>
+          </div>
+        </div>
+      </SectionCard>
     </div>
   );
 }

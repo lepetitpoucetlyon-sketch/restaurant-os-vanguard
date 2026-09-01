@@ -54,8 +54,8 @@ export interface PageShellProps {
 }
 
 const ALERT_COLOR: Record<Exclude<PageShellAlert, null | undefined>, string> = {
-  rush: "bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0",
-  critical: "bg-gradient-to-r from-red-600/0 via-red-600 to-red-600/0",
+  rush: "bg-gradient-to-r from-red-500/0 via-red-500 to-red-500/0 motion-safe:animate-pulse",
+  critical: "bg-gradient-to-r from-red-600/0 via-red-600 to-red-600/0 motion-safe:animate-pulse",
   warning: "bg-gradient-to-r from-amber-500/0 via-amber-500 to-amber-500/0",
   info: "bg-gradient-to-r from-accent-gold/0 via-accent-gold to-accent-gold/0",
 };
@@ -161,17 +161,17 @@ export function PageShell({
               </span>
             )}
 
-            {/* Editorial kicker + title */}
+            {/* Editorial kicker mono */}
             {derivedKicker && (
-              <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
+              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted/80 shrink-0">
                 {derivedKicker}
               </span>
             )}
 
             <h1
               className={cn(
-                "font-serif font-black text-text-primary tracking-[-0.02em] leading-[0.95] truncate",
-                isHero ? "text-4xl lg:text-5xl" : isCompact ? "text-2xl" : "text-3xl lg:text-[34px]"
+                "font-serif italic text-text-primary tracking-tight leading-[1.02] [text-wrap:balance] truncate",
+                isHero ? "text-4xl md:text-6xl" : isCompact ? "text-2xl" : "text-3xl md:text-5xl"
               )}
             >
               {title}
@@ -179,19 +179,19 @@ export function PageShell({
 
             {status && (
               <span className="flex items-center gap-2 self-center pl-1 shrink-0">
-                <span className="relative flex w-2 h-2">
+                <span className="relative flex w-2.5 h-2.5 items-center justify-center">
                   <span
                     className={cn(
-                      "absolute inset-0 rounded-full animate-ping",
+                      "absolute inset-0 rounded-full motion-safe:animate-ping",
                       STATUS_DOT[statusTone],
-                      "opacity-60"
+                      "opacity-50"
                     )}
                   />
                   <span className={cn("relative rounded-full w-2 h-2", STATUS_DOT[statusTone])} />
                 </span>
                 <span
                   className={cn(
-                    "font-serif italic text-micro tracking-[0.24em] uppercase",
+                    "font-mono text-[10px] tracking-[0.20em] uppercase",
                     STATUS_TEXT[statusTone]
                   )}
                 >
@@ -204,14 +204,14 @@ export function PageShell({
           </div>
 
           {actions && (
-            <div className="flex items-center gap-3 flex-wrap shrink-0">
+            <div className={cn("flex items-center gap-3 flex-wrap shrink-0", isCompact && "tabular-nums")}>
               {actions}
             </div>
           )}
         </div>
 
         {subtitle && (
-          <p className={cn("text-sm text-text-secondary mt-3 max-w-3xl leading-relaxed", isCompact && "text-xs mt-2")}>
+          <p className={cn("text-sm text-text-secondary mt-3 max-w-[65ch] leading-relaxed", isCompact && "text-xs mt-2")}>
             {subtitle}
           </p>
         )}
@@ -323,13 +323,18 @@ export function PageShellTab({
       aria-label={ariaLabel}
       className={cn(
         "group relative shrink-0 flex items-center gap-2 pb-2 text-xs font-medium tracking-wide transition-colors whitespace-nowrap",
-        active ? "text-accent-gold" : "text-text-muted hover:text-text-primary"
+        active ? "text-accent-gold font-semibold" : "text-text-muted hover:text-text-primary"
       )}
     >
       {Icon && <Icon className="w-[15px] h-[15px]" strokeWidth={1.8} />}
       <span>{children}</span>
       {active && (
-        <span aria-hidden="true" className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full" />
+        <motion.span
+          layoutId="pageshell-active-tab-underline"
+          transition={{ type: "spring", stiffness: 450, damping: 35 }}
+          aria-hidden="true"
+          className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-accent-gold rounded-full"
+        />
       )}
     </button>
   );
@@ -467,13 +472,13 @@ export function PageShellEditorialTitle({
   const inner = (
     <>
       {kicker && (
-        <span className="font-serif font-black italic text-micro uppercase tracking-[0.32em] text-text-muted/70 shrink-0">
+        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted/80 shrink-0">
           {kicker}
         </span>
       )}
       <span
         className={cn(
-          "font-serif font-black leading-[0.95] tracking-[-0.02em]",
+          "font-serif italic leading-[1.02] tracking-tight",
           titleColor,
           titleSize
         )}
@@ -499,10 +504,10 @@ export function PageShellEditorialTitle({
       )}
       {status && (
         <span className="flex items-center gap-2 self-center pl-1 shrink-0">
-          <span className="relative flex w-2 h-2">
+          <span className="relative flex w-2.5 h-2.5 items-center justify-center">
             <span
               className={cn(
-                "absolute inset-0 rounded-full animate-ping opacity-60",
+                "absolute inset-0 rounded-full motion-safe:animate-ping opacity-50",
                 STATUS_DOT[statusTone]
               )}
             />
@@ -510,7 +515,7 @@ export function PageShellEditorialTitle({
           </span>
           <span
             className={cn(
-              "font-serif italic text-micro tracking-[0.24em] uppercase",
+              "font-mono text-[10px] tracking-[0.20em] uppercase",
               STATUS_TEXT[statusTone]
             )}
           >

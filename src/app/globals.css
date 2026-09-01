@@ -251,6 +251,24 @@
 }
 
 /* ============================================
+   TYPOGRAPHIE CJK / JAPONAIS (DESIGNUP §4.4)
+   - Instrument Serif italique est illisible en japonais (pas d'italique en CJK)
+   - Surcharge des tokens de police et neutralisation de l'italique pour ja
+   ============================================ */
+:root:lang(ja) {
+  --font-serif: var(--font-sans, 'Outfit', 'Hiragino Sans', 'Meiryo', sans-serif);
+  --font-brand: var(--font-sans, 'Outfit', 'Hiragino Sans', 'Meiryo', sans-serif);
+  --tracking-kicker: 0.05em;
+  --leading-body: 1.8;
+  --leading-title: 1.4;
+}
+
+:root:lang(ja) .font-serif {
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+}
+
+/* ============================================
    KEYFRAME ANIMATIONS
    ============================================ */
 
