@@ -8,12 +8,19 @@ import {
   tenantEInvoiceConfigPath,
 } from './EInvoiceProviderConfig';
 import { SuperPdpProvider } from './SuperPdpProvider';
+import { DirectApiEInvoicingProvider } from './DirectApiEInvoicingProvider';
 import { MockEInvoicingProvider } from './MockEInvoicingProvider';
 
 function buildProvider(config: EInvoiceProviderConfig): IEInvoicingProvider {
   switch (config.providerId) {
     case 'super-pdp':
       return new SuperPdpProvider(config.apiKey, config.sandboxMode);
+    case 'direct-api':
+      return new DirectApiEInvoicingProvider(
+        config.apiKey,
+        config.customEndpointUrl,
+        config.sandboxMode,
+      );
     case 'b2brouter':
       // Skeleton — implémenter B2BrouterProvider quand le contrat est signé
       logger.warn('[EInvoiceFactory] b2brouter non implémenté — fallback mock');

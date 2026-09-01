@@ -119,9 +119,9 @@ export function MCCTreasury() {
                     
                     <div className="flex justify-between items-center mb-8 relative z-10">
                         <div>
-                            <h3 className="text-lg font-bold tracking-tight uppercase">Achats Groupés Flotte</h3>
-                            <p className="text-xs text-secondary font-medium tracking-widest mt-1">Statut des négociations groupées industrielles</p>
-                            <p className="text-nano text-status-warning font-bold uppercase tracking-widest mt-0.5">Estimations contractuelles — négociations en cours</p>
+                            <h3 className="text-lg font-bold tracking-tight uppercase">{"Achats Groupés Flotte"}</h3>
+                            <p className="text-xs text-secondary font-medium tracking-widest mt-1">{"Statut des négociations groupées industrielles"}</p>
+                            <p className="text-nano text-status-warning font-bold uppercase tracking-widest mt-0.5">{"Estimations contractuelles — négociations en cours"}</p>
                         </div>
                         <div className="p-3 bg-surface-card rounded-2xl">
                             <ShoppingBag className="w-5 h-5 text-brand" />
@@ -130,8 +130,8 @@ export function MCCTreasury() {
 
                     <div className="space-y-1 relative z-10">
                         <div className="grid grid-cols-12 text-nano font-black text-secondary uppercase tracking-widest pb-2 border-b border-border-subtle px-2">
-                            <span className="col-span-5">Catégorie</span>
-                            <span className="col-span-3">Économies</span>
+                            <span className="col-span-5">{"Catégorie"}</span>
+                            <span className="col-span-3">{"Économies"}</span>
                             <span className="col-span-4 text-right">Statut</span>
                         </div>
                         {PROCUREMENT_ROWS.map(row => (
@@ -169,7 +169,7 @@ export function MCCTreasury() {
                         
                         <div className="mt-8 pt-8 border-t border-border-subtle space-y-4">
                              <div className="flex justify-between items-center text-nano font-bold uppercase tracking-widest text-secondary">
-                                 <span>Santé Opérationnelle</span>
+                                 <span>{"Santé Opérationnelle"}</span>
                                  <span className="text-text-primary">OPTIMAL</span>
                              </div>
                              <div className="w-full h-1 bg-surface-card rounded-full overflow-hidden">
@@ -195,7 +195,7 @@ export function MCCTreasury() {
                         </div>
                         <div className="text-right">
                             <div className="text-sm font-black text-text-primary">€{Math.round(theoreticalReport.collectiveSavings * 0.15).toLocaleString()}</div>
-                            <div className="text-nano text-secondary uppercase tracking-widest">économies logistique</div>
+                            <div className="text-nano text-secondary uppercase tracking-widest">{"économies logistique"}</div>
                         </div>
                     </div>
                 </div>

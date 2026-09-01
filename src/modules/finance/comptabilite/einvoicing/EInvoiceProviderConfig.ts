@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const EInvoiceProviderIdSchema = z.enum(['super-pdp', 'b2brouter', 'mock']);
+export const EInvoiceProviderIdSchema = z.enum(['super-pdp', 'direct-api', 'b2brouter', 'mock']);
 export type EInvoiceProviderId = z.infer<typeof EInvoiceProviderIdSchema>;
 
 /**
@@ -15,6 +15,7 @@ export const EInvoiceProviderConfigSchema = z.object({
   providerId: EInvoiceProviderIdSchema,
   apiKey: z.string().min(1, 'Clé API requise'),
   webhookSecret: z.string().min(1, 'Secret webhook requis'),
+  customEndpointUrl: z.string().url('URL API personnalisée invalide').optional(),
   siret: z.string().regex(/^\d{14}$/, 'SIRET invalide (14 chiffres)'),
   sandboxMode: z.boolean().default(false),
   registeredWithPdp: z.boolean().default(false),

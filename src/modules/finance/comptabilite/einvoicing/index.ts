@@ -29,6 +29,8 @@ export type { EInvoiceProviderId, EInvoiceProviderConfig, PlatformEInvoiceConfig
 export { EInvoiceProviderFactory } from './EInvoiceProviderFactory';
 export { MockEInvoicingProvider } from './MockEInvoicingProvider';
 export { SuperPdpProvider } from './SuperPdpProvider';
+export { DirectApiEInvoicingProvider } from './DirectApiEInvoicingProvider';
 export { EInvoicingService } from './EInvoicingService';
 export { parseEInvoiceXml } from './FacturXParser';
 export { InboundInvoiceLifecycle } from './InboundInvoiceLifecycle';
+

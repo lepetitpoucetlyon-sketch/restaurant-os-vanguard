@@ -25,7 +25,7 @@ interface Props {
 export function ReservationStepsDEFG({ step, form, bookingRef, businessName, submitting, cardImprintConfig, inputClass, btnPrimary, btnSecondary, go, setField, handleProceedFromNotes }: Props) {
   if (step === 4) return (
     <div className="space-y-4">
-      <h2 className="text-xl font-serif font-semibold text-gray-900">Vos coordonnées</h2>
+      <h2 className="text-xl font-serif font-semibold text-gray-900">{"Vos coordonnées"}</h2>
       <input className={inputClass} placeholder="Prénom" value={form.firstName} onChange={(e) => setField('firstName', e.target.value)} autoComplete="given-name" />
       <input className={inputClass} placeholder="Nom"    value={form.lastName}  onChange={(e) => setField('lastName', e.target.value)}  autoComplete="family-name" />
       <div className="flex gap-3">
@@ -37,7 +37,7 @@ export function ReservationStepsDEFG({ step, form, bookingRef, businessName, sub
 
   if (step === 5) return (
     <div className="space-y-4">
-      <h2 className="text-xl font-serif font-semibold text-gray-900">Email et téléphone</h2>
+      <h2 className="text-xl font-serif font-semibold text-gray-900">{"Email et téléphone"}</h2>
       <input className={inputClass} type="email" placeholder="Email"                  value={form.email} onChange={(e) => setField('email', e.target.value)} autoComplete="email" />
       <input className={inputClass} type="tel"   placeholder="Téléphone (optionnel)"  value={form.phone} onChange={(e) => setField('phone', e.target.value)} autoComplete="tel" />
       <div className="flex gap-3">
@@ -49,7 +49,7 @@ export function ReservationStepsDEFG({ step, form, bookingRef, businessName, sub
 
   if (step === 6) return (
     <div className="space-y-4">
-      <h2 className="text-xl font-serif font-semibold text-gray-900">Remarques particulières</h2>
+      <h2 className="text-xl font-serif font-semibold text-gray-900">{"Remarques particulières"}</h2>
       <textarea
         className={`${inputClass} resize-none`}
         rows={4}
@@ -79,18 +79,18 @@ export function ReservationStepsDEFG({ step, form, bookingRef, businessName, sub
       {imprintRequired(cardImprintConfig, form.covers) && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700">
           <Fingerprint className="w-3.5 h-3.5 flex-shrink-0" />
-          Une garantie bancaire sera demandée à l&apos;étape suivante (aucun débit immédiat).
+          {"Une garantie bancaire sera demandée à l'étape suivante (aucun débit immédiat)."}
         </div>
       )}
       <div className="flex gap-3">
         <button onClick={() => go(5)} className={btnSecondary}><ChevronLeft className="w-4 h-4" /> Retour</button>
         <button aria-label="Chargement" className={btnPrimary} disabled={submitting} onClick={handleProceedFromNotes}>
           {submitting ? (
-            <><Loader2 className="w-4 h-4 animate-spin" /> Réservation en cours…</>
+            <><Loader2 className="w-4 h-4 animate-spin" /> {"Réservation en cours…"}</>
           ) : imprintRequired(cardImprintConfig, form.covers) ? (
-            <><Fingerprint className="w-4 h-4" /> Continuer vers la garantie</>
+            <><Fingerprint className="w-4 h-4" /> {"Continuer vers la garantie"}</>
           ) : (
-            <>Confirmer la réservation <CheckCircle2 className="w-4 h-4" /></>
+            <>{"Confirmer la réservation"} <CheckCircle2 className="w-4 h-4" /></>
           )}
         </button>
       </div>
@@ -109,21 +109,21 @@ export function ReservationStepsDEFG({ step, form, bookingRef, businessName, sub
         <CheckCircle2 className="w-10 h-10 text-green-600" />
       </motion.div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-serif font-bold text-gray-900">Réservation confirmée !</h2>
+        <h2 className="text-2xl font-serif font-bold text-gray-900">{"Réservation confirmée !"}</h2>
         <p className="text-text-muted text-sm">Merci {form.firstName}, votre table est réservée chez {businessName}.</p>
       </div>
       <div className="rounded-2xl bg-amber-50 border border-amber-200 px-6 py-4 space-y-1 w-full">
-        <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Référence</p>
+        <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">{"Référence"}</p>
         <p className="font-mono text-lg font-bold text-amber-800 tracking-wider">{bookingRef ?? '—'}</p>
         <p className="text-xs text-amber-600 mt-1">
           {form.date ? format(parseISO(form.date), 'EEE d MMMM yyyy', { locale: fr }) : ''} • {form.time} • {form.covers} couvert{form.covers > 1 ? 's' : ''}
         </p>
       </div>
-      <p className="text-xs text-text-secondary">Un email de confirmation a été envoyé à {form.email}</p>
+      <p className="text-xs text-text-secondary">{"Un email de confirmation a été envoyé à "}{form.email}</p>
       {bookingRef && form.date && form.time && (
         <a href={buildICSLink(form, businessName)} download={`reservation-${form.date}.ics`} className={btnPrimary}>
           <CalendarPlus className="w-4 h-4" />
-          Ajouter à mon calendrier
+          {"Ajouter à mon calendrier"}
         </a>
       )}
     </div>

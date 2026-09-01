@@ -155,10 +155,26 @@ Pour ne pas saturer le CPU et attendre 100s à chaque micro-édition :
 
 ---
 
+## Loi 10 — Souveraineté & Performance Native (Rust & WASM Acceleration)
+
+Pour toute tâche de calcul intensif, d'analyse statique, de cryptographie fiscale ou de pilote bas niveau, le dépôt privilégie **les outils natifs et Rust/WASM (< 100 ms)** afin de décharger le runtime JavaScript et d'éliminer les latences.
+
+### 1. Cartographie des briques natives :
+- **Linting & Analyse de code** : `oxlint` (`npm run lint:fast`) $\rightarrow$ Analyse 3 700 fichiers en < 170 ms.
+- **Règles d'Architecture & Graphe** : `sentrux` $\rightarrow$ Validation des frontières inter-piliers en < 800 ms.
+- **Cœur Fiscal & Chaînage NF525** : Module WebAssembly/Rust (`@nexus/fiscal-seal-wasm`) pour les calculs de hachage SHA-256 et l'inaltérabilité des tickets/factures.
+- **Pilotes Matériels & IoT** : Démons natifs pour les communications série ESC/POS et tireuses SmartSpout (latence sub-milliseconde, 0% CPU).
+
+### 2. Règle pour tout agent :
+Avant d'écrire un script d'analyse lourd en Node.js, l'agent doit vérifier s'il existe une solution native ou utiliser les commandes rapides (`npm run lint:fast`, `node scripts/gate-last-mile.mjs`, `sentrux check`).
+
+---
+
 ## Installation des gardes (une fois, par la personne humaine de préférence)
 ```bash
 git config core.hooksPath .githooks
 chmod +x .githooks/pre-commit
 node scripts/verify-gate-integrity.mjs --freeze   # fige la baseline anti-desserrement
 ```
+
 

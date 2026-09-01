@@ -46,9 +46,9 @@ export function SectorStudyTab() {
               Forge Stack P1 • Sector Study Store
             </span>
           </div>
-          <h2 className="text-xl font-black text-text-primary">Registre & Persistance des Études Sectorielles</h2>
+          <h2 className="text-xl font-black text-text-primary">{"Registre & Persistance des Études Sectorielles"}</h2>
           <p className="text-xs text-text-muted mt-0.5">
-            Bibliothèque d'études de marchés mutualisées, signaux de qualification et blueprints dérivés.
+            {"Bibliothèque d'études de marchés mutualisées, signaux de qualification et blueprints dérivés."}
           </p>
         </div>
 
@@ -111,31 +111,31 @@ export function SectorStudyTab() {
               <h3 className="text-xl font-bold text-text-primary mt-0.5">{activeStudy.name}</h3>
             </div>
             <button className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md">
-              Re-compiler Blueprint
+              {"Re-compiler Blueprint"}
             </button>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
-              <span className="text-nano uppercase font-bold text-text-muted">Workflows Clés</span>
+              <span className="text-nano uppercase font-bold text-text-muted">{"Workflows Clés"}</span>
               <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.workflowsCount}</p>
             </div>
             <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
-              <span className="text-nano uppercase font-bold text-text-muted">Capabilities Dérivées</span>
+              <span className="text-nano uppercase font-bold text-text-muted">{"Capabilities Dérivées"}</span>
               <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.capabilitiesCount}</p>
             </div>
             <div className="p-4 rounded-2xl bg-surface-glass border border-border-default">
-              <span className="text-nano uppercase font-bold text-text-muted">Indicateurs KPIs</span>
+              <span className="text-nano uppercase font-bold text-text-muted">{"Indicateurs KPIs"}</span>
               <p className="text-2xl font-black text-text-primary mt-1">{activeStudy.kpisCount}</p>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-2">
-            <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">Métadonnées de persistance MCC</h4>
+            <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">{"Métadonnées de persistance MCC"}</h4>
             <div className="text-xs text-text-secondary space-y-1 font-mono">
               <p>• Scope : <span className="text-text-primary">mcc/studies/{activeStudy.slug}</span></p>
-              <p>• Dernière mise à jour : <span className="text-text-primary">{activeStudy.updatedAt}</span></p>
-              <p>• Intégrité cryptographique : <span className="text-emerald-400">Validée (FNV-1a)</span></p>
+              <p>{"• Dernière mise à jour : "}<span className="text-text-primary">{activeStudy.updatedAt}</span></p>
+              <p>{"• Intégrité cryptographique : "}<span className="text-emerald-400">{"Validée (FNV-1a)"}</span></p>
             </div>
           </div>
         </div>

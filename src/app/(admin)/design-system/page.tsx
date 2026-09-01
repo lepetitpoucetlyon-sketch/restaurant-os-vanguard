@@ -131,7 +131,7 @@ function PatternsShowcase() {
               </div>
               <div>
                 <h4 className="font-serif text-lg font-bold text-text-primary">POS Caisse Tactile</h4>
-                <p className="text-xs text-text-secondary">Service du Midi • 24 Tables Actives</p>
+                <p className="text-xs text-text-secondary">{"Service du Midi • 24 Tables Actives"}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -148,23 +148,23 @@ function PatternsShowcase() {
       <SectionCard title="2. SectionCard & Variantes" subtitle="Conteneur modulaire (default, glass, premium, ghost)" variant="default">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <SectionCard title="Variante Default" variant="default">
-            <p className="text-xs text-text-secondary">Surface opaque standard avec bordure contrastée.</p>
+            <p className="text-xs text-text-secondary">{"Surface opaque standard avec bordure contrastée."}</p>
           </SectionCard>
           <SectionCard title="Variante Glass" variant="glass">
-            <p className="text-xs text-text-secondary">Flou backdrop-blur et lueur sombre subtile.</p>
+            <p className="text-xs text-text-secondary">{"Flou backdrop-blur et lueur sombre subtile."}</p>
           </SectionCard>
           <SectionCard title="Variante Premium" variant="premium">
-            <p className="text-xs text-text-secondary">Bordure or et dégradé luxury.</p>
+            <p className="text-xs text-text-secondary">{"Bordure or et dégradé luxury."}</p>
           </SectionCard>
           <SectionCard title="Variante Ghost" variant="ghost">
-            <p className="text-xs text-text-secondary">Transparent sans ombre, adapté aux sous-sections.</p>
+            <p className="text-xs text-text-secondary">{"Transparent sans ombre, adapté aux sous-sections."}</p>
           </SectionCard>
         </div>
       </SectionCard>
 
       <SectionCard title="3. ActionBar Contextuelle" subtitle="Barre d'actions pour filtres, sélection et CTA primaires">
         <ActionBar
-          leftSlot={<span className="text-xs font-medium text-text-secondary">3 éléments sélectionnés</span>}
+          leftSlot={<span className="text-xs font-medium text-text-secondary">{"3 éléments sélectionnés"}</span>}
           rightSlot={
             <>
               <Button size="sm" variant="outline">Exporter</Button>
@@ -181,7 +181,7 @@ function PatternsShowcase() {
             icon={Package}
             title="Aucune Commande en Attente"
             description="Toutes les commandes ont été traitées ou envoyées en cuisine."
-            action={<Button size="sm" variant="default">Rafraîchir</Button>}
+            action={<Button size="sm" variant="default">{"Rafraîchir"}</Button>}
           />
           <SkeletonList count={3} variant="list" />
         </div>
@@ -196,7 +196,7 @@ function RbacPreviewShowcase() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 p-4 rounded-2xl bg-surface-card border border-border-default">
-        <span className="text-xs font-bold text-text-secondary">Simuler le Rôle :</span>
+        <span className="text-xs font-bold text-text-secondary">{"Simuler le Rôle :"}</span>
         {(['admin', 'manager', 'serveur', 'cuisinier'] as const).map((r) => (
           <button
             key={r}
@@ -217,8 +217,8 @@ function RbacPreviewShowcase() {
         <div className="space-y-4">
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
-              <div className="text-xs font-bold text-text-primary">Clôture Fiscale Z (Finance)</div>
-              <div className="text-micro text-text-muted">Action critique autorisée pour : admin, directeur</div>
+              <div className="text-xs font-bold text-text-primary">{"Clôture Fiscale Z (Finance)"}</div>
+              <div className="text-micro text-text-muted">{"Action critique autorisée pour : admin, directeur"}</div>
             </div>
             {simulatedRole === 'admin' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -230,7 +230,7 @@ function RbacPreviewShowcase() {
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
               <div className="text-xs font-bold text-text-primary">Annuler une Ligne Ticket (POS)</div>
-              <div className="text-micro text-text-muted">Action autorisée pour : admin, directeur, manager</div>
+              <div className="text-micro text-text-muted">{"Action autorisée pour : admin, directeur, manager"}</div>
             </div>
             {simulatedRole === 'admin' || simulatedRole === 'manager' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -241,8 +241,8 @@ function RbacPreviewShowcase() {
 
           <div className="p-4 rounded-xl border border-border-default bg-surface-bg flex items-center justify-between">
             <div>
-              <div className="text-xs font-bold text-text-primary">Prise de Commande & Encaissement (POS)</div>
-              <div className="text-micro text-text-muted">Action autorisée pour : admin, manager, serveur</div>
+              <div className="text-xs font-bold text-text-primary">{"Prise de Commande & Encaissement (POS)"}</div>
+              <div className="text-micro text-text-muted">{"Action autorisée pour : admin, manager, serveur"}</div>
             </div>
             {simulatedRole !== 'cuisinier' ? (
               <StatusBadge status="success" label="Autorisé" />
@@ -263,15 +263,15 @@ function PwaPreviewShowcase() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Affichage Standalone</div>
-            <div className="text-micro text-text-secondary">Plein écran sans barre d'URL navigateur sur iOS & Android.</div>
+            <div className="text-micro text-text-secondary">{"Plein écran sans barre d'URL navigateur sur iOS & Android."}</div>
           </div>
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Precache Workbox</div>
-            <div className="text-micro text-text-secondary">Routes critiques /pos et /kds disponibles immédiatement hors-ligne.</div>
+            <div className="text-micro text-text-secondary">{"Routes critiques /pos et /kds disponibles immédiatement hors-ligne."}</div>
           </div>
           <div className="p-4 rounded-xl bg-surface-bg border border-border-default">
             <div className="text-xs font-bold text-text-primary mb-1">Apple Startup Images</div>
-            <div className="text-micro text-text-secondary">12 résolutions iOS générées sans écran blanc au lancement.</div>
+            <div className="text-micro text-text-secondary">{"12 résolutions iOS générées sans écran blanc au lancement."}</div>
           </div>
         </div>
       </SectionCard>
@@ -295,7 +295,7 @@ export default function DesignSystemPage() {
             Design System & Layout Primitives V2
           </h1>
           <p className="text-text-secondary text-xs">
-            Fondations unifiées, guide de tokens, intégration RBAC granulaire et architectures multi-devices.
+            {"Fondations unifiées, guide de tokens, intégration RBAC granulaire et architectures multi-devices."}
           </p>
         </div>
 
