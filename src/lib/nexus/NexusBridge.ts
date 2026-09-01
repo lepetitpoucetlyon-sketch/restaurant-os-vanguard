@@ -3,7 +3,7 @@ import { getDefaultStore } from 'jotai';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { tenantConfigAtom } from '@nexus/state/SovereignGenome';
 import { db } from '@/lib/offline/offline-store';
-import { FiscalKeyService } from '@/modules/finance/services/FiscalKeyService';
+import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import type { CommunicationPulse } from '@/modules/finance/tresorerie/collection/types';
  
 import { TenantConfig, DEFAULT_TENANT_CONFIG } from "@/shared/nexus/contracts";

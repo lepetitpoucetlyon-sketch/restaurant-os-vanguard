@@ -7,7 +7,7 @@ import { VerticalRegistry, CoreContext } from '@/shared/plugins';
 import { injectBrandingVars } from '@/lib/branding/WhiteLabelBrandingInjector';
 import type { PlatformVariant } from '@/modules/system';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount, resolveBrandingOverlayFromRequest } from './steps/provisioningSteps';

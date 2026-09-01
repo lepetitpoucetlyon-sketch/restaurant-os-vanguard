@@ -7,7 +7,7 @@ import { Resend } from 'resend';
 import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
 import { scrapeCompany } from '@/modules/commerce';
 import type { TenantID } from '@/shared/types/brands';
-import { FiscalKeyService } from '@/modules/finance';
+import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import {
     tenantBrandingFromScrape,

@@ -132,7 +132,7 @@ fi
 # jour de l'activation du vecteur, jamais relevée. Se résorbe par `import type`, contrat
 # neutre kernel/contracts/, NexusEventBus, ou relocalisation du composition root.
 # NE PAS corriger en routant vers les barrels : mesuré, ça fait passer les cycles de 2 a 100.
-LIB_TO_MODULES_MAX=46
+LIB_TO_MODULES_MAX=37
 if [ "$LIB_TO_MODULES_COUNT" -gt "$LIB_TO_MODULES_MAX" ]; then
   fail "ESLint lib->modules : $LIB_TO_MODULES_COUNT > seuil ratchet ($LIB_TO_MODULES_MAX)."
   echo "$ESLINT_FULL" | grep "Loi des couches (ADR-015)" | head -20
