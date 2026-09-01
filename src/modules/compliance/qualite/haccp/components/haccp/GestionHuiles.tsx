@@ -70,8 +70,8 @@ export function GestionHuiles() {
                         <Droplet size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Gestion des Huiles</h2>
-                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Suivi des composés polaires (TPOM)</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">{"Gestion des Huiles"}</h2>
+                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">{"Suivi des composés polaires (TPOM)"}</p>
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@ export function GestionHuiles() {
                     className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-nano uppercase tracking-widest shadow-2xl flex items-center gap-2"
                 >
                     <FlaskConical size={16} />
-                    Mesurer TPOM
+                    {"Mesurer TPOM"}
                 </motion.button>
             </div>
 
@@ -104,7 +104,7 @@ export function GestionHuiles() {
                                 {lastLog ? (
                                     <StatusBadge status={lastLog.status === 'ok' ? 'success' : lastLog.status === 'warning' ? 'warning' : 'error'} label={lastLog.status} />
                                 ) : (
-                                    <span className="text-nano font-black uppercase tracking-widest text-text-muted">Aucun Relevé</span>
+                                    <span className="text-nano font-black uppercase tracking-widest text-text-muted">{"Aucun Relevé"}</span>
                                 )}
                             </div>
 
@@ -126,7 +126,7 @@ export function GestionHuiles() {
                 <div className="px-8 py-6 border-b border-border flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <History size={18} className="text-text-muted" />
-                        <h3 className="text-xs font-black uppercase tracking-widest text-text-primary italic">Historique des Interventions</h3>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-text-primary italic">{"Historique des Interventions"}</h3>
                     </div>
                     <div className="flex items-center gap-2 bg-bg-tertiary px-4 py-2 rounded-full border border-border">
                         <Search size={14} className="text-text-muted" />
@@ -139,7 +139,7 @@ export function GestionHuiles() {
                         <thead>
                             <tr className="bg-bg-tertiary/50">
                                 <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Date</th>
-                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Équipement</th>
+                                <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">{"Équipement"}</th>
                                 <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Valeur</th>
                                 <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Action</th>
                                 <th className="px-8 py-4 text-left text-nano font-black uppercase tracking-[0.2em] text-text-muted">Par</th>
@@ -172,7 +172,7 @@ export function GestionHuiles() {
                             {logs.length === 0 && (
                                 <tr>
                                     <td colSpan={5} className="px-8 py-20 text-center text-text-muted italic text-sm">
-                                        Aucun historique disponible
+                                        {"Aucun historique disponible"}
                                     </td>
                                 </tr>
                             )}
@@ -189,7 +189,7 @@ export function GestionHuiles() {
             >
                 <div className="space-y-6 pt-4 pb-8">
                     <div className="space-y-2">
-                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Équipement</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">{"Équipement"}</label>
                         <select 
                             value={formData.fryerName}
                             onChange={(e) => setFormData({ ...formData, fryerName: e.target.value })}
@@ -204,7 +204,7 @@ export function GestionHuiles() {
 
                     <div className="space-y-4 px-1">
                         <div className="flex justify-between items-end">
-                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">Taux de Composés Polaires (%)</label>
+                            <label className="text-nano font-black text-text-muted uppercase tracking-widest">{"Taux de Composés Polaires (%)"}</label>
                             <span className={cn(
                                 "text-2xl font-black italic font-serif",
                                 formData.status === 'ok' ? "text-status-success" :
@@ -231,7 +231,7 @@ export function GestionHuiles() {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">Action Effectuée</label>
+                        <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">{"Action Effectuée"}</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             {(['control', 'fitering', 'changing'] as const).map((action) => (
                                 <button
@@ -257,7 +257,7 @@ export function GestionHuiles() {
                         onClick={handleSubmit}
                         className="w-full h-16 rounded-[24px] text-chip-label shadow-xl transition-all bg-status-warning text-text-primary hover:bg-status-warning border border-action-primary/20"
                     >
-                        Valider l'Intervention
+                        {"Valider l'Intervention"}
                     </Button>
                 </div>
             </BottomSheet>

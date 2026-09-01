@@ -123,7 +123,7 @@ export function ReceptionWizard() {
                     <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle">
                         <h4 className="font-bold uppercase text-nano tracking-widest text-primary mb-4 flex items-center gap-2">
                             <TruckIcon className="w-4 h-4 text-status-success" />
-                            Hygiène Véhicule
+                            {"Hygiène Véhicule"}
                         </h4>
                         <div className="flex gap-3">
                             {['clean', 'acceptable', 'dirty'].map((status) => (
@@ -149,8 +149,8 @@ export function ReceptionWizard() {
                         <CameraIcon className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="font-serif font-black italic text-lg text-primary">Photo du Bon de Livraison</p>
-                        <p className="text-nano text-muted mt-1 font-black uppercase tracking-widest">Preuve numérique HACCP requise</p>
+                        <p className="font-serif font-black italic text-lg text-primary">{"Photo du Bon de Livraison"}</p>
+                        <p className="text-nano text-muted mt-1 font-black uppercase tracking-widest">{"Preuve numérique HACCP requise"}</p>
                     </div>
                 </div>
             </motion.div>
@@ -165,7 +165,7 @@ export function ReceptionWizard() {
               className="space-y-6"
             >
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-serif font-black italic text-primary">Contrôle des Articles</h3>
+                    <h3 className="text-xl font-serif font-black italic text-primary">{"Contrôle des Articles"}</h3>
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-status-success rounded-full border border-emerald-100">
                         <SearchIcon className="w-3.5 h-3.5 text-status-success" />
                         <span className="text-nano font-black text-status-success uppercase tracking-widest">{stats.total} Articles</span>
@@ -176,7 +176,7 @@ export function ReceptionWizard() {
                     {!session || (session.items || []).length === 0 ? (
                         <div className="py-20 flex flex-col items-center justify-center opacity-30 text-center">
                             <AlertIcon className="w-12 h-12 mb-4" />
-                            <p className="font-black text-sm uppercase tracking-widest">Aucun article chargé</p>
+                            <p className="font-black text-sm uppercase tracking-widest">{"Aucun article chargé"}</p>
                         </div>
                     ) : (
                         session.items?.map((item, i) => (
@@ -202,16 +202,16 @@ export function ReceptionWizard() {
                     <CheckIcon className="w-12 h-12" />
                 </div>
                 
-                <h3 className="text-3xl font-serif font-black italic mb-2 tracking-tight">Rapport de Synthèse</h3>
-                <p className="text-secondary font-medium max-w-sm mb-10">Dernière vérification avant signature et injection en stock.</p>
+                <h3 className="text-3xl font-serif font-black italic mb-2 tracking-tight">{"Rapport de Synthèse"}</h3>
+                <p className="text-secondary font-medium max-w-sm mb-10">{"Dernière vérification avant signature et injection en stock."}</p>
 
                 <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                    <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle text-center">
-                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Items Acceptés</p>
+                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">{"Items Acceptés"}</p>
                        <p className="text-3xl font-mono font-bold text-status-success">{stats.accepted}</p>
                    </div>
                    <div className="p-6 rounded-[2rem] bg-surface-bg border border-subtle text-center">
-                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">Items Rejetés</p>
+                       <p className="text-nano font-black text-muted uppercase tracking-widest mb-1">{"Items Rejetés"}</p>
                        <p className="text-3xl font-mono font-bold text-status-danger">{stats.rejected}</p>
                    </div>
                 </div>
@@ -221,7 +221,7 @@ export function ReceptionWizard() {
                         <PenIcon className="w-6 h-6" />
                     </div>
                    <div className="text-left">
-                       <p className="font-black text-sm tracking-tight text-primary">Signature Électronique</p>
+                       <p className="font-black text-sm tracking-tight text-primary">{"Signature Électronique"}</p>
                        <p className="text-nano text-secondary uppercase font-black tracking-widest">Validation Finale Grade VI</p>
                    </div>
                 </div>

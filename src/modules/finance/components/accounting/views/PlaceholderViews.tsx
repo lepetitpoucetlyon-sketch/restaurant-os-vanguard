@@ -28,7 +28,7 @@ export function SuppliersView() {
         <div className="p-4 border-b border-border-default flex justify-between items-center">
           <h3 className="font-bold text-sm text-text-primary">Balance Auxiliaire Fournisseurs (Compte 401)</h3>
           <button className="px-3 py-1.5 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold shadow-sm">
-            Nouveau Règlement
+            {"Nouveau Règlement"}
           </button>
         </div>
         <table className="w-full text-xs">
@@ -36,9 +36,9 @@ export function SuppliersView() {
             <tr>
               <th className="p-3 text-left">Compte</th>
               <th className="p-3 text-left">Fournisseur</th>
-              <th className="p-3 text-left">Échéance</th>
+              <th className="p-3 text-left">{"Échéance"}</th>
               <th className="p-3 text-left">Statut</th>
-              <th className="p-3 text-right">Solde Dû</th>
+              <th className="p-3 text-right">{"Solde Dû"}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border-default">
@@ -72,9 +72,9 @@ export function CustomersView() {
       </StatGrid>
       <div className="p-6 bg-surface-card border border-border-default rounded-2xl text-center space-y-3">
         <Users className="w-10 h-10 text-action-primary mx-auto" />
-        <h4 className="font-bold text-text-primary text-sm">Gestion des Comptes Clients & Débiteurs</h4>
+        <h4 className="font-bold text-text-primary text-sm">{"Gestion des Comptes Clients & Débiteurs"}</h4>
         <p className="text-xs text-text-muted max-w-md mx-auto">
-          Factures d'entreprises, événements de groupe et transferts folios hôtel en attente de virement bancaire.
+          {"Factures d'entreprises, événements de groupe et transferts folios hôtel en attente de virement bancaire."}
         </p>
       </div>
     </div>
@@ -92,7 +92,7 @@ export function EmployeesView() {
       <div className="p-4 bg-surface-card border border-border-default rounded-2xl flex items-center justify-between">
         <div>
           <h4 className="font-bold text-sm text-text-primary">Journal de Paie Mensuel</h4>
-          <p className="text-xs text-text-muted">Écritures automatiques des salaires nets et des cotisations URSSAF.</p>
+          <p className="text-xs text-text-muted">{"Écritures automatiques des salaires nets et des cotisations URSSAF."}</p>
         </div>
         <button className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold shadow-sm">
           Exporter DSN / FEC Paie
@@ -125,8 +125,8 @@ export function ReconciliationView() {
       <div className="p-5 bg-surface-card border border-border-default rounded-2xl flex items-center gap-4">
         <CheckCircle2 className="w-8 h-8 text-status-success shrink-0" />
         <div>
-          <h4 className="font-bold text-sm text-text-primary">Liaison Bancaire Automatique EBICS / OpenBanking</h4>
-          <p className="text-xs text-text-muted">Flux bancaire synchronisé en temps réel avec le grand livre des encaissements TPE.</p>
+          <h4 className="font-bold text-sm text-text-primary">{"Liaison Bancaire Automatique EBICS / OpenBanking"}</h4>
+          <p className="text-xs text-text-muted">{"Flux bancaire synchronisé en temps réel avec le grand livre des encaissements TPE."}</p>
         </div>
       </div>
     </div>
@@ -155,11 +155,11 @@ export function TVAView() {
       </StatGrid>
       <div className="p-4 bg-surface-card border border-border-default rounded-2xl flex items-center justify-between">
         <div>
-          <h4 className="font-bold text-sm text-text-primary">Déclaration CA3 Mensuelle</h4>
+          <h4 className="font-bold text-sm text-text-primary">{"Déclaration CA3 Mensuelle"}</h4>
           <p className="text-xs text-text-muted">Ventilation automatique des taux 10% (restauration) et 20% (alcools/boissons).</p>
         </div>
         <button className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold">
-          Télédéclarer CA3
+          {"Télédéclarer CA3"}
         </button>
       </div>
     </div>
@@ -225,11 +225,11 @@ export function MonthlyClosingView() {
       </StatGrid>
       <div className="p-4 bg-surface-card border border-border-default rounded-2xl flex items-center justify-between">
         <div>
-          <h4 className="font-bold text-sm text-text-primary">Génération du Bilan Mensuel & Export Expert-Comptable</h4>
-          <p className="text-xs text-text-muted">Génération des écritures d'inventaire, des FNP et des CCA.</p>
+          <h4 className="font-bold text-sm text-text-primary">{"Génération du Bilan Mensuel & Export Expert-Comptable"}</h4>
+          <p className="text-xs text-text-muted">{"Génération des écritures d'inventaire, des FNP et des CCA."}</p>
         </div>
         <button className="px-4 py-2 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold">
-          Clôturer le Mois
+          {"Clôturer le Mois"}
         </button>
       </div>
     </div>

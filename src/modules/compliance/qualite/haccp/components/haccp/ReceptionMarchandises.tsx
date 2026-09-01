@@ -97,8 +97,8 @@ export function ReceptionMarchandises() {
                         <Truck size={24} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">Réception Marchandises</h2>
-                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">Contrôle sanitaire à l'arrivée</p>
+                        <h2 className="text-2xl font-black text-primary dark:text-text-primary tracking-tight uppercase">{"Réception Marchandises"}</h2>
+                        <p className="text-nano font-black text-muted dark:text-secondary uppercase tracking-widest mt-1">{"Contrôle sanitaire à l'arrivée"}</p>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@ export function ReceptionMarchandises() {
                     className="h-12 px-6 rounded-[24px] bg-text-primary text-bg-primary font-black text-nano uppercase tracking-widest shadow-2xl flex items-center gap-2"
                 >
                     <Plus size={16} />
-                    Nouvelle Réception
+                    {"Nouvelle Réception"}
                 </motion.button>
             </div>
 
@@ -157,7 +157,7 @@ export function ReceptionMarchandises() {
                                         <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <Thermometer size={14} />
                                         </div>
-                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">TEMP.</span>
+                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">{"TEMP."}</span>
                                     </div>
                                     <span className={cn(
                                         "text-sm font-black",
@@ -172,7 +172,7 @@ export function ReceptionMarchandises() {
                                         <div className="w-8 h-8 rounded-full bg-action-primary/10 flex items-center justify-center text-brand">
                                             <ShieldCheck size={14} />
                                         </div>
-                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">INTÉGRITÉ</span>
+                                        <span className="text-nano font-black uppercase text-text-muted tracking-widest">{"INTÉGRITÉ"}</span>
                                     </div>
                                     <StatusBadge 
                                         status={log.integrityStatus === 'conforme' ? 'success' : 'error'} 
@@ -192,8 +192,8 @@ export function ReceptionMarchandises() {
                 {logs.length === 0 && (
                     <div className="col-span-1 md:col-span-2 lg:grid-cols-3 py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-[32px] bg-bg-primary/50">
                         <Truck size={48} className="text-text-muted/30 mb-4" />
-                        <h3 className="text-xl font-serif italic text-text-muted">Aucune réception enregistrée</h3>
-                        <p className="text-chip-label text-text-muted/50 mt-2">Cliquez sur nouvelle réception pour commencer</p>
+                        <h3 className="text-xl font-serif italic text-text-muted">{"Aucune réception enregistrée"}</h3>
+                        <p className="text-chip-label text-text-muted/50 mt-2">{"Cliquez sur nouvelle réception pour commencer"}</p>
                     </div>
                 )}
             </div>
@@ -217,7 +217,7 @@ export function ReceptionMarchandises() {
                                     ) : (
                                         <>
                                             <Camera size={24} />
-                                            <span className="text-chip-label-sm">Photo du Bon / Étiquette</span>
+                                            <span className="text-chip-label-sm">{"Photo du Bon / Étiquette"}</span>
                                         </>
                                     )}
                                     {formData.imageUrl && <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Camera size={24} className="text-text-primary" /></div>}
@@ -249,7 +249,7 @@ export function ReceptionMarchandises() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">Température (°C)</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1">{"Température (°C)"}</label>
                                     <input
                                         type="number"
                                         step="0.1"
@@ -270,7 +270,7 @@ export function ReceptionMarchandises() {
                             </div>
 
                             <div className="flex flex-col gap-3">
-                                <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">État du Conditionnement</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest px-1 text-center">{"État du Conditionnement"}</label>
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         onClick={() => setFormData({ ...formData, integrityStatus: 'conforme' })}
@@ -281,7 +281,7 @@ export function ReceptionMarchandises() {
                                                 : "bg-bg-tertiary border-border text-text-muted"
                                         )}
                                     >
-                                        <ShieldCheck size={16} /> Conforme
+                                        <ShieldCheck size={16} /> {"Conforme"}
                                     </button>
                                     <button
                                         onClick={() => setFormData({ ...formData, integrityStatus: 'non-conforme' })}
@@ -292,7 +292,7 @@ export function ReceptionMarchandises() {
                                                 : "bg-bg-tertiary border-border text-text-muted"
                                         )}
                                     >
-                                        <AlertTriangle size={16} /> Non Conforme
+                                        <AlertTriangle size={16} /> {"Non Conforme"}
                                     </button>
                                 </div>
                             </div>
@@ -305,7 +305,7 @@ export function ReceptionMarchandises() {
                                 {isUploading ? (
                                     <>
                                         <Loader2 size={16} className="mr-2 animate-spin" />
-                                        Enregistrement...
+                                        {"Enregistrement..."}
                                     </>
                                 ) : (
                                     'Valider la Réception'

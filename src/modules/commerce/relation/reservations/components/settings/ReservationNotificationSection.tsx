@@ -95,14 +95,14 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
             <Bell className="w-6 h-6" />
           </motion.div>
           <div>
-            <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Studio Notifications &amp; SMS</h3>
-            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Passerelle Twilio, Emails &amp; Templates Dynamiques</p>
+            <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">{"Studio Notifications & SMS"}</h3>
+            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Passerelle Twilio, Emails & Templates Dynamiques"}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 bg-status-success/10 border border-status-success/20 px-3.5 py-1.5 rounded-full">
           <CheckCircle2 className="w-4 h-4 text-status-success" />
-          <span className="text-xs font-mono font-bold text-status-success">Twilio Gateway Connecté</span>
+          <span className="text-xs font-mono font-bold text-status-success">{"Twilio Gateway Connecté"}</span>
         </div>
       </div>
 
@@ -111,8 +111,8 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
         {/* Manager notifications */}
         <div className="space-y-5 p-6 rounded-2xl border border-border bg-bg-tertiary/30">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-black uppercase tracking-widest text-text-muted">Alertes Équipe &amp; Gérant</p>
-            <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-bold">Temps Réel</span>
+            <p className="text-xs font-black uppercase tracking-widest text-text-muted">{"Alertes Équipe & Gérant"}</p>
+            <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-bold">{"Temps Réel"}</span>
           </div>
 
           {MGR_TOGGLES.map(({ key, label }) => {
@@ -128,7 +128,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
           })}
 
           <div className="pt-3 border-t border-border/40 space-y-3">
-            <p className="text-chip-label text-text-muted">Canaux de notification gérant</p>
+            <p className="text-chip-label text-text-muted">{"Canaux de notification gérant"}</p>
             <div className="flex gap-2 flex-wrap">
               {(['email', 'sms', 'push'] as const).map((ch) => {
                 const channels = (cfg.mgrNotifChannels as string[]) ?? ['email'];
@@ -170,8 +170,8 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
         {/* Client triggers & timing */}
         <div className="space-y-5 p-6 rounded-2xl border border-border bg-bg-tertiary/30">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-black uppercase tracking-widest text-text-muted">Déclencheurs Client</p>
-            <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-bold">Automatisé</span>
+            <p className="text-xs font-black uppercase tracking-widest text-text-muted">{"Déclencheurs Client"}</p>
+            <span className="text-nano px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-bold">{"Automatisé"}</span>
           </div>
 
           {CLIENT_TOGGLES.map(({ key, label }) => {
@@ -188,11 +188,11 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
           })}
 
           <div className="pt-3 border-t border-border/40 space-y-4">
-            <p className="text-chip-label text-text-muted">Cadencement des Rappels Programmés</p>
+            <p className="text-chip-label text-text-muted">{"Cadencement des Rappels Programmés"}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-nano font-bold text-text-muted uppercase tracking-widest flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-accent" /> Rappel Principal (J-1/J-2)
+                  <Clock className="w-3 h-3 text-accent" /> {"Rappel Principal (J-1/J-2)"}
                 </label>
                 <div className="relative">
                   <input
@@ -209,7 +209,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
 
               <div className="space-y-1.5">
                 <label className="text-nano font-bold text-text-muted uppercase tracking-widest flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-accent" /> Rappel Express SMS (Jour J)
+                  <Clock className="w-3 h-3 text-accent" /> {"Rappel Express SMS (Jour J)"}
                 </label>
                 <div className="relative">
                   <input
@@ -236,8 +236,8 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
               <MessageSquare className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-lg font-serif text-text-primary uppercase tracking-tight italic">Personnalisation des Messages &amp; SMS</h4>
-              <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Insérez des variables dynamiques en 1 clic</p>
+              <h4 className="text-lg font-serif text-text-primary uppercase tracking-tight italic">{"Personnalisation des Messages & SMS"}</h4>
+              <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Insérez des variables dynamiques en 1 clic"}</p>
             </div>
           </div>
 
@@ -247,19 +247,19 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
               onClick={() => setActiveTab('confirmation')}
               className={cn('px-4 py-1.5 rounded-xl text-xs font-bold transition-all', activeTab === 'confirmation' ? 'bg-accent text-bg-primary shadow-sm' : 'text-text-muted hover:text-text-primary')}
             >
-              Confirmation Immédiate
+              {"Confirmation Immédiate"}
             </button>
             <button
               onClick={() => setActiveTab('reminder')}
               className={cn('px-4 py-1.5 rounded-xl text-xs font-bold transition-all', activeTab === 'reminder' ? 'bg-accent text-bg-primary shadow-sm' : 'text-text-muted hover:text-text-primary')}
             >
-              Rappel Programmé
+              {"Rappel Programmé"}
             </button>
             <button
               onClick={() => setActiveTab('cancellation')}
               className={cn('px-4 py-1.5 rounded-xl text-xs font-bold transition-all', activeTab === 'cancellation' ? 'bg-accent text-bg-primary shadow-sm' : 'text-text-muted hover:text-text-primary')}
             >
-              Annulation
+              {"Annulation"}
             </button>
           </div>
         </div>
@@ -267,7 +267,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
         {/* Dynamic Variable Chips */}
         <div className="space-y-2">
           <p className="text-chip-label text-text-muted flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-accent" /> Variables dynamiques disponibles (cliquez pour insérer) :
+            <Sparkles className="w-3 h-3 text-accent" /> {"Variables dynamiques disponibles (cliquez pour insérer) :"}
           </p>
           <div className="flex flex-wrap gap-2">
             {DYNAMIC_VARIABLES.map(({ tag, label, example }) => (
@@ -290,8 +290,8 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
           {/* Text Editor */}
           <div className="lg:col-span-7 space-y-3">
             <div className="flex items-center justify-between text-xs text-text-muted font-mono">
-              <span>Texte du message {activeTab.toUpperCase()} :</span>
-              <span>{currentText.length} caractères • ~{Math.ceil(currentText.length / 153)} segment(s) SMS</span>
+              <span>{"Texte du message "}{activeTab.toUpperCase()}{" :"}</span>
+              <span>{currentText.length}{" caractères • ~"}{Math.ceil(currentText.length / 153)}{" segment(s) SMS"}</span>
             </div>
             <textarea
               rows={6}
@@ -302,14 +302,14 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
             />
             <div className="flex items-center justify-between text-micro text-text-muted">
               <span className="flex items-center gap-1">
-                <ShieldAlert className="w-3.5 h-3.5 text-accent" /> Le lien autonome {`{lien_modification}`} permet au client d’annuler en 1-clic pour libérer la table.
+                <ShieldAlert className="w-3.5 h-3.5 text-accent" /> {"Le lien autonome "}{"{lien_modification}"}{" permet au client d’annuler en 1-clic pour libérer la table."}
               </span>
               <button
                 type="button"
                 onClick={() => setConfig(c => ({ ...c, [currentTemplateKey]: defaultText }))}
                 className="text-xs text-accent hover:underline font-bold"
               >
-                Rétablir défaut
+                {"Rétablir défaut"}
               </button>
             </div>
           </div>
@@ -341,7 +341,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
               <div className="w-24 h-1 bg-neutral-600 rounded-full mx-auto mt-2" />
             </div>
             <p className="text-nano font-bold text-text-muted uppercase tracking-widest text-center mt-3">
-              Aperçu en direct (avec données d’exemple)
+              {"Aperçu en direct (avec données d’exemple)"}
             </p>
           </div>
         </div>

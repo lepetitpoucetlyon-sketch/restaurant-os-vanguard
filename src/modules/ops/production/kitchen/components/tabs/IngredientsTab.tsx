@@ -125,8 +125,8 @@ export function IngredientsTab() {
         >
             <motion.div variants={fadeInUp} className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">Catalogue Ingrédients</h2>
-                    <p className="text-text-muted text-[13px] mt-2 font-medium">Référentiel des matières premières et coûts unitaires.</p>
+                    <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">{"Catalogue Ingrédients"}</h2>
+                    <p className="text-text-muted text-[13px] mt-2 font-medium">{"Référentiel des matières premières et coûts unitaires."}</p>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2 bg-bg-secondary p-1 rounded-xl border border-border">
@@ -203,7 +203,7 @@ export function IngredientsTab() {
  
                              <div className="grid grid-cols-2 gap-4 py-4 border-y border-border/50">
                                  <div>
-                                     <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">Coût Unitaire</p>
+                                     <p className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-1">{"Coût Unitaire"}</p>
                                      <p className="text-xl font-mono font-black text-text-primary">{formatMu(_costMu)}<span className="text-nano text-text-muted ml-1">/{String(ing.unit || '')}</span></p>
                                  </div>
                                  <div className="text-right">
@@ -229,7 +229,7 @@ export function IngredientsTab() {
                     <div className="w-16 h-16 rounded-full bg-accent/5 flex items-center justify-center group-hover:bg-accent transition-colors">
                         <Plus className="w-8 h-8 text-accent group-hover:text-text-primary transition-colors" />
                     </div>
-                    <span className="text-nano font-black uppercase tracking-[0.3em] text-text-muted group-hover:text-accent">Ajouter au Catalogue</span>
+                    <span className="text-nano font-black uppercase tracking-[0.3em] text-text-muted group-hover:text-accent">{"Ajouter au Catalogue"}</span>
                 </motion.button>
             </div>
 
@@ -243,7 +243,7 @@ export function IngredientsTab() {
                 <form onSubmit={handleSave} className="space-y-6">
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Nom de l'ingrédient</label>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Nom de l'ingrédient"}</label>
                             <input
                                 type="text"
                                 value={formName}
@@ -256,7 +256,7 @@ export function IngredientsTab() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Catégorie</label>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Catégorie"}</label>
                                 <input
                                     type="text"
                                     value={formCategory}
@@ -266,7 +266,7 @@ export function IngredientsTab() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Unité</label>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Unité"}</label>
                                 <input
                                     type="text"
                                     value={formUnit}
@@ -279,7 +279,7 @@ export function IngredientsTab() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Coût unitaire (€)</label>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Coût unitaire (€)"}</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -290,7 +290,7 @@ export function IngredientsTab() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Stock minimum</label>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Stock minimum"}</label>
                                 <input
                                     type="number"
                                     step="0.1"
@@ -303,7 +303,7 @@ export function IngredientsTab() {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Fournisseur</label>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-text-muted mb-1">{"Fournisseur"}</label>
                             <input
                                 type="text"
                                 value={formSupplier}
@@ -327,7 +327,7 @@ export function IngredientsTab() {
                             className="px-6 py-3 rounded-xl bg-accent text-text-primary font-bold text-xs uppercase tracking-wider hover:opacity-90 flex items-center gap-2"
                         >
                             <Save className="w-4 h-4" />
-                            Enregistrer
+                            {"Enregistrer"}
                         </button>
                     </div>
                 </form>

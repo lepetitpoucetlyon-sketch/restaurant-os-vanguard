@@ -96,8 +96,8 @@ export default function ApiKeysPanel() {
             <Key className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-text-primary">Clés API Externes</h3>
-            <p className="text-xs text-text-muted">Intégration ERP et systèmes tiers via <code className="bg-bg-secondary px-1 rounded">ros_*</code></p>
+            <h3 className="text-base font-semibold text-text-primary">{"Clés API Externes"}</h3>
+            <p className="text-xs text-text-muted">{"Intégration ERP et systèmes tiers via "}<code className="bg-bg-secondary px-1 rounded">ros_*</code></p>
           </div>
         </div>
         <button
@@ -105,7 +105,7 @@ export default function ApiKeysPanel() {
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-bg-primary text-xs font-bold hover:opacity-90 transition-opacity"
         >
           <Plus className="w-3.5 h-3.5" />
-          Générer
+          {"Générer"}
         </button>
       </div>
 
@@ -114,9 +114,9 @@ export default function ApiKeysPanel() {
         <div className="rounded-xl border border-emerald-500/30 bg-status-success/5 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-status-success flex-shrink-0" />
-            <p className="text-sm font-semibold text-status-success">Clé générée — copiez-la maintenant</p>
+            <p className="text-sm font-semibold text-status-success">{"Clé générée — copiez-la maintenant"}</p>
           </div>
-          <p className="text-xs text-text-muted">Cette clé ne sera plus affichée après fermeture de cette section.</p>
+          <p className="text-xs text-text-muted">{"Cette clé ne sera plus affichée après fermeture de cette section."}</p>
           <div className="flex items-center gap-2">
             <code className={`flex-1 text-xs font-mono bg-bg-secondary rounded-lg px-3 py-2.5 text-text-primary truncate transition-all ${!showKey ? 'blur-sm select-none pointer-events-none' : ''}`}>
               {createdKey.key}
@@ -146,7 +146,7 @@ export default function ApiKeysPanel() {
       {/* Create form */}
       {showForm && (
         <div className="rounded-xl border border-border bg-bg-secondary p-4 space-y-3">
-          <p className="text-sm font-semibold text-text-primary">Nouvelle clé API</p>
+          <p className="text-sm font-semibold text-text-primary">{"Nouvelle clé API"}</p>
           <input
             type="text"
             placeholder="Nom (ex: ERP Compta, App Mobile…)"
@@ -169,7 +169,7 @@ export default function ApiKeysPanel() {
               className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-accent text-bg-primary text-xs font-bold disabled:opacity-40 transition-opacity"
             >
               {isCreating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Key className="w-3.5 h-3.5" />}
-              Générer
+              {"Générer"}
             </button>
           </div>
         </div>
@@ -179,13 +179,13 @@ export default function ApiKeysPanel() {
       {isLoading ? (
         <div className="flex items-center justify-center py-8 text-text-muted text-xs">
           <Loader2 className="w-4 h-4 animate-spin mr-2" />
-          Chargement…
+          {"Chargement…"}
         </div>
       ) : keys.length === 0 ? (
         <div className="rounded-xl border border-dashed border-border p-8 text-center">
           <Key className="w-8 h-8 text-text-muted mx-auto mb-3" />
-          <p className="text-sm text-text-muted">Aucune clé API active.</p>
-          <p className="text-xs text-text-muted mt-1">Générez une clé pour intégrer des systèmes tiers.</p>
+          <p className="text-sm text-text-muted">{"Aucune clé API active."}</p>
+          <p className="text-xs text-text-muted mt-1">{"Générez une clé pour intégrer des systèmes tiers."}</p>
         </div>
       ) : (
         <div className="space-y-2">
