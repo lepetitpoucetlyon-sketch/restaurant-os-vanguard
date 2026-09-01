@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { browserSessionPersistence, onAuthStateChanged, setPersistence, signInWithCustomToken, signOut } from 'firebase/auth';
-import { httpsCallable, getFunctions } from 'firebase/functions';
-import { auth, firebaseApp } from '@/lib/firebase';
+import { getClientAuthProvider } from '@/lib/auth/clientAuthProvider';
 import type { PersistedSession } from '@/lib/IdentityManager';
 import type { User } from '@nexus/contracts';
 import { clearDevBypass, isDevBypassActive } from '@/lib/auth/DevAuthBridge';
+import { logger } from '@/lib/logger';
 
 const SESSION_STORAGE_KEY = 'executive_user_session_v2';
 const LEGACY_SESSION_KEY = 'executive_user_session';
@@ -39,12 +38,7 @@ function resolveDevBypassUserId(): string | null {
 }
 
 export function useAuthSession() {
-    // 🛡️ Safe initialization for SSR
-    const firebaseFunctions = typeof window !== 'undefined' ? getFunctions(firebaseApp) : null;
-    
-    const loginWithPinCallable = firebaseFunctions 
-        ? httpsCallable<{ userId: string; pin: string }, LoginWithPinResponse>(firebaseFunctions, 'loginWithPin') 
-        : null;
+    const authProvider = getClientAuthProvider();
 
     const [firebaseUserId, setFirebaseUserId] = useState<string | null>(null);
     const [isFirebaseAuthReady, setIsFirebaseAuthReady] = useState(false);
@@ -59,15 +53,15 @@ export function useAuthSession() {
             localStorage.removeItem('role_permissions');
         }
 
-        void setPersistence(auth, browserSessionPersistence).catch((error) => {
-            console.error('Unable to enforce browser-session Firebase persistence', error);
+        void authProvider.setSessionPersistence().catch((error) => {
+            logger.error('Unable to enforce browser-session auth persistence', error);
         });
 
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-            setFirebaseUserId(firebaseUser?.uid ?? null);
+        const unsubscribe = authProvider.onAuthStateChanged((uid) => {
+            setFirebaseUserId(uid);
             setIsFirebaseAuthReady(true);
 
-            if (!firebaseUser) {
+            if (!uid) {
                 const devBypassUserId = resolveDevBypassUserId();
                 if (devBypassUserId) {
                     sessionUserIdRef.current = devBypassUserId;
@@ -83,10 +77,10 @@ export function useAuthSession() {
                 return;
             }
 
-            const nextSessionUserId = sessionUserIdRef.current ?? firebaseUser.uid;
+            const nextSessionUserId = sessionUserIdRef.current ?? uid;
             sessionUserIdRef.current = nextSessionUserId;
             setSessionUserId(nextSessionUserId);
-            
+
             if (typeof window !== 'undefined') {
                 const payload: PersistedSession = { userId: nextSessionUserId, lastAuthenticatedAt: new Date().toISOString() };
                 sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(payload));
@@ -110,11 +104,28 @@ export function useAuthSession() {
     };
 
     const loginWithFirebase = async (token: string) => {
-        await signInWithCustomToken(auth, token);
+        await authProvider.signInWithToken(token);
     };
 
     const logoutFirebase = async () => {
-        await signOut(auth);
+        await authProvider.signOut();
+    };
+
+    /**
+     * Remplace l'ancien loginWithPinCallable (httpsCallable Cloud Function) par
+     * un appel à /api/auth/login-pin (firestore.md §12 Lot B2.b/B2.e).
+     */
+    const loginWithPin = async (userId: string, pin: string): Promise<LoginWithPinResponse> => {
+        const res = await fetch('/api/auth/login-pin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, pin }),
+        });
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({} as { error?: string }));
+            throw new Error(body?.error ?? `login-pin a échoué (${res.status})`);
+        }
+        return res.json() as Promise<LoginWithPinResponse>;
     };
 
     return {
@@ -129,6 +140,6 @@ export function useAuthSession() {
         clearPersistedSession,
         loginWithFirebase,
         logoutFirebase,
-        loginWithPinCallable
+        loginWithPin,
     };
 }

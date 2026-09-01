@@ -73,8 +73,6 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
         'src/infrastructure/services/storage/FirebaseStorageProvider.ts',
         'src/lib/nexus/providerFactory.ts',
         'src/lib/storage/providerFactory.ts',
-        'src/shared/providers/hooks/auth/AuthSession.tsx',
-        'src/shared/providers/hooks/auth/AuthStaff.tsx',
       ];
 
       const violations: string[] = [];
@@ -114,7 +112,7 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
   });
 
   describe('INV-3 — Ratchet de Couplage Auth', () => {
-    it('le nombre de fichiers sources couplés à Firebase Auth ne dépasse pas le seuil de 10', () => {
+    it('le nombre de fichiers sources couplés à Firebase Auth ne dépasse pas le seuil de 5', () => {
       const srcFiles = getSrcFiles().filter(f => !f.includes('__tests__') && !f.endsWith('.test.ts') && !f.endsWith('.spec.ts'));
       const authFiles: string[] = [];
 
@@ -125,8 +123,10 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
         }
       }
 
-      // Ratchet bloquant : max 10 fichiers réels
-      expect(authFiles.length).toBeLessThanOrEqual(10);
+      // Ratchet bloquant : max 5 fichiers réels (firestore.md §12 Lot B2 — mfa.ts et
+      // AuthSession.tsx découplés, ne restent que firebase.ts, firebase-admin-init.ts,
+      // serverNexus.ts, ServerAuthProvider.ts, clientAuthProvider.ts).
+      expect(authFiles.length).toBeLessThanOrEqual(5);
     });
   });
 

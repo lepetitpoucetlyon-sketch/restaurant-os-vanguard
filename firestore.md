@@ -267,6 +267,22 @@ export interface AuthUser {
 
 ### B2 — Client : abstraire l'auth navigateur et supprimer `httpsCallable`
 
+> ✅ **Livré le 2026-09-01.** `src/lib/auth/clientAuthProvider.ts` (nouveau, seul
+> point d'entrée `firebase/auth` côté client) ; `mfa.ts`, `AuthSession.tsx`,
+> `AuthStaff.tsx`, `authedFetch.ts` découplés. Routes `/api/auth/login-pin` et
+> `/api/auth/login-profiles` créées (cascade Argon2id → PBKDF2 → SHA-256 legacy
+> → clair, migration silencieuse, anti-brute-force 5/15min identiques à
+> l'ancienne Cloud Function). `IServerAuthProvider.createSessionToken()` ajouté
+> (Firebase : `createCustomToken` ; Keycloak : JWT HS256 local + `verifyIdToken`
+> étendu pour le revérifier). Dépendance `argon2@^0.44.0` installée à la racine
+> (validée par l'utilisateur avant install). INV-3 mesuré et redescendu 10 → **5**
+> fichiers réels (`firebase.ts`, `firebase-admin-init.ts`, `serverNexus.ts`,
+> `ServerAuthProvider.ts`, `clientAuthProvider.ts`) ; INV-2 allégé des 2
+> exemptions devenues inutiles. 9 tests dédiés (`KeycloakAuthProvider.test.ts`
+> ×8 déjà existants + `login-pin.test.ts` ×8 nouveaux). Preuves : `tsc` 0 erreur,
+> `eslint` 0 violation (Barrel Contract inclus), `vitest run` 2574/2574,
+> cycles madge 7/430 inchangé, gate-last-mile aucun compteur en hausse.
+
 C'est le morceau structurel. Trois surfaces :
 
 **B2.a — `src/lib/auth/mfa.ts`** — importe `getAuth`, `multiFactor`, etc. de `firebase/auth` (ligne 16). Introduire `IClientAuthProvider` dans `src/lib/auth/clientAuthProvider.ts` :
@@ -640,7 +656,7 @@ G    Souveraineté (§12)          (chantier à part entière : PostgresAdapter,
 - **Les lots A→F n'écrivent pas d'adapter PostgreSQL.** Ils rendent son écriture possible sans toucher au reste. L'adapter Postgres fait l'objet du **lot G** (§12), qui ne peut démarrer qu'une fois la suite de conformité (D.3) en place — elle en est le cahier des charges exécutable.
 - **Il ne retire pas Firebase.** Firestore reste le provider par défaut (`DB_PROVIDER=firestore`, `AUTH_PROVIDER=firebase`). L'objectif est la **réversibilité**, pas la migration.
 - **Il ne touche pas au scellement fiscal NF525** (ADR-003), sauf sur le point B3 (`onJournalEntryCreated`), explicitement encadré par les tests fiscaux existants.
-- **Il n'installe aucune dépendance sans validation** : `argon2` (B2.b), un éventuel `better-sqlite3` (D.1), puis `pg`, `jose` (ou `jsonwebtoken` + cache JWKS manuel) et un éventuel `node-pg-migrate` (lot G) doivent être demandés avant installation.
+- **Il n'installe aucune dépendance sans validation** : `argon2` (B2.b, ✅ installé le 2026-09-01 après validation utilisateur), un éventuel `better-sqlite3` (D.1), puis `pg`, `jose` (ou `jsonwebtoken` + cache JWKS manuel — finalement évité, cf. G.2.1 : `crypto.createPublicKey` suffit) et un éventuel `node-pg-migrate` (lot G) doivent être demandés avant installation.
 - **Il ne chiffre pas l'extension du cache offline.** Passer à Postgres fait perdre le cache IndexedDB que Firestore fournit sur toutes les collections (cf. §12 G.0.bis). L'ampleur du rattrapage Dexie est un arbitrage à part, préalable au lot G.
 - **Il ne relève aucun cliquet.** Un seuil qui gêne se corrige à la source.
 
@@ -654,7 +670,7 @@ G    Souveraineté (§12)          (chantier à part entière : PostgresAdapter,
 | **A** | P0-1 — pas de factory provider | 🔴 | 5 + 2 nouveaux | — |
 | **B1** | P0-2 — 174 routes contournent l'abstraction | 🔴 | 3 | A |
 | **C.2/C.3** | P1-1 — INV-2 aveugle | 🟠 | 1 | A |
-| **B2** | P1-3 — login POS dépend des Cloud Functions | 🟠 | 6 + 2 routes | A, B1 |
+| **B2** ✅ | P1-3 — login POS dépend des Cloud Functions | 🟠 | 6 + 2 routes (livré 2026-09-01, INV-3 réel : 10 → 5) | A, B1 |
 | **B3** | P1-3 — trigger fiscal Firestore→BigQuery | 🟠 | 3 (dont `functions/`) | B2 |
 | **D** | P2-1/P2-2 — portabilité non prouvée | 🟡 | 3 + 1 nouveau | — |
 | **E** | P2-3/4/5 — dette de nommage et doublons | 🟡 | ~20 | A, B |
@@ -667,7 +683,7 @@ G    Souveraineté (§12)          (chantier à part entière : PostgresAdapter,
 |---|---|---|---|---|
 | M1 — mentions textuelles | 126 | 126 | **< 40** | < 40 |
 | M2 — imports SDK réels | 13 | **8** | 8 | 8 (tous optionnels) |
-| INV-3 — couplage auth (réel) | 10 (affiché 16) | **3** | 3 | 3 |
+| INV-3 — couplage auth (réel) | 10 (affiché 16) | **5** (mesuré 2026-09-01, estimation initiale 3) | 5 | 5 |
 | Routes API couplées à firebase-admin | 174 / 216 | **0** | 0 | 0 |
 | Adapters passant la conformité | 0 / 5 | 3 / 5 | 3 / 5 | **4 / 6** |
 | Providers persistants non-Firebase | 0 | 0 | 0 | **1 (Postgres)** |

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { httpsCallable, getFunctions } from 'firebase/functions';
-import { firebaseApp, isMock } from '@/lib/firebase';
+import { isMock } from '@/lib/firebase';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { IdentityManager, ROOT_ADMIN, FLEET_OPERATOR } from '@/lib/IdentityManager';
 import { isMCCMode } from '@/config/instance';
@@ -39,12 +38,17 @@ async function resolveDefaultUser(): Promise<User> {
         : IdentityManager.createRootAdminUser();
 }
 
+/**
+ * Remplace l'ancien listLoginProfilesCallable (httpsCallable Cloud Function)
+ * par un appel à /api/auth/login-profiles (firestore.md §12 Lot B2.b/B2.e).
+ */
+async function fetchLoginProfiles(): Promise<{ users?: User[] }> {
+    const res = await fetch('/api/auth/login-profiles');
+    if (!res.ok) throw new Error(`login-profiles a échoué (${res.status})`);
+    return res.json() as Promise<{ users?: User[] }>;
+}
+
 export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: string | null) {
-    const firebaseFunctions = getFunctions(firebaseApp);
-    const listLoginProfilesCallable = httpsCallable<Record<string, never>, { users?: User[] }>(
-        firebaseFunctions,
-        'listLoginProfiles',
-    );
     const [users, setUsers] = useState<User[]>([]);
     const [isUsersLoaded, setIsUsersLoaded] = useState(false);
 
@@ -62,8 +66,8 @@ export function useAuthStaff(firebaseUserId: string | null, _sessionUserId: stri
 
             try {
                 // Pre-auth fallback
-                const response = await listLoginProfilesCallable({});
-                const remoteUsers = extractRemoteUsers(response.data);
+                const data = await fetchLoginProfiles();
+                const remoteUsers = extractRemoteUsers(data);
                 const rootAdmin = IdentityManager.buildSessionUser(ROOT_ADMIN);
                 const combinedUsers = [rootAdmin, ...remoteUsers.filter(u => u.id !== rootAdmin.id)];
 

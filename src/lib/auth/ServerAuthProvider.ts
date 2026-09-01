@@ -46,6 +46,13 @@ export interface IServerAuthProvider {
     getUser(uid: string): Promise<AuthUser | null>;
     setCustomClaims(uid: string, claims: Record<string, unknown>): Promise<void>;
     deleteUser(uid: string): Promise<void>;
+    /**
+     * Émet un jeton de session opaque pour `uid`, portant `claims`.
+     * Consommé côté client par IClientAuthProvider.signInWithToken().
+     * Remplace l'ancien flux Cloud Function loginWithPin → adminAuth.createCustomToken()
+     * (firestore.md §12 Lot B2.c).
+     */
+    createSessionToken(uid: string, claims: Record<string, unknown>): Promise<string>;
 }
 
 // ─── Firebase Admin (actuel) ─────────────────────────────────────────────────
@@ -132,6 +139,13 @@ export class FirebaseAuthProvider implements IServerAuthProvider {
         initFirebaseAdmin();
         await getAuth().deleteUser(uid);
     }
+
+    async createSessionToken(uid: string, claims: Record<string, unknown>): Promise<string> {
+        const { getAuth } = await import('firebase-admin/auth');
+        const { initFirebaseAdmin } = await import('@/lib/firebase-admin-init');
+        initFirebaseAdmin();
+        return getAuth().createCustomToken(uid, claims);
+    }
 }
 
 import jwt from 'jsonwebtoken';
@@ -192,9 +206,23 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
      * Vérifie la SIGNATURE du jeton via la JWKS du realm (RFC 7517), pas seulement
      * son contenu. `jwt.decode()` seul ne fait AUCUNE vérification cryptographique —
      * un jeton forgé à la main serait accepté. Voir firestore.md §12 G.2.1.
+     *
+     * Deux familles de jetons acceptées :
+     *  - RS256/ES256 signés par le realm Keycloak (login classique OIDC), vérifiés
+     *    contre la JWKS publiée — branche ci-dessous.
+     *  - HS256 émis localement par `createSessionToken()` (login PIN staff — il
+     *    n'existe pas d'équivalent Keycloak au custom token Firebase, donc cette
+     *    classe émet elle-même un jeton de session signé par `AUTH_SESSION_SECRET`,
+     *    qu'elle doit donc aussi savoir vérifier). Les deux jamais interchangeables :
+     *    un jeton HS256 sans `kid` ne peut PAS être rejoué comme un jeton realm.
      */
     async verifyIdToken(token: string): Promise<DecodedAuthToken> {
         const unverifiedHeader = jwt.decode(token, { complete: true })?.header;
+
+        if (unverifiedHeader?.alg === 'HS256') {
+            return this.verifySessionToken(token);
+        }
+
         const kid = unverifiedHeader?.kid;
         if (!kid) {
             throw new Error('Invalid Keycloak ID token — kid manquant dans le header');
@@ -236,6 +264,32 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
         };
     }
 
+    /** Vérifie un jeton de session HS256 émis par `createSessionToken()` (login PIN). */
+    private async verifySessionToken(token: string): Promise<DecodedAuthToken> {
+        const secret = process.env.AUTH_SESSION_SECRET;
+        if (!secret) {
+            throw new Error('[SECURITY] AUTH_SESSION_SECRET absent — impossible de vérifier un jeton de session.');
+        }
+        let decoded: Record<string, unknown>;
+        try {
+            decoded = jwt.verify(token, secret, {
+                algorithms: ['HS256'],
+                issuer: this.issuer,
+            }) as Record<string, unknown>;
+        } catch (err) {
+            throw new Error(`Invalid session token — signature/claims invalides (${err instanceof Error ? err.message : String(err)})`);
+        }
+        return {
+            uid:      String(decoded.sub ?? ''),
+            role:     typeof decoded.role === 'string' ? decoded.role : undefined,
+            tenantId: typeof decoded.tenantId === 'string' ? decoded.tenantId : undefined,
+            clientId: typeof decoded.clientId === 'string' ? decoded.clientId : undefined,
+            // Un login PIN staff n'est jamais un second facteur — cohérent avec
+            // FirebaseAuthProvider.verifyIdToken() sur un customToken équivalent.
+            mfaUsed:  false,
+        };
+    }
+
     async createUser(_params: { email: string; password?: string; displayName?: string; uid?: string; emailVerified?: boolean }): Promise<{ uid: string }> {
         // Appel API REST Keycloak Admin — à implémenter avec KEYCLOAK_ADMIN_SECRET
         throw new Error('KeycloakAuthProvider.createUser — not yet implemented. Use Keycloak Admin REST API.');
@@ -256,6 +310,26 @@ export class KeycloakAuthProvider implements IServerAuthProvider {
 
     async deleteUser(_uid: string): Promise<void> {
         throw new Error('KeycloakAuthProvider.deleteUser — not yet implemented.');
+    }
+
+    /**
+     * Émet un JWT de session signé HS256 avec `AUTH_SESSION_SECRET` — pas un
+     * custom token Keycloak (le realm ne sait pas signer nos claims applicatifs
+     * `role`/`tenantId`). Vérifié en retour par `verifySessionToken()` ci-dessus.
+     */
+    async createSessionToken(uid: string, claims: Record<string, unknown>): Promise<string> {
+        const secret = process.env.AUTH_SESSION_SECRET;
+        if (!secret) {
+            throw new Error(
+                '[SECURITY] AUTH_SESSION_SECRET absent — requis pour émettre des jetons de session ' +
+                'avec AUTH_PROVIDER=keycloak. Aucun défaut fourni.'
+            );
+        }
+        return jwt.sign({ ...claims, sub: uid }, secret, {
+            algorithm: 'HS256',
+            issuer: this.issuer,
+            expiresIn: '12h',
+        });
     }
 }
 

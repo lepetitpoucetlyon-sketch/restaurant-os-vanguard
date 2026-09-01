@@ -56,18 +56,17 @@ async function attemptDevLogin(
 }
 
 async function attemptCloudLogin(
-    loginCallable: ((args: { userId: string; pin: string }) => Promise<{ data: unknown }>) | null | undefined,
+    loginWithPin: ((userId: string, pin: string) => Promise<{ token: string; user: unknown }>) | null | undefined,
     loginWithFirebase: (token: string) => Promise<void>,
     userId: string,
     pin: string,
     commitSession: () => void,
 ): Promise<boolean | null> {
-    if (!loginCallable) return null;
+    if (!loginWithPin) return null;
     try {
-        const result = await loginCallable({ userId, pin });
-        const data = result.data as { token: string };
-        if (data.token) {
-            await loginWithFirebase(data.token);
+        const result = await loginWithPin(userId, pin);
+        if (result?.token) {
+            await loginWithFirebase(result.token);
             commitSession();
             return true;
         }
@@ -97,7 +96,7 @@ export function useNexusAuthLogic(
             session.setIsTwoFactorVerified(true);
         };
         try {
-            const cloudResult = await attemptCloudLogin(session.loginWithPinCallable, session.loginWithFirebase, userId, pin, commitSession);
+            const cloudResult = await attemptCloudLogin(session.loginWithPin, session.loginWithFirebase, userId, pin, commitSession);
             if (cloudResult !== null) return cloudResult;
             return await attemptDevLogin(staff.users, userId, pin, session.persistSession, commitSession);
         } catch (err) {
