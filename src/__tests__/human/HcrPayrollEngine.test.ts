@@ -27,6 +27,14 @@ describe('HcrPayrollEngine — Convention Collective HCR (IDCC 1979)', () => {
     expect(nightHours).toBe(3);
   });
 
+  it('calcule les heures de nuit sur un shift 21h00 -> 02h00 traversant minuit (4h de nuit)', () => {
+    const start = new Date('2026-09-01T21:00:00');
+    const end = new Date('2026-09-02T02:00:00');
+
+    const nightHours = HcrPayrollEngine.computeNightHours(start, end, 'Europe/Paris');
+    expect(nightHours).toBe(4);
+  });
+
   it('calcule la paie mensuelle d\'un salarié CDI 39h avec avantage repas MG', () => {
     const mockUser: User = {
       id: 'usr_cdi_01',

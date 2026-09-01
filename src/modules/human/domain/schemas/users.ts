@@ -33,6 +33,7 @@ export const ContractorProfileSchema = z.object({
   billingRateType: z.enum(['hourly', 'shift_flat_fee', 'per_cover']).default('hourly'),
   rateInMicrounits: z.number().int().min(0).optional(),
   selfBillingAgreed: z.boolean().default(false),
+  vigilanceStatus: z.enum(['valid', 'missing', 'expired']).default('missing').optional(),
   urssafVigilanceCertificateUrl: z.string().optional(),
   urssafVigilanceValidUntil: z.string().optional(),
   iban: z.string().optional(),

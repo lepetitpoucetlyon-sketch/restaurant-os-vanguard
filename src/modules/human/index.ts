@@ -20,10 +20,12 @@ export { LaborCostService } from './effectifs/hr/services/laborCost';
 export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';
 export { DigitalEmployeeVault, type VaultArchiveManifest } from './services/DigitalEmployeeVault';
 
-// 🍷 Services RH conventionnels HCR (IDCC 1979) — paie, self-billing freelance, contrats
+// 🍷 Services RH conventionnels HCR (IDCC 1979) — paie, self-billing freelance, contrats, vigilance
 export { HcrPayrollEngine, HCR_CONSTANTS, type HcrEmployeeMonthlyPayroll, type HcrWeeklyHoursBreakdown } from './services/HcrPayrollEngine';
 export { ContractorSelfBillingService, type SelfBillingInvoiceDraft, type ContractorShift } from './services/ContractorSelfBillingService';
 export { HcrLegalContractService, type GeneratedLegalDocument, type ContractGenerationInput } from './services/HcrLegalContractService';
+export { InvoiceSequenceService } from './services/InvoiceSequenceService';
+export { UrssafVigilanceService, UrssafVigilanceError, URSSAF_CONSTANTS } from './services/UrssafVigilanceService';
 
 export { useStaffPage } from './effectifs/hr/hooks';
 export { RecruitmentBoard } from './effectifs/hr/components/RecruitmentBoard';

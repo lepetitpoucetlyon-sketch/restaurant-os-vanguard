@@ -5,3 +5,5 @@ export * from './StaffService';
 export * from './HcrPayrollEngine';
 export * from './ContractorSelfBillingService';
 export * from './HcrLegalContractService';
+export * from './InvoiceSequenceService';
+export * from './UrssafVigilanceService';
