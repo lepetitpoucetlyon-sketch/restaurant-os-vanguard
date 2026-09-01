@@ -1,0 +1,141 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders Card with default and elevated intents 1`] = `
+<div
+  class="border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-surface-card border-border-default shadow-sm p-6 rounded-2xl"
+>
+  <div
+    class="flex flex-col space-y-1.5 p-6"
+  >
+    <h3
+      class="text-2xl font-semibold leading-none tracking-tight"
+    >
+      Titre Standard
+    </h3>
+  </div>
+  <div
+    class="p-6 pt-0"
+  >
+    Contenu
+  </div>
+</div>
+`;
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders Card with default and elevated intents 2`] = `
+<div
+  class="border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-surface-card border-border-default shadow-[var(--shadow-premium,0_8px_24px_-12px_rgba(0,0,0,0.15))] hover:shadow-[var(--shadow-glow-accent,0_20px_40px_-15px_rgba(0,0,0,0.20))] hover:-translate-y-[1px] p-8 rounded-3xl"
+>
+  <div
+    class="p-6 pt-0"
+  >
+    Contenu Élevé
+  </div>
+</div>
+`;
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders GlassCard with inset and default variants 1`] = `
+<div
+  class="backdrop-blur-[var(--glass-blur,16px)] border overflow-hidden relative bg-surface-card/40 dark:bg-bg-secondary/40 border-white/50 dark:border-border/50 shadow-xl p-6 rounded-[1.5rem]"
+  style="opacity: 0; transform: translateY(20px);"
+>
+  <div>
+    Contenu Verre
+  </div>
+</div>
+`;
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders PremiumCard with glass and elevated variants 1`] = `
+<div
+  class="relative overflow-hidden transition-all duration-500 p-8 rounded-[2.5rem] bg-bg-secondary border border-border shadow-[var(--shadow-premium,0_20px_50px_-20px_rgba(0,0,0,0.22))] hover:-translate-y-[2px] hover:shadow-accent/10 hover:border-accent/40"
+>
+  <div>
+    Contenu Premium
+  </div>
+</div>
+`;
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders SectionCard with header actions and subtitle 1`] = `
+<section
+  class="rounded-2xl transition-all duration-200 overflow-hidden flex flex-col bg-gradient-to-b from-surface-card to-surface-card/90 border border-action-primary/20 shadow-premium"
+  style="opacity: 0; transform: translateY(10px);"
+>
+  <div
+    class="flex items-center justify-between gap-4 px-6 py-4 border-b border-border-subtle"
+  >
+    <div
+      class="flex items-center gap-3 min-w-0"
+    >
+      <div
+        class="min-w-0"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <h2
+            class="font-serif text-base font-bold text-text-primary tracking-tight truncate"
+          >
+            Paramètres de Caisse
+          </h2>
+        </div>
+        <p
+          class="text-micro text-text-secondary truncate mt-0.5"
+        >
+          Configuration du terminal
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-2 shrink-0"
+    >
+      <button
+        type="button"
+      >
+        Sauvegarder
+      </button>
+    </div>
+  </div>
+  <div
+    class="flex-1 p-6"
+  >
+    <div>
+      Formulaire
+    </div>
+  </div>
+</section>
+`;
+
+exports[`Card Family — Baseline Snapshot & Rendering Tests > renders StatCard with value and trend 1`] = `
+<div
+  aria-label="Chiffre d'affaires: 14 500 €"
+  class="bg-bg-secondary border border-border rounded-[2rem] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:shadow-[var(--shadow-glow-accent,0_16px_32px_-16px_rgba(0,0,0,0.18))] hover:-translate-y-[1px] group p-6"
+  role="region"
+  style="opacity: 0; transform: translateY(10px);"
+>
+  <div
+    class="flex items-start justify-between mb-4"
+  >
+    <div
+      class="flex items-center justify-center border w-12 h-12 rounded-2xl bg-[color:color-mix(in_srgb,var(--action-primary,theme(colors.indigo.500))_10%,transparent)] border-[color:color-mix(in_srgb,var(--action-primary,theme(colors.indigo.500))_20%,transparent)]"
+    />
+    <div
+      class="flex items-center gap-1 font-bold text-status-success"
+    >
+      ↑
+      15
+      %
+    </div>
+  </div>
+  <div>
+    <p
+      class="font-serif font-medium text-text-primary tracking-tight italic group-hover:text-accent transition-colors text-3xl"
+    >
+      14 500 €
+    </p>
+    <p
+      class="font-black text-text-muted uppercase tracking-[0.2em] mt-1 text-nano"
+    >
+      Chiffre d'affaires
+    </p>
+  </div>
+</div>
+`;

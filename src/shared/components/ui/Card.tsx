@@ -2,10 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/ui.foundations";
 
-// ── Card CVA ─────────────────────────────────────────────────────────────────
-// taste-skill : ombres génériques (shadow-md/lg/xl) bannies au profit d'ombres
-// teintées (accent-gold à 6-15% d'opacité) qui s'harmonisent avec le fond
-// crème du dashboard et évitent l'effet "carton flottant" générique.
+// ── Card CVA Unifié (DESIGNUP Lot 2) ──────────────────────────────────────────
 const cardVariants = cva(
   'border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
   {
@@ -13,19 +10,47 @@ const cardVariants = cva(
       intent: {
         default:  'bg-surface-card border-border-default shadow-sm',
         elevated: 'bg-surface-card border-border-default shadow-[var(--shadow-premium,0_8px_24px_-12px_rgba(0,0,0,0.15))] hover:shadow-[var(--shadow-glow-accent,0_20px_40px_-15px_rgba(0,0,0,0.20))] hover:-translate-y-[1px]',
-        glass:    'bg-surface-card/40 backdrop-blur-xl border-white/10',
+        glass:    'bg-surface-card/40 dark:bg-surface-card/5 backdrop-blur-xl border border-white/50 dark:border-subtle shadow-[var(--shadow-premium,0_8px_24px_-14px_rgba(0,0,0,0.12))]',
         ghost:    'bg-transparent border-transparent shadow-none',
         premium:  'bg-surface-card border-border-default shadow-premium ring-1 ring-action-primary/20',
+        minimal:  'bg-bg-tertiary border border-border/50',
+        inset:    'bg-surface-bg/50 dark:bg-surface-card/5 border-subtle dark:border-border shadow-inner',
+        stat:     'bg-bg-secondary border border-border rounded-[2rem] hover:shadow-[var(--shadow-glow-accent,0_16px_32px_-16px_rgba(0,0,0,0.18))] hover:-translate-y-[1px]',
+        section:  'bg-surface-card border border-border-default shadow-sm hover:border-border-focus/30',
+        role:     'bg-surface-card dark:bg-bg-secondary rounded-3xl border border-border-default dark:border-border transition-all duration-300 overflow-hidden',
       },
       size: {
+        none: '',
         sm: 'p-3 rounded-xl',
         md: 'p-6 rounded-2xl',
         lg: 'p-8 rounded-3xl',
+        xl: 'p-10 rounded-[2.5rem]',
+        compact: 'p-4 rounded-2xl',
+        large: 'p-8 rounded-[2rem]',
+        minimal: 'p-4 rounded-xl',
+      },
+      tint: {
+        none: '',
+        accent: 'border-accent-gold/40 shadow-glow-accent',
+        success: 'border-emerald-500/40 shadow-emerald-500/10',
+        warning: 'border-amber-500/40 shadow-amber-500/10',
+        danger: 'border-rose-500/40 shadow-rose-500/10',
+      },
+      interactive: {
+        true: 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.99]',
+        false: '',
+      },
+      bezel: {
+        true: 'ring-1 ring-white/10 dark:ring-white/5',
+        false: '',
       },
     },
     defaultVariants: {
       intent: 'default',
       size:   'md',
+      tint:   'none',
+      interactive: false,
+      bezel: false,
     },
   }
 );
@@ -35,17 +60,19 @@ export interface CardProps
     VariantProps<typeof cardVariants> {}
 
 /**
- * Card — composant de base avec variants CVA.
+ * Card — composant unifié avec variants CVA complets.
  * Rétrocompatible : sans `intent`/`size`, se comporte comme avant.
  */
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, intent, size, ...props }, ref) => (
+  ({ className, intent, size, tint, interactive, bezel, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
         // Fallback pour les usages legacy sans intent/size (rounded-lg + text classes)
         !intent && !size && "rounded-lg border bg-card text-card-foreground shadow-sm",
-        intent || size ? cardVariants({ intent, size }) : undefined,
+        intent || size || tint || interactive || bezel
+          ? cardVariants({ intent, size, tint, interactive, bezel })
+          : undefined,
         className
       )}
       {...props}
