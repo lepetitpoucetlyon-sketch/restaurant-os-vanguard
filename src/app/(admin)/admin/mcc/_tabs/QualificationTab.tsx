@@ -19,7 +19,7 @@ export function QualificationTab() {
               Forge Stack P2a • Qualification Engine
             </span>
           </div>
-          <h2 className="text-xl font-black text-text-primary">Matrice de Qualification & Calibration de Tier</h2>
+          <h2 className="text-xl font-black text-text-primary">{"Matrice de Qualification & Calibration de Tier"}</h2>
           <p className="text-xs text-text-muted mt-0.5">
             Moteur d'inférence des 7 axes de provisioning, calibrage du display depth et suggestions contextuelles.
           </p>
@@ -74,7 +74,7 @@ export function QualificationTab() {
             </div>
 
             <div>
-              <label className="text-xs font-bold text-text-muted uppercase tracking-wider block mb-2">Niveau IA & Autonomie</label>
+              <label className="text-xs font-bold text-text-muted uppercase tracking-wider block mb-2">{"Niveau IA & Autonomie"}</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {(['none', 'copilot', 'autonomous'] as const).map((lvl) => (
                   <button
@@ -100,10 +100,10 @@ export function QualificationTab() {
           <div className="flex items-center justify-between border-b border-border-default pb-3">
             <div className="flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-amber-400" />
-              <h3 className="font-bold text-sm text-text-primary">Profil de Qualification Résolu</h3>
+              <h3 className="font-bold text-sm text-text-primary">{"Profil de Qualification Résolu"}</h3>
             </div>
             <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold">
-              Tier {tier} Recommandé
+              {"Tier "}{tier}{" Recommandé"}
             </span>
           </div>
 
@@ -111,7 +111,7 @@ export function QualificationTab() {
             <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-1">
               <div className="flex items-center gap-2 text-text-muted text-xs font-bold uppercase">
                 <UserCheck className="w-4 h-4 text-indigo-400" />
-                <span>Rôles RBAC Dérivés</span>
+                <span>{"Rôles RBAC Dérivés"}</span>
               </div>
               <p className="text-sm font-bold text-text-primary mt-2">DIRECTOR · CHEF · WAITER · CASHIER</p>
               <p className="text-micro text-text-muted">Matrice de permission et double validation PIN</p>
@@ -120,7 +120,7 @@ export function QualificationTab() {
             <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-1">
               <div className="flex items-center gap-2 text-text-muted text-xs font-bold uppercase">
                 <Scale className="w-4 h-4 text-emerald-400" />
-                <span>Règles Métier (Business Laws)</span>
+                <span>{"Règles Métier (Business Laws)"}</span>
               </div>
               <p className="text-sm font-bold text-text-primary mt-2">NF525 Strict · HACCP DGAL · Pas de stock négatif</p>
               <p className="text-micro text-text-muted">Validation d'inaltérabilité et scellage Z</p>
@@ -130,7 +130,7 @@ export function QualificationTab() {
           <div className="p-4 rounded-2xl bg-surface-glass border border-border-default space-y-2">
             <div className="flex items-center gap-2 text-text-muted text-xs font-bold uppercase">
               <Cpu className="w-4 h-4 text-amber-400" />
-              <span>Hardware Profilé pour ce Tier</span>
+              <span>{"Hardware Profilé pour ce Tier"}</span>
             </div>
             <div className="flex flex-wrap gap-2 pt-1">
               <span className="px-2.5 py-1 rounded-xl bg-surface-card border border-border-default text-xs text-text-secondary">

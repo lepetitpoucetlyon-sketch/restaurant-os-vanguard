@@ -64,7 +64,7 @@ export function BlindSpotTab() {
               Forge Stack P2bis • BlindSpot Detector
             </span>
           </div>
-          <h2 className="text-xl font-black text-text-primary">Détecteur des Angles Morts Métiers & Légaux</h2>
+          <h2 className="text-xl font-black text-text-primary">{"Détecteur des Angles Morts Métiers & Légaux"}</h2>
           <p className="text-xs text-text-muted mt-0.5">
             Audit exhaustif des 20 règles de complétude (NF525, HACCP, RGPD, hardware manquant, dépendances).
           </p>
@@ -91,7 +91,7 @@ export function BlindSpotTab() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl bg-surface-card border border-border-default">
-          <span className="text-micro font-bold text-text-muted uppercase">Règles Évaluées</span>
+          <span className="text-micro font-bold text-text-muted uppercase">{"Règles Évaluées"}</span>
           <p className="text-2xl font-black text-text-primary mt-1">{report.totalRulesRun}</p>
         </div>
         <div className="p-4 rounded-2xl bg-surface-card border border-border-default">
@@ -103,7 +103,7 @@ export function BlindSpotTab() {
           <p className="text-2xl font-black text-amber-400 mt-1">{report.summary.high}</p>
         </div>
         <div className="p-4 rounded-2xl bg-surface-card border border-border-default">
-          <span className="text-micro font-bold text-emerald-400 uppercase">Alertes Déclenchées</span>
+          <span className="text-micro font-bold text-emerald-400 uppercase">{"Alertes Déclenchées"}</span>
           <p className="text-2xl font-black text-emerald-400 mt-1">{report.triggered.length}</p>
         </div>
       </div>
@@ -156,11 +156,11 @@ export function BlindSpotTab() {
 
               <div className="p-3 rounded-2xl bg-surface-glass border border-border-default flex items-center justify-between">
                 <div className="text-xs">
-                  <span className="text-text-muted font-bold uppercase text-nano block">Correction Recommandée :</span>
+                  <span className="text-text-muted font-bold uppercase text-nano block">{"Correction Recommandée :"}</span>
                   <span className="text-text-secondary">{spot.suggestedFix.rationale}</span>
                 </div>
                 <button className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md">
-                  Appliquer le Fix
+                  {"Appliquer le Fix"}
                 </button>
               </div>
             </div>
@@ -169,8 +169,8 @@ export function BlindSpotTab() {
           {filteredSpots.length === 0 && (
             <div className="p-12 text-center rounded-3xl bg-surface-card/40 border border-border-default text-text-muted space-y-2">
               <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
-              <p className="font-bold text-text-primary text-sm">Zéro angle mort détecté pour cette sélection.</p>
-              <p className="text-xs">Toutes les règles de complétude réglementaire et matérielle sont respectées.</p>
+              <p className="font-bold text-text-primary text-sm">{"Zéro angle mort détecté pour cette sélection."}</p>
+              <p className="text-xs">{"Toutes les règles de complétude réglementaire et matérielle sont respectées."}</p>
             </div>
           )}
         </div>

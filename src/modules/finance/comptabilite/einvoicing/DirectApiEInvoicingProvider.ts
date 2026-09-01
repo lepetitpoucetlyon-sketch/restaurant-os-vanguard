@@ -143,43 +143,44 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
 
   // ── Private mapping ──────────────────────────────────────────────────────
 
+  private mapParty(p?: Record<string, string>): InboundEInvoice['seller'] {
+    const raw = p ?? {};
+    return {
+      name: raw.name ?? '',
+      siret: raw.siret ?? '',
+      vatNumber: raw.vatNumber,
+      address: raw.address ?? '',
+      country: raw.country ?? 'FR',
+    };
+  }
+
+  private mapLine(l: Record<string, unknown>): InboundEInvoice['lines'][number] {
+    return {
+      description: String(l.description ?? ''),
+      quantity: Number(l.quantity ?? 1),
+      unitPriceHTInMicrounits: Number(l.unitPriceHTInMicrounits ?? 0),
+      vatRate: Number(l.vatRate ?? 0),
+      totalHTInMicrounits: Number(l.totalHTInMicrounits ?? 0),
+      totalTTCInMicrounits: Number(l.totalTTCInMicrounits ?? 0),
+    };
+  }
+
   private mapInbound(data: Record<string, unknown>): InboundEInvoice {
-    const seller = (data.seller as Record<string, string>) || {};
-    const buyer = (data.buyer as Record<string, string>) || {};
-    const lines = (data.lines as Record<string, unknown>[]) || [];
+    const lines = (data.lines as Record<string, unknown>[]) ?? [];
 
     return {
-      providerInvoiceId: String(data.providerInvoiceId || data.id || ''),
-      invoiceNumber: String(data.invoiceNumber || ''),
-      issueDate: String(data.issueDate || ''),
+      providerInvoiceId: String(data.providerInvoiceId ?? data.id ?? ''),
+      invoiceNumber: String(data.invoiceNumber ?? ''),
+      issueDate: String(data.issueDate ?? ''),
       dueDate: data.dueDate ? String(data.dueDate) : undefined,
-      format: (data.format as InboundEInvoice['format']) || 'factur-x',
-      seller: {
-        name: seller.name || '',
-        siret: seller.siret || '',
-        vatNumber: seller.vatNumber,
-        address: seller.address || '',
-        country: seller.country || 'FR',
-      },
-      buyer: {
-        name: buyer.name || '',
-        siret: buyer.siret || '',
-        vatNumber: buyer.vatNumber,
-        address: buyer.address || '',
-        country: buyer.country || 'FR',
-      },
-      lines: lines.map(l => ({
-        description: String(l.description || ''),
-        quantity: Number(l.quantity || 1),
-        unitPriceHTInMicrounits: Number(l.unitPriceHTInMicrounits || 0),
-        vatRate: Number(l.vatRate || 0),
-        totalHTInMicrounits: Number(l.totalHTInMicrounits || 0),
-        totalTTCInMicrounits: Number(l.totalTTCInMicrounits || 0),
-      })),
-      totalHTInMicrounits: Number(data.totalHTInMicrounits || 0),
-      totalVATInMicrounits: Number(data.totalVATInMicrounits || 0),
-      totalTTCInMicrounits: Number(data.totalTTCInMicrounits || 0),
-      currency: String(data.currency || 'EUR'),
+      format: (data.format as InboundEInvoice['format']) ?? 'factur-x',
+      seller: this.mapParty(data.seller as Record<string, string>),
+      buyer: this.mapParty(data.buyer as Record<string, string>),
+      lines: lines.map(l => this.mapLine(l)),
+      totalHTInMicrounits: Number(data.totalHTInMicrounits ?? 0),
+      totalVATInMicrounits: Number(data.totalVATInMicrounits ?? 0),
+      totalTTCInMicrounits: Number(data.totalTTCInMicrounits ?? 0),
+      currency: String(data.currency ?? 'EUR'),
       rawXml: data.rawXml ? String(data.rawXml) : undefined,
       pdfUrl: data.pdfUrl ? String(data.pdfUrl) : undefined,
     };

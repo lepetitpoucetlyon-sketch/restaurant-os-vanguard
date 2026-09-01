@@ -53,11 +53,11 @@ export default function WelcomePage() {
             className="z-10 max-w-4xl"
          >
             <motion.p variants={fadeUp} className="text-accent uppercase tracking-[0.5em] text-sm font-bold mb-6">
-                L'Excellence Opérationnelle
+                {"L'Excellence Opérationnelle"}
             </motion.p>
             <motion.h1 variants={fadeUp} className="text-6xl md:text-8xl font-serif font-light text-text-primary leading-[0.9] mb-8">
-                Bienvenue dans<br/>
-                <span className="italic text-accent-gold">l'ère Restaurant OS.</span>
+                {"Bienvenue dans"}<br/>
+                <span className="italic text-accent-gold">{"l'ère Restaurant OS."}</span>
             </motion.h1>
             <motion.p variants={fadeUp} className="text-text-muted text-lg md:text-xl font-medium max-w-2xl mx-auto mb-12">
                 Un système d'exploitation premium, conçu comme l'extension naturelle de votre brigade. La configuration ne vous prendra que quelques minutes.
@@ -101,7 +101,7 @@ export default function WelcomePage() {
                  </div>
                  <h2 className="text-4xl md:text-5xl font-serif text-text-primary leading-tight">
                      Forgez l'ADN<br/>
-                     <span className="italic font-light">de votre Établissement.</span>
+                     <span className="italic font-light">{"de votre Établissement."}</span>
                  </h2>
                  <p className="text-text-muted text-lg leading-relaxed">
                      Commencez par définir votre identité. Notre IA utilisera ces informations pour générer vos communications, adapter l'interface (bistrot, gastro, fast-casual) et formater vos tickets de caisse de manière chirurgicale.
@@ -143,13 +143,13 @@ export default function WelcomePage() {
                     initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
                     className="text-accent uppercase tracking-[0.5em] text-sm font-bold mb-4"
                  >
-                     L'Outil de Migration
+                     {"L'Outil de Migration"}
                  </motion.p>
                  <motion.h2 
                     initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                     className="text-5xl md:text-7xl font-serif font-light leading-tight"
                  >
-                     Ne saisissez plus <span className="italic text-accent-gold">jamais</span> votre carte à la main.
+                     {"Ne saisissez plus "}<span className="italic text-accent-gold">jamais</span>{" votre carte à la main."}
                  </motion.h2>
              </div>
 
@@ -167,7 +167,7 @@ export default function WelcomePage() {
                  {/* Step B */}
                  <div className="bg-surface-card/5 border border-accent/30 p-10 rounded-3xl backdrop-blur-md relative transform lg:-translate-y-6 shadow-2xl shadow-accent/20">
                      <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-chip-label">
-                         L'Oracle Intervient
+                         {"L'Oracle Intervient"}
                      </div>
                      <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-8">
                          <div className="w-5 h-5 border-2 border-bg-primary border-t-transparent rounded-full animate-spin" />
@@ -214,7 +214,7 @@ export default function WelcomePage() {
                      <Laptop className="w-12 h-12 text-text-primary" />
                  </div>
                  <div className="mt-auto">
-                     <h4 className="font-serif text-3xl mb-4 text-text-primary">Ecosystème Unifié.</h4>
+                     <h4 className="font-serif text-3xl mb-4 text-text-primary">{"Ecosystème Unifié."}</h4>
                      <div className="space-y-3">
                          <div className="h-2 w-full bg-border rounded-full overflow-hidden"><div className="w-full h-full bg-success"></div></div>
                          <div className="flex justify-between text-xs font-bold text-text-muted uppercase tracking-widest">
@@ -236,13 +236,13 @@ export default function WelcomePage() {
                  </div>
                  <h2 className="text-4xl md:text-5xl font-serif text-text-primary leading-tight">
                      Synchronisation<br/>
-                     <span className="italic font-light">Matérielle Totale.</span>
+                     <span className="italic font-light">{"Matérielle Totale."}</span>
                  </h2>
                  <p className="text-text-muted text-lg leading-relaxed">
                      L'OS est conçu "Agnostic". Scannez les QR Codes depuis vos tablettes de cuisine ou téléphones de prise de commande pour lier les appareils instantanément, sans aucune configuration de réseau de bas niveau requise.
                  </p>
                  <div className="bg-bg-tertiary p-6 rounded-2xl border border-border">
-                     <h4 className="font-bold text-sm uppercase tracking-widest text-text-primary mb-2">Modules Activables</h4>
+                     <h4 className="font-bold text-sm uppercase tracking-widest text-text-primary mb-2">{"Modules Activables"}</h4>
                      <div className="flex flex-wrap gap-2">
                          {["POS Principal", "KDS Cuisine", "KDS Bar", "Borne de Commande", "Dashboard Bureau"].map(tag => (
                              <span key={tag} className="px-3 py-1 bg-bg-primary border border-border rounded-full text-xs font-semibold">{tag}</span>
@@ -262,8 +262,8 @@ export default function WelcomePage() {
               <div className="relative z-10 space-y-8">
                   <PlayCircle strokeWidth={1} className="w-24 h-24 mx-auto text-accent-gold" />
                   <h2 className="text-5xl md:text-6xl font-serif font-light leading-tight">
-                      Prêt pour le test ?<br/>
-                      <span className="italic text-accent">Activez le Bac à Sable.</span>
+                      {"Prêt pour le test ?"}<br/>
+                      <span className="italic text-accent">{"Activez le Bac à Sable."}</span>
                   </h2>
                   <p className="text-text-primary/60 text-xl font-medium max-w-2xl mx-auto">
                       Simulez un service complet avec des fausses commandes générées par notre IA pour former vos équipes avant le grand jour.

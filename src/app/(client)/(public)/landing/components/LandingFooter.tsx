@@ -15,7 +15,7 @@ export function LandingFooter() {
                             <span className="text-text-primary font-brand text-xl font-semibold">Restaurant OS</span>
                         </div>
                         <p className="text-text-primary/40 text-sm leading-relaxed mb-6">
-                            L'intelligence exécutive pour restaurateurs visionnaires.
+                            {"L'intelligence exécutive pour restaurateurs visionnaires."}
                         </p>
                         <div className="flex gap-4">
                             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center text-text-primary/40 hover:text-text-primary hover:bg-surface-card transition-all">
@@ -34,30 +34,30 @@ export function LandingFooter() {
                     <div>
                         <h4 className="text-text-primary font-bold text-sm uppercase tracking-widest mb-6">Produit</h4>
                         <ul className="space-y-4">
-                            <li><Link href="/verticales" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Fonctionnalités</Link></li>
+                            <li><Link href="/verticales" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">{"Fonctionnalités"}</Link></li>
                             <li><Link href="/pricing" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Tarifs</Link></li>
-                            <li><Link href="/integrations" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Intégrations</Link></li>
+                            <li><Link href="/integrations" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">{"Intégrations"}</Link></li>
                             <li><Link href="/status" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Statut & Roadmap</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h4 className="text-text-primary font-bold text-sm uppercase tracking-widest mb-6">Ressources</h4>
+                        <h4 className="text-text-primary font-bold text-sm uppercase tracking-widest mb-6">{"Ressources"}</h4>
                         <ul className="space-y-4">
                             <li><Link href="/aide" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Documentation</Link></li>
                             <li><Link href="/aide" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Guides</Link></li>
-                            <li><Link href="/welcome" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Découverte</Link></li>
+                            <li><Link href="/welcome" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">{"Découverte"}</Link></li>
                             <li><Link href="/aide" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Support</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h4 className="text-text-primary font-bold text-sm uppercase tracking-widest mb-6">Légal</h4>
+                        <h4 className="text-text-primary font-bold text-sm uppercase tracking-widest mb-6">{"Légal"}</h4>
                         <ul className="space-y-4">
                             <li><Link href="/legal/cgv" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">CGV</Link></li>
-                            <li><Link href="/legal/mentions" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">Mentions légales</Link></li>
+                            <li><Link href="/legal/mentions" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">{"Mentions légales"}</Link></li>
                             <li><Link href="/legal/cgu" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">CGU</Link></li>
-                            <li><Link href="/legal/rgpd" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">RGPD & Confidentialité</Link></li>
+                            <li><Link href="/legal/rgpd" className="text-text-primary/40 hover:text-text-primary text-sm transition-colors">{"RGPD & Confidentialité"}</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -65,10 +65,10 @@ export function LandingFooter() {
                 {/* Bottom */}
                 <div className="pt-8 border-t border-border-subtle flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-text-primary/30 text-sm">
-                        © 2026 Restaurant OS. Tous droits réservés.
+                        {"© 2026 Restaurant OS. Tous droits réservés."}
                     </p>
                     <p className="text-text-primary/30 text-sm">
-                        Fait avec ❤️ par des passionnés de gastronomie.
+                        {"Fait avec ❤️ par des passionnés de gastronomie."}
                     </p>
                 </div>
             </div>
