@@ -7,8 +7,7 @@
  *
  *   system.events.ts        — intégrations, tenant lifecycle, fleet, MCC, audit, souveraineté, notifications, sms
  *   ops.events.ts            — orders, tables, réservations (session/salle), production
- *   kds.events.ts            — cuisine/passe (KDS)
- *   pos.events.ts            — caisse, bar
+ *   restaurant.events.ts     — verticale RESTAURANT : caisse, bar, cuisine/passe (ex-pos + ex-kds)
  *   delivery.events.ts       — livraison, coursiers
  *   reservations.events.ts   — cycle de vie réservation (créée/màj/annulée/no-show)
  *   finance.events.ts        — finance, fournisseurs, NF525, paiements
@@ -23,11 +22,12 @@
  *
  * Pour ajouter un event : aller dans le fichier du bon domaine, jamais ici.
  * Pour ajouter une verticale : créer une section dans vertical.events.ts.
+ * Un event qui n'a de sens QUE pour un restaurant va dans restaurant.events.ts ;
+ * un event de service valable pour les 12 variantes reste dans ops.events.ts.
  */
 import type { SYSTEMEvents }       from './system.events';
 import type { OPSEvents }          from './ops.events';
-import type { KDSEvents }          from './kds.events';
-import type { POSEvents }          from './pos.events';
+import type { RESTAURANTEvents }   from './restaurant.events';
 import type { DELIVERYEvents }     from './delivery.events';
 import type { RESERVATIONSEvents } from './reservations.events';
 import type { FINANCEEvents }      from './finance.events';
@@ -43,8 +43,7 @@ import type { VERTICALEvents }     from './vertical.events';
 export type NexusEvents =
   & SYSTEMEvents
   & OPSEvents
-  & KDSEvents
-  & POSEvents
+  & RESTAURANTEvents
   & DELIVERYEvents
   & RESERVATIONSEvents
   & FINANCEEvents
@@ -59,7 +58,7 @@ export type NexusEvents =
 
 // Ré-exports pour les consumers qui importent les interfaces de domaine directement
 export type {
-  SYSTEMEvents, OPSEvents, KDSEvents, POSEvents, DELIVERYEvents, RESERVATIONSEvents,
+  SYSTEMEvents, OPSEvents, RESTAURANTEvents, DELIVERYEvents, RESERVATIONSEvents,
   FINANCEEvents, COMPLIANCEEvents, HUMANEvents, COMMERCEEvents, INTELLIGENCEEvents,
   LOGISTICSEvents, FACILITYEvents, SUPPORTEvents, VERTICALEvents,
 };
