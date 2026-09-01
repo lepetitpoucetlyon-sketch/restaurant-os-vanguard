@@ -1,8 +1,24 @@
-fastapi>=0.100.0
-uvicorn>=0.23.0
-python-multipart>=0.0.6
-raganything[all]>=0.1.0
-pydantic>=2.0.0
-numpy>=1.24.0
-anthropic>=0.15.0
-openai>=1.10.0
+# === LightRAG sidecar — Dependencies ===
+# Versions ÉPINGLÉES le 2026-09-01 (remédiation Dependabot).
+#
+# Avant : tout était en `>=`. Un `>=` n'est pas une contrainte de sécurité — le
+# résolveur (et l'analyseur de GitHub) retient le PLANCHER, donc les CVE connues
+# des vieilles versions restent signalées et peuvent réellement s'installer.
+# Exemples au plancher précédent : python-multipart 0.0.6 (ReDoS CVE-2024-24762,
+# DoS CVE-2024-53981), fastapi 0.100 via une starlette obsolète.
+#
+# Les versions ci-dessous sont celles réellement installées et éprouvées dans le
+# venv du projet, alignées sur services/sovereign-rag/requirements.txt.
+# Toute montée passe par une vérification, pas par un `>=`.
+
+fastapi==0.136.1
+uvicorn==0.46.0
+python-multipart==0.0.32
+pydantic==2.13.3
+numpy==2.4.4
+anthropic==0.100.0
+openai==2.32.0
+
+# raganything tire sa propre chaîne (torch, transformers…) : pas d'épinglage strict
+# ici, mais borné pour empêcher une majeure non testée d'entrer silencieusement.
+raganything[all]>=0.1.0,<0.2.0
