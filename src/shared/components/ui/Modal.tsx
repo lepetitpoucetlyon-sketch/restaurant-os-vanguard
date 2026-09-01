@@ -234,7 +234,7 @@ export function Modal({
                                         initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
                                         animate={{ opacity: 1, scale: 1, rotate: 0 }}
                                         transition={{ delay: 0.4, type: "spring", damping: 12 }}
-                                        whileHover={{ scale: 1.1, backgroundColor: "rgba(0,0,0,0.05)" }}
+                                        whileHover={{ scale: 1.1, backgroundColor: "var(--color-surface-glass-hover, rgba(0,0,0,0.05))" }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={onClose}
                                         aria-label="Fermer la boîte de dialogue"

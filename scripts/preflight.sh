@@ -97,7 +97,7 @@ VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
 FR_HARDCODED_MAX=781         # chaînes FR en dur hors legal & verticals — 893→781 : lots 1 à 4 encapsulés (2026-09-01)
-HARDCODED_HEX_MAX=797        # couleurs #hex et rgba() en dur (DESIGNUP Lot 0) — baseline post-purge primitives (2026-09-01)
+HARDCODED_HEX_MAX=795        # couleurs #hex et rgba() en dur (DESIGNUP Lot 0) — baseline post-purge primitives (2026-09-01)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
