@@ -3,11 +3,11 @@ import { registerRushModeIntegrationHandler } from '../handlers/RushModeIntegrat
 import { registerEndOfServiceActionHandler } from '../handlers/EndOfServiceActionHandler';
 import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverUnlockHandler';
 import { registerFacilityHandlers } from '../handlers/FacilityHandlers';
-import { registerHRClockInGuardHandler } from '../handlers/HRClockInGuardHandler';
+import { registerHRClockInGuardHandler } from '@/modules/human';
 import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler';
 import { registerProformaHandler } from '../handlers/ProformaHandler';
-import { registerKDSTicketDoneNotifier } from '../handlers/KDSTicketDoneNotifier';
-import { registerKDSRushAlertNotifier } from '../handlers/KDSRushAlertNotifier';
+import { registerKDSTicketDoneNotifier } from '@/modules/ops';
+import { registerKDSRushAlertNotifier } from '@/modules/ops';
 
 export function registerOpsServiceHandlers(): Array<() => void> {
   return [

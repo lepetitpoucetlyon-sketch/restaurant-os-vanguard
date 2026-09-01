@@ -5,7 +5,7 @@
  * l'instruction dans Nexus pour que le KDS rafraîchisse les écrans de chaque station.
  * Émet `kds.course_fired` pour compatibilité avec les handlers existants.
  */
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

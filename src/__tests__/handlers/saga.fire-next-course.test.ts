@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { registerFireNextCourseHandler } from '@/shared/eventBus/handlers/FireNextCourseHandler';
+import { registerFireNextCourseHandler } from '@/verticals/restaurant/handlers/FireNextCourseHandler';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';

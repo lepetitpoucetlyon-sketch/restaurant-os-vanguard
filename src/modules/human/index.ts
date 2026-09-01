@@ -49,3 +49,6 @@ export * from './domain/schemas/rbac';
 export * from './domain/schemas/employeeDocument';
 export type { LeaveBalance, ShiftLog, LeaveRequest, Shift, ShiftStats, PayrollCalculation } from './effectifs/hr/types';
 export type { ShiftEntry } from './domain/schemas/hr';
+
+// Handler RH — relocalise depuis shared/eventBus/handlers/ (ADR-020)
+export * from './effectifs/hr/handlers/HRClockInGuardHandler';

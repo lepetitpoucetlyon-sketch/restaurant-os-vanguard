@@ -1,4 +1,4 @@
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../../../shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
 

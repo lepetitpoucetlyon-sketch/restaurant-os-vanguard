@@ -1,14 +1,14 @@
-import { registerKdsRoutingHandler } from '../handlers/KdsRoutingHandler';
-import { registerKdsCourseManagerHandler } from '../handlers/KdsCourseManagerHandler';
-import { registerKdsPrepTimeAnalyzerHandler } from '../handlers/KdsPrepTimeAnalyzerHandler';
-import { registerKdsPassNotifierHandler } from '../handlers/KdsPassNotifierHandler';
-import { registerKdsPrintFallbackHandler } from '../handlers/KdsPrintFallbackHandler';
+import { registerKdsRoutingHandler } from '@/modules/ops';
+import { registerKdsCourseManagerHandler } from '@/modules/ops';
+import { registerKdsPrepTimeAnalyzerHandler } from '@/modules/ops';
+import { registerKdsPassNotifierHandler } from '@/modules/ops';
+import { registerKdsPrintFallbackHandler } from '@/modules/ops';
 import { registerGroupPrepTasksHandler } from '../handlers/GroupPrepTasksHandler';
 import { registerRecipeChangeKDSHandler } from '../handlers/RecipeChangeKDSHandler';
-import { registerKdsPrepDelayAlertHandler } from '../handlers/KdsPrepDelayAlertHandler';
-import { registerKdsCoursePassedHandler } from '../handlers/KdsCoursePassedHandler';
-import { registerFireNextCourseHandler } from '../handlers/FireNextCourseHandler';
-import { registerDishReboundHandler } from '../handlers/DishReboundHandler';
+import { registerKdsPrepDelayAlertHandler } from '@/modules/ops';
+import { registerKdsCoursePassedHandler } from '@/modules/ops';
+import { registerFireNextCourseHandler } from '@/verticals/restaurant/handlers/FireNextCourseHandler';
+import { registerDishReboundHandler } from '@/modules/ops';
 
 export function registerOpsKdsHandlers(): Array<() => void> {
   return [

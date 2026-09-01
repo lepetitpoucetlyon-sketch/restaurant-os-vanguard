@@ -1,4 +1,4 @@
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../../../shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 

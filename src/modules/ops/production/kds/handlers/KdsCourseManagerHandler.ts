@@ -1,7 +1,7 @@
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../../../shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
-import type { KdsTicket, KdsItem } from './_handler-types';
+import type { KdsTicket, KdsItem } from '../../../../../shared/eventBus/handlers/_handler-types';
 
 export function registerKdsCourseManagerHandler() {
   return NexusEventBus.on(

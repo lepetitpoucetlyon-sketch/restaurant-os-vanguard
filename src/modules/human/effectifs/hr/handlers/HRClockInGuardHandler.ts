@@ -5,7 +5,7 @@
  * vérifie qu'il est bien pointé (CLOCK_IN actif). Si ce n'est pas le cas,
  * émet une alerte RH et crée un enregistrement de pointage manquant.
  */
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../../../shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

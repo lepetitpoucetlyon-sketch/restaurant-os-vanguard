@@ -95,3 +95,15 @@ export { PmsPage } from './service/hospitality/pms/PmsPage';
 export type { Table, Floor, Zone, TableShape, TableStatus, Reservation, FloorTable } from './domain/schemas/ops';
 export type { ConsumptionMode } from './domain/schemas/orders';
 export type { CourseType, SplitMode, PaymentMethod, ConvivePayment } from './domain/schemas/pos';
+
+// Handlers KDS — relocalises depuis shared/eventBus/handlers/ (ADR-020)
+export * from './production/kds/handlers/DishReboundHandler';
+export * from './production/kds/handlers/KDSRushAlertNotifier';
+export * from './production/kds/handlers/KDSTicketDoneNotifier';
+export * from './production/kds/handlers/KdsCourseManagerHandler';
+export * from './production/kds/handlers/KdsCoursePassedHandler';
+export * from './production/kds/handlers/KdsPassNotifierHandler';
+export * from './production/kds/handlers/KdsPrepDelayAlertHandler';
+export * from './production/kds/handlers/KdsPrepTimeAnalyzerHandler';
+export * from './production/kds/handlers/KdsPrintFallbackHandler';
+export * from './production/kds/handlers/KdsRoutingHandler';

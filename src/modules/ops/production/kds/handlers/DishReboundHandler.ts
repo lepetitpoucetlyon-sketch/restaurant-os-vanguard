@@ -5,7 +5,7 @@
  * cuisine dans le registre de gaspillage HACCP et crée un audit trace.
  * Alerte le manager si le motif est allergen.
  */
-import { NexusEventBus } from '../NexusEventBus';
+import { NexusEventBus } from '../../../../../shared/eventBus/NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';

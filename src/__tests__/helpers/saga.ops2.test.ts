@@ -1,10 +1,10 @@
+import { registerKdsCourseManagerHandler } from '@/modules/ops';
+import { registerKdsPassNotifierHandler } from '@/modules/ops';
+import { registerKdsPrepDelayAlertHandler } from '@/modules/ops';
+import { registerKdsPrepTimeAnalyzerHandler } from '@/modules/ops';
+import { registerKdsPrintFallbackHandler } from '@/modules/ops';
+import { registerKdsRoutingHandler } from '@/modules/ops';
 import {
-  registerKdsCourseManagerHandler,
-  registerKdsPassNotifierHandler,
-  registerKdsPrepDelayAlertHandler,
-  registerKdsPrepTimeAnalyzerHandler,
-  registerKdsPrintFallbackHandler,
-  registerKdsRoutingHandler,
   registerRecipeChangeKDSHandler,
   registerRushModeIntegrationHandler,
   registerOrderAcceptanceWindowHandler,
