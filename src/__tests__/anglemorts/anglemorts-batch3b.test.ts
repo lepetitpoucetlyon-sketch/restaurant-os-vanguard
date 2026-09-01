@@ -48,7 +48,7 @@ import { OutboxService } from '@/lib/offline/OutboxService';
 import { MenuEngineeringService } from '@/modules/intelligence/analytique/analytics/MenuEngineeringService';
 import { BINRoutingService } from '@/modules/finance/tresorerie/BINRoutingService';
 import { AccountingExportService } from '@/modules/finance/comptabilite/AccountingExportService';
-import { DineAndDashDetectorService } from '@/modules/ops/service/pos/services/DineAndDashDetectorService';
+import { DineAndDashDetectorService } from '@/modules/ops/service/restaurant/pos/services/DineAndDashDetectorService';
 import { AntidatedInvoiceGuard } from '@/modules/finance/fiscalite/AntidatedInvoiceGuard';
 import { BreathalyzerRegisterService } from '@/modules/compliance/qualite/haccp/services/BreathalyzerRegisterService';
 import { NF525CertExpiryService } from '@/modules/finance/fiscalite/NF525CertExpiryService';

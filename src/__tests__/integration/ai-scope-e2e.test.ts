@@ -164,7 +164,7 @@ describe('AI Scope E2E — Isolation multi-tenant + multi-vertical', () => {
 
     it('Isolation : un caller tenant ne peut PAS accéder à MCCAIRegistry', async () => {
         expect(() =>
-            AIScopeGuard.assertMCCScope('src/modules/ops/service/pos/hooks/usePos.ts'),
+            AIScopeGuard.assertMCCScope('src/modules/ops/service/restaurant/pos/hooks/usePos.ts'),
         ).toThrow(/VIOLATION R1/);
     });
 

@@ -41,17 +41,17 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { TpeResilienceSimulatorService } from '@/modules/ops/service/pos/services/TpeResilienceSimulatorService';
-import { PosFiscalSealE2EPipeline } from '@/modules/ops/service/pos/services/PosFiscalSealE2EPipeline';
-import { SplitBillService } from '@/modules/ops/service/pos/services/SplitBillService';
-import { CashDrawerReconciliationService } from '@/modules/ops/service/pos/services/CashDrawerReconciliationService';
-import { MealVoucherLimitGuard } from '@/modules/ops/service/pos/services/MealVoucherLimitGuard';
-import { ExactChangeAssistanceService } from '@/modules/ops/service/pos/services/ExactChangeAssistanceService';
-import { SharedBillDispatchService } from '@/modules/ops/service/pos/services/SharedBillDispatchService';
-import { UniversalPrinterBridgeService } from '@/modules/ops/service/pos/services/UniversalPrinterBridgeService';
-import { CashDrawerTriggerService } from '@/modules/ops/service/pos/services/CashDrawerTriggerService';
-import { CustomerFacingDisplayService } from '@/modules/ops/service/pos/services/CustomerFacingDisplayService';
-import { BarcodeScannerInputService } from '@/modules/ops/service/pos/services/BarcodeScannerInputService';
+import { TpeResilienceSimulatorService } from '@/modules/ops/service/restaurant/pos/services/TpeResilienceSimulatorService';
+import { PosFiscalSealE2EPipeline } from '@/modules/ops/service/restaurant/pos/services/PosFiscalSealE2EPipeline';
+import { SplitBillService } from '@/modules/ops/service/restaurant/pos/services/SplitBillService';
+import { CashDrawerReconciliationService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerReconciliationService';
+import { MealVoucherLimitGuard } from '@/modules/ops/service/restaurant/pos/services/MealVoucherLimitGuard';
+import { ExactChangeAssistanceService } from '@/modules/ops/service/restaurant/pos/services/ExactChangeAssistanceService';
+import { SharedBillDispatchService } from '@/modules/ops/service/restaurant/pos/services/SharedBillDispatchService';
+import { UniversalPrinterBridgeService } from '@/modules/ops/service/restaurant/pos/services/UniversalPrinterBridgeService';
+import { CashDrawerTriggerService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerTriggerService';
+import { CustomerFacingDisplayService } from '@/modules/ops/service/restaurant/pos/services/CustomerFacingDisplayService';
+import { BarcodeScannerInputService } from '@/modules/ops/service/restaurant/pos/services/BarcodeScannerInputService';
 
 
 describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {

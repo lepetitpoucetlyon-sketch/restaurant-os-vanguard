@@ -32,7 +32,7 @@ import { CAPABILITY_KEYS, getCapability, resolveCapabilityDependencies } from '.
 export interface CapabilityWiring {
     /**
      * Chemin d'import lazy du module principal de la capability.
-     * Ex. `'@/modules/ops/service/pos'`. Le générateur émettra un `React.lazy(...)`
+     * Ex. `'@/modules/ops/service/restaurant/pos'`. Le générateur émettra un `React.lazy(...)`
      * sur ce chemin ; le tenant runtime peut le pré-charger en dependency-hint.
      */
     module?: string;

@@ -25,7 +25,7 @@ import { TabGuard } from "@/shared/components/rbac/TabGuard";
 import { Recipe, PrepTask, Product } from "@nexus/contracts";
 import dynamic from "next/dynamic";
 const ProductFormModal = dynamic(
-  () => import('../../../service/pos/components/ProductFormModal').then(m => m.ProductFormModal),
+  () => import('../../../service/restaurant/pos/components/ProductFormModal').then(m => m.ProductFormModal),
   { ssr: false, loading: () => null }
 );
 const ExpertHub = dynamic(

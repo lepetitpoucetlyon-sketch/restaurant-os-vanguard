@@ -41,18 +41,18 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { FlashAlcoholInventoryService } from '@/modules/ops/service/pos/services/FlashAlcoholInventoryService';
-import { CorkedBottleDisputeService } from '@/modules/ops/service/pos/services/CorkedBottleDisputeService';
-import { KegHydrostaticLossService } from '@/modules/ops/service/pos/services/KegHydrostaticLossService';
-import { SmartSpoutTelemetryService } from '@/modules/ops/service/pos/services/SmartSpoutTelemetryService';
-import { FermentationMonitorService } from '@/modules/ops/service/pos/services/FermentationMonitorService';
-import { CocktailDilutionIndexService } from '@/modules/ops/service/pos/services/CocktailDilutionIndexService';
+import { FlashAlcoholInventoryService } from '@/modules/ops/service/restaurant/pos/services/FlashAlcoholInventoryService';
+import { CorkedBottleDisputeService } from '@/modules/ops/service/restaurant/pos/services/CorkedBottleDisputeService';
+import { KegHydrostaticLossService } from '@/modules/ops/service/restaurant/pos/services/KegHydrostaticLossService';
+import { SmartSpoutTelemetryService } from '@/modules/ops/service/restaurant/pos/services/SmartSpoutTelemetryService';
+import { FermentationMonitorService } from '@/modules/ops/service/restaurant/pos/services/FermentationMonitorService';
+import { CocktailDilutionIndexService } from '@/modules/ops/service/restaurant/pos/services/CocktailDilutionIndexService';
 import { MenuComboTaxProrataService } from '@/modules/finance/fiscalite/MenuComboTaxProrataService';
 import { SmartCardRoutingService } from '@/modules/finance/tresorerie/SmartCardRoutingService';
-import { PrinterFailoverRoutingService } from '@/modules/ops/service/pos/services/PrinterFailoverRoutingService';
-import { HardenedTouchUiHelper } from '@/modules/ops/service/pos/services/HardenedTouchUiHelper';
-import { ThermalOverheatP2PFailoverService } from '@/modules/ops/service/pos/services/ThermalOverheatP2PFailoverService';
-import { BilingualTipGratuityHelper } from '@/modules/ops/service/pos/services/BilingualTipGratuityHelper';
+import { PrinterFailoverRoutingService } from '@/modules/ops/service/restaurant/pos/services/PrinterFailoverRoutingService';
+import { HardenedTouchUiHelper } from '@/modules/ops/service/restaurant/pos/services/HardenedTouchUiHelper';
+import { ThermalOverheatP2PFailoverService } from '@/modules/ops/service/restaurant/pos/services/ThermalOverheatP2PFailoverService';
+import { BilingualTipGratuityHelper } from '@/modules/ops/service/restaurant/pos/services/BilingualTipGratuityHelper';
 describe('Angles Morts — Batch 4 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 

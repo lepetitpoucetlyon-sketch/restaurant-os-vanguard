@@ -7,7 +7,7 @@ describe('V3-GUARD-01: Figma Redesign & UI Invariants (4 Garde-fous)', () => {
 
   it('Garde-fou 1: prevents raw float multiplier arithmetic in presentation TSX components', () => {
     // POS and Cart components must use SovereignMath / formatCurrency, not raw * 0.20 or * 1.20
-    const cartPath = join(root, 'src/modules/ops/service/pos/components/Cart.tsx');
+    const cartPath = join(root, 'src/modules/ops/service/restaurant/pos/components/Cart.tsx');
     if (existsSync(cartPath)) {
       const content = readFileSync(cartPath, 'utf-8');
       expect(content).not.toMatch(/price\s*\*\s*0\.\d+/);
@@ -27,7 +27,7 @@ describe('V3-GUARD-01: Figma Redesign & UI Invariants (4 Garde-fous)', () => {
   });
 
   it('Garde-fou 3: verifies that CashCounterModal enforces microunits and does not have inert handlers', () => {
-    const cashModalPath = join(root, 'src/modules/ops/service/pos/components/CashCounterModal.tsx');
+    const cashModalPath = join(root, 'src/modules/ops/service/restaurant/pos/components/CashCounterModal.tsx');
     expect(existsSync(cashModalPath)).toBe(true);
 
     const content = readFileSync(cashModalPath, 'utf-8');

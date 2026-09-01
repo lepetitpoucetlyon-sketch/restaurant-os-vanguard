@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3723,
-    "loc": 351319,
+    "loc": 351332,
     "pages": 87,
     "apiRoutes": 216
   },
@@ -162,7 +162,7 @@
     },
     {
       "file": "src/__tests__/architecture/invariants.test.ts",
-      "loc": 542
+      "loc": 555
     },
     {
       "file": "src/config/navConfig.ts",

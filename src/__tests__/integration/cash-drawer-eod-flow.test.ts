@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useCashDrawer } from '@/modules/ops/service/pos/hooks/useCashDrawer';
+import { useCashDrawer } from '@/modules/ops/service/restaurant/pos/hooks/useCashDrawer';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { empireAudit } from '@/lib/audit';
 

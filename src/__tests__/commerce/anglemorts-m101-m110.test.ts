@@ -306,7 +306,7 @@ describe('M110 — LateAllergenInterceptionService', () => {
 describe('M105 — SmsSanitizerService', () => {
   it('analyze texte pure ASCII → GSM-7 / 1 segment', async () => {
     const { SmsSanitizerService } = await import(
-      '@/modules/ops/service/notifications/SmsSanitizerService'
+      '@/modules/ops/service/core/notifications/SmsSanitizerService'
     );
     const r = SmsSanitizerService.analyze('Bonjour votre table est prete');
     expect(r.encoding).toBe('GSM-7');
@@ -316,7 +316,7 @@ describe('M105 — SmsSanitizerService', () => {
 
   it('texte avec emoji → UCS-2 + emoji strippé du sanitized', async () => {
     const { SmsSanitizerService } = await import(
-      '@/modules/ops/service/notifications/SmsSanitizerService'
+      '@/modules/ops/service/core/notifications/SmsSanitizerService'
     );
     const r = SmsSanitizerService.analyze('Table prete 🎉');
     expect(r.encoding).toBe('UCS-2');
@@ -325,7 +325,7 @@ describe('M105 — SmsSanitizerService', () => {
 
   it('isValidE164 accepte +33612345678 et rejette 0612345678', async () => {
     const { SmsSanitizerService } = await import(
-      '@/modules/ops/service/notifications/SmsSanitizerService'
+      '@/modules/ops/service/core/notifications/SmsSanitizerService'
     );
     expect(SmsSanitizerService.isValidE164('+33612345678')).toBe(true);
     expect(SmsSanitizerService.isValidE164('0612345678')).toBe(false);
@@ -334,7 +334,7 @@ describe('M105 — SmsSanitizerService', () => {
 
   it('warnIfSegmentBudget émet event si dépasse maxSegments', async () => {
     const { SmsSanitizerService } = await import(
-      '@/modules/ops/service/notifications/SmsSanitizerService'
+      '@/modules/ops/service/core/notifications/SmsSanitizerService'
     );
     await SmsSanitizerService.warnIfSegmentBudget('t1', '+33612345678', 'x'.repeat(500), 2);
     expect(emittedEvents.some(e => e.name === 'system.sms_segment_warning')).toBe(true);

@@ -47,9 +47,9 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 import { OutboxService } from '@/lib/offline/OutboxService';
 
-import { TableMergeService } from '@/modules/ops/service/pos/services/TableMergeService';
-import { AllergenGateService } from '@/modules/ops/service/pos/services/AllergenGateService';
-import { TpeReconciliationService } from '@/modules/ops/service/pos/services/TpeReconciliationService';
+import { TableMergeService } from '@/modules/ops/service/restaurant/pos/services/TableMergeService';
+import { AllergenGateService } from '@/modules/ops/service/restaurant/pos/services/AllergenGateService';
+import { TpeReconciliationService } from '@/modules/ops/service/restaurant/pos/services/TpeReconciliationService';
 import { DisinfectionSequenceService } from '@/modules/ops/production/kds/services/DisinfectionSequenceService';
 import { EightysixtService } from '@/modules/ops/production/kds/services/EightysixtService';
 import { TicketZEnforcementService } from '@/modules/finance/fiscalite/TicketZEnforcementService';

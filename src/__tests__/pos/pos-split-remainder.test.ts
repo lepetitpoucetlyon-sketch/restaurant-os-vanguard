@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { SovereignMath } from '@/shared/services/SovereignMath';
-import { usePosSplit } from '@/modules/ops/service/pos/hooks/usePosSplit';
+import { usePosSplit } from '@/modules/ops/service/restaurant/pos/hooks/usePosSplit';
 import { renderHook, act } from '@testing-library/react';
 
 describe('Règle du Reliquat de Split (Invariant #5 & Invariant Fiscal)', () => {

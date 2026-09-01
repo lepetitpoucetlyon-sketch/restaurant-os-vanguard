@@ -49,7 +49,7 @@ import { OutboxService } from '@/lib/offline/OutboxService';
 
 import { DunningSaaSService } from '@/modules/finance/tresorerie/DunningSaaSService';
 import { SupplierPriceDeviationWatcher } from '@/modules/logistics/approvisionnement/procurement/SupplierPriceDeviationWatcher';
-import { CodeAmbreService } from '@/modules/ops/service/pos/services/CodeAmbreService';
+import { CodeAmbreService } from '@/modules/ops/service/restaurant/pos/services/CodeAmbreService';
 import { SecondaryDlcLabelService } from '@/modules/logistics/stock/inventory/SecondaryDlcLabelService';
 import { RestPeriodGuard } from '@/modules/human/effectifs/hr/services/RestPeriodGuard';
 import { AOTTerraceQuotaService } from '@/modules/commerce/relation/reservations/services/AOTTerraceQuotaService';

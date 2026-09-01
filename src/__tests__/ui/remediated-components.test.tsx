@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { CashCounterModal } from '@/modules/ops/service/pos/components/CashCounterModal';
+import { CashCounterModal } from '@/modules/ops/service/restaurant/pos/components/CashCounterModal';
 import { PlaceholderView } from '@/modules/finance/components/accounting/PlaceholderView';
 import { StorageMapBoard } from '@/modules/logistics/stock/inventory/components/storage-map/StorageMapBoard';
 import { FileText } from 'lucide-react';

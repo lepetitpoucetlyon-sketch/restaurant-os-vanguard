@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { EscPosBuilder } from '@/modules/ops/service/printers/hardware/EscPosBuilder';
-import type { ReceiptTicket, BitmapImage } from '@/modules/ops/service/printers/hardware/types';
+import { EscPosBuilder } from '@/modules/ops/service/core/printing/hardware/EscPosBuilder';
+import type { ReceiptTicket, BitmapImage } from '@/modules/ops/service/core/printing/hardware/types';
 
 describe('🎨 EscPosBuilder — Styles de Tickets, Logo Bitmap & QR Code Thermique', () => {
   const baseTicket: ReceiptTicket = {

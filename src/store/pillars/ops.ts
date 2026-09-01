@@ -19,7 +19,7 @@ export {
     availableSpacesAtom,      // OPS (Universal Space Alias)
     pendingOrdersAtom,        // OPS
     pendingModificationsAtom, // OPS
-} from '@/modules/ops/service/pos/store/orderAtoms';
+} from '@/modules/ops/service/restaurant/pos/store/orderAtoms';
 
 export {
     floorsAtom,               // OPS

@@ -47,12 +47,12 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 import { OutboxService } from '@/lib/offline/OutboxService';
 
-import { PosIdempotencyGuard } from '@/modules/ops/service/pos/services/PosIdempotencyGuard';
+import { PosIdempotencyGuard } from '@/modules/ops/service/restaurant/pos/services/PosIdempotencyGuard';
 import { ProvisionalSealService } from '@/modules/finance/comptabilite/ProvisionalSealService';
 import { PostSealAddonService } from '@/modules/finance/comptabilite/PostSealAddonService';
 import { AdvanceInvoiceService } from '@/modules/finance/comptabilite/AdvanceInvoiceService';
 import { CashVarianceService } from '@/modules/finance/comptabilite/CashVarianceService';
-import { TableTransferService } from '@/modules/ops/service/pos/services/TableTransferService';
+import { TableTransferService } from '@/modules/ops/service/restaurant/pos/services/TableTransferService';
 
 const adapter = Nexus.adapter as unknown as {
   get: ReturnType<typeof vi.fn>;

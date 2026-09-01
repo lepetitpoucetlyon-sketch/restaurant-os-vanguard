@@ -122,15 +122,28 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
       }
     });
 
-    it('les 17 ADRs documentés existent sous docs/adrs/', () => {
+    // Plancher qui ne peut que MONTER (Loi 2) : ajouter un ADR ne demande aucune
+    // édition ici, mais en supprimer un — ou laisser un trou dans la numérotation —
+    // fait échouer le test. Le nombre en dur (qui valait 17) était réédité à chaque
+    // ADR ; c'est la contiguïté qui porte réellement l'invariant, pas le total.
+    const ADR_COUNT_FLOOR = 20;
+
+    it('la série des ADRs sous docs/adrs/ est contiguë depuis ADR-001', () => {
       const adrsDir = path.join(ROOT, 'docs/adrs');
       const existingAdrs = fs.readdirSync(adrsDir).filter(f => f.startsWith('ADR-') && f.endsWith('.md'));
 
-      expect(existingAdrs.length).toBe(17);
-      for (let i = 1; i <= 17; i++) {
+      const numbers = existingAdrs
+        .map(f => Number(f.slice(4, 7)))
+        .filter(n => Number.isInteger(n))
+        .sort((a, b) => a - b);
+
+      expect(new Set(numbers).size, 'numéro d\'ADR en double').toBe(numbers.length);
+      expect(numbers.length).toBeGreaterThanOrEqual(ADR_COUNT_FLOOR);
+
+      for (let i = 1; i <= numbers.length; i++) {
         const prefix = `ADR-${String(i).padStart(3, '0')}`;
         const match = existingAdrs.find(a => a.startsWith(prefix));
-        expect(match, `ADR ${prefix} manquant`).toBeDefined();
+        expect(match, `ADR ${prefix} manquant — la série doit être contiguë`).toBeDefined();
       }
     });
 
@@ -236,7 +249,7 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
      * qui échouera dès que quelqu'un la retire du code sans la retirer d'ici.
      */
     const EXCEPTIONS_ASSUMEES: Record<string, string> = {
-      'src/modules/ops/service/pos/components/Cart.tsx:onClearCart':
+      'src/modules/ops/service/restaurant/pos/components/Cart.tsx:onClearCart':
         'Vider un panier détruit une commande en cours : le geste attendu ' +
         '(confirmation ? validation manager ? passage par VoidModal ?) est un ' +
         'arbitrage produit non tranché. Le libellé "clear_cart" et le handler ' +
@@ -267,7 +280,7 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
 
     it('le partage d’addition reste câblé de bout en bout (POS bureau et mobile)', () => {
       const cart = fs.readFileSync(
-        path.join(ROOT, 'src/modules/ops/service/pos/components/Cart.tsx'), 'utf-8');
+        path.join(ROOT, 'src/modules/ops/service/restaurant/pos/components/Cart.tsx'), 'utf-8');
       expect(cart, 'Cart doit invoquer onSplitBill, sinon SplitBillDialog est inatteignable')
         .toMatch(/onClick=\{onSplitBill\}/);
       expect(cart, 'le réglage split_bill_enabled doit piloter l’affichage du bouton')
@@ -466,8 +479,8 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     });
 
     it('ProductGrid POS et KdsTab intègrent la gestion des listes vides', () => {
-      const productGrid = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/pos/components/ProductGrid.tsx'), 'utf-8');
-      const kdsTab = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/pos/components/bar/KdsTab.tsx'), 'utf-8');
+      const productGrid = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/restaurant/pos/components/ProductGrid.tsx'), 'utf-8');
+      const kdsTab = fs.readFileSync(path.join(ROOT, 'src/modules/ops/service/restaurant/pos/components/bar/KdsTab.tsx'), 'utf-8');
 
       expect(productGrid).toContain('EmptyState');
       expect(kdsTab).toContain('EmptyState');

@@ -11,8 +11,8 @@ import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
 import { formatCurrency, formatMu } from "@/lib/formatters";
 
-const PaymentDialog = dynamic(() => import('@/modules/ops/service/pos/components/PaymentDialog').then(m => m.PaymentDialog), { ssr: false });
-const SplitBillDialog = dynamic(() => import('@/modules/ops/service/pos/components/SplitBillDialog').then(m => m.SplitBillDialog), { ssr: false });
+const PaymentDialog = dynamic(() => import('@/modules/ops/service/restaurant/pos/components/PaymentDialog').then(m => m.PaymentDialog), { ssr: false });
+const SplitBillDialog = dynamic(() => import('@/modules/ops/service/restaurant/pos/components/SplitBillDialog').then(m => m.SplitBillDialog), { ssr: false });
 const CashDrawerModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.CashDrawerModal), { ssr: false });
 const PinModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.PinModal), { ssr: false });
 const TipPanel = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.TipPanel), { ssr: false });

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { SmsGatewayService } from '@/modules/ops/service/notifications/SmsGatewayService';
+import { SmsGatewayService } from '@/modules/ops/service/core/notifications/SmsGatewayService';
 
 describe('SmsGatewayService — Passerelle SMS Multi-Fournisseurs', () => {
   beforeEach(() => {

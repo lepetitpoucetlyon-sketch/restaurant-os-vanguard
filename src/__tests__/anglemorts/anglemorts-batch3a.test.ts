@@ -45,12 +45,12 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 import { OutboxService } from '@/lib/offline/OutboxService';
 
-import { AgecCarafeService } from '@/modules/ops/service/pos/services/AgecCarafeService';
+import { AgecCarafeService } from '@/modules/ops/service/restaurant/pos/services/AgecCarafeService';
 import { ComplementaryInvoiceService } from '@/modules/finance/comptabilite/ComplementaryInvoiceService';
 import { RpiExportService } from '@/modules/human/effectifs/hr/services/RpiExportService';
 import { TipRedistributionService } from '@/modules/human/remuneration/payroll/TipRedistributionService';
 import { BadgeClockoutAtZService } from '@/modules/human/effectifs/hr/services/BadgeClockoutAtZService';
-import { OrderLineDAGService } from '@/modules/ops/service/pos/services/OrderLineDAGService';
+import { OrderLineDAGService } from '@/modules/ops/service/restaurant/pos/services/OrderLineDAGService';
 import { ReviewBombingDetectorService } from '@/modules/commerce/acquisition/marketing/ReviewBombingDetectorService';
 import { WitnessDishService } from '@/modules/compliance/qualite/haccp/services/WitnessDishService';
 import { FryingOilTestRegisterService } from '@/modules/compliance/qualite/haccp/services/FryingOilTestRegisterService';

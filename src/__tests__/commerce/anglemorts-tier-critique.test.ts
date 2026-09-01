@@ -329,7 +329,7 @@ describe('MCC-E2 — MFAEnforcementService', () => {
 // ── D5 — TaxRateGuard ───────────────────────────────────────────────────────
 describe('D5 — TaxRateGuard', () => {
   it('items tous OK → allowed', async () => {
-    const { TaxRateGuard } = await import('@/modules/ops/service/pos/services/TaxRateGuard');
+    const { TaxRateGuard } = await import('@/modules/ops/service/restaurant/pos/services/TaxRateGuard');
     const r = TaxRateGuard.evaluate([
       { cartId: 'a', productId: 'p1', name: 'X', taxRate: '0.10' },
       { cartId: 'b', productId: 'p2', name: 'Y', taxRate: '0.20' },
@@ -339,7 +339,7 @@ describe('D5 — TaxRateGuard', () => {
   });
 
   it('item sans taxRate → offending + refus', async () => {
-    const { TaxRateGuard } = await import('@/modules/ops/service/pos/services/TaxRateGuard');
+    const { TaxRateGuard } = await import('@/modules/ops/service/restaurant/pos/services/TaxRateGuard');
     const r = TaxRateGuard.evaluate([
       { cartId: 'a', productId: 'p1', name: 'X', taxRate: '0.10' },
       { cartId: 'b', productId: 'p2', name: 'Y', taxRate: undefined },
@@ -351,7 +351,7 @@ describe('D5 — TaxRateGuard', () => {
   });
 
   it('taxRate non standard → offending', async () => {
-    const { TaxRateGuard } = await import('@/modules/ops/service/pos/services/TaxRateGuard');
+    const { TaxRateGuard } = await import('@/modules/ops/service/restaurant/pos/services/TaxRateGuard');
     const r = TaxRateGuard.evaluate([
       { cartId: 'a', productId: 'p1', name: 'X', taxRate: '0.99' },
     ]);
@@ -360,14 +360,14 @@ describe('D5 — TaxRateGuard', () => {
   });
 
   it('assertOrThrow throw si offending', async () => {
-    const { TaxRateGuard } = await import('@/modules/ops/service/pos/services/TaxRateGuard');
+    const { TaxRateGuard } = await import('@/modules/ops/service/restaurant/pos/services/TaxRateGuard');
     expect(() => TaxRateGuard.assertOrThrow([
       { cartId: 'a', productId: 'p1', name: 'X', taxRate: null },
     ])).toThrow('TAX_RATE_MISSING');
   });
 
   it('guard() trace audit si refus', async () => {
-    const { TaxRateGuard } = await import('@/modules/ops/service/pos/services/TaxRateGuard');
+    const { TaxRateGuard } = await import('@/modules/ops/service/restaurant/pos/services/TaxRateGuard');
     await TaxRateGuard.guard('t1', 'op1', 'ord_1', [
       { cartId: 'a', productId: 'p1', name: 'X', taxRate: undefined },
     ]);

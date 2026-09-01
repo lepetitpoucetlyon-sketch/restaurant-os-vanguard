@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { TableLockService } from '@/modules/ops/service/pos/services/TableLockService';
+import { TableLockService } from '@/modules/ops/service/restaurant/pos/services/TableLockService';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { registerTableLockHandler } from '@/shared/eventBus/handlers/TableLockHandler';
 

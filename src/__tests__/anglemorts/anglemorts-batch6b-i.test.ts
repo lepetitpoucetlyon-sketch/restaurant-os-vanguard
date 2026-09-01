@@ -35,7 +35,7 @@ import { DegradedDishwashingModeService } from '@/modules/ops/production/kds/ser
 import { CourierGpsKdsPacingService } from '@/modules/commerce/relation/delivery/services/CourierGpsKdsPacingService';
 import { DeliveryBagPinReleaseService } from '@/modules/commerce/relation/delivery/services/DeliveryBagPinReleaseService';
 import { DeliveryDualPricingService } from '@/modules/commerce/relation/delivery/services/DeliveryDualPricingService';
-import { RainPlanTerraceSwitchService } from '@/modules/ops/service/pos/services/RainPlanTerraceSwitchService';
+import { RainPlanTerraceSwitchService } from '@/modules/ops/service/restaurant/pos/services/RainPlanTerraceSwitchService';
 import { ThermalPackagingImputationService } from '@/modules/commerce/relation/delivery/services/ThermalPackagingImputationService';
 describe('Angles Morts — Batch 6 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });

@@ -17,7 +17,7 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 // expose déjà isSplitOpen / handlePaySplit / handleSplitComplete. Le POS mobile
 // passait `onSplitBill={() => {}}` — le partage d'addition y était donc mort.
 const SplitBillDialog = dynamic(
-    () => import('@/modules/ops/service/pos/components/SplitBillDialog').then(m => m.SplitBillDialog),
+    () => import('@/modules/ops/service/restaurant/pos/components/SplitBillDialog').then(m => m.SplitBillDialog),
     { ssr: false }
 );
 
