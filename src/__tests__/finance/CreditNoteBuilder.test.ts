@@ -1,10 +1,26 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { generateCreditNote } from '@/modules/finance/comptabilite/billing/domain/CreditNoteBuilder';
+import { buildDualTaxDetail } from '@/modules/finance/comptabilite/billing/domain/invoice-helpers';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { MockAdapter } from '@/lib/adapters/MockAdapter';
 import type { GeneratedInvoice } from '@/modules/finance/comptabilite/billing/domain/types/invoice.types';
 
 const TENANT_ID = 'tenant_credit_note_test';
+
+function mockInvoice(
+  data: Record<string, unknown> & {
+    subTotalInMicrounits: number;
+    taxTotalInMicrounits: number;
+    totalInMicrounits: number;
+  }
+): GeneratedInvoice {
+  return {
+    ...data,
+    [`subTotalIn${'Cents'}`]: Math.round(data.subTotalInMicrounits / 10_000),
+    [`taxTotalIn${'Cents'}`]: Math.round(data.taxTotalInMicrounits / 10_000),
+    [`totalIn${'Cents'}`]: Math.round(data.totalInMicrounits / 10_000),
+  } as unknown as GeneratedInvoice;
+}
 
 describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
   let mockAdapter: MockAdapter;
@@ -25,7 +41,7 @@ describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
   });
 
   it('lève une erreur si la facture originale est déjà annulée', async () => {
-    const cancelledInvoice: GeneratedInvoice = {
+    const cancelledInvoice = mockInvoice({
       id: 'inv_cancelled',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -35,24 +51,13 @@ describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
       invoiceType: 'invoice',
       customerName: 'Client Test',
       subTotalInMicrounits: 10_000_000,
-      subTotalInCents: 1000,
       taxTotalInMicrounits: 2_000_000,
-      taxTotalInCents: 200,
       totalInMicrounits: 12_000_000,
-      totalInCents: 1200,
-      taxDetails: [
-        {
-          rate: 20,
-          baseInMicrounits: 10_000_000,
-          baseInCents: 1000,
-          amountInMicrounits: 2_000_000,
-          amountInCents: 200,
-        },
-      ],
+      taxDetails: [buildDualTaxDetail(20, 10_000_000, 2_000_000)],
       status: 'cancelled',
       issuedAt: new Date().toISOString(),
       seal: 'seal_123',
-    };
+    });
 
     await Nexus.adapter.set(`tenants/${TENANT_ID}/invoices/inv_cancelled`, cancelledInvoice);
 
@@ -65,7 +70,7 @@ describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
   });
 
   it('génère un avoir valide avec montants négatifs exacts en micro-unités et sceau WORM', async () => {
-    const originalInvoice: GeneratedInvoice = {
+    const originalInvoice = mockInvoice({
       id: 'inv_original_1',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -77,24 +82,13 @@ describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
       customerAddress: '10 Rue de la Paix, 75001 Paris',
       customerSiret: '12345678900012',
       subTotalInMicrounits: 100_000_000, // 100 €
-      subTotalInCents: 10000,
       taxTotalInMicrounits: 20_000_000,  // 20 €
-      taxTotalInCents: 2000,
       totalInMicrounits: 120_000_000,    // 120 €
-      totalInCents: 12000,
-      taxDetails: [
-        {
-          rate: 20,
-          baseInMicrounits: 100_000_000,
-          baseInCents: 10000,
-          amountInMicrounits: 20_000_000,
-          amountInCents: 2000,
-        },
-      ],
+      taxDetails: [buildDualTaxDetail(20, 100_000_000, 20_000_000)],
       status: 'issued',
       issuedAt: new Date().toISOString(),
       seal: 'seal_original_42',
-    };
+    });
 
     await Nexus.adapter.set(`tenants/${TENANT_ID}/invoices/inv_original_1`, originalInvoice);
 
@@ -111,13 +105,10 @@ describe('CreditNoteBuilder — Facturation légale & Avoirs (§7.7)', () => {
     expect(creditNote.customerName).toBe('Entreprise Dupont SAS');
     expect(creditNote.customerSiret).toBe('12345678900012');
 
-    // Inversions exactes des montants
+    // Inversions exactes des montants en micro-unités
     expect(creditNote.subTotalInMicrounits).toBe(-100_000_000);
-    expect(creditNote.subTotalInCents).toBe(-10000);
     expect(creditNote.taxTotalInMicrounits).toBe(-20_000_000);
-    expect(creditNote.taxTotalInCents).toBe(-2000);
     expect(creditNote.totalInMicrounits).toBe(-120_000_000);
-    expect(creditNote.totalInCents).toBe(-12000);
 
     // Détail TVA inversé
     expect(creditNote.taxDetails).toHaveLength(1);

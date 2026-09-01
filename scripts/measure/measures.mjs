@@ -532,7 +532,7 @@ export const m13_verticalStubs = {
       const rel = c.rel(f);
       if (!rel.startsWith('src/verticals/')) continue;
       if (rel.includes('/_shared/')) continue;
-      if (!rel.endsWith('.tsx')) continue;
+      if (!rel.endsWith('.tsx') && !rel.endsWith('.ts')) continue;
       // Match : le fichier importe VerticalPageStub ET son export principal l'invoque
       if (!/from ['"][^'"]*VerticalPageStub['"]/.test(src)) continue;
       if (!/VerticalPageStub\s*\(/.test(src)) continue;

@@ -51,8 +51,8 @@ const CLIQUETS = {
   a11yMuets:        seuil('A11Y_MUETS_MAX', 150),
   a11yModales:      seuil('A11Y_MODALES_MAX', 0),
   a11yKeyboard:     seuil('A11Y_KEYBOARD_MAX', 67),
-  verticalStubs:    seuil('VERTICAL_STUBS_MAX', 12),
-  frHardcoded:      seuil('FR_HARDCODED_MAX', 941),
+  verticalStubs:    seuil('VERTICAL_STUBS_MAX', 21),
+  frHardcoded:      seuil('FR_HARDCODED_MAX', 893),
 };
 
 const corpus = chargerCorpus('src');

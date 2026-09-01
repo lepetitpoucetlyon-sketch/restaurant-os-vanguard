@@ -92,7 +92,7 @@ DS_OUTSIDE_MAX=0             # écrans fabriquant de l'UI hors design system —
 A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 derniers switchs/pulse fixés à la main (SwitchboardItem role=switch, DebugModeSection role=switch, HermesDashboard aria-label)
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=0          # conteneurs cliquables non focalisables — 67→0 : DraggableIngredient fixé via onKeyDown explicite après spread {...listeners} (merger dnd-kit + Enter/Space)
-VERTICAL_STUBS_MAX=12        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8
+VERTICAL_STUBS_MAX=21        # écrans de verticale rendus par VerticalPageStub — obligation Loi 8 (mesuré sur .tsx + .ts)
 FR_HARDCODED_MAX=893         # chaînes FR en dur hors legal & verticals — à traduire par lots (onboarding d'abord)
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
@@ -209,12 +209,12 @@ else
   CC_VIOLATIONS=$(echo "$CHECK_OUT" | grep "max_cc" || true)
 
   if [ -n "$CC_VIOLATIONS" ]; then
-    # Ratchet complex_fn_count : la dette existante ne bloque pas, mais ne peut que descendre.
-    COMPLEX_FN_MAX=${COMPLEX_FN_MAX:-1519}   # baseline 2026-08-30 — abaisser lors des refactos (1518→1519 : +1 dans .{agent,claude,gemini,github}/skills/impeccable, packages Anthropic externes non-src)
-    COMPLEX_FN_CURRENT=$(echo "$CHECK_OUT" | grep -oE "max_cc: [0-9]+ function" | grep -oE "[0-9]+" | head -1)
+    # Ratchet complex_fn_count : filtré sur src/ et scripts/ pour exclure le code vendorisé des skills agents.
+    COMPLEX_FN_MAX=${COMPLEX_FN_MAX:-76}   # baseline 2026-09-01 — 76 fonctions cc>12 dans src/ et scripts/
+    COMPLEX_FN_CURRENT=$(echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*(src/|scripts/)" | wc -l | tr -d ' ')
     if [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -gt "$COMPLEX_FN_MAX" ]; then
-      fail "RÉGRESSION complexité : $COMPLEX_FN_CURRENT fonctions > cc12 (seuil ratchet $COMPLEX_FN_MAX)"
-      echo "$CHECK_OUT" | grep "cc=" | head -20 | while IFS= read -r line; do echo "    $line"; done
+      fail "RÉGRESSION complexité : $COMPLEX_FN_CURRENT fonctions > cc12 dans src/scripts (seuil ratchet $COMPLEX_FN_MAX)"
+      echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*(src/|scripts/)" | head -20 | while IFS= read -r line; do echo "    $line"; done
       exit 1
     elif [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -lt "$COMPLEX_FN_MAX" ]; then
       ok "Complexité en baisse : $COMPLEX_FN_CURRENT / $COMPLEX_FN_MAX — baisse COMPLEX_FN_MAX dans preflight.sh"

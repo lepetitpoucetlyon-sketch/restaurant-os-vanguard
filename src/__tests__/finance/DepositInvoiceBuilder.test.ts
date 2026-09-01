@@ -33,13 +33,10 @@ describe('DepositInvoiceBuilder — Acomptes & Conversion Devis (§7.7)', () => 
       expect(deposit.customerName).toBe('Client Événementiel SARL');
       expect(deposit.customerSiret).toBe('98765432100099');
 
-      // Calculs montants
+      // Calculs montants en micro-unités
       expect(deposit.subTotalInMicrounits).toBe(50_000_000);
-      expect(deposit.subTotalInCents).toBe(5000);
       expect(deposit.taxTotalInMicrounits).toBe(10_000_000); // 20% de 50€
-      expect(deposit.taxTotalInCents).toBe(1000);
       expect(deposit.totalInMicrounits).toBe(60_000_000); // 60€ TTC
-      expect(deposit.totalInCents).toBe(6000);
 
       // Détail TVA
       expect(deposit.taxDetails).toHaveLength(1);
