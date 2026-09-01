@@ -8,4 +8,7 @@ export { ChangeAsTipService } from "./ChangeAsTipService";
 export { BilingualTipGratuityHelper } from "./BilingualTipGratuityHelper";
 export { PosIdempotencyGuard } from "./PosIdempotencyGuard";
 export { HardenedTouchUiHelper } from "./HardenedTouchUiHelper";
+export { MealVoucherLimitGuard } from "./MealVoucherLimitGuard";
+export { ConecsVatSplittingService } from "./ConecsVatSplittingService";
+
 

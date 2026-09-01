@@ -96,7 +96,7 @@ VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub 
 VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
-VERTICAL_SERVICES_UNWIRED_MAX=145 # services de verticale/ops non câblés — 148→145 : Lot 4 câblage caisse (2026-09-01)
+VERTICAL_SERVICES_UNWIRED_MAX=144 # services de verticale/ops non câblés — 145→144 : Lot 5 câblage titres-restaurant (2026-09-01)
 FR_HARDCODED_MAX=777         # chaînes FR en dur hors legal & verticals — recalibré à 777 (2026-09-01)
 HARDCODED_HEX_MAX=955        # couleurs #hex ET rgba()/rgb() en dur — 958→955 (2026-09-01)
                              # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait

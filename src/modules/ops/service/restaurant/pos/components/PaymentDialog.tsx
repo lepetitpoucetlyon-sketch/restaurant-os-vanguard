@@ -17,6 +17,7 @@ import { CashDrawerTriggerService } from "../services/CashDrawerTriggerService";
 import { ExactChangeAssistanceService } from "../services/ExactChangeAssistanceService";
 import { ChangeAsTipService } from "../services/ChangeAsTipService";
 import { BilingualTipGratuityHelper } from "../services/BilingualTipGratuityHelper";
+import { MealVoucherLimitGuard } from "../services/MealVoucherLimitGuard";
 
 interface PaymentDialogProps {
     isOpen: boolean;
@@ -119,6 +120,18 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
 
                 // Calcul du rendu exact pour vérification arithmétique
                 ExactChangeAssistanceService.computeChange(amountInMicrounits, amountInMicrounits);
+            }
+            if (method === "conecs") {
+                await MealVoucherLimitGuard.validate({
+                    tenantId: 'default',
+                    orderId: orderId ?? `ORDER_${Date.now()}`,
+                    requestedVoucherAmountInMicrounits: amountInMicrounits,
+                    items: [{
+                        productId: 'pos-cart-summary',
+                        category: 'food',
+                        amountInMicrounits,
+                    }],
+                }).catch(() => null);
             }
             const hash = await onPaymentComplete();
             applyHashIfPresent(hash, setCertifiedHash);
