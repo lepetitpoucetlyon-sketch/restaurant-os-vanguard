@@ -1,33 +1,33 @@
 import 'server-only';
 import { Nexus } from './NexusAdapter';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
-import { FirestoreServerAdapter } from '@/lib/adapters/FirestoreServerAdapter';
+import { createServerAdapter } from './providerFactory';
 import { logger } from '@/lib/logger';
+import { toError } from '@/lib/toError';
 
 let registered = false;
 
 /**
- * Enregistre l'adapter Nexus côté serveur (Admin SDK), une seule fois.
- * Idempotent et TOLÉRANT : si `FIREBASE_SERVICE_ACCOUNT_JSON` est absent (dev sans
- * service account), on ne bloque pas le démarrage — on log un avertissement et on
- * laisse `Nexus.adapter` non enregistré (les routes qui l'utilisent échoueront
- * explicitement au lieu de faire planter tout le serveur au boot).
- *
- * Appelé au démarrage par `src/instrumentation.ts`, et sûr à appeler depuis une
- * route API par précaution.
+ * Enregistre l'adapter Nexus côté serveur (Admin SDK / Memory / Mock), une seule fois.
  */
-export function ensureServerNexus(): void {
+export async function ensureServerNexus(): Promise<void> {
   if (registered) return;
 
-  if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    logger.warn(
-      '[Nexus] FIREBASE_SERVICE_ACCOUNT_JSON absent — adapter serveur NON enregistré. ' +
-      'Les routes API utilisant Nexus.adapter renverront une erreur explicite.',
-    );
-    return;
+  try {
+    const adapter = await createServerAdapter();
+    if (adapter) {
+      if (process.env.DB_PROVIDER === 'firestore' || !process.env.DB_PROVIDER) {
+        initFirebaseAdmin();
+      }
+      Nexus.registerServerAdapter(adapter);
+      registered = true;
+    } else {
+      logger.warn(
+        '[Nexus] Adapter serveur NON enregistré. ' +
+        'Les routes API utilisant Nexus.adapter renverront une erreur explicite.',
+      );
+    }
+  } catch (err) {
+    logger.warn('[Nexus] Erreur enregistrement adapter serveur', { error: toError(err).message });
   }
-
-  initFirebaseAdmin();
-  Nexus.registerServerAdapter(new FirestoreServerAdapter());
-  registered = true;
 }

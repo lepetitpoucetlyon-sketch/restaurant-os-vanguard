@@ -22,7 +22,7 @@ const BLOCKED_STATUSES: UserStatus[] = ['suspended', 'inactive', 'on_leave', 'RE
 
 async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean> {
     try {
-        ensureServerNexus(); // idempotent — no-op si déjà initialisé par instrumentation.ts
+        await ensureServerNexus(); // idempotent — no-op si déjà initialisé par instrumentation.ts
         const user = await Nexus.adapter.get<{ status?: UserStatus }>(`tenants/${tenantId}/users/${uid}`);
         if (!user) return true; // pas dans Nexus = fleet admin ou service account → ok
         if (!user.status) return true; // champ absent → on ne bloque pas (compat legacy)
@@ -36,7 +36,7 @@ async function isEmployeeActive(tenantId: string, uid: string): Promise<boolean>
 async function resolveTenantVariant(tenantId: string, headerVariant?: string | null): Promise<string> {
     if (headerVariant) return headerVariant.toLowerCase();
     try {
-        ensureServerNexus();
+        await ensureServerNexus();
         const config = await Nexus.adapter.get<{ variant?: string }>(`tenants/${tenantId}/config`);
         return config?.variant || 'restaurant';
     } catch {

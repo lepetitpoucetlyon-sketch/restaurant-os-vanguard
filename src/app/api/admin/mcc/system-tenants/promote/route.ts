@@ -24,7 +24,7 @@ const BodySchema = z.object({
 export async function POST(req: NextRequest) {
     const caller = await requireMccLevel(req, 'mcc_super_admin');
     if (isDenied(caller)) return caller;
-    ensureServerNexus();
+    await ensureServerNexus();
 
     const parsed = BodySchema.safeParse(await req.json());
     if (!parsed.success) {

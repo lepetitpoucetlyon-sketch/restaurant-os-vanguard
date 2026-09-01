@@ -30,7 +30,9 @@ export function useNexusTenantLogic(): NexusTenantState {
     const [activeTenantConfig, setActiveTenantConfig] = useState<TenantConfig | null>(null);
 
     useEffect(() => {
-        bootstrapDefaultProviders();
+        bootstrapDefaultProviders().catch((err) => {
+            logger.warn('[NexusTenant] bootstrap provider failed', err);
+        });
     }, []);
 
     useEffect(() => {
