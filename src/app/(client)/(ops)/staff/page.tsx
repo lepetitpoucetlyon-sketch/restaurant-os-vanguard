@@ -1,6 +1,8 @@
 "use client";
 
-import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap } from "lucide-react";
+import { useState } from "react";
+import { Users, CalendarRange, Palmtree, UserPlus, Plus, Clock, Euro, GraduationCap, Briefcase } from "lucide-react";
+import type { User } from "@nexus/contracts";
 
 import dynamic from "next/dynamic";
 import {
@@ -25,13 +27,16 @@ const QuickAddStaffModal = dynamic(() => import('@/modules/human').then(m => m.Q
 const SkillsTab = dynamic(() => import("./_tabs/SkillsTab").then(m => m.SkillsTab), { ssr: false });
 const TimesheetTab = dynamic(() => import("./_tabs/TimesheetTab").then(m => m.TimesheetTab), { ssr: false });
 const PayrollTab = dynamic(() => import("./_tabs/PayrollTab").then(m => m.PayrollTab), { ssr: false });
+const FreelanceTab = dynamic(() => import("./_tabs/FreelanceTab").then(m => m.FreelanceTab), { ssr: false });
 const LeavesTab = dynamic(() => import("./_tabs/LeavesTab").then(m => m.LeavesTab), { ssr: false });
+const ContractGeneratorModal = dynamic(() => import("./_tabs/ContractGeneratorModal").then(m => m.ContractGeneratorModal), { ssr: false });
 
 const TABS: { id: StaffTab; label: string; icon: typeof Users }[] = [
     { id: "team",        label: "Équipe",              icon: Users },
     { id: "planning",    label: "Planning",             icon: CalendarRange },
     { id: "timesheet",   label: "Pointage",             icon: Clock },
-    { id: "payroll",     label: "Paie",                 icon: Euro },
+    { id: "payroll",     label: "Paie HCR",             icon: Euro },
+    { id: "freelance",   label: "Freelances & B2B",     icon: Briefcase },
     { id: "skills",      label: "Compétences",          icon: GraduationCap },
     { id: "leaves",      label: "Congés & Absences",    icon: Palmtree },
     { id: "recruitment", label: "Recrutement",          icon: UserPlus },
@@ -41,10 +46,13 @@ function StaffPage() {
     const canSeePayroll = useTabAccess("staff", "payroll");
     const canSeeRecruitment = useTabAccess("staff", "recruitment");
     const visibleTabs = TABS.filter(t => {
-        if (t.id === "payroll") return canSeePayroll;
+        if (t.id === "payroll" || t.id === "freelance") return canSeePayroll;
         if (t.id === "recruitment") return canSeeRecruitment;
         return true;
     });
+
+    const [contractModalUser, setContractModalUser] = useState<User | null>(null);
+    const [isContractModalOpen, setIsContractModalOpen] = useState(false);
 
     const {
         activeTab, setActiveTab,
@@ -58,17 +66,22 @@ function StaffPage() {
         staffDocs, docForm, setDocForm,
         staffMembers, auditLogs, shifts,
         isManager, visibleShiftLogs, visibleLeaveRequests,
-        leaveBalances, payrollRows,
+        leaveBalances, payrollRows, contractorRows,
         handleToggleSkill, handleAddDoc, handleDeleteDoc,
         handleLeaveSubmit, openStaffModal, handleHireCandidate,
         handlePublishPlanning, handleApproveLeave, handleRejectLeave,
     } = useStaffPage();
 
+    const handleOpenContractModal = (user: User) => {
+        setContractModalUser(user);
+        setIsContractModalOpen(true);
+    };
+
     return (
         <PageShell
             kicker="Humain"
-            title="Ressources Humaines"
-            subtitle="Équipe, planning, congés et recrutement — pilotage RH de l'établissement."
+            title="Ressources Humaines & Effectifs"
+            subtitle="Équipe HCR, vacations freelances, paie, contrats et planning — pilotage complet de l'établissement."
             icon={Users}
             breadcrumbs={[{ label: "Opérations" }, { label: "Équipe" }]}
             actions={activeTab === "team" ? (
@@ -122,7 +135,26 @@ function StaffPage() {
 
                 {activeTab === "payroll" && (
                     <TabGuard pageKey="staff" tabKey="payroll">
-                        <PayrollTab isManager={isManager} payrollMonth={payrollMonth} setPayrollMonth={setPayrollMonth} payrollRows={payrollRows} />
+                        <PayrollTab
+                            isManager={isManager}
+                            payrollMonth={payrollMonth}
+                            setPayrollMonth={setPayrollMonth}
+                            payrollRows={payrollRows}
+                            onOpenContractModal={handleOpenContractModal}
+                        />
+                    </TabGuard>
+                )}
+
+                {activeTab === "freelance" && (
+                    <TabGuard pageKey="staff" tabKey="payroll">
+                        <FreelanceTab
+                            isManager={isManager}
+                            billingMonth={payrollMonth}
+                            setBillingMonth={setPayrollMonth}
+                            contractorRows={contractorRows}
+                            onOpenContractModal={handleOpenContractModal}
+                            onOpenAddStaff={() => openStaffModal()}
+                        />
                     </TabGuard>
                 )}
 
@@ -150,6 +182,15 @@ function StaffPage() {
             />
             <NewRequestModal isOpen={isLeaveModalOpen} onClose={() => setIsLeaveModalOpen(false)} balances={leaveBalances} onSubmit={handleLeaveSubmit} />
             <QuickAddStaffModal isOpen={isQuickAddOpen} onClose={() => setIsQuickAddOpen(false)} />
+            
+            <ContractGeneratorModal
+                isOpen={isContractModalOpen}
+                onClose={() => {
+                    setIsContractModalOpen(false);
+                    setContractModalUser(null);
+                }}
+                collaborator={contractModalUser}
+            />
 
             {/* BadgeControl reserved for team tab actions */}
             <BadgeControl />

@@ -15,10 +15,10 @@ import { useAuth } from "@/shared/providers/NexusCoreContext";
 import { useTenant } from "@/shared/hooks/useTenant";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
-import { computePayroll, type StaffTab } from "@/app/(client)/(ops)/staff/staffUtils";
+import { computePayroll, computeContractorBilling, type StaffTab } from "@/app/(client)/(ops)/staff/staffUtils";
 import type { JsonObject } from "@/shared/types/json";
 
-const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "leaves", "recruitment"];
+const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "payroll", "freelance", "skills", "leaves", "recruitment"];
 
 function computeInitialTab(tabParam: StaffTab | null): StaffTab {
     return tabParam && VALID_STAFF_TABS.includes(tabParam) ? tabParam : "team";
@@ -72,6 +72,7 @@ export function useStaffPage() {
 
     const visibleLeaveRequests = isManager ? leaveRequests : leaveRequests.filter(r => r.userId === currentUser?.id);
     const payrollRows = useMemo(() => computePayroll(staffMembers, shiftLogs, payrollMonth), [staffMembers, shiftLogs, payrollMonth]);
+    const contractorRows = useMemo(() => computeContractorBilling(staffMembers, shiftLogs, payrollMonth), [staffMembers, shiftLogs, payrollMonth]);
 
     // Sous-hook : gestion documents salarié (fetch + scellement vault + persistance)
     const { staffDocs, docForm, setDocForm, handleAddDoc, handleDeleteDoc } = useStaffDocs({
@@ -184,7 +185,7 @@ export function useStaffPage() {
         staffDocs, docForm, setDocForm,
         currentUser, staffMembers, auditLogs, shiftLogs, shifts,
         isManager, visibleShiftLogs, visibleLeaveRequests,
-        leaveBalances, payrollRows,
+        leaveBalances, payrollRows, contractorRows,
         handleToggleSkill, handleAddDoc, handleDeleteDoc,
         handleLeaveSubmit, openStaffModal, handleHireCandidate,
         handlePublishPlanning, handleApproveLeave, handleRejectLeave,

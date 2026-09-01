@@ -30,10 +30,17 @@ export class StaffService {
 
             if (totalCostCents <= 0) return null;
 
+            const isContractor = shift.metadata?.isContractor === true || shift.metadata?.employmentStatus === 'contractor' || shift.metadata?.contractType === 'freelance';
+            const debitAccountCode = isContractor ? '611' : '641';
+            const debitAccountName = isContractor ? 'Sous-traitance générale' : 'Rémunérations du personnel';
+            const creditAccountCode = isContractor ? '401' : '421';
+            const creditAccountName = isContractor ? 'Fournisseurs - Prestataires divers' : 'Personnel - Rémunérations dues';
+            const descriptionPrefix = isContractor ? 'Provision Sous-traitance Freelance' : 'Provision Charge Personnel';
+
             return {
                 pieceNumber: `PAY-EST-${Date.now()}`,
                 date: new Date().toISOString(),
-                description: `Provision Charge Personnel - Shift ${shift.id} (${shift.userId})`,
+                description: `${descriptionPrefix} - Shift ${shift.id} (${shift.userId})`,
                 status: 'draft',
                 referenceId: shift.id,
                 referenceType: 'payroll',
@@ -41,19 +48,19 @@ export class StaffService {
                 isValidated: false,
                 lines: [
                     {
-                        accountId: 'acc_641',
-                        accountCode: '641',
-                        accountName: 'Rémunérations du personnel',
+                        accountId: `acc_${debitAccountCode}`,
+                        accountCode: debitAccountCode,
+                        accountName: debitAccountName,
                         description: `Estimation coût horaire (${hours.toFixed(2)}h @ 18€/h)`,
                         side: 'debit',
                         amountInCents: totalCostCents,
                         amountInMicrounits: totalCostCents * 10_000,
                     },
                     {
-                        accountId: 'acc_421',
-                        accountCode: '421',
-                        accountName: 'Personnel - Rémunérations dues',
-                        description: `Provision pour paie à venir`,
+                        accountId: `acc_${creditAccountCode}`,
+                        accountCode: creditAccountCode,
+                        accountName: creditAccountName,
+                        description: `Provision pour règlement à venir`,
                         side: 'credit',
                         amountInCents: totalCostCents,
                         amountInMicrounits: totalCostCents * 10_000,
@@ -62,7 +69,7 @@ export class StaffService {
                 metadata: {
                     userId: shift.userId,
                     hours,
-                    hourlyRate: estimatedHourlyRate
+                    hourlyRate: estimatedHourlyRate,
                 }
             };
         } catch (error) {

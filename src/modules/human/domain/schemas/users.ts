@@ -9,6 +9,40 @@ export const UserPermissionsSchema = z.record(z.string(), z.array(z.string())).a
     restrictedPillars: z.array(z.string()).optional(),
 }));
 
+export const ContractTypeSchema = z.enum([
+  'cdi_35h',
+  'cdi_39h',
+  'cdd',
+  'extra_cddu',
+  'apprenti',
+  'stage',
+  'freelance',
+  'interim'
+]);
+export type ContractType = z.infer<typeof ContractTypeSchema>;
+
+export const EmploymentStatusSchema = z.enum(['employee', 'contractor', 'agency']);
+export type EmploymentStatus = z.infer<typeof EmploymentStatusSchema>;
+
+export const ContractorProfileSchema = z.object({
+  siren: z.string().regex(/^[0-9]{9}$/, 'Le SIREN doit comporter 9 chiffres').optional(),
+  siret: z.string().regex(/^[0-9]{14}$/, 'Le SIRET doit comporter 14 chiffres').optional(),
+  companyName: z.string().min(1).max(120).optional(),
+  vatRegime: z.enum(['franchise_art_293b', 'vat_standard_20', 'vat_exempt']).default('franchise_art_293b'),
+  vatNumber: z.string().optional(),
+  billingRateType: z.enum(['hourly', 'shift_flat_fee', 'per_cover']).default('hourly'),
+  rateInMicrounits: z.number().int().min(0).optional(),
+  selfBillingAgreed: z.boolean().default(false),
+  urssafVigilanceCertificateUrl: z.string().optional(),
+  urssafVigilanceValidUntil: z.string().optional(),
+  iban: z.string().optional(),
+  bic: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  postalCode: z.string().optional()
+});
+export type ContractorProfile = z.infer<typeof ContractorProfileSchema>;
+
 export const UserSchema = z.object({
   id:                UUIDSchema,
   type:              z.literal('user').default('user'),
@@ -17,6 +51,9 @@ export const UserSchema = z.object({
   email:             z.string().email('Email invalide').toLowerCase().optional(),
   role:              z.string(),
   status:            StatusSchema.default('active'),
+  contractType:      ContractTypeSchema.optional(),
+  employmentStatus:  EmploymentStatusSchema.default('employee').optional(),
+  contractorProfile: ContractorProfileSchema.optional(),
   pin:               z.string().regex(/^[0-9]{4}$/, 'Le PIN doit être composé de 4 chiffres').optional(),
   pinHash:           z.string().optional(),
   pinSalt:           z.string().optional(),

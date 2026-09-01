@@ -13,7 +13,9 @@
  * Ce fichier les fusionne en un objet unique consommé par LanguageContext.
  */
 
-export type Language = 'fr' | 'en' | 'ja' | 'pt' | 'es';
+import type { LanguageCode } from '@/config/languages';
+
+export type Language = LanguageCode;
 
 // Async lazy loading function
 export async function loadTranslations(lang: Language): Promise<import("@/shared/nexus/contracts/sovereign.types").SovereignData> {

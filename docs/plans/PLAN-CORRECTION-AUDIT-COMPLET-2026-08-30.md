@@ -1,4 +1,4 @@
-# Plan de correction complet — audit projet du 2026-08-30
+bgvb n# Plan de correction complet — audit projet du 2026-08-30
 
 > ## État après exécution — 2026-08-30 (arbre `main` @ `c8e97e6b1`)
 >
@@ -10,14 +10,14 @@
 >
 > **Vérité terrain finale mesurée** (chaque commande relancée sur l'arbre `c8e97e6b1`) :
 >
-> | Vérification | Résultat |
-> |---|---|
-> | `rtk proxy npx tsc --noEmit` | 0 erreur |
-> | `./node_modules/.bin/vitest run` | 2 477 passés / 0 échec / 307 fichiers |
-> | `node scripts/gate-last-mile.mjs` | 12/12 verts |
-> | `node scripts/verify-gate-integrity.mjs` | OK (hash `e3daa83b4036a186`) |
-> | `npx next build` | OK — 290 pages générées |
-> | `npm run preflight` complet | **bloqué** sur `MADGE_CYCLES_MAX=0` vs **11 cycles réels** (dette héritée hors périmètre) |
+> | Vérification                             | Résultat                                                                                  |
+> | ---------------------------------------- | ----------------------------------------------------------------------------------------- |
+> | `rtk proxy npx tsc --noEmit`             | 0 erreur                                                                                  |
+> | `./node_modules/.bin/vitest run`         | 2 477 passés / 0 échec / 307 fichiers                                                     |
+> | `node scripts/gate-last-mile.mjs`        | 12/12 verts                                                                               |
+> | `node scripts/verify-gate-integrity.mjs` | OK (hash `e3daa83b4036a186`)                                                              |
+> | `npx next build`                         | OK — 290 pages générées                                                                   |
+> | `npm run preflight` complet              | **bloqué** sur `MADGE_CYCLES_MAX=0` vs **11 cycles réels** (dette héritée hors périmètre) |
 >
 > **Restes précis à traiter** (baseline actualisée) :
 >
