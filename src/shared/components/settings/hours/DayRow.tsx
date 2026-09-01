@@ -47,7 +47,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                         onClick={() => onChange({ isOpen: !day.isOpen })}
                         className={cn(
                             "w-16 h-10 rounded-full relative transition-all duration-700 shadow-inner group/toggle overflow-hidden",
-                            day.isOpen ? "bg-accent shadow-[0_0_20px_rgba(197,160,89,0.3)]" : "bg-surface-bg dark:bg-surface-card"
+                            day.isOpen ? "bg-accent shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.3))]" : "bg-surface-bg dark:bg-surface-card"
                         )}
                     >
                         <motion.div

@@ -68,7 +68,7 @@ export function PinLogin() {
                         aria-label="Changer de thème (clair/sombre)"
                         className="w-16 h-16 bg-bg-tertiary rounded-2xl flex items-center justify-center mx-auto mb-6 border border-border shadow-2xl backdrop-blur-md cursor-pointer hover:bg-bg-tertiary/80 transition-all group"
                     >
-                        <div className="w-4 h-4 rounded-full bg-accent animate-pulse shadow-[0_0_20px_#C5A059_80]" aria-hidden="true" />
+                        <div className="w-4 h-4 rounded-full bg-accent animate-pulse shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.5))]" aria-hidden="true" />
                     </button>
                     <h1 className="text-4xl font-black text-text-primary tracking-tighter mb-2 font-serif italic">Accès Exécutif</h1>
                 </div>
@@ -149,7 +149,7 @@ export function PinLogin() {
                                         )}
                                     >
                                         {pin.length > i && (
-                                            <div className="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_10px_#C5A059]" />
+                                            <div className="w-2.5 h-2.5 rounded-full bg-accent shadow-[var(--shadow-glow-accent,0_0_10px_rgba(0,0,0,0.5))]" />
                                         )}
                                     </div>
                                 ))}

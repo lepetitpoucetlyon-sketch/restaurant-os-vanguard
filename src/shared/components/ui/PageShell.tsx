@@ -289,7 +289,7 @@ export function PageShellActionCTA({
       className={cn(
         "h-10 px-5 rounded-xl text-sm font-medium tracking-tight transition-colors flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed",
         tone === "primary" &&
-          "bg-accent-gold hover:bg-accent-gold/90 text-[#0B0B0C] shadow-[0_4px_20px_-6px_rgba(197,160,89,0.4)]",
+          "bg-accent-gold hover:bg-accent-gold/90 text-text-inverted shadow-[var(--shadow-glow-accent,0_4px_20px_-6px_rgba(0,0,0,0.4))]",
         tone === "danger" &&
           "bg-red-500 hover:bg-red-600 text-white shadow-[0_4px_20px_-6px_rgba(239,68,68,0.5)]",
         tone === "ghost" &&

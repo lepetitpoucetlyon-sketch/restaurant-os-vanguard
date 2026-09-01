@@ -161,14 +161,10 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                             className="group flex flex-col items-center gap-6 transition-all duration-700 active:scale-95"
                                         >
                                             <div className="relative w-14 h-14 md:w-16 md:h-16 flex items-center justify-center group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-700">
-                                                <div className="absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-surface-glass border-2 transition-all duration-700"
-                                                    style={{
-                                                        borderColor: hoveredIndex === -1 ? '#C5A059' : '#C5A05940',
-                                                        boxShadow: hoveredIndex === -1
-                                                            ? '0 15px 45px -10px rgba(197, 160, 89, 0.5), inset 0 0 20px rgba(197, 160, 89, 0.2)'
-                                                            : '0 5px 25px -5px rgba(197, 160, 89, 0.15)'
-                                                    }}
-                                                />
+                                                <div className={cn(
+                                                    "absolute inset-0 rounded-[2rem] md:rounded-[2.4rem] bg-surface-glass border-2 transition-all duration-700",
+                                                    hoveredIndex === -1 ? "border-accent shadow-[var(--shadow-glow-accent,0_15px_45px_-10px_rgba(0,0,0,0.5))]" : "border-border shadow-sm"
+                                                )} />
                                                 <Search className="w-6 h-6 md:w-7 md:h-7 text-accent-gold group-hover:scale-110 transition-transform duration-700" />
                                             </div>
                                             <div className="flex flex-col items-center gap-1.5 pointer-events-none">
@@ -265,7 +261,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                     <motion.div
                                                         initial={{ width: 0 }}
                                                         whileHover={{ width: 40 }}
-                                                        className="h-[3px] bg-gradient-to-r from-transparent via-accent-gold to-transparent mt-3 rounded-full shadow-[0_0_10px_rgba(197,160,89,0.5)]"
+                                                        className="h-[3px] bg-gradient-to-r from-transparent via-accent-gold to-transparent mt-3 rounded-full shadow-[var(--shadow-glow-accent,0_0_10px_rgba(0,0,0,0.5))]"
                                                     />
                                                 </div>
                                             </motion.button>

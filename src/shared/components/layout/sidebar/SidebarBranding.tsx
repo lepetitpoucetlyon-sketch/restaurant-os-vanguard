@@ -77,7 +77,7 @@ export function SidebarBranding({
                         whileHover={{ scale: 1.1, x: 2 }}
                         whileTap={{ scale: 0.9 }}
                         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                        className="w-10 h-10 rounded-xl bg-text-primary dark:bg-accent-gold/10 text-accent-gold flex items-center justify-center transition-all border border-accent-gold/20 shadow-[0_0_20px_rgba(197,160,89,0.1)]"
+                        className="w-10 h-10 rounded-xl bg-text-primary dark:bg-accent-gold/10 text-accent-gold flex items-center justify-center transition-all border border-accent-gold/20 shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.1))]"
                     >
                         <ChevronRight strokeWidth={2} className="w-5 h-5" />
                     </motion.div>

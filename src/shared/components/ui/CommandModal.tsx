@@ -142,7 +142,7 @@ export function CommandModal({ isOpen, onClose }: CommandModalProps) {
         >
             <div className={cn(
                 "relative w-full border rounded-[2.5rem] overflow-hidden flex flex-col group/modal transition-colors duration-500",
-                "bg-bg-primary border-border shadow-[0_0_100px_rgba(0,0,0,0.8),0_0_50px_rgba(197,160,89,0.1)]"
+                "bg-bg-primary border-border shadow-[0_0_100px_rgba(0,0,0,0.8),var(--shadow-glow-accent,0_0_50px_rgba(0,0,0,0.1))]"
             )}>
                 {/* Visual Glow */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-accent-gold/5 blur-3xl pointer-events-none" />

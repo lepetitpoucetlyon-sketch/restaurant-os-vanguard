@@ -607,10 +607,37 @@ export const m14_frHardcoded = {
   },
 };
 
+export const m16_hardcodedHex = {
+  id: 'hardcodedHex',
+  titre: 'Couleurs #hex et rgba() en dur (hors tokens & marketing)',
+  // Protège la personnalisation tenant MCC (DESIGNUP §1 & §4.2)
+  // Bloque les couleurs littérales dans les classes CSS, styles et props JSX.
+  run(c) {
+    const whitelist = /(?:globals\.css$|\/tokens\/|\/blueprints\/|\/verticals\/[^/]+\/ui\.ts$|\/app\/\(marketing\)\/|\/app\/\(client\)\/\(public\)\/|\.test\.[tj]sx?$|\/__tests__\/|\/tests\/|\/e2e\/)/;
+    const re = /#[0-9a-fA-F]{3,8}\b/g;
+    const hits = [];
+    for (const [f, src] of c.contenu) {
+      const rel = c.rel(f);
+      if (!/\.(tsx|ts|jsx|js)$/.test(rel)) continue;
+      if (whitelist.test(rel)) continue;
+      const lines = src.split('\n');
+      let countInFile = 0;
+      lines.forEach((l) => {
+        const trimmed = l.trim();
+        if (trimmed.startsWith('//') || trimmed.startsWith('*')) return;
+        const matches = l.match(re);
+        if (matches) countInFile += matches.length;
+      });
+      if (countInFile > 0) hits.push(rel + ' (' + countInFile + ')');
+    }
+    return { valeur: hits.reduce((s, h) => s + Number(h.match(/\((\d+)\)$/)?.[1] || 0), 0), detail: hits.sort() };
+  },
+};
+
 export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
   m11_dsAdoption, m12a_a11yMuets, m12b_a11yModales, m12c_a11yKeyboard,
-  m13_verticalStubs, m14_frHardcoded, m15_verticalScreensUnwired,
+  m13_verticalStubs, m14_frHardcoded, m15_verticalScreensUnwired, m16_hardcodedHex,
 ];
 

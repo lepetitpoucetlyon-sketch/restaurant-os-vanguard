@@ -138,7 +138,7 @@ export function Header() {
                             onClick={openCommandPalette}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
                             <Search strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold transition-colors duration-300" />
                         </motion.button>
 
@@ -151,7 +151,7 @@ export function Header() {
                             onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                             className="relative w-11 h-11 flex items-center justify-center group overflow-hidden rounded-full"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
                             <span className="text-lg relative z-10 grayscale group-hover:grayscale-0 transition-all duration-300 transform scale-110">{selectedLanguage?.flag}</span>
                         </motion.button>
 
@@ -162,7 +162,7 @@ export function Header() {
                             onClick={() => setIsNotificationsOpen(true)}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
                             <Bell strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold group-hover:rotate-12 transition-all duration-300" />
                             {unreadCount > 0 && (
                                 <div className="absolute top-0 right-0 translate-x-1 -translate-y-1 px-1.5 py-0.5 min-w-[20px] bg-status-danger text-text-primary flex items-center justify-center text-nano font-black rounded-full border-2 border-white dark:border-bg-primary shadow-sm z-20">
@@ -181,7 +181,7 @@ export function Header() {
                             onClick={toggleLaunchpad}
                             className="relative w-11 h-11 flex items-center justify-center group"
                         >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
                             <div className="relative z-10 flex flex-wrap gap-0.5 w-4 h-4 items-center justify-center text-accent-gold opacity-70 group-hover:opacity-100 transition-opacity">
                                 <div className="w-1.5 h-1.5 rounded-[1px] bg-current" />
                                 <div className="w-1.5 h-1.5 rounded-[1px] bg-current" />
@@ -203,7 +203,7 @@ export function Header() {
                                     !hasAccessToSettings && "opacity-50 cursor-not-allowed"
                                 )}
                             >
-                                <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(197,160,89,0.15)]" />
+                                <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
                                 <Settings strokeWidth={1.5} className="relative z-10 w-5 h-5 text-accent-gold transition-colors duration-300" />
                             </motion.button>
                         )}

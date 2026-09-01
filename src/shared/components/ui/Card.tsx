@@ -11,8 +11,8 @@ const cardVariants = cva(
   {
     variants: {
       intent: {
-        default:  'bg-surface-card border-border-default shadow-[0_1px_2px_rgba(197,160,89,0.04)]',
-        elevated: 'bg-surface-card border-border-default shadow-[0_8px_24px_-12px_rgba(197,160,89,0.15)] hover:shadow-[0_20px_40px_-15px_rgba(197,160,89,0.20)] hover:-translate-y-[1px]',
+        default:  'bg-surface-card border-border-default shadow-sm',
+        elevated: 'bg-surface-card border-border-default shadow-[var(--shadow-premium,0_8px_24px_-12px_rgba(0,0,0,0.15))] hover:shadow-[var(--shadow-glow-accent,0_20px_40px_-15px_rgba(0,0,0,0.20))] hover:-translate-y-[1px]',
         glass:    'bg-surface-card/40 backdrop-blur-xl border-white/10',
         ghost:    'bg-transparent border-transparent shadow-none',
         premium:  'bg-surface-card border-border-default shadow-premium ring-1 ring-action-primary/20',

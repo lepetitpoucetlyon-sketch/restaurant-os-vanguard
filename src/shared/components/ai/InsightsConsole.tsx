@@ -47,7 +47,7 @@ export const InsightsConsole: React.FC<InsightsConsoleProps> = ({ reasoning, isA
                             transition={{ delay: idx * 0.1 }}
                             className="relative pl-6 border-l border-border-default"
                         >
-                            <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-accent-gold shadow-[0_0_10px_rgba(197,160,89,0.8)]" />
+                            <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-accent-gold shadow-[var(--shadow-glow-accent,0_0_10px_rgba(0,0,0,0.8))]" />
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-accent-gold text-nano font-black uppercase tracking-widest">{step.action}</span>
                                 <span className="text-text-muted text-nano font-mono">{new Date(step.timestamp).toLocaleTimeString()}</span>

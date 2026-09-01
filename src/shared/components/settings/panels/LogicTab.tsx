@@ -61,7 +61,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                             className={cn(
                                 "w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-500",
                                 localValues[setting.key] && SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField)
-                                    ? "bg-accent/5 border-accent text-accent shadow-[0_0_20px_rgba(197,160,89,0.1)]"
+                                    ? "bg-accent/5 border-accent text-accent shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.1))]"
                                     : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
                             )}
                         >
@@ -103,7 +103,7 @@ export function LogicTab({ filteredSettings, localValues, updateValue }: LogicTa
                             type="text"
                             value={SharedKernel.castString(localValues[setting.key] as SovereignField)}
                             onChange={(e) => updateValue(setting.key, e.target.value)}
-                            className="w-full p-4 rounded-2xl bg-bg-tertiary/20 border-2 border-border/50 text-text-primary font-serif focus:border-accent focus:outline-none focus:shadow-[0_0_20px_rgba(197,160,89,0.15)] transition-all duration-300"
+                            className="w-full p-4 rounded-2xl bg-bg-tertiary/20 border-2 border-border/50 text-text-primary font-serif focus:border-accent focus:outline-none focus:shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.15))] transition-all duration-300"
                         />
                     )}
                 </motion.div>

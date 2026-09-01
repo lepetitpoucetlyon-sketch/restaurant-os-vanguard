@@ -54,6 +54,7 @@ const CLIQUETS = {
   verticalStubs:    seuil('VERTICAL_STUBS_MAX', 21),
   verticalScreensUnwired: seuil('VERTICAL_SCREENS_UNWIRED_MAX', 0),
   frHardcoded:      seuil('FR_HARDCODED_MAX', 893),
+  hardcodedHex:     seuil('HARDCODED_HEX_MAX', 797),
 };
 
 const corpus = chargerCorpus('src');

@@ -202,7 +202,7 @@ export function StyleTab({ filteredSettings, localValues, updateValue }: StyleTa
                                     className={cn(
                                         "w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-500",
                                         localValues[setting.key] && SharedKernel.Sovereign.unwrap(localValues[setting.key] as SovereignField)
-                                            ? "bg-accent/5 border-accent text-accent shadow-[0_0_20px_rgba(197,160,89,0.1)]"
+                                            ? "bg-accent/5 border-accent text-accent shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.1))]"
                                             : "bg-bg-tertiary/20 border-border/50 text-text-muted hover:border-accent/30"
                                     )}
                                 >

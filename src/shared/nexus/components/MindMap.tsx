@@ -85,7 +85,7 @@ export function MindMap() {
             .attr('class', 'link-group');
 
         link.append('path')
-            .attr('stroke', '#C5A059')
+            .attr('stroke', 'var(--brand-primary, #C5A059)')
             .attr('stroke-opacity', 0.4)
             .attr('stroke-width', d => d.strength * 4)
             .attr('fill', 'none')
@@ -141,7 +141,7 @@ export function MindMap() {
         node.append('circle')
             .attr('r', d => d.size)
             .attr('fill', '#0F172A')
-            .attr('stroke', '#C5A059')
+            .attr('stroke', 'var(--brand-primary, #C5A059)')
             .attr('stroke-width', 3)
             .attr('filter', 'url(#glow)');
 
@@ -160,7 +160,7 @@ export function MindMap() {
         // Node Icons center dot
         node.append('circle')
             .attr('r', 4)
-            .attr('fill', '#C5A059')
+            .attr('fill', 'var(--brand-primary, #C5A059)')
             .attr('opacity', 0.8);
 
         simulation.on('tick', () => {

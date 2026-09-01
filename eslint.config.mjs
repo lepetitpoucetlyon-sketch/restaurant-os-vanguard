@@ -3,6 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import { murDeChinePlugin } from "./eslint-plugins/mur-de-chine.mjs";
 import { noRawControlsPlugin } from "./eslint-plugins/no-raw-controls.mjs";
+import { noHardcodedHexPlugin } from "./eslint-plugins/no-hardcoded-hex.mjs";
 import unusedImports from "eslint-plugin-unused-imports";
 
 const eslintConfig = defineConfig([
@@ -12,11 +13,14 @@ const eslintConfig = defineConfig([
     plugins: {
       "vanguard": murDeChinePlugin,
       "ds": noRawControlsPlugin,
+      "color-guard": noHardcodedHexPlugin,
       "unused-imports": unusedImports,
     },
     rules: {
       "vanguard/no-cross-imports": "error",
       "vanguard/no-inter-module-imports": "error",
+      // Anti-fuite de personnalisation tenant MCC (DESIGNUP §1 & §4.2)
+      "color-guard/no-hardcoded-hex": "warn",
       // Anti-régression DS : bloque les contrôles bruts en niveau `warn` pour
       // ne pas casser le code hérité mais visibiliser les nouvelles régressions.
       // Exemptions : primitives DS elles-mêmes + marketing (cf. overrides plus bas).

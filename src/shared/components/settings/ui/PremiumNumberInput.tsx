@@ -55,7 +55,7 @@ export function PremiumNumberInput({ value, onChange, min = 0, max = 100, step =
                     }}
                     min={min}
                     max={max}
-                    className="w-full text-center p-4 rounded-2xl bg-bg-tertiary/50 border-2 border-border text-text-primary font-serif text-xl font-semibold focus:border-accent focus:outline-none focus:shadow-[0_0_20px_rgba(197,160,89,0.15)] transition-all duration-300 appearance-none [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden"
+                    className="w-full text-center p-4 rounded-2xl bg-bg-tertiary/50 border-2 border-border text-text-primary font-serif text-xl font-semibold focus:border-accent focus:outline-none focus:shadow-[var(--shadow-glow-accent,0_0_20px_rgba(0,0,0,0.15))] transition-all duration-300 appearance-none [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden"
                 />
             </div>
 

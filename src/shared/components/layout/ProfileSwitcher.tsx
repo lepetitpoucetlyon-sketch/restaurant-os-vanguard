@@ -57,16 +57,14 @@ export function ProfileSwitcher({ isOpen, onClose }: ProfileSwitcherProps) {
                                     whileHover={{
                                         scale: 1.05,
                                         y: -8,
-                                        backgroundColor: "rgba(197, 160, 89, 0.05)",
-                                        borderColor: "rgba(197, 160, 89, 0.3)"
                                     }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => handleSwitch(user.id)}
                                     className={cn(
                                         "flex flex-col items-center justify-center p-6 rounded-[3rem] transition-all aspect-square relative group",
                                         isActive
-                                            ? "bg-accent-gold/10 border-2 border-accent-gold shadow-[0_0_30px_rgba(197,160,89,0.2)]"
-                                            : "bg-bg-tertiary/30 hover:bg-bg-tertiary border border-border/50"
+                                            ? "bg-accent-gold/10 border-2 border-accent-gold shadow-[var(--shadow-glow-accent,0_0_30px_rgba(0,0,0,0.2))]"
+                                            : "bg-bg-tertiary/30 hover:bg-bg-tertiary hover:border-accent/40 border border-border/50"
                                     )}
                                 >
                                     <div className={cn(
