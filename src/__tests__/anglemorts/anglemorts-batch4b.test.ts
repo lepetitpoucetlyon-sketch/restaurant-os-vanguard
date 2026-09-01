@@ -41,12 +41,7 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { FlashAlcoholInventoryService } from '@/modules/ops/service/restaurant/pos/services/FlashAlcoholInventoryService';
-import { CorkedBottleDisputeService } from '@/modules/ops/service/restaurant/pos/services/CorkedBottleDisputeService';
-import { KegHydrostaticLossService } from '@/modules/ops/service/restaurant/pos/services/KegHydrostaticLossService';
 import { SmartSpoutTelemetryService } from '@/modules/ops/service/restaurant/pos/services/SmartSpoutTelemetryService';
-import { FermentationMonitorService } from '@/modules/ops/service/restaurant/pos/services/FermentationMonitorService';
-import { CocktailDilutionIndexService } from '@/modules/ops/service/restaurant/pos/services/CocktailDilutionIndexService';
 import { MenuComboTaxProrataService } from '@/modules/finance/fiscalite/MenuComboTaxProrataService';
 import { SmartCardRoutingService } from '@/modules/finance/tresorerie/SmartCardRoutingService';
 import { PrinterFailoverRoutingService } from '@/modules/ops/service/restaurant/pos/services/PrinterFailoverRoutingService';
@@ -55,65 +50,6 @@ import { BilingualTipGratuityHelper } from '@/modules/ops/service/restaurant/pos
 describe('Angles Morts — Batch 4 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
-  describe('L15 — FlashAlcoholInventoryService', () => {
-    it('computes bottle liquid volume deducting tare and flags variance', () => {
-      const summary = FlashAlcoholInventoryService.evaluateInventory('tenant-1', 'MGR-1', [
-        {
-          productId: 'VODKA-GREY-GOOSE',
-          productName: 'Vodka Grey Goose 70cl',
-          tareWeightGrams: 450, // Poids bouteille vide
-          fullNetVolumeCl: 70,
-          densityGramsPerCl: 9.5, // 9.5 g/cl (~0.95 g/ml)
-          currentGrossWeightGrams: 830, // Net liquid = 380g -> 380 / 9.5 = 40cl
-          billedDosesCl: 25,            // Expected = 70 - 25 = 45cl -> Variance -5cl coulage
-          costPerClInMicrounits: 500_000, // 0.50€/cl
-        },
-      ]);
-
-      expect(summary.bottleCount).toBe(1);
-      expect(summary.evaluations[0].calculatedRemainingCl).toBe(40);
-      expect(summary.evaluations[0].expectedRemainingCl).toBe(45);
-      expect(summary.evaluations[0].varianceCl).toBe(-5);
-      expect(summary.totalLossInMicrounits).toBe(2_500_000); // 2.50€
-    });
-  });
-
-  // ── L16: CorkedBottleDisputeService ───────────────────────────────────────
-  describe('L16 — CorkedBottleDisputeService', () => {
-    it('records corked bottle dispute and creates supplier claim', async () => {
-      const auditSpy = vi.spyOn(AuditLogger, 'logAction');
-      const res = await CorkedBottleDisputeService.recordCorkedBottle({
-        tenantId: 'tenant-1',
-        adminId: 'SOMMELIER-1',
-        productId: 'WINE-POMMARD-2018',
-        productName: 'Pommard 2018 Domaine X',
-        bottleLot: 'LOT-2018-A',
-        supplierId: 'CAVISTE-LYON',
-        costInMicrounits: 35_000_000,
-        tableNumber: '4',
-      });
-
-      expect(res.stockTransferToDispute).toBe(true);
-      expect(res.supplierDebitClaimSlipId).toContain('CLAIM-SUPPLIER-CAVISTE-LYON');
-      expect(auditSpy).toHaveBeenCalledWith(expect.objectContaining({ action: 'CORKED_BOTTLE_RECORDED' }));
-    });
-  });
-
-  // ── L17: KegHydrostaticLossService ────────────────────────────────────────
-  describe('L17 — KegHydrostaticLossService', () => {
-    it('calculates hydrostatic keg yield for 30L beer keg (9.5% loss)', () => {
-      const res = KegHydrostaticLossService.computeKegYield({
-        kegCapacityLiters: 30,
-        glassVolumeCl: 50, // Pinte
-      });
-
-      expect(res.usableVolumeLiters).toBe(27.15);
-      expect(res.lossVolumeLiters).toBe(2.85);
-      expect(res.theoreticalGlassesCount).toBe(60);
-      expect(res.usableGlassesCount).toBe(54); // 54 pintes réelles
-      expect(res.lossGlassesCount).toBe(6);
-    });
-  });
 
   // ── L18: SmartSpoutTelemetryService ───────────────────────────────────────
   describe('L18 — SmartSpoutTelemetryService', () => {
@@ -132,54 +68,6 @@ describe('Angles Morts — Batch 4 (Part 2)', () => {
     });
   });
 
-  // ── L19: FermentationMonitorService ───────────────────────────────────────
-  describe('L19 — FermentationMonitorService', () => {
-    it('triggers critical overpressure alert if degas interval exceeded', () => {
-      const res = FermentationMonitorService.evaluateBatch({
-        tenantId: 'tenant-1',
-        batchId: 'BATCH-KOMBUCHA-04',
-        recipeName: 'Kombucha Gingembre',
-        type: 'kombucha',
-        startedAt: Date.now() - 48 * 3600 * 1000,
-        currentBrix: 4.5,
-        targetBrix: 4.0,
-        currentPh: 3.1,
-        minSafePh: 2.5,
-        maxSafePh: 4.2,
-        hoursSinceLastDegas: 40,
-        maxDegasIntervalHours: 24,
-      });
-
-      expect(res.isCriticalOverpressure).toBe(true);
-      expect(res.recommendation).toContain('DANGER SURPRESSION');
-    });
-  });
-
-  // ── L20: CocktailDilutionIndexService ─────────────────────────────────────
-  describe('L20 — CocktailDilutionIndexService', () => {
-    it('computes slower dilution for clear ice block vs standard cube', () => {
-      const clearIce = CocktailDilutionIndexService.computeDilution({
-        recipeName: 'Old Fashioned',
-        liquidVolumeCl: 6,
-        alcoholVolumePct: 40,
-        iceType: 'clear_ice_block',
-        technique: 'stirred',
-        durationSeconds: 20,
-      });
-
-      const standardIce = CocktailDilutionIndexService.computeDilution({
-        recipeName: 'Old Fashioned',
-        liquidVolumeCl: 6,
-        alcoholVolumePct: 40,
-        iceType: 'cube_standard',
-        technique: 'stirred',
-        durationSeconds: 20,
-      });
-
-      expect(clearIce.dilutionPct).toBeLessThan(standardIce.dilutionPct);
-      expect(clearIce.finalAbvPct).toBeGreaterThan(standardIce.finalAbvPct);
-    });
-  });
 
   // ── L24: MenuComboTaxProrataService ───────────────────────────────────────
   describe('L24 — MenuComboTaxProrataService', () => {

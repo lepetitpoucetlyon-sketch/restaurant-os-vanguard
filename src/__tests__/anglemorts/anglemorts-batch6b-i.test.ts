@@ -31,11 +31,9 @@ import { AuditLogger } from '@/lib/audit';
 
 import { SkuSubstitutionAlertService } from '@/modules/logistics/approvisionnement/procurement/services/SkuSubstitutionAlertService';
 import { CommodityPriceSurgeWatcherService } from '@/modules/logistics/approvisionnement/procurement/services/CommodityPriceSurgeWatcherService';
-import { DegradedDishwashingModeService } from '@/modules/ops/production/kds/services/DegradedDishwashingModeService';
 import { CourierGpsKdsPacingService } from '@/modules/commerce/relation/delivery/services/CourierGpsKdsPacingService';
 import { DeliveryBagPinReleaseService } from '@/modules/commerce/relation/delivery/services/DeliveryBagPinReleaseService';
 import { DeliveryDualPricingService } from '@/modules/commerce/relation/delivery/services/DeliveryDualPricingService';
-import { RainPlanTerraceSwitchService } from '@/modules/ops/service/restaurant/pos/services/RainPlanTerraceSwitchService';
 import { ThermalPackagingImputationService } from '@/modules/commerce/relation/delivery/services/ThermalPackagingImputationService';
 describe('Angles Morts — Batch 6 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
@@ -74,19 +72,6 @@ describe('Angles Morts — Batch 6 (Part 2)', () => {
     });
   });
 
-  // ── L40: DegradedDishwashingModeService ───────────────────────────────────
-  describe('L40 — DegradedDishwashingModeService', () => {
-    it('activates disposable packaging switch when dishwasher breaks', () => {
-      const plan = DegradedDishwashingModeService.activateDegradedMode('tenant-1', {
-        cause: 'dishwasher_failure',
-        expectedDowntimeHours: 4,
-      });
-
-      expect(plan.isDegradedModeActive).toBe(true);
-      expect(plan.switchAllToDisposablePackaging).toBe(true);
-      expect(plan.blockHardToWashMenuCategories.length).toBeGreaterThan(0);
-    });
-  });
 
   // ── L47: CourierGpsKdsPacingService ───────────────────────────────────────
   describe('L47 — CourierGpsKdsPacingService', () => {
@@ -140,26 +125,6 @@ describe('Angles Morts — Batch 6 (Part 2)', () => {
     });
   });
 
-  // ── L50: RainPlanTerraceSwitchService ─────────────────────────────────────
-  describe('L50 — RainPlanTerraceSwitchService', () => {
-    it('reassigns terrace guests to indoor tables and packs remainder as takeaway', async () => {
-      const res = await RainPlanTerraceSwitchService.executeRainPlan(
-        'tenant-1',
-        'MGR-1',
-        [
-          { tableNumber: 'T1', orderId: 'O-1', covers: 2, totalInMicrounits: 45_000_000 },
-          { tableNumber: 'T2', orderId: 'O-2', covers: 4, totalInMicrounits: 90_000_000 },
-          { tableNumber: 'T3', orderId: 'O-3', covers: 6, totalInMicrounits: 120_000_000 },
-        ],
-        5 // Only 5 indoor seats left -> T1 (2) fits, T2 (4) exceeds -> takeaway
-      );
-
-      expect(res.activeTerraceTablesCount).toBe(3);
-      expect(res.reassignedToIndoorCount).toBe(1);
-      expect(res.packedTakeawayCount).toBe(2);
-      expect(AuditLogger.logAction).toHaveBeenCalledWith(expect.objectContaining({ action: 'RAIN_PLAN_SWITCH_ACTIVATED' }));
-    });
-  });
 
   // ── T44: ThermalPackagingImputationService ────────────────────────────────
   describe('T44 — ThermalPackagingImputationService', () => {

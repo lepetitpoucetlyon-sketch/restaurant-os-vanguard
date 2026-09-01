@@ -45,12 +45,10 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 import { OutboxService } from '@/lib/offline/OutboxService';
 
-import { AgecCarafeService } from '@/modules/ops/service/restaurant/pos/services/AgecCarafeService';
 import { ComplementaryInvoiceService } from '@/modules/finance/comptabilite/ComplementaryInvoiceService';
 import { RpiExportService } from '@/modules/human/effectifs/hr/services/RpiExportService';
 import { TipRedistributionService } from '@/modules/human/remuneration/payroll/TipRedistributionService';
 import { BadgeClockoutAtZService } from '@/modules/human/effectifs/hr/services/BadgeClockoutAtZService';
-import { OrderLineDAGService } from '@/modules/ops/service/restaurant/pos/services/OrderLineDAGService';
 import { ReviewBombingDetectorService } from '@/modules/commerce/acquisition/marketing/ReviewBombingDetectorService';
 import { WitnessDishService } from '@/modules/compliance/qualite/haccp/services/WitnessDishService';
 import { FryingOilTestRegisterService } from '@/modules/compliance/qualite/haccp/services/FryingOilTestRegisterService';
@@ -72,29 +70,6 @@ beforeEach(() => {
 });
 
 
-// ── L8 — AGEC Carafe ────────────────────────────────────────────────────────
-describe('L8 — AgecCarafeService', () => {
-  it('buildLine: 4 couverts -> 1 carafe', () => {
-    const line = AgecCarafeService.buildLine(4);
-    expect(line.unitPriceInMicrounits).toBe(0);
-    expect(line.quantity).toBe(1);
-    expect(line.legalRef).toBe('Art. L. 229-61 C.Env.');
-  });
-
-  it('buildLine: 8 couverts -> 2 carafes', () => {
-    const line = AgecCarafeService.buildLine(8);
-    expect(line.quantity).toBe(2);
-  });
-
-  it('attachToOrder: persiste et emet event', async () => {
-    const line = await AgecCarafeService.attachToOrder({
-      tenantId: 't1', orderId: 'ord1', couverts: 4, operatorId: 'op1', now: 1000,
-    });
-    expect(line.unitPriceInMicrounits).toBe(0);
-    expect(adapter.set).toHaveBeenCalled();
-    expect(NexusEventBus.emit).toHaveBeenCalledWith('ops.agec_carafe_attached', expect.any(Object));
-  });
-});
 
 // ── L23 — Facture complementaire J+3 ────────────────────────────────────────
 describe('L23 — ComplementaryInvoiceService', () => {
@@ -190,47 +165,6 @@ describe('L38 — BadgeClockoutAtZService', () => {
   });
 });
 
-// ── L51 — DAG commande ──────────────────────────────────────────────────────
-describe('L51 — OrderLineDAGService', () => {
-  it('appendNode: cree un noeud avec parentNodeId null pour la creation', async () => {
-    adapter.get.mockResolvedValueOnce(null);
-    const node = await OrderLineDAGService.appendNode({
-      tenantId: 't1', orderId: 'ord1', lineId: 'line1', action: 'created',
-      productId: 'p1', productName: 'Entrecote', quantity: 1,
-      unitPriceInMicrounits: 25_000_000, operatorId: 'chef1', now: 1000,
-    });
-    expect(node.parentNodeId).toBeNull();
-    expect(node.action).toBe('created');
-    expect(node.nodeHash).toBe('mock-hash-xyz');
-  });
-
-  it('appendNode: chainage: le 2e noeud pointe vers le 1er', async () => {
-    const firstNode = {
-      nodeId: 'line1_1000', parentNodeId: null, lineId: 'line1', nodeHash: 'hash1',
-      orderId: 'ord1', action: 'created' as const, productId: 'p1', productName: 'Entrecote',
-      quantity: 1, unitPriceInMicrounits: 25_000_000, operatorId: 'chef1', timestamp: 1000,
-    };
-    adapter.get.mockResolvedValueOnce({ nodes: [firstNode] });
-
-    const node2 = await OrderLineDAGService.appendNode({
-      tenantId: 't1', orderId: 'ord1', lineId: 'line1', action: 'qty_changed',
-      productId: 'p1', productName: 'Entrecote', quantity: 2,
-      unitPriceInMicrounits: 25_000_000, operatorId: 'chef1', now: 2000,
-    });
-    expect(node2.parentNodeId).toBe('line1_1000');
-  });
-
-  it('getLatestStatePerLine: retourne le dernier etat par ligne', () => {
-    const nodes = [
-      { nodeId: 'n1', lineId: 'l1', timestamp: 1000, action: 'created' as const, parentNodeId: null,
-        orderId: 'o1', productId: 'p1', productName: 'P1', quantity: 1, unitPriceInMicrounits: 0, operatorId: 'op1', nodeHash: 'h1' },
-      { nodeId: 'n2', lineId: 'l1', timestamp: 2000, action: 'qty_changed' as const, parentNodeId: 'n1',
-        orderId: 'o1', productId: 'p1', productName: 'P1', quantity: 2, unitPriceInMicrounits: 0, operatorId: 'op1', nodeHash: 'h2' },
-    ];
-    const map = OrderLineDAGService.getLatestStatePerLine(nodes);
-    expect(map.get('l1')?.quantity).toBe(2);
-  });
-});
 
 // ── L53 — Review Bombing ────────────────────────────────────────────────────
 describe('L53 — ReviewBombingDetectorService', () => {

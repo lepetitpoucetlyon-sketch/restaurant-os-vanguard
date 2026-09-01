@@ -41,14 +41,11 @@ vi.mock('@/modules/finance/fiscalite/FiscalSealer', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { TpeResilienceSimulatorService } from '@/modules/ops/service/restaurant/pos/services/TpeResilienceSimulatorService';
 import { CashDrawerReconciliationService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerReconciliationService';
 import { MealVoucherLimitGuard } from '@/modules/ops/service/restaurant/pos/services/MealVoucherLimitGuard';
 import { ExactChangeAssistanceService } from '@/modules/ops/service/restaurant/pos/services/ExactChangeAssistanceService';
 import { UniversalPrinterBridgeService } from '@/modules/ops/service/restaurant/pos/services/UniversalPrinterBridgeService';
 import { CashDrawerTriggerService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerTriggerService';
-import { CustomerFacingDisplayService } from '@/modules/ops/service/restaurant/pos/services/CustomerFacingDisplayService';
-import { BarcodeScannerInputService } from '@/modules/ops/service/restaurant/pos/services/BarcodeScannerInputService';
 
 
 describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {
@@ -56,39 +53,6 @@ describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {
     vi.clearAllMocks();
   });
 
-  // ── A1: TpeResilienceSimulatorService ────────────────────────────────────
-  describe('A1 — TpeResilienceSimulatorService', () => {
-    it('pings provider and returns health report', async () => {
-      const ping = await TpeResilienceSimulatorService.ping('ingenico');
-      expect(ping.reachable).toBe(true);
-      expect(ping.standInModeAvailable).toBe(true);
-      expect(ping.batteryLevelPct).toBe(88);
-    });
-
-    it('simulates successful transaction and publishes event', async () => {
-      const res = await TpeResilienceSimulatorService.simulateTransaction({
-        tenantId: 'tenant-1',
-        provider: 'stripe_terminal',
-        amountInMicrounits: 35_000_000,
-      });
-
-      expect(res.success).toBe(true);
-      expect(res.authCode).toBeDefined();
-      expect(NexusEventBus.emit).toHaveBeenCalledWith('pos.tpe_simulation_completed', expect.any(Object));
-    });
-
-    it('triggers stand-in mode on timeout fault for supported terminal', async () => {
-      const res = await TpeResilienceSimulatorService.simulateTransaction({
-        tenantId: 'tenant-1',
-        provider: 'verifone',
-        amountInMicrounits: 20_000_000,
-        simulateFault: 'timeout',
-      });
-
-      expect(res.success).toBe(false);
-      expect(res.fallbackToStandIn).toBe(true);
-    });
-  });
 
 
   // ── A4: CashDrawerReconciliationService ────────────────────────────────────
@@ -256,44 +220,6 @@ describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {
     });
   });
 
-  // ── I3: CustomerFacingDisplayService ──────────────────────────────────────
-  describe('I3 — CustomerFacingDisplayService', () => {
-    it('formats 2x20 VFD lines for idle and scanning states', () => {
-      const idle = CustomerFacingDisplayService.formatVfdLines({
-        terminalId: 'VFD-1',
-        state: 'idle',
-      });
-      expect(idle.line1.length).toBe(20);
-      expect(idle.line2.length).toBe(20);
-
-      const scanning = CustomerFacingDisplayService.formatVfdLines({
-        terminalId: 'VFD-1',
-        state: 'scanning',
-        items: [{ name: 'Croissant', quantity: 1, priceInMicrounits: 1_500_000, totalInMicrounits: 1_500_000 }],
-        totalInMicrounits: 1_500_000,
-      });
-      expect(scanning.line1).toContain('Croissant');
-      expect(scanning.line2).toContain('TOTAL: 1.50E');
-    });
-  });
-
-  // ── I4: BarcodeScannerInputService ────────────────────────────────────────
-  describe('I4 — BarcodeScannerInputService', () => {
-    it('parses standard EAN13 barcode', () => {
-      const parsed = BarcodeScannerInputService.parseBarcode('3017620422003');
-      expect(parsed.symbology).toBe('EAN13');
-      expect(parsed.isVariableWeight).toBe(false);
-      expect(parsed.sku).toBe('3017620422003');
-    });
-
-    it('parses in-store variable weight barcode (prefix 28)', () => {
-      // 28 1234 000450 C -> SKU-1234 with 450 grams
-      const parsed = BarcodeScannerInputService.parseBarcode('2812340004505');
-      expect(parsed.isVariableWeight).toBe(true);
-      expect(parsed.sku).toBe('SKU-1234');
-      expect(parsed.weightGrams).toBe(450);
-    });
-  });
 
   // ── L15: FlashAlcoholInventoryService ─────────────────────────────────────
 });

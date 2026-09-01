@@ -49,7 +49,6 @@ import { OutboxService } from '@/lib/offline/OutboxService';
 
 import { DunningSaaSService } from '@/modules/finance/tresorerie/DunningSaaSService';
 import { SupplierPriceDeviationWatcher } from '@/modules/logistics/approvisionnement/procurement/SupplierPriceDeviationWatcher';
-import { CodeAmbreService } from '@/modules/ops/service/restaurant/pos/services/CodeAmbreService';
 import { SecondaryDlcLabelService } from '@/modules/logistics/stock/inventory/SecondaryDlcLabelService';
 import { RestPeriodGuard } from '@/modules/human/effectifs/hr/services/RestPeriodGuard';
 import { AOTTerraceQuotaService } from '@/modules/commerce/relation/reservations/services/AOTTerraceQuotaService';
@@ -133,17 +132,6 @@ describe('T59 — SupplierPriceDeviationWatcher', () => {
   });
 });
 
-// ── L85 — Code Ambre ────────────────────────────────────────────────────────
-describe('L85 — CodeAmbreService', () => {
-  it(`déclenche le blocage alcool et émet l'événement`, async () => {
-    const state = await CodeAmbreService.trigger({
-      tenantId: 't1', tableId: 'T3', triggeredBy: 'serveur1', now: 1000,
-    });
-    expect(state.alcoholBlocked).toBe(true);
-    expect(NexusEventBus.emit).toHaveBeenCalledWith('ops.code_ambre_triggered', expect.any(Object));
-    expect(AuditLogger.logAction).toHaveBeenCalledWith('serveur1', 'CODE_AMBRE_TRIGGERED', 'T3', expect.any(Object));
-  });
-});
 
 // ── T57 — Secondary DLC ─────────────────────────────────────────────────────
 describe('T57 — SecondaryDlcLabelService', () => {

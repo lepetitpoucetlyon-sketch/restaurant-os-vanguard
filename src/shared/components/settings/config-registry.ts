@@ -135,7 +135,6 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
     bar: {
         title: "Paramètres Bar & Tireuses",
         settings: [
-            { key: "alcohol_loss_alert_eur", label: "Seuil alerte perte alcool (€)", description: "Seuil d'écart financier déclenchant une alerte inventaire bar (DF-A3).", group: "logic", type: "number", min: 1, max: 500, roles: ["admin", "directeur", "manager", "barman"] },
             { key: "spout_variance_cl", label: "Écart toléré bec verseur (cl)", description: "Tolérance télémétrique par dose servie SmartSpout (DF-A4).", group: "logic", type: "number", min: 1, max: 50, roles: ["admin", "directeur", "manager", "barman"] },
         ],
     },

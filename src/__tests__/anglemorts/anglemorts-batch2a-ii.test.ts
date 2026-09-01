@@ -50,7 +50,6 @@ import { OutboxService } from '@/lib/offline/OutboxService';
 import { TableMergeService } from '@/modules/ops/service/restaurant/pos/services/TableMergeService';
 import { AllergenGateService } from '@/modules/ops/service/restaurant/pos/services/AllergenGateService';
 import { TpeReconciliationService } from '@/modules/ops/service/restaurant/pos/services/TpeReconciliationService';
-import { DisinfectionSequenceService } from '@/modules/ops/production/kds/services/DisinfectionSequenceService';
 import { EightysixtService } from '@/modules/ops/production/kds/services/EightysixtService';
 import { TicketZEnforcementService } from '@/modules/finance/fiscalite/TicketZEnforcementService';
 
@@ -161,29 +160,6 @@ describe('L42 — TpeReconciliationService', () => {
   });
 });
 
-// ── L14 — Disinfection Sequence ─────────────────────────────────────────────
-describe('L14 — DisinfectionSequenceService', () => {
-  it('check() pur: raw_meat → ready_to_eat exige P3_high_temp_sanitize', () => {
-    const r = DisinfectionSequenceService.check('raw_meat', 'ready_to_eat');
-    expect(r.requiredProtocol).toBe('P3_high_temp_sanitize');
-  });
-
-  it('check() pur: raw_meat → raw_meat = pas de protocole requis', () => {
-    const r = DisinfectionSequenceService.check('raw_meat', 'raw_meat');
-    expect(r.requiredProtocol).toBeNull();
-  });
-
-  it('validateAndAlert(): alerte si désinfection non récente', async () => {
-    const result = await DisinfectionSequenceService.validateAndAlert({
-      tenantId: 't1', stationId: 'trancheuse1',
-      fromTaskCategory: 'raw_poultry', toTaskCategory: 'ready_to_eat',
-      sanitizationCompletedAt: undefined,
-      operatorId: 'chef1', now: 2_000_000,
-    });
-    expect(result.safe).toBe(false);
-    expect(NexusEventBus.emit).toHaveBeenCalledWith('compliance.disinfection_sequence_violation', expect.any(Object));
-  });
-});
 
 // ── L9 — Eightysix ──────────────────────────────────────────────────────────
 describe('L9 — EightysixtService', () => {

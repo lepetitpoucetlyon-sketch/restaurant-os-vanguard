@@ -12,16 +12,6 @@ export function registerOpsBarHandlers(): Array<() => void> {
       } catch (err) {
         logger.error("[bar.spout_variance_detected] SmartSpout error:", err);
       }
-    }),
-    NexusEventBus.on("bar.flash_inventory_completed", async (payload) => {
-      try {
-        const { FlashAlcoholInventoryService } = await import("@/modules/ops/service/restaurant/pos/services/FlashAlcoholInventoryService");
-        if (typeof (FlashAlcoholInventoryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).performFlashCount === "function") {
-          await (FlashAlcoholInventoryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).performFlashCount(payload);
-        }
-      } catch (err) {
-        logger.error("[bar.flash_inventory_completed] Flash inventory error:", err);
-      }
     })
   ];
 }
