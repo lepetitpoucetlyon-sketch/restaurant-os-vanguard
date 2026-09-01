@@ -1,10 +1,13 @@
-'use client';
-
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useKitchen } from '../../../providers/hooks/kitchenHooks';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import type { Order, OrderItem } from '@nexus/contracts';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
+import { KDSPacingEngine } from '../services/KDSPacingEngine';
+import { KDSStationRecoveryService } from '../services/KDSStationRecoveryService';
+import { HotColdSyncKdsService, type CoursePreparationSpec } from '../services/HotColdSyncKdsService';
+import { MeatRestingTimerService, type MeatRestingPlanRequest } from '../services/MeatRestingTimerService';
+import { PassPickupReminderService, type PassOrderState } from '../services/PassPickupReminderService';
 
 function resolveLockedStation(role?: string): KitchenStation | null {
     if (!role) return null;
@@ -95,6 +98,35 @@ export const useKDSController = () => {
         getPendingModifications().length,
     [getPendingModifications]);
 
+    const pacingStatus = useMemo(() => {
+        const delays = (orders as Order[]).map(o => {
+            const base = o.createdAt ?? (o as unknown as { timestamp?: number }).timestamp ?? Date.now();
+            return Math.floor((Date.now() - new Date(base).getTime()) / 60_000);
+        });
+        const avgDelay = delays.length > 0 ? Math.round(delays.reduce((a, b) => a + b, 0) / delays.length) : 0;
+        return KDSPacingEngine.evaluatePacing('default', avgDelay);
+    }, [orders]);
+
+    const handleRecoverStation = useCallback((incomingBufferedOrders: string[] = []) => {
+        return KDSStationRecoveryService.recoverStation(
+            'default',
+            { stationId: activeStation, lastPingTimestamp: Date.now(), unacknowledgedOrderIds: [] },
+            incomingBufferedOrders
+        );
+    }, [activeStation]);
+
+    const handlePlanCourseSync = useCallback((orderId: string, items: CoursePreparationSpec[]) => {
+        return HotColdSyncKdsService.planCourseSync('default', orderId, items);
+    }, []);
+
+    const handleCalculateMeatResting = useCallback((req: MeatRestingPlanRequest) => {
+        return MeatRestingTimerService.calculateRestingPlan(req);
+    }, []);
+
+    const handleEvaluatePassPickup = useCallback((order: PassOrderState) => {
+        return PassPickupReminderService.evaluatePassStatus('default', order);
+    }, []);
+
     return {
         // Data
         orders: filteredOrders,
@@ -102,9 +134,10 @@ export const useKDSController = () => {
         isLoading,
         error,
         
-        // Counters
+        // Counters & Pacing
         preparingOrdersCount,
         pendingModificationsCount,
+        pacingStatus,
         
         // State & Actions
         activeStation,
@@ -115,9 +148,13 @@ export const useKDSController = () => {
         searchQuery,
         setSearchQuery,
         
-        // Mutations
+        // Mutations & Services
         updateOrderStatus,
-        getPendingModifications
+        getPendingModifications,
+        handleRecoverStation,
+        handlePlanCourseSync,
+        handleCalculateMeatResting,
+        handleEvaluatePassPickup,
     };
 };
 

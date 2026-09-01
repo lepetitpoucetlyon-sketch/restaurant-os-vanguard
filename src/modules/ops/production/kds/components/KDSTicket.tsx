@@ -23,6 +23,7 @@ import { KDSItemCard } from './kds-ticket/KDSItemCard';
 import { KDSContextDrawer } from './kds-ticket/KDSContextDrawer';
 import { KDSTicketHeader } from './kds-ticket/KDSTicketHeader';
 import { KDSTicketFooter } from './kds-ticket/KDSTicketFooter';
+import { KDSCoursingAnimationIndicator } from './KDSCoursingAnimationIndicator';
 export { hasAllergens };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -190,6 +191,17 @@ export function KDSTicket({
                 elapsedSeconds={elapsedSeconds}
                 elapsedMinutes={elapsedMinutes}
             />
+
+            {ticket.status === 'cooking' && (
+                <div className="px-4 pt-2">
+                    <KDSCoursingAnimationIndicator
+                        orderId={ticket.id}
+                        tableNumber={ticket.tableNumber}
+                        requestedCourse="PLATS"
+                        isFireActive={true}
+                    />
+                </div>
+            )}
 
             {/* ── Item List with DnD (kds-4) ─────────────────────────────── */}
             <div className={cn(

@@ -4,3 +4,6 @@
 
 export * from './hooks/useKDSController';
 export * from './contracts/kds-constants';
+export * from './services';
+export { KDSCoursingAnimationIndicator } from './components/KDSCoursingAnimationIndicator';
+
