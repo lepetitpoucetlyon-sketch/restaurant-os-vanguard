@@ -7,6 +7,7 @@ import { PromotionExpiryJob } from './PromotionExpiryJob';
 import { MiseEnPlaceJob } from './MiseEnPlaceJob';
 import { DraftPOEscalationJob } from './DraftPOEscalationJob';
 import { StaffingPlannerJob } from './StaffingPlannerJob';
+import { SaaSBillingJob } from './SaaSBillingJob';
 import { toError } from "@/lib/toError";
 
 export interface CronJobDefinition {
@@ -33,6 +34,7 @@ export const CronScheduler = {
     MiseEnPlaceJob,
     DraftPOEscalationJob,
     StaffingPlannerJob,
+    SaaSBillingJob,
     {
       name: 'NoShowDetectorJob',
       schedule: '*/5 * * * *',
