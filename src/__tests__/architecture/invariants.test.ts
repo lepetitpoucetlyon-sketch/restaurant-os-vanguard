@@ -128,6 +128,53 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
     // ADR ; c'est la contiguïté qui porte réellement l'invariant, pas le total.
     const ADR_COUNT_FLOOR = 20;
 
+    // ADR-019 — le kernel connaît les niveaux, les verticales nomment les rôles.
+    // Ratchet : nombre de noms métier encore hébergés par le kernel. Ne peut que
+    // DESCENDRE (étape c de la migration : 16 -> 0, une fois les gardes applicatives
+    // passées en comparaison de niveau).
+    const KERNEL_BUSINESS_ROLES_MAX = 18;
+
+    it('le kernel n\'héberge plus de nouveaux noms de rôles métier (ADR-019)', () => {
+      const src = fs.readFileSync(path.join(ROOT, 'src/kernel/contracts/rbac.ts'), 'utf-8');
+      const roleKeys = [...src.matchAll(/^\s{2}([a-z_]+):\s*\{/gm)].map(m => m[1]);
+
+      const STRUCTURAL = ['admin', 'directeur', 'manager', 'comptable'];
+      const business = roleKeys.filter(
+        r => !STRUCTURAL.includes(r) && !r.startsWith('mcc_')
+      );
+
+      expect(
+        business.length,
+        `noms métier dans le kernel : ${business.join(', ')} — un nouveau rôle métier va dans le roleMap de sa verticale, pas ici`
+      ).toBeLessThanOrEqual(KERNEL_BUSINESS_ROLES_MAX);
+    });
+
+    it('chaque roleMap de verticale respecte l\'échelle RoleLevel et pointe le lexique', () => {
+      const LEVELS = [10, 30, 35, 40, 45, 50, 60, 70, 90, 100, 800, 900, 1000];
+      const fr = fs.readFileSync(path.join(ROOT, 'src/i18n/locales/fr.ts'), 'utf-8');
+      const verticalsDir = path.join(ROOT, 'src/verticals');
+
+      const slugs = fs.readdirSync(verticalsDir)
+        .filter(f => f !== '_shared' && fs.statSync(path.join(verticalsDir, f)).isDirectory());
+
+      let checked = 0;
+      for (const slug of slugs) {
+        const bp = path.join(verticalsDir, slug, `${slug}.blueprint.ts`);
+        if (!fs.existsSync(bp)) continue;
+        const src = fs.readFileSync(bp, 'utf-8');
+        const block = src.match(/roleMap:\s*\{([\s\S]*?)\n\s*\},/);
+        if (!block) continue;
+
+        for (const m of block[1].matchAll(/level:\s*(\d+),\s*labelKey:\s*'([^']+)'/g)) {
+          expect(LEVELS, `${slug} : niveau ${m[1]} hors échelle RoleLevel`).toContain(Number(m[1]));
+          const leaf = m[2].split('.').pop()!;
+          expect(fr, `${slug} : clé ${m[2]} absente de fr.ts`).toContain(`"${leaf}"`);
+          checked++;
+        }
+      }
+      expect(checked, 'aucun roleMap trouvé — la migration ADR-019 a régressé').toBeGreaterThan(20);
+    });
+
     it('la série des ADRs sous docs/adrs/ est contiguë depuis ADR-001', () => {
       const adrsDir = path.join(ROOT, 'docs/adrs');
       const existingAdrs = fs.readdirSync(adrsDir).filter(f => f.startsWith('ADR-') && f.endsWith('.md'));

@@ -16,6 +16,7 @@
 
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
 import type { VerticalAIPrompts } from '@/kernel/ai/core/types';
+import type { VerticalRoleMap } from '@/kernel/contracts/rbac';
 import {
     type CapabilityKey,
     type CapabilitySet,
@@ -146,6 +147,16 @@ export interface VerticalBlueprint {
     meta: { emoji: string; label: string; name: string; description: string };
     /** Overrides de capabilities appliqués sur le socle du profil. */
     capabilities: CapabilitySet;
+    /**
+     * Rôles métier propres à la verticale (ADR-019). Le kernel connaît l'échelle de
+     * niveaux, la verticale nomme les rôles. `level` est pris dans `RoleLevel` — tsc
+     * refuse toute valeur hors échelle. `labelKey` pointe le lexique, jamais une
+     * chaîne FR en dur.
+     *
+     * Les rôles STRUCTURELS (admin, directeur, manager, comptable) ne se déclarent
+     * pas ici : ils existent dans tout tenant et restent au kernel.
+     */
+    roleMap?: VerticalRoleMap;
     tokens: BlueprintTokens;
     /** Forme des métriques du health ping MCC (clé → type), pour typer makeMccAdapter. */
     healthMetrics: Record<string, 'number' | 'boolean' | 'string'>;

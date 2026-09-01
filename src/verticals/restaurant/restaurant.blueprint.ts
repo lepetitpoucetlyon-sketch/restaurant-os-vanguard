@@ -26,6 +26,19 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
     mod_marketing: true,
     mod_pms: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    chef_rang:      { level: 50, labelKey: 'role.head_waiter' },
+    chef_cuisinier: { level: 45, labelKey: 'role.head_chef' },
+    serveur:        { level: 40, labelKey: 'role.server' },
+    cuisinier:      { level: 35, labelKey: 'role.cook' },
+    barman:         { level: 35, labelKey: 'role.bartender' },
+    hotesse:        { level: 30, labelKey: 'role.host' },
+    plongeur:       { level: 10, labelKey: 'role.dishwasher' },
+  },
+
   tokens: {
     // Aligné sur restaurantDefaultTokens (shared/nexus/tokens/verticals/restaurant.ts) —
     // le blueprint déclarait auparavant une palette indigo/violet #6366f1 / #8b5cf6

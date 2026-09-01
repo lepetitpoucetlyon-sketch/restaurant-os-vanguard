@@ -24,6 +24,16 @@ export const HOTEL_BLUEPRINT: VerticalBlueprint = {
     mod_kds: false,
     mod_haccp: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    chef_rang:      { level: 50, labelKey: 'role.head_waiter' },
+    receptionnaire: { level: 40, labelKey: 'role.receptionist' },
+    hotesse:        { level: 30, labelKey: 'role.host' },
+    plongeur:       { level: 10, labelKey: 'role.housekeeping' },
+  },
+
   tokens: {
     appearance: 'dark',
     defaultTokens: {

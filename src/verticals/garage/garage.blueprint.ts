@@ -25,6 +25,15 @@ export const GARAGE_BLUEPRINT: VerticalBlueprint = {
     mod_pms: false,
     mod_floor_plan: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    chef_atelier:   { level: 50, labelKey: 'role.workshop_manager' },
+    mecanicien:     { level: 40, labelKey: 'role.mechanic' },
+    receptionnaire: { level: 40, labelKey: 'role.service_advisor' },
+  },
+
   tokens: {
     appearance: 'dark',
     defaultTokens: {

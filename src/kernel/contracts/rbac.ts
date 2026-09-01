@@ -15,6 +15,60 @@
 
 export type RbacScope = 'fleet' | 'tenant';
 
+/**
+ * Échelle de niveaux — la SEULE chose que le kernel connaît du RBAC (ADR-019).
+ *
+ * Le kernel connaît les niveaux, les verticales nomment les rôles. Un niveau a une
+ * sémantique universelle, vraie pour les 12 variantes et pour la 13ᵉ :
+ *
+ *   1000 / 900 / 800  opérateur plateforme (éditeur)                    scope fleet
+ *    100  administrateur du tenant — RBAC, config fiscale               scope tenant
+ *     90  direction — rapports financiers, RH                           scope tenant
+ *     70  encadrement — équipe, stock, clôture                          scope tenant
+ *     60  comptabilité — lecture finance, export légal                  scope tenant
+ *     50  encadrement métier — responsable d'une activité               scope tenant
+ *     45  encadrement métier junior                                     scope tenant
+ *     40  opérationnel — exécute l'acte métier principal                scope tenant
+ *     35  opérationnel junior                                           scope tenant
+ *     30  accueil / support                                             scope tenant
+ *     10  entretien / logistique interne                                scope tenant
+ *
+ * Un `roleMap` de verticale ne peut employer QUE ces valeurs : tsc refuse le reste.
+ */
+export type RoleLevel = 10 | 30 | 35 | 40 | 45 | 50 | 60 | 70 | 90 | 100 | 800 | 900 | 1000;
+
+/**
+ * Un rôle déclaré par une verticale dans son blueprint (ADR-019).
+ * `labelKey` et non `label` : un rôle affiché passe par le lexique, jamais par une
+ * chaîne FR en dur — même règle que le test du lexique de l'ADR-018.
+ */
+export interface VerticalRoleDefinition {
+  readonly level: RoleLevel;
+  readonly labelKey: string;
+}
+
+export type VerticalRoleMap = Readonly<Record<string, VerticalRoleDefinition>>;
+
+/**
+ * Rôles STRUCTURELS — présents dans tout tenant quelle que soit sa verticale.
+ * Ce ne sont pas des métiers, c'est la gouvernance d'un tenant : ils restent au kernel.
+ */
+export const STRUCTURAL_TENANT_ROLES = ['admin', 'directeur', 'manager', 'comptable'] as const;
+
+/**
+ * Résout un rôle vers son niveau : d'abord le `roleMap` de la verticale du tenant
+ * actif, puis repli sur la table kernel (rôles structurels + noms métier encore
+ * hébergés ici — étape (b) de la migration ADR-019).
+ *
+ * Toute garde applicative doit comparer des NIVEAUX, jamais des noms : un
+ * `if (role === 'serveur')` casse sur les 11 autres verticales.
+ */
+export function resolveRoleLevel(role: string, roleMap?: VerticalRoleMap): number | null {
+  if (roleMap && role in roleMap) return roleMap[role].level;
+  const canonical = normalizeRbacRole(role);
+  return canonical ? RBAC_ROLES[canonical].level : null;
+}
+
 export interface RbacRoleDefinition {
   /** Scope opérationnel : MCC fleet (éditeur) vs tenant (gérant restaurant). */
   scope: RbacScope;

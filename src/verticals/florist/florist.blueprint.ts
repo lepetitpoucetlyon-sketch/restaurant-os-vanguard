@@ -25,6 +25,14 @@ export const FLORIST_BLUEPRINT: VerticalBlueprint = {
     mod_haccp: false,
     mod_floor_plan: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    vendeur:   { level: 40, labelKey: 'role.florist' },
+    operateur: { level: 40, labelKey: 'role.operator' },
+  },
+
   tokens: {
     appearance: 'light',
     defaultTokens: {

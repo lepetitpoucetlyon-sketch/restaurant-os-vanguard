@@ -26,6 +26,14 @@ export const RETAIL_BLUEPRINT: VerticalBlueprint = {
     mod_haccp: false,
     mod_floor_plan: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    vendeur: { level: 40, labelKey: 'role.sales_advisor' },
+    hotesse: { level: 30, labelKey: 'role.host' },
+  },
+
   tokens: {
     appearance: 'dark',
     defaultTokens: {

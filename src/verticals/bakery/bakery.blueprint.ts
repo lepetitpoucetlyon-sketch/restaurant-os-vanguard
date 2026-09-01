@@ -25,6 +25,15 @@ export const BAKERY_BLUEPRINT: VerticalBlueprint = {
     mod_reservations: true,
     mod_marketing: true,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    chef_cuisinier: { level: 45, labelKey: 'role.head_baker' },
+    cuisinier:      { level: 35, labelKey: 'role.baker' },
+    vendeur:        { level: 40, labelKey: 'role.sales_advisor' },
+  },
+
   tokens: {
     appearance: 'light',
     defaultTokens: {

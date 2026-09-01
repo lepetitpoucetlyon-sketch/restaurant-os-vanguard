@@ -23,6 +23,14 @@ export const COWORKING_BLUEPRINT: VerticalBlueprint = {
     mod_kds: false,
     mod_haccp: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    collaborateur: { level: 40, labelKey: 'role.community_manager' },
+    hotesse:       { level: 30, labelKey: 'role.host' },
+  },
+
   tokens: {
     appearance: 'dark',
     defaultTokens: {

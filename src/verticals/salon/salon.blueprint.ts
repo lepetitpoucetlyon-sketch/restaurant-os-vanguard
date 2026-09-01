@@ -33,6 +33,15 @@ export const SALON_BLUEPRINT: VerticalBlueprint = {
     mod_haccp: false,
     mod_registre: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    coiffeur:      { level: 40, labelKey: 'role.hairdresser' },
+    estheticienne: { level: 40, labelKey: 'role.beautician' },
+    hotesse:       { level: 30, labelKey: 'role.host' },
+  },
+
   tokens: {
     appearance: 'light',
     defaultTokens: {

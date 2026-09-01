@@ -1,6 +1,30 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const en: SovereignData = {
+    "role": {
+        "head_waiter": "Head Waiter",
+        "head_chef": "Head Chef",
+        "server": "Server",
+        "cook": "Cook",
+        "bartender": "Bartender",
+        "host": "Host",
+        "dishwasher": "Dishwasher",
+        "workshop_manager": "Workshop Manager",
+        "mechanic": "Mechanic",
+        "service_advisor": "Service Advisor",
+        "hairdresser": "Hairdresser",
+        "beautician": "Beautician",
+        "practitioner": "Practitioner",
+        "operator": "Operator",
+        "sales_advisor": "Sales Advisor",
+        "head_baker": "Head Baker",
+        "baker": "Baker",
+        "receptionist": "Receptionist",
+        "housekeeping": "Housekeeping",
+        "community_manager": "Community Manager",
+        "coach": "Coach",
+        "florist": "Florist"
+    },
     "crm": {
         "contact_info": "Infos contact",
         "new_profile": "Nouveau profil",

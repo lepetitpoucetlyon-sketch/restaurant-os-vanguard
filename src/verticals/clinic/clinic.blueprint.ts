@@ -23,6 +23,15 @@ export const CLINIC_BLUEPRINT: VerticalBlueprint = {
     mod_floor_plan: false,
     mod_pms: false,
   },
+  // Rôles métier de la verticale (ADR-019) — le kernel connaît les niveaux,
+  // la verticale nomme les rôles. admin/directeur/manager/comptable sont
+  // structurels et restent au kernel.
+  roleMap: {
+    praticien: { level: 50, labelKey: 'role.practitioner' },
+    operateur: { level: 40, labelKey: 'role.operator' },
+    hotesse:   { level: 30, labelKey: 'role.host' },
+  },
+
   tokens: {
     appearance: 'light',
     defaultTokens: {
