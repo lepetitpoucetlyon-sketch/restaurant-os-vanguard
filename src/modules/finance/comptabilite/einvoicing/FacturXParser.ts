@@ -143,7 +143,8 @@ export function parseEInvoiceXml(xml: string, providerInvoiceId?: string): Inbou
     || extractTag(xml, 'DocumentCurrencyCode')
     || 'EUR';
 
-  const dueDateRaw = extractTag(xml, 'DueDateDateTime') || extractTag(xml, 'DueDate');
+  const dueDateSection = extractSection(xml, 'DueDateDateTime');
+  const dueDateRaw = (dueDateSection ? extractTag(dueDateSection, 'DateTimeString') : '') || extractTag(xml, 'DueDateDateTime') || extractTag(xml, 'DueDate');
   const dueDate = dueDateRaw.length === 8
     ? `${dueDateRaw.slice(0, 4)}-${dueDateRaw.slice(4, 6)}-${dueDateRaw.slice(6, 8)}`
     : dueDateRaw || undefined;
