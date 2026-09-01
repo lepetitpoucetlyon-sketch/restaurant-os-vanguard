@@ -52,6 +52,7 @@ const CLIQUETS = {
   a11yModales:      seuil('A11Y_MODALES_MAX', 0),
   a11yKeyboard:     seuil('A11Y_KEYBOARD_MAX', 67),
   verticalStubs:    seuil('VERTICAL_STUBS_MAX', 21),
+  verticalScreensUnwired: seuil('VERTICAL_SCREENS_UNWIRED_MAX', 30),
   frHardcoded:      seuil('FR_HARDCODED_MAX', 893),
 };
 

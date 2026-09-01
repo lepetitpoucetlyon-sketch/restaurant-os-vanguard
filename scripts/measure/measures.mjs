@@ -542,6 +542,36 @@ export const m13_verticalStubs = {
   },
 };
 
+export const m15_verticalScreensUnwired = {
+  id: 'verticalScreensUnwired',
+  titre: 'Écrans de verticale non câblés (UI sans accès données)',
+  // Angle mort de m13 : remplacer un VerticalPageStub par une maquette à données
+  // locales (`const INITIAL_ROOMS = [...]` + useState) fait passer m13 à 0 SANS
+  // rien livrer. L'écran s'affiche, il est joli, et il oublie tout au rafraîchissement.
+  //
+  // Un écran est CÂBLÉ s'il lit ou écrit par un canal légitime (ADR-015) :
+  //   - Nexus.adapter          accès données direct
+  //   - useSovereign*          hooks de collection souveraine
+  //   - NexusEventBus / emit   effets de bord
+  //   - un adapter de sa verticale (<Vertical><Pilier>Adapter)
+  //
+  // `useTenant()` NE COMPTE PAS : c'est un contexte, pas une source de données.
+  run(c) {
+    const nonCables = [];
+    for (const [f, src] of c.contenu) {
+      const rel = c.rel(f);
+      if (!rel.startsWith('src/verticals/')) continue;
+      if (rel.includes('/_shared/')) continue;
+      if (!rel.endsWith('.tsx')) continue;
+      // Un écran = un composant qui rend du JSX et porte de l'état ou une interaction.
+      if (!/useState\s*[<(]|onClick=|onSubmit=/.test(src)) continue;
+      const cable = /Nexus\.adapter|useSovereign[A-Z]|NexusEventBus|emitDurable\s*\(|[A-Z][a-zA-Z]*(?:Ops|Finance|Commerce|Logistics|Human|Compliance|Facility|Intelligence|Mcc)Adapter\b/.test(src);
+      if (!cable) nonCables.push(rel);
+    }
+    return { valeur: nonCables.length, detail: nonCables.sort() };
+  },
+};
+
 export const m14_frHardcoded = {
   id: 'frHardcoded',
   titre: 'Chaînes françaises en dur dans le JSX (hors legal & verticals)',
@@ -569,6 +599,6 @@ export const MESURES = [
   m1_reachability, m2_settings, m3_i18n, m3b_i18nParite, m4_responsive,
   m5_inertProps, m6_duplicates, m7_swallowed, m8_seal, m9_fakeMetrics, m10_footprint,
   m11_dsAdoption, m12a_a11yMuets, m12b_a11yModales, m12c_a11yKeyboard,
-  m13_verticalStubs, m14_frHardcoded,
+  m13_verticalStubs, m14_frHardcoded, m15_verticalScreensUnwired,
 ];
 
