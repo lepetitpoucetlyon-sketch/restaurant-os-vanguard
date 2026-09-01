@@ -95,3 +95,54 @@
 ```
 
 > **Rappel** : la base est déjà verte et vérifiée. Ce backlog ajoute de la **profondeur** sans jamais casser le vert. Si une tâche fait passer preflight au rouge et que tu es tenté de desserrer une gate → **c'est le signal qu'il faut corriger le code, pas la gate.**
+
+---
+
+## 🧭 TRACK 5 — Trouvailles de l'audit des branches mortes (2026-09-01)
+
+*Relevées en comparant `grade-x-vanguard` et `perf/simulacra-coupe-circuit` au code d'après,
+avant de les supprimer. Les deux branches sont archivées sous le tag
+`archive/grade-x-vanguard-2026-08-31` (poussé sur `origin`) — leur contenu est
+intégralement contenu dedans.*
+
+### 5.1 — Supprimer `VoiceCommandService`, coquille sans appelant
+- **Constat mesuré** : `src/modules/intelligence/services/VoiceCommandService.ts` (48 l.)
+  n'a **aucun appelant** (`grep -rn "VoiceCommandService" src | grep -v services/`
+  → 0 hors sa propre définition et le barrel).
+  `startListening()` pose un booléen et écrit un log — **aucune capture audio**.
+  `processIntent()` est un `switch` dont **chaque branche est commentée**
+  (`// EdgeSyncService.broadcast(...)`, `// MasterBridge.reportHealth(...)`).
+- **Le vrai vocal est ailleurs et fonctionne** : `src/shared/hooks/useUniversalAssistant.ts`
+  (247 l.) porte la vraie reconnaissance — `webkitSpeechRecognition`, `lang = 'fr-FR'`,
+  `interimResults`, `onstart`/`onresult`/`onend`, message d'erreur si navigateur non
+  supporté. Consommé par `UniversalAssistantFrame`, `MobileNavBar` et les 5 composants
+  `assistant-frame/`.
+- [ ] Supprimer le service et son export du barrel `modules/intelligence/services/index.ts`.
+- **Vérif** : `grep -rn "VoiceCommandService" src | grep -v "\.test\."` = 0.
+- **Motif récurrent** : même famille que `MerchantProvisioningService` (supprimé) et
+  `MultiTenantBillingEngineService` (réveillé le 2026-09-01 par `SaaSBillingJob`).
+  Du code qui calcule dans le vide parce que personne ne l'appelle.
+
+### 5.2 — Historique de sessions de l'assistant (la seule vraie perte)
+- **Constat** : `SessionHistory` = **0 occurrence** dans `main`. La branche
+  `grade-x-vanguard` avait un `VoiceAssistantOverlay` permettant de rouvrir une
+  conversation passée (`sessions: { id, timestamp, lastMessage }[]`) ; l'assistant
+  actuel n'a pas cet écran.
+- Tout le reste de cet overlay est couvert par `main` (dictée, Gemini Live via
+  `useGeminiLive`, fil de discussion, `NexusSphere`) — c'est le seul manque réel.
+- [ ] Ajouter la persistance et la reprise de sessions sur `useUniversalAssistant`
+      (~50 l. côté UI + une collection Nexus `tenants/{t}/assistantSessions`).
+- **DoD** : rouvrir une conversation de la veille depuis `UniversalAssistantFrame`.
+
+### Pour mémoire — ce qui a été vérifié et NE mérite PAS d'être récupéré
+- `CronosBillingEngine` (147 l.) : sa méthode d'encaissement était un **stub**
+  (`if (Math.random() < 0.2) throw`). Le code d'après est fonctionnel et plus complet —
+  Stripe assure la récurrence (`/api/webhooks/stripe`, signature HMAC),
+  `StripePaymentRetryHandler` gère le retry + l'email de relance, et
+  `/api/billing/dunning` escalade en 3 paliers (J+3 `past_due_grace`, J+7 `suspended`,
+  J+14 `LOCKED`). Il importait en plus `@/domain/...`, supprimé en S11 : il ne
+  compilerait pas.
+- Les 770 fichiers « absents de `main` » de la branche : **697 étaient des déplacements**
+  (même nom de fichier ailleurs). Sur les 71 restants, 25 jetables (`scratch/`, one-shot,
+  `.bak`), 29 d'arborescence morte (`src/components/`, `src/domain/`, `src/engines/`,
+  `src/theme/`), 6 d'anciens chemins de modules.
