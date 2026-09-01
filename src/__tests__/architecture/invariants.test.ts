@@ -60,14 +60,21 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
   });
 
   describe('INV-2 — Agnosticisme Base de Données', () => {
-    it('Firestore reste confiné strictement aux fichiers d’adapters et d’initialisation', () => {
+    it('Firestore et les SDKs Firebase restent confinés strictement aux adapters et initialisations autorisés', () => {
       const srcFiles = getSrcFiles().filter(f => !f.includes('__tests__') && !f.endsWith('.test.ts') && !f.endsWith('.spec.ts'));
       const allowedFiles = [
         'src/lib/firebase.ts',
+        'src/lib/firebase-admin-init.ts',
         'src/lib/adapters/FirestoreAdapter.ts',
         'src/lib/adapters/FirestoreBatch.ts',
         'src/lib/adapters/FirestoreDocumentStore.ts',
-        'src/e2e/vanguard/mocks.ts',
+        'src/lib/adapters/FirestoreServerAdapter.ts',
+        'src/lib/storage/FirebaseStorageProvider.ts',
+        'src/infrastructure/services/storage/FirebaseStorageProvider.ts',
+        'src/lib/nexus/providerFactory.ts',
+        'src/lib/storage/providerFactory.ts',
+        'src/shared/providers/hooks/auth/AuthSession.tsx',
+        'src/shared/providers/hooks/auth/AuthStaff.tsx',
       ];
 
       const violations: string[] = [];
@@ -75,7 +82,29 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
         const rel = path.relative(ROOT, file).replace(/\\/g, '/');
         if (allowedFiles.includes(rel)) continue;
         const content = fs.readFileSync(file, 'utf-8');
-        if (/from\s+['"]firebase\/firestore['"]/.test(content)) {
+        if (/from\s+['"]firebase(-admin)?\/(firestore|storage|functions|messaging)['"]|import\(\s*['"]firebase(-admin)?\/(firestore|storage|functions|messaging)['"]\)/.test(content)) {
+          violations.push(rel);
+        }
+      }
+
+      expect(violations).toEqual([]);
+    });
+  });
+
+  describe("INV-2b — Aucune instanciation d'adapter hors de la factory", () => {
+    it("aucune instanciation directe de FirestoreAdapter ou FirestoreServerAdapter hors des factories", () => {
+      const srcFiles = getSrcFiles().filter(f => !f.includes('__tests__') && !f.endsWith('.test.ts') && !f.endsWith('.spec.ts'));
+      const allowedFactoryFiles = [
+        'src/lib/nexus/providerFactory.ts',
+        'src/lib/storage/providerFactory.ts',
+      ];
+
+      const violations: string[] = [];
+      for (const file of srcFiles) {
+        const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+        if (allowedFactoryFiles.includes(rel)) continue;
+        const content = fs.readFileSync(file, 'utf-8');
+        if (/\bnew\s+(FirestoreAdapter|FirestoreServerAdapter|FirebaseStorageProvider)\s*\(/.test(content)) {
           violations.push(rel);
         }
       }
@@ -85,19 +114,19 @@ describe('🏛️ Invariants Architecturaux (Zero-Claim Policy)', () => {
   });
 
   describe('INV-3 — Ratchet de Couplage Auth', () => {
-    it('le nombre de fichiers sources couplés à Firebase Auth ne dépasse pas le seuil de 17', () => {
+    it('le nombre de fichiers sources couplés à Firebase Auth ne dépasse pas le seuil de 10', () => {
       const srcFiles = getSrcFiles().filter(f => !f.includes('__tests__') && !f.endsWith('.test.ts') && !f.endsWith('.spec.ts'));
       const authFiles: string[] = [];
 
       for (const file of srcFiles) {
         const content = fs.readFileSync(file, 'utf-8');
-        if (/from\s+['"]firebase(-admin)?\/(auth|app)['"]|getAuth|initFirebaseAdmin/.test(content)) {
+        if (/from\s+['"]firebase(-admin)?\/(auth|app)['"]|import\(\s*['"]firebase(-admin)?\/(auth|app)['"]|\binitFirebaseAdmin\b/.test(content)) {
           authFiles.push(path.relative(ROOT, file).replace(/\\/g, '/'));
         }
       }
 
-      // Ratchet bloquant : max 17 fichiers
-      expect(authFiles.length).toBeLessThanOrEqual(17);
+      // Ratchet bloquant : max 10 fichiers réels
+      expect(authFiles.length).toBeLessThanOrEqual(10);
     });
   });
 

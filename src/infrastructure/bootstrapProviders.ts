@@ -1,18 +1,20 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FirestoreAdapter } from '@/lib/adapters/FirestoreAdapter';
 import { LLMManager, createLLMProvider } from '@/modules/intelligence';
 import { StorageManager } from '@/infrastructure/services/storage';
-import { FirebaseStorageProvider } from '@/lib/storage/FirebaseStorageProvider';
+import { createClientAdapter } from '@/lib/nexus/providerFactory';
+import { createStorageProvider } from '@/lib/storage/providerFactory';
+import { logger } from '@/lib/logger';
+import { toError } from '@/lib/toError';
 
 /**
- * 🚀 Bootstrap standard infrastructure providers (Firestore, LLM Provider, Firebase Storage)
+ * 🚀 Bootstrap standard infrastructure providers (Data adapter, LLM Provider, Storage Provider)
  */
-export function bootstrapDefaultProviders(): void {
+export async function bootstrapDefaultProviders(): Promise<void> {
     try {
-        Nexus.adapter = new FirestoreAdapter();
+        Nexus.adapter = await createClientAdapter();
         LLMManager.provider = createLLMProvider();
-        StorageManager.provider = new FirebaseStorageProvider();
-    } catch {
-        // Silently handled in test/mock environments
+        StorageManager.provider = await createStorageProvider();
+    } catch (err) {
+        logger.warn('[bootstrap] Provider non initialisé', { error: toError(err).message });
     }
 }

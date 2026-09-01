@@ -1,7 +1,6 @@
 import 'server-only';
 import { NextResponse } from 'next/server';
-import { getAuth, type DecodedIdToken } from 'firebase-admin/auth';
-import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
+import { getServerAuthProvider, type DecodedAuthToken } from '@/lib/auth/ServerAuthProvider';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
@@ -100,8 +99,7 @@ export async function requireMccLevel(
     }
 
     try {
-        initFirebaseAdmin();
-        const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
+        const decoded = await getServerAuthProvider().verifyIdToken(authHeader.slice('Bearer '.length));
         const rawRole = typeof decoded.role === 'string' ? decoded.role : '';
         const normalizedRole = normalizeMccRole(rawRole);
         const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
@@ -198,16 +196,16 @@ function mfaError(code: 'MFA_ENROLLMENT_REQUIRED' | 'MFA_REAUTHENTICATION_REQUIR
  */
 async function checkFleetAdminMFA(
     uid: string,
-    decoded: DecodedIdToken,
+    decoded: DecodedAuthToken,
 ): Promise<NextResponse | null> {
     try {
-        const userRecord = await getAuth().getUser(uid);
-        const enrolled = (userRecord.multiFactor?.enrolledFactors?.length ?? 0) > 0;
+        const userRecord = await getServerAuthProvider().getUser(uid);
+        const enrolled = !!userRecord?.mfaEnrolled;
         if (!enrolled) {
             logger.warn(`[adminAuth] MFA non enrollé pour mcc_super_admin uid=${uid}`);
             return mfaError('MFA_ENROLLMENT_REQUIRED');
         }
-        const usedMFA = !!decoded.firebase?.sign_in_second_factor;
+        const usedMFA = !!decoded.mfaUsed;
         if (!usedMFA) {
             logger.warn(`[adminAuth] MFA enrollé mais non utilisé cette session uid=${uid}`);
             return mfaError('MFA_REAUTHENTICATION_REQUIRED');
@@ -266,8 +264,7 @@ async function verifyCaller(request: Request): Promise<AdminCaller | NextRespons
   }
 
   try {
-    initFirebaseAdmin();
-    const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
+    const decoded = await getServerAuthProvider().verifyIdToken(authHeader.slice('Bearer '.length));
     // `clientId` : alias historique de tenantId (SovereignModuleGate) — compat.
     const tenantId = typeof decoded.tenantId === 'string' ? decoded.tenantId
       : typeof decoded.clientId === 'string' ? decoded.clientId : undefined;
@@ -306,8 +303,7 @@ export async function requireFleetAdmin(request: Request): Promise<AdminCaller |
     if (!authHeader || !authHeader.startsWith('Bearer ')) return hiddenDoor();
 
     try {
-        initFirebaseAdmin();
-        const decoded = await getAuth().verifyIdToken(authHeader.slice('Bearer '.length));
+        const decoded = await getServerAuthProvider().verifyIdToken(authHeader.slice('Bearer '.length));
         const role = typeof decoded.role === 'string' ? decoded.role : '';
         if (!(FLEET_ROLES as readonly string[]).includes(role)) return hiddenDoor();
 

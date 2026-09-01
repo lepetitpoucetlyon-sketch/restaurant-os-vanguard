@@ -9,6 +9,6 @@
 export async function register(): Promise<void> {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     const { ensureServerNexus } = await import('@/lib/nexus/serverNexus');
-    ensureServerNexus();
+    await ensureServerNexus();
   }
 }

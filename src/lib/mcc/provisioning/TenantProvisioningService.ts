@@ -201,7 +201,7 @@ export class TenantProvisioningService {
         request: ProvisioningRequest
     ): Promise<ProvisioningResult> {
         // Garantit que le server adapter est actif (cross-tenant autorisé)
-        ensureServerNexus();
+        await ensureServerNexus();
 
         const refId    = getSystemTenantId(variant, 'REFERENCE');
         const tenantId = `tenant_${request.siret}`;
